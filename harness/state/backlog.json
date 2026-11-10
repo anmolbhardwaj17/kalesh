@@ -1,6 +1,6 @@
 {
   "_doc": "Written only by node harness/bin/task.mjs. Phases run in order; P0 (ADOPT + STYLE DISCOVERY) waits for the owner by design and needs task.mjs signoff and task.mjs archsignoff before its gate passes. Later phases are added by the planner at the end of P0 (task.mjs phase-add) from the game's real state.",
-  "updated": "2026-11-10T13:46:13.721Z",
+  "updated": "2026-11-10T14:11:18.428Z",
   "phases": [
     {
       "id": "P0",
@@ -152,57 +152,63 @@
     {
       "id": "P0-006",
       "phase": "P0",
-      "title": "Style options draft, city brief and game design options update",
-      "desc": "Mode STYLE_DISCOVERY with the round 1, 2 and 2b answers. Write harness/design/STYLE_OPTIONS.md from templates/STYLE_OPTIONS.template.md (reference board, 3 to 5 candidates, the comparison table with estimates, the fidelity levels for a city look: stylised low-poly city, stylised realistic, realistic PBR with baked lighting, photo-textured, each with honest performance cost at driving speed and asset volume for Delhi) and harness/design/CITY_BRIEF.md from templates/CITY_BRIEF.template.md (unconfirmed items marked). Name which 2 candidates go in style test batch A and which in batch B, and the ?style= name of each. Write the next round's questions (at most 6). Also update harness/design/GAME_DESIGN_OPTIONS.md with the game design round 1 answers (narrow the options, sharpen the recommendation, new sketches where they help) and write the game design round 2 questions (at most 6, short, with options). Delhi world layers (DELHI_WORLD.md): add a section 'Landmark tiers and area kits per candidate' to STYLE_OPTIONS.md: for each candidate, how a hero, a signature and a marker landmark look and two contrasting area kits (proposal: Chandni Chowk old city bazaar vs Lutyens bungalow road), the asset volume per tier (how many hero models, signature textures, kit atlases the city needs in that style and who makes them), and AI prompt fit for landmark models and kit textures. Put the landmark and area answers from P0-005 into CITY_BRIEF.md (Landmarks table with tiers) and update DELHI_WORLD.md section 9 (open questions) with what is answered.",
+      "title": "Style options draft, city brief and game design options update (Godot, three characters)",
+      "desc": "Mode STYLE_DISCOVERY plus a game design update, after interview sitting 1 (answers in the inbox with source interview; decisions.md 'Game direction from interview round 1' and 'Engine Godot 4, and a compressed Delhi map'). STYLE: Anmol saw a style board artifact with four looks: realistic, stylised realistic (recommended), comic, gritty. His pick is pending (asked in sitting 2). He does not want: cartoony or childish, a generic Western city, a low-poly mobile game. He wants real conditions, poverty included, shown honestly. The engine is Godot 4 on desktop. Write harness/design/STYLE_OPTIONS.md from templates/STYLE_OPTIONS.template.md with those four as the candidates (plus any he named): reference board, the comparison table, and for each candidate a Godot style id used as the user arg --style=<id> (style tests run in Godot, not ?style= in a browser). Performance estimates are for Godot 4.7 Forward+ on this Mac (sun and shadows, SSAO, SSIL, GI choice: baked lightmaps, SDFGI or VoxelGI, volumetric fog, glow, tonemap, draw calls, video memory), with the Mobile renderer noted where it matters. Asset pipeline (AI image and 3D tools, procedural, what Godot imports), AI prompt fit, tooling, risk, scope. The fidelity levels for a city look with honest costs at driving speed and on foot. On-foot views matter now: each candidate says how people, the three characters and street detail at 1.7 m eye height look, and how guns and fights read in it. Name batch A (the two Anmol is most likely to pick: stylised realistic plus one) and batch B. Write the style questions for sitting 2 (which look, which 2 or 3 go into the Godot style tests). Write harness/design/CITY_BRIEF.md from its template with the sitting 1 answers, unconfirmed items marked. Delhi world layers (DELHI_WORLD.md): add a section 'Landmark tiers and area kits per candidate' to STYLE_OPTIONS.md: for each candidate, how a hero, a signature and a marker landmark look and two contrasting area kits (proposal: Chandni Chowk old city bazaar vs Lutyens bungalow road), the asset volume per tier (hero models, signature textures, kit atlases, who makes them), and AI prompt fit for landmark models and kit textures. Put the landmark and area answers from P0-005 into CITY_BRIEF.md (Landmarks table with tiers) and update DELHI_WORLD.md section 9. GAME DESIGN: update harness/design/GAME_DESIGN_OPTIONS.md for the new direction: three playable characters (auto driver, cop, small-time fixer) with their own lives and stories and missions that merge; guns and fights in an over-the-top action movie tone; on foot anywhere; the earlier picks (auto driver only, 'the city is the game', grounded arcade) are to be rethought. Give: 2 or 3 structure options for three characters (switching, story arcs, how missions merge), the core loop at 30 s, 5 min and 1 h per character, 3 candidate pillar sets, combat and on-foot scope options with honest cost (animation, AI, crowds, cover, weapons, police response), how driving stays central, the respect rule applied to crime, police and poverty (honest, never spectacle or a joke; no real parties or real people), a first playable slice (one mission per character plus one merged mission in the pilot districts), scope and risk. Write the game design round 2 questions (at most 6, short, with options), including the two round 1 questions not asked yet: reasons to return, and how police work. The composite map questions are not yours here (P0-028 writes them). Never invent the owner's answers.",
       "accept": [
         "STYLE_OPTIONS.md and CITY_BRIEF.md exist and follow their templates; every number is marked estimate",
-        "each candidate has a ?style= name and is assigned to batch A or B",
-        "the questions for the next round are listed in STYLE_OPTIONS.md",
-        "GAME_DESIGN_OPTIONS.md reflects every round 1 answer and lists the round 2 questions",
-        "STYLE_OPTIONS.md has the 'Landmark tiers and area kits per candidate' section covering every candidate, with asset volume per tier marked estimate",
-        "CITY_BRIEF.md Landmarks table lists the landmarks Anmol named with a proposed tier"
+        "each candidate (at least realistic, stylised realistic, comic, gritty) has a Godot --style id and is assigned to batch A or B",
+        "the style questions for sitting 2 are listed in STYLE_OPTIONS.md",
+        "STYLE_OPTIONS.md has the 'Landmark tiers and area kits per candidate' section covering every candidate, asset volume per tier marked estimate, and an on-foot and combat line per candidate",
+        "CITY_BRIEF.md Landmarks table lists the landmarks Anmol named with a proposed tier",
+        "GAME_DESIGN_OPTIONS.md has the three-character structure options, 3 pillar sets, combat and on-foot scope options with cost, the respect rule line, the first playable slice, and at most 6 round 2 questions including reasons to return and police"
       ],
       "deps": [
         "P0-005"
       ],
       "agent": "planner",
-      "priority": 2,
+      "priority": 1,
       "kind": "feature",
       "status": "todo",
       "attempts": 0,
       "notes": [],
-      "created": "2026-11-10T13:04:46.154Z"
+      "created": "2026-11-10T13:04:46.154Z",
+      "order": 10
     },
     {
       "id": "P0-007",
       "phase": "P0",
-      "title": "Game design round 2 and later until the game design sign-off",
-      "desc": "Show Anmol the updated GAME_DESIGN_OPTIONS.md (tables, sketches, recommendation) and ask the round 2 questions, short and clear. May share a sitting with the style and architecture rounds. Record every answer verbatim (inbox-add --source interview, ack). Only his explicit words count as sign-off ('yes, go with the cabbie loop' counts; 'looks nice' or 'maybe' do not: ask him to confirm); record with task.mjs designsignoff \"<his exact words>\". If a round ends without sign-off: add a planner GAME_DESIGN_DISCOVERY update task and a new orchestrator task 'Game design round <n>', add each as a dep of the 'Game design record' task (task.mjs deps --add), then mark this task done with a note.",
+      "title": "Interview sitting 2: game design round 2, look pick and map districts (and later rounds until the game design sign-off)",
+      "desc": "Show Anmol the updated GAME_DESIGN_OPTIONS.md (tables, sketches, recommendation) and ask the round 2 questions, short and clear. May share a sitting with the style and architecture rounds. Record every answer verbatim (inbox-add --source interview, ack). Only his explicit words count as sign-off ('yes, go with the cabbie loop' counts; 'looks nice' or 'maybe' do not: ask him to confirm); record with task.mjs designsignoff \"<his exact words>\". If a round ends without sign-off: add a planner GAME_DESIGN_DISCOVERY update task and a new orchestrator task 'Game design round <n>', add each as a dep of the 'Game design record' task (task.mjs deps --add), then mark this task done with a note. Replan 2026-11-10 (Godot and the compressed map): this sitting also covers (a) the style look: show the four board looks again (realistic, stylised realistic, comic, gritty) and STYLE_OPTIONS.md, ask which he leans to and which 2 or 3 go into the Godot style tests; record verbatim. That sets batch A and B for P0-011 and P0-012; if he narrows the test to two looks, skip P0-012 with his words as the reason. (b) the composite map questions from DELHI_WORLD.md section 0 (written by P0-028): show the layout SVG sketches, ask about must-have districts, how big the map should feel, which NCR parts, where each character lives and works, the Yamuna and East Delhi placement, and the pilot districts. The map answers go to the planner for P0-010. (c) the round 2 game design questions include reasons to return and how police work (not asked in sitting 1). Keep questions short, with options. A skipped question goes to P0-014.",
       "accept": [
         "every answer recorded and acked in the inbox",
-        "either task.mjs status shows the game design sign-off with his quote, or the follow-up round task exists and blocks the game design record task"
+        "either task.mjs status shows the game design sign-off with his quote, or the follow-up round task exists and blocks the game design record task",
+        "the look answer (which looks go into the Godot style tests) is recorded verbatim, or listed as skipped and carried to P0-014",
+        "the composite map answers (districts, size, NCR, character homes, Yamuna and East Delhi, pilot) are recorded verbatim, or listed as skipped and carried to P0-014"
       ],
       "deps": [
         "P0-002",
-        "P0-006"
+        "P0-006",
+        "P0-028"
       ],
       "agent": "orchestrator",
-      "priority": 2,
+      "priority": 1,
       "kind": "feature",
       "status": "todo",
       "attempts": 0,
       "notes": [],
-      "created": "2026-11-10T13:04:46.154Z"
+      "created": "2026-11-10T13:04:46.154Z",
+      "order": 30
     },
     {
       "id": "P0-008",
       "phase": "P0",
       "title": "Game design record: GAME.md, pillars and mission rules",
-      "desc": "Only after task.mjs status shows the game design sign-off. Update harness/design/GAME.md with the signed fantasy, core loop (30 s, 5 min, 1 h), the 3 feel pillars (replacing the draft pillars), the mission and activity list with the first playable loop marked, the progression plan, scope guardrails, player verbs, HUD and the movement and camera feel numbers that the loop needs. Add the decisions.md entry with the sign-off quote. Make the standing rules concrete in harness/design/VERIFY.md 'Writing acceptance criteria': every mission task's acceptance includes fun criteria checked by a scenario, a play script or a named shot (clear goal shown within 5 s of start, a fair fail with a stated reason and an instant retry, a reason to retry such as a time or score to beat, a reward that matters shown on completion), and every phase plan lists how each of its tasks serves a pillar. Add milestones.json entries for the first playable loop's missions (required true) with summaries beat by beat.",
+      "desc": "Only after task.mjs status shows the game design sign-off. Update harness/design/GAME.md with the signed fantasy, core loop (30 s, 5 min, 1 h), the 3 feel pillars (replacing the draft pillars), the mission and activity list with the first playable loop marked, the progression plan, scope guardrails, player verbs, HUD and the movement and camera feel numbers that the loop needs. Add the decisions.md entry with the sign-off quote. Make the standing rules concrete in harness/design/VERIFY.md 'Writing acceptance criteria': every mission task's acceptance includes fun criteria checked by a scenario, a play script or a named shot (clear goal shown within 5 s of start, a fair fail with a stated reason and an instant retry, a reason to retry such as a time or score to beat, a reward that matters shown on completion), and every phase plan lists how each of its tasks serves a pillar. Add milestones.json entries for the first playable loop's missions (required true) with summaries beat by beat. Replan 2026-11-10: the signed design now covers three playable characters (auto driver, cop, small-time fixer) with their stories and merging missions, combat (guns and fights, over-the-top action tone), on foot anywhere, police and wanted rules, and the composite map districts each character uses. GAME.md gets sections for the characters, combat and on-foot verbs, police, and the respect rule as refined (real conditions shown honestly, never spectacle or a joke, no real parties or real people). milestones.json gets the first playable slice: one mission per character plus one merged mission.",
       "accept": [
         "GAME.md has the fantasy, core loop, pillars, mission list and progression plan sections filled from the signed design; the draft pillars section is gone",
         "decisions.md has the game design sign-off entry with Anmol's exact quote",
-        "VERIFY.md 'Writing acceptance criteria' has the fun criteria rule; milestones.json lists the first playable loop's missions"
+        "VERIFY.md 'Writing acceptance criteria' has the fun criteria rule; milestones.json lists the first playable loop's missions",
+        "GAME.md has sections for the three characters, combat and on-foot verbs, police, and the refined respect rule; milestones.json has one mission per character plus one merged mission, required true"
       ],
       "deps": [
         "P0-007"
@@ -218,20 +224,19 @@
     {
       "id": "P0-009",
       "phase": "P0",
-      "title": "Delhi street stand-in scene and perf baseline",
-      "desc": "The scaffold is a box on a plane, too empty to compare styles or measure anything real. Add a procedural stand-in Delhi street behind ?scene=street (default boot unchanged), built from CITY_BRIEF.md: about 300 m of a 6 lane arterial with a median and kerbs, a service lane, one signal junction, a stub flyover ramp (simple stand-in, not the lane model), footpaths, 40 to 80 box buildings with shopfront bands and sign boards, trees, street lights, a bus stop, 15 to 25 static vehicles (car, auto-rickshaw, bus stand-ins), a few people stand-ins, a debug.load id 'street' that puts the box car on it. Pure stand-ins, no assets needed; keep it in its own module (src/scenes/street.ts or similar) so style tests and benches reuse it. Then write harness/look_proof/poses.json with 6 views on it (car close-up, street at player height, junction, flyover ramp, HUD over play, busiest view from 40 m up; sim held, same moment every run), run node harness/bin/lookproof.mjs --set baseline --perf, read the shots, and write draft budgets in harness/verify/perf_budgets.json (status stays draft) from the measured numbers with headroom, with the target filled in (machine, GL renderer, resolution, load). Delhi world layers (DELHI_WORLD.md): also add, in the same module or a sibling (src/scenes/landmarks_areas.ts or similar), procedural stand-ins for one landmark per tier (hero: an India Gate like arch from a small parts kit; signature: a domed tomb on a plinth or a CP style colonnade block; marker: an extruded footprint with an area material), each with its surroundings (lawn, wall, gate, parking), and two contrasting area kit blocks of about 100 m each (old city bazaar strip: tight shop houses, wires, signs, vendors; Lutyens bungalow road: walls, trees, low white bungalows), reachable by debug.load ids 'landmarks' and 'areas' (or placed along the street). Add 2 lookproof views to poses.json for them (tiers from the road at player height, the two area blocks side by side from 30 m up), so the poses become 8.",
+      "title": "Delhi street stand-in scene and perf baseline (Godot)",
+      "desc": "The Godot scaffold is a box on a plane, too empty to compare styles or measure anything. In the Godot project add a procedural stand-in Delhi street built by a GDScript builder (for example game/scenes/standin/), reusable by style tests and benches, loaded with debug.load('street') or --scene=street; the default boot is unchanged. From CITY_BRIEF.md: about 300 m of a 6 lane arterial with a median and kerbs, a service lane, one signal junction, a stub flyover ramp (a simple stand-in, not the lane model), footpaths, 40 to 80 box buildings with shopfront bands and sign boards, trees, street lights, a bus stop, 15 to 25 static vehicles (car, auto-rickshaw, bus stand-ins), 20 to 40 people stand-ins (capsules or simple mannequins), and one third-person character stand-in for on-foot views. Landmarks and areas, loaded with 'landmarks' and 'areas' (or placed along the street): one stand-in per tier (hero: an India Gate like arch from a small parts kit; signature: a domed tomb on a plinth or a CP style colonnade block; marker: an extruded footprint with an area material), each with its surroundings (lawn, wall, gate, parking), and two contrasting area kit blocks of about 100 m each (old city bazaar strip: tight shop houses, wires, signs, vendors; Lutyens bungalow road: walls, trees, low white bungalows). Then write harness/look_proof/poses.json with 9 views (car close-up, street at driving eye height, junction, flyover ramp, HUD over play, busiest view from 40 m up, landmark tiers from the road at player height, the two area blocks from 30 m up, on foot at 1.7 m eye height in the bazaar strip; sim held, same moment every run), run node harness/bin/lookproof.mjs --set baseline --perf, read the shots, and write draft budgets in harness/verify/perf_budgets.json (status stays draft) from the measured numbers with headroom, with the target filled in (machine, Godot version, renderer, GPU, resolution, load). Pure stand-ins, no assets needed.",
       "accept": [
-        "node harness/bin/lookproof.mjs --check passes and --set baseline --perf writes all 6 views and harness/look_proof/baseline/perf.json; the report quotes the machine, GL renderer and load",
-        "the builder read the 6 baseline shots: no blank or black frames, the street reads as a Delhi arterial (median, kerbs, shops, vehicles)",
+        "node harness/bin/lookproof.mjs --check passes and --set baseline --perf writes all 9 views and harness/look_proof/baseline/perf.json; the report quotes the machine, Godot version, renderer, GPU and load",
+        "the builder read the baseline shots (downscaled): no blank or black frames; the street reads as a Delhi arterial (median, kerbs, shops, vehicles, people); the three landmark tiers differ in detail; the two area blocks look different; the on-foot view is at eye height",
         "perf_budgets.json has draft numbers derived from the baseline with the target text filled in",
-        "a scenario street_boot (debug.load street, settle, shot) passes with no console errors; the default boot (no scene param) is unchanged: boot_title still passes",
-        "node harness/bin/verify.mjs --quick passes",
-        "scenarios landmarks_boot and areas_boot (debug.load, settle, shot) pass with no console errors; the builder read the shots: the three tiers are visibly different in detail and the two area blocks are visibly different",
-        "harness/look_proof/poses.json has the 2 extra views and the baseline set includes them"
+        "scenarios street_boot, landmarks_boot and areas_boot (debug.load, settle, shot) pass with no console errors; boot_title still passes (default boot unchanged)",
+        "node harness/bin/verify.mjs --quick passes"
       ],
       "deps": [
         "P0-001",
-        "P0-006"
+        "P0-006",
+        "P0-027"
       ],
       "agent": "builder",
       "priority": 2,
@@ -244,18 +249,19 @@
     {
       "id": "P0-010",
       "phase": "P0",
-      "title": "Architecture options draft (with map repair, lane model and map inspector)",
-      "desc": "Mode ARCH_DISCOVERY. Write harness/design/ARCH_OPTIONS.md from templates/ARCH_OPTIONS.template.md, using SALVAGE_AUDIT.md 'What Dilli Darshan must do differently', the baseline perf numbers, the style candidates and the owner's architecture answers from the interview, and the leading game design options (what the first playable loop needs from the map, traffic and physics). Decisions, 2 to 4 options each, every estimate marked: renderer (three.js WebGLRenderer vs WebGPURenderer with TSL and WebGL2 fallback, or another engine), physics (Rapier vs Jolt, main thread vs worker, vehicle controller), coordinates and projection (confirm or replace src/geo/projection.ts), world data pipeline and tile format (sizes, binary layout, compression), the map repair layer (refine harness/design/MAP_REPAIR.md: sources with licence and attribution and quality checks, pipeline, rule engine, auto-repair log, per-tile overrides, elevation solver, verification, pilot area), the lane-level road model (lane sets, Delhi class defaults, tapers, gores, flyover centre lanes climbing while service lanes stay at grade, never shared index points, continuity and overlap checks), the road graph to junction mesh builder (lane-edge curves, corner radii, kerbs, railings, no overlaps), terrain that conforms to roads (bare-earth DTM, flattening with shoulder blend), tile streaming and memory, instancing, LOD and impostors, textures (KTX2 and Basis vs WebP), the map inspector page (3D, linked from the dashboard, fly-to, proposed fixes as 3D preview lines with confidence and reasoning, writes per-tile overrides and the inbox, lane widths and splits shown; stack and port), and budgets per system. Confirm or rewrite the four bench tasks that follow this one (renderer, physics, pilot data and repair, lane road and terrain prototype) with task.mjs note or a desc change through REPLAN, so each measures what the table needs. Delhi world layers (harness/design/DELHI_WORLD.md): add decision rows for (a) the landmark registry pipeline: sources and matching (ASI list, Wikidata, Wikipedia and Commons as reference only, OSM tags, Anmol's named list), storage (landmarks.json plus overrides, schema), tier scoring, placement (footprint, orientation, plinth fit, landmark zone vs generated city), hero model limits (the 25,000 triangle and 3 material ingest limit vs a hero LOD chain or parts), stand-in parts kit; (b) the area profile pipeline: area division method (grid features, colony and ward seeds, which open sources), profile storage (archetypes plus per-area overrides), generator at bake time vs in the game, kits and atlases, edge blending, determinism; (c) the map inspector area and landmark views. Refine DELHI_WORLD.md with what changes and cross-link it from ARCH_OPTIONS.md. Make sure P0-016 measures an instanced area kit block (one atlas, many modules) and P0-018 covers the world layer sources.",
+      "title": "Architecture options draft for Godot and the composite map (with map repair, lane model and map inspector)",
+      "desc": "Mode ARCH_DISCOVERY, now for Godot 4.7 on desktop (Mac and Windows; a web demo maybe later) and the composite map. Write harness/design/ARCH_OPTIONS.md from templates/ARCH_OPTIONS.template.md, using SALVAGE_AUDIT.md 'What Dilli Darshan must do differently', the Godot baseline perf numbers (P0-009), the style candidates, the owner's answers from sittings 1 and 2 (three characters, guns and fights, on foot anywhere, the composite map districts and layout), and the leading game design options. Decisions, 2 to 4 options each, every number marked estimate or measured: renderer (Forward+ vs Mobile; lighting at city scale: baked lightmaps vs SDFGI vs VoxelGI vs no GI with tuned ambient); physics (Jolt vs Godot Physics; VehicleBody3D vs a custom raycast vehicle; CharacterBody3D for on foot; collider shapes per tile: concave trimesh vs HeightMapShape3D plus road meshes); language (GDScript vs C#, which blocks the web export and needs the .NET build and a dotnet SDK, vs GDExtension in C++ or Rust for heavy runtime code); the offline bake pipeline outside Godot (Node reusing tools/geo/projection.ts, vs Python) and what Godot reads (custom binary tiles parsed in GDScript or GDExtension, Godot resources written by a headless Godot import step, or glTF per tile); coordinates (district frames: a transverse Mercator origin per district plus a translation offset, MAP_REPAIR.md 'District frames and stitching'; float precision at the planned map size: 32-bit floats, a floating origin, or a double precision build); the composite map (district selection file, clip and offset, stitching, connector authoring format and tools, filler between districts, the layout options from DELHI_WORLD.md section 0 with the owner's answers); tile streaming and memory (ResourceLoader threaded loads or WorkerThreadPool, tile size, unload, memory per tile); instancing and LOD (MultiMesh, visibility ranges and HLOD, impostors, occlusion culling); textures (VRAM compression on Mac and Windows, atlases); navigation (navmesh baked per tile offline vs at load; agents for pedestrians, police and traffic); animation and crowds (AnimationTree with skinned characters vs vertex animation in MultiMesh for far crowds, LOD); combat runtime (hitscan, projectiles, ragdolls); traffic AI on the lane model; the map repair layer (refine MAP_REPAIR.md: sources with licence, attribution and quality checks, the pipeline with district selection and stitching, rule engine, auto-repair log, per-tile overrides, elevation solver, verification, pilot districts); the lane-level road model; the road graph to junction mesh builder; terrain that conforms to roads; the map inspector (a web page reading baked data vs a Godot tool scene or editor plugin: fly-to, proposed fixes as 3D preview lines with confidence and reasoning, writes per-tile overrides and the inbox, lane widths and splits, area and landmark views); the verify harness on Godot (the debug server and driver from P0-025 to P0-027: keep or change); export and packaging (Mac signing and notarising, Windows build); budgets per system. Delhi world layers (DELHI_WORLD.md): decision rows for (a) the landmark registry pipeline (sources and matching, storage, tier scoring, placement inside the district frame, hero model limits and LOD, stand-in parts kit), (b) the area profile pipeline (area division, profile storage, generator at bake time vs in the game, kits and atlases, edge blending, determinism, filler between districts), (c) the inspector area and landmark views. Confirm or rewrite the bench tasks that follow (render and crowds P0-016, physics, on foot and scripting P0-017, data and tile format P0-018, roads and terrain P0-019, composite map stitch P0-029) with task.mjs note or edit, so each measures what the table needs in Godot. Refine MAP_REPAIR.md and DELHI_WORLD.md with what changes and cross-link them from ARCH_OPTIONS.md.",
       "accept": [
         "harness/design/ARCH_OPTIONS.md exists, follows the template, has every decision named in the desc with 2 to 4 options, and marks every number as estimate or measured",
-        "harness/design/MAP_REPAIR.md is refined (sources with licence, rule list, overrides format, inspector) and cross-linked from ARCH_OPTIONS.md",
-        "each bench task in P0 names its ?arch= page or harness/bench/ script, its numbers and its harness/reports/arch/<name>.json output",
-        "ARCH_OPTIONS.md has decision rows for the landmark registry pipeline, the area profile pipeline and the inspector area view, 2 to 4 options each, every number marked",
+        "MAP_REPAIR.md is refined (sources with licence, rules including district stitching, overrides format, inspector choice) and cross-linked from ARCH_OPTIONS.md",
+        "each bench task (P0-016, P0-017, P0-018, P0-019, P0-029) names its --arch=<name> Godot scene or its tools/ or harness/bench/ script, its numbers and its harness/reports/arch/<name>.json output",
+        "ARCH_OPTIONS.md has decision rows for the composite map layout, the landmark registry pipeline, the area profile pipeline and the inspector views, 2 to 4 options each, every number marked",
         "DELHI_WORLD.md is refined and cross-linked from ARCH_OPTIONS.md"
       ],
       "deps": [
         "P0-003",
-        "P0-009"
+        "P0-009",
+        "P0-007"
       ],
       "agent": "planner",
       "priority": 2,
@@ -269,15 +275,15 @@
     {
       "id": "P0-011",
       "phase": "P0",
-      "title": "Style tests batch A (2 candidates)",
-      "desc": "Per harness/design/templates/STYLE_TEST_TASK.md, for the 2 candidates STYLE_OPTIONS.md assigns to batch A: render the street scene (and the default scene) in each candidate behind ?style=<name>, touching only render setup, materials, shaders, post passes, lights and a few procedural stand-ins, in one module per style (src/render/styles/<name>.ts). No gameplay, camera or UI logic change; without the param the look is unchanged. Time box: one build round and one fix round per candidate; a style that cannot be shown in that time is reported with what it would need. The style set includes the landmark tier and area kit views from P0-009, so each candidate shows how a hero, signature and marker landmark and the two contrasting area kits look in it.",
+      "title": "Style tests batch A in Godot (2 candidates)",
+      "desc": "Per harness/design/templates/STYLE_TEST_TASK.md, adapted to Godot. Candidates: the looks Anmol picked for the test in sitting 2 (inbox, source interview), else STYLE_OPTIONS.md batch A. Render the stand-in scenes (street, landmarks, areas, the on-foot view) and the default scene in each candidate behind the user arg --style=<id>, touching only render setup (WorldEnvironment: tonemap, exposure, glow, SSAO, SSIL, fog, sky), lights and shadows, materials and shaders, post (a compositor effect or a full screen shader where the look needs one, for example comic outlines or a gritty grade) and a few procedural stand-ins, in one script plus resources per style (game/render/styles/<id>.gd and its .tres files). No gameplay, camera or UI logic change; without --style the look is unchanged. Time box: one build round and one fix round per candidate; a style that cannot be shown in that time is reported with what it would need. The style set includes the landmark tier, area kit and on-foot views from P0-009.",
       "accept": [
-        "for each batch A style: node harness/bin/lookproof.mjs --set style_<name> --query \"style=<name>\" --perf --no-build writes every view and perf.json judged against the draft budgets",
+        "for each batch A style: node harness/bin/lookproof.mjs --set style_<id> --query \"style=<id>\" --perf --no-build writes every view (9) and perf.json judged against the draft budgets",
         "node harness/bin/lookproof.mjs --sheet baseline,style_<a>,style_<b> --out style_options writes harness/reports/look/style_options.jpg and the builder read it (downscaled to about 1600 px)",
         "the default look is unchanged: lookproof.mjs --set baseline_check --no-build then --compare baseline_check --against baseline passes",
         "verify --quick passes with no console errors",
         "STYLE_OPTIONS.md has the measured numbers for both candidates in place of the estimates, wrong estimates marked",
-        "every style set has the landmark tiers view and the area kits view, and the sheet shows them for every candidate"
+        "the sheet shows the landmark tiers, area kits and on-foot views for every candidate"
       ],
       "deps": [
         "P0-009"
@@ -293,14 +299,14 @@
     {
       "id": "P0-012",
       "phase": "P0",
-      "title": "Style tests batch B and the full side by side sheet",
-      "desc": "Same as batch A for the remaining candidates (STYLE_OPTIONS.md batch B, 1 to 3 styles), then the full sheet of baseline plus every candidate. Same rules and time box as batch A. The style set includes the landmark tier and area kit views from P0-009, so each candidate shows how a hero, signature and marker landmark and the two contrasting area kits look in it.",
+      "title": "Style tests batch B in Godot and the full side by side sheet",
+      "desc": "Same as P0-011 (Godot, --style=<id>, one script plus resources per style, same rules and time box) for the remaining candidates Anmol picked for the test (or STYLE_OPTIONS.md batch B, 1 or 2 styles), then the full sheet of baseline plus every candidate. The orchestrator skips this task if sitting 2 narrowed the test to the batch A looks; then the P0-011 sheet is the full sheet. The style set includes the landmark tier, area kit and on-foot views from P0-009.",
       "accept": [
-        "for each batch B style: lookproof.mjs --set style_<name> --query \"style=<name>\" --perf --no-build writes every view and perf.json",
+        "for each batch B style: lookproof.mjs --set style_<id> --query \"style=<id>\" --perf --no-build writes every view and perf.json",
         "node harness/bin/lookproof.mjs --sheet baseline,<every style set> --out style_options writes harness/reports/look/style_options.jpg with every candidate, and the builder read it",
         "the default look is unchanged (baseline_check compare passes); verify --quick passes",
         "STYLE_OPTIONS.md has measured numbers for every candidate and the sheet path",
-        "every style set has the landmark tiers view and the area kits view, and the sheet shows them for every candidate"
+        "the sheet shows the landmark tiers, area kits and on-foot views for every candidate"
       ],
       "deps": [
         "P0-011"
@@ -317,7 +323,7 @@
       "id": "P0-013",
       "phase": "P0",
       "title": "Style comparison review",
-      "desc": "Mode STYLE TEST for both batches: check every style set exists with all views and perf.json, read the sheet and at most 6 views, check the default look compare, check STYLE_OPTIONS.md numbers match the perf.json files. Report per candidate: shows the intended look or not, perf against the draft budgets, visible defects. This review stands in for per-task verification of the two style test tasks (low usage mode). Also judge per candidate: are the three landmark tiers distinct and readable, and do the two area kits read as different places.",
+      "desc": "Mode STYLE TEST for both batches: check every style set exists with all views and perf.json, read the sheet and at most 6 views, check the default look compare, check STYLE_OPTIONS.md numbers match the perf.json files. Report per candidate: shows the intended look or not, perf against the draft budgets, visible defects. This review stands in for per-task verification of the two style test tasks (low usage mode). Also judge per candidate: are the three landmark tiers distinct and readable, and do the two area kits read as different places. Replan 2026-11-10: the styles render in Godot (--style=<id>) through the Godot driver; read the lookproof output and sheets, do not open a browser. Also judge the on-foot view per candidate: people and street detail at eye height.",
       "accept": [
         "report lists every candidate with PASS or FAIL against its style test acceptance, with the perf numbers quoted from perf.json",
         "any FAIL is a fix task added before the next style round"
@@ -337,7 +343,7 @@
       "id": "P0-014",
       "phase": "P0",
       "title": "Style round 3 and later until the style sign-off (architecture round 1 in the same sitting)",
-      "desc": "Show Anmol harness/reports/look/style_options.jpg and the STYLE_OPTIONS.md table with measured numbers, follow STYLE_INTERVIEW.md round 3 and later, record every answer verbatim (inbox-add --source interview, ack). In the same sitting show the ARCH_OPTIONS.md draft and ask its questions (benches are still to come). Only explicit words count as sign-off; record it with task.mjs signoff \"<his exact words>\". If a round ends without sign-off: add the refinement tasks it needs (planner STYLE_DISCOVERY update, builder style tweaks or a new candidate) plus a new orchestrator task 'Style round <n>', add each as a dep of the 'Style bible and budgets' task (task.mjs deps --add), then mark this task done with a note. Delhi world layers: show the pilot landmark census (harness/reports/arch/landmarks_pilot_draft.json, if P0-018 is done) and the 'Landmark tiers and area kits' section of STYLE_OPTIONS.md, and ask: confirm the pilot heroes, the hero list for later, the area order after the pilot, and any P0-005 question he skipped (public or commercial, posters, ETS2, top speed).",
+      "desc": "Show Anmol harness/reports/look/style_options.jpg and the STYLE_OPTIONS.md table with measured numbers, follow STYLE_INTERVIEW.md round 3 and later, record every answer verbatim (inbox-add --source interview, ack). In the same sitting show the ARCH_OPTIONS.md draft and ask its questions (benches are still to come). Only explicit words count as sign-off; record it with task.mjs signoff \"<his exact words>\". If a round ends without sign-off: add the refinement tasks it needs (planner STYLE_DISCOVERY update, builder style tweaks or a new candidate) plus a new orchestrator task 'Style round <n>', add each as a dep of the 'Style bible and budgets' task (task.mjs deps --add), then mark this task done with a note. Delhi world layers: show the pilot landmark census (harness/reports/arch/landmarks_pilot_draft.json, if P0-018 is done) and the 'Landmark tiers and area kits' section of STYLE_OPTIONS.md, and ask: confirm the pilot heroes, the hero list for later, the area order after the pilot, and any P0-005 question he skipped (public or commercial, posters, ETS2, top speed). Replan 2026-11-10: style tests now render in Godot. Also show the composite map: the layout options updated with his sitting 2 answers and, if P0-029 is done, the stitch bench shots and numbers (harness/reports/arch/stitch.json). Ask him to confirm the district list and the layout, and any sitting 2 question he skipped.",
       "accept": [
         "every answer recorded and acked in the inbox",
         "either task.mjs status shows the style sign-off with his quote, or the follow-up round task exists and blocks the style bible task"
@@ -358,7 +364,7 @@
       "id": "P0-015",
       "phase": "P0",
       "title": "Style bible, look rules and signed budgets",
-      "desc": "Only after task.mjs status shows the style sign-off (STYLE_DISCOVERY step 6, templates/SIGNOFF_CHECKLIST.md): write STYLE_BIBLE.md (look in one line, palette hex, lighting presets, materials, scale and camera, vehicles and people, UI, effects, the readability floor, AI image prompt anchors and technical tails per asset kind so the art-director can write dashboard cards with no manual work for Anmol), the VERIFY.md look rules and rubric lines, signed budgets in perf_budgets.json (status signed), look_rules.json tolerances, approve the chosen style's shots (node harness/bin/lookproof.mjs --approve style_<chosen>), and the decisions.md entry with the sign-off quote. Record what happens to the ?style= switches (chosen one promoted or kept behind the flag, others removed in the first phase). Delhi world layers: STYLE_BIBLE.md gets look rules per landmark tier (hero, signature, marker) and per area kit, AI prompt anchors for landmark models and kit textures, and the respect rule from DELHI_WORLD.md section 3 as a VERIFY.md rubric line.",
+      "desc": "Only after task.mjs status shows the style sign-off (STYLE_DISCOVERY step 6, templates/SIGNOFF_CHECKLIST.md): write STYLE_BIBLE.md (look in one line, palette hex, lighting presets, materials, scale and camera, vehicles and people, UI, effects, the readability floor, AI image prompt anchors and technical tails per asset kind so the art-director can write dashboard cards with no manual work for Anmol), the VERIFY.md look rules and rubric lines, signed budgets in perf_budgets.json (status signed), look_rules.json tolerances, approve the chosen style's shots (node harness/bin/lookproof.mjs --approve style_<chosen>), and the decisions.md entry with the sign-off quote. Record what happens to the ?style= switches (chosen one promoted or kept behind the flag, others removed in the first phase). Delhi world layers: STYLE_BIBLE.md gets look rules per landmark tier (hero, signature, marker) and per area kit, AI prompt anchors for landmark models and kit textures, and the respect rule from DELHI_WORLD.md section 3 as a VERIFY.md rubric line. Replan 2026-11-10, Godot terms: lighting presets as WorldEnvironment and light settings (tonemap, exposure, glow, fog, GI method), materials as StandardMaterial3D or shader parameters, and what happens to the --style switches (the chosen one becomes the default, the others are removed in the first phase). Add look rules for the three characters and people at on-foot distance, weapons and combat effects (muzzle flash, impacts, smoke) in the over-the-top action tone, and the respect rule as refined (real conditions shown honestly, never spectacle or a joke) as a VERIFY.md rubric line.",
       "accept": [
         "STYLE_BIBLE.md has every template section filled with this style's values",
         "perf_budgets.json status is signed; look_rules.json updated; harness/look_proof/approved/ holds the chosen style's views",
@@ -378,13 +384,13 @@
     {
       "id": "P0-016",
       "phase": "P0",
-      "title": "Arch bench: renderer, instancing, LOD and textures",
-      "desc": "Bench per ARCH_OPTIONS.md (its notes on this task win over this text). Behind ?arch=render: a dense city stand-in (the street module tiled to about 2 km by 2 km, 2000 or more buildings, 500 or more vehicles and props) rendered with three.js WebGLRenderer and WebGPURenderer (TSL), comparing merged meshes vs InstancedMesh vs BatchedMesh, LOD with impostors at distance vs none, and KTX2 (Basis UASTC and ETC1S) vs WebP textures (GPU memory, upload and decode time). Fixed camera paths at driving speed (60 and 100 km/h), numbers through debug.perf: frame time p50 and p95, CPU and GPU ms, draw calls, triangles, memory, load time. Write harness/reports/arch/render.json and a short readme of the setups. New dependencies only for the bench, each with a decisions.md line. Time box: one build round and one fix round; report what could not be measured. Also measure an area kit stand-in (DELHI_WORLD.md 'Area kits'): one atlas, 20 to 40 facade and prop modules instanced into a 500 m by 500 m dense old city block, draw calls and frame time vs the same block as merged meshes.",
+      "title": "Arch bench (Godot): renderer, lighting, instancing, LOD, textures and crowds",
+      "desc": "Bench per ARCH_OPTIONS.md (its notes on this task win over this text). Behind --arch=render in Godot 4.7.2: a dense city stand-in (the stand-in street module tiled to about 2 km by 2 km, 2000 or more buildings, 500 or more vehicles and props) comparing Forward+ vs Mobile, individual MeshInstance3D vs merged meshes vs MultiMesh, visibility ranges and HLOD vs none, occlusion culling on and off, and VRAM compressed textures vs uncompressed (video memory, import size, load time). Lighting cost: one sun with shadows, plus SSAO, plus SDFGI, and baked lightmaps on one block (bake time and file size). Crowds: 300 people stand-ins on the street, skinned meshes with an AnimationTree walk vs vertex animation in a MultiMesh, with a distance LOD. Area kit (DELHI_WORLD.md 'Area kits'): one atlas, 20 to 40 facade and prop modules as MultiMesh in a 500 m by 500 m dense old city block vs the same block merged. Fixed camera paths at driving speed (60 and 100 km/h) and on foot (5 km/h); numbers through debug.perf: frame time p50 and p95, CPU and GPU ms, draw calls, primitives, video memory, load time. Write harness/reports/arch/render.json and a short readme of the setups. Time box: one build round and one fix round; report what could not be measured.",
       "accept": [
-        "harness/reports/arch/render.json exists with p50 and p95 frame time, draw calls, triangles, memory and load per setup, and the GL renderer and machine",
-        "the default game (no ?arch) is unchanged: verify --quick passes",
+        "harness/reports/arch/render.json has p50 and p95 frame time, CPU and GPU ms, draw calls, primitives, video memory and load per setup, plus the machine, Godot version, renderer and GPU",
+        "render.json has the crowd numbers (skinned vs vertex animation, 300 people) and the area kit block numbers (MultiMesh vs merged)",
         "the builder read one shot per setup to confirm each rendered (not blank)",
-        "render.json has the area kit block numbers (draw calls, p95 frame time, memory) for instanced vs merged"
+        "verify --quick passes; the default game (no --arch) is unchanged"
       ],
       "deps": [
         "P0-010"
@@ -401,10 +407,10 @@
     {
       "id": "P0-017",
       "phase": "P0",
-      "title": "Arch bench: physics engine, worker and vehicle",
-      "desc": "Bench per ARCH_OPTIONS.md. Behind ?arch=physics or a harness/bench/ script: Rapier and the other engine ARCH_OPTIONS names (for example Jolt) on the main thread vs in a worker (postMessage vs SharedArrayBuffer, note the cross-origin isolation headers it needs), a raycast vehicle on a road surface with kerbs and a flyover ramp, colliders built per 500 m tile (trimesh vs heightfield plus road trimesh) with build time and memory, 200 static and 30 dynamic bodies. Measure step ms p95, input to motion latency in frames, collider build ms per tile, memory, determinism of a replayed input script. Collision shapes must match the visible meshes (owner rule): add a check that a ray down from 20 sampled points hits the collider within 0.05 m of the visible surface. Write harness/reports/arch/physics.json. Time box: one build round and one fix round.",
+      "title": "Arch bench (Godot): physics, vehicle, on foot, combat, navigation and scripting cost",
+      "desc": "Bench per ARCH_OPTIONS.md. Behind --arch=physics in Godot: Jolt vs Godot Physics; a vehicle (VehicleBody3D vs a custom raycast vehicle, both with the KEEP tune numbers from decisions.md) on a road surface with kerbs and a flyover ramp; colliders built per 500 m tile (ConcavePolygonShape3D trimesh vs HeightMapShape3D plus road trimesh) with build time on a worker thread and memory; 200 static and 30 dynamic bodies; on foot: a CharacterBody3D on stairs, kerbs and ramps; combat: 1000 hitscan raycasts per second against 100 character colliders, and 10 ragdolls; navigation: navmesh bake time and memory for one tile, and paths for 100 agents. Scripting cost: a GDScript tick of 200 pedestrian and 30 traffic agents (steering plus raycasts) in ms per frame; a GDExtension version only if godot-cpp builds inside the time box (scons in a local venv under tools/, never global), else an estimate marked as such. Measure physics step ms p95, input to motion latency in frames, collider build ms per tile, memory, and determinism of a replayed input script on the fixed tick. Collision shapes must match the visible meshes (owner rule): a ray down from 20 sampled points hits the collider within 0.05 m of the visible surface. Write harness/reports/arch/physics.json. Time box: one build round and one fix round.",
       "accept": [
-        "harness/reports/arch/physics.json exists with the numbers above for each engine and threading setup",
+        "harness/reports/arch/physics.json has the numbers above for each engine and vehicle setup, plus on foot, combat, navigation and scripting cost",
         "the collider vs visible surface check is in the report with its max error",
         "verify --quick passes; the default game is unchanged"
       ],
@@ -424,7 +430,7 @@
       "id": "P0-018",
       "phase": "P0",
       "title": "Arch bench: pilot data sources, map repair census and tile format",
-      "desc": "Bench per ARCH_OPTIONS.md and MAP_REPAIR.md. Fetch the pilot area data (Connaught Place, the ITO and Pragati Maidan flyovers, Chandni Chowk, one metro line; bounding boxes written into harness/bench/pilot_areas.json) from the sources ARCH_OPTIONS names (OSM extract or Overpass, Overture transportation, Google Open Buildings and Microsoft footprints, FABDEM or CartoDEM) into a gitignored data folder in this repo (never commit a file over 50 MB; record source URL, date and licence for each). If a source is unreachable after 3 tries, note it and continue. Run a first rule engine pass (harness/bench/ script) and count issues per pilot site and per rule: dangling ends near another road, crossings without a shared node on the same layer, flyover and bridge ends without support, ramps ending in the air, building and road overlaps, duplicate building footprints across sources, DTM vs road height outliers. Bake the pilot to 2 or 3 candidate tile formats and measure file size, bake time, decode time in a worker, and memory per tile. Write harness/reports/arch/pilot_data.json and harness/reports/arch/tile_format.json, plus 3 to 6 top-down debug renders of issues (lines and points on a plain map) that the builder reads. Delhi world layers (DELHI_WORLD.md): (1) Source licence check for every source in DELHI_WORLD.md 'Sources' and 'Area division from open data' (ASI list, Wikidata, Wikipedia, Commons, OSM tags, MPD land use, Census 2011, ward boundaries, Google Open Buildings, Microsoft footprints, Sentinel-2 NDVI, VIIRS night lights) and for the bare-earth DEM: confirm the FABDEM licence (the audit believes CC BY-NC-SA 4.0, unverified) and the CartoDEM terms, and say which are allowed for a public, a free public and a commercial game. (2) Pilot census: in the pilot boxes, count landmark candidates per source and per proposed tier, how many have an OSM footprint, OSM centroid vs Wikidata P625 distance (median, p90, count over 50 m), and a draft candidate list harness/reports/arch/landmarks_pilot_draft.json (name, ids, lat/lon, footprint yes or no, proposed tier). (3) Area data coverage in the pilot: which area sources cover it, resolution, and a first feature table per 100 m cell for the three pilot areas. Write harness/reports/arch/world_sources.json.",
+      "desc": "Bench per ARCH_OPTIONS.md and MAP_REPAIR.md. Fetch the pilot area data (Connaught Place, the ITO and Pragati Maidan flyovers, Chandni Chowk, one metro line; bounding boxes written into harness/bench/pilot_areas.json) from the sources ARCH_OPTIONS names (OSM extract or Overpass, Overture transportation, Google Open Buildings and Microsoft footprints, FABDEM or CartoDEM) into a gitignored data folder in this repo (never commit a file over 50 MB; record source URL, date and licence for each). If a source is unreachable after 3 tries, note it and continue. Run a first rule engine pass (harness/bench/ script) and count issues per pilot site and per rule: dangling ends near another road, crossings without a shared node on the same layer, flyover and bridge ends without support, ramps ending in the air, building and road overlaps, duplicate building footprints across sources, DTM vs road height outliers. Bake the pilot to 2 or 3 candidate tile formats and measure file size, bake time, decode time in a worker, and memory per tile. Write harness/reports/arch/pilot_data.json and harness/reports/arch/tile_format.json, plus 3 to 6 top-down debug renders of issues (lines and points on a plain map) that the builder reads. Delhi world layers (DELHI_WORLD.md): (1) Source licence check for every source in DELHI_WORLD.md 'Sources' and 'Area division from open data' (ASI list, Wikidata, Wikipedia, Commons, OSM tags, MPD land use, Census 2011, ward boundaries, Google Open Buildings, Microsoft footprints, Sentinel-2 NDVI, VIIRS night lights) and for the bare-earth DEM: confirm the FABDEM licence (the audit believes CC BY-NC-SA 4.0, unverified) and the CartoDEM terms, and say which are allowed for a public, a free public and a commercial game. (2) Pilot census: in the pilot boxes, count landmark candidates per source and per proposed tier, how many have an OSM footprint, OSM centroid vs Wikidata P625 distance (median, p90, count over 50 m), and a draft candidate list harness/reports/arch/landmarks_pilot_draft.json (name, ids, lat/lon, footprint yes or no, proposed tier). (3) Area data coverage in the pilot: which area sources cover it, resolution, and a first feature table per 100 m cell for the three pilot areas. Write harness/reports/arch/world_sources.json. Replan 2026-11-10 for Godot and the composite map: (a) fetch the pilot districts plus the far district the stitch bench P0-029 uses (for example a stretch of East Delhi), or one Delhi-wide extract if that is simpler, all in the gitignored data folder; (b) compare tile formats on the Godot side: custom binary parsed in GDScript (and GDExtension if cheap), Godot resources written by a headless Godot import step, and glTF per tile; measure file size, bake time, load time on a Godot background thread, and memory per tile; (c) the bake tooling lives in tools/ (Node reusing tools/geo/projection.ts, or Python if ARCH_OPTIONS.md says so); (d) debug renders are north up.",
       "accept": [
         "harness/reports/arch/pilot_data.json lists every source with URL, date, licence and attribution need, and the issue counts per pilot site and rule",
         "harness/reports/arch/tile_format.json has size, bake ms, decode ms and memory per format",
@@ -449,7 +455,7 @@
       "id": "P0-019",
       "phase": "P0",
       "title": "Arch bench: lane-level road, junction and terrain fit prototype",
-      "desc": "Bench per ARCH_OPTIONS.md (the lane-level road model is the top Fable job; this is its feasibility prototype, not the production build). On one hard pilot site from the census (the ITO or Pragati Maidan flyover with its service lanes, plus one Connaught Place radial junction), behind ?arch=roads: build lane sets from lanes, width or Delhi class defaults; a diverge and a merge with tapers and gore areas where carriageways never share an index point; flyover centre lanes climbing while service lanes stay at grade; one junction surface from lane-edge curves with corner radii; terrain from the DTM flattened under the roads with a shoulder blend. Automated checks with counts: overlapping road faces, lane continuity through every split and merge, taper length per class, road surface vs terrain gap (max metres), floating or sunk segments. Measure build ms and triangle counts. Write harness/reports/arch/roads.json and 4 to 6 shots (top down and player height) that the builder reads. Time box: one build round and one fix round; report what the production version needs.",
+      "desc": "Bench per ARCH_OPTIONS.md (the lane-level road model is the top Fable job; this is its feasibility prototype, not the production build). On one hard pilot site from the census (the ITO or Pragati Maidan flyover with its service lanes, plus one Connaught Place radial junction), behind ?arch=roads: build lane sets from lanes, width or Delhi class defaults; a diverge and a merge with tapers and gore areas where carriageways never share an index point; flyover centre lanes climbing while service lanes stay at grade; one junction surface from lane-edge curves with corner radii; terrain from the DTM flattened under the roads with a shoulder blend. Automated checks with counts: overlapping road faces, lane continuity through every split and merge, taper length per class, road surface vs terrain gap (max metres), floating or sunk segments. Measure build ms and triangle counts. Write harness/reports/arch/roads.json and 4 to 6 shots (top down and player height) that the builder reads. Time box: one build round and one fix round; report what the production version needs. Replan 2026-11-10 for Godot: the prototype mesh build runs in the offline bake tooling or in Godot, as ARCH_OPTIONS.md picks, and is shown in Godot behind --arch=roads (not a browser page). Shots come from lookproof or shoot on the Godot driver.",
       "accept": [
         "harness/reports/arch/roads.json has the check counts (overlaps, continuity breaks, taper violations, max road to terrain gap) and build ms and triangles",
         "the builder read the shots: lanes visibly split and merge with tapers, the flyover climbs while service lanes stay at grade, no visible overlap or floating road",
@@ -471,7 +477,7 @@
       "id": "P0-020",
       "phase": "P0",
       "title": "Architecture options: measured numbers and recommendation",
-      "desc": "Mode ARCH_DISCOVERY step 4: put the measured numbers from harness/reports/arch/*.json into ARCH_OPTIONS.md in place of the estimates, mark each estimate that was wrong, give one recommendation per decision with the reason and its fit with the signed style (or the leading candidate if the style is not signed yet), the budgets per system, the map repair layer and map inspector plan with the pilot census numbers, and at most 6 questions for the owner.",
+      "desc": "Mode ARCH_DISCOVERY step 4: put the measured numbers from harness/reports/arch/*.json into ARCH_OPTIONS.md in place of the estimates, mark each estimate that was wrong, give one recommendation per decision with the reason and its fit with the signed style (or the leading candidate if the style is not signed yet), the budgets per system, the map repair layer and map inspector plan with the pilot census numbers, and at most 6 questions for the owner. Replan 2026-11-10: include the composite map stitch numbers (harness/reports/arch/stitch.json) and a recommendation for the district layout, and give the budgets per system in Godot terms.",
       "accept": [
         "every number in ARCH_OPTIONS.md is marked measured (with its report file) or estimate; wrong estimates marked",
         "one recommendation per decision and at most 6 questions for the next round"
@@ -480,7 +486,8 @@
         "P0-016",
         "P0-017",
         "P0-018",
-        "P0-019"
+        "P0-019",
+        "P0-029"
       ],
       "agent": "planner",
       "priority": 2,
@@ -495,11 +502,12 @@
       "id": "P0-021",
       "phase": "P0",
       "title": "Architecture rounds until the architecture sign-off",
-      "desc": "Show Anmol the ARCH_OPTIONS.md table with measured numbers and the recommendations (including the map repair layer, the lane-level road model, the map inspector and the pilot area), ask the questions, record every answer verbatim (inbox-add --source interview, ack). Style rounds still open may share the sitting. Only explicit words count; record with task.mjs archsignoff \"<his exact words>\". If a round ends without sign-off: add the follow-up tasks (another bench, a planner ARCH_DISCOVERY update) and a new orchestrator task 'Architecture round <n>', add each as a dep of the 'Architecture record' task, then mark this task done with a note. Include the landmark registry and area profile pipelines (DELHI_WORLD.md) in the architecture sign-off, with the pilot census numbers and the source licence results. Ask any landmark or area question still open (hero list, area order, pilot metro line).",
+      "desc": "Show Anmol the ARCH_OPTIONS.md table with measured numbers and the recommendations (including the map repair layer, the lane-level road model, the map inspector and the pilot area), ask the questions, record every answer verbatim (inbox-add --source interview, ack). Style rounds still open may share the sitting. Only explicit words count; record with task.mjs archsignoff \"<his exact words>\". If a round ends without sign-off: add the follow-up tasks (another bench, a planner ARCH_DISCOVERY update) and a new orchestrator task 'Architecture round <n>', add each as a dep of the 'Architecture record' task, then mark this task done with a note. Include the landmark registry and area profile pipelines (DELHI_WORLD.md) in the architecture sign-off, with the pilot census numbers and the source licence results. Ask any landmark or area question still open (hero list, area order, pilot metro line). Replan 2026-11-10: the sign-off covers the Godot stack (renderer, physics, language, bake pipeline, tile format, streaming, export), the composite map (district list, layout, connectors) and the harness on Godot. Ask him to confirm the district list and layout in his own words.",
       "accept": [
         "every answer recorded and acked",
         "either task.mjs status shows the architecture sign-off with his quote, or the follow-up round task exists and blocks the architecture record task",
-        "the architecture sign-off quote or the round notes cover the landmark registry and area profile pipelines"
+        "the architecture sign-off quote or the round notes cover the landmark registry and area profile pipelines",
+        "the architecture sign-off quote or the round notes cover the Godot stack and the composite map district list and layout"
       ],
       "deps": [
         "P0-020"
@@ -516,7 +524,7 @@
       "id": "P0-022",
       "phase": "P0",
       "title": "Architecture record",
-      "desc": "Only after task.mjs status shows the architecture sign-off (ARCH_DISCOVERY step 5): write the chosen design into harness/design/TECH.md (stack, coordinates and projection, world pipeline, map repair layer, lane model, streaming, physics, render pipeline, budgets) and docs/ARCHITECTURE.md (target module map, keeping every module small: no file owns streaming, building, physics and cleanup together), finalise MAP_REPAIR.md, put budgets per system into perf_budgets.json, update shared_paths.json and READ_MAP.md areas for the planned modules, and add the decisions.md entry with the sign-off quote. Also record the signed landmark registry and area profile design: finalise DELHI_WORLD.md (no open option wording), put the world layer modules into docs/ARCHITECTURE.md and TECH.md, and their budgets (generated buildings, dressing, landmarks, life) into perf_budgets.json.",
+      "desc": "Only after task.mjs status shows the architecture sign-off (ARCH_DISCOVERY step 5): write the chosen design into harness/design/TECH.md (stack, coordinates and projection, world pipeline, map repair layer, lane model, streaming, physics, render pipeline, budgets) and docs/ARCHITECTURE.md (target module map, keeping every module small: no file owns streaming, building, physics and cleanup together), finalise MAP_REPAIR.md, put budgets per system into perf_budgets.json, update shared_paths.json and READ_MAP.md areas for the planned modules, and add the decisions.md entry with the sign-off quote. Also record the signed landmark registry and area profile design: finalise DELHI_WORLD.md (no open option wording), put the world layer modules into docs/ARCHITECTURE.md and TECH.md, and their budgets (generated buildings, dressing, landmarks, life) into perf_budgets.json. Replan 2026-11-10: write the Godot stack and the composite map into TECH.md and docs/ARCHITECTURE.md (game/ module map, tools/ bake modules), harness/data/districts.json as signed, the connector format in MAP_REPAIR.md, and the Godot budgets per system in perf_budgets.json.",
       "accept": [
         "TECH.md, docs/ARCHITECTURE.md and MAP_REPAIR.md describe the signed design with no open 'option' wording left",
         "perf_budgets.json has budgets per system; decisions.md has the entry with Anmol's exact quote"
@@ -536,7 +544,7 @@
       "id": "P0-023",
       "phase": "P0",
       "title": "Plan the game: phases after P0",
-      "desc": "From the signed style, architecture and game design (GAME.md), add the phases after P0 with task.mjs phase-add (goal, exit criteria, milestones) and add their missions to milestones.json. Order: P1 the foundation and pilot (coordinates and bake pipeline, map repair layer with the map inspector page as an early task so Anmol can review during the pilot, the lane-level road model, junction builder, terrain fit, streaming, physics worker and handling, render foundation, all with the tests the owner asked for: landmark lands right, collisions match visuals, north up), then the pilot area made rich in the signed style (procedural first, art cards on the dashboard with prompts, nothing waits for art), then scale-up to the wider city, then traffic, life, audio and missions, polish last. Write next_phase_notes.md items for P1 (which tasks carry the Fable tag per CLAUDE.md, and that the ?style= switches not chosen are removed). Then run node harness/bin/task.mjs gate P0. Standing rules (decisions.md 2026-11-10): check every phase against the GAME.md pillars and say in each phase goal which pillar it serves; every mission task carries the fun criteria from VERIFY.md; no mission system task exists before the game design sign-off, and every mission system task in later phases builds on GAME.md as signed. Delhi world layers (DELHI_WORLD.md section 8, inbox mmwapw3co): after the map repair pilot tasks, P1 or the pilot phase must add: (1) landmark registry build: ingest, match and merge, tier scoring, harness/data/landmarks.json and overrides (MODEL fable); (2) landmark placement pipeline: footprint, orientation, plinth fit, landmark zone, surroundings, LOD (MODEL fable); (3) landmark stand-in parts kit and the pilot heroes as stand-ins, plus art cards with prompts and reference notes for the pilot heroes (art-director, after the style bible); (4) area division and area profile data for the pilot areas with evidence lines (builder, not Fable); (5) area profile generator: parcels, buildings, street dressing, edge blending, instancing and atlases per area kit (MODEL fable); (6) map inspector area view (map coloured by area, click to view and edit the profile) and landmark view (builder, Opus); (7) pilot verification tasks: landmark position tests against real coordinates, side by side pilot shots against reference photos read by eye, area difference metric, perf on the pilot camera paths within the signed budgets; (8) OSM ODbL attribution and every source credit shown in the game. Scale-up phases follow in the area order Anmol gave. Keep the respect rule (DELHI_WORLD.md section 3) in every area and art task's acceptance.",
+      "desc": "From the signed style, architecture and game design (GAME.md), add the phases after P0 with task.mjs phase-add (goal, exit criteria, milestones) and add their missions to milestones.json. Order: P1 the foundation and pilot (coordinates and bake pipeline, map repair layer with the map inspector page as an early task so Anmol can review during the pilot, the lane-level road model, junction builder, terrain fit, streaming, physics worker and handling, render foundation, all with the tests the owner asked for: landmark lands right, collisions match visuals, north up), then the pilot area made rich in the signed style (procedural first, art cards on the dashboard with prompts, nothing waits for art), then scale-up to the wider city, then traffic, life, audio and missions, polish last. Write next_phase_notes.md items for P1 (which tasks carry the Fable tag per CLAUDE.md, and that the ?style= switches not chosen are removed). Then run node harness/bin/task.mjs gate P0. Standing rules (decisions.md 2026-11-10): check every phase against the GAME.md pillars and say in each phase goal which pillar it serves; every mission task carries the fun criteria from VERIFY.md; no mission system task exists before the game design sign-off, and every mission system task in later phases builds on GAME.md as signed. Delhi world layers (DELHI_WORLD.md section 8, inbox mmwapw3co): after the map repair pilot tasks, P1 or the pilot phase must add: (1) landmark registry build: ingest, match and merge, tier scoring, harness/data/landmarks.json and overrides (MODEL fable); (2) landmark placement pipeline: footprint, orientation, plinth fit, landmark zone, surroundings, LOD (MODEL fable); (3) landmark stand-in parts kit and the pilot heroes as stand-ins, plus art cards with prompts and reference notes for the pilot heroes (art-director, after the style bible); (4) area division and area profile data for the pilot areas with evidence lines (builder, not Fable); (5) area profile generator: parcels, buildings, street dressing, edge blending, instancing and atlases per area kit (MODEL fable); (6) map inspector area view (map coloured by area, click to view and edit the profile) and landmark view (builder, Opus); (7) pilot verification tasks: landmark position tests against real coordinates, side by side pilot shots against reference photos read by eye, area difference metric, perf on the pilot camera paths within the signed budgets; (8) OSM ODbL attribution and every source credit shown in the game. Scale-up phases follow in the area order Anmol gave. Keep the respect rule (DELHI_WORLD.md section 3) in every area and art task's acceptance. Replan 2026-11-10: plan for Godot, the composite map and the three characters. The foundation phase also holds: district selection and stitching in the bake (MODEL fable, part of the map bake pipeline), the debug server and driver kept green, export builds for Mac (Windows when a machine is available), the on-foot character controller and camera, the combat foundation and police. The first playable slice is one mission per character plus one merged mission in the pilot districts. Update kit.config.json gameSizeEstimate from the plan.",
       "accept": [
         "task.mjs status lists the new phases with goals, exits and milestones",
         "milestones.json lists the planned missions",
@@ -556,6 +564,146 @@
       "attempts": 0,
       "notes": [],
       "created": "2026-11-10T13:04:46.154Z"
+    },
+    {
+      "id": "P0-024",
+      "phase": "P0",
+      "title": "Godot toolchain and project scaffold with the coordinate contract",
+      "desc": "Owner direction 2026-11-10 (decisions.md 'Engine Godot 4, and a compressed Delhi map'): the game moves from the browser to Godot 4, desktop first (Mac and Windows), maybe a web demo later. Found on this machine: /Applications/Godot.app is Godot 4.7.2.stable.official (standard build, no .NET), export templates 4.7.2.stable are installed in ~/Library/Application Support/Godot/export_templates, no dotnet SDK, clang via Xcode tools, no scons. (1) Pin the version: kit.config.json gets a godot block {version: '4.7.2.stable', candidates: [env GODOT, tools/godot/, /Applications/Godot.app/Contents/MacOS/Godot]}; add harness/bin/godot.mjs that finds the binary, checks --version against the pin and prints the path, with a test. If no matching binary is found, it downloads the official 4.7.2 portable build for the platform into tools/godot/ (gitignored, checksum checked against the official release file) and never installs anything globally; this path is for other machines (Windows), do not download on this Mac. (2) Scaffold the Godot project in game/ (project.godot, Forward+ for now, GDScript, a fixed physics tick of 60 Hz): a main scene with a ground plane, the red north post 50 m along -Z, the box car stand-in ported from src/car.ts (same kinematic model and forward(heading) rule), the chase camera, and simple input actions (throttle, brake, steer) in the InputMap. Coordinates are binding (TECH.md 'Coordinates'): east +X, north -Z, up +Y, 1 unit = 1 m, no negative scale and no axis flips anywhere. (3) Port the projection to GDScript (game/geo/projection.gd) from src/geo/projection.ts. The TS file stays as the reference for the offline bake tooling. Write a fixture of 20 points (lat, lon, x, z) generated from the TS code into harness/data/fixtures/projection_points.json and check the GDScript port against it. (4) A headless Godot test runner (a small runner in game/tests/ or a vendored MIT addon such as GUT; write the choice to decisions.md) run by npm test next to vitest. Port the tests: origin maps to (0, 0); Connaught Place park (28.6315, 77.2167) at x -1246 +/- 25, z -2071 +/- 25; Red Fort (28.6562, 77.2410) at x +1129 +/- 25, z -4821 +/- 25; round trip under 0.01 m; due north has x 0 and negative z; GDScript vs TS fixture within 0.01 m; forward(0) is -Z and forward(PI/2) is +X; no node under the world root has a negative scale. (5) decisions.md entries: Godot 4.7.2 pinned; GDScript first, C# not used (it blocks the web export, needs the .NET build of Godot and a dotnet SDK); GDExtension is an architecture option for heavy code; project layout (game/ for the Godot project, tools/ for offline bake tooling, harness/ unchanged). The three.js scaffold in src/ stays until the harness driver task ports its scenarios. No look work: stand-ins only.",
+      "accept": [
+        "node harness/bin/godot.mjs --version prints 4.7.2.stable and the binary path; its test passes; kit.config.json has the godot block; tools/godot/ is in .gitignore; nothing installed outside the repo",
+        "the pinned Godot runs headless on the project and exits 0 with no ERROR or SCRIPT ERROR lines in its output (import and script parse clean)",
+        "npm test runs vitest and the headless Godot tests; all pass, including every projection, fixture cross-check, axis and no-negative-scale test named in the desc",
+        "the builder captured one windowed frame of the scaffold (Movie Maker --write-movie to a PNG, or a viewport capture) and read it: the box car sits on the ground and the red north post is ahead when the camera faces -Z",
+        "decisions.md has the pin, language and layout entries; TECH.md 'Stack' names Godot 4.7.2, game/ and the test runner"
+      ],
+      "deps": [],
+      "agent": "builder",
+      "priority": 1,
+      "kind": "feature",
+      "status": "todo",
+      "attempts": 0,
+      "notes": [],
+      "created": "2026-11-10T14:08:49.920Z",
+      "order": 40
+    },
+    {
+      "id": "P0-025",
+      "phase": "P0",
+      "title": "Godot debug server: the hook contract inside the game",
+      "desc": "Implement docs/GAME_HOOKS.md in the Godot game so the harness can drive it. (1) An autoload in game/debug/ that exists only when the game is started with the user arg --debug (after the -- separator). It listens on 127.0.0.1 (port from --debug-port, default from kit.config.json godot.debugPort) over WebSocket or TCP with JSON messages, one request id per call. (2) Methods: every required hook (state, clock, frames, input, perf, load, teleport, setCamera, timeScale, hold, events, hud) plus shot(path) (viewport image saved as PNG after the frame is drawn), quit, and quality if cheap. Snapshot push: after every drawn frame the server sends a small snapshot (state, clock, hold, the newest events) so the harness can answer the synchronous hooks (state, clock, hold, events) from the latest snapshot; frames, perf, load and shot are request and response. (3) Sim clock with time scale and the sim hold, read by every game system that steps (the car now; later physics, AI and missions), with a fixed physics tick. (4) perf(ms): cpuMs and gpuMs p50, p95 and max per frame (RenderingServer viewport measured CPU and GPU render times plus process time), p95FrameMs, avgFps, drawCalls and triangles (RenderingServer total draw calls and primitives in frame), gpuMB (video memory used). (5) CLI user args replace the page params: --debug, --verify (hides every debug overlay), --quality=<preset>, --style=<name>, --scene=<id>, --arch=<name>, --lockstep, --mute, --resolution handled by Godot itself. (6) Without --debug: no port opens, the debug node does not exist, the game plays the same. (7) Errors: expected situations never call push_error; unexpected ones are also sent as an 'error' event. (8) docs/GAME_HOOKS.md: add a 'Godot transport' section (args, message format, snapshot vs request, shot) and mark the browser params as the web demo path (later). Add game/debug/ to shared_paths.json.",
+      "accept": [
+        "a node smoke script (harness/bin/godotsmoke.mjs or similar) launches the pinned Godot windowed with --debug, calls every required hook plus shot and quit, prints each result, and the builder ran it: every hook answers in the documented shape",
+        "the shot PNG from the smoke run exists and the builder read it (downscaled): the scaffold scene, no debug overlay with --verify",
+        "a headless Godot test or a smoke check proves that without --debug no port is listening and the debug autoload is absent",
+        "hold({at}) pauses the sim within one physics tick of the asked time, and a held sim does not move for 0.2 s of wall time (checked in the smoke script)",
+        "docs/GAME_HOOKS.md has the 'Godot transport' section; npm test passes"
+      ],
+      "deps": [
+        "P0-024"
+      ],
+      "agent": "builder",
+      "priority": 1,
+      "kind": "feature",
+      "status": "todo",
+      "attempts": 0,
+      "notes": [],
+      "created": "2026-11-10T14:08:49.921Z",
+      "order": 50
+    },
+    {
+      "id": "P0-026",
+      "phase": "P0",
+      "title": "Harness driver for Godot: verify and shoot run the game, scenarios ported",
+      "desc": "Make verify.mjs, shoot.mjs, flakecheck.mjs and gateretry.mjs drive the Godot game instead of a browser page. (1) harness/bin/godotdriver.mjs with the same interface verify.mjs uses from browser.mjs (open a fresh run per scenario, run steps, shots, perf, collect console errors, close). It launches the pinned Godot windowed at a fixed resolution with --debug --verify and the scenario's args, connects to the debug server, and runs the page-side scripts (harness/verify/scripts/*.js, milestone play scripts, the __sim lib) in a node vm with a window shim: window.__game.ready and version, window.__game.debug where state, clock, hold and events read the latest pushed snapshot and frames, perf, load and shot are remote calls. Existing scripts should run unchanged; where one cannot, change the script and note why. (2) kit.config.json gets target 'godot' (browser.mjs stays for the later web demo, target 'web', not run now). verify.mjs picks the driver from it. Its build step becomes the headless Godot import plus npm run typecheck (tsc on harness and tools, plus a GDScript parse check) and npm test. (3) A console error is any ERROR or SCRIPT ERROR line in Godot's output or an 'error' event. (4) Scenario field 'headless: true' runs Godot headless for script-only checks with no shot or perf (headless has no rendering). (5) Port the scenarios to the Godot scaffold: boot_title, hooks_contract, hooks_no_debug (launch without --debug and prove no port answers), perf_baseline, drive_north, drive_turn_right, coords_north_marker, and the FD0 play script. (6) quick.json areas and shared_paths.json point at game/ paths and the new driver files; kit.config.json srcDir 'game', buildDir set to the Godot export or import folder as the builder decides (write it in TECH.md 'npm scripts'). (7) VERIFY.md gets a short 'Godot runs' section: windowed vs headless, args, where shots and logs go. Time box: one build round and one fix round; report what is left.",
+      "accept": [
+        "node harness/bin/verify.mjs --only boot_title,hooks_contract,hooks_no_debug,perf_baseline,drive_north,drive_turn_right,coords_north_marker passes against Godot with no console errors; no browser is launched (the report shows the godot driver)",
+        "node harness/bin/verify.mjs --milestone FD0 passes with its play script (real inputs only)",
+        "node harness/bin/verify.mjs --quick passes",
+        "node harness/bin/shoot.mjs writes a PNG of the Godot game and the builder read coords_north_marker (red post centred, ahead)",
+        "npm test passes, including tests for the window shim (sync hooks read the snapshot, async hooks call the server)",
+        "quick.json, shared_paths.json, kit.config.json and VERIFY.md updated as in the desc"
+      ],
+      "deps": [
+        "P0-025"
+      ],
+      "agent": "builder",
+      "priority": 1,
+      "kind": "feature",
+      "status": "todo",
+      "attempts": 0,
+      "notes": [],
+      "created": "2026-11-10T14:08:49.921Z",
+      "order": 60
+    },
+    {
+      "id": "P0-027",
+      "phase": "P0",
+      "title": "Lookproof and perf on Godot; retire the browser scaffold",
+      "desc": "(1) lookproof.mjs runs on the Godot driver: poses, --set, --perf, --query (mapped to user args, so --query \"style=<name>\" becomes --style=<name>), --sheet, --compare and --approve work as before; perf.json quotes the machine, the Godot version, the renderer (Forward+ or Mobile), the GPU adapter name and the load. perfbudget.mjs and perfgate.mjs read the Godot perf numbers (cpuMs, gpuMs, p95FrameMs, drawCalls, triangles, gpuMB). One trial pose on the scaffold proves it end to end. (2) Retire the browser game: once every ported scenario passes on Godot, remove src/ (three.js scaffold), index.html, vite.config.ts and the three and vite dependencies; move src/geo/projection.ts and its tests to tools/geo/ (the offline bake uses them; the GDScript fixture test keeps both in step). Mark retired scenarios as replaced in their _note if any remain. (3) The dashboard /play/ link and playcopy.mjs: replace the browser copy with a launch note or a command (npm run play launches the pinned Godot on the last verified commit's game/ copy under harness/reports/play/), so Anmol can open the newest verified build. (4) docs/READ_MAP.md areas, docs/ARCHITECTURE.md module map and TECH.md 'Source layout' and 'npm scripts' point at game/ and tools/. decisions.md entry: browser scaffold retired, browser.mjs kept for a later web demo.",
+      "accept": [
+        "node harness/bin/lookproof.mjs --check passes and --set trial --perf writes the trial shot and perf.json with the machine, Godot version, renderer, GPU adapter and load; the builder read the shot",
+        "lookproof.mjs --sheet trial --out trial writes a sheet image",
+        "git ls-files src index.html vite.config.ts lists nothing; tools/geo/projection.ts and its tests exist and pass in npm test; package.json has no three or vite dependency",
+        "node harness/bin/verify.mjs --quick passes",
+        "npm run play (or the documented command) launches the verified game copy; the dashboard play link text says how to run it",
+        "READ_MAP.md, ARCHITECTURE.md and TECH.md name game/ and tools/ paths; decisions.md has the retirement entry"
+      ],
+      "deps": [
+        "P0-026"
+      ],
+      "agent": "builder",
+      "priority": 1,
+      "kind": "feature",
+      "status": "todo",
+      "attempts": 0,
+      "notes": [],
+      "created": "2026-11-10T14:08:49.921Z",
+      "order": 70
+    },
+    {
+      "id": "P0-028",
+      "phase": "P0",
+      "title": "Composite map draft: district candidates, layout options and interview questions",
+      "desc": "Owner direction 2026-11-10 (inbox mmwarg8cw, decisions.md 'Engine Godot 4, and a compressed Delhi map'): a compressed Delhi made of real districts, like big open world games do with a real city. Read DELHI_WORLD.md '0. Composite map' and MAP_REPAIR.md 'District frames and stitching' (proposals written at the replan), GAME_DESIGN_OPTIONS.md and the round 1 answers (three characters: auto driver, cop, small-time fixer; guns and fights; on foot anywhere). Extend DELHI_WORLD.md section 0 with: (1) a candidate table of 15 to 25 districts: name, real centre lat and lon, true size in km2 at the proposed clip, what it gives the game (which character lives or works there, mission types, landmarks inside, street life), must-have or optional (proposal), and a rough data and build cost (estimate); cover his list: monuments, main areas and localities, the big roads, the Yamuna and its bridges, IGI Airport, East Delhi, parts of NCR (Gurugram, Noida). (2) 2 or 3 layout options: which districts, their placement, total map size, connectors (ring road arcs, flyovers, the river, bridges, airport road, NH-48), time to cross at 80 km/h, total bake area in km2, landmark count, and honest costs (bake, streaming, art volume, risk). Draw each layout as a north-up SVG sketch saved in harness/design/img/district_layout_<a|b|c>.svg (district boxes with names, connectors, the river, a scale bar and a north arrow). (3) A recommendation and at most 6 short questions for the next interview sitting, each with options (must-have districts, map size feel, which NCR parts, where each character lives and works, the Yamuna and East Delhi placement, the pilot districts). Every number is marked estimate. Never invent the owner's answers.",
+      "accept": [
+        "DELHI_WORLD.md section 0 has the candidate table with 15 to 25 districts, every column filled, numbers marked estimate",
+        "2 or 3 layout options with the totals named in the desc, each with an SVG sketch in harness/design/img/ that has names, connectors, the river, a scale bar and a north arrow (north up)",
+        "a recommendation and at most 6 questions with options are at the end of section 0, and section 9 links them"
+      ],
+      "deps": [
+        "P0-005"
+      ],
+      "agent": "planner",
+      "priority": 1,
+      "kind": "feature",
+      "status": "todo",
+      "attempts": 0,
+      "notes": [],
+      "created": "2026-11-10T14:08:49.921Z",
+      "order": 20
+    },
+    {
+      "id": "P0-029",
+      "phase": "P0",
+      "title": "Arch bench: composite map stitch prototype",
+      "desc": "Bench per ARCH_OPTIONS.md (its notes on this task win over this text), MAP_REPAIR.md 'District frames and stitching' and DELHI_WORLD.md '0. Composite map'. Using the pilot data fetched by the data bench, write a bake-side prototype (in the bake language ARCH_OPTIONS.md picks, under tools/ or harness/bench/) that: takes 2 or 3 real districts from a draft harness/data/districts.json (proposal: Connaught Place with India Gate, Chandni Chowk with Red Fort, and one district that in reality is far away, such as a stretch of East Delhi), clips each to its polygon, projects each around its own frame origin, moves it by its placement offset (translation only), finds every boundary port where a road leaves a clip polygon, and joins ports with 2 or 3 authored connectors from harness/data/connectors/ (a ring road arc, one flyover, one bridge over a Yamuna stand-in) built as lane sets with grades. Show the result in Godot behind --arch=stitch (top down and player height). Checks with counts: open boundary ports, connector grade and curve radius violations per class, overlapping district polygons after placement, landmark position error inside its district frame (Red Fort, Jama Masjid, India Gate, CP inner circle: projected plus offset vs baked, max metres), relative layout inside a district vs reality, north still -Z (no rotation in any transform). Measure bake ms and the share of boundary ports closed automatically vs needing an authored connector. Write harness/reports/arch/stitch.json and 3 to 5 shots the builder reads. Time box: one build round and one fix round; report what the production version needs.",
+      "accept": [
+        "harness/reports/arch/stitch.json has the counts named in the desc (open ports, grade and radius violations, polygon overlaps, landmark error max in metres, relative layout check, rotation check) plus bake ms",
+        "the builder read the shots: districts sit at their offsets, connectors join the boundary ports, no road ends in the air or at the clip line without a connector or an explained dead end, north up in the top down shot",
+        "node harness/bin/verify.mjs --quick passes; the default game (no --arch) is unchanged"
+      ],
+      "deps": [
+        "P0-018"
+      ],
+      "agent": "builder",
+      "priority": 2,
+      "kind": "feature",
+      "status": "todo",
+      "attempts": 0,
+      "notes": [],
+      "created": "2026-11-10T14:08:49.921Z",
+      "model": "fable"
     }
   ]
 }

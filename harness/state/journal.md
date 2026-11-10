@@ -57,3 +57,42 @@ One line per event, written by task.mjs (start, done, fail, phase changes, inbox
 - 2026-11-10 19:27 mentor message mmwar8qs4 handled: Style round 1 recorded. Discussion and a visual style board follow.
 - 2026-11-10 19:28 mentor message mmwar93dw handled: Noted. Honest argument given in the terminal.
 - 2026-11-10 19:33 mentor message mmwarg8cw handled: Godot 4 recorded as your engine choice. A compressed Delhi map built from real districts is the right call; answer in the terminal.
+- 2026-11-10 19:37 mentor message mmwarkusg handled: Style direction recorded: B stylised realistic, with D's dirt in Old Delhi. Not a sign-off yet; test scenes come first.
+- 2026-11-10 19:38 mentor message mmwarmkj2 handled: Style round 2 recorded.
+- 2026-11-10 19:38 mentor message mmwarmklx handled: Style round 2 recorded.
+- 2026-11-10 19:38 mentor message mmwarmkor handled: Style round 2 recorded.
+- 2026-11-10 19:38 mentor message mmwarmks4 handled: Style round 2 recorded.
+- 2026-11-10 19:38 added 6 tasks: P0-024, P0-025, P0-026, P0-027, P0-028, P0-029
+- 2026-11-10 19:40 [P0-006] edited: title, desc, accept
+- 2026-11-10 19:40 [P0-006] moved P0 -> P0, priority 1
+- 2026-11-10 19:40 [P0-007] edited: title, desc+, accept+
+- 2026-11-10 19:40 [P0-007] deps now: P0-002, P0-006, P0-028
+- 2026-11-10 19:40 [P0-007] moved P0 -> P0, priority 1
+- 2026-11-10 19:40 order set: P0-006, P0-028, P0-007, P0-024, P0-025, P0-026, P0-027
+- 2026-11-10 19:40 [P0-008] edited: desc+, accept+
+- 2026-11-10 19:40 [P0-009] edited: title, desc, accept
+- 2026-11-10 19:40 [P0-009] deps now: P0-001, P0-006, P0-027
+- 2026-11-10 19:41 [P0-010] edited: title, desc, accept
+- 2026-11-10 19:41 [P0-010] deps now: P0-003, P0-009, P0-007
+- 2026-11-10 19:41 [P0-011] edited: title, desc, accept
+- 2026-11-10 19:41 [P0-012] edited: title, desc, accept
+- 2026-11-10 19:41 [P0-013] edited: desc+
+- 2026-11-10 19:41 [P0-014] edited: desc+
+- 2026-11-10 19:41 [P0-015] edited: desc+
+- 2026-11-10 19:41 [P0-016] edited: title, desc, accept
+- 2026-11-10 19:41 [P0-017] edited: title, desc, accept
+- 2026-11-10 19:41 [P0-018] edited: desc+
+- 2026-11-10 19:41 [P0-019] edited: desc+
+- 2026-11-10 19:41 [P0-020] edited: desc+
+- 2026-11-10 19:41 [P0-020] deps now: P0-016, P0-017, P0-018, P0-019, P0-029
+- 2026-11-10 19:41 [P0-021] edited: desc+, accept+
+- 2026-11-10 19:41 [P0-022] edited: desc+
+- 2026-11-10 19:41 [P0-023] edited: desc+
+- 2026-11-10 19:41 mentor message mmwarq9we handled: Place round recorded.
+- 2026-11-10 19:41 mentor message mmwarq9yx handled: Place round recorded.
+- 2026-11-10 19:41 mentor message mmwarqa1h handled: Place round recorded.
+- 2026-11-10 19:41 mentor message mmwarqa41 handled: Place round recorded.
+- 2026-11-10 19:43 mentor message mmwartn71 handled: Recorded for game design and architecture.
+- 2026-11-10 19:43 mentor message mmwartn9f handled: Recorded for game design and architecture.
+- 2026-11-10 19:43 mentor message mmwartnbr handled: Recorded for game design and architecture.
+- 2026-11-10 19:43 mentor message mmwartne9 handled: Recorded for game design and architecture.

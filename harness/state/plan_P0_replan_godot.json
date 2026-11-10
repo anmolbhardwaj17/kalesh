@@ -1,0 +1,97 @@
+[
+  {
+    "phase": "P0",
+    "title": "Godot toolchain and project scaffold with the coordinate contract",
+    "desc": "Owner direction 2026-11-10 (decisions.md 'Engine Godot 4, and a compressed Delhi map'): the game moves from the browser to Godot 4, desktop first (Mac and Windows), maybe a web demo later. Found on this machine: /Applications/Godot.app is Godot 4.7.2.stable.official (standard build, no .NET), export templates 4.7.2.stable are installed in ~/Library/Application Support/Godot/export_templates, no dotnet SDK, clang via Xcode tools, no scons. (1) Pin the version: kit.config.json gets a godot block {version: '4.7.2.stable', candidates: [env GODOT, tools/godot/, /Applications/Godot.app/Contents/MacOS/Godot]}; add harness/bin/godot.mjs that finds the binary, checks --version against the pin and prints the path, with a test. If no matching binary is found, it downloads the official 4.7.2 portable build for the platform into tools/godot/ (gitignored, checksum checked against the official release file) and never installs anything globally; this path is for other machines (Windows), do not download on this Mac. (2) Scaffold the Godot project in game/ (project.godot, Forward+ for now, GDScript, a fixed physics tick of 60 Hz): a main scene with a ground plane, the red north post 50 m along -Z, the box car stand-in ported from src/car.ts (same kinematic model and forward(heading) rule), the chase camera, and simple input actions (throttle, brake, steer) in the InputMap. Coordinates are binding (TECH.md 'Coordinates'): east +X, north -Z, up +Y, 1 unit = 1 m, no negative scale and no axis flips anywhere. (3) Port the projection to GDScript (game/geo/projection.gd) from src/geo/projection.ts. The TS file stays as the reference for the offline bake tooling. Write a fixture of 20 points (lat, lon, x, z) generated from the TS code into harness/data/fixtures/projection_points.json and check the GDScript port against it. (4) A headless Godot test runner (a small runner in game/tests/ or a vendored MIT addon such as GUT; write the choice to decisions.md) run by npm test next to vitest. Port the tests: origin maps to (0, 0); Connaught Place park (28.6315, 77.2167) at x -1246 +/- 25, z -2071 +/- 25; Red Fort (28.6562, 77.2410) at x +1129 +/- 25, z -4821 +/- 25; round trip under 0.01 m; due north has x 0 and negative z; GDScript vs TS fixture within 0.01 m; forward(0) is -Z and forward(PI/2) is +X; no node under the world root has a negative scale. (5) decisions.md entries: Godot 4.7.2 pinned; GDScript first, C# not used (it blocks the web export, needs the .NET build of Godot and a dotnet SDK); GDExtension is an architecture option for heavy code; project layout (game/ for the Godot project, tools/ for offline bake tooling, harness/ unchanged). The three.js scaffold in src/ stays until the harness driver task ports its scenarios. No look work: stand-ins only.",
+    "accept": [
+      "node harness/bin/godot.mjs --version prints 4.7.2.stable and the binary path; its test passes; kit.config.json has the godot block; tools/godot/ is in .gitignore; nothing installed outside the repo",
+      "the pinned Godot runs headless on the project and exits 0 with no ERROR or SCRIPT ERROR lines in its output (import and script parse clean)",
+      "npm test runs vitest and the headless Godot tests; all pass, including every projection, fixture cross-check, axis and no-negative-scale test named in the desc",
+      "the builder captured one windowed frame of the scaffold (Movie Maker --write-movie to a PNG, or a viewport capture) and read it: the box car sits on the ground and the red north post is ahead when the camera faces -Z",
+      "decisions.md has the pin, language and layout entries; TECH.md 'Stack' names Godot 4.7.2, game/ and the test runner"
+    ],
+    "deps": [],
+    "agent": "builder",
+    "priority": 1,
+    "kind": "feature"
+  },
+  {
+    "phase": "P0",
+    "title": "Godot debug server: the hook contract inside the game",
+    "desc": "Implement docs/GAME_HOOKS.md in the Godot game so the harness can drive it. (1) An autoload in game/debug/ that exists only when the game is started with the user arg --debug (after the -- separator). It listens on 127.0.0.1 (port from --debug-port, default from kit.config.json godot.debugPort) over WebSocket or TCP with JSON messages, one request id per call. (2) Methods: every required hook (state, clock, frames, input, perf, load, teleport, setCamera, timeScale, hold, events, hud) plus shot(path) (viewport image saved as PNG after the frame is drawn), quit, and quality if cheap. Snapshot push: after every drawn frame the server sends a small snapshot (state, clock, hold, the newest events) so the harness can answer the synchronous hooks (state, clock, hold, events) from the latest snapshot; frames, perf, load and shot are request and response. (3) Sim clock with time scale and the sim hold, read by every game system that steps (the car now; later physics, AI and missions), with a fixed physics tick. (4) perf(ms): cpuMs and gpuMs p50, p95 and max per frame (RenderingServer viewport measured CPU and GPU render times plus process time), p95FrameMs, avgFps, drawCalls and triangles (RenderingServer total draw calls and primitives in frame), gpuMB (video memory used). (5) CLI user args replace the page params: --debug, --verify (hides every debug overlay), --quality=<preset>, --style=<name>, --scene=<id>, --arch=<name>, --lockstep, --mute, --resolution handled by Godot itself. (6) Without --debug: no port opens, the debug node does not exist, the game plays the same. (7) Errors: expected situations never call push_error; unexpected ones are also sent as an 'error' event. (8) docs/GAME_HOOKS.md: add a 'Godot transport' section (args, message format, snapshot vs request, shot) and mark the browser params as the web demo path (later). Add game/debug/ to shared_paths.json.",
+    "accept": [
+      "a node smoke script (harness/bin/godotsmoke.mjs or similar) launches the pinned Godot windowed with --debug, calls every required hook plus shot and quit, prints each result, and the builder ran it: every hook answers in the documented shape",
+      "the shot PNG from the smoke run exists and the builder read it (downscaled): the scaffold scene, no debug overlay with --verify",
+      "a headless Godot test or a smoke check proves that without --debug no port is listening and the debug autoload is absent",
+      "hold({at}) pauses the sim within one physics tick of the asked time, and a held sim does not move for 0.2 s of wall time (checked in the smoke script)",
+      "docs/GAME_HOOKS.md has the 'Godot transport' section; npm test passes"
+    ],
+    "deps": ["#1"],
+    "agent": "builder",
+    "priority": 1,
+    "kind": "feature"
+  },
+  {
+    "phase": "P0",
+    "title": "Harness driver for Godot: verify and shoot run the game, scenarios ported",
+    "desc": "Make verify.mjs, shoot.mjs, flakecheck.mjs and gateretry.mjs drive the Godot game instead of a browser page. (1) harness/bin/godotdriver.mjs with the same interface verify.mjs uses from browser.mjs (open a fresh run per scenario, run steps, shots, perf, collect console errors, close). It launches the pinned Godot windowed at a fixed resolution with --debug --verify and the scenario's args, connects to the debug server, and runs the page-side scripts (harness/verify/scripts/*.js, milestone play scripts, the __sim lib) in a node vm with a window shim: window.__game.ready and version, window.__game.debug where state, clock, hold and events read the latest pushed snapshot and frames, perf, load and shot are remote calls. Existing scripts should run unchanged; where one cannot, change the script and note why. (2) kit.config.json gets target 'godot' (browser.mjs stays for the later web demo, target 'web', not run now). verify.mjs picks the driver from it. Its build step becomes the headless Godot import plus npm run typecheck (tsc on harness and tools, plus a GDScript parse check) and npm test. (3) A console error is any ERROR or SCRIPT ERROR line in Godot's output or an 'error' event. (4) Scenario field 'headless: true' runs Godot headless for script-only checks with no shot or perf (headless has no rendering). (5) Port the scenarios to the Godot scaffold: boot_title, hooks_contract, hooks_no_debug (launch without --debug and prove no port answers), perf_baseline, drive_north, drive_turn_right, coords_north_marker, and the FD0 play script. (6) quick.json areas and shared_paths.json point at game/ paths and the new driver files; kit.config.json srcDir 'game', buildDir set to the Godot export or import folder as the builder decides (write it in TECH.md 'npm scripts'). (7) VERIFY.md gets a short 'Godot runs' section: windowed vs headless, args, where shots and logs go. Time box: one build round and one fix round; report what is left.",
+    "accept": [
+      "node harness/bin/verify.mjs --only boot_title,hooks_contract,hooks_no_debug,perf_baseline,drive_north,drive_turn_right,coords_north_marker passes against Godot with no console errors; no browser is launched (the report shows the godot driver)",
+      "node harness/bin/verify.mjs --milestone FD0 passes with its play script (real inputs only)",
+      "node harness/bin/verify.mjs --quick passes",
+      "node harness/bin/shoot.mjs writes a PNG of the Godot game and the builder read coords_north_marker (red post centred, ahead)",
+      "npm test passes, including tests for the window shim (sync hooks read the snapshot, async hooks call the server)",
+      "quick.json, shared_paths.json, kit.config.json and VERIFY.md updated as in the desc"
+    ],
+    "deps": ["#2"],
+    "agent": "builder",
+    "priority": 1,
+    "kind": "feature"
+  },
+  {
+    "phase": "P0",
+    "title": "Lookproof and perf on Godot; retire the browser scaffold",
+    "desc": "(1) lookproof.mjs runs on the Godot driver: poses, --set, --perf, --query (mapped to user args, so --query \"style=<name>\" becomes --style=<name>), --sheet, --compare and --approve work as before; perf.json quotes the machine, the Godot version, the renderer (Forward+ or Mobile), the GPU adapter name and the load. perfbudget.mjs and perfgate.mjs read the Godot perf numbers (cpuMs, gpuMs, p95FrameMs, drawCalls, triangles, gpuMB). One trial pose on the scaffold proves it end to end. (2) Retire the browser game: once every ported scenario passes on Godot, remove src/ (three.js scaffold), index.html, vite.config.ts and the three and vite dependencies; move src/geo/projection.ts and its tests to tools/geo/ (the offline bake uses them; the GDScript fixture test keeps both in step). Mark retired scenarios as replaced in their _note if any remain. (3) The dashboard /play/ link and playcopy.mjs: replace the browser copy with a launch note or a command (npm run play launches the pinned Godot on the last verified commit's game/ copy under harness/reports/play/), so Anmol can open the newest verified build. (4) docs/READ_MAP.md areas, docs/ARCHITECTURE.md module map and TECH.md 'Source layout' and 'npm scripts' point at game/ and tools/. decisions.md entry: browser scaffold retired, browser.mjs kept for a later web demo.",
+    "accept": [
+      "node harness/bin/lookproof.mjs --check passes and --set trial --perf writes the trial shot and perf.json with the machine, Godot version, renderer, GPU adapter and load; the builder read the shot",
+      "lookproof.mjs --sheet trial --out trial writes a sheet image",
+      "git ls-files src index.html vite.config.ts lists nothing; tools/geo/projection.ts and its tests exist and pass in npm test; package.json has no three or vite dependency",
+      "node harness/bin/verify.mjs --quick passes",
+      "npm run play (or the documented command) launches the verified game copy; the dashboard play link text says how to run it",
+      "READ_MAP.md, ARCHITECTURE.md and TECH.md name game/ and tools/ paths; decisions.md has the retirement entry"
+    ],
+    "deps": ["#3"],
+    "agent": "builder",
+    "priority": 1,
+    "kind": "feature"
+  },
+  {
+    "phase": "P0",
+    "title": "Composite map draft: district candidates, layout options and interview questions",
+    "desc": "Owner direction 2026-11-10 (inbox mmwarg8cw, decisions.md 'Engine Godot 4, and a compressed Delhi map'): a compressed Delhi made of real districts, like big open world games do with a real city. Read DELHI_WORLD.md '0. Composite map' and MAP_REPAIR.md 'District frames and stitching' (proposals written at the replan), GAME_DESIGN_OPTIONS.md and the round 1 answers (three characters: auto driver, cop, small-time fixer; guns and fights; on foot anywhere). Extend DELHI_WORLD.md section 0 with: (1) a candidate table of 15 to 25 districts: name, real centre lat and lon, true size in km2 at the proposed clip, what it gives the game (which character lives or works there, mission types, landmarks inside, street life), must-have or optional (proposal), and a rough data and build cost (estimate); cover his list: monuments, main areas and localities, the big roads, the Yamuna and its bridges, IGI Airport, East Delhi, parts of NCR (Gurugram, Noida). (2) 2 or 3 layout options: which districts, their placement, total map size, connectors (ring road arcs, flyovers, the river, bridges, airport road, NH-48), time to cross at 80 km/h, total bake area in km2, landmark count, and honest costs (bake, streaming, art volume, risk). Draw each layout as a north-up SVG sketch saved in harness/design/img/district_layout_<a|b|c>.svg (district boxes with names, connectors, the river, a scale bar and a north arrow). (3) A recommendation and at most 6 short questions for the next interview sitting, each with options (must-have districts, map size feel, which NCR parts, where each character lives and works, the Yamuna and East Delhi placement, the pilot districts). Every number is marked estimate. Never invent the owner's answers.",
+    "accept": [
+      "DELHI_WORLD.md section 0 has the candidate table with 15 to 25 districts, every column filled, numbers marked estimate",
+      "2 or 3 layout options with the totals named in the desc, each with an SVG sketch in harness/design/img/ that has names, connectors, the river, a scale bar and a north arrow (north up)",
+      "a recommendation and at most 6 questions with options are at the end of section 0, and section 9 links them"
+    ],
+    "deps": ["P0-005"],
+    "agent": "planner",
+    "priority": 1,
+    "kind": "feature"
+  },
+  {
+    "phase": "P0",
+    "title": "Arch bench: composite map stitch prototype",
+    "desc": "Bench per ARCH_OPTIONS.md (its notes on this task win over this text), MAP_REPAIR.md 'District frames and stitching' and DELHI_WORLD.md '0. Composite map'. Using the pilot data fetched by the data bench, write a bake-side prototype (in the bake language ARCH_OPTIONS.md picks, under tools/ or harness/bench/) that: takes 2 or 3 real districts from a draft harness/data/districts.json (proposal: Connaught Place with India Gate, Chandni Chowk with Red Fort, and one district that in reality is far away, such as a stretch of East Delhi), clips each to its polygon, projects each around its own frame origin, moves it by its placement offset (translation only), finds every boundary port where a road leaves a clip polygon, and joins ports with 2 or 3 authored connectors from harness/data/connectors/ (a ring road arc, one flyover, one bridge over a Yamuna stand-in) built as lane sets with grades. Show the result in Godot behind --arch=stitch (top down and player height). Checks with counts: open boundary ports, connector grade and curve radius violations per class, overlapping district polygons after placement, landmark position error inside its district frame (Red Fort, Jama Masjid, India Gate, CP inner circle: projected plus offset vs baked, max metres), relative layout inside a district vs reality, north still -Z (no rotation in any transform). Measure bake ms and the share of boundary ports closed automatically vs needing an authored connector. Write harness/reports/arch/stitch.json and 3 to 5 shots the builder reads. Time box: one build round and one fix round; report what the production version needs.",
+    "accept": [
+      "harness/reports/arch/stitch.json has the counts named in the desc (open ports, grade and radius violations, polygon overlaps, landmark error max in metres, relative layout check, rotation check) plus bake ms",
+      "the builder read the shots: districts sit at their offsets, connectors join the boundary ports, no road ends in the air or at the clip line without a connector or an explained dead end, north up in the top down shot",
+      "node harness/bin/verify.mjs --quick passes; the default game (no --arch) is unchanged"
+    ],
+    "deps": ["P0-018"],
+    "agent": "builder",
+    "priority": 2,
+    "kind": "feature",
+    "model": "fable"
+  }
+]

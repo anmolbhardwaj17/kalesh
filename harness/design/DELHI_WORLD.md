@@ -18,7 +18,7 @@ Design starting point, written 2026-11-10 (planner REPLAN after Anmol's directio
 ## How the layers fit
 
 ```
-sources -> map repair (graph, footprints, DTM) -> landmark registry -> area profiles -> generator -> tiles -> game
+sources -> district selection -> map repair (graph, footprints, DTM) -> stitching and connectors -> landmark registry -> area profiles -> generator -> tiles -> game (Godot)
 ```
 
 - The map repair layer gives the clean road graph, merged building footprints and the bare-earth ground. Nothing below reads raw sources.
@@ -26,6 +26,20 @@ sources -> map repair (graph, footprints, DTM) -> landmark registry -> area prof
 - Area profiles cover everything else. The generator reads the profile at each parcel and builds the ordinary city.
 - Order of precedence on any square metre: road corridor, then landmark zone, then generated city. A conflict between a road and a landmark footprint is a map repair issue, not a silent overlap.
 - Both layers bake with the map (same deterministic, logged, versioned rules as `MAP_REPAIR.md`). Hand edits live in override files that survive every rebake.
+
+## 0. Composite map (proposal, pending Anmol)
+
+Anmol (inbox mmwarg8cw, 2026-11-10): a compressed Delhi, the way big open world games treat a real city: main areas, monuments, localities, roads, the Yamuna, the airport, parts of NCR and East Delhi, merged into one smaller map. Not a 1:1 copy.
+
+Proposal for the architecture options (Anmol confirms the district list and layout in the interview):
+- **Districts at true scale inside.** Each chosen district is clipped from real data (OSM streets, footprints, DTM) and keeps true distances and angles inside it. Landmarks stay where they really are inside their district.
+- **Districts moved closer.** Each district gets a placement offset (translation only: no rotation, no scale, no mirroring; north stays -Z). Details in `MAP_REPAIR.md` "District frames and stitching".
+- **Authored connectors join them**: ring road arcs, flyovers, the Yamuna with its bridges, the airport road, NH-48 towards Gurugram, the roads into East Delhi and Noida. They use the same lane model and elevation solver as real roads.
+- **Filler** between districts comes from area profiles (generated ordinary city, parks, rail corridors), never claimed as a real place.
+- **Steps added to the bake**: district selection (`harness/data/districts.json`: clip polygon, frame origin, offset, area profile hints, why it is in the game) before ingest, and stitching with connector authoring (`harness/data/connectors/`) after the per-tile overrides. Connectors are data files Claude authors and Anmol reviews in the map inspector.
+- **Seed list from his words** (to turn into 15 to 25 candidates with real size and game role): Connaught Place, India Gate and Rajpath, Chandni Chowk and Red Fort, ITO and Pragati Maidan, a stretch of the Yamuna with bridges, IGI Airport, East Delhi (Laxmi Nagar, Shahdara side), parts of NCR (Gurugram Cyber City, Noida), plus areas the three characters need (a police station or HQ for the cop, auto stands and a resettlement colony for the driver, markets and back lanes for the fixer).
+- **Size targets** (estimates, to compare in the layout options): total playable area, number of districts, longest drive across the map at 80 km/h, and bake area in km2. The layout options in the architecture discovery give 2 or 3 choices with a north-up sketch.
+- **Tests**: a landmark lands at its district offset plus its projected position within the tier tolerance; relative layout inside a district matches reality; every boundary port is closed; north is up on the map and -Z in the world.
 
 ## 1. Landmark registry
 
@@ -213,15 +227,15 @@ Build and prove both layers on the map repair pilot area before scaling up:
 ## 5. Performance approach
 
 Estimates until the P0-016 bench and the pilot measure them.
-- Generated buildings and dressing: instanced per kit module (InstancedMesh or BatchedMesh, whichever P0-016 measures better). Draw calls grow with kits in view, not with buildings.
-- One texture atlas per area kit, compressed (KTX2 if P0-016 confirms it).
+- Generated buildings and dressing: instanced per kit module (Godot MultiMesh, or merged meshes, whichever the render bench measures better). Draw calls grow with kits in view, not with buildings.
+- One texture atlas per area kit, VRAM compressed (Godot import: BPTC or S3TC on desktop, ASTC where the bench says so).
 - LOD per small cell: full modules near, merged block shells mid, impostors or a skyline ring far. Hero landmarks keep their own LOD chain and far silhouette.
 - Each system has its own budget inside the signed `perf_budgets.json`: generated buildings, street dressing, landmarks, life (people, vendors, animals). Tiles carry placement data with a byte budget.
 - Measure the pilot on fixed camera paths at 60 and 100 km/h before any scale-up.
 
 ## 6. Verification
 
-- Landmark position: a unit test projects every registry entry with `confidence.position` high and checks the baked position and orientation. Tolerance (estimate): hero 5 m and 5 degrees, signature 10 m, marker 15 m. A scenario teleports to each pilot hero and reads its world position through the hooks; north is -Z and the landmark is on the right side of the map.
+- Landmark position (composite map): positions are checked inside the landmark's district frame (district offset plus the projected position). A unit test projects every registry entry with `confidence.position` high and checks the baked position and orientation. Tolerance (estimate): hero 5 m and 5 degrees, signature 10 m, marker 15 m. A scenario teleports to each pilot hero and reads its world position through the hooks; north is -Z and the landmark is on the right side of the map.
 - Source agreement: OSM centroid vs Wikidata P625 above 50 m is a flagged issue in the map health report, never silently placed.
 - Side by side: lookproof poses matched to reference photos for each pilot area and hero (same view direction, similar focal length). `lookproof.mjs --sheet` builds the sheet; the verifier reads it by eye against a rubric (silhouette, colour, density, street life). Reference photos are linked with their licence and kept out of the shipped build.
 - Areas visibly different, by metric: per area, from generated output and from lookproof shots: building height histogram, facade colour histogram (Lab), props per 100 m of road, tree cover, sign density. The distance between each pair of pilot areas must pass a threshold set from the first measurement, and the verifier also reads the shots.
@@ -252,6 +266,8 @@ Estimates until the P0-016 bench and the pilot measure them.
 8. OSM attribution ("© OpenStreetMap contributors") and every other source credit shown in the game.
 
 ## 9. Open questions for Anmol
+
+Composite map questions (next interview sitting): which districts are must-haves, which are optional; how big the map should feel (minutes to cross); which NCR parts; where the three characters live and work; how the Yamuna and East Delhi sit in the layout.
 
 1. Which landmarks matter most to you? Which are heroes?
 2. Which areas should come first after the pilot?
