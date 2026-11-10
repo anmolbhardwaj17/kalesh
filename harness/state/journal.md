@@ -112,3 +112,4 @@ One line per event, written by task.mjs (start, done, fail, phase changes, inbox
 - 2026-11-10 20:09 mentor message mmwasqz6i handled: Round 2 recorded.
 - 2026-11-10 20:09 mentor message mmwasqz9d handled: Round 2 recorded.
 - 2026-11-10 20:09 mentor message mmwasqzc3 handled: Round 2 recorded.
+- 2026-11-10 20:09 [P0-028] done: DELHI_WORLD.md section 0: 22 candidate districts, layouts A (15 km2), B (22 km2, recommended), C (27 km2) with north-up SVG sketches, pilot 7.2 km2, sitting 2 map questions.

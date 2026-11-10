@@ -1,6 +1,6 @@
 {
   "_doc": "Written only by node harness/bin/task.mjs. Phases run in order; P0 (ADOPT + STYLE DISCOVERY) waits for the owner by design and needs task.mjs signoff and task.mjs archsignoff before its gate passes. Later phases are added by the planner at the end of P0 (task.mjs phase-add) from the game's real state.",
-  "updated": "2026-11-10T14:39:54.829Z",
+  "updated": "2026-11-10T14:39:55.042Z",
   "phases": [
     {
       "id": "P0",
@@ -684,14 +684,17 @@
       "agent": "planner",
       "priority": 1,
       "kind": "feature",
-      "status": "doing",
+      "status": "done",
       "attempts": 1,
       "notes": [
         "Sketches live in harness/design/map_sketches/ (orchestrator brief), not harness/design/img/."
       ],
       "created": "2026-11-10T14:08:49.921Z",
       "order": 20,
-      "started": "2026-11-10T14:24:11.476Z"
+      "started": "2026-11-10T14:24:11.476Z",
+      "done": "2026-11-10T14:39:55.015Z",
+      "summary": "DELHI_WORLD.md section 0: 22 candidate districts, layouts A (15 km2), B (22 km2, recommended), C (27 km2) with north-up SVG sketches, pilot 7.2 km2, sitting 2 map questions.",
+      "commit": "d71dd4b"
     },
     {
       "id": "P0-029",
