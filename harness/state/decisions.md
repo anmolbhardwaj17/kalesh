@@ -155,3 +155,6 @@ By: builder (P0-027)
 
 ## 2026-11-10: The game is named Kalesh; GitHub remote; strict no-attribution rule
 Anmol: "ok we will do kalesh". Game name Kalesh everywhere (kit.config, dashboard, Godot project, project rules). Lal Batti stays available as an in-game name (the wanted level or a chapter). Repo folder keeps its old name. Remote origin: https://github.com/anmolbhardwaj17/kalesh.git. Anmol: the assistant name must not appear in commits at all; the commit-msg hook now rejects any commit message or author that mentions it.
+
+## 2026-11-10: GB Road treatment (Anmol: "ok")
+The red-light trade exists in the story: hardware shops at street level, brothels upstairs as background, people who live and work there shown with dignity. Missions are about the crime around it: the cop raids traffickers and rescues people, the fixer deals with pimps and money, the auto driver drives out someone who wants to escape. No sex, no nudity, no paying for sex as a mechanic.

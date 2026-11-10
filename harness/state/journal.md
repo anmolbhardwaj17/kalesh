@@ -151,3 +151,4 @@ One line per event, written by task.mjs (start, done, fail, phase changes, inbox
 - 2026-11-10 21:36 mentor message mmwavsvqb handled: Done: remote added and pushed, strict commit rule in the hook, game renamed Kalesh on the dashboard and in the Godot project.
 - 2026-11-10 21:36 [P0-008] start (attempt 1): Game design record: GAME.md, pillars and mission rules
 - 2026-11-10 21:36 mentor message mmwavsvo5 handled: Name Kalesh done. GB Road: confirmed as a story place, brothels not confirmed as playable spaces; recommendation and question in the terminal.
+- 2026-11-10 21:38 mentor message mmwavx09c handled: GB Road treatment recorded in decisions.md and sent to GAME.md.
