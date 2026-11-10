@@ -1,6 +1,6 @@
 {
   "_doc": "Written only by node harness/bin/task.mjs. Phases run in order; P0 (ADOPT + STYLE DISCOVERY) waits for the owner by design and needs task.mjs signoff and task.mjs archsignoff before its gate passes. Later phases are added by the planner at the end of P0 (task.mjs phase-add) from the game's real state.",
-  "updated": "2026-11-10T15:56:48.129Z",
+  "updated": "2026-11-10T15:56:48.310Z",
   "phases": [
     {
       "id": "P0",
@@ -680,13 +680,14 @@
       "agent": "builder",
       "priority": 1,
       "kind": "feature",
-      "status": "todo",
-      "attempts": 0,
+      "status": "doing",
+      "attempts": 1,
       "notes": [
         "From P0-026: lookproof.mjs still browser only; /play/ and playcopy expect dist/index.html; key, hold, click and reload steps unsupported on Godot (raw key input via the debug server may be needed later)."
       ],
       "created": "2026-11-10T14:08:49.921Z",
-      "order": 70
+      "order": 70,
+      "started": "2026-11-10T15:56:48.310Z"
     },
     {
       "id": "P0-028",

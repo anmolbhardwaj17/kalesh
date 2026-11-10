@@ -1,5 +1,5 @@
 ## Projection port (game/geo/projection.gd) against the TypeScript reference: landmarks, axes, round trips and the
-## 20 point fixture generated from src/geo/projection.ts (harness/data/fixtures/projection_points.json).
+## 20 point fixture generated from tools/geo/projection.ts (harness/data/fixtures/projection_points.json).
 extends RefCounted
 
 const Geo := preload("res://geo/projection.gd")

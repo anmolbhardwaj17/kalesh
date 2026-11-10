@@ -11,3 +11,7 @@ One line per gotcha.
 - vitest: CLI tests that spawn task.mjs need a long testTimeout (30 s); under Godot load they pass 5 s.
 - Godot target: page-side scripts run in a node vm (godotshim.mjs), so `D.input`, `D.hold({...})`, `D.setCamera` return before the game applies them; the next awaited request (`frames`) runs after them in order. Results from the vm are cross-realm: JSON-copy them before deep equality checks. Headless Godot never fires `frame_post_draw`: the debug server ends frames on `process_frame` there, and `perf` and `shot` answer an error.
 - Never call `resolveGodot` (spawnSync `godot --version`) per run inside a driver that talks to other running games: it blocks the event loop. Pass `binary` to `launchGame`.
+- lookproof.mjs runs on the driver of kit.config.json target (godot: one game run per view; `--query "style=x"` becomes `--style=x`); `perf.json` has machine, Godot version, renderer, GPU adapter and load. A `--approve` makes the set the reference: only run it after Anmol said yes.
+- `npm run play` is playcopy.mjs --play: `git archive` of game/ at the newest verified commit into harness/reports/play/<sha>/ (gitignored), headless import, then a window run; extra args after --play go to the engine (`--quit-after 120` for a smoke run).
+- vitest has no vite.config.ts any more: `vitest.config.ts` lists the test globs (tools/**/*.test.ts, harness/bin/**/*.test.mjs). A ?raw import in a test needs the `*?raw` module declaration in tools/geo/raw.d.ts for tsc.
+

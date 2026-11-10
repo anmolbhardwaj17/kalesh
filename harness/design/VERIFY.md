@@ -111,7 +111,7 @@ Perf scenarios (`perf: true`) measure one `debug.perf` window after their steps 
 ## Look proof workflow (`lookproof.mjs`)
 
 1. `harness/look_proof/poses.json` lists the views (staging steps plus a fixed camera).
-2. `--set <name> [--perf] [--query style=x]` shoots every view (and measures it).
+2. `--set <name> [--perf] [--query style=x]` shoots every view (and measures it). On Godot each view is a fresh game run at the view's size; `--query style=x` becomes the game arg `--style=x`. `--perf` writes `perf.json` with the machine, the Godot version, the renderer (Forward+ or Mobile), the GPU adapter name and the machine load, plus a row per view (cpu and gpu p95, frame p95, draw calls, triangles, verdict from `perf_budgets.json`). The Metal driver gives no GPU time: set `HARNESS_GODOT_ARGS="--rendering-driver vulkan"` when `gpuMs` matters. Steps that need raw keys, mouse or reload do not exist on Godot: stage a view with `call` and `input` steps.
 3. `--compare <name>` against `approved/` within `look_rules.json`; sheets in `harness/reports/look/`.
 4. `--approve <name>` only after the owner accepted that look (Phase 0 sign-off, or a look task he accepted on the dashboard).
 5. `--sheet a,b,c` puts sets side by side with their worst frame time: the Phase 0 style comparison and any before and after.

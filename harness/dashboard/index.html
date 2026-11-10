@@ -51,9 +51,8 @@
   .lanterns li.active { color: var(--white); font-weight: 500; }
   .lanterns li.planned { color: var(--dim); }
   @media (prefers-reduced-motion: reduce) { .pulse { animation: none; } }
-  .play { display: block; text-align: center; padding: 10px; border-radius: 8px; background: var(--white); color: var(--ink); font-weight: 600; text-decoration: none; transition: opacity .15s; }
-  .play:hover { opacity: .88; }
-  .play.off { background: var(--asphalt); color: var(--dim); border: 1px solid var(--line); pointer-events: none; }
+  .play { display: block; text-align: center; padding: 10px; border-radius: 8px; background: var(--white); color: var(--ink); font-weight: 600; }
+  .play code { display: block; margin-top: 4px; font-size: 12px; font-weight: 500; opacity: .75; user-select: all; }
   nav.tabs { display: flex; gap: 2px; flex-wrap: wrap; border-bottom: 1px solid var(--line); margin-bottom: 28px; }
   nav.tabs button { background: none; border: none; border-bottom: 1px solid transparent; border-radius: 0; padding: 8px 12px 11px; margin-bottom: -1px; font-size: 14px; font-weight: 500; color: var(--mute); }
   nav.tabs button:hover { color: var(--bone); background: none; }
@@ -172,7 +171,7 @@
     <div class="counts" id="counts"></div>
     <div class="counts" id="eta"></div>
     <ul class="lanterns" id="lanterns"></ul>
-    <a class="play off" id="play" href="/play/" target="_blank" rel="noopener">Play latest build</a>
+    <div class="play" id="play">Play the latest build<code id="playCmd">npm run play</code></div>
     <div class="small muted" id="playInfo" style="margin-top:6px;text-align:center"></div>
   </aside>
   <main>
@@ -333,10 +332,10 @@ function renderSide() {
     + tile(side.playable, side.total, `optional ${W}s playable`)
     + `<div class="count" style="grid-column:1/-1"><strong>${p.tasksDone}<span class="muted small"> / ${p.tasksTotal}</span></strong><span class="small muted">planned tasks done or skipped (${p.tasksTotal - p.tasksDone} open)</span><div class="bar"><i style="width:${(100 * p.tasksDone / Math.max(1, p.tasksTotal)).toFixed(1)}%"></i></div></div>`;
   $('#lanterns').innerHTML = S.phases.map((ph) => `<li class="${esc(ph.status)}"><span class="orb"></span>${esc(ph.id)} ${esc(ph.name)}</li>`).join('');
-  $('#play').classList.toggle('off', !S.playUrl);
-  // /play/ is a stable copy of a verified commit (playcopy.mjs); Refresh builds the newest verified one.
+  // The game is Godot: no page to open. The play command launches the stable copy of a verified commit (playcopy.mjs); Refresh builds the newest verified one.
+  $('#playCmd').textContent = (S.play || {}).command || 'npm run play';
   const pl = S.play || {};
-  $('#playInfo').innerHTML = (pl.sha ? `Build ${esc(pl.sha)}, made ${esc(ago(pl.builtAt))}` : 'Build: the working copy (no stable copy yet)')
+  $('#playInfo').innerHTML = (pl.sha ? `Build ${esc(pl.sha)}, made ${esc(ago(pl.builtAt))}` : 'No stable copy yet: the command builds one')
     + ` · <a href="#" data-playcopy="1" style="color:inherit">${pl.building ? 'building a new copy...' : 'Refresh'}</a>`;
   // P2B-106: open notices count in the badge too.
   const need = needsCount(true) + (S.notices || []).length;

@@ -11,7 +11,7 @@ import { perfSummary } from './perfgate.mjs';
 import { readNotices, openNotices } from './notice.mjs';
 import { signoffStates } from './signoffs.mjs';
 import { scriptIds, milestoneCounts, isRequired, loadMilestones } from './milestoneset.mjs';
-import { playRoots, readCopies, COPY_ROOT } from './playcopy.mjs';
+import { readCopies, COPY_ROOT, PLAY_COMMAND } from './playcopy.mjs';
 
 const PORT = Number(process.env.HARNESS_DASHBOARD_PORT || config().dashboardPort || 4477);
 const MIME = { '.html': 'text/html; charset=utf-8', '.js': 'text/javascript', '.css': 'text/css', '.json': 'application/json', '.png': 'image/png', '.jpg': 'image/jpeg', '.webp': 'image/webp', '.svg': 'image/svg+xml', '.wasm': 'application/wasm', '.mp3': 'audio/mpeg', '.ogg': 'audio/ogg', '.wav': 'audio/wav', '.glb': 'model/gltf-binary', '.woff2': 'font/woff2', '.woff': 'font/woff', '.ttf': 'font/ttf', '.otf': 'font/otf', '.webmanifest': 'application/manifest+json' };
@@ -173,7 +173,7 @@ function buildState() {
     notices: openNotices(readNotices()),
     journal: tail(PATHS.journal, 80),
     commits: git('log --oneline -12').split('\n').filter(Boolean),
-    playUrl: readCopies().length || fs.existsSync(R(cfg.buildDir, 'index.html')) ? '/play/' : null,
+    playCommand: PLAY_COMMAND,
     play: playInfo(),
   };
 }
@@ -187,7 +187,7 @@ function playInfo() {
   const c = readCopies()[0];
   let building = false;
   try { const pid = Number(fs.readFileSync(path.join(COPY_ROOT, '.lock'), 'utf8')); process.kill(pid, 0); building = true; } catch { /* idle */ }
-  return { sha: c?.sha || null, subject: c?.subject || null, builtAt: c?.builtAt || null, building, fromDist: !c };
+  return { sha: c?.sha || null, subject: c?.subject || null, builtAt: c?.builtAt || null, building, command: PLAY_COMMAND };
 }
 
 function serveFile(res, roots, rel, cache = 'no-store') {
@@ -252,15 +252,10 @@ const server = http.createServer(async (req, res) => {
     if (req.method === 'GET' && p.startsWith('/shots/')) return serveFile(res, [PATHS.shots], p.slice(7)) || send(res, 404, 'no shot', 'text/plain');
     if (req.method === 'GET' && p.startsWith('/assets/')) return serveFile(res, [PATHS.publicAssets], p.slice(8)) || send(res, 404, 'no asset', 'text/plain');
     if (req.method === 'GET' && (p === '/play' || p.startsWith('/play/'))) {
-      if (p === '/play') { res.writeHead(302, { Location: '/play/' }); return res.end(); }
-      let rel = p.slice(6); if (!rel || rel.endsWith('/')) rel += 'index.html';
-      // P4-073: a stable copy (playcopy.mjs), not dist/, which builders rebuild and wipe while a page is open. index.html
-      // comes from the current copy and is never cached; other files look in public/ (re-ingested art and manifest.json
-      // show without a rebuild), then the current copy, then the older kept copies, so an open older page still finds its
-      // chunks. With no copy yet, dist/ as before.
-      const roots = playRoots() || [R(config().publicDir), R(config().buildDir)];
-      if (rel === 'index.html') return serveFile(res, roots.slice(1, 2), rel, 'no-cache, no-store, must-revalidate') || send(res, 404, 'No build yet.', 'text/plain');
-      return serveFile(res, roots, rel, /^assets\/[^/]+-[A-Za-z0-9_-]{8}\.(js|css)$/.test(rel) ? 'public, max-age=31536000, immutable' : 'no-store') || send(res, 404, 'No build yet.', 'text/plain');
+      // P0-027: the game is Godot, so there is no page to open. /play/ (old bookmarks) says how to run the newest verified build.
+      const c = readCopies()[0];
+      const body = `<!doctype html><meta charset="utf-8"><title>Play</title><body style="background:#111;color:#e8e6e1;font:16px/1.5 -apple-system,'SF Pro Text',system-ui,sans-serif;max-width:560px;margin:12vh auto;padding:0 20px"><h1 style="font-weight:600;font-size:22px">Play the latest verified build</h1><p>The game runs in Godot, not in the browser. Open a terminal in the project folder and run:</p><pre style="background:#1b1b1b;border:1px solid #2c2c2c;border-radius:8px;padding:12px 14px;font-size:15px">${PLAY_COMMAND}</pre><p style="color:#9a968e">${c ? `Current copy: ${c.sha} (${String(c.subject || '').replace(/[<&]/g, '')}).` : 'No copy yet: the command builds one from the newest verified commit.'}</p>`;
+      return send(res, 200, body, 'text/html; charset=utf-8');
     }
     if (req.method === 'POST' && p === '/api/playcopy') {
       // P4-073: the dashboard's Refresh button. Builds the newest verified commit in the background (playcopy.mjs --verified).

@@ -37,4 +37,27 @@ describe('perf budgets', () => {
     expect(d.frameMsFail).toBe(22);
     expect(judgeBudgets({ perf: perf(10), budgets: d }).fails).toEqual([]);
   });
+
+  // The block game/debug/debug_server.gd perf(ms) answers on Godot: cpuMs and gpuMs stats, p95FrameMs a number, gpuMB video memory.
+  const godotPerf = (over = {}) => ({
+    windowMs: 3000, frames: 360, cpuMs: { p50: 0.2, p95: 0.3, max: 0.5 }, p95FrameMs: 8.4, avgFps: 120, drawCalls: 18, drawCallsAvg: 18,
+    triangles: 116, trianglesAvg: 116, gpuMB: 90, textureMB: 20, bufferMB: 10, renderer: 'Apple M2 Pro (Apple8)', ...over,
+  });
+
+  it('reads a Godot perf block: cpuMs, p95FrameMs, drawCalls, triangles, gpuMB', () => {
+    const budgets = normalize({ presets: { default: { gpuMB: { warn: 64, fail: 256 }, triangles: { warn: 100, fail: 1000 } } } });
+    const ok = judgeBudgets({ perf: godotPerf(), budgets });
+    expect(ok.frame.level).toBe('ok');
+    expect(ok.fails).toEqual([]);
+    expect(ok.warnings.join()).toMatch(/GPU memory 90 MB/);
+    expect(ok.warnings.join()).toMatch(/triangles 116/);
+    expect(judgeBudgets({ perf: godotPerf({ gpuMB: 300 }), budgets }).fails.join()).toMatch(/GPU memory/);
+    expect(judgeBudgets({ perf: godotPerf({ cpuMs: { p50: 20, p95: 30, max: 40 } }), budgets }).fails.join()).toMatch(/frame time/);
+  });
+
+  it('judges Godot gpuMs when the Vulkan driver reports it, and works without it on Metal', () => {
+    const slow = godotPerf({ gpuMs: { p50: 20, p95: 30, max: 40 }, p95FrameMs: 31, avgFps: 32 });
+    expect(judgeBudgets({ perf: slow }).fails.join()).toMatch(/gpu p95/);
+    expect(judgeBudgets({ perf: godotPerf({ gpuNote: 'the renderer reported no GPU time' }) }).frame.bound).toBe('cpu');
+  });
 });

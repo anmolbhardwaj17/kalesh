@@ -1,4 +1,4 @@
-## Placeholder car model, pure logic (no nodes), so it is unit tested. Port of src/car.ts: same numbers, same rules.
+## Placeholder car model, pure logic (no nodes), so it is unit tested. Port of the retired three.js car model: same numbers, same rules.
 ## World axes: east +X, north -Z, up +Y, 1 unit = 1 metre.
 ## heading is the compass heading in radians: 0 = north, PI/2 = east (clockwise seen from above).
 extends RefCounted

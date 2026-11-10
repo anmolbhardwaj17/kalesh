@@ -141,3 +141,8 @@ One line per event, written by task.mjs (start, done, fail, phase changes, inbox
 - 2026-11-10 21:10 mentor message mmwauwgjt handled: Answered plainly in the terminal.
 - 2026-11-10 21:20 mentor message mmwav9ylh handled: Agreed and recorded: Watch Dogs 2 is the fidelity target. The six images stay as mood and character references only.
 - 2026-11-10 21:26 [P0-026] done: godotdriver + node vm shim run the existing scenario scripts against Godot; verify/shoot use it (target godot); 7 scenarios and FD0 pass; typecheck now includes GDScript parse. Self-checked: 203 vitest + 21 godot tests, quick 7/7.
+- 2026-11-10 21:26 [P0-027] start (attempt 1): Lookproof and perf on Godot; retire the browser scaffold
+- 2026-11-10 21:28 mentor message mmwavkbv5 handled: Name options given in the terminal.
+- 2026-11-10 21:30 mentor message mmwavmnrs handled: Kalesh recommended, Lal Batti as a chapter or mode name. Waiting for his pick before renaming.
+- 2026-11-10 21:32 mentor message mmwavooof handled: More name options given in the terminal.
+- 2026-11-10 21:32 mentor message mmwavpp7u handled: Movie-style title options given in the terminal.

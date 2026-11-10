@@ -11,7 +11,7 @@ What the game must expose so the harness can drive it: verify scenarios, play sc
 - Hooks drive the game the way a player could (inputs, camera, time) or read it. Play scripts never write positions or flags to skip work; `teleport` exists for staging scenes and look proofs, never inside a milestone play script.
 - Every hook returns plain JSON-able data (the harness copies results with `JSON.parse(JSON.stringify(v))`).
 - Expected situations never call `console.error`: any console error fails verification.
-- Keep the hook code in one folder (`game/debug/` in Godot, `src/debug/` in the browser scaffold) and list it in `harness/verify/shared_paths.json`: a change there can break every scenario.
+- Keep the hook code in one folder (`game/debug/` in Godot) and list it in `harness/verify/shared_paths.json`: a change there can break every scenario.
 
 ## Godot transport
 

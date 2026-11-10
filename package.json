@@ -4,25 +4,18 @@
   "version": "0.0.1",
   "type": "module",
   "scripts": {
-    "dev": "vite",
+    "play": "node harness/bin/playcopy.mjs --play",
     "build": "node harness/bin/godot.mjs check",
-    "preview": "vite preview",
     "test": "vitest run && npm run test:godot",
     "typecheck": "tsc --noEmit && tsc --noEmit -p tsconfig.tools.json && node harness/bin/godot.mjs parse",
     "test:godot": "node harness/bin/godot.mjs test",
     "godot:check": "node harness/bin/godot.mjs check",
-    "build:web": "tsc --noEmit && vite build",
     "godot:parse": "node harness/bin/godot.mjs parse"
   },
-  "dependencies": {
-    "three": "^0.187.0"
-  },
   "devDependencies": {
-    "@types/three": "^0.187.0",
     "playwright": "^1.65.0",
     "sharp": "^0.35.5",
     "typescript": "~5.9.3",
-    "vite": "^8.3.7",
     "vitest": "^5.1.0"
   }
 }

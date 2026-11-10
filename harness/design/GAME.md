@@ -7,10 +7,10 @@ the reason in one line. Builders read only the sections docs/READ_MAP.md lists f
 ## As found (ADOPT, 2026-11-10)
 
 Dilli Darshan is a new repo, not an adopted game. What exists today is a minimal scaffold:
-- One scene: a 2 km sand coloured ground plane, one straight grey road strip along the Z axis, a red north post 50 m north of the origin (`src/main.ts`).
-- A box car (yellow body, dark cabin) driven with the arrow keys by a simple kinematic model (`src/car.ts`, tuned in `CAR`: accel 8, brake 14, drag 0.6, max 30 m/s, turn rate 1.6). No physics engine, no collisions.
+- One scene: a 2 km sand coloured ground plane, one straight grey road strip along the Z axis, a red north post 50 m north of the origin (`game/scenes/main.tscn`).
+- A box car (yellow body, dark cabin) driven with the arrow keys by a simple kinematic model (`game/scripts/car_model.gd`, tuned in `CAR`: accel 8, brake 14, drag 0.6, max 30 m/s, turn rate 1.6). No physics engine, no collisions.
 - A chase camera 10 m behind and 4.5 m up. A one-line HUD hint. No menus, audio, save, traffic or world data.
-- The hook contract `window.__game` (`src/debug/hooks.ts`) and unit tests for the coordinate rule and the car (`src/car.test.ts`, `src/debug/hooks.test.ts`). `verify --quick` was green on 2026-11-10 (boot_title, hooks_contract, perf_baseline) on an Apple M2 Pro (ANGLE Metal).
+- The hook contract `window.__game` (the debug server in `game/debug/`) and unit tests for the coordinate rule and the car (`game/tests/test_car.gd`, `test_scene.gd`, `test_debug.gd`). The game is a Godot project; the three.js scaffold it started as was retired in P0-027. `verify --quick` runs on an Apple M2 Pro (Metal, Forward+).
 - Content counts: 1 scene, 1 vehicle, 0 missions.
 
 The intended game (owner inbox, 2026-11-10): an open-world driving game set in Delhi, built from real map data put through a map repair layer (`harness/design/MAP_REPAIR.md`), with lane-level roads, rich Delhi assets, polished. The old game `/Users/apple/Desktop/code/delhi-drive` is a read-only reference (salvage audit in Phase 0).

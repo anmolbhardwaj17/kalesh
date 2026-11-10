@@ -1,0 +1,13 @@
+{
+  "views": {
+    "first_screen": {
+      "file": "first_screen.png",
+      "at": "2026-11-10T15:57:49.552Z",
+      "query": "debug=1&verify=1",
+      "error": null
+    }
+  },
+  "commit": "80f4180",
+  "gl": "Godot 4.7.2.stable Apple M2 Pro (Apple8) (metal, forward_plus)",
+  "at": "2026-11-10T15:57:49.662Z"
+}

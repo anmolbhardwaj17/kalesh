@@ -9,12 +9,12 @@ Docs: `docs/ARCHITECTURE.md` (ARCH), `harness/design/TECH.md` (TECH), `harness/d
 
 ## Verify scripts and harness tooling
 Notes: `harness/state/knowledge/verify-and-harness-tooling.md`
-- ARCH: "Tooling (outside `src/`)".
+- ARCH: "Tooling (outside `game/`)".
 - TECH: "npm scripts", "Debug hooks".
 - VERIFY: "Levels", "shoot.mjs behaviour", "Scenario options", "Speed", "Quick set", "Play scripts (anti-cheat for our own bot)", "Perf probes", "Look proof workflow (`lookproof.mjs`)", "Final gate".
 - HOOKS: all.
 - Also: `CLAUDE.md` (the loop), `.claude/agents/verifier.md` when changing what the verifier runs.
-- Source: `harness/bin/godot.mjs` (the pinned engine, headless check and tests, Movie Maker frame), `godotclient.mjs` and `godotsmoke.mjs` (the Godot debug server client and smoke test), `driver.mjs`, `godotdriver.mjs` and `godotshim.mjs` (how verify and shoot run the Godot game and its page-side scripts), `game/debug/` and `game/core/` (debug server, args, sim clock, events), `game/tests/run_tests.gd`, `harness/bin/verify.mjs`, `browser.mjs`, `shoot.mjs`, `lib.mjs`, `task.mjs`, `lookproof.mjs`, `perfbudget.mjs`, `perfgate.mjs`, `quickset.mjs`, `freshreport.mjs`, `gatecheck.mjs`, `gateretry.mjs`, `cliguard.mjs`; `harness/verify/scenarios.json`, `quick.json`, `shared_paths.json`, `perf_budgets.json`, `look_rules.json`, `scripts/`, `milestones/`; the game's debug hook folder.
+- Source: `harness/bin/godot.mjs` (the pinned engine, headless check and tests, Movie Maker frame), `godotclient.mjs` and `godotsmoke.mjs` (the Godot debug server client and smoke test), `driver.mjs`, `godotdriver.mjs` and `godotshim.mjs` (how verify and shoot run the Godot game and its page-side scripts), `game/debug/` and `game/core/` (debug server, args, sim clock, events), `game/tests/run_tests.gd`, `harness/bin/verify.mjs`, `browser.mjs` (the web driver, kept for a later web demo), `playcopy.mjs` (npm run play), `shoot.mjs`, `lib.mjs`, `task.mjs`, `lookproof.mjs`, `perfbudget.mjs`, `perfgate.mjs`, `quickset.mjs`, `freshreport.mjs`, `gatecheck.mjs`, `gateretry.mjs`, `cliguard.mjs`; `harness/verify/scenarios.json`, `quick.json`, `shared_paths.json`, `perf_budgets.json`, `look_rules.json`, `scripts/`, `milestones/`; the game's debug hook folder.
 
 ## Rendering and look
 Notes: `harness/state/knowledge/rendering-and-look.md`
@@ -22,7 +22,7 @@ Notes: `harness/state/knowledge/rendering-and-look.md`
 - TECH: "Render pipeline", "Performance budgets".
 - STYLE: all sections that apply to the task.
 - VERIFY: "Visual review rubric (verifier agent)", "Look proof workflow (`lookproof.mjs`)", "Perf probes".
-- Source: `src/main.ts` (renderer, lights, scene); the Phase 0 style tests add one module per style as `src/render/styles/<name>.ts`.
+- Source: `game/scenes/main.tscn` (environment, lights, scene); the Phase 0 style tests switch the look with the game arg `--style=<name>` (`game/core/game_args.gd`) and add their code under `game/` (for example `game/render/styles/<name>.gd`).
 
 ## UI and input
 Notes: `harness/state/knowledge/ui-and-input.md`
@@ -30,7 +30,7 @@ Notes: `harness/state/knowledge/ui-and-input.md`
 - TECH: "Input".
 - GAME: "Player verbs", "HUD", "Menus", "Accessibility".
 - STYLE: "UI".
-- Source: `index.html` (`#hud`), input handling in `src/main.ts`.
+- Source: the InputMap actions in `game/project.godot`, `game/scripts/car.gd` (input to the car); the HUD under `game/ui/` once added.
 
 ## Assets and ingest
 Notes: `harness/state/knowledge/assets-and-ingest.md`
@@ -43,14 +43,14 @@ Notes: `harness/state/knowledge/driving-and-camera.md` (create on first gotcha)
 - ARCH: "Systems" (Driving).
 - TECH: "Main loop and time", "Coordinates (binding, owner 2026-11-10)".
 - GAME: "Movement and camera feel".
-- Source: `src/car.ts`, `src/car.test.ts`, the camera block in `src/main.ts`; Godot: `game/scripts/car_model.gd`, `car.gd`, `chase_camera.gd`, `game/tests/test_car.gd`.
+- Source: `game/scripts/car_model.gd`, `car.gd`, `chase_camera.gd`, `game/tests/test_car.gd`.
 
 ## World, map data and bake
 Notes: `harness/state/knowledge/world-and-map.md` (create on first gotcha)
 - TECH: "Coordinates (binding, owner 2026-11-10)" and the world sections written after the architecture sign-off.
 - Design: `harness/design/MAP_REPAIR.md` (all), `harness/design/DELHI_WORLD.md` (landmark registry and area profiles: read the section for your task), `harness/design/ARCH_OPTIONS.md` once written.
 - Data: `harness/data/landmarks.json` and `harness/data/areas/` once added.
-- Source: `src/geo/` (projection, added by the P0 harness baseline task), its Godot port `game/geo/projection.gd` with `game/tests/test_projection.gd` and the fixture `harness/data/fixtures/projection_points.json`, bake scripts and benches under `harness/bench/` and `tools/` once added.
+- Source: `tools/geo/` (the reference projection and its tests), its Godot port `game/geo/projection.gd` with `game/tests/test_projection.gd` and the fixture `harness/data/fixtures/projection_points.json`, bake scripts and benches under `harness/bench/` and `tools/` once added.
 
 ## Old game reference (read only)
 - `/Users/apple/Desktop/code/delhi-drive`: never edit, build or install there. Read `harness/design/SALVAGE_AUDIT.md` first (written in Phase 0) instead of the old code.

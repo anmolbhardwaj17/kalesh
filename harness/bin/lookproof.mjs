@@ -6,9 +6,12 @@
 //   node harness/bin/lookproof.mjs --check
 //       validates harness/look_proof/poses.json (exit 1 on a problem)
 //   node harness/bin/lookproof.mjs --set <name> [--views a,b] [--query "style=toon"] [--perf] [--no-build]
-//       shoots every view of poses.json into harness/look_proof/<name>/<view>.png (+ shots.json). --query adds page params
-//       (a style test task switches the look with one, for example ?style=toon). --perf also measures each view
-//       (debug.perf, judged against harness/verify/perf_budgets.json) into harness/look_proof/<name>/perf.json.
+//       shoots every view of poses.json into harness/look_proof/<name>/<view>.png (+ shots.json). --query adds game args
+//       on Godot ("style=toon" becomes --style=toon) or page params on the web target (a style test task switches the
+//       look with one). --perf also measures each view (debug.perf, judged against harness/verify/perf_budgets.json)
+//       into harness/look_proof/<name>/perf.json, which quotes the machine, the Godot version, the renderer (Forward+ or
+//       Mobile), the GPU adapter and the machine load. Each view is a fresh game run. HARNESS_GODOT_ARGS="--rendering-driver
+//       vulkan" adds GPU times on macOS (the Metal driver reports none).
 //   node harness/bin/lookproof.mjs --approve <name>
 //       makes that set the approved reference (harness/look_proof/approved/), recorded in approved.json. Only after the
 //       owner said yes to it (Phase 0 sign-off, or a look task he accepted).
@@ -26,8 +29,14 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import { ROOT, R, readJSON, writeJSON, nowISO, parseArgs, git, config } from './lib.mjs';
-import { npmRun, startServer, launch, openPage, waitReady, runStep } from './browser.mjs';
+import os from 'node:os';
+import { loadDriver } from './driver.mjs';
 import { loadBudgets, judgeBudgets } from './perfbudget.mjs';
+
+/** The driver of kit.config.json "target" (driver.mjs): godot runs the pinned Godot, web the built page in Chromium. */
+const DRV = await loadDriver(config());
+const { npmRun, startServer, launch, openPage, waitReady, runStep } = DRV;
+const GODOT = DRV.kind === 'godot';
 
 const args = parseArgs(process.argv.slice(2), { booleans: ['check', 'perf', 'no-build'] });
 const LP = R('harness', 'look_proof');
@@ -35,7 +44,7 @@ const POSES = path.join(LP, 'poses.json');
 const LOOK_OUT = R('harness', 'reports', 'look');
 const CFG = config();
 
-function usage() { console.log(fs.readFileSync(new URL(import.meta.url), 'utf8').split('\n').slice(1, 27).map((l) => l.replace(/^\/\/ ?/, '')).join('\n')); }
+function usage() { console.log(fs.readFileSync(new URL(import.meta.url), 'utf8').split('\n').slice(1, 32).map((l) => l.replace(/^\/\/ ?/, '')).join('\n')); }
 
 export function checkPoses(p) {
   const errs = [];
@@ -50,6 +59,24 @@ export function checkPoses(p) {
   return errs;
 }
 
+const RENDER_METHODS = { forward_plus: 'Forward+', mobile: 'Mobile', gl_compatibility: 'Compatibility' };
+
+/** What a perf.json quotes about the run: machine, engine version, renderer, GPU adapter and the machine load. */
+export function perfMeta({ gl = {}, browser = {}, hello = null, kind = DRV.kind, load = null } = {}) {
+  const cpus = os.cpus();
+  const r = hello?.renderer || null;
+  const l = load || { avg1: Math.round(os.loadavg()[0] * 100) / 100, cores: cpus.length };
+  return {
+    driver: kind,
+    machine: `${os.hostname().replace(/\.local$/, '')}, ${os.platform()} ${os.arch()}, ${cpus[0]?.model || 'unknown cpu'}, ${cpus.length} cores, ${Math.round(os.totalmem() / 2 ** 30)} GB`,
+    godotVersion: kind === 'godot' ? (browser.version || null) : null,
+    renderer: r ? (RENDER_METHODS[r.method] || r.method || null) : null,
+    renderingDriver: r?.driver || null,
+    gpuAdapter: r?.adapter || gl.renderer || null,
+    load: { ...l, perCore: Math.round((l.avg1 / Math.max(1, l.cores)) * 100) / 100 },
+  };
+}
+
 async function sharpOrNull() { try { return (await import('sharp')).default; } catch { return null; } }
 
 async function shootSet(name) {
@@ -61,28 +88,33 @@ async function shootSet(name) {
   if (!args['no-build']) { const b = npmRun('build'); if (!b.ok) { console.log(`build failed:\n${b.tail}`); process.exit(1); } }
   const dir = path.join(LP, name);
   fs.mkdirSync(dir, { recursive: true });
-  const server = await startServer();
+  const server = GODOT ? null : await startServer();
   const { browser, gl } = await launch();
   const budgets = loadBudgets();
   const shots = readJSON(path.join(dir, 'shots.json'), { views: {} });
   const perf = readJSON(path.join(dir, 'perf.json'), { rows: {} });
   let bad = 0;
+  const meta = perfMeta({ gl, browser });
   try {
     for (const v of views) {
       const q = [CFG.pageQuery, v.quality ? `quality=${v.quality}` : '', typeof args.query === 'string' ? args.query : ''].filter(Boolean).join('&');
       const t0 = Date.now();
-      const { page, log } = await openPage(browser, `${server.url}index.html?${q}`, { width: v.size?.[0] || 1280, height: v.size?.[1] || 720 });
+      const query = typeof args.query === 'string' ? args.query : '';
+      const target = GODOT ? { quality: v.quality, query } : `${server.url}index.html?${q}`;
+      const { page, log } = await openPage(browser, target, { width: v.size?.[0] || 1280, height: v.size?.[1] || 720 });
       const ready = await waitReady(page);
+      if (ready.ok && !meta.renderer && GODOT) Object.assign(meta, perfMeta({ gl, browser, hello: page.client?.hello }));
       const loadMs = Date.now() - t0;
       const ctx = { page, shotsDir: dir, shots: [], perf: null };
       let err = ready.ok ? null : ready.reason;
       for (const st of ready.ok ? v.steps : []) { const r = await runStep(ctx, st); if (!r.ok) { err = r.error; break; } }
       if (!err) { const r = await runStep(ctx, { shot: v.name }); if (!r.ok) err = r.error; }
       if (!err && args.perf) {
+        const load = perfMeta({}).load;
         const r = await runStep(ctx, { perf: budgets.windowMs });
         if (r.ok && ctx.perf) {
           const j = judgeBudgets({ perf: ctx.perf, loadMs, quality: v.quality, budgets, software: gl.software });
-          perf.rows[v.name] = { quality: v.quality || null, loadMs, cpuP95: ctx.perf.cpuMs?.p95 ?? null, gpuP95: ctx.perf.gpuMs?.p95 ?? null, fps: ctx.perf.avgFps ?? null, drawCalls: ctx.perf.drawCalls ?? null, triangles: ctx.perf.triangles ?? null, frameP95: j.frame?.p95 ?? null, verdict: j.fails.length ? 'FAIL' : j.warnings.length ? 'warn' : 'ok', notes: [...j.fails, ...j.warnings] };
+          perf.rows[v.name] = { quality: v.quality || null, loadMs, hostLoad: load, cpuP95: ctx.perf.cpuMs?.p95 ?? null, gpuP95: ctx.perf.gpuMs?.p95 ?? null, fps: ctx.perf.avgFps ?? null, drawCalls: ctx.perf.drawCalls ?? null, triangles: ctx.perf.triangles ?? null, frameP95: j.frame?.p95 ?? null, verdict: j.fails.length ? 'FAIL' : j.warnings.length ? 'warn' : 'ok', notes: [...j.fails, ...j.warnings] };
         } else err = `perf: ${r.error}`;
       }
       if (log.errors.length && !err) err = `${log.errors.length} console error(s): ${log.errors[0].text}`;
@@ -91,10 +123,10 @@ async function shootSet(name) {
       if (err) bad++;
       await page.close();
     }
-  } finally { await browser.close(); await server.close(); }
+  } finally { await browser.close(); await server?.close(); }
   shots.commit = git('rev-parse --short HEAD'); shots.gl = gl.renderer; shots.at = nowISO();
   writeJSON(path.join(dir, 'shots.json'), shots);
-  if (args.perf) { perf.gl = gl.renderer; perf.budgets = budgets.source; writeJSON(path.join(dir, 'perf.json'), perf); }
+  if (args.perf) { Object.assign(perf, meta); perf.gl = gl.renderer; perf.budgets = budgets.source; writeJSON(path.join(dir, 'perf.json'), perf); }
   console.log(`LOOKPROOF SET ${name}: ${bad ? 'FAIL' : 'OK'} (${views.length} views) -> ${path.relative(ROOT, dir)}`);
   process.exitCode = bad ? 1 : 0;
 }

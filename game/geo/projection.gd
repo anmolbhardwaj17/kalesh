@@ -1,5 +1,5 @@
 ## Geographic projection: latitude and longitude (WGS84 degrees) to world metres and back, around one named origin.
-## Port of src/geo/projection.ts, which stays as the reference for the offline bake tooling. Checked against
+## Port of tools/geo/projection.ts, which stays as the reference for the offline bake tooling. Checked against
 ## harness/data/fixtures/projection_points.json (generated from the TypeScript code) in game/tests/test_projection.gd.
 ##
 ## World axes (TECH.md "Coordinates"): east +X, north -Z, up +Y, 1 unit = 1 metre. A point north of the origin has a

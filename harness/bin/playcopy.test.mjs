@@ -33,13 +33,14 @@ describe('playcopy (P4-073)', () => {
     expect(pickVerified([c('3', 'state'), c('2', '[T-C] y'), c('1', '[T-B] x')], status).sha).toBe('3');
   });
 
-  it('lists only copies that still have an index.html, current first', () => {
+  it('lists only copies that still have a game/project.godot, current first', () => {
     const root = fs.mkdtempSync(path.join(os.tmpdir(), 'playcopy-'));
     try {
       expect(readCopies(root)).toEqual([]);
-      for (const s of ['bbb', 'aaa']) { fs.mkdirSync(path.join(root, s)); fs.writeFileSync(path.join(root, s, 'index.html'), '<html>'); }
+      for (const s of ['bbb', 'aaa']) { fs.mkdirSync(path.join(root, s, 'game'), { recursive: true }); fs.writeFileSync(path.join(root, s, 'game', 'project.godot'), ''); }
       fs.writeFileSync(path.join(root, 'current.json'), JSON.stringify({ sha: 'bbb', copies: [{ sha: 'bbb' }, { sha: 'gone' }, { sha: 'aaa' }] }));
       expect(readCopies(root).map((x) => x.sha)).toEqual(['bbb', 'aaa']);
+      expect(readCopies(root)[0].project).toBe(path.join(root, 'bbb', 'game'));
     } finally { fs.rmSync(root, { recursive: true, force: true }); }
   });
 });

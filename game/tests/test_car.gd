@@ -1,4 +1,4 @@
-## Car model port (game/scripts/car_model.gd) against src/car.test.ts, and the forward(heading) axis rule.
+## Car model port (game/scripts/car_model.gd) of the retired three.js car tests, and the forward(heading) axis rule.
 extends RefCounted
 
 const CarModel := preload("res://scripts/car_model.gd")
