@@ -34,3 +34,6 @@ By: owner
 Decision: roads are built as lane sets with tapers, gores and flyover lane splits (never shared index points), checked for overlapping faces, lane continuity and taper limits; this is the top Fable task. A 3D map inspector page lets Anmol pick among Claude's proposed fixes for unclear or high-impact issues; choices go to per-tile overrides and the inbox. It is an early task after the architecture sign-off.
 Why: centrelines on one shared node made carriageways collapse in the old game; Anmol wants to review hard map cases himself without blocking the build.
 By: owner
+
+## 2026-11-10: Dashboard restyle
+Anmol asked for a dark, minimal dashboard in the Saans font. Restyled harness/dashboard/index.html: neutral black (no blue tint), Saans and Saans Mono served locally from harness/dashboard/fonts (route /fonts/). The Saans files are TRIAL builds with a personal use only licence (fonts/LICENSE.txt): fine for this private local dashboard, never ship them in the game build.

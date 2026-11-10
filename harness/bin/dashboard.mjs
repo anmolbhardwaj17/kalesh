@@ -13,7 +13,7 @@ import { scriptIds, milestoneCounts, isRequired, loadMilestones } from './milest
 import { playRoots, readCopies, COPY_ROOT } from './playcopy.mjs';
 
 const PORT = Number(process.env.HARNESS_DASHBOARD_PORT || config().dashboardPort || 4477);
-const MIME = { '.html': 'text/html; charset=utf-8', '.js': 'text/javascript', '.css': 'text/css', '.json': 'application/json', '.png': 'image/png', '.jpg': 'image/jpeg', '.webp': 'image/webp', '.svg': 'image/svg+xml', '.wasm': 'application/wasm', '.mp3': 'audio/mpeg', '.ogg': 'audio/ogg', '.wav': 'audio/wav', '.glb': 'model/gltf-binary', '.woff2': 'font/woff2', '.woff': 'font/woff', '.ttf': 'font/ttf', '.webmanifest': 'application/manifest+json' };
+const MIME = { '.html': 'text/html; charset=utf-8', '.js': 'text/javascript', '.css': 'text/css', '.json': 'application/json', '.png': 'image/png', '.jpg': 'image/jpeg', '.webp': 'image/webp', '.svg': 'image/svg+xml', '.wasm': 'application/wasm', '.mp3': 'audio/mpeg', '.ogg': 'audio/ogg', '.wav': 'audio/wav', '.glb': 'model/gltf-binary', '.woff2': 'font/woff2', '.woff': 'font/woff', '.ttf': 'font/ttf', '.otf': 'font/otf', '.webmanifest': 'application/manifest+json' };
 const UPLOAD_EXT = new Set(['png', 'jpg', 'jpeg', 'webp', 'mp3', 'wav', 'ogg', 'm4a', 'aac', 'flac', 'glb']);
 
 function tail(file, n) { try { return fs.readFileSync(file, 'utf8').split('\n').filter((l) => l.startsWith('- ')).slice(-n); } catch { return []; } }
@@ -231,6 +231,7 @@ const server = http.createServer(async (req, res) => {
     const p = url.pathname;
     if (!tunnelAllowed(req, url, res)) return send(res, 403, 'Forbidden', 'text/plain');
     if (req.method === 'GET' && (p === '/' || p === '/index.html')) return serveFile(res, [H('dashboard')], 'index.html') || send(res, 404, 'missing dashboard', 'text/plain');
+    if (req.method === 'GET' && p.startsWith('/fonts/')) return serveFile(res, [H('dashboard/fonts')], p.slice(7), 'public, max-age=86400') || send(res, 404, 'no font', 'text/plain');
     if (req.method === 'GET' && p === '/api/ping') return send(res, 200, { ok: true });
     if (req.method === 'GET' && p === '/api/state') return send(res, 200, buildState());
     if (req.method === 'GET' && p.startsWith('/vshots/')) return serveFile(res, [VERIFY_SHOTS], p.slice(8)) || send(res, 404, 'no shot', 'text/plain');
