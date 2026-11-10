@@ -24,6 +24,7 @@ import { pickQuick, describePick, changedScenarioNames, useCommitFiles } from '.
 import { frameTimeGate, loadText, perfSummary, perfTable, runOrder } from './perfgate.mjs';
 import { checkVerifyArgs, scenarioNames, milestoneIds, VERIFY_BOOLEANS } from './cliguard.mjs';
 import { loadBudgets, judgeBudgets } from './perfbudget.mjs';
+import { ballastPerf } from './ballast.mjs';
 
 if (process.argv.includes('--help') || process.argv.includes('-h')) {
   console.log(fs.readFileSync(new URL(import.meta.url), 'utf8').split('\n').slice(1, 15).map((l) => l.replace(/^\/\/ ?/, '')).join('\n'));
@@ -137,10 +138,15 @@ function absorb(log) {
   report.failedRequests.push(...log.failedRequests.slice(0, 20));
 }
 
+const ballastCache = {};
+
 /** One perf window (debug.perf(ms), docs/GAME_HOOKS.md) with the machine load around it. */
 async function measurePerf(ctx, ms) {
   const before = os.loadavg()[0];
   const r = await runStep(ctx, { perf: ms });
+  // Godot: the window is capped at 120 fps, so a plain gpuMs is the idle frame. Add the ballast cost (perf.gpuCost, the GPU
+  // number perfgate.mjs judges) from a second window with the GPU kept busy; the plain window stays for CPU, fps and counts.
+  if (r.ok && ctx.perf && GODOT && ctx.page.client) ctx.perf = await ballastPerf(ctx.page.client, ctx.perf, { windowMs: ms, cache: ballastCache, key: String(ctx.page.client.hello?.renderer?.driver || 'default') });
   if (r.ok && ctx.perf) {
     const after = os.loadavg()[0];
     ctx.perf.load = { avg1: Math.round(Math.max(before, after) * 100) / 100, cores: os.cpus().length };

@@ -11,7 +11,10 @@
 //       look with one). --perf also measures each view (debug.perf, judged against harness/verify/perf_budgets.json)
 //       into harness/look_proof/<name>/perf.json, which quotes the machine, the Godot version, the renderer (Forward+ or
 //       Mobile), the GPU adapter and the machine load. Each view is a fresh game run. HARNESS_GODOT_ARGS="--rendering-driver
-//       vulkan" adds GPU times on macOS (the Metal driver reports none).
+//       vulkan" adds GPU times on macOS (the Metal driver reports none). Since P0-039 every view also runs the GPU ballast
+//       (harness/bin/ballast.mjs): `gpuP95` is the GPU p95 with the GPU kept busy (the scene's cost at full clock, Vulkan
+//       only), `frameCostP50` and `frameCostP95` the same cost from frame times (also on Metal), `gpuP95Capped` the plain
+//       reading under this Mac's 120 fps cap. The budgets judge the ballast cost.
 //   node harness/bin/lookproof.mjs --approve <name>
 //       makes that set the approved reference (harness/look_proof/approved/), recorded in approved.json. Only after the
 //       owner said yes to it (Phase 0 sign-off, or a look task he accepted).
@@ -33,6 +36,7 @@ import path from 'node:path';
 import { ROOT, R, readJSON, writeJSON, nowISO, parseArgs, git, config } from './lib.mjs';
 import os from 'node:os';
 import { loadDriver } from './driver.mjs';
+import { ballastPerf, ballastText } from './ballast.mjs';
 import { loadBudgets, judgeBudgets } from './perfbudget.mjs';
 
 /** The driver of kit.config.json "target" (driver.mjs): godot runs the pinned Godot, web the built page in Chromium. */
@@ -81,6 +85,24 @@ export function perfMeta({ gl = {}, browser = {}, hello = null, kind = DRV.kind,
 
 async function sharpOrNull() { try { return (await import('sharp')).default; } catch { return null; } }
 
+/**
+ * One perf.json row from a measured window. gpuP95 is the GPU p95 with the ballast on (the scene's cost at full clock,
+ * Vulkan only) and gpuP95Capped the plain reading under the 120 fps cap; frameCostP50 and frameCostP95 are the same cost
+ * from frame times (a ballast frame minus the ballast alone, also on Metal); gpuCostMs is the number the gate judged.
+ * A window without a ballast keeps the plain reading in gpuP95.
+ */
+export function perfRow({ perf, j, loadMs, load, quality }) {
+  const c = perf.gpuCost && perf.gpuCost.ms != null ? perf.gpuCost : null;
+  const capped = (c ? perf.gpuMsCapped?.p95 : perf.gpuMs?.p95) ?? null;
+  return {
+    quality: quality || null, loadMs, hostLoad: load, cpuP95: perf.cpuMs?.p95 ?? null,
+    gpuP95: c ? c.gpuP95 : (perf.gpuMs?.p95 ?? null), gpuP95Capped: capped,
+    frameCostP50: c?.frameCostP50 ?? null, frameCostP95: c?.frameCostP95 ?? null, gpuCostMs: c?.ms ?? null, ballastN: c?.n ?? null,
+    fps: perf.avgFps ?? null, drawCalls: perf.drawCalls ?? null, triangles: perf.triangles ?? null, frameP95: j.frame?.p95 ?? null,
+    verdict: j.fails.length ? 'FAIL' : j.warnings.length ? 'warn' : 'ok', notes: [...j.fails, ...j.warnings],
+  };
+}
+
 async function shootSet(name) {
   const poses = readJSON(POSES, null);
   const errs = checkPoses(poses);
@@ -93,6 +115,7 @@ async function shootSet(name) {
   const server = GODOT ? null : await startServer();
   const { browser, gl } = await launch();
   const budgets = loadBudgets();
+  const ballastCache = {};
   const shots = readJSON(path.join(dir, 'shots.json'), { views: {} });
   const perf = readJSON(path.join(dir, 'perf.json'), { rows: {} });
   let bad = 0;
@@ -114,14 +137,16 @@ async function shootSet(name) {
       if (!err && args.perf) {
         const load = perfMeta({}).load;
         const r = await runStep(ctx, { perf: budgets.windowMs });
+        // The window is capped at 120 fps: a plain gpuMs is the idle frame. Keep the GPU busy for the real cost (ballast.mjs).
+        if (r.ok && ctx.perf && GODOT && page.client) ctx.perf = await ballastPerf(page.client, ctx.perf, { windowMs: budgets.windowMs, cache: ballastCache, key: `${meta.renderingDriver || DRV.kind}:${v.size?.join('x') || ''}` });
         if (r.ok && ctx.perf) {
           const j = judgeBudgets({ perf: ctx.perf, loadMs, quality: v.quality, budgets, software: gl.software });
-          perf.rows[v.name] = { quality: v.quality || null, loadMs, hostLoad: load, cpuP95: ctx.perf.cpuMs?.p95 ?? null, gpuP95: ctx.perf.gpuMs?.p95 ?? null, fps: ctx.perf.avgFps ?? null, drawCalls: ctx.perf.drawCalls ?? null, triangles: ctx.perf.triangles ?? null, frameP95: j.frame?.p95 ?? null, verdict: j.fails.length ? 'FAIL' : j.warnings.length ? 'warn' : 'ok', notes: [...j.fails, ...j.warnings] };
+          perf.rows[v.name] = perfRow({ perf: ctx.perf, j, loadMs, load, quality: v.quality });
         } else err = `perf: ${r.error}`;
       }
       if (log.errors.length && !err) err = `${log.errors.length} console error(s): ${log.errors[0].text}`;
       shots.views[v.name] = { file: `${v.name}.png`, at: nowISO(), query: q, error: err };
-      console.log(`  ${v.name}: ${err ? 'FAIL ' + err : 'ok'}${perf.rows[v.name] && args.perf ? ` (p95 ${perf.rows[v.name].frameP95?.toFixed?.(1) ?? '-'} ms, ${perf.rows[v.name].drawCalls ?? '-'} calls, ${perf.rows[v.name].verdict})` : ''}`);
+      console.log(`  ${v.name}: ${err ? 'FAIL ' + err : 'ok'}${perf.rows[v.name] && args.perf ? ` (p95 ${perf.rows[v.name].frameP95?.toFixed?.(1) ?? '-'} ms, ${perf.rows[v.name].drawCalls ?? '-'} calls, ${perf.rows[v.name].verdict}; ${ballastText(ctx.perf?.gpuCost)}; capped gpu ${perf.rows[v.name].gpuP95Capped?.toFixed?.(1) ?? '-'} ms)` : ''}`);
       if (err) bad++;
       await page.close();
     }
@@ -212,6 +237,8 @@ export function sheetCost(perf, vulkanPerf) {
   if (own != null) return `GPU p95 ${own.toFixed(1)} ms`;
   const vk = worst(vulkanPerf, 'gpuP95');
   if (vk != null) return `GPU p95 ${vk.toFixed(1)} ms (Vulkan run)`;
+  const fc = worst(perf, 'frameCostP50');
+  if (fc != null) return `frame cost p50 ${fc.toFixed(1)} ms (ballast)`;
   const cpu = worst(perf, 'cpuP95') ?? worst(perf, 'frameP95');
   return cpu != null ? `CPU p95 ${cpu.toFixed(1)} ms (no GPU timer)` : 'no perf run';
 }

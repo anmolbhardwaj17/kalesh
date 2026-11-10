@@ -13,6 +13,7 @@ extends Node
 const Stats := preload("res://debug/perf_stats.gd")
 const DebugLogger := preload("res://debug/debug_logger.gd")
 const FrameProbe := preload("res://debug/frame_probe.gd")
+const GpuBallast := preload("res://debug/gpu_ballast.gd")
 const PROTOCOL := 1
 const MAX_LINE_BYTES := 1 << 20
 ## Composite actions the harness scripts use (the browser scaffold's names) mapped onto InputMap actions:
@@ -39,6 +40,7 @@ var _overlay: CanvasLayer = null
 var _overlay_label: Label = null
 var _logger: DebugLogger = null
 var _quitting := false
+var _ballast: Node = null
 var _probe_start: Node = null
 ## Headless runs (DisplayServer "headless") draw nothing, so frame_post_draw never fires: frames end on process_frame.
 var _headless := false
@@ -230,7 +232,21 @@ func _call(method: String, a: Array) -> Dictionary:
 				_events().emit_event("quality", {"preset": a[0]})
 			return _ok({"preset": _args().quality, "presets": QUALITY_PRESETS})
 		"bench":
-			# Architecture benches only (--arch=<name>): passes a command to the bench scene's bench_call(cmd, opts).
+			# bench('ballast', {n}) and bench('blank', {on}) work in any scene (honest GPU readings under this Mac's 120 fps
+			# cap, harness/bin/ballast.mjs). Every other command goes to the bench scene's bench_call(cmd, opts) (--arch=<name>).
+			if a.size() > 0 and (a[0] == "ballast" or a[0] == "blank"):
+				var o = a[1] if a.size() > 1 and a[1] is Dictionary else {}
+				if a[0] == "blank":
+					# on: the root viewport draws no 3D, so a perf window measures the ballast alone
+					get_viewport().disable_3d = bool(o.get("on", false))
+					return _ok({"blank": get_viewport().disable_3d})
+				if _headless:
+					return _fail("bench(ballast): a headless run renders nothing")
+				if _ballast == null:
+					_ballast = GpuBallast.new()
+					_ballast.name = "GpuBallast"
+					add_child(_ballast)
+				return _ok({"n": _ballast.set_load(int(o.get("n", 0)))})
 			var scene := get_tree().current_scene
 			if scene == null or not scene.has_method("bench_call"):
 				return _fail("bench(cmd, opts): the current scene is not a bench scene (start the game with --arch=<name>)")

@@ -32,6 +32,7 @@ import { spawnSync } from 'node:child_process';
 import { fileURLToPath, pathToFileURL } from 'node:url';
 import { launchGame } from '../bin/godotclient.mjs';
 import { resolveGodot } from '../bin/godot.mjs';
+import { calibrateBallast as calibrate, measureBlank } from '../bin/ballast.mjs';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..', '..');
 const RENDER_METHODS = { forward_plus: 'Forward+', mobile: 'Mobile', gl_compatibility: 'Compatibility' };
@@ -102,27 +103,10 @@ async function waitReady(game, timeoutMs = 240000) {
   throw new Error(`the bench scene was not ready in ${timeoutMs} ms (${last?.message || 'no answer'})`);
 }
 
-/**
- * Finds a ballast size (shader iterations) that makes a frame with no 3D take 12 to 20 ms, so every measured frame
- * is GPU bound and longer than the display's refresh. On this Mac the window is capped at 120 fps even with vsync
- * off; under the cap the GPU clocks down and a light scene reads about 6.5 ms of GPU time whatever it costs.
- */
+/** The ballast size for this driver (harness/bin/ballast.mjs), calibrated once per run. */
 async function calibrateBallast(ctx, game, driver) {
   ctx.ballast = ctx.ballast || {};
-  let n = ctx.ballast[driver] || 1200;
-  await game.client.call('bench', 'blank', { on: true });
-  for (let i = 0; i < 6; i++) {
-    await game.client.call('bench', 'ballast', { n });
-    await game.client.call('perf', 300);
-    const f = (await game.client.call('perf', 700)).frameMs.p50;
-    if (f < 12) n = Math.round(n * 1.5);
-    else if (f > 20) n = Math.round(n * (15 / f));
-    else break;
-  }
-  await game.client.call('bench', 'ballast', { n: 0 });
-  await game.client.call('bench', 'blank', { on: false });
-  ctx.ballast[driver] = n;
-  return n;
+  return calibrate(game.client, ctx.ballast, driver);
 }
 
 async function runSetup(ctx, setup) {
@@ -170,12 +154,7 @@ async function runSetup(ctx, setup) {
       row.paths[name] = r;
     }
     // the ballast alone (the root viewport draws no 3D): what to take off a ballast frame to get the scene's cost
-    await game.client.call('bench', 'blank', { on: true });
-    await game.client.call('bench', 'ballast', { n });
-    await game.client.call('perf', 400);
-    const blank = await game.client.call('perf', 1200);
-    await game.client.call('bench', 'ballast', { n: 0 });
-    await game.client.call('bench', 'blank', { on: false });
+    const blank = await measureBlank(game.client, n, { warmMs: 400, windowMs: 1200 });
     row.ballast = { n, blankFrameP50: round(blank.frameMs?.p50), blankFrameP95: round(blank.frameMs?.p95) };
     for (const r of Object.values(row.paths)) {
       r.frameCostP50 = round(r.ballastFrameP50 - row.ballast.blankFrameP50);

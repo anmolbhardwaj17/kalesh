@@ -44,3 +44,17 @@ describe('lookproof sheet labels', () => {
     expect(sheetCost(null, null)).toBe('no perf run');
   });
 });
+
+describe('perfRow', () => {
+  const j = { fails: [], warnings: [], frame: { p95: 7.4 } };
+  it('puts the ballast cost in the row and keeps the capped reading', async () => {
+    const { perfRow } = await import('./lookproof.mjs');
+    const perf = { cpuMs: { p95: 0.9 }, gpuMs: { p95: 6.6 }, gpuMsCapped: { p95: 6.6 }, avgFps: 119, drawCalls: 150, triangles: 1000,
+      gpuCost: { ms: 7.4, source: 'ballast-gpu', gpuP95: 7.4, frameCostP50: 7.1, frameCostP95: 7.5, n: 900 } };
+    expect(perfRow({ perf, j, loadMs: 1000, load: null })).toMatchObject({ gpuP95: 7.4, gpuP95Capped: 6.6, frameCostP50: 7.1, frameCostP95: 7.5, gpuCostMs: 7.4, ballastN: 900, frameP95: 7.4, verdict: 'ok' });
+  });
+  it('keeps the plain reading when no ballast ran', async () => {
+    const { perfRow } = await import('./lookproof.mjs');
+    expect(perfRow({ perf: { cpuMs: { p95: 0.9 }, gpuMs: { p95: 6.6 } }, j, loadMs: 1, load: null })).toMatchObject({ gpuP95: 6.6, gpuP95Capped: 6.6, gpuCostMs: null });
+  });
+});

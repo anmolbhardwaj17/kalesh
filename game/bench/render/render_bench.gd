@@ -10,7 +10,7 @@
 ## The look is the signed stylised B on its lean path: the style's own environment, sun and materials (the
 ## surface_b shader with its tiling texture array), SSAO, SSIL, glow, fog and a depth haze box. No dressing, decals,
 ## signs or night lights: those are measured by the style tasks.
-## The harness drives it through the debug hook bench(cmd, opts) -> bench_call here: info, path, pose, ballast, blank.
+## The harness drives it through the debug hook bench(cmd, opts) -> bench_call here: info, path, pose (ballast and blank are answered by the debug server in any scene).
 ## Run by node harness/bench/arch.mjs render. Never loaded by the default game.
 extends Node3D
 
@@ -19,7 +19,6 @@ const Crowd := preload("res://bench/render/crowd.gd")
 const Kit := preload("res://scenes/standin/kit.gd")
 const HAZE_SHADER := preload("res://render/shaders/haze_b.gdshader")
 const TX_SHADER := preload("res://bench/render/tx.gdshader")
-const BALLAST_SHADER := preload("res://bench/render/ballast.gdshader")
 const STYLE := "res://render/styles/stylised_b"
 const TEX_DIR := "res://bench/render/tex_gen/"
 ## name -> [start, direction, km/h]. A speed of 0 is a fixed view.
@@ -53,8 +52,6 @@ var _style: RefCounted
 var _light: Resource
 var _mats := {}
 var _path := {}
-var _ballast: SubViewport
-var _ballast_mat: ShaderMaterial
 
 
 func _ready() -> void:
@@ -134,32 +131,7 @@ func bench_call(cmd: String, opts: Dictionary) -> Variant:
 				_path = {"start": p[0], "dir": flat, "speed": speed, "seconds": float(opts.get("seconds", 6.0)), "t0": Time.get_ticks_usec()}
 			var at := _cam.global_position
 			return {"name": name, "kmh": p[2], "pos": [at.x, at.y, at.z], "moving": cmd == "path" and speed > 0.0}
-		"ballast":
-			# n > 0: a constant GPU load of n shader iterations per pixel in an offscreen viewport (ballast.gdshader)
-			return {"n": _set_ballast(int(opts.get("n", 0)))}
-		"blank":
-			# on: the root viewport draws no 3D, so a perf window measures the ballast alone
-			get_viewport().disable_3d = bool(opts.get("on", false))
-			return {"blank": get_viewport().disable_3d}
-	return {"error": "unknown bench command '%s' (info, path, pose, ballast, blank)" % cmd}
-
-
-func _set_ballast(n: int) -> int:
-	if _ballast == null:
-		_ballast = SubViewport.new()
-		_ballast.name = "Ballast"
-		_ballast.size = Vector2i(1024, 1024)
-		_ballast.disable_3d = true
-		var rect := ColorRect.new()
-		rect.size = Vector2(1024, 1024)
-		_ballast_mat = ShaderMaterial.new()
-		_ballast_mat.shader = BALLAST_SHADER
-		rect.material = _ballast_mat
-		_ballast.add_child(rect)
-		add_child(_ballast)
-	_ballast_mat.set_shader_parameter("iterations", maxi(n, 1))
-	_ballast.render_target_update_mode = SubViewport.UPDATE_ALWAYS if n > 0 else SubViewport.UPDATE_DISABLED
-	return n
+	return {"error": "unknown bench command '%s' (info, path, pose)" % cmd}
 
 
 # ------------------------------------------------------------------ look B load
