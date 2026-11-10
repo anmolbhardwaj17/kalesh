@@ -1,6 +1,6 @@
 {
   "_doc": "Written only by node harness/bin/task.mjs. Phases run in order; P0 (ADOPT + STYLE DISCOVERY) waits for the owner by design and needs task.mjs signoff and task.mjs archsignoff before its gate passes. Later phases are added by the planner at the end of P0 (task.mjs phase-add) from the game's real state.",
-  "updated": "2026-11-10T13:40:45.794Z",
+  "updated": "2026-11-10T13:46:05.696Z",
   "phases": [
     {
       "id": "P0",
@@ -116,11 +116,14 @@
       "agent": "planner",
       "priority": 2,
       "kind": "feature",
-      "status": "doing",
+      "status": "done",
       "attempts": 1,
       "notes": [],
       "created": "2026-11-10T13:04:46.154Z",
-      "started": "2026-11-10T13:40:45.793Z"
+      "started": "2026-11-10T13:40:45.793Z",
+      "done": "2026-11-10T13:46:05.460Z",
+      "summary": "GAME_DESIGN_OPTIONS.md: 7 sections, tables, 46 ranked missions, 3 sketches, recommendation and 6 round 1 questions. Self-checked.",
+      "commit": "a45ad06"
     },
     {
       "id": "P0-005",
