@@ -202,3 +202,4 @@ One line per event, written by task.mjs (start, done, fail, phase changes, inbox
 - 2026-11-10 23:55 added 1 tasks: P0-034
 - 2026-11-10 23:55 [P0-013] deps now: P0-012, P0-034
 - 2026-11-10 23:56 [P0-031] done: GAME.md structure (5 acts, GTA V style intros, merges at act peaks, 65 to 70 missions, side content), characters Bittu, Meera, Danny; Act 1 Sawari with 10 missions; slice M01 to M04 solo, switching moved to M10; milestones.json M01 to M10. Self-check: milestones parse, typecheck, 199 vitest plus 34 Godot tests, verify quick OK.
+- 2026-11-10 23:56 [P0-032] start (attempt 1): Story outline for the whole game (script first, owner review)

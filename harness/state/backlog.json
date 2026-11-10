@@ -1,6 +1,6 @@
 {
   "_doc": "Written only by node harness/bin/task.mjs. Phases run in order; P0 (ADOPT + STYLE DISCOVERY) waits for the owner by design and needs task.mjs signoff and task.mjs archsignoff before its gate passes. Later phases are added by the planner at the end of P0 (task.mjs phase-add) from the game's real state.",
-  "updated": "2026-11-10T18:26:04.531Z",
+  "updated": "2026-11-10T18:26:09.981Z",
   "phases": [
     {
       "id": "P0",
@@ -844,15 +844,16 @@
       "agent": "content-writer",
       "priority": 1,
       "kind": "mentor",
-      "status": "todo",
-      "attempts": 0,
+      "status": "doing",
+      "attempts": 1,
       "notes": [
         "Orchestrator pushback to owner (mmwazgwfq): Gurugram teased in Act 1, visited in Act 2 (not Act 1, pilot scope). The core Delhi finale must show familiar places transformed (night, festival or lockdown, closed roads, crowds) and open never-seen spaces (Red Fort ramparts, Chandni Chowk rooftops, a Metro tunnel). Start the outline from the villain and the three arcs; pick places to fit the story; districts the story does not need get side content only.",
         "Owner (mmwazjlvn): no release-driven compromises; banger story, inner stories, links between people, Reddit mysteries, controversy. Build the outline from harness/design/STORY_SEED.md (orchestrator draft, owner to review): about 65 to 70 story missions. This replaces the release-staging talk in the P0-031 notes; staging is a build-order question only.",
         "Owner approved STORY_SEED.md (mmwazjuxz). It is the base: Act 1 missions and the four-mission solo slice come from Act 1 Sawari (bag, dead passenger, Meera on Bittu's trail, Danny hired), not from the older proposal.",
         "Decision 2026-11-10 'Pistol stays in the slice, used in M03': M03 Barricade at ITO ends in a short standoff and exchange of fire before the arrest. Act 1 order and M05 to M10 are in GAME.md 'Act 1: Sawari' and milestones.json; expand them, keep the slice M01 to M04."
       ],
-      "created": "2026-11-10T17:47:44.352Z"
+      "created": "2026-11-10T17:47:44.352Z",
+      "started": "2026-11-10T18:26:09.980Z"
     },
     {
       "id": "P0-033",

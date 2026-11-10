@@ -195,3 +195,6 @@ By: builder (P0-011)
 
 ## 2026-11-10: Pistol stays in the slice, used in M03
 The Act 1 restructure moved the pistol fight to M10 (merged finale, RELEASE), leaving SLICE pistol items unused. Decision: keep the basic pistol (draw, aim, hitscan, cover-lite) tagged SLICE and use it in M03 Barricade at ITO: the takedown ends in a short standoff and exchange of fire before the arrest. Why: combat is a core risk and must be proven in the first playable slice, not after it. The content writer and phase planning follow this. Also: HUD.md ties the detection meter to M03; the fixer mission is now M04, so read it as M04.
+
+## 2026-11-10: Story outline on Opus
+The content writer for P0-032 (full story outline) runs on Opus, not the usual Sonnet. Why: Anmol asked for "no compromises" on the story and it is the base for every mission; later dialogue tasks go back to Sonnet.
