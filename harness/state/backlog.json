@@ -1,6 +1,6 @@
 {
   "_doc": "Written only by node harness/bin/task.mjs. Phases run in order; P0 (ADOPT + STYLE DISCOVERY) waits for the owner by design and needs task.mjs signoff and task.mjs archsignoff before its gate passes. Later phases are added by the planner at the end of P0 (task.mjs phase-add) from the game's real state.",
-  "updated": "2026-11-10T16:19:16.595Z",
+  "updated": "2026-11-10T16:50:31.457Z",
   "phases": [
     {
       "id": "P0",
@@ -750,6 +750,26 @@
       "notes": [],
       "created": "2026-11-10T14:08:49.921Z",
       "model": "fable"
+    },
+    {
+      "id": "P0-030",
+      "phase": "P0",
+      "title": "HUD and UI discovery: research modern open-world HUDs and propose the Kalesh HUD",
+      "desc": "Owner 2026-11-10 (inbox mmwaxey59): the stand-in HUD is not acceptable; he wants a proper HUD, in-world hints, targets and mission displays, inspired by how modern games do it (GTA V, what GTA VI has shown, and others). Research online (web-fetch or WebSearch): GTA V (minimap with health and armour arcs, wanted stars, mission text at the bottom, the phone, weapon wheel, waypoint route on the minimap and GPS line), GTA VI trailers and published UI details (only what is publicly shown; mark guesses), Red Dead Redemption 2 (minimal HUD, cores, context prompts), Watch Dogs 2 (diegetic phone UI, hack prompts, graphic style), Cyberpunk 2077, Forza Horizon 5 (route ribbons on the road), Sleeping Dogs, Spider-Man 2 (clean prompts), Ghost of Tsushima (wind guidance, minimal HUD). Extract principles, not copies: minimal by default, context-sensitive prompts, diegetic elements, world-space objective markers, GPS ribbon on the road, readable at speed, distance and arrival cues, mission banners, fail and retry screens, wanted level presentation (proposed name Lal Batti, 1 to 5 red beacons), per-character HUD tint for the three players, Hindi and English text, accessibility (scale, colour-blind safe). Write harness/design/HUD.md: principles, a component list (minimap or radar, health, wanted, money, mission objective, waypoint and route, interaction prompts, subtitles, phone, weapon select, speed for vehicles, notifications, pause and map screen, mission start, pass and fail screens) with first slice or later tags, layout sketches for driving, on foot, combat and mission start, motion rules, and a cost note per item. Make 3 or 4 HUD mockups as images (HTML or SVG rendered to PNG over a mood reference or a stand-in shot) for the owner to react to, and questions for him. Inspiration only: never copy another game's exact layout, icons or fonts. The HUD build happens after the style sign-off; the HUD look must follow the signed style.",
+      "accept": [
+        "harness/design/HUD.md exists with the researched references (each with what we take and what we avoid), principles, the component list with tags, and layout sketches",
+        "3 or 4 mockup images in harness/design/hud_mockups/ that the planner looked at",
+        "questions for the owner, short, with options",
+        "GAME.md HUD section points to HUD.md"
+      ],
+      "deps": [],
+      "agent": "planner",
+      "priority": 1,
+      "kind": "mentor",
+      "status": "todo",
+      "attempts": 0,
+      "notes": [],
+      "created": "2026-11-10T16:50:31.451Z"
     }
   ]
 }

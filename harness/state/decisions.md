@@ -172,3 +172,6 @@ Anmol: some roads must be realistic, like the CP ones, Janpath, Lutyens and the 
 Decision: the stand-in street, landmarks and area kits (game/scenes/standin/) are built at load by GDScript from cached primitives and extruded outlines, merged into one ArrayMesh per block with a surface per material and vertex colours as albedo (about 5 meshes per scene). Round parts use 32 segments. No .tscn geometry, no imported assets. Labels on sign boards are Label3D with invented Latin script names (the default font has no Devanagari).
 Why: one seeded builder serves every style test and bench, builds in under 0.1 s, keeps draw calls near what a batched real city will have, and is text that tests can check (counts, winding, no mirroring).
 By: builder (P0-009)
+
+## 2026-11-10: HUD gets its own discovery (Anmol)
+The stand-in HUD (text box, plain compass, speed box) is a placeholder and not acceptable as a direction. P0-030 researches modern open world HUDs online and proposes the Kalesh HUD with mockups for Anmol to react to, before any HUD build. HUD build follows the signed style.

@@ -158,3 +158,6 @@ One line per event, written by task.mjs (start, done, fail, phase changes, inbox
 - 2026-11-10 21:43 [P0-008] done: GAME.md rewritten for Kalesh from the signed design (pillars, three characters, loops, full capability list tagged SLICE/RELEASE/LATER, missions, progression, GB Road); VERIFY.md fun criteria; M01-M04 in milestones.json. Self-checked: tests, quick.
 - 2026-11-10 21:43 [P0-009] start (attempt 1): Delhi street stand-in scene and perf baseline (Godot)
 - 2026-11-10 21:49 mentor message mmwawarh9 handled: Yes. Added a hero road tier: CP circles and radials, Janpath, Lutyens avenues and roundabouts, garden edges, checked against photos.
+- 2026-11-10 22:20 mentor message mmwaxdlzr handled: Fixed: the page refresh was overwriting the icon with the letter. The icon now stays.
+- 2026-11-10 22:20 [P0-030] added: HUD and UI discovery: research modern open-world HUDs and propose the Kalesh HUD
+- 2026-11-10 22:20 mentor message mmwaxey59 handled: Agreed. Added P0-030: research modern open world HUDs (GTA V, what GTA VI has shown, RDR2, Watch Dogs 2, Forza, Spider-Man and more), write HUD.md and show mockups. The current HUD is a placeholder.
