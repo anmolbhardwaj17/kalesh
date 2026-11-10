@@ -186,3 +186,4 @@ One line per event, written by task.mjs (start, done, fail, phase changes, inbox
 - 2026-11-10 23:16 mentor message mmwazefyj handled: Proposed 5 acts, 55 to 60 story missions, release 1 = Acts 1 to 3, plus city life, 30 to 40 stranger missions and activities. Added to P0-031.
 - 2026-11-10 23:17 [P0-032] added: Story outline for the whole game (script first, owner review)
 - 2026-11-10 23:17 mentor message mmwazgiz9 handled: Agreed, my mistake: acts were in map order. Revised spine: Gurugram in Act 2, exile on the edges in Act 4, finale back in core Delhi ending at Chandni Chowk and Red Fort. Story outline task added, script first.
+- 2026-11-10 23:18 mentor message mmwazgwfq handled: Pushback: Gurugram is a tease in Act 1, not a visit; the core Delhi finale must transform familiar places or it feels like a rerun; the story starts from characters, not places. Added to P0-032.

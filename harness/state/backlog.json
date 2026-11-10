@@ -1,6 +1,6 @@
 {
   "_doc": "Written only by node harness/bin/task.mjs. Phases run in order; P0 (ADOPT + STYLE DISCOVERY) waits for the owner by design and needs task.mjs signoff and task.mjs archsignoff before its gate passes. Later phases are added by the planner at the end of P0 (task.mjs phase-add) from the game's real state.",
-  "updated": "2026-11-10T17:47:44.353Z",
+  "updated": "2026-11-10T17:48:01.756Z",
   "phases": [
     {
       "id": "P0",
@@ -834,7 +834,9 @@
       "kind": "mentor",
       "status": "todo",
       "attempts": 0,
-      "notes": [],
+      "notes": [
+        "Orchestrator pushback to owner (mmwazgwfq): Gurugram teased in Act 1, visited in Act 2 (not Act 1, pilot scope). The core Delhi finale must show familiar places transformed (night, festival or lockdown, closed roads, crowds) and open never-seen spaces (Red Fort ramparts, Chandni Chowk rooftops, a Metro tunnel). Start the outline from the villain and the three arcs; pick places to fit the story; districts the story does not need get side content only."
+      ],
       "created": "2026-11-10T17:47:44.352Z"
     }
   ]
