@@ -1,0 +1,104 @@
+<!doctype html>
+<html><head><meta charset="utf-8"><title>Kalesh HUD 02 on foot</title>
+<link rel="stylesheet" href="hud.css">
+<style>
+  .reveal { position: absolute; left: 0; right: 0; top: 150px; text-align: center; }
+  .reveal .dev { font-family: var(--display); font-size: 92px; line-height: 0.85; font-weight: 500; }
+  .reveal .en { font-family: var(--display); font-size: 28px; letter-spacing: 0.42em; color: var(--ink-dim); margin-top: 8px; padding-left: 0.42em; }
+  .reveal .rule { width: 120px; height: 3px; margin: 14px auto 0; border-radius: 2px; background: var(--tint); box-shadow: 0 0 12px var(--tint); }
+  .reveal .meta { font-size: 18px; color: var(--ink-dim); margin-top: 12px; letter-spacing: 0.04em; }
+  .leader { position: absolute; }
+</style></head>
+<body class="lead-fixer">
+<div class="stage">
+  <img class="bg" src="../../reference/mood_old_delhi_golden.jpg">
+  <div class="edge-shade"></div>
+
+  <div class="scrim" style="left:560px;top:60px;width:800px;height:340px"></div>
+  <div class="scrim" style="left:-120px;top:-40px;width:900px;height:300px"></div>
+  <!-- Area reveal on first entry (3 s, then fades) -->
+  <div class="reveal shadow-text">
+    <div class="dev">चाँदनी चौक</div>
+    <div class="en">CHANDNI CHOWK</div>
+    <div class="rule"></div>
+    <div class="meta">Old Delhi · 4:52 pm · 34°C, hazy</div>
+  </div>
+
+  <!-- Objective tracker -->
+  <div class="tracker shadow-text">
+    <div class="mission">Chandni Chowk pickup</div>
+    <div class="goal">Collect the bag from <em>Gupta-ji</em></div>
+    <div class="sub">Don't let the man in the grey kurta see you take it</div>
+  </div>
+
+  <!-- Contact marker becomes the interaction prompt when close -->
+  <svg class="leader" width="1920" height="1080" style="left:0;top:0">
+    <circle cx="206" cy="545" r="5" fill="#ffb224"/>
+    <circle cx="206" cy="545" r="11" fill="none" stroke="#ffb224" stroke-width="1.5" opacity=".6"/>
+    <path d="M214 538 L262 486 H286" fill="none" stroke="rgba(246,239,228,.75)" stroke-width="1.5"/>
+  </svg>
+  <div class="prompt glass" style="left:296px; top:436px">
+    <div class="row">
+      <span class="key">E</span>
+      <span class="verb">Talk<small>Gupta-ji · the contact</small></span>
+    </div>
+    <div class="row secondary">
+      <span class="key dim" style="min-width:32px;height:32px;font-size:17px">Q</span>
+      <span class="verb">Buy jalebi · ₹40</span>
+    </div>
+  </div>
+
+  <!-- Phone message -->
+  <div class="toast glass">
+    <div class="ava">B</div>
+    <div style="flex:1">
+      <div class="from"><b>Bunty</b><span>now</span></div>
+      <div class="msg">Maal ready hai. Peeche wali gali se nikalna.</div>
+      <div style="font-size:15px;color:var(--ink-faint);margin-top:4px">The goods are ready. Leave by the back lane.</div>
+    </div>
+  </div>
+
+  <!-- Minimap, smaller and quieter on foot -->
+  <div class="minimap-wrap" style="width:268px">
+    <div class="minimap" style="width:268px;height:268px;opacity:.92">
+      <svg width="268" height="268" viewBox="0 0 268 268" id="mapsvg"></svg>
+      <div class="north">N</div>
+      <div class="vignette"></div>
+      <div class="street shadow-text" style="font-size:14px"><span class="dev">चाँदनी चौक</span>Chandni Chowk</div>
+    </div>
+    <div class="vitals">
+      <div class="vital-row"><span class="lbl">Health</span><div class="bar health seg"><i style="width:100%"></i></div></div>
+      <div class="vital-row"><span class="lbl">Nerve</span><div class="bar skill"><i style="width:72%"></i></div></div>
+    </div>
+  </div>
+
+  <!-- Cash shows only when it changes -->
+  <div class="money shadow-text" style="right:64px; bottom:60px">₹ 12,450</div>
+</div>
+<script>
+(function(){
+  const s = document.getElementById('mapsvg');
+  let o = '<rect width="268" height="268" fill="#1c1611"/>';
+  // dense irregular blocks (katras and galis)
+  const rnd = (seed => () => (seed = (seed * 16807) % 2147483647) / 2147483647)(7);
+  for (let y = -10; y < 280; y += 22) for (let x = -10; x < 280; x += 24) {
+    if (Math.abs(x + 12 - 134) < 26) continue;
+    const w = 14 + rnd() * 8, h = 12 + rnd() * 8;
+    o += `<rect x="${x + rnd()*4}" y="${y + rnd()*4}" width="${w}" height="${h}" rx="2" fill="#2c231c"/>`;
+  }
+  // Red Fort ahead
+  o += `<rect x="96" y="-30" width="80" height="54" rx="4" fill="#5a2a22"/>`;
+  // main road (Chandni Chowk) and a side lane
+  o += `<rect x="116" y="0" width="36" height="268" fill="#5d5146"/>`;
+  o += `<path d="M116 150 H40 V60" fill="none" stroke="#4a4036" stroke-width="8"/>`;
+  o += `<path d="M152 196 H268" fill="none" stroke="#4a4036" stroke-width="8"/>`;
+  // objective: the sweet shop, left side
+  o += `<g transform="translate(104,150)"><path d="M0,-11 L11,0 L0,11 L-11,0 Z" fill="#ffb224" stroke="#1a120a" stroke-width="2"/></g>`;
+  // watcher (neutral, not hostile yet): white ring
+  o += `<circle cx="164" cy="112" r="6" fill="none" stroke="#f6efe4" stroke-width="2.5"/>`;
+  // player
+  o += `<g transform="translate(134,178)"><circle r="15" fill="#ff4f9a" opacity=".2"/><path d="M0,-12 L9,9 L0,4.5 L-9,9 Z" fill="#ff4f9a" stroke="#2a0d1a" stroke-width="2" stroke-linejoin="round"/></g>`;
+  s.innerHTML = o;
+})();
+</script>
+</body></html>

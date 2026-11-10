@@ -1,6 +1,6 @@
 {
   "_doc": "Written only by node harness/bin/task.mjs. Phases run in order; P0 (ADOPT + STYLE DISCOVERY) waits for the owner by design and needs task.mjs signoff and task.mjs archsignoff before its gate passes. Later phases are added by the planner at the end of P0 (task.mjs phase-add) from the game's real state.",
-  "updated": "2026-11-10T16:50:47.438Z",
+  "updated": "2026-11-10T17:03:48.037Z",
   "phases": [
     {
       "id": "P0",
@@ -380,7 +380,9 @@
       "kind": "feature",
       "status": "todo",
       "attempts": 0,
-      "notes": [],
+      "notes": [
+        "Ask Anmol the 6 HUD questions from harness/design/HUD.md (feel, road guidance, minimap, Hindi and English, wanted level, mission passed card, plus the character colours) if not answered before; show harness/design/hud_mockups/*.png."
+      ],
       "created": "2026-11-10T13:04:46.154Z"
     },
     {
@@ -769,10 +771,11 @@
       "agent": "planner",
       "priority": 1,
       "kind": "mentor",
-      "status": "todo",
-      "attempts": 0,
+      "status": "doing",
+      "attempts": 1,
       "notes": [],
-      "created": "2026-11-10T16:50:31.451Z"
+      "created": "2026-11-10T16:50:31.451Z",
+      "started": "2026-11-10T16:51:01.563Z"
     }
   ]
 }

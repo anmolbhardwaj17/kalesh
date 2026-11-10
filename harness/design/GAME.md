@@ -458,6 +458,8 @@ Players return for "a city that opens up" and "the story of the three" (owner).
 
 ## HUD
 
+Full HUD design, research, components, motion and mockups: `harness/design/HUD.md` (P0-030, proposal until Anmol answers its questions; the look follows the signed style). Where HUD.md and the list below differ, HUD.md is the newer proposal.
+
 What is on screen in play. The HUD never covers the player (shot rule).
 - Bottom left: minimap, north up, with the objective marker and police; health bar under it (SLICE).
 - Top right: wanted level as 1 to 5 red beacons (Lal Batti, proposed), money, current weapon and ammo (SLICE).

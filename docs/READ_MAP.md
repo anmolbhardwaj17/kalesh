@@ -29,6 +29,7 @@ Notes: `harness/state/knowledge/ui-and-input.md`
 - ARCH: "Source map".
 - TECH: "Input".
 - GAME: "Player verbs", "HUD", "Menus", "Accessibility".
+- HUD: `harness/design/HUD.md` (components, layouts, motion, checkable rules; mockups in `harness/design/hud_mockups/`).
 - STYLE: "UI".
 - Source: the InputMap actions in `game/project.godot`, `game/scripts/car.gd` (input to the car); the HUD under `game/ui/` once added.
 

@@ -162,3 +162,9 @@ One line per event, written by task.mjs (start, done, fail, phase changes, inbox
 - 2026-11-10 22:20 [P0-030] added: HUD and UI discovery: research modern open-world HUDs and propose the Kalesh HUD
 - 2026-11-10 22:20 mentor message mmwaxey59 handled: Agreed. Added P0-030: research modern open world HUDs (GTA V, what GTA VI has shown, RDR2, Watch Dogs 2, Forza, Spider-Man and more), write HUD.md and show mockups. The current HUD is a placeholder.
 - 2026-11-10 22:20 [P0-009] done: Godot stand-in: Delhi arterial street, three landmark tiers, bazaar vs Lutyens blocks, people, 9 lookproof views, draft perf budgets (GPU p95 1.5 to 3.2 ms on Vulkan). Verifier PASS. Polish: marker tier reads as an office block, roof tanks look like holes from above.
+- 2026-11-10 22:21 [P0-030] start (attempt 1): HUD and UI discovery: research modern open-world HUDs and propose the Kalesh HUD
+- 2026-11-10 22:22 mentor message mmwaxho0e handled: Answered: rename is safe for the project; claude --continue will not find this session after a rename and the goal must be set again. Steps in the terminal.
+- 2026-11-10 22:23 mentor message mmwaxi7qt handled: Done: every tab count badge is red now, Messages included.
+- 2026-11-10 22:23 mentor message mmwaxjb1w handled: Folder stays dilli-darshan; the game and repo are Kalesh.
+- 2026-11-10 22:26 mentor message mmwaxm2ur handled: Will tell him when P0-030 is done and hold the next task so the rename is safe.
+- 2026-11-10 22:27 mentor message mmwaxnubt handled: Updated GOAL.txt and GOAL_PROMPT.md for Kalesh, Godot, three sign-offs, the remote and the commit rule.
