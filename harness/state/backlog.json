@@ -1,6 +1,6 @@
 {
   "_doc": "Written only by node harness/bin/task.mjs. Phases run in order; P0 (ADOPT + STYLE DISCOVERY) waits for the owner by design and needs task.mjs signoff and task.mjs archsignoff before its gate passes. Later phases are added by the planner at the end of P0 (task.mjs phase-add) from the game's real state.",
-  "updated": "2026-11-10T22:51:15.625Z",
+  "updated": "2026-11-10T23:13:06.747Z",
   "phases": [
     {
       "id": "P0",
@@ -1052,12 +1052,15 @@
       "agent": "builder",
       "priority": 1,
       "kind": "bug",
-      "status": "doing",
+      "status": "done",
       "attempts": 1,
       "notes": [],
       "created": "2026-11-10T22:50:56.620Z",
       "model": "sonnet",
-      "started": "2026-11-10T22:51:15.625Z"
+      "started": "2026-11-10T22:51:15.625Z",
+      "done": "2026-11-10T23:13:06.731Z",
+      "summary": "Shared ballast (harness/bin/ballast.mjs, game/debug/gpu_ballast.gd) now used by lookproof --perf, verify perf and the arch bench. Stylised B real GPU cost 4.0 to 9.0 ms across four lights, all under warn 10. Cap is in the Metal present path (OpenGL runs 600+ fps), cause not found. Self-check: typecheck, 219 vitest, 47 Godot tests, quick OK.",
+      "commit": "522f45b"
     }
   ]
 }
