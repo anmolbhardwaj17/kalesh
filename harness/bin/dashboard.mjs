@@ -246,6 +246,7 @@ const server = http.createServer(async (req, res) => {
     if (!tunnelAllowed(req, url, res)) return send(res, 403, 'Forbidden', 'text/plain');
     if (req.method === 'GET' && (p === '/' || p === '/index.html')) return serveFile(res, [H('dashboard')], 'index.html') || send(res, 404, 'missing dashboard', 'text/plain');
     if (req.method === 'GET' && p.startsWith('/fonts/')) return serveFile(res, [H('dashboard/fonts')], p.slice(7), 'public, max-age=86400') || send(res, 404, 'no font', 'text/plain');
+    if (req.method === 'GET' && p === '/logo') { const f = ['logo.png', 'logo.jpg', 'logo.webp'].find((n) => fs.existsSync(H('dashboard', n))); return (f && serveFile(res, [H('dashboard')], f)) || send(res, 404, 'no logo', 'text/plain'); }
     if (req.method === 'GET' && p === '/api/ping') return send(res, 200, { ok: true });
     if (req.method === 'GET' && p === '/api/state') return send(res, 200, buildState());
     if (req.method === 'GET' && p.startsWith('/vshots/')) return serveFile(res, [VERIFY_SHOTS], p.slice(8)) || send(res, 404, 'no shot', 'text/plain');
