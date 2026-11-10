@@ -153,17 +153,17 @@ Return your summary in the format from your agent instructions.
 
 Dilli Darshan is an open-world driving game set in Delhi, built from real map data, with rich Delhi assets. Anmol's first request is in the inbox; Phase 0 handles it first.
 
-**The old game is a READ-ONLY reference.** `/Users/apple/Desktop/code/delhi-drive` (a Barcelona OSM driving sim, originally Delhi). Never edit, build, install or commit in it. Read it only for the Phase 0 salvage audit and when checking a specific idea.
+**The old game is a READ-ONLY reference.** `/Users/apple/Desktop/code/delhi-drive` ("Barcelona Drive", an OSM driving sim, originally Delhi; full verdicts in `harness/design/SALVAGE_AUDIT.md`). Never edit, build, install or commit in it. Read it only for the Phase 0 salvage audit and when checking a specific idea.
 
 Lessons from the old game:
 - It mirrored the world (`worldGroup.scale.x = -1`) and negated physics `px` to match. Collisions and visuals drifted apart and every system had to know about the flip.
 - Roads were broken: overlapping road meshes, railings in the wrong places, junctions that did not join.
 - Terrain and road fit was broken: roads floating over or sunk into the ground.
-- `tileManager.js` grew to 2346 lines: one file owned streaming, building, physics and cleanup.
+- `tileManager.js` grew to 4,065 lines: one file owned streaming, building, physics and cleanup.
 - Bake: `backend/worldBuilder/buildRegion.js` turned OSM PBF plus Copernicus GLO-30 DEM into binary 500 m tiles at zoom 16. The data sources and tile idea are worth auditing; the code is not trusted.
 - Physics was Rapier WASM, with a leftover cannon-es descriptor layer still in the code.
-- The Delhi tiles in `backend/tiles/delhi` are 11 GB in an old JSON format. Do not copy them; rebake from source data.
-- The frontend has 580 node tests. Read them for intent (what was checked), not as proof the code works.
+- The Delhi tiles in `backend/tiles/delhi` are 11 GB of old format v6 (binary with a JSON header, flat elevation, whole ways copied into every tile). Do not copy them; rebake from source data.
+- The frontend has 576 node test declarations. Read them for intent (what was checked), not as proof the code works.
 
 New-game rules:
 - **One coordinate system.** East is +X, north is -Z, up is +Y, 1 unit = 1 metre. No mirroring anywhere, ever (no negative scale on world groups, no axis flips in physics). Tests from day 1: a known landmark lands at its projected position and the right side of the map, collision shapes match the visible meshes, north is up on the map and -Z in the world.
