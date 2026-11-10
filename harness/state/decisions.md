@@ -78,3 +78,6 @@ By: planner (P0-003)
 
 ## 2026-11-10: Dashboard font and whole game percent
 Anmol: Saans was hard to read, use SF Pro; and the whole game percent (13% with only P0 planned) was wrong. The dashboard now uses the system SF Pro and SF Mono stack; the Saans trial files are removed from the repo. Whole game percent is tasks done over the game size, which is at least kit.config.json gameSizeEstimate.tasks (250, a rough guess) until every phase is planned. The day estimate assumes at least 1 h per task until 10 tasks are done. Planner: update gameSizeEstimate when P0-023 sizes the game.
+
+## 2026-11-10: Game direction from interview round 1 (pending sign-off)
+Anmol: three playable characters (auto driver, cop, small-time fixer) with their own lives and stories and missions that merge; guns and fights; over-the-top action movie tone; on foot anywhere; rethink the pillars and rules. "this last message might change the game feel but tbh thats what i wanna do". Respect rule refined: Anmol wants poverty shown where it is true ("i want to show some part of it as its actually true"). So: show real conditions honestly, as part of the city and never its only face, never as spectacle or a joke. Engine question (browser vs a native engine such as Godot) is open and goes to architecture discovery. Not signed off yet.
