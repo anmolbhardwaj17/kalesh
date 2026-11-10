@@ -9,6 +9,20 @@
   ],
   "areas": [
     {
+      "path": "game/scenes/standin/",
+      "scenarios": [
+        "street_boot",
+        "landmarks_boot",
+        "areas_boot"
+      ]
+    },
+    {
+      "path": "game/ui/",
+      "scenarios": [
+        "street_boot"
+      ]
+    },
+    {
       "path": "game/scripts/car",
       "scenarios": [
         "drive_north",

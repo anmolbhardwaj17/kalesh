@@ -64,7 +64,7 @@ Grouped by axis after round 2:
 - Renderer: Forward+ on the Metal driver (Godot 4.4 and later; Vulkan through MoltenVK as fallback; the P0-016 bench confirms which is faster). Mobile renderer noted per candidate as the low preset. Compatibility (OpenGL) only for a possible web demo later.
 - Test resolution: 1920 x 1080 internal, scale 1.0 (est). A second run at 0.67 render scale with FSR 2 or MetalFX upscaling (whichever Godot 4.7 exposes on this Mac; the bench checks) tells us how much the upscaler buys.
 - Player target: Windows and Mac desktops. The minimum player GPU is not decided (question below). Until then budgets are written for this M2 Pro.
-- Baseline: not measured yet. P0-009 builds the Godot stand-in Delhi street and writes `harness/look_proof/baseline/perf.json` (9 views). Its numbers go here.
+- Baseline (P0-009, measured): the Godot stand-in Delhi street, landmark tiers and area kits, 9 views at 1920 x 1080 (`harness/look_proof/baseline/`, Metal; `baseline_vulkan/` for GPU times with vsync off). GPU p95 1.5 to 3.2 ms over two runs, 84 to 175 draw calls, 0.8 to 1.95 M triangles drawn (shadow passes included), 192 MB GPU memory, load under 1 s. Plain look: sky, sun with shadows, light haze, no textures, SSAO or glow. Draft budgets in `harness/verify/perf_budgets.json`.
 
 ## Candidates
 

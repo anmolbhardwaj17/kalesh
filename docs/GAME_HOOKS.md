@@ -32,7 +32,7 @@ godot --path game --resolution 1280x720 --quit-after 12000 -- --debug --debug-po
 | `--verify` | `verify=1` | Hides every debug overlay (the `DEBUG port fps sim` label). `state().debugOverlay` says if one shows. |
 | `--quality=<preset>` | `quality=` | Start preset (low, medium, high). |
 | `--style=<name>` | `style=` | Phase 0 style test. |
-| `--scene=<id>` | | Start in that scene (ids in `GameArgs.SCENES`; `scaffold` now). |
+| `--scene=<id>` | | Start in that scene (ids in `GameArgs.SCENES`: `scaffold`, and the P0-009 stand-ins `street`, `landmarks`, `areas`). |
 | `--arch=<name>` | | Architecture bench. |
 | `--lockstep` | `lockstep=1` | At most one engine physics frame per drawn frame (`Engine.max_physics_steps_per_frame = 1`), so a loaded machine runs slower and never catches up in bursts. |
 | `--mute` | `mute=1` | Master bus muted. |

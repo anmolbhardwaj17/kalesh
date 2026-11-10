@@ -17,6 +17,9 @@ const DEBUG_SERVER_PATH := "res://debug/debug_server.gd"
 ## Scene ids the game can load (debug load(id) and --scene=<id>).
 const SCENES := {
 	"scaffold": "res://scenes/main.tscn",
+	"street": "res://scenes/standin/street.tscn",
+	"landmarks": "res://scenes/standin/landmarks.tscn",
+	"areas": "res://scenes/standin/areas.tscn",
 }
 
 var debug := false

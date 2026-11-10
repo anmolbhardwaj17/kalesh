@@ -167,3 +167,8 @@ By: planner (P0-008)
 
 ## 2026-11-10: Hero roads (Anmol)
 Anmol: some roads must be realistic, like the CP ones, Janpath, Lutyens and the gardens. Add a hero road tier next to hero landmarks: real layout from OSM at true scale (already the rule inside districts), plus checked lane counts, medians, kerbs, footpaths, roundabouts, tree lines (Lutyens avenue trees), street furniture and the right surroundings, compared against reference photos. First hero roads: CP inner, middle and outer circles and the radials, Janpath (with the market), the Lutyens roundabouts and avenues (Kartavya Path, Rajpath area, Safdarjung Road), and the garden edges (Lodhi Garden, India Gate lawns). Ordinary roads come from the lane model and area profiles.
+
+## 2026-11-10: Stand-in scenes are procedural GDScript, merged per material (P0-009)
+Decision: the stand-in street, landmarks and area kits (game/scenes/standin/) are built at load by GDScript from cached primitives and extruded outlines, merged into one ArrayMesh per block with a surface per material and vertex colours as albedo (about 5 meshes per scene). Round parts use 32 segments. No .tscn geometry, no imported assets. Labels on sign boards are Label3D with invented Latin script names (the default font has no Devanagari).
+Why: one seeded builder serves every style test and bench, builds in under 0.1 s, keeps draw calls near what a batched real city will have, and is text that tests can check (counts, winding, no mirroring).
+By: builder (P0-009)

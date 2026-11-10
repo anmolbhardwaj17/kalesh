@@ -17,6 +17,8 @@ The game is a Godot 4.7.2 project in `game/`. `scenes/main.tscn` is a stand-in s
 | `tools/geo/projection.ts` | Lat/lon to world metres and back (`geoToWorld`, `worldToGeo`), WGS84 transverse Mercator around India Gate; east +X, north -Z. Provisional until the architecture sign-off. Tests in `projection.test.ts`; `projection.fixture.test.ts` keeps `harness/data/fixtures/projection_points.json` in step. Used by the offline bake tooling; GDScript port in `game/geo/projection.gd`. |
 | `game/project.godot` | The Godot 4.7.2 project (P0-024): Forward+, 60 Hz physics, InputMap actions throttle, brake, steer_left, steer_right. |
 | `game/scenes/main.tscn` | Stand-in scene: `Main` with the world root `World` (environment, sun, ground, road strip, red north post at 0, 3, -50, the car) and `ChaseCamera`. |
+| `game/scenes/standin/` | Procedural stand-in scenes for style tests and benches (P0-009), ids `street`, `landmarks`, `areas` (`street.tscn` etc., root `standin_scene.gd`). `builder.gd` lays out each scene (seeded, counts in the root metadata `standin`), `kit.gd` holds the palette, materials and parts (shop houses, trees, lights, signals, bus stop, car, auto, bus, scooter, cart, people, the third person character), `landmarks.gd` one stand-in per tier, `geo.gd` the Sink that merges primitives per material into one mesh per block, `prims.gd` the cached primitives, extrusion and outlines. Tested in `game/tests/test_standin.gd`. |
+| `game/ui/standin_hud.gd` | HUD stand-in (objective, minimap disc, speed) in the group `hud`, scaled to the window height. |
 | `game/scripts/car_model.gd` | Kinematic car model (ported from the retired three.js scaffold), `forward(heading)` (0 is -Z, PI/2 is +X). Pure, tested. |
 | `game/scripts/car.gd`, `chase_camera.gd` | The car node (input to model on `SimClock.sim_tick`, `rotation.y = -heading`, group `player`, `place()` for staging) and the chase camera (10 m back, 4.5 m up, looks 6 m ahead). |
 | `game/core/game_args.gd` | Autoload `GameArgs`: parses the user args after `--` (`--debug`, `--debug-port`, `--verify`, `--quality`, `--style`, `--scene`, `--arch`, `--lockstep`, `--mute`), the scene id table `SCENES`, adds the debug server only with `--debug`. |
@@ -30,6 +32,9 @@ The game is a Godot 4.7.2 project in `game/`. `scenes/main.tscn` is a stand-in s
 
 ### Driving (scaffold)
 `game/scripts/car_model.gd`: throttle and steer in, position, heading and speed out; pure, unit tested (`game/tests/test_car.gd`). Verified by `hooks_contract` and the unit tests.
+
+### Stand-in scenes
+`game/scenes/standin/builder.gd` builds a 300 m six lane arterial (median, kerbs, service lane, signal junction, flyover ramp stub, bus stop, about 80 shop houses with labelled boards, 21 static vehicles, 28 people, the player car with the chase camera and HUD), a landmark row (hero arch, signature domed tomb, marker block, each with surroundings) and two area kit blocks (bazaar strip, Lutyens road). Static geometry is merged per block and material (about 5 meshes, 100 to 175 draw calls with shadows). Look proof views in `harness/look_proof/poses.json`; scenarios `street_boot`, `landmarks_boot`, `areas_boot`.
 
 ### Debug hooks
 Godot: `game/debug/debug_server.gd` serves every hook plus shot, quality and quit over TCP JSON lines on 127.0.0.1 (docs/GAME_HOOKS.md "Godot transport"); `GameArgs` adds it only with `--debug`. Sim time comes from `SimClock`, events from `GameEvents`. Verified by `game/tests/test_debug.gd` and `harness/bin/godotsmoke.mjs`.

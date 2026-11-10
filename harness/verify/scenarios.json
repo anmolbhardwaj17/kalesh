@@ -107,6 +107,75 @@
         }
       ],
       "_note": "P0-001. Camera at the origin looking north (-Z): the red north post (0,-50) must be in the centre third of the shot. The builder reads the shot."
+    },
+    {
+      "name": "street_boot",
+      "steps": [
+        {
+          "call": "load",
+          "args": [
+            "street"
+          ],
+          "timeout": 90000
+        },
+        {
+          "waitFor": "window.__game.debug.state().scene === 'street'",
+          "timeout": 20000
+        },
+        {
+          "settle": 0.5
+        },
+        {
+          "shot": "street_boot"
+        }
+      ],
+      "_note": "P0-009. debug.load('street') builds the stand-in Delhi arterial (median, kerbs, service lane, signal junction, flyover ramp stub, shops, traffic, people); the scene reports its id, the sim runs, a shot is taken, no console errors."
+    },
+    {
+      "name": "landmarks_boot",
+      "steps": [
+        {
+          "call": "load",
+          "args": [
+            "landmarks"
+          ],
+          "timeout": 90000
+        },
+        {
+          "waitFor": "window.__game.debug.state().scene === 'landmarks'",
+          "timeout": 20000
+        },
+        {
+          "settle": 0.5
+        },
+        {
+          "shot": "landmarks_boot"
+        }
+      ],
+      "_note": "P0-009. debug.load('landmarks') builds one landmark stand-in per tier (hero arch, signature domed tomb, marker block) with surroundings; the scene reports its id, the sim runs, a shot is taken, no console errors."
+    },
+    {
+      "name": "areas_boot",
+      "steps": [
+        {
+          "call": "load",
+          "args": [
+            "areas"
+          ],
+          "timeout": 90000
+        },
+        {
+          "waitFor": "window.__game.debug.state().scene === 'areas'",
+          "timeout": 20000
+        },
+        {
+          "settle": 0.5
+        },
+        {
+          "shot": "areas_boot"
+        }
+      ],
+      "_note": "P0-009. debug.load('areas') builds the two area kit blocks (old city bazaar strip, Lutyens bungalow road) and the third person character stand-in; the scene reports its id, the sim runs, a shot is taken, no console errors."
     }
   ]
 }

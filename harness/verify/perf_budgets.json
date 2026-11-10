@@ -1,12 +1,12 @@
 {
-  "_doc": "Performance budgets (harness/bin/perfbudget.mjs). DRAFT values until Phase 0 measures a baseline on the target machine and the owner signs off the style; then status becomes signed and decisions.md records it. frameMs is the p95 frame time (the larger of CPU and GPU), loadMs is page open to window.__game.ready, presets are per quality preset (scenario `quality`), default for the rest.",
+  "_doc": "Performance budgets (harness/bin/perfbudget.mjs). DRAFT values until the owner signs off the style; then status becomes signed and decisions.md records it. frameMs is the p95 frame time (the larger of CPU and GPU), loadMs is launch to the first ready snapshot, presets are per quality preset (scenario `quality`), default for the rest. Draft from the P0-009 baseline (harness/look_proof/baseline/perf.json on Metal and harness/look_proof/baseline_vulkan/perf.json on Vulkan with vsync off, 9 views of the stand-in Delhi street, landmarks and area kits): GPU p95 1.5 to 3.2 ms over two Vulkan runs (the file holds the second, 1.5 to 2.4 ms), CPU p95 under 0.4 ms, 84 to 175 draw calls, 0.79 to 1.95 M triangles drawn (shadow passes included), 192 MB GPU memory in the busiest view, load 0.56 to 0.82 s. Headroom: the stand-ins have no textures, SSAO, glow or crowds yet, so frame time keeps the 60 fps line (fail 16.6 ms, warn at 11.1 ms = 90 fps), draw calls and triangles about 2.5x the worst view at warn and 4x at fail, GPU memory about 3x, load about 4x.",
   "status": "draft",
-  "target": "fill in: machine, resolution, quality preset",
+  "target": "Apple M2 Pro MacBook Pro (12 CPU cores, 19 core GPU, 16 GB), macOS, Godot 4.7.2.stable standard build, Forward+ renderer on the Metal driver (Vulkan through MoltenVK for GPU times), 1920x1080 at render scale 1.0, medium preset, one game window, machine load per core 0.37 to 0.76 during the baseline",
   "windowMs": 3000,
-  "frameMs": { "warn": 16.6, "fail": 22 },
-  "fpsFloor": 45,
-  "loadMs": { "warn": 5000, "fail": 15000 },
+  "frameMs": { "warn": 11.1, "fail": 16.6 },
+  "fpsFloor": 50,
+  "loadMs": { "warn": 3000, "fail": 10000 },
   "presets": {
-    "default": { "drawCalls": { "warn": 400, "fail": 1000 }, "triangles": { "warn": 750000, "fail": 2000000 }, "gpuMB": { "warn": 384, "fail": 768 } }
+    "default": { "drawCalls": { "warn": 450, "fail": 900 }, "triangles": { "warn": 5000000, "fail": 8000000 }, "gpuMB": { "warn": 600, "fail": 1024 } }
   }
 }

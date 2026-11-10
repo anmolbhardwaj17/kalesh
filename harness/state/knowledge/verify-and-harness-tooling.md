@@ -15,3 +15,6 @@ One line per gotcha.
 - `npm run play` is playcopy.mjs --play: `git archive` of game/ at the newest verified commit into harness/reports/play/<sha>/ (gitignored), headless import, then a window run; extra args after --play go to the engine (`--quit-after 120` for a smoke run).
 - vitest has no vite.config.ts any more: `vitest.config.ts` lists the test globs (tools/**/*.test.ts, harness/bin/**/*.test.mjs). A ?raw import in a test needs the `*?raw` module declaration in tools/geo/raw.d.ts for tsc.
 
+- Godot perf on Metal: fps is capped by vsync (120 on this display) and GPU time is missing, so frameP95 is CPU only. For real frame cost run `HARNESS_GODOT_ARGS="--rendering-driver vulkan --disable-vsync"` (P0-009 baseline_vulkan set). Triangle counts include the 4 shadow cascades.
+- shoot.mjs `--args "--scene=street"` is dropped (parseArgs reads a value starting with -- as a flag): stage with `--load street` instead.
+- A look proof view that holds the sim: settle first, then `{"call":"hold","args":[{"at":0}]}` (pauses at once) and a waitFor on `debug.clock().paused`; a settle after the hold never ends.

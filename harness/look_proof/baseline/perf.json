@@ -1,0 +1,170 @@
+{
+  "rows": {
+    "car_closeup": {
+      "quality": null,
+      "loadMs": 819,
+      "hostLoad": {
+        "avg1": 4.35,
+        "cores": 12,
+        "perCore": 0.36
+      },
+      "cpuP95": 0.191000002205372,
+      "gpuP95": null,
+      "fps": 119.313567052392,
+      "drawCalls": 84,
+      "triangles": 1195968,
+      "frameP95": 0.191000002205372,
+      "verdict": "ok",
+      "notes": []
+    },
+    "street_eye": {
+      "quality": null,
+      "loadMs": 561,
+      "hostLoad": {
+        "avg1": 4.41,
+        "cores": 12,
+        "perCore": 0.37
+      },
+      "cpuP95": 0.219000000059605,
+      "gpuP95": null,
+      "fps": 119.314839533206,
+      "drawCalls": 151,
+      "triangles": 1649514,
+      "frameP95": 0.219000000059605,
+      "verdict": "ok",
+      "notes": []
+    },
+    "junction": {
+      "quality": null,
+      "loadMs": 565,
+      "hostLoad": {
+        "avg1": 4.29,
+        "cores": 12,
+        "perCore": 0.36
+      },
+      "cpuP95": 0.212999993205071,
+      "gpuP95": null,
+      "fps": 119.33245822864,
+      "drawCalls": 152,
+      "triangles": 1951250,
+      "frameP95": 0.212999993205071,
+      "verdict": "ok",
+      "notes": []
+    },
+    "flyover_ramp": {
+      "quality": null,
+      "loadMs": 565,
+      "hostLoad": {
+        "avg1": 4.67,
+        "cores": 12,
+        "perCore": 0.39
+      },
+      "cpuP95": 0.201000002741814,
+      "gpuP95": null,
+      "fps": 119.798140133874,
+      "drawCalls": 108,
+      "triangles": 1102962,
+      "frameP95": 0.201000002741814,
+      "verdict": "ok",
+      "notes": []
+    },
+    "hud_play": {
+      "quality": null,
+      "loadMs": 571,
+      "hostLoad": {
+        "avg1": 6.54,
+        "cores": 12,
+        "perCore": 0.55
+      },
+      "cpuP95": 0.228000007390976,
+      "gpuP95": null,
+      "fps": 119.358284645238,
+      "drawCalls": 175,
+      "triangles": 1652796,
+      "frameP95": 0.228000007390976,
+      "verdict": "ok",
+      "notes": []
+    },
+    "busiest_40m": {
+      "quality": null,
+      "loadMs": 566,
+      "hostLoad": {
+        "avg1": 6.17,
+        "cores": 12,
+        "perCore": 0.51
+      },
+      "cpuP95": 0.222999997317791,
+      "gpuP95": null,
+      "fps": 119.813450457637,
+      "drawCalls": 155,
+      "triangles": 1649630,
+      "frameP95": 0.222999997317791,
+      "verdict": "ok",
+      "notes": []
+    },
+    "landmark_tiers": {
+      "quality": null,
+      "loadMs": 569,
+      "hostLoad": {
+        "avg1": 6,
+        "cores": 12,
+        "perCore": 0.5
+      },
+      "cpuP95": 0.205999996781349,
+      "gpuP95": null,
+      "fps": 119.389762011974,
+      "drawCalls": 108,
+      "triangles": 786372,
+      "frameP95": 0.205999996781349,
+      "verdict": "ok",
+      "notes": []
+    },
+    "area_blocks_30m": {
+      "quality": null,
+      "loadMs": 569,
+      "hostLoad": {
+        "avg1": 5.6,
+        "cores": 12,
+        "perCore": 0.47
+      },
+      "cpuP95": 0.203999998688698,
+      "gpuP95": null,
+      "fps": 119.844202536702,
+      "drawCalls": 128,
+      "triangles": 1112654,
+      "frameP95": 0.203999998688698,
+      "verdict": "ok",
+      "notes": []
+    },
+    "on_foot_bazaar": {
+      "quality": null,
+      "loadMs": 568,
+      "hostLoad": {
+        "avg1": 5.39,
+        "cores": 12,
+        "perCore": 0.45
+      },
+      "cpuP95": 0.206999997377396,
+      "gpuP95": null,
+      "fps": 119.47156959352,
+      "drawCalls": 126,
+      "triangles": 1221142,
+      "frameP95": 0.206999997377396,
+      "verdict": "ok",
+      "notes": []
+    }
+  },
+  "driver": "godot",
+  "machine": "macbook-pro, darwin arm64, Apple M2 Pro, 12 cores, 16 GB",
+  "godotVersion": "4.7.2.stable",
+  "renderer": "Forward+",
+  "renderingDriver": "metal",
+  "gpuAdapter": "Apple M2 Pro (Apple8)",
+  "load": {
+    "avg1": 4.65,
+    "cores": 12,
+    "perCore": 0.39
+  },
+  "gl": "Godot 4.7.2.stable Apple M2 Pro (Apple8) (metal, forward_plus)",
+  "budgets": "harness/verify/perf_budgets.json (draft)"
+}

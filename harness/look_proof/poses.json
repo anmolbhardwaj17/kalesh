@@ -1,6 +1,483 @@
 {
-  "_doc": "Look proof views (harness/bin/lookproof.mjs). Each view stages one scene with verify steps and is shot from a fixed camera. Phase 0 picks 4 to 8 views that show the look best: the hero up close, a wide shot of a typical space, a dark corner, the HUD over play, a busy scene for perf.",
+  "_doc": "Look proof views (harness/bin/lookproof.mjs). Each view is a fresh game run at its size: it loads a stand-in scene (P0-009: street, landmarks, areas), puts the debug camera at a fixed pose (hud_play keeps the chase camera and the HUD), lets 1 s of sim pass, then holds the sim (hold at 0 pauses at once) so every run shoots the same moment. The scenes are seeded and static.",
   "views": [
-    { "name": "first_screen", "steps": [{ "settle": 1 }] }
+    {
+      "name": "car_closeup",
+      "size": [
+        1920,
+        1080
+      ],
+      "_note": "The player car stand-in up close, front three quarter, at the kerb side of the arterial.",
+      "steps": [
+        {
+          "call": "load",
+          "args": [
+            "street"
+          ],
+          "timeout": 90000
+        },
+        {
+          "call": "setCamera",
+          "args": [
+            {
+              "pos": [
+                -2.6,
+                1.05,
+                70.6
+              ],
+              "target": [
+                -5.85,
+                0.65,
+                75.2
+              ]
+            }
+          ]
+        },
+        {
+          "call": "hud",
+          "args": [
+            false
+          ]
+        },
+        {
+          "settle": 1
+        },
+        {
+          "call": "hold",
+          "args": [
+            {
+              "at": 0
+            }
+          ]
+        },
+        {
+          "waitFor": "window.__game.debug.clock().paused === true",
+          "timeout": 10000
+        }
+      ]
+    },
+    {
+      "name": "street_eye",
+      "size": [
+        1920,
+        1080
+      ],
+      "_note": "The arterial at driving eye height (1.25 m) looking north: median, kerbs, shops, queued traffic, junction.",
+      "steps": [
+        {
+          "call": "load",
+          "args": [
+            "street"
+          ],
+          "timeout": 90000
+        },
+        {
+          "call": "setCamera",
+          "args": [
+            {
+              "pos": [
+                -7.2,
+                1.25,
+                69.0
+              ],
+              "target": [
+                -6.5,
+                1.6,
+                0.0
+              ]
+            }
+          ]
+        },
+        {
+          "call": "hud",
+          "args": [
+            false
+          ]
+        },
+        {
+          "settle": 1
+        },
+        {
+          "call": "hold",
+          "args": [
+            {
+              "at": 0
+            }
+          ]
+        },
+        {
+          "waitFor": "window.__game.debug.clock().paused === true",
+          "timeout": 10000
+        }
+      ]
+    },
+    {
+      "name": "junction",
+      "size": [
+        1920,
+        1080
+      ],
+      "_note": "The signal junction from a corner at 7.5 m: signals, zebras, stop lines, queues on red, cross traffic.",
+      "steps": [
+        {
+          "call": "load",
+          "args": [
+            "street"
+          ],
+          "timeout": 90000
+        },
+        {
+          "call": "setCamera",
+          "args": [
+            {
+              "pos": [
+                -6.0,
+                9.0,
+                38.0
+              ],
+              "target": [
+                3.0,
+                0.0,
+                -4.0
+              ]
+            }
+          ]
+        },
+        {
+          "call": "hud",
+          "args": [
+            false
+          ]
+        },
+        {
+          "settle": 1
+        },
+        {
+          "call": "hold",
+          "args": [
+            {
+              "at": 0
+            }
+          ]
+        },
+        {
+          "waitFor": "window.__game.debug.clock().paused === true",
+          "timeout": 10000
+        }
+      ]
+    },
+    {
+      "name": "flyover_ramp",
+      "size": [
+        1920,
+        1080
+      ],
+      "_note": "The stub flyover ramp in the centre lanes from the outer northbound lane.",
+      "steps": [
+        {
+          "call": "load",
+          "args": [
+            "street"
+          ],
+          "timeout": 90000
+        },
+        {
+          "call": "setCamera",
+          "args": [
+            {
+              "pos": [
+                -9.5,
+                1.6,
+                -40.0
+              ],
+              "target": [
+                -1.0,
+                4.0,
+                -150.0
+              ]
+            }
+          ]
+        },
+        {
+          "call": "hud",
+          "args": [
+            false
+          ]
+        },
+        {
+          "settle": 1
+        },
+        {
+          "call": "hold",
+          "args": [
+            {
+              "at": 0
+            }
+          ]
+        },
+        {
+          "waitFor": "window.__game.debug.clock().paused === true",
+          "timeout": 10000
+        }
+      ]
+    },
+    {
+      "name": "hud_play",
+      "size": [
+        1920,
+        1080
+      ],
+      "_note": "Play view: the chase camera behind the player car with the HUD stand-in on.",
+      "steps": [
+        {
+          "call": "load",
+          "args": [
+            "street"
+          ],
+          "timeout": 90000
+        },
+        {
+          "call": "hud",
+          "args": [
+            true
+          ]
+        },
+        {
+          "settle": 1
+        },
+        {
+          "call": "hold",
+          "args": [
+            {
+              "at": 0
+            }
+          ]
+        },
+        {
+          "waitFor": "window.__game.debug.clock().paused === true",
+          "timeout": 10000
+        }
+      ]
+    },
+    {
+      "name": "busiest_40m",
+      "size": [
+        1920,
+        1080
+      ],
+      "_note": "Busiest view, 40 m up over the junction: every vehicle, person and block in frame (the perf worst case).",
+      "steps": [
+        {
+          "call": "load",
+          "args": [
+            "street"
+          ],
+          "timeout": 90000
+        },
+        {
+          "call": "setCamera",
+          "args": [
+            {
+              "pos": [
+                30.0,
+                40.0,
+                70.0
+              ],
+              "target": [
+                0.0,
+                0.0,
+                0.0
+              ]
+            }
+          ]
+        },
+        {
+          "call": "hud",
+          "args": [
+            false
+          ]
+        },
+        {
+          "settle": 1
+        },
+        {
+          "call": "hold",
+          "args": [
+            {
+              "at": 0
+            }
+          ]
+        },
+        {
+          "waitFor": "window.__game.debug.clock().paused === true",
+          "timeout": 10000
+        }
+      ]
+    },
+    {
+      "name": "landmark_tiers",
+      "size": [
+        1920,
+        1080
+      ],
+      "_note": "The three landmark tiers from the road at player height: marker block (left), hero arch (centre), signature tomb (right).",
+      "steps": [
+        {
+          "call": "load",
+          "args": [
+            "landmarks"
+          ],
+          "timeout": 90000
+        },
+        {
+          "call": "setCamera",
+          "args": [
+            {
+              "pos": [
+                3.5,
+                1.6,
+                40.0
+              ],
+              "target": [
+                88.0,
+                12.0,
+                -2.0
+              ]
+            }
+          ]
+        },
+        {
+          "call": "hud",
+          "args": [
+            false
+          ]
+        },
+        {
+          "settle": 1
+        },
+        {
+          "call": "hold",
+          "args": [
+            {
+              "at": 0
+            }
+          ]
+        },
+        {
+          "waitFor": "window.__game.debug.clock().paused === true",
+          "timeout": 10000
+        }
+      ]
+    },
+    {
+      "name": "area_blocks_30m",
+      "size": [
+        1920,
+        1080
+      ],
+      "_note": "The two area kit blocks from 30 m up: old city bazaar strip (left) and Lutyens bungalow road (right).",
+      "steps": [
+        {
+          "call": "load",
+          "args": [
+            "areas"
+          ],
+          "timeout": 90000
+        },
+        {
+          "call": "setCamera",
+          "args": [
+            {
+              "pos": [
+                -32.0,
+                30.0,
+                70.0
+              ],
+              "target": [
+                0.0,
+                0.0,
+                -15.0
+              ]
+            }
+          ]
+        },
+        {
+          "call": "hud",
+          "args": [
+            false
+          ]
+        },
+        {
+          "settle": 1
+        },
+        {
+          "call": "hold",
+          "args": [
+            {
+              "at": 0
+            }
+          ]
+        },
+        {
+          "waitFor": "window.__game.debug.clock().paused === true",
+          "timeout": 10000
+        }
+      ]
+    },
+    {
+      "name": "on_foot_bazaar",
+      "size": [
+        1920,
+        1080
+      ],
+      "_note": "On foot at 1.7 m eye height in the bazaar strip, the character stand-in ahead.",
+      "steps": [
+        {
+          "call": "load",
+          "args": [
+            "areas"
+          ],
+          "timeout": 90000
+        },
+        {
+          "call": "setCamera",
+          "args": [
+            {
+              "pos": [
+                -44.2,
+                1.7,
+                44.5
+              ],
+              "target": [
+                -45.1,
+                1.45,
+                0.0
+              ]
+            }
+          ]
+        },
+        {
+          "call": "hud",
+          "args": [
+            false
+          ]
+        },
+        {
+          "settle": 1
+        },
+        {
+          "call": "hold",
+          "args": [
+            {
+              "at": 0
+            }
+          ]
+        },
+        {
+          "waitFor": "window.__game.debug.clock().paused === true",
+          "timeout": 10000
+        }
+      ]
+    }
   ]
 }
