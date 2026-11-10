@@ -22,3 +22,4 @@ One line per event, written by task.mjs (start, done, fail, phase changes, inbox
 - 2026-11-10 18:42 [P0-001] done: Transverse Mercator projection around India Gate, no flips; CP and Red Fort land within 25 m; drive_north, drive_turn_right, coords_north_marker, hooks_no_debug scenarios and FD0 pass; quick 7/7. verify --all deferred to the P0 gate (low usage mode).
 - 2026-11-10 18:42 [P0-002] done: task.mjs designsignoff and phase-flag; P0 gate and gate --final require the design sign-off; status and dashboard show all three sign-offs; 10 new tests pass.
 - 2026-11-10 18:42 [P0-003] start (attempt 1): Salvage and quality audit of the old game (read only)
+- 2026-11-10 19:04 [P0-003] done: SALVAGE_AUDIT.md (keep 3: handling and camera numbers, 4 CC0 sounds; base layer all dropped, root causes measured) and QUALITY_AUDIT.md (3 meet, 13 close, 14 far of 30). Old repo git status empty. Self-checked headings, decisions entries.

@@ -1,6 +1,6 @@
 {
   "_doc": "Written only by node harness/bin/task.mjs. Phases run in order; P0 (ADOPT + STYLE DISCOVERY) waits for the owner by design and needs task.mjs signoff and task.mjs archsignoff before its gate passes. Later phases are added by the planner at the end of P0 (task.mjs phase-add) from the game's real state.",
-  "updated": "2026-11-10T13:12:21.092Z",
+  "updated": "2026-11-10T13:34:53.692Z",
   "phases": [
     {
       "id": "P0",
@@ -91,12 +91,15 @@
       "agent": "planner",
       "priority": 2,
       "kind": "feature",
-      "status": "doing",
+      "status": "done",
       "attempts": 1,
       "notes": [],
       "created": "2026-11-10T13:04:46.154Z",
       "model": "fable",
-      "started": "2026-11-10T13:12:21.092Z"
+      "started": "2026-11-10T13:12:21.092Z",
+      "done": "2026-11-10T13:34:53.664Z",
+      "summary": "SALVAGE_AUDIT.md (keep 3: handling and camera numbers, 4 CC0 sounds; base layer all dropped, root causes measured) and QUALITY_AUDIT.md (3 meet, 13 close, 14 far of 30). Old repo git status empty. Self-checked headings, decisions entries.",
+      "commit": "ea9efd3"
     },
     {
       "id": "P0-004",
