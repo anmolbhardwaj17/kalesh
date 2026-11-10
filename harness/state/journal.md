@@ -252,3 +252,4 @@ One line per event, written by task.mjs (start, done, fail, phase changes, inbox
 - 2026-11-11 04:21 [P0-039] edited: desc, accept
 - 2026-11-11 04:21 [P0-039] start (attempt 1): Perf tooling: GPU readings under the 120 fps cap
 - 2026-11-11 04:43 [P0-039] done: Shared ballast (harness/bin/ballast.mjs, game/debug/gpu_ballast.gd) now used by lookproof --perf, verify perf and the arch bench. Stylised B real GPU cost 4.0 to 9.0 ms across four lights, all under warn 10. Cap is in the Metal present path (OpenGL runs 600+ fps), cause not found. Self-check: typecheck, 219 vitest, 47 Godot tests, quick OK.
+- 2026-11-11 04:43 [P0-017] start (attempt 1): Arch bench (Godot): physics, vehicle, on foot, combat, navigation and scripting cost
