@@ -5,3 +5,13 @@ One line per event, written by task.mjs (start, done, fail, phase changes, inbox
 - 2026-11-10 18:32 mentor message mmwap6gt1 handled: Done. The dashboard is now near black with no blue tint, set in Saans and Saans Mono, with a minimal layout. Note: your Saans files are trial fonts for personal use only, so they stay in the dashboard and never go into the game.
 - 2026-11-10 18:34 added 23 tasks: P0-001, P0-002, P0-003, P0-004, P0-005, P0-006, P0-007, P0-008, P0-009, P0-010, P0-011, P0-012, P0-013, P0-014, P0-015, P0-016, P0-017, P0-018, P0-019, P0-020, P0-021, P0-022, P0-023
 - 2026-11-10 18:34 phase P0 planned
+- 2026-11-10 18:35 mentor message mmwaowrf4 handled: Planned as Phase 0. The base layer gets rebuilt from scratch with tests; nothing from the old code is trusted without a check.
+- 2026-11-10 18:35 mentor message mmwaowrg7 handled: The salvage audit is P0-003 (deep model run). It covers keep, rewrite or drop, with evidence.
+- 2026-11-10 18:35 mentor message mmwaowrh9 handled: Style discovery: a stand-in Delhi street scene, two batches of style tests side by side with measured frame times, then rounds with you until you sign off.
+- 2026-11-10 18:35 mentor message mmwaowrie handled: Architecture discovery: four measured benches (renderer and textures, physics worker, data and tiles, lane roads and terrain), then a table with numbers and a recommendation for you to sign off.
+- 2026-11-10 18:35 mentor message mmwaowrjk handled: Agreed. After sign-off, art, texture and sound needs become dashboard cards with prompts. The style bible sets the prompt anchors.
+- 2026-11-10 18:35 mentor message mmwaowrkp handled: No mirror anywhere. P0-001 adds the projection with tests: Connaught Place and Red Fort must land at their real positions, north is -Z, and colliders must match what you see.
+- 2026-11-10 18:35 mentor message mmwaoyndb handled: The map repair layer and its pilot area are in the architecture options and the data bench. You sign it off together with the architecture.
+- 2026-11-10 18:35 mentor message mmwaoz9kb handled: The lane-level road model gets its own deep-model bench prototype in P0 (P0-019) and becomes the top build task after sign-off.
+- 2026-11-10 18:35 mentor message mmwaoz9la handled: The map inspector is in the architecture options and is planned as an early P1 task, right after the architecture sign-off.
+- 2026-11-10 18:35 mentor message mmwap8jxg handled: Added game design discovery as a third Phase 0 sign-off: options doc, interview rounds, sign-off, then GAME.md. No mission system before you sign off.
