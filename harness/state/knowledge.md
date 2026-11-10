@@ -7,3 +7,4 @@ Gotchas that hold across every area of this repo, one line each. Area gotchas go
 - Wait on game conditions in sim time (window.__sim until/waitSim), never on fixed wall clock sleeps: a loaded machine runs less game per ms.
 - Lessons from the old game are in harness/design/SALVAGE_AUDIT.md: section 5 (root cause of each base-layer failure) and section 8 (one-line rules). Read the rows for your area before building roads, terrain, tiles, physics or the bake.
 - Dashboard: if http://localhost:4488/ answers 'missing dashboard', the running server is stale (started before a folder rename). Kill the process on 4488 and start node harness/bin/dashboard.mjs again.
+- Verifiers always run in the snapshot (node harness/bin/snapshot.mjs, then work in .worktrees/verify), even with one agent at a time; otherwise their shots mix with the builder's and the dashboard verifier strip stays empty.

@@ -306,7 +306,7 @@ function liveStrip() {
   // One builder strip: test shots and look shots (style views, sheets) together, newest first.
   const builder = [...(L.builder || []).map((x) => ({ ...x, base: '/shots/' })), ...(L.look || []).map((x) => ({ ...x, base: '/lshots/' }))].sort((a, b) => b.t - a.t).slice(0, 12);
   return part('Live now: builder', '/shots/', builder, 'Every shot the builder took most recently (tests, style views, sheets), newest first.')
-    + part('Live now: verifier', '/vshots/', L.verifier, 'The shots the verifier took on its snapshot copy, newest first.');
+    + ((L.verifier && L.verifier.length) ? part('Live now: verifier', '/vshots/', L.verifier, 'The shots the verifier took on its snapshot copy, newest first.') : '<h2>Live now: verifier</h2><div class="empty">No verifier shots yet. They appear here when the next verifier checks a task.</div>');
 }
 function shotUrl(name) { return `/shots/${encodeURIComponent(name)}?t=${(S.shots.find((x) => x.name === name) || {}).t || 0}`; }
 function hasShot(name) { return S.shots.some((x) => x.name === name); }

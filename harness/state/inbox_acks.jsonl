@@ -107,3 +107,4 @@
 {"id":"mmwb0yga2","ts":"2026-11-10T18:29:40.319Z","reply":"Yes. Directed in-engine cutscenes for openings, reveals and act endings, plus drive talk, phone calls, inner voice, the RJ and ambient lines. Added to the story outline, the architecture table and the phase plan.","tasks":[]}
 {"id":"mmwb1h5pr","ts":"2026-11-10T18:44:13.032Z","reply":"All ten answers written into STORY_OUTLINE.md and decisions.md.","tasks":[]}
 {"id":"mmwb1hofa","ts":"2026-11-10T18:44:37.260Z","reply":"Removed the extra strip. Live now: builder now shows every builder shot (tests, style views, sheets) in one list, newest first.","tasks":[]}
+{"id":"mmwb1kvv9","ts":"2026-11-10T18:47:06.878Z","reply":"Not removed: it hid because it was empty. The last verifiers ran in the main folder instead of the snapshot copy, so their shots went to the builder folder. Verifiers run in the snapshot again from now on, and the strip stays visible when empty.","tasks":[]}
