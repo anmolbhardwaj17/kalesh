@@ -52,3 +52,6 @@ By: planner
 Decision: `src/geo/projection.ts` maps lat/lon to world metres with a transverse Mercator (Krüger series, 3rd order) on the WGS84 ellipsoid, central meridian through the origin (India Gate, 28.612894 N, 77.229446 E), scale 1 on that meridian, origin northing subtracted. East +X, north -Z, up +Y. No mirroring. Scale error is about 0.2 m at 25 km east or west, round trip under 1 cm. Provisional: the architecture sign-off may replace it (for example with a local ENU or a tile-local origin).
 Why: needs no dependency, is accurate to centimetres over the whole city, and keeps the axis rule in one place with tests.
 By: builder
+
+## 2026-11-10: Delhi world layers (landmark registry and area profiles)
+Anmol (inbox mmwapw3co): "Delhi must look like Delhi, area by area." Two data layers on top of the repaired map: a landmark registry (hero, signature, marker tiers, exact place and orientation) and area profiles that drive a procedural generator for ordinary buildings and street dressing. Both join Phase 0 architecture and style discovery for sign-off. Plan in harness/design/DELHI_WORLD.md; build tasks go after the map repair pilot. The area profile generator and the landmark placement pipeline are Fable tier (CLAUDE.md updated). Respect rule: portray every community from data and reference, never caricature.
