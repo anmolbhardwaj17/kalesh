@@ -79,3 +79,4 @@
 {"id":"mmwavypfw","ts":"2026-11-10T16:10:12.460Z","reply":"Prompt given in the terminal. The dashboard shows harness/dashboard/logo.png in place of the K once it exists.","tasks":[]}
 {"id":"mmwaw0luo","ts":"2026-11-10T16:12:04.039Z","reply":"Removed. The Play button now opens the latest build in a Godot window when clicked.","tasks":[]}
 {"id":"mmwaw1su5","ts":"2026-11-10T16:12:21.017Z","reply":"Icon in place on the dashboard and as the tab icon.","tasks":[]}
+{"id":"mmwawarh9","ts":"2026-11-10T16:19:16.638Z","reply":"Yes. Added a hero road tier: CP circles and radials, Janpath, Lutyens avenues and roundabouts, garden edges, checked against photos.","tasks":["P0-010","P0-023"]}

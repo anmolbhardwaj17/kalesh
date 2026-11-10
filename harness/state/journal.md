@@ -156,3 +156,5 @@ One line per event, written by task.mjs (start, done, fail, phase changes, inbox
 - 2026-11-10 21:42 mentor message mmwaw0luo handled: Removed. The Play button now opens the latest build in a Godot window when clicked.
 - 2026-11-10 21:42 mentor message mmwaw1su5 handled: Icon in place on the dashboard and as the tab icon.
 - 2026-11-10 21:43 [P0-008] done: GAME.md rewritten for Kalesh from the signed design (pillars, three characters, loops, full capability list tagged SLICE/RELEASE/LATER, missions, progression, GB Road); VERIFY.md fun criteria; M01-M04 in milestones.json. Self-checked: tests, quick.
+- 2026-11-10 21:43 [P0-009] start (attempt 1): Delhi street stand-in scene and perf baseline (Godot)
+- 2026-11-10 21:49 mentor message mmwawarh9 handled: Yes. Added a hero road tier: CP circles and radials, Janpath, Lutyens avenues and roundabouts, garden edges, checked against photos.
