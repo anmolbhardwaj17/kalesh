@@ -222,3 +222,7 @@ One line per event, written by task.mjs (start, done, fail, phase changes, inbox
 - 2026-11-11 01:13 added 1 tasks: P0-038
 - 2026-11-11 01:13 [P0-037] deps now: P0-034, P0-038
 - 2026-11-11 01:13 [P0-014] deps now: P0-010, P0-013, P0-038
+- 2026-11-11 01:13 [P0-038] start (attempt 1): Style test: realistic reference in Godot, side by side with stylised B
+- 2026-11-11 01:19 mentor message mmwb3tqzd handled: Recorded as the performance target.
+- 2026-11-11 01:19 mentor message mmwb3tr1f handled: Recorded as the performance target.
+- 2026-11-11 01:19 mentor message mmwb3tqyc handled: Explained why it is not WD2 yet (shape, materials, density, models, polish, not just light). The realistic test will report cost per mission and area for both looks, and a 60 fps verdict on the M2 Pro.

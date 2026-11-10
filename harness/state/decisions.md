@@ -217,3 +217,6 @@ Anmol: "Each ADA should have its own style. And to refer that exactly, we can ch
 Decision: the Delhi detail of style test stylised_b (grilles, AC units, tanks, wires, shutters, Hindi boards, laundry, tarps, scooters, carts, electric boxes, broken and painted kerbs, a milestone, barricades, dogs) is laid by the style from anchors the stand-in kit records as metadata, not by the builder. Tiling textures and the trim sheet are generated offline by game/render/tools/make_textures.gd and committed as PNGs (slots for the AI texture cards).
 Why: the default look must not change (baseline_check), and procedural PNGs load in milliseconds where generating them at start would add about a second per run.
 By: builder (P0-034)
+
+## 2026-11-11: Performance target
+Anmol: "The game should be able to run on Mac M2 smoothly. No struggles." Answers: minimum Mac is the M2 Pro (this laptop); smooth means 60 fps steady while driving fast, rendered near 1080p and upscaled (MetalFX or FSR). Every budget in perf_budgets.json and the style and architecture sign-offs are judged against this: frame time under 16.6 ms p95 with headroom for gameplay, AI and physics (render target about 10 to 11 ms GPU at play speed). Why: if it runs here it runs on gaming PCs.

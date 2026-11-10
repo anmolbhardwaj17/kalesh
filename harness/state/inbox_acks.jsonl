@@ -112,3 +112,6 @@
 {"id":"mmwb2jqfr","ts":"2026-11-10T19:14:12.798Z","reply":"Changed: the guard only acts if you were in a terminal when Godot opened, and only for the first 4 seconds. In any other app, or if you click a Godot window, it stays.","tasks":[]}
 {"id":"mmwb3li1m","ts":"2026-11-10T19:43:34.849Z","reply":"Recorded; realistic reference queued next, side by side with stylised B.","tasks":[]}
 {"id":"mmwb3li3r","ts":"2026-11-10T19:43:34.924Z","reply":"Recorded; realistic reference queued next, side by side with stylised B.","tasks":[]}
+{"id":"mmwb3tqzd","ts":"2026-11-10T19:49:59.678Z","reply":"Recorded as the performance target.","tasks":[]}
+{"id":"mmwb3tr1f","ts":"2026-11-10T19:49:59.757Z","reply":"Recorded as the performance target.","tasks":[]}
+{"id":"mmwb3tqyc","ts":"2026-11-10T19:49:59.834Z","reply":"Explained why it is not WD2 yet (shape, materials, density, models, polish, not just light). The realistic test will report cost per mission and area for both looks, and a 60 fps verdict on the M2 Pro.","tasks":[]}
