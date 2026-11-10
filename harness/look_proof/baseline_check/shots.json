@@ -2,60 +2,60 @@
   "views": {
     "car_closeup": {
       "file": "car_closeup.png",
-      "at": "2026-11-10T18:05:40.580Z",
+      "at": "2026-11-10T18:16:08.730Z",
       "query": "debug=1&verify=1",
       "error": null
     },
     "street_eye": {
       "file": "street_eye.png",
-      "at": "2026-11-10T18:05:42.864Z",
+      "at": "2026-11-10T18:16:11.189Z",
       "query": "debug=1&verify=1",
       "error": null
     },
     "junction": {
       "file": "junction.png",
-      "at": "2026-11-10T18:05:45.135Z",
+      "at": "2026-11-10T18:16:13.660Z",
       "query": "debug=1&verify=1",
       "error": null
     },
     "flyover_ramp": {
       "file": "flyover_ramp.png",
-      "at": "2026-11-10T18:05:47.398Z",
+      "at": "2026-11-10T18:16:16.141Z",
       "query": "debug=1&verify=1",
       "error": null
     },
     "hud_play": {
       "file": "hud_play.png",
-      "at": "2026-11-10T18:05:49.659Z",
+      "at": "2026-11-10T18:16:18.352Z",
       "query": "debug=1&verify=1",
       "error": null
     },
     "busiest_40m": {
       "file": "busiest_40m.png",
-      "at": "2026-11-10T18:05:51.872Z",
+      "at": "2026-11-10T18:16:20.557Z",
       "query": "debug=1&verify=1",
       "error": null
     },
     "landmark_tiers": {
       "file": "landmark_tiers.png",
-      "at": "2026-11-10T18:05:54.140Z",
+      "at": "2026-11-10T18:16:22.831Z",
       "query": "debug=1&verify=1",
       "error": null
     },
     "area_blocks_30m": {
       "file": "area_blocks_30m.png",
-      "at": "2026-11-10T18:05:56.340Z",
+      "at": "2026-11-10T18:16:25.014Z",
       "query": "debug=1&verify=1",
       "error": null
     },
     "on_foot_bazaar": {
       "file": "on_foot_bazaar.png",
-      "at": "2026-11-10T18:05:58.481Z",
+      "at": "2026-11-10T18:16:27.185Z",
       "query": "debug=1&verify=1",
       "error": null
     }
   },
-  "commit": "a682786",
+  "commit": "7ecd7d8",
   "gl": "Godot 4.7.2.stable Apple M2 Pro (Apple8) (metal, forward_plus)",
-  "at": "2026-11-10T18:05:58.597Z"
+  "at": "2026-11-10T18:16:27.291Z"
 }
