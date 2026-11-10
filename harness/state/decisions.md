@@ -228,3 +228,13 @@ By: builder
 
 ## 2026-11-11: Look direction is stylised B
 Anmol in style round 5, after the per-light sheets, the cost table and the 60 fps verdict: "Pure stylised B". Realistic is kept only as a reference set (style_realistic_*); it is not tuned further. This is the direction, not yet the sign-off: the sign-off needs his own words (P0-014).
+
+## 2026-11-10: style signed off by Anmol
+Quote: "Yes, I sign off on stylised B as the Kalesh style."
+See harness/design/STYLE_OPTIONS.md and STYLE_BIBLE.md. From now on the never-wait rule applies.
+
+## 2026-11-11: Style sign-off
+Anmol: "Yes, I sign off on stylised B as the Kalesh style." Chosen: stylised B (style id stylised_b: stylised realistic, rich and warm, D grime by area wear, Delhi detail, dawn, afternoon, golden, night on one day curve). The approved reference shots are taken after the P0-037 fix pass. Realistic stays a reference set only.
+
+## 2026-11-11: Architecture answers, round 1
+Licences: open sources only, keep a sale possible (no FABDEM or other non-commercial data shipped; publish repaired map data as ODbL asks). Mac signing: deferred by Anmol ("not a decision i wanna take right now"); unsigned test builds until he decides, asked again before release. Windows: Anmol has a Windows PC and a friend will test, so Windows builds get tested on real hardware from the first playable. Map inspector: web page on the dashboard, kept small (see the reply below). Animation: free CC0 library (Quaternius). Hero roads: the first list as proposed. Reference photos: online only (no owner photos).

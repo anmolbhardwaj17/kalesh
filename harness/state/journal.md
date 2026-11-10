@@ -230,3 +230,14 @@ One line per event, written by task.mjs (start, done, fail, phase changes, inbox
 - 2026-11-11 01:50 mentor message mmwb4xiyn handled: Recorded: pure stylised B. Queued fixes run next; sign-off needs his own words.
 - 2026-11-11 01:50 [P0-037] start (attempt 1): Style B pass: bazaar frame time under the warn line and better night light
 - 2026-11-11 01:53 mentor message mmwb50n2m handled: Any time, now or after the fix pass shots. Type it in your own words.
+- 2026-11-11 01:53 style sign-off recorded: Yes, I sign off on stylised B as the Kalesh style.
+- 2026-11-11 01:53 mentor message mmwb513y1 handled: Style sign-off recorded. Style bible, look rules and signed budgets come next.
+- 2026-11-11 02:01 mentor message mmwb5b2ks handled: Recorded for the architecture options (P0-020, P0-021).
+- 2026-11-11 02:01 mentor message mmwb5b2n5 handled: Recorded for the architecture options (P0-020, P0-021).
+- 2026-11-11 02:01 mentor message mmwb5b2pu handled: Recorded for the architecture options (P0-020, P0-021).
+- 2026-11-11 02:01 mentor message mmwb5b2s6 handled: Recorded for the architecture options (P0-020, P0-021).
+- 2026-11-11 02:01 mentor message mmwb5b2uj handled: Recorded for the architecture options (P0-020, P0-021).
+- 2026-11-11 02:01 mentor message mmwb5b2wm handled: Recorded for the architecture options (P0-020, P0-021).
+- 2026-11-11 02:01 mentor message mmwb5b2yr handled: Recorded for the architecture options (P0-020, P0-021).
+- 2026-11-11 02:01 [P0-014] done: Style rounds 3 to 5 run (batch A, batch B, realistic reference with cost and 60 fps verdict); signed: 'Yes, I sign off on stylised B as the Kalesh style.' Architecture round 1 questions answered (decisions.md). Landmark census and composite map stitch questions move to P0-021, since P0-018 and P0-029 are not run yet.
+- 2026-11-11 02:01 [P0-015] deps now: P0-014, P0-037
