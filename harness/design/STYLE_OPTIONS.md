@@ -1,6 +1,6 @@
 # Dilli Darshan: Style options
 
-Status: style rounds 1 and 2 answered in interview sitting 1 (2026-11-10). Anmol leans to look B (stylised realistic) with D's grime in Old Delhi. Not signed off. Batch A style tests are built and measured (P0-011, 2026-11-10: see "Measured in Godot (batch A)"). Next: style round 3 on the test results.
+Status: SIGNED 2026-11-11. Anmol: "Yes, I sign off on stylised B as the Kalesh style." The chosen look is stylised B (`stylised_b`, batch B after the P0-037 lean pass); see "Chosen: stylised B" below and STYLE_BIBLE.md. Realistic (A) stays a reference set only. B, B+D, C and D are not built further (B and B+D stay behind `--style=` until the first phase gate; C and D were never built).
 
 Every number in this doc is an estimate (marked "est") until a Godot style test measures it on this machine. Measured numbers replace the estimates in P0-011 and P0-012, and every estimate that was wrong is marked "WRONG, was ...". Never hide a bad number.
 
@@ -117,11 +117,25 @@ Costs at play speed: the auto at about 65 km/h, ordinary cars at about 140, fast
 | **Risk** | Looks cheap | Mixed looks if the anchor drifts between batches | Bake times, memory, day cycle | Uncanny mismatch, licensing |
 | **Measured** (frame time p95 on the busiest view at 140 km/h, draw calls, load) | n/a | P0-011 on the stand-ins (held sim, not at speed): GPU p95 6.8 to 6.9 ms on the busiest view, 8.3 ms worst view (B+D golden, on foot in the bazaar), 89 to 180 draw calls, load 0.8 s. See "Measured in Godot (batch A)" | P0-012 if built | n/a |
 
+## Chosen: stylised B (signed 2026-11-11)
+
+Anmol: "Yes, I sign off on stylised B as the Kalesh style." The chosen column is **B+D grown into batch B, style id `stylised_b`**: stylised realistic, rich and warm (B), Old Delhi grime by area wear (D as data), Delhi detail dressing, and four lights on one day curve (dawn, afternoon, golden, night), on the P0-037 lean path. It is what Anmol picked in round 2 ("I also like B, with d's dirst on old delhi"), asked to push in round 3, confirmed after seeing realistic in round 4 and 5 ("Pure stylised B"), and it meets the performance target ("The game should be able to run on Mac M2 smoothly. No struggles.").
+
+| | Chosen: stylised B (`stylised_b`, P0-037) | Reference only: realistic (`realistic`, P0-038) |
+|---|---|---|
+| Look | Watch Dogs 2 level stylised realism, warm grade, grime in Old Delhi, Delhi detail kit | The same scene with PBR surfaces, a physical sky, SSR, volumetric fog, TAA |
+| Frame time p95 on the stand-ins (Vulkan, M2 Pro, calm) | **Measured**: worst view 8.68 dawn, 9.29 afternoon, 7.75 golden, 9.18 night; typical 6.6 to 8.0 ms | 15.6 to 18.0 ms worst view, 13.2 to 15.6 typical (over the 60 fps target) |
+| Draw calls, triangles, load | 96 to 315; 0.77 to 3.2 M with shadow passes; 1.06 to 1.33 s | similar draw calls, more shader cost |
+| Why chosen | Meets 60 fps with 2 to 4 ms of headroom for real content; AI kit cards hold the style; grime follows the real city | Costs about 7 ms more for a look Anmol did not choose |
+| Signed budgets | `perf_budgets.json` status signed (frame warn 10.0, fail 12.0 ms; draw calls 600 and 1000; triangles 6 M and 9 M; GPU memory 1200 and 2000 MB) | n/a |
+
+Every estimate in the Comparison table below is either replaced by a measured number (marked "measured") or kept as an estimate for the streamed city, where it stays open until the architecture benches (draw calls and memory of a whole district, LOD and streaming). Estimates that were wrong are marked "WRONG, was ...". Estimates for B, B+D, C and D that no test replaced are not decisions and are left as they were; the chosen column's row values are in the table above and in STYLE_BIBLE.md.
+
 ## Comparison
 
 All numbers est, at 1920 x 1080 internal on the M2 Pro, Forward+, for the busiest stand-in view (P0-009 "busiest view from 40 m up") unless a row says otherwise. B and B+D are the columns that matter; A is the reference; C and D are kept for completeness.
 
-| | A. Realistic | B. Stylised | B+D. Stylised with grime | C. Comic | D. Gritty |
+| | A. Realistic (reference only) | B. Stylised | B+D. Stylised with grime (CHOSEN: grew into `stylised_b`, see above) | C. Comic | D. Gritty |
 |---|---|---|---|---|---|
 | **Godot id, batch** | `realistic`, B (optional) | `stylised`, A | `stylised_grime`, A | `comic`, B reserve | `gritty`, B reserve |
 | **Look** | GTA V, Mafia II | Watch Dogs 2, Sleeping Dogs | Watch Dogs 2 plus Max Payne 3 and Far Cry 4 grime in Old Delhi | Borderlands 3 | Max Payne 3 everywhere |
@@ -196,9 +210,9 @@ GPU p95 in ms over a 3 s window with the sim held, Apple M2 Pro, 1920 x 1080, Go
 | on_foot_bazaar | 2.13 | 8.86 | 9.14 | 12.55 | 11.89 | 11.87 | 12.85 |
 | **worst** | **2.35** | **8.86** | **9.14** | **12.55** | **11.89** | **11.87** | **12.85** |
 
-(B2 = `stylised_b`.) Draft budgets: warn 11.1 ms, fail 16.6 ms. Every batch B view is "ok" except on_foot_bazaar, which is "warn" (11.9 to 12.9 ms) in all four lights. Draw calls 104 to 320 (B+D: 89 to 180), triangles 0.8 to 3.2 M with shadow passes (B+D: under 2 M), load 1.07 s (B+D: 0.82 s; the generated textures). The calm B+D reruns read about 0.5 to 1 ms above the P0-011 table (6.3 to 8.3 ms there): that is run to run noise on this Mac, and they replace the contaminated sets.
+(B2 = `stylised_b`, the P0-034 setup before the lean pass.) These numbers are superseded by the P0-037 table below: after the lean pass the worst view is 7.75 to 9.29 ms in all four lights and every view is "ok" against the signed budgets (warn 10.0 ms, fail 12.0 ms). Before the pass, on_foot_bazaar was 11.9 to 12.9 ms (over the 11.1 ms draft warn line); draw calls were 104 to 320, triangles 0.8 to 3.2 M with shadow passes, load 1.07 s. The calm B+D reruns read about 0.5 to 1 ms above the P0-011 table: that is run to run noise on this Mac, and they replace the contaminated sets.
 
-Batch B costs about 2 to 3.5 ms over B+D in the street views and 3 to 4 ms in the bazaar. What each part costs (golden, before the optimisation round, street_eye / on_foot_bazaar, with one part switched off by `--style-off=<part>`): everything on 12.3 / 14.6; volumetric haze off 11.0 / 14.0; heat shimmer off 10.3 / 13.6; dressing off 10.8 / 13.0; lights off 10.1 / 11.5; textures off 11.1 / 14.4. Night bazaar after the optimisation: everything 12.4, haze off 12.1, lights off 10.4, dressing off 11.6. Noise is about 0.5 to 1 ms. The optimisation round took 2 to 4 ms off: no shadows from small dressing (wires, frames, grilles), lights only after dusk, half the bazaar shops with a real light, lower-poly tanks, small wall decals fading by 55 m, no shimmer in golden light. To get the bazaar under 11 ms: fewer shop lights again or one light per two shops, a cheaper haze (depth fog per area instead of a FogVolume), and the dressing merged into the block mesh.
+Where the P0-034 cost came from (golden, before the optimisation round, street_eye / on_foot_bazaar, one part off at a time with `--style-off=<part>`): everything on 12.3 / 14.6 ms; volumetric haze off 11.0 / 14.0; heat shimmer off 10.3 / 13.6; dressing off 10.8 / 13.0; lights off 10.1 / 11.5; textures off 11.1 / 14.4 (noise 0.5 to 1 ms). The P0-037 pass below acted on this (and on the sun shadow finding) and replaced the open "to get the bazaar under 11 ms" ideas: the bazaar is now 7.75 to 9.29 ms worst view.
 
 #### P0-037 pass: frame time and night light (after Anmol picked "Pure stylised B")
 
@@ -399,7 +413,7 @@ Samples (B+D; the art-director writes the real cards after sign-off):
 
 ## Recommendation
 
-Build B with D's grime as data, not as a second look: one `stylised` base and a `wear` value per area profile (high in Old Delhi, near zero in Lutyens and CP). It is what Anmol picked, it costs about 1 to 2 ms more than plain B (est), it scales down well to the Mobile renderer, and the grime follows the real city instead of covering it. Show A only if he wants the cost comparison.
+Taken: build stylised B (`stylised_b`), with D's grime as data (a `wear` value per area profile: high in Old Delhi, near zero in Lutyens and Connaught Place), on the lean path that meets the 60 fps target on the M2 Pro. Realistic is a reference set only. See STYLE_BIBLE.md.
 
 ## Questions for the next round
 
@@ -427,4 +441,5 @@ Show `harness/reports/look/style_options.jpg` and this table with measured numbe
 - Round 2 (sitting 1): "I also like B, with d's dirst on old delhi". Light for tests: hot hazy afternoon and golden evening. Colour: rich and warm. Camera: third person behind. Characters: realistic proportions, stylised finish.
 - Round 3 (2026-11-10): main light "Full day-night cycle"; grime "Much stronger"; push "Building detail, Materials, Atmosphere, Night and lights". Built as batch B (`stylised_b`, P0-034), sheet `harness/reports/look/style_options_b.jpg`.
 - Round 4 (2026-11-11): "Show me realistic too first"; likes in batch B: "Bazaar detail and grime, Night lights, Golden hour, Afternoon heat". Built as `realistic` (P0-038), sheet `harness/reports/look/style_options_real.jpg`, comparison in "Realistic vs stylised B".
-- No sign-off yet.
+- Round 5 (2026-11-11): after the per-light sheets, the cost table and the 60 fps verdict: "Pure stylised B" (the direction).
+- Sign-off (2026-11-11): "Yes, I sign off on stylised B as the Kalesh style." Recorded with `task.mjs signoff` (state.json and decisions.md "Style sign-off"). STYLE_BIBLE.md, VERIFY.md rubric lines 14 to 24, signed budgets, look rules and the approved reference (stylised_b golden) are P0-015.

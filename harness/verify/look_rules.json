@@ -1,6 +1,18 @@
 {
-  "_doc": "Tolerances for lookproof.mjs --compare against the approved reference shots. mean: mean absolute channel difference (0 to 255); share: part of the pixels whose largest channel moved more than delta. Animated scenes (water, particles, idle animation) need looser numbers or a held sim (debug.hold). Phase 0 sets these from two runs of the same build: put them just above that run to run noise.",
-  "tolMean": 6,
-  "tolShare": 0.25,
-  "delta": 40
+  "_doc": "Tolerances for lookproof.mjs --compare against the approved reference shots. mean: mean absolute channel difference (0 to 255); share: part of the pixels whose largest channel moved more than delta. Signed with the style (P0-015, 2026-11-11) from run to run noise of the same build on this M2 Pro (stylised_b, 9 views at 1920x1080, sim held): golden worst view mean 0.03 and share 0.0%, night mean 0.03 and share 0.0%, afternoon (heat shimmer) mean 0.65 and share 0.2% in the busiest view. The limits sit about 2x above the worst noise, so any real look change (a new prop group, a light, a grade change) shows up and must be re-approved. Main reference: approved/ (stylised_b golden). The other three lights are named comparison sets: --against style_stylised_b_dawn, _afternoon or _night, with the same numbers.",
+  "tolMean": 1.5,
+  "tolShare": 0.01,
+  "delta": 40,
+  "referenceSets": {
+    "approved": "style_stylised_b_golden",
+    "dawn": "style_stylised_b_dawn",
+    "afternoon": "style_stylised_b_afternoon",
+    "night": "style_stylised_b_night"
+  },
+  "noise": {
+    "measuredAt": "2026-11-11",
+    "golden": { "meanMax": 0.03, "shareMax": 0.0 },
+    "afternoon": { "meanMax": 0.65, "shareMax": 0.002 },
+    "night": { "meanMax": 0.03, "shareMax": 0.0 }
+  }
 }

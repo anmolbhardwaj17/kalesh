@@ -1,6 +1,6 @@
 {
   "_doc": "Written only by node harness/bin/task.mjs. Phases run in order; P0 (ADOPT + STYLE DISCOVERY) waits for the owner by design and needs task.mjs signoff and task.mjs archsignoff before its gate passes. Later phases are added by the planner at the end of P0 (task.mjs phase-add) from the game's real state.",
-  "updated": "2026-11-10T21:20:32.514Z",
+  "updated": "2026-11-10T21:20:37.813Z",
   "phases": [
     {
       "id": "P0",
@@ -421,12 +421,13 @@
       "agent": "planner",
       "priority": 2,
       "kind": "feature",
-      "status": "todo",
-      "attempts": 0,
+      "status": "doing",
+      "attempts": 1,
       "notes": [
         "From P0-037 verifier: STYLE_OPTIONS.md around lines 199 to 201 has stale batch B perf text; replace with the P0-037 numbers when marking the chosen column. Approve the four style_stylised_b_* sets as the reference. Polish for the last phase: distinct night lamp pools at street_eye, dark asphalt patches at the night junction. Night perf checks need a calm machine (other GPU load adds 3 to 5 ms)."
       ],
-      "created": "2026-11-10T13:04:46.154Z"
+      "created": "2026-11-10T13:04:46.154Z",
+      "started": "2026-11-10T21:20:37.812Z"
     },
     {
       "id": "P0-016",

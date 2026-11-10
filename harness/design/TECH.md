@@ -86,14 +86,38 @@ Godot: `game/debug/` (debug server, logger, frame probe, perf stats), added unde
 
 ## Render pipeline
 
-<!-- Renderer settings (colour space, tone mapping, shadows, pixel ratio cap), post stack in order, quality presets and
-what each turns on or off, the style switch (?style=) used in Phase 0 and what happened to it after sign-off. -->
+Signed look: stylised B (`stylised_b`), signed 2026-11-11 (STYLE_BIBLE.md). Renderer: Godot 4.7.2 Forward+ (Metal for play on the Mac, Vulkan through MoltenVK when GPU times are measured), 1920x1080 at render scale 1.0 or about 1080p upscaled (MetalFX or FSR) for the 60 fps target on the M2 Pro (decisions.md "Performance target"). Linear colour, Filmic tonemap, no TAA, no SDFGI, no SSR, no volumetric fog.
+
+How the look is built (`game/render/`, all procedural, no art files yet):
+- `style_runner.gd` restyles every scene from outside as it loads (SceneTree `node_added`, connected by the `GameArgs` autoload before the main scene): a WorldEnvironment gets the style's Environment, the DirectionalLight3D becomes the sun, MeshInstance3D materials are swapped by their stand-in key (`matte`, `road`, `satin`, ...), Label3D nodes go to the style's sign decoration. Scenes do not know about it. Args: `--style=<id>`, `--light=dawn|afternoon|golden|night` or `--time=<0..24>`, `--style-off=<tokens>` (cost measuring: volfog, shimmer, dressing, lights, textures, decals, ssao, ssil, glow, sunshadow, nopcss, noblend, split2, near80, dshadow, ssq, p34).
+- `styles/stylised_b.gd` (extends `stylised_grime.gd`, which extends `stylised.gd`): environment and post, the surface shader layer (`shaders/surface_b.gdshader`: six generated tiling layers in a Texture2DArray plus the wear mask), the Delhi detail dressing laid from anchors the stand-in kit records (`Sink.anchor` in `scenes/standin/geo.gd`), per-area haze (`shaders/haze_b.gdshader`), the heat shimmer pass (`shaders/shimmer.gdshader`), decals, dust motes and the night lights. `styles/stylised_b.tres` holds the look numbers (`style_preset.gd`), `styles/light_<id>.tres` the light presets (`light_preset.gd`), `day_cycle.gd` the day curve.
+- Day curve (`--time`): keys night 0 to 4.6 h, dawn 6.3, afternoon 15.0, golden 17.75, dusk 19.0, night from 20.5 h; every field blends (sun azimuth the short way round); the sun swaps to a faint moon at dusk and before dawn.
+
+What each light sets (Environment and lights; numbers in STYLE_BIBLE.md "Lighting presets"):
+
+| Setting | dawn | afternoon | golden | night |
+|---|---|---|---|---|
+| Sun | 7 degrees, pink, energy 1.9, ESE | 52 degrees, warm white, 2.3, SW | 12 degrees, orange, 2.6, WNW | moon, cool, 0.22 |
+| Sky and haze | peach horizon, thick haze (fog 0.0042), contrast plus 0.08 | pale blue, dusty haze (0.0026) | grey-warm top, orange horizon and fog (0.0032) | dark blue, warm horizon glow, brown haze (0.0034) |
+| Exposure, ambient | 1.15, 0.45 | 0.85, 0.5 | 1.0, 0.4 | 1.45, 0.32 plus a cool moonlit fill |
+| Lights on | lamps half on, 12% windows | none | bulbs start to bloom, 8% windows | sodium lamps, one shop in three, headlights, 55% windows, neon |
+| Extras | damp road look in the realistic reference only | heat shimmer pass (1 to 2 ms) | strongest bloom, no shimmer | shadow distance 160 m |
+
+Post stack in order: SSAO (low), SSIL (low), sun-lit exponential fog with the depth haze box, Filmic tonemap and exposure, glow (softlight, threshold 1.0), adjustment (contrast 1.08, saturation 1.05), 3D LUT (33 cubed, per light split tone), heat shimmer (afternoon only). Sun shadows: 4 splits to 240 m, filtered with blur 1.6, no PCSS, no split blending (those two cost 2.8 ms).
+
+What the lean path turns off (`_lean()`, P0-037; the realistic reference look keeps them): PCSS, split blending, the FogVolume and volumetric fog, full-quality SSAO and SSIL, real lights on every shop, shadows from small dressing, decals beyond 55 m.
+
+Quality presets: one preset (default) for now. A later low preset (Mobile renderer or Forward+ with SSAO, SSIL, decals and dressing cut) is a performance task, not built.
+
+The `--style` switches after the sign-off (decisions.md "Style bible and signed budgets"): `stylised_b` becomes the default look in the first task of the first phase; `stylised`, `stylised_grime` and `realistic` stay behind `--style=` as reference sets until the first phase gate, then `stylised` and `stylised_grime` are folded into `stylised_b.gd` and removed; `realistic` is kept as a documented reference until the upscaler decision is done. `--style=none` keeps the flat stand-in look for fast verification.
 
 ## Performance budgets
 
-<!-- The signed numbers (harness/verify/perf_budgets.json) per preset on the target machine, and the GPU ms each feature
-may cost. How they are measured: debug.perf windows in perf scenarios, lookproof.mjs --perf, perfgate.mjs rules
-(p95 frame time, the larger of CPU and GPU; a loaded machine downgrades a fail to "not judged"). -->
+Signed 2026-11-11 in `harness/verify/perf_budgets.json` (status signed): the minimum machine is the Apple M2 Pro at 60 fps steady, about 1080p; look scenes p95 frame time warn 10.0 ms and fail 12.0 ms (graphics get about 10 to 11 ms so 5 to 6 ms stay for gameplay, AI, physics and streaming), average fps floor 55, draw calls warn 600 and fail 1000, triangles with shadow passes warn 6 M and fail 9 M, GPU memory warn 1200 MB and fail 2000 MB, load warn 3 s and fail 10 s. Measured stylised_b on the stand-ins: GPU p95 6.5 to 9.3 ms (worst view per light 7.75 to 9.29), 96 to 315 draw calls, 0.77 to 3.2 M triangles, load 1.06 to 1.33 s.
+
+How they are measured: `debug.perf` windows in perf scenarios and `lookproof.mjs --set <name> --perf` (3 s window, sim held), judged by `perfbudget.mjs` (p95 of the larger of CPU and GPU). The Metal driver reports no GPU time, so GPU numbers use `HARNESS_GODOT_ARGS="--rendering-driver vulkan --disable-vsync"`. Judge on a calm machine (check `ps -r`: another GPU user adds 3 to 5 ms at night); a fail is rerun once; the first view after a shader change is not judged. Per-system and streamed-city budgets are added by the architecture record.
+
+Cost of look features (Vulkan, M2 Pro, bazaar): sun PCSS 1.8 ms, shadow split blending 1 ms, SSIL about 1.5 ms (low quality kept), heat shimmer 1 to 2 ms, 40 omni lights in a narrow lane about 2 ms, per-area volumetric fog 0.3 to 1.3 ms, decals about 0.5 ms, glow and SSAO under the 0.5 ms noise. A look feature that adds more than 0.5 ms says so in its task and is measured with `--style-off=<token>`.
 
 ## Movement and camera (if the game has a moving player)
 

@@ -1,12 +1,23 @@
 {
-  "_doc": "Performance budgets (harness/bin/perfbudget.mjs). DRAFT values until the owner signs off the style; then status becomes signed and decisions.md records it. frameMs is the p95 frame time (the larger of CPU and GPU), loadMs is launch to the first ready snapshot, presets are per quality preset (scenario `quality`), default for the rest. Draft from the P0-009 baseline (harness/look_proof/baseline/perf.json on Metal and harness/look_proof/baseline_vulkan/perf.json on Vulkan with vsync off, 9 views of the stand-in Delhi street, landmarks and area kits): GPU p95 1.5 to 3.2 ms over two Vulkan runs (the file holds the second, 1.5 to 2.4 ms), CPU p95 under 0.4 ms, 84 to 175 draw calls, 0.79 to 1.95 M triangles drawn (shadow passes included), 192 MB GPU memory in the busiest view, load 0.56 to 0.82 s. Headroom: the stand-ins have no textures, SSAO, glow or crowds yet, so frame time keeps the 60 fps line (fail 16.6 ms, warn at 11.1 ms = 90 fps), draw calls and triangles about 2.5x the worst view at warn and 4x at fail, GPU memory about 3x, load about 4x.",
-  "status": "draft",
-  "target": "Apple M2 Pro MacBook Pro (12 CPU cores, 19 core GPU, 16 GB), macOS, Godot 4.7.2.stable standard build, Forward+ renderer on the Metal driver (Vulkan through MoltenVK for GPU times), 1920x1080 at render scale 1.0, medium preset, one game window, machine load per core 0.37 to 0.76 during the baseline",
+  "_doc": "Performance budgets (harness/bin/perfbudget.mjs). SIGNED with the style (P0-015, 2026-11-11, decisions.md 'Style bible and signed budgets'). The target is Anmol's (decisions.md 'Performance target'): 'The game should be able to run on Mac M2 smoothly. No struggles.' Minimum machine is the M2 Pro, 60 fps steady at play speed, rendered near 1080p and upscaled. frameMs is the p95 frame time (the larger of CPU and GPU) of the LOOK scenes: graphics may use about 10 to 11 ms so 5 to 6 ms of the 16.6 ms frame stay free for gameplay, AI, physics and streaming. warn 10.0 is the low end of that band, fail 12.0 still leaves 4.6 ms. Measured stylised_b on the stand-ins after P0-037 (Vulkan, M2 Pro, vsync off, sim held, calm machine, 4 lights x 9 views): GPU p95 6.5 to 9.3 ms (worst view per light 7.75 to 9.29, typical 6.6 to 8.0), CPU p95 under 1 ms, 96 to 315 draw calls, 0.77 to 3.2 M triangles with shadow passes, load 1.06 to 1.33 s. Draw calls, triangles and memory keep room for the real content that the stand-ins lack (kit textures, crowds, traffic, vehicles, landmarks): about 2x the worst measured view at warn and 3x at fail; the per-system and streamed-city numbers come from the architecture sign-off (TECH.md 'Performance budgets'). Night GPU time reads 3 to 5 ms higher when other GPU work runs on the machine (a browser, another game): judge budgets on a calm machine (check `ps -r`), rerun a fail once before it counts. The Metal driver reports no GPU time: use HARNESS_GODOT_ARGS='--rendering-driver vulkan --disable-vsync' for GPU numbers. Every light (dawn, afternoon, golden, night) shares these numbers.",
+  "status": "signed",
+  "signed": { "at": "2026-11-11", "by": "Anmol (style sign-off 'Yes, I sign off on stylised B as the Kalesh style.' and the performance target); numbers set by the planner from the target and the P0-037 measurements" },
+  "target": "Apple M2 Pro MacBook Pro (12 CPU cores, 19 core GPU, 16 GB) is the minimum machine: 60 fps steady at play speed, 1920x1080 render scale 1.0 (or about 1080p upscaled to the display), Godot 4.7.2.stable standard build, Forward+ renderer (Vulkan through MoltenVK for GPU times, Metal for play), one game window, calm machine (load per core under 0.6)",
   "windowMs": 3000,
-  "frameMs": { "warn": 11.1, "fail": 16.6 },
-  "fpsFloor": 50,
+  "frameMs": { "warn": 10.0, "fail": 12.0 },
+  "fpsFloor": 55,
   "loadMs": { "warn": 3000, "fail": 10000 },
   "presets": {
-    "default": { "drawCalls": { "warn": 450, "fail": 900 }, "triangles": { "warn": 5000000, "fail": 8000000 }, "gpuMB": { "warn": 600, "fail": 1024 } }
+    "default": { "drawCalls": { "warn": 600, "fail": 1000 }, "triangles": { "warn": 6000000, "fail": 9000000 }, "gpuMB": { "warn": 1200, "fail": 2000 } }
+  },
+  "measured": {
+    "style": "stylised_b",
+    "at": "2026-11-11",
+    "gpuP95WorstViewMs": { "dawn": 8.68, "afternoon": 9.29, "golden": 7.75, "night": 9.18 },
+    "gpuP95RangeMs": [6.47, 9.29],
+    "drawCalls": [96, 315],
+    "trianglesMillions": [0.77, 3.2],
+    "loadMs": [1058, 1329],
+    "source": "harness/look_proof/style_stylised_b_{dawn,afternoon,golden,night}/perf.json"
   }
 }
