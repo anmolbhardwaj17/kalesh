@@ -209,3 +209,6 @@ By: content-writer (P0-032)
 
 ## 2026-11-11: Story outline answers
 Anmol answered the ten writer questions (inbox mmwb1h5pr): guilty Gullu, playable flashback, hidden ending independent of the encounter, names kept, MALCHA code kept, Sonu jailed until Act 5 on refusal, Expose ending softened (government hospital), Hinglish main track with Hindi later, the Sorry note in the tiffin, M67 kept. Written as section 13 of STORY_OUTLINE.md, which overrides earlier sections.
+
+## 2026-11-11: Every area is built from real references
+Anmol: "Each ADA should have its own style. And to refer that exactly, we can check some online images of that ADA. Or not just one or two, multiple. And figure out the overall gist." Decision: before any area is built, it gets an area sheet and a reference board from 20 to 40 real photos (Google Images, Wikimedia Commons, Mapillary): footpaths, road surface, street lamps, boundaries, buildings, trees, street life, clutter, and what sets it apart. Every area build task cites its sheet, and its verifier compares game shots with the board and fails a generic look. Photos are internal reference only, never in the game. Why: a generic Delhi is the failure the owner names.
