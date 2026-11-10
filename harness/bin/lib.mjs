@@ -170,18 +170,18 @@ export function withLock(fn) {
 }
 
 /**
- * The paths whose content decides a verify run: the game (src, public, index.html, package and build config, the
+ * The paths whose content decides a verify run: the game (src, the Godot project in game/, tools/, public, index.html, package and build config, the
  * milestone data in harness/data) and the verify scripts and their inputs (harness/bin, harness/verify, the look proof
  * poses). Everything else (docs, harness/state, harness/reports, harness/design, harness/requests, look proof output,
  * CLAUDE.md, .claude, assets_inbox, and junk a verifier leaves untracked in its snapshot) is left out of treeHash.
  * kit.config.json `treeHashPaths` replaces the list for a repo with another layout.
  */
 /** Bump when TREE_HASH_PATHS or the hash method changes: reports record it, so freshreport can say why an older run never matches. */
-export const TREE_RULE = 2;
+export const TREE_RULE = 3;
 export const TREE_HASH_PATHS = [
   'src', 'public', 'index.html', 'package.json', 'package-lock.json', 'tsconfig.json', 'tsconfig.node.json',
   'vite.config.ts', 'vite.config.mts', 'vite.config.js', 'vitest.config.ts', 'vitest.config.mts', 'build',
-  'harness/bin', 'harness/verify', 'harness/data', 'harness/look_proof/poses.json',
+  'harness/bin', 'harness/verify', 'harness/data', 'harness/look_proof/poses.json', 'game', 'tools',
 ];
 function hashPaths() { const c = config().treeHashPaths; return Array.isArray(c) && c.length ? c : TREE_HASH_PATHS; }
 

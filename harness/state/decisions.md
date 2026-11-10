@@ -100,3 +100,23 @@ Map: layout C (Delhi plus NCR) is the full map; first release has Gurugram, Laxm
 ## 2026-11-10: game design signed off by Anmol
 Quote: "yes, I sign off on this game design"
 See harness/design/GAME_DESIGN_OPTIONS.md and GAME.md (fantasy, core loop, pillars, mission list, progression plan).
+
+## 2026-11-10: Godot 4.7.2 pinned, found or fetched by godot.mjs
+Decision: the game engine is Godot 4.7.2.stable, standard build. kit.config.json "godot" pins it; harness/bin/godot.mjs looks in env GODOT, then tools/godot/, then /Applications/Godot.app, checks --version, and only when nothing matches downloads the official portable zip into tools/godot/ (gitignored), checked against the release SHA512-SUMS.txt. Nothing is installed globally.
+Why: one exact engine version on every machine keeps imports, scenes and test output stable; this Mac already has 4.7.2 and its export templates, Windows machines get the same build without an install.
+By: builder (P0-024)
+
+## 2026-11-10: GDScript first, no C#, GDExtension only as an option for heavy code
+Decision: game code is GDScript. C# is not used. GDExtension (C++) stays an architecture option for measured hot spots (for example the bake loader or crowds), decided per system in ARCH_OPTIONS.md.
+Why: C# needs the .NET build of Godot and a dotnet SDK (neither is on this Mac) and blocks the web export Anmol may want later. GDScript files are text, parse headless and need no toolchain.
+By: builder (P0-024)
+
+## 2026-11-10: Project layout game/, tools/, harness/
+Decision: the Godot project lives in game/ (project.godot, scenes/, scripts/, geo/, tests/; game/.godot/ import cache gitignored, *.gd.uid files committed). Offline bake tooling and fixture generators live in tools/ (Node, may import the TS reference code such as src/geo/projection.ts). harness/ is unchanged. src/ (three.js) stays until P0-026 ports its scenarios and P0-027 retires it. lib.mjs treeHash now covers game/ and tools/ (tree rule 3).
+Why: keeps the engine project self-contained and openable in the editor, keeps the bake off the game runtime, and lets verify know a game/ change needs a fresh run.
+By: builder (P0-024)
+
+## 2026-11-10: Own headless GDScript test runner, not GUT
+Decision: game/tests/run_tests.gd is a 60 line runner (a SceneTree script; suites are game/tests/test_*.gd with test_* methods and a check.gd assert helper). It runs on the first frame (the root is only in the tree then), prints PASS or FAIL per test and exits 1 on any failure. npm test runs it after vitest through godot.mjs test, which also fails on any ERROR or SCRIPT ERROR line. Cross-language checks use JSON fixtures generated from the TS code (harness/data/fixtures/).
+Why: GUT is MIT and fine, but it is a large vendored addon with its own editor plugin and version coupling to Godot; the tests needed now are plain asserts. Revisit if tests need mocking, doubles or async helpers.
+By: builder (P0-024)

@@ -1,0 +1,54 @@
+## Headless GDScript test runner (no addon). Run by `node harness/bin/godot.mjs test`, which `npm test` calls:
+##   godot --headless --path game -s res://tests/run_tests.gd
+## Each suite is a script in SUITES that extends RefCounted, has `var t` (the assert helper, tests/check.gd) and
+## `var tree` (this SceneTree), and methods named test_*. Prints PASS or FAIL per test and exits 1 on any failure.
+extends SceneTree
+
+const Check := preload("res://tests/check.gd")
+const SUITES := [
+	"res://tests/test_projection.gd",
+	"res://tests/test_car.gd",
+	"res://tests/test_scene.gd",
+]
+
+
+var _ran := false
+
+
+# Tests run on the first frame, not in _initialize: the root viewport is only inside the tree once the loop starts.
+func _process(_delta: float) -> bool:
+	if not _ran:
+		_ran = true
+		_run_all()
+	return false
+
+
+func _run_all() -> void:
+	var passed := 0
+	var failed := 0
+	for path in SUITES:
+		var script: GDScript = load(path)
+		if script == null or not script.can_instantiate():
+			failed += 1
+			print("FAIL ", path, " does not load (see the SCRIPT ERROR lines above)")
+			continue
+		var suite: RefCounted = script.new()
+		for m in suite.get_method_list():
+			var name: String = m.name
+			if not name.begins_with("test_"):
+				continue
+			var t := Check.new()
+			suite.set("t", t)
+			suite.set("tree", self)
+			suite.call(name)
+			var label := "%s %s" % [path.get_file().get_basename(), name]
+			if t.failures.is_empty():
+				passed += 1
+				print("PASS ", label, " (", t.checks, " checks)")
+			else:
+				failed += 1
+				print("FAIL ", label)
+				for f in t.failures:
+					print("    ", f)
+	print("godot tests: %d passed, %d failed" % [passed, failed])
+	quit(1 if failed > 0 or passed == 0 else 0)

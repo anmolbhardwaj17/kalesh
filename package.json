@@ -7,8 +7,10 @@
     "dev": "vite",
     "build": "tsc --noEmit && vite build",
     "preview": "vite preview",
-    "test": "vitest run",
-    "typecheck": "tsc --noEmit"
+    "test": "vitest run && npm run test:godot",
+    "typecheck": "tsc --noEmit",
+    "test:godot": "node harness/bin/godot.mjs test",
+    "godot:check": "node harness/bin/godot.mjs check"
   },
   "dependencies": {
     "three": "^0.187.0"

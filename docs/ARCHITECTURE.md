@@ -19,6 +19,12 @@ Scaffold, as found 2026-11-10. `index.html` loads `src/main.ts`, which creates t
 | `src/car.ts` | Kinematic car model, `forward(heading)` axis rule (east +X, north -Z). |
 | `src/geo/projection.ts` | Lat/lon to world metres and back (`geoToWorld`, `worldToGeo`), WGS84 transverse Mercator around India Gate; east +X, north -Z. Provisional until the architecture sign-off. Tests in `projection.test.ts`. |
 | `src/debug/hooks.ts` | `window.__game` hook contract and the sim clock. |
+| `game/project.godot` | The Godot 4.7.2 project (P0-024): Forward+, 60 Hz physics, InputMap actions throttle, brake, steer_left, steer_right. |
+| `game/scenes/main.tscn` | Stand-in scene: `Main` with the world root `World` (environment, sun, ground, road strip, red north post at 0, 3, -50, the car) and `ChaseCamera`. |
+| `game/scripts/car_model.gd` | Port of `src/car.ts`: kinematic car, `forward(heading)` (0 is -Z, PI/2 is +X). Pure, tested. |
+| `game/scripts/car.gd`, `chase_camera.gd` | The car node (input to model on the physics tick, `rotation.y = -heading`) and the chase camera (10 m back, 4.5 m up, looks 6 m ahead). |
+| `game/geo/projection.gd` | Port of `src/geo/projection.ts`; returns floats (Vector3 is 32 bit). |
+| `game/tests/` | Headless test runner `run_tests.gd`, assert helper `check.gd`, suites `test_*.gd`. |
 
 ## Systems
 
@@ -32,6 +38,8 @@ Scaffold, as found 2026-11-10. `index.html` loads `src/main.ts`, which creates t
 
 | Path | What |
 |---|---|
+| `harness/bin/godot.mjs` | Finds the pinned Godot (kit.config.json "godot"), checks its version, downloads a portable copy into `tools/godot/` only when none matches. `--version`, `path`, `check`, `test`, `frame <png>` (Movie Maker), `run --`. Tests: `godot.test.mjs`. |
+| `tools/fixtures/gen_projection_points.mjs` | Writes `harness/data/fixtures/projection_points.json` from the TS projection, for the GDScript cross-check. |
 | `harness/bin/task.mjs` | The only writer of `harness/state/backlog.json`: status, next, start, done, fail, phases, gates, inbox, milestones, sign-off. |
 | `harness/bin/signoffs.mjs` | The three Phase 0 sign-offs (style, architecture, game design) as one table: state keys, commands, phase flags, status lines, gate reasons; read by `task.mjs` and the dashboard. Tests: `signoffs.test.mjs`. |
 | `harness/bin/verify.mjs` | Builds, serves the build, runs scenarios and milestone play scripts in Chromium, judges budgets, writes `harness/reports/latest.json` and shots. `--quick`, `--only`, `--milestone`, `--all`, `--repeat`. |

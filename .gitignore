@@ -21,3 +21,6 @@ harness/state/.dash_token
 .worktrees/
 # local Claude Code overrides only (the rest of .claude/ is versioned)
 .claude/settings.local.json
+# Godot: the portable engine downloaded by harness/bin/godot.mjs on machines without it, and the editor's import cache
+tools/godot/
+game/.godot/

@@ -19,5 +19,16 @@
   "gameSizeEstimate": {
     "tasks": 250,
     "_doc": "Rough size of the whole game in tasks. The dashboard's whole game percent uses at least this many until every phase is planned. Raise or lower it when the planner sizes the game."
+  },
+  "godot": {
+    "_doc": "The pinned Godot engine. harness/bin/godot.mjs finds the binary in candidate order (env GODOT, then tools/godot/, then the macOS app), checks --version starts with version, and only on a machine with no match downloads the official portable build into tools/godot/ (gitignored, SHA512 checked). project is the Godot project folder.",
+    "version": "4.7.2.stable",
+    "release": "4.7.2-stable",
+    "project": "game",
+    "candidates": [
+      "env GODOT",
+      "tools/godot/",
+      "/Applications/Godot.app/Contents/MacOS/Godot"
+    ]
   }
 }
