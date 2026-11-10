@@ -302,9 +302,10 @@ async function sendPlaytest(pid) {
 function chip(s) { return `<span class="chip ${esc(s)}">${esc(String(s).replace(/_/g, ' '))}</span>`; }
 function liveStrip() {
   const L = S.live || {}; const enc = (n) => n.split('/').map(encodeURIComponent).join('/'); const fig = (base, x) => `<figure data-src="${base}${enc(x.name)}?t=${x.t}" data-name="${esc(x.name)}"><img loading="lazy" src="${base}${enc(x.name)}?t=${x.t}" alt="${esc(x.name)}"><figcaption>${esc(x.name.replace(/^(look_proof|reports\/look)\//, '').replace(/\.(png|jpg)$/, ''))} <span class="muted">${ago(x.t)}</span></figcaption></figure>`;
-  const part = (title, base, list, note) => list && list.length ? `<h2>${title}</h2><div class="muted small" style="margin:-4px 0 8px">${note}</div><div class="shots">${list.map((x) => fig(base, x)).join('')}</div>` : '';
-  return part('Live now: style and look shots', '/lshots/', L.look, 'Style test views and comparison sheets, newest first. Set name, then view.')
-    + part('Live now: builder', '/shots/', L.builder, 'The shots the builder wrote most recently, newest first.')
+  const part = (title, base, list, note) => list && list.length ? `<h2>${title}</h2><div class="muted small" style="margin:-4px 0 8px">${note}</div><div class="shots">${list.map((x) => fig(x.base || base, x)).join('')}</div>` : '';
+  // One builder strip: test shots and look shots (style views, sheets) together, newest first.
+  const builder = [...(L.builder || []).map((x) => ({ ...x, base: '/shots/' })), ...(L.look || []).map((x) => ({ ...x, base: '/lshots/' }))].sort((a, b) => b.t - a.t).slice(0, 12);
+  return part('Live now: builder', '/shots/', builder, 'Every shot the builder took most recently (tests, style views, sheets), newest first.')
     + part('Live now: verifier', '/vshots/', L.verifier, 'The shots the verifier took on its snapshot copy, newest first.');
 }
 function shotUrl(name) { return `/shots/${encodeURIComponent(name)}?t=${(S.shots.find((x) => x.name === name) || {}).t || 0}`; }

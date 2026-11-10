@@ -207,3 +207,4 @@ One line per event, written by task.mjs (start, done, fail, phase changes, inbox
 - 2026-11-11 00:08 [P0-032] done: STORY_OUTLINE.md, 12.3k words: logline, villain layers, three arcs, 19 supporting characters, how the story is told (cutscene, drive talk, phone, inner, radio, ambient tags on all 67 missions), five acts (10/14/14/14/15), six choices, four endings, mystery map, 12 stranger chains, controversy table, 10 owner questions. Self-check: sections present, no dashes, no real parties or brands.
 - 2026-11-11 00:08 [P0-033] start (attempt 1): Godot test windows must not steal keyboard focus on macOS
 - 2026-11-11 00:14 mentor message mmwb1h5pr handled: All ten answers written into STORY_OUTLINE.md and decisions.md.
+- 2026-11-11 00:14 mentor message mmwb1hofa handled: Removed the extra strip. Live now: builder now shows every builder shot (tests, style views, sheets) in one list, newest first.
