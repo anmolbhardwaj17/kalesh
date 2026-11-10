@@ -12,7 +12,7 @@ import net from 'node:net';
 import path from 'node:path';
 import { spawn } from 'node:child_process';
 import { fileURLToPath } from 'node:url';
-import { resolveGodot, godotConfig, stripAnsi } from './godot.mjs';
+import { resolveGodot, godotConfig, stripAnsi, startFocusGuard } from './godot.mjs';
 
 const ROOT = process.env.HARNESS_ROOT
   ? path.resolve(process.env.HARNESS_ROOT)
@@ -187,6 +187,8 @@ export async function launchGame(opts = {}) {
   const port = opts.port || await freePort();
   const args = gameArgs({ ...opts, project, port });
   const proc = spawn(g.path, args, { cwd: ROOT, stdio: ['ignore', 'pipe', 'pipe'] });
+  // A windowed run must not take keyboard focus from the terminal (macOS): see startFocusGuard in godot.mjs.
+  if (!opts.headless && !opts.keepFocus) startFocusGuard(proc);
   const log = [];
   const onOut = lineSplitter((l) => { log.push(stripAnsi(l)); opts.onLog?.(stripAnsi(l)); });
   proc.stdout.on('data', onOut);

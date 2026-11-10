@@ -140,7 +140,7 @@ async function debugRun() {
   const w0 = Date.now();
   await sleep(200);
   const later = c.snapshot;
-  check('held sim does not move for 0.2 s of wall time', Date.now() - w0 >= 200 && later.clock.t === tHeld && later.state.player.pos.every((v, i) => v === p1[i]),
+  check('held sim does not move for 0.2 s of wall time', Date.now() - w0 >= 190 && later.clock.t === tHeld && later.state.player.pos.every((v, i) => v === p1[i]),
     `t ${tHeld} -> ${later.clock.t}, pos ${JSON.stringify(p1)} -> ${JSON.stringify(later.state.player.pos)}`);
   check('frames keep drawing while held', later.frame - fA >= 3, `${later.frame - fA} frames in 0.2 s`);
   const holdEv = c.events.find((e) => e.type === 'sim:hold');

@@ -19,7 +19,7 @@ import fs from 'node:fs';
 import os from 'node:os';
 import path from 'node:path';
 import crypto from 'node:crypto';
-import { spawnSync } from 'node:child_process';
+import { spawn, spawnSync, execFile } from 'node:child_process';
 import { fileURLToPath } from 'node:url';
 
 const ROOT = process.env.HARNESS_ROOT
@@ -156,11 +156,96 @@ export async function resolveGodot({ allowDownload = true } = {}) {
   return { ...hit, cfg };
 }
 
+// ---- Keyboard focus guard (macOS) -------------------------------------------------------------------------------------
+// A windowed Godot launch makes the engine the active app, so keys typed in the terminal are lost. Checked 2026-11-11:
+// the no_focus window flag (display/window/size/no_focus) and --position do not stop the app activating on macOS, so the
+// harness restores focus instead: it follows the frontmost app, and when the Godot process becomes frontmost it brings
+// the last other app back (`open -b <bundle id>`, then osascript as a fallback). Uses lsappinfo, which needs no
+// Accessibility or Automation permission. Applies to harness windowed runs only (godotclient launchGame, `frame`);
+// `npm run play` (playcopy.mjs) does not use it. Set HARNESS_FOCUS=keep to turn it off.
+
+const sh = (cmd, args) => new Promise((resolve) => {
+  execFile(cmd, args, { encoding: 'utf8', timeout: 5000 }, (err, stdout) => resolve(err ? '' : String(stdout)));
+});
+
+/** The frontmost app as { asn, pid, bundleId, type } (type "Foreground" for a normal app, "UIElement" for helpers like SystemUIServer), or null (not macOS, or lsappinfo failed). */
+export async function frontApp() {
+  if (process.platform !== 'darwin') return null;
+  const asn = (await sh('lsappinfo', ['front'])).trim();
+  if (!asn.startsWith('ASN:')) return null;
+  if (appCache.has(asn)) return appCache.get(asn);
+  const info = await sh('lsappinfo', ['info', '-only', 'bundleid', '-only', 'pid', '-only', 'applicationtype', asn]);
+  const pid = Number((info.match(/pid\s*=\s*(\d+)/) || [])[1]);
+  const bundleId = (info.match(/bundleID="([^"]+)"/) || [])[1] || null;
+  const type = (info.match(/type="([^"]+)"/) || [])[1] || null;
+  const app = { asn, pid: Number.isFinite(pid) ? pid : null, bundleId, type };
+  if (app.pid) appCache.set(asn, app); // an ASN keeps its pid and bundle id; one lsappinfo call per poll after the first
+  return app;
+}
+const appCache = new Map();
+
+async function activateApp(app) {
+  if (app.bundleId) { await sh('open', ['-b', app.bundleId]); return; }
+  if (app.pid) await sh('osascript', ['-e', `tell application "System Events" to set frontmost of first process whose unix id is ${app.pid} to true`]);
+}
+
+/**
+ * Starts a guard for a windowed Godot child process. While the process lives, whenever it is the frontmost app the guard
+ * brings the last other frontmost app back. Returns { stop(), restored } (stop() is also called when the process exits).
+ * Does nothing (and returns a no-op) off macOS, when HARNESS_FOCUS=keep, or for a headless run.
+ */
+export function startFocusGuard(proc, { headless = false, intervalMs = 25 } = {}) {
+  let stopped = false;
+  let timer = null;
+  const handle = { restored: 0, stop() { stopped = true; clearInterval(timer); } };
+  if (process.platform !== 'darwin' || process.env.HARNESS_FOCUS === 'keep' || headless || !proc?.pid) return handle;
+  let last = null;
+  let busy = false;
+  const tick = async () => {
+    if (busy || stopped) return;
+    busy = true;
+    try {
+      const f = await frontApp();
+      if (!f || stopped) return;
+      if (f.pid === proc.pid) {
+        if (last && last.pid !== proc.pid) { await activateApp(last); handle.restored++; }
+      } else if (f.type === 'Foreground') {
+        last = f; // helpers (SystemUIServer and the like) flash to the front and are never restored
+      }
+    } finally { busy = false; }
+  };
+  // Remember the app that is frontmost right now, before Godot's window opens.
+  frontApp().then((f) => { if (f && f.type === 'Foreground' && f.pid !== proc.pid && !stopped && !last) last = f; });
+  timer = setInterval(tick, intervalMs);
+  timer.unref?.();
+  proc.once?.('exit', () => handle.stop());
+  return handle;
+}
+
 function runGodot(bin, args, { timeoutMs = 300000, echo = true } = {}) {
   const r = spawnSync(bin, args, { cwd: ROOT, encoding: 'utf8', timeout: timeoutMs, maxBuffer: 64 * 1024 * 1024 });
   const out = stripAnsi(`${r.stdout || ''}${r.stderr || ''}`);
   if (echo && out.trim()) process.stdout.write(out.endsWith('\n') ? out : out + '\n');
   return { status: r.status ?? (r.signal ? 1 : 0), out, timedOut: r.error?.code === 'ETIMEDOUT' };
+}
+
+/** Like runGodot but async, with the focus guard: for windowed runs (a window must not take keyboard focus from the terminal). */
+function runGodotWindowed(bin, args, { timeoutMs = 300000, echo = true } = {}) {
+  return new Promise((resolve) => {
+    const proc = spawn(bin, args, { cwd: ROOT, stdio: ['ignore', 'pipe', 'pipe'] });
+    const guard = startFocusGuard(proc);
+    let out = '';
+    let timedOut = false;
+    const timer = setTimeout(() => { timedOut = true; proc.kill(); }, timeoutMs);
+    proc.stdout.on('data', (d) => { out += d; });
+    proc.stderr.on('data', (d) => { out += d; });
+    proc.on('exit', (code, signal) => {
+      clearTimeout(timer); guard.stop();
+      out = stripAnsi(out);
+      if (echo && out.trim()) process.stdout.write(out.endsWith('\n') ? out : out + '\n');
+      resolve({ status: code ?? (signal ? 1 : 0), out, timedOut, focusRestores: guard.restored });
+    });
+  });
 }
 
 function judge(label, r) {
@@ -217,7 +302,7 @@ async function main(argv) {
     try {
       const imp = runGodot(g.path, ['--headless', '--path', project, '--import'], { echo: false });
       if (judge('import', imp)) return 1;
-      const r = runGodot(g.path, ['--path', project, '--resolution', res, '--write-movie', path.join(tmp, 'f.png'), '--fixed-fps', '60', '--quit-after', String(frames)]);
+      const r = await runGodotWindowed(g.path, ['--path', project, '--resolution', res, '--write-movie', path.join(tmp, 'f.png'), '--fixed-fps', '60', '--quit-after', String(frames)]);
       const pngs = fs.readdirSync(tmp).filter((f) => f.endsWith('.png')).sort();
       if (!pngs.length) { console.log('godot frame: FAIL (Movie Maker wrote no PNG)'); return 1; }
       fs.mkdirSync(path.dirname(path.resolve(out)), { recursive: true });
