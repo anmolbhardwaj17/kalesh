@@ -149,3 +149,5 @@ One line per event, written by task.mjs (start, done, fail, phase changes, inbox
 - 2026-11-10 21:35 [P0-027] done: lookproof, perf and playcopy run on Godot; npm run play launches the latest build; src/, index.html, vite and three removed, projection moved to tools/geo/. Self-checked: 199 vitest + 21 godot tests, quick 6/6.
 - 2026-11-10 21:36 mentor message mmwavsvp8 handled: Done: remote added and pushed, strict commit rule in the hook, game renamed Kalesh on the dashboard and in the Godot project.
 - 2026-11-10 21:36 mentor message mmwavsvqb handled: Done: remote added and pushed, strict commit rule in the hook, game renamed Kalesh on the dashboard and in the Godot project.
+- 2026-11-10 21:36 [P0-008] start (attempt 1): Game design record: GAME.md, pillars and mission rules
+- 2026-11-10 21:36 mentor message mmwavsvo5 handled: Name Kalesh done. GB Road: confirmed as a story place, brothels not confirmed as playable spaces; recommendation and question in the terminal.
