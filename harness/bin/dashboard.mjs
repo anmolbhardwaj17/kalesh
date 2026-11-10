@@ -40,6 +40,19 @@ function liveShots(dir, n = 10) {
     .sort((a, b) => b.t - a.t).slice(0, n);
 }
 
+// Look shots (owner 2026-11-10): the newest lookproof views (harness/look_proof/<set>/*.png, approved excluded)
+// and sheets (harness/reports/look/*.jpg), so style tests show up live. Names are relative to LOOK_ROOT.
+const LOOK_ROOT = R('harness');
+function liveLook(n = 12) {
+  const out = [];
+  const lp = path.join(LOOK_ROOT, 'look_proof');
+  try { for (const set of fs.readdirSync(lp)) { if (set === 'approved') continue; const d = path.join(lp, set); if (!fs.statSync(d).isDirectory()) continue;
+    for (const v of fs.readdirSync(d)) if (v.endsWith('.png')) out.push({ name: 'look_proof/' + set + '/' + v, t: fs.statSync(path.join(d, v)).mtimeMs }); } } catch { /* none yet */ }
+  const sheets = path.join(LOOK_ROOT, 'reports', 'look');
+  try { for (const v of fs.readdirSync(sheets)) if (/\.(jpg|png)$/.test(v)) out.push({ name: 'reports/look/' + v, t: fs.statSync(path.join(sheets, v)).mtimeMs }); } catch { /* none yet */ }
+  return out.sort((a, b) => b.t - a.t).slice(0, n);
+}
+
 // Frame time panel (P2-118): the newest run that measured perf, from latest.json, the report history or a sweep summary.
 // Runs with frame time in ms (cpuMs) win over older fps only runs. Cached on the newest file's mtime, so polling stays cheap.
 const SWEEP_DIR = path.join(path.dirname(PATHS.reportLatest), 'sweep');
@@ -167,7 +180,7 @@ function buildState() {
     report: report && { mode: report.mode, ok: report.ok, finishedAt: report.finishedAt, durationMs: report.durationMs, gl: report.gl, failReason: report.failReason, consoleErrors: (report.consoleErrors || []).slice(0, 5), checks: Object.fromEntries(Object.entries(report.checks || {}).map(([k, v]) => [k, { ran: v.ran, ok: v.ok }])), scenarios: Object.fromEntries(Object.entries(report.scenarios || {}).map(([k, v]) => [k, { ok: v.ok, error: v.errors?.[0] || null, perf: v.perf || null }])), missionsRun: Object.keys(report.milestones || {}).length, missionsOk: Object.values(report.milestones || {}).filter((m) => m.ok).length },
     perf: lastPerf(),
     shots: shotsList(),
-    live: { builder: liveShots(PATHS.shots), verifier: liveShots(VERIFY_SHOTS) },
+    live: { builder: liveShots(PATHS.shots), verifier: liveShots(VERIFY_SHOTS), look: liveLook() },
     requests: { images: req(PATHS.reqAssets, 'requests'), sfx: req(PATHS.reqSfx, 'requests'), music: req(PATHS.reqMusic, 'requests'), voices: voice.voices || [], lines: (voice.lines || []).map((l) => ({ ...l, status: statusOf(l.id, l, man), file: man.audio?.[l.id]?.path || null })) },
     inbox,
     notices: openNotices(readNotices()),
@@ -249,6 +262,7 @@ const server = http.createServer(async (req, res) => {
     if (req.method === 'GET' && p === '/logo') { const f = ['logo.png', 'logo.jpg', 'logo.webp'].find((n) => fs.existsSync(H('dashboard', n))); return (f && serveFile(res, [H('dashboard')], f)) || send(res, 404, 'no logo', 'text/plain'); }
     if (req.method === 'GET' && p === '/api/ping') return send(res, 200, { ok: true });
     if (req.method === 'GET' && p === '/api/state') return send(res, 200, buildState());
+    if (req.method === 'GET' && p.startsWith('/lshots/')) return serveFile(res, [LOOK_ROOT], p.slice(8)) || send(res, 404, 'no shot', 'text/plain');
     if (req.method === 'GET' && p.startsWith('/vshots/')) return serveFile(res, [VERIFY_SHOTS], p.slice(8)) || send(res, 404, 'no shot', 'text/plain');
     if (req.method === 'GET' && p.startsWith('/shots/')) return serveFile(res, [PATHS.shots], p.slice(7)) || send(res, 404, 'no shot', 'text/plain');
     if (req.method === 'GET' && p.startsWith('/assets/')) return serveFile(res, [PATHS.publicAssets], p.slice(8)) || send(res, 404, 'no asset', 'text/plain');

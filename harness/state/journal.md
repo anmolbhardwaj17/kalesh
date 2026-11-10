@@ -191,3 +191,4 @@ One line per event, written by task.mjs (start, done, fail, phase changes, inbox
 - 2026-11-10 23:20 mentor message mmwazjuxz handled: Locked in: STORY_SEED.md is the approved story base. Act 1 and the slice get rebuilt from it next, then the full outline.
 - 2026-11-10 23:25 [P0-033] added: Godot test windows must not steal keyboard focus on macOS
 - 2026-11-10 23:25 mentor message mmwazqn6b handled: Fixable, worth doing. Queued a tooling task after the style test: no-focus window flag, then unfocused or off-screen launch, then focus restore as a fallback.
+- 2026-11-10 23:38 mentor message mmwb07pxa handled: It was not: Live now only showed verify shots. Added 'Live now: style and look shots' with the newest style test views and sheets. Refresh the dashboard.
