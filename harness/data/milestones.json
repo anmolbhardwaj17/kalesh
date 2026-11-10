@@ -1,5 +1,5 @@
 {
-  "_doc": "Milestones: the playable end-to-end units of this game (kit.config.json milestoneWord names them: level, mission, stage, quest, run). Each phase in backlog.json lists its milestone ids. A milestone is playable by the harness once harness/verify/milestones/<ID>.js plays it start to finish through window.__game.debug (no position writes, real inputs only). required: false marks an optional one, counted once it has a play script. budgetMs is the play script's time budget. The ADOPT phase lists what the game already has; the planner adds the rest. M01 to M04 are the first playable slice of the signed game design (GAME.md 'Milestones'); story details (names, lines) come from the content writer and may change, the beats and checks stay.",
+  "_doc": "Milestones: the playable end-to-end units of this game (kit.config.json milestoneWord names them: level, mission, stage, quest, run). Each phase in backlog.json lists its milestones ids. A milestone is playable by the harness once harness/verify/milestones/<ID>.js plays it start to finish through window.__game.debug (no position writes, real inputs only). required: false marks an optional one, counted once it has a play script. budgetMs is the play script's time budget. 'act' and 'order' give the story position (STORY_SEED.md, GAME.md 'Structure' and 'Act 1: Sawari'); 'slice': true marks the first playable slice, M01 to M04 (four SOLO missions, no merge, GAME.md 'First playable slice'). M05 to M10 are the rest of Act 1, not required until their phase is planned. Story details (names, lines) come from the content writer and may change, the beats and checks stay.",
   "milestones": [
     {
       "id": "FD0",
@@ -13,48 +13,150 @@
       "title": "Train at 6:10 (Driver)",
       "required": true,
       "budgetMs": 480000,
+      "act": 1,
+      "order": 1,
       "lead": "driver",
+      "slice": true,
       "districts": [
         "D09",
         "D07 (New Delhi station forecourt, Ajmeri Gate side: pilot gap, see GAME.md)",
         "D01"
       ],
-      "summary": "First mission of the game; the auto driver leads. 1. Start at an auto stand near Chandni Chowk in a hot hazy afternoon; goal line 'Pick up the family' and a marker within 5 s. 2. Drive to the hail and stop beside the family; they board with luggage (passenger lines). 3. Goal 'New Delhi station before 6:10' with a timer; the main road is jammed, a gali shortcut is marked as the second route. 4. Drive with gap weaving and the horn through traffic to the station drop-off; no on-foot part. 5. Drop off: the family leave; a second passenger (the courier) hails, rides a short way toward CP and gets out in a hurry, leaving a bag in the auto (a short story beat). 6. Completion screen: fare money, time against the best, the bag as a story hook. Fails: timer runs out ('The train left'), the auto is wrecked, the family is thrown out by a crash; each shows its reason and retries from the last checkpoint. Must show: the gali shortcut and the main road both drivable, near misses, horn reaction."
+      "summary": "First mission of the game; the auto driver leads. 1. Start at an auto stand near Chandni Chowk in a hot hazy afternoon; goal line 'Pick up the family' and a marker within 5 s. 2. Drive to the hail and stop beside the family; they board with luggage (passenger lines). 3. Goal 'New Delhi station before 6:10' with a timer; the main road is jammed, a gali shortcut is marked as the second route. 4. Drive with gap weaving and the horn through traffic to the station drop-off; no on-foot part. 5. Drop off: the family leave; a second passenger, a nervous man with no luggage, hails, rides toward CP and gets out in a hurry, leaving a bag in the auto: cash and a diary (a short story beat, STORY_SEED.md hook). 6. Completion screen: fare money, time against the best, the bag and the diary as the hook. Fails: timer runs out ('The train left'), the auto is wrecked, the family is thrown out by a crash; each shows its reason and retries from the last checkpoint. Must show: the gali shortcut and the main road both drivable, near misses, horn reaction."
     },
     {
       "id": "M02",
+      "title": "Who wants the bag (Driver)",
+      "required": true,
+      "budgetMs": 480000,
+      "act": 1,
+      "order": 2,
+      "lead": "driver",
+      "slice": true,
+      "districts": [
+        "D01",
+        "D04"
+      ],
+      "summary": "The driver's second mission, same night as M01. Cameo: the cop. 1. Start in the auto at CP with the bag under the seat; goal line 'Get away from the men following you' within 5 s. A dark car of two men chases (they want the bag; the first passenger is already dead, told by the radio or a crowd). 2. Chase through the CP circles and out toward Barakhamba Road: gap weaving and the horn, two routes (the main road, or the service lane behind the blocks). 3. A police jeep joins from a side road; SI Meera Rana is at the wheel for a few seconds (cameo, she is introduced here, not playable). She notes the auto number and gives chase half-heartedly; the driver loses both in the galis near Connaught Place or Janpath. 4. Hide-out: stop in a quiet lane, look in the bag (the diary, torn pages, three missing), goal 'Hide the bag'. 5. Completion screen: fare money, time against the best, the dead passenger and the cop jeep as the hook. Fails: caught by the dark car for 8 s ('They got you'), the auto is wrecked, the police pin the auto ('The police stopped you'); each with its reason and a checkpoint retry. Must show: the two routes, near misses, the jeep cameo framed so Meera is recognisable later."
+    },
+    {
+      "id": "M03",
       "title": "Barricade at ITO (Cop)",
       "required": true,
       "budgetMs": 480000,
+      "act": 1,
+      "order": 3,
       "lead": "cop",
+      "slice": true,
       "districts": [
         "D04",
         "D01"
       ],
-      "summary": "The cop's first mission. 1. Start at the police station near ITO; a radio call: a stolen car fleeing from CP; goal line 'Stop the stolen car' and a marker within 5 s. 2. Get in the patrol car and catch up with the suspect on the road from CP toward ITO. 3. Pursuit over the ITO flyovers: the suspect weaves through traffic; the goal prompts 'Call a barricade' and the player calls one at the next junction ahead (B). 4. The suspect crashes at the barricade and runs on foot. 5. Foot chase a short way; melee hits stagger the suspect, a takedown downs him, the player holds the arrest. 6. A clue in the car points at the racket (story hook). Completion screen: case reward, pursuit time against the best. Fails: the suspect gets away (distance over 300 m for 10 s: 'He got away'), a civilian is killed, the patrol car is wrecked; each with its reason and a checkpoint retry. Must show: the flyover split, the barricade at a real junction, the takedown."
-    },
-    {
-      "id": "M03",
-      "title": "Chandni Chowk pickup (Fixer)",
-      "required": true,
-      "budgetMs": 480000,
-      "lead": "fixer",
-      "districts": [
-        "D09"
-      ],
-      "summary": "The fixer's first mission. 1. Start on foot in a Chandni Chowk lane; goal line 'Collect the package' and a marker within 5 s. 2. Walk through the bazaar crowd (30 to 60 people) to the contact's shop; the package is gone: the courier lost it (ties to M01). 3. A rival crew jumps the fixer in the lane: a fistfight with 3 melee thugs (combo, block, dodge, one takedown). 4. Police whistles: wanted level 1 starts. 5. Get on the scooter and escape through the galis or the main road (two routes) and lose the wanted level (leave the search circle, stay unseen 15 s). 6. Completion screen: payment, escape time against the best, the hunt for the bag as the hook. Fails: the fixer is downed ('You were beaten'), busted ('The police got you'); each with its reason and a checkpoint retry. Must show: dense crowd that parts and flees, the fight, wanted 1 and its escape."
+      "summary": "The cop's first mission. 1. Start at the police station near ITO; this is Meera's first mission and the dead passenger from M02 is her case; a radio call: the dark getaway car (stolen) is fleeing from CP; goal line 'Stop the stolen car' and a marker within 5 s. 2. Get in the patrol car and catch up with the suspect on the road from CP toward ITO. 3. Pursuit over the ITO flyovers: the suspect weaves through traffic; the goal prompts 'Call a barricade' and the player calls one at the next junction ahead (B). 4. The suspect crashes at the barricade and runs on foot. 5. Foot chase a short way; melee hits stagger the suspect, a takedown downs him, the player holds the arrest. 6. A clue in the car points at the bag's auto (she has its number from the jeep) and at a fixer's name in Chandni Chowk (story hook). Meera meets ACP Khanna on the radio, a warm voice (he is later in the diary). Completion screen: case reward, pursuit time against the best. Fails: the suspect gets away (distance over 300 m for 10 s: 'He got away'), a civilian is killed, the patrol car is wrecked; each with its reason and a checkpoint retry. Must show: the flyover split, the barricade at a real junction, the takedown."
     },
     {
       "id": "M04",
-      "title": "Red Fort rush (merged)",
+      "title": "Chandni Chowk pickup (Fixer)",
       "required": true,
+      "budgetMs": 480000,
+      "act": 1,
+      "order": 6,
+      "lead": "fixer",
+      "slice": true,
+      "districts": [
+        "D09"
+      ],
+      "summary": "The fixer's first playable mission in the slice; Danny is introduced here (he is named in M03's clue); hired by a client to get the bag back. 1. Start on foot in a Chandni Chowk lane; goal line 'Collect the package' and a marker within 5 s. 2. Walk through the bazaar crowd (30 to 60 people) to the contact's shop; the courier who was to hand over the bag is dead and the bag is missing (ties to M01 and M02); the shopkeeper gives him one lead, an auto number. 3. A rival crew jumps the fixer in the lane: a fistfight with 3 melee thugs (combo, block, dodge, one takedown). 4. Police whistles: wanted level 1 starts. 5. Get on the scooter and escape through the galis or the main road (two routes) and lose the wanted level (leave the search circle, stay unseen 15 s). 6. Completion screen: payment, escape time against the best, the auto number and the hunt for the bag as the hook. Fails: the fixer is downed ('You were beaten'), busted ('The police got you'); each with its reason and a checkpoint retry. Must show: dense crowd that parts and flees, the fight, wanted 1 and its escape."
+    },
+    {
+      "id": "M05",
+      "title": "Lead to the Chowk (Cop)",
+      "required": false,
+      "budgetMs": 480000,
+      "act": 1,
+      "order": 4,
+      "lead": "cop",
+      "slice": false,
+      "districts": [
+        "D09",
+        "D01"
+      ],
+      "summary": "Meera follows the M03 clue into Chandni Chowk. 1. Patrol bike from ITO to the bazaar edge, then on foot in the crowd. 2. Find the witness at a shop (talk, no combat). 3. A man tails her; a tail chase through the galis, then a short foot chase and takedown. 4. She hears the name Danny from a frightened shopkeeper (the fixer is now on her map). Completion: case progress, the name, a warning from Khanna. Fails: the witness is lost, the tail escapes, a civilian is hurt."
+    },
+    {
+      "id": "M06",
+      "title": "First favour (Fixer, past story)",
+      "required": false,
+      "budgetMs": 480000,
+      "act": 1,
+      "order": 5,
+      "lead": "fixer",
+      "slice": false,
+      "districts": [
+        "D09"
+      ],
+      "summary": "A short playable flashback of Danny years ago, shown with a graded look (sepia and warm grain). He is young and takes his first job for a boss: carry a sealed package across the Chowk and never ask what is inside. Reuses built places (lanes, the Old Delhi roofs). Teaches the fixer verbs in a safe setting (crowd slipping, a tail, one fight). Plants Danny's rule 'never ask what is inside'. No reveal of the fire; that is Act 4. About 6 to 8 minutes. Fails: dropped package, caught by the boss's rival."
+    },
+    {
+      "id": "M07",
+      "title": "Wrong auto (Fixer, crossing)",
+      "required": false,
+      "budgetMs": 480000,
+      "act": 1,
+      "order": 7,
+      "lead": "fixer",
+      "slice": false,
+      "districts": [
+        "D07 (New Delhi station forecourt)",
+        "D01"
+      ],
+      "summary": "The crossing and first meeting of the three. 1. Danny, with the auto number from M04, searches the station stands and finds Bittu. 2. A tense talk by the auto; Bittu denies it. 3. Meera arrives in a patrol car (she traced the number too). A stand-off in the forecourt: Danny talks his way out, Bittu is questioned, none of them says what they know. 4. Danny slips away on foot or scooter through the station crowd; the cop and the driver both see his face. Completion: the three now know of each other. Fails: Danny is caught, a bystander is hurt, Bittu bolts too early."
+    },
+    {
+      "id": "M08",
+      "title": "Nowhere to hide (Driver)",
+      "required": false,
+      "budgetMs": 480000,
+      "act": 1,
+      "order": 8,
+      "lead": "driver",
+      "slice": false,
+      "districts": [
+        "D09",
+        "D07 (station forecourt)"
+      ],
+      "summary": "The driver's fallout. Bittu takes the bag to an elder at the auto stand for advice; the crew follows. The elder is shoved around and Bittu drives him out through the galis and back streets (two routes). A first taste of the story: he cannot stay out of it, and a torn page is found. Completion: the first missing page clue and the first step in his arc. Fails: the elder is hurt in a crash, the auto is wrecked, the crew boxes him in."
+    },
+    {
+      "id": "M09",
+      "title": "Khanna says drop it (Cop)",
+      "required": false,
+      "budgetMs": 480000,
+      "act": 1,
+      "order": 9,
+      "lead": "cop",
+      "slice": false,
+      "districts": [
+        "D04",
+        "D01",
+        "D09"
+      ],
+      "summary": "The cop's fallout. ACP Khanna, warm and fatherly, warns Meera off the case at a chai stall near ITO. She does not drop it. 1. A night tail of the crew's car from ITO toward Old Delhi in a patrol car, lights off. 2. A short foot approach. 3. She overhears the crew's meeting spot: Red Fort parking. Completion: the setup for the finale and a first doubt that she keeps to herself. Fails: spotted too early, the tail is lost, a civilian is hurt."
+    },
+    {
+      "id": "M10",
+      "title": "Red Fort rush (merged finale)",
+      "required": false,
       "budgetMs": 600000,
+      "act": 1,
+      "order": 10,
       "lead": "all",
+      "slice": false,
       "districts": [
         "D09",
         "D04"
       ],
-      "summary": "First merged mission, the peak of the slice. 1. Start as the driver near Red Fort with the bag in the auto; goal line 'Lose the men following you' within 5 s; a car of the rival crew chases. 2. Driver getaway through Netaji Subhas Marg traffic toward the Red Fort parking. 3. Switch at the beat (prompt, T) to the fixer, who arrives at the parking lot: a pistol fight against 3 or 4 thugs with soft lock-on (pistol 12 rounds, cover is not in the slice). 4. Switch at the beat to the cop, who was tailing: the crew's leader flees by car; a chase finale ending in a barricade or a ram and an arrest. 5. Completion screen: rewards for all three, the story turn (the three now know of each other), the time against the best. Fails: any lead downed or busted, the leader escapes, the bag is lost; each with its reason and a checkpoint retry at the current lead's beat. Must show: two switches under 2 s each, a pistol fight, Red Fort framed in a first-sight shot."
+      "summary": "The Act 1 finale and the first merged mission: the first use of switching. 1. Start as Bittu near Red Fort with the bag; a crew car chases. 2. Driver getaway through Netaji Subhas Marg traffic toward the Red Fort parking. 3. Switch at the beat (T) to Danny, who arrives in the parking lot: a pistol fight against 3 or 4 thugs with soft lock-on. 4. Switch at the beat to Meera, who tailed the crew: the leader flees by car; a chase ending in a barricade or a ram and an arrest. 5. The three meet and stand off at Red Fort; a call comes: 'Gurugram mein milte hain.' Completion: rewards for all three, the story turn. Fails: any lead downed or busted, the leader escapes, the bag is lost; each with its reason and a checkpoint retry. Must show: two switches under 2 s each, a pistol fight, Red Fort in a first-sight shot."
     }
   ]
 }

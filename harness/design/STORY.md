@@ -1,8 +1,12 @@
-# Dilli Darshan: Story and Cast
+# Kalesh: Story and Cast
 
 <!-- Template. Skip what the game does not need (a puzzle game may have no cast); keep the headings that apply. The
 content-writer reads this before every dialogue task; the art-director repeats each character's fixed features in every
 portrait prompt so the cast stays consistent. -->
+
+## Approved base (read first)
+
+The approved story is `harness/design/STORY_SEED.md` (Anmol, 2026-11-10: "That's a banger story. Let's go ahead with it."). It is the base for every outline, mission and line: the hook, the people, the five acts (Sawari, Paisa, Gaddari, Jalaawatan, Kalesh), the choices, the mysteries and the controversy from systems. No release-driven compromises on the story. The structure (each life leads its own run, the next character introduced inside the current mission, merged missions at each act's peak) and the Act 1 mission list (M01 to M10) are in GAME.md "Structure: chapters with a lead" and "Act 1: Sawari", and in `harness/data/milestones.json`. The slice is M01 to M04, four solo missions. Respect rule in GAME.md applies: invented people, parties, police and gangs; no community, caste or religion as villain.
 
 ## Premise
 

@@ -195,3 +195,9 @@ One line per event, written by task.mjs (start, done, fail, phase changes, inbox
 - 2026-11-10 23:46 mentor message mmwb0havq handled: Style sets are kept in git (harness/look_proof); live test shots are overwritten. The P0-011 sheet and a golden bazaar shot go into progress/ on pass, and each visible step adds one or two.
 - 2026-11-10 23:47 mentor message mmwb0iweq handled: It polls every 5 s, but browsers slow background tabs to about once a minute. Added an instant refresh when the page is seen or focused. Reload once to get it.
 - 2026-11-10 23:50 [P0-011] done: Styles stylised and stylised_grime in afternoon and golden light via game/render style runner; grime by area wear (bazaar only); 4 sets x 9 views plus perf, sheet style_options.jpg; default look pixel identical; GPU p95 worst 6.9 to 8.3 ms Vulkan. Verifier PASS (one load flake on rerun). Polish: sheet labels truncated and show Metal CPU ms; grime subtle at eye height; golden bazaar in shade; streaky roof grime.
+- 2026-11-10 23:50 [P0-031] start (attempt 1): Restructure Act 1 story flow and the first slice (owner: GTA V style, no early merge)
+- 2026-11-10 23:54 mentor message mmwb0rkpg handled: Recorded for style batch B.
+- 2026-11-10 23:54 mentor message mmwb0rkro handled: Recorded for style batch B.
+- 2026-11-10 23:54 mentor message mmwb0rku0 handled: Recorded for style batch B.
+- 2026-11-10 23:55 added 1 tasks: P0-034
+- 2026-11-10 23:55 [P0-013] deps now: P0-012, P0-034

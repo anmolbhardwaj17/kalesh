@@ -39,35 +39,49 @@ Show real conditions honestly, never as spectacle or a joke. Anmol: "i want to s
 - **Combat grows in steps.** The first playable slice uses the SLICE items of the capability list only. RELEASE items come after the slice is fun. LATER items are not built before the first release unless Anmol asks. Nothing on the capability list is dropped silently: a change of tag needs a decisions.md entry.
 - **Map grows in steps.** Pilot districts first, then the first release map, then later unlocks (see "Map and districts"). No district is built before the pilot plays well.
 - **Driving stays central.** Every mission has at least one drive that matters. On-foot parts stay at about 40% of a mission's time or less.
-- **Content size (estimate, set at phase planning):** first release about 25 to 30 story missions over 3 acts, plus side activities per character. The first playable slice is 4 missions.
+- **Content size (owner, 2026-11-10: "a big game", story base approved):** about 65 to 70 story missions over 5 acts (Act 1 about 10), plus side content: per-character city life, 30 to 40 stranger missions in chains of 2 to 4, activities and discovery collectibles. The first playable slice is 4 solo missions from Act 1. Release staging (which acts ship first) is only a build-order question; it never cuts or bends the story. Each act is planned in its own phase, so scope is checked per phase, not up front.
 - **No feature without a pillar.** If a task cannot say which pillar it serves, it is not planned.
 - **Art and audio never block.** Procedural or stand-in placeholders until Anmol's ChatGPT images arrive through dashboard cards (owner).
 
 ## Structure: chapters with a lead
 
-Signed: chapters (owner, 2026-11-10). The auto driver leads first (owner).
-- The story runs in chapters. Each chapter has one lead. Free roam between that chapter's missions is as the lead.
-- Merged missions sit at the peak of each act. They switch the player between the three at set story beats (a relay, a crossing or a converge).
+Signed: chapters with a lead (owner, 2026-11-10). The auto driver leads first (owner). The story base is `harness/design/STORY_SEED.md`, approved by Anmol ("That's a banger story. Let's go ahead with it."). The play model is GTA V style (owner): no early merge.
+- **Each life gets its own run of missions.** One lead per chapter. Free roam between a chapter's missions is as the lead.
+- **The next character is introduced inside the current one's mission** (a cameo, a crossing, a rumour, a dropped object), so the player meets them before playing them.
+- **The first meeting of the three is a tense crossing** inside a solo mission, not a merged one.
+- **Merged missions sit at the peak of each act.** They switch the player between the three at set story beats (a relay, a crossing or a converge). Switching is built for the Act 1 finale, not for the slice. After the finale the lives separate again.
 - Merge patterns: **crossing** (one character's mission leaves a mark in another's: a dropped bag, a wrecked car, a rumour), **relay** (a hand-off mid-mission), **converge** (all three at one set piece).
-- Free switching (any time, like GTA V) is a LATER unlock after Act 1 if playtests want it. Built for from day 1 by saving all three states.
-- Act plan (estimate, the content writer and phase planning refine it): Act 1 in the pilot districts (driver, cop, fixer chapters and the Red Fort merged mission); Act 2 opens the east bank and the rest of Old Delhi; Act 3 opens the south, the airport and Gurugram. Later unlocks add Noida, Shahdara and Akshardham.
+- Free switching (any time, like GTA V) is a LATER unlock after Act 1 if playtests want it. All three states are saved from day 1.
+- Size: about 65 to 70 story missions. Acts that follow the story, not the map build order (the map build order follows the acts):
+
+| Act | Name | Places | Story, in one line | Missions (estimate) |
+|---|---|---|---|---|
+| 1 | Sawari | CP, ITO, New Delhi station, Chandni Chowk, Red Fort (the pilot) | The bag, the dead passenger, Meera on Bittu's trail, Danny hired; three-way chase to Red Fort. Ends on a call: "Gurugram mein milte hain." | about 10 |
+| 2 | Paisa | Gurugram towers, Cyber City, Laxmi Nagar, Kashmere Gate ISBT, Delhi Gymkhana | Follow the money; Bittu's family threatened; a forced alliance; a tower heist; Sethi at a charity gala | about 13 |
+| 3 | Gaddari | Vasant Kunj, Khan Market, Nizamuddin, the airport | Khanna's betrayal; the fake encounter order; Bittu's brother arrested; the runway chase | about 13 |
+| 4 | Jalaawatan | Yamuna floodplains, Shahdara, Noida, Malcha Mahal | Exile in a basti marked for demolition; Danny's playable flashback of the fire night; the woman at Malcha Mahal | about 13 |
+| 5 | Kalesh | Core Delhi: Lutyens, Kartavya Path, India Gate, CP, Chandni Chowk, Red Fort | Election night; the finale ends at dawn on the Red Fort ramparts at 6:10; 3 endings plus a hidden fourth | about 13 |
+
+- **Side content** (not counted in the story total): endless per-character city life (fares, patrol calls, contact jobs); 30 to 40 stranger missions in chains of 2 to 4; activities (auto race, Metro race, street fights, kite fights, gali cricket); discovery collectibles linked to the mysteries (the three missing pages, 6:10 marks, the radio host, the first passenger's name in every newspaper).
+- Each act ends on a merged peak mission; acts 2 to 5 have their own mission lists written by the content writer (STORY.md) before their phase is planned.
+- The Act 1 list is in "Milestones" below and in `harness/data/milestones.json`.
 
 ## The three characters
 
-Working roles only. Names, ages, backstories and voices come from the content writer (STORY.md). First look ideas (proposal only, not decided): `harness/design/reference/mood_three_characters.jpg` shows a worn auto driver with a gamchha, a woman police officer in khaki, and a flashy fixer in a maroon jacket. The cop's gender is open; the image proposes a woman sub-inspector.
+Working names from STORY_SEED.md (Anmol approved the story; names stay changeable until voice work starts). The cop is a woman, SI Meera Rana. The content writer owns backstory and voices (STORY.md). First look ideas (proposal only): `harness/design/reference/mood_three_characters.jpg` shows a worn auto driver with a gamchha, a woman police officer in khaki, and a flashy fixer in a maroon jacket.
 
-| | The Driver (leads first) | The Cop | The Fixer |
+| | The Driver (leads first): Bittu | The Cop: SI Meera Rana | The Fixer: Danny (Dhananjay) |
 |---|---|---|---|
-| One line | Rents an auto, drives fares across the city, gets pulled into trouble by one passenger | A sub-inspector at a central police station, honest enough to be in the way | Arranges anything for a price in Old Delhi's back lanes: documents, deliveries, debts |
+| One line | 28, Laxmi Nagar. Pays off a rented auto, funny, never picks a side. A passenger leaves a bag in his auto | Honest at a station where honesty is a career risk. ACP Khanna, a father figure, got her the posting | Paharganj. Charming, expensive. Arranges anything for a price. Guilt dressed up as cool |
 | Home and work (owner: as proposed) | Lives in East Delhi (Laxmi Nagar), works the stands at CP, the railway station and Metro exits | Station near ITO and CP, patrols the central core | Works out of Chandni Chowk and Paharganj, deals in East Delhi |
 | Vehicles | Auto (about 65 km/h); any car when the story calls for it | Patrol car (about 140), police motorcycle | Scooter (about 90); any car he takes |
 | Signature skill (works in a vehicle) | Knows every gali: shortcuts, gap weaving, near misses | Pursuit: calls a barricade at the next junction, PIT takedown, arrests | Nerve: tailing, getaways, talking his way in |
 | On foot | Brawler, improvised weapons | Trained: lathi, pistol, arrest takedown | Street fighter, pistol, knife (no gore) |
 | City life between missions | Fares and fare twists, rival autos, Metro race | Patrol calls (fight, robbery, crash) | Jobs for contacts: pickups, debts, deliveries |
 | Wanted level | Normal | Normal in the slice; a flipped "internal pressure" version (breaking the law brings suspension risk and a rival officer, not police stars) is a LATER option, decided when the cop's chapters are planned (Claude call) | Normal, plus rival crews |
-| Life arc (proposal) | Pay off the auto and the debt, keep the family out of it | Promotion or integrity | Get out from under a bigger boss |
+| Life arc | From "not my problem" to choosing to fight. His father died in a Chandni Chowk factory fire when he was 13 | The system she believes in is the crime: burn it or keep the badge | Shown in Act 4: as a boy he locked a door when told to, the factory where Bittu's father died. Never told anyone |
 
-Story frame (proposal for the content writer): a counterfeit money racket runs through Chandni Chowk's wholesale lanes. The fixer moves it, the cop is tracking it, and the driver unknowingly carries a courier's bag. All gangs and politicians are invented.
+Story frame: see STORY_SEED.md (the diary of fifteen years of payments to the people who run Delhi, the face Harish Sethi, ACP Khanna, the unconfirmed signature "M"). The older counterfeit money frame is replaced. All people, parties, gangs and the police force are invented (respect rule); the controversy comes from systems (demolitions, fake encounters, media trials, charity as a laundromat), never from a community.
 
 ## Core loop
 
@@ -78,7 +92,7 @@ Balance: about half action and story, half city life (owner, 2026-11-10).
 | Driver | Weave through traffic, horn, find the gap, pick the gali or the main road | One fare or one story mission: pick up, route, a twist (a chase, a deadline, a passenger in trouble), drop off | A chapter: 2 or 3 story missions, fares and side jobs between, money toward owning the auto, a new district or person |
 | Cop | Hold the pursuit line, call a barricade at the next junction, close in | One case beat: respond to a call, chase, a foot fight, an arrest or a shootout | A chapter: a case of 2 or 3 missions, patrol calls between, pressure from above, a lead on the racket |
 | Fixer | Slip through a crowd, spot the tail, fight or run | One job: pick up, deliver, collect, with a fight or a getaway | A chapter: jobs for contacts, money and standing, a rival crew, a new district opens |
-| All three | Traffic, crowds, the wanted level | A merged mission every 2 or 3 chapters | The city opens up and the three stories close in on each other |
+| All three | Traffic, crowds, the wanted level | A merged mission at each act's peak (the first is the Act 1 finale) | The city opens up and the three stories close in on each other |
 
 Session loop: start where you saved (end of the last mission) as the chapter's lead; a clear next story marker and 2 or 3 city life options nearby; play a mission or a side activity; autosave; the next marker.
 
@@ -119,7 +133,7 @@ Everywhere:
 ## Capability list (full; nothing here is forgotten)
 
 Anmol asked for this list (owner, 2026-11-10: "have a list of all capabilites so later it doesnt forget like climbing, swimming, weapons and other things"). Combat starts lean and grows. Tags:
-- **SLICE**: in the first playable slice (missions M01 to M04).
+- **SLICE**: in the first playable slice (four solo missions, M01 to M04; no merge and no switching).
 - **RELEASE**: by the first public release.
 - **LATER**: after the first release, or when Anmol asks.
 
@@ -245,7 +259,7 @@ A tag changes only with a decisions.md entry. Each phase plan checks this list a
 | Capability | When | Notes |
 |---|---|---|
 | Three playable characters, one shared animation set | SLICE | Stand-ins until art arrives |
-| Switch at story beats in merged missions | SLICE | |
+| Switch at story beats in merged missions | RELEASE | Act 1 finale (M10); not in the slice |
 | All three player states saved (place, vehicle, money, weapons, health, wanted) | SLICE | Day 1 rule |
 | Free switching any time (sky camera) | LATER | After Act 1 if playtests want it |
 | Off-screen life (where the others are when you switch) | LATER | With free switching |
@@ -256,7 +270,8 @@ A tag changes only with a decisions.md entry. Each phase plan checks this list a
 | Capability | When | Notes |
 |---|---|---|
 | Mission system: objectives, checkpoints, fail reasons, instant retry, rewards | SLICE | |
-| Story missions per character and merged missions | SLICE | 4 in the slice |
+| Story missions per character | SLICE | 4 solo missions in the slice |
+| Merged missions (switching at beats) | RELEASE | Built for the Act 1 finale (M10), not in the slice |
 | Fares (driver) | SLICE | One fare type in the slice, as part of M01 |
 | Patrol calls (cop), jobs (fixer) | RELEASE | |
 | Races (Metro race, night auto race, CP laps, flyover sprint) | RELEASE | |
@@ -390,18 +405,37 @@ Signed in the map round (owner, 2026-11-10); details in `harness/design/DELHI_WO
 
 The playable units are missions (kit.config.json `milestoneWord`). The list lives in `harness/data/milestones.json`; play scripts in `harness/verify/milestones/<ID>.js` follow VERIFY.md "Play scripts".
 
+### Act 1: Sawari (about 10 missions)
+
+Owner direction (2026-11-10, GTA V style): each life gets its own run; the next character is introduced inside the current one's mission; the merged mission is the Act 1 finale. Ids M01 to M04 are the slice (below); M05 to M10 are the rest of Act 1. "Order" is the play order. Story details (names, lines) come from the content writer.
+
+| Order | ID | Mission | Lead | One line |
+|---|---|---|---|---|
+| 1 | M01 | Train at 6:10 | Driver | Get a family to New Delhi station before their train. A hurried passenger leaves a bag in the auto: cash and a diary |
+| 2 | M02 | Who wants the bag | Driver | Two men hunt the bag through CP. A police jeep joins the chase; Meera notes the auto number. The first passenger is found dead |
+| 3 | M03 | Barricade at ITO | Cop | Meera works the CP death. Pursuit of the stolen getaway car over the ITO flyovers, a barricade, a foot chase, a takedown. The clue points to the bag's auto and a fixer's name |
+| 4 | M05 | Lead to the Chowk | Cop | Meera follows the clue into Chandni Chowk: a witness, a tail through the lanes, and she hears Danny's name |
+| 5 | M06 | First favour | Fixer | Danny's short past-story mission, in a graded flashback (reuses built places): his rule "never ask what is inside" |
+| 6 | M04 | Chandni Chowk pickup | Fixer | Danny is hired to get the bag back. His contact's shop is empty, a rival crew jumps him, wanted 1, a scooter escape. He has the auto number |
+| 7 | M07 | Wrong auto | Fixer | The crossing: Danny finds Bittu near the station; Meera arrives. The first tense meeting of the three; Danny slips away, Bittu is shaken |
+| 8 | M08 | Nowhere to hide | Driver | Bittu takes the bag to an elder at the auto stand; the crew arrives; he drives to get them out and cannot stay out of it any more |
+| 9 | M09 | Khanna says drop it | Cop | Khanna warns Meera off. She does not drop it: a night tail from ITO toward Old Delhi. Players like Khanna here |
+| 10 | M10 | Red Fort rush (merged) | All three | The finale. The driver runs with the bag, the fixer fights in the parking lot, the cop closes the chase. Three-way meeting at Red Fort. Ends on a call: "Gurugram mein milte hain." |
+
 ### First playable slice (required)
 
-The slice is Act 1 in miniature, in the pilot districts. The order is the play order: the driver first (owner).
+The slice is four solo missions from Act 1, in the pilot districts. No merge and no switching in the slice (owner, 2026-11-10): switching is built for the Act 1 finale (M10). The order is the play order: the driver first (owner). The slice is orders 1, 2, 3 and 6 of Act 1.
 
 | ID | Mission | Lead | Shows |
 |---|---|---|---|
 | M01 | Train at 6:10 | Driver | Fare pickup, gap weaving, the gali shortcut, a deadline, the bag left behind |
-| M02 | Barricade at ITO | Cop | Pursuit over the ITO flyovers, a barricade call, a foot chase and takedown |
-| M03 | Chandni Chowk pickup | Fixer | On foot in the bazaar crowd, a fistfight, a scooter getaway at wanted 1 |
-| M04 | Red Fort rush (merged) | All three | Switching at beats, a pistol fight, a chase finale |
+| M02 | Who wants the bag | Driver | A chase through CP traffic, the cop jeep cameo (Meera is introduced), a hide-out in the galis |
+| M03 | Barricade at ITO | Cop | Pursuit over the ITO flyovers, a barricade call, a foot chase and takedown |
+| M04 | Chandni Chowk pickup | Fixer | On foot in the bazaar crowd, a fistfight, a scooter getaway at wanted 1 |
 
-Pilot gap (Claude call): M01 ends at New Delhi railway station, which sits in district D07 (Paharganj), outside the signed pilot. The pilot adds the station forecourt on the Ajmeri Gate side (about 0.2 km2, estimate) as part of the connector between CP and Chandni Chowk. If the pilot build cannot fit it, the content writer moves the drop-off to a station gate inside the pilot instead; the beats stay.
+By the end of the slice the player has met all three lives, each introduced by another's mission, and the bag links them. The slice stays inside the pilot districts.
+
+Pilot gap (Claude call): M01 ends at New Delhi railway station, which sits in district D07 (Paharganj), outside the signed pilot. The pilot adds the station forecourt on the Ajmeri Gate side (about 0.2 km2, estimate) as part of the connector between CP and Chandni Chowk. If the pilot build cannot fit it, the content writer moves the drop-off to a station gate inside the pilot instead; the beats stay. M07 (not in the slice) uses the same forecourt.
 
 ### Mission and activity list (round 2, scored)
 
@@ -409,10 +443,10 @@ Score: 2 x fun + Delhi + map reuse + effort points (S 3, M 2, L 1); planner esti
 
 | # | Mission or activity | Who | What happens | Score | When |
 |---|---|---|---|---|---|
-| 1 | Barricade at ITO | Cop | A stolen car flees from CP; pursue it over the ITO flyovers, call a barricade, finish on foot with a takedown | 21 | SLICE (M02) |
-| 2 | Chandni Chowk pickup | Fixer | Collect a package in the bazaar on foot; a rival crew jumps you; fistfight, then a scooter getaway at wanted 1 | 21 | SLICE (M03) |
+| 1 | Barricade at ITO | Cop | A stolen car flees from CP; pursue it over the ITO flyovers, call a barricade, finish on foot with a takedown | 21 | SLICE (M03) |
+| 2 | Chandni Chowk pickup | Fixer | Collect a package in the bazaar on foot; a rival crew jumps you; fistfight, then a scooter getaway at wanted 1 | 21 | SLICE (M04) |
 | 3 | Train at 6:10 | Driver | Get a family to New Delhi station before their train; a passenger leaves a bag behind | 20 | SLICE (M01) |
-| 4 | Red Fort rush | All (merged) | The bag is the fixer's package; the cop is tailing. Driver escapes, fixer fights in a parking lot, cop's chase finale | 20 | SLICE (M04) |
+| 4 | Red Fort rush | All (merged) | The bag is the fixer's package; the cop is tailing. Driver escapes, fixer fights in a parking lot, cop's chase finale | 20 | RELEASE (Act 1 finale, M10) |
 | 5 | Metro race | Driver | Beat the Metro train between two stations, the train on the track beside you | 21 | RELEASE |
 | 12 | Yamuna bridge getaway | Fixer | Lose a wanted level across the bridges into East Delhi | 22 | RELEASE (Act 2) |
 | 6 | Night patrol call | Cop | A random call: a fight, a robbery, a crash; respond, sort it | 19 | RELEASE |
@@ -501,4 +535,5 @@ The repo started as a minimal scaffold: a box car on a ground plane with the hoo
 ## Open questions
 
 - The wanted level's name: "Lal Batti" is proposed.
-- The cop's gender and all three names: the content writer proposes, Anmol may change them.
+- The three names (Bittu, SI Meera Rana, Danny) are working names from STORY_SEED.md; Anmol may change them before voice work.
+- Act 1 mission titles and beats M05 to M09 are a planner proposal from STORY_SEED.md; the content writer refines them (STORY.md).
