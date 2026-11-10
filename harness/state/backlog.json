@@ -1,6 +1,6 @@
 {
   "_doc": "Written only by node harness/bin/task.mjs. Phases run in order; P0 (ADOPT + STYLE DISCOVERY) waits for the owner by design and needs task.mjs signoff and task.mjs archsignoff before its gate passes. Later phases are added by the planner at the end of P0 (task.mjs phase-add) from the game's real state.",
-  "updated": "2026-11-10T14:13:59.821Z",
+  "updated": "2026-11-10T14:23:07.494Z",
   "phases": [
     {
       "id": "P0",
@@ -171,11 +171,12 @@
       "agent": "planner",
       "priority": 1,
       "kind": "feature",
-      "status": "todo",
-      "attempts": 0,
+      "status": "doing",
+      "attempts": 1,
       "notes": [],
       "created": "2026-11-10T13:04:46.154Z",
-      "order": 10
+      "order": 10,
+      "started": "2026-11-10T14:14:05.697Z"
     },
     {
       "id": "P0-007",
@@ -278,15 +279,15 @@
     {
       "id": "P0-011",
       "phase": "P0",
-      "title": "Style tests batch A in Godot (2 candidates)",
-      "desc": "Per harness/design/templates/STYLE_TEST_TASK.md, adapted to Godot. Candidates: the looks Anmol picked for the test in sitting 2 (inbox, source interview), else STYLE_OPTIONS.md batch A. Render the stand-in scenes (street, landmarks, areas, the on-foot view) and the default scene in each candidate behind the user arg --style=<id>, touching only render setup (WorldEnvironment: tonemap, exposure, glow, SSAO, SSIL, fog, sky), lights and shadows, materials and shaders, post (a compositor effect or a full screen shader where the look needs one, for example comic outlines or a gritty grade) and a few procedural stand-ins, in one script plus resources per style (game/render/styles/<id>.gd and its .tres files). No gameplay, camera or UI logic change; without --style the look is unchanged. Time box: one build round and one fix round per candidate; a style that cannot be shown in that time is reported with what it would need. The style set includes the landmark tier, area kit and on-foot views from P0-009.",
+      "title": "Style tests batch A in Godot: stylised and stylised_grime, afternoon and golden",
+      "desc": "Per harness/design/templates/STYLE_TEST_TASK.md, adapted to Godot. Batch A from STYLE_OPTIONS.md (Anmol's pick in sitting 1: 'I also like B, with d's dirst on old delhi'): style ids stylised (B, stylised realistic, rich and warm) and stylised_grime (B plus D's grime as a layer driven by a per-area wear value: high on the old city bazaar block, near zero on the Lutyens block). Each style renders in two light presets, the user arg --light=afternoon (hot hazy afternoon) and --light=golden (golden evening), from Anmol's round 2 answer. Render the stand-in scenes (street, landmarks, areas, the on-foot view) and the default scene behind the user args --style=<id> --light=<preset>, touching only render setup (WorldEnvironment: tonemap, exposure, glow, SSAO, SSIL, fog, sky, a warm 3D LUT), the sun and shadows, materials and shaders (one shared building shader with the grime mask for stylised_grime), decals, a few particles, and procedural stand-ins, in one script plus resources per style (game/render/styles/<id>.gd and .tres files) and one per light preset. No gameplay, camera or UI logic change; without --style the look is unchanged. Keep character stand-in materials clean in both styles so people stay readable. Set names: style_<id>_<light> (4 sets). Time box: one build round and one fix round per style; a style that cannot be shown in that time is reported with what it would need.",
       "accept": [
-        "for each batch A style: node harness/bin/lookproof.mjs --set style_<id> --query \"style=<id>\" --perf --no-build writes every view (9) and perf.json judged against the draft budgets",
-        "node harness/bin/lookproof.mjs --sheet baseline,style_<a>,style_<b> --out style_options writes harness/reports/look/style_options.jpg and the builder read it (downscaled to about 1600 px)",
+        "for each of style_stylised_afternoon, style_stylised_golden, style_stylised_grime_afternoon, style_stylised_grime_golden: node harness/bin/lookproof.mjs --set <set> --query \"style=<id>&light=<preset>\" --perf --no-build writes every view (9) and perf.json judged against the draft budgets",
+        "node harness/bin/lookproof.mjs --sheet baseline,style_stylised_afternoon,style_stylised_golden,style_stylised_grime_afternoon,style_stylised_grime_golden --out style_options writes harness/reports/look/style_options.jpg and the builder read it (downscaled to about 1600 px)",
         "the default look is unchanged: lookproof.mjs --set baseline_check --no-build then --compare baseline_check --against baseline passes",
         "verify --quick passes with no console errors",
-        "STYLE_OPTIONS.md has the measured numbers for both candidates in place of the estimates, wrong estimates marked",
-        "the sheet shows the landmark tiers, area kits and on-foot views for every candidate"
+        "STYLE_OPTIONS.md has the measured numbers for both styles and both lights in place of the estimates, wrong estimates marked",
+        "the sheet shows the landmark tiers, both area kits (grime visible on the bazaar block only in stylised_grime) and the on-foot view for every set"
       ],
       "deps": [
         "P0-009"
@@ -302,14 +303,14 @@
     {
       "id": "P0-012",
       "phase": "P0",
-      "title": "Style tests batch B in Godot and the full side by side sheet",
-      "desc": "Same as P0-011 (Godot, --style=<id>, one script plus resources per style, same rules and time box) for the remaining candidates Anmol picked for the test (or STYLE_OPTIONS.md batch B, 1 or 2 styles), then the full sheet of baseline plus every candidate. The orchestrator skips this task if sitting 2 narrowed the test to the batch A looks; then the P0-011 sheet is the full sheet. The style set includes the landmark tier, area kit and on-foot views from P0-009.",
+      "title": "Style test batch B in Godot (optional realistic reference) and the full side by side sheet",
+      "desc": "Optional. Build only if Anmol asks in sitting 2 to see the realistic look as a cost and quality reference (STYLE_OPTIONS.md 'Questions for the next round', question 1); otherwise the orchestrator skips this task with his words as the reason, and the P0-011 sheet is the full sheet. Same rules as P0-011 (Godot, --style=<id> --light=<preset>, one script plus resources per style, same time box) for style id realistic (A: full PBR stand-in materials, SDFGI, SSR, volumetric fog, a film LUT, TAA) in both light presets afternoon and golden, then the full sheet of baseline plus every set. The comic and gritty ids stay in reserve and are not built unless Anmol asks.",
       "accept": [
-        "for each batch B style: lookproof.mjs --set style_<id> --query \"style=<id>\" --perf --no-build writes every view and perf.json",
-        "node harness/bin/lookproof.mjs --sheet baseline,<every style set> --out style_options writes harness/reports/look/style_options.jpg with every candidate, and the builder read it",
+        "for style_realistic_afternoon and style_realistic_golden: lookproof.mjs --set <set> --query \"style=realistic&light=<preset>\" --perf --no-build writes every view and perf.json",
+        "node harness/bin/lookproof.mjs --sheet baseline,<every style set> --out style_options writes harness/reports/look/style_options.jpg with every set, and the builder read it",
         "the default look is unchanged (baseline_check compare passes); verify --quick passes",
-        "STYLE_OPTIONS.md has measured numbers for every candidate and the sheet path",
-        "the sheet shows the landmark tiers, area kits and on-foot views for every candidate"
+        "STYLE_OPTIONS.md has measured numbers for every set and the sheet path",
+        "the sheet shows the landmark tiers, area kits and on-foot views for every set"
       ],
       "deps": [
         "P0-011"

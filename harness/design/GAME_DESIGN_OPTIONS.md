@@ -1,110 +1,242 @@
-# Dilli Darshan: Game design options (round 1 draft)
+# Dilli Darshan: Game design options (round 2 draft)
 
-Owner direction 2026-11-10 (inbox mmwap8jxg): a car driving around Delhi is a tech demo, not a game. This doc lays out the options for a real core loop built from what makes Delhi Delhi. Nothing here is decided. The owner's answers in the interview rounds decide; his sign-off is recorded with `task.mjs designsignoff`. No mission system is built before that.
+Owner direction 2026-11-10 (inbox mmwap8jxg): a car driving around Delhi is a tech demo, not a game. This doc lays out the options. Nothing is decided until Anmol signs off in his own words (`task.mjs designsignoff`). No mission system is built before that.
 
-Status: round 1 draft, written by the planner (P0-004). No owner answers yet.
+Status: round 2 draft (planner, P0-006), after interview sitting 1. The round 1 recommendation (auto driver only, "the city is the game", grounded arcade) was answered with "Rethink all of it", so this draft starts again from his answers. Every number is an estimate.
 
 ## Summary (10 lines)
 
-1. Fantasy options: new auto driver, cabbie who knows every gali, delivery rider, tour guide, street racer, or a mix. The recommended mix is "new auto driver who becomes the one who knows every gali", with tours as the signature job.
-2. Core loop (recommended): 30 s weave and choose a route, 5 min one fare from pick up to tip, 1 h a shift that pays the day's auto rent and grows your name in an area.
-3. Tension comes mostly from traffic, time and passengers. Money (rent) is a soft pressure. Police are a small fine, not a chase.
-4. 46 missions and activities are ranked below. The top picks all reuse one fare system: Metro race, Train at 6:10, near-miss chains, shortcut fares, Dilli Darshan tours.
-5. Progression that is healthy: city knowledge (a gali map that fills in), reputation by area, auto upgrades and styling, regular passengers. Chores to avoid: fuel queues, daily streaks you lose, grinding.
-6. Feel: near misses, horn as a verb, weaving through mixed traffic, landmarks revealed as rewards. Three pillar sets are offered; set A "The city is the game" is recommended.
-7. First playable (recommended): fares in the pilot area with near-miss and horn, plus the Metro race. It needs a drivable pilot map with named places, a lane graph router and light mixed traffic.
-8. The old game tried five modes (dash, taxi, delivery, police, free). They were generic, siloed in a menu, aimed at random road points, and money only bought paint. We keep the lessons, not the modes.
-9. References: Crazy Taxi, Euro Truck Simulator 2, Burnout Paradise, Forza Horizon, Taxi Life, Night Call and others, for ideas only.
-10. Six round 1 questions at the end, each with 2 to 4 options.
+1. Anmol wants three playable characters with their own lives and stories: an auto driver, a cop and a small-time fixer, whose missions merge.
+2. Tone: an over-the-top action movie, with guns and fights, on foot anywhere, in a real and honest Delhi.
+3. Already answered: police work through a wanted level and chases; players return for "a city that opens up" and "the story of the three".
+4. Three structure options for the three characters: chapters with a lead (recommended), free switch like GTA V, or one main character with two guests.
+5. Three pillar sets. Recommended: "Three lives, one Dilli": three lives, one city; filmi, never cheap; the city opens up.
+6. Three combat and on-foot scopes with honest cost. Recommended: lean for the first slice (fists, two or three weapons, no cover), mid by the first public release.
+7. Driving stays central: every mission has a drive that matters, each character's signature skill is in a vehicle, and wanted escapes are drives.
+8. The respect rule now covers crime, police and poverty: honest, never spectacle or a joke, invented gangs and parties, no real people.
+9. First playable slice: one mission per character plus one merged mission, in the pilot districts (CP, ITO and Pragati Maidan, Chandni Chowk and Red Fort, India Gate).
+10. Six round 2 questions at the end: how the three connect, which pillars, who leads first, combat scope, civilians and violence, action vs city life.
 
-Fantasy letters used in the tables: A new auto driver, B cabbie in a car, C delivery rider, D tour guide, E street racer, F the mix.
+## What Anmol has said (sitting 1)
 
-## What the old game tried (evidence)
+| Question | His answer (inbox id) |
+|---|---|
+| Who is the player (round 1) | Picked "New auto driver", then in Q4: "Bro game should not be just about auto driver and all, it should have different things man, maybe 3 types of player s and their mission like they have their own life and story and then we ahve missions merging them as well, there should be gun use and all as well, fightng mission and all too, but the city should be in delhi, on top of that map, we can have a lot more things" (mmwaqyyxq) |
+| The three players | Auto driver, cop, small-time fixer (mmwar1t1j) |
+| Tone of guns and fights | Over-the-top action movie (mmwar1t4i) |
+| On foot | Yes, anywhere (mmwar1t71) |
+| Earlier picks (auto only, city is the game, grounded arcade) | Rethink all of it (mmwar1t9q). "this last message might change the game feel but tbh thats what i wanna do" (mmwar1tco) |
+| Police | Wanted level and chases (mmwartn71) |
+| Reasons to return | A city that opens up; The story of the three (mmwartn9f) |
+| Top speed | "see whats best accoring to you": per vehicle, auto about 65, scooter 90, car 140, fast cars 180 to 200 (decisions.md "Speeds and map size") |
+| Map | Compressed Delhi: districts, story places, NCR parts; "smaller than gta5 but not too small to feel boring and not vast" (mmwartrys) |
+| Release | Free, public; invented parties only (mmwarqa1h, mmwarqa41) |
+| Look | B stylised realistic with D's grime in Old Delhi (mmwarkusg) |
 
-From `harness/design/SALVAGE_AUDIT.md` C10 and a read of delhi-drive `frontend/src/game/` and `docs/context/game-modes.md`:
+## 1. The three characters (proposals for the content writer, not decided)
 
-| Old mode | What it was | What we learn |
+Working roles only. Names, ages and backstories come from the content writer after the sign-off.
+
+| | The Driver | The Cop | The Fixer |
+|---|---|---|---|
+| One line | Rents an auto, drives fares across the city, and gets pulled into trouble by one passenger | A sub-inspector at a central police station, honest enough to be in the way | Arranges anything for a price in Old Delhi's back lanes: documents, deliveries, debts |
+| Home and work (proposal; P0-028 places them) | Lives in East Delhi across the Yamuna, works the stands at CP, the railway station and the Metro exits | Station near ITO or CP, patrols the central core | Works out of Chandni Chowk and Paharganj, deals in East Delhi |
+| Vehicles | Auto (about 65 km/h), any car when the story calls for it | Patrol car (about 140), police motorcycle | Scooter (about 90), any car he takes |
+| Signature skill | Knows every gali: shortcuts on the map, gap weaving, near misses | Pursuit: calls barricades at junctions, takedowns, arrests | Contacts and nerve: talks his way in, fights his way out |
+| On foot | Brawler, improvised weapons | Trained: lathi, pistol, arrest takedown | Street fighter, pistol, knife (no gore) |
+| His wanted level | Normal stars | Flipped: breaking the law raises an "internal pressure" meter (suspension, a rival officer hunting him) instead of stars (option) | Normal stars, and rival crews |
+| Life arc (proposal) | Pay off the auto and the debt, keep the family out of it | Promotion or integrity | Get out from under a bigger boss |
+
+Story frame to make merging concrete (proposal only): a counterfeit money racket runs through Chandni Chowk's wholesale lanes. The fixer moves it, the cop is tracking it, and the driver unknowingly carries a courier's bag. All gangs and politicians are invented.
+
+## 2. Structure options for three characters
+
+| | S1. Chapters with a lead (recommended) | S2. Free switch (GTA V style) | S3. One lead plus two guests |
+|---|---|---|---|
+| How it works | The story runs in chapters. Each chapter has a lead; free roam between missions is as that lead. Merged chapters at each act's peak switch between the three at set beats | Any time in free roam, switch to any of the three; each is somewhere in the city living their life. Missions per character; merged missions switch at beats or on demand | The driver is the main character. The cop and fixer play their own short arcs that cut in between his chapters |
+| How missions merge | Crossing (one's mission leaves a mark in another's), relay (hand-off mid-mission), converge (all three at one set piece) | All three patterns, plus switch on demand during merged missions | Relay and converge only |
+| "Their own life and story" | Strong, in turns | Strongest | Weak for the cop and fixer |
+| Cost (est) | Medium: one active player at a time, others scripted as NPCs in their chapters. 3 to 5 tasks for the chapter and switch-at-beat system | High: three persistent player states (position, vehicle, wanted, money, weapons), a sky-camera switch, off-screen life placement, story order rules; 8 to 12 tasks plus much more testing | Low: 2 to 3 tasks |
+| Risk | Less freedom: you may want the cop while the chapter is the driver's | Scope and bugs; three of everything to test | Misses what Anmol asked for |
+| Grows into | S2: save all three player states from day 1, so free switch can unlock after Act 1 | | S1 |
+
+Recommendation: S1 now, built so free switch (S2) can unlock after the first act if playtests want it.
+
+## 3. Core loop per character
+
+| | 30 seconds | 5 minutes | 1 hour |
+|---|---|---|---|
+| Driver | Weave through traffic, horn, find the gap, pick the gali or the main road | One fare or one story mission: pick up, route, a twist (a chase, a deadline, a passenger in trouble), drop off | A chapter: 2 or 3 story missions, fares and side jobs between, money toward the auto, a new district or person |
+| Cop | Hold the pursuit line, call a barricade at the next junction, close in | One case beat: respond to a call, chase, a foot fight, an arrest or a shootout | A chapter: a case with 2 or 3 missions, patrol events between, pressure from above, a lead on the racket |
+| Fixer | Slip through a crowd, spot the tail, fight or run | One job: pick up, deliver, collect, with a fight or a getaway | A chapter: jobs for contacts, money and standing, a rival crew, a new district opens |
+| Shared (all three) | Traffic, crowds, the wanted level | A merged mission every 2 or 3 chapters | The city opens up and the three stories close in on each other |
+
+Tension sources: the wanted level and chases (Anmol), rival crews, time (deadlines), traffic, the story's stakes for each character. Money is soft.
+
+Driving rules (Claude's proposal; stands unless Anmol objects): action arcade. Cars take a beating before they fail, handling is forgiving at speed, top speeds per vehicle as above. Red lights and wrong-side driving matter only when police see it (wanted level).
+
+## 4. Three candidate pillar sets
+
+Every feature must serve all three pillars of the chosen set. The respect rule (section 7) is a standing rule for every set, not a pillar.
+
+| Set | Pillar 1 | Pillar 2 | Pillar 3 | What it leads to |
+|---|---|---|---|---|
+| A. Three lives, one Dilli (recommended) | Three lives, one city: every mission moves one life and touches another | Filmi, never cheap: action as loud as a Hindi action film, but every fight has a reason and a cost in the story | The city opens up: real Delhi is the reward; each chapter opens new districts, places and people | Chapters, merged missions, district unlocks, landmarks as rewards |
+| B. Street smart | Know the streets: routes, galis and shortcuts win chases and missions for all three | Every fight costs: short, loud fights with consequences (wanted level, injuries, standing) | Honest Delhi: real places and real conditions, never a joke | More driving skill, tighter fights, slower pace |
+| C. Chaos sandbox | Make a scene: traffic, crowds, police and three characters collide | Delhi as a playground: stunts, chases, landmarks as set pieces | Anything is fun in 3 minutes | Systems first, less story |
+
+## 5. Combat and on foot: scope options with honest cost
+
+Costs are estimates for Godot 4 (AnimationTree, NavigationServer3D, physics bones for ragdoll; the P0-017 bench measures them). Animation clips mean a shared humanoid set retargeted to all characters (a free library such as Mixamo, licence checked in P0-010, plus custom clips).
+
+| | O1. Lean (recommended for the first slice) | O2. Mid (recommended by the first public release) | O3. Full |
+|---|---|---|---|
+| On foot | Walk, run, sprint, crouch, vault low walls, enter and exit vehicles | O1 plus carjacking, ladders, fall and roll | O2 plus rooftop climbing, swimming (Yamuna) |
+| Fights | Melee: 3-hit combo, block, dodge, takedown; hit reactions; ragdoll on knockdown | O1 plus environment finishers (stalls, shutters, walls) | O2 plus grapples and weapons in melee |
+| Guns | 2 or 3 (pistol, lathi or bat, one thrown), soft lock-on, no cover system | 5 or 6 classes (pistol, revolver, shotgun, SMG, rifle, thrown), cover snap from auto cover points, shooting from vehicles | 10 or more, weapon wheel, aim from bikes |
+| Police response | Wanted 1 to 3: patrol cars, foot police, barricades at junctions | Wanted 1 to 5: roadblocks, armed units, a drone or helicopter at the top | O2 plus search grids and dogs |
+| Crowds near the player | 30 to 60 agents: walk, flee, cower | 60 to 120 with panic spreading | 150 or more |
+| Animation clips (est) | 60 to 90 | 150 to 250 | 300 or more |
+| AI (est) | Civilian, melee enemy, pistol enemy, foot cop, police driver | O1 plus cover shooter, flanker, armed unit | O2 plus stealth and search |
+| Build tasks (est) | 12 to 18 | 25 to 40 | 50 or more |
+| Risk | Fights feel thin if animation is weak | Cover and aim feel need many tuning rounds | Too big for this team before release |
+
+Police and chases (answered: wanted level and chases): pursuit AI drives the lane graph, barricades are placed at real junctions (the lane model gives the spots), escape uses galis, flyovers and the Yamuna bridges. Cost for O1's wanted 1 to 3: 6 to 10 tasks (est).
+
+## 6. How driving stays central
+
+1. Every mission has at least one drive that matters: a chase, a getaway, a deadline or a tail.
+2. On-foot parts stay short: at most about 40% of a mission's time (est; tuned in playtests).
+3. Each character's signature skill works in a vehicle: the driver's gap weaving and shortcuts, the cop's pursuit and barricades, the fixer's getaways and tailing.
+4. Wanted escapes are mostly drives through the real map: galis, service lanes, flyovers, bridges.
+5. The map is the arena: chases use the lane-level roads, flyover splits and junctions from MAP_REPAIR.md.
+
+## 7. The respect rule applied to crime, police and poverty
+
+Honest, never spectacle or a joke. No real people, no real parties (invented ones only), no real brands, no real cases.
+- Crime: criminals are people with reasons. No community, caste or religion is the criminal group. Gangs are invented. Drugs can exist in the story (Anmol named East Delhi for this) without glamour or how-to detail.
+- Police: people doing a job, some good, some corrupt, as individuals. No real officers, units or cases. The cop's story can show pressure and corruption without mocking the force.
+- Poverty: shown where it is true (Anmol: "i want to show some part of it as its actually true"), built with the same craft as rich areas. Poor characters have dignity, agency and humour. Never a punchline, never a backdrop to shoot through.
+- GB Road and dark places: story and atmosphere, no sexual content, no exploitation of real people.
+- Violence: over-the-top in style, never cruel. No torture scenes, no violence against children, no sexual violence, no real religious conflict.
+
+## 8. Missions and activities (round 2 list)
+
+Score as in round 1: 2 x fun + Delhi + map reuse + effort points (S 3, M 2, L 1). Fun, Delhi and reuse are 1 to 5 planner estimates. The round 1 list of fares and city jobs stays as the driver's side jobs (appendix).
+
+| # | Mission or activity | Who | What happens | Fun | Delhi | Effort | Reuse | Score |
+|---|---|---|---|---|---|---|---|---|
+| 1 | Barricade at ITO | Cop | A stolen car flees from CP. Pursue it over the ITO flyovers, call a barricade at the next junction, finish on foot with a takedown | 5 | 4 | M | 5 | 21 |
+| 2 | Chandni Chowk pickup | Fixer | Collect a package in the bazaar on foot, a rival crew jumps you: fistfight, then a scooter getaway through the galis with wanted 1 | 5 | 5 | M | 4 | 21 |
+| 3 | Train at 6:10 (twist) | Driver | Get a family to New Delhi station before their train; a passenger leaves a bag behind | 4 | 5 | M | 5 | 20 |
+| 4 | Red Fort rush (merged) | All | The bag is the fixer's package; the cop is tailing. Driver escapes, fixer fights in a parking lot, cop's chase finale | 5 | 5 | L | 4 | 20 |
+| 5 | Metro race | Driver | Beat the Metro train between two stations, the train on the track beside you | 5 | 5 | M | 4 | 21 |
+| 6 | Night patrol call | Cop | A random call: a fight, a robbery, a crash; respond, sort it | 4 | 4 | M | 5 | 19 |
+| 7 | Collect the debt | Fixer | Find a man who owes money, chase him through a market, decide how hard to push | 4 | 4 | M | 5 | 19 |
+| 8 | Protest at Jantar Mantar | Cop, Fixer | Crowds and tempers; the cop keeps order, the fixer works the crowd for someone | 4 | 5 | L | 3 | 17 |
+| 9 | Airport run | Driver, Fixer | Get someone from IGI to Old Delhi before people who want them catch up | 5 | 4 | M | 4 | 20 |
+| 10 | Wedding baraat chase | Any | A chase that runs into a wedding procession; find the way round | 5 | 5 | L | 3 | 19 |
+| 11 | Haunted night | Any | A night mission at the haunted place in winter fog | 4 | 5 | M | 3 | 18 |
+| 12 | Yamuna bridge getaway | Fixer | Lose a wanted level across the bridges into East Delhi | 5 | 4 | S | 5 | 22 |
+| 13 | Raid in East Delhi | Cop | A raid on a den; shootout on stairs and rooftops | 5 | 3 | L | 3 | 17 |
+| 14 | Gymkhana favour | Fixer | A rich client at the club wants something done quietly | 3 | 4 | M | 3 | 15 |
+| 15 | Fare rush and rival autos | Driver | Race rival autos to a hail at the stand | 4 | 4 | M | 4 | 18 |
+| 16 | Undercover ride | Cop, Driver | The cop rides in the driver's auto to follow a target without being seen | 4 | 5 | M | 4 | 19 |
+| 17 | Landmark first sight | All | The first view of a landmark: a short reveal and a stamp | 3 | 5 | S | 5 | 19 |
+| 18 | Street fight at Paharganj | Fixer | An arena-style street fight for money, rounds against tougher fighters | 4 | 3 | M | 3 | 16 |
+
+## 9. Progression and reasons to return (answered: a city that opens up, the story of the three)
+
+| Item | How it works | Verdict |
 |---|---|---|
-| Checkpoint Dash | Glowing gates laid on wide roads, drive through in order against a clock, best time saved | Works as a time trial, but the gates were placed by an algorithm on random wide roads. Nothing about the place mattered |
-| City Cab | Green pick up marker on a random road, gold drop off, a decaying tip, fares chain forever, best payday saved | The right skeleton. But destinations were points, not places; passengers had no voice; nothing changed after an hour |
-| Rush Hour | Timed parcel delivery, streak multiplier, parcel integrity drops on crashes | Integrity and streaks are good tension. A x2.5 streak on a generous base made money climb too fast and was cut by 55% (`economy.js`) |
-| Heat | Cop cars chase you, a wanted meter, escape for a payout | Generic, not Delhi. Its HUD card flickered and was removed the same day (M-8) |
-| Free Roam | Drive anywhere | Fine as a mode, not a game |
-| Wallet | Fares pay in; the only thing to buy was car paint colours | Money with nothing worth buying is a number, not a reason to play |
+| The city opens up | Each chapter opens a district through the story (a bridge reopens, a case leads south, the airport road), never an invisible wall. Each new district brings missions, people, landmarks and side activities | Core (Anmol) |
+| The story of the three | Chapters that end on hooks; merged missions as the peaks of each act; each character's life arc moves | Core (Anmol) |
+| Money per character | Driver: fares and jobs toward owning the auto. Cop: salary and case rewards. Fixer: job payments | Healthy if money buys vehicles, weapons, safe houses |
+| Skills per character | Driving, shooting, fighting grow with use (light, felt) | Healthy if few and felt |
+| Vehicles and weapons | Taken in the world or bought (weapons through the fixer's contacts) | Healthy |
+| Landmarks and places as rewards | First sight, photo spots, side activities at story places | Healthy |
+| Daily jobs and streaks | | Leave out (chore) |
 
-Lessons carried over: one fare system shared by all job types, not five modes in a hub; destinations are real named places; routes follow the road graph, not a bearing (the old router fixed "the number goes up as you drive the right way"); one economy file; HUD values need a dead band.
+## 10. First playable slice (pilot districts)
 
-## 1. Fantasy
+Pilot: Connaught Place, ITO and Pragati Maidan, Chandni Chowk and Red Fort, plus India Gate (Anmol's first heroes; India Gate needs a connector or the layout from P0-028).
 
-Who the player is, in one sentence each, and why it fits Delhi.
+| Mission | Who | Shows |
+|---|---|---|
+| Train at 6:10 (twist) | Driver | Fares, gap weaving, the gali shortcut, the bag left behind |
+| Barricade at ITO | Cop | Pursuit on the flyovers, barricade call, foot takedown |
+| Chandni Chowk pickup | Fixer | On foot in the dense bazaar, a fistfight, scooter getaway, wanted 1 |
+| Red Fort rush | All three, merged | Switch at beats, a pistol fight (O1), a chase finale |
 
-| Option | One sentence | Why it fits Delhi | Vehicle and feel | Risks |
-|---|---|---|---|---|
-| A. New auto driver | You just rented a green and yellow auto and must learn the city fare by fare to pay the daily rent. | The auto is Delhi's icon. It squeezes through gaps a car cannot, and every Delhiite has an auto story | Small, light, about 50 to 60 km/h top speed. Speed is felt through closeness and gaps, not raw speed | New handling tune needed (the kept tune is for a 1730 kg car). Lower top speed may feel slow if traffic is thin |
-| B. Cabbie who knows every gali | A cab driver whose real skill is knowing every shortcut, flyover and gali in the city. | Delhi is a city of shortcuts and galis; "bhaiya, shortcut lo" is something every rider says. The real map becomes the skill | A hatchback cab. The kept car tune and camera apply directly | Less iconic than the auto. Could feel like any taxi game |
-| C. Delivery rider | A scooter rider racing food and parcels through the city on a 10 minute promise. | Two-wheelers are most of Delhi's traffic. Quick delivery is part of daily life | Scooter: lean, filter between cars. The fastest feel in traffic | A rider on a bike needs a character model and lean animation (costly). Must show gig work with dignity, not as a joke |
-| D. Tour guide | You drive visitors to Delhi's landmarks and give the "Dilli Darshan" tour. | It is the game's name. Delhi's landmarks are world famous | Any vehicle. Calm drives, photo stops | Low tension. Strong only when landmarks look great, which is art heavy |
-| E. Street racer | Night races on Ring Road and over the flyovers. | Late-night racing on the flyovers is real in Delhi | Fast car or bike. Pure speed | Generic, not Delhi specific. Glorifies dangerous driving on real streets |
-| F. The mix (recommended) | A new auto driver who becomes the one who knows every gali: fares first, tours as the signature job, deliveries and night races as side jobs that unlock later. | Combines Delhi's icon (the auto), its real map (the gali skill) and its name (Darshan tours) | Starts in an auto; a car or scooter could unlock later | Scope creep if all job types arrive at once. Mitigation: one shared fare system, one job type at a time |
+Needs (est): the pilot map on the lane model; light to medium traffic; 30 to 60 people in the bazaar; three character stand-ins on one shared animation set; O1 fights and two guns; wanted 1 to 2; switch at mission beats; the mission system (only after the sign-off); 20 to 30 build tasks after the base world. Every mission's acceptance includes the fun criteria: clear goal, fair fail, a reason to retry, a reward that matters.
 
-## 2. Core loop
+## 11. Scope and risk
 
-### Loops per fantasy
+| Risk | Why | Mitigation |
+|---|---|---|
+| Scope: three characters, combat, crowds and a city | Each is a large system | S1 chapters, O1 first, pilot districts only until the slice is fun |
+| Animation quality | On-foot fights live or die by animation | Shared humanoid set; measure in the P0-017 bench; art cards for key clips |
+| Tone clash: over-the-top action in an honest city | Respect rule vs filmi action | Section 7 rules in every mission review; violence never at real groups |
+| Base world first | Missions need the lane model, traffic and map | Mission system waits for the sign-off and the pilot map |
+| Godot learning curve | New engine for the harness | Godot debug server and driver tasks (P0-024 to P0-027) first |
 
-| Fantasy | 30 seconds | 5 minutes | 1 hour | Main tension |
-|---|---|---|---|---|
-| A. Auto driver | Read the gap, horn, slip past a bus, choose a turn | One fare: quote, pick up, route, drop off, tip | A shift: 8 to 12 fares, pay the day's rent, grow your name at one stand | Traffic, passenger mood, rent |
-| B. Cabbie | Pick the faster line, choose flyover or gali | One fare with a promised ETA you must beat | A shift; new shortcuts found and added to your map | Time, traffic |
-| C. Delivery rider | Filter between cars, brake late, keep the food level | One order: shop, pick up, rush to the door | A run of orders, rating and streak | Time, food damage |
-| D. Tour guide | Line up the next landmark, slow for the view | One stop: arrive, frame the photo, short line about the place | A full tour of 3 to 5 landmarks, guests' rating | Light: time of day, guests' patience |
-| E. Street racer | Hit the apex, draft a truck, near miss | One race | A night of races, rivals, standing | Rivals, speed |
-| F. The mix | Weave, horn, choose route | One job of any kind, from one shared system | A shift that mixes fares, one tour and a side job; rent paid; a new area or story beat | Traffic, time, passengers, rent |
+## 12. References (inspiration, never copy)
 
-### Recommended loop (F), as a sketch
+| Game | What fits | What to avoid |
+|---|---|---|
+| GTA V | Three characters, switching, merged heists, a living city | Satire that mocks groups; size we cannot build |
+| Sleeping Dogs | A cop in a crime world, strong melee, a real city's street feel | Long fight-only stretches |
+| Yakuza 0 and Like a Dragon | Two leads in alternating chapters; a small, dense city full of side stories; over-the-top but heartfelt | Menus and long cutscenes |
+| Mafia Definitive Edition | Chapter structure, driving between story beats | A city with nothing to do between missions |
+| Max Payne 3 | Over-the-top gunfights with weight | Grim tone everywhere |
+| Watch Dogs 2 | A bright real city, readable characters | Gadget clutter |
+| Driver: San Francisco | Chases as the core | |
+| Hindi action films | Tone of chases, heroics and slow-motion moments | Real people, real politics |
 
-```
-             +--------------------------------------------------+
-             |  1 HOUR: a shift (morning, rush hour, evening)    |
-             |  rent due at the end, reputation per area grows,  |
-             |  a regular passenger calls, a new stand opens      |
-             +------------------------+-------------------------+
-                                      |
-        +-----------------------------v-----------------------------+
-        |  5 MINUTES: one job                                        |
-        |  hail or stand -> quote (meter or fixed) -> pick up ->     |
-        |  route choice (main road / flyover / gali) -> drop off ->  |
-        |  meter + tip (time, smoothness, near misses, horn manners) |
-        |  -> stamp if you passed a new landmark                     |
-        +-----------------------------+-----------------------------+
-                                      |
-        +-----------------------------v-----------------------------+
-        |  30 SECONDS: the road                                      |
-        |  read traffic -> find the gap -> horn -> slip through ->   |
-        |  near miss (+tip) -> signal countdown -> pick the turn     |
-        +------------------------------------------------------------+
-```
+## Recommendation
 
-### Tension sources
+1. Structure S1: chapters with a lead, merged missions at the peaks, built so free switch can unlock later.
+2. Pillar set A: three lives, one city; filmi, never cheap; the city opens up.
+3. Combat O1 for the first slice, O2 by the first public release.
+4. The driver leads the first chapter: driving first, the city through his eyes, then the cop and the fixer.
+5. First playable: the four pilot missions above.
 
-| Source | How it shows | Fits | Cost | Notes |
-|---|---|---|---|---|
-| Traffic | Mixed autos, buses, bikes, cars, cycle rickshaws; gaps open and close | all | L (needs lane graph AI) | The heart of the 30 s loop. Without it every option is thin |
-| Time | Promised arrival, train or exam deadline, food going cold | all | S | Use on some jobs, not all, or it becomes a stopwatch game |
-| Passengers | Mood bar, short lines ("bhaiya, jaldi"), tip | A B D F | M (text and voice) | Gives jobs a face. Respect rule applies to every passenger |
-| Money | Daily auto rent, meter vs fixed price | A F | S | Soft target: missing rent costs reputation, never a game over |
-| Rivals | Other autos race you to a hail; night racers | A E F | M | Good in short bursts |
-| Police | Challan (fine) for a red light or wrong side | all | S | Recommended as a small fine only. No chase as core |
-| Weather and season | Fog, monsoon flooding, summer heat haze | all | M to L | Strong Delhi flavour, changes how known routes play |
-| Events | Baraat, fair at Pragati Maidan, VIP hold, festival nights | all | M to L | Change the map for a while; turn route knowledge into choices |
+## Round 2 questions
 
-## 3. Missions and activities
+At most 6, each with options. Answered already (not asked again): police = wanted level and chases; reasons to return = a city that opens up and the story of the three.
 
-Ranking: score = 2 x fun + Delhi uniqueness + map reuse + effort points (S = 3, M = 2, L = 1). Fun, Delhi and map reuse are 1 to 5 planner estimates, to be checked in playtests. Effort: S is a part of one task once the fare system exists, M is one task, L is several tasks or new art and AI. Map reuse means it plays on the same pilot roads again and again.
+1. How do the three connect?
+   - a. Chapters: each chapter has a lead, merged missions at the peaks; free switching can unlock later (recommended)
+   - b. Free switch any time, like GTA V (the biggest cost)
+   - c. One main character, the other two in short arcs
+2. Which three pillars should every feature serve?
+   - a. Three lives, one Dilli: three lives one city; filmi, never cheap; the city opens up (recommended)
+   - b. Street smart: know the streets; every fight costs; honest Delhi
+   - c. Chaos sandbox: make a scene; Delhi as a playground; fun in 3 minutes
+3. Who do players meet first?
+   - a. The auto driver (recommended)
+   - b. The cop
+   - c. The fixer
+   - d. All three in a short prologue
+4. How big are combat and on foot at the first release?
+   - a. Lean: fists, two or three weapons, no cover (first slice), growing to b (recommended)
+   - b. Mid: cover, 5 or 6 weapon types, shooting from vehicles
+   - c. Full: climbing, swimming, 10 or more weapons
+5. Civilians and violence?
+   - a. Guns hit only enemies; civilians cannot be harmed
+   - b. Civilians can be hurt, it raises the wanted level hard and the story treats it as wrong (recommended)
+   - c. Full sandbox, no limits
+6. How much of play is action and story vs city life (fares, side jobs, exploring)?
+   - a. Mostly action and story
+   - b. About half and half (recommended)
+   - c. Mostly city life, with action peaks
 
-Read with care: rank is per item. "Stand fare" sits at 9 but it is the backbone: most items above and below it are a stand fare with a twist (a deadline, a cargo, a route rule). Build the fare system once, then each twist is cheap.
+## Appendix: round 1 driver jobs (kept as the driver's side jobs and fare twists)
 
-Respect rule (`DELHI_WORLD.md` section 3) applies to every row: passengers of every age, gender and community; festivals of many faiths, each at the real places where they happen; weddings from many communities; no real people, no real party symbols, no real brand names; gig workers and drivers shown with dignity; no community is a joke or an obstacle.
+From the round 1 draft (P0-004). Fits column letters: A auto driver, B cabbie, C delivery rider, D tour guide, E street racer. Mission 42 "Police chase" is now covered by the wanted level (Anmol). Respect rule applies to every row.
 
+| Rank | Mission or activity | Kind | What happens | Fun | Delhi | Effort | Map reuse | Score | Fits |
+|---|---|---|---|---|---|---|---|---|---|
 | Rank | Mission or activity | Kind | What happens | Fun | Delhi | Effort | Map reuse | Score | Fits |
 |---|---|---|---|---|---|---|---|---|---|
 | 1 | Metro race | race | Beat the Blue Line train between two stations near Pragati Maidan. You see the train on the elevated track beside you. | 5 | 5 | M | 4 | 21 | A B C E |
@@ -154,164 +286,3 @@ Respect rule (`DELHI_WORLD.md` section 3) applies to every row: passengers of ev
 | 45 | CNG queue | side | Queue for CNG at a fuel station. Real, but a chore. | 1 | 5 | S | 4 | 14 | A |
 | 46 | Ghost replay duel | race | Race the ghost of your best run, or a friend's shared run. | 3 | 1 | M | 4 | 13 | all |
 
-Pilot fit: every row from 1 to 20 can run in the pilot area (Connaught Place, ITO and Pragati Maidan flyovers, Chandni Chowk, one metro line), except Night auto race, whose India Gate finish is about 2 km outside it (use a CP finish in the pilot). Minto Bridge (Monsoon underpass) is next to CP.
-
-### Sample mission beat sheet: "Train at 6:10"
-
-```
-Goal       Get a family of four with luggage from Chandni Chowk to New Delhi Railway Station by 18:10.
-Start      17:52 game time, evening rush. Hail at the Chandni Chowk metro exit.
-Beat 1     Pick up. Line: "Bhaiya, New Delhi station, train at 6:10!" Clock shows 18 min.
-Beat 2     Route choice on screen: Netaji Subhash Marg (wide, jammed), or the galis past
-           Ajmeri Gate (tight, quicker if you know them). Both are real roads in the repaired map.
-Beat 3     The jam: a bus stalls ahead. Horn, find the gap, or turn into the gali.
-Beat 4     Luggage meter: hard bumps and crashes shake it. A bag falls at 0, cost on the tip.
-Beat 5     Final stretch: station forecourt, crowds, find the drop off bay.
-Win        Arrive by 18:10. Fare + tip + "On time" stamp. Faster than 14 min unlocks the gali on your map.
-Fail       Train missed at 18:10: the family takes a later train, small fare, no tip. Retry from the hail.
-Why retry  You saw the gali route and the time it saves. Your best time shows next to the job.
-Fun check  Clear goal (the clock), fair fail (a bus you could see coming), reason to retry (a route
-           you now know), a reward that matters (a new gali on your map, a better stand).
-```
-
-## 4. Progression and reasons to return
-
-| Item | What it is | Verdict | Why |
-|---|---|---|---|
-| Money | Fares and tips into one wallet | Healthy if it buys things that change play | The old game's wallet only bought paint, so money meant nothing |
-| Daily auto rent | A target per shift, as real auto drivers pay | Healthy as a soft target | Gives each shift a goal. Becomes a chore if missing it means a game over or a loss of progress. Missing it costs reputation only |
-| Vehicle unlocks | Auto first; later a car (more speed) or a scooter (more filtering) | Healthy | Each vehicle changes how the same streets play. Each costs a handling tune, a model and sounds |
-| Upgrades | Engine, brakes, horn, suspension; small and felt | Healthy if felt, chore if +2% numbers | Keep few, each one noticeable in a feel probe |
-| Styling | Auto art, lettering, seat covers, lights, the horn tune | Healthy | Expression, and Delhi autos are famously decorated. Cheap content |
-| Reputation by area | Your name at CP, ITO, Chandni Chowk grows with good fares | Healthy | Unlocks better fares and new stands in that area. Ties progress to real places |
-| City knowledge map | Galis and shortcuts appear on your map once driven; landmarks once seen | Healthy, core | The real map becomes the progress. Grows naturally with each new area |
-| Unlocking parts of the city | New areas open as reputation grows | Healthy if it matches how the map grows | Also matches the build: pilot first, then area by area. Chore if gated by invisible walls; use story and fares, not walls |
-| Daily and weekly jobs | A seeded job per day or week | Chore risk | Healthy only with no streak to lose and no fear of missing out |
-| Story and characters | Regular passengers who come back (a student, a shopkeeper, a visitor) with small arcs | Healthy | A reason to come back tomorrow. Costs writing and voice; text first, voice later |
-| Personal bests | Best time per job and route | Healthy | Free with the job system. Local first |
-| Online leaderboards | Shared scores | Healthy but costly | Needs a backend and cheat checks. Later, if ever |
-| Photo spots | Pose points at hero landmarks, best time of day | Healthy | Turns landmarks into rewards. Keep the count small and each one special |
-| Collectibles (stamps, kites, food map) | Things gathered while driving | Healthy if each one is a place; chore if 500 hidden items | Tie each to a real place or event |
-| Fuel and CNG | Refuel stops | Chore | Real, but a stop with nothing to decide. Leave out, or make it a free ambient scene |
-| Damage and repair | Paying to fix the auto | Mostly chore | A light cost on the tip is enough |
-
-## 5. Game feel
-
-| Element | What it means here | How we measure it (feel probes) |
-|---|---|---|
-| Speed sense | Low camera, wide FOV at speed, roadside objects close, wind and engine rise. In an auto, 50 km/h past a bus must feel fast | FOV at 0, 30 and 60 km/h; roadside props within 3 m per 100 m of road |
-| Near misses | Passing within about 0.6 m of a vehicle at over 25 km/h gives a whoosh, a small tip bump and a chain | Probe counts near misses on a scripted route; no false ones when stopped |
-| Horn culture | The horn is a verb. A tap at a blind corner is good manners; holding it at a jam annoys passengers. Traffic and people react | Probe: a horn at a pedestrian ahead makes them step aside within 1 s |
-| Weaving | Mixed traffic leaves real gaps; the auto fits where a car does not | Gap widths in the traffic AI; the auto passes a gap of 1.6 m, a car needs 2.0 m |
-| Drifts and tilt | A car can slide; an auto can lift onto two wheels in a sharp turn (risky, playful) | Tilt angle and recovery time in a probe |
-| Landmarks as rewards | A landmark comes into view: a short camera nudge, a sound sting, a stamp | First-sight event fires once per landmark; shot shows the landmark in frame |
-
-### Three candidate pillar sets
-
-Every feature must serve all three pillars of the chosen set.
-
-| Set | Pillar 1 | Pillar 2 | Pillar 3 | What it leads to |
-|---|---|---|---|---|
-| A. The city is the game (recommended) | Know the city: real places, routes and shortcuts are the skill | Flow through chaos: weaving, horns and near misses make every minute alive | Every trip shows Delhi: each job ends with something new seen or learned | Fares, tours, knowledge map, area reputation |
-| B. Hustle | Every rupee counts: money and time press on every job | Read the road: traffic is a puzzle of gaps | Your auto, your name: styling and reputation are yours | A tighter economy game, more stress, more replay of the same jobs |
-| C. Joyride | Speed and style: near misses, drifts, tilt, flyover jumps | Delhi as a playground: landmarks are set pieces | Short bursts: a run in 3 minutes | Arcade races and stunts, less about the real city |
-
-### HUD sketch (recommended loop)
-
-```
-+--------------------------------------------------------------------------+
-| [Job] Train at 6:10   Chandni Chowk -> New Delhi Stn     14:32 left      |
-|       Family of 4   mood [#######---]   luggage [#########-]             |
-|                                                                          |
-|                                                                          |
-|                         (the road, never covered)                        |
-|                                                                          |
-|                                           NEAR MISS x3  +Rs 12          |
-|                                                                          |
-| +-----------+                                      Signal: green 08      |
-| | minimap   |   Turn left in 120 m onto Asaf Ali Road                    |
-| | route     |                                       42 km/h  | Rs 1,240  |
-| +-----------+                                       rent today: Rs 850   |
-+--------------------------------------------------------------------------+
-```
-
-## 6. Scope: the first playable loop and what grows from it
-
-### First playable options (pilot area only)
-
-| Option | What is in it | Fun | Cost | Risk | Needs from the map | Needs from AI traffic | Needs from art |
-|---|---|---|---|---|---|---|---|
-| S1. Fares + Metro race (recommended) | Stand fares with quote, route, tip; near-miss chain; horn reactions; landmark first-sight stamps; one Metro race | 4 | M: about 6 to 8 tasks on top of the base world | Medium: fun depends on traffic density | Named places and drop off bays, lane graph router, metro track and 2 stations | 40 to 80 mixed vehicles in view, gaps, horns, signals with countdowns | Auto stand-in, passenger stand-ins, stand and bay signs, metro train stand-in |
-| S2. Time trials only | CP circle laps, flyover sprint, Metro race, personal bests | 3 | S: 3 to 4 tasks | Low | Lane graph, flyovers, metro track | Light traffic | Few |
-| S3. Dilli Darshan tour | One tour of 3 landmarks with photo spots | 3 | M | High: depends on hero landmark art being good early | Hero landmark placement and photo spots | Light traffic, tourist crowds | 2 or 3 hero landmark models (procedural stand-ins look weak) |
-| S4. Delivery rush on a scooter | Food runs with timers and damage | 4 | L | High: new vehicle, rider model and lean animation | Galis drivable, shop points | Dense two-wheeler gaps | Rider and scooter model |
-| S5. Full shift | Rent, reputation in 3 areas, several job types, a regular passenger | 5 | L: 15 or more tasks | High: too much before the base is proven | All of S1 plus area data | All of S1 | All of S1 plus characters |
-
-### What grows from S1 (each step is fun on its own)
-
-| Step | Adds | Builds on |
-|---|---|---|
-| 1 | S1: fares, near misses, horn, stamps, Metro race | Map pilot, lane graph, traffic |
-| 2 | The shift: rent, reputation per area, knowledge map, shortcut fares, Train at 6:10, Exam day | Fare system |
-| 3 | Dilli Darshan tours and photo spots | Hero landmarks from the world layers |
-| 4 | Events and weather: fog, monsoon underpass, rush hour at ITO, festival nights | Weather and event layer |
-| 5 | Regular passengers with small stories; styling and upgrades | Content writer, art batches |
-| 6 | Night auto races and rivals at the stand; a second vehicle | Rival AI, new handling tune |
-| 7 | New areas of the city, each with its own jobs and landmarks | Area by area world growth |
-
-## 7. References (inspiration, never copy)
-
-| Game | What fits Dilli Darshan | What to avoid |
-|---|---|---|
-| Crazy Taxi | The 30 s loop: a fare, a clock, tips for skilful driving, arrows that never leave you lost | Arcade disregard for the place; the city is only a track |
-| Euro Truck Simulator 2 | Route knowledge, calm pride in a job done, real places made recognisable | Long empty stretches and slow chores (fuel, rest stops) |
-| Taxi Life: A City Driving Simulator | A real city (Barcelona) driven fare by fare, a growing company | Slow pace and an empty feel when traffic and people are thin; the old game's trap too |
-| Burnout Paradise | Events start at any junction; shortcuts and billboards to find; the city learned by heart | Crashes as the main reward; aggression |
-| Forza Horizon | A festival frame, photo spots, a strong sense of place, big set pieces | Reward overload: many currencies, constant pop-ups |
-| Midtown Madness | A real-ish city with several modes on the same streets | Modes in a menu with no link between them |
-| Night Call | Passengers with stories; the cab as a small stage | Slow, text heavy |
-| Tokyo Xtreme Racer | Night highway racing, named rivals | Racing as the only thing to do |
-| GTA series | A living city: radio, chatter, people with routines | Crime fantasy, violence, caricature of communities |
-| Death Stranding | Cargo care and the joy of a well chosen route | Long walks between moments |
-
-## Recommendation
-
-1. Fantasy F: a new auto driver who becomes the one who knows every gali. Fares are the core, Dilli Darshan tours are the signature job, deliveries and night races come later as side jobs.
-2. Pillar set A, "The city is the game": know the city; flow through chaos; every trip shows Delhi.
-3. Loop: 30 s weave and choose, 5 min one fare with a tip, 1 h a shift with soft rent and area reputation.
-4. Tone: grounded arcade. Crashes cost time, tip and passenger mood; red lights cost a small challan; no police chase in the core game.
-5. Progression: knowledge map, area reputation, auto styling and a few felt upgrades, regular passengers. No fuel queues, no streaks you can lose, online boards later if ever.
-6. First playable: S1 (fares, near misses, horn, stamps, Metro race) in the pilot area. Then grow step by step as in section 6.
-7. One open risk to settle with the owner: starting in an auto needs a new light-vehicle tune and a model, while the kept handling tune is for a car. Starting in a cab is cheaper; starting in an auto is more Delhi.
-
-## Round 1 questions
-
-Each has 2 to 4 options. The orchestrator asks them; answers are recorded verbatim, never invented.
-
-1. Who is the player?
-   - a. A new auto driver who learns the city: fares first, tours and deliveries later (recommended)
-   - b. A cab driver in a car who knows every gali
-   - c. A delivery rider on a scooter
-   - d. A street racer at night
-2. Which three pillars should every feature serve?
-   - a. The city is the game: know the city, flow through chaos, every trip shows Delhi (recommended)
-   - b. Hustle: every rupee counts, read the road, your auto your name
-   - c. Joyride: speed and style, Delhi as a playground, short bursts
-3. How strict should the driving rules be?
-   - a. Arcade: forgiving, crashes only cost time
-   - b. Grounded arcade: crashes cost tip and passenger mood, red lights give a small fine (recommended)
-   - c. Close to real: real speeds and rules, slower and calmer
-4. What should the first playable in the pilot area be?
-   - a. Fares with near misses and horn, plus a race against the metro (recommended)
-   - b. A Dilli Darshan tour past 3 landmarks
-   - c. Time trials only: CP laps and flyover sprints
-   - d. A full shift with rent, reputation and several job types (bigger, later)
-5. What should bring players back tomorrow? (pick up to 2)
-   - a. A city map that fills in with galis and landmarks, plus reputation by area (recommended)
-   - b. Regular passengers with small stories
-   - c. Auto styling and upgrades
-   - d. Daily jobs and personal bests
-6. Police and chases?
-   - a. No chases; breaking rules gives a small challan only (recommended)
-   - b. A police chase as an optional night event
-   - c. Chases as a core mode

@@ -267,9 +267,21 @@ Estimates until the P0-016 bench and the pilot measure them.
 
 ## 9. Open questions for Anmol
 
-Composite map questions (next interview sitting): which districts are must-haves, which are optional; how big the map should feel (minutes to cross); which NCR parts; where the three characters live and work; how the Yamuna and East Delhi sit in the layout.
+Answered in interview sitting 1 (2026-11-10, inbox source "interview"; details in `CITY_BRIEF.md`):
+- First hero landmarks: Connaught Place circle, India Gate, Red Fort (inbox mmwarq9yx). India Gate is about 2 km south of CP, so the pilot area stretches down Kartavya Path or uses a connector (P0-028 decides the layout).
+- Districts in the compressed map: central core, Old Delhi, East Delhi across the Yamuna, South with Gurgaon and the airport, plus story places: GB Road, Jantar Mantar (protests), Vasant Kunj, Delhi Gymkhana, the Golf Club, Khan Market, one haunted place (inbox mmwarq9we).
+- Release: free and public (inbox mmwarqa1h). Prefer data licences that would still allow a later sale (decisions.md "Speeds and map size").
+- Political posters: invented parties only (inbox mmwarqa41).
+- Map size: "smaller than gta5 but not too small to feel boring and not vast" (inbox mmwartrys).
+- Look: B stylised realistic, with D's grime in Old Delhi (inbox mmwarkusg). Area profiles get a `wear` value (0 to 1) that drives the grime layer; see `STYLE_OPTIONS.md` "Landmark tiers and area kits per candidate".
 
-1. Which landmarks matter most to you? Which are heroes?
-2. Which areas should come first after the pilot?
-3. Which metro line for the pilot?
-4. Will the game be public or commercial? (Decides some data licences, FABDEM in particular.)
+Proposed tiers for the places he named (to confirm in sitting 2 or P0-014): heroes CP circle, India Gate, Red Fort; heroes later Jama Masjid, Qutub Minar, Humayun's Tomb; signature Jantar Mantar, Khan Market, Delhi Gymkhana, the haunted place, IGI terminal, Yamuna bridges; GB Road, Vasant Kunj and the Golf Club grounds as area profiles with marker buildings. Full table in `CITY_BRIEF.md` "Landmarks".
+
+Composite map questions (P0-028 writes them for sitting 2): must-have districts, how big the map should feel, which NCR parts, where each character lives and works, the Yamuna and East Delhi placement, the pilot districts.
+
+Still open:
+1. Which heroes come after the first three?
+2. Which areas come first after the pilot?
+3. Which metro line for the pilot? (Proposal: the Blue Line stretch near Pragati Maidan and Indraprastha, or the Yellow Line through Chandni Chowk, Rajiv Chowk and Central Secretariat, which links all three hero landmarks' districts.)
+4. Which haunted place? (Candidates in `CITY_BRIEF.md`.)
+5. Police look: close to the real Delhi Police, or an invented city force?
