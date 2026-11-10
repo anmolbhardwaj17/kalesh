@@ -87,3 +87,7 @@
 {"id":"mmwaxjb1w","ts":"2026-11-10T16:53:54.777Z","reply":"Folder stays dilli-darshan; the game and repo are Kalesh.","tasks":[]}
 {"id":"mmwaxm2ur","ts":"2026-11-10T16:56:04.127Z","reply":"Will tell him when P0-030 is done and hold the next task so the rename is safe.","tasks":[]}
 {"id":"mmwaxnubt","ts":"2026-11-10T16:57:26.385Z","reply":"Updated GOAL.txt and GOAL_PROMPT.md for Kalesh, Godot, three sign-offs, the remote and the commit rule.","tasks":[]}
+{"id":"mmwaysy3e","ts":"2026-11-10T17:29:24.160Z","reply":"Fixed: the old dashboard server had a stale path. Restarted it; http://localhost:4488 works now.","tasks":[]}
+{"id":"mmwaz7d6h","ts":"2026-11-10T17:41:30.765Z","reply":"Done: README.md with logo, concept art, the three lives, pillars, map, slice missions, status and run steps. Pushed to GitHub.","tasks":[]}
+{"id":"mmwaz929k","ts":"2026-11-10T17:41:56.065Z","reply":"Commits to main already count. The repo is private: turn on Private contributions in profile settings. The graph counts days, not commits. A PR flow adds about one per task; offered as an opt-in.","tasks":[]}
+{"id":"mmwaz9k74","ts":"2026-11-10T17:42:19.303Z","reply":"Rewrote the README: logo, hero shot, three-line pitch, two mood shots, short sections, no tables or badges. Pushed.","tasks":[]}

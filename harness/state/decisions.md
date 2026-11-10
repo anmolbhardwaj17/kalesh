@@ -175,3 +175,9 @@ By: builder (P0-009)
 
 ## 2026-11-10: HUD gets its own discovery (Anmol)
 The stand-in HUD (text box, plain compass, speed box) is a placeholder and not acceptable as a direction. P0-030 researches modern open world HUDs online and proposes the Kalesh HUD with mockups for Anmol to react to, before any HUD build. HUD build follows the signed style.
+
+## 2026-11-10: Architecture options draft 1 (P0-010), recommendations pending sign-off
+Decision: harness/design/ARCH_OPTIONS.md compares 54 system decisions for Godot 4.7.2 and the composite map, 2 to 4 options each, with a recommendation per decision (option ids such as R1, P1, LN1). None is decided until Anmol's architecture sign-off; the benches P0-016 to P0-019 and P0-029 measure them and P0-020 updates the file. Provisional calls the benches build on: the offline bake and every bench prototype are Node and TypeScript under tools/bake/ (one projection module, with an origin argument for district frames); Godot bench scenes live in game/bench/<name>/ behind --arch=<name>, run by harness/bench/arch.mjs; source downloads go in a gitignored data/ folder pinned in data/SOURCES.json. FABDEM (CC BY-NC-SA 4.0) is used only as a yardstick in the data bench and is never shipped or baked into tiles; the ground height source is GEDTM30 or Copernicus GLO-30 with our own ground filter, chosen by the pilot check. MAP_REPAIR.md and DELHI_WORLD.md are refined to match (sources with licences, rule ids including district stitching and hero roads, issue, repair log and override formats, the inspector as a web page with an "open in game" button, pipeline choices for landmarks and areas).
+Why: Anmol wants the engine and systems chosen on evidence. A bench needs one bake language and one place for its scenes and data, and a non-commercial ground model would block the later sale the licence preference keeps open.
+By: planner (P0-010)
+

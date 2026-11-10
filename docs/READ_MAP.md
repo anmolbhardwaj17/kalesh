@@ -49,9 +49,9 @@ Notes: `harness/state/knowledge/driving-and-camera.md` (create on first gotcha)
 ## World, map data and bake
 Notes: `harness/state/knowledge/world-and-map.md` (create on first gotcha)
 - TECH: "Coordinates (binding, owner 2026-11-10)" and the world sections written after the architecture sign-off.
-- Design: `harness/design/MAP_REPAIR.md` (all), `harness/design/DELHI_WORLD.md` (landmark registry and area profiles: read the section for your task), `harness/design/ARCH_OPTIONS.md` once written.
-- Data: `harness/data/landmarks.json` and `harness/data/areas/` once added.
-- Source: `tools/geo/` (the reference projection and its tests), its Godot port `game/geo/projection.gd` with `game/tests/test_projection.gd` and the fixture `harness/data/fixtures/projection_points.json`, bake scripts and benches under `harness/bench/` and `tools/` once added.
+- Design: `harness/design/MAP_REPAIR.md` (all), `harness/design/DELHI_WORLD.md` (section 0 composite map, 1 landmarks, 2 area profiles, 10 pipeline choices: read the section for your task), `harness/design/ARCH_OPTIONS.md` (the rows for your system by option id, "Budgets per system", "Bench tasks"; a draft until the architecture sign-off).
+- Data (each once added): `harness/data/districts.json` and `harness/data/districts/`, `harness/data/connectors/`, `harness/data/overrides/`, `harness/data/hero_roads/`, `harness/data/landmarks/`, `harness/data/areas/`. Source data downloads live in the gitignored `data/` folder with `data/SOURCES.json`.
+- Source: `tools/geo/` (the reference projection and its tests), its Godot port `game/geo/projection.gd` with `game/tests/test_projection.gd` and the fixture `harness/data/fixtures/projection_points.json`, the offline bake under `tools/bake/` and bench drivers under `harness/bench/` once added; Godot bench scenes under `game/bench/<name>/` (game arg `--arch=<name>`).
 
 ## Old game reference (read only)
 - `/Users/apple/Desktop/code/delhi-drive`: never edit, build or install there. Read `harness/design/SALVAGE_AUDIT.md` first (written in Phase 0) instead of the old code.

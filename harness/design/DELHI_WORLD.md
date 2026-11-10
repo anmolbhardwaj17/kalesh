@@ -1,6 +1,6 @@
 # Delhi world layers: landmark registry and area profiles
 
-Design starting point, written 2026-11-10 (planner REPLAN after Anmol's direction change, inbox mmwapw3co; decisions.md "Delhi world layers"). Phase 0 architecture and style discovery refine it, measure it and put it in front of Anmol for sign-off. Nothing here is decided until then. Every number is an estimate unless it names a report file.
+Design starting point, written 2026-11-10 (planner REPLAN after Anmol's direction change, inbox mmwapw3co; decisions.md "Delhi world layers"). Refined in architecture discovery (P0-010, 2026-11-10): the map round answers are recorded in section 0, and section 10 lists the pipeline choices with their option ids from [`ARCH_OPTIONS.md`](ARCH_OPTIONS.md) section 8. The map layout, districts and pilot are Anmol's answers. Everything marked "Rec" is a recommendation until the architecture sign-off. Every number is an estimate unless it names a report file. The game is now called Kalesh.
 
 ## Summary (10 lines)
 
@@ -27,7 +27,17 @@ sources -> district selection -> map repair (graph, footprints, DTM) -> stitchin
 - Order of precedence on any square metre: road corridor, then landmark zone, then generated city. A conflict between a road and a landmark footprint is a map repair issue, not a silent overlap.
 - Both layers bake with the map (same deterministic, logged, versioned rules as `MAP_REPAIR.md`). Hand edits live in override files that survive every rebake.
 
-## 0. Composite map (proposal, pending Anmol)
+## 0. Composite map
+
+**Anmol's answers (interview sitting 2, 2026-11-10; decisions.md "Sitting 2 results"; `GAME.md` "Map and districts"):**
+- Layout C (Delhi plus NCR) is the full map, built in stages.
+- Pilot: Connaught Place with Jantar Mantar, India Gate, ITO, Chandni Chowk with Red Fort (about 7.2 km2, estimate).
+- First release: layout B's districts plus Gurugram, Laxmi Nagar, Kashmere Gate with ISBT, and Humayun's Tomb with Nizamuddin.
+- Later unlocks: Noida, Shahdara, Akshardham.
+- Homes as proposed in 0.1. The haunted place is Malcha Mahal (in the Central Ridge clip, D17). The police force is invented and Delhi-like.
+- `harness/data/districts.json` gives every district a `stage` (pilot, release, later), so the bake and the story open them in order.
+
+The text below is the P0-028 draft that he answered. The mechanics (district frames, clip polygons along real edges with an edge band, authored connectors, filler) are Rec X1, DC3, SC1 and FL1 in `ARCH_OPTIONS.md` section 4 and are described in `MAP_REPAIR.md` "District frames and stitching".
 
 Anmol (inbox mmwarg8cw, 2026-11-10): a compressed Delhi, the way big open world games treat a real city: main areas, monuments, localities, roads, the Yamuna, the airport, parts of NCR and East Delhi, merged into one smaller map. Not a 1:1 copy.
 
@@ -181,7 +191,7 @@ Licences below are what the planner believes today. Each one is checked in the P
 
 ### Data file: `harness/data/landmarks.json`
 
-One generated file plus one hand-edited override file (`harness/data/landmarks.overrides.json`), so a rebuild of the registry never loses Anmol's or Claude's edits. The schema below is the starting point; P0-010 confirms it.
+One generated file plus one hand-edited override file (`harness/data/landmarks.overrides.json`), so a rebuild of the registry never loses Anmol's or Claude's edits. P0-010 keeps the schema below and recommends splitting the storage (Rec LS2, section 10): one file per hero and signature landmark in `harness/data/landmarks/<id>.json`, one generated `landmarks_markers.json` for markers, and the overrides file. Every entry also carries a `district` id; a landmark outside every district clip is marked `far` (skyline only).
 
 ```json
 {
@@ -235,7 +245,7 @@ Tier rule: an automatic score proposes the tier (ASI listed, Wikidata sitelinks,
 
 ### Art cards and stand-ins
 
-- Hero: one model card (kind model, `model_lm_<id>`) with a step by step prompt, the reference photo list and notes on what must read at speed. Texture cards for its main materials. The current ingest limit (25,000 triangles, 3 materials) may be too low for a hero; P0-010 decides a hero limit or a split into parts.
+- Hero: one model card (kind model, `model_lm_<id>`) with a step by step prompt, the reference photo list and notes on what must read at speed. Texture cards for its main materials. The prop ingest limit (25,000 triangles, 3 materials) is too low for a hero. Rec HM2 (section 10): a hero is up to 8 parts of up to 25,000 triangles each, up to 6 materials in all, 3 LODs per part and one far silhouette under 2,000 triangles.
 - Signature: one facade or material texture card per landmark where the area kit material is not enough.
 - Marker: no card. It uses its area kit material.
 - Every card is registered with `node harness/bin/assets.mjs add` after the style sign-off, in batches Anmol can make in one sitting. Before that, only intents.
@@ -263,7 +273,9 @@ Licences are beliefs until the P0-018 data bench checks them.
 | NDVI from Sentinel-2 | Greenery per cell | Copernicus data, free with attribution |
 | Night lights (VIIRS) | Activity and wealth proxy at coarse scale | Believed public or CC BY; check |
 
-Method (to confirm in P0-010):
+P0-010 recommends a simpler method for the composite map (Rec AD2, section 10): with about 20 small districts, Claude draws 3 to 8 area polygons per district along roads and rail, seeded by OSM land use and colony outlines, and uses the feature grid below as evidence, not as an automatic clustering. The steps below stay as the way the evidence is made.
+
+Method:
 1. Lay a grid of cells (about 100 m, estimate) and give each cell a feature vector: land use, footprint size and coverage, building count, height hints, road density, NDVI, night lights, density from census.
 2. Seed areas from named colonies and wards, then merge or split cells by feature similarity, with roads and rail lines preferred as boundaries.
 3. Claude assigns each area an archetype and tunes the values from the features and reference photos. Every value carries an evidence line.
@@ -317,7 +329,7 @@ Fields cover everything in Anmol's message: building types and their mix, height
 
 ### Area kits
 
-- One kit per archetype: modular facade, roof, balcony, shopfront and prop pieces that share one texture atlas (one KTX2 array or atlas per kit, format decided in P0-010).
+- One kit per archetype: modular facade, roof, balcony, shopfront and prop pieces. Textures (Rec TX1): one VRAM compressed Texture2DArray per kit for tiling materials and one trim and decal atlas per kit, imported by Godot. Modules keep fixed ids so baked placements never change when a module is replaced (Rec KT2).
 - Kits are procedural first, then upgraded with texture cards in the signed style.
 
 ### Map inspector: area view
@@ -372,7 +384,7 @@ Estimates until the P0-016 bench and the pilot measure them.
 - P0-006 (style options): how a hero, signature and marker landmark and two contrasting area kits look in each candidate style, with AI prompt fit and asset volume per tier.
 - P0-009 (stand-in scene): procedural stand-ins for one landmark per tier and two contrasting area kit blocks, so every style test renders them.
 - P0-011, P0-012 (style tests): the lookproof views include those stand-ins.
-- P0-010 (architecture options): decisions for the landmark registry pipeline and the area profile pipeline, and the inspector area view.
+- P0-010 (architecture options): done. Decisions for the landmark registry pipeline, the area profile pipeline and the inspector views are rows in `ARCH_OPTIONS.md` section 8 and are summarised in section 10 below.
 - P0-018 (data bench): source and licence check for landmark and area sources, and a pilot census.
 - P0-014, P0-021 (later rounds): confirm the hero list and the area order from the census.
 - P0-023 (plan the game): adds the build tasks listed below after the map repair pilot.
@@ -400,11 +412,46 @@ Answered in interview sitting 1 (2026-11-10, inbox source "interview"; details i
 
 Proposed tiers for the places he named (to confirm in sitting 2 or P0-014): heroes CP circle, India Gate, Red Fort; heroes later Jama Masjid, Qutub Minar, Humayun's Tomb; signature Jantar Mantar, Khan Market, Delhi Gymkhana, the haunted place, IGI terminal, Yamuna bridges; GB Road, Vasant Kunj and the Golf Club grounds as area profiles with marker buildings. Full table in `CITY_BRIEF.md` "Landmarks".
 
-Composite map questions for sitting 2 (P0-028): see [section 0.6](#06-questions-for-interview-sitting-2-composite-map), with the candidate districts in [0.1](#01-candidate-districts-p0-028-draft-pending-anmol), the layouts and sketches in [0.3](#03-layout-options-p0-028-draft-pending-anmol) and the recommendation in [0.5](#05-recommendation): layout, optional places, NCR parts, where each character lives and works, the east bank of the Yamuna, the pilot districts.
+Answered in sitting 2 (2026-11-10): layout C in stages, the first release and later districts, homes as proposed, the pilot, Malcha Mahal as the haunted place, an invented Delhi-like police force (see the top of section 0). Hero roads were added as a tier next to hero landmarks (decisions.md "Hero roads"; `MAP_REPAIR.md` "Hero roads").
+
+The composite map questions he answered (P0-028): see [section 0.6](#06-questions-for-interview-sitting-2-composite-map), with the candidate districts in [0.1](#01-candidate-districts-p0-028-draft-pending-anmol), the layouts and sketches in [0.3](#03-layout-options-p0-028-draft-pending-anmol) and the recommendation in [0.5](#05-recommendation): layout, optional places, NCR parts, where each character lives and works, the east bank of the Yamuna, the pilot districts.
 
 Still open:
 1. Which heroes come after the first three?
 2. Which areas come first after the pilot?
 3. Which metro line for the pilot? (Proposal: the Blue Line stretch near Pragati Maidan and Indraprastha, or the Yellow Line through Chandni Chowk, Rajiv Chowk and Central Secretariat, which links all three hero landmarks' districts.)
-4. Which haunted place? (Candidates in `CITY_BRIEF.md`.)
-5. Police look: close to the real Delhi Police, or an invented city force?
+4. The architecture questions in `ARCH_OPTIONS.md` "Questions for the owner" (licences, signing, Windows testing, the inspector, animation, the hero road list).
+
+## 10. Pipeline choices (architecture discovery, P0-010)
+
+The full comparison with options, costs and risks is in [`ARCH_OPTIONS.md`](ARCH_OPTIONS.md) section 8 (world layers), section 4 (composite map) and section 7 (inspector). This is the recommended pipeline in one place. All of it runs in the offline bake (`tools/bake/`, Node and TypeScript) after map repair; the game reads the result from the tiles.
+
+### Landmark registry pipeline
+
+1. **Sources and matching (Rec LM1).** Join on ids, not names: OSM objects carry a `wikidata` tag; Wikidata gives coordinates, era, height, heritage status and the ASI monument id. Name and distance matching is only a fallback, and every fallback match is flagged. Heroes and signatures come from Anmol's list and are checked by hand. The registry is built per district, from the district clip plus the far landmarks.
+2. **Storage (Rec LS2).** `harness/data/landmarks/<id>.json` per hero and signature, `landmarks_markers.json` generated, `landmarks.overrides.json` for edits. Same schema as section 1, plus `district` and `far`.
+3. **Tier scoring.** A score proposes the tier (named by Anmol, ASI listed, Wikidata sitelinks, footprint size, seen from an arterial or a hero road). Anmol's list and inspector edits win.
+4. **Placement (Rec LP2).** Inside a clip: district offset plus the projected position in the district frame, on a flattened pad, replacing the repaired buildings in its zone (logged). Outside every clip: a far landmark on the backdrop, placed by its real bearing from the nearest district, as a silhouette. A far landmark is never a place the player can reach, and the map does not mark it as one.
+5. **Hero models (Rec HM2).** Up to 8 parts per hero, up to 25,000 triangles each, up to 6 materials in all, 3 LODs per part, one far silhouette under 2,000 triangles. LODs are made with Blender in background mode (it is installed on this Mac) or meshoptimizer. The ingest tool gets a hero rule with these limits.
+6. **Stand-in parts kit (HM3 as the placeholder).** Domes, chhatris, arches, colonnades, minarets, shikharas and slabs, driven by the registry fields. It is the stand-in for every hero until its model arrives, and the final build for the signature tier.
+7. **Checks.** OSM centroid against Wikidata within 50 m or the entry is flagged; the position test in the district frame; the relative layout test inside a district.
+
+### Area profile pipeline
+
+1. **Area division (Rec AD2).** Claude draws 3 to 8 area polygons per district along roads and rail, seeded by OSM land use and colony outlines, with the 100 m feature grid as evidence. Anmol edits them in the inspector. Filler between districts uses archetypes marked `filler`.
+2. **Profile storage (Rec PS1).** Archetype defaults, a small file per area with only what differs, and an overrides file for inspector edits. Every value has an evidence line. The `wear` value (0 to 1) drives the grime layer of look B+D.
+3. **Generator at bake time (Rec AG1).** Parcels, building shells, facade module placements, street dressing and colliders are written into the tiles. Only life (people, vendors, animals, parked two-wheelers) is spawned in the game, from seeded points in the tile.
+4. **Kits and atlases (Rec KT2, TX1).** Procedural modules first, replaced module by module through ingest. One Texture2DArray and one trim and decal atlas per kit. Fixed module ids.
+5. **Edge blending and seeds (Rec EB1).** Inside each area's blend band the generator mixes the two profiles by distance, shorter at roads and rail. One seeded random generator, written once in the bake; every pick is seeded from the district id and a parcel id made from the footprint, so a rebake gives the same city.
+6. **Checks.** The area difference metric, variety inside an area, smooth edges on transects, and the respect rule read by the verifier (section 6).
+
+### Inspector views
+
+Rec IV1, built in the order of IV3: one page with layers. Issues and lanes first; then hero roads beside their reference photos and the districts with their connectors; then the area view (map coloured by area, profile fields with evidence, a generated block preview, edit controls) and the landmark view (tier icons, fly to, registry entry, flags). Every edit writes an override file and an inbox entry with source `inspector`.
+
+### What the benches measure for these layers
+
+- P0-016 (`harness/reports/arch/render.json`): the area kit block as MultiMesh modules against merged meshes; the crowd.
+- P0-018 (`world_sources.json`, `landmarks_pilot_draft.json`): the licence of every landmark and area source, the pilot landmark census with the OSM to Wikidata distances, and which area sources cover the pilot.
+- P0-029 (`stitch.json`): landmark position error in the district frame, and the layout inside a district against reality.
+

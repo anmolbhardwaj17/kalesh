@@ -18,3 +18,6 @@ One line per gotcha.
 - Godot perf on Metal: fps is capped by vsync (120 on this display) and GPU time is missing, so frameP95 is CPU only. For real frame cost run `HARNESS_GODOT_ARGS="--rendering-driver vulkan --disable-vsync"` (P0-009 baseline_vulkan set). Triangle counts include the 4 shadow cascades.
 - shoot.mjs `--args "--scene=street"` is dropped (parseArgs reads a value starting with -- as a flag): stage with `--load street` instead.
 - A look proof view that holds the sim: settle first, then `{"call":"hold","args":[{"at":0}]}` (pauses at once) and a waitFor on `debug.clock().paused`; a settle after the hold never ends.
+- `harness/reports/` is gitignored: bench reports in `harness/reports/arch/` exist only on this machine. Copy every number a design doc needs into the doc.
+- Tools on this Mac (checked 2026-11-10): Blender, the osmium CLI, ffmpeg, clang, Python 3.14 and Node 22 are present; scons, cmake, cargo and GDAL are not. Install extras only inside the repo (a venv or an unpacked toolchain under `tools/`).
+- The pinned Godot build is single precision, offers Jolt Physics and GodotPhysics3D (project on DEFAULT), FSR 1.0, FSR 2.2 and MetalFX in the viewport API, and has no built-in terrain or tile streaming (probed 2026-11-10; list in ARCH_OPTIONS.md "What is known before the benches").

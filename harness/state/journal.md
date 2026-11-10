@@ -169,3 +169,13 @@ One line per event, written by task.mjs (start, done, fail, phase changes, inbox
 - 2026-11-10 22:26 mentor message mmwaxm2ur handled: Will tell him when P0-030 is done and hold the next task so the rename is safe.
 - 2026-11-10 22:27 mentor message mmwaxnubt handled: Updated GOAL.txt and GOAL_PROMPT.md for Kalesh, Godot, three sign-offs, the remote and the commit rule.
 - 2026-11-10 22:33 [P0-030] done: HUD.md: 10 researched references, 9 principles, 34 components tagged with costs, layouts, Lal Batti spec, bilingual and accessibility rules; 4 mockups over the mood images; 6 questions for Anmol (queued on P0-014).
+- 2026-11-10 22:49 [P0-010] start (attempt 1): Architecture options draft for Godot and the composite map (with map repair, lane model and map inspector)
+- 2026-11-10 22:59 mentor message mmwaysy3e handled: Fixed: the old dashboard server had a stale path. Restarted it; http://localhost:4488 works now.
+- 2026-11-10 23:10 [P0-016] edited: desc, accept
+- 2026-11-10 23:10 [P0-017] edited: desc, accept
+- 2026-11-10 23:10 [P0-018] edited: desc, accept
+- 2026-11-10 23:10 [P0-019] edited: desc, accept
+- 2026-11-10 23:10 [P0-029] edited: desc, accept
+- 2026-11-10 23:11 mentor message mmwaz7d6h handled: Done: README.md with logo, concept art, the three lives, pillars, map, slice missions, status and run steps. Pushed to GitHub.
+- 2026-11-10 23:11 mentor message mmwaz929k handled: Commits to main already count. The repo is private: turn on Private contributions in profile settings. The graph counts days, not commits. A PR flow adds about one per task; offered as an opt-in.
+- 2026-11-10 23:12 mentor message mmwaz9k74 handled: Rewrote the README: logo, hero shot, three-line pitch, two mood shots, short sections, no tables or badges. Pushed.
