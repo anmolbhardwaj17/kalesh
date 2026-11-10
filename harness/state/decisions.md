@@ -198,3 +198,6 @@ The Act 1 restructure moved the pistol fight to M10 (merged finale, RELEASE), le
 
 ## 2026-11-10: Story outline on Opus
 The content writer for P0-032 (full story outline) runs on Opus, not the usual Sonnet. Why: Anmol asked for "no compromises" on the story and it is the base for every mission; later dialogue tasks go back to Sonnet.
+
+## 2026-11-10: Cutscenes and story telling
+Anmol: "I hope there will be cutscenes as well in this game to blend the story properly. Thinking, talking, dialogue." Decision: directed in-engine cutscenes (camera cuts, framing, character animation, lip sync) become a RELEASE capability for openings, reveals and act endings (3 to 5 big ones per act), replacing the GAME.md line "No cinematic cutscenes at AAA level". Most talk happens in play: drive talk, phone calls, inner voice of the three leads, the RJ on the radio, ambient lines. The slice gets simple in-engine scenes with subtitles plus drive talk. Cutscenes are short and skippable. Why: the approved story is drama led and needs scenes to land its reveals.

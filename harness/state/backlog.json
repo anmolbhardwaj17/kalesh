@@ -1,6 +1,6 @@
 {
   "_doc": "Written only by node harness/bin/task.mjs. Phases run in order; P0 (ADOPT + STYLE DISCOVERY) waits for the owner by design and needs task.mjs signoff and task.mjs archsignoff before its gate passes. Later phases are added by the planner at the end of P0 (task.mjs phase-add) from the game's real state.",
-  "updated": "2026-11-10T18:26:09.981Z",
+  "updated": "2026-11-10T18:29:40.284Z",
   "phases": [
     {
       "id": "P0",
@@ -546,7 +546,8 @@
       "status": "todo",
       "attempts": 0,
       "notes": [
-        "From P0-010: harness/reports/ is not in git, so copy every measured number into ARCH_OPTIONS.md (replace Est cells, mark wrong estimates). Reports to read: render.json, physics.json, pilot_data.json, tile_format.json, terrain_sources.json, world_sources.json, landmarks_pilot_draft.json, roads.json, stitch.json in harness/reports/arch/. Update the Rec marks in MAP_REPAIR.md and DELHI_WORLD.md section 10 if a recommendation changes, fill the Measured column of \"Budgets per system\", and fold in the answers to the 6 owner questions."
+        "From P0-010: harness/reports/ is not in git, so copy every measured number into ARCH_OPTIONS.md (replace Est cells, mark wrong estimates). Reports to read: render.json, physics.json, pilot_data.json, tile_format.json, terrain_sources.json, world_sources.json, landmarks_pilot_draft.json, roads.json, stitch.json in harness/reports/arch/. Update the Rec marks in MAP_REPAIR.md and DELHI_WORLD.md section 10 if a recommendation changes, fill the Measured column of \"Budgets per system\", and fold in the answers to the 6 owner questions.",
+        "Owner (mmwb0yga2): add a decision row for the cutscene and dialogue runtime: sequencer (AnimationPlayer camera rigs vs a custom timeline resource vs a Godot cutscene addon), lip sync (Rhubarb Lip Sync style phoneme files offline vs amplitude jaw vs none in the slice), facial blendshapes on the character rig, drive talk and interruption system, subtitles in Hindi and English, skip and resume. Numbers marked estimate or measured."
       ],
       "created": "2026-11-10T13:04:46.154Z",
       "model": "fable"
@@ -616,7 +617,8 @@
       "status": "todo",
       "attempts": 0,
       "notes": [
-        "Owner 2026-11-10: plan hero road tasks for the pilot (decisions.md 'Hero roads')."
+        "Owner 2026-11-10: plan hero road tasks for the pilot (decisions.md 'Hero roads').",
+        "Owner (mmwb0yga2): plan a cutscene and dialogue system phase item (decisions.md 'Cutscenes and story telling'): slice gets in-engine scenes with subtitles and drive talk; RELEASE gets directed cutscenes with camera cuts and lip sync."
       ],
       "created": "2026-11-10T13:04:46.154Z"
     },
