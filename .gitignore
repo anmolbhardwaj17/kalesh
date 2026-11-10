@@ -24,3 +24,5 @@ harness/state/.dash_token
 # Godot: the portable engine downloaded by harness/bin/godot.mjs on machines without it, and the editor's import cache
 tools/godot/
 game/.godot/
+# generated kit textures of the render bench texture test (harness/bench/render.plan.mjs writes and removes them)
+game/bench/render/tex_gen/

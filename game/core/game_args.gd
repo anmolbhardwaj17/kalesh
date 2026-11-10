@@ -9,7 +9,8 @@
 ##   --style-off=<a,b>    style test features to switch off for cost measuring (stylised_b: volfog, shimmer, dressing,
 ##                        lights, textures, decals, ssao, ssil, glow, sunshadow; p34 = the P0-034 setup)
 ##   --scene=<id>         start in that scene (ids in SCENES)
-##   --arch=<name>        architecture bench
+##   --arch=<name>        architecture bench: loads the bench scene from ARCH_SCENES; a setup goes after a colon
+##                        (--arch=render:city+i3+lod), read by the bench scene with arch_setup()
 ##   --lockstep           one sim tick per rendered frame at most (a loaded machine runs slower, never catches up)
 ##   --mute               master bus muted
 ## Resolution is an engine arg (`--resolution WxH`, before `--`), handled by Godot itself.
@@ -25,6 +26,12 @@ const SCENES := {
 	"street": "res://scenes/standin/street.tscn",
 	"landmarks": "res://scenes/standin/landmarks.tscn",
 	"areas": "res://scenes/standin/areas.tscn",
+}
+
+## Architecture bench scenes (game/bench/<name>/, ARCH_OPTIONS.md "Bench tasks"), started with --arch=<name>[:setup].
+## Loaded by path only when --arch is given; the default game never loads them.
+const ARCH_SCENES := {
+	"render": "res://bench/render/render_bench.tscn",
 }
 
 var debug := false
@@ -96,7 +103,11 @@ func _ready() -> void:
 		_style_runner = load(STYLE_RUNNER_PATH).new(get_tree(), style, light, time, style_off)
 	if mute:
 		AudioServer.set_bus_mute(0, true)
-	if scene != "" and SCENES.has(scene) and SCENES[scene] != ProjectSettings.get_setting("application/run/main_scene"):
+	if arch != "" and ARCH_SCENES.has(arch_name()):
+		get_tree().change_scene_to_file.call_deferred(ARCH_SCENES[arch_name()])
+	elif arch != "":
+		print("game: unknown --arch=%s (benches: %s), staying on the main scene" % [arch, ", ".join(ARCH_SCENES.keys())])
+	elif scene != "" and SCENES.has(scene) and SCENES[scene] != ProjectSettings.get_setting("application/run/main_scene"):
 		get_tree().change_scene_to_file.call_deferred(SCENES[scene])
 	elif scene != "" and not SCENES.has(scene):
 		print("game: unknown --scene=%s, staying on the main scene" % scene)
@@ -122,6 +133,24 @@ func apply(p: Dictionary) -> void:
 	lockstep = p.lockstep
 	mute = p.mute
 	unknown = p.unknown
+
+
+## The bench name of --arch=<name>[:setup] ("" without --arch).
+func arch_name() -> String:
+	return split_arch(arch)[0]
+
+
+## The setup of --arch=<name>:<setup> ("" when none was given).
+func arch_setup() -> String:
+	return split_arch(arch)[1]
+
+
+## "render:city+i3" -> ["render", "city+i3"]; "render" -> ["render", ""]. Pure, unit tested.
+static func split_arch(value: String) -> PackedStringArray:
+	var i := value.find(":")
+	if i < 0:
+		return PackedStringArray([value, ""])
+	return PackedStringArray([value.substr(0, i), value.substr(i + 1)])
 
 
 ## The res:// path of a scene id, or "" for an unknown id.

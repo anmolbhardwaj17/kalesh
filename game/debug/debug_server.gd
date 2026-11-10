@@ -23,7 +23,7 @@ const COMPOSITE := {
 }
 const METHODS := [
 	"ping", "state", "clock", "frames", "input", "perf", "load", "teleport", "setCamera", "timeScale", "hold",
-	"events", "hud", "shot", "quality", "quit",
+	"events", "hud", "shot", "quality", "bench", "quit",
 ]
 const QUALITY_PRESETS := ["low", "medium", "high"]
 
@@ -229,6 +229,18 @@ func _call(method: String, a: Array) -> Dictionary:
 				_args().quality = a[0]
 				_events().emit_event("quality", {"preset": a[0]})
 			return _ok({"preset": _args().quality, "presets": QUALITY_PRESETS})
+		"bench":
+			# Architecture benches only (--arch=<name>): passes a command to the bench scene's bench_call(cmd, opts).
+			var scene := get_tree().current_scene
+			if scene == null or not scene.has_method("bench_call"):
+				return _fail("bench(cmd, opts): the current scene is not a bench scene (start the game with --arch=<name>)")
+			if a.is_empty() or not (a[0] is String):
+				return _fail("bench(cmd, opts): cmd must be a string")
+			var bopts = a[1] if a.size() > 1 and a[1] is Dictionary else {}
+			var res = await scene.bench_call(a[0], bopts)
+			if res is Dictionary and res.has("error"):
+				return _fail("bench(%s): %s" % [a[0], res.error])
+			return _ok(res)
 		"quit":
 			return _ok(true)
 	return _fail("unknown method '%s' (methods: %s)" % [method, ", ".join(METHODS)])
@@ -342,6 +354,7 @@ func _perf(ms: float) -> Dictionary:
 		"windowMs": ms, "frames": frame.size(),
 		"cpuMs": Stats.stats(cpu),
 		"p95FrameMs": Stats.stats(frame).p95,
+		"frameMs": Stats.stats(frame),
 		"avgFps": 1000.0 / avg_frame if avg_frame > 0.0 else 0.0,
 		"drawCalls": Stats.stats(calls).max, "drawCallsAvg": Stats.mean(calls),
 		"triangles": Stats.stats(tris).max, "trianglesAvg": Stats.mean(tris),

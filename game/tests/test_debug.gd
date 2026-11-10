@@ -38,6 +38,14 @@ func test_parse_user_args() -> void:
 	t.ok(d.unknown.size() == 3, "bad port, unknown flag and stray word are reported (%s)" % [d.unknown])
 
 
+func test_arch_name_and_setup() -> void:
+	t.ok(GameArgs.split_arch("render:city+i3+lod") == PackedStringArray(["render", "city+i3+lod"]), "name and setup split at the first colon")
+	t.ok(GameArgs.split_arch("render") == PackedStringArray(["render", ""]), "no setup")
+	t.ok(GameArgs.split_arch("") == PackedStringArray(["", ""]), "no bench")
+	for id in GameArgs.ARCH_SCENES:
+		t.ok(ResourceLoader.exists(GameArgs.ARCH_SCENES[id]), "bench scene %s exists" % id)
+
+
 func test_default_port_matches_kit_config() -> void:
 	var path := ProjectSettings.globalize_path("res://").path_join("../harness/kit.config.json")
 	var cfg = JSON.parse_string(FileAccess.get_file_as_string(path))
