@@ -1,6 +1,6 @@
 {
   "_doc": "Written only by node harness/bin/task.mjs. Phases run in order; P0 (ADOPT + STYLE DISCOVERY) waits for the owner by design and needs task.mjs signoff and task.mjs archsignoff before its gate passes. Later phases are added by the planner at the end of P0 (task.mjs phase-add) from the game's real state.",
-  "updated": "2026-11-10T17:40:36.258Z",
+  "updated": "2026-11-10T17:42:33.095Z",
   "phases": [
     {
       "id": "P0",
@@ -285,14 +285,17 @@
       "agent": "planner",
       "priority": 2,
       "kind": "feature",
-      "status": "doing",
+      "status": "done",
       "attempts": 1,
       "notes": [
         "Owner 2026-11-10: add a hero road tier (decisions.md 'Hero roads'): CP circles and radials, Janpath, Lutyens roundabouts and avenues, Lodhi Garden and India Gate lawn edges; real layout plus checked lanes, medians, kerbs, footpaths, tree lines, furniture, verified against reference photos."
       ],
       "created": "2026-11-10T13:04:46.154Z",
       "model": "fable",
-      "started": "2026-11-10T17:19:01.207Z"
+      "started": "2026-11-10T17:19:01.207Z",
+      "done": "2026-11-10T17:42:33.073Z",
+      "summary": "ARCH_OPTIONS.md: 54 decisions, 2 to 4 options each, numbers marked measured or estimate; MAP_REPAIR.md and DELHI_WORLD.md refined and cross-linked; bench tasks P0-016/017/018/019/029 rewritten with scenes, scripts and report paths; 6 owner questions. Self-checked by grep; vitest green per planner.",
+      "commit": "7b31e48"
     },
     {
       "id": "P0-011",
