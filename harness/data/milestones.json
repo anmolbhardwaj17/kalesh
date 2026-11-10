@@ -1,5 +1,5 @@
 {
-  "_doc": "Milestones: the playable end-to-end units of this game (kit.config.json milestoneWord names them: level, mission, stage, quest, run). Each phase in backlog.json lists its milestone ids. A milestone is playable by the harness once harness/verify/milestones/<ID>.js plays it start to finish through window.__game.debug (no position writes, real inputs only). required: false marks an optional one, counted once it has a play script. budgetMs is the play script's time budget. The ADOPT phase lists what the game already has; the planner adds the rest.",
+  "_doc": "Milestones: the playable end-to-end units of this game (kit.config.json milestoneWord names them: level, mission, stage, quest, run). Each phase in backlog.json lists its milestone ids. A milestone is playable by the harness once harness/verify/milestones/<ID>.js plays it start to finish through window.__game.debug (no position writes, real inputs only). required: false marks an optional one, counted once it has a play script. budgetMs is the play script's time budget. The ADOPT phase lists what the game already has; the planner adds the rest. M01 to M04 are the first playable slice of the signed game design (GAME.md 'Milestones'); story details (names, lines) come from the content writer and may change, the beats and checks stay.",
   "milestones": [
     {
       "id": "FD0",
@@ -7,6 +7,54 @@
       "required": false,
       "budgetMs": 60000,
       "summary": "Scaffold free drive: boot, drive the box car north along the road strip for 100 m with real inputs, turn right toward east, stop. Proves the input, sim clock and coordinate rule end to end. Replaced by the real free drive once the world exists; optional so it never blocks a gate."
+    },
+    {
+      "id": "M01",
+      "title": "Train at 6:10 (Driver)",
+      "required": true,
+      "budgetMs": 480000,
+      "lead": "driver",
+      "districts": [
+        "D09",
+        "D07 (New Delhi station forecourt, Ajmeri Gate side: pilot gap, see GAME.md)",
+        "D01"
+      ],
+      "summary": "First mission of the game; the auto driver leads. 1. Start at an auto stand near Chandni Chowk in a hot hazy afternoon; goal line 'Pick up the family' and a marker within 5 s. 2. Drive to the hail and stop beside the family; they board with luggage (passenger lines). 3. Goal 'New Delhi station before 6:10' with a timer; the main road is jammed, a gali shortcut is marked as the second route. 4. Drive with gap weaving and the horn through traffic to the station drop-off; no on-foot part. 5. Drop off: the family leave; a second passenger (the courier) hails, rides a short way toward CP and gets out in a hurry, leaving a bag in the auto (a short story beat). 6. Completion screen: fare money, time against the best, the bag as a story hook. Fails: timer runs out ('The train left'), the auto is wrecked, the family is thrown out by a crash; each shows its reason and retries from the last checkpoint. Must show: the gali shortcut and the main road both drivable, near misses, horn reaction."
+    },
+    {
+      "id": "M02",
+      "title": "Barricade at ITO (Cop)",
+      "required": true,
+      "budgetMs": 480000,
+      "lead": "cop",
+      "districts": [
+        "D04",
+        "D01"
+      ],
+      "summary": "The cop's first mission. 1. Start at the police station near ITO; a radio call: a stolen car fleeing from CP; goal line 'Stop the stolen car' and a marker within 5 s. 2. Get in the patrol car and catch up with the suspect on the road from CP toward ITO. 3. Pursuit over the ITO flyovers: the suspect weaves through traffic; the goal prompts 'Call a barricade' and the player calls one at the next junction ahead (B). 4. The suspect crashes at the barricade and runs on foot. 5. Foot chase a short way; melee hits stagger the suspect, a takedown downs him, the player holds the arrest. 6. A clue in the car points at the racket (story hook). Completion screen: case reward, pursuit time against the best. Fails: the suspect gets away (distance over 300 m for 10 s: 'He got away'), a civilian is killed, the patrol car is wrecked; each with its reason and a checkpoint retry. Must show: the flyover split, the barricade at a real junction, the takedown."
+    },
+    {
+      "id": "M03",
+      "title": "Chandni Chowk pickup (Fixer)",
+      "required": true,
+      "budgetMs": 480000,
+      "lead": "fixer",
+      "districts": [
+        "D09"
+      ],
+      "summary": "The fixer's first mission. 1. Start on foot in a Chandni Chowk lane; goal line 'Collect the package' and a marker within 5 s. 2. Walk through the bazaar crowd (30 to 60 people) to the contact's shop; the package is gone: the courier lost it (ties to M01). 3. A rival crew jumps the fixer in the lane: a fistfight with 3 melee thugs (combo, block, dodge, one takedown). 4. Police whistles: wanted level 1 starts. 5. Get on the scooter and escape through the galis or the main road (two routes) and lose the wanted level (leave the search circle, stay unseen 15 s). 6. Completion screen: payment, escape time against the best, the hunt for the bag as the hook. Fails: the fixer is downed ('You were beaten'), busted ('The police got you'); each with its reason and a checkpoint retry. Must show: dense crowd that parts and flees, the fight, wanted 1 and its escape."
+    },
+    {
+      "id": "M04",
+      "title": "Red Fort rush (merged)",
+      "required": true,
+      "budgetMs": 600000,
+      "lead": "all",
+      "districts": [
+        "D09",
+        "D04"
+      ],
+      "summary": "First merged mission, the peak of the slice. 1. Start as the driver near Red Fort with the bag in the auto; goal line 'Lose the men following you' within 5 s; a car of the rival crew chases. 2. Driver getaway through Netaji Subhas Marg traffic toward the Red Fort parking. 3. Switch at the beat (prompt, T) to the fixer, who arrives at the parking lot: a pistol fight against 3 or 4 thugs with soft lock-on (pistol 12 rounds, cover is not in the slice). 4. Switch at the beat to the cop, who was tailing: the crew's leader flees by car; a chase finale ending in a barricade or a ram and an arrest. 5. Completion screen: rewards for all three, the story turn (the three now know of each other), the time against the best. Fails: any lead downed or busted, the leader escapes, the bag is lost; each with its reason and a checkpoint retry at the current lead's beat. Must show: two switches under 2 s each, a pistol fight, Red Fort framed in a first-sight shot."
     }
   ]
 }

@@ -258,6 +258,16 @@ const server = http.createServer(async (req, res) => {
       const body = `<!doctype html><meta charset="utf-8"><title>Play</title><body style="background:#111;color:#e8e6e1;font:16px/1.5 -apple-system,'SF Pro Text',system-ui,sans-serif;max-width:560px;margin:12vh auto;padding:0 20px"><h1 style="font-weight:600;font-size:22px">Play the latest verified build</h1><p>The game runs in Godot, not in the browser. Open a terminal in the project folder and run:</p><pre style="background:#1b1b1b;border:1px solid #2c2c2c;border-radius:8px;padding:12px 14px;font-size:15px">${PLAY_COMMAND}</pre><p style="color:#9a968e">${c ? `Current copy: ${c.sha} (${String(c.subject || '').replace(/[<&]/g, '')}).` : 'No copy yet: the command builds one from the newest verified commit.'}</p>`;
       return send(res, 200, body, 'text/html; charset=utf-8');
     }
+    if (req.method === 'POST' && p === '/api/play') {
+      // The sidebar Play button: opens the latest stable copy in a Godot window on this machine (playcopy.mjs --play).
+      // Only from this machine: a window opened through the tunnel would appear on the Mac, not for the remote viewer.
+      if (req.headers['cf-connecting-ip'] || req.headers['x-forwarded-for']) return send(res, 403, { error: 'Play opens a window on the Mac, so it only works from this machine.' });
+      fs.mkdirSync(PATHS.shots, { recursive: true });
+      const log = fs.openSync(path.join(PATHS.shots, '..', 'play.log'), 'a');
+      const child = spawn(process.execPath, [H('bin', 'playcopy.mjs'), '--play'], { cwd: ROOT, stdio: ['ignore', log, log], detached: true });
+      child.unref();
+      return send(res, 200, { ok: true });
+    }
     if (req.method === 'POST' && p === '/api/playcopy') {
       // P4-073: the dashboard's Refresh button. Builds the newest verified commit in the background (playcopy.mjs --verified).
       if (playInfo().building) return send(res, 409, { error: 'A copy is already building.' });

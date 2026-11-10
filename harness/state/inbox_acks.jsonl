@@ -77,3 +77,4 @@
 {"id":"mmwavsvo5","ts":"2026-11-10T16:06:50.706Z","reply":"Name Kalesh done. GB Road: confirmed as a story place, brothels not confirmed as playable spaces; recommendation and question in the terminal.","tasks":[]}
 {"id":"mmwavx09c","ts":"2026-11-10T16:08:34.752Z","reply":"GB Road treatment recorded in decisions.md and sent to GAME.md.","tasks":["P0-008"]}
 {"id":"mmwavypfw","ts":"2026-11-10T16:10:12.460Z","reply":"Prompt given in the terminal. The dashboard shows harness/dashboard/logo.png in place of the K once it exists.","tasks":[]}
+{"id":"mmwaw0luo","ts":"2026-11-10T16:12:04.039Z","reply":"Removed. The Play button now opens the latest build in a Godot window when clicked.","tasks":[]}

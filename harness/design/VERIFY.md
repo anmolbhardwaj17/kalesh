@@ -72,6 +72,14 @@ Each milestone with a play script (`harness/verify/milestones/<ID>.js`) is playe
 - Look changes name the lookproof views and the compare against the approved reference, or say the reference is to be re-approved by the owner.
 - Perf-sensitive tasks name the perf scenario and the budget.
 - Every milestone task: matches its milestones.json entry beat by beat, `verify --milestone <ID>` passes, shots pass the rubric, `task.mjs milestone <ID> playable`.
+- **Fun criteria (signed game design, 2026-11-10).** Every mission task's acceptance includes these four, each checked by a named scenario, the mission's play script or a named shot:
+  1. Clear goal: the goal line and the objective marker are on screen within 5 s of sim time after the mission starts (play script asserts `state().mission.goal` is set by t = 5 s; shot `<ID>_goal` shows it).
+  2. Fair fail: each fail the mission can hit shows its reason in words (event `mission:fail` with a non-empty `reason`, shot `<ID>_fail`) and the instant retry puts the player back in control at the last checkpoint in under 3 s of sim time (scenario `<id>_fail_retry`).
+  3. A reason to retry: the mission records a time, score or medal to beat, and the completion screen shows it next to the best so far (shot `<ID>_done`).
+  4. A reward that matters: the completion screen shows the reward (money, a district or place opened, a story turn or a stamp), and the play script checks the reward reached the save (`state().progress`).
+- **Pillars in every phase plan.** Every task in a phase plan names the pillar it serves (GAME.md "Pillars": three lives, one city; filmi, never cheap; the city opens up) in its desc, as `Pillar: <name>`. A task that serves no pillar is cut or folded into one that does. Base and tooling tasks name the pillar they unblock.
+- **Respect rule.** Every mission, character and area task's acceptance includes a check against GAME.md "Respect rule" (verifier reads the named shots and the mission text for it).
+- **Driving stays central.** Every mission task's play script logs the time on foot and in a vehicle; on foot stays at about 40% of the mission or less, and at least one objective is a drive.
 
 ## Visual review rubric (verifier agent)
 

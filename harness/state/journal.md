@@ -153,3 +153,4 @@ One line per event, written by task.mjs (start, done, fail, phase changes, inbox
 - 2026-11-10 21:36 mentor message mmwavsvo5 handled: Name Kalesh done. GB Road: confirmed as a story place, brothels not confirmed as playable spaces; recommendation and question in the terminal.
 - 2026-11-10 21:38 mentor message mmwavx09c handled: GB Road treatment recorded in decisions.md and sent to GAME.md.
 - 2026-11-10 21:40 mentor message mmwavypfw handled: Prompt given in the terminal. The dashboard shows harness/dashboard/logo.png in place of the K once it exists.
+- 2026-11-10 21:42 mentor message mmwaw0luo handled: Removed. The Play button now opens the latest build in a Godot window when clicked.
