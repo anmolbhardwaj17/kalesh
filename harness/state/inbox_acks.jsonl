@@ -80,3 +80,4 @@
 {"id":"mmwaw0luo","ts":"2026-11-10T16:12:04.039Z","reply":"Removed. The Play button now opens the latest build in a Godot window when clicked.","tasks":[]}
 {"id":"mmwaw1su5","ts":"2026-11-10T16:12:21.017Z","reply":"Icon in place on the dashboard and as the tab icon.","tasks":[]}
 {"id":"mmwawarh9","ts":"2026-11-10T16:19:16.638Z","reply":"Yes. Added a hero road tier: CP circles and radials, Janpath, Lutyens avenues and roundabouts, garden edges, checked against photos.","tasks":["P0-010","P0-023"]}
+{"id":"mmwaxdlzr","ts":"2026-11-10T16:50:05.403Z","reply":"Fixed: the page refresh was overwriting the icon with the letter. The icon now stays.","tasks":[]}

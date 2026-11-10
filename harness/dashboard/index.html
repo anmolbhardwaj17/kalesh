@@ -312,7 +312,7 @@ function renderSide() {
   const W = S.milestoneWord || 'milestone';
   document.title = `${S.game || 'Game'} build monitor`;
   $('#markName').textContent = S.game || 'Game';
-  $('#markGlyph').textContent = String(S.game || '?').trim().charAt(0).toUpperCase();
+  if (!$('#markGlyph').classList.contains('logo')) $('#markGlyph').textContent = String(S.game || '?').trim().charAt(0).toUpperCase();
   if (!window.__logoTried) { window.__logoTried = true; const im = new Image(); im.alt = ''; im.onload = () => { const g = $('#markGlyph'); g.textContent = ''; g.classList.add('logo'); g.appendChild(im); const l = document.querySelector('link[rel=icon]') || Object.assign(document.createElement('link'), { rel: 'icon' }); l.href = im.src; document.head.appendChild(l); }; im.src = '/logo?t=' + Date.now(); }
   $('#msTab').textContent = W.charAt(0).toUpperCase() + W.slice(1) + 's';
   const idle = Date.now() - S.lastActivity > 20 * 60 * 1000;
