@@ -1,6 +1,6 @@
 {
   "_doc": "Written only by node harness/bin/task.mjs. Phases run in order; P0 (ADOPT + STYLE DISCOVERY) waits for the owner by design and needs task.mjs signoff and task.mjs archsignoff before its gate passes. Later phases are added by the planner at the end of P0 (task.mjs phase-add) from the game's real state.",
-  "updated": "2026-11-10T18:26:04.392Z",
+  "updated": "2026-11-10T18:26:04.531Z",
   "phases": [
     {
       "id": "P0",
@@ -821,7 +821,7 @@
       "agent": "planner",
       "priority": 1,
       "kind": "mentor",
-      "status": "doing",
+      "status": "done",
       "attempts": 1,
       "notes": [
         "Owner asked for a big game (mmwazefyj). Proposed (orchestrator reply, owner may adjust): 5 acts, about 55 to 60 story missions (Act 1 ~10 pilot, Act 2 ~12 east bank and Old Delhi, Act 3 ~12 south and airport, Act 4 ~12 Gurugram, Act 5 ~10 Noida, Shahdara, Akshardham, 2 or 3 endings). Release 1 = Acts 1 to 3 (~34 missions); Acts 4 and 5 as updates. Side content: endless per-character city life (fares, patrol calls, contact jobs), 30 to 40 stranger missions in chains of 2 to 4, activities (auto race, Metro race, street fights, kite fights, gali cricket), discovery collectibles. Free roam from the start; free switching after Act 1. Write this into GAME.md (Structure, Scope guardrails content size, Missions and activities) and a decisions.md entry.",
@@ -829,7 +829,10 @@
         "Owner approved STORY_SEED.md (mmwazjuxz). It is the base: Act 1 missions and the four-mission solo slice come from Act 1 Sawari (bag, dead passenger, Meera on Bittu's trail, Danny hired), not from the older proposal."
       ],
       "created": "2026-11-10T17:45:16.175Z",
-      "started": "2026-11-10T18:20:26.540Z"
+      "started": "2026-11-10T18:20:26.540Z",
+      "done": "2026-11-10T18:26:04.510Z",
+      "summary": "GAME.md structure (5 acts, GTA V style intros, merges at act peaks, 65 to 70 missions, side content), characters Bittu, Meera, Danny; Act 1 Sawari with 10 missions; slice M01 to M04 solo, switching moved to M10; milestones.json M01 to M10. Self-check: milestones parse, typecheck, 199 vitest plus 34 Godot tests, verify quick OK.",
+      "commit": "4bb0c8f"
     },
     {
       "id": "P0-032",
