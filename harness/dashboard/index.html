@@ -549,6 +549,9 @@ async function load() {
   catch { $('#now').innerHTML = '<span class="muted">Dashboard server is not responding. Run node harness/bin/dashboard.mjs</span>'; }
 }
 load(); setInterval(load, 5000);
+// Browsers slow timers in background tabs (Chrome to about once a minute), so refresh the moment the page is seen again.
+document.addEventListener('visibilitychange', () => { if (!document.hidden) load(); });
+window.addEventListener('focus', load);
 </script>
 </body>
 </html>

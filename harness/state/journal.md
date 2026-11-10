@@ -193,3 +193,4 @@ One line per event, written by task.mjs (start, done, fail, phase changes, inbox
 - 2026-11-10 23:25 mentor message mmwazqn6b handled: Fixable, worth doing. Queued a tooling task after the style test: no-focus window flag, then unfocused or off-screen launch, then focus restore as a fallback.
 - 2026-11-10 23:38 mentor message mmwb07pxa handled: It was not: Live now only showed verify shots. Added 'Live now: style and look shots' with the newest style test views and sheets. Refresh the dashboard.
 - 2026-11-10 23:46 mentor message mmwb0havq handled: Style sets are kept in git (harness/look_proof); live test shots are overwritten. The P0-011 sheet and a golden bazaar shot go into progress/ on pass, and each visible step adds one or two.
+- 2026-11-10 23:47 mentor message mmwb0iweq handled: It polls every 5 s, but browsers slow background tabs to about once a minute. Added an instant refresh when the page is seen or focused. Reload once to get it.

@@ -100,3 +100,4 @@
 {"id":"mmwazqn6b","ts":"2026-11-10T17:55:36.362Z","reply":"Fixable, worth doing. Queued a tooling task after the style test: no-focus window flag, then unfocused or off-screen launch, then focus restore as a fallback.","tasks":[]}
 {"id":"mmwb07pxa","ts":"2026-11-10T18:08:53.039Z","reply":"It was not: Live now only showed verify shots. Added 'Live now: style and look shots' with the newest style test views and sheets. Refresh the dashboard.","tasks":[]}
 {"id":"mmwb0havq","ts":"2026-11-10T18:16:20.131Z","reply":"Style sets are kept in git (harness/look_proof); live test shots are overwritten. The P0-011 sheet and a golden bazaar shot go into progress/ on pass, and each visible step adds one or two.","tasks":[]}
+{"id":"mmwb0iweq","ts":"2026-11-10T18:17:34.647Z","reply":"It polls every 5 s, but browsers slow background tabs to about once a minute. Added an instant refresh when the page is seen or focused. Reload once to get it.","tasks":[]}
