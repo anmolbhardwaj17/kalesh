@@ -9,7 +9,7 @@
 extends RefCounted
 
 const DayCycle := preload("res://render/day_cycle.gd")
-const STYLES := ["stylised", "stylised_grime", "stylised_b"]
+const STYLES := ["stylised", "stylised_grime", "stylised_b", "realistic"]
 const LIGHTS := ["dawn", "afternoon", "golden", "night"]
 const DEFAULT_LIGHT := "afternoon"
 const DIR := "res://render/styles/"

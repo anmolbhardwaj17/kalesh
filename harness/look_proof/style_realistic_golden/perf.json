@@ -1,0 +1,186 @@
+{
+  "rows": {
+    "car_closeup": {
+      "quality": null,
+      "loadMs": 1064,
+      "hostLoad": {
+        "avg1": 7.98,
+        "cores": 12,
+        "perCore": 0.67
+      },
+      "cpuP95": 0.44199998664856,
+      "gpuP95": 13.0830001831055,
+      "fps": 81.2053266700591,
+      "drawCalls": 167,
+      "triangles": 1997060,
+      "frameP95": 13.0830001831055,
+      "verdict": "warn",
+      "notes": [
+        "frame time: p95 frame time 13.1 ms (gpu bound) is over the 11.1 ms budget (60 fps): cpu p95 0.4 ms, gpu p95 13.1 ms, rAF p95 13.3 ms, 81.2 fps"
+      ]
+    },
+    "street_eye": {
+      "quality": null,
+      "loadMs": 1062,
+      "hostLoad": {
+        "avg1": 7.5,
+        "cores": 12,
+        "perCore": 0.63
+      },
+      "cpuP95": 0.56799998664856,
+      "gpuP95": 13.3000001907349,
+      "fps": 80.3810460164881,
+      "drawCalls": 313,
+      "triangles": 3046714,
+      "frameP95": 13.3000001907349,
+      "verdict": "warn",
+      "notes": [
+        "frame time: p95 frame time 13.3 ms (gpu bound) is over the 11.1 ms budget (60 fps): cpu p95 0.6 ms, gpu p95 13.3 ms, rAF p95 13.4 ms, 80.4 fps"
+      ]
+    },
+    "junction": {
+      "quality": null,
+      "loadMs": 1060,
+      "hostLoad": {
+        "avg1": 7.22,
+        "cores": 12,
+        "perCore": 0.6
+      },
+      "cpuP95": 0.576000013113022,
+      "gpuP95": 13.1899995803833,
+      "fps": 84.0361813959173,
+      "drawCalls": 289,
+      "triangles": 3095694,
+      "frameP95": 13.1899995803833,
+      "verdict": "warn",
+      "notes": [
+        "frame time: p95 frame time 13.2 ms (gpu bound) is over the 11.1 ms budget (60 fps): cpu p95 0.6 ms, gpu p95 13.2 ms, rAF p95 13.3 ms, 84.0 fps"
+      ]
+    },
+    "flyover_ramp": {
+      "quality": null,
+      "loadMs": 1066,
+      "hostLoad": {
+        "avg1": 7.12,
+        "cores": 12,
+        "perCore": 0.59
+      },
+      "cpuP95": 0.506000005960464,
+      "gpuP95": 12.5209999084473,
+      "fps": 85.2325600365168,
+      "drawCalls": 199,
+      "triangles": 1910396,
+      "frameP95": 12.5209999084473,
+      "verdict": "warn",
+      "notes": [
+        "frame time: p95 frame time 12.5 ms (gpu bound) is over the 11.1 ms budget (60 fps): cpu p95 0.5 ms, gpu p95 12.5 ms, rAF p95 12.6 ms, 85.2 fps"
+      ]
+    },
+    "hud_play": {
+      "quality": null,
+      "loadMs": 1063,
+      "hostLoad": {
+        "avg1": 6.78,
+        "cores": 12,
+        "perCore": 0.57
+      },
+      "cpuP95": 0.571000000715256,
+      "gpuP95": 13.1809997558594,
+      "fps": 79.6036736262704,
+      "drawCalls": 320,
+      "triangles": 2797336,
+      "frameP95": 13.1809997558594,
+      "verdict": "warn",
+      "notes": [
+        "frame time: p95 frame time 13.2 ms (gpu bound) is over the 11.1 ms budget (60 fps): cpu p95 0.6 ms, gpu p95 13.2 ms, rAF p95 13.3 ms, 79.6 fps"
+      ]
+    },
+    "busiest_40m": {
+      "quality": null,
+      "loadMs": 1065,
+      "hostLoad": {
+        "avg1": 6.8,
+        "cores": 12,
+        "perCore": 0.57
+      },
+      "cpuP95": 0.546999992132187,
+      "gpuP95": 13.5729999542236,
+      "fps": 77.4033919295835,
+      "drawCalls": 311,
+      "triangles": 2999218,
+      "frameP95": 13.5729999542236,
+      "verdict": "warn",
+      "notes": [
+        "frame time: p95 frame time 13.6 ms (gpu bound) is over the 11.1 ms budget (60 fps): cpu p95 0.5 ms, gpu p95 13.6 ms, rAF p95 13.7 ms, 77.4 fps"
+      ]
+    },
+    "landmark_tiers": {
+      "quality": null,
+      "loadMs": 1067,
+      "hostLoad": {
+        "avg1": 6.68,
+        "cores": 12,
+        "perCore": 0.56
+      },
+      "cpuP95": 0.41099999499321,
+      "gpuP95": 9.44099998474121,
+      "fps": 115.778091990352,
+      "drawCalls": 105,
+      "triangles": 771576,
+      "frameP95": 9.44099998474121,
+      "verdict": "ok",
+      "notes": []
+    },
+    "area_blocks_30m": {
+      "quality": null,
+      "loadMs": 1062,
+      "hostLoad": {
+        "avg1": 6.55,
+        "cores": 12,
+        "perCore": 0.55
+      },
+      "cpuP95": 0.689999972820282,
+      "gpuP95": 13.0729999542236,
+      "fps": 80.8114937223104,
+      "drawCalls": 230,
+      "triangles": 1817664,
+      "frameP95": 13.0729999542236,
+      "verdict": "warn",
+      "notes": [
+        "frame time: p95 frame time 13.1 ms (gpu bound) is over the 11.1 ms budget (60 fps): cpu p95 0.7 ms, gpu p95 13.1 ms, rAF p95 13.2 ms, 80.8 fps"
+      ]
+    },
+    "on_foot_bazaar": {
+      "quality": null,
+      "loadMs": 1061,
+      "hostLoad": {
+        "avg1": 6.34,
+        "cores": 12,
+        "perCore": 0.53
+      },
+      "cpuP95": 0.724999985694885,
+      "gpuP95": 15.6020002365112,
+      "fps": 66.8461646929865,
+      "drawCalls": 226,
+      "triangles": 1926108,
+      "frameP95": 15.6020002365112,
+      "verdict": "warn",
+      "notes": [
+        "frame time: p95 frame time 15.6 ms (gpu bound) is over the 11.1 ms budget (60 fps): cpu p95 0.7 ms, gpu p95 15.6 ms, rAF p95 15.7 ms, 66.8 fps"
+      ]
+    }
+  },
+  "driver": "godot",
+  "machine": "macbook-pro, darwin arm64, Apple M2 Pro, 12 cores, 16 GB",
+  "godotVersion": "4.7.2.stable",
+  "renderer": "Forward+",
+  "renderingDriver": "vulkan",
+  "gpuAdapter": "Apple M2 Pro",
+  "load": {
+    "avg1": 7.98,
+    "cores": 12,
+    "perCore": 0.67
+  },
+  "gl": "Godot 4.7.2.stable Apple M2 Pro (vulkan, forward_plus)",
+  "budgets": "harness/verify/perf_budgets.json (draft)"
+}

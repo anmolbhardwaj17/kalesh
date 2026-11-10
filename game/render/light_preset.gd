@@ -52,3 +52,8 @@ extends Resource
 ## Per-area haze (stylised_b): density of the dust and haze volume over a block, times the block's wear.
 @export var area_haze := 0.02
 @export var area_haze_color := Color(0.85, 0.74, 0.58)
+## Surface response of the realistic reference look (style realistic, P0-038): 0 dry, 1 a damp street after the
+## morning wash or a wet night (darker, glossy asphalt and footpaths that show reflections); and dust settled on the
+## street, roofs and the wall bases (0 none, 1 a dry hot afternoon). Other styles ignore both.
+@export var wet := 0.0
+@export var dust := 0.0

@@ -6,6 +6,10 @@
 // (instance uniform "wear"): rising damp with a tide line, soot and rain streaks that start under the floor bands
 // (never full-height streaks), tea-coloured water stains with dark rims, peeling paint that shows old paint or brick,
 // patched plaster, dust on roofs, oil, litter specks and sharp-edged puddles on the street.
+// The realistic reference look (style realistic, P0-038) turns on the PBR layer with pbr = 1: a height per surface
+// (from the texture layer, or procedural noise on the bare ground) turned into a normal by screen-space derivatives,
+// roughness and AO from the joints, a second finer texture scale, a dirt and dry grass ground between the blocks,
+// and wet and dusty surface response (uniforms wetness and dustiness, per light). With pbr = 0 the output is unchanged.
 shader_type spatial;
 render_mode blend_mix, depth_draw_opaque, cull_back, diffuse_burley, specular_schlick_ggx;
 
@@ -17,6 +21,12 @@ uniform float albedo_saturation = 1.0;
 uniform float wear_scale = 0.0;
 uniform vec3 backlight_tint = vec3(0.0);
 uniform float tex_mix = 1.0;
+// realistic layer (0 = off, the stylised_b look)
+uniform float pbr = 0.0;
+uniform float bump = 1.0;
+uniform float mottle = 1.0;
+uniform float wetness = 0.0;
+uniform float dustiness = 0.0;
 uniform sampler2DArray tiles : source_color, filter_linear_mipmap_anisotropic, repeat_enable;
 instance uniform float wear = 0.0;
 
@@ -29,6 +39,9 @@ const int L_SHUTTER = 5;
 // stand-in kit colours (sRGB) that pick a texture layer (game/scenes/standin/kit.gd)
 const vec3 KIT_BRICK = vec3(0.561, 0.369, 0.271);
 const vec3 KIT_PAVER = vec3(0.604, 0.553, 0.502);
+// the bare ground boxes between blocks (builder.gd _ground)
+const vec3 KIT_GROUND_A = vec3(0.612, 0.561, 0.471);
+const vec3 KIT_GROUND_B = vec3(0.604, 0.541, 0.439);
 
 varying vec3 wpos;
 varying vec3 wnrm;
@@ -70,6 +83,20 @@ vec4 layer(vec2 uv, float tile, int l) {
 	return texture(tiles, vec3(uv / tile, float(l)));
 }
 
+// height of a texture layer sample for the bump (joints and cracks sit lower)
+float theight(vec4 t) {
+	return luma(t.rgb) * 0.7 - t.a * 0.5;
+}
+
+// a finer second sample of the same layer, so close surfaces hold detail (texel density about 3x)
+vec4 fine(vec4 t, vec2 tuv, float tile, int l) {
+	if (pbr <= 0.0) {
+		return t;
+	}
+	vec4 f = layer(tuv + vec2(0.37, 0.61), tile * 0.31, l);
+	return vec4(t.rgb * mix(1.0, clamp(luma(f.rgb) / max(luma(t.rgb), 0.02), 0.6, 1.5), 0.35), max(t.a, f.a * 0.6));
+}
+
 void vertex() {
 	wpos = (MODEL_MATRIX * vec4(VERTEX, 1.0)).xyz;
 	wnrm = normalize((MODEL_MATRIX * vec4(NORMAL, 0.0)).xyz);
@@ -91,29 +118,36 @@ void fragment() {
 	float smax = max(srgb.r, max(srgb.g, srgb.b));
 	float sat = smax > 0.0 ? (smax - min(srgb.r, min(srgb.g, srgb.b))) / smax : 0.0;
 	bool brick = false;
+	// bump height in metres (realistic layer), and whether this is the bare ground between blocks
+	float hgt = 0.0;
+	bool earth = false;
 	if (surface_kind == 0) {
 		float m = fbm(uv * 0.55) - 0.5;
 		float g = vnoise(uv * 11.0) - 0.5;
-		col *= 1.0 + detail * (m * 0.12 + g * 0.04);
+		col *= 1.0 + detail * (m * 0.12 * mottle + g * 0.04);
 		rough = clamp(rough + detail * g * 0.1, 0.0, 1.0);
 		if (tex_mix > 0.0) {
 			if (!vertical && distance(srgb, KIT_PAVER) < 0.05) {
-				vec4 t = layer(tuv, 1.2, L_PAVER);
+				vec4 t = fine(layer(tuv, 1.2, L_PAVER), tuv, 1.2, L_PAVER);
+				hgt = theight(t) * 0.012;
 				// the checker is kept soft (a third of the stand-in colour stays) so it does not glare under lamps
 				col = mix(col, mix(t.rgb * (lum / 0.27), col * (0.75 + t.a * -0.3 + luma(t.rgb) * 1.0), 0.35), tex_mix);
 				mask = t.a;
 				rough = mix(rough, 0.8, t.a);
 			} else if (distance(srgb, KIT_BRICK) < 0.06) {
-				vec4 t = layer(tuv, 0.96, L_BRICK);
+				vec4 t = fine(layer(tuv, 0.96, L_BRICK), tuv, 0.96, L_BRICK);
+				hgt = theight(t) * 0.014;
 				col = mix(col, t.rgb * (lum / 0.17), tex_mix);
 				mask = t.a;
 				brick = true;
 			} else if (sat < 0.09 && smax < 0.78) {
-				vec4 t = layer(tuv, 2.4, L_CONCRETE);
+				vec4 t = fine(layer(tuv, 2.4, L_CONCRETE), tuv, 2.4, L_CONCRETE);
+				hgt = theight(t) * 0.006;
 				col *= mix(1.0, t.r * 2.0, tex_mix);
 				mask = t.a;
 			} else {
-				vec4 t = layer(tuv, 2.0, L_PLASTER);
+				vec4 t = fine(layer(tuv, 2.0, L_PLASTER), tuv, 2.0, L_PLASTER);
+				hgt = theight(t) * 0.006;
 				col *= mix(1.0, t.r * 2.0, tex_mix * 0.85);
 				mask = t.a;
 			}
@@ -123,15 +157,40 @@ void fragment() {
 		float m = fbm(uv * 0.22) - 0.5;
 		col *= 1.0 + detail * (g * 0.08 + m * 0.14);
 		rough = clamp(rough - detail * (0.12 + m * 0.2), 0.45, 1.0);
-		if (tex_mix > 0.0) {
+		earth = pbr > 0.0 && wpos.y < 0.05 && min(distance(srgb, KIT_GROUND_A), distance(srgb, KIT_GROUND_B)) < 0.025;
+		if (earth) {
+			// bare ground between blocks: dusty earth, darker damp patches, dry grass and pebbles
+			col = base;
+			float big = fbm(uv * 0.08 + 4.0);
+			float mid = fbm(uv * 0.6 + 8.0);
+			float n = vnoise(uv * 7.0);
+			col *= 0.66 + big * 0.3 + (mid - 0.5) * 0.26 + (n - 0.5) * 0.1;
+			col = mix(col, col * vec3(1.06, 0.95, 0.84), smoothstep(0.45, 0.7, big));
+			float grass = smoothstep(0.58, 0.72, fbm(uv * 0.25 + 17.0)) * smoothstep(0.35, 0.65, vnoise(uv * 3.0));
+			col = mix(col, vec3(0.16, 0.15, 0.07) + vec3(0.06, 0.05, 0.0) * n, grass * 0.85);
+			vec2 pc = floor(uv * 9.0);
+			vec2 pf = fract(uv * 9.0) - 0.5;
+			float peb = step(0.86, hash12(pc + 2.0)) * (1.0 - smoothstep(0.12, 0.3, length(pf + (vec2(hash12(pc), hash12(pc + 5.0)) - 0.5) * 0.3)));
+			col = mix(col, base * (0.7 + hash12(pc + 7.0) * 0.6), peb * 0.8);
+			mask = (1.0 - n) * 0.4;
+			hgt = (mid * 0.02 + n * 0.006 + peb * 0.012 + grass * 0.01);
+			rough = 0.96;
+		} else if (tex_mix > 0.0) {
 			if (smax > 0.36) {
-				vec4 t = layer(tuv, 2.4, L_CONCRETE);
+				vec4 t = fine(layer(tuv, 2.4, L_CONCRETE), tuv, 2.4, L_CONCRETE);
+				hgt = theight(t) * 0.006;
 				col *= mix(1.0, t.r * 2.0, tex_mix);
 				mask = t.a;
 			} else {
 				// two scales blended by a slow noise, so the patches and tar lines do not repeat on a grid
 				float pick = smoothstep(0.4, 0.6, vnoise(uv * 0.045 + 7.0));
 				vec4 t = mix(layer(tuv, 7.0, L_ASPHALT), layer(tuv.yx + vec2(3.7, 1.3), 11.3, L_ASPHALT), pick);
+				if (pbr > 0.0) {
+					// aggregate: a fine grain on top of the patches, so the road holds detail up close
+					vec4 f = layer(tuv * 1.0 + vec2(0.31, 0.17), 1.3, L_ASPHALT);
+					t.rgb *= mix(1.0, clamp(luma(f.rgb) / max(luma(t.rgb), 0.02), 0.7, 1.35), 0.4);
+					hgt = (luma(f.rgb) * 0.004 + theight(t) * 0.004);
+				}
 				// tar lines show faintly in most places, darker in a few stretches
 				float tarv = smoothstep(0.5, 0.75, vnoise(uv * 0.05 + 3.0));
 				float mult = mix(t.r * 2.0, max(t.r * 2.0, 0.82), t.a * (1.0 - tarv * 0.7));
@@ -143,6 +202,7 @@ void fragment() {
 		}
 	} else if (surface_kind == 3) {
 		vec4 t = layer(tuv, 1.0, L_SHUTTER);
+		hgt = theight(t) * 0.01;
 		col *= mix(1.0, t.r * 2.0, tex_mix);
 		col = mix(col, t.rgb * lum * 2.0, tex_mix * 0.4);
 		rough = mix(0.55, 0.85, t.a);
@@ -232,9 +292,58 @@ void fragment() {
 		}
 		rough = mix(rough, 1.0, w * 0.3 * (vertical ? 1.0 : 0.5));
 	}
+	float ao = 1.0;
+	if (pbr > 0.0 && surface_kind != 2) {
+		// dust: settles on flat tops and the street, and splashes up the wall base
+		if (dustiness > 0.0) {
+			float dn = fbm(uv * 0.35 + 41.0);
+			vec3 dc = vec3(0.47, 0.41, 0.32);
+			// a thin film on the asphalt (more at the edges of the patches), thicker on roofs, ledges and footpaths
+			float dm = vertical ? (1.0 - smoothstep(0.1, 0.9, wpos.y)) * 0.35
+				: (surface_kind == 1 ? smoothstep(0.45, 0.85, dn) * 0.16 : smoothstep(0.3, 0.75, dn) * 0.35);
+			if (earth) {
+				dm *= 0.5;
+			}
+			col = mix(col, dc * (0.85 + dn * 0.3), clamp(dm * dustiness, 0.0, 0.6));
+			rough = mix(rough, 1.0, dm * dustiness);
+		}
+		// wet: a damp sheen on the street and footpaths, standing water in the joints and low patches
+		if (wetness > 0.0 && !vertical && wpos.y < 0.4) {
+			float wn = fbm(uv * 0.12 + 61.0);
+			float wm = wetness * (0.45 + 0.55 * smoothstep(0.4, 0.62, wn)) + mask * wetness * 0.4;
+			float pool = smoothstep(0.62, 0.66, wn) * wetness;
+			if (earth) {
+				wm *= 0.6;
+				pool *= 0.4;
+			}
+			wm = clamp(wm, 0.0, 1.0);
+			col *= mix(1.0, 0.55, wm);
+			rough = mix(rough, 0.18, wm);
+			rough = mix(rough, 0.03, pool);
+			hgt *= 1.0 - max(wm * 0.6, pool);
+		}
+		ao = 1.0 - mask * 0.55;
+		// height to normal by screen-space derivatives (Mikkelsen 2010), faded with distance against shimmer
+		vec3 dpx = dFdx(wpos);
+		vec3 dpy = dFdy(wpos);
+		vec3 n = normalize(wnrm);
+		vec3 r1 = cross(dpy, n);
+		vec3 r2 = cross(n, dpx);
+		float det = dot(dpx, r1);
+		float hx = dFdx(hgt);
+		float hy = dFdy(hgt);
+		float fade = 1.0 - smoothstep(18.0, 60.0, length(wpos - CAMERA_POSITION_WORLD));
+		vec3 grad = sign(det) * (hx * r1 + hy * r2);
+		vec3 nb = normalize(abs(det) * n - grad * bump * fade);
+		if (abs(det) > 1e-9) {
+			NORMAL = normalize((VIEW_MATRIX * vec4(nb, 0.0)).xyz);
+		}
+		AO = ao;
+		AO_LIGHT_AFFECT = 0.25;
+	}
 	ALBEDO = col;
 	ROUGHNESS = rough;
 	METALLIC = surface_kind == 3 ? 0.35 : 0.0;
-	SPECULAR = 0.4;
+	SPECULAR = pbr > 0.0 ? 0.5 : 0.4;
 	BACKLIGHT = backlight_tint * col;
 }

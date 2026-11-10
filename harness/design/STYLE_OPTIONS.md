@@ -98,6 +98,7 @@ Dropped from the fidelity list: stylised low-poly city (Anmol: not a low-poly mo
 |---|---|---|---|---|
 | A (build now) | `stylised` (B), `stylised_grime` (B+D) | afternoon, golden | Anmol's pick, and the one open question inside it: how much grime and where | P0-011 |
 | B (optional) | `realistic` (A) | afternoon, golden | Cost and quality reference: shows what "more real" costs in frame time and art. Built only if Anmol wants to see it (asked in sitting 2), else P0-012 is skipped | P0-012 |
+| Round 4 | `realistic` (A), on top of batch B | dawn, afternoon, golden, night | Anmol: "Show me realistic too first". Same content as `stylised_b`, realistic rendering; sheet `style_options_real.jpg` | P0-038 |
 | B reserve (not built unless Anmol asks) | `comic` (C), `gritty` (D) | | C is out (cartoony). D's grime is already inside B+D | none |
 
 ## Fidelity options for a city look
@@ -126,7 +127,7 @@ All numbers est, at 1920 x 1080 internal on the M2 Pro, Forward+, for the busies
 | **Look** | GTA V, Mafia II | Watch Dogs 2, Sleeping Dogs | Watch Dogs 2 plus Max Payne 3 and Far Cry 4 grime in Old Delhi | Borderlands 3 | Max Payne 3 everywhere |
 | **Feel** | Grand and believable; action reads as a film | Warm, lively, readable; action is clear and loud | As B, plus Old Delhi feels old, lived in and honest about its conditions | Playful; too light for the honest city | Heavy and tense; the whole city reads as grim |
 | **On foot and combat** (people at 1.7 m, guns and fights) | Best faces and cloth close up, highest cost per person; muzzle flash and smoke look real but busy scenes get muddy | Clear silhouettes and readable clothing, so enemies, cops and civilians separate well; bold muzzle flash, sparks and dust hits read at once | As B; grime adds dust kicked up by hits and soot on walls; keep character materials clean so fighters stay readable against busy walls | Very readable hits, but cartoon gore and outlines fight the tone | Fights feel heavy; readability drops in dark grimy corners |
-| **Frame time p95, worst view** (est; B and B+D measured in P0-011 on the stand-ins, GPU p95 on Vulkan) | 18 to 26 ms (needs upscaling for 60 fps) | **measured 6.9 ms afternoon, 7.2 ms golden** (WRONG, was 9 to 13 ms) | **measured 7.9 ms afternoon, 8.3 ms golden** (WRONG, was 10 to 15 ms) | 9 to 13 ms | 10 to 15 ms |
+| **Frame time p95, worst view** (est; B and B+D measured in P0-011 on the stand-ins, GPU p95 on Vulkan) | 18 to 26 ms (needs upscaling for 60 fps); **measured on the stand-ins in P0-038: 15.6 to 18.0 ms worst view, 13.2 to 15.6 typical** (see "Realistic vs stylised B") | **measured 6.9 ms afternoon, 7.2 ms golden** (WRONG, was 9 to 13 ms) | **measured 7.9 ms afternoon, 8.3 ms golden** (WRONG, was 10 to 15 ms) | 9 to 13 ms | 10 to 15 ms |
 | **Draw calls, triangles** (est; B and B+D measured on the stand-ins) | 3,000 to 5,000; 4 to 8 M | **measured 89 to 180; 0.77 to 1.95 M** with shadow passes (WRONG for the stand-ins, was 1,500 to 3,000 and 2 to 4 M: the stand-ins merge each block into one mesh; the estimate stays open for the streamed city) | **measured 89 to 180; 0.77 to 1.95 M** (decals add about 1 call in the bazaar views; same caveat) | 1,500 to 3,000; 2 to 3 M | as B+D |
 | **Shader and post cost** (GPU ms, est; B and B+D measured as a whole) | SDFGI 3 to 5, SSR 1 to 2, volumetric fog 1 to 2, SSAO 0.8, SSIL 1.5, TAA 0.5, glow 0.4 | est SSAO 0.8, glow 0.4, fog 0.2, LUT 0.1, shadows 2 to 3 (about 3.5 to 4.5 in all). **Measured: plus 3.2 to 4.8 ms over the plain baseline** for SSAO, SSIL, glow, fog, LUT, soft 4 split shadows and the surface shader together (about right; SSIL was not in the estimate) | est B plus grime shader 0.5 to 1, decals 0.5 to 1, particles 0.3, heat shimmer 0.3. **Measured: plus 0.5 to 1.3 ms over B in the bazaar views** for the grime mask, decals and dust (WRONG, was 1.6 to 2.6; heat shimmer not built), nothing elsewhere | B plus outline 0.5 to 1.5, toon ramp 0.2 | as B+D plus heavier fog 0.5 |
 | **Load time and video memory** (est; B and B+D load measured on the stand-ins) | 8 to 15 s; 3 to 5 GB | 4 to 8 s; 1.2 to 2 GB (stand-ins: **measured load 0.82 s**, the same as the baseline, since no textures load yet; memory not measured by lookproof) | 5 to 9 s; 1.5 to 2.5 GB (stand-ins: **measured load 0.82 s**; memory not measured) | 3 to 6 s; 0.8 to 1.5 GB | as B+D |
@@ -230,7 +231,98 @@ What batch B contains (game/render/, all procedural, no art files):
 | Stray dogs | yes | Simple lying and standing dogs on the footpaths and by the bazaar walls |
 | Extra | yes | Rusty rebar on unfinished roofs, dish antennas, festive bunting across the bazaar, strings of snack packets at shop openings, neon outlines, litter specks |
 
-Not landed in the time box: cows and other animals, painted signs as textures (the boards are still text labels), more than one milestone, dressing on the far city blocks beyond the street, and a real Devanagari font in the project. The realistic reference look (old option A) was not built.
+Not landed in the time box: cows and other animals, painted signs as textures (the boards are still text labels), more than one milestone, dressing on the far city blocks beyond the street, and a real Devanagari font in the project. The realistic reference look (old option A) was built in round 4, below.
+
+### Realistic vs stylised B (P0-038, style round 4)
+
+Anmol, round 4: "Show me realistic too first". Fidelity bar: Watch Dogs 2. Style id `realistic`, the same four lights (`--light=dawn|afternoon|golden|night`). It extends batch B, so every dressing piece, the bazaar-only grime and all the Delhi detail are identical: the comparison is about rendering only.
+
+Sheet: `harness/reports/look/style_options_real.jpg` (columns: baseline, then stylised B and realistic side by side for dawn, afternoon, golden and night; one row per view). Made with `node harness/bin/lookproof.mjs --sheet baseline,style_stylised_b_dawn,style_realistic_dawn,style_stylised_b_afternoon,style_realistic_afternoon,style_stylised_b_golden,style_realistic_golden,style_stylised_b_night,style_realistic_night --out style_options_real`.
+
+What realistic adds over stylised B (all procedural, no art files):
+- Surfaces: a normal from the height of every texture layer (brick joints, paver joints, plaster cracks, asphalt grain, shutter ribs), a second finer texture scale for close views (about 3 times the texel density), ambient occlusion and roughness from the joints, less of the soft plaster blotching (the "marbled" walls), and earth with dry grass and pebbles on the bare ground between blocks.
+- Wet and dust per light: dawn has a damp street (the morning wash), night a damp street that shows the lamps, golden almost dry, afternoon dry with a dust film on the road, thicker dust on roofs, footpaths and the wall bases.
+- Light: a physical sky (scattering from the sun position, heavy with dust), screen-space reflections (cars, glass, wet roads), SSAO and SSIL, volumetric fog over the whole view so the sun makes shafts and the lamps make cones, a filmic tonemap with a neutral to warm grade (half the tint and saturation of B), TAA.
+- Night: sodium street lights with real inverse square falloff, so each lamp throws a pool on the road that fades over about 10 m, plus cones in the haze.
+- Tried and left out, measured: SDFGI (real-time GI) made the bazaar lane near black by day, still black after 12 s to settle, with or without the dressing, and cost 3 to 4 ms more; SSIL plus sky light was the better GI here. ACES tonemap crushed the shaded asphalt to black at golden and dawn; Filmic kept it readable. Both stay available as opt-in tokens (`--style-off=sdfgi_on`, `aces_on`).
+
+GPU p95 in ms, Apple M2 Pro, 1920 x 1080 native, Godot 4.7.2 Forward+ on Vulkan (MoltenVK), vsync off, sim held, 3 s window. Calm machine: load per core 0.36 to 0.83 in every run (under 1). Stylised B numbers are the P0-034 sets.
+
+| View | B dawn | Real dawn | B afternoon | Real afternoon | B golden | Real golden | B night | Real night |
+|---|---|---|---|---|---|---|---|---|
+| car_closeup | 9.80 | 15.70 | 9.00 | 13.30 | 8.71 | 13.08 | 10.17 | 14.11 |
+| street_eye | 10.28 | 15.55 | 9.17 | 12.96 | 8.84 | 13.30 | 9.76 | 14.32 |
+| junction | 10.77 | 16.13 | 9.74 | 13.55 | 9.26 | 13.19 | 10.14 | 15.18 |
+| flyover_ramp | 9.40 | 14.39 | 9.15 | 13.04 | 8.27 | 12.52 | 9.53 | 14.23 |
+| hud_play | 10.86 | 16.23 | 9.91 | 13.74 | 9.21 | 13.18 | 10.01 | 14.91 |
+| busiest_40m | 9.50 | 14.46 | 10.01 | 14.19 | 9.16 | 13.57 | 9.79 | 14.39 |
+| landmark_tiers | 7.05 | 11.10 | 7.13 | 10.48 | 6.69 | 9.44 | 6.89 | 10.63 |
+| area_blocks_30m | 8.65 | 13.64 | 9.36 | 13.73 | 8.62 | 13.07 | 8.91 | 13.10 |
+| on_foot_bazaar | 12.55 | 18.04 | 11.89 | 16.33 | 11.87 | 15.60 | 12.85 | 17.87 |
+| **worst** | **12.55** | **18.04** | **11.89** | **16.33** | **11.87** | **15.60** | **12.85** | **17.87** |
+| typical (median view) | 9.80 | 15.55 | 9.36 | 13.55 | 8.84 | 13.18 | 9.79 | 14.32 |
+
+Realistic costs about 3.7 to 5.8 ms more than stylised B in every view. Draw calls and triangles are the same (104 to 320 calls, 0.8 to 3.2 M triangles with shadow passes), load 1.07 s for both: the extra cost is all per-pixel (SSR, the full-view volumetric fog, the bump and second texture fetch, TAA). Budgets (draft): warn 11.1 ms, fail 16.6 ms. Every realistic view except landmark_tiers is "warn"; on_foot_bazaar is "FAIL" at dawn (18.0) and night (17.9).
+
+Extra measurements, afternoon:
+- With an upscaler, FSR 2.2 at render scale 0.75 (1440 x 810 inside, shown at 1080p; set `style_realistic_afternoon_fsr2_075`, `--style-off=fsr2@0.75`): worst 12.64 ms (bazaar), typical 11.23 ms, every street view 10.8 to 11.6 ms. That saves 2.3 to 3.7 ms. MetalFX could not be measured: it needs the Metal driver, which reports no GPU time.
+- With SDFGI on (`style_realistic_afternoon_sdfgi`, 3 views): street_eye 16.43, junction 17.52, on_foot_bazaar 18.99 ms, that is 3.5 to 4 ms over realistic without it.
+
+Per light, what realistic gains and loses against stylised B (read from the sheet):
+
+| Light | Realistic gains | Realistic loses | GPU p95 worst / typical, B vs realistic |
+|---|---|---|---|
+| Dawn | Damp street with soft reflections, a real sky gradient, haze with depth, brick and paver relief | The pink and peach mood of B; street views go brown and dark, the far city fades into murk | 12.6 / 9.8 vs 18.0 / 15.6 |
+| Afternoon | Believable hazy daylight, a dust film on the road, relief on brick and tiles, a neutral sky | Most of the warmth Anmol liked in B's "Afternoon heat"; shaded sides read grey | 11.9 / 9.4 vs 16.3 / 13.6 |
+| Golden | Sun shafts through the haze from above, deeper contrast, a natural orange sky | The glowing golden colour at street level: the shaded street is much darker than in B | 11.9 / 8.8 vs 15.6 / 13.2 |
+| Night | Sodium lamp pools on the road with real falloff, light cones in the haze, wet reflections of lamps and signs | Neon pops a little less, the far city and roofs are darker | 12.9 / 9.8 vs 17.9 / 14.3 |
+
+Both looks keep people readable (clean satin material and rim light), and both show the same bazaar-only grime and Delhi detail. The grime reads stronger in realistic up close (the joints and cracks catch light).
+
+Verdict against the performance target (decisions.md "Performance target": this M2 Pro, 60 fps steady at play speed, about 1080p rendered and upscaled, render about 10 to 11 ms GPU):
+- **Stylised B: fits, with work.** Typical view 8.8 to 9.8 ms at native 1080p, worst 11.9 to 12.9 ms (the bazaar). The bazaar needs the optimisations listed in batch B. These are stand-ins: the real city adds streaming, traffic, crowds and more geometry, so the 1 to 2 ms of headroom is thin but workable with LODs and an upscaler.
+- **Realistic: does not fit.** Typical view 13.2 to 15.6 ms at native 1080p, worst 15.6 to 18.0 ms, over the 10 to 11 ms render target in every view and over the 16.6 ms line in the bazaar, before any real city content. Even at 810p inside with FSR 2 it is 11.2 typical and 12.6 worst, still over the target and below "about 1080p".
+- Not measured: a 1080p render upscaled to a 1440p or Retina window (the look proof views are fixed at 1920 x 1080; native 1080p is the cost of the render itself, the FSR 2 pass adds about 0.5 to 1 ms, est).
+
+Risk at play speed (the views are held still, so these are judged from how each feature works, not measured at 200 km/h):
+- TAA ghosting: thin wires, poles and the edges of fast cars smear for a frame or two. Realistic leans on TAA; stylised B does not use it.
+- Screen-space reflections on wet roads vanish or tear when the reflected car or lamp leaves the screen; at speed this flickers at the bottom edge. Realistic only.
+- Bump shimmer: the derivative bump is faded out from 18 to 60 m to stop sparkle; the near road still crawls a little without TAA.
+- Volumetric fog lag: the fog reuses last frame's result, so shafts and lamp cones trail when the camera turns fast. Realistic uses it over the whole view; B only over the bazaar.
+- GI lag: SDFGI is off, so there is no GI lag. With SDFGI on, its cascades would lag behind a car at 200 km/h (not measured; held views only).
+
+Asset cost per look (what Anmol would make or source; Claude derives the rest):
+- Stylised B: one albedo card per material (AI image, tileable), atlases and trim sheets per area kit, alpha decals. Normals, roughness and AO come from Claude's tools. Models only need clean silhouettes and simple UVs.
+- Realistic: a full PBR set per material that tiles (albedo plus a height or normal map at least; Claude can derive roughness and AO), at 2 to 3 times the texel density, so more unique sets per area (each shop front, each wall type). Models need proper UVs, baked normal maps and more detail (AI 3D output needs more cleanup). Characters need real skin and cloth materials. Light per area needs more tuning (no SDFGI: hand-placed bounce lights in lanes).
+
+#### Effort per area and per mission (all numbers are estimates)
+
+Hours for Anmol are art hours (running the AI tools, checking, re-doing, uploading). Build hours are Claude's work in the game. "x" is realistic over stylised B.
+
+| Item | Anmol art, B | Anmol art, realistic | x | Build, B | Build, realistic | x |
+|---|---|---|---|---|---|---|
+| One area kit (for example the Chandni Chowk bazaar): textures | 2 to 3 h (8 to 12 cards) | 8 to 12 h (20 to 30 PBR sets) | about 4 | 2 to 3 h | 4 to 6 h | about 2 |
+| One area kit: normal and other maps | 0 h (generated) | 2 to 4 h (checking derived maps, fixing seams) | new | 0 to 1 h | 2 to 4 h | about 4 |
+| One area kit: models and props (30 to 50) | 6 to 10 h | 15 to 25 h | about 2.5 | 6 to 10 h | 10 to 16 h | about 1.6 |
+| One area kit: light and look tuning | 0 h | 0 h | | 2 to 3 h | 4 to 6 h | about 2 |
+| **One area kit, total** | **8 to 13 h** | **25 to 41 h** | **about 3** | **10 to 17 h** | **20 to 32 h** | **about 1.9** |
+| One hero landmark (India Gate, Red Fort) | 3 to 6 h | 10 to 20 h | about 3 | 4 to 8 h | 8 to 14 h | about 1.8 |
+| One story mission (mission props, a character or vehicle, the set dressing) | 2 to 4 h | 5 to 10 h | about 2.5 | 8 to 14 h | 12 to 20 h | about 1.5 |
+| **Pilot** (4 districts, 3 heroes) | 40 to 70 h | 130 to 220 h | about 3 | 50 to 90 h | 100 to 170 h | about 1.9 |
+| **Slice** (pilot plus missions M01 to M04) | 50 to 85 h | 150 to 260 h | about 3 | 80 to 150 h | 150 to 250 h | about 1.7 |
+| **Act 1** (pilot plus 10 missions) | 60 to 110 h | 180 to 320 h | about 3 | 130 to 230 h | 220 to 370 h | about 1.7 |
+| **Whole game** (10 area kits, 15 heroes, about 70 missions) | 270 to 500 h | 750 to 1,400 h | about 2.8 | 720 to 1,270 h | 1,160 to 1,930 h | about 1.5 |
+
+#### Why the stand-in scene does not look like Watch Dogs 2
+
+The test scene is a stand-in. Both looks sit far below Watch Dogs 2 for reasons that the rendering cannot fix:
+- **Geometry.** Our buildings are boxes with flat walls. Watch Dogs 2 facades are modelled: window recesses, cornices, bevelled edges, pipes, ledges, balconies with depth. Light and shadow on that depth is most of what reads as "real".
+- **Materials.** We have six procedural 512 px layers mapped in world space. Watch Dogs 2 has hand-made PBR sets, trim sheets, unique shop fronts, many decals per wall and blended layers (dirt, wet, paint) painted by artists.
+- **Prop density.** We have hundreds of dressing pieces in the scene. A Watch Dogs 2 block has thousands: litter, signs, bins, street furniture, plants, cables, parked bikes, posters, all placed by hand or by tools.
+- **Models.** Our people, cars and autos are simple boxes. Watch Dogs 2 has scanned characters with cloth, faces and animation, and cars with interiors, lights and dirt.
+- **Post and light.** This is the one part that is close: tonemap, grade, fog, reflections and AO are similar. Watch Dogs 2 also uses baked light probes and an artist grade per district, which we can add later.
+
+What each later piece of work adds (the phases are planned after the sign-offs): the map bake and repair layer gives real street layouts, footprints and heights; the area profile generator gives modular facades with depth and per-area dressing at real density; the landmark pipeline gives hero models; the art batches replace the procedural layers with real textures, trims and decals; the character and vehicle work gives real models; a late lighting pass adds per-district grades and light probes. The look we pick now is the base that all of this sits on, so the choice is about cost and feel, not about how the stand-ins look today.
 
 ## Landmark tiers and area kits per candidate
 
@@ -303,4 +395,5 @@ Show `harness/reports/look/style_options.jpg` and this table with measured numbe
 - Round 1 (sitting 1): engine moved to Godot 4 desktop ("yes for godot 4").
 - Round 2 (sitting 1): "I also like B, with d's dirst on old delhi". Light for tests: hot hazy afternoon and golden evening. Colour: rich and warm. Camera: third person behind. Characters: realistic proportions, stylised finish.
 - Round 3 (2026-11-10): main light "Full day-night cycle"; grime "Much stronger"; push "Building detail, Materials, Atmosphere, Night and lights". Built as batch B (`stylised_b`, P0-034), sheet `harness/reports/look/style_options_b.jpg`.
+- Round 4 (2026-11-11): "Show me realistic too first"; likes in batch B: "Bazaar detail and grime, Night lights, Golden hour, Afternoon heat". Built as `realistic` (P0-038), sheet `harness/reports/look/style_options_real.jpg`, comparison in "Realistic vs stylised B".
 - No sign-off yet.

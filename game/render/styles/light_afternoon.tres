@@ -35,3 +35,5 @@ dust_energy = 0.6
 heat = 1.0
 area_haze = 0.035
 area_haze_color = Color(0.86, 0.76, 0.6, 1)
+wet = 0.0
+dust = 0.7

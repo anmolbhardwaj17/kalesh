@@ -37,3 +37,5 @@ night = 0.0
 window_share = 0.08
 area_haze = 0.03
 area_haze_color = Color(0.95, 0.7, 0.45, 1)
+wet = 0.08
+dust = 0.55

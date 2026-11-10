@@ -136,6 +136,30 @@ func test_stylised_b_materials_and_presets() -> void:
 	t.ok(load(DIR + "light_night.tres").night == 1.0 and load(DIR + "light_afternoon.tres").night == 0.0, "night flag on the presets")
 
 
+# ---------------------------------------------------------------- realistic reference (P0-038)
+
+
+func test_realistic_turns_on_the_pbr_layer_and_the_render_features() -> void:
+	t.ok("realistic" in load("res://render/style_runner.gd").STYLES, "realistic is a known style id")
+	for light in ["dawn", "afternoon", "golden", "night"]:
+		var st := _style("realistic", light)
+		var mats := Kit.materials()
+		for k in mats:
+			t.ok(st.material_for(mats[k]) != null, "realistic %s styles kit material %s" % [light, k])
+		t.ok(st.material_for(mats["satin"]) is StandardMaterial3D, "people stay on a clean material (%s)" % light)
+		var road: ShaderMaterial = st.material_for(mats["road"])
+		t.near(road.get_shader_parameter("pbr"), 1.0, 1e-6, "PBR layer on (%s)" % light)
+		var env: Environment = st.environment()
+		t.ok(env.ssr_enabled and env.ssil_enabled and env.volumetric_fog_enabled and not env.sdfgi_enabled, "SSR, SSIL and volumetric fog on, SDFGI opt-in (%s)" % light)
+		t.ok(env.tonemap_mode == Environment.TONE_MAPPER_FILMIC, "filmic tonemap (%s)" % light)
+		t.ok((env.sky.sky_material is PhysicalSkyMaterial) == (light != "night"), "physical sky by day only (%s)" % light)
+	var b := _style("stylised_b", "dawn")
+	var bp: Variant = b.material_for(Kit.materials()["road"]).get_shader_parameter("pbr")
+	t.ok(bp == null or float(bp) == 0.0, "stylised_b keeps the PBR layer off")
+	t.ok(load(DIR + "light_dawn.tres").wet > load(DIR + "light_afternoon.tres").wet, "dawn streets are wetter than the afternoon")
+	t.ok(load(DIR + "light_afternoon.tres").dust > load(DIR + "light_dawn.tres").dust, "the afternoon is dustier than dawn")
+
+
 func test_builder_records_dressing_anchors_without_geometry() -> void:
 	var root := Node3D.new()
 	tree.root.add_child(root)

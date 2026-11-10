@@ -1,0 +1,25 @@
+{
+  "views": {
+    "street_eye": {
+      "file": "street_eye.png",
+      "at": "2026-11-10T20:09:56.180Z",
+      "query": "debug=1&verify=1&style=realistic&light=afternoon&style-off=sdfgi_on",
+      "error": null
+    },
+    "junction": {
+      "file": "junction.png",
+      "at": "2026-11-10T20:10:03.687Z",
+      "query": "debug=1&verify=1&style=realistic&light=afternoon&style-off=sdfgi_on",
+      "error": null
+    },
+    "on_foot_bazaar": {
+      "file": "on_foot_bazaar.png",
+      "at": "2026-11-10T20:10:10.771Z",
+      "query": "debug=1&verify=1&style=realistic&light=afternoon&style-off=sdfgi_on",
+      "error": null
+    }
+  },
+  "commit": "88ea00b",
+  "gl": "Godot 4.7.2.stable Apple M2 Pro (vulkan, forward_plus)",
+  "at": "2026-11-10T20:10:10.983Z"
+}

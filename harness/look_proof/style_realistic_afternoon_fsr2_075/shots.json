@@ -1,0 +1,61 @@
+{
+  "views": {
+    "car_closeup": {
+      "file": "car_closeup.png",
+      "at": "2026-11-10T20:08:40.731Z",
+      "query": "debug=1&verify=1&style=realistic&light=afternoon&style-off=fsr2@0.75",
+      "error": null
+    },
+    "street_eye": {
+      "file": "street_eye.png",
+      "at": "2026-11-10T20:08:48.031Z",
+      "query": "debug=1&verify=1&style=realistic&light=afternoon&style-off=fsr2@0.75",
+      "error": null
+    },
+    "junction": {
+      "file": "junction.png",
+      "at": "2026-11-10T20:08:55.223Z",
+      "query": "debug=1&verify=1&style=realistic&light=afternoon&style-off=fsr2@0.75",
+      "error": null
+    },
+    "flyover_ramp": {
+      "file": "flyover_ramp.png",
+      "at": "2026-11-10T20:09:02.356Z",
+      "query": "debug=1&verify=1&style=realistic&light=afternoon&style-off=fsr2@0.75",
+      "error": null
+    },
+    "hud_play": {
+      "file": "hud_play.png",
+      "at": "2026-11-10T20:09:09.505Z",
+      "query": "debug=1&verify=1&style=realistic&light=afternoon&style-off=fsr2@0.75",
+      "error": null
+    },
+    "busiest_40m": {
+      "file": "busiest_40m.png",
+      "at": "2026-11-10T20:09:16.747Z",
+      "query": "debug=1&verify=1&style=realistic&light=afternoon&style-off=fsr2@0.75",
+      "error": null
+    },
+    "landmark_tiers": {
+      "file": "landmark_tiers.png",
+      "at": "2026-11-10T20:09:23.606Z",
+      "query": "debug=1&verify=1&style=realistic&light=afternoon&style-off=fsr2@0.75",
+      "error": null
+    },
+    "area_blocks_30m": {
+      "file": "area_blocks_30m.png",
+      "at": "2026-11-10T20:09:30.839Z",
+      "query": "debug=1&verify=1&style=realistic&light=afternoon&style-off=fsr2@0.75",
+      "error": null
+    },
+    "on_foot_bazaar": {
+      "file": "on_foot_bazaar.png",
+      "at": "2026-11-10T20:09:37.989Z",
+      "query": "debug=1&verify=1&style=realistic&light=afternoon&style-off=fsr2@0.75",
+      "error": null
+    }
+  },
+  "commit": "88ea00b",
+  "gl": "Godot 4.7.2.stable Apple M2 Pro (vulkan, forward_plus)",
+  "at": "2026-11-10T20:09:38.174Z"
+}

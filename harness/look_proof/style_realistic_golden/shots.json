@@ -1,0 +1,61 @@
+{
+  "views": {
+    "car_closeup": {
+      "file": "car_closeup.png",
+      "at": "2026-11-10T20:06:10.177Z",
+      "query": "debug=1&verify=1&style=realistic&light=golden",
+      "error": null
+    },
+    "street_eye": {
+      "file": "street_eye.png",
+      "at": "2026-11-10T20:06:17.175Z",
+      "query": "debug=1&verify=1&style=realistic&light=golden",
+      "error": null
+    },
+    "junction": {
+      "file": "junction.png",
+      "at": "2026-11-10T20:06:24.244Z",
+      "query": "debug=1&verify=1&style=realistic&light=golden",
+      "error": null
+    },
+    "flyover_ramp": {
+      "file": "flyover_ramp.png",
+      "at": "2026-11-10T20:06:31.290Z",
+      "query": "debug=1&verify=1&style=realistic&light=golden",
+      "error": null
+    },
+    "hud_play": {
+      "file": "hud_play.png",
+      "at": "2026-11-10T20:06:38.276Z",
+      "query": "debug=1&verify=1&style=realistic&light=golden",
+      "error": null
+    },
+    "busiest_40m": {
+      "file": "busiest_40m.png",
+      "at": "2026-11-10T20:06:45.452Z",
+      "query": "debug=1&verify=1&style=realistic&light=golden",
+      "error": null
+    },
+    "landmark_tiers": {
+      "file": "landmark_tiers.png",
+      "at": "2026-11-10T20:06:52.172Z",
+      "query": "debug=1&verify=1&style=realistic&light=golden",
+      "error": null
+    },
+    "area_blocks_30m": {
+      "file": "area_blocks_30m.png",
+      "at": "2026-11-10T20:06:59.337Z",
+      "query": "debug=1&verify=1&style=realistic&light=golden",
+      "error": null
+    },
+    "on_foot_bazaar": {
+      "file": "on_foot_bazaar.png",
+      "at": "2026-11-10T20:07:06.330Z",
+      "query": "debug=1&verify=1&style=realistic&light=golden",
+      "error": null
+    }
+  },
+  "commit": "88ea00b",
+  "gl": "Godot 4.7.2.stable Apple M2 Pro (vulkan, forward_plus)",
+  "at": "2026-11-10T20:07:06.535Z"
+}
