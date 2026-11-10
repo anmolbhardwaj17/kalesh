@@ -38,8 +38,131 @@ Proposal for the architecture options (Anmol confirms the district list and layo
 - **Filler** between districts comes from area profiles (generated ordinary city, parks, rail corridors), never claimed as a real place.
 - **Steps added to the bake**: district selection (`harness/data/districts.json`: clip polygon, frame origin, offset, area profile hints, why it is in the game) before ingest, and stitching with connector authoring (`harness/data/connectors/`) after the per-tile overrides. Connectors are data files Claude authors and Anmol reviews in the map inspector.
 - **Seed list from his words** (to turn into 15 to 25 candidates with real size and game role): Connaught Place, India Gate and Rajpath, Chandni Chowk and Red Fort, ITO and Pragati Maidan, a stretch of the Yamuna with bridges, IGI Airport, East Delhi (Laxmi Nagar, Shahdara side), parts of NCR (Gurugram Cyber City, Noida), plus areas the three characters need (a police station or HQ for the cop, auto stands and a resettlement colony for the driver, markets and back lanes for the fixer).
-- **Size targets** (estimates, to compare in the layout options): total playable area, number of districts, longest drive across the map at 80 km/h, and bake area in km2. The layout options in the architecture discovery give 2 or 3 choices with a north-up sketch.
+- **Size targets** (estimates, to compare in the layout options): total playable area, number of districts, longest drive across the map at 80 km/h, and bake area in km2. Section 0.3 gives three layouts with north-up sketches.
 - **Tests**: a landmark lands at its district offset plus its projected position within the tier tolerance; relative layout inside a district matches reality; every boundary port is closed; north is up on the map and -Z in the world.
+
+### 0.1 Candidate districts (P0-028 draft, pending Anmol)
+
+22 candidates from Anmol's list (central core, Old Delhi, East Delhi across the Yamuna, the south with Gurugram and the airport, and his story places). Every number is an estimate: centres are read from public maps to about 200 m, clip sizes are first proposals, costs are guesses until the P0-018 data bench measures real data. "Must" and "optional" are proposals: must means Anmol named it or a character needs it. Cost: S (under 2 build tasks), M (2 to 3), L (3 to 5), XL (5 or more, hard road geometry or the densest areas), counted after the base layers exist.
+
+| # | District | Real centre (lat, lon), est | Clip at proposal, est | What it gives the game | Must or optional | Data and build cost, est |
+|---|---|---|---|---|---|---|
+| D01 | Connaught Place: inner and outer circle, radials, Palika Bazaar, Rajiv Chowk Metro | 28.6315, 77.2167 | 1.2 x 1.2 km, 1.4 km2 (with D02: 1.2 x 1.6 km, 1.9 km2) | Hero: CP circle. Driver's main fare stand at the Metro exits; cop patrol; fixer meetings in the colonnades. Missions: fares, chases round the circles, a shootout in the corridors. Life: office crowds, vendors, autos queuing | Must (hero) | L: OSM very good; radial junctions and the colonnade kit are the work |
+| D02 | Jantar Mantar and Sansad Marg | 28.6271, 77.2166 | 0.6 x 0.6 km, 0.4 km2, clipped with D01 (450 m apart, so they share one clip in every layout) | Jantar Mantar observatory (signature); the protest site. Cop crowd control, fixer works a crowd, driver drops a leader. Agrasen ki Baoli (haunted candidate) is about 800 m east, just outside the clip unless it grows | Must (story place) | S: small; needs the crowd system |
+| D03 | India Gate and Kartavya Path: C-Hexagon, lawns, canals, Vijay Chowk | 28.6135, 77.2190 | 2.2 x 0.8 km, 1.8 km2 | Hero: India Gate. Rashtrapati Bhavan and North and South Block as far signatures. Evening crowds, ice cream carts, a chase down the long avenue, cop VIP route. The War Memorial is a no-combat zone (respect rule) | Must (hero) | M: simple roads and open lawns; the hero model and the far buildings are the work |
+| D04 | ITO and Pragati Maidan: stacked flyovers, Vikas Marg, IP Estate, Bharat Mandapam, the tunnel, Delhi Gate, Khooni Darwaza | 28.6290, 77.2430 | 1.4 x 1.2 km, 1.7 km2 | The cop's station (made up, no real station named) and the police HQ area. Pursuits on the flyovers, barricades, the tunnel chase. Khooni Darwaza is a haunted candidate inside | Must (cop's base, pilot) | XL: the hardest road geometry in the map (stacked ramps, tunnel); the lane model's proving ground |
+| D05 | Lutyens bungalows and Delhi Gymkhana: Safdarjung Road, roundabouts, tree tunnels | 28.6033, 77.2003 | 1.0 x 0.9 km, 0.9 km2 | Delhi Gymkhana (signature). Power and money (invented politicians only, no real residences shown). Tail a car, a VIP heist, cop protection duty | Must (story place) | M: repeating bungalow kit and roundabouts; many trees (perf) |
+| D06 | Khan Market, Lodhi Garden and the Delhi Golf Club | 28.5960, 77.2280 | 1.4 x 1.0 km, 1.4 km2 | Khan Market and the Lodhi tombs (signatures). Rich clients for the fixer, cafe meets, a chase across the golf course | Must (story places) | M: the market is small; the golf course is cheap open ground |
+| D07 | Paharganj and New Delhi Railway Station | 28.6430, 77.2170 | 1.2 x 0.9 km, 1.1 km2 | NDLS station (signature). Driver's station stand; fixer's hotel contacts; backpackers, touts, porters. The "Train at 6:10" fare | Must (driver and fixer) | L: dense lanes plus the station; rail yard as cheap filler |
+| D08 | GB Road and Ajmeri Gate (Swami Shraddhanand Marg) | 28.6480, 77.2240 | 0.6 x 0.5 km, 0.3 km2 | Story and atmosphere only, under the respect rule: no sexual content, no exploitation of real people. Hardware shops at street level; cop rescue missions; fixer contacts | Must (story place) | S: reuses the Old Delhi kit |
+| D09 | Chandni Chowk, Red Fort and Jama Masjid: Dariba, Kinari Bazaar, Fatehpuri, Netaji Subhash Marg | 28.6530, 77.2350 | 1.6 x 1.1 km, 1.8 km2 | Hero: Red Fort; Jama Masjid hero later. Signatures: Sis Ganj Gurudwara, Fatehpuri Masjid, Gauri Shankar Mandir, Lal Mandir (no combat inside any place of worship). The fixer's home ground: on foot in the bazaar, rooftop chases, rickshaws, the "Red Fort rush" | Must (hero, fixer) | XL: densest area, crowds, narrow lanes, the grime layer (wear high) |
+| D10 | Kashmere Gate and ISBT | 28.6670, 77.2280 | 1.0 x 0.8 km, 0.8 km2 | ISBT and the old gate (signatures). Arrivals into the city, smuggling by bus, fares | Optional | M: the bus terminal and its interchange |
+| D11 | The Yamuna: river, floodplain, ghats and bridges (ITO bridge, Nizamuddin bridge, Loha Pul, DND; Signature Bridge as a far landmark) | river near ITO 28.6300, 77.2550 | corridor 0.4 to 0.5 km wide, 5.5 to 8.9 km long, 2.2 to 4.5 km2 | Bridges as chokepoints for wanted escapes; night scenes at the ghats; the line between the two halves of the city | Must | M: water and floodplain are cheap per km2; each bridge is an authored connector (lane model and elevation solver) |
+| D12 | Laxmi Nagar and Shakarpur: coaching centres, Vikas Marg market, the elevated Blue Line | 28.6310, 77.2770 | 1.2 x 1.0 km, 1.2 km2 | The driver's home (proposal). Dense 4 to 6 storey lanes, the fixer's East Delhi deals, a Metro viaduct chase | Must (East Delhi, driver) | L: dense generated city and the Metro viaduct |
+| D13 | Shahdara and Seelampur back lanes | 28.6730, 77.2890 | 1.2 x 1.0 km, 1.2 km2 | Old East Delhi wholesale lanes. The fixer's harder deals and rival crews; the drug racket line Anmol mentioned, told under the respect rule (invented gangs, no real community blamed) | Optional | M: reuses the Old Delhi and Laxmi Nagar kits |
+| D14 | Akshardham and the Games Village edge | 28.6127, 77.2773 | 1.2 x 1.0 km, 1.2 km2 | Akshardham (signature, a place of worship: no combat inside). A chase along NH-9 | Optional | M: one complex signature model |
+| D15 | Noida Sector 18 and Film City | 28.5700, 77.3230 | 1.4 x 1.0 km, 1.4 km2 | NCR new money: malls, Atta Market, the Film City studio gate. A filmi mission on a film set fits the tone | Optional (NCR) | M: modern tower and mall kit (shared with D22) |
+| D16 | Nizamuddin and Humayun's Tomb: Dargah and Basti, Sundar Nursery, Nizamuddin station | 28.5920, 77.2470 | 1.2 x 1.0 km, 1.2 km2 | Hero later: Humayun's Tomb. Qawwali nights (atmosphere only), train arrivals at Nizamuddin | Optional (recommended in B) | L: hero model and a dense basti |
+| D17 | Haunted place in the Central Ridge (Bhuli Bhatiyari ka Mahal; Malcha Mahal is the other Ridge candidate) | 28.6420, 77.2020 | 0.8 x 0.8 km, 0.6 km2 of forest with one ruin | Night and fog missions, the ghost story side line for all three. If Anmol picks Khooni Darwaza (inside D04) or Agrasen ki Baoli (next to D02), this clip shrinks to Ridge forest filler | Must (one haunted place; which one is open) | S: one ruin; trees cost perf |
+| D18 | Dhaula Kuan interchange and the Ridge road | 28.5918, 77.1617 | 1.0 x 0.9 km, 0.9 km2 | The gate from the city to the airport and Gurugram; highway chases on a cloverleaf | Optional: proposal is to author it as a connector junction in B and C, not a real clip | L as a real clip (complex interchange); M as an authored connector |
+| D19 | Vasant Kunj: Ambience and DLF Promenade malls, upscale sectors | 28.5410, 77.1560 | 1.2 x 1.0 km, 1.2 km2 | Rich clients and the Lutyens set at home (Anmol: "vasant kunj for lutens"), a mall shootout, a farmhouse party | Must (story place) | M: mall and gated housing kit |
+| D20 | Mehrauli and Qutub Minar: the Qutub complex, Archaeological Park ruins, Mehrauli village | 28.5245, 77.1855 | 1.0 x 1.0 km, 1.0 km2 | Hero later: Qutub Minar. Ruins at night; Jamali Kamali in the park is another well known haunted candidate | Optional (recommended in B) | L: hero model, ruins, village lanes |
+| D21 | IGI Airport T3 and Aerocity | 28.5530, 77.1000 | 1.8 x 1.0 km, 1.8 km2 (terminal, forecourt ramps, one runway stretch behind a fence, Aerocity hotels) | T3 and the control tower (signatures). Airport runs for the driver, a smuggling line for the fixer, a chase on the perimeter road | Must (Anmol named the airport) | M: one big signature terminal; the rest is flat fenced ground |
+| D22 | Gurugram Cyber City and Cyber Hub, with the NH-48 toll edge | 28.4950, 77.0890 | 1.2 x 1.0 km, 1.2 km2 | Glass towers, Rapid Metro, Cyber Hub (signature). Corporate money, a heist in a tower, highway chases on NH-48 | Must (Gurgaon) | M: tower kit repeats well; glass needs good reflections |
+
+Character homes, proposal for every layout (from `GAME_DESIGN_OPTIONS.md` section 1): the driver lives in Laxmi Nagar (D12) and works the CP stands (D01), the station (D07) and airport runs (D21), so his day crosses the ITO bridge. The cop works from a made-up station in the ITO district (D04) and patrols the core, with VIP duty in Lutyens and at India Gate (D05, D03) and protests at Jantar Mantar (D02). The fixer works out of Chandni Chowk and Paharganj (D09, D07), has contacts on GB Road (D08), deals in East Delhi (D12, D13 in C), and meets rich clients at Khan Market, Vasant Kunj and Cyber City (D06, D19, D22).
+
+### 0.2 Connectors: the big roads, the river and the bridges
+
+Connectors are authored data (`harness/data/connectors/`), built with the same lane model and elevation solver as real roads, and carry the real road's name. Lengths are game lengths, not real ones.
+
+| Connector | Stands for | Joins | Kind | Layouts |
+|---|---|---|---|---|
+| Ring Road | Ring Road and Mahatma Gandhi Marg on the west bank | Holds the core: Old Delhi, ITO, Nizamuddin on the river side, the south arc, Dhaula Kuan in the south west | 6 lane arterial, flyovers at the big junctions | A (river bank and south arc only), B, C (full loop) |
+| NH-48 | NH-48 from Dhaula Kuan | Ring Road to the airport and Gurugram, then off the map towards Jaipur | Expressway | A, B, C |
+| Airport road | the T3 link | NH-48 to the T3 forecourt ramps and Aerocity | Expressway spur | A, B, C |
+| MG Road | Mehrauli-Gurgaon Road | Qutub and Vasant Kunj to Gurugram | Arterial with the elevated Metro beside it | B, C |
+| Aurobindo Marg | Aurobindo Marg | the south arc to Qutub | Arterial | B, C |
+| Barapullah | the Barapullah elevated road | Nizamuddin to the south of Khan Market and Lodhi | Elevated | B, C |
+| Janpath, Barakhamba Road, Minto Road, BSZ Marg, Mathura Road, Lodhi Road, Ridge Road | the same real roads | short links inside the core (CP to India Gate, CP to ITO, CP to Old Delhi, ITO to Old Delhi, ITO to Nizamuddin, India Gate to Khan Market and Nizamuddin, CP to the Ridge) | Arterials | A (some), B, C |
+| ITO bridge | Vikas Marg bridge | ITO to Laxmi Nagar | Bridge | A, B, C |
+| Nizamuddin bridge and Pushta Road | the NH-24 bridge and the east bank road | Nizamuddin to the east bank, up to Laxmi Nagar, so the river has a loop for escapes | Bridge, arterial | A, B, C |
+| Loha Pul | the Old Yamuna Bridge (road below, rail above) | Old Delhi to Shahdara | Bridge | C |
+| DND Flyway and NH-9 | the DND Flyway and NH-9 | the south arc to Noida, Noida up to Akshardham | Expressway | C |
+
+### 0.3 Layout options (P0-028 draft, pending Anmol)
+
+Three layouts, all north up, all with districts at true scale moved closer by translation only. Sketches (SVG, north arrow and 2 km scale bar on each): [Layout A](map_sketches/district_layout_a.svg), [Layout B](map_sketches/district_layout_b.svg), [Layout C](map_sketches/district_layout_c.svg). They are drawn from data by `harness/design/map_sketches/make_sketches.mjs`, which also prints the totals below and the placement offset of every district; edit it to move a district and redraw.
+
+- **A. Compact core.** The 15 must places with trimmed clips and merges: CP with Jantar Mantar, Paharganj with GB Road, India Gate without most of Kartavya Path. Only the river bank and south arc of the Ring Road; the south (Vasant Kunj, airport, Cyber City) is pressed into the south west corner. The river is a narrow band on the east with Laxmi Nagar beyond.
+- **B. Delhi shape (recommended).** The 15 musts at full clip plus Humayun's Tomb with Nizamuddin and Qutub with Mehrauli. Real compass directions hold: Old Delhi north, the core inside a full Ring Road loop, the Yamuna on the east with Laxmi Nagar across two bridges, the south outside the Ring Road with Dhaula Kuan as the gate to NH-48, the airport and Gurugram in the south west.
+- **C. Delhi plus NCR.** B unchanged, plus Kashmere Gate on the north of the Ring Road, Shahdara and Akshardham on a wider east bank with Loha Pul as a third bridge, and Noida Sector 18 and Film City in the south east by the DND Flyway. B's districts keep the same positions, so C is B grown at the edges.
+
+| Totals (all estimates) | A. Compact core | B. Delhi shape | C. Delhi plus NCR |
+|---|---|---|---|
+| Districts (plus the river) | 12 (D01 and D02, D07 and D08 merged) | 15 (D01 and D02 merged) | 19 |
+| District clips | 13.4 km2 | 19.0 km2 | 23.6 km2 |
+| Connectors and filler | 2.0 km2 | 3.2 km2 | 3.6 km2 |
+| Playable land | 15.4 km2 | 22.2 km2 | 27.2 km2 (above the 15 to 25 target) |
+| River and floodplain | 2.2 km2 | 3.8 km2 | 4.5 km2 |
+| Detailed bake area (land plus river) | 17.6 km2 | 26.0 km2 | 31.7 km2 |
+| Map box, and terrain-only bake (box plus a 0.5 km backdrop ring) | 6.7 x 5.8 km, 52 km2 | 9.1 x 7.5 km, 85 km2 | 10.1 x 8.9 km, 110 km2 |
+| Longest drive (dotted on the sketch, 1.1 winding factor) | Cyber City to Laxmi Nagar, 9.9 km | Cyber City to Laxmi Nagar, 12.3 km | Cyber City to Shahdara, 14.2 km |
+| Time across at 80 km/h (and in an auto at 65) | 7.4 min (9.1) | 9.2 min (11.3) | 10.6 min (13.1) |
+| Landmarks: heroes now, heroes later, signatures | 3, 1 (Jama Masjid), about 23 | 3, 3 (Jama Masjid, Humayun's Tomb, Qutub Minar), about 25 | 3, 3, about 30 |
+| Area kits | about 10 | about 11 (the basti reuses the Old Delhi kit) | about 11 to 12 (Shahdara and Noida reuse kits) |
+| Bake time on this Mac, before the data bench measures it | 1 to 2 h | 1.5 to 3 h | 2 to 4 h |
+| Streaming: tiles if 250 m (tile size is an architecture decision) | about 280 | about 420 | about 510 |
+
+Honest costs:
+- **Bake.** Grows with the detailed area: B is about 1.5 times A, C about 1.8 times A. All three stay far under the 50 GB disk Anmol allows (source data under 10 GB, estimate). The terrain-only ring is cheap.
+- **Streaming.** The per-tile budget and the speed are the same in all three, so frame cost per second of driving is the same. What grows is disk, bake time and the number of area kits that can be resident at a district edge (at most 3 or 4 at once in all layouts, estimate).
+- **Art volume.** The three first heroes are the same in all layouts. B adds two later heroes (Humayun's Tomb, Qutub Minar) and about 2 more signatures; C adds about 5 more signatures (ISBT, Kashmere Gate, Akshardham, Film City gate, Loha Pul). Kits barely grow because the extra districts reuse kits.
+- **Road work.** The hard geometry (CP circles, ITO flyovers, the Chandni Chowk lanes) is in every layout. B adds Dhaula Kuan, Barapullah and MG Road; C adds Loha Pul and the DND. Each bridge or elevated connector is about 1 builder task on the lane model (estimate).
+- **Risk A.** May feel small after a few hours ("not too small to feel boring"); the south corner is cramped, so the airport and Gurugram feel like a side room; fewer places for three lives.
+- **Risk B.** The core is dense, so the central districts sit close (CP to Old Delhi about 2.6 km in the game, 3.0 km in reality); the south is moved most (Cyber City is 5.2 km from CP in the game, 19.6 km in reality), so the drive from Delhi to Gurugram is short but still a highway drive. Fits his size words.
+- **Risk C.** Above his 15 to 25 km2 target and about 1.3 times B's work; the wide east bank and Noida need a third bridge and the DND. Better as later unlocks than at the first release.
+- **All layouts.** Missions and spawn points are stored in district-local coordinates (district id plus position), so a district can move between layouts without breaking mission data. Moving a district means a rebake of its tiles and its connectors.
+
+Placement offsets in B (game centre minus real centre, relative to CP, from the script): the core moves under 1 km (Old Delhi 0.8 km south, ITO 0.6 km west); the south moves most (Qutub 3.4 km east and 7.7 km north, Vasant Kunj 4.9 and 5.8, the airport 8.2 and 6.4, Cyber City 9.5 and 10.9). No district is rotated, scaled or mirrored.
+
+### 0.4 Pilot inside the layout
+
+The pilot is the first set of districts selected, repaired and stitched (`MAP_REPAIR.md` "Pilot area first"). Proposal: CP with Jantar Mantar, India Gate, ITO and Pragati Maidan, and Chandni Chowk with Red Fort, joined by Janpath, Barakhamba Road and BSZ Marg as authored connectors. That is about 7.2 km2 (estimate) and holds all three of Anmol's first heroes. India Gate adds about 1.8 km2 of simple roads and open lawns to the earlier proposal, so its cost is mostly the hero model. The pilot is the same in A, B and C, so it can start before the layout is final.
+
+### 0.5 Recommendation
+
+Build **Layout B** for the first release: it holds every place Anmol named, keeps real compass directions so Delhi players recognise it, sits in the middle of his size words (about 22 km2, about 9 minutes across at 80 km/h, 11 in an auto), and leaves room at the edges. Plan C's four districts (Kashmere Gate, Shahdara, Akshardham, Noida) as later unlocks, which fits his answer that players return for "a city that opens up": B's districts never move, so adding them is a bake of new tiles and connectors only. Start with the 7.2 km2 pilot above.
+
+### 0.6 Questions for interview sitting 2 (composite map)
+
+Already answered and not asked again: the district groups, the story places, the first three heroes, the map size in his words, the vehicle speeds. The haunted place is asked in section 9.
+
+1. Which map layout should we build? (see the three sketches)
+   - a. A, Compact core: about 15 km2, about 7 minutes across at 80 km/h, the cheapest
+   - b. B, Delhi shape: about 22 km2, about 9 minutes across, real directions (recommended)
+   - c. C, Delhi plus NCR: about 27 km2, about 11 minutes across, a bit bigger than your size words
+2. Which optional places must be in the first release? (pick any)
+   - a. Humayun's Tomb and Nizamuddin (in B)
+   - b. Qutub Minar and Mehrauli (in B)
+   - c. Kashmere Gate and the ISBT
+   - d. Akshardham
+3. Which NCR parts?
+   - a. Gurugram Cyber City only
+   - b. Gurugram and Noida (Sector 18 and Film City), both at the first release
+   - c. Gurugram now, Noida later as the city opens up (recommended)
+4. Where do the three live and work?
+   - a. As proposed: driver lives in Laxmi Nagar and works CP, the station and the airport; cop at a made-up station at ITO; fixer in Chandni Chowk and Paharganj, with deals in East Delhi (recommended)
+   - b. Swap the driver and the fixer: the fixer lives in East Delhi, the driver in Paharganj near the station
+   - c. The driver lives in a resettlement colony at the map edge (one more district)
+5. How big is the east bank of the Yamuna?
+   - a. Narrow: Laxmi Nagar only, two bridges (ITO and Nizamuddin)
+   - b. Wide: Laxmi Nagar, Shahdara and Akshardham, three bridges (as in C)
+   - c. Narrow at the first release, Shahdara and Akshardham unlock later (recommended)
+6. Which districts go in the pilot (the first piece built and proven)?
+   - a. CP with Jantar Mantar, ITO and Chandni Chowk with Red Fort: about 5.4 km2
+   - b. The same plus India Gate, so all three of your first heroes are in it: about 7.2 km2 (recommended)
+   - c. Central core only: CP, India Gate and ITO, about 5.4 km2; Red Fort next
 
 ## 1. Landmark registry
 
@@ -277,7 +400,7 @@ Answered in interview sitting 1 (2026-11-10, inbox source "interview"; details i
 
 Proposed tiers for the places he named (to confirm in sitting 2 or P0-014): heroes CP circle, India Gate, Red Fort; heroes later Jama Masjid, Qutub Minar, Humayun's Tomb; signature Jantar Mantar, Khan Market, Delhi Gymkhana, the haunted place, IGI terminal, Yamuna bridges; GB Road, Vasant Kunj and the Golf Club grounds as area profiles with marker buildings. Full table in `CITY_BRIEF.md` "Landmarks".
 
-Composite map questions (P0-028 writes them for sitting 2): must-have districts, how big the map should feel, which NCR parts, where each character lives and works, the Yamuna and East Delhi placement, the pilot districts.
+Composite map questions for sitting 2 (P0-028): see [section 0.6](#06-questions-for-interview-sitting-2-composite-map), with the candidate districts in [0.1](#01-candidate-districts-p0-028-draft-pending-anmol), the layouts and sketches in [0.3](#03-layout-options-p0-028-draft-pending-anmol) and the recommendation in [0.5](#05-recommendation): layout, optional places, NCR parts, where each character lives and works, the east bank of the Yamuna, the pilot districts.
 
 Still open:
 1. Which heroes come after the first three?

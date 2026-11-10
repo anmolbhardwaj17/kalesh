@@ -103,3 +103,12 @@ One line per event, written by task.mjs (start, done, fail, phase changes, inbox
 - 2026-11-10 19:53 [P0-012] edited: title, desc, accept
 - 2026-11-10 19:54 [P0-006] done: STYLE_OPTIONS.md (batch A: stylised and stylised_grime, afternoon and golden; grime as per-area wear value), CITY_BRIEF.md, GAME_DESIGN_OPTIONS.md round 2 (6 questions), DELHI_WORLD.md section 9. Self-checked.
 - 2026-11-10 19:54 mentor message mmwas6d70 handled: Done. progress/ holds a small album of shots when the game visibly moves forward. The first one is the day one box car.
+- 2026-11-10 19:54 [P0-028] start (attempt 1): Composite map draft: district candidates, layout options and interview questions
+- 2026-11-10 20:05 mentor message mmwaskztn handled: Game design round 2 recorded.
+- 2026-11-10 20:05 mentor message mmwaskzzg handled: Game design round 2 recorded.
+- 2026-11-10 20:05 mentor message mmwasl074 handled: Game design round 2 recorded.
+- 2026-11-10 20:05 mentor message mmwasl0b2 handled: Game design round 2 recorded.
+- 2026-11-10 20:09 mentor message mmwasqz3v handled: Round 2 recorded.
+- 2026-11-10 20:09 mentor message mmwasqz6i handled: Round 2 recorded.
+- 2026-11-10 20:09 mentor message mmwasqz9d handled: Round 2 recorded.
+- 2026-11-10 20:09 mentor message mmwasqzc3 handled: Round 2 recorded.

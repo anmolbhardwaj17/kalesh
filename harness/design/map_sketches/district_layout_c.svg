@@ -1,0 +1,131 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="948" height="972" viewBox="0 0 948 972" font-family="Helvetica, Arial, sans-serif">
+<rect width="948" height="972" fill="#fbf8f1"/>
+<text x="50" y="30" font-size="20" font-weight="bold" fill="#222">Layout C: Delhi plus NCR</text>
+<text x="50" y="52" font-size="13" fill="#555">19 districts plus the river: B plus Kashmere Gate, Shahdara, Akshardham, Noida. Sketch, every number is an estimate.</text>
+<rect x="40" y="110" width="828.0000000000001" height="732" fill="#efe9dc" stroke="#d6cdb8" stroke-dasharray="6 4"/>
+<polygon points="618,120 622.1,149.7 626,179.3 629.3,209 631.9,238.7 633.5,268.3 634,298 633.5,327.7 631.9,357.3 629.3,387 626,416.7 622.1,446.3 618,476 613.9,505.7 610,535.3 606.7,565 604.1,594.7 602.5,624.3 602,654 602.5,683.7 604.1,713.3 606.7,743 610,772.7 613.9,802.3 618,832 658,832 653.9,802.3 650,772.7 646.7,743 644.1,713.3 642.5,683.7 642,654 642.5,624.3 644.1,594.7 646.7,565 650,535.3 653.9,505.7 658,476 662.1,446.3 666,416.7 669.3,387 671.9,357.3 673.5,327.7 674,298 673.5,268.3 671.9,238.7 669.3,209 666,179.3 662.1,149.7 658,120" fill="#7fb3d5" opacity="0.85"/>
+<text x="642" y="818" font-size="13" fill="#1f4e79" font-style="italic" transform="rotate(-90 642 818)">Yamuna</text>
+<rect x="234" y="208" width="372" height="455.99999999999994" rx="40" fill="none" stroke="#d9822b" stroke-width="6" opacity="0.9"/>
+<text x="284" y="200" font-size="12" fill="#a0521a" font-weight="bold">Ring Road</text>
+<circle cx="234" cy="664" r="7" fill="#fff" stroke="#c0392b" stroke-width="3"/><text x="244" y="668" font-size="10.5" font-weight="bold" fill="#c0392b" stroke="#fbf8f1" stroke-width="3" paint-order="stroke">Dhaula Kuan</text>
+<rect x="246" y="296" width="64" height="64" fill="#b9dca0" stroke="#5a4a3a" stroke-width="1.5"/>
+<text x="278" y="318.3" font-size="11.5" text-anchor="middle" fill="#222" font-weight="bold">Haunted</text>
+<text x="278" y="331.8" font-size="11.5" text-anchor="middle" fill="#222" font-weight="bold">ruin (Ridge)</text>
+<text x="278" y="345.3" font-size="10" text-anchor="middle" fill="#6b5b4b">0.6 km2</text>
+<rect x="322" y="232" width="96" height="72" fill="#e8a27c" stroke="#5a4a3a" stroke-width="1.5"/>
+<text x="370" y="258.3" font-size="11.5" text-anchor="middle" fill="#222" font-weight="bold">Paharganj</text>
+<text x="370" y="271.8" font-size="11.5" text-anchor="middle" fill="#222" font-weight="bold">NDLS station</text>
+<text x="370" y="285.3" font-size="10" text-anchor="middle" fill="#6b5b4b">1.1 km2</text>
+<rect x="422" y="236" width="48" height="40" fill="#e8a27c" stroke="#5a4a3a" stroke-width="1.5"/>
+<text x="446" y="253.3" font-size="10" text-anchor="middle" fill="#222" font-weight="bold">GB Road</text>
+<text x="446" y="265.3" font-size="8.5" text-anchor="middle" fill="#6b5b4b">0.3 km2</text>
+<rect x="474" y="224" width="128" height="88" fill="#e8a27c" stroke="#5a4a3a" stroke-width="1.5"/>
+<text x="538" y="251.6" font-size="11.5" text-anchor="middle" fill="#222" font-weight="bold">Chandni Chowk</text>
+<text x="538" y="265.1" font-size="11.5" text-anchor="middle" fill="#222" font-weight="bold">Red Fort</text>
+<text x="538" y="278.6" font-size="11.5" text-anchor="middle" fill="#222" font-weight="bold">Jama Masjid</text>
+<text x="538" y="292.1" font-size="10" text-anchor="middle" fill="#6b5b4b">1.8 km2</text>
+<rect x="330" y="332" width="96" height="128" fill="#f2c98a" stroke="#5a4a3a" stroke-width="1.5"/>
+<text x="378" y="386.3" font-size="11.5" text-anchor="middle" fill="#222" font-weight="bold">Connaught Place</text>
+<text x="378" y="399.8" font-size="11.5" text-anchor="middle" fill="#222" font-weight="bold">+ Jantar Mantar</text>
+<text x="378" y="413.3" font-size="10" text-anchor="middle" fill="#6b5b4b">1.9 km2</text>
+<rect x="478" y="336" width="112" height="96" fill="#f2c98a" stroke="#5a4a3a" stroke-width="1.5"/>
+<text x="534" y="374.3" font-size="11.5" text-anchor="middle" fill="#222" font-weight="bold">ITO, Pragati</text>
+<text x="534" y="387.8" font-size="11.5" text-anchor="middle" fill="#222" font-weight="bold">Maidan, cop HQ</text>
+<text x="534" y="401.3" font-size="10" text-anchor="middle" fill="#6b5b4b">1.7 km2</text>
+<rect x="246" y="456" width="80" height="72" fill="#b9dca0" stroke="#5a4a3a" stroke-width="1.5"/>
+<text x="286" y="482.3" font-size="11.5" text-anchor="middle" fill="#222" font-weight="bold">Lutyens</text>
+<text x="286" y="495.8" font-size="11.5" text-anchor="middle" fill="#222" font-weight="bold">Gymkhana</text>
+<text x="286" y="509.3" font-size="10" text-anchor="middle" fill="#6b5b4b">0.9 km2</text>
+<rect x="334" y="476" width="176" height="64" fill="#f2c98a" stroke="#5a4a3a" stroke-width="1.5"/>
+<text x="422" y="505.1" font-size="11.5" text-anchor="middle" fill="#222" font-weight="bold">India Gate, Kartavya Path</text>
+<text x="422" y="518.6" font-size="10" text-anchor="middle" fill="#6b5b4b">1.8 km2</text>
+<rect x="346" y="548" width="112" height="80" fill="#b9dca0" stroke="#5a4a3a" stroke-width="1.5"/>
+<text x="402" y="578.3" font-size="11.5" text-anchor="middle" fill="#222" font-weight="bold">Khan Market</text>
+<text x="402" y="591.8" font-size="11.5" text-anchor="middle" fill="#222" font-weight="bold">Lodhi, Golf Club</text>
+<text x="402" y="605.3" font-size="10" text-anchor="middle" fill="#6b5b4b">1.4 km2</text>
+<rect x="486" y="552" width="96" height="80" fill="#f2c98a" stroke="#5a4a3a" stroke-width="1.5"/>
+<text x="534" y="582.3" font-size="11.5" text-anchor="middle" fill="#222" font-weight="bold">Nizamuddin</text>
+<text x="534" y="595.8" font-size="11.5" text-anchor="middle" fill="#222" font-weight="bold">Humayun's Tomb</text>
+<text x="534" y="609.3" font-size="10" text-anchor="middle" fill="#6b5b4b">1.2 km2</text>
+<rect x="678" y="360" width="96" height="80" fill="#c9b8e8" stroke="#5a4a3a" stroke-width="1.5"/>
+<text x="726" y="390.3" font-size="11.5" text-anchor="middle" fill="#222" font-weight="bold">Laxmi Nagar</text>
+<text x="726" y="403.8" font-size="11.5" text-anchor="middle" fill="#222" font-weight="bold">East Delhi</text>
+<text x="726" y="417.3" font-size="10" text-anchor="middle" fill="#6b5b4b">1.2 km2</text>
+<rect x="370" y="688" width="80" height="80" fill="#a9d4e6" stroke="#5a4a3a" stroke-width="1.5"/>
+<text x="410" y="718.3" font-size="11.5" text-anchor="middle" fill="#222" font-weight="bold">Qutub Minar</text>
+<text x="410" y="731.8" font-size="11.5" text-anchor="middle" fill="#222" font-weight="bold">Mehrauli</text>
+<text x="410" y="745.3" font-size="10" text-anchor="middle" fill="#6b5b4b">1.0 km2</text>
+<rect x="250" y="692" width="96" height="80" fill="#a9d4e6" stroke="#5a4a3a" stroke-width="1.5"/>
+<text x="298" y="729.1" font-size="11.5" text-anchor="middle" fill="#222" font-weight="bold">Vasant Kunj</text>
+<text x="298" y="742.6" font-size="10" text-anchor="middle" fill="#6b5b4b">1.2 km2</text>
+<rect x="50" y="544" width="144" height="80" fill="#a9d4e6" stroke="#5a4a3a" stroke-width="1.5"/>
+<text x="122" y="574.3" font-size="11.5" text-anchor="middle" fill="#222" font-weight="bold">IGI Airport T3</text>
+<text x="122" y="587.8" font-size="11.5" text-anchor="middle" fill="#222" font-weight="bold">Aerocity</text>
+<text x="122" y="601.3" font-size="10" text-anchor="middle" fill="#6b5b4b">1.8 km2</text>
+<rect x="90" y="696" width="96" height="80" fill="#9fc3f0" stroke="#5a4a3a" stroke-width="1.5"/>
+<text x="138" y="726.3" font-size="11.5" text-anchor="middle" fill="#222" font-weight="bold">Cyber City</text>
+<text x="138" y="739.8" font-size="11.5" text-anchor="middle" fill="#222" font-weight="bold">Gurugram</text>
+<text x="138" y="753.3" font-size="10" text-anchor="middle" fill="#6b5b4b">1.2 km2</text>
+<rect x="478" y="137.6" width="80" height="64" fill="#e8a27c" stroke="#5a4a3a" stroke-width="1.5"/>
+<text x="518" y="159.9" font-size="11.5" text-anchor="middle" fill="#222" font-weight="bold">Kashmere Gate</text>
+<text x="518" y="173.4" font-size="11.5" text-anchor="middle" fill="#222" font-weight="bold">ISBT</text>
+<text x="518" y="186.9" font-size="10" text-anchor="middle" fill="#6b5b4b">0.8 km2</text>
+<rect x="678" y="208" width="96" height="80" fill="#c9b8e8" stroke="#5a4a3a" stroke-width="1.5"/>
+<text x="726" y="238.3" font-size="11.5" text-anchor="middle" fill="#222" font-weight="bold">Shahdara</text>
+<text x="726" y="251.8" font-size="11.5" text-anchor="middle" fill="#222" font-weight="bold">back lanes</text>
+<text x="726" y="265.3" font-size="10" text-anchor="middle" fill="#6b5b4b">1.2 km2</text>
+<rect x="678" y="480" width="96" height="80" fill="#c9b8e8" stroke="#5a4a3a" stroke-width="1.5"/>
+<text x="726" y="517.1" font-size="11.5" text-anchor="middle" fill="#222" font-weight="bold">Akshardham</text>
+<text x="726" y="530.6" font-size="10" text-anchor="middle" fill="#6b5b4b">1.2 km2</text>
+<rect x="746" y="680" width="112" height="80" fill="#9fc3f0" stroke="#5a4a3a" stroke-width="1.5"/>
+<text x="802" y="710.3" font-size="11.5" text-anchor="middle" fill="#222" font-weight="bold">Noida Sec 18</text>
+<text x="802" y="723.8" font-size="11.5" text-anchor="middle" fill="#222" font-weight="bold">Film City</text>
+<text x="802" y="737.3" font-size="10" text-anchor="middle" fill="#6b5b4b">1.4 km2</text>
+<polyline points="234,664 210,688 186,728 122,800" fill="none" stroke="#c0392b" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+<text x="126" y="796" font-size="10.5" fill="#c0392b" font-weight="bold" stroke="#fbf8f1" stroke-width="3" paint-order="stroke">NH-48</text>
+<polyline points="214,680 186,624" fill="none" stroke="#c0392b" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+<text x="98" y="644" font-size="10.5" fill="#c0392b" font-weight="bold" stroke="#fbf8f1" stroke-width="3" paint-order="stroke">Airport road</text>
+<polyline points="370,752 346,752" fill="none" stroke="#c0392b" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+<polyline points="250,752 178,752" fill="none" stroke="#c0392b" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+<text x="190" y="768" font-size="10.5" fill="#c0392b" font-weight="bold" stroke="#fbf8f1" stroke-width="3" paint-order="stroke">MG Road</text>
+<polyline points="410,664 410,688" fill="none" stroke="#7f8c8d" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+<text x="418" y="680" font-size="10.5" fill="#7f8c8d" font-weight="bold" stroke="#fbf8f1" stroke-width="3" paint-order="stroke">Aurobindo Marg</text>
+<polyline points="486,640 322,640" fill="none" stroke="#8e44ad" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="8 4"/>
+<text x="322" y="652" font-size="10.5" fill="#8e44ad" font-weight="bold" stroke="#fbf8f1" stroke-width="3" paint-order="stroke">Barapullah (elevated)</text>
+<polyline points="394,460 394,476" fill="none" stroke="#7f8c8d" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+<text x="402" y="465.6" font-size="10.5" fill="#7f8c8d" font-weight="bold" stroke="#fbf8f1" stroke-width="3" paint-order="stroke">Janpath</text>
+<polyline points="426,368 478,368" fill="none" stroke="#7f8c8d" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+<text x="457" y="363" font-size="10.5" fill="#7f8c8d" font-weight="bold" stroke="#fbf8f1" stroke-width="3" paint-order="stroke">Barakhamba Rd</text>
+<polyline points="402,316 434,276" fill="none" stroke="#7f8c8d" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+<text x="423" y="291" font-size="10.5" fill="#7f8c8d" font-weight="bold" stroke="#fbf8f1" stroke-width="3" paint-order="stroke">Minto Rd</text>
+<polyline points="530,336 530,312" fill="none" stroke="#7f8c8d" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+<text x="535" y="319" font-size="10.5" fill="#7f8c8d" font-weight="bold" stroke="#fbf8f1" stroke-width="3" paint-order="stroke">BSZ Marg</text>
+<polyline points="546,432 546,552" fill="none" stroke="#7f8c8d" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+<text x="551" y="487" font-size="10.5" fill="#7f8c8d" font-weight="bold" stroke="#fbf8f1" stroke-width="3" paint-order="stroke">Mathura Rd</text>
+<polyline points="310,328 330,352" fill="none" stroke="#7f8c8d" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+<text x="325" y="335" font-size="10.5" fill="#7f8c8d" font-weight="bold" stroke="#fbf8f1" stroke-width="3" paint-order="stroke">Ridge Rd</text>
+<polyline points="590,392 678,392" fill="none" stroke="#333333" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/>
+<text x="606" y="412" font-size="10.5" fill="#333333" font-weight="bold" stroke="#fbf8f1" stroke-width="3" paint-order="stroke">ITO bridge</text>
+<polyline points="606,592 690,592" fill="none" stroke="#333333" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/>
+<text x="653" y="587" font-size="10.5" fill="#333333" font-weight="bold" stroke="#fbf8f1" stroke-width="3" paint-order="stroke">Nizamuddin bridge</text>
+<polyline points="602,256 678,256" fill="none" stroke="#333333" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/>
+<text x="606" y="276" font-size="10.5" fill="#333333" font-weight="bold" stroke="#fbf8f1" stroke-width="3" paint-order="stroke">Loha Pul (old bridge)</text>
+<polyline points="670,288 670,592" fill="none" stroke="#7f8c8d" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+<polyline points="606,664 666,688 746,704" fill="none" stroke="#c0392b" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+<text x="641" y="671" font-size="10.5" fill="#c0392b" font-weight="bold" stroke="#fbf8f1" stroke-width="3" paint-order="stroke">DND Flyway</text>
+<polyline points="774,560 794,680" fill="none" stroke="#c0392b" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+<text x="789" y="615" font-size="10.5" fill="#c0392b" font-weight="bold" stroke="#fbf8f1" stroke-width="3" paint-order="stroke">NH-9</text>
+<polyline points="138,736 186,728 210,688 234,664 606,664 606,256 678,256 726,248" fill="none" stroke="#111" stroke-width="1.5" stroke-dasharray="2 4"/>
+<polygon points="888,90 878,118 888,111 898,118" fill="#222"/>
+<text x="888" y="84" font-size="15" font-weight="bold" text-anchor="middle">N</text>
+<rect x="50" y="912" width="80" height="8" fill="#222"/><rect x="130" y="912" width="80" height="8" fill="#fff" stroke="#222"/>
+<text x="50" y="907" font-size="11">0</text><text x="122" y="907" font-size="11">1 km</text><text x="202" y="907" font-size="11">2 km</text>
+<line x1="250" y1="916" x2="278" y2="916" stroke="#d9822b" stroke-width="6"/><text x="283" y="920" font-size="11">Ring Road</text>
+<line x1="345" y1="916" x2="373" y2="916" stroke="#c0392b" stroke-width="4"/><text x="378" y="920" font-size="11">Highway</text>
+<line x1="440" y1="916" x2="468" y2="916" stroke="#333333" stroke-width="6"/><text x="473" y="920" font-size="11">Bridge</text>
+<line x1="535" y1="916" x2="563" y2="916" stroke="#8e44ad" stroke-width="3" stroke-dasharray="8 4"/><text x="568" y="920" font-size="11">Elevated</text>
+<line x1="630" y1="916" x2="658" y2="916" stroke="#7f8c8d" stroke-width="2.5"/><text x="663" y="920" font-size="11">Main road</text>
+<line x1="250" y1="938" x2="278" y2="938" stroke="#111" stroke-width="1.5" stroke-dasharray="2 4"/><text x="283" y="942" font-size="11">Longest drive: Cyber City to Shahdara, about 14.2 km, 10.6 min at 80 km/h (est)</text>
+<text x="50" y="942" font-size="11" fill="#555">Land about 27.2 km2 (est)</text>
+<text x="50" y="960" font-size="10.5" fill="#777">Boxes: real districts at true scale, moved closer (translation only). Pale ground: filler from area profiles. Dashed edge: map boundary.</text>
+</svg>
