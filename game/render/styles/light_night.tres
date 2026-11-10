@@ -1,0 +1,41 @@
+[gd_resource type="Resource" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://render/light_preset.gd" id="1_light"]
+
+; Night (style round 3, day-night cycle and night lights): a faint cool moon high in the south east for shape, a
+; dark blue sky with the warm glow of the city at the horizon; the scene is lit by sodium street lights, shop tube
+; lights, neon, headlights and lit windows.
+[resource]
+script = ExtResource("1_light")
+sun_azimuth_deg = 140.0
+sun_elevation_deg = 48.0
+sun_color = Color(0.62, 0.72, 1, 1)
+sun_energy = 0.22
+sun_angular_deg = 0.6
+shadow_max_distance = 160.0
+sky_top = Color(0.035, 0.05, 0.1, 1)
+sky_horizon = Color(0.26, 0.2, 0.2, 1)
+ground_horizon = Color(0.2, 0.16, 0.15, 1)
+ground_bottom = Color(0.05, 0.05, 0.06, 1)
+sky_energy = 0.6
+sun_disc_deg = 2.0
+sun_curve = 0.3
+ambient_energy = 0.32
+exposure = 1.45
+fog_color = Color(0.22, 0.18, 0.18, 1)
+fog_density = 0.0034
+fog_sun_scatter = 0.05
+fog_aerial = 0.3
+fog_sky_affect = 0.25
+fog_height = 6.0
+fog_height_density = 0.0
+shadow_tint = Vector3(-0.01, 0.0, 0.03)
+highlight_tint = Vector3(0.05, 0.02, -0.03)
+grade_saturation = 1.12
+lamp_gain = 6.0
+dust_energy = 0.4
+night = 1.0
+window_share = 0.55
+heat = 0.0
+area_haze = 0.03
+area_haze_color = Color(0.4, 0.33, 0.3, 1)

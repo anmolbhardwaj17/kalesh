@@ -111,6 +111,7 @@ static func shop_house(s: Geo.Sink, rng: RandomNumberGenerator, w: float, d: flo
 	s.box("matte", shade(col, 0.62), Vector3(0, 0.25, -0.02), Vector3(w, 0.5, 0.06))
 	# ground floor: shop opening, half raised shutter, goods
 	var ow := w - 0.7
+	s.anchor("shop", Transform3D.IDENTITY, {"w": w, "d": d, "h": h, "floors": floors, "tight": tight, "col": col, "ow": ow})
 	s.box("matte", Color("#4a3a2c"), Vector3(0, 1.45, -0.02), Vector3(ow, 2.7, 0.05))
 	s.box("matte", Color("#6a5848"), Vector3(0, 1.3, -0.03), Vector3(ow - 0.4, 1.2, 0.04))
 	for i in maxi(1, int(ow / 1.6)):
@@ -135,13 +136,18 @@ static func shop_house(s: Geo.Sink, rng: RandomNumberGenerator, w: float, d: flo
 			var wx := -w * 0.5 + w * (i + 0.5) / n
 			s.box("matte", shade(col, 0.75), Vector3(wx, y + 1.5, -0.025), Vector3(1.3, 1.7, 0.05))
 			s.box("glass", GLASS, Vector3(wx, y + 1.5, -0.04), Vector3(1.05, 1.45, 0.04))
+			s.anchor("window", Transform3D(Basis.IDENTITY, Vector3(wx, y + 1.5, 0)), {"f": f, "w": 1.05, "h": 1.45})
 			if rng.randf() < 0.25:
 				s.box("satin", Color("#d9d9d4"), Vector3(wx + 0.75, y + 1.0, -0.3), Vector3(0.8, 0.55, 0.5))
+				s.anchor("ac", Transform3D(Basis.IDENTITY, Vector3(wx + 0.75, y + 1.0, -0.3)))
 		if rng.randf() < o.get("balcony", 0.35):
 			var bw := w * rng.randf_range(0.5, 0.9)
 			s.box("matte", shade(col, 0.9), Vector3(0, y + 0.05, -0.55), Vector3(bw, 0.15, 1.1))
 			s.box("metal", Color("#3a3f44"), Vector3(0, y + 0.6, -1.08), Vector3(bw, 0.9, 0.04))
+			var bd := {"bw": bw, "laundry": false}
+			s.anchor("balcony", Transform3D(Basis.IDENTITY, Vector3(0, y + 0.13, -1.08)), bd)
 			if tight and rng.randf() < 0.5:
+				bd.laundry = true
 				# washing line with clothes
 				for k in 4:
 					s.box("satin", pick(rng, CLOTHES), Vector3(-bw * 0.4 + k * bw * 0.25, y + 1.05, -1.0), Vector3(0.5, 0.6, 0.02))
@@ -152,19 +158,25 @@ static func shop_house(s: Geo.Sink, rng: RandomNumberGenerator, w: float, d: flo
 		var bh := 0.95
 		s.box("satin", bc, Vector3(0, 3.35, -0.12), Vector3(w - 0.25, bh, 0.12))
 		board = {"pos": Vector3(0, 3.35, -0.185), "size": Vector2(w - 0.25, bh), "color": bc}
+		s.anchor("board", Transform3D(Basis.IDENTITY, Vector3(0, 3.35, -0.18)), {"w": w - 0.25, "h": bh})
 		if tight and floors > 2 and rng.randf() < 0.6:
 			var b2: Color = pick(rng, BOARDS)
-			s.box("satin", b2, Vector3(rng.randf_range(-0.3, 0.3), 5.1, -0.1), Vector3(w * 0.7, 0.8, 0.1))
+			var b2x := rng.randf_range(-0.3, 0.3)
+			s.box("satin", b2, Vector3(b2x, 5.1, -0.1), Vector3(w * 0.7, 0.8, 0.1))
+			s.anchor("board2", Transform3D(Basis.IDENTITY, Vector3(b2x, 5.1, -0.15)), {"w": w * 0.7, "h": 0.8, "color": b2})
 	if o.get("awning", false):
 		var ac: Color = pick(rng, BOARDS)
+		s.anchor("awning", Transform3D.IDENTITY, {"w": w - 0.3})
 		# cloth awning sloping down and out from the facade
 		s.put("satin", Geo.unit_box(), Transform3D(Basis(Vector3.RIGHT, deg_to_rad(-14)) * Basis.from_scale(Vector3(w - 0.3, 0.04, 1.5)),
 			Vector3(0, 2.92, -0.73)), ac)
 	# roof: parapet, water tank, stair cabin
 	s.box("matte", shade(col, 0.92), Vector3(0, h + 0.45, 0.1), Vector3(w, 0.9, 0.2))
 	s.box("matte", shade(col, 0.92), Vector3(0, h + 0.45, d - 0.1), Vector3(w, 0.9, 0.2))
+	s.anchor("roof", Transform3D(Basis.IDENTITY, Vector3(0, h, d * 0.5)), {"w": w, "d": d})
 	if rng.randf() < 0.7:
 		var tx := rng.randf_range(-w * 0.3, w * 0.3)
+		s.anchor("tank", Transform3D(Basis.IDENTITY, Vector3(tx, h + 0.15, d * 0.6)))
 		s.cyl("satin", Color("#202224"), Vector3(tx, h + 0.75, d * 0.6), 0.55, 1.2, Geo.SEG_MID)
 		s.cyl("satin", Color("#202224"), Vector3(tx, h + 1.4, d * 0.6), 0.2, 0.12, Geo.SEG_SMALL)
 	if rng.randf() < 0.4:
@@ -177,6 +189,8 @@ static func far_block(s: Geo.Sink, rng: RandomNumberGenerator, w: float, d: floa
 	var col: Color = pick(rng, FACADES)
 	s.box("matte", shade(col, 0.9), Vector3(0, h * 0.5, d * 0.5), Vector3(w, h, d))
 	s.cyl("satin", Color("#202224"), Vector3(0, h + 0.6, d * 0.5), 0.55, 1.2, Geo.SEG_MID)
+	s.anchor("tank", Transform3D(Basis.IDENTITY, Vector3(0, h, d * 0.5)), {"lid": false})
+	s.anchor("roof", Transform3D(Basis.IDENTITY, Vector3(0, h, d * 0.5)), {"w": w, "d": d, "far": true})
 
 
 # ------------------------------------------------------------------ street furniture
@@ -203,6 +217,7 @@ static func street_light(s: Geo.Sink, h := 9.0, double := false) -> void:
 		s.rod("metal", STEEL, Vector3(0, h - 0.3, 0), Vector3(0, h + 0.2, dz * 1.8), 0.05, Geo.SEG_SMALL)
 		s.box("satin", Color("#4a4e52"), Vector3(0, h + 0.18, dz * 2.1), Vector3(0.4, 0.16, 0.8))
 		s.box("glow", Color("#fff3d6"), Vector3(0, h + 0.09, dz * 2.1), Vector3(0.3, 0.03, 0.6))
+		s.anchor("lamp", Transform3D(Basis.IDENTITY, Vector3(0, h + 0.05, dz * 2.1)), {"h": h})
 
 
 ## Signal post with three lamps facing -Z; lit: "red", "amber" or "green". Optional mast arm over the road (+X).

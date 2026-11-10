@@ -87,3 +87,63 @@ func test_environment_settings() -> void:
 	var env: Environment = _style("stylised", "golden").environment()
 	t.ok(env.ssao_enabled and env.glow_enabled and env.fog_enabled, "SSAO, glow and haze on")
 	t.ok(env.adjustment_color_correction is ImageTexture3D, "a 3D LUT grade")
+
+
+# ---------------------------------------------------------------- batch B (P0-034)
+
+const DayCycle := preload("res://render/day_cycle.gd")
+
+
+func test_time_and_style_off_args() -> void:
+	var d := GameArgs.parse(PackedStringArray(["--style=stylised_b", "--time=21.5", "--style-off=volfog,lights"]))
+	t.ok(d.time == "21.5" and d.style_off == "volfog,lights" and d.unknown.is_empty(), "--time and --style-off are value args")
+
+
+func test_day_cycle_keys_are_the_presets() -> void:
+	for id in DayCycle.PRESET_HOURS:
+		var at: Resource = DayCycle.at(DayCycle.PRESET_HOURS[id])
+		var p: Resource = DayCycle.key(id)
+		t.near(at.sun_elevation_deg, p.sun_elevation_deg, 1e-4, "--time at the %s hour is the %s preset (sun)" % [id, id])
+		t.near(at.exposure, p.exposure, 1e-4, "--time at the %s hour is the %s preset (exposure)" % [id, id])
+
+
+func test_day_cycle_is_continuous_and_wraps() -> void:
+	var worst := 0.0
+	var prev: Resource = DayCycle.at(0.0)
+	var h := 0.05
+	while h <= 24.0:
+		var cur: Resource = DayCycle.at(h)
+		worst = maxf(worst, absf(cur.sun_energy - prev.sun_energy))
+		prev = cur
+		h += 0.05
+	t.ok(worst < 0.25, "sun energy changes smoothly through the day (largest 3 minute step %.3f)" % worst)
+	t.near(DayCycle.at(24.0).night, DayCycle.at(0.0).night, 1e-6, "midnight wraps")
+	t.ok(DayCycle.at(13.0).night < 0.05 and DayCycle.at(23.0).night > 0.95, "lights off at noon, on at night")
+	t.ok(DayCycle.at(14.0).heat > 0.5 and DayCycle.at(3.0).heat == 0.0, "heat shimmer only by day")
+	var mid: float = DayCycle.blend(DayCycle.key("dusk"), DayCycle.key("night"), 0.5).sun_azimuth_deg
+	t.ok(mid > 140.0 and mid < 290.0, "the azimuth blends the short way round (%.1f)" % mid)
+
+
+func test_stylised_b_materials_and_presets() -> void:
+	for light in ["dawn", "afternoon", "golden", "night"]:
+		var st := _style("stylised_b", light)
+		var mats := Kit.materials()
+		for k in mats:
+			t.ok(st.material_for(mats[k]) != null, "stylised_b %s styles kit material %s" % [light, k])
+		t.ok(st.material_for(mats["satin"]) is StandardMaterial3D, "people stay on a clean material (%s)" % light)
+		var tiles: Texture2DArray = st.material_for(mats["matte"]).get_shader_parameter("tiles")
+		t.ok(tiles != null and tiles.get_layers() == 6 and tiles.get_width() == 512, "six generated tiling layers load")
+	t.ok(load(DIR + "light_night.tres").night == 1.0 and load(DIR + "light_afternoon.tres").night == 0.0, "night flag on the presets")
+
+
+func test_builder_records_dressing_anchors_without_geometry() -> void:
+	var root := Node3D.new()
+	tree.root.add_child(root)
+	Builder.new().build(root, "areas")
+	var kinds := {}
+	for a in root.get_node("Bazaar").get_meta("anchors", []):
+		kinds[a[0]] = kinds.get(a[0], 0) + 1
+	for k in ["shop", "window", "balcony", "tank", "roof", "lane", "pole", "person"]:
+		t.ok(kinds.get(k, 0) > 0, "bazaar records %s anchors (%d)" % [k, kinds.get(k, 0)])
+	t.ok(not root.get_node("Bazaar").has_node("Dressing"), "the default look adds no dressing")
+	root.free()

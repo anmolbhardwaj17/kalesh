@@ -174,6 +174,64 @@ What the tests contain (game/render/, one script plus a .tres per style and per 
 
 What the shots show (read by the builder): grime shows clearly on the bazaar facades and roofs from above (area_blocks_30m) and only there; the Lutyens block and every street, landmark and car view look the same in B and B+D. At eye height in the bazaar (on_foot_bazaar) the grime is subtle: stains on the street, streaks on the upper walls, small posters. Golden reads as golden in open views; the narrow bazaar is in the shade of its own west row in golden light, so it changes less. These are the points for style round 3 below.
 
+### Measured in Godot (batch B, `stylised_b`)
+
+P0-034, 2026-11-11. Batch B is B+D (`stylised_grime`) plus Anmol's style round 3 asks: "Full day-night cycle", grime on Old Delhi "Much stronger", and "Building detail, Materials, Atmosphere, Night and lights. I feel small things that looks like attention to detial for delhi should be there and not missed". Style id `stylised_b`, light presets `--light=dawn|afternoon|golden|night`, or `--time=<0..24>` for any hour of the day-night curve.
+
+Sheet: `harness/reports/look/style_options_b.jpg` (columns: baseline, B+D golden, then batch B dawn, afternoon, golden, night; one row per view). Made with `node harness/bin/lookproof.mjs --sheet baseline,style_stylised_grime_golden,style_stylised_b_dawn,style_stylised_b_afternoon,style_stylised_b_golden,style_stylised_b_night --out style_options_b`. The labels are now short names with the worst GPU p95 (Vulkan) under each; the old sheet showed the Metal CPU time.
+
+GPU p95 in ms over a 3 s window with the sim held, Apple M2 Pro, 1920 x 1080, Godot 4.7.2 Forward+ on Vulkan through MoltenVK with vsync off. Calm machine: load per core 0.36 to 0.65 during every run (under 1). The batch B sets ran on Vulkan directly (`style_stylised_b_<light>`); the two B+D sets are the calm reruns asked for in P0-011 (`style_stylised_grime_<light>_vulkan`).
+
+| View | Baseline | B+D afternoon | B+D golden | B2 dawn | B2 afternoon | B2 golden | B2 night |
+|---|---|---|---|---|---|---|---|
+| car_closeup | 2.12 | 7.26 | 7.76 | 9.80 | 9.00 | 8.71 | 10.17 |
+| street_eye | 2.20 | 7.29 | 7.57 | 10.28 | 9.17 | 8.84 | 9.76 |
+| junction | 2.28 | 7.75 | 8.02 | 10.77 | 9.74 | 9.26 | 10.14 |
+| flyover_ramp | 2.02 | 7.11 | 7.17 | 9.40 | 9.15 | 8.27 | 9.53 |
+| hud_play | 2.35 | 7.81 | 8.02 | 10.86 | 9.91 | 9.21 | 10.01 |
+| busiest_40m | 2.33 | 7.64 | 8.02 | 9.50 | 10.01 | 9.16 | 9.79 |
+| landmark_tiers | 1.48 | 6.58 | 5.48 | 7.05 | 7.13 | 6.69 | 6.89 |
+| area_blocks_30m | 1.89 | 7.16 | 7.48 | 8.65 | 9.36 | 8.62 | 8.91 |
+| on_foot_bazaar | 2.13 | 8.86 | 9.14 | 12.55 | 11.89 | 11.87 | 12.85 |
+| **worst** | **2.35** | **8.86** | **9.14** | **12.55** | **11.89** | **11.87** | **12.85** |
+
+(B2 = `stylised_b`.) Draft budgets: warn 11.1 ms, fail 16.6 ms. Every batch B view is "ok" except on_foot_bazaar, which is "warn" (11.9 to 12.9 ms) in all four lights. Draw calls 104 to 320 (B+D: 89 to 180), triangles 0.8 to 3.2 M with shadow passes (B+D: under 2 M), load 1.07 s (B+D: 0.82 s; the generated textures). The calm B+D reruns read about 0.5 to 1 ms above the P0-011 table (6.3 to 8.3 ms there): that is run to run noise on this Mac, and they replace the contaminated sets.
+
+Batch B costs about 2 to 3.5 ms over B+D in the street views and 3 to 4 ms in the bazaar. What each part costs (golden, before the optimisation round, street_eye / on_foot_bazaar, with one part switched off by `--style-off=<part>`): everything on 12.3 / 14.6; volumetric haze off 11.0 / 14.0; heat shimmer off 10.3 / 13.6; dressing off 10.8 / 13.0; lights off 10.1 / 11.5; textures off 11.1 / 14.4. Night bazaar after the optimisation: everything 12.4, haze off 12.1, lights off 10.4, dressing off 11.6. Noise is about 0.5 to 1 ms. The optimisation round took 2 to 4 ms off: no shadows from small dressing (wires, frames, grilles), lights only after dusk, half the bazaar shops with a real light, lower-poly tanks, small wall decals fading by 55 m, no shimmer in golden light. To get the bazaar under 11 ms: fewer shop lights again or one light per two shops, a cheaper haze (depth fog per area instead of a FogVolume), and the dressing merged into the block mesh.
+
+What batch B contains (game/render/, all procedural, no art files):
+- Day-night cycle: `day_cycle.gd` blends the light presets as keys (night 0 to 4.6 h, dawn 6.3, afternoon 15.0, golden 17.75, dusk 19.0, night from 20.5) into one sun, sky, fog, exposure and night-lights curve. The directional light is the sun by day and a faint cool moon by night; it swaps at dusk and before dawn, where it is nearly off. Dawn: pink and peach light through a thick morning haze. Night: dark blue sky with a warm city glow at the horizon.
+- Night and lights: sodium street lights (spot lights under the lamp heads), shop tube lights and shop lights, neon outlines on about a third of the bazaar boards, headlights and tail lights on every vehicle, lit windows (55 percent at night, warm bulbs, cool tube lights, curtains), lamps on the bazaar electricity poles, warm floodlights on the landmarks, and 40 percent of bazaar shutters pulled down.
+- Grime, bazaar only (wear 0.9; Lutyens 0.03 stays clean; the arterial 0): rising damp with a dark tide line and salt above it, soot and rain streaks that start under each floor band and under window sills (decals), tea-coloured water stains with dark rims, peeling paint that shows a paler old coat or bare brick, patched plaster, paan stains at the wall base, torn poster layers on the piers, AC drip stains, oil, litter specks, and sharp-edged puddles with a damp ring. P0-011 polish fixed: the full-height streaks ("streaky roof grime") are gone, the soft blotch puddles have hard edges now, grime is much stronger at eye height, and the golden bazaar gets soft bounce light so it no longer sits flat in its own shade.
+- Materials: six generated tiling layers in one Texture2DArray (`game/render/textures/tile_*.png`, from `game/render/tools/make_textures.gd`): plaster with cracks, exposed brick, concrete with formwork lines, asphalt with patches and tar lines (two scales blended so it does not repeat on a grid), red and grey footpath tiles, ribbed shutter. A trim sheet (`trim.png`): moulded floor band, concrete sill and sunshade edge, black and yellow paint, shutter drum; and a window grille texture. Sampled in world space in `shaders/surface_b.gdshader` (the stand-ins have no UVs). They are slots for the AI texture cards after the sign-off. The floor band row of the trim sheet is not used yet.
+- Atmosphere: a dust and haze volume over the bazaar only (volumetric fog, one FogVolume, with sun shafts), thinner haze elsewhere; faint heat shimmer over far asphalt in the afternoon (a full-screen pass that skips anything within 15 m and the sky); the B+D dust motes over the bazaar street. People keep their clean materials.
+
+#### Delhi detail checklist
+
+| Detail | Landed | Where and how |
+|---|---|---|
+| Window frames and grilles | yes | Frame bars, concrete sills, sunshades (chhajja) on about half, grilles (bars, diamond and sunburst motif) on 45 to 65 percent of windows |
+| Balconies | yes | Grille fronts, top rail, potted plants, laundry lines |
+| AC units with drip stains | yes | Fan grille, slats, wall brackets, drip pipe, a drip stain decal under each unit |
+| Roof water tanks (fix: read as holes from above) | yes | Ribbed body, domed top, lighter lid, brick stand, pipe; 70 percent black, the rest white or blue. They read as tanks in area_blocks_30m |
+| Tangled overhead wires | yes | 3 to 6 wires per bundle across the bazaar lane, spare cable coils, bundles along both shop rows; wires along the shop fronts on the arterial |
+| Shop shutters | yes | Ribbed shutter texture, guide rails, rolled drum; closed shutters at night |
+| Hand-painted signboards, Hindi and English | yes | About 2 in 5 boards carry an invented Hindi name, the blank second boards in the bazaar get Hindi names. Devanagari comes from the system font (Kohinoor Devanagari on macOS); a shipped OFL font is needed later |
+| Hanging laundry | yes | Balconies and roof clothes lines, kurtas and long saree strips |
+| Tarps and awnings | yes | Blue tarps over roof junk and over vendor carts, tarps strung over the bazaar vendors; the cloth awnings stay |
+| Potted plants | yes | Balconies, roof edges, shop fronts on the arterial footpaths |
+| Scooters on footpaths | yes | Rows of 3 to 5 parked scooters on the arterial footpaths, kept clear of people |
+| Vendor carts | yes | Carts with tarp canopies on the arterial footpaths (the bazaar carts stay) |
+| Electrical boxes | yes | Green feeder boxes with an invented stencil (खतरा 440V, KVS-27), meter boxes with wires on bazaar piers |
+| Broken kerbs | yes | Missing stone gaps, a stone tipped onto the road, rubble chips |
+| Black and yellow painted kerbs | yes | The median (already there) plus the footpath kerbs 36 m either side of the junction |
+| Milestone stones | yes, one | White stone with a yellow top on the west footpath: लाल किला, RED FORT, 4 km |
+| Police-style barricades, invented markings | yes | Three steel barricades with black and yellow boards and "TRAFFIC यातायात" at the junction and in the service lane |
+| Stray dogs | yes | Simple lying and standing dogs on the footpaths and by the bazaar walls |
+| Extra | yes | Rusty rebar on unfinished roofs, dish antennas, festive bunting across the bazaar, strings of snack packets at shop openings, neon outlines, litter specks |
+
+Not landed in the time box: cows and other animals, painted signs as textures (the boards are still text labels), more than one milestone, dressing on the far city blocks beyond the street, and a real Devanagari font in the project. The realistic reference look (old option A) was not built.
+
 ## Landmark tiers and area kits per candidate
 
 Tiers from `DELHI_WORLD.md` section 1: hero (detailed model, recognised from the road at driving speed), signature (right silhouette and colour), marker (right footprint, massing and material). The two contrasting area kits for every test: Chandni Chowk old city bazaar and a Lutyens bungalow road. All counts and costs are estimates.
@@ -244,4 +302,5 @@ Show `harness/reports/look/style_options.jpg` and this table with measured numbe
 - Round 1 (sitting 1): Anmol asked to see looks as pictures; look board artifact made with four looks next to real Delhi. Must not look: cartoony or childish, a generic Western city, a low-poly mobile game. Real conditions shown honestly.
 - Round 1 (sitting 1): engine moved to Godot 4 desktop ("yes for godot 4").
 - Round 2 (sitting 1): "I also like B, with d's dirst on old delhi". Light for tests: hot hazy afternoon and golden evening. Colour: rich and warm. Camera: third person behind. Characters: realistic proportions, stylised finish.
+- Round 3 (2026-11-10): main light "Full day-night cycle"; grime "Much stronger"; push "Building detail, Materials, Atmosphere, Night and lights". Built as batch B (`stylised_b`, P0-034), sheet `harness/reports/look/style_options_b.jpg`.
 - No sign-off yet.

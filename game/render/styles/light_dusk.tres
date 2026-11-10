@@ -1,0 +1,40 @@
+[gd_resource type="Resource" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://render/light_preset.gd" id="1_light"]
+
+; Dusk, the blue hour (a key of the day-night curve between golden and night, not a --light preset): the sun just
+; under the horizon, a deep blue sky with an orange rim, the street and shop lights coming on.
+[resource]
+script = ExtResource("1_light")
+sun_azimuth_deg = 290.0
+sun_elevation_deg = 3.0
+sun_color = Color(0.95, 0.5, 0.35, 1)
+sun_energy = 0.25
+sun_angular_deg = 1.0
+shadow_max_distance = 200.0
+sky_top = Color(0.16, 0.22, 0.38, 1)
+sky_horizon = Color(0.82, 0.5, 0.36, 1)
+ground_horizon = Color(0.42, 0.32, 0.3, 1)
+ground_bottom = Color(0.12, 0.11, 0.12, 1)
+sky_energy = 0.7
+sun_disc_deg = 30.0
+sun_curve = 0.1
+ambient_energy = 0.35
+exposure = 1.35
+fog_color = Color(0.45, 0.36, 0.4, 1)
+fog_density = 0.0036
+fog_sun_scatter = 0.3
+fog_aerial = 0.5
+fog_sky_affect = 0.4
+fog_height = 6.0
+fog_height_density = 0.0
+shadow_tint = Vector3(-0.02, 0, 0.04)
+highlight_tint = Vector3(0.06, 0.02, -0.04)
+grade_saturation = 1.15
+lamp_gain = 5.0
+dust_energy = 0.5
+night = 0.75
+window_share = 0.4
+heat = 0.0
+area_haze = 0.03
+area_haze_color = Color(0.5, 0.42, 0.42, 1)

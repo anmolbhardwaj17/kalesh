@@ -41,3 +41,14 @@ extends Resource
 @export var lamp_gain := 1.2
 ## Brightness of the dust motes in the grime style.
 @export var dust_energy := 0.6
+
+## Night and lights (style stylised_b): 0 in daylight, 1 at full night. Drives the sodium street lights, shop lights,
+## headlights, lit windows and the neon (game/render/styles/stylised_b.gd).
+@export var night := 0.0
+## Share of windows lit from inside (0..1), used when night > 0.
+@export var window_share := 0.0
+## Heat shimmer over hot asphalt (0 none, 1 a hot afternoon).
+@export var heat := 0.0
+## Per-area haze (stylised_b): density of the dust and haze volume over a block, times the block's wear.
+@export var area_haze := 0.02
+@export var area_haze_color := Color(0.85, 0.74, 0.58)

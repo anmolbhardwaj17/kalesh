@@ -107,6 +107,8 @@ func _commit(s: Geo.Sink, name: String, meta := {}) -> void:
 	mi.name = name
 	mi.mesh = s.to_mesh(mats)
 	mi.set_meta("wear", AREA_WEAR.get(name, 0.0))
+	if not s.anchors.is_empty():
+		mi.set_meta("anchors", s.anchors)
 	for k in meta:
 		mi.set_meta(k, meta[k])
 	root.add_child(mi)
@@ -161,6 +163,7 @@ func _shop_row(s: Geo.Sink, front: Vector3, yaw: float, along: float, length: fl
 
 func _vehicle(s: Geo.Sink, kind: String, p: Vector3, yaw: float) -> void:
 	s.push(Kit.at(p, yaw))
+	s.anchor("vehicle", Transform3D.IDENTITY, {"kind": kind})
 	match kind:
 		"car":
 			Kit.car(s, Kit.pick(rng, Kit.CAR_PAINT), Kit.pick(rng, ["hatch", "hatch", "sedan", "suv"]))
@@ -176,6 +179,7 @@ func _vehicle(s: Geo.Sink, kind: String, p: Vector3, yaw: float) -> void:
 
 func _person(s: Geo.Sink, p: Vector3, yaw: float, o := {}) -> void:
 	s.push(Kit.at(p, yaw))
+	s.anchor("person", Transform3D.IDENTITY)
 	Kit.person(s, rng, o)
 	s.pop()
 	stats.people += 1
@@ -259,6 +263,7 @@ func _street() -> void:
 		road.box("road", Kit.shade(Kit.ASPHALT, 1.06), Vector3((SERVICE0 + SERVICE1) * 0.5, ROAD_TOP - 0.15, zc), Vector3(SERVICE1 - SERVICE0, 0.3, zl))
 	road.box("road", Kit.shade(Kit.ASPHALT, 1.03), Vector3(0, ROAD_TOP - 0.15, 0), Vector3(2 * z_s, 0.3, 2 * (JUNCTION - 3.5)))
 	_markings(road, z_s)
+	road.anchor("junction", Transform3D.IDENTITY, {"half": JUNCTION, "carriage": CARRIAGE, "median": MEDIAN})
 	_median(road)
 	_paths(road)
 	_commit(road, "Road")
@@ -356,6 +361,9 @@ func _paths(s: Geo.Sink) -> void:
 		for x in [CARRIAGE + 0.1, SERVICE0 - 0.1, SERVICE1 + 0.1]:
 			s.box("matte", Kit.KERB, Vector3(x, PATH_TOP * 0.5 + 0.01, zc), Vector3(0.22, PATH_TOP + 0.02, zl))
 		s.box("matte", Kit.PAVER, Vector3((SERVICE1 + EAST_PATH) * 0.5 + 0.2, PATH_TOP * 0.5, zc), Vector3(EAST_PATH - SERVICE1 + 0.4, PATH_TOP, zl))
+		# footpaths for the dressing of a style test: x range, z range, the kerb line and which way the road is
+		s.anchor("path", Transform3D.IDENTITY, {"x0": WEST_PATH - 0.4, "x1": -CARRIAGE - 0.2, "z0": zr[0], "z1": zr[1], "kerb": -CARRIAGE - 0.1, "road": 1.0, "top": PATH_TOP})
+		s.anchor("path", Transform3D.IDENTITY, {"x0": SERVICE1 + 0.2, "x1": EAST_PATH + 0.4, "z0": zr[0], "z1": zr[1], "kerb": SERVICE1 + 0.1, "road": -1.0, "top": PATH_TOP})
 	# footpaths along the cross road (both sides, both halves)
 	for zs in [-1.0, 1.0]:
 		for xr in [[-80.0, -CARRIAGE], [CARRIAGE, 80.0]]:
@@ -636,6 +644,7 @@ func _bazaar(cx: float) -> void:
 			var base := Vector3(cx + xs * (hw - 0.55), 0, pz)
 			s.cyl("matte", Kit.CEMENT, base + Vector3(0, 5.0, 0), 0.14, 10.0, Geo.SEG_SMALL, 0.7)
 			s.box("metal", Color("#6a6e70"), base + Vector3(0, 4.2, 0), Vector3(0.5, 0.7, 0.35))
+			s.anchor("pole", Transform3D(Basis.IDENTITY, base), {"to": -xs})
 			for k in 4:
 				var y := 8.5 + k * 0.3
 				s.wire("satin", Kit.BLACK, base + Vector3(0, y, 0), base + Vector3(0, y + rng.randf_range(-0.2, 0.2), 16.0), 0.4)
@@ -656,6 +665,7 @@ func _bazaar(cx: float) -> void:
 	# shop fronts as [start, end, outward normal, wall piers between shops] at ground level, for grime style decals
 	var facades := [[Vector3(cx - hw, 0, z0), Vector3(cx - hw, 0, z1), Vector3.RIGHT, west_piers],
 		[Vector3(cx + hw, 0, z0), Vector3(cx + hw, 0, z1), Vector3.LEFT, o.piers.duplicate()]]
+	s.anchor("lane", Transform3D(Basis.IDENTITY, Vector3(cx, 0.06, 0)), {"hw": hw, "z0": z0, "z1": z1})
 	_commit(s, "Bazaar", {"facades": facades})
 	stats.areas.append("bazaar")
 

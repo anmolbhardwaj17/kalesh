@@ -19,9 +19,11 @@
 //       pixel compare of every shot against the reference (sharp): mean channel difference and the share of pixels that
 //       moved more than --delta. Tolerances default from harness/verify/look_rules.json. Writes a side by side sheet per
 //       view into harness/reports/look/. Exit 1 when a shot is over tolerance or missing.
-//   node harness/bin/lookproof.mjs --sheet <setA,setB,...> [--out style_options]
-//       one side by side contact sheet (a row per view, a column per set, with each set's frame time p95 under its label)
-//       in harness/reports/look/<out>.jpg, 1600 px wide: the picture for STYLE_OPTIONS.md.
+//   node harness/bin/lookproof.mjs --sheet <setA,setB,...> [--out style_options] [--labels "setA=Name,setB=Name"]
+//       one side by side contact sheet (a row per view, a column per set) in harness/reports/look/<out>.jpg, 1600 px
+//       wide: the picture for STYLE_OPTIONS.md. Each column has a short name (the prefix all sets share is dropped,
+//       or --labels) and its worst GPU p95: from the set's own perf.json when it ran on Vulkan, else from a sibling
+//       <set>_vulkan/perf.json, else the CPU p95 marked as such (Metal reports no GPU time).
 //
 // poses.json: { "views": [ { "name": "start_area", "quality": "medium", "steps": [ <verify steps that stage the scene,
 //   for example {"call": "loadLevel", "args": ["L01"]}, {"call": "setCamera", "args": [{"pos": [0,2,5], "target": [0,0,0]}]},
@@ -185,20 +187,54 @@ async function compare(name) {
   process.exitCode = bad ? 1 : 0;
 }
 
+/** Short column names for a sheet: explicit labels win, else the longest prefix (ending in an underscore) that at
+ *  least half of the sets (and two or more) share is dropped from those sets, and underscores become spaces. */
+export function sheetLabels(sets, labels = {}) {
+  const need = Math.max(2, Math.ceil(sets.length / 2));
+  let pre = '';
+  for (const s of sets) {
+    for (let i = s.indexOf('_'); i >= 0; i = s.indexOf('_', i + 1)) {
+      const p = s.slice(0, i + 1);
+      if (p.length > pre.length && sets.filter((x) => x.startsWith(p) && x.length > p.length).length >= need) pre = p;
+    }
+  }
+  return sets.map((s) => labels[s] || (pre && s.startsWith(pre) && s.length > pre.length ? s.slice(pre.length) : s).replace(/_/g, ' '));
+}
+
+/** The frame cost line under a sheet column: worst GPU p95 over the views from a Vulkan perf.json (the set's own or
+ *  its <set>_vulkan sibling), else the worst CPU p95 marked as CPU only. perf and vulkanPerf are perf.json objects. */
+export function sheetCost(perf, vulkanPerf) {
+  const worst = (p, key) => {
+    const xs = p ? Object.values(p.rows || {}).map((r) => r[key]).filter((x) => typeof x === 'number' && x > 0) : [];
+    return xs.length ? Math.max(...xs) : null;
+  };
+  const own = worst(perf, 'gpuP95');
+  if (own != null) return `GPU p95 ${own.toFixed(1)} ms`;
+  const vk = worst(vulkanPerf, 'gpuP95');
+  if (vk != null) return `GPU p95 ${vk.toFixed(1)} ms (Vulkan run)`;
+  const cpu = worst(perf, 'cpuP95') ?? worst(perf, 'frameP95');
+  return cpu != null ? `CPU p95 ${cpu.toFixed(1)} ms (no GPU timer)` : 'no perf run';
+}
+
 async function sheet(list) {
   const sharp = await sharpOrNull();
   if (!sharp) { console.log('lookproof --sheet needs sharp: npm i -D sharp'); process.exit(2); }
   const sets = list.split(',').map((s) => s.trim()).filter(Boolean);
   const views = [...new Set(sets.flatMap((s) => (fs.existsSync(path.join(LP, s)) ? fs.readdirSync(path.join(LP, s)).filter((n) => n.endsWith('.png')) : [])))].sort();
-  const cw = Math.floor((1600 - 10 * (sets.length + 1)) / sets.length); const ch = Math.round(cw * 9 / 16); const head = 46;
+  const cw = Math.floor((1600 - 10 * (sets.length + 1)) / sets.length); const ch = Math.round(cw * 9 / 16); const head = 52;
   const H = head + views.length * (ch + 10) + 10;
   const comps = [];
-  const label = (text, w, h, size = 18) => Buffer.from(`<svg width="${w}" height="${h}"><text x="6" y="${size + 4}" font-family="Helvetica" font-size="${size}" fill="#eee">${String(text).replace(/[<&]/g, '')}</text></svg>`);
+  const esc = (t) => String(t).replace(/[<&]/g, '');
+  // the font shrinks until the longest line fits the column (about 0.55 em per character in Helvetica)
+  const fit = (t, w, max) => Math.max(9, Math.min(max, Math.floor((w - 10) / (0.56 * Math.max(1, String(t).length)))));
+  const label = (text, w, h, size = 18) => Buffer.from(`<svg width="${w}" height="${h}"><text x="6" y="${size + 4}" font-family="Helvetica" font-size="${size}" fill="#eee">${esc(text)}</text></svg>`);
+  const head2 = (name, cost, w, h) => { const a = fit(name, w, 20); const b = fit(cost, w, 15); return Buffer.from(`<svg width="${w}" height="${h}"><text x="6" y="${a + 3}" font-family="Helvetica" font-weight="bold" font-size="${a}" fill="#f2f2f2">${esc(name)}</text><text x="6" y="${a + b + 10}" font-family="Helvetica" font-size="${b}" fill="#c8c8c8">${esc(cost)}</text></svg>`); };
+  const labels = typeof args.labels === 'string' ? Object.fromEntries(args.labels.split(',').map((kv) => kv.split('=').map((x) => x.trim())).filter((kv) => kv.length === 2)) : {};
+  const names = sheetLabels(sets, labels);
   sets.forEach((s, i) => {
     const perf = readJSON(path.join(LP, s, 'perf.json'), null);
-    const p95s = perf ? Object.values(perf.rows || {}).map((r) => r.frameP95).filter((x) => typeof x === 'number') : [];
-    const p = p95s.length ? `, worst p95 ${Math.max(...p95s).toFixed(1)} ms` : '';
-    comps.push({ input: label(`${s}${p}`, cw, head), left: 10 + i * (cw + 10), top: 4 });
+    const vperf = readJSON(path.join(LP, `${s}_vulkan`, 'perf.json'), null);
+    comps.push({ input: head2(names[i], sheetCost(perf, vperf), cw, head), left: 10 + i * (cw + 10), top: 2 });
   });
   for (const [r, v] of views.entries()) {
     for (const [i, s] of sets.entries()) {

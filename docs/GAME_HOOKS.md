@@ -31,8 +31,10 @@ godot --path game --resolution 1280x720 --quit-after 12000 -- --debug --debug-po
 | `--debug-port=N` | | Its port on 127.0.0.1. Default 47181 (`kit.config.json` `godot.debugPort`, the same as `DEFAULT_DEBUG_PORT` in `game_args.gd`). The harness picks a free port per run. |
 | `--verify` | `verify=1` | Hides every debug overlay (the `DEBUG port fps sim` label). `state().debugOverlay` says if one shows. |
 | `--quality=<preset>` | `quality=` | Start preset (low, medium, high). |
-| `--style=<name>` | `style=` | Phase 0 style test: `stylised` (look B) or `stylised_grime` (B+D). Restyles every scene through `game/render/style_runner.gd`. Absent: the default look, no style code loaded. `state().style` and `state().light` report it. |
-| `--light=<preset>` | `light=` | Light preset for a style test: `afternoon` (default) or `golden`. Ignored without `--style`. |
+| `--style=<name>` | `style=` | Phase 0 style test: `stylised` (look B), `stylised_grime` (B+D) or `stylised_b` (B+D batch B: day-night, Delhi detail dressing, textures, haze, night lights). Restyles every scene through `game/render/style_runner.gd`. Absent: the default look, no style code loaded. `state().style` and `state().light` report it. |
+| `--light=<preset>` | `light=` | Light preset for a style test: `dawn`, `afternoon` (default), `golden` or `night`. Ignored without `--style`. |
+| `--time=<0..24>` | `time=` | Style test hour on the day-night curve (`game/render/day_cycle.gd`, keys are the light presets); overrides `--light`. `state().args.time` reports it. |
+| `--style-off=<a,b>` | `style-off=` | `stylised_b` features to switch off for cost measuring: `volfog`, `shimmer`, `dressing`, `lights`, `textures`. |
 | `--scene=<id>` | | Start in that scene (ids in `GameArgs.SCENES`: `scaffold`, and the P0-009 stand-ins `street`, `landmarks`, `areas`). |
 | `--arch=<name>` | | Architecture bench. |
 | `--lockstep` | `lockstep=1` | At most one engine physics frame per drawn frame (`Engine.max_physics_steps_per_frame = 1`), so a loaded machine runs slower and never catches up in bursts. |

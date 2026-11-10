@@ -1,0 +1,172 @@
+{
+  "rows": {
+    "car_closeup": {
+      "quality": null,
+      "loadMs": 1077,
+      "hostLoad": {
+        "avg1": 4.92,
+        "cores": 12,
+        "perCore": 0.41
+      },
+      "cpuP95": 0.352999995350838,
+      "gpuP95": 9.79800033569336,
+      "fps": 106.289400381176,
+      "drawCalls": 167,
+      "triangles": 2020628,
+      "frameP95": 9.79800033569336,
+      "verdict": "ok",
+      "notes": []
+    },
+    "street_eye": {
+      "quality": null,
+      "loadMs": 1073,
+      "hostLoad": {
+        "avg1": 4.61,
+        "cores": 12,
+        "perCore": 0.38
+      },
+      "cpuP95": 0.470999995231628,
+      "gpuP95": 10.2829999923706,
+      "fps": 100.906728547246,
+      "drawCalls": 292,
+      "triangles": 2827332,
+      "frameP95": 10.2829999923706,
+      "verdict": "ok",
+      "notes": []
+    },
+    "junction": {
+      "quality": null,
+      "loadMs": 1064,
+      "hostLoad": {
+        "avg1": 4.32,
+        "cores": 12,
+        "perCore": 0.36
+      },
+      "cpuP95": 0.47,
+      "gpuP95": 10.7690000534058,
+      "fps": 96.5749848144162,
+      "drawCalls": 298,
+      "triangles": 3233800,
+      "frameP95": 10.7690000534058,
+      "verdict": "ok",
+      "notes": []
+    },
+    "flyover_ramp": {
+      "quality": null,
+      "loadMs": 1067,
+      "hostLoad": {
+        "avg1": 4.45,
+        "cores": 12,
+        "perCore": 0.37
+      },
+      "cpuP95": 0.400000012397766,
+      "gpuP95": 9.39900016784668,
+      "fps": 111.528482876383,
+      "drawCalls": 213,
+      "triangles": 2268778,
+      "frameP95": 9.39900016784668,
+      "verdict": "ok",
+      "notes": []
+    },
+    "hud_play": {
+      "quality": null,
+      "loadMs": 1065,
+      "hostLoad": {
+        "avg1": 4.53,
+        "cores": 12,
+        "perCore": 0.38
+      },
+      "cpuP95": 0.449999985218048,
+      "gpuP95": 10.8649997711182,
+      "fps": 95.6392500816432,
+      "drawCalls": 320,
+      "triangles": 2831734,
+      "frameP95": 10.8649997711182,
+      "verdict": "ok",
+      "notes": []
+    },
+    "busiest_40m": {
+      "quality": null,
+      "loadMs": 811,
+      "hostLoad": {
+        "avg1": 5.21,
+        "cores": 12,
+        "perCore": 0.43
+      },
+      "cpuP95": 0.456999995946884,
+      "gpuP95": 9.49899959564209,
+      "fps": 109.003235202728,
+      "drawCalls": 295,
+      "triangles": 2827312,
+      "frameP95": 9.49899959564209,
+      "verdict": "ok",
+      "notes": []
+    },
+    "landmark_tiers": {
+      "quality": null,
+      "loadMs": 1066,
+      "hostLoad": {
+        "avg1": 5.59,
+        "cores": 12,
+        "perCore": 0.47
+      },
+      "cpuP95": 0.319000007390976,
+      "gpuP95": 7.05299997329712,
+      "fps": 120.447973296485,
+      "drawCalls": 104,
+      "triangles": 810116,
+      "frameP95": 7.05299997329712,
+      "verdict": "ok",
+      "notes": []
+    },
+    "area_blocks_30m": {
+      "quality": null,
+      "loadMs": 808,
+      "hostLoad": {
+        "avg1": 5.71,
+        "cores": 12,
+        "perCore": 0.48
+      },
+      "cpuP95": 0.539999998092651,
+      "gpuP95": 8.65200042724609,
+      "fps": 120.235501713439,
+      "drawCalls": 230,
+      "triangles": 1843638,
+      "frameP95": 8.65200042724609,
+      "verdict": "ok",
+      "notes": []
+    },
+    "on_foot_bazaar": {
+      "quality": null,
+      "loadMs": 810,
+      "hostLoad": {
+        "avg1": 5.68,
+        "cores": 12,
+        "perCore": 0.47
+      },
+      "cpuP95": 0.541000005483627,
+      "gpuP95": 12.5450000762939,
+      "fps": 81.1495566374019,
+      "drawCalls": 234,
+      "triangles": 1953558,
+      "frameP95": 12.5450000762939,
+      "verdict": "warn",
+      "notes": [
+        "frame time: p95 frame time 12.5 ms (gpu bound) is over the 11.1 ms budget (60 fps): cpu p95 0.5 ms, gpu p95 12.5 ms, rAF p95 12.8 ms, 81.1 fps"
+      ]
+    }
+  },
+  "driver": "godot",
+  "machine": "macbook-pro, darwin arm64, Apple M2 Pro, 12 cores, 16 GB",
+  "godotVersion": "4.7.2.stable",
+  "renderer": "Forward+",
+  "renderingDriver": "vulkan",
+  "gpuAdapter": "Apple M2 Pro",
+  "load": {
+    "avg1": 5.27,
+    "cores": 12,
+    "perCore": 0.44
+  },
+  "gl": "Godot 4.7.2.stable Apple M2 Pro (vulkan, forward_plus)",
+  "budgets": "harness/verify/perf_budgets.json (draft)"
+}

@@ -1,0 +1,40 @@
+[gd_resource type="Resource" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://render/light_preset.gd" id="1_light"]
+
+; Dawn (style round 3, day-night cycle): the sun just up in the east south east, pink and peach light through a
+; thick morning haze, cool shadows, a few street and shop lights still on.
+[resource]
+script = ExtResource("1_light")
+sun_azimuth_deg = 108.0
+sun_elevation_deg = 7.0
+sun_color = Color(1, 0.72, 0.55, 1)
+sun_energy = 1.9
+sun_angular_deg = 0.9
+shadow_max_distance = 240.0
+sky_top = Color(0.42, 0.5, 0.64, 1)
+sky_horizon = Color(0.96, 0.74, 0.6, 1)
+ground_horizon = Color(0.8, 0.66, 0.56, 1)
+ground_bottom = Color(0.3, 0.27, 0.26, 1)
+sky_energy = 0.9
+sun_disc_deg = 35.0
+sun_curve = 0.12
+ambient_energy = 0.45
+exposure = 1.15
+fog_color = Color(0.88, 0.72, 0.64, 1)
+fog_density = 0.0042
+fog_sun_scatter = 0.55
+fog_aerial = 0.55
+fog_sky_affect = 0.5
+fog_height = 6.0
+fog_height_density = 0.0
+shadow_tint = Vector3(-0.025, -0.005, 0.035)
+highlight_tint = Vector3(0.05, 0.015, -0.02)
+grade_saturation = 1.12
+lamp_gain = 2.5
+dust_energy = 0.9
+night = 0.25
+window_share = 0.12
+heat = 0.0
+area_haze = 0.05
+area_haze_color = Color(0.9, 0.78, 0.7, 1)

@@ -212,3 +212,8 @@ Anmol answered the ten writer questions (inbox mmwb1h5pr): guilty Gullu, playabl
 
 ## 2026-11-11: Every area is built from real references
 Anmol: "Each ADA should have its own style. And to refer that exactly, we can check some online images of that ADA. Or not just one or two, multiple. And figure out the overall gist." Decision: before any area is built, it gets an area sheet and a reference board from 20 to 40 real photos (Google Images, Wikimedia Commons, Mapillary): footpaths, road surface, street lamps, boundaries, buildings, trees, street life, clutter, and what sets it apart. Every area build task cites its sheet, and its verifier compares game shots with the board and fails a generic look. Photos are internal reference only, never in the game. Why: a generic Delhi is the failure the owner names.
+
+## 2026-11-11: Style batch B dresses the stand-ins from recorded anchors
+Decision: the Delhi detail of style test stylised_b (grilles, AC units, tanks, wires, shutters, Hindi boards, laundry, tarps, scooters, carts, electric boxes, broken and painted kerbs, a milestone, barricades, dogs) is laid by the style from anchors the stand-in kit records as metadata, not by the builder. Tiling textures and the trim sheet are generated offline by game/render/tools/make_textures.gd and committed as PNGs (slots for the AI texture cards).
+Why: the default look must not change (baseline_check), and procedural PNGs load in milliseconds where generating them at start would add about a second per run.
+By: builder (P0-034)

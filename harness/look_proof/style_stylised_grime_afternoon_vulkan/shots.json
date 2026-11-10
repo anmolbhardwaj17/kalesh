@@ -2,60 +2,60 @@
   "views": {
     "car_closeup": {
       "file": "car_closeup.png",
-      "at": "2026-11-10T18:11:04.955Z",
+      "at": "2026-11-10T19:17:05.519Z",
       "query": "debug=1&verify=1&style=stylised_grime&light=afternoon",
       "error": null
     },
     "street_eye": {
       "file": "street_eye.png",
-      "at": "2026-11-10T18:11:10.779Z",
+      "at": "2026-11-10T19:17:11.235Z",
       "query": "debug=1&verify=1&style=stylised_grime&light=afternoon",
       "error": null
     },
     "junction": {
       "file": "junction.png",
-      "at": "2026-11-10T18:11:16.733Z",
+      "at": "2026-11-10T19:17:17.110Z",
       "query": "debug=1&verify=1&style=stylised_grime&light=afternoon",
       "error": null
     },
     "flyover_ramp": {
       "file": "flyover_ramp.png",
-      "at": "2026-11-10T18:11:22.898Z",
+      "at": "2026-11-10T19:17:22.831Z",
       "query": "debug=1&verify=1&style=stylised_grime&light=afternoon",
       "error": null
     },
     "hud_play": {
       "file": "hud_play.png",
-      "at": "2026-11-10T18:11:28.931Z",
+      "at": "2026-11-10T19:17:28.595Z",
       "query": "debug=1&verify=1&style=stylised_grime&light=afternoon",
       "error": null
     },
     "busiest_40m": {
       "file": "busiest_40m.png",
-      "at": "2026-11-10T18:11:35.462Z",
+      "at": "2026-11-10T19:17:34.573Z",
       "query": "debug=1&verify=1&style=stylised_grime&light=afternoon",
       "error": null
     },
     "landmark_tiers": {
       "file": "landmark_tiers.png",
-      "at": "2026-11-10T18:11:41.429Z",
+      "at": "2026-11-10T19:17:40.336Z",
       "query": "debug=1&verify=1&style=stylised_grime&light=afternoon",
       "error": null
     },
     "area_blocks_30m": {
       "file": "area_blocks_30m.png",
-      "at": "2026-11-10T18:11:49.237Z",
+      "at": "2026-11-10T19:17:46.306Z",
       "query": "debug=1&verify=1&style=stylised_grime&light=afternoon",
       "error": null
     },
     "on_foot_bazaar": {
       "file": "on_foot_bazaar.png",
-      "at": "2026-11-10T18:11:55.402Z",
+      "at": "2026-11-10T19:17:51.996Z",
       "query": "debug=1&verify=1&style=stylised_grime&light=afternoon",
       "error": null
     }
   },
-  "commit": "f1a44d4",
+  "commit": "7f9c21d",
   "gl": "Godot 4.7.2.stable Apple M2 Pro (vulkan, forward_plus)",
-  "at": "2026-11-10T18:11:55.621Z"
+  "at": "2026-11-10T19:17:52.139Z"
 }

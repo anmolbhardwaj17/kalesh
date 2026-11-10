@@ -4,7 +4,10 @@
 ##   --verify             hide every debug overlay (the harness always passes it)
 ##   --quality=<preset>   start on that quality preset
 ##   --style=<name>       Phase 0 style test (game/render/style_runner.gd; ids in its STYLES)
-##   --light=<preset>     light preset for a style test: afternoon (default) or golden
+##   --light=<preset>     light preset for a style test: dawn, afternoon (default), golden or night
+##   --time=<0..24>       style test hour of day on the day-night curve (game/render/day_cycle.gd); overrides --light
+##   --style-off=<a,b>    style test features to switch off for cost measuring (stylised_b: volfog, shimmer, dressing,
+##                        lights, textures)
 ##   --scene=<id>         start in that scene (ids in SCENES)
 ##   --arch=<name>        architecture bench
 ##   --lockstep           one sim tick per rendered frame at most (a loaded machine runs slower, never catches up)
@@ -30,6 +33,8 @@ var verify := false
 var quality := "medium"
 var style := ""
 var light := ""
+var time := ""
+var style_off := ""
 var scene := ""
 var arch := ""
 var lockstep := false
@@ -42,11 +47,11 @@ var _style_runner: RefCounted = null
 ## Parses user args into a Dictionary. Pure, so it is unit tested. Accepts `--key=value` and `--key value`.
 static func parse(args: PackedStringArray) -> Dictionary:
 	var out := {
-		"debug": false, "debug_port": DEFAULT_DEBUG_PORT, "verify": false, "quality": "medium", "style": "", "light": "",
+		"debug": false, "debug_port": DEFAULT_DEBUG_PORT, "verify": false, "quality": "medium", "style": "", "light": "", "time": "", "style_off": "",
 		"scene": "", "arch": "", "lockstep": false, "mute": false, "unknown": [] as Array[String],
 	}
 	var flags := ["debug", "verify", "lockstep", "mute"]
-	var values := ["debug-port", "quality", "style", "light", "scene", "arch"]
+	var values := ["debug-port", "quality", "style", "light", "time", "style-off", "scene", "arch"]
 	var i := 0
 	while i < args.size():
 		var a: String = args[i]
@@ -77,7 +82,7 @@ static func parse(args: PackedStringArray) -> Dictionary:
 				else:
 					out.unknown.append(a)
 			else:
-				out[key] = val
+				out[key.replace("-", "_")] = val
 		else:
 			out.unknown.append(a)
 	return out
@@ -88,7 +93,7 @@ func _ready() -> void:
 	if style != "":
 		# Loaded by path only for a style test, so the default look runs no style code at all. It restyles every
 		# scene as its nodes enter the tree (SceneTree.node_added), so it must start before the main scene loads.
-		_style_runner = load(STYLE_RUNNER_PATH).new(get_tree(), style, light)
+		_style_runner = load(STYLE_RUNNER_PATH).new(get_tree(), style, light, time, style_off)
 	if mute:
 		AudioServer.set_bus_mute(0, true)
 	if scene != "" and SCENES.has(scene) and SCENES[scene] != ProjectSettings.get_setting("application/run/main_scene"):
@@ -110,6 +115,8 @@ func apply(p: Dictionary) -> void:
 	quality = p.quality
 	style = p.style
 	light = p.light
+	time = p.time
+	style_off = p.style_off
 	scene = p.scene
 	arch = p.arch
 	lockstep = p.lockstep
@@ -139,6 +146,6 @@ func current_scene_id() -> String:
 
 func as_dict() -> Dictionary:
 	return {
-		"debug": debug, "debugPort": debug_port, "verify": verify, "quality": quality, "style": style, "light": light,
+		"debug": debug, "debugPort": debug_port, "verify": verify, "quality": quality, "style": style, "light": light, "time": time, "styleOff": style_off,
 		"scene": scene, "arch": arch, "lockstep": lockstep, "mute": mute, "unknown": unknown,
 	}

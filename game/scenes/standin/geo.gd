@@ -12,12 +12,20 @@ class Sink:
 
 	var batches := {}
 	var stack: Array[Transform3D] = [Transform3D.IDENTITY]
+	## Dressing anchors: [kind, world transform, data] recorded by the kit (window, shop, roof, tank, balcony, lamp,
+	## vehicle, path). Pure data: no geometry, no rng. A style test that dresses the stand-ins (stylised_b) reads them
+	## from the committed block's metadata "anchors"; the default look ignores them.
+	var anchors: Array = []
 
 	func push(xf: Transform3D) -> void:
 		stack.append(stack[-1] * xf)
 
 	func pop() -> void:
 		stack.pop_back()
+
+	## Records a dressing anchor at the local frame xf (under the current stack).
+	func anchor(kind: String, xf: Transform3D, data := {}) -> void:
+		anchors.append([kind, stack[-1] * xf, data])
 
 	func put(mat: String, arrays: Array, xf: Transform3D, col: Color) -> void:
 		if not batches.has(mat):
