@@ -1,6 +1,6 @@
 {
   "_doc": "Written only by node harness/bin/task.mjs. Phases run in order; P0 (ADOPT + STYLE DISCOVERY) waits for the owner by design and needs task.mjs signoff and task.mjs archsignoff before its gate passes. Later phases are added by the planner at the end of P0 (task.mjs phase-add) from the game's real state.",
-  "updated": "2026-11-10T22:51:03.000Z",
+  "updated": "2026-11-10T22:51:15.625Z",
   "phases": [
     {
       "id": "P0",
@@ -1042,17 +1042,22 @@
       "id": "P0-039",
       "phase": "P0",
       "title": "Perf tooling: GPU readings under the 120 fps cap",
-      "desc": "",
-      "accept": [],
+      "desc": "Since 2026-11-11 a Godot window on this Mac is capped at 120 fps even with vsync off, so a plain gpuMs reads the idle frame, not the cost (look over empty ground reads 6.6 ms, costs 3.6 ms). Move lookproof --perf and the perf gate to the ballast method from harness/bench/arch.mjs (gpuP95 with the GPU kept busy, cross-checked by frame cost). Re-measure stylised B in all four lights and update the measured notes in perf_budgets.json if they change (signed budgets stay). Try once to find the cap cause; note it if not found.",
+      "accept": [
+        "lookproof --perf reports ballast GPU p95 and frame cost",
+        "stylised B re-measured in all four lights, numbers in the report",
+        "vitest green and verify --quick OK"
+      ],
       "deps": [],
       "agent": "builder",
       "priority": 1,
       "kind": "bug",
-      "status": "todo",
-      "attempts": 0,
+      "status": "doing",
+      "attempts": 1,
       "notes": [],
       "created": "2026-11-10T22:50:56.620Z",
-      "model": "sonnet"
+      "model": "sonnet",
+      "started": "2026-11-10T22:51:15.625Z"
     }
   ]
 }

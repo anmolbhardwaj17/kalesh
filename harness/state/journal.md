@@ -249,3 +249,5 @@ One line per event, written by task.mjs (start, done, fail, phase changes, inbox
 - 2026-11-11 03:00 [P0-016] start (attempt 1): Arch bench (Godot): renderer, lighting, instancing, LOD, textures and crowds
 - 2026-11-11 04:20 [P0-039] added: Perf tooling: GPU readings under the 120 fps cap
 - 2026-11-11 04:21 [P0-016] done: Render bench, 45 setups on M2 Pro Vulkan with ballast GPU method, run twice (worst diff 0.35 ms). Recs: Forward+, Metal, L1 lighting, 1080p with MetalFX spatial for Retina, I3 MultiMesh plus LD1 LOD, occlusion off, TX1 both sets, AN2 crowds. Self-check: typecheck, 209 vitest, 47 Godot tests, quick OK. Report harness/reports/arch/render.json. Follow-up P0-039 (perf readings under a 120 fps cap).
+- 2026-11-11 04:21 [P0-039] edited: desc, accept
+- 2026-11-11 04:21 [P0-039] start (attempt 1): Perf tooling: GPU readings under the 120 fps cap
