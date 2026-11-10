@@ -180,3 +180,6 @@ One line per event, written by task.mjs (start, done, fail, phase changes, inbox
 - 2026-11-10 23:11 mentor message mmwaz929k handled: Commits to main already count. The repo is private: turn on Private contributions in profile settings. The graph counts days, not commits. A PR flow adds about one per task; offered as an opt-in.
 - 2026-11-10 23:12 mentor message mmwaz9k74 handled: Rewrote the README: logo, hero shot, three-line pitch, two mood shots, short sections, no tables or badges. Pushed.
 - 2026-11-10 23:12 [P0-010] done: ARCH_OPTIONS.md: 54 decisions, 2 to 4 options each, numbers marked measured or estimate; MAP_REPAIR.md and DELHI_WORLD.md refined and cross-linked; bench tasks P0-016/017/018/019/029 rewritten with scenes, scripts and report paths; 6 owner questions. Self-checked by grep; vitest green per planner.
+- 2026-11-10 23:12 [P0-011] start (attempt 1): Style tests batch A in Godot: stylised and stylised_grime, afternoon and golden
+- 2026-11-10 23:15 [P0-031] added: Restructure Act 1 story flow and the first slice (owner: GTA V style, no early merge)
+- 2026-11-10 23:15 mentor message mmwazdco9 handled: Agreed, with pushback: introduce each next character inside the current mission (GTA V style), slice becomes 4 solo missions, fixer flashback kept small. Restructure task queued at priority 1.
