@@ -127,3 +127,4 @@ One line per event, written by task.mjs (start, done, fail, phase changes, inbox
 - 2026-11-10 20:40 game design sign-off recorded: yes, I sign off on this game design
 - 2026-11-10 20:40 mentor message mmwatuy8p handled: Game design signed off and recorded. GAME.md gets written next (P0-008).
 - 2026-11-10 20:40 [P0-007] done: Sitting 2: map layout C staged, optional places, homes, pilot, Malcha Mahal, invented police, game design round 2 answers. Game design signed off: 'yes, I sign off on this game design'.
+- 2026-11-10 20:43 [P0-024] done: game/ Godot 4.7.2 project (Forward+, 60 Hz), godot.mjs pin and launcher, GDScript projection matching TS within 6e-7 m, 13 headless Godot tests in npm test, windowed frame read. Self-checked: typecheck, 189 vitest + 13 godot tests, quick 4/4.

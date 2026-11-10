@@ -1,6 +1,6 @@
 {
   "_doc": "Written only by node harness/bin/task.mjs. Phases run in order; P0 (ADOPT + STYLE DISCOVERY) waits for the owner by design and needs task.mjs signoff and task.mjs archsignoff before its gate passes. Later phases are added by the planner at the end of P0 (task.mjs phase-add) from the game's real state.",
-  "updated": "2026-11-10T15:10:59.730Z",
+  "updated": "2026-11-10T15:13:49.835Z",
   "phases": [
     {
       "id": "P0",
@@ -594,12 +594,15 @@
       "agent": "builder",
       "priority": 1,
       "kind": "feature",
-      "status": "doing",
+      "status": "done",
       "attempts": 1,
       "notes": [],
       "created": "2026-11-10T14:08:49.920Z",
       "order": 40,
-      "started": "2026-11-10T15:01:25.564Z"
+      "started": "2026-11-10T15:01:25.564Z",
+      "done": "2026-11-10T15:13:49.810Z",
+      "summary": "game/ Godot 4.7.2 project (Forward+, 60 Hz), godot.mjs pin and launcher, GDScript projection matching TS within 6e-7 m, 13 headless Godot tests in npm test, windowed frame read. Self-checked: typecheck, 189 vitest + 13 godot tests, quick 4/4.",
+      "commit": "caecb5c"
     },
     {
       "id": "P0-025",
