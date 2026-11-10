@@ -1,6 +1,6 @@
 {
   "_doc": "Written only by node harness/bin/task.mjs. Phases run in order; P0 (ADOPT + STYLE DISCOVERY) waits for the owner by design and needs task.mjs signoff and task.mjs archsignoff before its gate passes. Later phases are added by the planner at the end of P0 (task.mjs phase-add) from the game's real state.",
-  "updated": "2026-11-10T17:03:48.037Z",
+  "updated": "2026-11-10T17:03:48.394Z",
   "phases": [
     {
       "id": "P0",
@@ -771,11 +771,14 @@
       "agent": "planner",
       "priority": 1,
       "kind": "mentor",
-      "status": "doing",
+      "status": "done",
       "attempts": 1,
       "notes": [],
       "created": "2026-11-10T16:50:31.451Z",
-      "started": "2026-11-10T16:51:01.563Z"
+      "started": "2026-11-10T16:51:01.563Z",
+      "done": "2026-11-10T17:03:48.376Z",
+      "summary": "HUD.md: 10 researched references, 9 principles, 34 components tagged with costs, layouts, Lal Batti spec, bilingual and accessibility rules; 4 mockups over the mood images; 6 questions for Anmol (queued on P0-014).",
+      "commit": "61c1619"
     }
   ]
 }

@@ -168,3 +168,4 @@ One line per event, written by task.mjs (start, done, fail, phase changes, inbox
 - 2026-11-10 22:23 mentor message mmwaxjb1w handled: Folder stays dilli-darshan; the game and repo are Kalesh.
 - 2026-11-10 22:26 mentor message mmwaxm2ur handled: Will tell him when P0-030 is done and hold the next task so the rename is safe.
 - 2026-11-10 22:27 mentor message mmwaxnubt handled: Updated GOAL.txt and GOAL_PROMPT.md for Kalesh, Godot, three sign-offs, the remote and the commit rule.
+- 2026-11-10 22:33 [P0-030] done: HUD.md: 10 researched references, 9 principles, 34 components tagged with costs, layouts, Lal Batti spec, bilingual and accessibility rules; 4 mockups over the mood images; 6 questions for Anmol (queued on P0-014).
