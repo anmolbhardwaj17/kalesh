@@ -1,6 +1,6 @@
 {
   "_doc": "Written only by node harness/bin/task.mjs. Phases run in order; P0 (ADOPT + STYLE DISCOVERY) waits for the owner by design and needs task.mjs signoff and task.mjs archsignoff before its gate passes. Later phases are added by the planner at the end of P0 (task.mjs phase-add) from the game's real state.",
-  "updated": "2026-11-10T18:29:40.284Z",
+  "updated": "2026-11-10T18:38:31.457Z",
   "phases": [
     {
       "id": "P0",
@@ -846,7 +846,7 @@
       "agent": "content-writer",
       "priority": 1,
       "kind": "mentor",
-      "status": "doing",
+      "status": "done",
       "attempts": 1,
       "notes": [
         "Orchestrator pushback to owner (mmwazgwfq): Gurugram teased in Act 1, visited in Act 2 (not Act 1, pilot scope). The core Delhi finale must show familiar places transformed (night, festival or lockdown, closed roads, crowds) and open never-seen spaces (Red Fort ramparts, Chandni Chowk rooftops, a Metro tunnel). Start the outline from the villain and the three arcs; pick places to fit the story; districts the story does not need get side content only.",
@@ -855,7 +855,10 @@
         "Decision 2026-11-10 'Pistol stays in the slice, used in M03': M03 Barricade at ITO ends in a short standoff and exchange of fire before the arrest. Act 1 order and M05 to M10 are in GAME.md 'Act 1: Sawari' and milestones.json; expand them, keep the slice M01 to M04."
       ],
       "created": "2026-11-10T17:47:44.352Z",
-      "started": "2026-11-10T18:26:09.980Z"
+      "started": "2026-11-10T18:26:09.980Z",
+      "done": "2026-11-10T18:38:31.439Z",
+      "summary": "STORY_OUTLINE.md, 12.3k words: logline, villain layers, three arcs, 19 supporting characters, how the story is told (cutscene, drive talk, phone, inner, radio, ambient tags on all 67 missions), five acts (10/14/14/14/15), six choices, four endings, mystery map, 12 stranger chains, controversy table, 10 owner questions. Self-check: sections present, no dashes, no real parties or brands.",
+      "commit": "1cfa41c"
     },
     {
       "id": "P0-033",
