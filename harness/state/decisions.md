@@ -225,3 +225,6 @@ Anmol: "The game should be able to run on Mac M2 smoothly. No struggles." Answer
 Decision: style `realistic` (P0-038) extends `stylised_b` so dressing, grime and Delhi detail are identical, and adds the PBR layer in surface_b.gdshader behind a `pbr` uniform (0 keeps stylised_b byte for byte), a physical sky, SSR, volumetric fog, Filmic and TAA. SDFGI and ACES are opt-in tokens, not the default.
 Why: measured on the stand-ins, SDFGI turned the bazaar lane black by day and ACES crushed shaded asphalt; SSIL plus sky ambient was the best GI option here. One shader with a switch avoids a second copy of the grime code.
 By: builder
+
+## 2026-11-11: Look direction is stylised B
+Anmol in style round 5, after the per-light sheets, the cost table and the 60 fps verdict: "Pure stylised B". Realistic is kept only as a reference set (style_realistic_*); it is not tuned further. This is the direction, not yet the sign-off: the sign-off needs his own words (P0-014).

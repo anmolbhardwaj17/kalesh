@@ -1,6 +1,6 @@
 {
   "_doc": "Written only by node harness/bin/task.mjs. Phases run in order; P0 (ADOPT + STYLE DISCOVERY) waits for the owner by design and needs task.mjs signoff and task.mjs archsignoff before its gate passes. Later phases are added by the planner at the end of P0 (task.mjs phase-add) from the game's real state.",
-  "updated": "2026-11-10T20:18:16.460Z",
+  "updated": "2026-11-10T20:20:55.564Z",
   "phases": [
     {
       "id": "P0",
@@ -975,7 +975,8 @@
       "status": "todo",
       "attempts": 0,
       "notes": [
-        "Run only if Anmol picks stylised B or a mix after seeing P0-038; if he picks realistic, rewrite this task for the realistic look."
+        "Run only if Anmol picks stylised B or a mix after seeing P0-038; if he picks realistic, rewrite this task for the realistic look.",
+        "Owner picked pure stylised B in round 5 (mmwb4xiyn). Run now. Night lamp pools stay within stylised B (no realistic PBR layer): visible sodium pools on the asphalt using cheap means (spot lights with tuned falloff or a projected decal), no SSR or full-view volumetric fog. Also fix the crate with a black side and the swirl cracks on the road at night (verifier P0-038)."
       ],
       "created": "2026-11-10T19:41:13.380Z",
       "model": "opus"
