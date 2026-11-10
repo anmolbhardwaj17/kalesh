@@ -96,3 +96,7 @@ Top speed is per vehicle, tuned for a compressed map: auto about 65 km/h, scoote
 
 ## 2026-11-10: Sitting 2 results (Claude call on look A test)
 Map: layout C (Delhi plus NCR) is the full map; first release has Gurugram, Laxmi Nagar, Kashmere Gate and ISBT, Humayun Tomb and Nizamuddin; Noida, Shahdara and Akshardham unlock later. Homes as proposed. Pilot: CP with Jantar Mantar, India Gate, ITO, Chandni Chowk with Red Fort (about 7.2 km2). Haunted place: Malcha Mahal. Police: invented, Delhi-like force. Look A realistic test: Anmol was unsure what it meant; Claude skips it (he already picked B; A would only show what realism costs). He can ask for it any time. Game design round 2: chapters, pillars "Three lives, one Dilli", the auto driver first, lean combat growing with a full capability list kept in GAME.md, civilians can be hurt with weight, half action and story, half city life. Hardware: this Mac and similar, and gaming PCs or better. Art: Anmol makes images in ChatGPT from dashboard prompts and uploads; Claude reviews.
+
+## 2026-11-10: game design signed off by Anmol
+Quote: "yes, I sign off on this game design"
+See harness/design/GAME_DESIGN_OPTIONS.md and GAME.md (fantasy, core loop, pillars, mission list, progression plan).

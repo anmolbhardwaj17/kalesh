@@ -123,3 +123,7 @@ One line per event, written by task.mjs (start, done, fail, phase changes, inbox
 - 2026-11-10 20:30 mentor message mmwathxor handled: Sitting 2 recorded.
 - 2026-11-10 20:30 mentor message mmwathxr1 handled: Sitting 2 recorded.
 - 2026-11-10 20:30 [P0-012] skipped: Look A realistic reference not needed: Anmol picked B; asked, he was unsure what it meant, Claude skipped it (decisions.md Sitting 2)
+- 2026-11-10 20:31 [P0-024] start (attempt 1): Godot toolchain and project scaffold with the coordinate contract
+- 2026-11-10 20:40 game design sign-off recorded: yes, I sign off on this game design
+- 2026-11-10 20:40 mentor message mmwatuy8p handled: Game design signed off and recorded. GAME.md gets written next (P0-008).
+- 2026-11-10 20:40 [P0-007] done: Sitting 2: map layout C staged, optional places, homes, pilot, Malcha Mahal, invented police, game design round 2 answers. Game design signed off: 'yes, I sign off on this game design'.

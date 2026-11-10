@@ -1,6 +1,6 @@
 {
   "_doc": "Written only by node harness/bin/task.mjs. Phases run in order; P0 (ADOPT + STYLE DISCOVERY) waits for the owner by design and needs task.mjs signoff and task.mjs archsignoff before its gate passes. Later phases are added by the planner at the end of P0 (task.mjs phase-add) from the game's real state.",
-  "updated": "2026-11-10T15:00:52.469Z",
+  "updated": "2026-11-10T15:10:59.730Z",
   "phases": [
     {
       "id": "P0",
@@ -200,12 +200,15 @@
       "agent": "orchestrator",
       "priority": 1,
       "kind": "feature",
-      "status": "doing",
+      "status": "done",
       "attempts": 1,
       "notes": [],
       "created": "2026-11-10T13:04:46.154Z",
       "order": 30,
-      "started": "2026-11-10T14:41:13.378Z"
+      "started": "2026-11-10T14:41:13.378Z",
+      "done": "2026-11-10T15:10:59.701Z",
+      "summary": "Sitting 2: map layout C staged, optional places, homes, pilot, Malcha Mahal, invented police, game design round 2 answers. Game design signed off: 'yes, I sign off on this game design'.",
+      "commit": "29b39fb"
     },
     {
       "id": "P0-008",
@@ -591,11 +594,12 @@
       "agent": "builder",
       "priority": 1,
       "kind": "feature",
-      "status": "todo",
-      "attempts": 0,
+      "status": "doing",
+      "attempts": 1,
       "notes": [],
       "created": "2026-11-10T14:08:49.920Z",
-      "order": 40
+      "order": 40,
+      "started": "2026-11-10T15:01:25.564Z"
     },
     {
       "id": "P0-025",
