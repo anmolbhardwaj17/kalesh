@@ -16,6 +16,10 @@
     "harness/bin/waitpredicate.mjs",
     "harness/bin/lib.mjs",
     "harness/verify/scripts/lib/",
-    "harness/bin/lookproof.mjs"
+    "harness/bin/lookproof.mjs",
+    "game/debug/",
+    "game/core/",
+    "game/project.godot",
+    "harness/bin/godotclient.mjs"
   ]
 }

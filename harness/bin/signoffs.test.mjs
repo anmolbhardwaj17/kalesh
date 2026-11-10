@@ -1,6 +1,9 @@
 // Tests for the three Phase 0 sign-offs: the pure table (signoffs.mjs) and the task.mjs commands, run on a scratch copy
 // of the harness (HARNESS_ROOT) so the real state is never touched.
-import { describe, it, expect, beforeEach, afterEach } from 'vitest';
+import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest';
+
+// Each test spawns task.mjs several times; under load (Godot running) that passes 5 s. Flake seen 2026-11-10.
+vi.setConfig({ testTimeout: 30000 });
 import fs from 'node:fs';
 import os from 'node:os';
 import path from 'node:path';

@@ -131,3 +131,5 @@ One line per event, written by task.mjs (start, done, fail, phase changes, inbox
 - 2026-11-10 20:43 [P0-025] start (attempt 1): Godot debug server: the hook contract inside the game
 - 2026-11-10 20:51 mentor message mmwau85im handled: Answered in the terminal; the quality bar is recorded in decisions.md.
 - 2026-11-10 20:51 mentor message mmwau8f0v handled: Answered in the terminal; the quality bar is recorded in decisions.md.
+- 2026-11-10 20:55 mentor message mmwaudm38 handled: Saved: progress/2026-11-10_map-layouts-a-b-c-side-by-side.jpg
+- 2026-11-10 21:00 mentor message mmwaukhze handled: Six concept prompts given in the terminal and saved in harness/design/CONCEPT_PROMPTS.md.

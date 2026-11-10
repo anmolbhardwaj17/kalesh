@@ -22,7 +22,11 @@ Scaffold, as found 2026-11-10. `index.html` loads `src/main.ts`, which creates t
 | `game/project.godot` | The Godot 4.7.2 project (P0-024): Forward+, 60 Hz physics, InputMap actions throttle, brake, steer_left, steer_right. |
 | `game/scenes/main.tscn` | Stand-in scene: `Main` with the world root `World` (environment, sun, ground, road strip, red north post at 0, 3, -50, the car) and `ChaseCamera`. |
 | `game/scripts/car_model.gd` | Port of `src/car.ts`: kinematic car, `forward(heading)` (0 is -Z, PI/2 is +X). Pure, tested. |
-| `game/scripts/car.gd`, `chase_camera.gd` | The car node (input to model on the physics tick, `rotation.y = -heading`) and the chase camera (10 m back, 4.5 m up, looks 6 m ahead). |
+| `game/scripts/car.gd`, `chase_camera.gd` | The car node (input to model on `SimClock.sim_tick`, `rotation.y = -heading`, group `player`, `place()` for staging) and the chase camera (10 m back, 4.5 m up, looks 6 m ahead). |
+| `game/core/game_args.gd` | Autoload `GameArgs`: parses the user args after `--` (`--debug`, `--debug-port`, `--verify`, `--quality`, `--style`, `--scene`, `--arch`, `--lockstep`, `--mute`), the scene id table `SCENES`, adds the debug server only with `--debug`. |
+| `game/core/sim_clock.gd` | Autoload `SimClock`: fixed 1/60 s sim tick from an accumulator, time scale, sim hold; every stepping system connects to `sim_tick(dt)`. |
+| `game/core/game_events.gd` | Autoload `GameEvents`: ring buffer of the last 200 game events `{seq, t, w, type, data}`. |
+| `game/debug/` | The debug server (P0-025): `debug_server.gd` (TCP JSON hooks, snapshot after every drawn frame, debug overlay), `debug_logger.gd` (unexpected errors to `error` events), `frame_probe.gd` (per frame logic time), `perf_stats.gd`. Only exists with `--debug`. |
 | `game/geo/projection.gd` | Port of `src/geo/projection.ts`; returns floats (Vector3 is 32 bit). |
 | `game/tests/` | Headless test runner `run_tests.gd`, assert helper `check.gd`, suites `test_*.gd`. |
 
@@ -32,13 +36,16 @@ Scaffold, as found 2026-11-10. `index.html` loads `src/main.ts`, which creates t
 `src/car.ts`: throttle and steer in, position, heading and speed out; pure, unit tested (`src/car.test.ts`). Verified by `hooks_contract` and the unit tests.
 
 ### Debug hooks
-`src/debug/hooks.ts`: state, clock, frames, input, perf, load, teleport, camera, time scale, sim hold, events, hud. Verified by the `hooks_contract` scenario and `src/debug/hooks.test.ts`.
+Godot: `game/debug/debug_server.gd` serves every hook plus shot, quality and quit over TCP JSON lines on 127.0.0.1 (docs/GAME_HOOKS.md "Godot transport"); `GameArgs` adds it only with `--debug`. Sim time comes from `SimClock`, events from `GameEvents`. Verified by `game/tests/test_debug.gd` and `harness/bin/godotsmoke.mjs`.
+Browser (until P0-027): `src/debug/hooks.ts`: state, clock, frames, input, perf, load, teleport, camera, time scale, sim hold, events, hud. Verified by the `hooks_contract` scenario and `src/debug/hooks.test.ts`.
 
 ## Tooling (outside `src/`)
 
 | Path | What |
 |---|---|
 | `harness/bin/godot.mjs` | Finds the pinned Godot (kit.config.json "godot"), checks its version, downloads a portable copy into `tools/godot/` only when none matches. `--version`, `path`, `check`, `test`, `frame <png>` (Movie Maker), `run --`. Tests: `godot.test.mjs`. |
+| `harness/bin/godotclient.mjs` | Client for the Godot debug server: `launchGame()` (spawns the pinned Godot with engine and game args, connects), `GodotDebugClient` (`call(method, ...args)`, latest `snapshot`, `events`, `waitSnapshot`), `freePort`, `portOpen`. Tests: `godotclient.test.mjs`. |
+| `harness/bin/godotsmoke.mjs` | Smoke test of the debug server: no port without `--debug`, every hook's shape, the sim hold, shot and quit; writes `harness/reports/godot/smoke.json` and `smoke_shot.png`. |
 | `tools/fixtures/gen_projection_points.mjs` | Writes `harness/data/fixtures/projection_points.json` from the TS projection, for the GDScript cross-check. |
 | `harness/bin/task.mjs` | The only writer of `harness/state/backlog.json`: status, next, start, done, fail, phases, gates, inbox, milestones, sign-off. |
 | `harness/bin/signoffs.mjs` | The three Phase 0 sign-offs (style, architecture, game design) as one table: state keys, commands, phase flags, status lines, gate reasons; read by `task.mjs` and the dashboard. Tests: `signoffs.test.mjs`. |

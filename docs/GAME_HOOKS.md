@@ -1,5 +1,7 @@
 # Game hook contract (`window.__game`)
 
+The game is Godot 4 (decisions.md 2026-11-10). The same hooks are served by an in-game debug server over TCP: see "Godot transport" below. `window.__game` and the page params describe the browser path, kept for the three.js scaffold until P0-027 and for a later web demo.
+
 What the game must expose so the harness can drive it: verify scenarios, play scripts, shots, look proofs and perf budgets all go through this object. The ADOPT phase adds it to the existing game as its first task. Scenario `hooks_contract` (`harness/verify/scripts/hooks_contract.js`) checks it on every `verify --quick`.
 
 ## Rules
@@ -9,9 +11,76 @@ What the game must expose so the harness can drive it: verify scenarios, play sc
 - Hooks drive the game the way a player could (inputs, camera, time) or read it. Play scripts never write positions or flags to skip work; `teleport` exists for staging scenes and look proofs, never inside a milestone play script.
 - Every hook returns plain JSON-able data (the harness copies results with `JSON.parse(JSON.stringify(v))`).
 - Expected situations never call `console.error`: any console error fails verification.
-- Keep the hook code in one folder (for example `src/debug/`) and list it in `harness/verify/shared_paths.json`: a change there can break every scenario.
+- Keep the hook code in one folder (`game/debug/` in Godot, `src/debug/` in the browser scaffold) and list it in `harness/verify/shared_paths.json`: a change there can break every scenario.
 
-## Page params
+## Godot transport
+
+The Godot game serves every hook from `game/debug/debug_server.gd`. `game/core/game_args.gd` (autoload `GameArgs`) adds it under `/root` as `DebugServer` only when the game starts with the user arg `--debug`. Without it no port opens, no debug node exists and the debug scripts are never loaded (checked by `game/tests/test_debug.gd` and `harness/bin/godotsmoke.mjs`). Client: `harness/bin/godotclient.mjs`.
+
+### Args
+
+Engine args go before `--`, game args after it. The harness always passes `--quit-after <frames>` as a safety net.
+
+```
+godot --path game --resolution 1280x720 --quit-after 12000 -- --debug --debug-port=47181 --verify
+```
+
+| Game arg | Replaces | Meaning |
+|---|---|---|
+| `--debug` | `debug=1` | Starts the debug server. |
+| `--debug-port=N` | | Its port on 127.0.0.1. Default 47181 (`kit.config.json` `godot.debugPort`, the same as `DEFAULT_DEBUG_PORT` in `game_args.gd`). The harness picks a free port per run. |
+| `--verify` | `verify=1` | Hides every debug overlay (the `DEBUG port fps sim` label). `state().debugOverlay` says if one shows. |
+| `--quality=<preset>` | `quality=` | Start preset (low, medium, high). |
+| `--style=<name>` | `style=` | Phase 0 style test. |
+| `--scene=<id>` | | Start in that scene (ids in `GameArgs.SCENES`; `scaffold` now). |
+| `--arch=<name>` | | Architecture bench. |
+| `--lockstep` | `lockstep=1` | At most one engine physics frame per drawn frame (`Engine.max_physics_steps_per_frame = 1`), so a loaded machine runs slower and never catches up in bursts. |
+| `--mute` | `mute=1` | Master bus muted. |
+
+Resolution is the engine arg `--resolution WxH`. Both `--key=value` and `--key value` work. Args the game does not know are listed in `GameArgs.unknown`, never an error.
+
+### Messages
+
+TCP on 127.0.0.1, newline-delimited JSON (one UTF-8 JSON object per line).
+
+| Direction | Message |
+|---|---|
+| client to game | `{"id": 7, "method": "state", "args": []}`. `id` is any number the client picks, one per call. `args` is the hook's argument list. |
+| game to client | `{"type": "response", "id": 7, "ok": true, "result": ...}` or `{"type": "response", "id": 7, "ok": false, "error": "..."}`. |
+| game to client, once on connect | `{"type": "hello", "protocol": 1, "version", "port", "methods": [...], "args": {...}, "ready", "frame"}`. |
+| game to client, after every drawn frame | `{"type": "snapshot", "frame", "w", "ready", "state", "clock", "hold", "events"}`. `events` holds only the events since the previous snapshot. |
+
+Methods: `ping`, `state`, `clock`, `frames`, `input`, `perf`, `load`, `teleport`, `setCamera`, `timeScale`, `hold`, `events`, `hud`, `shot`, `quality`, `quit`. Shapes are the ones in "Required" below, with these Godot details:
+
+- `state()`: `{scene, level, milestone: null, player: {pos, heading, speed, grounded}, camera: {pos, dir, fov, override}, hud, debugOverlay, quality, style, arch, lockstep, frame}`.
+- `input(action, value)`: `throttle` and `steer` are composite (-1 to 1: negative presses `brake` or `steer_left`, positive `throttle` or `steer_right`). Any InputMap action name also works, with a strength 0 to 1 or a boolean. It goes through `Input.action_press`, the way a player's keys do.
+- `frames(n)`: answers `{frame}` after n drawn frames (`RenderingServer.frame_post_draw`).
+- `perf(ms)`: `cpuMs` is the game logic time of the frame (first physics or process callback to the last `_process`, measured by `game/debug/frame_probe.gd`) plus the viewport's measured render CPU time and frame setup time. `gpuMs` is the viewport's measured GPU time. `p95FrameMs` and `avgFps` come from the intervals between drawn frames. `drawCalls` and `triangles` are the max per frame of `RenderingServer` total draw calls and primitives in frame (`drawCallsAvg`, `trianglesAvg` too). `gpuMB` is video memory used (`textureMB`, `bufferMB` too). On macOS the default Metal driver gives no GPU time, so `gpuMs` is missing and `gpuNote` says why; with the engine arg `--rendering-driver vulkan` (MoltenVK) `gpuMs` is there.
+- `load(id)`: changes to the scene and answers `{scene}` two drawn frames later. Releases debug inputs and the debug camera. Unknown ids are an error response.
+- `teleport([x, y, z])`: puts the player on the ground at x, z and stops it. A name looks for a node in the group `anchor` (none yet, so it answers false).
+- `setCamera({pos, target})` adds a `DebugCamera` to the scene and makes it current; `null` frees it and hands back to the game camera.
+- `hud(on)`: shows or hides the nodes in the group `hud`; answers `{hud, nodes}`.
+- `shot(path)`: `path` must be absolute. Waits for the next drawn frame, saves the viewport image as PNG, answers `{path, width, height, frame}`. The window must be visible (not headless).
+- `quality(name?)`: reads or sets the preset; answers `{preset, presets}`.
+- `quit()`: answers, then quits with code 0 after the next drawn frame.
+
+### Snapshot vs request
+
+`state`, `clock`, `hold` (read) and `events` are cheap and change every frame, so the game pushes them in each snapshot. A driver answers the synchronous hooks from the newest snapshot (the harness-side event ring is the events of every snapshot it got). `frames`, `perf`, `load`, `shot`, `input`, `teleport`, `setCamera`, `timeScale`, `hold({...})`, `hud`, `quality` and `quit` are requests: the answer comes in the response.
+
+### Sim clock and hold
+
+`game/core/sim_clock.gd` (autoload `SimClock`) owns sim time for every system that steps: they connect to `SimClock.sim_tick(dt)` and step only there. The tick is fixed at 1/60 s (`physics_ticks_per_second`). Each engine physics frame adds `delta * scale` to an accumulator and runs whole ticks, so `t` is always a whole number of ticks. `hold({at})` pauses on the last tick boundary at or before `at` (within one tick, never past it) and emits a `sim:hold` event. A held sim runs no ticks; frames keep drawing.
+
+### Errors
+
+Expected problems (unknown method, bad args, unknown scene or action) are error responses, never `push_error`. Unexpected engine or script errors are caught by `game/debug/debug_logger.gd` (a Godot `Logger`) and sent as `error` events `{kind, message, code, function, file, line}`, so they show in the snapshot `events`. Godot still prints them as `ERROR` lines, which `godot.mjs` and the smoke test fail on.
+
+### Smoke test
+
+`node harness/bin/godotsmoke.mjs` (add `--driver vulkan` for GPU times) runs the game without `--debug` and checks no port listens, then windowed with `--debug --verify`, calls every hook, checks each shape and the hold, saves `harness/reports/godot/smoke_shot.png` and writes `harness/reports/godot/smoke.json`.
+
+## Page params (browser, the web demo path, later)
 
 | Param | Meaning |
 |---|---|

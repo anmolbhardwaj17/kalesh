@@ -58,7 +58,9 @@ UI layers, the debug hooks (docs/GAME_HOOKS.md). -->
 
 ### Main loop and time
 
-Variable step: `requestAnimationFrame`, dt capped at 0.1 s, scaled by `hooks.clock.advance(dt)` (time scale and sim hold). The car steps with the sim dt; render every frame. A fixed physics step is an architecture decision for Phase 0.
+Godot: fixed sim tick of 1/60 s owned by the autoload `SimClock` (`game/core/sim_clock.gd`). Each engine physics frame adds `delta * scale` to an accumulator and runs whole ticks, emitting `sim_tick(dt)`. Every system that steps (the car now; later physics, AI and missions) connects to `sim_tick` and never steps in its own `_physics_process`, so the time scale and the sim hold reach all of them. A held sim runs no ticks while frames keep drawing. `--lockstep` sets `Engine.max_physics_steps_per_frame = 1`. Cameras follow on `_physics_process` with a higher `process_physics_priority`.
+
+Browser scaffold (until P0-027): variable step `requestAnimationFrame`, dt capped at 0.1 s, scaled by `hooks.clock.advance(dt)` (time scale and sim hold).
 
 ### Coordinates (binding, owner 2026-11-10)
 
@@ -83,7 +85,9 @@ with harness/bin/assets.mjs; uploads go through the dashboard and harness/bin/in
 
 ### Debug hooks
 
-`src/debug/hooks.ts`, installed by `src/main.ts`; the `debug` part exists only with `?debug=1`. Listed in `harness/verify/shared_paths.json`.
+Godot: `game/debug/` (debug server, logger, frame probe, perf stats), added under `/root` by `GameArgs` only with the user arg `--debug`. TCP JSON lines on 127.0.0.1, port `--debug-port` (default `kit.config.json` `godot.debugPort`, 47181). Contract and messages: docs/GAME_HOOKS.md "Godot transport". Client `harness/bin/godotclient.mjs`, smoke `harness/bin/godotsmoke.mjs`. `game/debug/` and `game/core/` are in `harness/verify/shared_paths.json`.
+
+Browser scaffold: `src/debug/hooks.ts`, installed by `src/main.ts`; the `debug` part exists only with `?debug=1`.
 
 ## Render pipeline
 

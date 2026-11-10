@@ -14,7 +14,7 @@ Notes: `harness/state/knowledge/verify-and-harness-tooling.md`
 - VERIFY: "Levels", "shoot.mjs behaviour", "Scenario options", "Speed", "Quick set", "Play scripts (anti-cheat for our own bot)", "Perf probes", "Look proof workflow (`lookproof.mjs`)", "Final gate".
 - HOOKS: all.
 - Also: `CLAUDE.md` (the loop), `.claude/agents/verifier.md` when changing what the verifier runs.
-- Source: `harness/bin/godot.mjs` (the pinned engine, headless check and tests, Movie Maker frame), `game/tests/run_tests.gd`, `harness/bin/verify.mjs`, `browser.mjs`, `shoot.mjs`, `lib.mjs`, `task.mjs`, `lookproof.mjs`, `perfbudget.mjs`, `perfgate.mjs`, `quickset.mjs`, `freshreport.mjs`, `gatecheck.mjs`, `gateretry.mjs`, `cliguard.mjs`; `harness/verify/scenarios.json`, `quick.json`, `shared_paths.json`, `perf_budgets.json`, `look_rules.json`, `scripts/`, `milestones/`; the game's debug hook folder.
+- Source: `harness/bin/godot.mjs` (the pinned engine, headless check and tests, Movie Maker frame), `godotclient.mjs` and `godotsmoke.mjs` (the Godot debug server client and smoke test), `game/debug/` and `game/core/` (debug server, args, sim clock, events), `game/tests/run_tests.gd`, `harness/bin/verify.mjs`, `browser.mjs`, `shoot.mjs`, `lib.mjs`, `task.mjs`, `lookproof.mjs`, `perfbudget.mjs`, `perfgate.mjs`, `quickset.mjs`, `freshreport.mjs`, `gatecheck.mjs`, `gateretry.mjs`, `cliguard.mjs`; `harness/verify/scenarios.json`, `quick.json`, `shared_paths.json`, `perf_budgets.json`, `look_rules.json`, `scripts/`, `milestones/`; the game's debug hook folder.
 
 ## Rendering and look
 Notes: `harness/state/knowledge/rendering-and-look.md`
