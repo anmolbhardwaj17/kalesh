@@ -161,3 +161,4 @@ One line per event, written by task.mjs (start, done, fail, phase changes, inbox
 - 2026-11-10 22:20 mentor message mmwaxdlzr handled: Fixed: the page refresh was overwriting the icon with the letter. The icon now stays.
 - 2026-11-10 22:20 [P0-030] added: HUD and UI discovery: research modern open-world HUDs and propose the Kalesh HUD
 - 2026-11-10 22:20 mentor message mmwaxey59 handled: Agreed. Added P0-030: research modern open world HUDs (GTA V, what GTA VI has shown, RDR2, Watch Dogs 2, Forza, Spider-Man and more), write HUD.md and show mockups. The current HUD is a placeholder.
+- 2026-11-10 22:20 [P0-009] done: Godot stand-in: Delhi arterial street, three landmark tiers, bazaar vs Lutyens blocks, people, 9 lookproof views, draft perf budgets (GPU p95 1.5 to 3.2 ms on Vulkan). Verifier PASS. Polish: marker tier reads as an office block, roof tanks look like holes from above.
