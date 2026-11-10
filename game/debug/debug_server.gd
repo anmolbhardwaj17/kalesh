@@ -273,7 +273,7 @@ func state() -> Dictionary:
 			"override": _camera != null and cam == _camera}
 	return {
 		"scene": id, "level": id, "milestone": null, "player": player, "camera": camera, "hud": _hud_on,
-		"debugOverlay": _overlay != null and _overlay.visible, "quality": gargs.quality, "style": gargs.style,
+		"debugOverlay": _overlay != null and _overlay.visible, "quality": gargs.quality, "style": gargs.style, "light": gargs.light,
 		"arch": gargs.arch, "lockstep": gargs.lockstep, "frame": _frame_no(),
 	}
 

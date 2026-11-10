@@ -1,0 +1,170 @@
+{
+  "rows": {
+    "car_closeup": {
+      "quality": null,
+      "loadMs": 820,
+      "hostLoad": {
+        "avg1": 5.31,
+        "cores": 12,
+        "perCore": 0.44
+      },
+      "cpuP95": 0.707000006198883,
+      "gpuP95": 6.67700004577637,
+      "fps": 149.111753267977,
+      "drawCalls": 89,
+      "triangles": 1197224,
+      "frameP95": 6.67700004577637,
+      "verdict": "ok",
+      "notes": []
+    },
+    "street_eye": {
+      "quality": null,
+      "loadMs": 815,
+      "hostLoad": {
+        "avg1": 5.13,
+        "cores": 12,
+        "perCore": 0.43
+      },
+      "cpuP95": 0.434999993562698,
+      "gpuP95": 6.76599979400635,
+      "fps": 149.160307376776,
+      "drawCalls": 163,
+      "triangles": 1802118,
+      "frameP95": 6.76599979400635,
+      "verdict": "ok",
+      "notes": []
+    },
+    "junction": {
+      "quality": null,
+      "loadMs": 816,
+      "hostLoad": {
+        "avg1": 4.79,
+        "cores": 12,
+        "perCore": 0.4
+      },
+      "cpuP95": 0.652000017166138,
+      "gpuP95": 7.11399984359741,
+      "fps": 140.458974662799,
+      "drawCalls": 152,
+      "triangles": 1951250,
+      "frameP95": 7.11399984359741,
+      "verdict": "ok",
+      "notes": []
+    },
+    "flyover_ramp": {
+      "quality": null,
+      "loadMs": 813,
+      "hostLoad": {
+        "avg1": 4.57,
+        "cores": 12,
+        "perCore": 0.38
+      },
+      "cpuP95": 0.721999982357025,
+      "gpuP95": 6.29099988937378,
+      "fps": 158.120766316482,
+      "drawCalls": 108,
+      "triangles": 1102962,
+      "frameP95": 6.29099988937378,
+      "verdict": "ok",
+      "notes": []
+    },
+    "hud_play": {
+      "quality": null,
+      "loadMs": 812,
+      "hostLoad": {
+        "avg1": 4.52,
+        "cores": 12,
+        "perCore": 0.38
+      },
+      "cpuP95": 0.47699999666214,
+      "gpuP95": 7.15000009536743,
+      "fps": 139.877327583709,
+      "drawCalls": 180,
+      "triangles": 1654052,
+      "frameP95": 7.15000009536743,
+      "verdict": "ok",
+      "notes": []
+    },
+    "busiest_40m": {
+      "quality": null,
+      "loadMs": 810,
+      "hostLoad": {
+        "avg1": 4.32,
+        "cores": 12,
+        "perCore": 0.36
+      },
+      "cpuP95": 0.46900001001358,
+      "gpuP95": 6.91400003433228,
+      "fps": 144.253176651507,
+      "drawCalls": 167,
+      "triangles": 1802234,
+      "frameP95": 6.91400003433228,
+      "verdict": "ok",
+      "notes": []
+    },
+    "landmark_tiers": {
+      "quality": null,
+      "loadMs": 813,
+      "hostLoad": {
+        "avg1": 4.13,
+        "cores": 12,
+        "perCore": 0.34
+      },
+      "cpuP95": 0.344000014781952,
+      "gpuP95": 4.72200012207031,
+      "fps": 209.800759212335,
+      "drawCalls": 105,
+      "triangles": 771576,
+      "frameP95": 4.72200012207031,
+      "verdict": "ok",
+      "notes": []
+    },
+    "area_blocks_30m": {
+      "quality": null,
+      "loadMs": 818,
+      "hostLoad": {
+        "avg1": 3.96,
+        "cores": 12,
+        "perCore": 0.33
+      },
+      "cpuP95": 0.38400000500679,
+      "gpuP95": 5.94299983978271,
+      "fps": 167.851507366483,
+      "drawCalls": 129,
+      "triangles": 1114386,
+      "frameP95": 5.94299983978271,
+      "verdict": "ok",
+      "notes": []
+    },
+    "on_foot_bazaar": {
+      "quality": null,
+      "loadMs": 815,
+      "hostLoad": {
+        "avg1": 3.89,
+        "cores": 12,
+        "perCore": 0.32
+      },
+      "cpuP95": 0.59600001335144,
+      "gpuP95": 6.95599985122681,
+      "fps": 143.244521729861,
+      "drawCalls": 127,
+      "triangles": 1222874,
+      "frameP95": 6.95599985122681,
+      "verdict": "ok",
+      "notes": []
+    }
+  },
+  "driver": "godot",
+  "machine": "macbook-pro, darwin arm64, Apple M2 Pro, 12 cores, 16 GB",
+  "godotVersion": "4.7.2.stable",
+  "renderer": "Forward+",
+  "renderingDriver": "vulkan",
+  "gpuAdapter": "Apple M2 Pro",
+  "load": {
+    "avg1": 5.31,
+    "cores": 12,
+    "perCore": 0.44
+  },
+  "gl": "Godot 4.7.2.stable Apple M2 Pro (vulkan, forward_plus)",
+  "budgets": "harness/verify/perf_budgets.json (draft)"
+}

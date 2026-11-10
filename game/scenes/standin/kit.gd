@@ -66,6 +66,9 @@ static func materials() -> Dictionary:
 	g.vertex_color_is_srgb = true
 	g.shading_mode = BaseMaterial3D.SHADING_MODE_UNSHADED
 	m["glow"] = g
+	# the key as the resource name, so a style test (game/render/style_runner.gd) can swap the material by key
+	for k in m:
+		m[k].resource_name = k
 	return m
 
 

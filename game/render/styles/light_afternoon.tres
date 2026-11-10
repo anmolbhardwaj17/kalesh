@@ -1,0 +1,34 @@
+[gd_resource type="Resource" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://render/light_preset.gd" id="1_light"]
+
+; Hot hazy afternoon (Anmol, style round 2): high sun from the south west, pale warm sky, dusty haze.
+[resource]
+script = ExtResource("1_light")
+sun_azimuth_deg = 235.0
+sun_elevation_deg = 52.0
+sun_color = Color(1, 0.94, 0.85, 1)
+sun_energy = 2.3
+sun_angular_deg = 0.5
+shadow_max_distance = 240.0
+sky_top = Color(0.4, 0.56, 0.75, 1)
+sky_horizon = Color(0.86, 0.79, 0.66, 1)
+ground_horizon = Color(0.831, 0.769, 0.635, 1)
+ground_bottom = Color(0.435, 0.388, 0.314, 1)
+sky_energy = 1.0
+sun_disc_deg = 30.0
+sun_curve = 0.15
+ambient_energy = 0.5
+exposure = 0.85
+fog_color = Color(0.86, 0.77, 0.62, 1)
+fog_density = 0.0026
+fog_sun_scatter = 0.25
+fog_aerial = 0.45
+fog_sky_affect = 0.4
+fog_height = 6.0
+fog_height_density = 0.0
+shadow_tint = Vector3(-0.015, 0, 0.02)
+highlight_tint = Vector3(0.05, 0.02, -0.04)
+grade_saturation = 1.15
+lamp_gain = 1.2
+dust_energy = 0.6

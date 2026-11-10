@@ -1,6 +1,6 @@
 # Dilli Darshan: Style options
 
-Status: style rounds 1 and 2 answered in interview sitting 1 (2026-11-10). Anmol leans to look B (stylised realistic) with D's grime in Old Delhi. Not signed off. Next: Godot style tests of that look (batch A), then style round 3 on the test results.
+Status: style rounds 1 and 2 answered in interview sitting 1 (2026-11-10). Anmol leans to look B (stylised realistic) with D's grime in Old Delhi. Not signed off. Batch A style tests are built and measured (P0-011, 2026-11-10: see "Measured in Godot (batch A)"). Next: style round 3 on the test results.
 
 Every number in this doc is an estimate (marked "est") until a Godot style test measures it on this machine. Measured numbers replace the estimates in P0-011 and P0-012, and every estimate that was wrong is marked "WRONG, was ...". Never hide a bad number.
 
@@ -114,7 +114,7 @@ Costs at play speed: the auto at about 65 km/h, ordinary cars at about 140, fast
 | **Who makes it** | Procedural | Procedural massing; AI texture cards for atlases, trims and decals; AI 3D or hand-made heroes; AI 3D plus cleanup for vehicles and characters | AI PBR sets plus a bake pipeline | Photo sources (licence issue) or AI photo textures, heavy cleanup |
 | **AI prompt fit** | High | Good with a fixed style anchor (below) | Medium: real PBR maps need care to tile | Low to medium: seams and consistency |
 | **Risk** | Looks cheap | Mixed looks if the anchor drifts between batches | Bake times, memory, day cycle | Uncanny mismatch, licensing |
-| **Measured** (frame time p95 on the busiest view at 140 km/h, draw calls, load) | n/a | P0-011 | P0-012 if built | n/a |
+| **Measured** (frame time p95 on the busiest view at 140 km/h, draw calls, load) | n/a | P0-011 on the stand-ins (held sim, not at speed): GPU p95 6.8 to 6.9 ms on the busiest view, 8.3 ms worst view (B+D golden, on foot in the bazaar), 89 to 180 draw calls, load 0.8 s. See "Measured in Godot (batch A)" | P0-012 if built | n/a |
 
 ## Comparison
 
@@ -126,10 +126,10 @@ All numbers est, at 1920 x 1080 internal on the M2 Pro, Forward+, for the busies
 | **Look** | GTA V, Mafia II | Watch Dogs 2, Sleeping Dogs | Watch Dogs 2 plus Max Payne 3 and Far Cry 4 grime in Old Delhi | Borderlands 3 | Max Payne 3 everywhere |
 | **Feel** | Grand and believable; action reads as a film | Warm, lively, readable; action is clear and loud | As B, plus Old Delhi feels old, lived in and honest about its conditions | Playful; too light for the honest city | Heavy and tense; the whole city reads as grim |
 | **On foot and combat** (people at 1.7 m, guns and fights) | Best faces and cloth close up, highest cost per person; muzzle flash and smoke look real but busy scenes get muddy | Clear silhouettes and readable clothing, so enemies, cops and civilians separate well; bold muzzle flash, sparks and dust hits read at once | As B; grime adds dust kicked up by hits and soot on walls; keep character materials clean so fighters stay readable against busy walls | Very readable hits, but cartoon gore and outlines fight the tone | Fights feel heavy; readability drops in dark grimy corners |
-| **Frame time p95, worst view** (est) | 18 to 26 ms (needs upscaling for 60 fps) | 9 to 13 ms | 10 to 15 ms | 9 to 13 ms | 10 to 15 ms |
-| **Draw calls, triangles** (est) | 3,000 to 5,000; 4 to 8 M | 1,500 to 3,000; 2 to 4 M | 1,800 to 3,500 (decals); 2 to 4 M | 1,500 to 3,000; 2 to 3 M | as B+D |
-| **Shader and post cost** (GPU ms, est) | SDFGI 3 to 5, SSR 1 to 2, volumetric fog 1 to 2, SSAO 0.8, SSIL 1.5, TAA 0.5, glow 0.4 | SSAO 0.8, glow 0.4, fog 0.2, LUT 0.1, shadows 2 to 3 | B plus grime shader 0.5 to 1, decals 0.5 to 1, particles 0.3, heat shimmer 0.3 | B plus outline 0.5 to 1.5, toon ramp 0.2 | as B+D plus heavier fog 0.5 |
-| **Load time and video memory** (est) | 8 to 15 s; 3 to 5 GB | 4 to 8 s; 1.2 to 2 GB | 5 to 9 s; 1.5 to 2.5 GB | 3 to 6 s; 0.8 to 1.5 GB | as B+D |
+| **Frame time p95, worst view** (est; B and B+D measured in P0-011 on the stand-ins, GPU p95 on Vulkan) | 18 to 26 ms (needs upscaling for 60 fps) | **measured 6.9 ms afternoon, 7.2 ms golden** (WRONG, was 9 to 13 ms) | **measured 7.9 ms afternoon, 8.3 ms golden** (WRONG, was 10 to 15 ms) | 9 to 13 ms | 10 to 15 ms |
+| **Draw calls, triangles** (est; B and B+D measured on the stand-ins) | 3,000 to 5,000; 4 to 8 M | **measured 89 to 180; 0.77 to 1.95 M** with shadow passes (WRONG for the stand-ins, was 1,500 to 3,000 and 2 to 4 M: the stand-ins merge each block into one mesh; the estimate stays open for the streamed city) | **measured 89 to 180; 0.77 to 1.95 M** (decals add about 1 call in the bazaar views; same caveat) | 1,500 to 3,000; 2 to 3 M | as B+D |
+| **Shader and post cost** (GPU ms, est; B and B+D measured as a whole) | SDFGI 3 to 5, SSR 1 to 2, volumetric fog 1 to 2, SSAO 0.8, SSIL 1.5, TAA 0.5, glow 0.4 | est SSAO 0.8, glow 0.4, fog 0.2, LUT 0.1, shadows 2 to 3 (about 3.5 to 4.5 in all). **Measured: plus 3.2 to 4.8 ms over the plain baseline** for SSAO, SSIL, glow, fog, LUT, soft 4 split shadows and the surface shader together (about right; SSIL was not in the estimate) | est B plus grime shader 0.5 to 1, decals 0.5 to 1, particles 0.3, heat shimmer 0.3. **Measured: plus 0.5 to 1.3 ms over B in the bazaar views** for the grime mask, decals and dust (WRONG, was 1.6 to 2.6; heat shimmer not built), nothing elsewhere | B plus outline 0.5 to 1.5, toon ramp 0.2 | as B+D plus heavier fog 0.5 |
+| **Load time and video memory** (est; B and B+D load measured on the stand-ins) | 8 to 15 s; 3 to 5 GB | 4 to 8 s; 1.2 to 2 GB (stand-ins: **measured load 0.82 s**, the same as the baseline, since no textures load yet; memory not measured by lookproof) | 5 to 9 s; 1.5 to 2.5 GB (stand-ins: **measured load 0.82 s**; memory not measured) | 3 to 6 s; 0.8 to 1.5 GB | as B+D |
 | **Asset pipeline** | Full PBR sets per material (albedo, normal, roughness, AO), many unique; hero models with high detail | Per area kit: one atlas and one trim sheet, AI texture cards; decals; procedural massing; AI 3D for vehicles and characters with cleanup | B plus a grime decal set (40 to 80, est) and a per-kit wear mask; no extra models | Fewer textures, hand-painted look; outlines need clean normals | as B+D |
 | **AI art prompt fit** | Medium: tileable real PBR is hard to keep seamless | Good: "stylised realistic, clean shapes, warm light, hand-tuned colour" holds across a batch | Good: grime decals are an easy prompt (stains, posters, soot) | High, but out | Good |
 | **Tooling** | SDFGI tuning, LUT, TAA, LOD chains | LUT, one shared building shader, MultiMesh kits, LOD | B plus grime mask shader, decal atlas, wear value in area profiles | CompositorEffect outline, toon shader | as B+D |
@@ -143,7 +143,36 @@ All numbers est, at 1920 x 1080 internal on the M2 Pro, Forward+, for the busies
 
 ## Side by side
 
-`harness/reports/look/style_options.jpg`, from `node harness/bin/lookproof.mjs --sheet baseline,style_stylised_afternoon,style_stylised_golden,style_stylised_grime_afternoon,style_stylised_grime_golden[,style_realistic_afternoon,style_realistic_golden] --out style_options`. One row per view (9 views from P0-009, including landmark tiers, the two area kits and the on-foot view), one column per style and light, worst frame time p95 under each label. Filled after P0-011.
+`harness/reports/look/style_options.jpg`, from `node harness/bin/lookproof.mjs --sheet baseline,style_stylised_afternoon,style_stylised_golden,style_stylised_grime_afternoon,style_stylised_grime_golden[,style_realistic_afternoon,style_realistic_golden] --out style_options`. One row per view (9 views from P0-009, including landmark tiers, the two area kits and the on-foot view), one column per style and light. The p95 under each label is from the Metal run, which has no GPU timer, so it is CPU time only (0.2 to 0.9 ms); the real frame cost is the Vulkan table below. Made in P0-011 (2026-11-10).
+
+### Measured in Godot (batch A)
+
+P0-011, 2026-11-10, Apple M2 Pro (19 core GPU), 1920 x 1080 at render scale 1.0, Godot 4.7.2 Forward+, GPU p95 over a 3 s window with the sim held, on Vulkan through MoltenVK with vsync off (`HARNESS_GODOT_ARGS="--rendering-driver vulkan --disable-vsync"`, sets `style_<id>_<light>_vulkan`; the acceptance sets `style_<id>_<light>` ran on Metal, CPU p95 0.3 to 0.9 ms). Machine load per core 0.3 during the runs. Run to run noise is about 0.5 to 1 ms (street_eye golden read 6.8 ms in B and 7.8 ms in B+D with the same work).
+
+| View | Baseline (P0-009) | B afternoon | B golden | B+D afternoon | B+D golden |
+|---|---|---|---|---|---|
+| car_closeup | 2.12 | 6.29 | 6.68 | 6.27 | 6.67 |
+| street_eye | 2.20 | 6.24 | 6.77 | 6.26 | 7.77 |
+| junction | 2.28 | 6.74 | 7.11 | 6.72 | 7.15 |
+| flyover_ramp | 2.02 | 6.25 | 6.29 | 6.23 | 6.29 |
+| hud_play | 2.35 | 6.72 | 7.15 | 6.73 | 7.09 |
+| busiest_40m | 2.33 | 6.81 | 6.91 | 6.78 | 6.92 |
+| landmark_tiers | 1.48 | 4.67 | 4.72 | 4.64 | 4.73 |
+| area_blocks_30m | 1.89 | 5.81 | 5.94 | 6.32 | 6.45 |
+| on_foot_bazaar | 2.13 | 6.87 | 6.96 | 7.89 | 8.29 |
+| **worst** | 2.35 | **6.87** | **7.15** | **7.89** | **8.29** |
+
+The B+D columns are from the first run, when the dust motes were GPUParticles3D. The dust then moved to CPUParticles3D (the GPU version printed an engine shader leak ERROR on quit). A rerun of the two B+D Vulkan sets after that change happened while another project loaded this Mac (load per core 1.1 to 1.4 against 0.3 to 0.6 before): it read 7.4 to 12.0 ms in every view, including views with no grime at all, so it measured the outside load, not the style, and is not used here (it is what `style_stylised_grime_*_vulkan/perf.json` now holds). A calm rerun is a follow-up. The Metal acceptance sets were reshot after the change.
+
+All 36 view runs of the table are "ok" against the draft budgets (warn 11.1 ms, fail 16.6 ms; draw calls 89 to 180 against warn 450; triangles under 2 M against warn 5 M; load 0.82 s). Headroom on this Mac: about 8 ms to the 60 fps line in the worst view, before textures, crowds, traffic and streaming.
+
+What the tests contain (game/render/, one script plus a .tres per style and per light):
+- B (`stylised`): Filmic tonemap (AgX looked grey and flat on these stand-ins), a warm 3D LUT (33 cubed, split tone and saturation), glow with a light bloom, SSAO, SSIL, sun-lit exponential haze, a procedural sky per light, soft 4 split sun shadows, one shared surface shader for walls, roads and leaves with world space detail (plaster mottling, asphalt grain, leaf variation, backlit leaves), clearcoat car paint, reflective glass, and rim light on people and signs.
+- B+D (`stylised_grime`): B plus the grime mask in the same shader, scaled by each block's wear (stand-in for the area profile `wear`: bazaar 0.9, Lutyens 0.03, every other block 0): damp at the wall base, soot and rain streaks, patched plaster, faded paint, dust on roofs, oil and wet patches on the street; procedural wall decals on the bazaar shop fronts (wordless posters on the wall piers at eye height and under the first floor windows, streaks, damp stains, patches); dust motes in the air over the bazaar street. People, signs and goods keep clean materials.
+- Lights: `afternoon` (sun 52 degrees up from the south west, pale warm sky, dusty haze) and `golden` (sun 12 degrees up from the west north west, orange light, long shadows, glowing haze, lamps and shop bulbs bloom).
+- Not built in the time box: heat shimmer over asphalt, a thicker haze over Old Delhi only (needs a FogVolume and volumetric fog, a cost to measure), real textures or trim sheets (no art yet).
+
+What the shots show (read by the builder): grime shows clearly on the bazaar facades and roofs from above (area_blocks_30m) and only there; the Lutyens block and every street, landmark and car view look the same in B and B+D. At eye height in the bazaar (on_foot_bazaar) the grime is subtle: stains on the street, streaks on the upper walls, small posters. Golden reads as golden in open views; the narrow bazaar is in the shade of its own west row in golden light, so it changes less. These are the points for style round 3 below.
 
 ## Landmark tiers and area kits per candidate
 

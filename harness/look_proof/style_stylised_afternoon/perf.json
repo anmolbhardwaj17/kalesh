@@ -1,0 +1,170 @@
+{
+  "rows": {
+    "car_closeup": {
+      "quality": null,
+      "loadMs": 816,
+      "hostLoad": {
+        "avg1": 5.65,
+        "cores": 12,
+        "perCore": 0.47
+      },
+      "cpuP95": 0.44499999499321,
+      "gpuP95": null,
+      "fps": 119.266504335404,
+      "drawCalls": 89,
+      "triangles": 1197224,
+      "frameP95": 0.44499999499321,
+      "verdict": "ok",
+      "notes": []
+    },
+    "street_eye": {
+      "quality": null,
+      "loadMs": 812,
+      "hostLoad": {
+        "avg1": 6,
+        "cores": 12,
+        "perCore": 0.5
+      },
+      "cpuP95": 0.463000004768372,
+      "gpuP95": null,
+      "fps": 120.205354699031,
+      "drawCalls": 151,
+      "triangles": 1649514,
+      "frameP95": 0.463000004768372,
+      "verdict": "ok",
+      "notes": []
+    },
+    "junction": {
+      "quality": null,
+      "loadMs": 815,
+      "hostLoad": {
+        "avg1": 5.92,
+        "cores": 12,
+        "perCore": 0.49
+      },
+      "cpuP95": 0.438000002861023,
+      "gpuP95": null,
+      "fps": 119.440327246534,
+      "drawCalls": 152,
+      "triangles": 1951250,
+      "frameP95": 0.438000002861023,
+      "verdict": "ok",
+      "notes": []
+    },
+    "flyover_ramp": {
+      "quality": null,
+      "loadMs": 809,
+      "hostLoad": {
+        "avg1": 5.85,
+        "cores": 12,
+        "perCore": 0.49
+      },
+      "cpuP95": 0.419000010490417,
+      "gpuP95": null,
+      "fps": 119.880638843924,
+      "drawCalls": 108,
+      "triangles": 1102962,
+      "frameP95": 0.419000010490417,
+      "verdict": "ok",
+      "notes": []
+    },
+    "hud_play": {
+      "quality": null,
+      "loadMs": 816,
+      "hostLoad": {
+        "avg1": 5.78,
+        "cores": 12,
+        "perCore": 0.48
+      },
+      "cpuP95": 0.425000001907349,
+      "gpuP95": null,
+      "fps": 119.111626891812,
+      "drawCalls": 180,
+      "triangles": 1654052,
+      "frameP95": 0.425000001907349,
+      "verdict": "ok",
+      "notes": []
+    },
+    "busiest_40m": {
+      "quality": null,
+      "loadMs": 811,
+      "hostLoad": {
+        "avg1": 5.5,
+        "cores": 12,
+        "perCore": 0.46
+      },
+      "cpuP95": 0.393999990940094,
+      "gpuP95": null,
+      "fps": 119.344476361981,
+      "drawCalls": 155,
+      "triangles": 1649630,
+      "frameP95": 0.393999990940094,
+      "verdict": "ok",
+      "notes": []
+    },
+    "landmark_tiers": {
+      "quality": null,
+      "loadMs": 809,
+      "hostLoad": {
+        "avg1": 5.3,
+        "cores": 12,
+        "perCore": 0.44
+      },
+      "cpuP95": 0.388000007390976,
+      "gpuP95": null,
+      "fps": 119.981682796426,
+      "drawCalls": 108,
+      "triangles": 786372,
+      "frameP95": 0.388000007390976,
+      "verdict": "ok",
+      "notes": []
+    },
+    "area_blocks_30m": {
+      "quality": null,
+      "loadMs": 808,
+      "hostLoad": {
+        "avg1": 5.36,
+        "cores": 12,
+        "perCore": 0.45
+      },
+      "cpuP95": 0.392999993085861,
+      "gpuP95": null,
+      "fps": 119.747293295382,
+      "drawCalls": 129,
+      "triangles": 1114386,
+      "frameP95": 0.392999993085861,
+      "verdict": "ok",
+      "notes": []
+    },
+    "on_foot_bazaar": {
+      "quality": null,
+      "loadMs": 810,
+      "hostLoad": {
+        "avg1": 8.21,
+        "cores": 12,
+        "perCore": 0.68
+      },
+      "cpuP95": 0.387999993920326,
+      "gpuP95": null,
+      "fps": 119.874491407496,
+      "drawCalls": 127,
+      "triangles": 1222874,
+      "frameP95": 0.387999993920326,
+      "verdict": "ok",
+      "notes": []
+    }
+  },
+  "driver": "godot",
+  "machine": "macbook-pro, darwin arm64, Apple M2 Pro, 12 cores, 16 GB",
+  "godotVersion": "4.7.2.stable",
+  "renderer": "Forward+",
+  "renderingDriver": "metal",
+  "gpuAdapter": "Apple M2 Pro (Apple8)",
+  "load": {
+    "avg1": 5.62,
+    "cores": 12,
+    "perCore": 0.47
+  },
+  "gl": "Godot 4.7.2.stable Apple M2 Pro (Apple8) (metal, forward_plus)",
+  "budgets": "harness/verify/perf_budgets.json (draft)"
+}

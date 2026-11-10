@@ -187,3 +187,8 @@ Anmol: "Bro, just after 3 missions you are merging them together. Doesn't seem l
 
 ## 2026-11-10: Story seed approved
 Anmol: "That's a banger story. Let's go ahead with it." Decision: harness/design/STORY_SEED.md (the diary, Bittu, SI Meera Rana, Danny, Harish Sethi, ACP Khanna, "M"; five acts Sawari, Paisa, Gaddari, Jalaawatan, Kalesh; the fake encounter choice; three endings plus a hidden fourth; the mysteries) is the approved base for the story. P0-031 aligns Act 1 and the slice to it; P0-032 expands it into the full outline. Why: owner approval in his own words.
+
+## 2026-11-10: Style tests restyle scenes from outside, grime is data (P0-011)
+Decision: `--style=<id> --light=<preset>` makes GameArgs create game/render/style_runner.gd, which restyles every scene on SceneTree.node_added (Environment, sun, material swap by kit material key, per-mesh decorate). Scenes and gameplay code do not know about styles; without --style no style code loads. Each style is one script plus a .tres preset (stylised, stylised_grime), each light one .tres (afternoon, golden). One shared surface shader serves walls, roads and leaves; B+D grime is that shader's mask times the block's `wear` metadata (builder.gd AREA_WEAR: Bazaar 0.9, Lutyens 0.03, all else 0), plus procedural decals and dust on blocks with wear 0.5 or more. Tonemap Filmic (AgX looked grey on these stand-ins) plus a 3D LUT built in code.
+Why: the default look must stay byte for byte, the two styles must compare like with like, and grime must follow the area profile (Anmol: D's dirt on Old Delhi only), so the later area profile generator only has to write a wear value.
+By: builder (P0-011)

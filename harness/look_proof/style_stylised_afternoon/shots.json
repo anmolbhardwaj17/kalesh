@@ -1,0 +1,61 @@
+{
+  "views": {
+    "car_closeup": {
+      "file": "car_closeup.png",
+      "at": "2026-11-10T17:56:43.181Z",
+      "query": "debug=1&verify=1&style=stylised&light=afternoon",
+      "error": null
+    },
+    "street_eye": {
+      "file": "street_eye.png",
+      "at": "2026-11-10T17:56:48.906Z",
+      "query": "debug=1&verify=1&style=stylised&light=afternoon",
+      "error": null
+    },
+    "junction": {
+      "file": "junction.png",
+      "at": "2026-11-10T17:56:54.765Z",
+      "query": "debug=1&verify=1&style=stylised&light=afternoon",
+      "error": null
+    },
+    "flyover_ramp": {
+      "file": "flyover_ramp.png",
+      "at": "2026-11-10T17:57:00.460Z",
+      "query": "debug=1&verify=1&style=stylised&light=afternoon",
+      "error": null
+    },
+    "hud_play": {
+      "file": "hud_play.png",
+      "at": "2026-11-10T17:57:06.215Z",
+      "query": "debug=1&verify=1&style=stylised&light=afternoon",
+      "error": null
+    },
+    "busiest_40m": {
+      "file": "busiest_40m.png",
+      "at": "2026-11-10T17:57:12.198Z",
+      "query": "debug=1&verify=1&style=stylised&light=afternoon",
+      "error": null
+    },
+    "landmark_tiers": {
+      "file": "landmark_tiers.png",
+      "at": "2026-11-10T17:57:17.944Z",
+      "query": "debug=1&verify=1&style=stylised&light=afternoon",
+      "error": null
+    },
+    "area_blocks_30m": {
+      "file": "area_blocks_30m.png",
+      "at": "2026-11-10T17:57:23.827Z",
+      "query": "debug=1&verify=1&style=stylised&light=afternoon",
+      "error": null
+    },
+    "on_foot_bazaar": {
+      "file": "on_foot_bazaar.png",
+      "at": "2026-11-10T17:57:29.452Z",
+      "query": "debug=1&verify=1&style=stylised&light=afternoon",
+      "error": null
+    }
+  },
+  "commit": "a682786",
+  "gl": "Godot 4.7.2.stable Apple M2 Pro (Apple8) (metal, forward_plus)",
+  "at": "2026-11-10T17:57:29.563Z"
+}

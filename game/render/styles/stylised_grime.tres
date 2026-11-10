@@ -1,0 +1,29 @@
+[gd_resource type="Resource" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://render/style_preset.gd" id="1_preset"]
+
+[resource]
+script = ExtResource("1_preset")
+tonemap = 2
+agx_contrast = 1.25
+exposure_scale = 1.0
+glow = true
+glow_intensity = 0.6
+glow_strength = 1.0
+glow_bloom = 0.04
+glow_threshold = 1.0
+ssao = true
+ssao_radius = 1.2
+ssao_intensity = 1.6
+ssao_power = 1.5
+ssao_light_affect = 0.1
+ssil = true
+ssil_radius = 4.0
+ssil_intensity = 0.7
+contrast = 1.08
+saturation = 1.05
+detail = 1.0
+albedo_saturation = 1.15
+wear_scale = 1.0
+rim = 0.25
+decal_wear_min = 0.5

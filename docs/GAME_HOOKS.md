@@ -31,7 +31,8 @@ godot --path game --resolution 1280x720 --quit-after 12000 -- --debug --debug-po
 | `--debug-port=N` | | Its port on 127.0.0.1. Default 47181 (`kit.config.json` `godot.debugPort`, the same as `DEFAULT_DEBUG_PORT` in `game_args.gd`). The harness picks a free port per run. |
 | `--verify` | `verify=1` | Hides every debug overlay (the `DEBUG port fps sim` label). `state().debugOverlay` says if one shows. |
 | `--quality=<preset>` | `quality=` | Start preset (low, medium, high). |
-| `--style=<name>` | `style=` | Phase 0 style test. |
+| `--style=<name>` | `style=` | Phase 0 style test: `stylised` (look B) or `stylised_grime` (B+D). Restyles every scene through `game/render/style_runner.gd`. Absent: the default look, no style code loaded. `state().style` and `state().light` report it. |
+| `--light=<preset>` | `light=` | Light preset for a style test: `afternoon` (default) or `golden`. Ignored without `--style`. |
 | `--scene=<id>` | | Start in that scene (ids in `GameArgs.SCENES`: `scaffold`, and the P0-009 stand-ins `street`, `landmarks`, `areas`). |
 | `--arch=<name>` | | Architecture bench. |
 | `--lockstep` | `lockstep=1` | At most one engine physics frame per drawn frame (`Engine.max_physics_steps_per_frame = 1`), so a loaded machine runs slower and never catches up in bursts. |
@@ -52,7 +53,7 @@ TCP on 127.0.0.1, newline-delimited JSON (one UTF-8 JSON object per line).
 
 Methods: `ping`, `state`, `clock`, `frames`, `input`, `perf`, `load`, `teleport`, `setCamera`, `timeScale`, `hold`, `events`, `hud`, `shot`, `quality`, `quit`. Shapes are the ones in "Required" below, with these Godot details:
 
-- `state()`: `{scene, level, milestone: null, player: {pos, heading, speed, grounded}, camera: {pos, dir, fov, override}, hud, debugOverlay, quality, style, arch, lockstep, frame}`.
+- `state()`: `{scene, level, milestone: null, player: {pos, heading, speed, grounded}, camera: {pos, dir, fov, override}, hud, debugOverlay, quality, style, light, arch, lockstep, frame}`.
 - `input(action, value)`: `throttle` and `steer` are composite (-1 to 1: negative presses `brake` or `steer_left`, positive `throttle` or `steer_right`). Any InputMap action name also works, with a strength 0 to 1 or a boolean. It goes through `Input.action_press`, the way a player's keys do.
 - `frames(n)`: answers `{frame}` after n drawn frames (`RenderingServer.frame_post_draw`). Headless (`--headless`, nothing is drawn) a frame ends on `SceneTree.process_frame` instead, for frames, snapshots, load and quit; `perf` and `shot` answer an error there.
 - `perf(ms)`: `cpuMs` is the game logic time of the frame (first physics or process callback to the last `_process`, measured by `game/debug/frame_probe.gd`) plus the viewport's measured render CPU time and frame setup time. `gpuMs` is the viewport's measured GPU time. `p95FrameMs` and `avgFps` come from the intervals between drawn frames. `drawCalls` and `triangles` are the max per frame of `RenderingServer` total draw calls and primitives in frame (`drawCallsAvg`, `trianglesAvg` too). `gpuMB` is video memory used (`textureMB`, `bufferMB` too). On macOS the default Metal driver gives no GPU time, so `gpuMs` is missing and `gpuNote` says why; with the engine arg `--rendering-driver vulkan` (MoltenVK) `gpuMs` is there.
@@ -89,6 +90,7 @@ Expected problems (unknown method, bad args, unknown scene or action) are error 
 | `quality=<preset>` | Starts on that quality preset (low, medium, high, or the game's names). Scenarios with `quality` use it; perf budgets are per preset. |
 | `lockstep=1` | Optional. Every rendered frame runs a fixed slice of sim, so a loaded page runs slower instead of catching up in bursts. Use for scenarios whose script steers or reads AI timing. |
 | `style=<name>` | Phase 0 style tests: renders the game in a candidate style. Default look when absent. |
+| `light=<preset>` | With `style`: the light preset (`afternoon`, `golden`). |
 | `mute=1` | Optional. Master volume 0 (a negative control for audio checks). |
 
 ## Required

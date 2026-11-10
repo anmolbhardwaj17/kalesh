@@ -29,6 +29,10 @@ const PATH_TOP := 0.17
 const LANES := [2.35, 5.85, 9.35]
 const STREET_HALF := 150.0
 const JUNCTION := 11.0
+## Wear (0 clean to 1 worn) per committed block, the stand-in for the area profile `wear` value (DELHI_WORLD.md
+## area profiles). Stored as node metadata "wear"; only the stylised_grime style reads it (Old Delhi grime). Blocks
+## not listed are 0. Lutyens is near zero on purpose: the contrast with the old city is the point.
+const AREA_WEAR := {"Bazaar": 0.9, "Lutyens": 0.03}
 
 var root: Node3D
 var rng := RandomNumberGenerator.new()
@@ -95,12 +99,16 @@ func _environment() -> void:
 	root.add_child(sun)
 
 
-func _commit(s: Geo.Sink, name: String) -> void:
+## meta: extra node metadata (set before the node enters the tree, so a style test sees it on node_added).
+func _commit(s: Geo.Sink, name: String, meta := {}) -> void:
 	if s.batches.is_empty():
 		return
 	var mi := MeshInstance3D.new()
 	mi.name = name
 	mi.mesh = s.to_mesh(mats)
+	mi.set_meta("wear", AREA_WEAR.get(name, 0.0))
+	for k in meta:
+		mi.set_meta(k, meta[k])
 	root.add_child(mi)
 	stats.chunks += 1
 	stats.vertices += s.vertex_count()
@@ -145,6 +153,9 @@ func _shop_row(s: Geo.Sink, front: Vector3, yaw: float, along: float, length: fl
 		if board != null:
 			_sign(s.stack[-1] * xf, board.pos, board.size, board.color, Kit.pick(rng, Kit.SHOP_NAMES))
 		stats.buildings += 1
+		if o.has("piers"):
+			# the wall pier between this shop and the next, on the front line (grime style posters go here)
+			o.piers.append(s.stack[-1] * (Kit.at(front, yaw) * Vector3(along * (u + w), 0, 0)))
 		u += w
 
 
@@ -596,8 +607,10 @@ func _bazaar(cx: float) -> void:
 		s.box("matte", Color("#4a4640"), Vector3(cx + xs * (hw - 0.3), 0.07, 0), Vector3(0.5, 0.02, z1 - z0))
 	var palette := [Kit.BRICK, Kit.LIME, Kit.MINT, Kit.PINK, Kit.OCHRE, Color("#c98f6b"), Color("#b9a48a")]
 	var o := {"tight": true, "awning": true, "balcony": 0.6, "wmin": 3.4, "wmax": 5.4, "fmin": 3, "fmax": 5, "dmin": 9.0,
-		"dmax": 11.0, "palette": palette}
+		"dmax": 11.0, "palette": palette, "piers": []}
 	_shop_row(s, Vector3(cx - hw, 0, z1), -PI * 0.5, -1.0, z1 - z0, o)
+	var west_piers: Array = o.piers.duplicate()
+	o.piers.clear()
 	_shop_row(s, Vector3(cx + hw, 0, z0), PI * 0.5, -1.0, z1 - z0, o)
 	# back blocks behind both rows
 	for xs in [-1.0, 1.0]:
@@ -640,7 +653,10 @@ func _bazaar(cx: float) -> void:
 	for i in 26:
 		var p := _free(taken, Vector2(cx + rng.randf_range(-hw + 0.9, hw - 0.9), rng.randf_range(z0 + 2, z1 - 2)), 0.45, hw - 0.9)
 		_person(s, Vector3(p.x, 0.06, p.y), rng.randf_range(0, TAU))
-	_commit(s, "Bazaar")
+	# shop fronts as [start, end, outward normal, wall piers between shops] at ground level, for grime style decals
+	var facades := [[Vector3(cx - hw, 0, z0), Vector3(cx - hw, 0, z1), Vector3.RIGHT, west_piers],
+		[Vector3(cx + hw, 0, z0), Vector3(cx + hw, 0, z1), Vector3.LEFT, o.piers.duplicate()]]
+	_commit(s, "Bazaar", {"facades": facades})
 	stats.areas.append("bazaar")
 
 

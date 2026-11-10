@@ -3,7 +3,8 @@
 ##   --debug-port=N       its port on 127.0.0.1 (default DEFAULT_DEBUG_PORT, same as kit.config.json godot.debugPort)
 ##   --verify             hide every debug overlay (the harness always passes it)
 ##   --quality=<preset>   start on that quality preset
-##   --style=<name>       Phase 0 style test
+##   --style=<name>       Phase 0 style test (game/render/style_runner.gd; ids in its STYLES)
+##   --light=<preset>     light preset for a style test: afternoon (default) or golden
 ##   --scene=<id>         start in that scene (ids in SCENES)
 ##   --arch=<name>        architecture bench
 ##   --lockstep           one sim tick per rendered frame at most (a loaded machine runs slower, never catches up)
@@ -14,6 +15,7 @@ extends Node
 
 const DEFAULT_DEBUG_PORT := 47181
 const DEBUG_SERVER_PATH := "res://debug/debug_server.gd"
+const STYLE_RUNNER_PATH := "res://render/style_runner.gd"
 ## Scene ids the game can load (debug load(id) and --scene=<id>).
 const SCENES := {
 	"scaffold": "res://scenes/main.tscn",
@@ -27,22 +29,24 @@ var debug_port := DEFAULT_DEBUG_PORT
 var verify := false
 var quality := "medium"
 var style := ""
+var light := ""
 var scene := ""
 var arch := ""
 var lockstep := false
 var mute := false
 ## Args that were not understood (reported in debug state, never an error).
 var unknown: Array[String] = []
+var _style_runner: RefCounted = null
 
 
 ## Parses user args into a Dictionary. Pure, so it is unit tested. Accepts `--key=value` and `--key value`.
 static func parse(args: PackedStringArray) -> Dictionary:
 	var out := {
-		"debug": false, "debug_port": DEFAULT_DEBUG_PORT, "verify": false, "quality": "medium", "style": "",
+		"debug": false, "debug_port": DEFAULT_DEBUG_PORT, "verify": false, "quality": "medium", "style": "", "light": "",
 		"scene": "", "arch": "", "lockstep": false, "mute": false, "unknown": [] as Array[String],
 	}
 	var flags := ["debug", "verify", "lockstep", "mute"]
-	var values := ["debug-port", "quality", "style", "scene", "arch"]
+	var values := ["debug-port", "quality", "style", "light", "scene", "arch"]
 	var i := 0
 	while i < args.size():
 		var a: String = args[i]
@@ -81,6 +85,10 @@ static func parse(args: PackedStringArray) -> Dictionary:
 
 func _ready() -> void:
 	apply(parse(OS.get_cmdline_user_args()))
+	if style != "":
+		# Loaded by path only for a style test, so the default look runs no style code at all. It restyles every
+		# scene as its nodes enter the tree (SceneTree.node_added), so it must start before the main scene loads.
+		_style_runner = load(STYLE_RUNNER_PATH).new(get_tree(), style, light)
 	if mute:
 		AudioServer.set_bus_mute(0, true)
 	if scene != "" and SCENES.has(scene) and SCENES[scene] != ProjectSettings.get_setting("application/run/main_scene"):
@@ -101,6 +109,7 @@ func apply(p: Dictionary) -> void:
 	verify = p.verify
 	quality = p.quality
 	style = p.style
+	light = p.light
 	scene = p.scene
 	arch = p.arch
 	lockstep = p.lockstep
@@ -130,6 +139,6 @@ func current_scene_id() -> String:
 
 func as_dict() -> Dictionary:
 	return {
-		"debug": debug, "debugPort": debug_port, "verify": verify, "quality": quality, "style": style,
+		"debug": debug, "debugPort": debug_port, "verify": verify, "quality": quality, "style": style, "light": light,
 		"scene": scene, "arch": arch, "lockstep": lockstep, "mute": mute, "unknown": unknown,
 	}

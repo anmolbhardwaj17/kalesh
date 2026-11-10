@@ -22,7 +22,7 @@ Notes: `harness/state/knowledge/rendering-and-look.md`
 - TECH: "Render pipeline", "Performance budgets".
 - STYLE: all sections that apply to the task.
 - VERIFY: "Visual review rubric (verifier agent)", "Look proof workflow (`lookproof.mjs`)", "Perf probes".
-- Source: `game/scenes/main.tscn` (environment, lights, scene), the stand-in scenes `game/scenes/standin/` (builder.gd sets their environment and sun; style tests restyle these); the Phase 0 style tests switch the look with the game arg `--style=<name>` (`game/core/game_args.gd`) and add their code under `game/` (for example `game/render/styles/<name>.gd`).
+- Source: `game/scenes/main.tscn` (environment, lights, scene), the stand-in scenes `game/scenes/standin/` (builder.gd sets their environment and sun; style tests restyle these); the Phase 0 style tests switch the look with the game args `--style=<name>` and `--light=<preset>` (`game/core/game_args.gd`); their code is `game/render/` (`style_runner.gd`, `styles/<id>.gd` and `.tres`, `styles/light_<id>.tres`, `shaders/surface.gdshader`), tests `game/tests/test_style.gd`.
 
 ## UI and input
 Notes: `harness/state/knowledge/ui-and-input.md`
