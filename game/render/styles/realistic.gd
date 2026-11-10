@@ -154,7 +154,7 @@ func setup_sun(sun: DirectionalLight3D) -> void:
 
 ## Sodium street light with inverse square falloff (attenuation 2): a bright pool under the lamp that fades over
 ## about 10 m, a soft cone edge, and a visible cone in the haze.
-func _street_lamp(xf: Transform3D) -> void:
+func _street_lamp(xf: Transform3D, _d := {}) -> void:
 	var s := SpotLight3D.new()
 	s.light_color = SODIUM
 	s.light_energy = 170.0 * light.night
@@ -181,3 +181,28 @@ func _dress(mi: MeshInstance3D) -> void:
 	for c in _h.get_children():
 		if c is GeometryInstance3D and (c as GeometryInstance3D).cast_shadow == GeometryInstance3D.SHADOW_CASTING_SETTING_OFF:
 			(c as GeometryInstance3D).gi_mode = GeometryInstance3D.GI_MODE_DISABLED
+
+
+# ---------------------------------------------------------------- P0-034 setup kept for this reference look
+
+
+## Realistic keeps the P0-034 batch B setup (stylised B's lean path, P0-037, is for the performance target).
+func _lean() -> bool:
+	return false
+
+
+## Dust and haze over a worn block: a fog volume, denser near the ground (volumetric fog).
+func _haze(xf: Transform3D, d: Dictionary) -> void:
+	var fv := FogVolume.new()
+	fv.name = "AreaHaze"
+	fv.shape = RenderingServer.FOG_VOLUME_SHAPE_BOX
+	var hw: float = d.hw
+	fv.size = Vector3(hw * 2.0 + 26.0, 24.0, d.z1 - d.z0 + 16.0)
+	fv.position = Vector3(xf.origin.x, 11.0, (d.z0 + d.z1) * 0.5)
+	var fm := FogMaterial.new()
+	fm.density = light.area_haze * _wear * 0.5
+	fm.albedo = light.area_haze_color
+	fm.height_falloff = 0.12
+	fm.edge_fade = 0.35
+	fv.material = fm
+	_h.add_child(fv)

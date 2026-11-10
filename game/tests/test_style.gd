@@ -136,6 +136,28 @@ func test_stylised_b_materials_and_presets() -> void:
 	t.ok(load(DIR + "light_night.tres").night == 1.0 and load(DIR + "light_afternoon.tres").night == 0.0, "night flag on the presets")
 
 
+## P0-037: stylised B runs the lean path (no volumetric fog, calm surfaces, night fill, dawn contrast); realistic keeps
+## the P0-034 setup.
+func test_stylised_b_lean_path_for_the_performance_target() -> void:
+	var weights := {}
+	for light in ["dawn", "afternoon", "golden", "night"]:
+		var st := _style("stylised_b", light)
+		t.ok(st._lean(), "stylised_b %s is lean" % light)
+		t.ok(not st.environment().volumetric_fog_enabled, "no volumetric fog pass (%s)" % light)
+		t.near(st.material_for(Kit.materials()["road"]).get_shader_parameter("calm"), 1.0, 1e-6, "calm surfaces on (%s)" % light)
+		weights[light] = st._dawn_weight()
+	t.near(weights.dawn, 1.0, 1e-6, "dawn gets the full contrast lift")
+	t.ok(weights.afternoon == 0.0 and weights.golden == 0.0 and weights.night == 0.0, "only dawn gets the contrast lift")
+	var night := _style("stylised_b", "night")
+	t.ok(night.environment().ambient_light_sky_contribution < 1.0, "moonlit fill colour at night")
+	var real := _style("realistic", "night")
+	t.ok(not real._lean(), "realistic keeps the P0-034 setup")
+	t.ok(real.material_for(Kit.materials()["road"]).get_shader_parameter("calm") == null, "realistic leaves calm unset")
+	var p34 := _style("stylised_b", "golden")
+	p34.set_off(PackedStringArray(["p34"]))
+	t.ok(not p34._lean(), "--style-off=p34 measures the old setup")
+
+
 # ---------------------------------------------------------------- realistic reference (P0-038)
 
 

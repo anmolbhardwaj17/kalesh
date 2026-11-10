@@ -2,158 +2,156 @@
   "rows": {
     "car_closeup": {
       "quality": null,
-      "loadMs": 1066,
+      "loadMs": 1070,
       "hostLoad": {
-        "avg1": 6.14,
+        "avg1": 7.24,
         "cores": 12,
-        "perCore": 0.51
+        "perCore": 0.6
       },
-      "cpuP95": 0.475000010490418,
-      "gpuP95": 10.1680002212524,
-      "fps": 110.962457701811,
-      "drawCalls": 167,
-      "triangles": 2035030,
-      "frameP95": 10.1680002212524,
+      "cpuP95": 0.876000014781952,
+      "gpuP95": 7.34200000762939,
+      "fps": 120.568965614863,
+      "drawCalls": 157,
+      "triangles": 1989082,
+      "frameP95": 7.34200000762939,
       "verdict": "ok",
       "notes": []
     },
     "street_eye": {
       "quality": null,
-      "loadMs": 1068,
+      "loadMs": 1065,
       "hostLoad": {
-        "avg1": 5.06,
+        "avg1": 7.06,
         "cores": 12,
-        "perCore": 0.42
+        "perCore": 0.59
       },
-      "cpuP95": 0.484000008106232,
-      "gpuP95": 9.75899982452393,
-      "fps": 107.759194120871,
-      "drawCalls": 291,
-      "triangles": 2822304,
-      "frameP95": 9.75899982452393,
+      "cpuP95": 1.02699998140335,
+      "gpuP95": 7.97599983215332,
+      "fps": 120.250961424757,
+      "drawCalls": 290,
+      "triangles": 2835224,
+      "frameP95": 7.97599983215332,
       "verdict": "ok",
       "notes": []
     },
     "junction": {
       "quality": null,
-      "loadMs": 1067,
+      "loadMs": 1058,
       "hostLoad": {
-        "avg1": 4.42,
+        "avg1": 6.89,
         "cores": 12,
-        "perCore": 0.37
+        "perCore": 0.57
       },
-      "cpuP95": 0.440999987125397,
-      "gpuP95": 10.1400003433228,
-      "fps": 102.752059280955,
-      "drawCalls": 286,
-      "triangles": 3070584,
-      "frameP95": 10.1400003433228,
+      "cpuP95": 1.02799997329712,
+      "gpuP95": 8.125,
+      "fps": 120.520916704732,
+      "drawCalls": 285,
+      "triangles": 3086364,
+      "frameP95": 8.125,
       "verdict": "ok",
       "notes": []
     },
     "flyover_ramp": {
       "quality": null,
-      "loadMs": 811,
+      "loadMs": 1071,
       "hostLoad": {
-        "avg1": 4.94,
+        "avg1": 6.74,
         "cores": 12,
-        "perCore": 0.41
+        "perCore": 0.56
       },
-      "cpuP95": 0.381000006437302,
-      "gpuP95": 9.5319995880127,
-      "fps": 111.331329369405,
-      "drawCalls": 194,
-      "triangles": 1894732,
-      "frameP95": 9.5319995880127,
+      "cpuP95": 0.945999983310699,
+      "gpuP95": 7.46299982070923,
+      "fps": 120.476233899616,
+      "drawCalls": 192,
+      "triangles": 1910468,
+      "frameP95": 7.46299982070923,
       "verdict": "ok",
       "notes": []
     },
     "hud_play": {
       "quality": null,
-      "loadMs": 1061,
+      "loadMs": 1064,
       "hostLoad": {
-        "avg1": 5.11,
+        "avg1": 6.6,
         "cores": 12,
-        "perCore": 0.43
+        "perCore": 0.55
       },
-      "cpuP95": 0.490000002384186,
-      "gpuP95": 10.0120000839233,
-      "fps": 105.253936780355,
-      "drawCalls": 315,
-      "triangles": 2728894,
-      "frameP95": 10.0120000839233,
+      "cpuP95": 1.02200002527237,
+      "gpuP95": 8.23999977111816,
+      "fps": 120.370955353016,
+      "drawCalls": 309,
+      "triangles": 2737698,
+      "frameP95": 8.23999977111816,
       "verdict": "ok",
       "notes": []
     },
     "busiest_40m": {
       "quality": null,
-      "loadMs": 1062,
+      "loadMs": 1063,
       "hostLoad": {
-        "avg1": 4.86,
+        "avg1": 5.75,
         "cores": 12,
-        "perCore": 0.41
+        "perCore": 0.48
       },
-      "cpuP95": 0.466000013113022,
-      "gpuP95": 9.79100036621094,
-      "fps": 108.022337025038,
-      "drawCalls": 304,
-      "triangles": 2824796,
-      "frameP95": 9.79100036621094,
+      "cpuP95": 0.986000000476837,
+      "gpuP95": 8.01099967956543,
+      "fps": 120.581736929956,
+      "drawCalls": 303,
+      "triangles": 2837716,
+      "frameP95": 8.01099967956543,
       "verdict": "ok",
       "notes": []
     },
     "landmark_tiers": {
       "quality": null,
-      "loadMs": 1063,
+      "loadMs": 1067,
       "hostLoad": {
-        "avg1": 4.89,
+        "avg1": 5.93,
         "cores": 12,
-        "perCore": 0.41
+        "perCore": 0.49
       },
-      "cpuP95": 0.292000004887581,
-      "gpuP95": 6.88500022888184,
-      "fps": 120.449055373292,
+      "cpuP95": 0.757000015735626,
+      "gpuP95": 6.57399988174438,
+      "fps": 120.287784358989,
       "drawCalls": 104,
       "triangles": 810116,
-      "frameP95": 6.88500022888184,
+      "frameP95": 6.57399988174438,
       "verdict": "ok",
       "notes": []
     },
     "area_blocks_30m": {
       "quality": null,
-      "loadMs": 1067,
+      "loadMs": 1066,
       "hostLoad": {
-        "avg1": 5.05,
+        "avg1": 5.85,
         "cores": 12,
-        "perCore": 0.42
+        "perCore": 0.49
       },
-      "cpuP95": 0.55000000667572,
-      "gpuP95": 8.91300010681152,
-      "fps": 118.937438907135,
+      "cpuP95": 0.821000018596649,
+      "gpuP95": 7.11499977111816,
+      "fps": 120.520716079494,
       "drawCalls": 230,
-      "triangles": 1817386,
-      "frameP95": 8.91300010681152,
+      "triangles": 1837932,
+      "frameP95": 7.11499977111816,
       "verdict": "ok",
       "notes": []
     },
     "on_foot_bazaar": {
       "quality": null,
-      "loadMs": 1068,
+      "loadMs": 1071,
       "hostLoad": {
-        "avg1": 4.89,
+        "avg1": 6,
         "cores": 12,
-        "perCore": 0.41
+        "perCore": 0.5
       },
-      "cpuP95": 0.561000012636185,
-      "gpuP95": 12.8520002365112,
-      "fps": 81.3465139034473,
+      "cpuP95": 1.13899999570847,
+      "gpuP95": 9.17700004577637,
+      "fps": 110.194341537208,
       "drawCalls": 218,
-      "triangles": 1816958,
-      "frameP95": 12.8520002365112,
-      "verdict": "warn",
-      "notes": [
-        "frame time: p95 frame time 12.9 ms (gpu bound) is over the 11.1 ms budget (60 fps): cpu p95 0.6 ms, gpu p95 12.9 ms, rAF p95 13.0 ms, 81.3 fps"
-      ]
+      "triangles": 1837660,
+      "frameP95": 9.17700004577637,
+      "verdict": "ok",
+      "notes": []
     }
   },
   "driver": "godot",
@@ -163,9 +161,9 @@
   "renderingDriver": "vulkan",
   "gpuAdapter": "Apple M2 Pro",
   "load": {
-    "avg1": 5.15,
+    "avg1": 7.24,
     "cores": 12,
-    "perCore": 0.43
+    "perCore": 0.6
   },
   "gl": "Godot 4.7.2.stable Apple M2 Pro (vulkan, forward_plus)",
   "budgets": "harness/verify/perf_budgets.json (draft)"

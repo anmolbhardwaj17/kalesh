@@ -6,11 +6,14 @@
 ## stand-ins from the anchors their builder records (geo.gd Sink.anchors: windows, shops, roofs, tanks, lamps,
 ## vehicles, footpaths, the bazaar lane). Gameplay, camera and UI are untouched, and the default look never loads
 ## this file. Every sign, stencil and poster is invented (no real brands, parties or offices).
-## --style-off=<a,b> switches features off to measure their cost: volfog, shimmer, dressing, lights, textures.
+## --style-off=<a,b> switches features off to measure their cost: volfog, shimmer, dressing, lights, textures, decals,
+## ssao, ssil, glow, sunshadow (and shadow options nopcss, noblend, split2, near80, dshadow; ssq; p34 = P0-034 setup).
+## P0-037 lean path (_lean(), the performance target; realistic.gd turns it off): see environment() and setup_sun().
 extends "res://render/styles/stylised_grime.gd"
 
 const SURFACE_B := preload("res://render/shaders/surface_b.gdshader")
 const SHIMMER_SHADER := preload("res://render/shaders/shimmer.gdshader")
+const HAZE_SHADER := preload("res://render/shaders/haze_b.gdshader")
 const Geo := preload("res://scenes/standin/geo.gd")
 const Kit := preload("res://scenes/standin/kit.gd")
 const TEX_DIR := "res://render/textures/"
@@ -64,18 +67,90 @@ func environment() -> Environment:
 	if _env != null:
 		return _env
 	var env := super()
-	if not off.has("volfog"):
-		# volumetric fog only feeds the per-area haze volumes (FogVolume over a worn block); base density 0
-		env.volumetric_fog_enabled = true
-		env.volumetric_fog_density = 0.0
-		env.volumetric_fog_albedo = light.area_haze_color
-		env.volumetric_fog_anisotropy = 0.55
-		env.volumetric_fog_length = 140.0
-		env.volumetric_fog_detail_spread = 2.0
-		env.volumetric_fog_ambient_inject = 0.35
-		env.volumetric_fog_sky_affect = 0.0
-		env.volumetric_fog_temporal_reprojection_enabled = true
+	if not _lean():
+		_volfog_for_haze_volumes(env)
+	else:
+		# P0-037 (performance target, about 10 to 11 ms GPU): no volumetric fog at all, the bazaar haze is a cheap depth
+		# haze box (_haze); the screen-space light passes run at low quality (the soft look stays, about 1.5 ms less)
+		if not off.has("ssq"):
+			RenderingServer.environment_set_ssil_quality(RenderingServer.ENV_SSIL_QUALITY_LOW, true, 0.5, 2, 50.0, 300.0)
+			RenderingServer.environment_set_ssao_quality(RenderingServer.ENV_SSAO_QUALITY_LOW, true, 0.5, 2, 50.0, 300.0)
+		# moonlit sky fill at night: a cool grey-blue ambient so no surface that faces away from every lamp goes black
+		var n: float = light.night
+		if n > 0.0:
+			env.ambient_light_color = Color(0.36, 0.42, 0.58)
+			env.ambient_light_sky_contribution = 1.0 - 0.55 * n
+			env.ambient_light_energy = light.ambient_energy * (1.0 + 0.9 * n)
+		# dawn reads flat through its thick haze: a little more contrast and slightly thinner haze
+		var dawn := _dawn_weight()
+		if dawn > 0.0:
+			env.adjustment_contrast = preset.contrast + 0.08 * dawn
+			env.fog_density = light.fog_density * (1.0 - 0.15 * dawn)
+	# cost measuring only (--style-off): the screen-space passes of the base look
+	if off.has("ssao"):
+		env.ssao_enabled = false
+	if off.has("ssil"):
+		env.ssil_enabled = false
+	if off.has("glow"):
+		env.glow_enabled = false
 	return env
+
+
+## The lean (performance target) path of stylised B; the realistic reference look (realistic.gd) keeps the P0-034 setup.
+## --style-off=p34 measures the P0-034 setup against it.
+func _lean() -> bool:
+	return not off.has("p34")
+
+
+## 1 for a low morning sun in the east (the dawn preset, or early hours on --time), 0 otherwise.
+func _dawn_weight() -> float:
+	if light.sun_azimuth_deg > 180.0 or light.sun_elevation_deg < -5.0:
+		return 0.0
+	return clampf((20.0 - light.sun_elevation_deg) / 13.0, 0.0, 1.0) * clampf((0.7 - light.night) / 0.3, 0.0, 1.0)
+
+
+## Volumetric fog only feeding the per-area FogVolume (P0-034 batch B; the realistic look still uses it).
+func _volfog_for_haze_volumes(env: Environment) -> void:
+	if off.has("volfog"):
+		return
+	env.volumetric_fog_enabled = true
+	env.volumetric_fog_density = 0.0
+	env.volumetric_fog_albedo = light.area_haze_color
+	env.volumetric_fog_anisotropy = 0.55
+	env.volumetric_fog_length = 140.0
+	env.volumetric_fog_detail_spread = 2.0
+	env.volumetric_fog_ambient_inject = 0.35
+	env.volumetric_fog_sky_affect = 0.0
+	env.volumetric_fog_temporal_reprojection_enabled = true
+
+
+func setup_sun(sun: DirectionalLight3D) -> void:
+	super(sun)
+	if _lean():
+		# P0-037, measured in the bazaar (Vulkan): the sun's soft shadows (PCSS, from its angular size) cost about
+		# 1.8 ms and blending the shadow splits about 1 ms more. A plain filtered shadow with a wider blur keeps the
+		# soft stylised edge; the shadow map itself (triangles, distance, splits) was not the cost.
+		sun.light_angular_distance = 0.0
+		sun.shadow_blur = 1.6
+		sun.directional_shadow_blend_splits = false
+	if off.has("nopcss"):
+		sun.light_angular_distance = 0.0
+	if off.has("noblend"):
+		sun.directional_shadow_blend_splits = false
+	if off.has("split2"):
+		sun.directional_shadow_mode = DirectionalLight3D.SHADOW_PARALLEL_2_SPLITS
+	if off.has("near80"):
+		sun.directional_shadow_max_distance = minf(light.shadow_max_distance, 80.0)
+	if off.has("sunshadow"):
+		sun.shadow_enabled = false
+
+
+## Every wall decal: cost measuring with --style-off=decals.
+func _decal(holder: Node3D, p: Vector3, y: float, n: Vector3, size: Vector2, tex: Texture2D, strength: float) -> void:
+	if off.has("decals"):
+		holder.add_child(Node3D.new())
+		return
+	super(holder, p, y, n, size, tex, strength)
 
 
 ## Heat shimmer over hot asphalt: a full-screen pass that wobbles the far ground a little (afternoon only).
@@ -147,6 +222,10 @@ func _surface_b(kind: int, rough: float) -> ShaderMaterial:
 	s.set_shader_parameter("wear_scale", preset.wear_scale)
 	s.set_shader_parameter("tex_mix", 0.0 if off.has("textures") else 1.0)
 	s.set_shader_parameter("tiles", _tile_array())
+	if _lean():
+		# P0-037: softer marbled plaster, faint tar lines, ground cover on the bare earth
+		s.set_shader_parameter("calm", 1.0)
+		s.set_shader_parameter("mottle", 0.7)
 	return s
 
 
@@ -316,7 +395,7 @@ func _dress(mi: MeshInstance3D) -> void:
 		if lights:
 			match kind:
 				"lamp":
-					_street_lamp(xf)
+					_street_lamp(xf, d)
 				"vehicle":
 					_vehicle_lights(xf, d)
 		if kind == "lane":
@@ -330,7 +409,7 @@ func _dress(mi: MeshInstance3D) -> void:
 		dm.mesh = (pair[0] as Geo.Sink).to_mesh(_mats)
 		dm.set_meta("dressing", true)
 		dm.set_instance_shader_parameter("wear", _wear)
-		if not pair[2]:
+		if not pair[2] or off.has("dshadow"):
 			dm.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
 		_h.add_child(dm)
 	for k in _u:
@@ -376,7 +455,9 @@ func _free_of_people(p: Vector3, r: float) -> bool:
 func _decal_at(xf: Transform3D, local: Vector3, size: Vector2, tex: Texture2D, strength: float) -> void:
 	var p := xf * local
 	_decal(_h, Vector3(p.x, 0, p.z), p.y, _out(xf), size, tex, strength)
-	var d: Decal = _h.get_child(_h.get_child_count() - 1)
+	var d := _h.get_child(_h.get_child_count() - 1) as Decal
+	if d == null:
+		return
 	d.distance_fade_begin = 40.0
 	d.distance_fade_length = 15.0
 
@@ -491,8 +572,9 @@ func _shop(xf: Transform3D, d: Dictionary, lights: bool) -> void:
 		for k in 3:
 			_n.rod("satin", Kit.BLACK, Vector3(mx - 0.08 + k * 0.08, 2.55, -0.1), Vector3(mx - 0.1 + k * 0.1, 4.4 + k * 0.1, -0.12), 0.01)
 	_pop()
-	# about half the open shops get a real light (the rest glow through their tube): lights cost 2 ms in the lane
-	if lights and not closed and _r.randf() < 0.5:
+	# about half the open shops get a real light (the rest glow through their tube): lights cost 2 ms in the lane.
+	# Lean (P0-037): one open shop in three, and only once it is properly dark (the night sky fill does the rest)
+	if lights and not closed and (light.night >= 0.5 or not _lean()) and _r.randf() < (0.34 if _lean() else 0.5):
 		_shop_light(xf, d)
 	# paan stains at the wall base beside the shop and torn poster layers on the pier (worn blocks)
 	if _wear > 0.5:
@@ -505,8 +587,8 @@ func _shop(xf: Transform3D, d: Dictionary, lights: bool) -> void:
 func _shop_light(xf: Transform3D, d: Dictionary) -> void:
 	var o := OmniLight3D.new()
 	o.light_color = Color("#e8f0ff") if _r.randf() < 0.6 else Color("#ffd49a")
-	o.light_energy = 1.8 * light.night
-	o.omni_range = 6.0
+	o.light_energy = (2.2 if _lean() else 1.8) * light.night
+	o.omni_range = 7.0 if _lean() else 6.0
 	o.omni_attenuation = 1.4
 	o.light_specular = 0.3
 	o.position = xf * Vector3(0, 2.3, -1.0)
@@ -808,21 +890,34 @@ func _lane(xf: Transform3D, d: Dictionary) -> void:
 			_dog(p, _r.randf_range(0, TAU), i != 1)
 
 
-## Dust and haze over a worn block: a fog volume, denser near the ground (volumetric fog; its cost is measured).
+## Dust and haze over a worn block: a box drawn with the cheap depth haze shader (haze_b.gdshader), denser near the
+## ground. The realistic look overrides this with the P0-034 FogVolume (volumetric fog).
 func _haze(xf: Transform3D, d: Dictionary) -> void:
-	var fv := FogVolume.new()
-	fv.name = "AreaHaze"
-	fv.shape = RenderingServer.FOG_VOLUME_SHAPE_BOX
 	var hw: float = d.hw
-	fv.size = Vector3(hw * 2.0 + 26.0, 24.0, d.z1 - d.z0 + 16.0)
-	fv.position = Vector3(xf.origin.x, 11.0, (d.z0 + d.z1) * 0.5)
-	var fm := FogMaterial.new()
-	fm.density = light.area_haze * _wear * 0.5
-	fm.albedo = light.area_haze_color
-	fm.height_falloff = 0.12
-	fm.edge_fade = 0.35
-	fv.material = fm
-	_h.add_child(fv)
+	var size := Vector3(hw * 2.0 + 26.0, 24.0, d.z1 - d.z0 + 16.0)
+	var centre := Vector3(xf.origin.x, 11.0, (d.z0 + d.z1) * 0.5)
+	var bm := BoxMesh.new()
+	bm.size = size
+	var m := ShaderMaterial.new()
+	m.shader = HAZE_SHADER
+	m.set_shader_parameter("box_min", centre - size * 0.5)
+	m.set_shader_parameter("box_max", centre + size * 0.5)
+	var n: float = light.night
+	var day_light: float = 0.3 + 0.3 * light.sun_energy * (1.0 - n)
+	var c: Color = light.area_haze_color.srgb_to_linear() * day_light
+	c = c.lerp(SODIUM.srgb_to_linear() * 0.1, n)
+	m.set_shader_parameter("haze_color", Vector3(c.r, c.g, c.b))
+	m.set_shader_parameter("density", light.area_haze * _wear * 0.32)
+	m.set_shader_parameter("height_falloff", 0.12)
+	m.set_shader_parameter("max_alpha", 0.5)
+	bm.material = m
+	var mi := MeshInstance3D.new()
+	mi.name = "AreaHaze"
+	mi.mesh = bm
+	mi.position = centre
+	mi.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
+	mi.set_meta("dressing", true)
+	_h.add_child(mi)
 
 
 ## Warm floodlights on a landmark at night (India Gate style), from the ground in front of it.
@@ -885,16 +980,23 @@ func _bounce(xf: Transform3D, d: Dictionary) -> void:
 		z += 16.0
 
 
-func _street_lamp(xf: Transform3D) -> void:
+## Sodium street light: inverse square falloff (attenuation 2) from the 8 to 10 m head, so each lamp throws a warm
+## pool that is bright under the head and fades over 10 to 15 m, tipped 15 degrees out along the arm so the pool lies
+## on the carriageway (the same light count as before: no extra cost). The dark asphalt needs a strong source.
+func _street_lamp(xf: Transform3D, d := {}) -> void:
 	var s := SpotLight3D.new()
 	s.light_color = SODIUM
-	s.light_energy = 5.5 * light.night
-	s.spot_range = 14.0
-	s.spot_angle = 62.0
-	s.spot_attenuation = 0.9
-	s.light_specular = 0.35
+	s.light_energy = 300.0 * light.night
+	s.spot_range = 30.0
+	s.spot_angle = 68.0
+	s.spot_angle_attenuation = 1.2
+	s.spot_attenuation = 2.0
+	s.light_specular = 0.5
 	s.shadow_enabled = false
-	s.transform = Transform3D(Basis(Vector3.RIGHT, -PI * 0.5), xf.origin)
+	s.light_volumetric_fog_energy = 0.0
+	var arm := (xf.basis * Vector3(0, 0, signf(float(d.get("dz", -1.0))))).normalized()
+	var aim := (Vector3.DOWN * cos(deg_to_rad(15.0)) + arm * sin(deg_to_rad(15.0))).normalized()
+	s.transform = Transform3D(Basis.looking_at(aim, arm), xf.origin)
 	_h.add_child(s)
 
 

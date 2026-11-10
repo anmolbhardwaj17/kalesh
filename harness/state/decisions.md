@@ -238,3 +238,9 @@ Anmol: "Yes, I sign off on stylised B as the Kalesh style." Chosen: stylised B (
 
 ## 2026-11-11: Architecture answers, round 1
 Licences: open sources only, keep a sale possible (no FABDEM or other non-commercial data shipped; publish repaired map data as ODbL asks). Mac signing: deferred by Anmol ("not a decision i wanna take right now"); unsigned test builds until he decides, asked again before release. Windows: Anmol has a Windows PC and a friend will test, so Windows builds get tested on real hardware from the first playable. Map inspector: web page on the dashboard, kept small (see the reply below). Animation: free CC0 library (Quaternius). Hero roads: the first list as proposed. Reference photos: online only (no owner photos).
+
+## 2026-11-11: Stylised B lean path for the performance target
+Decision: stylised B (P0-037) drops PCSS and shadow split blending on the sun, runs SSAO and SSIL at low quality, replaces the volumetric fog and FogVolume with a depth haze box (`haze_b.gdshader`), gives one open shop in three a real light, and lights the night with tilted inverse square sodium lamps plus a moonlit ambient fill. `_lean()` in stylised_b.gd gates all of it; realistic.gd returns false and keeps the P0-034 setup. The tile texture imports have fix_alpha_border off (shared bug fix).
+Why: measured on Vulkan, the sun's soft shadows were the main cost (about 2.8 ms in the bazaar), not geometry; the bazaar went from 11.9 to 12.9 ms to 7.8 to 9.3 ms in all four lights, every view ok. The realistic set stays a reference for the comparison Anmol already saw.
+By: builder
+

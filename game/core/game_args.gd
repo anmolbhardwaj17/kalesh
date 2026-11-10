@@ -7,7 +7,7 @@
 ##   --light=<preset>     light preset for a style test: dawn, afternoon (default), golden or night
 ##   --time=<0..24>       style test hour of day on the day-night curve (game/render/day_cycle.gd); overrides --light
 ##   --style-off=<a,b>    style test features to switch off for cost measuring (stylised_b: volfog, shimmer, dressing,
-##                        lights, textures)
+##                        lights, textures, decals, ssao, ssil, glow, sunshadow; p34 = the P0-034 setup)
 ##   --scene=<id>         start in that scene (ids in SCENES)
 ##   --arch=<name>        architecture bench
 ##   --lockstep           one sim tick per rendered frame at most (a loaded machine runs slower, never catches up)

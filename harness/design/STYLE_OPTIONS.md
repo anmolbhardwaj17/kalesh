@@ -200,6 +200,37 @@ GPU p95 in ms over a 3 s window with the sim held, Apple M2 Pro, 1920 x 1080, Go
 
 Batch B costs about 2 to 3.5 ms over B+D in the street views and 3 to 4 ms in the bazaar. What each part costs (golden, before the optimisation round, street_eye / on_foot_bazaar, with one part switched off by `--style-off=<part>`): everything on 12.3 / 14.6; volumetric haze off 11.0 / 14.0; heat shimmer off 10.3 / 13.6; dressing off 10.8 / 13.0; lights off 10.1 / 11.5; textures off 11.1 / 14.4. Night bazaar after the optimisation: everything 12.4, haze off 12.1, lights off 10.4, dressing off 11.6. Noise is about 0.5 to 1 ms. The optimisation round took 2 to 4 ms off: no shadows from small dressing (wires, frames, grilles), lights only after dusk, half the bazaar shops with a real light, lower-poly tanks, small wall decals fading by 55 m, no shimmer in golden light. To get the bazaar under 11 ms: fewer shop lights again or one light per two shops, a cheaper haze (depth fog per area instead of a FogVolume), and the dressing merged into the block mesh.
 
+#### P0-037 pass: frame time and night light (after Anmol picked "Pure stylised B")
+
+Same machine and method (GPU p95, Vulkan, vsync off, sim held, 3 s window), measured 2026-11-11 with load per core 0.34 to 0.60 in every run. Another project's browser tests were using the GPU on and off during the session: runs that spiked during those bursts were rerun once when the machine was calm. "Before" is the P0-034 table above.
+
+| View | Dawn before | Dawn after | Afternoon before | Afternoon after | Golden before | Golden after | Night before | Night after |
+|---|---|---|---|---|---|---|---|---|
+| car_closeup | 9.80 | 7.70 | 9.00 | 6.62 | 8.71 | 6.55 | 10.17 | 7.34 |
+| street_eye | 10.28 | 7.50 | 9.17 | 6.80 | 8.84 | 6.55 | 9.76 | 7.98 |
+| junction | 10.77 | 8.37 | 9.74 | 7.07 | 9.26 | 6.51 | 10.14 | 8.13 |
+| flyover_ramp | 9.40 | 6.74 | 9.15 | 6.51 | 8.27 | 6.71 | 9.53 | 7.46 |
+| hud_play | 10.86 | 7.89 | 9.91 | 7.03 | 9.21 | 6.67 | 10.01 | 8.24 |
+| busiest_40m | 9.50 | 7.61 | 10.01 | 7.54 | 9.16 | 6.61 | 9.79 | 8.01 |
+| landmark_tiers | 7.05 | 6.63 | 7.13 | 6.47 | 6.69 | 6.67 | 6.89 | 6.57 |
+| area_blocks_30m | 8.65 | 6.72 | 9.36 | 7.94 | 8.62 | 6.60 | 8.91 | 7.11 |
+| on_foot_bazaar | 12.55 | 8.68 | 11.89 | 9.29 | 11.87 | 7.75 | 12.85 | 9.18 |
+| **worst** | **12.55** | **8.68** | **11.89** | **9.29** | **11.87** | **7.75** | **12.85** | **9.18** |
+| typical (median view) | 9.80 | 7.61 | 9.36 | 7.03 | 8.84 | 6.61 | 9.79 | 7.98 |
+
+Every view is "ok" in every light now (warn line 11.1 ms). Draw calls 96 to 315, triangles 0.8 to 3.2 M with shadow passes, load 1.06 to 1.33 s. Against the performance target (10 to 11 ms GPU at about 1080p) stylised B now has 2 to 4 ms of headroom on the stand-ins.
+
+Where the time went (bazaar, golden, one part off at a time, `--style-off=<part>`): the sun's soft shadows were the big cost, not the shadow geometry. PCSS (the contact-hardening soft shadow Godot uses when the sun has an angular size) cost about 1.8 ms and blending the four shadow splits about 1 ms more; fewer shadow triangles (2 splits, 80 m, no shadows from the dressing) changed nothing measurable. SSIL cost about 1.5 to 2 ms (kept, at low quality), decals about 0.5 ms, glow and SSAO under the noise (about 0.5 ms run to run).
+
+What changed (stylised B only; the realistic reference keeps the P0-034 setup):
+- Sun shadows: plain filtered shadows with a wider blur, no PCSS, no split blending. The edges stay soft.
+- SSAO and SSIL at low quality. No volumetric fog pass at all: the bazaar haze is a cheap depth haze box (thicker near the ground, clear for the first 6 m so near people stay crisp).
+- Shop lights: one open shop in three gets a real light, and only once it is properly dark; the rest glow through their tube lights.
+- Night: the sodium street lights have inverse square falloff and tip 15 degrees out over the carriageway, so each throws a warm pool that is bright under the head and fades over 10 to 15 m (same number of lights as before). A cool moonlit sky fill stops surfaces that face away from every lamp going black (that was the bazaar crate with one black side: it faced away from the only shop light near it and the night ambient was close to zero).
+- The swirl cracks on the road and the marbled swirl on dark shop walls were one bug: the texture import option "fix alpha border" bled the dark tar and crack lines into the neighbouring pixels of the mask textures (their alpha is a mask, not transparency). It is off now for the six tiling layers (realistic gets the same fix). On top of that stylised B keeps the tar lines faint and without gloss, and softens the plaster cracks on dark walls and at eye height.
+- Ground cover: the bare ground between the bazaar and Lutyens is dusty earth with wide patches of dry grass, a few scrub clumps and pebbles (shader only).
+- Dawn: a little more contrast and slightly thinner haze.
+
 What batch B contains (game/render/, all procedural, no art files):
 - Day-night cycle: `day_cycle.gd` blends the light presets as keys (night 0 to 4.6 h, dawn 6.3, afternoon 15.0, golden 17.75, dusk 19.0, night from 20.5) into one sun, sky, fog, exposure and night-lights curve. The directional light is the sun by day and a faint cool moon by night; it swaps at dusk and before dawn, where it is nearly off. Dawn: pink and peach light through a thick morning haze. Night: dark blue sky with a warm city glow at the horizon.
 - Night and lights: sodium street lights (spot lights under the lamp heads), shop tube lights and shop lights, neon outlines on about a third of the bazaar boards, headlights and tail lights on every vehicle, lit windows (55 percent at night, warm bulbs, cool tube lights, curtains), lamps on the bazaar electricity poles, warm floodlights on the landmarks, and 40 percent of bazaar shutters pulled down.
@@ -280,7 +311,7 @@ Per light, what realistic gains and loses against stylised B (read from the shee
 Both looks keep people readable (clean satin material and rim light), and both show the same bazaar-only grime and Delhi detail. The grime reads stronger in realistic up close (the joints and cracks catch light).
 
 Verdict against the performance target (decisions.md "Performance target": this M2 Pro, 60 fps steady at play speed, about 1080p rendered and upscaled, render about 10 to 11 ms GPU):
-- **Stylised B: fits, with work.** Typical view 8.8 to 9.8 ms at native 1080p, worst 11.9 to 12.9 ms (the bazaar). The bazaar needs the optimisations listed in batch B. These are stand-ins: the real city adds streaming, traffic, crowds and more geometry, so the 1 to 2 ms of headroom is thin but workable with LODs and an upscaler.
+- **Stylised B: fits, with work.** (P0-037 did that work: worst 7.8 to 9.3 ms, typical 6.6 to 8.0 ms, table in batch B.) Typical view 8.8 to 9.8 ms at native 1080p, worst 11.9 to 12.9 ms (the bazaar). The bazaar needs the optimisations listed in batch B. These are stand-ins: the real city adds streaming, traffic, crowds and more geometry, so the 1 to 2 ms of headroom is thin but workable with LODs and an upscaler.
 - **Realistic: does not fit.** Typical view 13.2 to 15.6 ms at native 1080p, worst 15.6 to 18.0 ms, over the 10 to 11 ms render target in every view and over the 16.6 ms line in the bazaar, before any real city content. Even at 810p inside with FSR 2 it is 11.2 typical and 12.6 worst, still over the target and below "about 1080p".
 - Not measured: a 1080p render upscaled to a 1440p or Retina window (the look proof views are fixed at 1920 x 1080; native 1080p is the cost of the render itself, the FSR 2 pass adds about 0.5 to 1 ms, est).
 

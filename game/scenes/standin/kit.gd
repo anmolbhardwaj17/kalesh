@@ -217,7 +217,7 @@ static func street_light(s: Geo.Sink, h := 9.0, double := false) -> void:
 		s.rod("metal", STEEL, Vector3(0, h - 0.3, 0), Vector3(0, h + 0.2, dz * 1.8), 0.05, Geo.SEG_SMALL)
 		s.box("satin", Color("#4a4e52"), Vector3(0, h + 0.18, dz * 2.1), Vector3(0.4, 0.16, 0.8))
 		s.box("glow", Color("#fff3d6"), Vector3(0, h + 0.09, dz * 2.1), Vector3(0.3, 0.03, 0.6))
-		s.anchor("lamp", Transform3D(Basis.IDENTITY, Vector3(0, h + 0.05, dz * 2.1)), {"h": h})
+		s.anchor("lamp", Transform3D(Basis.IDENTITY, Vector3(0, h + 0.05, dz * 2.1)), {"h": h, "dz": dz})
 
 
 ## Signal post with three lamps facing -Z; lit: "red", "amber" or "green". Optional mast arm over the road (+X).

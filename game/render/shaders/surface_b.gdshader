@@ -27,6 +27,10 @@ uniform float bump = 1.0;
 uniform float mottle = 1.0;
 uniform float wetness = 0.0;
 uniform float dustiness = 0.0;
+// calmer stylised B surfaces (P0-037; 0 keeps the P0-034 output, the realistic look leaves it at 0): softer plaster
+// swirl and crack veins on dark walls and at eye height, faint tar lines on the asphalt, earth and dry grass on the
+// bare ground between blocks (the realistic look has its own earth through pbr)
+uniform float calm = 0.0;
 uniform sampler2DArray tiles : source_color, filter_linear_mipmap_anisotropic, repeat_enable;
 instance uniform float wear = 0.0;
 
@@ -148,8 +152,12 @@ void fragment() {
 			} else {
 				vec4 t = fine(layer(tuv, 2.0, L_PLASTER), tuv, 2.0, L_PLASTER);
 				hgt = theight(t) * 0.006;
-				col *= mix(1.0, t.r * 2.0, tex_mix * 0.85);
-				mask = t.a;
+				// calm: the cracks and swirl read as marble veins on dark walls and at eye height, so keep them faint there
+				float dark = 1.0 - smoothstep(0.03, 0.16, lum);
+				float eye = 1.0 - smoothstep(2.6, 4.2, wpos.y);
+				float k = 1.0 - calm * clamp(0.35 + dark * 0.4 + eye * 0.2, 0.0, 0.75);
+				col *= mix(1.0, t.r * 2.0, tex_mix * 0.85 * k);
+				mask = t.a * k;
 			}
 		}
 	} else if (surface_kind == 1) {
@@ -157,7 +165,7 @@ void fragment() {
 		float m = fbm(uv * 0.22) - 0.5;
 		col *= 1.0 + detail * (g * 0.08 + m * 0.14);
 		rough = clamp(rough - detail * (0.12 + m * 0.2), 0.45, 1.0);
-		earth = pbr > 0.0 && wpos.y < 0.05 && min(distance(srgb, KIT_GROUND_A), distance(srgb, KIT_GROUND_B)) < 0.025;
+		earth = (pbr > 0.0 || calm > 0.0) && wpos.y < 0.05 && min(distance(srgb, KIT_GROUND_A), distance(srgb, KIT_GROUND_B)) < 0.025;
 		if (earth) {
 			// bare ground between blocks: dusty earth, darker damp patches, dry grass and pebbles
 			col = base;
@@ -168,6 +176,13 @@ void fragment() {
 			col = mix(col, col * vec3(1.06, 0.95, 0.84), smoothstep(0.45, 0.7, big));
 			float grass = smoothstep(0.58, 0.72, fbm(uv * 0.25 + 17.0)) * smoothstep(0.35, 0.65, vnoise(uv * 3.0));
 			col = mix(col, vec3(0.16, 0.15, 0.07) + vec3(0.06, 0.05, 0.0) * n, grass * 0.85);
+			if (calm > 0.0 && pbr <= 0.0) {
+				// stylised B ground cover: wide patches of dry grass, a few darker scrub clumps, readable from 30 m up
+				float gc = smoothstep(0.46, 0.6, fbm(uv * 0.18 + 23.0)) * (0.55 + 0.45 * smoothstep(0.3, 0.6, vnoise(uv * 2.2)));
+				col = mix(col, vec3(0.2, 0.21, 0.07) + vec3(0.05, 0.04, 0.0) * n, gc * 0.8 * calm);
+				float scrub = smoothstep(0.66, 0.7, fbm(uv * 0.7 + 5.0)) * step(0.4, gc);
+				col = mix(col, vec3(0.05, 0.08, 0.025), scrub * 0.8 * calm);
+			}
 			vec2 pc = floor(uv * 9.0);
 			vec2 pf = fract(uv * 9.0) - 0.5;
 			float peb = step(0.86, hash12(pc + 2.0)) * (1.0 - smoothstep(0.12, 0.3, length(pf + (vec2(hash12(pc), hash12(pc + 5.0)) - 0.5) * 0.3)));
@@ -194,8 +209,20 @@ void fragment() {
 				// tar lines show faintly in most places, darker in a few stretches
 				float tarv = smoothstep(0.5, 0.75, vnoise(uv * 0.05 + 3.0));
 				float mult = mix(t.r * 2.0, max(t.r * 2.0, 0.82), t.a * (1.0 - tarv * 0.7));
+				// calm: the long tar lines read as swirl cracks (dark rimmed outlines, glossy under the lamps): one faint
+				// even tone over the whole line and none of its gloss
+				if (calm > 0.0) {
+					// undo the line in the texture value (make_textures.gd darkens v towards 0.14 sRGB by the line mask),
+					// so the asphalt under it shows; a fifth of the line stays
+					float a = clamp(t.a, 0.0, 1.0);
+					float sr = pow(max(t.r, 0.0), 1.0 / 2.2);
+					float v0 = (sr - 0.14 * a) / max(1.0 - a, 0.15);
+					v0 = mix(clamp(v0, 0.0, 1.0), 0.5, smoothstep(0.5, 0.85, a));
+					float under = pow(v0, 2.2) * 2.0;
+					mult = mix(mult, mix(under, t.r * 2.0, 0.2), calm);
+				}
 				col *= mix(1.0, mult, tex_mix);
-				mask = t.a * (0.3 + tarv * 0.7);
+				mask = t.a * (0.3 + tarv * 0.7) * (1.0 - calm * 0.85);
 				// tar lines and patch edges are a little glossier
 				rough = mix(rough, 0.55, mask * tex_mix);
 			}
@@ -288,7 +315,7 @@ void fragment() {
 		if (vertical) {
 			float blotch = smoothstep(0.5, 0.78, fbm(uv * 0.3 + 3.7));
 			float fl = luma(col);
-			col = mix(col, mix(vec3(fl), col, 0.5) * 1.08 + vec3(0.01, 0.006, 0.0), blotch * 0.45 * w);
+			col = mix(col, mix(vec3(fl), col, 0.5) * 1.08 + vec3(0.01, 0.006, 0.0), blotch * 0.45 * w * (1.0 - calm * 0.4));
 		}
 		rough = mix(rough, 1.0, w * 0.3 * (vertical ? 1.0 : 0.5));
 	}

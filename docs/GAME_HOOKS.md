@@ -34,7 +34,7 @@ godot --path game --resolution 1280x720 --quit-after 12000 -- --debug --debug-po
 | `--style=<name>` | `style=` | Phase 0 style test: `stylised` (look B), `stylised_grime` (B+D) or `stylised_b` (B+D batch B: day-night, Delhi detail dressing, textures, haze, night lights). Restyles every scene through `game/render/style_runner.gd`. Absent: the default look, no style code loaded. `state().style` and `state().light` report it. |
 | `--light=<preset>` | `light=` | Light preset for a style test: `dawn`, `afternoon` (default), `golden` or `night`. Ignored without `--style`. |
 | `--time=<0..24>` | `time=` | Style test hour on the day-night curve (`game/render/day_cycle.gd`, keys are the light presets); overrides `--light`. `state().args.time` reports it. |
-| `--style-off=<a,b>` | `style-off=` | `stylised_b` features to switch off for cost measuring: `volfog`, `shimmer`, `dressing`, `lights`, `textures`. |
+| `--style-off=<a,b>` | `style-off=` | `stylised_b` features to switch off for cost measuring: `volfog`, `shimmer`, `dressing`, `lights`, `textures`, `decals`, `ssao`, `ssil`, `glow`, `sunshadow`; `ssq` keeps the default SSAO and SSIL quality, `nopcss`, `noblend`, `split2`, `near80` and `dshadow` test sun shadow options, and `p34` measures the whole P0-034 setup (no lean path). |
 | `--scene=<id>` | | Start in that scene (ids in `GameArgs.SCENES`: `scaffold`, and the P0-009 stand-ins `street`, `landmarks`, `areas`). |
 | `--arch=<name>` | | Architecture bench. |
 | `--lockstep` | `lockstep=1` | At most one engine physics frame per drawn frame (`Engine.max_physics_steps_per_frame = 1`), so a loaded machine runs slower and never catches up in bursts. |
