@@ -4,11 +4,31 @@
 it into the design. Every section: short, concrete, checkable. Mark mentor decisions with "(owner, YYYY-MM-DD)" and keep
 the reason in one line. Builders read only the sections docs/READ_MAP.md lists for their area, so keep headings stable. -->
 
-## As found (ADOPT, YYYY-MM-DD)
+## As found (ADOPT, 2026-11-10)
 
-<!-- What the game is today, before the harness: genre, what a player can do from boot to the end of the current content,
-what is finished, half done or broken, content counts (levels, enemies, items), known bugs. Facts only, with file paths.
-Open questions for the owner go in a list at the end. -->
+Dilli Darshan is a new repo, not an adopted game. What exists today is a minimal scaffold:
+- One scene: a 2 km sand coloured ground plane, one straight grey road strip along the Z axis, a red north post 50 m north of the origin (`src/main.ts`).
+- A box car (yellow body, dark cabin) driven with the arrow keys by a simple kinematic model (`src/car.ts`, tuned in `CAR`: accel 8, brake 14, drag 0.6, max 30 m/s, turn rate 1.6). No physics engine, no collisions.
+- A chase camera 10 m behind and 4.5 m up. A one-line HUD hint. No menus, audio, save, traffic or world data.
+- The hook contract `window.__game` (`src/debug/hooks.ts`) and unit tests for the coordinate rule and the car (`src/car.test.ts`, `src/debug/hooks.test.ts`). `verify --quick` was green on 2026-11-10 (boot_title, hooks_contract, perf_baseline) on an Apple M2 Pro (ANGLE Metal).
+- Content counts: 1 scene, 1 vehicle, 0 missions.
+
+The intended game (owner inbox, 2026-11-10): an open-world driving game set in Delhi, built from real map data put through a map repair layer (`harness/design/MAP_REPAIR.md`), with lane-level roads, rich Delhi assets, polished. The old game `/Users/apple/Desktop/code/delhi-drive` is a read-only reference (salvage audit in Phase 0).
+
+Open questions for the owner (asked in the Phase 0 interview rounds, never invented):
+1. What does the player do besides free drive: missions (taxi, delivery, sightseeing "Dilli Darshan" tour), races, exploration goals?
+2. Which vehicles: hatchback, auto-rickshaw, scooter, bus? Which one first?
+3. Day only, or a day and night cycle, fog and smog, monsoon rain?
+4. Traffic and pedestrians: how dense, how chaotic (Delhi honking and lane discipline, or a calmer version)?
+5. Target hardware and browsers beyond this M2 Pro: other laptops, phones, tablets?
+6. How big must the first playable city area be (pilot area only, or a wider New Delhi core)?
+
+## Draft pillars (from the owner's inbox, 2026-11-10; confirm in the interview)
+
+- Real Delhi: the roads, junctions, flyovers and landmarks are where they are on the map, and a Delhiite recognises them.
+- Solid base: no floating or sunk roads, no overlapping faces, no railings in the wrong place, collisions match what you see.
+- Rich and polished: every street feels lived in (props, signs, traffic, sound), never thin.
+- Fast in the browser: smooth on this machine within the signed budgets, streaming without hitches.
 
 ## Pillars
 

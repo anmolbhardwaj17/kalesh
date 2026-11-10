@@ -6,10 +6,6 @@ Which doc sections and source files to read for the area you touch. Heading text
 
 Docs: `docs/ARCHITECTURE.md` (ARCH), `harness/design/TECH.md` (TECH), `harness/design/GAME.md` (GAME), `harness/design/VERIFY.md` (VERIFY), `harness/design/STYLE_BIBLE.md` (STYLE), `docs/GAME_HOOKS.md` (HOOKS). Every visual task also reads VERIFY "Visual review rubric (verifier agent)", since the verifier fails against it.
 
-<!-- Template. The planner writes one section per area in ADOPT mode from the real source tree, and keeps it current.
-An area is a part of the code a builder works in at one time (8 to 15 areas for a mid size game). Each section:
-a Notes line (its knowledge file), then per doc the exact section headings to read, then the source files. Builders
-add their new modules here. Example areas below: rename and refill. -->
 
 ## Verify scripts and harness tooling
 Notes: `harness/state/knowledge/verify-and-harness-tooling.md`
@@ -22,22 +18,38 @@ Notes: `harness/state/knowledge/verify-and-harness-tooling.md`
 
 ## Rendering and look
 Notes: `harness/state/knowledge/rendering-and-look.md`
-- ARCH: "<render section>".
+- ARCH: "How the pieces fit", "Systems".
 - TECH: "Render pipeline", "Performance budgets".
 - STYLE: all sections that apply to the task.
 - VERIFY: "Visual review rubric (verifier agent)", "Look proof workflow (`lookproof.mjs`)", "Perf probes".
-- Source: <renderer setup, materials, shaders, post, lights>.
+- Source: `src/main.ts` (renderer, lights, scene); style switch modules under `src/render/` once added (Phase 0 style tests).
 
 ## UI and input
 Notes: `harness/state/knowledge/ui-and-input.md`
-- ARCH: "<ui section>".
+- ARCH: "Source map".
 - TECH: "Input".
 - GAME: "Player verbs", "HUD", "Menus", "Accessibility".
 - STYLE: "UI".
-- Source: <ui and input folders>.
+- Source: `index.html` (`#hud`), input handling in `src/main.ts`.
 
 ## Assets and ingest
 Notes: `harness/state/knowledge/assets-and-ingest.md`
 - TECH: "Assets".
 - STYLE: "AI image prompts".
-- Source: `harness/bin/assets.mjs`, `ingest.mjs`, `public/assets/manifest.json`, <the game's asset registry and placeholders>.
+- Source: `harness/bin/assets.mjs`, `ingest.mjs`, `public/assets/manifest.json`, the game asset registry once added.
+
+## Driving and camera
+Notes: `harness/state/knowledge/driving-and-camera.md` (create on first gotcha)
+- ARCH: "Systems" (Driving).
+- TECH: "Main loop and time", "Coordinates (binding, owner 2026-11-10)".
+- GAME: "Movement and camera feel".
+- Source: `src/car.ts`, `src/car.test.ts`, the camera block in `src/main.ts`.
+
+## World, map data and bake
+Notes: `harness/state/knowledge/world-and-map.md` (create on first gotcha)
+- TECH: "Coordinates (binding, owner 2026-11-10)" and the world sections written after the architecture sign-off.
+- Design: `harness/design/MAP_REPAIR.md` (all), `harness/design/ARCH_OPTIONS.md` once written.
+- Source: `src/geo/` (projection, added by the P0 harness baseline task), bake scripts and benches under `harness/bench/` and `tools/` once added.
+
+## Old game reference (read only)
+- `/Users/apple/Desktop/code/delhi-drive`: never edit, build or install there. Read `harness/design/SALVAGE_AUDIT.md` first (written in Phase 0) instead of the old code.

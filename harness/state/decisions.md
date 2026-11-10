@@ -37,3 +37,13 @@ By: owner
 
 ## 2026-11-10: Dashboard restyle
 Anmol asked for a dark, minimal dashboard in the Saans font. Restyled harness/dashboard/index.html: neutral black (no blue tint), Saans and Saans Mono served locally from harness/dashboard/fonts (route /fonts/). The Saans files are TRIAL builds with a personal use only licence (fonts/LICENSE.txt): fine for this private local dashboard, never ship them in the game build.
+
+## 2026-11-10: Game design discovery is the third Phase 0 sign-off
+Decision: Phase 0 adds GAME DESIGN DISCOVERY (harness/design/GAME_DESIGN_OPTIONS.md, interview rounds, explicit sign-off recorded with task.mjs designsignoff). Gate P0 needs style, architecture and game design sign-offs. Standing rules for every plan from then on: each phase is checked against the GAME.md pillars; every mission task's acceptance includes fun criteria (clear goal, fair fail, a reason to retry, a reward that matters) as well as function; no mission system is built before the game design sign-off.
+Why: a car driving around Delhi is a tech demo, not a game; Anmol wants a real core loop built from what makes Delhi Delhi (inbox mmwap8jxg).
+By: owner
+
+## 2026-11-10: Salvage audit and quality audit run as one Fable task
+Decision: the Phase 0 quality audit ("why it felt thin") is written in the same Fable run as the salvage audit, scored against the old game, since the new repo is a scaffold with nothing to audit yet.
+Why: both read the old repo deeply; one run saves a second full read in low usage mode.
+By: planner

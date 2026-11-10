@@ -4,6 +4,8 @@
     "src/main.ts",
     "src/debug/",
     "index.html",
+    "src/geo/",
+    "src/car.ts",
     "package.json",
     "package-lock.json",
     "vite.config.ts",
@@ -13,6 +15,7 @@
     "harness/bin/browser.mjs",
     "harness/bin/waitpredicate.mjs",
     "harness/bin/lib.mjs",
-    "harness/verify/scripts/lib/"
+    "harness/verify/scripts/lib/",
+    "harness/bin/lookproof.mjs"
   ]
 }

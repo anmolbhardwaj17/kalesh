@@ -1,0 +1,386 @@
+[
+  {
+    "phase": "P0",
+    "title": "Harness baseline on the scaffold: coordinate contract, drive scenarios, FD0",
+    "agent": "builder",
+    "priority": 2,
+    "kind": "feature",
+    "desc": "The scaffold already has window.__game (src/debug/hooks.ts) and verify --quick was green on 2026-11-10. Lock the baseline and the coordinate rule (owner inbox: correct coordinates from day 1 with tests). (1) Check the hook contract against docs/GAME_HOOKS.md and fix any gap; without ?debug=1 window.__game.debug must not exist (add a unit test or a scenario that opens the page without debug=1). (2) Add src/geo/projection.ts: lat/lon to world metres and back around one named Delhi origin constant (India Gate, 28.612894 N, 77.229446 E), east +X, north -Z, up +Y, accurate to under 0.5 m within 25 km of the origin (local transverse Mercator or ENU; write the choice to decisions.md as provisional until the architecture sign-off). No mirroring, no axis flips. (3) Unit tests: the origin maps to (0,0); Connaught Place central park (28.6315, 77.2167) lands at x -1246 +/- 25, z -2071 +/- 25 (north-west of the origin); Red Fort (28.6562, 77.2410) lands at x +1129 +/- 25, z -4821 +/- 25 (north-north-east); round trip error under 0.01 m; a point due north has x 0 and negative z. (4) Scenarios (input only, wait in sim time): drive_north (throttle 3 s from heading 0: z falls by over 10 m, abs x under 0.5 m), drive_turn_right (throttle plus steer right: heading grows and x becomes positive), coords_north_marker (camera at the origin looking north shows the red north post in the centre third of the shot; the builder reads the shot). (5) Play script harness/verify/milestones/FD0.js per milestones.json FD0 (real inputs only). (6) quick.json: core = boot_title, hooks_contract, perf_baseline, drive_north; areas mapped to src/car.ts, src/geo/, src/debug/. Notes: this is tooling and tests, no look change.",
+    "accept": [
+      "npm run typecheck and npm test pass; the projection tests named above exist and pass (CP and Red Fort within 25 m of the given x and z, round trip under 0.01 m)",
+      "node harness/bin/verify.mjs --only hooks_contract,boot_title,drive_north,drive_turn_right,coords_north_marker passes with no console errors, and the builder read coords_north_marker.png (red post centred, ahead)",
+      "node harness/bin/verify.mjs --milestone FD0 passes",
+      "a check proves window.__game.debug is undefined when the page opens without ?debug=1",
+      "node harness/bin/verify.mjs --quick passes and node harness/bin/verify.mjs --all passes (or each failure is listed as a known bug task)",
+      "decisions.md has the provisional projection entry; TECH.md 'Coordinates' names src/geo/projection.ts and its tests"
+    ],
+    "deps": []
+  },
+  {
+    "phase": "P0",
+    "title": "Tooling: game design sign-off in task.mjs, gates, status and dashboard",
+    "agent": "builder",
+    "priority": 2,
+    "kind": "feature",
+    "desc": "Owner direction 2026-11-10 (inbox mmwap8jxg): Phase 0 needs a third sign-off, the game design. Small tooling task, same pattern as signoff and archsignoff in harness/bin/task.mjs. (1) Add task.mjs designsignoff \"<the owner's exact words>\": writes designSignoff {at, quote} to harness/state/state.json and a decisions.md entry with the quote, journal line. (2) P0 gets designSignoff: true (through task.mjs, for example a small migration or a phase flag command; backlog.json is written only by task.mjs) and its exit list gains 'the owner signed off a game design (task.mjs designsignoff); GAME.md has the fantasy, core loop, pillars, mission list and progression plan'. (3) task.mjs gate P0 and gate --final fail without it, with a clear reason line. (4) task.mjs status prints 'game design sign-off: not yet ...' until recorded, like the other two. (5) The dashboard (harness/bin/dashboard.mjs) shows all three sign-offs (style, architecture, game design) with their state and quote. (6) Update the usage text, CLAUDE.md Phase 0 (one short paragraph 'd3. Game design discovery' and the gate line in step e) and add tests in harness/bin/ for the new command and gate reasons.",
+    "accept": [
+      "npm test passes, including new tests: designsignoff writes state.json and a decisions.md entry; gate P0 lists 'No game design sign-off' until it is recorded",
+      "node harness/bin/task.mjs status prints the game design sign-off line; node harness/bin/task.mjs gate P0 output names the missing design sign-off",
+      "the dashboard page (node harness/bin/dashboard.mjs, http://localhost:4488) shows the three sign-off states (checked with a curl of the page or its JSON endpoint)",
+      "CLAUDE.md Phase 0 mentions the game design discovery and the third sign-off"
+    ],
+    "deps": []
+  },
+  {
+    "phase": "P0",
+    "title": "Salvage and quality audit of the old game (read only)",
+    "agent": "planner",
+    "model": "fable",
+    "priority": 2,
+    "kind": "feature",
+    "desc": "Owner inbox part 1: a SALVAGE AUDIT of /Users/apple/Desktop/code/delhi-drive, read only (never edit, build, install, run npm or write there). Write harness/design/SALVAGE_AUDIT.md: one table row per item with verdict KEEP (copy after a check), REWRITE (keep the idea, new code), DROP, with evidence (file:line, numbers) and the reason. Cover: data sources and their licences (OSM PBF, Copernicus GLO-30 and why a surface model makes roads float or sink), bake knowledge in backend/worldBuilder/buildRegion.js (projection, tiling at zoom 16, 500 m tiles, binary format, what it did right and wrong), car tuning numbers and the handling model, the 580 frontend tests (read for intent: which checks are worth rewriting as tests here), assets in art-src and frontend/public (quality, licence, Delhi relevance: paan stains, political posters, textures), the lessons in README, TECHNICAL_DOCUMENTATION.md, docs/, TODO.md and CLAUDE.md, and the root cause of each base-layer failure: the mirror axis (worldGroup.scale.x = -1 and negated physics px), overlapping road meshes, misplaced railings, junctions that do not join, terrain and road misfit, tileManager.js at 2346 lines, the leftover cannon-es layer, the 11 GB JSON tiles. End with 'What Dilli Darshan must do differently' (one line each, feeds ARCH_OPTIONS). Then write harness/design/QUALITY_AUDIT.md from harness/design/templates/QUALITY_AUDIT.template.md, 'why it felt thin', scored against a polish and richness bar for a Delhi driving game (visuals, feel: handling, speed sense, camera, FOV, shake; audio: engine, horns, ambience; VFX: dust, smoke, skid marks, heat haze; traffic and life; UI and HUD; performance), every finding with evidence from the old game and a fix size, plus 'What to protect' (the good parts). Evidence for shots: if the already built frontend/dist can be served read only by a static server started from THIS repo (for example the harness static server pointed at that folder) without writing into the old repo, take a few shots and read them; if it needs its backend or fails, rely on code, docs and art files and say so. The owner reads both docs before the style interview, so put a 10 line summary at the top of each.",
+    "accept": [
+      "harness/design/SALVAGE_AUDIT.md exists with a 10 line summary, the KEEP / REWRITE / DROP table (every row has file:line or a measured number as evidence) and the root cause section for each base-layer failure named in the desc",
+      "harness/design/QUALITY_AUDIT.md exists, follows the template headings, scores every area, and every finding has evidence and a fix size",
+      "git status shows no change under /Users/apple/Desktop/code/delhi-drive (cd there and run git status --short: empty or unchanged from before)",
+      "decisions.md has one entry per KEEP item that will be copied, with the reason (CLAUDE.md 'Copy from the old repo only after checking')"
+    ],
+    "deps": []
+  },
+  {
+    "phase": "P0",
+    "title": "Game design options draft (GAME_DESIGN_DISCOVERY)",
+    "agent": "planner",
+    "priority": 2,
+    "kind": "feature",
+    "desc": "Mode GAME_DESIGN_DISCOVERY (owner direction 2026-11-10, inbox mmwap8jxg: a car driving around Delhi is a tech demo, not a game). Write harness/design/GAME_DESIGN_OPTIONS.md with comparison tables and small text sketches (loop diagrams, a sample mission beat sheet, a HUD sketch) covering his 7 points: 1. fantasy options (new auto driver, delivery rider, cabbie who knows every gali, tourist guide, street racer, a mix), one sentence each plus why it fits Delhi; 2. the core loop at 30 s, 5 min and 1 h per fantasy, and the tension sources (traffic, time, money, rivals, police, weather, fares); 3. a big list (40 or more) of Delhi missions and activities (fares, deliveries, races, chases, festivals, wedding baraat routes, monsoon floods, rush hour, night runs, sightseeing tours past real landmarks, side jobs, collectibles) ranked by fun, uniqueness, build effort and map reuse; 4. progression and reasons to return (money, vehicle unlocks and upgrades, reputation by area, unlocking parts of the city, daily and weekly jobs, story or characters, personal bests and leaderboards, photo spots), each marked healthy or chore with the reason; 5. game feel (speed sense, near misses, horn culture, weaving through traffic, drifts, landmarks as rewards) and 3 candidate sets of feel pillars; 6. honest scope: the smallest first playable loop that is already fun in the pilot area (Connaught Place, ITO and Pragati Maidan, Chandni Chowk, one metro line), then what grows from it, each option with fun, cost, risk and needs from the map, AI traffic and art; 7. references (known open world and driving games): what fits, what to avoid; inspiration, never copy. Use the old game's modes (dash, taxi, delivery, free, police, see SALVAGE_AUDIT.md) as evidence of what was tried. End with a recommendation and at most 6 short, clear questions for round 1, each with options. Never invent the owner's answers.",
+    "accept": [
+      "harness/design/GAME_DESIGN_OPTIONS.md exists with one section per point 1 to 7, a comparison table in each of 1, 2, 3, 4 and 6, at least 40 ranked missions and activities, and at least 2 sketches",
+      "a recommendation and at most 6 round 1 questions with options are at the end"
+    ],
+    "deps": [
+      "#3"
+    ]
+  },
+  {
+    "phase": "P0",
+    "title": "Interview sitting 1: style, place and game design round 1",
+    "agent": "orchestrator",
+    "priority": 2,
+    "kind": "feature",
+    "desc": "The main session asks Anmol in short, clear rounds (AskUserQuestion if available, else plain questions) and waits. First show him the 10 line summaries of SALVAGE_AUDIT.md and QUALITY_AUDIT.md. Then follow harness/design/templates/STYLE_INTERVIEW.md rounds 1 (references and mood), 2 (concrete axes) and 2b (the place: Delhi landmarks, road types, signage and scripts, vehicles, street life, weather, light and time of day, materials). In the same sitting run game design round 1: show the GAME_DESIGN_OPTIONS.md tables and sketches briefly and ask its round 1 questions (fantasy, core loop, first playable loop). Also ask the GAME.md 'As found' open questions (what the player does besides free drive, vehicles, day and night, traffic density, target hardware and browsers, size of the first playable area) and his first architecture preferences: is WebGPU-only acceptable or must WebGL2 work, how much disk the source data may use on this machine, is an offline bake on this machine fine. Record every answer verbatim with task.mjs inbox-add \"<his words>\" --source interview and ack it. Never invent an answer: a skipped question goes to the next round.",
+    "accept": [
+      "task.mjs inbox shows every answer recorded with source interview and acked",
+      "the answers are passed to the planner for the style options task (brief lists them)"
+    ],
+    "deps": [
+      "#3",
+      "#4"
+    ]
+  },
+  {
+    "phase": "P0",
+    "title": "Style options draft, city brief and game design options update",
+    "agent": "planner",
+    "priority": 2,
+    "kind": "feature",
+    "desc": "Mode STYLE_DISCOVERY with the round 1, 2 and 2b answers. Write harness/design/STYLE_OPTIONS.md from templates/STYLE_OPTIONS.template.md (reference board, 3 to 5 candidates, the comparison table with estimates, the fidelity levels for a city look: stylised low-poly city, stylised realistic, realistic PBR with baked lighting, photo-textured, each with honest performance cost at driving speed and asset volume for Delhi) and harness/design/CITY_BRIEF.md from templates/CITY_BRIEF.template.md (unconfirmed items marked). Name which 2 candidates go in style test batch A and which in batch B, and the ?style= name of each. Write the next round's questions (at most 6). Also update harness/design/GAME_DESIGN_OPTIONS.md with the game design round 1 answers (narrow the options, sharpen the recommendation, new sketches where they help) and write the game design round 2 questions (at most 6, short, with options).",
+    "accept": [
+      "STYLE_OPTIONS.md and CITY_BRIEF.md exist and follow their templates; every number is marked estimate",
+      "each candidate has a ?style= name and is assigned to batch A or B",
+      "the questions for the next round are listed in STYLE_OPTIONS.md",
+      "GAME_DESIGN_OPTIONS.md reflects every round 1 answer and lists the round 2 questions"
+    ],
+    "deps": [
+      "#5"
+    ]
+  },
+  {
+    "phase": "P0",
+    "title": "Game design round 2 and later until the game design sign-off",
+    "agent": "orchestrator",
+    "priority": 2,
+    "kind": "feature",
+    "desc": "Show Anmol the updated GAME_DESIGN_OPTIONS.md (tables, sketches, recommendation) and ask the round 2 questions, short and clear. May share a sitting with the style and architecture rounds. Record every answer verbatim (inbox-add --source interview, ack). Only his explicit words count as sign-off ('yes, go with the cabbie loop' counts; 'looks nice' or 'maybe' do not: ask him to confirm); record with task.mjs designsignoff \"<his exact words>\". If a round ends without sign-off: add a planner GAME_DESIGN_DISCOVERY update task and a new orchestrator task 'Game design round <n>', add each as a dep of the 'Game design record' task (task.mjs deps --add), then mark this task done with a note.",
+    "accept": [
+      "every answer recorded and acked in the inbox",
+      "either task.mjs status shows the game design sign-off with his quote, or the follow-up round task exists and blocks the game design record task"
+    ],
+    "deps": [
+      "#2",
+      "#6"
+    ]
+  },
+  {
+    "phase": "P0",
+    "title": "Game design record: GAME.md, pillars and mission rules",
+    "agent": "planner",
+    "priority": 2,
+    "kind": "feature",
+    "desc": "Only after task.mjs status shows the game design sign-off. Update harness/design/GAME.md with the signed fantasy, core loop (30 s, 5 min, 1 h), the 3 feel pillars (replacing the draft pillars), the mission and activity list with the first playable loop marked, the progression plan, scope guardrails, player verbs, HUD and the movement and camera feel numbers that the loop needs. Add the decisions.md entry with the sign-off quote. Make the standing rules concrete in harness/design/VERIFY.md 'Writing acceptance criteria': every mission task's acceptance includes fun criteria checked by a scenario, a play script or a named shot (clear goal shown within 5 s of start, a fair fail with a stated reason and an instant retry, a reason to retry such as a time or score to beat, a reward that matters shown on completion), and every phase plan lists how each of its tasks serves a pillar. Add milestones.json entries for the first playable loop's missions (required true) with summaries beat by beat.",
+    "accept": [
+      "GAME.md has the fantasy, core loop, pillars, mission list and progression plan sections filled from the signed design; the draft pillars section is gone",
+      "decisions.md has the game design sign-off entry with Anmol's exact quote",
+      "VERIFY.md 'Writing acceptance criteria' has the fun criteria rule; milestones.json lists the first playable loop's missions"
+    ],
+    "deps": [
+      "#7"
+    ]
+  },
+  {
+    "phase": "P0",
+    "title": "Delhi street stand-in scene and perf baseline",
+    "agent": "builder",
+    "priority": 2,
+    "kind": "feature",
+    "desc": "The scaffold is a box on a plane, too empty to compare styles or measure anything real. Add a procedural stand-in Delhi street behind ?scene=street (default boot unchanged), built from CITY_BRIEF.md: about 300 m of a 6 lane arterial with a median and kerbs, a service lane, one signal junction, a stub flyover ramp (simple stand-in, not the lane model), footpaths, 40 to 80 box buildings with shopfront bands and sign boards, trees, street lights, a bus stop, 15 to 25 static vehicles (car, auto-rickshaw, bus stand-ins), a few people stand-ins, a debug.load id 'street' that puts the box car on it. Pure stand-ins, no assets needed; keep it in its own module (src/scenes/street.ts or similar) so style tests and benches reuse it. Then write harness/look_proof/poses.json with 6 views on it (car close-up, street at player height, junction, flyover ramp, HUD over play, busiest view from 40 m up; sim held, same moment every run), run node harness/bin/lookproof.mjs --set baseline --perf, read the shots, and write draft budgets in harness/verify/perf_budgets.json (status stays draft) from the measured numbers with headroom, with the target filled in (machine, GL renderer, resolution, load).",
+    "accept": [
+      "node harness/bin/lookproof.mjs --check passes and --set baseline --perf writes all 6 views and harness/look_proof/baseline/perf.json; the report quotes the machine, GL renderer and load",
+      "the builder read the 6 baseline shots: no blank or black frames, the street reads as a Delhi arterial (median, kerbs, shops, vehicles)",
+      "perf_budgets.json has draft numbers derived from the baseline with the target text filled in",
+      "a scenario street_boot (debug.load street, settle, shot) passes with no console errors; the default boot (no scene param) is unchanged: boot_title still passes",
+      "node harness/bin/verify.mjs --quick passes"
+    ],
+    "deps": [
+      "#1",
+      "#6"
+    ]
+  },
+  {
+    "phase": "P0",
+    "title": "Architecture options draft (with map repair, lane model and map inspector)",
+    "agent": "planner",
+    "model": "fable",
+    "priority": 2,
+    "kind": "feature",
+    "desc": "Mode ARCH_DISCOVERY. Write harness/design/ARCH_OPTIONS.md from templates/ARCH_OPTIONS.template.md, using SALVAGE_AUDIT.md 'What Dilli Darshan must do differently', the baseline perf numbers, the style candidates and the owner's architecture answers from the interview, and the leading game design options (what the first playable loop needs from the map, traffic and physics). Decisions, 2 to 4 options each, every estimate marked: renderer (three.js WebGLRenderer vs WebGPURenderer with TSL and WebGL2 fallback, or another engine), physics (Rapier vs Jolt, main thread vs worker, vehicle controller), coordinates and projection (confirm or replace src/geo/projection.ts), world data pipeline and tile format (sizes, binary layout, compression), the map repair layer (refine harness/design/MAP_REPAIR.md: sources with licence and attribution and quality checks, pipeline, rule engine, auto-repair log, per-tile overrides, elevation solver, verification, pilot area), the lane-level road model (lane sets, Delhi class defaults, tapers, gores, flyover centre lanes climbing while service lanes stay at grade, never shared index points, continuity and overlap checks), the road graph to junction mesh builder (lane-edge curves, corner radii, kerbs, railings, no overlaps), terrain that conforms to roads (bare-earth DTM, flattening with shoulder blend), tile streaming and memory, instancing, LOD and impostors, textures (KTX2 and Basis vs WebP), the map inspector page (3D, linked from the dashboard, fly-to, proposed fixes as 3D preview lines with confidence and reasoning, writes per-tile overrides and the inbox, lane widths and splits shown; stack and port), and budgets per system. Confirm or rewrite the four bench tasks that follow this one (renderer, physics, pilot data and repair, lane road and terrain prototype) with task.mjs note or a desc change through REPLAN, so each measures what the table needs.",
+    "accept": [
+      "harness/design/ARCH_OPTIONS.md exists, follows the template, has every decision named in the desc with 2 to 4 options, and marks every number as estimate or measured",
+      "harness/design/MAP_REPAIR.md is refined (sources with licence, rule list, overrides format, inspector) and cross-linked from ARCH_OPTIONS.md",
+      "each bench task in P0 names its ?arch= page or harness/bench/ script, its numbers and its harness/reports/arch/<name>.json output"
+    ],
+    "deps": [
+      "#3",
+      "#9"
+    ]
+  },
+  {
+    "phase": "P0",
+    "title": "Style tests batch A (2 candidates)",
+    "agent": "builder",
+    "priority": 2,
+    "kind": "feature",
+    "desc": "Per harness/design/templates/STYLE_TEST_TASK.md, for the 2 candidates STYLE_OPTIONS.md assigns to batch A: render the street scene (and the default scene) in each candidate behind ?style=<name>, touching only render setup, materials, shaders, post passes, lights and a few procedural stand-ins, in one module per style (src/render/styles/<name>.ts). No gameplay, camera or UI logic change; without the param the look is unchanged. Time box: one build round and one fix round per candidate; a style that cannot be shown in that time is reported with what it would need.",
+    "accept": [
+      "for each batch A style: node harness/bin/lookproof.mjs --set style_<name> --query \"style=<name>\" --perf --no-build writes every view and perf.json judged against the draft budgets",
+      "node harness/bin/lookproof.mjs --sheet baseline,style_<a>,style_<b> --out style_options writes harness/reports/look/style_options.jpg and the builder read it (downscaled to about 1600 px)",
+      "the default look is unchanged: lookproof.mjs --set baseline_check --no-build then --compare baseline_check --against baseline passes",
+      "verify --quick passes with no console errors",
+      "STYLE_OPTIONS.md has the measured numbers for both candidates in place of the estimates, wrong estimates marked"
+    ],
+    "deps": [
+      "#9"
+    ]
+  },
+  {
+    "phase": "P0",
+    "title": "Style tests batch B and the full side by side sheet",
+    "agent": "builder",
+    "priority": 2,
+    "kind": "feature",
+    "desc": "Same as batch A for the remaining candidates (STYLE_OPTIONS.md batch B, 1 to 3 styles), then the full sheet of baseline plus every candidate. Same rules and time box as batch A.",
+    "accept": [
+      "for each batch B style: lookproof.mjs --set style_<name> --query \"style=<name>\" --perf --no-build writes every view and perf.json",
+      "node harness/bin/lookproof.mjs --sheet baseline,<every style set> --out style_options writes harness/reports/look/style_options.jpg with every candidate, and the builder read it",
+      "the default look is unchanged (baseline_check compare passes); verify --quick passes",
+      "STYLE_OPTIONS.md has measured numbers for every candidate and the sheet path"
+    ],
+    "deps": [
+      "#11"
+    ]
+  },
+  {
+    "phase": "P0",
+    "title": "Style comparison review",
+    "agent": "verifier",
+    "priority": 2,
+    "kind": "feature",
+    "desc": "Mode STYLE TEST for both batches: check every style set exists with all views and perf.json, read the sheet and at most 6 views, check the default look compare, check STYLE_OPTIONS.md numbers match the perf.json files. Report per candidate: shows the intended look or not, perf against the draft budgets, visible defects. This review stands in for per-task verification of the two style test tasks (low usage mode).",
+    "accept": [
+      "report lists every candidate with PASS or FAIL against its style test acceptance, with the perf numbers quoted from perf.json",
+      "any FAIL is a fix task added before the next style round"
+    ],
+    "deps": [
+      "#12"
+    ]
+  },
+  {
+    "phase": "P0",
+    "title": "Style round 3 and later until the style sign-off (architecture round 1 in the same sitting)",
+    "agent": "orchestrator",
+    "priority": 2,
+    "kind": "feature",
+    "desc": "Show Anmol harness/reports/look/style_options.jpg and the STYLE_OPTIONS.md table with measured numbers, follow STYLE_INTERVIEW.md round 3 and later, record every answer verbatim (inbox-add --source interview, ack). In the same sitting show the ARCH_OPTIONS.md draft and ask its questions (benches are still to come). Only explicit words count as sign-off; record it with task.mjs signoff \"<his exact words>\". If a round ends without sign-off: add the refinement tasks it needs (planner STYLE_DISCOVERY update, builder style tweaks or a new candidate) plus a new orchestrator task 'Style round <n>', add each as a dep of the 'Style bible and budgets' task (task.mjs deps --add), then mark this task done with a note.",
+    "accept": [
+      "every answer recorded and acked in the inbox",
+      "either task.mjs status shows the style sign-off with his quote, or the follow-up round task exists and blocks the style bible task"
+    ],
+    "deps": [
+      "#10",
+      "#13"
+    ]
+  },
+  {
+    "phase": "P0",
+    "title": "Style bible, look rules and signed budgets",
+    "agent": "planner",
+    "priority": 2,
+    "kind": "feature",
+    "desc": "Only after task.mjs status shows the style sign-off (STYLE_DISCOVERY step 6, templates/SIGNOFF_CHECKLIST.md): write STYLE_BIBLE.md (look in one line, palette hex, lighting presets, materials, scale and camera, vehicles and people, UI, effects, the readability floor, AI image prompt anchors and technical tails per asset kind so the art-director can write dashboard cards with no manual work for Anmol), the VERIFY.md look rules and rubric lines, signed budgets in perf_budgets.json (status signed), look_rules.json tolerances, approve the chosen style's shots (node harness/bin/lookproof.mjs --approve style_<chosen>), and the decisions.md entry with the sign-off quote. Record what happens to the ?style= switches (chosen one promoted or kept behind the flag, others removed in the first phase).",
+    "accept": [
+      "STYLE_BIBLE.md has every template section filled with this style's values",
+      "perf_budgets.json status is signed; look_rules.json updated; harness/look_proof/approved/ holds the chosen style's views",
+      "decisions.md has the sign-off entry with Anmol's exact quote; SIGNOFF_CHECKLIST.md items all true"
+    ],
+    "deps": [
+      "#14"
+    ]
+  },
+  {
+    "phase": "P0",
+    "title": "Arch bench: renderer, instancing, LOD and textures",
+    "agent": "builder",
+    "model": "fable",
+    "priority": 2,
+    "kind": "feature",
+    "desc": "Bench per ARCH_OPTIONS.md (its notes on this task win over this text). Behind ?arch=render: a dense city stand-in (the street module tiled to about 2 km by 2 km, 2000 or more buildings, 500 or more vehicles and props) rendered with three.js WebGLRenderer and WebGPURenderer (TSL), comparing merged meshes vs InstancedMesh vs BatchedMesh, LOD with impostors at distance vs none, and KTX2 (Basis UASTC and ETC1S) vs WebP textures (GPU memory, upload and decode time). Fixed camera paths at driving speed (60 and 100 km/h), numbers through debug.perf: frame time p50 and p95, CPU and GPU ms, draw calls, triangles, memory, load time. Write harness/reports/arch/render.json and a short readme of the setups. New dependencies only for the bench, each with a decisions.md line. Time box: one build round and one fix round; report what could not be measured.",
+    "accept": [
+      "harness/reports/arch/render.json exists with p50 and p95 frame time, draw calls, triangles, memory and load per setup, and the GL renderer and machine",
+      "the default game (no ?arch) is unchanged: verify --quick passes",
+      "the builder read one shot per setup to confirm each rendered (not blank)"
+    ],
+    "deps": [
+      "#10"
+    ]
+  },
+  {
+    "phase": "P0",
+    "title": "Arch bench: physics engine, worker and vehicle",
+    "agent": "builder",
+    "model": "fable",
+    "priority": 2,
+    "kind": "feature",
+    "desc": "Bench per ARCH_OPTIONS.md. Behind ?arch=physics or a harness/bench/ script: Rapier and the other engine ARCH_OPTIONS names (for example Jolt) on the main thread vs in a worker (postMessage vs SharedArrayBuffer, note the cross-origin isolation headers it needs), a raycast vehicle on a road surface with kerbs and a flyover ramp, colliders built per 500 m tile (trimesh vs heightfield plus road trimesh) with build time and memory, 200 static and 30 dynamic bodies. Measure step ms p95, input to motion latency in frames, collider build ms per tile, memory, determinism of a replayed input script. Collision shapes must match the visible meshes (owner rule): add a check that a ray down from 20 sampled points hits the collider within 0.05 m of the visible surface. Write harness/reports/arch/physics.json. Time box: one build round and one fix round.",
+    "accept": [
+      "harness/reports/arch/physics.json exists with the numbers above for each engine and threading setup",
+      "the collider vs visible surface check is in the report with its max error",
+      "verify --quick passes; the default game is unchanged"
+    ],
+    "deps": [
+      "#10"
+    ]
+  },
+  {
+    "phase": "P0",
+    "title": "Arch bench: pilot data sources, map repair census and tile format",
+    "agent": "builder",
+    "model": "fable",
+    "priority": 2,
+    "kind": "feature",
+    "desc": "Bench per ARCH_OPTIONS.md and MAP_REPAIR.md. Fetch the pilot area data (Connaught Place, the ITO and Pragati Maidan flyovers, Chandni Chowk, one metro line; bounding boxes written into harness/bench/pilot_areas.json) from the sources ARCH_OPTIONS names (OSM extract or Overpass, Overture transportation, Google Open Buildings and Microsoft footprints, FABDEM or CartoDEM) into a gitignored data folder in this repo (never commit a file over 50 MB; record source URL, date and licence for each). If a source is unreachable after 3 tries, note it and continue. Run a first rule engine pass (harness/bench/ script) and count issues per pilot site and per rule: dangling ends near another road, crossings without a shared node on the same layer, flyover and bridge ends without support, ramps ending in the air, building and road overlaps, duplicate building footprints across sources, DTM vs road height outliers. Bake the pilot to 2 or 3 candidate tile formats and measure file size, bake time, decode time in a worker, and memory per tile. Write harness/reports/arch/pilot_data.json and harness/reports/arch/tile_format.json, plus 3 to 6 top-down debug renders of issues (lines and points on a plain map) that the builder reads.",
+    "accept": [
+      "harness/reports/arch/pilot_data.json lists every source with URL, date, licence and attribution need, and the issue counts per pilot site and rule",
+      "harness/reports/arch/tile_format.json has size, bake ms, decode ms and memory per format",
+      "no file over 50 MB is staged in git; the data folder is in .gitignore",
+      "the builder read the debug renders and they show the counted issues in the right places (north up)"
+    ],
+    "deps": [
+      "#10"
+    ]
+  },
+  {
+    "phase": "P0",
+    "title": "Arch bench: lane-level road, junction and terrain fit prototype",
+    "agent": "builder",
+    "model": "fable",
+    "priority": 2,
+    "kind": "feature",
+    "desc": "Bench per ARCH_OPTIONS.md (the lane-level road model is the top Fable job; this is its feasibility prototype, not the production build). On one hard pilot site from the census (the ITO or Pragati Maidan flyover with its service lanes, plus one Connaught Place radial junction), behind ?arch=roads: build lane sets from lanes, width or Delhi class defaults; a diverge and a merge with tapers and gore areas where carriageways never share an index point; flyover centre lanes climbing while service lanes stay at grade; one junction surface from lane-edge curves with corner radii; terrain from the DTM flattened under the roads with a shoulder blend. Automated checks with counts: overlapping road faces, lane continuity through every split and merge, taper length per class, road surface vs terrain gap (max metres), floating or sunk segments. Measure build ms and triangle counts. Write harness/reports/arch/roads.json and 4 to 6 shots (top down and player height) that the builder reads. Time box: one build round and one fix round; report what the production version needs.",
+    "accept": [
+      "harness/reports/arch/roads.json has the check counts (overlaps, continuity breaks, taper violations, max road to terrain gap) and build ms and triangles",
+      "the builder read the shots: lanes visibly split and merge with tapers, the flyover climbs while service lanes stay at grade, no visible overlap or floating road",
+      "verify --quick passes; the default game is unchanged"
+    ],
+    "deps": [
+      "#18"
+    ]
+  },
+  {
+    "phase": "P0",
+    "title": "Architecture options: measured numbers and recommendation",
+    "agent": "planner",
+    "model": "fable",
+    "priority": 2,
+    "kind": "feature",
+    "desc": "Mode ARCH_DISCOVERY step 4: put the measured numbers from harness/reports/arch/*.json into ARCH_OPTIONS.md in place of the estimates, mark each estimate that was wrong, give one recommendation per decision with the reason and its fit with the signed style (or the leading candidate if the style is not signed yet), the budgets per system, the map repair layer and map inspector plan with the pilot census numbers, and at most 6 questions for the owner.",
+    "accept": [
+      "every number in ARCH_OPTIONS.md is marked measured (with its report file) or estimate; wrong estimates marked",
+      "one recommendation per decision and at most 6 questions for the next round"
+    ],
+    "deps": [
+      "#16",
+      "#17",
+      "#18",
+      "#19"
+    ]
+  },
+  {
+    "phase": "P0",
+    "title": "Architecture rounds until the architecture sign-off",
+    "agent": "orchestrator",
+    "priority": 2,
+    "kind": "feature",
+    "desc": "Show Anmol the ARCH_OPTIONS.md table with measured numbers and the recommendations (including the map repair layer, the lane-level road model, the map inspector and the pilot area), ask the questions, record every answer verbatim (inbox-add --source interview, ack). Style rounds still open may share the sitting. Only explicit words count; record with task.mjs archsignoff \"<his exact words>\". If a round ends without sign-off: add the follow-up tasks (another bench, a planner ARCH_DISCOVERY update) and a new orchestrator task 'Architecture round <n>', add each as a dep of the 'Architecture record' task, then mark this task done with a note.",
+    "accept": [
+      "every answer recorded and acked",
+      "either task.mjs status shows the architecture sign-off with his quote, or the follow-up round task exists and blocks the architecture record task"
+    ],
+    "deps": [
+      "#20"
+    ]
+  },
+  {
+    "phase": "P0",
+    "title": "Architecture record",
+    "agent": "planner",
+    "priority": 2,
+    "kind": "feature",
+    "desc": "Only after task.mjs status shows the architecture sign-off (ARCH_DISCOVERY step 5): write the chosen design into harness/design/TECH.md (stack, coordinates and projection, world pipeline, map repair layer, lane model, streaming, physics, render pipeline, budgets) and docs/ARCHITECTURE.md (target module map, keeping every module small: no file owns streaming, building, physics and cleanup together), finalise MAP_REPAIR.md, put budgets per system into perf_budgets.json, update shared_paths.json and READ_MAP.md areas for the planned modules, and add the decisions.md entry with the sign-off quote.",
+    "accept": [
+      "TECH.md, docs/ARCHITECTURE.md and MAP_REPAIR.md describe the signed design with no open 'option' wording left",
+      "perf_budgets.json has budgets per system; decisions.md has the entry with Anmol's exact quote"
+    ],
+    "deps": [
+      "#21"
+    ]
+  },
+  {
+    "phase": "P0",
+    "title": "Plan the game: phases after P0",
+    "agent": "planner",
+    "priority": 2,
+    "kind": "feature",
+    "desc": "From the signed style, architecture and game design (GAME.md), add the phases after P0 with task.mjs phase-add (goal, exit criteria, milestones) and add their missions to milestones.json. Order: P1 the foundation and pilot (coordinates and bake pipeline, map repair layer with the map inspector page as an early task so Anmol can review during the pilot, the lane-level road model, junction builder, terrain fit, streaming, physics worker and handling, render foundation, all with the tests the owner asked for: landmark lands right, collisions match visuals, north up), then the pilot area made rich in the signed style (procedural first, art cards on the dashboard with prompts, nothing waits for art), then scale-up to the wider city, then traffic, life, audio and missions, polish last. Write next_phase_notes.md items for P1 (which tasks carry the Fable tag per CLAUDE.md, and that the ?style= switches not chosen are removed). Then run node harness/bin/task.mjs gate P0. Standing rules (decisions.md 2026-11-10): check every phase against the GAME.md pillars and say in each phase goal which pillar it serves; every mission task carries the fun criteria from VERIFY.md; no mission system task exists before the game design sign-off, and every mission system task in later phases builds on GAME.md as signed.",
+    "accept": [
+      "task.mjs status lists the new phases with goals, exits and milestones",
+      "milestones.json lists the planned missions",
+      "node harness/bin/task.mjs gate P0 output is quoted in the summary",
+      "each new phase goal names the pillars it serves"
+    ],
+    "deps": [
+      "#8",
+      "#15",
+      "#22"
+    ]
+  }
+]

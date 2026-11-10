@@ -8,17 +8,24 @@ contracts it keeps, how it is verified (scenario, test), and the task id that ad
 
 ## How the pieces fit
 
-<!-- Boot sequence (index.html -> entry -> renderer, loop, input, assets, first screen), the main loop (fixed step or
-variable), how scenes or levels load, how assets resolve by id, and where window.__game is installed (?debug=1). -->
+Scaffold, as found 2026-11-10. `index.html` loads `src/main.ts`, which creates the three.js WebGL renderer, the scene, the box car and the chase camera, installs `window.__game` (`src/debug/hooks.ts`, debug part only with `?debug=1`) and runs a variable step `requestAnimationFrame` loop: sim dt from the hook clock, `stepCar` (`src/car.ts`), camera follow, render, `hooks.frameDone`. No scenes, no asset loading, no physics yet. The real module map is written after the Phase 0 architecture sign-off.
 
 ## Source map
 
 | Path | What |
 |---|---|
+| `index.html` | Canvas `#game`, `#hud` hint text. |
+| `src/main.ts` | Renderer, scene, car mesh, chase camera, frame loop, hook wiring. |
+| `src/car.ts` | Kinematic car model, `forward(heading)` axis rule (east +X, north -Z). |
+| `src/debug/hooks.ts` | `window.__game` hook contract and the sim clock. |
 
 ## Systems
 
-<!-- One subsection per system. -->
+### Driving (scaffold)
+`src/car.ts`: throttle and steer in, position, heading and speed out; pure, unit tested (`src/car.test.ts`). Verified by `hooks_contract` and the unit tests.
+
+### Debug hooks
+`src/debug/hooks.ts`: state, clock, frames, input, perf, load, teleport, camera, time scale, sim hold, events, hud. Verified by the `hooks_contract` scenario and `src/debug/hooks.test.ts`.
 
 ## Tooling (outside `src/`)
 

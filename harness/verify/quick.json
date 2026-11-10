@@ -1,9 +1,36 @@
 {
   "_doc": "verify --quick = the core set plus at most maxExtras scenarios mapped to the changed files (git status vs HEAD, untracked included). An area path is a prefix of a changed file; a file uses only its most specific areas (the longest matching path), so a fallback like src/ui/ never adds its list on top of src/ui/hud/. Test files and harness/state map to nothing. A changed harness/verify/scripts/<name>.js adds every scenario that uses it, a changed scenarios.json entry adds that scenario; both rank first. Keep areas narrow: list the scenarios that really exercise the files. Selection code: harness/bin/quickset.mjs. --quick --dry [--changed a,b] prints the set and why. --quick --full runs every non-allOnly scenario. Aim for a core of about 20 to 30 scenarios that together touch every shared system once.",
   "maxExtras": 12,
-  "core": ["boot_title", "hooks_contract", "perf_baseline"],
+  "core": [
+    "boot_title",
+    "hooks_contract",
+    "perf_baseline"
+  ],
   "areas": [
-    { "path": "src/", "scenarios": ["boot_title"] },
-    { "path": "harness/bin/", "scenarios": ["hooks_contract"] }
+    {
+      "path": "src/car.ts",
+      "scenarios": [
+        "hooks_contract",
+        "boot_title"
+      ]
+    },
+    {
+      "path": "src/debug/",
+      "scenarios": [
+        "hooks_contract"
+      ]
+    },
+    {
+      "path": "src/",
+      "scenarios": [
+        "boot_title"
+      ]
+    },
+    {
+      "path": "harness/bin/",
+      "scenarios": [
+        "hooks_contract"
+      ]
+    }
   ]
 }

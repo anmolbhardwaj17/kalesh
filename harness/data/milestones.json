@@ -1,4 +1,12 @@
 {
   "_doc": "Milestones: the playable end-to-end units of this game (kit.config.json milestoneWord names them: level, mission, stage, quest, run). Each phase in backlog.json lists its milestone ids. A milestone is playable by the harness once harness/verify/milestones/<ID>.js plays it start to finish through window.__game.debug (no position writes, real inputs only). required: false marks an optional one, counted once it has a play script. budgetMs is the play script's time budget. The ADOPT phase lists what the game already has; the planner adds the rest.",
-  "milestones": []
+  "milestones": [
+    {
+      "id": "FD0",
+      "title": "Free drive (scaffold)",
+      "required": false,
+      "budgetMs": 60000,
+      "summary": "Scaffold free drive: boot, drive the box car north along the road strip for 100 m with real inputs, turn right toward east, stop. Proves the input, sim clock and coordinate rule end to end. Replaced by the real free drive once the world exists; optional so it never blocks a gate."
+    }
+  ]
 }
