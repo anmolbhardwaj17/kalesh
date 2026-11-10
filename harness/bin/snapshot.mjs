@@ -19,4 +19,10 @@ if (!fs.existsSync(path.join(WT, '.git'))) { sh('git worktree prune'); sh(`git w
 else sh(`git checkout --detach --force ${sha}`, WT);
 const nm = path.join(WT, 'node_modules');
 if (!fs.existsSync(nm)) fs.symlinkSync(R('node_modules'), nm, 'dir');
-console.log(`SNAPSHOT ${sha} at ${WT}`);
+// A fresh worktree has no game/.godot import cache: without it the first lookproof run fails on every texture
+// ("Unable to open res://.godot/imported/..."). Run the headless import there now (P0-036).
+let imp = 'ok';
+try { execSync('node harness/bin/godot.mjs check', { cwd: WT, encoding: 'utf8', stdio: ['ignore', 'pipe', 'pipe'] }); }
+catch (e) { imp = 'FAILED'; process.stdout.write(String(e.stdout || '') + String(e.stderr || '')); }
+console.log(`SNAPSHOT ${sha} at ${WT} (godot import ${imp})`);
+if (imp !== 'ok') process.exitCode = 1;
