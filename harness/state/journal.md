@@ -189,3 +189,5 @@ One line per event, written by task.mjs (start, done, fail, phase changes, inbox
 - 2026-11-10 23:18 mentor message mmwazgwfq handled: Pushback: Gurugram is a tease in Act 1, not a visit; the core Delhi finale must transform familiar places or it feels like a rerun; the story starts from characters, not places. Added to P0-032.
 - 2026-11-10 23:20 mentor message mmwazjlvn handled: Wrote a full story pitch (the diary, Bittu, Meera, Danny, Sethi, M; five acts; fake encounter choice; three endings plus a hidden fourth; Reddit mysteries). Saved as STORY_SEED.md for P0-032.
 - 2026-11-10 23:20 mentor message mmwazjuxz handled: Locked in: STORY_SEED.md is the approved story base. Act 1 and the slice get rebuilt from it next, then the full outline.
+- 2026-11-10 23:25 [P0-033] added: Godot test windows must not steal keyboard focus on macOS
+- 2026-11-10 23:25 mentor message mmwazqn6b handled: Fixable, worth doing. Queued a tooling task after the style test: no-focus window flag, then unfocused or off-screen launch, then focus restore as a fallback.

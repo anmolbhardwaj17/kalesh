@@ -97,3 +97,4 @@
 {"id":"mmwazgwfq","ts":"2026-11-10T17:48:01.791Z","reply":"Pushback: Gurugram is a tease in Act 1, not a visit; the core Delhi finale must transform familiar places or it feels like a rerun; the story starts from characters, not places. Added to P0-032.","tasks":[]}
 {"id":"mmwazjlvn","ts":"2026-11-10T17:50:08.081Z","reply":"Wrote a full story pitch (the diary, Bittu, Meera, Danny, Sethi, M; five acts; fake encounter choice; three endings plus a hidden fourth; Reddit mysteries). Saved as STORY_SEED.md for P0-032.","tasks":[]}
 {"id":"mmwazjuxz","ts":"2026-11-10T17:50:19.872Z","reply":"Locked in: STORY_SEED.md is the approved story base. Act 1 and the slice get rebuilt from it next, then the full outline.","tasks":[]}
+{"id":"mmwazqn6b","ts":"2026-11-10T17:55:36.362Z","reply":"Fixable, worth doing. Queued a tooling task after the style test: no-focus window flag, then unfocused or off-screen launch, then focus restore as a fallback.","tasks":[]}
