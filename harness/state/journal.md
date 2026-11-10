@@ -140,3 +140,4 @@ One line per event, written by task.mjs (start, done, fail, phase changes, inbox
 - 2026-11-10 21:10 mentor message mmwauwa3m handled: Honest correction given: the images are AI paintings beyond any game, ours included. They set the mood, not the detail level.
 - 2026-11-10 21:10 mentor message mmwauwgjt handled: Answered plainly in the terminal.
 - 2026-11-10 21:20 mentor message mmwav9ylh handled: Agreed and recorded: Watch Dogs 2 is the fidelity target. The six images stay as mood and character references only.
+- 2026-11-10 21:26 [P0-026] done: godotdriver + node vm shim run the existing scenario scripts against Godot; verify/shoot use it (target godot); 7 scenarios and FD0 pass; typecheck now includes GDScript parse. Self-checked: 203 vitest + 21 godot tests, quick 7/7.

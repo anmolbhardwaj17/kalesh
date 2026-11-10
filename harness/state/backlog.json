@@ -1,6 +1,6 @@
 {
   "_doc": "Written only by node harness/bin/task.mjs. Phases run in order; P0 (ADOPT + STYLE DISCOVERY) waits for the owner by design and needs task.mjs signoff and task.mjs archsignoff before its gate passes. Later phases are added by the planner at the end of P0 (task.mjs phase-add) from the game's real state.",
-  "updated": "2026-11-10T15:38:18.569Z",
+  "updated": "2026-11-10T15:56:48.129Z",
   "phases": [
     {
       "id": "P0",
@@ -651,12 +651,15 @@
       "agent": "builder",
       "priority": 1,
       "kind": "feature",
-      "status": "doing",
+      "status": "done",
       "attempts": 1,
       "notes": [],
       "created": "2026-11-10T14:08:49.921Z",
       "order": 60,
-      "started": "2026-11-10T15:38:18.569Z"
+      "started": "2026-11-10T15:38:18.569Z",
+      "done": "2026-11-10T15:56:48.067Z",
+      "summary": "godotdriver + node vm shim run the existing scenario scripts against Godot; verify/shoot use it (target godot); 7 scenarios and FD0 pass; typecheck now includes GDScript parse. Self-checked: 203 vitest + 21 godot tests, quick 7/7.",
+      "commit": "255621d"
     },
     {
       "id": "P0-027",
@@ -679,7 +682,9 @@
       "kind": "feature",
       "status": "todo",
       "attempts": 0,
-      "notes": [],
+      "notes": [
+        "From P0-026: lookproof.mjs still browser only; /play/ and playcopy expect dist/index.html; key, hold, click and reload steps unsupported on Godot (raw key input via the debug server may be needed later)."
+      ],
       "created": "2026-11-10T14:08:49.921Z",
       "order": 70
     },
