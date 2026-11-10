@@ -1,6 +1,6 @@
 {
   "_doc": "Written only by node harness/bin/task.mjs. Phases run in order; P0 (ADOPT + STYLE DISCOVERY) waits for the owner by design and needs task.mjs signoff and task.mjs archsignoff before its gate passes. Later phases are added by the planner at the end of P0 (task.mjs phase-add) from the game's real state.",
-  "updated": "2026-11-10T17:45:16.176Z",
+  "updated": "2026-11-10T17:46:07.090Z",
   "phases": [
     {
       "id": "P0",
@@ -816,7 +816,9 @@
       "kind": "mentor",
       "status": "todo",
       "attempts": 0,
-      "notes": [],
+      "notes": [
+        "Owner asked for a big game (mmwazefyj). Proposed (orchestrator reply, owner may adjust): 5 acts, about 55 to 60 story missions (Act 1 ~10 pilot, Act 2 ~12 east bank and Old Delhi, Act 3 ~12 south and airport, Act 4 ~12 Gurugram, Act 5 ~10 Noida, Shahdara, Akshardham, 2 or 3 endings). Release 1 = Acts 1 to 3 (~34 missions); Acts 4 and 5 as updates. Side content: endless per-character city life (fares, patrol calls, contact jobs), 30 to 40 stranger missions in chains of 2 to 4, activities (auto race, Metro race, street fights, kite fights, gali cricket), discovery collectibles. Free roam from the start; free switching after Act 1. Write this into GAME.md (Structure, Scope guardrails content size, Missions and activities) and a decisions.md entry."
+      ],
       "created": "2026-11-10T17:45:16.175Z"
     }
   ]

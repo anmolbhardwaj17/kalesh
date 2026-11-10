@@ -183,3 +183,4 @@ One line per event, written by task.mjs (start, done, fail, phase changes, inbox
 - 2026-11-10 23:12 [P0-011] start (attempt 1): Style tests batch A in Godot: stylised and stylised_grime, afternoon and golden
 - 2026-11-10 23:15 [P0-031] added: Restructure Act 1 story flow and the first slice (owner: GTA V style, no early merge)
 - 2026-11-10 23:15 mentor message mmwazdco9 handled: Agreed, with pushback: introduce each next character inside the current mission (GTA V style), slice becomes 4 solo missions, fixer flashback kept small. Restructure task queued at priority 1.
+- 2026-11-10 23:16 mentor message mmwazefyj handled: Proposed 5 acts, 55 to 60 story missions, release 1 = Acts 1 to 3, plus city life, 30 to 40 stranger missions and activities. Added to P0-031.
