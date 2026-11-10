@@ -1,6 +1,6 @@
 {
   "_doc": "Written only by node harness/bin/task.mjs. Phases run in order; P0 (ADOPT + STYLE DISCOVERY) waits for the owner by design and needs task.mjs signoff and task.mjs archsignoff before its gate passes. Later phases are added by the planner at the end of P0 (task.mjs phase-add) from the game's real state.",
-  "updated": "2026-11-10T17:46:07.090Z",
+  "updated": "2026-11-10T17:47:44.353Z",
   "phases": [
     {
       "id": "P0",
@@ -817,9 +817,25 @@
       "status": "todo",
       "attempts": 0,
       "notes": [
-        "Owner asked for a big game (mmwazefyj). Proposed (orchestrator reply, owner may adjust): 5 acts, about 55 to 60 story missions (Act 1 ~10 pilot, Act 2 ~12 east bank and Old Delhi, Act 3 ~12 south and airport, Act 4 ~12 Gurugram, Act 5 ~10 Noida, Shahdara, Akshardham, 2 or 3 endings). Release 1 = Acts 1 to 3 (~34 missions); Acts 4 and 5 as updates. Side content: endless per-character city life (fares, patrol calls, contact jobs), 30 to 40 stranger missions in chains of 2 to 4, activities (auto race, Metro race, street fights, kite fights, gali cricket), discovery collectibles. Free roam from the start; free switching after Act 1. Write this into GAME.md (Structure, Scope guardrails content size, Missions and activities) and a decisions.md entry."
+        "Owner asked for a big game (mmwazefyj). Proposed (orchestrator reply, owner may adjust): 5 acts, about 55 to 60 story missions (Act 1 ~10 pilot, Act 2 ~12 east bank and Old Delhi, Act 3 ~12 south and airport, Act 4 ~12 Gurugram, Act 5 ~10 Noida, Shahdara, Akshardham, 2 or 3 endings). Release 1 = Acts 1 to 3 (~34 missions); Acts 4 and 5 as updates. Side content: endless per-character city life (fares, patrol calls, contact jobs), 30 to 40 stranger missions in chains of 2 to 4, activities (auto race, Metro race, street fights, kite fights, gali cricket), discovery collectibles. Free roam from the start; free switching after Act 1. Write this into GAME.md (Structure, Scope guardrails content size, Missions and activities) and a decisions.md entry.",
+        "SUPERSEDES the act spread in the previous note (mmwazgiz9). Acts follow the story, not the map build order. Act 1 pilot (CP, ITO, Chandni Chowk, Red Fort), ends on a call from Gurugram. Act 2 Gurugram, east bank, Kashmere Gate: follow the money, forced together, the boss gets a face. Act 3 South Delhi, Nizamuddin, airport: betrayal, cop suspended, low point. Act 4 Noida, Shahdara, the edges: exile, regroup, fixer's past. Act 5 back to core Delhi: finale across Lutyens, Kartavya Path, India Gate, CP, ending at Chandni Chowk and Red Fort (full circle). Map build order follows the acts (Gurugram moves up; still in the first-release map). Script first: missions come from the story outline (separate content-writer task)."
       ],
       "created": "2026-11-10T17:45:16.175Z"
+    },
+    {
+      "id": "P0-032",
+      "phase": "P0",
+      "title": "Story outline for the whole game (script first, owner review)",
+      "desc": "Owner (mmwazgiz9): the story needs drama, good storytelling, action, a good script. Before mission lists are fixed, write harness/design/STORY_OUTLINE.md: logline, the villain and their plan, each of the three arcs (wants, flaw, change), five acts with beats, turning points, twists, set pieces, act endings and payoffs, the merged missions, the 2 or 3 endings, and where each act happens (spine in P0-031 notes: Gurugram in Act 2, exile on the edges in Act 4, finale back in core Delhi ending at Chandni Chowk and Red Fort). Follow the GAME.md respect rule (invented people, parties, gangs, police force). Plain English, no em dashes. End with questions for Anmol. Runs after P0-031.",
+      "accept": [],
+      "deps": [],
+      "agent": "content-writer",
+      "priority": 1,
+      "kind": "mentor",
+      "status": "todo",
+      "attempts": 0,
+      "notes": [],
+      "created": "2026-11-10T17:47:44.352Z"
     }
   ]
 }
