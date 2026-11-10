@@ -217,3 +217,8 @@ One line per event, written by task.mjs (start, done, fail, phase changes, inbox
 - 2026-11-11 01:11 [P0-034] done: stylised_b: dawn, afternoon, golden, night plus --time day curve; strong bazaar-only grime; 18 Delhi details; procedural textures and trim sheet; per-area haze, shimmer, dust; night lights; sheet style_options_b.jpg. GPU p95 6.7 to 10.9 ms, on_foot_bazaar 11.9 to 12.9 (warn). Default look identical. Verifier PASS on snapshot. Polish: dark night roads, marbled wall texture, empty ground between blocks, flat dawn.
 - 2026-11-11 01:11 added 2 tasks: P0-036, P0-037
 - 2026-11-11 01:11 [P0-013] skipped: Both style batches were verified per task (P0-011 and P0-034 verifier PASS, sheets read, numbers matched); a second review adds nothing in low usage mode.
+- 2026-11-11 01:13 mentor message mmwb3li1m handled: Recorded; realistic reference queued next, side by side with stylised B.
+- 2026-11-11 01:13 mentor message mmwb3li3r handled: Recorded; realistic reference queued next, side by side with stylised B.
+- 2026-11-11 01:13 added 1 tasks: P0-038
+- 2026-11-11 01:13 [P0-037] deps now: P0-034, P0-038
+- 2026-11-11 01:13 [P0-014] deps now: P0-010, P0-013, P0-038
