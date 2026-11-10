@@ -22,7 +22,7 @@ Notes: `harness/state/knowledge/rendering-and-look.md`
 - TECH: "Render pipeline", "Performance budgets".
 - STYLE: all sections that apply to the task.
 - VERIFY: "Visual review rubric (verifier agent)", "Look proof workflow (`lookproof.mjs`)", "Perf probes".
-- Source: `src/main.ts` (renderer, lights, scene); style switch modules under `src/render/` once added (Phase 0 style tests).
+- Source: `src/main.ts` (renderer, lights, scene); the Phase 0 style tests add one module per style as `src/render/styles/<name>.ts`.
 
 ## UI and input
 Notes: `harness/state/knowledge/ui-and-input.md`
@@ -48,7 +48,8 @@ Notes: `harness/state/knowledge/driving-and-camera.md` (create on first gotcha)
 ## World, map data and bake
 Notes: `harness/state/knowledge/world-and-map.md` (create on first gotcha)
 - TECH: "Coordinates (binding, owner 2026-11-10)" and the world sections written after the architecture sign-off.
-- Design: `harness/design/MAP_REPAIR.md` (all), `harness/design/ARCH_OPTIONS.md` once written.
+- Design: `harness/design/MAP_REPAIR.md` (all), `harness/design/DELHI_WORLD.md` (landmark registry and area profiles: read the section for your task), `harness/design/ARCH_OPTIONS.md` once written.
+- Data: `harness/data/landmarks.json` and `harness/data/areas/` once added.
 - Source: `src/geo/` (projection, added by the P0 harness baseline task), bake scripts and benches under `harness/bench/` and `tools/` once added.
 
 ## Old game reference (read only)

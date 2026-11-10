@@ -27,6 +27,8 @@ const HELP = `Harness task CLI
   unblock <id> [--note "..."]     Back to todo, attempts reset
   skip <id> --reason "..."        Mark skipped (counts as done for deps and gates)
   note <id> "text"                Append a note to a task
+  edit <id> [--title "..."] [--desc "..."] [--desc-append "..."] [--accept "a|b"] [--accept-add "a|b"]
+                                  Change an open task's text (planner REPLAN); journals the change
   deps <id> [--add a,b] [--remove c]  Add or remove dependencies of an existing task
   move <id> --phase P7 [--priority 4]  Move an open task to another phase (id kept)
   order <id,id,...>               Explicit order among tasks of the same phase and priority
@@ -303,6 +305,21 @@ switch (cmd) {
   case 'note': {
     const b = loadBacklog(); const t = taskById(b, args._[1]);
     t.notes = [...(t.notes || []), args._.slice(2).join(' ')]; saveBacklog(b); print('noted'); break;
+  }
+
+  case 'edit': {
+    // Planner REPLAN: change an open task's title, desc or acceptance criteria without hand-editing backlog.json.
+    const b = loadBacklog(); const t = taskById(b, args._[1]);
+    if (t.status === 'done' || t.status === 'skipped') { console.error(`${t.id} is ${t.status}; add a new task instead`); process.exit(2); }
+    const str = (v) => (v && v !== true ? String(v) : null);
+    const changed = [];
+    if (str(args.title)) { t.title = str(args.title); changed.push('title'); }
+    if (str(args.desc)) { t.desc = str(args.desc); changed.push('desc'); }
+    if (str(args['desc-append'])) { t.desc = `${t.desc || ''}${t.desc ? ' ' : ''}${str(args['desc-append'])}`; changed.push('desc+'); }
+    if (str(args.accept)) { t.accept = splitList(args.accept, /\|/); changed.push('accept'); }
+    if (str(args['accept-add'])) { t.accept = [...(t.accept || []), ...splitList(args['accept-add'], /\|/)]; changed.push('accept+'); }
+    if (!changed.length) { console.error('edit needs --title, --desc, --desc-append, --accept or --accept-add'); process.exit(2); }
+    saveBacklog(b); appendJournal(`[${t.id}] edited: ${changed.join(', ')}`); print(`${t.id} edited: ${changed.join(', ')}`); break;
   }
 
   case 'deps': {

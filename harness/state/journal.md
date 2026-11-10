@@ -23,3 +23,17 @@ One line per event, written by task.mjs (start, done, fail, phase changes, inbox
 - 2026-11-10 18:42 [P0-002] done: task.mjs designsignoff and phase-flag; P0 gate and gate --final require the design sign-off; status and dashboard show all three sign-offs; 10 new tests pass.
 - 2026-11-10 18:42 [P0-003] start (attempt 1): Salvage and quality audit of the old game (read only)
 - 2026-11-10 19:04 [P0-003] done: SALVAGE_AUDIT.md (keep 3: handling and camera numbers, 4 CC0 sounds; base layer all dropped, root causes measured) and QUALITY_AUDIT.md (3 meet, 13 close, 14 far of 30). Old repo git status empty. Self-checked headings, decisions entries.
+- 2026-11-10 19:09 [P0-005] edited: desc+, accept+
+- 2026-11-10 19:09 [P0-006] edited: desc+, accept+
+- 2026-11-10 19:09 [P0-009] edited: desc+, accept+
+- 2026-11-10 19:09 [P0-011] edited: desc+, accept+
+- 2026-11-10 19:09 [P0-012] edited: desc+, accept+
+- 2026-11-10 19:09 [P0-013] edited: desc+
+- 2026-11-10 19:09 [P0-010] edited: desc+, accept+
+- 2026-11-10 19:09 [P0-016] edited: desc+, accept+
+- 2026-11-10 19:09 [P0-018] edited: desc+, accept+
+- 2026-11-10 19:09 [P0-014] edited: desc+
+- 2026-11-10 19:09 [P0-021] edited: desc+, accept+
+- 2026-11-10 19:09 [P0-015] edited: desc+
+- 2026-11-10 19:09 [P0-022] edited: desc+
+- 2026-11-10 19:09 [P0-023] edited: desc+, accept+
