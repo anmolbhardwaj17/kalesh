@@ -113,3 +113,13 @@ One line per event, written by task.mjs (start, done, fail, phase changes, inbox
 - 2026-11-10 20:09 mentor message mmwasqz9d handled: Round 2 recorded.
 - 2026-11-10 20:09 mentor message mmwasqzc3 handled: Round 2 recorded.
 - 2026-11-10 20:09 [P0-028] done: DELHI_WORLD.md section 0: 22 candidate districts, layouts A (15 km2), B (22 km2, recommended), C (27 km2) with north-up SVG sketches, pilot 7.2 km2, sitting 2 map questions.
+- 2026-11-10 20:11 [P0-007] start (attempt 1): Interview sitting 2: game design round 2, look pick and map districts (and later rounds until the game design sign-off)
+- 2026-11-10 20:29 mentor message mmwatfwjr handled: Map round recorded.
+- 2026-11-10 20:29 mentor message mmwatfwm9 handled: Map round recorded.
+- 2026-11-10 20:29 mentor message mmwatfwon handled: Map round recorded.
+- 2026-11-10 20:29 mentor message mmwatfwse handled: Map round recorded.
+- 2026-11-10 20:30 mentor message mmwathxjr handled: Sitting 2 recorded.
+- 2026-11-10 20:30 mentor message mmwathxm7 handled: Sitting 2 recorded.
+- 2026-11-10 20:30 mentor message mmwathxor handled: Sitting 2 recorded.
+- 2026-11-10 20:30 mentor message mmwathxr1 handled: Sitting 2 recorded.
+- 2026-11-10 20:30 [P0-012] skipped: Look A realistic reference not needed: Anmol picked B; asked, he was unsure what it meant, Claude skipped it (decisions.md Sitting 2)
