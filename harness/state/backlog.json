@@ -1,6 +1,6 @@
 {
   "_doc": "Written only by node harness/bin/task.mjs. Phases run in order; P0 (ADOPT + STYLE DISCOVERY) waits for the owner by design and needs task.mjs signoff and task.mjs archsignoff before its gate passes. Later phases are added by the planner at the end of P0 (task.mjs phase-add) from the game's real state.",
-  "updated": "2026-11-10T17:50:08.043Z",
+  "updated": "2026-11-10T17:50:19.837Z",
   "phases": [
     {
       "id": "P0",
@@ -818,7 +818,8 @@
       "attempts": 0,
       "notes": [
         "Owner asked for a big game (mmwazefyj). Proposed (orchestrator reply, owner may adjust): 5 acts, about 55 to 60 story missions (Act 1 ~10 pilot, Act 2 ~12 east bank and Old Delhi, Act 3 ~12 south and airport, Act 4 ~12 Gurugram, Act 5 ~10 Noida, Shahdara, Akshardham, 2 or 3 endings). Release 1 = Acts 1 to 3 (~34 missions); Acts 4 and 5 as updates. Side content: endless per-character city life (fares, patrol calls, contact jobs), 30 to 40 stranger missions in chains of 2 to 4, activities (auto race, Metro race, street fights, kite fights, gali cricket), discovery collectibles. Free roam from the start; free switching after Act 1. Write this into GAME.md (Structure, Scope guardrails content size, Missions and activities) and a decisions.md entry.",
-        "SUPERSEDES the act spread in the previous note (mmwazgiz9). Acts follow the story, not the map build order. Act 1 pilot (CP, ITO, Chandni Chowk, Red Fort), ends on a call from Gurugram. Act 2 Gurugram, east bank, Kashmere Gate: follow the money, forced together, the boss gets a face. Act 3 South Delhi, Nizamuddin, airport: betrayal, cop suspended, low point. Act 4 Noida, Shahdara, the edges: exile, regroup, fixer's past. Act 5 back to core Delhi: finale across Lutyens, Kartavya Path, India Gate, CP, ending at Chandni Chowk and Red Fort (full circle). Map build order follows the acts (Gurugram moves up; still in the first-release map). Script first: missions come from the story outline (separate content-writer task)."
+        "SUPERSEDES the act spread in the previous note (mmwazgiz9). Acts follow the story, not the map build order. Act 1 pilot (CP, ITO, Chandni Chowk, Red Fort), ends on a call from Gurugram. Act 2 Gurugram, east bank, Kashmere Gate: follow the money, forced together, the boss gets a face. Act 3 South Delhi, Nizamuddin, airport: betrayal, cop suspended, low point. Act 4 Noida, Shahdara, the edges: exile, regroup, fixer's past. Act 5 back to core Delhi: finale across Lutyens, Kartavya Path, India Gate, CP, ending at Chandni Chowk and Red Fort (full circle). Map build order follows the acts (Gurugram moves up; still in the first-release map). Script first: missions come from the story outline (separate content-writer task).",
+        "Owner approved STORY_SEED.md (mmwazjuxz). It is the base: Act 1 missions and the four-mission solo slice come from Act 1 Sawari (bag, dead passenger, Meera on Bittu's trail, Danny hired), not from the older proposal."
       ],
       "created": "2026-11-10T17:45:16.175Z"
     },
@@ -836,7 +837,8 @@
       "attempts": 0,
       "notes": [
         "Orchestrator pushback to owner (mmwazgwfq): Gurugram teased in Act 1, visited in Act 2 (not Act 1, pilot scope). The core Delhi finale must show familiar places transformed (night, festival or lockdown, closed roads, crowds) and open never-seen spaces (Red Fort ramparts, Chandni Chowk rooftops, a Metro tunnel). Start the outline from the villain and the three arcs; pick places to fit the story; districts the story does not need get side content only.",
-        "Owner (mmwazjlvn): no release-driven compromises; banger story, inner stories, links between people, Reddit mysteries, controversy. Build the outline from harness/design/STORY_SEED.md (orchestrator draft, owner to review): about 65 to 70 story missions. This replaces the release-staging talk in the P0-031 notes; staging is a build-order question only."
+        "Owner (mmwazjlvn): no release-driven compromises; banger story, inner stories, links between people, Reddit mysteries, controversy. Build the outline from harness/design/STORY_SEED.md (orchestrator draft, owner to review): about 65 to 70 story missions. This replaces the release-staging talk in the P0-031 notes; staging is a build-order question only.",
+        "Owner approved STORY_SEED.md (mmwazjuxz). It is the base: Act 1 missions and the four-mission solo slice come from Act 1 Sawari (bag, dead passenger, Meera on Bittu's trail, Danny hired), not from the older proposal."
       ],
       "created": "2026-11-10T17:47:44.352Z"
     }

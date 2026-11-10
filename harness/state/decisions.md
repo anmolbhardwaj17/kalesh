@@ -184,3 +184,6 @@ By: planner (P0-010)
 
 ## 2026-11-10: Act 1 story flow, no early merge
 Anmol: "Bro, just after 3 missions you are merging them together. Doesn't seem like a good plan... Just like a GTA 5 story." Decision: each life gets its own run of missions, the next character is introduced inside the current one's mission, the fixer gets a short past-story mission, the first meeting is a crossing, and the merged mission is the Act 1 finale. The first slice becomes four solo missions (no merge). Why: a merge after one mission each is unearned; the slice still has to prove the core systems fast. Restructure task queued.
+
+## 2026-11-10: Story seed approved
+Anmol: "That's a banger story. Let's go ahead with it." Decision: harness/design/STORY_SEED.md (the diary, Bittu, SI Meera Rana, Danny, Harish Sethi, ACP Khanna, "M"; five acts Sawari, Paisa, Gaddari, Jalaawatan, Kalesh; the fake encounter choice; three endings plus a hidden fourth; the mysteries) is the approved base for the story. P0-031 aligns Act 1 and the slice to it; P0-032 expands it into the full outline. Why: owner approval in his own words.

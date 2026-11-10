@@ -1,6 +1,6 @@
 # Kalesh: story seed (orchestrator draft, 2026-11-10)
 
-Starting point for the story outline (task P0-032). Anmol: "The game should look banger, the story should be banger, no compromises." Everything here is a proposal for him to tear apart. Names are working names.
+Approved by Anmol 2026-11-10: "That's a banger story. Let's go ahead with it." Base for the story outline (task P0-032) and the Act 1 restructure (P0-031).
 
 ## Hook
 One night at Connaught Place a passenger leaves a bag in Bittu's auto: cash and a diary of fifteen years of payments to the people who run Delhi. Everyone wants it back. Three pages are missing.
