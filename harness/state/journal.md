@@ -101,3 +101,5 @@ One line per event, written by task.mjs (start, done, fail, phase changes, inbox
 - 2026-11-10 19:44 [P0-006] start (attempt 1): Style options draft, city brief and game design options update (Godot, three characters)
 - 2026-11-10 19:53 [P0-011] edited: title, desc, accept
 - 2026-11-10 19:53 [P0-012] edited: title, desc, accept
+- 2026-11-10 19:54 [P0-006] done: STYLE_OPTIONS.md (batch A: stylised and stylised_grime, afternoon and golden; grime as per-area wear value), CITY_BRIEF.md, GAME_DESIGN_OPTIONS.md round 2 (6 questions), DELHI_WORLD.md section 9. Self-checked.
+- 2026-11-10 19:54 mentor message mmwas6d70 handled: Done. progress/ holds a small album of shots when the game visibly moves forward. The first one is the day one box car.

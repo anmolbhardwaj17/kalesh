@@ -1,6 +1,6 @@
 {
   "_doc": "Written only by node harness/bin/task.mjs. Phases run in order; P0 (ADOPT + STYLE DISCOVERY) waits for the owner by design and needs task.mjs signoff and task.mjs archsignoff before its gate passes. Later phases are added by the planner at the end of P0 (task.mjs phase-add) from the game's real state.",
-  "updated": "2026-11-10T14:23:07.494Z",
+  "updated": "2026-11-10T14:24:06.826Z",
   "phases": [
     {
       "id": "P0",
@@ -171,12 +171,15 @@
       "agent": "planner",
       "priority": 1,
       "kind": "feature",
-      "status": "doing",
+      "status": "done",
       "attempts": 1,
       "notes": [],
       "created": "2026-11-10T13:04:46.154Z",
       "order": 10,
-      "started": "2026-11-10T14:14:05.697Z"
+      "started": "2026-11-10T14:14:05.697Z",
+      "done": "2026-11-10T14:24:06.799Z",
+      "summary": "STYLE_OPTIONS.md (batch A: stylised and stylised_grime, afternoon and golden; grime as per-area wear value), CITY_BRIEF.md, GAME_DESIGN_OPTIONS.md round 2 (6 questions), DELHI_WORLD.md section 9. Self-checked.",
+      "commit": "719e844"
     },
     {
       "id": "P0-007",
