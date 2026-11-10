@@ -96,3 +96,4 @@ One line per event, written by task.mjs (start, done, fail, phase changes, inbox
 - 2026-11-10 19:43 mentor message mmwartn9f handled: Recorded for game design and architecture.
 - 2026-11-10 19:43 mentor message mmwartnbr handled: Recorded for game design and architecture.
 - 2026-11-10 19:43 mentor message mmwartne9 handled: Recorded for game design and architecture.
+- 2026-11-10 19:43 [P0-005] done: Sitting 1 done: game (3 players, action, on foot, wanted level, story and city as return), look B with D dirt in Old Delhi, light afternoon and golden evening, rich warm colour, third person, characters realistic with stylised finish, districts and story places, heroes CP circle, India Gate, Red Fort, free public, invented parties, engine Godot 4, compressed map. All recorded verbatim. Carried to P0-007: character connection, pillar set, map layout and size check.

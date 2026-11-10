@@ -1,6 +1,6 @@
 {
   "_doc": "Written only by node harness/bin/task.mjs. Phases run in order; P0 (ADOPT + STYLE DISCOVERY) waits for the owner by design and needs task.mjs signoff and task.mjs archsignoff before its gate passes. Later phases are added by the planner at the end of P0 (task.mjs phase-add) from the game's real state.",
-  "updated": "2026-11-10T14:11:18.428Z",
+  "updated": "2026-11-10T14:13:59.821Z",
   "phases": [
     {
       "id": "P0",
@@ -143,11 +143,14 @@
       "agent": "orchestrator",
       "priority": 2,
       "kind": "feature",
-      "status": "doing",
+      "status": "done",
       "attempts": 1,
       "notes": [],
       "created": "2026-11-10T13:04:46.154Z",
-      "started": "2026-11-10T13:46:13.721Z"
+      "started": "2026-11-10T13:46:13.721Z",
+      "done": "2026-11-10T14:13:59.798Z",
+      "summary": "Sitting 1 done: game (3 players, action, on foot, wanted level, story and city as return), look B with D dirt in Old Delhi, light afternoon and golden evening, rich warm colour, third person, characters realistic with stylised finish, districts and story places, heroes CP circle, India Gate, Red Fort, free public, invented parties, engine Godot 4, compressed map. All recorded verbatim. Carried to P0-007: character connection, pillar set, map layout and size check.",
+      "commit": "4fb6485"
     },
     {
       "id": "P0-006",
