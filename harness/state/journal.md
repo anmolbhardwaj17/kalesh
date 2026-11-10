@@ -38,3 +38,4 @@ One line per event, written by task.mjs (start, done, fail, phase changes, inbox
 - 2026-11-10 19:09 [P0-022] edited: desc+
 - 2026-11-10 19:09 [P0-023] edited: desc+, accept+
 - 2026-11-10 19:10 mentor message mmwapw3co handled: Planned. DELHI_WORLD.md has the landmark registry and area profiles plan. Both layers are now in the style tests and architecture benches for your sign-off, your landmark and area questions are in the interview, and the build tasks (generator and placement on Fable) come after the map repair pilot.
+- 2026-11-10 19:10 [P0-004] start (attempt 1): Game design options draft (GAME_DESIGN_DISCOVERY)

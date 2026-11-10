@@ -4,23 +4,17 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Dilli Darshan</title>
-<link rel="preload" href="/fonts/Saans-TRIAL-Regular.otf" as="font" type="font/otf" crossorigin>
 <style>
-  @font-face { font-family: 'Saans'; src: url('/fonts/Saans-TRIAL-Regular.otf') format('opentype'); font-weight: 400; font-display: swap; }
-  @font-face { font-family: 'Saans'; src: url('/fonts/Saans-TRIAL-Medium.otf') format('opentype'); font-weight: 500; font-display: swap; }
-  @font-face { font-family: 'Saans'; src: url('/fonts/Saans-TRIAL-SemiBold.otf') format('opentype'); font-weight: 600 800; font-display: swap; }
-  @font-face { font-family: 'Saans Mono'; src: url('/fonts/SaansMono-TRIAL-Regular.otf') format('opentype'); font-weight: 400; font-display: swap; }
-  @font-face { font-family: 'Saans Mono'; src: url('/fonts/SaansMono-TRIAL-Medium.otf') format('opentype'); font-weight: 500 800; font-display: swap; }
   :root {
     --ink: #0a0a0a; --night: #111111; --asphalt: #1a1a1a; --line: #232323; --line-2: #2e2e2e; --mute: #8a8a8a; --dim: #5c5c5c;
     --bone: #ededed; --white: #fafafa;
     --sodium: #f2a33a; --cyan: #7ee2a8; --lantern: #ff5f56; --moss: #7ee2a8;
-    --serif: 'Saans', system-ui, sans-serif;
-    --sans: 'Saans', -apple-system, system-ui, sans-serif;
-    --mono: 'Saans Mono', ui-monospace, 'SF Mono', Menlo, monospace;
+    --serif: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'SF Pro Text', 'Helvetica Neue', system-ui, sans-serif;
+    --sans: -apple-system, BlinkMacSystemFont, 'SF Pro Text', 'SF Pro Display', 'Helvetica Neue', system-ui, sans-serif;
+    --mono: ui-monospace, 'SF Mono', SFMono-Regular, Menlo, monospace;
   }
   * { box-sizing: border-box; }
-  html, body { margin: 0; background: var(--ink); color: var(--bone); font-family: var(--sans); font-size: 14.5px; line-height: 1.55; -webkit-font-smoothing: antialiased; font-feature-settings: 'ss01', 'cv11'; }
+  html, body { margin: 0; background: var(--ink); color: var(--bone); font-family: var(--sans); font-size: 14.5px; line-height: 1.55; -webkit-font-smoothing: antialiased; }
   ::selection { background: var(--white); color: var(--ink); }
   a { color: var(--white); text-decoration-color: var(--dim); text-underline-offset: 3px; }
   a:hover { text-decoration-color: var(--white); }
@@ -330,7 +324,7 @@ function renderSide() {
   const G = E.gameEta;
   const gameLine = G ? `<div class="small" style="margin-top:4px">Whole game: ${G.tasksLeft} tasks left (${G.tasksLeft - (G.guessedTasks || 0)} planned, ${G.guessedTasks || 0} estimated for phases not planned yet), about ${Math.round(G.lowDays)} to ${Math.round(G.highDays)} days</div>` : '';
   const etaLine = E.phaseEta ? `<div class="small" style="margin-top:4px">${esc(E.phaseEta.phase)}: ${E.phaseEta.tasksLeft} task${E.phaseEta.tasksLeft === 1 ? '' : 's'} left, about ${hm(E.phaseEta.lowMin)} to ${hm(E.phaseEta.highMin)} of work</div>` : '';
-  $('#eta').innerHTML = `<div class="count" style="grid-column:1/-1"><strong>${E.overallPct ?? 0}<span class="muted small">%</span></strong><span class="small muted">whole game done (weighted by phase)</span><div class="bar"><i style="width:${E.overallPct || 0}%"></i></div>`
+  $('#eta').innerHTML = `<div class="count" style="grid-column:1/-1"><strong>${E.overallPct ?? 0}<span class="muted small">%</span></strong><span class="small muted">whole game done${E.overallTasks ? ` (${E.overallTasks.done} of ${E.overallTasks.estimated ? 'about ' : ''}${E.overallTasks.total} tasks${E.overallTasks.estimated ? ', size estimated until every phase is planned' : ''})` : ''}</span><div class="bar"><i style="width:${E.overallPct || 0}%"></i></div>`
     + gameLine + (curPh ? `<div class="small" style="margin-top:6px">${esc(curPh.id)} ${curPh.pct}% (${curPh.done} of ${curPh.total} tasks done or skipped)</div>` : '') + etaLine + doingLine + `</div>`;
   // Required milestones and optional ones (harness/data/milestones.json). An optional one counts once it has a play script.
   const core = p.core || { playable: 0, total: 0 }, side = p.side || { playable: 0, back: 0, total: 0 };

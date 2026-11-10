@@ -108,11 +108,22 @@ function progressInfo(tasks, phases) {
     }
     const since = Date.now() - 48 * 3600e3;
     const recent = tasks.filter((t) => t.status === 'done' && t.done && Date.parse(t.done) > since).length;
-    const hPerTask = recent >= 4 ? 48 / recent : (median ? median / 60 : 1);
+    // Fewer than 10 finished tasks is too few to trust the pace: assume at least 1 hour per task until then.
+    const rawH = recent >= 4 ? 48 / recent : (median ? median / 60 : 1);
+    const hPerTask = mins.length < 10 ? Math.max(1, rawH) : rawH;
     const hours = left * hPerTask;
     gameEta = { tasksLeft: left, guessedTasks: guessed, hoursPerTask: Math.round(hPerTask * 100) / 100, lowDays: Math.round((hours * 0.8) / 24 * 10) / 10, highDays: Math.round((hours * 1.3) / 24 * 10) / 10 };
   }
-  return { overallPct: Math.round((100 * wDone) / Math.max(1, wSum)), phases: per, taskMinutes: { median: median && Math.round(median), p75: p75 && Math.round(p75), samples: mins.length }, doing, phaseEta, gameEta };
+  // Whole game percent: tasks done over the whole game's size. Until every phase is planned, the size is at least
+  // config.gameSizeEstimate.tasks (a rough guess for the full game), so an early phase cannot read as a big share of the game.
+  const doneCount = tasks.filter(doneLike).length;
+  const known = doneCount + (gameEta ? gameEta.tasksLeft : 0);
+  const floor = Number(config().gameSizeEstimate?.tasks) || 0;
+  const sized = floor > known;
+  const total = Math.max(known, floor, 1);
+  if (gameEta && sized) { const extra = total - known; gameEta.guessedTasks += extra; gameEta.tasksLeft += extra; const hours = gameEta.tasksLeft * gameEta.hoursPerTask; gameEta.lowDays = Math.round((hours * 0.8) / 24 * 10) / 10; gameEta.highDays = Math.round((hours * 1.3) / 24 * 10) / 10; }
+  const overallPct = Math.round((1000 * doneCount) / total) / 10;
+  return { overallPct, overallTasks: { done: doneCount, total, estimated: sized || (gameEta && gameEta.guessedTasks > 0) }, phaseWeightedPct: Math.round((100 * wDone) / Math.max(1, wSum)), phases: per, taskMinutes: { median: median && Math.round(median), p75: p75 && Math.round(p75), samples: mins.length }, doing, phaseEta, gameEta };
 }
 
 function buildState() {

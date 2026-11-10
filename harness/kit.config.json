@@ -10,7 +10,14 @@
   "pageQuery": "debug=1&verify=1",
   "dashboardPort": 4488,
   "treeHashPaths": null,
-  "artPass": { "intents": 8, "tasksSince": 6 },
+  "artPass": {
+    "intents": 8,
+    "tasksSince": 6
+  },
   "sessionLogLimitMB": 15,
-  "perfBudgetsFile": "harness/verify/perf_budgets.json"
+  "perfBudgetsFile": "harness/verify/perf_budgets.json",
+  "gameSizeEstimate": {
+    "tasks": 250,
+    "_doc": "Rough size of the whole game in tasks. The dashboard's whole game percent uses at least this many until every phase is planned. Raise or lower it when the planner sizes the game."
+  }
 }
