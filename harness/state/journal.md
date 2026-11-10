@@ -205,3 +205,5 @@ One line per event, written by task.mjs (start, done, fail, phase changes, inbox
 - 2026-11-10 23:56 [P0-032] start (attempt 1): Story outline for the whole game (script first, owner review)
 - 2026-11-10 23:59 mentor message mmwb0yga2 handled: Yes. Directed in-engine cutscenes for openings, reveals and act endings, plus drive talk, phone calls, inner voice, the RJ and ambient lines. Added to the story outline, the architecture table and the phase plan.
 - 2026-11-11 00:08 [P0-032] done: STORY_OUTLINE.md, 12.3k words: logline, villain layers, three arcs, 19 supporting characters, how the story is told (cutscene, drive talk, phone, inner, radio, ambient tags on all 67 missions), five acts (10/14/14/14/15), six choices, four endings, mystery map, 12 stranger chains, controversy table, 10 owner questions. Self-check: sections present, no dashes, no real parties or brands.
+- 2026-11-11 00:08 [P0-033] start (attempt 1): Godot test windows must not steal keyboard focus on macOS
+- 2026-11-11 00:14 mentor message mmwb1h5pr handled: All ten answers written into STORY_OUTLINE.md and decisions.md.

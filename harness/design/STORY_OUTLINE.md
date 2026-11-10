@@ -699,3 +699,16 @@ Scenes people will argue about, by design: the encounter (M32), the playable loc
 8. **Language.** Lines are Hinglish with English subtitles. Do you want a Hindi-only voice option later, or Hinglish only?
 9. **Danny's tiffin note.** The note inside says "Sorry" in a child's hand. Or should the tiffin be empty, nothing at all?
 10. **Mission count.** 67 story missions. Act 5 has 15 because the finale is three missions (M65 to M67). OK, or fold M67 into M66?
+
+## 13. Anmol's answers (2026-11-11, these override the sections above)
+
+1. Gullu is truly guilty. The fake encounter stays a brutal choice between justice and the law.
+2. The fire flashback (M42) is playable. The player locks the door, then hears the knocking.
+3. The hidden ending needs all three missing pages plus forgiving Danny. It does not depend on the encounter choice.
+4. All invented names stay: Nav Dilli Dal, Rajdhani Police, NewsTez 24, Jhatpat, Raat Wali 106.1, Footpath News.
+5. The MALCHA newspaper code stays.
+6. If Meera refuses the encounter, Sonu stays in jail until Act 5.
+7. Expose ending, softened: Sethi's hospital closes and Amma's treatment moves to a government hospital. A hard road, not a dead end.
+8. Voices: Hinglish is the main track. A pure Hindi track is considered after release.
+9. The tiffin holds young Danny's "Sorry" note, never given.
+10. M67, the quiet closing drive, stays. 67 story missions.
