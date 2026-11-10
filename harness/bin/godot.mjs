@@ -189,26 +189,37 @@ async function activateApp(app) {
   if (app.pid) await sh('osascript', ['-e', `tell application "System Events" to set frontmost of first process whose unix id is ${app.pid} to true`]);
 }
 
+// Terminal apps the owner types in. The guard only protects focus when one of these was frontmost at launch
+// (owner 2026-11-11: when he is in another app he wants to watch the Godot windows). Extra ids: HARNESS_FOCUS_APPS=a,b.
+export const TERMINAL_APPS = new Set([
+  'com.apple.Terminal', 'com.googlecode.iterm2', 'dev.warp.Warp-Stable', 'dev.warp.Warp', 'com.mitchellh.ghostty',
+  'net.kovidgoyal.kitty', 'io.alacritty', 'org.alacritty', 'com.github.wez.wezterm', 'co.zeit.hyper', 'com.microsoft.VSCode',
+  'com.todesktop.230313mzl4w4u92', 'com.anthropic.claudefordesktop',
+  ...String(process.env.HARNESS_FOCUS_APPS || '').split(',').map((x) => x.trim()).filter(Boolean),
+]);
+
 /**
- * Starts a guard for a windowed Godot child process. While the process lives, whenever it is the frontmost app the guard
- * brings the last other frontmost app back. Returns { stop(), restored } (stop() is also called when the process exits).
- * Does nothing (and returns a no-op) off macOS, when HARNESS_FOCUS=keep, or for a headless run.
+ * Hands keyboard focus back to the terminal when a Godot window grabs it on open (macOS activates the app on launch).
+ * Acts only if a terminal app was frontmost at launch, and only during the first windowMs after launch, so a click
+ * on the Godot window later is respected and a run started while the owner is in another app is left alone.
  */
-export function startFocusGuard(proc, { headless = false, intervalMs = 25 } = {}) {
+export function startFocusGuard(proc, { headless = false, intervalMs = 25, windowMs = 4000 } = {}) {
   let stopped = false;
   let timer = null;
   const handle = { restored: 0, stop() { stopped = true; clearInterval(timer); } };
   if (process.platform !== 'darwin' || process.env.HARNESS_FOCUS === 'keep' || headless || !proc?.pid) return handle;
+  const t0 = Date.now();
   let last = null;
   let busy = false;
   const tick = async () => {
     if (busy || stopped) return;
+    if (Date.now() - t0 > windowMs) { handle.stop(); return; }
     busy = true;
     try {
       const f = await frontApp();
       if (!f || stopped) return;
       if (f.pid === proc.pid) {
-        if (last && last.pid !== proc.pid) { await activateApp(last); handle.restored++; }
+        if (last && TERMINAL_APPS.has(last.bundleId)) { await activateApp(last); handle.restored++; }
       } else if (f.type === 'Foreground') {
         last = f; // helpers (SystemUIServer and the like) flash to the front and are never restored
       }
