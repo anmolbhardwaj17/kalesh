@@ -1,6 +1,6 @@
 {
   "_doc": "Written only by node harness/bin/task.mjs. Phases run in order; P0 (ADOPT + STYLE DISCOVERY) waits for the owner by design and needs task.mjs signoff and task.mjs archsignoff before its gate passes. Later phases are added by the planner at the end of P0 (task.mjs phase-add) from the game's real state.",
-  "updated": "2026-11-10T18:38:36.621Z",
+  "updated": "2026-11-10T18:46:18.868Z",
   "phases": [
     {
       "id": "P0",
@@ -870,12 +870,15 @@
       "agent": "builder",
       "priority": 2,
       "kind": "bug",
-      "status": "doing",
+      "status": "done",
       "attempts": 1,
       "notes": [],
       "created": "2026-11-10T17:55:36.319Z",
       "model": "sonnet",
-      "started": "2026-11-10T18:38:36.621Z"
+      "started": "2026-11-10T18:38:36.621Z",
+      "done": "2026-11-10T18:46:18.848Z",
+      "summary": "Focus guard in godot.mjs and godotclient.mjs: polls lsappinfo, returns focus to the previous foreground app; Godot holds focus 30 to 80 ms twice per launch instead of about 1.2 s. no_focus flag and unfocused launch do not work on macOS. Render unchanged (lookproof compare OK). Self-check: typecheck, 199 vitest plus 34 Godot tests, quick OK. Loosened one godotsmoke wall-time tolerance to 190 ms.",
+      "commit": "6aa6e1f"
     },
     {
       "id": "P0-034",

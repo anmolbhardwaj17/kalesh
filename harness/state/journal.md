@@ -208,3 +208,4 @@ One line per event, written by task.mjs (start, done, fail, phase changes, inbox
 - 2026-11-11 00:08 [P0-033] start (attempt 1): Godot test windows must not steal keyboard focus on macOS
 - 2026-11-11 00:14 mentor message mmwb1h5pr handled: All ten answers written into STORY_OUTLINE.md and decisions.md.
 - 2026-11-11 00:14 mentor message mmwb1hofa handled: Removed the extra strip. Live now: builder now shows every builder shot (tests, style views, sheets) in one list, newest first.
+- 2026-11-11 00:16 [P0-033] done: Focus guard in godot.mjs and godotclient.mjs: polls lsappinfo, returns focus to the previous foreground app; Godot holds focus 30 to 80 ms twice per launch instead of about 1.2 s. no_focus flag and unfocused launch do not work on macOS. Render unchanged (lookproof compare OK). Self-check: typecheck, 199 vitest plus 34 Godot tests, quick OK. Loosened one godotsmoke wall-time tolerance to 190 ms.
