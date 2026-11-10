@@ -1,6 +1,6 @@
 {
   "_doc": "Written only by node harness/bin/task.mjs. Phases run in order; P0 (ADOPT + STYLE DISCOVERY) waits for the owner by design and needs task.mjs signoff and task.mjs archsignoff before its gate passes. Later phases are added by the planner at the end of P0 (task.mjs phase-add) from the game's real state.",
-  "updated": "2026-11-10T19:49:59.796Z",
+  "updated": "2026-11-10T20:18:16.460Z",
   "phases": [
     {
       "id": "P0",
@@ -998,14 +998,17 @@
       "agent": "builder",
       "priority": 1,
       "kind": "feature",
-      "status": "doing",
+      "status": "done",
       "attempts": 1,
       "notes": [
         "Owner (mmwb3tqyc): he will compare cost and performance. In STYLE_OPTIONS.md add (a) an effort table: per mission and per area, stylised B vs realistic, art hours Anmol would spend (textures, normal maps, models, props) and build hours, with the multiplier, every number marked estimate; (b) a verdict per look against the target (decisions.md 'Performance target': M2 Pro, 60 fps steady at play speed, about 1080p render scale upscaled); measure at least one realistic set at a 1080p-class render scale with the upscaler if possible. (c) Say plainly why the stand-in scene does not look like Watch Dogs 2 (geometry, materials, prop density, models, post) and what each phase adds."
       ],
       "created": "2026-11-10T19:43:34.965Z",
       "model": "opus",
-      "started": "2026-11-10T19:43:42.299Z"
+      "started": "2026-11-10T19:43:42.299Z",
+      "done": "2026-11-10T20:18:16.441Z",
+      "summary": "Realistic reference (PBR, physical sky, SSR, SSAO, SSIL, volumetric fog, Filmic, TAA, lamp pools) on batch B content in four lights; GPU p95 worst 15.6 to 18.0 ms, typical 13.2 to 15.6 vs stylised B 11.9 to 12.9 / 8.8 to 9.8; misses the M2 Pro 60 fps target even with FSR2 0.75. Effort table: art about 2.8x, build 1.5 to 1.9x (estimates). Verifier PASS on snapshot. Polish: crate with a black side, marble plaster swirl, even orange night road wash, swirl cracks.",
+      "commit": "ce25854"
     }
   ]
 }
