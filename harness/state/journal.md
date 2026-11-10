@@ -15,3 +15,7 @@ One line per event, written by task.mjs (start, done, fail, phase changes, inbox
 - 2026-11-10 18:35 mentor message mmwaoz9kb handled: The lane-level road model gets its own deep-model bench prototype in P0 (P0-019) and becomes the top build task after sign-off.
 - 2026-11-10 18:35 mentor message mmwaoz9la handled: The map inspector is in the architecture options and is planned as an early P1 task, right after the architecture sign-off.
 - 2026-11-10 18:35 mentor message mmwap8jxg handled: Added game design discovery as a third Phase 0 sign-off: options doc, interview rounds, sign-off, then GAME.md. No mission system before you sign off.
+- 2026-11-10 18:35 [P0-001] start (attempt 1): Harness baseline on the scaffold: coordinate contract, drive scenarios, FD0
+- 2026-11-10 18:35 [P0-002] start (attempt 1): Tooling: game design sign-off in task.mjs, gates, status and dashboard
+- 2026-11-10 18:36 mentor message mmwape5xn handled: Done. The Needs you count is now red so it stands out. Messages stays white.
+- 2026-11-10 18:39 phase P0: designSignoff on

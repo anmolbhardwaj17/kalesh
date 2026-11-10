@@ -9,6 +9,7 @@ import { spawn } from 'node:child_process';
 import { PATHS, ROOT, R, H, config, readJSON, readJSONL, appendJSONL, nowISO, git, manifest, manifestEntry, statusOf } from './lib.mjs';
 import { perfSummary } from './perfgate.mjs';
 import { readNotices, openNotices } from './notice.mjs';
+import { signoffStates } from './signoffs.mjs';
 import { scriptIds, milestoneCounts, isRequired, loadMilestones } from './milestoneset.mjs';
 import { playRoots, readCopies, COPY_ROOT } from './playcopy.mjs';
 
@@ -140,6 +141,8 @@ function buildState() {
     // core = required milestones, side = optional ones (back = optional with a play script), the shape the page reads.
     progress: { tasksDone: done, tasksTotal: tasks.length, milestones: mc, core: { total: mc.required.total, playable: mc.required.playable }, side: { total: mc.optional.total, playable: mc.optional.playable, back: mc.optional.scripted } },
     state: st,
+    // The three Phase 0 sign-offs (style, architecture, game design) with their state and the owner's words.
+    signoffs: signoffStates(st),
     current: tasks.find((t) => t.status === 'doing') || null,
     eta: progressInfo(tasks, backlog.phases || []),
     // `missions` and `chapters` are the page's names for milestones and their groups (milestones.json `chapter`, optional;

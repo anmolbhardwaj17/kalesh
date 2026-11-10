@@ -3,20 +3,109 @@
   "scenarios": [
     {
       "name": "boot_title",
-      "steps": [{ "wait": 800 }, { "shot": "boot_title" }],
+      "steps": [
+        {
+          "wait": 800
+        },
+        {
+          "shot": "boot_title"
+        }
+      ],
       "_note": "Kit sample. The first screen the player sees, after the game says ready."
     },
     {
       "name": "hooks_contract",
-      "steps": [{ "script": "harness/verify/scripts/hooks_contract.js", "timeout": 60000 }, { "shot": "hooks_contract" }],
+      "steps": [
+        {
+          "script": "harness/verify/scripts/hooks_contract.js",
+          "timeout": 60000
+        },
+        {
+          "shot": "hooks_contract"
+        }
+      ],
       "_note": "Kit sample. Proves window.__game implements docs/GAME_HOOKS.md: state, clock, frames, input, perf, load, teleport, setCamera, timeScale and the sim hold. The ADOPT phase makes this pass first."
     },
     {
       "name": "perf_baseline",
       "perf": true,
       "perfQuick": true,
-      "steps": [{ "settle": 1 }, { "shot": "perf_baseline" }],
+      "steps": [
+        {
+          "settle": 1
+        },
+        {
+          "shot": "perf_baseline"
+        }
+      ],
       "_note": "Kit sample. One perf window on the first scene, judged against perf_budgets.json. perfQuick keeps it in --quick; heavier perf scenes should leave perfQuick out so they run in --only and --all."
+    },
+    {
+      "name": "hooks_no_debug",
+      "steps": [
+        {
+          "script": "harness/verify/scripts/hooks_no_debug.js",
+          "timeout": 40000
+        }
+      ],
+      "_note": "P0-001. Opens the game URL without ?debug=1 in an iframe: window.__game has ready and version, window.__game.debug is undefined (GAME_HOOKS.md Rules)."
+    },
+    {
+      "name": "drive_north",
+      "lockstep": true,
+      "steps": [
+        {
+          "script": "harness/verify/scripts/drive_north.js",
+          "timeout": 60000
+        }
+      ],
+      "_note": "P0-001. Input only: throttle 3 s of sim from heading 0, z falls by over 10 m and abs x stays under 0.5 m (north is -Z)."
+    },
+    {
+      "name": "drive_turn_right",
+      "lockstep": true,
+      "steps": [
+        {
+          "script": "harness/verify/scripts/drive_turn_right.js",
+          "timeout": 60000
+        }
+      ],
+      "_note": "P0-001. Input only: throttle plus steer right, heading grows and x becomes positive (east is +X)."
+    },
+    {
+      "name": "coords_north_marker",
+      "steps": [
+        {
+          "call": "load",
+          "args": [
+            "scaffold"
+          ]
+        },
+        {
+          "call": "setCamera",
+          "args": [
+            {
+              "pos": [
+                0,
+                3,
+                0
+              ],
+              "target": [
+                0,
+                3,
+                -100
+              ]
+            }
+          ]
+        },
+        {
+          "settle": 0.3
+        },
+        {
+          "shot": "coords_north_marker"
+        }
+      ],
+      "_note": "P0-001. Camera at the origin looking north (-Z): the red north post (0,-50) must be in the centre third of the shot. The builder reads the shot."
     }
   ]
 }

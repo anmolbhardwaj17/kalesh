@@ -47,3 +47,8 @@ By: owner
 Decision: the Phase 0 quality audit ("why it felt thin") is written in the same Fable run as the salvage audit, scored against the old game, since the new repo is a scaffold with nothing to audit yet.
 Why: both read the old repo deeply; one run saves a second full read in low usage mode.
 By: planner
+
+## 2026-11-10: Projection is WGS84 transverse Mercator around India Gate (provisional)
+Decision: `src/geo/projection.ts` maps lat/lon to world metres with a transverse Mercator (Krüger series, 3rd order) on the WGS84 ellipsoid, central meridian through the origin (India Gate, 28.612894 N, 77.229446 E), scale 1 on that meridian, origin northing subtracted. East +X, north -Z, up +Y. No mirroring. Scale error is about 0.2 m at 25 km east or west, round trip under 1 cm. Provisional: the architecture sign-off may replace it (for example with a local ENU or a tile-local origin).
+Why: needs no dependency, is accurate to centimetres over the whole city, and keeps the axis rule in one place with tests.
+By: builder

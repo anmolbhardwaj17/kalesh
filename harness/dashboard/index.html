@@ -74,6 +74,9 @@
   .review { margin-top: 8px; font-size: 13px; }
   .chip.fail, .chip.redo, .chip.blocked { color: var(--lantern); border-color: rgba(255,95,86,.35); background: rgba(255,95,86,.06); }
   .chip.doing, .chip.received, .chip.building, .chip.active { color: var(--sodium); border-color: rgba(242,163,58,.35); background: rgba(242,163,58,.06); }
+  .signoffs { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 10px; }
+  .signoff { border: 1px solid var(--line); border-radius: 10px; padding: 12px 14px; background: var(--night); }
+  .signoff .quote { margin-top: 8px; color: var(--mute); font-size: 13px; border-left: 1px solid var(--line-2); padding-left: 10px; white-space: pre-wrap; }
   .verify { border: 1px solid var(--line); border-radius: 10px; padding: 14px 16px; background: var(--night); position: relative; }
   .verify:before { content: ''; position: absolute; left: 16px; top: 20px; width: 6px; height: 6px; border-radius: 50%; background: var(--dim); }
   .verify > div:first-child { padding-left: 16px; }
@@ -383,6 +386,13 @@ function renderPerf() {
     ${notes.length ? `<p class="muted small">${notes.map(esc).join('<br>')}</p>` : ''}`;
 }
 
+// The Phase 0 sign-offs: style, architecture, game design. Signed shows the owner's words; not yet shows how it is recorded.
+function signoffBlock() {
+  const list = S.signoffs || [];
+  if (!list.length) return '';
+  return `<h2>Sign-offs</h2><div class="signoffs">${list.map((x) => `<div class="signoff" data-signoff="${esc(x.key)}"><div><strong>${esc(x.label)}</strong> ${x.signed ? '<span class="chip ok">signed</span>' : '<span class="chip doing">not yet</span>'}</div>${x.signed ? `<div class="muted small" style="margin-top:4px">${ago(x.at)}</div><div class="quote">${esc(x.quote)}</div>` : `<div class="muted small" style="margin-top:6px">Waiting for your explicit words. Recorded with task.mjs ${esc(x.command)}.</div>`}</div>`).join('')}</div>`;
+}
+
 function renderOverview() {
   const rep = S.report;
   let v = '<div class="verify">No verification run yet. Claude runs it during Phase 0, right after the hook contract.</div>';
@@ -395,6 +405,7 @@ function renderOverview() {
   const shots = S.shots.slice(0, 12).map((s) => `<figure data-src="/shots/${encodeURIComponent(s.name)}?t=${s.t}" data-name="${esc(s.name)}"><img loading="lazy" src="/shots/${encodeURIComponent(s.name)}?t=${s.t}" alt="${esc(s.name)}"><figcaption>${esc(s.name.replace(/\.png$/, ''))} <span class="muted">new ${ago(s.first || s.t)}</span></figcaption></figure>`).join('');
   const pt = S.phases.filter((p) => p.status === 'done' && p.playtest && p.playtest.length).slice(-1)[0];
   return `${pt ? `<div class="playtest"><strong>${esc(pt.id)} is ready for you to play.</strong> <span class="muted">Open "Play latest build", then check the list in Needs you.</span></div>` : ''}
+    ${signoffBlock()}
     <h2>Verification</h2>${v}
     ${liveStrip()}
     <div class="cols"><div><h2>Recent work</h2><ul class="journal">${S.journal.slice(-10).reverse().map((l) => `<li>${esc(l.slice(2))}</li>`).join('') || '<li class="muted">Nothing yet</li>'}</ul></div>
@@ -513,7 +524,7 @@ function renderMessages() {
 function renderJournal() { return `<h2>Journal</h2><ul class="journal">${S.journal.slice().reverse().map((l) => `<li>${esc(l.slice(2))}</li>`).join('') || '<li class="muted">Empty</li>'}</ul>`; }
 
 const panels = {
-  overview: [() => ({ r: S.report, s: S.shots.slice(0, 12), lv: S.live, j: S.journal.slice(-10), c: S.commits, p: S.phases.map((p) => p.status) }), renderOverview, '#p-overview'],
+  overview: [() => ({ so: S.signoffs, r: S.report, s: S.shots.slice(0, 12), lv: S.live, j: S.journal.slice(-10), c: S.commits, p: S.phases.map((p) => p.status) }), renderOverview, '#p-overview'],
   needs: [() => ({ r: S.requests, f: needsFilter, p: S.phases.map((p) => p.playtest), n: S.notices }), renderNeeds, '#p-needs'],
   missions: [() => ({ m: S.missions, s: S.shots.filter((x) => /_(start|end)\.png$/.test(x.name)) }), renderMissions, '#p-missions'],
   tasks: [() => ({ t: S.tasks, p: S.phases }), renderTasks, '#p-tasks'],

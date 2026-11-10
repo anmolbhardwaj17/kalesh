@@ -7,6 +7,7 @@ import os from 'node:os';
 import { spawnSync } from 'node:child_process';
 import { PATHS, ROOT, config, readJSON, writeJSON, readJSONL, appendJSONL, appendJournal, nowISO, git, parseArgs, splitList, treeHash } from './lib.mjs';
 import { loadMilestones, scriptIds, phaseRequired, requiredMilestones, milestoneReasons } from './milestoneset.mjs';
+import { PHASE_FLAGS, DESIGN_EXIT, signoffByCommand, statusLines as signoffStatusLines, phaseReasons as signoffPhaseReasons, finalReasons as signoffFinalReasons } from './signoffs.mjs';
 import { ensureAllCopy, fullRunReasons, decideRetry, failedItems, changedSince, loadSharedPaths, retryFile } from './gatecheck.mjs';
 
 const HELP = `Harness task CLI
@@ -42,6 +43,8 @@ const HELP = `Harness task CLI
   milestone <ID> <planned|building|playable|polished> [--note "..."]   (alias: mission)
   signoff "<the owner's exact words>"   Phase 0: record the owner's style sign-off (needed by gate P0)
   archsignoff "<the owner's exact words>"   Phase 0: record the owner's architecture sign-off (needed by gate P0)
+  designsignoff "<the owner's exact words>"   Phase 0: record the owner's game design sign-off (needed by gate P0 and the final gate)
+  phase-flag <P> <signoff|archSignoff|designSignoff> [off] [--exit-add "text"]   Ask a phase for a sign-off (the gate then needs it); --exit-add appends an exit line once
   gate <P>                        Check a phase gate (tasks + the phase's full verify report, or a retry of what it failed:
                                     harness/bin/gatecheck.mjs, gateretry.mjs). Milestones counted: the required ones
                                     of this phase and every earlier phase, plus optional ones with a play script (milestoneset.mjs)
@@ -222,8 +225,7 @@ switch (cmd) {
       `last verify: ${out.last_verify}`,
       `art pass due: ${out.art_pass_due ? 'YES (' + intents + ' intents waiting for prompts)' : 'no'}`,
       `art review due: ${out.art_review_due ? 'YES (' + unreviewed + ' delivered images not reviewed)' : 'no'}${out.art_fit_pending ? `  (in-game fit not confirmed yet: ${out.art_fit_pending})` : ''}`,
-      ...(st.styleSignoff ? [] : ['style sign-off: not yet (Phase 0 waits for the owner; record it with task.mjs signoff "<quote>")']),
-      ...(st.archSignoff ? [] : ['architecture sign-off: not yet (Phase 0 waits for the owner; record it with task.mjs archsignoff "<quote>")']),
+      ...signoffStatusLines(st),
       ...sessionLogHint(config().sessionLogLimitMB),
     ].join('\n'));
     break;
@@ -417,22 +419,28 @@ switch (cmd) {
     appendJournal(`mentor message ${id} handled: ${args.reply}`); print(`acknowledged ${id}`); break;
   }
 
-  case 'signoff': {
-    // Phase 0 (ADOPT + STYLE DISCOVERY) ends only with the owner's explicit sign-off on the style. Record his words verbatim.
+  case 'signoff': case 'archsignoff': case 'designsignoff': {
+    // Phase 0 ends only with the owner's explicit sign-offs (style, architecture, game design). Record his words verbatim.
+    const so = signoffByCommand(cmd);
     const quote = args._.slice(1).join(' ').trim();
-    if (!quote) { console.error('signoff "<the owner\'s exact words>"'); process.exit(2); }
-    saveState({ styleSignoff: { at: nowISO(), quote } });
-    fs.appendFileSync(PATHS.decisions, `\n## ${nowISO().slice(0, 10)}: style signed off by ${config().owner}\nQuote: "${quote}"\nSee harness/design/STYLE_OPTIONS.md and STYLE_BIBLE.md. From now on the never-wait rule applies.\n`);
-    appendJournal(`style sign-off recorded: ${quote}`); print('style sign-off recorded'); break;
+    if (!quote) { console.error(`${cmd} "<the owner's exact words>"`); process.exit(2); }
+    saveState({ [so.stateKey]: { at: nowISO(), quote } });
+    fs.appendFileSync(PATHS.decisions, `\n## ${nowISO().slice(0, 10)}: ${so.record} by ${config().owner}\nQuote: "${quote}"\nSee ${so.see}\n`);
+    appendJournal(`${so.label.toLowerCase()} sign-off recorded: ${quote}`); print(`${so.label.toLowerCase()} sign-off recorded`); break;
   }
 
-  case 'archsignoff': {
-    // Phase 0 ARCHITECTURE DISCOVERY ends only with the owner's explicit sign-off on the architecture. Record his words verbatim.
-    const quote = args._.slice(1).join(' ').trim();
-    if (!quote) { console.error('archsignoff "<the owner\'s exact words>"'); process.exit(2); }
-    saveState({ archSignoff: { at: nowISO(), quote } });
-    fs.appendFileSync(PATHS.decisions, `\n## ${nowISO().slice(0, 10)}: architecture signed off by ${config().owner}\nQuote: "${quote}"\nSee harness/design/ARCH_OPTIONS.md, TECH.md and docs/ARCHITECTURE.md.\n`);
-    appendJournal(`architecture sign-off recorded: ${quote}`); print('architecture sign-off recorded'); break;
+  case 'phase-flag': {
+    // Turns a sign-off requirement on (or off) for a phase. backlog.json is written only here, never by hand.
+    const b = loadBacklog(); const pid = args._[1]; const flag = args._[2];
+    const p = b.phases.find((x) => x.id === pid);
+    if (!p) { console.error(`No phase ${pid}`); process.exit(2); }
+    if (!PHASE_FLAGS.includes(flag)) { console.error(`phase-flag <P> <${PHASE_FLAGS.join('|')}> [off]`); process.exit(2); }
+    const off = args._[3] === 'off';
+    if (off) delete p[flag]; else p[flag] = true;
+    // The design sign-off flag brings its exit line (once); --exit-add adds any other line for any flag.
+    const line = args['exit-add'] && args['exit-add'] !== true ? String(args['exit-add']) : (flag === 'designSignoff' && !off ? DESIGN_EXIT : null);
+    if (line && !(p.exit || []).includes(line)) p.exit = [...(p.exit || []), line];
+    saveBacklog(b); appendJournal(`phase ${pid}: ${flag} ${off ? 'off' : 'on'}`); print(`phase ${pid} ${flag} ${off ? 'off' : 'on'}`); break;
   }
 
   case 'milestone': case 'mission': {
@@ -455,8 +463,7 @@ switch (cmd) {
       const open = b.tasks.filter((t) => !DONEISH.has(t.status));
       if (open.length) reasons.push(`Open tasks: ${open.length}`);
       reasons.push(...checkReport(requiredMilestones(loadMilestones(), scriptIds()), 'Final'));
-      if (!loadState().styleSignoff) reasons.push('No style sign-off recorded (task.mjs signoff)');
-      if (b.phases.some((x) => x.archSignoff) && !loadState().archSignoff) reasons.push('No architecture sign-off recorded (task.mjs archsignoff)');
+      reasons.push(...signoffFinalReasons(b.phases, loadState()));
       if (reasons.length) { print('GATE NOT PASSED (final)\n' + reasons.map((r) => `  - ${r}`).join('\n')); process.exitCode = 1; }
       else print('ALL GATES PASSED');
       break;
@@ -466,8 +473,7 @@ switch (cmd) {
     const reasons = [];
     const open = b.tasks.filter((t) => phaseIndex(b, t.phase) <= phaseIndex(b, pid) && !DONEISH.has(t.status));
     if (open.length) reasons.push(`Open tasks: ${open.map((t) => `${t.id}[${t.status}]`).join(', ')}`);
-    if (p.signoff && !loadState().styleSignoff) reasons.push(`Phase ${pid} needs the owner's style sign-off: task.mjs signoff "<quote>"`);
-    if (p.archSignoff && !loadState().archSignoff) reasons.push(`Phase ${pid} needs the owner's architecture sign-off: task.mjs archsignoff "<quote>"`);
+    reasons.push(...signoffPhaseReasons(p, loadState()));
     const g = gatePath(pid, milestoneIdsInPhase(b, p));
     reasons.push(...g.reasons);
     if (reasons.length) { print(`GATE ${pid} NOT PASSED\n${g.info.join('\n')}\n` + reasons.map((r) => `  - ${r}`).join('\n')); process.exitCode = 1; }

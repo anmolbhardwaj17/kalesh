@@ -47,7 +47,9 @@ Variable step: `requestAnimationFrame`, dt capped at 0.1 s, scaled by `hooks.clo
 
 ### Coordinates (binding, owner 2026-11-10)
 
-East is +X, north is -Z, up is +Y, 1 unit = 1 metre. Compass heading 0 = north, PI/2 = east (`forward()` in `src/car.ts`). No mirroring anywhere: no negative scale on world groups, no axis flips in physics. Tests: `src/car.test.ts` "coordinates"; the geographic projection and its landmark test arrive with the P0 harness baseline task.
+East is +X, north is -Z, up is +Y, 1 unit = 1 metre. Compass heading 0 = north, PI/2 = east (`forward()` in `src/car.ts`). No mirroring anywhere: no negative scale on world groups, no axis flips in physics. Tests: `src/car.test.ts` "coordinates".
+
+Geographic projection: `src/geo/projection.ts` (`geoToWorld(lat, lon)` and `worldToGeo(x, z)`, origin `ORIGIN` = India Gate 28.612894 N, 77.229446 E). WGS84 transverse Mercator (Krüger series) with the central meridian through the origin, so scale error is about 0.2 m at 25 km and the round trip is under 1 cm. Provisional until the architecture sign-off. Tests: `src/geo/projection.test.ts` (origin at 0,0; Connaught Place park at about -1246, -2062; Red Fort at about +1130, -4800; due north has x 0 and negative z; meridian arc against numerical integration; round trips). Scenarios: `drive_north`, `drive_turn_right`, `coords_north_marker`.
 ### Scenes and levels
 
 ### Input

@@ -4,20 +4,30 @@
   "core": [
     "boot_title",
     "hooks_contract",
-    "perf_baseline"
+    "perf_baseline",
+    "drive_north"
   ],
   "areas": [
     {
       "path": "src/car.ts",
       "scenarios": [
-        "hooks_contract",
-        "boot_title"
+        "drive_north",
+        "drive_turn_right",
+        "hooks_contract"
+      ]
+    },
+    {
+      "path": "src/geo/",
+      "scenarios": [
+        "coords_north_marker",
+        "drive_north"
       ]
     },
     {
       "path": "src/debug/",
       "scenarios": [
-        "hooks_contract"
+        "hooks_contract",
+        "hooks_no_debug"
       ]
     },
     {

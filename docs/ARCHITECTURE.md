@@ -17,6 +17,7 @@ Scaffold, as found 2026-11-10. `index.html` loads `src/main.ts`, which creates t
 | `index.html` | Canvas `#game`, `#hud` hint text. |
 | `src/main.ts` | Renderer, scene, car mesh, chase camera, frame loop, hook wiring. |
 | `src/car.ts` | Kinematic car model, `forward(heading)` axis rule (east +X, north -Z). |
+| `src/geo/projection.ts` | Lat/lon to world metres and back (`geoToWorld`, `worldToGeo`), WGS84 transverse Mercator around India Gate; east +X, north -Z. Provisional until the architecture sign-off. Tests in `projection.test.ts`. |
 | `src/debug/hooks.ts` | `window.__game` hook contract and the sim clock. |
 
 ## Systems
@@ -32,6 +33,7 @@ Scaffold, as found 2026-11-10. `index.html` loads `src/main.ts`, which creates t
 | Path | What |
 |---|---|
 | `harness/bin/task.mjs` | The only writer of `harness/state/backlog.json`: status, next, start, done, fail, phases, gates, inbox, milestones, sign-off. |
+| `harness/bin/signoffs.mjs` | The three Phase 0 sign-offs (style, architecture, game design) as one table: state keys, commands, phase flags, status lines, gate reasons; read by `task.mjs` and the dashboard. Tests: `signoffs.test.mjs`. |
 | `harness/bin/verify.mjs` | Builds, serves the build, runs scenarios and milestone play scripts in Chromium, judges budgets, writes `harness/reports/latest.json` and shots. `--quick`, `--only`, `--milestone`, `--all`, `--repeat`. |
 | `harness/bin/browser.mjs` | Static server, Chromium launch (GPU first, then software GL), page open with console capture, `waitReady`, `debugCall`, the step runner. |
 | `harness/bin/shoot.mjs` | Ad hoc screenshots and play-throughs. |
