@@ -8,7 +8,7 @@ scenario conventions. Verifiers apply the rubric and the severity rule to every 
 | Level | Command | What it proves |
 |---|---|---|
 | L0 static | `npm run typecheck && npm test` | Types and pure logic. |
-| L1 boot | `node harness/bin/verify.mjs --quick` | `npm run build` succeeds, the build boots in a browser, `window.__game.ready` becomes true within the load budget, zero console errors, screenshots of the first screen and of the quick set: the core scenarios plus at most 12 mapped to the changed files ("Quick set" below; `--quick --full` runs every scenario that is not `allOnly`). |
+| L1 boot | `node harness/bin/verify.mjs --quick` | `npm run build` succeeds, the game boots (Godot run, "Godot runs" below), `window.__game.ready` becomes true within the load budget, zero console errors, screenshots of the first screen and of the quick set: the core scenarios plus at most 12 mapped to the changed files ("Quick set" below; `--quick --full` runs every scenario that is not `allOnly`). |
 | L2 milestone | `node harness/bin/verify.mjs --milestone L07` | The play script beats the milestone under real rules within its budget; shots at start and end (and at each beat the script shoots). |
 | L3 full | `node harness/bin/verify.mjs --all` | L1 + every scenario incl. perf + every milestone with a play script. Required for every phase gate and the final gate. |
 | L1 focused | `node harness/bin/verify.mjs --only <name,prefix*>` | Typecheck, tests, build, boot and only the named scenarios. For builders iterating on one feature. Its report has mode "only" and never counts for a gate. Every name and `--milestone` id must exist: an unknown one (or a space separated list) exits 2 before the build, with close matches (`cliguard.mjs`). |
@@ -37,6 +37,18 @@ Steps (`harness/bin/browser.mjs` runStep): `{wait: ms}`, `{call: name, args, tim
 ### Quick set
 
 `verify --quick` runs the core set of `harness/verify/quick.json` plus at most `maxExtras` scenarios mapped to the changed files. Target: 20 to 45 scenarios and about 5 minutes. An area `{path, scenarios}` maps a path prefix to the scenarios that really exercise it; a file uses only its most specific areas. Test files and harness state map to nothing. A changed script or scenarios.json entry pulls in its scenarios first. `--quick --dry [--changed a,b]` prints the set. A clean tree (a verifier's snapshot) maps the last commit's files. `--quick` and `--all` record a tree hash so `freshreport.mjs --tree` can reuse a run on the identical tree.
+
+### Godot runs
+
+kit.config.json `target` is `godot`, so verify, shoot, flakecheck and gateretry run the Godot game (`harness/bin/godotdriver.mjs`, picked by `driver.mjs`). No browser is launched; the report says `"driver": "godot"`. The web driver (`browser.mjs`, target `web`) stays for a later web demo.
+
+- **Build.** `npm run build` is the headless import of `game/` into `game/.godot/` (kit.config.json `buildDir`). `npm run typecheck` adds a parse check of every `.gd` file and of the harness `.mjs` files.
+- **One run per scenario.** Each scenario, the boot check and each milestone launch the pinned Godot fresh: `godot --path game --resolution WxH --quit-after N -- --debug --debug-port=<free port> --verify` plus the scenario's game args. `quality` adds `--quality=<q>`, `lockstep: true` adds `--lockstep`, `query: "a=1&b"` adds `--a=1 --b` (so does `HARNESS_QUERY`). `viewport: [w, h]` sets the window size (default 1280x720). `HARNESS_GODOT_ARGS` adds engine args, for example `--rendering-driver vulkan` for GPU times on macOS. Default `--jobs` is 2 (two game windows side by side).
+- **Windowed vs headless.** Runs are windowed by default: they render, so they take shots and measure perf. A scenario with `headless: true` runs Godot headless (no window, no GPU): only for script-only checks. Its `{shot}` and `{perf}` steps fail, and a script's `S.shot` is skipped with a log line. Headless frames end on `process_frame` (nothing is drawn), so `frames(n)` and snapshots still work.
+- **Scripts.** Page-side scripts (`harness/verify/scripts/*.js`, milestone play scripts, `lib/sim.js`) run unchanged in a node vm whose global is a window shim (`godotshim.mjs`). `state`, `clock`, `events` and `hold()` read the newest snapshot; every other hook is a request to the debug server. `input`, `setCamera`, `timeScale`, `hud` and `hold({...})` send and return at once (TCP keeps the order); a request that fails and was not awaited fails the script. `window.__shot`, `__hostLoad` and `__probeNoDebug` (hooks_no_debug) exist; `__realInput` and screen recording are web only.
+- **Steps.** `call`, `eval`, `waitFor`, `settle`, `input`, `script`, `perf`, `shot`, `sheets` and `wait` work. `key`, `hold`, `click`, `emulate`, `reload`, `cpuThrottle` and a `viewport` step are browser steps and fail with a clear error: drive the game with `input`.
+- **Console errors.** Any `ERROR`, `SCRIPT ERROR` or `USER ERROR` line in Godot's output, any `error` event from the game (`game/debug/debug_logger.gd`), a `console.error` in a script, a game that exits on its own, or a debug server that never answers. `WARNING` lines go to the report's warnings.
+- **Where things go.** Shots are the debug server's `shot(path)` (the viewport as a PNG) in `harness/reports/shots/` (or `--shots`). The engine output lines that count as errors or warnings are in the report (`consoleErrors`, `warnings`); `godot.mjs` and the smoke test keep their own output (`harness/reports/godot/`). Load time is launch to the first ready snapshot.
 
 ## Debug hook contract
 

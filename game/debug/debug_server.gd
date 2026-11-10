@@ -40,10 +40,13 @@ var _overlay_label: Label = null
 var _logger: DebugLogger = null
 var _quitting := false
 var _probe_start: Node = null
+## Headless runs (DisplayServer "headless") draw nothing, so frame_post_draw never fires: frames end on process_frame.
+var _headless := false
 
 
 func _ready() -> void:
 	process_mode = Node.PROCESS_MODE_ALWAYS
+	_headless = DisplayServer.get_name() == "headless"
 	var args := _args()
 	port = args.debug_port if args != null else 47181
 	var err := _server.listen(port, "127.0.0.1")
@@ -62,14 +65,14 @@ func _ready() -> void:
 	probe_end.setup(false, _probe_start)
 	add_child(_probe_start)
 	add_child(probe_end)
-	RenderingServer.frame_post_draw.connect(_after_draw)
+	_frame_signal().connect(_after_draw)
 
 
 func _exit_tree() -> void:
 	if _logger != null:
 		OS.remove_logger(_logger)
-	if RenderingServer.frame_post_draw.is_connected(_after_draw):
-		RenderingServer.frame_post_draw.disconnect(_after_draw)
+	if _frame_signal().is_connected(_after_draw):
+		_frame_signal().disconnect(_after_draw)
 	for c in _clients:
 		c.peer.disconnect_from_host()
 	_server.stop()
@@ -84,7 +87,8 @@ func _process(_delta: float) -> void:
 		var c := {"peer": peer, "buf": PackedByteArray(), "last_seq": _events().seq}
 		_clients.append(c)
 		_send(c, {"type": "hello", "protocol": PROTOCOL, "version": _version(), "port": port, "methods": METHODS,
-			"args": _args().as_dict(), "ready": _ready_now(), "frame": Engine.get_frames_drawn()})
+			"args": _args().as_dict(), "ready": _ready_now(), "frame": _frame_no(), "headless": _headless,
+			"renderer": _renderer()})
 	for c in _clients.duplicate():
 		_read(c)
 	if _overlay_label != null and _overlay.visible:
@@ -149,7 +153,7 @@ func _handle(c: Dictionary, msg: Dictionary) -> void:
 	_send(c, reply)
 	if method == "quit" and out.ok and not _quitting:
 		_quitting = true
-		await RenderingServer.frame_post_draw
+		await _frame_signal()
 		get_tree().quit(0)
 
 
@@ -164,7 +168,7 @@ static func _fail(error: String) -> Dictionary:
 func _call(method: String, a: Array) -> Dictionary:
 	match method:
 		"ping":
-			return _ok({"frame": Engine.get_frames_drawn()})
+			return _ok({"frame": _frame_no()})
 		"state":
 			return _ok(state())
 		"clock":
@@ -191,9 +195,11 @@ func _call(method: String, a: Array) -> Dictionary:
 		"frames":
 			var n := int(a[0]) if a.size() > 0 and (a[0] is float or a[0] is int) else 1
 			for k in maxi(1, n):
-				await RenderingServer.frame_post_draw
-			return _ok({"frame": Engine.get_frames_drawn()})
+				await _frame_signal()
+			return _ok({"frame": _frame_no()})
 		"perf":
+			if _headless:
+				return _fail("perf: a headless run renders nothing, so it has no frame times (run the scenario windowed)")
 			var ms := float(a[0]) if a.size() > 0 and (a[0] is float or a[0] is int) else 1000.0
 			return _ok(await _perf(clampf(ms, 50.0, 60000.0)))
 		"load":
@@ -240,7 +246,7 @@ func _after_draw() -> void:
 	var ev := _events()
 	for c in _clients:
 		var snap := {
-			"type": "snapshot", "frame": Engine.get_frames_drawn(), "w": Time.get_ticks_msec(), "ready": _ready_now(),
+			"type": "snapshot", "frame": _frame_no(), "w": Time.get_ticks_msec(), "ready": _ready_now(),
 			"state": st, "clock": clock, "hold": hold, "events": ev.since(c.last_seq),
 		}
 		c.last_seq = ev.seq
@@ -268,7 +274,7 @@ func state() -> Dictionary:
 	return {
 		"scene": id, "level": id, "milestone": null, "player": player, "camera": camera, "hud": _hud_on,
 		"debugOverlay": _overlay != null and _overlay.visible, "quality": gargs.quality, "style": gargs.style,
-		"arch": gargs.arch, "lockstep": gargs.lockstep, "frame": Engine.get_frames_drawn(),
+		"arch": gargs.arch, "lockstep": gargs.lockstep, "frame": _frame_no(),
 	}
 
 
@@ -312,7 +318,7 @@ func _release_all() -> void:
 func _perf(ms: float) -> Dictionary:
 	var vp := get_viewport().get_viewport_rid()
 	RenderingServer.viewport_set_measure_render_time(vp, true)
-	await RenderingServer.frame_post_draw
+	await _frame_signal()
 	var cpu: Array[float] = []
 	var gpu: Array[float] = []
 	var frame: Array[float] = []
@@ -321,7 +327,7 @@ func _perf(ms: float) -> Dictionary:
 	var start := Time.get_ticks_usec()
 	var last := start
 	while float(Time.get_ticks_usec() - start) < ms * 1000.0:
-		await RenderingServer.frame_post_draw
+		await _frame_signal()
 		var now := Time.get_ticks_usec()
 		frame.append((now - last) / 1000.0)
 		last = now
@@ -363,8 +369,8 @@ func _load(id: String) -> Dictionary:
 	# The swap happens at the end of this frame; two drawn frames later the new scene is on screen.
 	await get_tree().process_frame
 	await get_tree().process_frame
-	await RenderingServer.frame_post_draw
-	await RenderingServer.frame_post_draw
+	await _frame_signal()
+	await _frame_signal()
 	_events().emit_event("scene:load", {"id": id})
 	return _ok({"scene": _args().current_scene_id()})
 
@@ -433,17 +439,19 @@ func _clear_camera() -> void:
 
 
 func _shot(path: String) -> Dictionary:
+	if _headless:
+		return _fail("shot: a headless run renders nothing (run the scenario windowed)")
 	var dir := path.get_base_dir()
 	if not DirAccess.dir_exists_absolute(dir):
 		DirAccess.make_dir_recursive_absolute(dir)
-	await RenderingServer.frame_post_draw
+	await _frame_signal()
 	var img := get_viewport().get_texture().get_image()
 	if img == null or img.is_empty():
 		return _fail("shot: the viewport gave no image (headless?)")
 	var err := img.save_png(path)
 	if err != OK:
 		return _fail("shot: could not save %s (error %d)" % [path, err])
-	return _ok({"path": path, "width": img.get_width(), "height": img.get_height(), "frame": Engine.get_frames_drawn()})
+	return _ok({"path": path, "width": img.get_width(), "height": img.get_height(), "frame": _frame_no()})
 
 
 # ---------------------------------------------------------------- helpers
@@ -465,8 +473,27 @@ func _make_overlay(verify: bool) -> void:
 	add_child(_overlay)
 
 
+## The signal that ends a frame: frame_post_draw when the game draws, process_frame when headless.
+func _frame_signal() -> Signal:
+	return get_tree().process_frame if _headless else RenderingServer.frame_post_draw
+
+
+## Frames so far: drawn frames, or process frames when headless.
+func _frame_no() -> int:
+	return Engine.get_process_frames() if _headless else Engine.get_frames_drawn()
+
+
+## What renders the game (in the hello, so a report names the GPU and driver).
+func _renderer() -> Dictionary:
+	return {
+		"adapter": RenderingServer.get_video_adapter_name(), "vendor": RenderingServer.get_video_adapter_vendor(),
+		"driver": RenderingServer.get_current_rendering_driver_name(),
+		"method": RenderingServer.get_current_rendering_method(),
+	}
+
+
 func _ready_now() -> bool:
-	return Engine.get_frames_drawn() > 0 and get_tree().current_scene != null
+	return _frame_no() > 0 and get_tree().current_scene != null
 
 
 func _version() -> String:

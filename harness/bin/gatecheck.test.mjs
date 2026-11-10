@@ -118,7 +118,8 @@ describe('gate retry path (P4-101)', () => {
 
   it('the shared_paths.json lists the entry, the debug hooks and the verify harness', () => {
     const real = loadSharedPaths();
-    for (const f of ['src/main.ts', 'src/debug/hooks.ts', 'harness/bin/verify.mjs', 'harness/bin/browser.mjs', 'package.json']) expect(matchesShared(f, real), f).toBe(true);
+    for (const f of ['game/project.godot', 'game/debug/debug_server.gd', 'game/core/sim_clock.gd', 'harness/bin/verify.mjs', 'harness/bin/godotdriver.mjs', 'harness/bin/godotshim.mjs', 'package.json']) expect(matchesShared(f, real), f).toBe(true);
     expect(matchesShared('src/data/dialogue/L01.json', real)).toBe(false);
+    expect(matchesShared('game/tests/test_car.gd', real)).toBe(false);
   });
 });

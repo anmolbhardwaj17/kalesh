@@ -5,12 +5,14 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "tsc --noEmit && vite build",
+    "build": "node harness/bin/godot.mjs check",
     "preview": "vite preview",
     "test": "vitest run && npm run test:godot",
-    "typecheck": "tsc --noEmit",
+    "typecheck": "tsc --noEmit && tsc --noEmit -p tsconfig.tools.json && node harness/bin/godot.mjs parse",
     "test:godot": "node harness/bin/godot.mjs test",
-    "godot:check": "node harness/bin/godot.mjs check"
+    "godot:check": "node harness/bin/godot.mjs check",
+    "build:web": "tsc --noEmit && vite build",
+    "godot:parse": "node harness/bin/godot.mjs parse"
   },
   "dependencies": {
     "three": "^0.187.0"

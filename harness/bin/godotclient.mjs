@@ -12,7 +12,7 @@ import net from 'node:net';
 import path from 'node:path';
 import { spawn } from 'node:child_process';
 import { fileURLToPath } from 'node:url';
-import { resolveGodot, stripAnsi } from './godot.mjs';
+import { resolveGodot, godotConfig, stripAnsi } from './godot.mjs';
 
 const ROOT = process.env.HARNESS_ROOT
   ? path.resolve(process.env.HARNESS_ROOT)
@@ -180,7 +180,9 @@ export function gameArgs({ project, debug = true, verify = true, port, quitAfter
  * quitAfter (frames) is a safety net so a stuck run always ends.
  */
 export async function launchGame(opts = {}) {
-  const g = await resolveGodot({ allowDownload: true });
+  // opts.binary (a path from an earlier resolveGodot) skips the lookup: resolveGodot runs `godot --version` with
+  // spawnSync, which blocks this process while other runs it drives are talking to their games.
+  const g = opts.binary ? { path: opts.binary, cfg: godotConfig() } : await resolveGodot({ allowDownload: true });
   const project = path.join(ROOT, g.cfg.project);
   const port = opts.port || await freePort();
   const args = gameArgs({ ...opts, project, port });

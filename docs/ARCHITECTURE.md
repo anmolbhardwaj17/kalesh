@@ -43,14 +43,17 @@ Browser (until P0-027): `src/debug/hooks.ts`: state, clock, frames, input, perf,
 
 | Path | What |
 |---|---|
-| `harness/bin/godot.mjs` | Finds the pinned Godot (kit.config.json "godot"), checks its version, downloads a portable copy into `tools/godot/` only when none matches. `--version`, `path`, `check`, `test`, `frame <png>` (Movie Maker), `run --`. Tests: `godot.test.mjs`. |
+| `harness/bin/godot.mjs` | Finds the pinned Godot (kit.config.json "godot"), checks its version, downloads a portable copy into `tools/godot/` only when none matches. `--version`, `path`, `check`, `test`, `parse` (loads every `.gd`, `game/tests/parse_all.gd`), `frame <png>` (Movie Maker), `run --`. Tests: `godot.test.mjs`. |
 | `harness/bin/godotclient.mjs` | Client for the Godot debug server: `launchGame()` (spawns the pinned Godot with engine and game args, connects), `GodotDebugClient` (`call(method, ...args)`, latest `snapshot`, `events`, `waitSnapshot`), `freePort`, `portOpen`. Tests: `godotclient.test.mjs`. |
+| `harness/bin/driver.mjs` | Picks the driver from kit.config.json `target` (`godot` or `web`; `HARNESS_TARGET` overrides). verify.mjs and shoot.mjs get launch, openPage, waitReady, debugCall and runStep from it. |
+| `harness/bin/godotdriver.mjs` | The Godot driver (P0-026): one Godot run per scenario (windowed at the scenario size, or headless), the scenario steps, shots through the debug server's `shot(path)`, console errors from ERROR lines and `error` events, `probeNoDebug` for hooks_no_debug. |
+| `harness/bin/godotshim.mjs` | The window shim page-side scripts run in (a node vm): `window.__game` whose sync hooks read the newest snapshot and whose other hooks are server requests. Tests: `godotshim.test.mjs`. |
 | `harness/bin/godotsmoke.mjs` | Smoke test of the debug server: no port without `--debug`, every hook's shape, the sim hold, shot and quit; writes `harness/reports/godot/smoke.json` and `smoke_shot.png`. |
 | `tools/fixtures/gen_projection_points.mjs` | Writes `harness/data/fixtures/projection_points.json` from the TS projection, for the GDScript cross-check. |
 | `harness/bin/task.mjs` | The only writer of `harness/state/backlog.json`: status, next, start, done, fail, phases, gates, inbox, milestones, sign-off. |
 | `harness/bin/signoffs.mjs` | The three Phase 0 sign-offs (style, architecture, game design) as one table: state keys, commands, phase flags, status lines, gate reasons; read by `task.mjs` and the dashboard. Tests: `signoffs.test.mjs`. |
-| `harness/bin/verify.mjs` | Builds, serves the build, runs scenarios and milestone play scripts in Chromium, judges budgets, writes `harness/reports/latest.json` and shots. `--quick`, `--only`, `--milestone`, `--all`, `--repeat`. |
-| `harness/bin/browser.mjs` | Static server, Chromium launch (GPU first, then software GL), page open with console capture, `waitReady`, `debugCall`, the step runner. |
+| `harness/bin/verify.mjs` | Builds (Godot: the headless import), runs scenarios and milestone play scripts through the target's driver (Godot runs, or the served build in Chromium), judges budgets, writes `harness/reports/latest.json` and shots. `--quick`, `--only`, `--milestone`, `--all`, `--repeat`. |
+| `harness/bin/browser.mjs` | The web driver (target `web`, kept for a later web demo): static server, Chromium launch (GPU first, then software GL), page open with console capture, `waitReady`, `debugCall`, the step runner. |
 | `harness/bin/shoot.mjs` | Ad hoc screenshots and play-throughs. |
 | `harness/bin/lookproof.mjs` | Look proof sets, compare against the approved reference, side by side sheets, perf per view. |
 | `harness/bin/perfbudget.mjs`, `perfgate.mjs`, `gpucost.mjs` | Budgets from `perf_budgets.json`, the frame time gate, the stable GPU cost. |

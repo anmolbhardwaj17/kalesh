@@ -3,7 +3,7 @@
 //   node harness/bin/flakecheck.mjs boot_title,camera_follow --runs 10 --jobs 2 --load 2
 // Options: --runs N (default 10), --jobs N (pages side by side, default 2), --load N (a second verify with N pages runs
 // heavy scenarios over and over in another browser while the check runs, so the GPU and CPU are shared; default 0),
-// --load-set a,b (scenarios for the load run), --no-build (reuse dist; the default builds once first). Every run's shots are
+// --load-set a,b (scenarios for the load run), --no-build (reuse the build: dist on web, the Godot import on godot; the default builds once first). Every run's shots are
 // measured (P2B-105, shots/r<k>/): a lightcheck FAIL fails that run, --min-mean N also fails a run with a shot under N.
 // A milestone id in the list (M07, TEST; P2-180) runs `verify --milestone <id>` N times, --jobs at a time, beside the scenarios.
 // It never runs typecheck or the unit tests (use npm test), never writes harness/reports/latest.json: the report is

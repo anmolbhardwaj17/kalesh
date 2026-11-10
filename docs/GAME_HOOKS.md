@@ -47,14 +47,14 @@ TCP on 127.0.0.1, newline-delimited JSON (one UTF-8 JSON object per line).
 |---|---|
 | client to game | `{"id": 7, "method": "state", "args": []}`. `id` is any number the client picks, one per call. `args` is the hook's argument list. |
 | game to client | `{"type": "response", "id": 7, "ok": true, "result": ...}` or `{"type": "response", "id": 7, "ok": false, "error": "..."}`. |
-| game to client, once on connect | `{"type": "hello", "protocol": 1, "version", "port", "methods": [...], "args": {...}, "ready", "frame"}`. |
+| game to client, once on connect | `{"type": "hello", "protocol": 1, "version", "port", "methods": [...], "args": {...}, "ready", "frame", "headless", "renderer": {adapter, vendor, driver, method}}`. |
 | game to client, after every drawn frame | `{"type": "snapshot", "frame", "w", "ready", "state", "clock", "hold", "events"}`. `events` holds only the events since the previous snapshot. |
 
 Methods: `ping`, `state`, `clock`, `frames`, `input`, `perf`, `load`, `teleport`, `setCamera`, `timeScale`, `hold`, `events`, `hud`, `shot`, `quality`, `quit`. Shapes are the ones in "Required" below, with these Godot details:
 
 - `state()`: `{scene, level, milestone: null, player: {pos, heading, speed, grounded}, camera: {pos, dir, fov, override}, hud, debugOverlay, quality, style, arch, lockstep, frame}`.
 - `input(action, value)`: `throttle` and `steer` are composite (-1 to 1: negative presses `brake` or `steer_left`, positive `throttle` or `steer_right`). Any InputMap action name also works, with a strength 0 to 1 or a boolean. It goes through `Input.action_press`, the way a player's keys do.
-- `frames(n)`: answers `{frame}` after n drawn frames (`RenderingServer.frame_post_draw`).
+- `frames(n)`: answers `{frame}` after n drawn frames (`RenderingServer.frame_post_draw`). Headless (`--headless`, nothing is drawn) a frame ends on `SceneTree.process_frame` instead, for frames, snapshots, load and quit; `perf` and `shot` answer an error there.
 - `perf(ms)`: `cpuMs` is the game logic time of the frame (first physics or process callback to the last `_process`, measured by `game/debug/frame_probe.gd`) plus the viewport's measured render CPU time and frame setup time. `gpuMs` is the viewport's measured GPU time. `p95FrameMs` and `avgFps` come from the intervals between drawn frames. `drawCalls` and `triangles` are the max per frame of `RenderingServer` total draw calls and primitives in frame (`drawCallsAvg`, `trianglesAvg` too). `gpuMB` is video memory used (`textureMB`, `bufferMB` too). On macOS the default Metal driver gives no GPU time, so `gpuMs` is missing and `gpuNote` says why; with the engine arg `--rendering-driver vulkan` (MoltenVK) `gpuMs` is there.
 - `load(id)`: changes to the scene and answers `{scene}` two drawn frames later. Releases debug inputs and the debug camera. Unknown ids are an error response.
 - `teleport([x, y, z])`: puts the player on the ground at x, z and stops it. A name looks for a node in the group `anchor` (none yet, so it answers false).
@@ -66,7 +66,7 @@ Methods: `ping`, `state`, `clock`, `frames`, `input`, `perf`, `load`, `teleport`
 
 ### Snapshot vs request
 
-`state`, `clock`, `hold` (read) and `events` are cheap and change every frame, so the game pushes them in each snapshot. A driver answers the synchronous hooks from the newest snapshot (the harness-side event ring is the events of every snapshot it got). `frames`, `perf`, `load`, `shot`, `input`, `teleport`, `setCamera`, `timeScale`, `hold({...})`, `hud`, `quality` and `quit` are requests: the answer comes in the response.
+`state`, `clock`, `hold` (read) and `events` are cheap and change every frame, so the game pushes them in each snapshot. A driver answers the synchronous hooks from the newest snapshot (the harness-side event ring is the events of every snapshot it got). The harness driver (`harness/bin/godotdriver.mjs`, VERIFY.md "Godot runs") runs page-side scripts in a node vm with a `window.__game` shim built this way (`harness/bin/godotshim.mjs`). `frames`, `perf`, `load`, `shot`, `input`, `teleport`, `setCamera`, `timeScale`, `hold({...})`, `hud`, `quality` and `quit` are requests: the answer comes in the response.
 
 ### Sim clock and hold
 

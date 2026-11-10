@@ -1,0 +1,14 @@
+{
+  "_doc": "Syntax check of the harness and tools scripts (P0-026): tsc parses every .mjs as JavaScript (allowJs, no type check, checkJs off). Page-side verify scripts are async function bodies, not modules, so they are left out; godot.mjs parse and the verify runs load those.",
+  "compilerOptions": {
+    "target": "ES2022",
+    "module": "NodeNext",
+    "moduleResolution": "NodeNext",
+    "allowJs": true,
+    "checkJs": false,
+    "noEmit": true,
+    "skipLibCheck": true,
+    "types": []
+  },
+  "include": ["harness/bin/**/*.mjs", "tools/**/*.mjs"]
+}

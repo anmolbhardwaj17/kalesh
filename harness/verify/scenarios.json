@@ -1,5 +1,5 @@
 {
-  "_doc": "Scenarios for verify.mjs (format in harness/design/VERIFY.md 'Scenario options' and the step list in browser.mjs runStep). Each scenario opens a fresh page (index.html?<pageQuery>), runs its steps in order and fails on the first failed step, any console error, a problem a shot rule reports (debug.shotProblems) or a budget over its fail limit (harness/verify/perf_budgets.json). Keep each scenario small and about one thing. Name it <area>_<what>. Add a `_note` that says what it proves and which task added it.",
+  "_doc": "Scenarios for verify.mjs (format in harness/design/VERIFY.md 'Scenario options' and the step list in browser.mjs runStep). Each scenario opens a fresh page (index.html?<pageQuery>) or, with kit.config.json target godot, a fresh Godot run (godotdriver.mjs; `headless: true` runs it headless, no shots or perf), runs its steps in order and fails on the first failed step, any console error, a problem a shot rule reports (debug.shotProblems) or a budget over its fail limit (harness/verify/perf_budgets.json). Keep each scenario small and about one thing. Name it <area>_<what>. Add a `_note` that says what it proves and which task added it.",
   "scenarios": [
     {
       "name": "boot_title",
@@ -48,7 +48,8 @@
           "timeout": 40000
         }
       ],
-      "_note": "P0-001. Opens the game URL without ?debug=1 in an iframe: window.__game has ready and version, window.__game.debug is undefined (GAME_HOOKS.md Rules)."
+      "_note": "P0-001, ported to Godot in P0-026. Web: opens the game URL without ?debug=1 in an iframe, window.__game.debug is undefined. Godot: the driver launches the game headless without --debug and no port answers (its own and the default), no debug server line, no ERROR lines (GAME_HOOKS.md Rules). The scenario's own debug run is headless (no shot).",
+      "headless": true
     },
     {
       "name": "drive_north",

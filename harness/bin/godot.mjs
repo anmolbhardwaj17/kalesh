@@ -5,6 +5,7 @@
 //   node harness/bin/godot.mjs path             prints the binary path only
 //   node harness/bin/godot.mjs check            headless import of the project; fails on any ERROR or SCRIPT ERROR line
 //   node harness/bin/godot.mjs test             import, then the headless GDScript tests (game/tests/run_tests.gd)
+//   node harness/bin/godot.mjs parse            import, then load every .gd under game/ (game/tests/parse_all.gd)
 //   node harness/bin/godot.mjs frame <out.png>  one windowed frame of the main scene through Movie Maker
 //                                               (--frames N, default 30; --resolution WxH, default 1280x720)
 //   node harness/bin/godot.mjs run -- <args>    the engine with any other arguments
@@ -179,7 +180,7 @@ async function main(argv) {
   const allowDownload = !args.includes('--no-download');
   const cmd = args.find((a) => !a.startsWith('--')) || (args.includes('--version') ? '--version' : 'help');
   if (cmd === 'help') {
-    console.log(fs.readFileSync(fileURLToPath(import.meta.url), 'utf8').split('\n').slice(1, 12).map((l) => l.replace(/^\/\/ ?/, '')).join('\n'));
+    console.log(fs.readFileSync(fileURLToPath(import.meta.url), 'utf8').split('\n').slice(1, 13).map((l) => l.replace(/^\/\/ ?/, '')).join('\n'));
     return 0;
   }
   const g = await resolveGodot({ allowDownload });
@@ -197,6 +198,14 @@ async function main(argv) {
     if (judge('import', imp)) { process.stdout.write(imp.out); return 1; }
     // --quit-after is a safety net: if the runner dies before quit(), the engine still exits (and the error lines fail it).
     return judge('test', runGodot(g.path, ['--headless', '--path', project, '-s', 'res://tests/run_tests.gd', '--quit-after', '600'], { timeoutMs: 180000 }));
+  }
+  if (cmd === 'parse') {
+    const imp = runGodot(g.path, ['--headless', '--path', project, '--import'], { echo: false });
+    if (judge('import', imp)) { process.stdout.write(imp.out); return 1; }
+    const r = runGodot(g.path, ['--headless', '--path', project, '-s', 'res://tests/parse_all.gd', '--quit-after', '600'], { timeoutMs: 120000, echo: false });
+    const code = judge('parse', r);
+    if (code) process.stdout.write(r.out);
+    return code;
   }
   if (cmd === 'frame') {
     const out = args[args.indexOf('frame') + 1];

@@ -41,7 +41,7 @@ export const CONFIG_DEFAULTS = {
   game: 'the game', owner: 'the owner', milestoneWord: 'level', milestoneScripts: 'harness/verify/milestones',
   pageQuery: 'debug=1&verify=1', buildDir: 'dist', publicDir: 'public', dashboardPort: 4477, sessionLogLimitMB: 15,
   artPass: { intents: 8, tasksSince: 6 }, perfBudgetsFile: 'harness/verify/perf_budgets.json',
-  treeHashPaths: null,
+  treeHashPaths: null, target: 'web',
 };
 let configCache = null;
 export function config() {

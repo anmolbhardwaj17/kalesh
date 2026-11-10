@@ -1,5 +1,6 @@
 #!/usr/bin/env node
-// Verification. Builds the game, runs it in Chromium, runs scenarios, plays milestones with their play scripts.
+// Verification. Builds the game, runs it (kit.config.json "target": godot runs the Godot game through godotdriver.mjs, web
+// runs the page in Chromium through browser.mjs), runs scenarios, plays milestones with their play scripts.
 //   node harness/bin/verify.mjs --quick            typecheck + tests + build + boot + quick scenario set (default)
 //   node harness/bin/verify.mjs --milestone L03    build + boot + that milestone's play script (comma list allowed)
 //   node harness/bin/verify.mjs --all              everything: checks, every scenario incl. perf, every milestone with a play script
@@ -7,7 +8,7 @@
 //   --quick --dry [--changed a,b] prints the quick set and why each mapped scenario is in it, runs nothing
 //   --all --dry (or --only a,b --dry) prints the run order (perf scenarios first and alone, the pool, the solo ones, milestones)
 // Options: --no-build (reuse the build), --no-checks (skip typecheck and tests), --headed, --jobs N (pages side by side,
-//   default 4), --repeat N (with --only: each scenario N times and a pass table; flakecheck.mjs drives it), --report <file>,
+//   default 4 on web, 2 on godot), --repeat N (with --only: each scenario N times and a pass table; flakecheck.mjs drives it), --report <file>,
 //   --shots <dir>, --query "a=1" (extra page params for milestone pages), --base-url <url> (test a served copy, no build)
 // Writes harness/reports/latest.json (+ history/) and screenshots in harness/reports/shots/. Exit code 1 if not ok.
 // Budgets (frame time, draw calls, triangles, GPU memory, load time) come from harness/verify/perf_budgets.json, which
@@ -17,7 +18,8 @@ import os from 'node:os';
 import path from 'node:path';
 import { execSync, spawnSync } from 'node:child_process';
 import { PATHS, ROOT, R, readJSON, writeJSON, nowISO, parseArgs, git, treeHash, TREE_RULE, powerInfo, config } from './lib.mjs';
-import { npmRun, startServer, launch, openPage, waitReady, debugCall, runStep } from './browser.mjs';
+import { npmRun } from './browser.mjs';
+import { loadDriver } from './driver.mjs';
 import { pickQuick, describePick, changedScenarioNames, useCommitFiles } from './quickset.mjs';
 import { frameTimeGate, loadText, perfSummary, perfTable, runOrder } from './perfgate.mjs';
 import { checkVerifyArgs, scenarioNames, milestoneIds, VERIFY_BOOLEANS } from './cliguard.mjs';
@@ -33,6 +35,10 @@ const args = parseArgs(process.argv.slice(2), { booleans: VERIFY_BOOLEANS });
   if (chk.exit !== null) { console.log(chk.text); process.exit(chk.exit); }
 }
 const CFG = config();
+// The driver of the target (driver.mjs): launch, openPage, waitReady, debugCall, runStep for Godot or the browser.
+const DRV = await loadDriver(CFG);
+const { startServer, launch, openPage, waitReady, debugCall, runStep } = DRV;
+const GODOT = DRV.kind === 'godot';
 const BUDGETS = loadBudgets();
 const mode = args.all ? 'all' : args.milestone ? 'milestone' : args.only ? 'only' : 'quick';
 const onlyPats = args.only ? String(args.only).split(',').map((x) => x.trim()).filter(Boolean) : null;
@@ -41,10 +47,10 @@ const REPEAT = Math.max(0, Number(args.repeat || 0) | 0);
 const FC_DIR = path.join(ROOT, 'harness', 'reports', 'flakecheck');
 const REPORT_OUT = args.report ? path.resolve(String(args.report)) : REPEAT ? path.join(FC_DIR, 'last.json') : PATHS.reportLatest;
 const shotsDir = args.shots ? path.resolve(String(args.shots)) : REPEAT ? path.join(FC_DIR, 'shots') : PATHS.shots;
-const JOBS = Math.max(1, Number(args.jobs || process.env.HARNESS_JOBS || 4) | 0);
+const JOBS = Math.max(1, Number(args.jobs || process.env.HARNESS_JOBS || (GODOT ? 2 : 4)) | 0);
 const TIMINGS_FILE = path.join(path.dirname(PATHS.reportLatest), 'timings.json');
 const SCEN_FILE = path.join(ROOT, 'harness', 'verify', 'scenarios.json');
-const report = { mode, ok: false, startedAt: nowISO(), finishedAt: null, commit: git('rev-parse --short HEAD') || null, gl: null, budgets: BUDGETS.source, checks: {}, boot: null, consoleErrors: [], warnings: [], failedRequests: [], scenarios: {}, milestones: {}, failReason: null };
+const report = { mode, driver: DRV.kind, ok: false, startedAt: nowISO(), finishedAt: null, commit: git('rev-parse --short HEAD') || null, gl: null, budgets: BUDGETS.source, checks: {}, boot: null, consoleErrors: [], warnings: [], failedRequests: [], scenarios: {}, milestones: {}, failReason: null };
 if (mode === 'quick' || mode === 'all') { report.tree = treeHash(); report.treeRule = TREE_RULE; }
 const fail = (why) => { if (!report.failReason) report.failReason = why; };
 
@@ -111,14 +117,16 @@ if (args.dry) {
   process.exit(0);
 }
 
-function pageUrl(base, { quality, query = '' } = {}) {
-  const q = [CFG.pageQuery, quality ? `quality=${encodeURIComponent(quality)}` : '', String(query || '').replace(/^[?&]+/, ''), String(process.env.HARNESS_QUERY || '').replace(/^[?&]+/, '')].filter(Boolean).join('&');
+function pageUrl(base, { quality, query = '', lockstep } = {}) {
+  const q = [CFG.pageQuery, quality ? `quality=${encodeURIComponent(quality)}` : '', lockstep ? 'lockstep=1' : '', String(query || '').replace(/^[?&]+/, ''), String(process.env.HARNESS_QUERY || '').replace(/^[?&]+/, '')].filter(Boolean).join('&');
   return `${base}index.html${q ? `?${q}` : ''}`;
 }
 
 async function freshPage(browser, base, opts = {}) {
   const t0 = Date.now();
-  const { page, log } = await openPage(browser, pageUrl(base, opts), { dpr: opts.dpr || 1, width: opts.viewport?.[0], height: opts.viewport?.[1] });
+  // Godot: a fresh game run with the scenario's game args (godotdriver.mjs specArgs); web: the page URL with its params.
+  const target = GODOT ? { quality: opts.quality, query: opts.query, lockstep: opts.lockstep, headless: opts.headless } : pageUrl(base, opts);
+  const { page, log } = await openPage(browser, target, { dpr: opts.dpr || 1, width: opts.viewport?.[0], height: opts.viewport?.[1] });
   const ready = await waitReady(page);
   return { page, log, ready, loadMs: Date.now() - t0 };
 }
@@ -144,7 +152,7 @@ async function measurePerf(ctx, ms) {
 
 async function runScenario(browser, base, sc, solo) {
   const t0 = Date.now();
-  const { page, log, ready, loadMs } = await freshPage(browser, base, { quality: sc.quality, query: sc.query, dpr: sc.dpr, viewport: sc.viewport });
+  const { page, log, ready, loadMs } = await freshPage(browser, base, { quality: sc.quality, query: sc.query, dpr: sc.dpr, viewport: sc.viewport, lockstep: sc.lockstep, headless: GODOT && sc.headless === true });
   const ctx = { page, shotsDir: sc.baseName ? path.join(shotsDir, `r${sc.name.split('#').pop()}`) : shotsDir, shots: [], perf: null };
   const res = { ok: true, shots: ctx.shots, errors: [], loadMs };
   if (!ready.ok) { res.ok = false; res.errors.push(ready.reason); }
@@ -158,6 +166,7 @@ async function runScenario(browser, base, sc, solo) {
       if (ctx.scriptResult.metrics) res.metrics = ctx.scriptResult.metrics;
       if (ctx.scriptResult.summary) res.summary = ctx.scriptResult.summary;
     }
+    if (res.ok && measuresPerf(sc) && GODOT && sc.headless) { res.ok = false; res.errors.push('perf: a headless scenario has no frame times (drop `headless`)'); }
     if (res.ok && measuresPerf(sc)) {
       const power = powerInfo();
       const r = await measurePerf(ctx, sc.perfMs || BUDGETS.windowMs);
@@ -173,6 +182,8 @@ async function runScenario(browser, base, sc, solo) {
       } else res.errors.push(`perf: ${r.error} (the game must expose debug.perf(ms), docs/GAME_HOOKS.md)`);
     }
   }
+  // Closed before the error check: a Godot run's last output lines (and error events) land in the log on close.
+  await page.close();
   if (ctx.problems?.length) { res.ok = false; res.errors.push(...ctx.problems.slice(0, 3)); }
   if (log.errors.length) { res.ok = false; res.errors.push(`${log.errors.length} console error(s)`); }
   // Budgets (perf_budgets.json): frame time, draw calls, triangles, GPU memory, per quality preset; load time on every page.
@@ -181,7 +192,6 @@ async function runScenario(browser, base, sc, solo) {
   if (b.fails.length) { res.ok = false; res.errors.push(...b.fails); }
   if (res.perf) Object.assign(res.perf, { judged: !report.gl.software, frameGate: b.frame?.level ?? null, frameP95Ms: b.frame?.p95 ?? null });
   if (!res.ok) fail(`scenario ${sc.name}: ${res.errors[0]}`);
-  await page.close();
   res.ms = Date.now() - t0;
   res.parallel = !solo;
   console.log(`  scenario ${sc.name}: ${res.ok ? 'ok' : 'FAIL ' + res.errors.join('; ')}${res.perf ? ` (p95 ${b.frame?.p95 != null ? b.frame.p95.toFixed(1) : '-'} ms, ${res.perf.avgFps != null ? res.perf.avgFps.toFixed(1) : '-'} fps, ${res.perf.drawCalls ?? '-'} calls, ${res.perf.triangles != null ? Math.round(res.perf.triangles / 1000) + 'k' : '-'} tris, ${loadText(res.perf)})` : ''}`);
@@ -229,6 +239,7 @@ async function runMilestone(browser, base, id) {
     res.ok = false; res.reason = String(e.message || e);
     try { await runStep(ctx, { shot: `${id}_error` }); } catch { /* ignore */ }
   }
+  await page.close();
   if (ctx.problems?.length) { res.ok = false; res.reason = res.reason || ctx.problems[0]; }
   res.consoleErrors = log.errors.length;
   if (log.errors.length) { res.ok = false; res.reason = res.reason || `${log.errors.length} console error(s)`; }
@@ -237,7 +248,6 @@ async function runMilestone(browser, base, id) {
   report.milestones[id] = res;
   if (!res.ok) fail(`${CFG.milestoneWord} ${id}: ${res.reason}`);
   console.log(`  ${CFG.milestoneWord} ${id}: ${res.ok ? 'ok' : 'FAIL ' + res.reason} (${Math.round(res.ms / 1000)} s)`);
-  await page.close();
 }
 
 async function main() {
@@ -253,14 +263,16 @@ async function main() {
     if (!r.ran && s === 'build') fail('package.json has no "build" script');
     if (r.ran && !r.ok) fail(`${s} failed:\n${r.tail}`);
   }
-  if (!BASE_URL && !report.failReason && !fs.existsSync(R(CFG.buildDir, 'index.html'))) fail(`${CFG.buildDir}/index.html does not exist after the build`);
+  // Godot: the build is the headless import, which fills the import folder (kit.config.json buildDir, game/.godot).
+  const built = GODOT ? R(CFG.buildDir) : R(CFG.buildDir, 'index.html');
+  if (!BASE_URL && !report.failReason && !fs.existsSync(built)) fail(`${path.relative(ROOT, built)} does not exist after the build`);
   if (report.failReason) return;
   const server = BASE_URL ? { url: BASE_URL, close: async () => undefined } : await startServer();
   let browser;
   try {
     const l = await launch({ headed: !!args.headed });
     browser = l.browser; report.gl = l.gl; report.perfJudged = !l.gl.software;
-    console.log(`  webgl: ${l.gl.renderer}${l.gl.software ? ' (software: perf not judged)' : ''}`);
+    if (!GODOT) console.log(`  webgl: ${l.gl.renderer}${l.gl.software ? ' (software: perf not judged)' : ''}`);
     // Boot: the page loads and window.__game.ready turns true. Its load time is judged against the budget.
     const { page, log, ready, loadMs } = await freshPage(browser, server.url);
     report.boot = { ok: ready.ok, ms: loadMs, reason: ready.reason || null };
@@ -275,9 +287,11 @@ async function main() {
     const bb = judgeBudgets({ loadMs, budgets: BUDGETS, software: !!l.gl.software });
     for (const w of bb.warnings) report.warnings.push(`boot: ${w}`);
     if (bb.fails.length) { report.boot.ok = false; report.boot.reason = bb.fails[0]; }
-    absorb(log);
-    console.log(`  boot: ${report.boot.ok ? 'ok' : 'FAIL ' + report.boot.reason} (${loadMs} ms to ready)`);
     await page.close();
+    absorb(log);
+    if (log.errors.length && report.boot.ok) { report.boot.ok = false; report.boot.reason = `${log.errors.length} console error(s), first: ${log.errors[0].text}`; }
+    if (GODOT) console.log(`  driver: godot, ${l.gl.renderer}`);
+    console.log(`  boot: ${report.boot.ok ? 'ok' : 'FAIL ' + report.boot.reason} (${loadMs} ms to ready)`);
     if (!report.boot.ok) { fail(`boot: ${report.boot.reason}`); return; }
     if (mode !== 'milestone') await runScenarios(browser, server.url);
     const ms = milestoneList();

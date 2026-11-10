@@ -16,7 +16,10 @@ const st = D.state();
 need(st && typeof st === 'object' && 'scene' in st, 'debug.state() returns an object with a scene');
 const c0 = D.clock();
 need(c0 && typeof c0.t === 'number' && typeof c0.scale === 'number' && typeof c0.paused === 'boolean', 'debug.clock() returns {t, scale, paused}');
+// The sim ticks at a fixed 60 Hz while frames may draw faster (a 120 Hz display under Godot, P0-026), so a couple of
+// frames can hold no tick at all: wait (a few frames, bounded) for the sim to move instead of counting frames.
 await S.frames(3);
+await S.until(() => D.clock().t > c0.t, { sim: 1, wallMs: 5000, label: 'sim time moves while frames run' }).catch(() => null);
 need(D.clock().t > c0.t, 'sim time moves while frames run');
 const h = D.hold({ at: D.clock().t + 0.2 });
 await S.until(() => D.hold().paused, { sim: 2, label: 'sim hold pauses at its time' });
@@ -25,6 +28,7 @@ await new Promise((r) => setTimeout(r, 150));
 need(Math.abs(D.clock().t - held) < 1e-6, 'a held sim does not move');
 D.hold({ release: true, cancel: true });
 await S.frames(2);
+await S.until(() => D.clock().t > held, { sim: 1, wallMs: 5000, label: 'a released sim moves again' }).catch(() => null);
 need(D.clock().t > held, 'a released sim moves again');
 const p = await D.perf(500);
 need(p && p.cpuMs && typeof p.cpuMs.p95 === 'number', 'debug.perf(ms) returns cpuMs {p50, p95, max}');

@@ -28,17 +28,20 @@ Browser scaffold (until P0-027):
 
 ## npm scripts
 
-<!-- The scripts the harness needs and what each does. verify.mjs runs `typecheck`, `test` and `build` when they exist;
-`build` must write index.html into the build folder (kit.config.json buildDir). -->
+<!-- The scripts the harness needs and what each does. verify.mjs runs `typecheck`, `test` and `build` when they exist. -->
+
+kit.config.json `target` is `godot` (P0-026): verify.mjs and shoot.mjs run the Godot game through `harness/bin/godotdriver.mjs`. `build` is the headless Godot import, which fills the import folder `game/.godot/` (kit.config.json `buildDir`; gitignored). There is no export yet: verify runs the project from `game/` with the pinned engine. `srcDir` is `game`. The three.js scaffold build stays as `build:web` for the later web demo (target `web`, not run now).
 
 | Script | Does |
 |---|---|
-| `build` | `tsc --noEmit && vite build`, writes `dist/index.html` |
-| `typecheck` | `tsc --noEmit` |
+| `build` | `node harness/bin/godot.mjs check`: headless import of `game/` into `game/.godot/`, fails on any ERROR or SCRIPT ERROR line |
+| `typecheck` | `tsc --noEmit` (src), `tsc --noEmit -p tsconfig.tools.json` (syntax of every `.mjs` in `harness/bin/` and `tools/`), then `godot.mjs parse` (loads every `.gd` under `game/`, `game/tests/parse_all.gd`) |
 | `test` | `vitest run`, then `test:godot` |
 | `test:godot` | `node harness/bin/godot.mjs test`: headless import of `game/`, then the GDScript tests |
-| `godot:check` | `node harness/bin/godot.mjs check`: headless import, fails on any ERROR or SCRIPT ERROR line |
-| `dev` | `vite` dev server |
+| `godot:check` | the same as `build` |
+| `godot:parse` | `node harness/bin/godot.mjs parse` on its own |
+| `build:web` | `tsc --noEmit && vite build`, writes `dist/index.html` (web target only) |
+| `dev` | `vite` dev server (web target only) |
 
 ## Source layout
 

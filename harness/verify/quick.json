@@ -1,5 +1,5 @@
 {
-  "_doc": "verify --quick = the core set plus at most maxExtras scenarios mapped to the changed files (git status vs HEAD, untracked included). An area path is a prefix of a changed file; a file uses only its most specific areas (the longest matching path), so a fallback like src/ui/ never adds its list on top of src/ui/hud/. Test files and harness/state map to nothing. A changed harness/verify/scripts/<name>.js adds every scenario that uses it, a changed scenarios.json entry adds that scenario; both rank first. Keep areas narrow: list the scenarios that really exercise the files. Selection code: harness/bin/quickset.mjs. --quick --dry [--changed a,b] prints the set and why. --quick --full runs every non-allOnly scenario. Aim for a core of about 20 to 30 scenarios that together touch every shared system once.",
+  "_doc": "verify --quick = the core set plus at most maxExtras scenarios mapped to the changed files (git status vs HEAD, untracked included). An area path is a prefix of a changed file; a file uses only its most specific areas (the longest matching path), so a fallback like game/ never adds its list on top of game/debug/. The game is Godot (kit.config.json target godot): areas point at game/ and the Godot driver files. Test files and harness/state map to nothing. A changed harness/verify/scripts/<name>.js adds every scenario that uses it, a changed scenarios.json entry adds that scenario; both rank first. Keep areas narrow: list the scenarios that really exercise the files. Selection code: harness/bin/quickset.mjs. --quick --dry [--changed a,b] prints the set and why. --quick --full runs every non-allOnly scenario. Aim for a core of about 20 to 30 scenarios that together touch every shared system once.",
   "maxExtras": 12,
   "core": [
     "boot_title",
@@ -9,7 +9,7 @@
   ],
   "areas": [
     {
-      "path": "src/car.ts",
+      "path": "game/scripts/car",
       "scenarios": [
         "drive_north",
         "drive_turn_right",
@@ -17,22 +17,90 @@
       ]
     },
     {
-      "path": "src/geo/",
+      "path": "game/scripts/chase_camera.gd",
+      "scenarios": [
+        "boot_title",
+        "drive_north",
+        "coords_north_marker"
+      ]
+    },
+    {
+      "path": "game/geo/",
       "scenarios": [
         "coords_north_marker",
         "drive_north"
       ]
     },
     {
-      "path": "src/debug/",
+      "path": "game/debug/",
+      "scenarios": [
+        "hooks_contract",
+        "hooks_no_debug",
+        "coords_north_marker"
+      ]
+    },
+    {
+      "path": "game/core/",
+      "scenarios": [
+        "hooks_contract",
+        "hooks_no_debug",
+        "drive_north",
+        "drive_turn_right"
+      ]
+    },
+    {
+      "path": "game/scenes/",
+      "scenarios": [
+        "boot_title",
+        "coords_north_marker",
+        "drive_north"
+      ]
+    },
+    {
+      "path": "game/project.godot",
+      "scenarios": [
+        "boot_title",
+        "hooks_contract",
+        "drive_north",
+        "drive_turn_right",
+        "coords_north_marker"
+      ]
+    },
+    {
+      "path": "game/",
+      "scenarios": [
+        "boot_title"
+      ]
+    },
+    {
+      "path": "harness/bin/godotdriver.mjs",
+      "scenarios": [
+        "hooks_contract",
+        "hooks_no_debug",
+        "boot_title",
+        "drive_north",
+        "coords_north_marker"
+      ]
+    },
+    {
+      "path": "harness/bin/godotshim.mjs",
+      "scenarios": [
+        "hooks_contract",
+        "drive_north",
+        "drive_turn_right"
+      ]
+    },
+    {
+      "path": "harness/bin/godotclient.mjs",
       "scenarios": [
         "hooks_contract",
         "hooks_no_debug"
       ]
     },
     {
-      "path": "src/",
+      "path": "harness/bin/driver.mjs",
       "scenarios": [
+        "hooks_contract",
         "boot_title"
       ]
     },
