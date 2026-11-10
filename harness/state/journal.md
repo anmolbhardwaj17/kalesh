@@ -133,3 +133,4 @@ One line per event, written by task.mjs (start, done, fail, phase changes, inbox
 - 2026-11-10 20:51 mentor message mmwau8f0v handled: Answered in the terminal; the quality bar is recorded in decisions.md.
 - 2026-11-10 20:55 mentor message mmwaudm38 handled: Saved: progress/2026-11-10_map-layouts-a-b-c-side-by-side.jpg
 - 2026-11-10 21:00 mentor message mmwaukhze handled: Six concept prompts given in the terminal and saved in harness/design/CONCEPT_PROMPTS.md.
+- 2026-11-10 21:07 [P0-025] done: TCP debug server under --debug (state, clock, frames, input, perf, load, teleport, camera, time scale, hold, events, hud, shot, quit), absent without --debug, SimClock fixed tick, smoke 37/37. Self-checked: 192 vitest + 21 godot tests, smoke PASS, quick OK.
