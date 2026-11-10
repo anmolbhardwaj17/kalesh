@@ -1,6 +1,6 @@
 {
   "_doc": "Written only by node harness/bin/task.mjs. Phases run in order; P0 (ADOPT + STYLE DISCOVERY) waits for the owner by design and needs task.mjs signoff and task.mjs archsignoff before its gate passes. Later phases are added by the planner at the end of P0 (task.mjs phase-add) from the game's real state.",
-  "updated": "2026-11-10T16:06:42.893Z",
+  "updated": "2026-11-10T16:13:15.277Z",
   "phases": [
     {
       "id": "P0",
@@ -227,11 +227,14 @@
       "agent": "planner",
       "priority": 2,
       "kind": "feature",
-      "status": "doing",
+      "status": "done",
       "attempts": 1,
       "notes": [],
       "created": "2026-11-10T13:04:46.154Z",
-      "started": "2026-11-10T16:06:42.886Z"
+      "started": "2026-11-10T16:06:42.886Z",
+      "done": "2026-11-10T16:13:15.242Z",
+      "summary": "GAME.md rewritten for Kalesh from the signed design (pillars, three characters, loops, full capability list tagged SLICE/RELEASE/LATER, missions, progression, GB Road); VERIFY.md fun criteria; M01-M04 in milestones.json. Self-checked: tests, quick.",
+      "commit": "707d5dc"
     },
     {
       "id": "P0-009",
