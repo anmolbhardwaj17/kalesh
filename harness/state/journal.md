@@ -19,3 +19,5 @@ One line per event, written by task.mjs (start, done, fail, phase changes, inbox
 - 2026-11-10 18:35 [P0-002] start (attempt 1): Tooling: game design sign-off in task.mjs, gates, status and dashboard
 - 2026-11-10 18:36 mentor message mmwape5xn handled: Done. The Needs you count is now red so it stands out. Messages stays white.
 - 2026-11-10 18:39 phase P0: designSignoff on
+- 2026-11-10 18:42 [P0-001] done: Transverse Mercator projection around India Gate, no flips; CP and Red Fort land within 25 m; drive_north, drive_turn_right, coords_north_marker, hooks_no_debug scenarios and FD0 pass; quick 7/7. verify --all deferred to the P0 gate (low usage mode).
+- 2026-11-10 18:42 [P0-002] done: task.mjs designsignoff and phase-flag; P0 gate and gate --final require the design sign-off; status and dashboard show all three sign-offs; 10 new tests pass.
