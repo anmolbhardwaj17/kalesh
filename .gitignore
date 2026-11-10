@@ -1,0 +1,23 @@
+node_modules/
+dist/
+.DS_Store
+*.tmp
+*.log
+coverage/
+.vite/
+# environment files (keep the example)
+.env
+.env.*
+!.env.example
+# verification output (the dashboard reads it from disk)
+harness/reports/*
+!harness/reports/.gitkeep
+# raw uploads from the owner (processed copies live in public/assets/ and are committed)
+assets_inbox/*
+!assets_inbox/.gitkeep
+harness/state/.requests.lock
+harness/state/.dash_token
+# verify snapshot, sweep and lane worktrees
+.worktrees/
+# local Claude Code overrides only (the rest of .claude/ is versioned)
+.claude/settings.local.json

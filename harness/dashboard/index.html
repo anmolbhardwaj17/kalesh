@@ -1,0 +1,526 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Build monitor</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Shippori+Mincho:wght@600;800&family=Zen+Kaku+Gothic+New:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --ink: #0b0e14; --night: #141a26; --asphalt: #1f2533; --line: #2c3446; --mute: #8b93a5;
+    --bone: #e8e0d0; --sodium: #ff9e3d; --cyan: #2ee6d6; --lantern: #e2382b; --moss: #7fa067;
+    --serif: 'Shippori Mincho', 'Hiragino Mincho ProN', serif;
+    --sans: 'Zen Kaku Gothic New', 'Hiragino Sans', system-ui, sans-serif;
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; background: var(--ink); color: var(--bone); font-family: var(--sans); font-size: 15px; line-height: 1.55; }
+  a { color: var(--cyan); }
+  button, .btn { font: inherit; font-size: 13px; color: var(--bone); background: var(--asphalt); border: 1px solid var(--line); border-radius: 6px; padding: 5px 11px; cursor: pointer; }
+  button:hover, .btn:hover { border-color: var(--sodium); }
+  button:focus-visible, a:focus-visible, textarea:focus-visible, select:focus-visible { outline: 2px solid var(--sodium); outline-offset: 2px; }
+  .layout { display: grid; grid-template-columns: 290px 1fr; min-height: 100vh; }
+  aside { background: var(--night); border-right: 1px solid var(--line); padding: 26px 22px; position: sticky; top: 0; height: 100vh; overflow-y: auto; }
+  main { padding: 26px 34px 80px; min-width: 0; }
+  .mark { display: flex; align-items: flex-end; gap: 12px; margin-bottom: 22px; }
+  .kanji { font-family: var(--serif); font-weight: 800; font-size: 76px; line-height: .9; color: var(--bone); text-shadow: 0 0 28px rgba(255,158,61,.35); }
+  .mark small { color: var(--mute); font-size: 13px; line-height: 1.3; }
+  .mark b { display: block; font-size: 18px; color: var(--bone); letter-spacing: .04em; }
+  .now { border: 1px solid var(--line); border-radius: 10px; padding: 12px 14px; margin-bottom: 20px; background: var(--ink); }
+  .now .title { font-weight: 700; }
+  .pulse { display: inline-block; width: 9px; height: 9px; border-radius: 50%; background: var(--sodium); box-shadow: 0 0 10px var(--sodium); margin-right: 7px; vertical-align: 1px; }
+  .pulse.idle { background: var(--mute); box-shadow: none; }
+  .muted { color: var(--mute); }
+  .small { font-size: 13px; }
+  .counts { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 22px; }
+  .count { background: var(--ink); border: 1px solid var(--line); border-radius: 10px; padding: 10px 12px; }
+  .count strong { font-family: var(--serif); font-size: 26px; display: block; line-height: 1.1; }
+  .bar { height: 4px; background: var(--asphalt); border-radius: 2px; margin-top: 6px; overflow: hidden; }
+  .bar i { display: block; height: 100%; background: var(--sodium); }
+  .lanterns { list-style: none; margin: 0 0 22px; padding: 0; position: relative; }
+  .lanterns:before { content: ''; position: absolute; left: 10px; top: 8px; bottom: 8px; width: 1px; background: var(--line); }
+  .lanterns li { position: relative; padding: 4px 0 10px 34px; font-size: 13.5px; }
+  .lanterns li .orb { position: absolute; left: 2px; top: 6px; width: 17px; height: 21px; border-radius: 8px / 10px; background: var(--asphalt); border: 1px solid var(--line); }
+  .lanterns li.done .orb { background: radial-gradient(circle at 50% 45%, #ffd29a, var(--sodium) 55%, #b35a10); border-color: #ffb062; box-shadow: 0 0 14px rgba(255,158,61,.55); }
+  .lanterns li.active .orb { background: radial-gradient(circle at 50% 45%, #ffb7ad, var(--lantern) 60%, #7a1710); border-color: #ff6a5a; box-shadow: 0 0 16px rgba(226,56,43,.7); animation: flicker 3.2s infinite; }
+  .lanterns li.active { color: var(--bone); font-weight: 700; }
+  .lanterns li.planned { color: var(--mute); }
+  @keyframes flicker { 0%,100% { opacity: 1; } 42% { opacity: .82; } 47% { opacity: 1; } 71% { opacity: .9; } }
+  @media (prefers-reduced-motion: reduce) { .lanterns li.active .orb { animation: none; } }
+  .play { display: block; text-align: center; padding: 10px; border-radius: 8px; background: var(--sodium); color: var(--ink); font-weight: 700; text-decoration: none; }
+  .play.off { background: var(--asphalt); color: var(--mute); pointer-events: none; }
+  nav.tabs { display: flex; gap: 6px; flex-wrap: wrap; border-bottom: 1px solid var(--line); margin-bottom: 22px; }
+  nav.tabs button { background: none; border: none; border-bottom: 2px solid transparent; border-radius: 0; padding: 8px 12px 10px; font-size: 15px; color: var(--mute); }
+  nav.tabs button.on { color: var(--bone); border-bottom-color: var(--sodium); }
+  nav.tabs .badge { background: var(--lantern); color: #fff; border-radius: 10px; padding: 0 7px; font-size: 12px; margin-left: 6px; }
+  h2 { font-family: var(--serif); font-weight: 800; font-size: 24px; margin: 26px 0 10px; }
+  h2:first-child { margin-top: 0; }
+  h3 { font-size: 16px; margin: 20px 0 8px; }
+  .chip { display: inline-block; font-size: 12px; border-radius: 10px; padding: 1px 9px; border: 1px solid var(--line); color: var(--mute); white-space: nowrap; }
+  .chip.ok, .chip.ready, .chip.done, .chip.playable, .chip.polished { color: var(--cyan); border-color: rgba(46,230,214,.45); }
+  .review { margin-top: 8px; font-size: 13px; }
+  .chip.fail, .chip.redo, .chip.blocked { color: #ff8a7e; border-color: rgba(226,56,43,.6); }
+  .chip.doing, .chip.received, .chip.building, .chip.active { color: var(--sodium); border-color: rgba(255,158,61,.6); }
+  .verify { border: 1px solid var(--line); border-left: 4px solid var(--mute); border-radius: 8px; padding: 14px 16px; background: var(--night); }
+  .verify.ok { border-left-color: var(--cyan); } .verify.fail { border-left-color: var(--lantern); }
+  .verify pre { white-space: pre-wrap; color: #ffb4ab; font-size: 12.5px; margin: 8px 0 0; max-height: 220px; overflow: auto; }
+  .shots { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 12px; }
+  .shots figure { margin: 0; background: var(--night); border: 1px solid var(--line); border-radius: 8px; overflow: hidden; cursor: zoom-in; }
+  .shots img { width: 100%; aspect-ratio: 16/9; object-fit: cover; display: block; background: #000; }
+  .shots figcaption { font-size: 12px; color: var(--mute); padding: 5px 9px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .journal { list-style: none; padding: 0; margin: 0; font-size: 13.5px; }
+  .journal li { padding: 5px 0; border-bottom: 1px solid #1a2130; }
+  .cols { display: grid; grid-template-columns: 1fr 1fr; gap: 26px; }
+  .req { border: 1px solid var(--line); border-radius: 10px; padding: 12px 14px; margin-bottom: 10px; background: var(--night); display: grid; grid-template-columns: 76px 1fr auto; gap: 14px; align-items: start; }
+  .req .thumb { width: 76px; height: 76px; border-radius: 6px; background: var(--asphalt) center/cover no-repeat; display: flex; align-items: center; justify-content: center; font-size: 11px; color: var(--mute); text-align: center; }
+  .req .id { font-weight: 700; word-break: break-all; }
+  .req pre { white-space: pre-wrap; font-family: var(--sans); font-size: 13.5px; background: var(--ink); border: 1px solid var(--line); border-radius: 6px; padding: 9px 11px; margin: 8px 0 0; max-height: 170px; overflow: auto; }
+  .req pre.steps { max-height: none; }
+  .req .actions { display: flex; flex-direction: column; gap: 6px; align-items: stretch; min-width: 110px; }
+  .req .redo { color: #ff8a7e; font-size: 13px; margin-top: 6px; }
+  .howto { background: var(--night); border: 1px dashed var(--line); border-radius: 10px; padding: 12px 16px; margin-bottom: 18px; font-size: 14px; }
+  .filters { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 14px; }
+  .filters button.on { border-color: var(--sodium); color: var(--sodium); }
+  .missions { display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 12px; }
+  .mission { border: 1px solid var(--line); border-radius: 10px; background: var(--night); overflow: hidden; }
+  .mission .pics { display: grid; grid-template-columns: 1fr 1fr; gap: 1px; background: var(--line); }
+  .mission .pics img, .mission .pics span { width: 100%; aspect-ratio: 16/9; object-fit: cover; display: block; background: var(--asphalt); }
+  .mission .body { padding: 10px 12px; }
+  .mission.held { opacity: .55; }
+  .mission .t { font-weight: 700; }
+  .ch { display: flex; align-items: baseline; gap: 12px; }
+  .ch .jp { font-family: var(--serif); color: var(--sodium); }
+  details.phase { border: 1px solid var(--line); border-radius: 10px; margin-bottom: 10px; background: var(--night); }
+  details.phase > summary { padding: 11px 14px; cursor: pointer; font-weight: 700; display: flex; gap: 10px; align-items: center; }
+  details.phase > summary .muted { font-weight: 400; }
+  .task { border-top: 1px solid var(--line); padding: 9px 14px; }
+  .task summary { cursor: pointer; display: flex; gap: 10px; align-items: baseline; list-style: none; }
+  .task summary::-webkit-details-marker { display: none; }
+  .task .tid { color: var(--mute); font-size: 13px; min-width: 58px; }
+  .task .detail { padding: 8px 0 4px 68px; font-size: 14px; }
+  .task .detail ol { margin: 6px 0; padding-left: 20px; }
+  textarea { width: 100%; min-height: 110px; background: var(--night); color: var(--bone); border: 1px solid var(--line); border-radius: 8px; padding: 10px 12px; font: inherit; resize: vertical; }
+  .msg { border-left: 3px solid var(--sodium); padding: 6px 0 8px 14px; margin: 16px 0; }
+  .msg .reply { border-left: 3px solid var(--cyan); padding-left: 12px; margin-top: 8px; color: #cfe9e5; }
+  .playtest { border: 1px solid rgba(255,158,61,.5); border-radius: 10px; padding: 12px 16px; margin-bottom: 14px; background: #1a1610; }
+  .playtest label { display: block; padding: 3px 0; }
+  details.playtest > summary { cursor: pointer; display: flex; gap: 10px; align-items: baseline; }
+  details.playtest[open] > summary { margin-bottom: 8px; }
+  /* P2B-106: notices (a failed push and similar) at the top of Needs you. */
+  .notice { border: 1px solid rgba(226,56,43,.6); border-left: 4px solid var(--lantern); border-radius: 10px; padding: 10px 14px; margin-bottom: 12px; background: #1c1214; }
+  .notice .text { white-space: pre-wrap; overflow-wrap: anywhere; }
+  .lightbox { position: fixed; inset: 0; background: rgba(5,7,10,.92); display: none; align-items: center; justify-content: center; z-index: 10; padding: 24px; cursor: zoom-out; flex-direction: column; gap: 10px; }
+  .lightbox.on { display: flex; }
+  .lightbox img { max-width: 100%; max-height: 88vh; border-radius: 6px; }
+  .lightbox .lb-nav { position: fixed; top: 50%; transform: translateY(-50%); background: rgba(20,24,32,.8); color: var(--bone, #eee); border: 1px solid var(--line); border-radius: 50%; width: 48px; height: 48px; font-size: 22px; cursor: pointer; display: flex; align-items: center; justify-content: center; }
+  .lightbox .lb-nav:hover { background: rgba(40,48,64,.95); }
+  .lightbox .lb-prev { left: 18px; } .lightbox .lb-next { right: 18px; }
+  .lightbox .lb-nav[hidden] { display: none; }
+  .perf { width: 100%; border-collapse: collapse; font-size: 13.5px; font-variant-numeric: tabular-nums; }
+  .perf th { text-align: right; font-weight: 500; color: var(--mute); font-size: 12px; padding: 6px 10px; border-bottom: 1px solid var(--line); white-space: nowrap; }
+  .perf td { text-align: right; padding: 6px 10px; border-bottom: 1px solid #1a2130; white-space: nowrap; }
+  .perf th:first-child, .perf td:first-child { text-align: left; }
+  .perf td.ms { color: var(--bone); }
+  .perf td.ms b { font-weight: 700; }
+  .perf td.dim, .perf .sub { color: var(--mute); }
+  .perf td.warn b { color: var(--sodium); } .perf td.fail b { color: #ff8a7e; }
+  .perfwrap { overflow-x: auto; border: 1px solid var(--line); border-radius: 8px; background: var(--night); }
+  .perf td.gate, .perf th:nth-child(2) { text-align: left; }
+  /* Phone: each scene becomes a small card, the name and gate on top and one labelled line per number. */
+  @media (max-width: 640px) {
+    .perf thead { display: none; }
+    .perf tr { display: grid; grid-template-columns: 1fr auto; gap: 2px 10px; padding: 9px 12px; border-bottom: 1px solid #1a2130; }
+    .perf td { border: none; padding: 1px 0; white-space: normal; }
+    .perf td:first-child { font-weight: 600; align-self: center; overflow-wrap: anywhere; }
+    .perf td.gate { text-align: right; }
+    .perf td[data-l] { grid-column: 1 / -1; display: flex; justify-content: space-between; gap: 12px; text-align: right; }
+    .perf td[data-l]::before { content: attr(data-l); color: var(--mute); font-size: 12px; }
+  }
+  .empty { color: var(--mute); padding: 18px; border: 1px dashed var(--line); border-radius: 10px; }
+  .toast { position: fixed; bottom: 18px; right: 18px; background: var(--asphalt); border: 1px solid var(--sodium); border-radius: 8px; padding: 9px 14px; display: none; z-index: 20; }
+  @media (max-width: 860px) {
+    .layout { grid-template-columns: 1fr; }
+    aside { position: static; height: auto; border-right: none; border-bottom: 1px solid var(--line); }
+    main { padding: 20px 16px 60px; }
+    .cols { grid-template-columns: 1fr; }
+    .req { grid-template-columns: 1fr; }
+    .req .thumb { width: 100%; height: 120px; }
+  }
+</style>
+</head>
+<body>
+<div class="layout">
+  <aside>
+    <div class="mark"><div class="kanji" id="markGlyph">&middot;</div><small><b id="markName">Game</b>build monitor</small></div>
+    <div class="now" id="now"><span class="muted">Loading...</span></div>
+    <div class="counts" id="counts"></div>
+    <div class="counts" id="eta"></div>
+    <ul class="lanterns" id="lanterns"></ul>
+    <a class="play off" id="play" href="/play/" target="_blank" rel="noopener">Play latest build</a>
+    <div class="small muted" id="playInfo" style="margin-top:6px;text-align:center"></div>
+  </aside>
+  <main>
+    <nav class="tabs" id="tabs">
+      <button data-tab="overview" class="on">Overview</button>
+      <button data-tab="needs">Needs you<span class="badge" id="needsBadge" hidden></span></button>
+      <button data-tab="missions" id="msTab">Milestones</button>
+      <button data-tab="tasks">Tasks</button>
+      <button data-tab="perf">Performance</button>
+      <button data-tab="messages">Messages<span class="badge" id="msgBadge" hidden></span></button>
+      <button data-tab="journal">Journal</button>
+    </nav>
+
+    <section data-panel="overview" id="p-overview"></section>
+    <section data-panel="needs" id="p-needs" hidden></section>
+    <section data-panel="missions" id="p-missions" hidden></section>
+    <section data-panel="tasks" id="p-tasks" hidden></section>
+    <section data-panel="perf" id="p-perf" hidden></section>
+    <section data-panel="messages" hidden>
+      <h2>Message Claude</h2>
+      <p class="muted">Claude reads new messages before it starts its next task, then replies here. You can also type straight into the Claude Code terminal.</p>
+      <textarea id="msgText" placeholder="For example: the camera feels too close at speed, pull it back a bit. Or: make the night scenes warmer and add more traffic."></textarea>
+      <p><button id="msgSend">Send to Claude</button> <span class="muted small" id="msgStatus"></span></p>
+      <div id="p-messages"></div>
+    </section>
+    <section data-panel="journal" id="p-journal" hidden></section>
+  </main>
+</div>
+<div class="lightbox" id="lightbox"><button class="lb-nav lb-prev" aria-label="Previous screenshot" title="Previous (left arrow)">&#8249;</button><img alt=""><span class="muted small"></span><button class="lb-nav lb-next" aria-label="Next screenshot" title="Next (right arrow)">&#8250;</button></div>
+<div class="toast" id="toast"></div>
+<input type="file" id="filePick" hidden>
+
+<script>
+const $ = (s, el = document) => el.querySelector(s);
+const esc = (s) => String(s ?? '').replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+const ago = (t) => { if (!t) return 'never'; const s = Math.round((Date.now() - (typeof t === 'number' ? t : Date.parse(t))) / 1000); if (s < 60) return `${s} s ago`; if (s < 3600) return `${Math.round(s / 60)} min ago`; if (s < 86400) return `${Math.round(s / 3600)} h ago`; return `${Math.round(s / 86400)} d ago`; };
+let S = null; let tab = 'overview'; const sigs = {}; const openDetails = new Set(); let needsFilter = 'todo'; let uploading = 0;
+const toast = (m) => { const t = $('#toast'); t.textContent = m; t.style.display = 'block'; clearTimeout(toast.h); toast.h = setTimeout(() => (t.style.display = 'none'), 2600); };
+
+document.querySelectorAll('#tabs button').forEach((b) => b.addEventListener('click', () => { tab = b.dataset.tab; document.querySelectorAll('#tabs button').forEach((x) => x.classList.toggle('on', x === b)); document.querySelectorAll('main section').forEach((s) => (s.hidden = s.dataset.panel !== tab)); render(true); }));
+
+async function copy(text) {
+  try { await navigator.clipboard.writeText(text); }
+  catch { const ta = document.createElement('textarea'); ta.value = text; document.body.appendChild(ta); ta.select(); document.execCommand('copy'); ta.remove(); }
+  toast('Copied');
+}
+
+let pickFor = null;
+$('#filePick').addEventListener('change', async (e) => {
+  const f = e.target.files[0]; const id = pickFor; e.target.value = '';
+  if (!f || !id) return;
+  // Catch uploads to the wrong card: compare the image shape with the card's requested size (for example a tall portrait on a square texture card).
+  const req = S.requests.images.find((x) => x.id === id);
+  const want = req && /(\d+)x(\d+)/.exec(req.generate || '');
+  if (want && f.type.startsWith('image/')) {
+    try {
+      const bmp = await createImageBitmap(f); const got = bmp.width / bmp.height; const need = Number(want[1]) / Number(want[2]);
+      if (Math.abs(got - need) / need > 0.12 && !confirm(`This file is ${bmp.width}x${bmp.height}, but ${id} asks for ${req.generate}. It may belong to another card. Upload it here anyway?`)) { toast('Upload cancelled.'); return; }
+    } catch { /* unreadable image: let the server decide */ }
+  }
+  uploading++; toast(`Uploading ${f.name}...`);
+  try {
+    const r = await fetch(`/api/upload?id=${encodeURIComponent(id)}&name=${encodeURIComponent(f.name)}`, { method: 'PUT', body: f });
+    const j = await r.json();
+    if (!r.ok) throw new Error(j.error || r.statusText);
+    toast(`Uploaded ${id}. Processing.`);
+  } catch (err) { toast(`Upload failed: ${err.message}`); }
+  uploading--; setTimeout(load, 1500);
+});
+function pick(id, accept) { pickFor = id; $('#filePick').accept = accept; $('#filePick').click(); }
+
+document.addEventListener('click', (e) => {
+  const c = e.target.closest('[data-copy]'); if (c) { copy(c.dataset.copy); return; }
+  const u = e.target.closest('[data-upload]'); if (u) { pick(u.dataset.upload, u.dataset.accept || 'image/*'); return; }
+  const fi = e.target.closest('[data-filter]'); if (fi) { needsFilter = fi.dataset.filter; render(true); return; }
+  if (e.target.closest('.lb-prev')) { lbStep(-1); return; }
+  if (e.target.closest('.lb-next')) { lbStep(1); return; }
+  const fig = e.target.closest('[data-src]'); if (fig && !e.target.closest('#lightbox')) { lbOpen(fig); return; }
+  if (e.target.closest('#lightbox')) $('#lightbox').classList.remove('on');
+  const pt = e.target.closest('[data-playtest]'); if (pt) { sendPlaytest(pt.dataset.playtest); }
+  if (e.target.closest('[data-playcopy]')) { e.preventDefault(); if (!(S.play || {}).building) fetch('/api/playcopy', { method: 'POST' }).then(() => load()); }
+});
+document.addEventListener('toggle', (e) => { const d = e.target; const k = d.dataset && d.dataset.key; if (!k) return; if (d.open) { openDetails.add(k); openDetails.delete('closed-' + k); } else { openDetails.delete(k); openDetails.add('closed-' + k); } }, true);
+// Lightbox: click a screenshot to zoom; left and right arrows (or the side buttons) step through the screenshots of the same group.
+const LB = { list: [], i: 0 };
+function lbShow() {
+  const lb = $('#lightbox'), el = LB.list[LB.i]; if (!el) return;
+  $('img', lb).src = el.dataset.src;
+  $('span', lb).textContent = `${el.dataset.name || ''}${LB.list.length > 1 ? `  (${LB.i + 1} of ${LB.list.length}, use left and right arrows)` : ''}`;
+  $('.lb-prev', lb).hidden = LB.i <= 0; $('.lb-next', lb).hidden = LB.i >= LB.list.length - 1;
+}
+function lbOpen(fig) {
+  const group = fig.closest('.shots, section, .panel, .card') || document;
+  LB.list = [...group.querySelectorAll('[data-src]')].filter((x) => !x.closest('#lightbox'));
+  LB.i = Math.max(0, LB.list.indexOf(fig)); lbShow(); $('#lightbox').classList.add('on');
+}
+function lbStep(d) { const n = LB.i + d; if (n < 0 || n >= LB.list.length) return; LB.i = n; lbShow(); }
+document.addEventListener('keydown', (e) => {
+  const on = $('#lightbox').classList.contains('on');
+  if (e.key === 'Escape') $('#lightbox').classList.remove('on');
+  else if (on && e.key === 'ArrowLeft') { e.preventDefault(); lbStep(-1); }
+  else if (on && e.key === 'ArrowRight') { e.preventDefault(); lbStep(1); }
+});
+
+$('#msgSend').addEventListener('click', async () => {
+  const text = $('#msgText').value.trim(); if (!text) return;
+  $('#msgSend').disabled = true;
+  try { const r = await fetch('/api/inbox', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ text }) }); if (!r.ok) throw new Error((await r.json()).error); $('#msgText').value = ''; $('#msgStatus').textContent = 'Sent. Claude will pick it up before its next task.'; load(); }
+  catch (err) { $('#msgStatus').textContent = `Not sent: ${err.message}`; }
+  $('#msgSend').disabled = false;
+});
+
+async function sendPlaytest(pid) {
+  const box = document.querySelector(`[data-pt="${pid}"]`); if (!box) return;
+  const items = [...box.querySelectorAll('label')].map((l) => `${l.querySelector('input').checked ? 'OK' : 'NOT OK'}: ${l.textContent.trim()}`);
+  const notes = box.querySelector('textarea').value.trim();
+  const text = `Playtest notes for ${pid}:\n${items.join('\n')}${notes ? '\n\nNotes: ' + notes : ''}`;
+  const r = await fetch('/api/inbox', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ text }) });
+  toast(r.ok ? 'Playtest notes sent to Claude' : 'Could not send');
+  load();
+}
+
+function chip(s) { return `<span class="chip ${esc(s)}">${esc(String(s).replace(/_/g, ' '))}</span>`; }
+function liveStrip() {
+  const L = S.live || {}; const fig = (base, x) => `<figure data-src="${base}${encodeURIComponent(x.name)}?t=${x.t}" data-name="${esc(x.name)}"><img loading="lazy" src="${base}${encodeURIComponent(x.name)}?t=${x.t}" alt="${esc(x.name)}"><figcaption>${esc(x.name.replace(/\.png$/, ''))} <span class="muted">${ago(x.t)}</span></figcaption></figure>`;
+  const part = (title, base, list, note) => list && list.length ? `<h2>${title}</h2><div class="muted small" style="margin:-4px 0 8px">${note}</div><div class="shots">${list.map((x) => fig(base, x)).join('')}</div>` : '';
+  return part('Live now: builder', '/shots/', L.builder, 'The shots the builder wrote most recently, newest first.')
+    + part('Live now: verifier', '/vshots/', L.verifier, 'The shots the verifier took on its snapshot copy, newest first.');
+}
+function shotUrl(name) { return `/shots/${encodeURIComponent(name)}?t=${(S.shots.find((x) => x.name === name) || {}).t || 0}`; }
+function hasShot(name) { return S.shots.some((x) => x.name === name); }
+
+function renderSide() {
+  const W = S.milestoneWord || 'milestone';
+  document.title = `${S.game || 'Game'} build monitor`;
+  $('#markName').textContent = S.game || 'Game';
+  $('#markGlyph').textContent = String(S.game || '?').trim().charAt(0).toUpperCase();
+  $('#msTab').textContent = W.charAt(0).toUpperCase() + W.slice(1) + 's';
+  const idle = Date.now() - S.lastActivity > 20 * 60 * 1000;
+  const cur = S.current;
+  $('#now').innerHTML = `<div class="small"><span class="pulse ${idle ? 'idle' : ''}"></span>${idle ? 'Quiet for' : 'Last activity'} ${ago(S.lastActivity)}</div>`
+    + (cur ? `<div class="title" style="margin-top:6px">${esc(cur.id)} ${esc(cur.title)}</div><div class="muted small">${esc(cur.agent || 'builder')}, attempt ${cur.attempts || 1}</div>`
+           : `<div class="muted small" style="margin-top:6px">${idle ? 'Claude may be waiting for a usage limit to reset, or the session stopped. Run harness/bin/start.sh to continue.' : 'Between tasks.'}</div>`);
+  const p = S.progress;
+  const E = S.eta || {};
+  const hm = (m) => m == null ? '?' : m < 60 ? `${m} min` : `${(m / 60).toFixed(m < 600 ? 1 : 0)} h`;
+  const curPh = (E.phases || []).find((x) => x.status === 'active');
+  const doingLine = (E.doing || []).length ? `<div class="small muted" style="margin-top:4px">${E.doing.map((d) => `${esc(d.id)} running ${hm(d.elapsedMin)}`).join(', ')}${E.taskMinutes?.median ? ` (a task usually takes ${hm(E.taskMinutes.median)}, slow ones ${hm(E.taskMinutes.p75)})` : ''}</div>` : '';
+  const G = E.gameEta;
+  const gameLine = G ? `<div class="small" style="margin-top:4px">Whole game: ${G.tasksLeft} tasks left (${G.tasksLeft - (G.guessedTasks || 0)} planned, ${G.guessedTasks || 0} estimated for phases not planned yet), about ${Math.round(G.lowDays)} to ${Math.round(G.highDays)} days</div>` : '';
+  const etaLine = E.phaseEta ? `<div class="small" style="margin-top:4px">${esc(E.phaseEta.phase)}: ${E.phaseEta.tasksLeft} task${E.phaseEta.tasksLeft === 1 ? '' : 's'} left, about ${hm(E.phaseEta.lowMin)} to ${hm(E.phaseEta.highMin)} of work</div>` : '';
+  $('#eta').innerHTML = `<div class="count" style="grid-column:1/-1"><strong>${E.overallPct ?? 0}<span class="muted small">%</span></strong><span class="small muted">whole game done (weighted by phase)</span><div class="bar"><i style="width:${E.overallPct || 0}%"></i></div>`
+    + gameLine + (curPh ? `<div class="small" style="margin-top:6px">${esc(curPh.id)} ${curPh.pct}% (${curPh.done} of ${curPh.total} tasks done or skipped)</div>` : '') + etaLine + doingLine + `</div>`;
+  // Required milestones and optional ones (harness/data/milestones.json). An optional one counts once it has a play script.
+  const core = p.core || { playable: 0, total: 0 }, side = p.side || { playable: 0, back: 0, total: 0 };
+  const tile = (n, total, label) => `<div class="count"><strong>${n}<span class="muted small"> / ${total}</span></strong><span class="small muted">${label}</span><div class="bar"><i style="width:${(100 * n / Math.max(1, total)).toFixed(1)}%"></i></div></div>`;
+  $('#counts').innerHTML = tile(core.playable, core.total, `${W}s playable`)
+    + tile(side.playable, side.total, `optional ${W}s playable`)
+    + `<div class="count" style="grid-column:1/-1"><strong>${p.tasksDone}<span class="muted small"> / ${p.tasksTotal}</span></strong><span class="small muted">planned tasks done or skipped (${p.tasksTotal - p.tasksDone} open)</span><div class="bar"><i style="width:${(100 * p.tasksDone / Math.max(1, p.tasksTotal)).toFixed(1)}%"></i></div></div>`;
+  $('#lanterns').innerHTML = S.phases.map((ph) => `<li class="${esc(ph.status)}"><span class="orb"></span>${esc(ph.id)} ${esc(ph.name)}</li>`).join('');
+  $('#play').classList.toggle('off', !S.playUrl);
+  // /play/ is a stable copy of a verified commit (playcopy.mjs); Refresh builds the newest verified one.
+  const pl = S.play || {};
+  $('#playInfo').innerHTML = (pl.sha ? `Build ${esc(pl.sha)}, made ${esc(ago(pl.builtAt))}` : 'Build: the working copy (no stable copy yet)')
+    + ` · <a href="#" data-playcopy="1" style="color:inherit">${pl.building ? 'building a new copy...' : 'Refresh'}</a>`;
+  // P2B-106: open notices count in the badge too.
+  const need = needsCount(true) + (S.notices || []).length;
+  $('#needsBadge').hidden = !need; $('#needsBadge').textContent = need;
+  const unread = S.inbox.filter((m) => !m.ack).length;
+  $('#msgBadge').hidden = !unread; $('#msgBadge').textContent = unread;
+}
+
+// Badge = every open card the owner can make right now (has a prompt, not uploaded yet, or asked for again), so it drops with each upload.
+// needsCount(false) narrows that to the most useful ones: priority 1, redo requests and voice lines.
+function needsCount(all) {
+  const r = S.requests; const open = (x) => x.status === 'waiting' || x.status === 'redo';
+  const now = (x) => all || x.priority === 1 || x.status === 'redo';
+  const make = (x) => x.prompt && open(x) && now(x);
+  return r.images.filter(make).length + r.lines.filter(open).length + r.sfx.filter(make).length + r.music.filter(make).length;
+}
+
+// Frame time (P2-118): CPU and GPU ms per perf scene, p95 in bold; the gate sits right after the scene name so it shows on a
+// phone. CPU p95 over 22 ms fails; the GPU timer over 22 ms fails only when frames drop (else "gpu overlap"); over 1 load
+// per core a fail is "not judged". fps and rAF p95 are secondary.
+function renderPerf() {
+  const p = S.perf;
+  if (!p || !p.rows || !p.rows.length) return '<h2>Frame time</h2><div class="empty">No perf run yet. Perf scenes are measured by verify --only and --all, and by the sweep.</div>';
+  const n = (v) => (typeof v === 'number' && isFinite(v) ? v.toFixed(1) : '-');
+  const cls = (r, side) => (r.bound === side && (r.frameGate === 'warn' || r.frameGate === 'fail') ? ` ${r.frameGate}` : '');
+  const triple = (s, r, side, label) => s ? `<td class="ms${cls(r, side)}" data-l="${label}"><span>${n(s.p50)} <span class="sub">/</span> <b>${n(s.p95)}</b> <span class="sub">/</span> ${n(s.max)}</span></td>` : `<td class="dim" data-l="${label}" title="${esc(r.gpuNote || '')}">unavailable</td>`;
+  const verdict = (r) => {
+    if (!r.cpuMs) return '<span class="chip">fps only</span>';
+    if (r.judged === false) return '<span class="chip">not judged</span>';
+    if (r.gateReason === 'loaded') return `<span class="chip doing" title="A fail on a loaded machine is not judged">not judged, loaded</span>`;
+    if (r.gateReason === 'gpu_overlap') return '<span class="chip doing" title="GPU timer over 22 ms but 60 fps held">gpu overlap</span>';
+    if (r.frameGate === 'fail') return '<span class="chip fail">fail</span>';
+    if (r.frameGate === 'warn') return '<span class="chip doing">over budget (warn)</span>';
+    return '<span class="chip ok">ok</span>';
+  };
+  const load = (r) => r.load ? `${n(r.load.avg1)} / ${r.load.cores}` : '-';
+  const rows = p.rows.map((r) => `<tr><td>${esc(r.name)}</td><td class="gate">${verdict(r)}</td>${r.cpuMs ? triple(r.cpuMs, r, 'cpu', 'CPU ms') : '<td class="dim" data-l="CPU ms">not measured</td>'}${triple(r.gpuMs, r, 'gpu', 'GPU ms')}<td class="dim" data-l="rAF p95">${n(r.rafP95)}</td><td class="dim" data-l="fps">${n(r.fps)}</td><td class="dim" data-l="Calls">${r.drawCalls ?? '-'}</td><td class="dim${r.load && r.load.loaded ? ' warn' : ''}" data-l="Load / cores">${r.load && r.load.loaded ? `<b>${load(r)}</b>` : load(r)}</td></tr>`).join('');
+  const notes = [...new Set(p.rows.filter((r) => !r.gpuMs && r.gpuNote).map((r) => r.gpuNote))];
+  return `<h2>Frame time</h2><p class="muted small" style="margin:0 0 8px">From the ${esc(p.from)}${p.commit ? ` at ${esc(p.commit)}` : ''}, ${ago(p.at)}. Milliseconds per frame, p50 / <b>p95</b> / max, judged against harness/verify/perf_budgets.json. CPU p95 over the fail budget fails. The GPU timer over it fails only when frames really drop, because other GPU work inflates it. Over the warn budget warns. When the machine is loaded (more than 1 load per core) a fail is not judged. fps is capped at 60 by the display, so it is shown last.</p>
+    <div class="perfwrap"><table class="perf"><thead><tr><th>Scene</th><th>Gate</th><th>CPU ms</th><th>GPU ms</th><th>rAF p95</th><th>fps</th><th>Calls</th><th>Load / cores</th></tr></thead><tbody>${rows}</tbody></table></div>
+    ${notes.length ? `<p class="muted small">${notes.map(esc).join('<br>')}</p>` : ''}`;
+}
+
+function renderOverview() {
+  const rep = S.report;
+  let v = '<div class="verify">No verification run yet. Claude runs it during Phase 0, right after the hook contract.</div>';
+  if (rep) {
+    const checks = Object.entries(rep.checks || {}).map(([k, x]) => `${k} ${x.ran ? (x.ok ? 'ok' : 'failed') : 'skipped'}`).join(', ');
+    v = `<div class="verify ${rep.ok ? 'ok' : 'fail'}"><div><strong>${rep.ok ? 'Last verification passed' : 'Last verification failed'}</strong> <span class="muted small">${esc(rep.mode)} run, ${ago(rep.finishedAt)}, ${Math.round((rep.durationMs || 0) / 1000)} s</span></div>
+      <div class="small muted" style="margin-top:4px">${esc(checks)}${rep.missionsRun ? `, ${esc(S.milestoneWord || 'milestone')}s ${rep.missionsOk}/${rep.missionsRun} passed` : ''}${rep.gl ? `, WebGL: ${esc(rep.gl.renderer)}${rep.gl.software ? ' (software)' : ''}` : ''}</div>
+      ${rep.failReason ? `<pre>${esc(rep.failReason)}</pre>` : ''}</div>`;
+  }
+  const shots = S.shots.slice(0, 12).map((s) => `<figure data-src="/shots/${encodeURIComponent(s.name)}?t=${s.t}" data-name="${esc(s.name)}"><img loading="lazy" src="/shots/${encodeURIComponent(s.name)}?t=${s.t}" alt="${esc(s.name)}"><figcaption>${esc(s.name.replace(/\.png$/, ''))} <span class="muted">new ${ago(s.first || s.t)}</span></figcaption></figure>`).join('');
+  const pt = S.phases.filter((p) => p.status === 'done' && p.playtest && p.playtest.length).slice(-1)[0];
+  return `${pt ? `<div class="playtest"><strong>${esc(pt.id)} is ready for you to play.</strong> <span class="muted">Open "Play latest build", then check the list in Needs you.</span></div>` : ''}
+    <h2>Verification</h2>${v}
+    ${liveStrip()}
+    <div class="cols"><div><h2>Recent work</h2><ul class="journal">${S.journal.slice(-10).reverse().map((l) => `<li>${esc(l.slice(2))}</li>`).join('') || '<li class="muted">Nothing yet</li>'}</ul></div>
+    <div><h2>Commits</h2><ul class="journal">${S.commits.map((c) => `<li>${esc(c)}</li>`).join('') || '<li class="muted">No commits yet</li>'}</ul></div></div>`;
+}
+
+// Review state of a delivered image: being checked, checked ok (with game fit), or nothing yet.
+function reviewState(r) {
+  if (r.status !== 'ready' || r.kind === 'model') return null;
+  const rv = r.review;
+  if (!rv || !rv.ingestedAt || (r.ingestedAt && Date.parse(rv.ingestedAt) < Date.parse(r.ingestedAt))) return 'checking';
+  return rv.verdict === 'ok' ? 'checked' : null;
+}
+function reviewLine(r) {
+  const st = reviewState(r); if (!st) return '';
+  if (st === 'checking') return `<div class="review"><span class="chip received">checking</span> Claude is checking this upload. A redo request shows here if it needs one.</div>`;
+  const rv = r.review;
+  const fit = rv.fit === 'ok' ? 'Works in the game.' : rv.fit === 'mismatch' ? 'Your art is the better design, so the game is being changed to match it.' : 'Looks right. It gets checked in the game once its feature is built.';
+  return `<div class="review"><span class="chip ok">checked</span> ${esc(fit)}${rv.note ? ` <span class="muted">Note: ${esc(rv.note)}</span>` : ''}</div>`;
+}
+function reqCard(r, type) {
+  const isModel = r.kind === 'model';
+  const accept = isModel ? '.glb,model/gltf-binary' : type === 'image' ? 'image/png,image/jpeg,image/webp' : 'audio/*';
+  const portrait = isModel && r.source ? (S.requests.images.find((x) => x.id === r.source)?.file || null) : null;
+  const thumbFile = isModel ? portrait : r.file;
+  const thumb = type === 'image' && thumbFile ? `<div class="thumb" style="background-image:url('/${esc(thumbFile)}?t=${Math.floor(Date.now() / 60000)}')" data-src="/${esc(thumbFile)}" data-name="${esc(r.source && isModel ? r.source : r.id)}"></div>` : `<div class="thumb">${esc(type === 'image' ? r.kind : type)}</div>`;
+  const prompt = type === 'image' ? r.prompt : type === 'voice' ? r.text : (r.prompt || r.desc);
+  const modelInfo = isModel && r.info ? ` In the game now: ${esc(r.info.triangles)} triangles, ${esc(r.info.materials)} materials.${(r.info.warnings || []).length ? ` Note: ${esc(r.info.warnings.join(' '))}` : ''}` : '';
+  const drop = ` Upload on this card, or drop it as assets_inbox/${esc(r.id)}.${isModel ? 'glb' : type === 'image' ? 'png' : 'mp3'} and run node harness/bin/ingest.mjs.`;
+  const meta = isModel ? `3D model as a .glb file${r.source ? `, made from ${esc(r.source)} (the picture on the left)` : ''}. At most ${esc(r.target?.maxTriangles || 25000)} triangles and ${esc(r.target?.maxMaterials || 3)} materials. Used by ${esc((r.used_by || []).join(', ') || 'the game')}.${modelInfo}${drop}`
+    : type === 'image' ? `Generate as ${esc(r.generate || 'square 1024x1024')}${r.target?.alpha ? ', transparent background' : ''}${r.target?.tileable ? ', seamless tileable' : ''}. In the game: ${esc(r.target?.w || '?')}x${esc(r.target?.h || '?')} ${esc((r.target?.out || '').split('.').pop() || 'webp')}. Used by ${esc((r.used_by || []).join(', ') || 'the game')}.${drop}`
+    : type === 'voice' ? `${esc(r.speaker)}${r.milestone ? `, ${esc(r.milestone)}` : ''}. Direction: ${esc(r.direction || 'natural')}.${drop}`
+    : `${esc(r.duration_s)} s${r.loop ? ', seamless loop' : ''}. Used by ${esc((r.used_by || []).join(', ') || 'the game')}.${drop}`;
+  const audio = type !== 'image' && r.file ? `<audio controls preload="none" src="/${esc(r.file)}" style="width:100%;margin-top:8px"></audio>` : '';
+  return `<div class="req">${thumb}<div><div class="id">${esc(r.id)} ${chip(r.status)}</div><div class="muted small">${meta}</div>
+    ${prompt ? `<pre${isModel ? ' class="steps"' : ''}>${esc(prompt)}</pre>` : ''}${r.redo && r.status === 'redo' ? `<div class="redo">${isModel ? 'Please upload a new file' : 'Claude asked for a new version'}: ${esc(r.redo.note)}</div>` : ''}${type === 'image' ? reviewLine(r) : ''}${audio}</div>
+    <div class="actions">${prompt ? `<button data-copy="${esc(prompt)}">Copy ${type === 'voice' ? 'line' : isModel ? 'steps' : 'prompt'}</button>` : ''}<button data-upload="${esc(r.id)}" data-accept="${accept}">${r.status === 'ready' ? 'Replace file' : isModel ? 'Upload .glb' : 'Upload file'}</button></div></div>`;
+}
+
+function reviewSummary() {
+  const im = S.requests.images;
+  const redo = im.filter((x) => x.status === 'redo'); const checking = im.filter((x) => reviewState(x) === 'checking'); const ok = im.filter((x) => reviewState(x) === 'checked');
+  if (!redo.length && !checking.length && !ok.length) return '';
+  return `<div class="howto"><strong>Upload check.</strong> ${ok.length} checked and fine. ${checking.length ? `${checking.length} being checked now. ` : ''}${redo.length ? `<strong>${redo.length} need a new version:</strong> ${redo.map((x) => esc(x.id)).join(', ')}. Their cards say what to change.` : 'Nothing needs a redo.'}</div>`;
+}
+// Open notices from harness/state/notices.jsonl (node harness/bin/notice.mjs add / resolve), newest first.
+function renderNotices() {
+  const list = S.notices || [];
+  if (!list.length) return '';
+  return `<h2 style="margin-top:0">Notices <span class="muted small">${list.length} open</span></h2>${list.map((n) => `<div class="notice"><div class="muted small">${esc(n.id)}, ${ago(n.ts)}</div><div class="text">${esc(n.text)}</div></div>`).join('')}`;
+}
+function renderNeeds() {
+  const r = S.requests; const open = (x) => x.status === 'waiting' || x.status === 'redo';
+  const keep = (x) => needsFilter === 'all' || (needsFilter === 'todo' ? open(x) : x.status === needsFilter);
+  // Batches stay in a fixed order (B1, B2, ... B10) so a section never jumps when some of its cards are uploaded.
+  // In "To make", a batch that still has open cards also shows its finished cards, so you see what is done and what is left.
+  const bkey = (x) => x.batch || 'Unbatched';
+  const withPrompt = r.images.filter((x) => x.prompt);
+  const openBatches = new Set(withPrompt.filter(open).map(bkey));
+  const imgs = withPrompt.filter((x) => needsFilter === 'todo' ? openBatches.has(bkey(x)) : keep(x))
+    .sort((a, b) => bkey(a).localeCompare(bkey(b), undefined, { numeric: true }) || (open(b) - open(a)) || (a.priority - b.priority) || a.id.localeCompare(b.id));
+  const batches = {}; imgs.forEach((x) => (batches[bkey(x)] ||= []).push(x));
+  const batchCount = (list) => { const left = list.filter(open).length; return needsFilter === 'todo' ? `${left} to make, ${list.length - left} done` : String(list.length); };
+  const lines = r.lines.filter(keep); const bySpeaker = {}; lines.forEach((l) => (bySpeaker[l.speaker] ||= []).push(l));
+  const sounds = [...r.sfx.map((x) => ({ ...x, _t: 'sfx' })), ...r.music.map((x) => ({ ...x, _t: 'music' }))].filter(keep);
+  const pts = S.phases.filter((p) => p.playtest && p.playtest.length);
+  const filters = ['todo', 'received', 'ready', 'all'].map((f) => `<button data-filter="${f}" class="${needsFilter === f ? 'on' : ''}">${{ todo: 'To make', received: 'Processing', ready: 'In the game', all: 'All' }[f]}</button>`).join('');
+  return `${renderNotices()}${pts.map((p) => `<details class="playtest" data-pt="${esc(p.id)}" data-key="pt-${esc(p.id)}" ${openDetails.has('pt-' + p.id) ? 'open' : ''}><summary><strong>Play ${esc(p.id)}: ${esc(p.name)}</strong> <span class="muted small">${p.playtest.length} things to check</span></summary><p class="muted small">Open "Play latest build" and check what feels right. Unchecked items are sent as "not ok".</p>${p.playtest.map((i) => `<label><input type="checkbox"> ${esc(i)}</label>`).join('')}<textarea placeholder="Anything else you noticed" style="min-height:70px;margin-top:8px"></textarea><p><button data-playtest="${esc(p.id)}">Send playtest notes</button></p></details>`).join('')}
+    <div class="howto"><strong>How this works.</strong> Keep one AI image chat per batch so the style stays consistent. Paste the prompt, download the PNG, then press Upload file on the same card. Claude turns it into game-ready files (resizing, encoding) and uses it on its next build. Voice lines and sounds work the same way with your AI audio tool. Nothing here blocks Claude: the game uses placeholders until your file arrives.</div>
+    <p><strong>${needsCount(true)} to make</strong> <span class="muted">(${needsCount(false)} most useful now: priority 1, redo requests and voice lines). Batches stay in order. Uploaded cards stay in their batch and show as done.</span></p>
+    ${reviewSummary()}
+    <div class="filters">${filters}</div>
+    <h2>Images</h2>${Object.keys(batches).length ? Object.entries(batches).map(([b, list]) => `<h3>${esc(b)} <span class="muted small">${batchCount(list)}</span></h3>${list.map((x) => reqCard(x, 'image')).join('')}`).join('') : '<div class="empty">No images in this view.</div>'}
+    <h2>Voices</h2>${S.requests.voices.length ? S.requests.voices.map((v) => `<div class="req"><div class="thumb">voice</div><div><div class="id">${esc(v.name)} <span class="muted small">${esc(v.speaker)}</span></div><pre>${esc(v.profile)}</pre></div><div class="actions"><button data-copy="${esc(v.profile)}">Copy voice design</button></div></div>`).join('') : ''}
+    ${Object.keys(bySpeaker).length ? Object.entries(bySpeaker).map(([sp, list]) => `<h3>${esc(sp)} <span class="muted small">${list.length} lines</span></h3>${list.map((x) => reqCard(x, 'voice')).join('')}`).join('') : '<div class="empty">No voice lines in this view yet. They appear as Claude writes the story.</div>'}
+    <h2>Sound effects and music</h2>${sounds.length ? sounds.map((x) => reqCard(x, x._t)).join('') : '<div class="empty">No sounds in this view.</div>'}`;
+}
+
+function renderMissions() {
+  const W = S.milestoneWord || 'milestone';
+  const p = S.progress || {}, core = p.core || { playable: 0, total: 0 }, side = p.side || { playable: 0, back: 0, total: 0 };
+  const row = (n, total, label, note) => `<div class="count" style="margin-bottom:8px"><strong>${n}<span class="muted small"> / ${total}</span></strong><span class="small muted">${label}${note ? `. ${note}` : ''}</span><div class="bar"><i style="width:${(100 * n / Math.max(1, total)).toFixed(1)}%"></i></div></div>`;
+  const head = `<div style="margin-bottom:18px">${row(core.playable, core.total, `${W}s playable`, 'Gates count these.')}`
+    + `${row(side.playable, side.total, `optional ${W}s playable`, side.back ? `${side.back} with a play script` : 'Counted once they have a play script.')}</div>`;
+  if (!S.missions.length) return head + `<div class="empty">No ${esc(W)}s listed yet. Phase 0 lists what the game has in harness/data/milestones.json.</div>`;
+  return head + S.chapters.map((c) => {
+    const list = S.missions.filter((m) => (m.chapter ?? null) === c.n);
+    return `<div class="ch"><h2>${esc(c.title)}</h2>${c.sub ? `<span class="jp">${esc(c.sub)}</span>` : ''}</div><div class="missions">${list.map((m) => {
+      const a = `${m.id}_start.png`, b = `${m.id}_end.png`;
+      const pic = (n) => (hasShot(n) ? `<img loading="lazy" src="${shotUrl(n)}" data-src="${shotUrl(n)}" data-name="${esc(n)}" alt="">` : '<span></span>');
+      const v = m.verify ? (m.verify.ok ? chip('ok') : chip('fail')) : '';
+      const opt = m.core === false ? ` <span class="chip">${m.solution ? 'optional' : 'optional, no play script yet'}</span>` : '';
+      return `<div class="mission${m.core === false && !m.solution ? ' held' : ''}"><div class="pics">${pic(a)}${pic(b)}</div><div class="body"><div class="t">${esc(m.id)} ${esc(m.title || '')}</div><div class="muted small">${esc((m.tags || []).join(', '))}${m.solution ? '' : ' (no play script yet)'}</div><div class="small" style="margin-top:6px">${esc(m.summary || '')}</div><div style="margin-top:8px">${chip(m.status)} ${v}${opt}</div></div></div>`;
+    }).join('')}</div>`;
+  }).join('');
+}
+
+function renderTasks() {
+  return S.phases.map((p) => {
+    const list = S.tasks.filter((t) => t.phase === p.id);
+    const done = list.filter((t) => t.status === 'done' || t.status === 'skipped').length;
+    const key = `ph-${p.id}`; const open = openDetails.has(key) || (p.status === 'active' && !openDetails.has('closed-' + key));
+    return `<details class="phase" data-key="${key}" ${open ? 'open' : ''}><summary>${esc(p.id)} ${esc(p.name)} ${chip(p.status)} <span class="muted small">${list.length ? `${done}/${list.length} done` : 'planned when it starts'}</span></summary>
+      <div class="muted small" style="padding:0 14px 10px">${esc(p.goal)}</div>
+      ${list.map((t) => { const k = `t-${t.id}`; return `<div class="task"><details data-key="${k}" ${openDetails.has(k) ? 'open' : ''}><summary><span class="tid">${esc(t.id)}</span><span style="flex:1">${esc(t.title)}</span>${chip(t.status)}</summary>
+        <div class="detail"><div class="muted small">${esc(t.agent || 'builder')}, attempts ${t.attempts || 0}${t.commit ? `, commit ${esc(t.commit)}` : ''}</div><p>${esc(t.desc)}</p>${t.accept?.length ? `<ol>${t.accept.map((a) => `<li>${esc(a)}</li>`).join('')}</ol>` : ''}${t.summary ? `<p><strong>Result:</strong> ${esc(t.summary)}</p>` : ''}${t.notes?.length ? `<p class="muted small">${t.notes.map(esc).join('<br>')}</p>` : ''}</div></details></div>`; }).join('')}
+    </details>`;
+  }).join('');
+}
+
+function renderMessages() {
+  if (!S.inbox.length) return '<div class="empty" style="margin-top:18px">No messages yet.</div>';
+  return S.inbox.map((m) => `<div class="msg"><div class="muted small">${ago(m.ts)}, ${esc(m.source || 'dashboard')}</div><div style="white-space:pre-wrap">${esc(m.text)}</div>${m.ack ? `<div class="reply"><div class="muted small">Claude, ${ago(m.ack.ts)}</div>${esc(m.ack.reply)}${m.ack.tasks?.length ? `<div class="muted small">Tasks: ${esc(m.ack.tasks.join(', '))}</div>` : ''}</div>` : '<div class="muted small" style="margin-top:6px">Waiting for Claude to read it.</div>'}</div>`).join('');
+}
+
+function renderJournal() { return `<h2>Journal</h2><ul class="journal">${S.journal.slice().reverse().map((l) => `<li>${esc(l.slice(2))}</li>`).join('') || '<li class="muted">Empty</li>'}</ul>`; }
+
+const panels = {
+  overview: [() => ({ r: S.report, s: S.shots.slice(0, 12), lv: S.live, j: S.journal.slice(-10), c: S.commits, p: S.phases.map((p) => p.status) }), renderOverview, '#p-overview'],
+  needs: [() => ({ r: S.requests, f: needsFilter, p: S.phases.map((p) => p.playtest), n: S.notices }), renderNeeds, '#p-needs'],
+  missions: [() => ({ m: S.missions, s: S.shots.filter((x) => /_(start|end)\.png$/.test(x.name)) }), renderMissions, '#p-missions'],
+  tasks: [() => ({ t: S.tasks, p: S.phases }), renderTasks, '#p-tasks'],
+  perf: [() => S.perf, renderPerf, '#p-perf'],
+  messages: [() => S.inbox, renderMessages, '#p-messages'],
+  journal: [() => S.journal, renderJournal, '#p-journal'],
+};
+
+function render(force) {
+  if (!S) return;
+  renderSide();
+  const [sig, fn, sel] = panels[tab];
+  const s = JSON.stringify(sig());
+  if (!force && sigs[tab] === s) return;
+  if (tab === 'needs' && uploading && !force) return;
+  if (tab === 'needs' && !force && document.activeElement && document.activeElement.closest('#p-needs textarea')) return;
+  sigs[tab] = s;
+  const el = $(sel); el.innerHTML = fn();
+}
+
+async function load() {
+  try { const r = await fetch('/api/state', { cache: 'no-store' }); S = await r.json(); render(false); }
+  catch { $('#now').innerHTML = '<span class="muted">Dashboard server is not responding. Run node harness/bin/dashboard.mjs</span>'; }
+}
+load(); setInterval(load, 5000);
+</script>
+</body>
+</html>

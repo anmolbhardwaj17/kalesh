@@ -1,0 +1,14 @@
+// Play script template for a milestone (copy to harness/verify/milestones/<ID>.js). Runs in the page as the body of an
+// async function, with window.__sim (S) loaded. It plays the milestone start to finish the way a player could:
+// real inputs only (debug.input or window.__realInput), never writing positions or skipping objectives. Return S.ok() when
+// the game says the milestone is complete, S.failed(reason) otherwise. Shots at each beat: await S.shot('<ID>_<beat>').
+// Rules (VERIFY.md "Play scripts"): wait on game conditions with S.until (sim seconds), never fixed wall clock sleeps;
+// mark progress on long runs (S.progress); log what happened (S.log) so a failure can be read without a rerun.
+const S = window.__sim;
+const D = S.D;
+await D.load('ID');
+await S.until(() => D.state().scene === 'play', { sim: 10, label: 'level loaded' });
+await S.shot('ID_ready');
+// ... steer with S.press('move', [0, 1], 1.5), S.press('jump'), and wait on S.until(() => D.state().<something>) ...
+await S.until(() => D.state().milestone && D.state().milestone.done === true, { sim: 120, label: 'milestone complete' });
+return S.ok({ simSeconds: D.clock().t });

@@ -1,0 +1,22 @@
+{
+  "_doc": "Scenarios for verify.mjs (format in harness/design/VERIFY.md 'Scenario options' and the step list in browser.mjs runStep). Each scenario opens a fresh page (index.html?<pageQuery>), runs its steps in order and fails on the first failed step, any console error, a problem a shot rule reports (debug.shotProblems) or a budget over its fail limit (harness/verify/perf_budgets.json). Keep each scenario small and about one thing. Name it <area>_<what>. Add a `_note` that says what it proves and which task added it.",
+  "scenarios": [
+    {
+      "name": "boot_title",
+      "steps": [{ "wait": 800 }, { "shot": "boot_title" }],
+      "_note": "Kit sample. The first screen the player sees, after the game says ready."
+    },
+    {
+      "name": "hooks_contract",
+      "steps": [{ "script": "harness/verify/scripts/hooks_contract.js", "timeout": 60000 }, { "shot": "hooks_contract" }],
+      "_note": "Kit sample. Proves window.__game implements docs/GAME_HOOKS.md: state, clock, frames, input, perf, load, teleport, setCamera, timeScale and the sim hold. The ADOPT phase makes this pass first."
+    },
+    {
+      "name": "perf_baseline",
+      "perf": true,
+      "perfQuick": true,
+      "steps": [{ "settle": 1 }, { "shot": "perf_baseline" }],
+      "_note": "Kit sample. One perf window on the first scene, judged against perf_budgets.json. perfQuick keeps it in --quick; heavier perf scenes should leave perfQuick out so they run in --only and --all."
+    }
+  ]
+}

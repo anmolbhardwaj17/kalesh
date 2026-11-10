@@ -1,0 +1,18 @@
+{
+  "_doc": "Shared-system paths for the phase gate retry (harness/bin/gatecheck.mjs). If any file changed since the phase's verify --all commit matches one of these, the gate needs a new verify --all; otherwise a retry (node harness/bin/gateretry.mjs <P>) of the failed items, verify --quick and every playable milestone is enough. An entry ending in / covers everything under it; other entries are single files. List the systems every milestone runs through: the game entry, the core loop and input, the player (movement and camera), physics, AI, save, loading, audio, the HUD core, the milestone runtime, the debug hooks every scenario drives, the render frame, the build setup and the verify harness itself. The ADOPT phase fills this in from the real source tree.",
+  "shared": [
+    "src/main.ts",
+    "src/debug/",
+    "index.html",
+    "package.json",
+    "package-lock.json",
+    "vite.config.ts",
+    "vite.config.js",
+    "tsconfig.json",
+    "harness/bin/verify.mjs",
+    "harness/bin/browser.mjs",
+    "harness/bin/waitpredicate.mjs",
+    "harness/bin/lib.mjs",
+    "harness/verify/scripts/lib/"
+  ]
+}

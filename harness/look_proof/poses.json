@@ -1,0 +1,6 @@
+{
+  "_doc": "Look proof views (harness/bin/lookproof.mjs). Each view stages one scene with verify steps and is shot from a fixed camera. Phase 0 picks 4 to 8 views that show the look best: the hero up close, a wide shot of a typical space, a dark corner, the HUD over play, a busy scene for perf.",
+  "views": [
+    { "name": "first_screen", "steps": [{ "settle": 1 }] }
+  ]
+}

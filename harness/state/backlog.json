@@ -1,0 +1,27 @@
+{
+  "_doc": "Written only by node harness/bin/task.mjs. Phases run in order; P0 (ADOPT + STYLE DISCOVERY) waits for the owner by design and needs task.mjs signoff and task.mjs archsignoff before its gate passes. Later phases are added by the planner at the end of P0 (task.mjs phase-add) from the game's real state.",
+  "updated": null,
+  "phases": [
+    {
+      "id": "P0",
+      "name": "Adopt, style discovery and architecture discovery",
+      "goal": "The harness drives the game (hook contract, verify, baseline perf), the old repo is audited, and the owner has signed off a style with budgets after side by side tests and an architecture after measured option benches.",
+      "exit": [
+        "window.__game implements docs/GAME_HOOKS.md and the hooks_contract scenario passes",
+        "verify --quick and verify --all run green on the game as it is",
+        "baseline perf measured on this machine and written to harness/verify/perf_budgets.json",
+        "harness/design/STYLE_OPTIONS.md compares the candidate styles with test scene shots and measured frame times",
+        "the owner signed off one style (task.mjs signoff), STYLE_BIBLE.md and VERIFY.md look rules are written",
+        "harness/design/ARCH_OPTIONS.md compares the architecture options with measured benches on this machine, including the map repair layer (harness/design/MAP_REPAIR.md: sources and licences, pipeline, rules, lane-level road model, map inspector, verification, pilot area), and the owner signed off an architecture (task.mjs archsignoff); TECH.md and docs/ARCHITECTURE.md describe the chosen design",
+        "the phases after P0 are planned from the game's current state"
+      ],
+      "milestones": [],
+      "status": "active",
+      "planned": false,
+      "signoff": true,
+      "playtest": [],
+      "archSignoff": true
+    }
+  ],
+  "tasks": []
+}

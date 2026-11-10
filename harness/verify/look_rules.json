@@ -1,0 +1,6 @@
+{
+  "_doc": "Tolerances for lookproof.mjs --compare against the approved reference shots. mean: mean absolute channel difference (0 to 255); share: part of the pixels whose largest channel moved more than delta. Animated scenes (water, particles, idle animation) need looser numbers or a held sim (debug.hold). Phase 0 sets these from two runs of the same build: put them just above that run to run noise.",
+  "tolMean": 6,
+  "tolShare": 0.25,
+  "delta": 40
+}

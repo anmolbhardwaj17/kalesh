@@ -1,0 +1,18 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Dilli Darshan</title>
+    <style>
+      html, body { margin: 0; height: 100%; overflow: hidden; background: #9fc6e0; }
+      canvas#game { display: block; width: 100vw; height: 100vh; }
+      #hud { position: fixed; left: 12px; bottom: 10px; font: 13px system-ui, sans-serif; color: #1d2a33; }
+    </style>
+  </head>
+  <body>
+    <canvas id="game"></canvas>
+    <div id="hud">Arrow keys to drive. Scaffold only: Phase 0 decides the real game.</div>
+    <script type="module" src="/src/main.ts"></script>
+  </body>
+</html>

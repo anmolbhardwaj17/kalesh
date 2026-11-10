@@ -1,0 +1,8 @@
+#!/bin/sh
+# Strip any Claude attribution lines from commit messages (the owner's rule: no Claude co-author lines or
+# "Generated with Claude Code" footers in this repo's history). Enable once per clone: git config core.hooksPath .githooks
+# Removes "Co-Authored-By: ... Claude/Anthropic" trailers, "Generated with Claude Code" footers and
+# "Claude-Session:" trailers, then trims trailing blank lines.
+grep -viE '^[[:space:]]*co-authored-by:.*(claude|anthropic)|generated with \[?claude code|^[[:space:]]*claude-session:' "$1" \
+  | awk 'NF{n=NR} {l[NR]=$0} END{for(i=1;i<=n;i++)print l[i]}' > "$1.strip"
+mv "$1.strip" "$1"
