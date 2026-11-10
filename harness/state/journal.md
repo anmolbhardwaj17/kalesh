@@ -146,3 +146,6 @@ One line per event, written by task.mjs (start, done, fail, phase changes, inbox
 - 2026-11-10 21:30 mentor message mmwavmnrs handled: Kalesh recommended, Lal Batti as a chapter or mode name. Waiting for his pick before renaming.
 - 2026-11-10 21:32 mentor message mmwavooof handled: More name options given in the terminal.
 - 2026-11-10 21:32 mentor message mmwavpp7u handled: Movie-style title options given in the terminal.
+- 2026-11-10 21:35 [P0-027] done: lookproof, perf and playcopy run on Godot; npm run play launches the latest build; src/, index.html, vite and three removed, projection moved to tools/geo/. Self-checked: 199 vitest + 21 godot tests, quick 6/6.
+- 2026-11-10 21:36 mentor message mmwavsvp8 handled: Done: remote added and pushed, strict commit rule in the hook, game renamed Kalesh on the dashboard and in the Godot project.
+- 2026-11-10 21:36 mentor message mmwavsvqb handled: Done: remote added and pushed, strict commit rule in the hook, game renamed Kalesh on the dashboard and in the Godot project.

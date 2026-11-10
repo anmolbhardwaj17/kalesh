@@ -6,3 +6,14 @@
 grep -viE '^[[:space:]]*co-authored-by:.*(claude|anthropic)|generated with \[?claude code|^[[:space:]]*claude-session:' "$1" \
   | awk 'NF{n=NR} {l[NR]=$0} END{for(i=1;i<=n;i++)print l[i]}' > "$1.strip"
 mv "$1.strip" "$1"
+
+# Strict rule (Anmol 2026-11-10): the name Claude (or Anthropic) never appears in a commit at all.
+# Reject the commit if the message, the author or the committer still mentions it.
+if grep -qiE 'claude|anthropic' "$1"; then
+  echo "commit-msg: rejected. The commit message mentions Claude or Anthropic. Reword it (for example 'project rules' instead of the rules file name)." >&2
+  exit 1
+fi
+if git var GIT_AUTHOR_IDENT | grep -qiE 'claude|anthropic' || git var GIT_COMMITTER_IDENT | grep -qiE 'claude|anthropic'; then
+  echo "commit-msg: rejected. The author or committer names Claude or Anthropic." >&2
+  exit 1
+fi

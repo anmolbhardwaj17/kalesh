@@ -1,4 +1,4 @@
-; Engine configuration file for Dilli Darshan, Godot 4.7.2 (pinned in harness/kit.config.json "godot").
+; Engine configuration file for Kalesh, Godot 4.7.2 (pinned in harness/kit.config.json "godot").
 ; Coordinates are binding (harness/design/TECH.md "Coordinates"): east +X, north -Z, up +Y, 1 unit = 1 metre.
 ; No negative scale and no axis flips anywhere. The physics tick is fixed at 60 Hz.
 
@@ -6,7 +6,7 @@ config_version=5
 
 [application]
 
-config/name="Dilli Darshan"
+config/name="Kalesh"
 config/version="0.0.1"
 config/description="Open world driving in Delhi. Stand-in scaffold."
 run/main_scene="res://scenes/main.tscn"

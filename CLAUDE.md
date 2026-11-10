@@ -1,4 +1,6 @@
-# Dilli Darshan
+# Kalesh
+
+The game is named Kalesh (Anmol, 2026-11-10; it was called Dilli Darshan until then; the folder keeps its old name).
 
 A browser game built autonomously by Claude Code for Anmol. Anmol mentors; Claude builds, verifies and never waits (after Phase 0, which waits for Anmol by design). This repo is a new game started with the harness kit on a minimal scaffold (a box car on a ground plane with the hook contract). The old driving game is a read-only reference: see "Game facts" at the end.
 
@@ -32,8 +34,8 @@ A browser game built autonomously by Claude Code for Anmol. Anmol mentors; Claud
 4. **Stay in the repo.** No sudo, no global installs (except `npx playwright install chromium`), no edits outside this folder, no force pushes, no history rewrites. To discard a failed attempt use `git stash push -u -m "<task id> failed attempt"` (recoverable), never `git reset --hard`. Why: everything must be recoverable and the machine is Anmol's. `.claude/hooks/guard.mjs` blocks the worst of these.
 5. **Writing style for anything Anmol or players read** (dashboard text, journal, inbox replies, playtest checklists, docs, dialogue): plain direct English, short sentences, **no em dashes** (use commas, colons or separate sentences).
 6. **Keep learning in files**, not in context: gotchas to `harness/state/knowledge/<area>.md` (one line each; `knowledge.md` core only for cross-cutting ones), architecture choices to `decisions.md`, module map to `docs/ARCHITECTURE.md`. Why: context is compacted and sessions restart; files survive both.
-7. **No Claude attribution in git.** Commit messages and PR descriptions never carry a Claude co-author line or a "Generated with Claude Code" footer. `.claude/settings.json` sets `attribution` to empty, and the versioned `commit-msg` hook in `.githooks/` (enabled with `git config core.hooksPath .githooks`) strips any such line. Why: Anmol's history, Anmol's name.
-8. **GitHub.** Remote `origin`: none yet, branch main. Until Anmol creates it, add one Needs-you notice (`node harness/bin/notice.mjs add "Please create a private GitHub repo for Dilli Darshan and tell me its URL"`, only if no such notice is open), skip the push and keep working; never create the remote or change visibility yourself. Once he gives the URL: `git remote add origin <url>`, update this rule, resolve the notice. Then push after every verified commit (`git push origin main --follow-tags`). If a push fails, do not wait: add a Needs-you note on the dashboard (`node harness/bin/notice.mjs add "<text>"`, resolve it once a push works) and keep working. Never commit files over 50 MB, secrets or `.env` files. Why: an off-machine copy after every verified step; a failed push must be visible without stopping work.
+7. **No Claude in git, ever (strict, Anmol 2026-11-10).** The name Claude or Anthropic never appears in any commit: not in the message, not as author or committer, no co-author line, no "Generated with Claude Code" footer. Name files by role in messages ("project rules", not the rules file name). `.claude/settings.json` sets `attribution` to empty, and the versioned `commit-msg` hook in `.githooks/` (enabled with `git config core.hooksPath .githooks`) strips attribution lines and then rejects any commit that still mentions Claude or Anthropic. Check `git config core.hooksPath` says `.githooks` before committing in a new clone. Why: Anmol's history, Anmol's name.
+8. **GitHub.** Remote `origin`: https://github.com/anmolbhardwaj17/kalesh.git (created by Anmol 2026-11-10), branch main. Push after every verified commit (`git push origin main --follow-tags`). Never change visibility or create other remotes. If a push fails, do not wait: add a Needs-you note on the dashboard (`node harness/bin/notice.mjs add "<text>"`, resolve it once a push works) and keep working. Never commit files over 50 MB, secrets or `.env` files. Why: an off-machine copy after every verified step; a failed push must be visible without stopping work.
 
 ## Modes (switchable)
 
@@ -150,9 +152,9 @@ Return your summary in the format from your agent instructions.
 - The game breaks the hook contract (a refactor removed a hook): `hooks_contract` fails in quick; fix the hook before anything else (priority 1 bug).
 - Context getting heavy: you lose nothing by compacting; all state lives in files. After compaction run step 1.
 
-## Game facts (Dilli Darshan)
+## Game facts (Kalesh)
 
-Dilli Darshan is an open-world driving game set in Delhi, built from real map data, with rich Delhi assets. Anmol's first request is in the inbox; Phase 0 handles it first.
+Kalesh is an open-world action game set in a compressed real Delhi plus NCR, with three playable lives (auto driver, cop, small-time fixer), built in Godot 4 from real map data, with rich Delhi assets. The signed game design is in harness/design/GAME.md. Anmol's first request is in the inbox; Phase 0 handles it first.
 
 **The old game is a READ-ONLY reference.** `/Users/apple/Desktop/code/delhi-drive` ("Barcelona Drive", an OSM driving sim, originally Delhi; full verdicts in `harness/design/SALVAGE_AUDIT.md`). Never edit, build, install or commit in it. Read it only for the Phase 0 salvage audit and when checking a specific idea.
 
