@@ -1,0 +1,136 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "airport_t3",
+        "name": "IGI Airport Terminal 3",
+        "block": "airport_t3",
+        "status": "draft",
+        "areaKm2": 2.92,
+        "frameOrigin": {
+          "lat": 28.55485,
+          "lon": 77.08417,
+          "name": "IGI Airport Terminal 3",
+          "from": "OSM way 51419058 Terminal 3, centre of its box"
+        },
+        "holds": "Terminal 3 with both piers, the forecourt with the arrival and departure roads, the Airport Express station, IGI Airport T3 Road and the freight terminal. Aerocity is not inside: at true scale it would land on the Vasant Kunj malls (measured in P1-008), so it is left to the airport road corridor",
+        "edges": "west: the tips of the international and domestic piers; south: just north of runway 11L/29R; east: the end of IGI Airport T3 Road past the freight terminal; north: the Terminal 2 roads, south of runway 10/28",
+        "drawn": "waypoints picked by hand at junctions and edges read from OpenStreetMap by Overpass (osmBase 2026-11-11T16:40 to 16:56Z); straight lines between them, counter-clockwise, closed. A compact outline: a far block sits at half its real distance from India Gate but is true scale inside, so it must stay small enough to keep clear of its neighbours (rule R-STITCH-05). The production outline follows the real roads when the block is baked (P8)",
+        "waypoints": [
+          {
+            "name": "north-west of the international pier",
+            "lat": 28.5632,
+            "lon": 77.08
+          },
+          {
+            "name": "west tip of the international pier",
+            "lat": 28.5545,
+            "lon": 77.0775
+          },
+          {
+            "name": "west of the domestic pier",
+            "lat": 28.5505,
+            "lon": 77.0795
+          },
+          {
+            "name": "south of the domestic pier, north of runway 11L/29R",
+            "lat": 28.5484,
+            "lon": 77.09
+          },
+          {
+            "name": "south-east of the car park",
+            "lat": 28.5512,
+            "lon": 77.0935
+          },
+          {
+            "name": "IGI Airport T3 Road, east end, south side",
+            "lat": 28.5516,
+            "lon": 77.1062
+          },
+          {
+            "name": "IGI Airport T3 Road, east end, north side",
+            "lat": 28.5572,
+            "lon": 77.1062
+          },
+          {
+            "name": "north-east of the freight terminal",
+            "lat": 28.5584,
+            "lon": 77.1045
+          },
+          {
+            "name": "Terminal 2B Road, north side",
+            "lat": 28.5592,
+            "lon": 77.0945
+          },
+          {
+            "name": "north-east of the Terminal 3 building",
+            "lat": 28.5605,
+            "lon": 77.087
+          },
+          {
+            "name": "north-east of the international pier",
+            "lat": 28.5632,
+            "lon": 77.084
+          }
+        ]
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              77.08,
+              28.5632
+            ],
+            [
+              77.0775,
+              28.5545
+            ],
+            [
+              77.0795,
+              28.5505
+            ],
+            [
+              77.09,
+              28.5484
+            ],
+            [
+              77.0935,
+              28.5512
+            ],
+            [
+              77.1062,
+              28.5516
+            ],
+            [
+              77.1062,
+              28.5572
+            ],
+            [
+              77.1045,
+              28.5584
+            ],
+            [
+              77.0945,
+              28.5592
+            ],
+            [
+              77.087,
+              28.5605
+            ],
+            [
+              77.084,
+              28.5632
+            ],
+            [
+              77.08,
+              28.5632
+            ]
+          ]
+        ]
+      }
+    }
+  ]
+}

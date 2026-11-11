@@ -40,6 +40,8 @@
     "tools/geo/",
     "tools/bake/tile/",
     "tools/bake/tile.ts",
+    "tools/bake/tileset.ts",
+    "tools/bake/layout/",
     "harness/data/districts.json"
   ]
 }

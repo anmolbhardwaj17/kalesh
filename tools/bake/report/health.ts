@@ -2,7 +2,7 @@
 // bake invariants: a failed invariant stops the bake before it writes tiles (TECH.md "World pipeline"). Pure; the
 // driver writes the file. The report holds no clock time, so the same inputs give the same file.
 
-export const HEALTH_VERSION = 1;
+export const HEALTH_VERSION = 2;
 
 export interface InvariantResult {
   id: string;
@@ -18,6 +18,37 @@ export interface HealthSource {
   sha256: string | null;
   licence: string | null;
   credit: string | null;
+}
+
+export interface PairRecord {
+  a: string;
+  b: string;
+  realM: number;
+  gameM: number;
+  errorPct: number;
+  realBearingDeg: number;
+  gameBearingDeg: number;
+  bearingErrorDeg: number;
+  ok: boolean;
+}
+
+export interface LayoutRecord {
+  centrePlaces: number;
+  centrePairs: number;
+  worstPairBearingDeg: number;
+  worstPairDistancePct: number;
+  /** Every block: translation only (north on -Z, east on +X, determinant +1, no scale). */
+  blocks: { id: string; offset: { x: number; z: number }; translationOnly: boolean; northOffDeg: number; determinant: number }[];
+  far: { block: string; realM: number; realBearingDeg: number; gameM: number; gameBearingDeg: number; bearingErrorDeg: number; distanceErrorPct: number }[];
+  blockGapMinM: number;
+  blockGapBetween: [string, string] | null;
+  mapBoxKm: { width: number; depth: number };
+  /** Radius of the smallest circle round every position: no world origin can do better. */
+  smallestCircleKm: number;
+  reachFromBoxCentreKm: number;
+  originAfterRecentre: { x: number; z: number };
+  reachAfterRecentreKm: number;
+  reachNowKm: number;
 }
 
 export interface HealthReport {
@@ -36,8 +67,10 @@ export interface HealthReport {
   overrides: { applied: number; stale: number };
   /** The gate counts of MAP_REPAIR.md "Verification": null until the step that measures them exists. */
   gates: Record<string, number | null>;
-  /** The pair table of the centre block (real against game bearing and distance); empty until layout runs. */
-  pairs: unknown[];
+  /** The pair table of the centre block (rule R-STITCH-03): real against game bearing and distance for every pair of centre places. */
+  pairs: PairRecord[];
+  /** What rule R-STITCH measured on the layout (tools/bake/layout/gate.ts); null when it did not run. */
+  layout: LayoutRecord | null;
   invariants: InvariantResult[];
   /** True when an invariant failed: no tile was written. */
   stoppedBeforeTiles: boolean;
@@ -50,7 +83,7 @@ export function emptyHealth(stage: string, block: string, outline: HealthReport[
   const gates: Record<string, number | null> = {};
   for (const k of GATE_KEYS) gates[k] = null;
   return {
-    _doc: 'Map health report of the last bake (MAP_REPAIR.md "Verification"), written by tools/bake/main.ts. issues, repairs, overrides, gates and pairs are filled by the steps that measure them; null means not measured yet. A failed invariant stops the bake before tiles are written (stoppedBeforeTiles).',
+    _doc: 'Map health report of the last bake (MAP_REPAIR.md "Verification"), written by tools/bake/main.ts. issues, repairs, overrides and gates are filled by the steps that measure them; null means not measured yet. pairs and layout come from rule R-STITCH, which runs in every bake before the first step. A failed invariant stops the bake before tiles are written (stoppedBeforeTiles).',
     version: HEALTH_VERSION,
     stage,
     block,
@@ -63,6 +96,7 @@ export function emptyHealth(stage: string, block: string, outline: HealthReport[
     overrides: { applied: 0, stale: 0 },
     gates,
     pairs: [],
+    layout: null,
     invariants: [],
     stoppedBeforeTiles: false,
     tiles: { written: 0, out: null, only: null },

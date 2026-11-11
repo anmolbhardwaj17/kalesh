@@ -1,4 +1,5 @@
-// Closing the boundary ports of a district (ARCH_OPTIONS FL1, SC1). Every port ends in exactly one closure:
+// Closing the boundary ports at the map edge (ARCH_OPTIONS FL1, SC1; MAP_REPAIR.md "The map edge"; moved in P1-008
+// from the Phase 0 stitch bench, tools/bake/stitch/ports.ts). Every port ends in exactly one closure:
 //   connector    a big road that an authored connector (harness/data/connectors/) takes over
 //   street_net   two or more small ports close together, joined by a short generated back street outside the clip
 //   loop         one small through street on its own: a turning loop
@@ -7,8 +8,8 @@
 //   open         a big road with no connector yet: it needs an authored connector (drawn with a barrier)
 // Small ports close automatically; a closure that the generator is not sure of carries `review`.
 import type { P2 } from '../geom.ts';
-import { ringAt, ringLength, ringProject } from './clip.ts';
-import type { Port } from './clip.ts';
+import { ringAt, ringLength, ringProject } from './edge.ts';
+import type { Port } from './edge.ts';
 
 export type ClosureKind = 'connector' | 'street_net' | 'loop' | 'gate' | 'dead_end' | 'open';
 

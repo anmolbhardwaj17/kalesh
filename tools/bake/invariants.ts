@@ -1,6 +1,8 @@
 // Invariants of the bake steps built so far (P1-007). Each returns pass or fail with a reason; the driver records them
 // in the health report and stops before writing tiles when one fails (TECH.md "World pipeline (offline bake)"). Later
-// steps add theirs here: open ports, floating ends, overlapping road faces, lane breaks, mirrors, the centre pair gate.
+// steps add theirs here: open ports, floating ends, overlapping road faces, lane breaks. The layout invariants (no
+// mirror, translation only, the centre pair gate, far blocks, block gaps, the map extent) are rule R-STITCH in
+// tools/bake/layout/gate.ts, run by the driver before the first step.
 import type { GroundModel } from './heights.ts';
 import { ringProblems } from './layout/outline.ts';
 import type { StagePlan } from './layout/stages.ts';

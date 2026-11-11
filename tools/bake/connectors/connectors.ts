@@ -1,4 +1,5 @@
-// Connectors of the composite map (ARCH_OPTIONS SC1, SC2). A connector is authored data: control points in game
+// Connectors: the authored corridors to far blocks (ARCH_OPTIONS SC1; MAP_REPAIR.md "Connector format"; moved in
+// P1-008 from the Phase 0 stitch bench, tools/bake/stitch/connectors.ts). A connector is authored data: control points in game
 // metres (the world frame), a road class and a lane set, one JSON file each in harness/data/connectors/. This file
 // turns a connector into roads for the lane model of tools/bake/roads/ (the same builder as real roads) and checks
 // its curve radius. SC2 (a real road's shape, shortened) is `shorten` below.
@@ -20,6 +21,16 @@ export interface ConnectorSpan {
   over: string;
 }
 
+export interface ConnectorEnd {
+  block?: string;
+  /** Phase 0 bench files only: the island district the end sat on. */
+  district?: string;
+  port: string;
+}
+
+/** The block (or, in a bench file, the district) an end of a connector leaves. */
+export const endBlock = (e: ConnectorEnd): string => e.block ?? e.district ?? '';
+
 export interface ConnectorSpec {
   id: string;
   name: string;
@@ -29,9 +40,9 @@ export interface ConnectorSpec {
   status: string;
   class: string;
   lanes: { forward: number; backward: number };
-  /** The port at each end: the district and the name of the road that leaves it there. */
-  from: { district: string; port: string };
-  to: { district: string; port: string };
+  /** The port at each end: the block and the name of the road that leaves it there (the three bench files say `district`). */
+  from: ConnectorEnd;
+  to: ConnectorEnd;
   /** Control points in world metres (east +X, north -Z). The first and last lie on the two ports. */
   points: { x: number; z: number }[];
   spans?: ConnectorSpan[];
@@ -61,6 +72,9 @@ export function specProblems(spec: ConnectorSpec): string[] {
   else if (spec.lanes.forward !== spec.lanes.backward) out.push('the lane model prototype builds a two-way road with the same lane count each way');
   for (const s of spec.spans ?? []) {
     if (!(s.from >= 0 && s.to > s.from && s.to < (spec.points?.length ?? 0))) out.push(`span over ${s.over}: from and to must be control point numbers in order`);
+  }
+  for (const [name, e] of [['from', spec.from], ['to', spec.to]] as const) {
+    if (!e || endBlock(e) === '' || !e.port) out.push(`${name} must name a block and the road at its port`);
   }
   for (const key of Object.keys(spec)) if (/^(rot|scale|mirror|flip)/i.test(key)) out.push(`key ${key}: a connector has no rotation, scale or mirror`);
   return out;

@@ -2,6 +2,8 @@
 // with tools/bake/sources/, touches files and the network; every other file under tools/bake/ is pure functions
 // (tools/bake/purity.test.ts). Usage in tools/bake/cli.ts; run through `npm run bake -- pilot`.
 //
+// Before any step: rule R-STITCH on the layout (tools/bake/layout/gate.ts: the placement method, translation only,
+// the centre pair gate, far blocks, block gaps, the map extent), with the pair table written into the health report.
 // Steps so far: sources (fetch or reuse every pinned file and print its hash), ground (GEDTM30 smoothed over 60 m,
 // filtered GLO-30 as the fallback), tiles (written by a later task). Invariants run after each step; a failed one
 // stops the bake before tiles are written. harness/reports/map/health.json is written at the end of every run.
@@ -14,7 +16,11 @@ import { parseArgs } from './cli.ts';
 import type { BakeArgs, Step } from './cli.ts';
 import { groundInvariants, outlineInvariants, sourceInvariants } from './invariants.ts';
 import { pickGround } from './heights.ts';
+import { checkLayout, layoutRecord, pairRows } from './layout/gate.ts';
+import type { BlockOutline, LayoutInput, Place } from './layout/gate.ts';
+import { readOutline } from './layout/outline.ts';
 import type { GeoBox } from './layout/outline.ts';
+import type { LayoutFile } from './layout/placement.ts';
 import { stageDefs, stagePlan } from './layout/stages.ts';
 import type { DistrictsWithStages, StagePlan } from './layout/stages.ts';
 import { BakeStop, emptyHealth, recordInvariants } from './report/health.ts';
@@ -50,6 +56,34 @@ export function boxMetres(plan: StagePlan, box: GeoBox = plan.box): Box2 {
   return { minX: Math.min(...pts.map((p) => p.x)), maxX: Math.max(...pts.map((p) => p.x)), minZ: Math.min(...pts.map((p) => p.z)), maxZ: Math.max(...pts.map((p) => p.z)) };
 }
 
+/**
+ * The layout data rule R-STITCH reads: the places and every outline that is drawn (block outlines, focus outlines,
+ * draft focus rings and the stage being baked). A file named in districts.json that is not there is listed, not thrown.
+ */
+export function readLayoutInput(dataDir: string, file: LayoutFile, stage: BlockOutline): { input: LayoutInput; missing: string[] } {
+  const missing: string[] = [];
+  const outlines: BlockOutline[] = [];
+  const add = (id: string, block: string, rel: string): void => {
+    const f = path.join(dataDir, rel);
+    if (!fs.existsSync(f)) {
+      missing.push(rel);
+      return;
+    }
+    outlines.push({ id, block, coords: readOutline(fs.readFileSync(f, 'utf8'), id).coords });
+  };
+  for (const b of file.blocks) if (b.outline) add(b.id, b.id, b.outline);
+  for (const d of [...file.districts, ...(file.planned ?? [])]) {
+    if (typeof d.outline === 'string') add(d.id, d.block, d.outline);
+    else if (d.outline) outlines.push({ id: d.id, block: d.block, coords: d.outline.ring });
+  }
+  outlines.push(stage);
+  let places: Place[] = [];
+  const placesFile = path.join(dataDir, 'districts', 'places.json');
+  if (fs.existsSync(placesFile)) places = (JSON.parse(fs.readFileSync(placesFile, 'utf8')) as { places: Place[] }).places;
+  else missing.push('districts/places.json');
+  return { input: { file, places, outlines }, missing };
+}
+
 export interface BakeOptions {
   root: string;
   net: Net;
@@ -62,11 +96,11 @@ export interface BakeOptions {
 /** Runs a bake for parsed arguments; returns the report (also written to disk). Throws BakeStop after writing it. */
 export async function bake(args: BakeArgs, opts: BakeOptions): Promise<HealthReport> {
   const dataDir = path.join(opts.root, 'harness', 'data');
-  const districts = JSON.parse(fs.readFileSync(path.join(dataDir, 'districts.json'), 'utf8')) as DistrictsWithStages;
+  const districts = JSON.parse(fs.readFileSync(path.join(dataDir, 'districts.json'), 'utf8')) as DistrictsWithStages & LayoutFile;
   const defs = stageDefs(districts);
   if (!defs[args.target]) {
     const block = districts.blocks.find((b) => b.id === args.target);
-    throw new Error(block ? `block "${args.target}" has no bake outline yet: bake a stage inside it (${Object.keys(defs).join(', ')})` : `"${args.target}" is neither a stage nor a block of harness/data/districts.json`);
+    throw new Error(block ? `block "${args.target}" has no bake stage yet: bake a stage of harness/data/districts.json "stages" (${Object.keys(defs).join(', ')})` : `"${args.target}" is neither a stage nor a block of harness/data/districts.json`);
   }
   const def = defs[args.target];
   const outlineFile = path.join(dataDir, def!.outline);
@@ -89,6 +123,15 @@ export async function bake(args: BakeArgs, opts: BakeOptions): Promise<HealthRep
     }
   };
   check(outlineInvariants(plan));
+  // rule R-STITCH: the layout is checked in every bake, before any step runs (MAP_REPAIR.md "District frames and stitching")
+  const layout = readLayoutInput(dataDir, districts, { id: `stage ${plan.id}`, block: plan.def.block, coords: plan.outline.coords });
+  const lc = checkLayout(layout.input);
+  report.pairs = pairRows(lc.pairs);
+  report.layout = layoutRecord(districts, lc, layout.input.places.filter((p) => p.block === plan.def.block).length);
+  check([
+    layout.missing.length ? { id: 'R-STITCH-00.files', ok: false, detail: `named in districts.json but not there: ${layout.missing.join(', ')}` } : { id: 'R-STITCH-00.files', ok: true, detail: `${layout.input.outlines.length} outlines and ${layout.input.places.length} places read` },
+    ...lc.results,
+  ]);
   const sourcesFile = path.join(opts.root, 'data', 'SOURCES.json');
   let results: SourceResult[] = [];
   for (const step of args.steps as Step[]) {

@@ -3,6 +3,7 @@
 // tolerance. A patch whose target is not found is reported as stale and stays in the file: it is never dropped.
 import { pointSegment } from './geom.ts';
 import type { P2 } from './geom.ts';
+import { TILE_M, overrideFile, tileOf } from './layout/grid.ts';
 import { roadWidth } from './osm.ts';
 import type { Footprint, MapData, Road } from './osm.ts';
 import type { Issue, Patch } from './rules/types.ts';
@@ -18,11 +19,13 @@ export interface PatchResult {
   note: string;
 }
 
-/** The tile an override is filed under: the tile of its anchor in district metres. */
-export function overrideTile(anchor: P2, size = 250): { tx: number; tz: number; file: string } {
-  const tx = Math.floor(anchor.x / size);
-  const tz = Math.floor(anchor.z / size);
-  return { tx, tz, file: `${tx}_${tz}.json` };
+/**
+ * The tile an override is filed under: the tile of its anchor on the one world grid (tools/bake/layout/grid.ts).
+ * The anchor is in world metres; the Phase 0 data bench still passes district metres for its sample patches.
+ */
+export function overrideTile(anchor: P2, size: number = TILE_M): { tx: number; tz: number; file: string } {
+  const { tx, tz } = tileOf(anchor.x, anchor.z, size);
+  return { tx, tz, file: overrideFile(tx, tz) };
 }
 
 function findFeature(map: MapData, id: string): Road | Footprint | null {

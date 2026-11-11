@@ -38,7 +38,7 @@ export interface SiteInput {
   heroes?: readonly HeroSpec[];
   /** Station spacing in metres. */
   step?: number;
-  /** false: no terrain is built (neither TF1 nor TF2) and no ground mesh is written: the caller brings its own ground (the stitch bench, whose roads lie in one ground for the whole map). */
+  /** false: no terrain is built (neither TF1 nor TF2) and no ground mesh is written: the caller brings its own ground (a connector built by tools/bake/connectors/, whose road lies in the map's own ground). */
   terrain?: boolean;
 }
 

@@ -1,6 +1,10 @@
-// District clip (ARCH_OPTIONS DC1, DC2, DC3): cuts the roads of a district at its clip ring and finds the boundary
-// ports, the places where a carriageway crosses the ring. Rings are open lists of points (no repeated first point)
-// in any frame; all functions here are plane geometry in metres.
+// The map edge (ARCH_OPTIONS DC2; MAP_REPAIR.md "The map edge"): cuts roads at an outline ring and finds the boundary
+// ports, the places where a carriageway crosses the ring. In the signed seamless map this is used only where the map
+// really ends: at a stage outline, at the outer edge of a block and at the end of a corridor. Focus districts inside a
+// block are never cut (streets run on through them). Moved here in P1-008 from the Phase 0 stitch bench
+// (tools/bake/stitch/clip.ts), where every district was an island with ports all round. Also the ring helpers the
+// layout gates use (overlap and gap of placed outlines). Rings are open lists of points (no repeated first point) in
+// any frame; all functions here are plane geometry in metres.
 import { boxOf, boxesMeet, pointInRing, pointSegment, ringArea, segmentSegment, triangulate } from '../geom.ts';
 import type { Box2, P2 } from '../geom.ts';
 import { ROAD_CLASSES } from '../osm.ts';
@@ -292,7 +296,7 @@ export function clipRoads(roads: readonly Road[], ring: readonly P2[], opts: Cli
 
 export interface Port extends P2 {
   id: string;
-  /** Unit vector pointing out of the district along the road. */
+  /** Unit vector pointing out of the outline along the road. */
   dx: number;
   dz: number;
   cls: string;
