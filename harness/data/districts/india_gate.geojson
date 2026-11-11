@@ -1,0 +1,314 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "properties": {
+        "district": "india_gate",
+        "name": "India Gate",
+        "status": "draft",
+        "option": "DC2",
+        "edges": "the C-Hexagon all round; west: Man Singh Road between Ashoka Road and Akbar Road",
+        "areaKm2": 0.665,
+        "drawn": "waypoints picked by hand at road junctions, the line walked along the real roads between them (OSM of 2026-11-11T00:46:50Z), then moved 35 m outwards so the edge road stays inside",
+        "waypoints": [
+          {
+            "name": "Ashoka Road at Man Singh Road (rotary 4)",
+            "lat": 28.6163,
+            "lon": 77.2249
+          },
+          {
+            "name": "Ashoka Road at the C-Hexagon",
+            "lat": 28.6149,
+            "lon": 77.2279
+          },
+          {
+            "name": "C-Hexagon at Copernicus Marg",
+            "lat": 28.6162,
+            "lon": 77.2313
+          },
+          {
+            "name": "C-Hexagon at Purana Quila Road",
+            "lat": 28.6146,
+            "lon": 77.2341
+          },
+          {
+            "name": "C-Hexagon at Sher Shah Road",
+            "lat": 28.6108,
+            "lon": 77.2343
+          },
+          {
+            "name": "C-Hexagon at Pandara Road",
+            "lat": 28.6094,
+            "lon": 77.231
+          },
+          {
+            "name": "C-Hexagon at Akbar Road",
+            "lat": 28.6105,
+            "lon": 77.2287
+          },
+          {
+            "name": "Akbar Road at Man Singh Road",
+            "lat": 28.6099,
+            "lon": 77.2245
+          }
+        ],
+        "legs": [
+          {
+            "from": "Ashoka Road at Man Singh Road (rotary 4)",
+            "to": "Ashoka Road at the C-Hexagon",
+            "along": [
+              "rotary no 4",
+              "Ashoka Road"
+            ]
+          },
+          {
+            "from": "Ashoka Road at the C-Hexagon",
+            "to": "C-Hexagon at Copernicus Marg",
+            "along": []
+          },
+          {
+            "from": "C-Hexagon at Copernicus Marg",
+            "to": "C-Hexagon at Purana Quila Road",
+            "along": []
+          },
+          {
+            "from": "C-Hexagon at Purana Quila Road",
+            "to": "C-Hexagon at Sher Shah Road",
+            "along": []
+          },
+          {
+            "from": "C-Hexagon at Sher Shah Road",
+            "to": "C-Hexagon at Pandara Road",
+            "along": []
+          },
+          {
+            "from": "C-Hexagon at Pandara Road",
+            "to": "C-Hexagon at Akbar Road",
+            "along": []
+          },
+          {
+            "from": "C-Hexagon at Akbar Road",
+            "to": "Akbar Road at Man Singh Road",
+            "along": [
+              "rotary no 15",
+              "Akbar Road"
+            ]
+          },
+          {
+            "from": "Akbar Road at Man Singh Road",
+            "to": "Ashoka Road at Man Singh Road (rotary 4)",
+            "along": [
+              "Man Singh Road",
+              "rotary no 15",
+              "rotary no 4"
+            ]
+          }
+        ]
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              77.2244665,
+              28.6164583
+            ],
+            [
+              77.2249915,
+              28.6164437
+            ],
+            [
+              77.225,
+              28.6164331
+            ],
+            [
+              77.2256214,
+              28.6164629
+            ],
+            [
+              77.2258127,
+              28.6162969
+            ],
+            [
+              77.2275576,
+              28.6153084
+            ],
+            [
+              77.2278522,
+              28.6152093
+            ],
+            [
+              77.2282539,
+              28.6152725
+            ],
+            [
+              77.2306476,
+              28.6163556
+            ],
+            [
+              77.2312272,
+              28.6164947
+            ],
+            [
+              77.2315875,
+              28.6164802
+            ],
+            [
+              77.2319295,
+              28.6163786
+            ],
+            [
+              77.2328333,
+              28.6158088
+            ],
+            [
+              77.2343005,
+              28.6150216
+            ],
+            [
+              77.2346522,
+              28.614699
+            ],
+            [
+              77.2348796,
+              28.6143946
+            ],
+            [
+              77.2350165,
+              28.6140497
+            ],
+            [
+              77.2350173,
+              28.613939
+            ],
+            [
+              77.2348639,
+              28.6115104
+            ],
+            [
+              77.2348308,
+              28.6113541
+            ],
+            [
+              77.2346614,
+              28.6108551
+            ],
+            [
+              77.2345913,
+              28.6107588
+            ],
+            [
+              77.2343543,
+              28.6105228
+            ],
+            [
+              77.234269,
+              28.6104483
+            ],
+            [
+              77.2341643,
+              28.6103961
+            ],
+            [
+              77.2315164,
+              28.609247
+            ],
+            [
+              77.2310891,
+              28.6091556
+            ],
+            [
+              77.2307409,
+              28.6091557
+            ],
+            [
+              77.230631,
+              28.6091683
+            ],
+            [
+              77.2302429,
+              28.6092898
+            ],
+            [
+              77.2280144,
+              28.610625
+            ],
+            [
+              77.2277628,
+              28.6106838
+            ],
+            [
+              77.2275893,
+              28.6106964
+            ],
+            [
+              77.2271658,
+              28.6106415
+            ],
+            [
+              77.2268966,
+              28.6106779
+            ],
+            [
+              77.2252155,
+              28.6099055
+            ],
+            [
+              77.2251307,
+              28.6098696
+            ],
+            [
+              77.2249416,
+              28.6098247
+            ],
+            [
+              77.2247638,
+              28.6098081
+            ],
+            [
+              77.2246051,
+              28.6098618
+            ],
+            [
+              77.2245567,
+              28.6098634
+            ],
+            [
+              77.2242233,
+              28.6100159
+            ],
+            [
+              77.2242174,
+              28.6103512
+            ],
+            [
+              77.2242377,
+              28.6103925
+            ],
+            [
+              77.2242379,
+              28.6103856
+            ],
+            [
+              77.2245383,
+              28.615489
+            ],
+            [
+              77.2245463,
+              28.6159264
+            ],
+            [
+              77.2244799,
+              28.6159949
+            ],
+            [
+              77.2244665,
+              28.6164583
+            ]
+          ]
+        ]
+      }
+    }
+  ]
+}

@@ -1,0 +1,395 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "properties": {
+        "district": "cp",
+        "name": "Connaught Place with Jantar Mantar",
+        "status": "draft",
+        "option": "DC2",
+        "edges": "south: Tolstoy Marg (Jantar Mantar stays inside); west: Sansad Marg, then the Outer Circle; north: the Outer Circle; east: the Outer Circle and Kasturba Gandhi Marg",
+        "areaKm2": 0.7,
+        "drawn": "waypoints picked by hand at road junctions, the line walked along the real roads between them (OSM of 2026-11-11T00:46:50Z), then moved 35 m outwards so the edge road stays inside",
+        "waypoints": [
+          {
+            "name": "Tolstoy Marg at Janpath",
+            "lat": 28.6263,
+            "lon": 77.2192
+          },
+          {
+            "name": "Tolstoy Marg at Sansad Marg",
+            "lat": 28.627,
+            "lon": 77.215
+          },
+          {
+            "name": "Sansad Marg at the Outer Circle",
+            "lat": 28.6303,
+            "lon": 77.2177
+          },
+          {
+            "name": "Outer Circle at Baba Kharak Singh Marg",
+            "lat": 28.6316,
+            "lon": 77.2167
+          },
+          {
+            "name": "Outer Circle at Shaheed Bhagat Singh Marg",
+            "lat": 28.633,
+            "lon": 77.2164
+          },
+          {
+            "name": "Outer Circle at Panchkuian Road",
+            "lat": 28.6343,
+            "lon": 77.2164
+          },
+          {
+            "name": "Outer Circle at Chelmsford Road",
+            "lat": 28.6357,
+            "lon": 77.2187
+          },
+          {
+            "name": "Outer Circle at Minto Road",
+            "lat": 28.6352,
+            "lon": 77.2215
+          },
+          {
+            "name": "Outer Circle at Barakhamba Road",
+            "lat": 28.6312,
+            "lon": 77.2229
+          },
+          {
+            "name": "Outer Circle at Kasturba Gandhi Marg",
+            "lat": 28.6303,
+            "lon": 77.2218
+          },
+          {
+            "name": "Kasturba Gandhi Marg at Tolstoy Marg",
+            "lat": 28.6264,
+            "lon": 77.2238
+          }
+        ],
+        "legs": [
+          {
+            "from": "Tolstoy Marg at Janpath",
+            "to": "Tolstoy Marg at Sansad Marg",
+            "along": [
+              "Tolstoy Marg",
+              "Jai Singh Road"
+            ]
+          },
+          {
+            "from": "Tolstoy Marg at Sansad Marg",
+            "to": "Sansad Marg at the Outer Circle",
+            "along": [
+              "Sansad Marg",
+              "Jai Singh Road"
+            ]
+          },
+          {
+            "from": "Sansad Marg at the Outer Circle",
+            "to": "Outer Circle at Baba Kharak Singh Marg",
+            "along": [
+              "Outer Circle",
+              "Sansad Marg"
+            ]
+          },
+          {
+            "from": "Outer Circle at Baba Kharak Singh Marg",
+            "to": "Outer Circle at Shaheed Bhagat Singh Marg",
+            "along": [
+              "Outer Circle"
+            ]
+          },
+          {
+            "from": "Outer Circle at Shaheed Bhagat Singh Marg",
+            "to": "Outer Circle at Panchkuian Road",
+            "along": [
+              "Outer Circle",
+              "Panchkuian Road"
+            ]
+          },
+          {
+            "from": "Outer Circle at Panchkuian Road",
+            "to": "Outer Circle at Chelmsford Road",
+            "along": [
+              "Chelmsford Road",
+              "Outer Circle",
+              "Panchkuian Road"
+            ]
+          },
+          {
+            "from": "Outer Circle at Chelmsford Road",
+            "to": "Outer Circle at Minto Road",
+            "along": [
+              "Outer Circle",
+              "Chelmsford Road"
+            ]
+          },
+          {
+            "from": "Outer Circle at Minto Road",
+            "to": "Outer Circle at Barakhamba Road",
+            "along": [
+              "Outer Circle",
+              "Barakhamba Road"
+            ]
+          },
+          {
+            "from": "Outer Circle at Barakhamba Road",
+            "to": "Outer Circle at Kasturba Gandhi Marg",
+            "along": [
+              "Outer Circle",
+              "Barakhamba Road"
+            ]
+          },
+          {
+            "from": "Outer Circle at Kasturba Gandhi Marg",
+            "to": "Kasturba Gandhi Marg at Tolstoy Marg",
+            "along": [
+              "Kasturba Gandhi Marg",
+              "Outer Circle",
+              "Tolstoy Marg"
+            ]
+          },
+          {
+            "from": "Kasturba Gandhi Marg at Tolstoy Marg",
+            "to": "Tolstoy Marg at Janpath",
+            "along": [
+              "Tolstoy Marg"
+            ]
+          }
+        ]
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              77.2192301,
+              28.6259983
+            ],
+            [
+              77.2182727,
+              28.6260235
+            ],
+            [
+              77.2171346,
+              28.6255992
+            ],
+            [
+              77.2165665,
+              28.6255576
+            ],
+            [
+              77.216456,
+              28.6255585
+            ],
+            [
+              77.2163477,
+              28.6255795
+            ],
+            [
+              77.2160584,
+              28.6256537
+            ],
+            [
+              77.2157509,
+              28.6258062
+            ],
+            [
+              77.2156167,
+              28.6259192
+            ],
+            [
+              77.2155409,
+              28.6260721
+            ],
+            [
+              77.2154005,
+              28.6264953
+            ],
+            [
+              77.2151468,
+              28.626647
+            ],
+            [
+              77.2149529,
+              28.6268786
+            ],
+            [
+              77.2150283,
+              28.6271523
+            ],
+            [
+              77.2154711,
+              28.6276942
+            ],
+            [
+              77.2173812,
+              28.6302979
+            ],
+            [
+              77.2173809,
+              28.6303125
+            ],
+            [
+              77.2173484,
+              28.6303802
+            ],
+            [
+              77.2173534,
+              28.6303676
+            ],
+            [
+              77.2165282,
+              28.6311673
+            ],
+            [
+              77.2164415,
+              28.6312665
+            ],
+            [
+              77.2163874,
+              28.6313808
+            ],
+            [
+              77.2161407,
+              28.6323221
+            ],
+            [
+              77.2160694,
+              28.6329902
+            ],
+            [
+              77.2163187,
+              28.6336975
+            ],
+            [
+              77.2167364,
+              28.6344665
+            ],
+            [
+              77.2177152,
+              28.6354444
+            ],
+            [
+              77.2179286,
+              28.6358531
+            ],
+            [
+              77.2180841,
+              28.6360099
+            ],
+            [
+              77.2184609,
+              28.6360447
+            ],
+            [
+              77.2186708,
+              28.635923
+            ],
+            [
+              77.2188738,
+              28.6359031
+            ],
+            [
+              77.2197185,
+              28.6360258
+            ],
+            [
+              77.2200604,
+              28.6360187
+            ],
+            [
+              77.221515,
+              28.6355867
+            ],
+            [
+              77.2216313,
+              28.6355402
+            ],
+            [
+              77.222379,
+              28.6349213
+            ],
+            [
+              77.2227881,
+              28.6344464
+            ],
+            [
+              77.2231579,
+              28.6337805
+            ],
+            [
+              77.2232983,
+              28.633264
+            ],
+            [
+              77.2233247,
+              28.6331094
+            ],
+            [
+              77.2233356,
+              28.6324521
+            ],
+            [
+              77.2232745,
+              28.6320961
+            ],
+            [
+              77.2231641,
+              28.6317407
+            ],
+            [
+              77.2229427,
+              28.6313824
+            ],
+            [
+              77.2229877,
+              28.6312532
+            ],
+            [
+              77.2228669,
+              28.6308766
+            ],
+            [
+              77.2225102,
+              28.6307715
+            ],
+            [
+              77.222325,
+              28.6305958
+            ],
+            [
+              77.2217424,
+              28.6301347
+            ],
+            [
+              77.2217149,
+              28.6300839
+            ],
+            [
+              77.2237227,
+              28.6265706
+            ],
+            [
+              77.2234629,
+              28.6260832
+            ],
+            [
+              77.2229855,
+              28.6259492
+            ],
+            [
+              77.2219018,
+              28.6258689
+            ],
+            [
+              77.2192301,
+              28.6259983
+            ]
+          ]
+        ]
+      }
+    }
+  ]
+}

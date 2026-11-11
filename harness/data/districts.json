@@ -1,0 +1,183 @@
+{
+  "_doc": "Draft district list of the composite map (P0-029 stitch bench; MAP_REPAIR.md \"District frames and stitching\"). world = offset + project(lat, lon, origin): a translation only, no rotation, scale or mirror, north is -Z. offset is the world position of the frame origin in metres (east +X, north -Z); heightOffset is added to every ground height of the district; clip is a GeoJSON polygon (WGS84) in harness/data/. Written by node harness/bench/stitch_draft.mjs from layout C; edit by hand after that. Not signed off.",
+  "status": "draft",
+  "layout": {
+    "id": "C",
+    "source": "harness/design/map_sketches/make_sketches.mjs",
+    "boxKm": {
+      "x0": -0.4,
+      "x1": 9.7,
+      "y0": -2.2,
+      "y1": 6.7
+    },
+    "river": {
+      "x": 6.95,
+      "width": 0.5,
+      "y1": 6.7,
+      "y2": -2.2,
+      "bend": 0.2
+    },
+    "riverNote": "the Yamuna of the layout C sketch in km (x east, y north): a band that bends by bend * sin over its length; a stand-in until the river district is drawn",
+    "worldOrigin": "the centre of the layout map box",
+    "worldOriginKm": [
+      4.65,
+      2.25
+    ]
+  },
+  "x2Origin": {
+    "lat": 28.612894,
+    "lon": 77.229446,
+    "name": "India Gate (the one origin of option X2)"
+  },
+  "heightLevelM": 215,
+  "districts": [
+    {
+      "id": "cp",
+      "name": "Connaught Place with Jantar Mantar",
+      "stage": "pilot",
+      "group": "core",
+      "area": "cp",
+      "layoutId": "D0102",
+      "layoutBoxKm": [
+        3.1,
+        2.45,
+        1.2,
+        1.6
+      ],
+      "layoutAnchor": {
+        "lat": 28.6295,
+        "lon": 77.2167
+      },
+      "origin": {
+        "lat": 28.6315,
+        "lon": 77.2167
+      },
+      "offset": {
+        "x": -950,
+        "z": -1221.7
+      },
+      "heightOffset": -1.6,
+      "clip": "districts/cp.geojson",
+      "draftRect": {
+        "centre": {
+          "lat": 28.6295,
+          "lon": 77.2167
+        },
+        "widthM": 1200,
+        "heightM": 1600
+      },
+      "note": "median ground along the clip ring 216.6 m (GEDTM30 smoothed over 60 m); the offset brings it to 215 m"
+    },
+    {
+      "id": "india_gate",
+      "name": "India Gate",
+      "stage": "pilot",
+      "group": "core",
+      "area": "india_gate",
+      "layoutId": "D03",
+      "layoutBoxKm": [
+        3.15,
+        1.45,
+        2.2,
+        0.8
+      ],
+      "layoutAnchor": {
+        "lat": 28.6135,
+        "lon": 77.219
+      },
+      "origin": {
+        "lat": 28.612894,
+        "lon": 77.229446
+      },
+      "offset": {
+        "x": 621.6,
+        "z": 467.2
+      },
+      "heightOffset": 1,
+      "clip": "districts/india_gate.geojson",
+      "draftRect": {
+        "centre": {
+          "lat": 28.6129,
+          "lon": 77.2285
+        },
+        "widthM": 1300,
+        "heightM": 800
+      },
+      "note": "median ground along the clip ring 214 m (GEDTM30 smoothed over 60 m); the offset brings it to 215 m"
+    },
+    {
+      "id": "chandni_chowk",
+      "name": "Chandni Chowk with Red Fort",
+      "stage": "pilot",
+      "group": "old_delhi",
+      "area": "chandni_chowk",
+      "layoutId": "D09",
+      "layoutBoxKm": [
+        4.9,
+        4.3,
+        1.6,
+        1.1
+      ],
+      "layoutAnchor": {
+        "lat": 28.653,
+        "lon": 77.235
+      },
+      "origin": {
+        "lat": 28.6506,
+        "lon": 77.2303
+      },
+      "offset": {
+        "x": 590.5,
+        "z": -2334
+      },
+      "heightOffset": -3.1,
+      "clip": "districts/chandni_chowk.geojson",
+      "draftRect": {
+        "centre": {
+          "lat": 28.653,
+          "lon": 77.235
+        },
+        "widthM": 1600,
+        "heightM": 1100
+      },
+      "note": "median ground along the clip ring 218.1 m (GEDTM30 smoothed over 60 m); the offset brings it to 215 m"
+    },
+    {
+      "id": "laxmi_nagar",
+      "name": "Laxmi Nagar",
+      "stage": "release",
+      "group": "east",
+      "area": "laxmi_nagar",
+      "layoutId": "D12",
+      "layoutBoxKm": [
+        7.45,
+        2.7,
+        1.2,
+        1
+      ],
+      "layoutAnchor": {
+        "lat": 28.631,
+        "lon": 77.277
+      },
+      "origin": {
+        "lat": 28.6304,
+        "lon": 77.2777
+      },
+      "offset": {
+        "x": 3468.4,
+        "z": -883.5
+      },
+      "heightOffset": 3.6,
+      "clip": "districts/laxmi_nagar.geojson",
+      "draftRect": {
+        "centre": {
+          "lat": 28.631,
+          "lon": 77.277
+        },
+        "widthM": 1200,
+        "heightM": 1000
+      },
+      "note": "median ground along the clip ring 211.4 m (GEDTM30 smoothed over 60 m); the offset brings it to 215 m"
+    }
+  ]
+}

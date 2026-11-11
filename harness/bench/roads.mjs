@@ -52,7 +52,7 @@ export const SITES = [
 ];
 
 /** GEDTM30 smoothed over 60 m around a box, then put on a 10 m grid: a fast sampler in district metres. */
-async function groundSampler(ctx, region) {
+export async function groundSampler(ctx, region) {
   const box = region.kind === 'box' ? region : { minX: region.cx - region.r, maxX: region.cx + region.r, minZ: region.cz - region.r, maxZ: region.cz + region.r };
   const heights = await loadHeights(ctx.area.bbox);
   const gd = heights.gedtm;

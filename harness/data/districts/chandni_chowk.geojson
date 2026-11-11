@@ -1,0 +1,487 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "properties": {
+        "district": "chandni_chowk",
+        "name": "Chandni Chowk with Red Fort",
+        "status": "draft",
+        "option": "DC2",
+        "edges": "north: Shyama Prasad Mukherji Marg (the rail yard beyond); east: Mahatma Gandhi Marg (the Ring Road) behind the Red Fort; south: Nishadraj Marg, the park edge, Urdu Bazaar Road and Chawri Bazar; west: Lal Kuan Bazar and Church Mission Road",
+        "areaKm2": 2.636,
+        "drawn": "waypoints picked by hand at road junctions, the line walked along the real roads between them (OSM of 2026-11-11T00:48:48Z), then moved 35 m outwards so the edge road stays inside",
+        "waypoints": [
+          {
+            "name": "Shyama Prasad Mukherji Marg at Church Mission Road",
+            "lat": 28.6603,
+            "lon": 77.2232
+          },
+          {
+            "name": "Shyama Prasad Mukherji Marg",
+            "lat": 28.6601,
+            "lon": 77.233
+          },
+          {
+            "name": "Shyama Prasad Mukherji Marg at Netaji Subhash Marg",
+            "lat": 28.66,
+            "lon": 77.2365
+          },
+          {
+            "name": "Mahatma Gandhi Marg north of the Red Fort",
+            "lat": 28.6605,
+            "lon": 77.2415
+          },
+          {
+            "name": "Mahatma Gandhi Marg behind the Red Fort",
+            "lat": 28.656,
+            "lon": 77.2449
+          },
+          {
+            "name": "Mahatma Gandhi Marg at Nishadraj Marg",
+            "lat": 28.6503,
+            "lon": 77.2447
+          },
+          {
+            "name": "Nishadraj Marg at Netaji Subhash Marg",
+            "lat": 28.6497,
+            "lon": 77.2385
+          },
+          {
+            "name": "Urdu Bazaar Road",
+            "lat": 28.6497,
+            "lon": 77.2362,
+            "straight": true
+          },
+          {
+            "name": "Chawri Bazar",
+            "lat": 28.6502,
+            "lon": 77.23
+          },
+          {
+            "name": "Hauz Qazi Chowk",
+            "lat": 28.6492,
+            "lon": 77.2265
+          },
+          {
+            "name": "Khari Baoli Road at Church Mission Road",
+            "lat": 28.6572,
+            "lon": 77.2231
+          }
+        ],
+        "legs": [
+          {
+            "from": "Shyama Prasad Mukherji Marg at Church Mission Road",
+            "to": "Shyama Prasad Mukherji Marg",
+            "along": [
+              "Shyama Prasad Mukherji Marg"
+            ]
+          },
+          {
+            "from": "Shyama Prasad Mukherji Marg",
+            "to": "Shyama Prasad Mukherji Marg at Netaji Subhash Marg",
+            "along": [
+              "Shyama Prasad Mukherji Marg",
+              "Netaji Subhash Marg",
+              "Tulsi Das Chowk"
+            ]
+          },
+          {
+            "from": "Shyama Prasad Mukherji Marg at Netaji Subhash Marg",
+            "to": "Mahatma Gandhi Marg north of the Red Fort",
+            "along": [
+              "Shyama Prasad Mukherji Marg",
+              "Mahatma Gandhi Marg",
+              "Netaji Subhash Marg"
+            ]
+          },
+          {
+            "from": "Mahatma Gandhi Marg north of the Red Fort",
+            "to": "Mahatma Gandhi Marg behind the Red Fort",
+            "along": [
+              "Mahatma Gandhi Marg"
+            ]
+          },
+          {
+            "from": "Mahatma Gandhi Marg behind the Red Fort",
+            "to": "Mahatma Gandhi Marg at Nishadraj Marg",
+            "along": [
+              "Mahatma Gandhi Marg",
+              "Nishadraj Marg",
+              "Raja Ram Kohli Marg"
+            ]
+          },
+          {
+            "from": "Mahatma Gandhi Marg at Nishadraj Marg",
+            "to": "Nishadraj Marg at Netaji Subhash Marg",
+            "along": [
+              "Nishadraj Marg",
+              "Netaji Subhash Marg"
+            ]
+          },
+          {
+            "from": "Nishadraj Marg at Netaji Subhash Marg",
+            "to": "Urdu Bazaar Road",
+            "along": [
+              "straight across open ground"
+            ]
+          },
+          {
+            "from": "Urdu Bazaar Road",
+            "to": "Chawri Bazar",
+            "along": [
+              "Urdu Bazaar Road",
+              "Chawri Bazar",
+              "Jama Masjid Road"
+            ]
+          },
+          {
+            "from": "Chawri Bazar",
+            "to": "Hauz Qazi Chowk",
+            "along": [
+              "Chawri Bazar",
+              "Hauz Kazi Chowk"
+            ]
+          },
+          {
+            "from": "Hauz Qazi Chowk",
+            "to": "Khari Baoli Road at Church Mission Road",
+            "along": [
+              "Sirkeenwalan Road",
+              "Katra Bariyan",
+              "Hauz Kazi Chowk",
+              "Church Mission Road"
+            ]
+          },
+          {
+            "from": "Khari Baoli Road at Church Mission Road",
+            "to": "Shyama Prasad Mukherji Marg at Church Mission Road",
+            "along": [
+              "Church Mission Road",
+              "Shyama Prasad Mukherji Marg"
+            ]
+          }
+        ]
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              77.2233701,
+              28.661015
+            ],
+            [
+              77.2236858,
+              28.6609497
+            ],
+            [
+              77.2240805,
+              28.6607246
+            ],
+            [
+              77.224283,
+              28.6606861
+            ],
+            [
+              77.2274068,
+              28.6604441
+            ],
+            [
+              77.2280597,
+              28.6604128
+            ],
+            [
+              77.2311164,
+              28.6604302
+            ],
+            [
+              77.2317522,
+              28.6605415
+            ],
+            [
+              77.2319415,
+              28.660554
+            ],
+            [
+              77.2377109,
+              28.6602867
+            ],
+            [
+              77.237807,
+              28.6603222
+            ],
+            [
+              77.2379448,
+              28.6605287
+            ],
+            [
+              77.2380236,
+              28.6610188
+            ],
+            [
+              77.2380275,
+              28.6610066
+            ],
+            [
+              77.2380102,
+              28.6610825
+            ],
+            [
+              77.2380132,
+              28.6613065
+            ],
+            [
+              77.2381758,
+              28.6614777
+            ],
+            [
+              77.2387319,
+              28.6618291
+            ],
+            [
+              77.2388453,
+              28.6618662
+            ],
+            [
+              77.2391953,
+              28.6619368
+            ],
+            [
+              77.2395197,
+              28.6619151
+            ],
+            [
+              77.2402448,
+              28.6616138
+            ],
+            [
+              77.2405393,
+              28.6614732
+            ],
+            [
+              77.2415799,
+              28.6607766
+            ],
+            [
+              77.2416388,
+              28.6607827
+            ],
+            [
+              77.2419534,
+              28.6607242
+            ],
+            [
+              77.2424528,
+              28.6604493
+            ],
+            [
+              77.2435671,
+              28.6596205
+            ],
+            [
+              77.2441528,
+              28.6593888
+            ],
+            [
+              77.244249,
+              28.6593125
+            ],
+            [
+              77.2450655,
+              28.6584685
+            ],
+            [
+              77.2454744,
+              28.6578644
+            ],
+            [
+              77.2455287,
+              28.6577599
+            ],
+            [
+              77.2455842,
+              28.6571962
+            ],
+            [
+              77.2454459,
+              28.6550317
+            ],
+            [
+              77.2451821,
+              28.6520374
+            ],
+            [
+              77.2452016,
+              28.6517311
+            ],
+            [
+              77.2454336,
+              28.650979
+            ],
+            [
+              77.2454393,
+              28.6507494
+            ],
+            [
+              77.2451146,
+              28.6502495
+            ],
+            [
+              77.2440169,
+              28.6499167
+            ],
+            [
+              77.2433754,
+              28.6498486
+            ],
+            [
+              77.2425441,
+              28.6498517
+            ],
+            [
+              77.2412057,
+              28.6499441
+            ],
+            [
+              77.2406077,
+              28.6499223
+            ],
+            [
+              77.2401799,
+              28.6498628
+            ],
+            [
+              77.2392672,
+              28.6494563
+            ],
+            [
+              77.2389817,
+              28.6494097
+            ],
+            [
+              77.2387842,
+              28.6495027
+            ],
+            [
+              77.2362826,
+              28.6493876
+            ],
+            [
+              77.2358499,
+              28.6495749
+            ],
+            [
+              77.2335344,
+              28.649401
+            ],
+            [
+              77.2326358,
+              28.649439
+            ],
+            [
+              77.2324359,
+              28.6494987
+            ],
+            [
+              77.2322997,
+              28.6495594
+            ],
+            [
+              77.2321968,
+              28.6496579
+            ],
+            [
+              77.2321191,
+              28.6497758
+            ],
+            [
+              77.2320971,
+              28.6499108
+            ],
+            [
+              77.2320787,
+              28.6502712
+            ],
+            [
+              77.2320554,
+              28.6502855
+            ],
+            [
+              77.2304224,
+              28.6501991
+            ],
+            [
+              77.2304371,
+              28.6502089
+            ],
+            [
+              77.2267918,
+              28.6488914
+            ],
+            [
+              77.2265358,
+              28.6488637
+            ],
+            [
+              77.2262514,
+              28.648914
+            ],
+            [
+              77.2260944,
+              28.649128
+            ],
+            [
+              77.2260801,
+              28.6491713
+            ],
+            [
+              77.2260917,
+              28.6494241
+            ],
+            [
+              77.2240246,
+              28.6513416
+            ],
+            [
+              77.2228643,
+              28.652665
+            ],
+            [
+              77.2210235,
+              28.654891
+            ],
+            [
+              77.2211488,
+              28.6553981
+            ],
+            [
+              77.2229213,
+              28.6564262
+            ],
+            [
+              77.222862,
+              28.6576859
+            ],
+            [
+              77.2230678,
+              28.6584742
+            ],
+            [
+              77.2232486,
+              28.6603615
+            ],
+            [
+              77.2232279,
+              28.6603959
+            ],
+            [
+              77.2233701,
+              28.661015
+            ]
+          ]
+        ]
+      }
+    }
+  ]
+}

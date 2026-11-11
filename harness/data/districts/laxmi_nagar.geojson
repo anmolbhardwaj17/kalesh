@@ -1,0 +1,341 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "properties": {
+        "district": "laxmi_nagar",
+        "name": "Laxmi Nagar",
+        "status": "draft",
+        "option": "DC2",
+        "edges": "west: Dadri Road (the interchange with the river bank road stays outside); south: Vikas Marg and Mother Dairy Road; north and east have no hard edge: the line follows residential streets of Shakarpur and Laxmi Nagar",
+        "areaKm2": 0.605,
+        "drawn": "waypoints picked by hand at road junctions, the line walked along the real roads between them (OSM of 2026-11-11T00:48:48Z), then moved 35 m outwards so the edge road stays inside",
+        "waypoints": [
+          {
+            "name": "Vikas Marg at Dadri Road",
+            "lat": 28.6283,
+            "lon": 77.2738
+          },
+          {
+            "name": "Dadri Road",
+            "lat": 28.63,
+            "lon": 77.2724,
+            "minor": true
+          },
+          {
+            "name": "Shakarpur north west",
+            "lat": 28.6338,
+            "lon": 77.274,
+            "minor": true
+          },
+          {
+            "name": "Shakarpur north",
+            "lat": 28.6348,
+            "lon": 77.279,
+            "minor": true
+          },
+          {
+            "name": "Vikas Marg north east",
+            "lat": 28.6342,
+            "lon": 77.2832,
+            "minor": true
+          },
+          {
+            "name": "Mother Dairy Road",
+            "lat": 28.6268,
+            "lon": 77.2797,
+            "minor": true
+          }
+        ],
+        "legs": [
+          {
+            "from": "Vikas Marg at Dadri Road",
+            "to": "Dadri Road",
+            "along": [
+              "Vikas Lane",
+              "Dadri Road"
+            ]
+          },
+          {
+            "from": "Dadri Road",
+            "to": "Shakarpur north west",
+            "along": [
+              "Vikas Lane"
+            ]
+          },
+          {
+            "from": "Shakarpur north west",
+            "to": "Shakarpur north",
+            "along": []
+          },
+          {
+            "from": "Shakarpur north",
+            "to": "Vikas Marg north east",
+            "along": [
+              "Vikas Marg",
+              "Gali Number 8",
+              "Vijay Chowk Road"
+            ]
+          },
+          {
+            "from": "Vikas Marg north east",
+            "to": "Mother Dairy Road",
+            "along": [
+              "Pandit Bakshi Ram Sharma Marg",
+              "Mother Dairy Road",
+              "Vikas Marg"
+            ]
+          },
+          {
+            "from": "Mother Dairy Road",
+            "to": "Vikas Marg at Dadri Road",
+            "along": [
+              "Mother Dairy Road",
+              "Vikas Marg"
+            ]
+          }
+        ]
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              77.2739476,
+              28.6280853
+            ],
+            [
+              77.2735643,
+              28.6280738
+            ],
+            [
+              77.27345,
+              28.6280969
+            ],
+            [
+              77.2733046,
+              28.6281487
+            ],
+            [
+              77.2730887,
+              28.6282939
+            ],
+            [
+              77.2729388,
+              28.6284894
+            ],
+            [
+              77.2728681,
+              28.6287833
+            ],
+            [
+              77.2730837,
+              28.629006
+            ],
+            [
+              77.2734724,
+              28.6291797
+            ],
+            [
+              77.2727992,
+              28.6300434
+            ],
+            [
+              77.2722201,
+              28.6309067
+            ],
+            [
+              77.2723964,
+              28.6314293
+            ],
+            [
+              77.2730219,
+              28.6316271
+            ],
+            [
+              77.2731136,
+              28.6317787
+            ],
+            [
+              77.2733286,
+              28.6318906
+            ],
+            [
+              77.2735866,
+              28.6319515
+            ],
+            [
+              77.2736536,
+              28.6342056
+            ],
+            [
+              77.2737752,
+              28.634464
+            ],
+            [
+              77.2740828,
+              28.6345489
+            ],
+            [
+              77.2755645,
+              28.6345104
+            ],
+            [
+              77.2756958,
+              28.6346342
+            ],
+            [
+              77.2759719,
+              28.6347392
+            ],
+            [
+              77.2761454,
+              28.634755
+            ],
+            [
+              77.2781363,
+              28.6347353
+            ],
+            [
+              77.2781438,
+              28.6348704
+            ],
+            [
+              77.2782545,
+              28.6351265
+            ],
+            [
+              77.2785371,
+              28.6352264
+            ],
+            [
+              77.2790481,
+              28.6352352
+            ],
+            [
+              77.2793488,
+              28.6351355
+            ],
+            [
+              77.2794894,
+              28.634969
+            ],
+            [
+              77.2796903,
+              28.6349792
+            ],
+            [
+              77.2805586,
+              28.6349493
+            ],
+            [
+              77.2808261,
+              28.6348985
+            ],
+            [
+              77.2816299,
+              28.6352935
+            ],
+            [
+              77.2821983,
+              28.6351802
+            ],
+            [
+              77.2823474,
+              28.634937
+            ],
+            [
+              77.2828208,
+              28.6343486
+            ],
+            [
+              77.2830292,
+              28.6343159
+            ],
+            [
+              77.2832625,
+              28.6340368
+            ],
+            [
+              77.2832952,
+              28.6337858
+            ],
+            [
+              77.2831484,
+              28.6333365
+            ],
+            [
+              77.2819662,
+              28.6314444
+            ],
+            [
+              77.2817221,
+              28.6306535
+            ],
+            [
+              77.2816816,
+              28.6305493
+            ],
+            [
+              77.2816148,
+              28.630457
+            ],
+            [
+              77.2813591,
+              28.6302012
+            ],
+            [
+              77.2806269,
+              28.6297008
+            ],
+            [
+              77.2801405,
+              28.6291452
+            ],
+            [
+              77.279646,
+              28.6287082
+            ],
+            [
+              77.2792368,
+              28.6281468
+            ],
+            [
+              77.2788789,
+              28.62779
+            ],
+            [
+              77.2782719,
+              28.6277745
+            ],
+            [
+              77.276686,
+              28.6294261
+            ],
+            [
+              77.2766207,
+              28.6294264
+            ],
+            [
+              77.2752723,
+              28.6285606
+            ],
+            [
+              77.2748479,
+              28.6284791
+            ],
+            [
+              77.2745176,
+              28.6282835
+            ],
+            [
+              77.2739476,
+              28.6280853
+            ]
+          ]
+        ]
+      }
+    }
+  ]
+}
