@@ -34,3 +34,5 @@ game/override.cfg
 !/data/SOURCES.json
 # tiles written by the tile format bench (harness/bench/pilot_data/tiles.mjs)
 game/bench/tiles/gen/
+# tiles and camera poses written by the road bench (harness/bench/roads.mjs)
+game/bench/roads/gen/
