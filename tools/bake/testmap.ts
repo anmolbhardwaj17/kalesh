@@ -5,7 +5,6 @@ import type { MapData, OsmElement } from './osm.ts';
 import { buildBlockGraph } from './graph/build.ts';
 import type { BlockGraph } from './graph/build.ts';
 import type { OvertureRow } from './graph/footprints.ts';
-import type { RuleContext as CensusContext } from './rules/census/types.ts';
 import { RuleContext } from './rules/context.ts';
 import type { Marks, RuleEnv } from './rules/types.ts';
 import { buildTile } from './tile.ts';
@@ -41,11 +40,6 @@ export class Sketch {
 
   map(): MapData {
     return buildMap(this.elements, flat);
-  }
-
-  /** The context of the Phase 0 census rules (tools/bake/rules/census/), which read the raw map model. */
-  ctx(ground?: (x: number, z: number) => number | null): CensusContext {
-    return { district: 'test', map: this.map(), box: { minX: -1000, minZ: -1000, maxX: 1000, maxZ: 1000 }, toGeo: (x: number, z: number) => ({ lat: -z, lon: x }), ...(ground ? { ground } : {}) };
   }
 
   /** The block graph of the sketch inside a square outline of half size h metres around 0. */

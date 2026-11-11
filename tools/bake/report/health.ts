@@ -3,9 +3,10 @@
 // driver writes the file. The report holds no clock time, so the same inputs give the same file (except the graph
 // step's build time, `graph.buildMs`, which the acceptance asks for).
 import type { GraphCounts } from '../graph/checks.ts';
-import type { RepairSummary } from '../repair/engine.ts';
+import type { RepairResult, RepairSummary } from '../repair/engine.ts';
+import type { OverrideCounts, OverrideRecord } from '../repair/overrides.ts';
 
-export const HEALTH_VERSION = 4;
+export const HEALTH_VERSION = 5;
 
 export interface InvariantResult {
   id: string;
@@ -64,10 +65,13 @@ export interface HealthReport {
   steps: string[];
   sources: HealthSource[];
   ground: { source: string; method: string; cols: number; rows: number; cell: number; minM: number; maxM: number; meanM: number; samples: number; holes: number } | null;
-  /** Filled by the rule engine, auto-repair and overrides tasks; zero until they run in the production bake. */
+  /** Filled by the repair step; zero until it runs in the production bake. */
   issues: { total: number; byRule: Record<string, number>; open: number };
   repairs: { auto: number; byRule: Record<string, number> };
-  overrides: { applied: number; stale: number };
+  /** The override patches read (harness/data/overrides/) and what became of each; zero when the repair step did not run. */
+  overrides: OverrideHealth;
+  /** The headline counts the dashboard shows: found, repaired on their own, fixed by overrides, stale overrides, left open. */
+  counts: MapCounts | null;
   /** The gate counts of MAP_REPAIR.md "Verification": null until the step that measures them exists. */
   gates: Record<string, number | null>;
   /** The block graph (tools/bake/graph/): counts, checks, hash and build time; null until the graph step runs. */
@@ -83,6 +87,43 @@ export interface HealthReport {
   stoppedBeforeTiles: boolean;
   tiles: { written: number; out: string | null; only: string[] | null };
 }
+
+export interface OverrideHealth extends OverrideCounts {
+  /** Patches of the files whose anchor lies outside this stage (another stage reads them): not counted above. */
+  outsideStage: number;
+  /** One record per patch of this stage. Stale ones stay in their files; they are listed here and in the dashboard. */
+  records: OverrideRecord[];
+}
+
+export interface MapCounts {
+  found: number;
+  byRule: Record<string, number>;
+  repairedAuto: number;
+  /** Issues a patch of the owner (or a hand written patch) settled. */
+  fixedByOverrides: number;
+  /** Repairs a disable_repair patch switched off. */
+  repairsSwitchedOff: number;
+  staleOverrides: number;
+  /** Queued for a person and not settled by a patch. */
+  leftOpen: number;
+  /** Of those, impact 0.7 or more. */
+  highImpactOpen: number;
+  explained: number;
+}
+
+/** The headline counts of a repair result: found by rule, repaired on their own, fixed by overrides, stale, left open. */
+export function mapCounts(res: Pick<RepairResult, 'issues' | 'overrides' | 'overrideCounts' | 'summary'>): MapCounts {
+  const s = res.summary;
+  const byRule: Record<string, number> = {};
+  for (const r of s.byRule) if (r.issues) byRule[r.rule] = r.issues;
+  const settledBy = (outcome: string): number => res.issues.filter((i) => i.status === 'overridden' && res.overrides.some((o) => o.outcome === outcome && o.issues.includes(i.id))).length;
+  return {
+    found: s.total, byRule, repairedAuto: s.auto, fixedByOverrides: settledBy('fixed'), repairsSwitchedOff: settledBy('kept'),
+    staleOverrides: res.overrideCounts.stale, leftOpen: s.queued, highImpactOpen: s.highImpact, explained: s.explained,
+  };
+}
+
+export const emptyOverrides = (): OverrideHealth => ({ files: 0, patches: 0, byId: 0, byAnchor: 0, stale: 0, applied: 0, switchedOff: 0, idle: 0, issuesSettled: 0, outsideStage: 0, records: [] });
 
 export interface GraphRecord {
   file: string;
@@ -117,7 +158,7 @@ export function emptyHealth(stage: string, block: string, outline: HealthReport[
   const gates: Record<string, number | null> = {};
   for (const k of GATE_KEYS) gates[k] = null;
   return {
-    _doc: 'Map health report of the last bake (MAP_REPAIR.md "Verification"), written by tools/bake/main.ts. issues, repairs, overrides and gates are filled by the steps that measure them; null means not measured yet. pairs and layout come from rule R-STITCH, which runs in every bake before the first step. graph holds the block graph counts (nodes, edges, paired carriageways, footprints, rail, water), its checks and hash. repair holds the rule engine and auto-repair result (issues by rule, repaired on their own, queued, explained, the time per rule). A failed invariant stops the bake before tiles are written (stoppedBeforeTiles).',
+    _doc: 'Map health report of the last bake (MAP_REPAIR.md "Verification"), written by tools/bake/main.ts. issues, repairs, overrides, counts and gates are filled by the steps that measure them; null means not measured yet. counts is the short form for the dashboard (found by rule, repaired on their own, fixed by overrides, stale overrides, left open); overrides lists every patch read with its outcome (fixed, kept, idle, stale). pairs and layout come from rule R-STITCH, which runs in every bake before the first step. graph holds the block graph counts (nodes, edges, paired carriageways, footprints, rail, water), its checks and hash. repair holds the rule engine and auto-repair result (issues by rule, repaired on their own, queued, explained, the time per rule). A failed invariant stops the bake before tiles are written (stoppedBeforeTiles).',
     version: HEALTH_VERSION,
     stage,
     block,
@@ -127,7 +168,8 @@ export function emptyHealth(stage: string, block: string, outline: HealthReport[
     ground: null,
     issues: { total: 0, byRule: {}, open: 0 },
     repairs: { auto: 0, byRule: {} },
-    overrides: { applied: 0, stale: 0 },
+    overrides: emptyOverrides(),
+    counts: null,
     gates,
     graph: null,
     repair: null,

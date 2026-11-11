@@ -120,7 +120,7 @@ One JSON object per issue in `issues.json` of the bake output (read by the inspe
 
 ### Overrides format
 
-`harness/data/overrides/<tileX>_<tileZ>.json` (OV1), one array of patches per world tile (the tile indices of the one 250 m world grid). The sample patches of the data bench under `harness/data/overrides/<district>/` move to this layout with the first rule engine task.
+`harness/data/overrides/<tileX>_<tileZ>.json` (OV1), one array of patches per world tile (the tile indices of the one 250 m world grid). The sample patches of the data bench live in this layout since P1-011 (no `<district>/` folders). The bake reads every file for its stage (patches whose anchor lies inside the stage outline), applies a resolved patch through the one patch applier in place of the repair of its issue (the issue gets the status `overridden`), and counts stale patches in `health.json` (`overrides`, `counts`). A patch with the action `disable_repair` switches off the automatic repair or the provisional top proposal of the issue it names.
 
 ```json
 {

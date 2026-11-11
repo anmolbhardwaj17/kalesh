@@ -3,8 +3,11 @@
 // report. The repair itself is pure (tools/bake/repair/).
 import fs from 'node:fs';
 import path from 'node:path';
+import type { P2 } from '../geom.ts';
 import type { StagePlan } from '../layout/stages.ts';
 import type { RepairResult } from '../repair/engine.ts';
+import { inspectorContext, inspectorIndex } from '../report/inspector.ts';
+import type { PlaceIn } from '../report/inspector.ts';
 import { issueRecords, repairLog } from '../repair/engine.ts';
 import type { HeroSpec } from '../roads/hero.ts';
 import { CATALOGUE } from '../rules/catalogue.ts';
@@ -13,7 +16,7 @@ import type { HeroListEntry } from '../rules/types.ts';
 export interface RepairInput {
   heroSpecs: HeroSpec[];
   heroList: HeroListEntry[];
-  places: { id: string; block: string; lat: number; lon: number }[];
+  places: (PlaceIn & { pilot?: boolean })[];
 }
 
 /** Hero specs (harness/data/hero_roads/*.json), the hero list (harness/data/hero_list.json) and the named places. */
@@ -34,8 +37,20 @@ export function readRepairInput(root: string): RepairInput {
   return { heroSpecs, heroList, places };
 }
 
-/** Writes the repaired graph, issues.json and repairs.jsonl; returns their repo-relative (or absolute, outside root) paths. */
-export function writeRepair(root: string, plan: StagePlan, reportDir: string, res: RepairResult, source: string): { graph: string; issues: string; repairs: string } {
+/** Where the stage sits in the world and what the inspector marks: the block's world offset, the outline ring and the places. */
+export interface InspectorFrame {
+  offset: P2;
+  outline: readonly P2[];
+  places: readonly PlaceIn[];
+  toBlock: (lat: number, lon: number) => P2;
+}
+
+/**
+ * Writes the repaired graph, issues.json (world metres, status overridden where a patch took over), repairs.jsonl and
+ * the two files the map inspector draws (context.json, tiles/index.json); returns their repo-relative (or absolute,
+ * outside root) paths.
+ */
+export function writeRepair(root: string, plan: StagePlan, reportDir: string, res: RepairResult, source: string, frame: InspectorFrame): { graph: string; issues: string; repairs: string; context: string } {
   const graphFile = path.join(root, plan.def.dataDir, 'graph_repaired.json');
   fs.mkdirSync(path.dirname(graphFile), { recursive: true });
   fs.writeFileSync(graphFile, JSON.stringify(res.graph));
@@ -43,9 +58,14 @@ export function writeRepair(root: string, plan: StagePlan, reportDir: string, re
   const issuesFile = path.join(reportDir, 'issues.json');
   const rules: Record<string, string> = {};
   for (const r of CATALOGUE) rules[r.id] = r.title;
-  fs.writeFileSync(issuesFile, JSON.stringify({ version: 1, block: res.graph.block, source, rules, issues: issueRecords(res.issues) }));
+  fs.writeFileSync(issuesFile, JSON.stringify({ version: 1, block: res.graph.block, source, rules, issues: issueRecords(res.issues, frame.offset) }));
   const repairsFile = path.join(reportDir, 'repairs.jsonl');
   fs.writeFileSync(repairsFile, repairLog(res.repairs));
+  const contextFile = path.join(reportDir, 'context.json');
+  fs.writeFileSync(contextFile, JSON.stringify(inspectorContext(res.graph, frame.offset, frame.outline)));
+  fs.mkdirSync(path.join(reportDir, 'tiles'), { recursive: true });
+  const indexFile = path.join(reportDir, 'tiles', 'index.json');
+  fs.writeFileSync(indexFile, JSON.stringify(inspectorIndex(res.graph.block, frame.places, frame.toBlock, frame.offset, frame.outline)));
   const rel = (f: string): string => (f.startsWith(root) ? path.relative(root, f) : f);
-  return { graph: rel(graphFile), issues: rel(issuesFile), repairs: rel(repairsFile) };
+  return { graph: rel(graphFile), issues: rel(issuesFile), repairs: rel(repairsFile), context: rel(contextFile) };
 }

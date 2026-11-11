@@ -1,4 +1,4 @@
-// Map inspector server part (P1-001). The dashboard mounts it on its own port (harness/bin/dashboard.mjs), and
+// Map inspector server part (P1-001, P1-011). The dashboard mounts it on its own port (harness/bin/dashboard.mjs), and
 // serve.mjs runs it alone for the tests. `inspectorHandler(options)` returns async (req, res, url) => boolean: true
 // when it answered the request. No outside host is ever contacted; the only socket it opens besides the page itself
 // is the game's debug port on 127.0.0.1 (the "Open in game" button).
@@ -7,15 +7,15 @@
 //   GET  /inspector/<file>                page files; .ts files go out with their types stripped
 //   GET  /inspector/vendor/three/<path>   three.js from node_modules (a dev dependency of the harness only)
 //   GET  /inspector/data/<file>           issues.json, context.json, tiles/index.json, tiles/*.ktl from the data folder
-//   GET  /api/inspector/status            { ready, building, error, counts }
-//   POST /api/inspector/build             runs the adapter (adapter.mjs) in the background
+//                                         (harness/reports/map/, written by `npm run bake -- pilot`; the file contract is in
+//                                         tools/bake/report/inspector.ts and tools/bake/repair/engine.ts issueRecords)
+//   GET  /api/inspector/status            { ready, counts }
 //   GET  /api/inspector/picks             what has been picked so far, read from the override files
 //   POST /api/inspector/pick              { issue, proposal: index | null, note } writes the patch and the inbox line
 //   POST /api/inspector/open-in-game      { x, z } teleports the running game (--debug) to the spot
 import fs from 'node:fs';
 import path from 'node:path';
 import module from 'node:module';
-import { spawn } from 'node:child_process';
 import { fileURLToPath } from 'node:url';
 import { GodotDebugClient } from '../../harness/bin/godotclient.mjs';
 import { buildPatch, inboxText, mergePatch, overrideFileName, worldTile } from './lib.ts';
@@ -60,20 +60,19 @@ function serveStatic(res, root, rel, { stripTs = false } = {}) {
 }
 
 /**
- * options: dataDir (adapter output), overridesDir (harness/data/overrides), inboxFile (harness/state/inbox.jsonl),
- * gamePort (the game's debug port), date (a fixed date for tests), adapter (a function that builds the data).
+ * options: dataDir (the bake's report folder), overridesDir (harness/data/overrides), inboxFile (harness/state/inbox.jsonl),
+ * gamePort (the game's debug port), date (a fixed date for tests).
  */
 export function inspectorHandler(options = {}) {
-  const dataDir = options.dataDir ?? path.join(ROOT, 'harness', 'reports', 'inspector', 'data');
+  const dataDir = options.dataDir ?? path.join(ROOT, 'harness', 'reports', 'map');
   const overridesDir = options.overridesDir ?? path.join(ROOT, 'harness', 'data', 'overrides');
   const inboxFile = options.inboxFile ?? path.join(ROOT, 'harness', 'state', 'inbox.jsonl');
   const gamePort = options.gamePort ?? Number(process.env.HARNESS_GAME_PORT || 47181);
   const today = () => options.date ?? new Date().toISOString().slice(0, 10);
-  const build = { running: false, error: null };
   let issuesCache = { mtime: 0, file: null };
 
   const issuesFile = path.join(dataDir, 'issues.json');
-  const ready = () => fs.existsSync(issuesFile) && fs.existsSync(path.join(dataDir, 'tiles', 'index.json'));
+  const ready = () => fs.existsSync(issuesFile);
   const loadIssues = () => {
     const m = fs.existsSync(issuesFile) ? fs.statSync(issuesFile).mtimeMs : 0;
     if (m !== issuesCache.mtime) issuesCache = { mtime: m, file: readJson(issuesFile, null) };
@@ -142,16 +141,6 @@ export function inspectorHandler(options = {}) {
     }
   }
 
-  function startBuild() {
-    if (build.running) return;
-    build.running = true;
-    build.error = null;
-    const child = spawn(process.execPath, [path.join(HERE, 'adapter.mjs'), '--out', dataDir], { cwd: ROOT, stdio: ['ignore', 'pipe', 'pipe'] });
-    let err = '';
-    child.stderr.on('data', (c) => { err += c; });
-    child.on('exit', (code) => { build.running = false; if (code !== 0) build.error = err.trim().split('\n').slice(-2).join(' ') || `the adapter stopped with code ${code}`; });
-  }
-
   return async function handle(req, res, url) {
     const p = url.pathname;
     try {
@@ -176,11 +165,7 @@ export function inspectorHandler(options = {}) {
       if (!p.startsWith('/api/inspector/')) return false;
       if (req.method === 'GET' && p === '/api/inspector/status') {
         const f = ready() ? loadIssues() : null;
-        return send(res, 200, { ready: ready(), building: build.running, error: build.error, counts: f ? { issues: f.issues.length } : null }), true;
-      }
-      if (req.method === 'POST' && p === '/api/inspector/build') {
-        if (options.adapter) { await options.adapter(dataDir); } else startBuild();
-        return send(res, 200, { ok: true, building: build.running }), true;
+        return send(res, 200, { ready: ready(), counts: f ? { issues: f.issues.length } : null }), true;
       }
       if (req.method === 'GET' && p === '/api/inspector/picks') return send(res, 200, picks()), true;
       if (req.method === 'POST' && p === '/api/inspector/pick') {

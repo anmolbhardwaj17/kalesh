@@ -2,7 +2,6 @@
 import { describe, expect, it } from 'vitest';
 import { worldTile, overrideFileName, TILE_SIZE } from '../../inspector/lib';
 import { parseArgs } from '../cli';
-import { overrideTile } from '../overrides';
 import { rng } from '../rand';
 import { tileOf as cutterTileOf } from '../tile';
 import { TILE, TileSet } from '../tileset';
@@ -92,13 +91,11 @@ describe('one grid for the tile cutter, the overrides, the bake options and the 
     for (const p of seededPoints()) {
       const t = tileOf(p.x, p.z);
       expect(cutterTileOf(p.x, p.z, TILE_M)).toEqual(t);
-      const ov = overrideTile(p);
-      expect({ tx: ov.tx, tz: ov.tz }).toEqual(t);
-      expect(ov.file).toBe(overrideFile(t.tx, t.tz));
-      expect(ov.file).toBe(`${tileId(t.tx, t.tz)}.json`);
+      const file = overrideFile(t.tx, t.tz);
+      expect(file).toBe(`${tileId(t.tx, t.tz)}.json`);
       const insp = worldTile(p.x, p.z);
       expect(insp).toEqual([t.tx, t.tz]);
-      expect(overrideFileName(insp)).toBe(ov.file);
+      expect(overrideFileName(insp)).toBe(file);
     }
   });
 

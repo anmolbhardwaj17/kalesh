@@ -1,7 +1,7 @@
 // Map inspector: the pure parts shared by the page, the server and the tests (TECH.md "Map inspector",
 // MAP_REPAIR.md "Issue record" and "Overrides format"). No file or DOM access here, so the browser loads this file
-// as it is (the server strips the types) and vitest imports it directly. Coordinates are block metres of the centre
-// block (origin India Gate): east +X, north -Z, up +Y, no mirroring.
+// as it is (the server strips the types) and vitest imports it directly. Coordinates are world metres (the one world
+// grid of the bake): east +X, north -Z, up +Y, no mirroring.
 
 export const TILE_SIZE = 250;
 /** Issues at or above this impact are "high impact" and sort first (MAP_REPAIR.md "Auto-repair bounds"). */
@@ -15,7 +15,7 @@ export interface Proposal {
   params: Record<string, string | number | boolean>;
   confidence: number;
   reasoning: string;
-  /** A polyline in block metres that the page draws. */
+  /** A polyline in world metres that the page draws. */
   preview: { x: number; z: number }[];
 }
 
@@ -61,8 +61,8 @@ export interface Patch {
   date: string;
 }
 
-/** High impact: waiting for a person (not repaired on its own) and impact 0.7 or more. The pilot has 27. */
-export const isHigh = (i: Pick<IssueRecord, 'impact' | 'status'>): boolean => i.impact >= HIGH_IMPACT && i.status !== 'auto_repaired';
+/** High impact: still open (waiting for a person) and impact 0.7 or more. */
+export const isHigh = (i: Pick<IssueRecord, 'impact' | 'status'>): boolean => i.impact >= HIGH_IMPACT && i.status === 'open';
 
 const STATUS_ORDER: Record<IssueStatus, number> = { open: 0, overridden: 1, explained: 2, auto_repaired: 3 };
 
@@ -81,8 +81,8 @@ export function sortIssues(list: readonly IssueRecord[]): IssueRecord[] {
 /**
  * The tile of a position on the 250 m grid. The same rule as the one world grid of the bake
  * (tools/bake/layout/grid.ts `tileOf`; tools/bake/layout/grid.test.ts holds the two in step). This file stays free of
- * imports so the page can load it as it is. Until the production bake feeds the inspector (P1-011) the adapter passes
- * block metres of the centre block; from then on world metres.
+ * imports so the page can load it as it is. The issues of the production bake carry world metres (tools/bake/repair/
+ * engine.ts `issueRecords` adds the block's offset), so this is the tile of the override file.
  */
 export function worldTile(x: number, z: number): [number, number] {
   return [Math.floor(x / TILE_SIZE), Math.floor(z / TILE_SIZE)];
@@ -105,6 +105,9 @@ const ACTION_WORDS: Record<PatchAction, string> = {
 /** Plain English name of a fix. */
 export const actionWords = (a: string): string => ACTION_WORDS[a as PatchAction] ?? a;
 
+/** Ids of graph nodes ("n123", "m45.0", "x..."): not targets of a patch (the same test as tools/bake/rules/types.ts isNodeId). */
+export const isNodeId = (id: string): boolean => /^(n\d|m\d|x)/.test(id);
+
 /** Builds the override patch (MAP_REPAIR.md "Overrides format") for a picked proposal. */
 export function buildPatch(issue: IssueRecord, proposal: Proposal, opts: { note?: string; date: string; id: string; by?: string }): Patch {
   const note = (opts.note ?? '').trim();
@@ -112,7 +115,7 @@ export function buildPatch(issue: IssueRecord, proposal: Proposal, opts: { note?
     id: opts.id,
     issue: issue.id,
     action: proposal.action,
-    target: { ids: issue.features.filter((f) => !f.startsWith('node/')), anchor: { lat: issue.lat, lon: issue.lon }, tolerance_m: 15 },
+    target: { ids: issue.features.filter((f) => !isNodeId(f)), anchor: { lat: issue.lat, lon: issue.lon }, tolerance_m: 15 },
     params: proposal.params,
     why: note || proposal.reasoning,
     by: opts.by ?? 'owner',
@@ -160,8 +163,8 @@ export type Filter = 'needs' | 'all' | 'auto' | 'picked';
 export function filterIssues(list: readonly IssueRecord[], filter: Filter, picked: ReadonlySet<string>): IssueRecord[] {
   switch (filter) {
     case 'needs': return list.filter((i) => i.status === 'open' && !picked.has(i.id));
-    case 'auto': return list.filter((i) => i.status === 'auto_repaired');
-    case 'picked': return list.filter((i) => picked.has(i.id));
+    case 'auto': return list.filter((i) => i.status === 'auto_repaired' || i.status === 'explained');
+    case 'picked': return list.filter((i) => picked.has(i.id) || i.status === 'overridden');
     default: return [...list];
   }
 }

@@ -6,10 +6,7 @@ import type { GroundSample } from './ground';
 import { distanceStats, haversine, joinLandmarks, osmLandmarks } from './landmarks';
 import type { WikidataItem } from './landmarks';
 import { tagCoverage } from './osm';
-import { applyPatches, markOverridden, overrideTile, staleReport } from './overrides';
-import { runRules } from './rules/census/catalogue';
-import type { Patch } from './rules/census/types';
-import { Sketch, flat } from './testmap';
+import { Sketch } from './testmap';
 import { buildTile, decodeT1, encodeGlb, encodeT1, tileOf, tileStats } from './tile';
 
 describe('projection with an origin argument', () => {
@@ -165,45 +162,6 @@ describe('tiles', () => {
     const json = JSON.parse(String.fromCharCode(...glb.subarray(20, 20 + jsonLen)));
     expect(json.meshes).toHaveLength(tile.meshes.length + tile.colliders.length);
     expect(view.getUint32(20 + jsonLen, true)).toBe(json.buffers[0].byteLength);
-  });
-});
-
-describe('overrides (OV1)', () => {
-  const make = () => {
-    const s = new Sketch();
-    s.way([[0, 0], [100, 0]], { highway: 'primary', bridge: 'yes' });
-    s.building([[0, 20], [10, 20], [10, 30], [0, 30]]);
-    return s;
-  };
-  const patches: Patch[] = [
-    { id: 'ov_1', issue: 'R-BRIDGE-01:way/100', action: 'set_tag', target: { ids: ['way/100'], anchor: { lat: 0, lon: 50 }, tolerance_m: 15 }, params: { key: 'layer', value: '1', kinds: 'road' }, why: 'flyover', by: 'builder', source: 'bench', date: '2026-11-11' },
-    { id: 'ov_2', issue: 'R-BLDG-03:way/101', action: 'remove', target: { ids: ['way/101'], anchor: { lat: 25, lon: 5 }, tolerance_m: 10 }, params: { kinds: 'building' }, why: 'kiosk', by: 'builder', source: 'bench', date: '2026-11-11' },
-    { id: 'ov_3', issue: 'R-ROAD-01:way/999', action: 'terminate', target: { ids: ['way/999'], anchor: { lat: 500, lon: 500 }, tolerance_m: 15 }, params: { kinds: 'road' }, why: 'gone', by: 'builder', source: 'bench', date: '2026-11-11' },
-  ];
-  it('applies by id, reports the stale patch and files a patch under the tile of its anchor', () => {
-    const map = make().map();
-    const res = applyPatches(map, patches, flat);
-    expect(res.map((r) => r.resolution)).toEqual(['by_id', 'by_id', 'stale']);
-    expect(map.roads[0]!.layer).toBe(1);
-    expect(map.buildings).toHaveLength(0);
-    expect(staleReport(res).map((r) => r.id)).toEqual(['ov_3']);
-    // a patch that changes the map makes its issue go away; one that only decides leaves it found and marked
-    const s = make();
-    const decide: Patch = { ...patches[0]!, id: 'ov_4', action: 'terminate', params: { kinds: 'road' } };
-    const ctx = s.ctx();
-    const marked = markOverridden(runRules(ctx), applyPatches(ctx.map, [decide, patches[1]!, patches[2]!], flat));
-    expect(marked.map((m) => m.outcome)).toEqual(['overridden', 'gone', 'stale']);
-    expect(overrideTile({ x: -10, z: 260 })).toEqual({ tx: -1, tz: 1, file: '-1_1.json' });
-  });
-  it('after a new extract with new ids the same patches are found again by their anchors', () => {
-    const s = make();
-    for (const e of s.elements) if (e.type === 'way') e.id += 5000;
-    const map = s.map();
-    const res = applyPatches(map, patches, flat);
-    expect(res.map((r) => r.resolution)).toEqual(['by_anchor', 'by_anchor', 'stale']);
-    expect(res[0]!.targets).toEqual(['way/5100']);
-    expect(map.roads[0]!.layer).toBe(1);
-    expect(map.buildings).toHaveLength(0);
   });
 });
 
