@@ -12,6 +12,8 @@ import type { BlockGraph, GraphEdge, GraphNode } from '../graph/build.ts';
 import { projectOn, r3 } from '../rules/context.ts';
 import type { End } from '../rules/context.ts';
 import { shiftedAway, slipFit, slipRatio } from '../rules/lanes.ts';
+import { shiftBeside, shiftBranch } from './shift.ts';
+import type { ShiftResult } from './shift.ts';
 import type { Marks, Params, Patch } from '../rules/types.ts';
 
 export interface RepairState {
@@ -199,6 +201,16 @@ function shiftApart(state: RepairState, p: Params, issue: string): Applied {
   return { applied: true, how: 'graph', before, after: { a: { id: a.id, pts: a.pts, moved_m: na.maxShift }, b: { id: b.id, pts: b.pts, moved_m: nb.maxShift }, min_sep: minSep }, note: '', drops: [] };
 }
 
+/** A shift of shift.ts on the two roads named a and b; refreshes the nodes after a move. */
+function moved(state: RepairState, p: Params, run: (a: GraphEdge, b: GraphEdge) => ShiftResult): Applied {
+  const a = edgeOf(state.graph, String(p['a']));
+  const b = edgeOf(state.graph, String(p['b']));
+  if (!a || !b) return none('one of the two roads is no longer there');
+  const r = run(a, b);
+  if (!r.applied) return none(r.note);
+  return { applied: true, how: 'graph', before: r.before, after: r.after, note: r.note, drops: [] };
+}
+
 function slipRedraw(state: RepairState, p: Params, issue: string): Applied {
   const g = state.graph;
   const minor = edgeOf(g, String(p['on']));
@@ -375,7 +387,9 @@ export function applyPatch(state: RepairState, patch: Patch): Applied {
     case 'set_lanes': return setLanes(state, p, patch.issue);
     case 'set_height': return setHeight(state, p, patch.issue);
     case 'move_node':
-      if (op === 'shift_apart' && p['node'] === undefined) return shiftApart(state, p, patch.issue);
+      if (op === 'shift_apart' && p['node'] !== undefined) return moved(state, p, (a, b) => shiftBranch(state, a, b, p, patch.issue));
+      if (op === 'shift_apart' && p['move_nodes'] === true) return moved(state, p, (a, b) => shiftBeside(state, a, b, p, patch.issue));
+      if (op === 'shift_apart') return shiftApart(state, p, patch.issue);
       return decision(state, patch, 'move', op || 'move_node');
     case 'replace_geometry':
       if (op === 'slip_redraw') return slipRedraw(state, p, patch.issue);

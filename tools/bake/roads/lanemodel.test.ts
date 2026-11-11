@@ -336,6 +336,39 @@ describe('ends, the lane graph and the files', () => {
     const part = buildLaneModel({ ...input, filter: { classes: ['secondary'] } });
     expect(part.strips.every((st) => st.cls === 'secondary')).toBe(true);
     expect(part.junctions).toHaveLength(1);
-    expect(checkPlanOverlap(part.strips).areaM2).toBe(0);
+    expect(checkPlanOverlap(part.strips, part.joints).areaM2).toBe(0);
+  });
+});
+
+describe('edges give way (P1-031)', () => {
+  // two one-way secondary roads (6.6 m carriageway, 2 m footpath on the left) drawn 9 m apart: the carriageways and
+  // kerbs keep clear (7.2 m), the footpaths between them do not
+  const s = new Sketch();
+  const west = s.way([[-200, 0], [200, 0]], { highway: 'secondary', oneway: 'yes', name: 'Upper Road' });
+  const east = s.way([[200, 9], [-200, 9]], { highway: 'secondary', oneway: 'yes', name: 'Lower Road' });
+  const { b } = model(s);
+  /** The narrower footpath of a strip at a station: the one that faces the other road. */
+  const footOf = (st: Strip, at: Station): number => Math.min(...st.lanes.map((l, k) => (l.type === 'footpath' ? at.b[k]! - at.b[k + 1]! : Infinity)));
+  it('the facing footpaths narrow until the two strips share no area; the carriageways stay as they are', () => {
+    expect(checkPlanOverlap(b.strips, b.joints).areaM2).toBe(0);
+    expect(b.edgeTrims.strips).toBe(2);
+    for (const way of [west, east]) {
+      for (const st of stripsOf(b, way)) {
+        const mid = st.st[Math.floor(st.st.length / 2)]!;
+        // 9 m between the centre lines: 3.3 + 0.3 on each side leaves 1.8 m, shared by the two footpaths
+        expect(footOf(st, mid)).toBeCloseTo(0.9, 1);
+        st.lanes.forEach((l, k) => {
+          if (l.type === 'drive') expect(mid.b[k]! - mid.b[k + 1]!).toBeCloseTo(l.width, 6);
+        });
+      }
+    }
+  });
+  it('roads far enough apart keep their edges whole', () => {
+    const one = new Sketch();
+    one.way([[-200, 0], [200, 0]], { highway: 'secondary', oneway: 'yes' });
+    const far = one.way([[200, 30], [-200, 30]], { highway: 'secondary', oneway: 'yes' });
+    const { b: apart } = model(one);
+    expect(apart.edgeTrims.stations).toBe(0);
+    expect(stripsOf(apart, far).length).toBeGreaterThan(0);
   });
 });

@@ -249,8 +249,10 @@ export interface LanesRecord {
   widths: LaneChecks['widths'];
   paths: LaneChecks['paths'] & { uTurnsLeftOut: number; restricted: number; droppedForRadius: number; tight: LaneBuild['tightPaths'] };
   hero: { spec: string; strips: number; stationsChecked: number; fieldsCompared: number; mismatches: number; list: string[] }[];
-  /** Strips lying on each other in plan on one level: the carriageway fit of the repair step leaves these (not a gate of this step). */
+  /** Strips lying on each other in plan on one level, after the edges gave way (not a gate of this step). */
   overlap: LaneChecks['overlap'];
+  /** Edge lanes narrowed beside another strip (roads/edges.ts). */
+  edgeTrims: LaneBuild['edgeTrims'];
   junctionClusters: { most: number; over8Nodes: number };
   problems: string[];
   ms: Record<string, number>;
@@ -293,6 +295,7 @@ export function lanesRecord(b: LaneBuild, c: LaneChecks, hash: string, buildMs: 
     paths: { ...c.paths, uTurnsLeftOut: b.turns.uTurnsTooTight, restricted: b.turns.restricted, droppedForRadius: b.turns.droppedForRadius, tight: b.tightPaths },
     hero: c.hero.map((h) => ({ spec: h.spec, strips: h.strips, stationsChecked: h.stationsChecked, fieldsCompared: h.fieldsCompared, mismatches: h.mismatches, list: h.list })),
     overlap: c.overlap,
+    edgeTrims: b.edgeTrims,
     junctionClusters: { most: b.junctions.reduce((m, j) => Math.max(m, j.nodes.length), 0), over8Nodes: b.junctions.filter((j) => j.nodes.length > 8).length },
     problems: b.problems, ms: b.ms, files,
   };

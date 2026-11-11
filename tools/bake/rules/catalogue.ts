@@ -11,7 +11,7 @@ import { fobLandings } from './fob.ts';
 import { footpathGap, footpathInRoad } from './footpaths.ts';
 import { heroEqualsSpec, heroReferences, heroSpecFile, heroUntouched } from './hero.ts';
 import { approachAngle, junctionCluster, shortArm, surfaceOverJunction } from './junctions.ts';
-import { carriagewayFit, doubleTaper, goreRoom, laneContinuity, laneCountAhead, sharedIndexPoint, slipRoadFit } from './lanes.ts';
+import { besideRoads, carriagewayFit, doubleTaper, goreRoom, laneContinuity, laneCountAhead, sharedIndexPoint, slipRoadFit } from './lanes.ts';
 import { stationLinks, viaductPiers } from './rail.ts';
 import { crossingNoNode, danglingEnd, noTaperRoom, overlappingWays, pairNamesDiffer, unpairedOneway, widthSanity } from './roads.ts';
 import { mapEdgeClosed } from './stitch.ts';
@@ -22,7 +22,7 @@ export const CATALOGUE: readonly Rule[] = [
   danglingEnd, crossingNoNode, overlappingWays, unpairedOneway, widthSanity, pairNamesDiffer,
   bridgeSupport, rampInAir, deckClearance, rampGrade, bridgeNoGround,
   carriagewayFit, slipRoadFit, laneCountAhead,
-  noTaperRoom, laneContinuity, doubleTaper, sharedIndexPoint, goreRoom,
+  noTaperRoom, laneContinuity, doubleTaper, sharedIndexPoint, goreRoom, besideRoads,
   approachAngle, surfaceOverJunction, junctionCluster, shortArm,
   footpathGap, footpathInRoad,
   buildingOnRoad, badPolygon, duplicateFootprint, badHeight,

@@ -76,6 +76,8 @@ export interface RepairSummary {
   passes: number;
   /** Issues that could still be repaired on their own after the last pass (0 unless the passes ran out). */
   unconverged: number;
+  /** The issues that could still repair, by rule. */
+  unconvergedBy: Record<string, number>;
   fills: { heightFromLevels: number; heightMissing: number };
 }
 
@@ -234,7 +236,15 @@ export function repairGraph(raw: BlockGraph, env: RuleEnv, opts: RepairOptions =
     settle();
   }
   let unconverged = 0;
-  for (const rule of rules) if (rule.repair) for (const issue of detect(rule, ctx)) if (decide(issue).mode === 'auto' && !overrideFor(ovs, issue)) unconverged++;
+  const unconvergedBy: Record<string, number> = {};
+  for (const rule of rules) {
+    if (!rule.repair) continue;
+    for (const issue of detect(rule, ctx)) {
+      if (decide(issue).mode !== 'auto' || overrideFor(ovs, issue)) continue;
+      unconverged++;
+      unconvergedBy[rule.id] = (unconvergedBy[rule.id] ?? 0) + 1;
+    }
+  }
 
   // heights the data gives through levels only; a footprint with neither waits for its area profile
   let heightFromLevels = 0;
@@ -270,7 +280,7 @@ export function repairGraph(raw: BlockGraph, env: RuleEnv, opts: RepairOptions =
       highImpact: issues.filter((i) => i.status === 'open' && i.impact >= 0.7).length, byRule: countByRule(issues, rules),
       withoutTerrainOutliers: { total: rest.length, auto: restAuto, autoShare: share(restAuto, rest.length) },
       provisionalApplied: provisional.filter((p) => p.applied).length, provisionalNotApplied: provisional.filter((p) => !p.applied).length,
-      drops: drops.length, passes, unconverged, fills: { heightFromLevels, heightMissing },
+      drops: drops.length, passes, unconverged, unconvergedBy, fills: { heightFromLevels, heightMissing },
     },
   };
 }

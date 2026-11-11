@@ -72,8 +72,8 @@ export class TriGrid<T extends Tri3> {
 /** Area of a triangle in the plane. */
 export const triArea = (a: Vec3, b: Vec3, c: Vec3): number => Math.abs((b[0] - a[0]) * (c[2] - a[2]) - (b[2] - a[2]) * (c[0] - a[0])) / 2;
 
-/** Area that two triangles share in the plane (Sutherland-Hodgman clip of one by the other). */
-export function overlapArea(t: readonly Vec3[], u: readonly Vec3[]): number {
+/** The polygon two triangles share in the plane (Sutherland-Hodgman clip of one by the other), as [x, z] points. */
+export function overlapPoly(t: readonly Vec3[], u: readonly Vec3[]): [number, number][] {
   let poly: [number, number][] = t.map((p) => [p[0], p[2]]);
   const clip: [number, number][] = u.map((p) => [p[0], p[2]]);
   const sign = (clip[1]![0] - clip[0]![0]) * (clip[2]![1] - clip[0]![1]) - (clip[1]![1] - clip[0]![1]) * (clip[2]![0] - clip[0]![0]) >= 0 ? 1 : -1;
@@ -95,11 +95,19 @@ export function overlapArea(t: readonly Vec3[], u: readonly Vec3[]): number {
     }
     poly = next;
   }
+  return poly;
+}
+
+/** Area of a polygon of [x, z] points. */
+export function polyArea(poly: readonly (readonly [number, number])[]): number {
   let area = 0;
   for (let k = 0; k < poly.length; k++) {
-    const p = poly[k] as [number, number];
-    const q = poly[(k + 1) % poly.length] as [number, number];
+    const p = poly[k] as readonly [number, number];
+    const q = poly[(k + 1) % poly.length] as readonly [number, number];
     area += p[0] * q[1] - q[0] * p[1];
   }
   return Math.abs(area) / 2;
 }
+
+/** Area that two triangles share in the plane. */
+export const overlapArea = (t: readonly Vec3[], u: readonly Vec3[]): number => polyArea(overlapPoly(t, u));

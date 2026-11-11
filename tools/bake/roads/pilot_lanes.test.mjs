@@ -66,6 +66,9 @@ describe.skipIf(missing.length > 0)(`pilot centre lane model${reason ? ` (skippe
     expect(lanes.counts.strips).toBeGreaterThan(5000);
     expect(lanes.counts.driveLanes).toBeGreaterThan(8000);
     expect(lanes.problems).toEqual([]);
+    // strips on each other in plan on the whole pilot (P1-012: 4,917 m2 in 494 pairs; P1-031: 819 m2 in 55 pairs, the
+    // ones left are listed in decisions.md "Side by side roads (P1-031)")
+    expect(lanes.overlap.areaM2).toBeLessThan(850);
     for (const f of [lanes.files.model, lanes.files.laneGraph]) expect(fs.existsSync(path.join(ROOT, f))).toBe(true);
     expect(lanes.files.pictures.filter((p) => p.endsWith('.png')).map((p) => path.basename(p)).sort()).toEqual(['lanes_pilot_cp.png', 'lanes_pilot_ito.png']);
   }, T);
@@ -163,18 +166,20 @@ describe.skipIf(missing.length > 0)(`pilot centre lane model${reason ? ` (skippe
     // the ten diverges and merges of the bench are all found; those whose branches do not separate within their own
     // length on the repaired graph are forks with a reason
     expect(site.zones.length + site.forks.length).toBe(PHASE0.zones);
-    expect(site.zones.length).toBeGreaterThanOrEqual(8);
+    // P1-031: 9 zones and 1 fork (P1-012 had 8 and 2): rule R-LANE-04 moves a branch with no room for a gore out from
+    // the split node, so the second fork opens into a zone; the one left is the cluster rule's (a turn island)
+    expect(site.zones.length).toBeGreaterThanOrEqual(9);
     expect(siteChecks.zones.withoutGoreOrNose + siteChecks.zones.endsOffCentreLine).toBe(0);
     // in the whole model the box holds more zones than the bench had: the slip roads the bench left out are in
     const node = new Map(graph.nodes.map((n) => [n.id, n]));
     const zonesInBox = model.zones.filter((z) => inBox(node.get(z.node)));
     expect(zonesInBox.length).toBeGreaterThanOrEqual(PHASE0.zones);
-    // strips on each other in plan. The bench moved centre lines (and their nodes) apart inside the lane model; the
-    // repair step keeps nodes where they are, so carriageways still meet near short edges (decisions.md, P1-012: open)
+    // strips on each other in plan: none in the box since P1-031 (rule R-LANE-05 moves roads beside each other apart,
+    // nodes too; the edges of strips side by side give way, roads/edges.ts)
     const all = buildLaneModel({ nodes: graph.nodes, edges: graph.edges, marks: graph.marks, wayLanes, heroes });
-    const overlap = checkPlanOverlap(all.strips, (s) => s.st.some(inBox));
+    const overlap = checkPlanOverlap(all.strips, all.joints, (s) => s.st.some(inBox));
     console.log(`[pilot lanes] ITO site of the bench: ${site.zones.length} zones and ${site.forks.length} forks of ${PHASE0.zones} splits (whole model: ${zonesInBox.length} zones in the box); strips on each other in the box ${overlap.areaM2} m2 in ${overlap.pairs} pairs (bench: ${PHASE0.overlapM2}); worst ${JSON.stringify(overlap.worst.slice(0, 3))}`);
-    expect(overlap.areaM2).toBeLessThan(150);
+    expect(overlap.areaM2).toBeLessThan(1);
   }, T);
 
   it('the Connaught Place inner circle equals its hero spec lane for lane', async () => {
