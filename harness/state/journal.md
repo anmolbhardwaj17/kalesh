@@ -259,3 +259,4 @@ One line per event, written by task.mjs (start, done, fail, phase changes, inbox
 - 2026-11-11 07:03 [P0-019] start (attempt 1): Arch bench: lane-level road, junction and terrain fit prototype
 - 2026-11-11 08:39 mentor message mmwbjimej handled: Done. Every task now gets its own branch and pull request from your account. I merge it once verified, so main always has a working state. Starts with the road test now running.
 - 2026-11-11 09:06 [P0-019] done: Lane-level road prototype at ITO (flyover, service lanes, 8-arm junction) and CP inner circle hero road from 11 photo refs: 0 overlap, 0 continuity breaks, 0 floating or sunk, TF2 ground gap 0 m; 4 taper findings on real short roads. Verifier PASS on snapshot (re-ran bench, read 6 shots). 287 vitest, 59 Godot tests, quick OK.
+- 2026-11-11 09:07 [P0-029] start (attempt 1): Arch bench: composite map stitch prototype
