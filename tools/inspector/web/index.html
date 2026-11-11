@@ -1,0 +1,54 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Map inspector</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Ccircle cx='8' cy='8' r='6' fill='%23d6342c'/%3E%3C/svg%3E">
+<link rel="stylesheet" href="/inspector/web/style.css">
+<script type="importmap">
+{ "imports": { "three": "/inspector/vendor/three/build/three.module.js", "three/addons/": "/inspector/vendor/three/examples/jsm/" } }
+</script>
+</head>
+<body>
+<div class="app">
+  <aside class="queue" aria-label="Issue queue">
+    <header>
+      <h1>Map issues</h1>
+      <p class="help">Pick an issue. Look at the fixes drawn on the map. Choose one, or write a note.</p>
+      <div class="chips" id="chips" role="group" aria-label="Show"></div>
+    </header>
+    <div class="list" id="list" role="list"></div>
+    <footer id="source" class="small"></footer>
+  </aside>
+
+  <main class="stage">
+    <div id="map" class="map"></div>
+    <div id="labels" class="labels" aria-hidden="true"></div>
+    <div id="ring" class="ring" hidden></div>
+    <div class="toolbar" role="group" aria-label="View">
+      <button id="viewTop" class="on" type="button">Top view</button>
+      <button id="view3d" type="button">3D view</button>
+      <button id="fit" type="button">Show everything</button>
+    </div>
+    <div class="compass" id="compass" title="North is up in the top view"><span>N</span></div>
+    <div class="legend small">
+      <span><i class="dot high"></i>High impact</span>
+      <span><i class="dot open"></i>Needs you</span>
+      <span><i class="dot auto"></i>Fixed by itself</span>
+      <span><i class="dot picked"></i>You picked</span>
+    </div>
+    <div id="status" class="statusbar small" hidden></div>
+  </main>
+
+  <section class="detail" id="detail" aria-label="Issue detail">
+    <div class="empty" id="empty">
+      <h2>Nothing picked yet</h2>
+      <p>Click a dot on the map, or a row on the left. The map flies there and shows the fixes.</p>
+    </div>
+    <div id="issue" hidden></div>
+  </section>
+</div>
+<script type="module" src="/inspector/web/app.js"></script>
+</body>
+</html>

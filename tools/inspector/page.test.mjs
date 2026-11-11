@@ -1,0 +1,220 @@
+// Map inspector page tests (P1-001): Playwright drives the real page against the adapter data of the pilot census.
+// They need the pilot downloads (data/pilot) or a built data folder (node tools/inspector/adapter.mjs) and the
+// Chromium of Playwright; without them the tests are skipped with a reason, never failed. The "Open in game" test also
+// needs the pinned Godot (it starts the game headless with --debug).
+import fs from 'node:fs';
+import os from 'node:os';
+import path from 'node:path';
+import { afterAll, beforeAll, describe, expect, it } from 'vitest';
+import { launch } from '../../harness/bin/browser.mjs';
+import { launchGame, freePort } from '../../harness/bin/godotclient.mjs';
+import { DEFAULT_OUT, buildData } from './adapter.mjs';
+import { startInspector } from './serve.mjs';
+
+const SHOTS = path.resolve(import.meta.dirname, '..', '..', 'harness', 'reports', 'inspector');
+let skip = '';
+let dataDir = DEFAULT_OUT;
+let browser = null;
+let issuesFile = null;
+let server = null;
+let tmp = '';
+let overrides = '';
+let inbox = '';
+const consoleErrors = [];
+const hosts = new Set();
+let page = null;
+
+async function ensureData() {
+  if (fs.existsSync(path.join(dataDir, 'issues.json')) && fs.existsSync(path.join(dataDir, 'context.json'))) return;
+  await buildData(dataDir);
+}
+
+beforeAll(async () => {
+  try {
+    await ensureData();
+  } catch (e) {
+    skip = `no map data and the adapter could not make it (${String(e.message).split('\n')[0]})`;
+    return;
+  }
+  try {
+    ({ browser } = await launch());
+  } catch (e) {
+    skip = `no Chromium with WebGL (${String(e.message).split('\n')[0]})`;
+    return;
+  }
+  issuesFile = JSON.parse(fs.readFileSync(path.join(dataDir, 'issues.json'), 'utf8'));
+  tmp = fs.mkdtempSync(path.join(os.tmpdir(), 'inspector-test-'));
+  overrides = path.join(tmp, 'overrides');
+  inbox = path.join(tmp, 'inbox.jsonl');
+  // gamePort: a port nothing listens on, so "Open in game" has no game to find
+  const closedPort = await freePort();
+  server = await startInspector({ dataDir, overridesDir: overrides, inboxFile: inbox, gamePort: closedPort, date: '2026-11-12' });
+  page = await browser.newPage({ viewport: { width: 1600, height: 900 } });
+  page.on('console', (m) => { if (m.type() === 'error') consoleErrors.push(m.text()); });
+  page.on('pageerror', (e) => consoleErrors.push(`pageerror: ${e.message}`));
+  page.on('request', (r) => { const u = new URL(r.url()); if (!['data:', 'blob:', 'about:'].includes(u.protocol)) hosts.add(u.hostname); });
+  await page.goto(server.url);
+  await page.waitForFunction(() => window.__inspector?.state().ready, null, { timeout: 60000 });
+  await page.waitForFunction(() => !window.__inspector.state().flying);
+}, 120000);
+
+afterAll(async () => {
+  await browser?.close();
+  await server?.close();
+  if (tmp) fs.rmSync(tmp, { recursive: true, force: true });
+});
+
+const run = (name, fn, timeout) => it(name, async (ctx) => { if (skip) return ctx.skip(skip); await fn(); }, timeout);
+const hook = (fn, arg) => page.evaluate(fn, arg);
+const flown = () => page.waitForFunction(() => !window.__inspector.state().flying);
+
+describe('map inspector page', () => {
+  run('loads with no console errors and no request to any host but localhost', async () => {
+    expect(consoleErrors).toEqual([]);
+    expect([...hosts]).toEqual(['localhost']);
+  });
+
+  run('lists every issue and puts the high impact ones first', async () => {
+    const st = await hook(() => window.__inspector.state());
+    expect(st.issueCount).toBe(issuesFile.issues.length);
+    expect(st.listCount).toBe(issuesFile.issues.length);
+    expect(await page.locator('#list .row').count()).toBe(issuesFile.issues.length);
+    const high = issuesFile.issues.filter((i) => i.status === 'open' && i.impact >= 0.7);
+    expect(high).toHaveLength(27);
+    const ids = await hook(() => window.__inspector.listIds());
+    const byId = new Map(issuesFile.issues.map((i) => [i.id, i]));
+    for (const id of ids.slice(0, 27)) { const i = byId.get(id); expect(i.status).toBe('open'); expect(i.impact).toBeGreaterThanOrEqual(0.7); }
+    expect(new Set(ids.slice(0, 27))).toEqual(new Set(high.map((i) => i.id)));
+    const rest = ids.slice(27).map((id) => byId.get(id));
+    expect(rest.every((i) => !(i.status === 'open' && i.impact >= 0.7))).toBe(true);
+  });
+
+  run('north is up: Red Fort is above and right of India Gate, Connaught Place above and left', async () => {
+    await page.click('#fit');
+    await flown();
+    const p = await hook(() => window.__inspector.places());
+    expect(p.red_fort.y).toBeLessThan(p.india_gate.y);
+    expect(p.red_fort.x).toBeGreaterThan(p.india_gate.x);
+    expect(p.connaught_place.y).toBeLessThan(p.india_gate.y);
+    expect(p.connaught_place.x).toBeLessThan(p.india_gate.x);
+    const box = async (id) => (await page.locator(`.place[data-place="${id}"]`).boundingBox());
+    const [ig, rf, cp] = [await box('india_gate'), await box('red_fort'), await box('connaught_place')];
+    expect(rf.y).toBeLessThan(ig.y);
+    expect(rf.x).toBeGreaterThan(ig.x);
+    expect(cp.y).toBeLessThan(ig.y);
+    expect(cp.x).toBeLessThan(ig.x);
+    const rotation = await page.locator('#compass span').evaluate((el) => el.style.transform);
+    expect(rotation).toBe('rotate(0deg)');
+  });
+
+  run('clicking an issue flies the camera target to within 30 m of it', async () => {
+    const ids = await hook(() => window.__inspector.listIds());
+    for (const k of [0, 5, 40]) {
+      await page.locator('#list .row').nth(k).click();
+      await flown();
+      const st = await hook(() => window.__inspector.state());
+      const i = issuesFile.issues.find((q) => q.id === ids[k]);
+      const d = Math.hypot(st.camera.target[0] - i.x, st.camera.target[2] - i.z);
+      expect(d).toBeLessThan(30);
+      expect(st.selected).toBe(ids[k]);
+    }
+  });
+
+  run('a click on a dot on the map selects that issue', async () => {
+    const id = (await hook(() => window.__inspector.listIds()))[3];
+    await hook((x) => window.__inspector.select(x), id);
+    await flown();
+    await hook((x) => window.__inspector.select(x, { fly: false }), id);
+    const s = await hook((x) => window.__inspector.issueScreen(x), id);
+    const r = await page.locator('#map canvas').boundingBox();
+    await page.mouse.click(s.x, s.y);
+    const st = await hook(() => window.__inspector.state());
+    expect(st.selected).toBeTruthy();
+    const a = issuesFile.issues.find((q) => q.id === st.selected);
+    const b = issuesFile.issues.find((q) => q.id === id);
+    expect(Math.hypot(a.x - b.x, a.z - b.z)).toBeLessThan(40);
+    expect(r.width).toBeGreaterThan(400);
+  });
+
+  run('screenshots', async () => {
+    fs.mkdirSync(SHOTS, { recursive: true });
+    const first = (await hook(() => window.__inspector.highIds()))[0];
+    await page.click('#fit');
+    await flown();
+    await hook((x) => window.__inspector.select(x, { fly: false }), first);
+    await page.waitForTimeout(400);
+    await page.screenshot({ path: path.join(SHOTS, 'issues.png') });
+    await page.locator(`.row[data-id="${first}"]`).click();
+    await flown();
+    await page.waitForTimeout(400);
+    await page.screenshot({ path: path.join(SHOTS, 'issue_zoom.png') });
+    expect(consoleErrors).toEqual([]);
+  });
+
+  run('picking a fix writes the patch to the override file of its tile and one inbox line', async () => {
+    const id = (await hook(() => window.__inspector.listIds())).find((x) => { const i = issuesFile.issues.find((q) => q.id === x); return i.proposals.length >= 2; });
+    const issue = issuesFile.issues.find((q) => q.id === id);
+    await page.locator(`.row[data-id="${id}"]`).click();
+    await flown();
+    await page.locator('.prop').nth(1).click();
+    await page.fill('#note', 'Checked in a street photo');
+    await page.click('#save');
+    await page.waitForFunction(() => document.querySelector('#msg') && !document.querySelector('#msg').hidden && /Saved/.test(document.querySelector('#msg').textContent));
+    const file = path.join(overrides, `${Math.floor(issue.x / 250)}_${Math.floor(issue.z / 250)}.json`);
+    expect(fs.existsSync(file)).toBe(true);
+    const patches = JSON.parse(fs.readFileSync(file, 'utf8'));
+    expect(patches).toHaveLength(1);
+    expect(patches[0]).toMatchObject({ issue: id, action: issue.proposals[1].action, source: 'inspector', by: 'owner', why: 'Checked in a street photo', date: '2026-11-12' });
+    expect(patches[0].target.anchor).toEqual({ lat: issue.lat, lon: issue.lon });
+    const lines = fs.readFileSync(inbox, 'utf8').trim().split('\n').map((l) => JSON.parse(l));
+    expect(lines).toHaveLength(1);
+    expect(lines[0].source).toBe('inspector');
+    expect(lines[0].text).toContain(id);
+    // a second pick for the same issue replaces the patch, and the inbox gets a second line
+    await page.locator('.prop').nth(0).click();
+    await page.click('#save');
+    await page.waitForFunction(() => /Saved/.test(document.querySelector('#msg')?.textContent ?? ''));
+    expect(JSON.parse(fs.readFileSync(file, 'utf8'))).toHaveLength(1);
+    expect(JSON.parse(fs.readFileSync(file, 'utf8'))[0].action).toBe(issue.proposals[0].action);
+    expect(await hook(() => window.__inspector.state().picks)).toContain(id);
+    expect(await page.locator('.chips button', { hasText: 'You picked' }).textContent()).toContain('1');
+  });
+
+  run('Open in game says so when no game is running and nothing fails', async () => {
+    await page.click('#openGame');
+    await page.waitForFunction(() => /No game is running/.test(document.querySelector('#msg')?.textContent ?? ''));
+    expect(consoleErrors).toEqual([]);
+  });
+
+});
+
+describe('Open in game with a running game', () => {
+  it('puts the player within 5 m of the issue', async (ctx) => {
+    if (skip) return ctx.skip(skip);
+    let game;
+    try {
+      game = await launchGame({ debug: true, verify: true, headless: true, quitAfter: 6000 });
+    } catch (e) {
+      return ctx.skip(`the game could not start (${String(e.message).split('\n')[0]})`);
+    }
+    const s = await startInspector({ dataDir, overridesDir: overrides, inboxFile: inbox, gamePort: game.port });
+    try {
+      const p2 = await browser.newPage({ viewport: { width: 1400, height: 800 } });
+      await p2.goto(s.url);
+      await p2.waitForFunction(() => window.__inspector?.state().ready, null, { timeout: 60000 });
+      const id = (await p2.evaluate(() => window.__inspector.listIds()))[0];
+      const issue = issuesFile.issues.find((q) => q.id === id);
+      await p2.locator(`.row[data-id="${id}"]`).click();
+      await p2.click('#openGame');
+      await p2.waitForFunction(() => /The game is now/.test(document.querySelector('#msg')?.textContent ?? ''), null, { timeout: 20000 });
+      await game.client.call('frames', 2);
+      const pos = game.client.snapshot.state.player.pos;
+      expect(Math.hypot(pos[0] - issue.x, pos[2] - issue.z)).toBeLessThan(5);
+      await p2.close();
+    } finally {
+      await s.close();
+      await game.client.call('quit').catch(() => {});
+      game.proc.kill();
+    }
+  }, 120000);
+});
