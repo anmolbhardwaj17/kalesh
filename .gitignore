@@ -36,5 +36,3 @@ game/override.cfg
 game/bench/tiles/gen/
 # tiles and camera poses written by the road bench (harness/bench/roads.mjs)
 game/bench/roads/gen/
-# tiles and camera poses written by the stitch bench (harness/bench/stitch.mjs)
-game/bench/stitch/gen/

@@ -356,4 +356,8 @@ function roundFeatures(f: Features): void {
     b.pts = b.pts.map((l) => l.map(rp));
     b.len = r3(b.len);
   }
+  for (const s of f.stations) {
+    s.x = r3(s.x);
+    s.z = r3(s.z);
+  }
 }

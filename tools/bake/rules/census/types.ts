@@ -1,8 +1,8 @@
 // Rule engine types (ARCH_OPTIONS RE1, MAP_REPAIR.md "Rule engine"): a rule is a module with an id, an area, a detect
 // function, an optional repair function and a confidence. Issues and patches use the record shapes of MAP_REPAIR.md
 // ("Issue record", "Overrides format"), so the inspector, the repair log and the overrides all read one form.
-import type { Box2, P2 } from '../geom.ts';
-import type { MapData } from '../osm.ts';
+import type { Box2, P2 } from '../../geom.ts';
+import type { MapData } from '../../osm.ts';
 
 export type PatchAction = 'connect' | 'terminate' | 'remove' | 'set_tag' | 'move_node' | 'set_lanes' | 'set_height' | 'replace_geometry' | 'disable_repair';
 

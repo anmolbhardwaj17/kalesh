@@ -1,8 +1,8 @@
 // Bridge and flyover rules (R-BRIDGE): ends without support, bridges without a layer, ramps that end in the air.
-import { inBox } from '../geom.ts';
-import type { P2 } from '../geom.ts';
-import { classImpact } from '../osm.ts';
-import type { MapData, Road } from '../osm.ts';
+import { inBox } from '../../geom.ts';
+import type { P2 } from '../../geom.ts';
+import { classImpact } from '../../osm.ts';
+import type { MapData, Road } from '../../osm.ts';
 import { issue, patchOf } from './types.ts';
 import type { Issue, Rule, RuleContext } from './types.ts';
 

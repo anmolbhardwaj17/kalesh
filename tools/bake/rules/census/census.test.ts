@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { Sketch } from '../testmap';
+import { Sketch } from '../../testmap';
 import { bridgeChains } from './bridges';
 import { CATALOGUE, catalogueLines, countByRule, runRules } from './catalogue';
 import { onewayPairStats } from './roads';

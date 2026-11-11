@@ -1,7 +1,7 @@
 // Building rules (R-BLDG): footprints that reach into a carriageway, and duplicate footprints.
-import { Grid, boxesMeet, overlapShare, segmentRing } from '../geom.ts';
-import { classImpact } from '../osm.ts';
-import type { Footprint } from '../osm.ts';
+import { Grid, boxesMeet, overlapShare, segmentRing } from '../../geom.ts';
+import { classImpact } from '../../osm.ts';
+import type { Footprint } from '../../osm.ts';
 import { roadSegments } from './roads.ts';
 import type { RoadSegment } from './roads.ts';
 import { issue, patchOf } from './types.ts';

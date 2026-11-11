@@ -40,8 +40,19 @@ export interface FootBridge {
   len: number;
 }
 
+export interface StationFeature {
+  /** "node/<id>" or "way/<id>" */
+  id: string;
+  kind: LineKind;
+  name: string;
+  x: number;
+  z: number;
+}
+
 export interface Features {
   rail: LineFeature[];
+  /** Railway and metro stations inside the outline (a node, or the middle of a station way). */
+  stations: StationFeature[];
   water: AreaFeature[];
   waterLines: LineFeature[];
   open: AreaFeature[];
@@ -156,7 +167,7 @@ const areaOf = (rings: readonly P2[][]): number => Math.abs(rings.reduce((s, r) 
 
 /** Features of the OSM elements inside the outline `ring` (block metres). `pos` gives a node's position. */
 export function readFeatures(elements: readonly OsmElement[], pos: (id: number) => P2 | undefined, ring: readonly P2[]): Features {
-  const out: Features = { rail: [], water: [], waterLines: [], open: [], footBridges: [], openRings: 0 };
+  const out: Features = { rail: [], stations: [], water: [], waterLines: [], open: [], footBridges: [], openRings: 0 };
   const outlineBox = boxOf(ring);
   const ptsOf = (ids: readonly number[]): P2[] => ids.map(pos).filter((p): p is P2 => p !== undefined);
   const ways = new Map<number, OsmElement>();
@@ -173,8 +184,18 @@ export function readFeatures(elements: readonly OsmElement[], pos: (id: number) 
     const cut = clipArea(rings, ring);
     if (cut.length) list.push({ id, kind, name, rings: cut, area: areaOf(cut) });
   };
+  const station = (id: string, t: Tags, p: P2 | undefined): void => {
+    if (!p || (t['railway'] !== 'station' && t['railway'] !== 'halt') || !pointInRing(p, ring)) return;
+    const metro = t['station'] === 'subway' || t['station'] === 'light_rail' || t['subway'] === 'yes' || /metro/i.test(`${t['operator'] ?? ''} ${t['network'] ?? ''}`);
+    out.stations.push({ id, kind: metro ? 'metro' : 'rail', name: t['name'] ?? '', x: p.x, z: p.z });
+  };
+  for (const e of elements) if (e.type === 'node' && e.tags) station(`node/${e.id}`, e.tags, pos(e.id));
   const foot: OsmElement[] = [];
   for (const w of [...ways.values()].sort((a, b) => a.id - b.id)) {
+    if (w.tags && (w.tags['railway'] === 'station' || w.tags['railway'] === 'halt')) {
+      const sp = ptsOf(w.nodes ?? []);
+      if (sp.length) station(`way/${w.id}`, w.tags, { x: sp.reduce((s, q) => s + q.x, 0) / sp.length, z: sp.reduce((s, q) => s + q.z, 0) / sp.length });
+    }
     const t = w.tags ?? {};
     const ids = w.nodes ?? [];
     const rk = railKind(t);
@@ -214,6 +235,8 @@ export function readFeatures(elements: readonly OsmElement[], pos: (id: number) 
   const byId = (a: { id: string }, b: { id: string }): number => (a.id < b.id ? -1 : a.id > b.id ? 1 : 0);
   out.water.sort(byId);
   out.open.sort(byId);
+  out.stations.sort(byId);
+  out.stations = out.stations.filter((st, i) => i === 0 || st.id !== (out.stations[i - 1] as StationFeature).id);
   return out;
 }
 

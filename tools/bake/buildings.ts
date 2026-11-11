@@ -3,7 +3,7 @@
 import { Grid, boxOf, boxesMeet, openRing, overlapShare, ringArea, ringCentroid } from './geom.ts';
 import type { P2 } from './geom.ts';
 import type { Footprint, Tags } from './osm.ts';
-import { duplicatePairs } from './rules/buildings.ts';
+import { duplicatePairs } from './rules/census/buildings.ts';
 
 /** A footprint from any source, in district metres. */
 export function footprint(id: string, source: string, ring: readonly P2[], tags: Tags = {}, height: number | null = null, levels: number | null = null): Footprint | null {

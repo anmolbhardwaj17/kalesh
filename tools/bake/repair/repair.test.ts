@@ -1,0 +1,286 @@
+// Auto-repair on small synthetic maps (MAP_REPAIR.md "Auto-repair bounds", "Repair log"): each bound from both
+// sides, the things that are never automatic, the repair log, provisional proposals, and the fixed point (a second
+// run on the repaired graph applies nothing). The pilot centre is tested in pilot_repair.test.mjs.
+import { describe, expect, it } from 'vitest';
+import { checkGraph, graphHash } from '../graph/checks';
+import type { BlockGraph } from '../graph/build';
+import { pairGaps } from '../rules/lanes';
+import type { Issue, RuleEnv } from '../rules/types';
+import { Sketch, rulesOn, testEnv } from '../testmap';
+import { BOUNDS, decide, isLowImpact } from './bounds';
+import { issueRecords, repairGraph, repairLog } from './engine';
+import type { RepairResult } from './engine';
+import { issuesSvg } from './render';
+
+const run = (s: Sketch, env: Partial<RuleEnv> = {}): RepairResult => repairGraph(s.graph(), testEnv({ nodeTags: s.nodeTags(), ...env }));
+const of = (r: RepairResult, rule: string): Issue[] => r.issues.filter((i) => i.rule === rule);
+const edge = (g: BlockGraph, id: string) => g.edges.find((e) => e.id === id)!;
+
+/** A road along north 0 and a side road that stops `gap` metres short of it. */
+function nearMiss(gap: number, tags: Record<string, string> = {}): Sketch {
+  const s = new Sketch();
+  s.way([[0, 0], [100, 0]], { highway: 'residential', ...tags });
+  s.way([[50, 60], [50, gap]], { highway: 'residential' });
+  return s;
+}
+
+/** The two carriageways of a street drawn `gap` metres apart (their lanes and the median need 7.2 m). */
+function closePair(gap: number): Sketch {
+  const s = new Sketch();
+  s.way([[-200, gap / 2], [200, gap / 2]], { highway: 'secondary', oneway: 'yes', name: 'Vikas Marg' });
+  s.way([[200, -gap / 2], [-200, -gap / 2]], { highway: 'secondary', oneway: 'yes', name: 'Vikas Marg' });
+  return s;
+}
+
+/** A street of two edges: the first tagged with 3 lanes, the second with the class default. */
+function laneStreet(cls: string): Sketch {
+  const s = new Sketch();
+  const n = s.node(0, 0);
+  s.way([[-200, 0], n], { highway: cls, name: 'X Marg', lanes: '3' });
+  s.way([n, [200, 0]], { highway: cls, name: 'X Marg' });
+  s.way([n, [0, 90]], { highway: 'residential' });
+  return s;
+}
+
+const spike = (m: number) => (x: number): number => 210 + (Math.abs(x - 150) < 1 ? m : 0);
+const longRoad = (): Sketch => {
+  const s = new Sketch();
+  s.way([[0, 0], [300, 0]], { highway: 'secondary' });
+  return s;
+};
+
+describe('auto-repair bounds (AR1)', () => {
+  it('names every bound of MAP_REPAIR.md and compares in millimetres', () => {
+    expect(BOUNDS).toEqual({ joinM: 5, buildingIntoRoadM: 1.5, heightOutlierM: 3, carriagewayShiftM: 2.5 });
+    expect(isLowImpact({ kind: 'join', m: 5 })).toBe(true);
+    expect(isLowImpact({ kind: 'join', m: 5.0000000001 })).toBe(true);
+    expect(isLowImpact({ kind: 'join', m: 5.1 })).toBe(false);
+    expect(isLowImpact({ kind: 'bridge_layer_tag' })).toBe(true);
+    expect(isLowImpact({ kind: 'building_into_road', m: 1.5, classDefault: true, fits: true })).toBe(true);
+    expect(isLowImpact({ kind: 'building_into_road', m: 1.6, classDefault: true, fits: true })).toBe(false);
+    expect(isLowImpact({ kind: 'building_into_road', m: 1, classDefault: false, fits: true })).toBe(false);
+    expect(isLowImpact({ kind: 'duplicate_footprint', exact: true })).toBe(true);
+    expect(isLowImpact({ kind: 'duplicate_footprint', exact: false })).toBe(false);
+    expect(isLowImpact({ kind: 'height_outlier', m: 3 })).toBe(true);
+    expect(isLowImpact({ kind: 'height_outlier', m: 3.1 })).toBe(false);
+    expect(isLowImpact({ kind: 'carriageway_shift', m: 2.5 })).toBe(true);
+    expect(isLowImpact({ kind: 'carriageway_shift', m: 2.6 })).toBe(false);
+    expect(isLowImpact({ kind: 'slip_redraw', m: 2.5 })).toBe(true);
+    expect(isLowImpact({ kind: 'slip_redraw', m: 2.6 })).toBe(false);
+    expect(isLowImpact({ kind: 'lane_count', cls: 'secondary' })).toBe(true);
+    for (const cls of ['motorway', 'trunk', 'primary']) expect(isLowImpact({ kind: 'lane_count', cls })).toBe(false);
+    expect(isLowImpact({ kind: 'other' })).toBe(false);
+    expect(isLowImpact({ kind: 'one_way_no_pair' })).toBe(false);
+  });
+
+  it('a 5.0 m join repairs on its own: the end is joined, the other road is cut there', () => {
+    const r = run(nearMiss(5.0));
+    const [issue] = of(r, 'R-ROAD-01');
+    expect(issue!.status).toBe('auto_repaired');
+    expect(issue!.note).toBe('gap 5 m');
+    expect(r.repairs).toHaveLength(1);
+    const line = r.repairs[0]!;
+    expect(line).toMatchObject({ rule: 'R-ROAD-01', issue: issue!.id, confidence: 0.8 });
+    expect(line.before).toMatchObject({ len: 55 });
+    expect(line.after).toMatchObject({ len: 60, at: [50, 0] });
+    expect(line.patch).toMatchObject({ action: 'connect', issue: issue!.id, by: 'bake' });
+    // one junction where the dead end was: three edges meet at (50, 0)
+    const j = r.graph.nodes.find((n) => n.x === 50 && n.z === 0)!;
+    expect(j).toMatchObject({ kind: 'junction', ends: 3 });
+    expect(r.graph.edges).toHaveLength(3);
+    expect(checkGraph(r.graph)).toMatchObject({ duplicateEdges: [], zeroLengthEdges: [], missingNodes: [], orphanNodes: [] });
+  });
+
+  it('a 5.1 m join is queued, with ranked proposals, and goes in as provisional', () => {
+    const r = run(nearMiss(5.1));
+    const [issue] = of(r, 'R-ROAD-01');
+    expect(issue!.status).toBe('open');
+    expect(r.repairs).toEqual([]);
+    expect(issue!.proposals.map((p) => [p.action, p.confidence, p.lowImpact])).toEqual([['connect', 0.65, false], ['terminate', 0.35, false]]);
+    for (const p of issue!.proposals) {
+      expect(p.reasoning.length).toBeGreaterThan(10);
+      expect(p.preview.length).toBeGreaterThan(0);
+    }
+    // a queued issue never blocks the bake: the top proposal is in the map, marked provisional
+    expect(issue!.provisional).toBe(true);
+    expect(r.provisional).toMatchObject([{ rule: 'R-ROAD-01', action: 'connect', applied: true, how: 'graph' }]);
+    expect(r.graph.nodes.some((n) => n.kind === 'junction')).toBe(true);
+    expect(repairGraph(nearMiss(5.1).graph(), testEnv(), { provisional: false }).graph.nodes.some((n) => n.kind === 'junction')).toBe(false);
+  });
+
+  it('a 2.5 m carriageway shift repairs on its own and 2.6 m is queued', () => {
+    const r = run(closePair(2.2));
+    const [issue] = of(r, 'R-LANE-FIT-01');
+    expect(issue!.proposals[0]!.params).toMatchObject({ shift_m: 2.5, min_sep: 7.2 });
+    expect(issue!.status).toBe('auto_repaired');
+    // away from their ends the two lines now keep their distance (within the rule's 0.25 m), and their end nodes did not move
+    const gaps = pairGaps(rulesOn(r.graph));
+    expect(gaps).toHaveLength(1);
+    expect(gaps[0]!.minD).toBeGreaterThanOrEqual(7.2 - 0.25);
+    expect(gaps[0]!.minD).toBeLessThan(7.3);
+    for (const e of r.graph.edges) {
+      expect(Math.abs(e.pts[0]!.x)).toBe(200);
+      expect(Math.abs(e.pts[0]!.z)).toBe(1.1);
+    }
+    expect(r.repairs[0]!.after).toMatchObject({ a: { moved_m: 2.52 }, b: { moved_m: 2.52 } });
+    const q = run(closePair(2.0));
+    expect(of(q, 'R-LANE-FIT-01')[0]!.proposals[0]!.params).toMatchObject({ shift_m: 2.6 });
+    expect(of(q, 'R-LANE-FIT-01')[0]!.status).toBe('open');
+    expect(q.repairs).toEqual([]);
+  });
+
+  it('a 3.0 m height outlier repairs on its own and 3.1 m is queued', () => {
+    const r = run(longRoad(), { heightSource: spike(3) });
+    const [issue] = of(r, 'R-TERR-03');
+    expect(issue!.proposals[0]!.params).toMatchObject({ mode: 'smooth_profile', max_m: 3 });
+    expect(issue!.status).toBe('auto_repaired');
+    expect(r.repairs[0]!.after).toMatchObject({ profile: 'smoothed' });
+    expect(r.graph.marks[issue!.features[0]!]).toMatchObject({ profile: 'smoothed' });
+    const q = run(longRoad(), { heightSource: spike(3.1) });
+    expect(of(q, 'R-TERR-03')[0]!.status).toBe('open');
+    expect(q.repairs).toEqual([]);
+  });
+
+  it('an issue on a hero road is never repaired, not even as provisional', () => {
+    const heroList = [{ id: 'janpath', name: 'Janpath', osmNames: ['Janpath'] }];
+    const s = nearMiss(3, { name: 'Janpath' });
+    const before = s.graph();
+    const r = run(s, { heroList });
+    const [issue] = of(r, 'R-ROAD-01');
+    expect(issue!.hero).toBe('janpath');
+    expect(issue!.status).toBe('open');
+    expect(issue!.impact).toBeGreaterThanOrEqual(0.9);
+    expect(decide(issue!)).toMatchObject({ mode: 'queued' });
+    expect(r.repairs).toEqual([]);
+    expect(r.provisional.find((p) => p.issue === issue!.id)).toMatchObject({ applied: false, how: 'none' });
+    expect(r.graph.edges.map((e) => [e.id, e.len, e.road.width, e.road.lanes])).toEqual(before.edges.map((e) => [e.id, e.len, e.road.width, e.road.lanes]));
+    // the same join with no hero road is automatic
+    expect(of(run(nearMiss(3)), 'R-ROAD-01')[0]!.status).toBe('auto_repaired');
+    // and the guard rule finds a hero edge that a repair did change
+    expect(of(r, 'R-HERO-03')).toEqual([]);
+  });
+
+  it('a one-way with no pair is marked explained and left unchanged', () => {
+    const s = new Sketch();
+    s.way([[0, 300], [240, 300]], { highway: 'secondary', oneway: 'yes', name: 'Radial Road 3' });
+    const before = s.graph();
+    const r = run(s);
+    const [issue] = of(r, 'R-ROAD-04');
+    expect(issue!.status).toBe('explained');
+    expect(r.repairs).toEqual([]);
+    expect(r.provisional).toEqual([]);
+    expect(r.graph.marks).toEqual({});
+    expect(JSON.stringify(r.graph.edges)).toBe(JSON.stringify(before.edges));
+    expect(r.summary).toMatchObject({ total: 1, auto: 0, queued: 0, explained: 1 });
+  });
+
+  it('a lane count change on a trunk road is queued; on a secondary road it is taken from the road ahead', () => {
+    const t = run(laneStreet('trunk'));
+    const [trunk] = of(t, 'R-LANE-FIT-03');
+    expect(trunk!.status).toBe('open');
+    expect(t.repairs).toEqual([]);
+    expect(decide(trunk!)).toMatchObject({ mode: 'queued', why: 'over the low impact bound' });
+    const r = run(laneStreet('secondary'));
+    const [sec] = of(r, 'R-LANE-FIT-03');
+    expect(sec!.status).toBe('auto_repaired');
+    expect(r.repairs[0]!.before).toMatchObject({ edges: [{ lanes: 4, lanesFrom: 'class', width: 13.2 }] });
+    expect(r.repairs[0]!.after).toMatchObject({ edges: [{ lanes: 3, lanesFrom: 'ahead', width: 9.9 }] });
+    expect(edge(r.graph, sec!.features[0]!).road).toMatchObject({ lanes: 3, lanesFrom: 'ahead', width: 9.9 });
+  });
+
+  it('a slip road redraw over 2.5 m is queued', () => {
+    const s = new Sketch();
+    const n = s.node(0, 0);
+    s.way([[-300, 0], n], { highway: 'trunk', oneway: 'yes', name: 'Ring Road' });
+    s.way([n, [300, 0]], { highway: 'trunk', oneway: 'yes', name: 'Ring Road' });
+    s.way([n, [10, -8], [250, -8]], { highway: 'trunk_link', oneway: 'yes' });
+    const r = run(s);
+    const [issue] = of(r, 'R-LANE-FIT-02');
+    expect(Number(issue!.proposals[0]!.params['move_m'])).toBeGreaterThan(2.5);
+    expect(issue!.status).toBe('open');
+    expect(r.repairs.filter((l) => l.rule === 'R-LANE-FIT-02')).toEqual([]);
+  });
+
+  it('a missing bridge layer tag, a 1.5 m sliver and an exact duplicate repair on their own; 1.6 m is queued', () => {
+    const s = new Sketch();
+    const a = s.node(0, 300);
+    const b = s.node(60, 300);
+    s.way([[-80, 300], a], { highway: 'primary' });
+    s.way([a, b], { highway: 'primary', bridge: 'yes' });
+    s.way([b, [140, 300]], { highway: 'primary' });
+    s.way([[0, 0], [100, 0]], { highway: 'residential' }); // 6 m by class: the kerb is 3 m from the centre line
+    s.building([[10, 1.5], [20, 1.5], [20, 12], [10, 12]]); // 1.5 m into the carriageway
+    s.way([[0, -100], [100, -100]], { highway: 'residential' });
+    s.building([[10, -98.6], [20, -98.6], [20, -88], [10, -88]]); // 1.6 m into the carriageway
+    s.building([[200, 0], [210, 0], [210, 10], [200, 10]], { name: 'kept' });
+    s.building([[200, 0], [210, 0], [210, 10], [200, 10]]);
+    const r = run(s);
+    expect(of(r, 'R-BRIDGE-01').map((i) => i.status)).toEqual(['auto_repaired']);
+    expect(r.graph.edges.flatMap((e) => e.pieces).filter((p) => p.bridge).map((p) => p.layer)).toEqual([1]);
+    const slivers = of(r, 'R-BLDG-01');
+    expect(slivers.map((i) => [i.note.slice(0, 5), i.status]).sort()).toEqual([['1.5 m', 'auto_repaired'], ['1.6 m', 'open']]);
+    const fixed = r.repairs.find((l) => l.rule === 'R-BLDG-01')!;
+    expect(fixed.before).toMatchObject({ width: 6 });
+    expect(fixed.after).toMatchObject({ width: 2.6 });
+    expect(of(r, 'R-BLDG-03').map((i) => i.status)).toEqual(['auto_repaired']);
+    // repair instead of drop, and every drop is logged with its source id
+    expect(r.drops).toEqual([{ id: 'way/108', rule: 'R-BLDG-03', issue: of(r, 'R-BLDG-03')[0]!.id, provisional: false }]);
+    expect(r.graph.footprints.map((f) => f.id)).not.toContain('way/108');
+    expect(r.graph.footprints.find((f) => f.id === 'way/107')!.tags).toMatchObject({ name: 'kept' });
+  });
+
+  it('writes one log line per applied repair with before and after, and a second run applies none', () => {
+    const s = nearMiss(3);
+    s.building([[10, 2.2], [20, 2.2], [20, 12], [10, 12]]);
+    s.building([[70, -2.4], [80, -2.4], [80, -12], [70, -12]]);
+    s.building([[300, 0], [310, 0], [310, 10], [300, 10]], { 'building:levels': '2' });
+    const env = testEnv({ heightSource: spike(2) });
+    const r = repairGraph(s.graph(), env);
+    expect(r.summary.auto).toBe(r.repairs.length);
+    expect(r.repairs.map((l) => l.rule)).toEqual(['R-ROAD-01', 'R-BLDG-01', 'R-BLDG-01']);
+    const lines = repairLog(r.repairs).trim().split('\n').map((l) => JSON.parse(l) as Record<string, unknown>);
+    expect(lines).toHaveLength(r.repairs.length);
+    for (const l of lines) {
+      expect(Object.keys(l)).toEqual(expect.arrayContaining(['rule', 'issue', 'before', 'after', 'confidence', 'patch']));
+      expect(JSON.stringify(l['before'])).not.toBe(JSON.stringify(l['after']));
+      expect(l['patch']).toMatchObject({ issue: l['issue'], by: 'bake', source: 'rule' });
+    }
+    // the road gave way twice: to the deeper of the two slivers
+    expect(r.graph.edges.find((e) => e.id === 'w100.0')!.road.width).toBe(4);
+    expect(r.graph.marks['w100.0']).toMatchObject({ width_was: 6, width_from: 'buildings' });
+    // a height the data gives through its levels is filled in, not an issue
+    expect(r.summary.fills).toEqual({ heightFromLevels: 1, heightMissing: 2 });
+    const again = repairGraph(r.graph, env);
+    expect(again.repairs).toEqual([]);
+    expect(again.summary.auto).toBe(0);
+    expect(again.summary.unconverged).toBe(0);
+    expect(graphHash(again.graph)).toBe(graphHash(r.graph));
+  });
+
+  it('gives the same result twice, and issue records in the form the inspector reads', () => {
+    const s = nearMiss(5.1);
+    s.building([[10, 2.2], [20, 2.2], [20, 12], [10, 12]]);
+    const a = run(s);
+    const b = run(s);
+    expect(JSON.stringify(a)).toBe(JSON.stringify(b));
+    expect(a.summary.byRule.reduce((n, x) => n + x.issues, 0)).toBe(a.issues.length);
+    const records = issueRecords(a.issues);
+    for (const rec of records) {
+      expect(Object.keys(rec)).toEqual(expect.arrayContaining(['id', 'rule', 'block', 'district', 'tile', 'lat', 'lon', 'x', 'z', 'features', 'impact', 'confidence', 'status', 'proposals']));
+      for (const p of rec['proposals'] as Record<string, unknown>[]) expect(Object.keys(p).sort()).toEqual(['action', 'confidence', 'params', 'preview', 'reasoning']);
+    }
+    const svg = issuesSvg(a.graph, a.issues);
+    expect(svg).toContain('repaired on its own: 1');
+    expect(svg).toContain('queued: 1');
+  });
+
+  it('the repair layer never changes a hero road: the guard rule reports a change made behind its back', () => {
+    const heroList = [{ id: 'janpath', name: 'Janpath', osmNames: ['Janpath'] }];
+    const s = new Sketch();
+    s.way([[0, 0], [300, 0]], { highway: 'secondary', name: 'Janpath' });
+    const g = s.graph() as BlockGraph & { marks?: Record<string, Record<string, string>> };
+    g.marks = { [g.edges[0]!.id]: { width_from: 'buildings', by: 'R-BLDG-01:way/1:w100.0' } };
+    const r = repairGraph(g, testEnv({ heroList }));
+    expect(of(r, 'R-HERO-03').map((i) => [i.status, i.proposals[0]!.action])).toEqual([['open', 'disable_repair']]);
+  });
+});

@@ -1,0 +1,14 @@
+{
+  "_doc": "The hero road list (MAP_REPAIR.md 'Hero roads', owner 2026-11-10: the CP circles and radials, Janpath, the Lutyens avenues and roundabouts, the garden edges). Rule R-HERO-01 checks that every road listed here that is in the baked stage has a spec file harness/data/hero_roads/<id>.json; until it has one, the class defaults apply. Nothing on a listed road is ever repaired automatically (tools/bake/repair/bounds.ts). A road is found by its OSM street names (osmNames) or, when it has no name, by its OSM way ids (osmWays, read from the pilot extract of 2026-11-11). Roads outside the stage being baked are skipped.",
+  "roads": [
+    { "id": "cp_inner_circle", "name": "Connaught Place, Inner Circle", "osmNames": ["Inner Circle"] },
+    { "id": "cp_middle_circle", "name": "Connaught Place, Middle Circle", "osmNames": ["Middle Circle"] },
+    { "id": "cp_outer_circle", "name": "Connaught Place, Outer Circle", "osmNames": ["Outer Circle", "Connaught Circus"] },
+    { "id": "cp_radials", "name": "Connaught Place, the radial roads", "osmNames": ["Radial Road 1", "Radial Road 2", "Radial Road 3", "Radial Road 4", "Radial Road 5", "Radial Road 6", "Radial Road 7", "Radial Road 8"] },
+    { "id": "janpath", "name": "Janpath", "osmNames": ["Janpath"] },
+    { "id": "kartavya_path", "name": "Kartavya Path", "osmNames": ["Kartavya Path", "Rajpath"] },
+    { "id": "india_gate_hexagon", "name": "The India Gate hexagon", "osmNames": ["C-Hexagon", "India Gate Circle"], "osmWays": [23134098, 582461172, 656933873, 680551207, 680551211, 680551212] },
+    { "id": "safdarjung_road", "name": "Safdarjung Road", "osmNames": ["Safdarjung Road"] },
+    { "id": "lodhi_garden_edges", "name": "The edges of Lodhi Garden", "osmNames": ["Lodhi Road", "Max Mueller Marg"] }
+  ]
+}

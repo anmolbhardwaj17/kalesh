@@ -1,8 +1,8 @@
 // Road rules (R-ROAD): dangling ends near another road, crossings without a shared node, one-way ways with no pair.
-import { Grid, boxOf, dist, inBox, pointSegment, resample, segmentCrossing } from '../geom.ts';
-import type { Box2, P2 } from '../geom.ts';
-import { classImpact } from '../osm.ts';
-import type { MapData, Road } from '../osm.ts';
+import { Grid, boxOf, dist, inBox, pointSegment, resample, segmentCrossing } from '../../geom.ts';
+import type { Box2, P2 } from '../../geom.ts';
+import { classImpact } from '../../osm.ts';
+import type { MapData, Road } from '../../osm.ts';
 import { issue, patchOf } from './types.ts';
 import type { Issue, Proposal, Rule, RuleContext } from './types.ts';
 

@@ -337,3 +337,4 @@ One line per event, written by task.mjs (start, done, fail, phase changes, inbox
 - 2026-11-11 23:06 [P1-009] done: One block graph for the pilot centre: 4,965 nodes, 6,677 edges (468 km), 706 carriageway pairs, 34,591 footprints, rail, metro, foot bridges, water and open ground; stable ids and a deterministic hash; build under 2 s; north-up debug render read. Self-check: typecheck, 478 vitest, 70 Godot tests, quick OK.
 - 2026-11-11 23:06 [P1-010] start (attempt 1): Repair rules and auto-repair for a whole block
 - 2026-11-11 23:43 mentor message mmwcftk26 handled: Answered: recent tasks are offline map pipeline code (no game frames); their debug maps go to harness/reports/map/, which the live strip does not show. Visible city comes with the tile writer and streaming tasks.
+- 2026-11-11 23:54 [P1-030] added: Raise the auto-repair share: gali rule and footprint alignment

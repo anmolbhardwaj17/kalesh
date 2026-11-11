@@ -19,6 +19,7 @@ declare module 'node:fs' {
   export function openSync(path: string, flags: string): number;
   export function readSync(fd: number, buf: Uint8Array, offset: number, length: number, position: number | null): number;
   export function closeSync(fd: number): void;
+  export function readdirSync(path: string): string[];
   const fs: {
     existsSync: typeof existsSync;
     readFileSync: typeof readFileSync;
@@ -31,6 +32,7 @@ declare module 'node:fs' {
     openSync: typeof openSync;
     readSync: typeof readSync;
     closeSync: typeof closeSync;
+    readdirSync: typeof readdirSync;
   };
   export default fs;
 }

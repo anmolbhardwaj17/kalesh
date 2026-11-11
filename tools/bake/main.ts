@@ -6,7 +6,9 @@
 // the centre pair gate, far blocks, block gaps, the map extent), with the pair table written into the health report.
 // Steps so far: sources (fetch or reuse every pinned file and print its hash), ground (GEDTM30 smoothed over 60 m,
 // filtered GLO-30 as the fallback), graph (the block graph of tools/bake/graph/, written to <dataDir>/graph.json with
-// a north-up picture in harness/reports/map/), tiles (written by a later task). Invariants run after each step; a failed one
+// a north-up picture in harness/reports/map/), repair (the rule catalogue and auto-repair of tools/bake/rules/ and
+// tools/bake/repair/: the repaired graph in <dataDir>/graph_repaired.json, issues.json and repairs.jsonl beside the
+// health report, a north-up picture of the issues), tiles (written by a later task). Invariants run after each step; a failed one
 // stops the bake before tiles are written. harness/reports/map/health.json is written at the end of every run.
 import fs from 'node:fs';
 import path from 'node:path';
@@ -27,6 +29,17 @@ import type { DistrictsWithStages, StagePlan } from './layout/stages.ts';
 import { BakeStop, emptyHealth, recordInvariants } from './report/health.ts';
 import type { HealthReport } from './report/health.ts';
 import { buildBlockGraph } from './graph/build.ts';
+import type { BlockGraph, GraphInput } from './graph/build.ts';
+import type { HeightGrid } from './ground.ts';
+import type { GroundModel } from './heights.ts';
+import { outlineRing } from './layout/outline.ts';
+import { blockFrame } from './layout/placement.ts';
+import { repairGraph } from './repair/engine.ts';
+import { buildRuleEnv } from './repair/env.ts';
+import { issuesSvg } from './repair/render.ts';
+import { timeRules } from './rules/catalogue.ts';
+import { RuleContext } from './rules/context.ts';
+import { readRepairInput, writeRepair } from './sources/repairio.ts';
 import { checkGraph, graphCounts, graphHash, graphInvariants } from './graph/checks.ts';
 import { graphSvg } from './graph/render.ts';
 import { readGedtmFile, readGlo30File } from './sources/ground.ts';
@@ -43,6 +56,7 @@ interface Proc {
 }
 const proc = (globalThis as unknown as { process: Proc }).process;
 const out = (globalThis as unknown as { console: { log(line: string): void } }).console;
+const clock = (globalThis as unknown as { performance: { now(): number } }).performance;
 
 export const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..', '..');
 const DEFAULT_OUT = 'game/world/tiles';
@@ -139,6 +153,10 @@ export async function bake(args: BakeArgs, opts: BakeOptions): Promise<HealthRep
   ]);
   const sourcesFile = path.join(opts.root, 'data', 'SOURCES.json');
   let results: SourceResult[] = [];
+  let groundModel: GroundModel | null = null;
+  let heightSource: HeightGrid | null = null;
+  let graphInput: GraphInput | null = null;
+  let graph: BlockGraph | null = null;
   for (const step of args.steps as Step[]) {
     opts.log(`[bake] step ${step}`);
     report.steps.push(step);
@@ -160,6 +178,8 @@ export async function bake(args: BakeArgs, opts: BakeOptions): Promise<HealthRep
       const glo30 = gedtm30 ? null : gloFile ? await readGlo30File(gloFile, plan.box) : null;
       const t0 = Date.now();
       const g = pickGround({ gedtm30, glo30 }, projector(plan.origin), boxMetres(plan));
+      groundModel = g;
+      heightSource = gedtm30 ?? glo30;
       report.ground = { source: g.source, method: g.method, cols: g.cols, rows: g.rows, cell: g.cell, minM: round(g.stats.min), maxM: round(g.stats.max), meanM: round(g.stats.mean), samples: g.stats.samples, holes: g.stats.holes };
       opts.log(`[ground] ${g.method}: ${g.cols} x ${g.rows} values, ${round(g.stats.min)} to ${round(g.stats.max)} m, ${g.stats.holes} holes (${Date.now() - t0} ms)`);
       check(groundInvariants(g));
@@ -167,6 +187,8 @@ export async function bake(args: BakeArgs, opts: BakeOptions): Promise<HealthRep
       const input = readGraphInput(opts.root, plan);
       const t0 = Date.now();
       const g = buildBlockGraph(input);
+      graphInput = input;
+      graph = g;
       const buildMs = Date.now() - t0;
       const json = JSON.stringify(g);
       const counts = graphCounts(g);
@@ -182,6 +204,47 @@ export async function bake(args: BakeArgs, opts: BakeOptions): Promise<HealthRep
       opts.log(`[graph] built in ${(buildMs / 1000).toFixed(2)} s: ${counts.nodes} nodes, ${counts.edges} edges (${counts.roadKm} km), ${counts.mapEdgeEnds} map edge ends, ${counts.pairs} carriageway pairs on ${counts.pairedStreets} named streets, ${counts.footprints} footprints, ${counts.rail} rail and ${counts.metro} metro lines, ${counts.footBridges} foot bridges, ${counts.water} water areas, ${counts.open} open areas; hash ${report.graph.hash}`);
       opts.log(`[graph] wrote ${file} and ${picture.join(', ')}`);
       check(graphInvariants(c, counts));
+    } else if (step === 'repair') {
+      if (!graph || !graphInput) throw new Error('the repair step needs the graph step before it');
+      const extra = readRepairInput(opts.root);
+      const focusIds = new Set(districts.districts.filter((d) => d.block === plan.def.block).map((d) => d.id));
+      const ground = groundModel;
+      const env = buildRuleEnv({
+        proj: projector(plan.origin), offset: blockFrame(districts, plan.def.block).offset,
+        focus: layout.input.outlines.filter((o) => focusIds.has(o.id)).map((o) => ({ id: o.id, ring: outlineRing(o.coords, plan.origin) })),
+        ground: ground ? (x, z) => ground.at(x, z) : null, heightSource, heroSpecs: extra.heroSpecs, heroList: extra.heroList,
+        places: extra.places.filter((p) => p.block === plan.def.block), elements: graphInput.elements, graph, mapEdge: 'stage',
+      });
+      // every rule once on the raw graph, timed; then the repair itself, and a second run on its result
+      const timed = timeRules(new RuleContext(graph, env), () => clock.now());
+      opts.log(`[rules] ${timed.issues.length} issues on the raw graph in ${timed.totalMs} ms: ${Object.entries(timed.ms).map(([id, ms]) => `${id} ${ms}`).join(', ')} (ms per rule)`);
+      const t0 = clock.now();
+      const res = repairGraph(graph, env);
+      const repairMs = Math.round(clock.now() - t0);
+      const again = repairGraph(res.graph, env);
+      const s = res.summary;
+      const c = checkGraph(res.graph);
+      const noProposal = res.issues.filter((i) => i.status === 'open' && !i.proposals.some((p) => p.confidence > 0 && p.reasoning.length > 0 && p.preview.length > 0)).length;
+      const files = writeRepair(opts.root, plan, path.dirname(healthFile), res, `production bake, stage ${plan.id}, graph ${graphHash(graph)}`);
+      const picture = await writePicture(opts.root, `harness/reports/map/issues_${plan.id}.png`, issuesSvg(res.graph, res.issues), 2400);
+      const ctx = new RuleContext(res.graph, env, res.graph.marks);
+      report.repair = { files: { ...files, picture }, hash: graphHash(res.graph), rulesMs: timed.ms, rulesTotalMs: timed.totalMs, repairMs, summary: s, secondRunRepairs: again.repairs.length, queuedWithoutProposal: noProposal, heroEdges: res.graph.edges.filter((e) => ctx.heroOf(e)).length };
+      const byRule: Record<string, number> = {};
+      const autoByRule: Record<string, number> = {};
+      for (const r of s.byRule) {
+        if (r.issues) byRule[r.rule] = r.issues;
+        if (r.auto) autoByRule[r.rule] = r.auto;
+      }
+      report.issues = { total: s.total, byRule, open: s.queued };
+      report.repairs = { auto: s.auto, byRule: autoByRule };
+      for (const r of s.byRule) if (r.issues) opts.log(`[repair] ${r.rule.padEnd(14)} ${String(r.issues).padStart(5)} issues: ${r.auto} repaired, ${r.queued} queued, ${r.explained} explained (${r.title})`);
+      opts.log(`[repair] ${s.total} issues in ${s.passes} passes (${(repairMs / 1000).toFixed(2)} s): ${s.auto} repaired on their own (${(s.autoShare * 100).toFixed(1)} percent; ${(s.autoShareOfChanged * 100).toFixed(1)} percent of repaired plus queued; ${(s.withoutTerrainOutliers.autoShare * 100).toFixed(1)} percent without the terrain outlier rule), ${s.queued} queued (${s.highImpact} high impact, ${s.provisionalApplied} top proposals applied as provisional), ${s.explained} explained, ${s.drops} drops logged; a second run applies ${again.repairs.length} repairs`);
+      opts.log(`[repair] wrote ${files.graph}, ${files.issues}, ${files.repairs} and ${picture.join(', ')}`);
+      check([
+        { id: 'REPAIR-01.fixed_point', ok: again.repairs.length === 0 && s.unconverged === 0, detail: again.repairs.length === 0 && s.unconverged === 0 ? `a second run on the repaired graph applies 0 repairs (${s.passes} passes)` : `a second run applies ${again.repairs.length} repairs, ${s.unconverged} issues could still repair after ${s.passes} passes` },
+        { id: 'REPAIR-02.proposals', ok: noProposal === 0, detail: noProposal === 0 ? `every one of the ${s.queued} queued issues has a proposal with a confidence, a reasoning line and a preview` : `${noProposal} queued issues have no usable proposal` },
+        { id: 'REPAIR-03.topology', ok: c.duplicateEdges.length + c.zeroLengthEdges.length + c.missingNodes.length + c.orphanNodes.length === 0, detail: `repaired graph: ${res.graph.nodes.length} nodes, ${res.graph.edges.length} edges, ${c.duplicateEdges.length} duplicate edges, ${c.zeroLengthEdges.length} zero length, ${c.missingNodes.length} missing nodes, ${c.orphanNodes.length} orphan nodes` },
+      ]);
     } else if (step === 'tiles') {
       opts.log(`[tiles] not built yet: the tile writer lands with the production road, terrain and tile tasks (would write to ${report.tiles.out})`);
     }

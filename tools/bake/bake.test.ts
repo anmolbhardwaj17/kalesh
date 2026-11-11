@@ -7,8 +7,8 @@ import { distanceStats, haversine, joinLandmarks, osmLandmarks } from './landmar
 import type { WikidataItem } from './landmarks';
 import { tagCoverage } from './osm';
 import { applyPatches, markOverridden, overrideTile, staleReport } from './overrides';
-import { runRules } from './rules/catalogue';
-import type { Patch } from './rules/types';
+import { runRules } from './rules/census/catalogue';
+import type { Patch } from './rules/census/types';
 import { Sketch, flat } from './testmap';
 import { buildTile, decodeT1, encodeGlb, encodeT1, tileOf, tileStats } from './tile';
 

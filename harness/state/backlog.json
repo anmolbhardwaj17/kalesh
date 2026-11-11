@@ -1,6 +1,6 @@
 {
   "_doc": "Written only by node harness/bin/task.mjs. Phases run in order; P0 (ADOPT + STYLE DISCOVERY) waits for the owner by design and needs task.mjs signoff and task.mjs archsignoff before its gate passes. Later phases are added by the planner at the end of P0 (task.mjs phase-add) from the game's real state.",
-  "updated": "2026-11-11T17:36:48.496Z",
+  "updated": "2026-11-11T18:24:08.280Z",
   "phases": [
     {
       "id": "P0",
@@ -1730,7 +1730,8 @@
       "status": "todo",
       "attempts": 0,
       "notes": [
-        "From P1-008: move the inspector and the sample overrides to world metres; inspector worldTile is a copy of the grid rule held in step by grid.test.ts. Draw the centre block outline (centre.geojson); R-STITCH-06 may then fail."
+        "From P1-008: move the inspector and the sample overrides to world metres; inspector worldTile is a copy of the grid rule held in step by grid.test.ts. Draw the centre block outline (centre.geojson); R-STITCH-06 may then fail.",
+        "From P1-010: read the production issues.json, apply overrides through tools/bake/repair/apply.ts, then delete tools/bake/rules/census/."
       ],
       "created": "2026-11-11T12:29:04.868Z"
     },
@@ -1757,7 +1758,9 @@
       "kind": "feature",
       "status": "todo",
       "attempts": 0,
-      "notes": [],
+      "notes": [
+        "From P1-010: lane tags inside a chain are lost at edge level (P1-009 keeps the longest piece); foot ways, platforms and noexit tags reach rules through RuleEnv, not the block graph; deck clearance over rail lines not checked yet."
+      ],
       "created": "2026-11-11T12:29:04.868Z",
       "model": "fable"
     },
@@ -3198,6 +3201,27 @@
       "notes": [],
       "created": "2026-11-11T17:15:43.159Z",
       "model": "sonnet"
+    },
+    {
+      "id": "P1-030",
+      "phase": "P1",
+      "title": "Raise the auto-repair share: gali rule and footprint alignment",
+      "desc": "From P1-010: 53.4% of pilot issues repair on their own (65% wanted). 2,421 of 4,916 building conflicts are queued: 1,939 reach over 1.5 m into the road, 360 leave under 2 m, 35 have the centre line inside the footprint. Add a gali rule for lanes under 2 m (old city lanes are narrower than road defaults), align Overture footprints (Google source) to the road graph where they overlap by a consistent offset, and review six hero roads without spec files so their roads are not all queued. Keep the signed bounds.",
+      "accept": [
+        "pilot auto share at least 65% without loosening the signed bounds",
+        "high impact queued count reported with reasons",
+        "bake deterministic, repairs.jsonl second run applies 0",
+        "npm test green, verify --quick OK"
+      ],
+      "deps": [],
+      "agent": "builder",
+      "priority": 3,
+      "kind": "feature",
+      "status": "todo",
+      "attempts": 0,
+      "notes": [],
+      "created": "2026-11-11T18:24:08.193Z",
+      "model": "opus"
     }
   ]
 }

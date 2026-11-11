@@ -3,8 +3,9 @@
 // driver writes the file. The report holds no clock time, so the same inputs give the same file (except the graph
 // step's build time, `graph.buildMs`, which the acceptance asks for).
 import type { GraphCounts } from '../graph/checks.ts';
+import type { RepairSummary } from '../repair/engine.ts';
 
-export const HEALTH_VERSION = 3;
+export const HEALTH_VERSION = 4;
 
 export interface InvariantResult {
   id: string;
@@ -71,6 +72,8 @@ export interface HealthReport {
   gates: Record<string, number | null>;
   /** The block graph (tools/bake/graph/): counts, checks, hash and build time; null until the graph step runs. */
   graph: GraphRecord | null;
+  /** The repair step (tools/bake/repair/): counts by rule, the automatic share, times and files; null until it runs. */
+  repair: RepairRecord | null;
   /** The pair table of the centre block (rule R-STITCH-03): real against game bearing and distance for every pair of centre places. */
   pairs: PairRecord[];
   /** What rule R-STITCH measured on the layout (tools/bake/layout/gate.ts); null when it did not run. */
@@ -92,13 +95,29 @@ export interface GraphRecord {
   footprintMerge: Record<string, { input: number; added: number; duplicate: number; conflict: number; tiny: number }>;
 }
 
+export interface RepairRecord {
+  files: { graph: string; issues: string; repairs: string; picture: string[] };
+  /** Hash of the repaired graph. */
+  hash: string;
+  /** Time of each rule on the raw graph (ms), their sum, and the whole repair step. */
+  rulesMs: Record<string, number>;
+  rulesTotalMs: number;
+  repairMs: number;
+  summary: RepairSummary;
+  /** Repairs a second run on the repaired graph applies: 0, or the bake stops. */
+  secondRunRepairs: number;
+  /** Queued issues with no proposal that has a confidence, a reasoning line and a preview: 0, or the bake stops. */
+  queuedWithoutProposal: number;
+  heroEdges: number;
+}
+
 export const GATE_KEYS = ['openPorts', 'floatingEnds', 'unjoinedEnds', 'overlappingRoadFaces', 'laneContinuityBreaks', 'tapersOutOfLimits'] as const;
 
 export function emptyHealth(stage: string, block: string, outline: HealthReport['outline']): HealthReport {
   const gates: Record<string, number | null> = {};
   for (const k of GATE_KEYS) gates[k] = null;
   return {
-    _doc: 'Map health report of the last bake (MAP_REPAIR.md "Verification"), written by tools/bake/main.ts. issues, repairs, overrides and gates are filled by the steps that measure them; null means not measured yet. pairs and layout come from rule R-STITCH, which runs in every bake before the first step. graph holds the block graph counts (nodes, edges, paired carriageways, footprints, rail, water), its checks and hash. A failed invariant stops the bake before tiles are written (stoppedBeforeTiles).',
+    _doc: 'Map health report of the last bake (MAP_REPAIR.md "Verification"), written by tools/bake/main.ts. issues, repairs, overrides and gates are filled by the steps that measure them; null means not measured yet. pairs and layout come from rule R-STITCH, which runs in every bake before the first step. graph holds the block graph counts (nodes, edges, paired carriageways, footprints, rail, water), its checks and hash. repair holds the rule engine and auto-repair result (issues by rule, repaired on their own, queued, explained, the time per rule). A failed invariant stops the bake before tiles are written (stoppedBeforeTiles).',
     version: HEALTH_VERSION,
     stage,
     block,
@@ -111,6 +130,7 @@ export function emptyHealth(stage: string, block: string, outline: HealthReport[
     overrides: { applied: 0, stale: 0 },
     gates,
     graph: null,
+    repair: null,
     pairs: [],
     layout: null,
     invariants: [],
