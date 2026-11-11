@@ -292,8 +292,15 @@ async function main(argv) {
   if (cmd === 'test') {
     const imp = runGodot(g.path, ['--headless', '--path', project, '--import'], { echo: false });
     if (judge('import', imp)) { process.stdout.write(imp.out); return 1; }
-    // --quit-after is a safety net: if the runner dies before quit(), the engine still exits (and the error lines fail it).
-    return judge('test', runGodot(g.path, ['--headless', '--path', project, '-s', 'res://tests/run_tests.gd', '--quit-after', '600'], { timeoutMs: 180000 }));
+    // The timeout is the safety net if the runner dies before quit(). --quit-after counts frames, and a headless loop
+    // runs thousands a second while a test waits for engine frames (test_sim_clock.gd), so it is set far out. The run
+    // only counts with the runner's own summary line: an engine that quits early must not read as a pass.
+    const r = runGodot(g.path, ['--headless', '--path', project, '-s', 'res://tests/run_tests.gd', '--quit-after', '50000000'], { timeoutMs: 180000 });
+    if (!/^godot tests: \d+ passed, 0 failed$/m.test(r.out) && r.status === 0 && !r.timedOut) {
+      console.log('godot test: FAIL (the runner never printed its summary line: it quit before every test ran)');
+      return 1;
+    }
+    return judge('test', r);
   }
   if (cmd === 'parse') {
     const imp = runGodot(g.path, ['--headless', '--path', project, '--import'], { echo: false });
