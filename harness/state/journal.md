@@ -351,3 +351,4 @@ One line per event, written by task.mjs (start, done, fail, phase changes, inbox
 - 2026-11-12 02:00 [P1-033] added: Clear the last road overlaps: slow forks and lane model feedback
 - 2026-11-12 02:00 [P1-014] deps now: P1-013, P1-031, P1-033
 - 2026-11-12 02:00 [P1-031] done: Repair rule R-LANE-05 for side by side carriageways, R-LANE-04 shift moves split branches, footpaths give way where strips lie side by side, network.ts split (765 to 134 lines). Pilot overlap 4,917 to 819 m2 (55 pairs), ITO box 101 to 0 m2, ITO 9 of 10 bench zones; 0 continuity breaks. Under 1 m2 not met: rest in P1-033. Self-check: typecheck, 622 vitest, 70 Godot, offline lanes bake, quick OK.
+- 2026-11-12 02:00 [P1-033] start (attempt 1): Clear the last road overlaps: slow forks and lane model feedback
