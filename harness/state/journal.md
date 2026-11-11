@@ -315,3 +315,4 @@ One line per event, written by task.mjs (start, done, fail, phase changes, inbox
 - 2026-11-11 18:49 mentor message mmwc5bzxr handled: Recorded for the HUD (P1-003).
 - 2026-11-11 18:49 mentor message mmwc5bzzo handled: Recorded for the HUD (P1-003).
 - 2026-11-11 18:49 [P1-003] done: Showed Anmol the 4 HUD mockups; 7 answers recorded: louder and more filmi, road chevrons plus minimap line, minimap turns while driving, English UI with bilingual names, Lal Batti 5 beacons, filmi freeze-frame pass card, character colours kept.
+- 2026-11-11 18:50 PHASE P0 DONE: Adopt, style discovery and architecture discovery. Next: P1 Foundation: drive and walk the real pilot centre
