@@ -56,6 +56,11 @@ Anmol saw the four HUD mockups (harness/design/hud_mockups/) and chose:
 - Character colours: Bittu green, Meera blue, Danny pink.
 How to apply: HUD.md and the HUD build (P3-002) follow these; the mockups are redrawn louder before the build, without asking again.
 
+## 2026-11-11: Core runtime on C1 and Jolt (P1-006)
+Decision: `game/core/sim_clock.gd` is the C1 clock (one physics frame is one 1/60 s tick; time scale through `Engine.time_scale` plus `physics_ticks_per_second`; hold stops the physics server only at a physics frame start; scale 0 is a freeze at the rates of scale 1, not 1 tick a second). `project.godot` names Jolt Physics. Only the clock and `*camera.gd` files may have a `_physics_process` (the debug frame probe moved to `SceneTree.physics_frame`). Module size exceptions: `stylised_b.gd` and `standin/builder.gd` (P2-001), `bench/render/world.gd` (P2-014). The TS size test reads files with `import.meta.glob` (no `@types/node` dev dependency).
+Why: TECH.md "Main loop and time (C1)" as signed; the replay test measures 0.0000 mm at scale 0.25, 1, 4 and after holds.
+By: builder, P1-006.
+
 ## Standing rules (short forms; full entries in decisions_archive.md under the bold title)
 
 Owner direction and rules:

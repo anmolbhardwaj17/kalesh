@@ -1,6 +1,7 @@
 ; Engine configuration file for Kalesh, Godot 4.7.2 (pinned in harness/kit.config.json "godot").
 ; Coordinates are binding (harness/design/TECH.md "Coordinates"): east +X, north -Z, up +Y, 1 unit = 1 metre.
-; No negative scale and no axis flips anywhere. The physics tick is fixed at 60 Hz.
+; No negative scale and no axis flips anywhere. The physics tick is fixed at 60 Hz (C1: SimClock sets the rate per time scale).
+; Physics is Jolt by name: DEFAULT resolves to GodotPhysics3D on 4.7.2 (P0-017); game/tests/test_sim_clock.gd checks it.
 
 config_version=5
 
@@ -57,6 +58,7 @@ steer_right={
 
 [physics]
 
+3d/physics_engine="Jolt Physics"
 common/physics_ticks_per_second=60
 common/max_physics_steps_per_frame=8
 

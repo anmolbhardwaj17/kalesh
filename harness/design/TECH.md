@@ -38,7 +38,7 @@ Contracts here are binding: a builder who changes one updates this file and adds
 Godot (the game):
 - Engine: Godot 4.7.2.stable, standard build (single precision, no .NET), pinned in `harness/kit.config.json` "godot". `node harness/bin/godot.mjs` finds it (env `GODOT`, then `tools/godot/`, then `/Applications/Godot.app`), checks the version and only on a machine without it downloads the official portable build into `tools/godot/` (gitignored, SHA512 checked). Nothing is installed globally.
 - Project: `game/` (`project.godot`), Forward+ renderer, fixed 60 Hz physics tick, main scene `res://scenes/main.tscn`. The import cache `game/.godot/` is gitignored; the `*.gd.uid` files are committed.
-- Physics: Jolt, named in `project.godot` (`physics/3d/physics_engine="Jolt Physics"`). The project default resolves to GodotPhysics3D on this build (measured), so the name must be set; the first physics task sets it and a test reads it back.
+- Physics: Jolt, named in `project.godot` (`physics/3d/physics_engine="Jolt Physics"`, set in P1-006). The project default resolves to GodotPhysics3D on this build (measured), so the name must be set; `game/tests/test_sim_clock.gd` reads the setting back and checks the running space state is Jolt's.
 - Language: GDScript, typed where it helps, written data first (packed arrays and server calls for crowds and traffic). No C#. No GDExtension: the measured numbers do not need it. A hot loop that misses its budget gets a decisions.md entry before any native code is considered.
 - Tests: the headless runner `game/tests/run_tests.gd` (no addon), suites `game/tests/test_*.gd`, run by `node harness/bin/godot.mjs test`, which `npm test` calls after vitest.
 - Input: InputMap actions in `project.godot` (today `throttle`, `brake`, `steer_left`, `steer_right`; keys W/S/A/D and arrows, gamepad triggers and left stick). Every action is remappable.
@@ -75,7 +75,7 @@ The bake gets its own script when the first production bake task lands (`bake`: 
 - `game/world/tiles/`: baked tiles (gitignored, rebuilt by the bake; a release build packs them per stage).
 - `public/assets/`: art and audio files with `manifest.json`.
 
-Module size rule (from the old game's 4,065 line tile manager): no file owns more than one of streaming, building, physics and cleanup. A GDScript file over 600 lines or a TypeScript file over 800 lines fails a test in `game/tests/test_module_size.gd` and `tools/module_size.test.ts` (added with the first world task). Each streamed system registers its own build and dispose functions with the streaming core.
+Module size rule (from the old game's 4,065 line tile manager): no file owns more than one of streaming, building, physics and cleanup. A GDScript file over 600 lines or a TypeScript file over 800 lines fails a test in `game/tests/test_module_size.gd` and `tools/module_size.test.ts` (P1-006). Files already over the limit sit on a named exception list in the test, each with the task that splits or retires it. Each streamed system registers its own build and dispose functions with the streaming core.
 
 ## Core contracts
 
@@ -85,7 +85,7 @@ One engine physics frame is one sim tick of 1/60 s. `SimClock` (`game/core/sim_c
 - Time scale sets `Engine.time_scale` and `Engine.physics_ticks_per_second` together, so the step stays 1/60 s of sim time at any scale (slow motion, the verify fast-forward).
 - The hold stops `SimClock` and calls `PhysicsServer3D.set_active(false)`, only at the start of a physics frame (stopped in the middle of a tick it is 269 mm off, measured). Frames keep drawing while held. Resume is exact (0.0000 mm against a run never held).
 - `--lockstep` sets `Engine.max_physics_steps_per_frame = 1`. Cameras follow on `_physics_process` with a higher `process_physics_priority`.
-- Today `SimClock` still runs the scaffold accumulator; the first physics task moves it to this contract (the bench version is `game/bench/physics/bench_clock.gd`).
+- Built in P1-006 from the bench version `game/bench/physics/bench_clock.gd`. `game/tests/test_sim_clock.gd` replays one input script (the car plus a rigid body) at scale 0.25, 1 and 4 and with holds (inside a tick, between frames): all end within 0.001 m (measured 0.0000000 m). It also fails any `_physics_process` outside `game/bench/` except the clock and `*camera.gd` files.
 
 ### Coordinates (binding, owner 2026-11-10)
 
@@ -304,7 +304,7 @@ Mono sources positioned in 3D for vehicles, horns, people and weapons; stereo be
 ## Known limits and debt
 
 - Everything in the playable scene is still a stand-in: flat ground, one road strip, a kinematic box car, no world data, no physics, no audio. The first phase replaces it with this design.
-- `SimClock` still runs the scaffold accumulator (C1 is in the bench clock); Jolt is not yet named in `project.godot`.
+- The physics bench plan's `engine_default` row (`harness/bench/physics.plan.mjs`) now runs on Jolt, since the project names it (P1-006); its P0-017 reading (DEFAULT is GodotPhysics3D) stays in the archive.
 - The tile reader, lane model, stitcher and generator exist only as bench prototypes (`game/bench/`, `tools/bake/roads/`, `tools/bake/stitch/`). The production modules are listed in `docs/ARCHITECTURE.md` "Target module map".
 - The three authored connectors in `harness/data/connectors/` are bench only (placed for the island layout). The stitch bench driver `harness/bench/stitch.mjs` was built for that layout and is not run again.
 - Not measured yet: the LOD cross-fade at speed, the worst frame while streaming at 200 km/h, a real CC0 character rig, the navmesh build, the bake of a whole block.

@@ -76,7 +76,7 @@ Methods: `ping`, `state`, `clock`, `frames`, `input`, `perf`, `load`, `teleport`
 
 ### Sim clock and hold
 
-`game/core/sim_clock.gd` (autoload `SimClock`) owns sim time for every system that steps: they connect to `SimClock.sim_tick(dt)` and step only there. The tick is fixed at 1/60 s (`physics_ticks_per_second`). Each engine physics frame adds `delta * scale` to an accumulator and runs whole ticks, so `t` is always a whole number of ticks. `hold({at})` pauses on the last tick boundary at or before `at` (within one tick, never past it) and emits a `sim:hold` event. A held sim runs no ticks; frames keep drawing.
+`game/core/sim_clock.gd` (autoload `SimClock`, C1 since P1-006) owns sim time for every system that steps: they connect to `SimClock.sim_tick(dt)` and step only there. One engine physics frame is one tick of exactly 1/60 s, so `t` is always a whole number of ticks. `timeScale(n)` sets `Engine.time_scale` and `Engine.physics_ticks_per_second` together (n 4 runs 240 physics frames per real second, n 0.25 runs 15; each still steps 1/60 s of sim and of physics); n 0 runs no ticks and stops the physics server, at the engine rates of n 1. `hold({at})` pauses on the last tick boundary at or before `at` (within one tick, never past it) and emits a `sim:hold` event. A held sim runs no ticks and the physics server is stopped (`PhysicsServer3D.set_active(false)`, only at the start of a physics frame, so a running tick keeps its step); frames keep drawing, and a release resumes exactly (an input script held and resumed ends within 0.0000 m of one never held, `game/tests/test_sim_clock.gd`). `clock().scale` is the scale as asked.
 
 ### Errors
 

@@ -1,7 +1,7 @@
 ## Headless GDScript test runner (no addon). Run by `node harness/bin/godot.mjs test`, which `npm test` calls:
 ##   godot --headless --path game -s res://tests/run_tests.gd
 ## Each suite is a script in SUITES that extends RefCounted, has `var t` (the assert helper, tests/check.gd) and
-## `var tree` (this SceneTree), and methods named test_*. Prints PASS or FAIL per test and exits 1 on any failure.
+## `var tree` (this SceneTree), and methods named test_* (a test may await engine frames). Prints PASS or FAIL per test and exits 1 on any failure.
 extends SceneTree
 
 const Check := preload("res://tests/check.gd")
@@ -15,6 +15,8 @@ const SUITES := [
 	"res://tests/test_bench.gd",
 	"res://tests/test_physics_bench.gd",
 	"res://tests/test_tiles.gd",
+	"res://tests/test_module_size.gd",
+	"res://tests/test_sim_clock.gd",
 ]
 
 
@@ -50,7 +52,8 @@ func _run_all() -> void:
 			var t := Check.new()
 			suite.set("t", t)
 			suite.set("tree", self)
-			suite.call(name)
+			# a test may be a coroutine (it waits for engine frames); await returns at once for a plain one
+			await suite.call(name)
 			var label := "%s %s" % [path.get_file().get_basename(), name]
 			if t.failures.is_empty():
 				passed += 1
