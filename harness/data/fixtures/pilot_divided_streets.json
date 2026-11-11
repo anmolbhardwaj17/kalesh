@@ -1,0 +1,22 @@
+{
+  "_doc": "Fixture of the block graph pairing test (P1-009, tools/bake/graph/pilot_graph.test.mjs). divided: streets of the pilot centre drawn in OSM as two one-way carriageways; each must be found as a pair with both edges within 40 m of the probe point (lat, lon). name is the street; osmName, when given, is a name one of the two edges carries in OSM (Mathura Road along Pragati Maidan has no name tag there, so it is found by place alone). oneWay: true one-way streets that must stay unpaired (the Connaught Place radials, DELHI_WORLD.md hero roads; knowledge world-and-map: R-ROAD-04 flags them, never auto). Probe points were read from the graph of 2026-11-11 (osmBase 2026-11-11T15:09:21Z) at the middle of the longest pair and checked against the street names.",
+  "divided": [
+    { "name": "Vikas Marg", "osmName": "Vikas Marg", "lat": 28.62796, "lon": 77.25268, "where": "ITO bridge, west bank" },
+    { "name": "Bahadur Shah Zafar Marg", "osmName": "Bahadur Shah Zafar Marg", "lat": 28.63348, "lon": 77.24082 },
+    { "name": "Barakhamba Road", "osmName": "Barakhamba Road", "lat": 28.62664, "lon": 77.23021 },
+    { "name": "Netaji Subhas Marg", "osmName": "Netaji Subhash Marg", "lat": 28.65689, "lon": 77.2369 },
+    { "name": "Mathura Road", "osmName": null, "lat": 28.622, "lon": 77.2404, "where": "along Pragati Maidan, both halves unnamed in OSM" },
+    { "name": "Kasturba Gandhi Marg", "osmName": "Kasturba Gandhi Marg", "lat": 28.61613, "lon": 77.22917 },
+    { "name": "Janpath", "osmName": "Janpath", "lat": 28.62944, "lon": 77.21945 },
+    { "name": "Mahatma Gandhi Marg (Ring Road)", "osmName": "Mahatma Gandhi Marg", "lat": 28.64507, "lon": 77.24709 },
+    { "name": "Deen Dayal Upadhyaya Marg", "osmName": "Deen Dayal Upadhyay Road", "lat": 28.6336, "lon": 77.23017 },
+    { "name": "Asaf Ali Road", "osmName": "Asaf Ali Road", "lat": 28.64415, "lon": 77.22682 },
+    { "name": "Tilak Marg", "osmName": "Tilak Marg", "lat": 28.61757, "lon": 77.23475 },
+    { "name": "Copernicus Marg", "osmName": "Copernicus Marg", "lat": 28.61719, "lon": 77.23133 },
+    { "name": "Sansad Marg", "osmName": "Sansad Marg", "lat": 28.62779, "lon": 77.21608 },
+    { "name": "Shyama Prasad Mukherji Marg", "osmName": "Shyama Prasad Mukherji Marg", "lat": 28.66026, "lon": 77.23356 },
+    { "name": "Indraprastha Marg", "osmName": "Indraprastha Marg", "lat": 28.62789, "lon": 77.24381 },
+    { "name": "Baba Kharak Singh Marg", "osmName": "Baba Kharak Singh Marg", "lat": 28.6304, "lon": 77.21428 }
+  ],
+  "oneWay": ["Radial Road 1", "Radial Road 2", "Radial Road 3", "Radial Road 4", "Radial Road 5", "Radial Road 6", "Radial Road 7"]
+}

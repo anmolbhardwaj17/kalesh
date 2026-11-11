@@ -117,7 +117,7 @@ const OPEN_KEYS: readonly [string, readonly string[]][] = [
   ['natural', ['grassland', 'wood', 'scrub']],
 ];
 
-function openKind(tags: Tags): string | null {
+export function openKind(tags: Tags): string | null {
   for (const [key, values] of OPEN_KEYS) {
     const v = tags[key];
     if (v !== undefined && values.includes(v)) return `${key}=${v}`;
