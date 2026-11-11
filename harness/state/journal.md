@@ -342,3 +342,7 @@ One line per event, written by task.mjs (start, done, fail, phase changes, inbox
 - 2026-11-11 23:54 [P1-011] start (attempt 1): Overrides per world tile, issues.json and the map health report
 - 2026-11-12 00:15 [P1-011] done: Overrides per world tile found by id then anchor, stale listed, disable_repair; production issues.json in world metres; health.json v5; inspector reads production files (adapter and census rules removed); dashboard Map health tab. Pilot: 6,319 found, 3,374 auto, 2 by overrides, 2,843 open (240 high impact). Self-check: typecheck, 591 tests, offline bake, quick OK.
 - 2026-11-12 00:16 [P1-012] start (attempt 1): Lane-level road model for the pilot centre
+- 2026-11-12 01:16 [P1-031] added: Keep side by side roads apart: split branches and same direction neighbours
+- 2026-11-12 01:16 [P1-014] deps now: P1-013, P1-031
+- 2026-11-12 01:16 [P1-032] added: Turn restrictions and turn lanes from OSM, medians and mid-block crossings
+- 2026-11-12 01:16 [P1-012] done: Lane model for the whole pilot: 9,150 driving lanes (567 lane km), 141 split zones with gores, 21,140 junction lane paths (0 arm pairs without one), 0 continuity breaks, 0 wrong side strips, CP circle 0 mismatches, deterministic hash, 2.2 to 3.6 s. 5 of 8 items met as written; plan overlap 4,917 m2 and ITO split mismatch go to P1-031 before the mesh. Self-check: typecheck, 616 vitest, 70 Godot, offline lanes bake, quick OK; ITO render read.
