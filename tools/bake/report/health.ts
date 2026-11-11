@@ -6,7 +6,9 @@ import type { GraphCounts } from '../graph/checks.ts';
 import type { RepairResult, RepairSummary } from '../repair/engine.ts';
 import type { OverrideCounts, OverrideRecord } from '../repair/overrides.ts';
 
-export const HEALTH_VERSION = 5;
+import type { LanesRecord } from '../roads/laneout.ts';
+
+export const HEALTH_VERSION = 6;
 
 export interface InvariantResult {
   id: string;
@@ -78,6 +80,8 @@ export interface HealthReport {
   graph: GraphRecord | null;
   /** The repair step (tools/bake/repair/): counts by rule, the automatic share, times and files; null until it runs. */
   repair: RepairRecord | null;
+  /** The lane model (tools/bake/roads/network.ts): counts, checks with every explained end and taper finding, hash and build time; null until the lanes step runs. */
+  lanes: LanesRecord | null;
   /** The pair table of the centre block (rule R-STITCH-03): real against game bearing and distance for every pair of centre places. */
   pairs: PairRecord[];
   /** What rule R-STITCH measured on the layout (tools/bake/layout/gate.ts); null when it did not run. */
@@ -173,6 +177,7 @@ export function emptyHealth(stage: string, block: string, outline: HealthReport[
     gates,
     graph: null,
     repair: null,
+    lanes: null,
     pairs: [],
     layout: null,
     invariants: [],

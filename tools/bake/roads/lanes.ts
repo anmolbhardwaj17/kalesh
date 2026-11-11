@@ -26,6 +26,8 @@ export interface Attach {
   nz: number;
   /** A cross-section the edge must reach at this end (the first section of a split zone), with the lane rows. */
   target?: { cs: CrossSection; rows: Row[] };
+  /** The frame is the edge's own (a street that widens before a junction): nothing is blended. */
+  own?: boolean;
 }
 
 export interface EdgePlan {
@@ -61,6 +63,13 @@ export interface Zone {
   leftCount: number;
   rightFirst: number;
   rightCount: number;
+}
+
+/** The cross-section an edge has at one of its ends, in its own orientation: the target of an attachment, else its end piece. */
+export function endCrossSection(plan: EdgePlan, atStart: boolean): CrossSection {
+  const att = atStart ? plan.startAttach : plan.endAttach;
+  if (att?.target) return att.target.cs;
+  return (atStart ? plan.cs[0] : plan.cs[plan.cs.length - 1]) as CrossSection;
 }
 
 const csEqual = (a: CrossSection, b: CrossSection): boolean =>
@@ -217,6 +226,23 @@ export function splitCandidate(graph: Graph, nodeId: number, maxAngleDeg = 50): 
     if (hb.x * frame.x + hb.z * frame.z < cosMax) return null;
   }
   return { node: nodeId, kind, parent, branches };
+}
+
+/** The branch of a split that runs straight on and the one that leaves or joins: a link is never the main line; of two equals the one that turns less is. */
+export function mainBranch(graph: Graph, cand: SplitCandidate): { main: GEnd; minor: GEnd } {
+  const node = graph.nodes.get(cand.node) as P2;
+  const tp = outward(graph.edges[cand.parent.edge] as GEdge, cand.parent.atStart).smoothAt(0, 6);
+  const deflect = (e: GEnd): number => {
+    const c = outward(graph.edges[e.edge] as GEdge, e.atStart);
+    const p = c.at(Math.min(15, c.length * 0.5));
+    const u = unit(p.x - node.x, p.z - node.z);
+    return Math.acos(Math.max(-1, Math.min(1, -u.x * tp.tx - u.z * tp.tz)));
+  };
+  const [p, q] = cand.branches;
+  const lp = (graph.edges[p.edge] as GEdge).link;
+  const lq = (graph.edges[q.edge] as GEdge).link;
+  const mainIsP = lp !== lq ? !lp : deflect(p) <= deflect(q);
+  return mainIsP ? { main: p, minor: q } : { main: q, minor: p };
 }
 
 /**
@@ -497,7 +523,7 @@ export function buildEdgeStrips(plan: EdgePlan, step = 4): EdgeStrips {
     const f = e.curve.smoothAt(s);
     let n = leftOf(f.tx, f.tz);
     const blend = (att: Attach | undefined, dist: number): void => {
-      if (!att) return;
+      if (!att || att.own) return;
       const w = 1 - smoothstep(dist / BLEND_M);
       if (w <= 0) return;
       const u = unit(lerp(n.nx, att.nx, w), lerp(n.nz, att.nz, w));
