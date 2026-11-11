@@ -61,6 +61,11 @@ Decision: `game/core/sim_clock.gd` is the C1 clock (one physics frame is one 1/6
 Why: TECH.md "Main loop and time (C1)" as signed; the replay test measures 0.0000 mm at scale 0.25, 1, 4 and after holds.
 By: builder, P1-006.
 
+## 2026-11-11: Bake driver, stages and pins (P1-007)
+Decision: `tools/bake/main.ts` is the one bake driver (`npm run bake -- <stage>`), with `tools/bake/sources/` the only other code that touches files or the network (`purity.test.ts`). A stage is an entry in `districts.json` `stages` (outline, margin, data folder, sources); the pilot is `districts/pilot_centre.geojson`, 21.8 km2, margin 400 m, one box extract per source in `data/pilot_centre/`. Every request goes through one `Net` seam, so tests count requests with a fake. A pinned file is reused only when its sha256 matches and its pinned box holds the stage box; a changed local file stops the bake (never overwritten without `--force`); `--offline` never fetches. GLO-30 stays one shared pin per 1 degree tile (`glo30`). Node typings come from `tools/bake/sources/node.d.ts`, not `@types/node`. `rand.ts` is sfc32 seeded by splitmix32 from `seedFor(tileX, tileZ, parcelId, stream)`; its first values are pinned in a test, because a change reshuffles every baked city.
+Why: TECH.md "World pipeline": deterministic, pinned sources, stop before tiles on a failed invariant; a fake network proves the second run makes no request.
+By: builder, P1-007.
+
 ## Standing rules (short forms; full entries in decisions_archive.md under the bold title)
 
 Owner direction and rules:

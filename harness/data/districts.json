@@ -257,10 +257,22 @@
       "note": "focus district on the east bank, inside the centre block across the real river; offset by the seamless method at factor 1.0 (was 3468.4, -883.5 in the island bench)"
     }
   ],
+  "stages": {
+    "_doc": "Bake stages (P1-007, TECH.md 'World layout' Stages): `npm run bake -- <stage>`. A stage is one continuous outline inside a block. Every source is fetched once for the outline's box plus the margin (one continuous extract) into dataDir (gitignored) and pinned in data/SOURCES.json. ground: GEDTM30 smoothed over smoothM metres, filtered Copernicus GLO-30 as the fallback; FABDEM is never read.",
+    "pilot": {
+      "name": "Pilot centre",
+      "block": "centre",
+      "outline": "districts/pilot_centre.geojson",
+      "marginM": 400,
+      "dataDir": "data/pilot_centre",
+      "sources": ["osm", "overture_buildings", "gedtm30", "glo30", "wikidata"],
+      "ground": { "primary": "gedtm30", "smoothM": 60, "fallback": "glo30" }
+    }
+  },
   "planned": [
-    { "id": "ito", "name": "ITO with Pragati Maidan", "stage": "pilot", "block": "centre", "focus": true, "origin": { "lat": 28.629, "lon": 77.243 }, "note": "pilot data downloaded (pilot_areas.json ito); outline drawn in the first map pilot task" },
-    { "id": "paharganj_station", "name": "Paharganj and New Delhi station", "stage": "pilot", "block": "centre", "focus": false, "origin": { "lat": 28.643, "lon": 77.217 } },
-    { "id": "gb_road", "name": "GB Road and Ajmeri Gate", "stage": "pilot", "block": "centre", "focus": false, "origin": { "lat": 28.648, "lon": 77.224 } },
+    { "id": "ito", "name": "ITO with Pragati Maidan", "stage": "pilot", "block": "centre", "focus": true, "origin": { "lat": 28.629, "lon": 77.243 }, "note": "draft focus outline (P1-007) inside the pilot centre", "outline": {"status": "draft", "edges": "north: Bahadur Shah Zafar Marg at Delhi Gate; east: Ring Road past Rajghat, out to the Yamuna west bank at the ITO bridge; south: Bhairon Marg and Mathura Road round Pragati Maidan (Bharat Mandapam); west: Tilak Marg and Deen Dayal Upadhyaya Marg", "drawn": "P1-007: waypoints read from the pilot stage OSM extract (osmBase 2026-11-11), straight lines between them; [lon, lat] pairs, counter-clockwise, closed", "ring": [[77.2375, 28.635], [77.236, 28.629], [77.236, 28.62], [77.2405, 28.611], [77.247, 28.611], [77.25, 28.6155], [77.255, 28.623], [77.255, 28.633], [77.248, 28.641], [77.2385, 28.641], [77.2375, 28.635]]} },
+    { "id": "paharganj_station", "name": "Paharganj and New Delhi station", "stage": "pilot", "block": "centre", "focus": true, "origin": { "lat": 28.643, "lon": 77.217 }, "note": "draft focus outline (P1-007): the station with both forecourts (Paharganj and Ajmeri Gate, where mission M01 ends) and the Main Bazar lanes", "outline": {"status": "draft", "edges": "north: Desh Bandhu Gupta Road; east: the Ajmeri Gate forecourt of New Delhi station; south: Chelmsford Road and Panchkuian Road; west: Chitragupta Road", "drawn": "P1-007: waypoints read from the pilot stage OSM extract (osmBase 2026-11-11), straight lines between them; [lon, lat] pairs, counter-clockwise, closed", "ring": [[77.2085, 28.6395], [77.212, 28.638], [77.2195, 28.6385], [77.2252, 28.6415], [77.2252, 28.646], [77.215, 28.6478], [77.209, 28.6458], [77.2085, 28.6395]]} },
+    { "id": "gb_road", "name": "GB Road and Ajmeri Gate", "stage": "pilot", "block": "centre", "focus": true, "origin": { "lat": 28.648, "lon": 77.224 }, "note": "draft focus outline (P1-007): Shraddhanand Road (GB Road) from Ajmeri Gate to the Khari Baoli end with about 100 m on each side", "outline": {"status": "draft", "edges": "a band of about 100 m on each side of Shraddhanand Road (GB Road), from Ajmeri Gate in the south-east to the Khari Baoli end in the north", "drawn": "P1-007: waypoints read from the pilot stage OSM extract (osmBase 2026-11-11), straight lines between them; [lon, lat] pairs, counter-clockwise, closed", "ring": [[77.2245, 28.6445], [77.2262, 28.6462], [77.2234, 28.6498], [77.2205, 28.6542], [77.22, 28.66], [77.2168, 28.66], [77.2172, 28.6525], [77.2205, 28.6478], [77.2222, 28.645], [77.2245, 28.6445]]} },
     { "id": "lutyens_gymkhana", "name": "Lutyens bungalows and Delhi Gymkhana", "stage": "release", "block": "centre", "focus": true, "origin": { "lat": 28.6033, "lon": 77.2003 } },
     { "id": "khan_market_lodhi", "name": "Khan Market, Lodhi Garden and the Golf Club", "stage": "release", "block": "centre", "focus": true, "origin": { "lat": 28.596, "lon": 77.228 } },
     { "id": "kashmere_gate", "name": "Kashmere Gate and ISBT", "stage": "release", "block": "centre", "focus": true, "origin": { "lat": 28.667, "lon": 77.228 } },

@@ -1,5 +1,5 @@
 {
-  "_doc": "Pin list of every source data download (written by harness/bench/pilot_data/fetch.mjs). The files live in the gitignored data/ folder; this list is versioned. sha256 and bytes are of the local file. A file cut out of a larger remote file names the remote in url and how it was cut in note.",
+  "_doc": "Pin list of every source data download. Written by the bake driver (tools/bake/main.ts, stage \"sources\") and, for the Phase 0 bench files, by harness/bench/pilot_data/fetch.mjs. The files live in the gitignored data/ folder; this list is versioned. sha256 and bytes are of the local file. A file cut out of a larger remote file names the remote in url and how it was cut in note; box is the cut in degrees. Every entry carries its licence and credit line (tools/bake/pins.test.ts fails on one without).",
   "files": {
     "asi_delhi_list": {
       "file": "data/pilot/landmarks/asi_delhi_list.html",
@@ -202,6 +202,84 @@
       "licenceUrl": "https://docs.overturemaps.org/attribution/",
       "credit": "© OpenStreetMap contributors, Overture Maps Foundation",
       "note": "DuckDB (httpfs, spatial) read of the public release, rows whose bbox meets a pilot box, geometry as GeoJSON text"
+    },
+    "pilot_gedtm30": {
+      "file": "data/pilot_centre/gedtm30_window.json",
+      "bytes": 737663,
+      "sha256": "e0fcc7ff2e413e86f706ddfdf229aa53de6ce3a6ab0146273ddb0882e288b1e2",
+      "date": "2026-11-11",
+      "url": "https://s3.opengeohub.org/global/dtm/v1.2/gedtm_rf_m_30m_s_20060101_20151231_go_epsg.4326.3855_v1.2.tif",
+      "licence": "CC BY 4.0",
+      "licenceUrl": "https://zenodo.org/api/records/18887460",
+      "credit": "GEDTM30: Ho, Y.-F. et al., OpenLandMap, CC BY 4.0, doi 10.5281/zenodo.18887460",
+      "note": "window of 204 x 228 cells cut from the global file with HTTP range requests; sha256 is of the saved window, url names the global file",
+      "stage": "pilot",
+      "box": {
+        "south": 28.60439,
+        "west": 77.2037,
+        "north": 28.66741,
+        "east": 77.2599
+      }
+    },
+    "pilot_osm": {
+      "file": "data/pilot_centre/osm.json",
+      "bytes": 22371623,
+      "sha256": "a51ae86e2c6737bd227e860706c9157d228448f874e428e71789e08eb8a9156a",
+      "date": "2026-11-11",
+      "url": "https://overpass-api.de/api/interpreter",
+      "licence": "ODbL 1.0",
+      "licenceUrl": "https://www.openstreetmap.org/copyright",
+      "credit": "© OpenStreetMap contributors",
+      "note": "one Overpass box query over the stage box (outline plus margin); osmBase is the date of the OSM data",
+      "stage": "pilot",
+      "box": {
+        "south": 28.60439,
+        "west": 77.2037,
+        "north": 28.66741,
+        "east": 77.2599
+      },
+      "query": "[out:json][timeout:900][maxsize:1073741824];(node(28.60439,77.2037,28.66741,77.2599);way(28.60439,77.2037,28.66741,77.2599););out body;>;out skel qt;rel[\"type\"=\"multipolygon\"](28.60439,77.2037,28.66741,77.2599);out body;",
+      "osmBase": "2026-11-11T16:24:25Z",
+      "elements": 216615
+    },
+    "pilot_overture_buildings": {
+      "file": "data/pilot_centre/overture_buildings.json",
+      "bytes": 50637620,
+      "sha256": "2bfd1fc6fc94d89bbec5db2386a921917866374a7745f6f0ed4d1a916b305f77",
+      "date": "2026-11-11",
+      "url": "s3://overturemaps-us-west-2/release/2026-10-21.0/theme=buildings/type=building/",
+      "licence": "ODbL 1.0",
+      "licenceUrl": "https://docs.overturemaps.org/attribution/",
+      "credit": "© OpenStreetMap contributors, Overture Maps Foundation",
+      "note": "DuckDB (httpfs, spatial) read of the public release: rows whose bbox meets the stage box, geometry as GeoJSON text, ordered by id",
+      "stage": "pilot",
+      "box": {
+        "south": 28.60439,
+        "west": 77.2037,
+        "north": 28.66741,
+        "east": 77.2599
+      },
+      "release": "2026-10-21.0",
+      "sql": "COPY (SELECT * EXCLUDE (geometry), ST_AsGeoJSON(geometry) AS geojson FROM read_parquet('s3://overturemaps-us-west-2/release/2026-10-21.0/theme=buildings/type=building/*', hive_partitioning=1) WHERE bbox.xmin < 77.2599 AND bbox.xmax > 77.2037 AND bbox.ymin < 28.66741 AND bbox.ymax > 28.60439 ORDER BY id) TO '$OUT' (FORMAT JSON, ARRAY true);"
+    },
+    "pilot_wikidata": {
+      "file": "data/pilot_centre/wikidata.json",
+      "bytes": 349024,
+      "sha256": "fe3b770a2a9b292fea45f0815272255a81d624a4eb48b5e7cea7b26f19f75a1b",
+      "date": "2026-11-11",
+      "url": "https://query.wikidata.org/sparql",
+      "licence": "CC0 1.0",
+      "licenceUrl": "https://www.wikidata.org/wiki/Wikidata:Copyright",
+      "credit": "none needed (Wikidata, CC0)",
+      "note": "SPARQL: items with P625 inside the stage box",
+      "stage": "pilot",
+      "box": {
+        "south": 28.60439,
+        "west": 77.2037,
+        "north": 28.66741,
+        "east": 77.2599
+      },
+      "rows": 597
     },
     "wikidata_pilot": {
       "file": "data/pilot/landmarks/wikidata.json",

@@ -1,0 +1,219 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "pilot",
+        "name": "Pilot centre",
+        "block": "centre",
+        "status": "draft",
+        "areaKm2": 21.82,
+        "edges": "north: Shyama Prasad Mukherji Marg, then north of the Red Fort complex and Salimgarh; east: Mahatma Gandhi Marg (the Ring Road) behind the Red Fort and past Rajghat, then out over the Yamuna west bank at the ITO (Vikas Marg) bridge; south: Bhairon Marg and Pragati Maidan, Purana Qila Road and the C-Hexagon south of India Gate, Akbar Road; west: Man Singh Road, Patel Chowk and Sansad Marg, Panchkuian Road, Rani Jhansi Road at Jhandewalan, Desh Bandhu Gupta Road to Qutab Road, then Qutab Road north beside GB Road",
+        "drawn": "waypoints picked by hand at junctions and edges read from the stage OSM extract (osmBase 2026-11-11T15:09:21Z); straight lines between them. A draft for the first bake: the production clip follows the real roads (P1-008)",
+        "waypoints": [
+          {
+            "name": "Qutab Road at Shyama Prasad Mukherji Marg",
+            "lat": 28.6632,
+            "lon": 77.216
+          },
+          {
+            "name": "Shyama Prasad Mukherji Marg at Netaji Subhash Marg",
+            "lat": 28.6634,
+            "lon": 77.233
+          },
+          {
+            "name": "north of Salimgarh",
+            "lat": 28.6638,
+            "lon": 77.2425
+          },
+          {
+            "name": "Ring Road behind Salimgarh",
+            "lat": 28.6605,
+            "lon": 77.2478
+          },
+          {
+            "name": "Ring Road behind the Red Fort",
+            "lat": 28.654,
+            "lon": 77.249
+          },
+          {
+            "name": "Rajghat east",
+            "lat": 28.642,
+            "lon": 77.251
+          },
+          {
+            "name": "Yamuna west bank north of the ITO bridge",
+            "lat": 28.6355,
+            "lon": 77.2556
+          },
+          {
+            "name": "Yamuna west bank south of the ITO bridge",
+            "lat": 28.6225,
+            "lon": 77.2558
+          },
+          {
+            "name": "Ring Road at Bhairon Marg",
+            "lat": 28.615,
+            "lon": 77.2508
+          },
+          {
+            "name": "Bhairon Marg south of Pragati Maidan",
+            "lat": 28.61,
+            "lon": 77.247
+          },
+          {
+            "name": "Purana Qila Road at Mathura Road",
+            "lat": 28.6085,
+            "lon": 77.239
+          },
+          {
+            "name": "C-Hexagon at Sher Shah Road, south",
+            "lat": 28.6082,
+            "lon": 77.2345
+          },
+          {
+            "name": "C-Hexagon at Pandara Road, south",
+            "lat": 28.608,
+            "lon": 77.23
+          },
+          {
+            "name": "Akbar Road at Man Singh Road",
+            "lat": 28.6088,
+            "lon": 77.2235
+          },
+          {
+            "name": "Man Singh Road at Ashoka Road",
+            "lat": 28.6168,
+            "lon": 77.2235
+          },
+          {
+            "name": "Sansad Marg south of Jantar Mantar",
+            "lat": 28.625,
+            "lon": 77.214
+          },
+          {
+            "name": "Sansad Marg at Baba Kharak Singh Marg",
+            "lat": 28.63,
+            "lon": 77.2125
+          },
+          {
+            "name": "Panchkuian Road at Chitragupta Road",
+            "lat": 28.6393,
+            "lon": 77.2078
+          },
+          {
+            "name": "Chitragupta Road at Desh Bandhu Gupta Road",
+            "lat": 28.646,
+            "lon": 77.2082
+          },
+          {
+            "name": "Desh Bandhu Gupta Road at Qutab Road",
+            "lat": 28.6488,
+            "lon": 77.2148
+          },
+          {
+            "name": "Qutab Road at Khari Baoli",
+            "lat": 28.658,
+            "lon": 77.215
+          }
+        ]
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              77.215,
+              28.658
+            ],
+            [
+              77.2148,
+              28.6488
+            ],
+            [
+              77.2082,
+              28.646
+            ],
+            [
+              77.2078,
+              28.6393
+            ],
+            [
+              77.2125,
+              28.63
+            ],
+            [
+              77.214,
+              28.625
+            ],
+            [
+              77.2235,
+              28.6168
+            ],
+            [
+              77.2235,
+              28.6088
+            ],
+            [
+              77.23,
+              28.608
+            ],
+            [
+              77.2345,
+              28.6082
+            ],
+            [
+              77.239,
+              28.6085
+            ],
+            [
+              77.247,
+              28.61
+            ],
+            [
+              77.2508,
+              28.615
+            ],
+            [
+              77.2558,
+              28.6225
+            ],
+            [
+              77.2556,
+              28.6355
+            ],
+            [
+              77.251,
+              28.642
+            ],
+            [
+              77.249,
+              28.654
+            ],
+            [
+              77.2478,
+              28.6605
+            ],
+            [
+              77.2425,
+              28.6638
+            ],
+            [
+              77.233,
+              28.6634
+            ],
+            [
+              77.216,
+              28.6632
+            ],
+            [
+              77.215,
+              28.658
+            ]
+          ]
+        ]
+      }
+    }
+  ]
+}

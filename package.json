@@ -5,6 +5,7 @@
   "type": "module",
   "scripts": {
     "play": "node harness/bin/playcopy.mjs --play",
+    "bake": "node tools/bake/main.ts",
     "build": "node harness/bin/godot.mjs check",
     "test": "vitest run && npm run test:godot",
     "typecheck": "tsc --noEmit && tsc --noEmit -p tsconfig.tools.json && node harness/bin/godot.mjs parse",
