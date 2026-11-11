@@ -8,7 +8,9 @@
 // filtered GLO-30 as the fallback), graph (the block graph of tools/bake/graph/, written to <dataDir>/graph.json with
 // a north-up picture in harness/reports/map/), repair (the rule catalogue and auto-repair of tools/bake/rules/ and
 // tools/bake/repair/: the repaired graph in <dataDir>/graph_repaired.json, issues.json and repairs.jsonl beside the
-// health report, a north-up picture of the issues), tiles (written by a later task). Invariants run after each step; a failed one
+// health report, a north-up picture of the issues), lanes (the lane model of tools/bake/roads/network.ts on the repaired
+// graph: lanes.json and lane_graph.json in <dataDir>, the inspector's lanes layer and north-up pictures beside the
+// health report), tiles (written by a later task). Invariants run after each step; a failed one
 // stops the bake before tiles are written. harness/reports/map/health.json is written at the end of every run.
 import fs from 'node:fs';
 import path from 'node:path';
@@ -45,6 +47,14 @@ import { readOverrides } from './sources/overridesio.ts';
 import { readRepairInput, writeRepair } from './sources/repairio.ts';
 import { checkGraph, graphCounts, graphHash, graphInvariants } from './graph/checks.ts';
 import { graphSvg } from './graph/render.ts';
+import { taggedLanes } from './graph/classify.ts';
+import type { RepairedGraph } from './repair/engine.ts';
+import { checkLaneModel } from './roads/lanechecks.ts';
+import { laneGraph, laneModelFile, laneModelHash, lanesLayer, lanesRecord } from './roads/laneout.ts';
+import { lanesSvg } from './roads/lanerender.ts';
+import { buildLaneModel } from './roads/network.ts';
+import type { LaneModelInput } from './roads/network.ts';
+import { writeLanes } from './sources/lanesio.ts';
 import { readGedtmFile, readGlo30File } from './sources/ground.ts';
 import { readGraphInput, writeGraph, writePicture } from './sources/graphinput.ts';
 import { OfflineError, realNet } from './sources/net.ts';
@@ -164,6 +174,7 @@ export async function bake(args: BakeArgs, opts: BakeOptions): Promise<HealthRep
   let heightSource: HeightGrid | null = null;
   let graphInput: GraphInput | null = null;
   let graph: BlockGraph | null = null;
+  let repaired: RepairedGraph | null = null;
   for (const step of args.steps as Step[]) {
     opts.log(`[bake] step ${step}`);
     report.steps.push(step);
@@ -241,6 +252,7 @@ export async function bake(args: BakeArgs, opts: BakeOptions): Promise<HealthRep
       const res = repairGraph(graph, env, { overrides: { entries, project: toBlock } });
       const repairMs = Math.round(clock.now() - t0);
       const again = repairGraph(res.graph, env, { overrides: { entries, project: toBlock, applied: true } });
+      repaired = res.graph;
       const s = res.summary;
       const c = checkGraph(res.graph);
       const noProposal = res.issues.filter((i) => i.status === 'open' && !i.proposals.some((p) => p.confidence > 0 && p.reasoning.length > 0 && p.preview.length > 0)).length;
@@ -268,6 +280,59 @@ export async function bake(args: BakeArgs, opts: BakeOptions): Promise<HealthRep
         { id: 'REPAIR-02.proposals', ok: noProposal === 0, detail: noProposal === 0 ? `every one of the ${s.queued} queued issues has a proposal with a confidence, a reasoning line and a preview` : `${noProposal} queued issues have no usable proposal` },
         { id: 'REPAIR-03.topology', ok: c.duplicateEdges.length + c.zeroLengthEdges.length + c.missingNodes.length + c.orphanNodes.length === 0, detail: `repaired graph: ${res.graph.nodes.length} nodes, ${res.graph.edges.length} edges, ${c.duplicateEdges.length} duplicate edges, ${c.zeroLengthEdges.length} zero length, ${c.missingNodes.length} missing nodes, ${c.orphanNodes.length} orphan nodes` },
       ]);
+    } else if (step === 'lanes') {
+      if (!repaired || !graphInput) throw new Error('the lanes step needs the repair step before it');
+      const proj = projector(plan.origin);
+      const offset = blockFrame(districts, plan.def.block).offset;
+      const heroes = readRepairInput(opts.root).heroSpecs;
+      const wayLanes = new Map<string, number>();
+      const points: NonNullable<LaneModelInput['points']>[number][] = [];
+      for (const el of graphInput.elements) {
+        if (el.type === 'way' && el.tags?.['highway']) {
+          const n = taggedLanes(el.tags);
+          if (n !== null) wayLanes.set(`way/${el.id}`, n);
+        } else if (el.type === 'node' && el.lat !== undefined && el.lon !== undefined && (el.tags?.['highway'] === 'crossing' || el.tags?.['highway'] === 'traffic_signals')) {
+          const p = proj.toWorld(el.lat, el.lon);
+          points.push({ x: p.x, z: p.z, kind: el.tags['highway'] === 'crossing' ? 'crossing' : 'signals' });
+        }
+      }
+      const input: LaneModelInput = { nodes: repaired.nodes, edges: repaired.edges, marks: repaired.marks, wayLanes, heroes, points };
+      const t0 = clock.now();
+      const build = buildLaneModel(input);
+      const buildMs = Math.round(clock.now() - t0);
+      const model = laneModelFile(build, plan.def.block, plan.id);
+      const hash = laneModelHash(model);
+      // the same input again: the model must not depend on anything but its input
+      const again = laneModelHash(laneModelFile(buildLaneModel(input), plan.def.block, plan.id));
+      const c = checkLaneModel(build, heroes);
+      const files = writeLanes(opts.root, plan, path.dirname(healthFile), model, laneGraph(build, plan.def.block, offset), lanesLayer(build, plan.def.block, offset));
+      const pictures: string[] = [];
+      for (const v of LANE_VIEWS) {
+        const at = proj.toWorld(v.lat, v.lon);
+        if (!pointInRing(at, outlineRing(plan.outline.coords, plan.origin))) continue;
+        const box = { minX: at.x - v.halfM, maxX: at.x + v.halfM, minZ: at.z - v.halfM, maxZ: at.z + v.halfM };
+        pictures.push(...(await writePicture(opts.root, `harness/reports/map/lanes_${plan.id}_${v.id}.png`, lanesSvg(build, box, `${v.name}: lane model, north up (${plan.id})`), 2400)));
+      }
+      const rec = lanesRecord(build, c, hash, buildMs, { ...files, pictures });
+      report.lanes = rec;
+      report.gates['laneContinuityBreaks'] = c.continuity.breaks;
+      report.gates['tapersOutOfLimits'] = c.tapers.violations;
+      const n = rec.counts;
+      opts.log(`[lanes] built in ${(buildMs / 1000).toFixed(2)} s (${build.rounds} rounds): ${n.strips} strips (${n.taperStrips} tapers, ${n.zoneStrips} split zones), ${n.stations} stations, ${n.driveLanes} driving lanes (${n.laneKm} lane km, ${n.galiLanes} gali lanes), ${n.junctions} junctions with ${n.junctionPaths} lane paths for ${n.junctionPairs} arm pairs; hash ${hash}`);
+      opts.log(`[lanes] lane counts: ${Object.entries(rec.inference.from).map(([k, v]) => `${k} ${v}`).join(', ')}; ${rec.inference.changed} edges differ from their own tag or class default; ${n.fitted} took a count the model settled, ${n.widenings} widen before a junction`);
+      opts.log(`[lanes] continuity breaks ${c.continuity.breaks} (${c.continuity.lanePairs} lane pairs at ${c.continuity.joints} joints; ends explained: ${Object.entries(c.explainedEnds).map(([k, v]) => `${k} ${v}`).join(', ')}); tapers ${c.tapers.tapers}, out of limits ${c.tapers.violations} (${c.tapers.violations - c.tapers.unexplained} explained, ${c.tapers.unexplained} findings listed)`);
+      opts.log(`[lanes] zones ${c.zones.zones} (${c.zones.diverges} diverges, ${c.zones.merges} merges), without gore or nose ${c.zones.withoutGoreOrNose}, off a branch centre line ${c.zones.endsOffCentreLine} (largest ${c.zones.maxEndErrorM} m); ${n.forks} one-way forks are junctions (${Object.entries(rec.forks.byReason).map(([k, v]) => `${v}: ${k}`).join('; ')})`);
+      opts.log(`[lanes] paths: ${c.paths.pairsWithoutPath} arm pairs without a path, ${c.paths.pairsBelowRadius} under the ${c.paths.minRadiusM === null ? '' : `radius (smallest ${c.paths.minRadiusM} m)`}, ${build.turns.uTurnsTooTight} U-turns left out, ${build.turns.droppedForRadius} turns left out for radius; left-hand side wrong on ${c.trafficSide.wrongSide} of ${c.trafficSide.twoWayStrips} two-way strips; ${c.widths.tooNarrow} lanes too narrow (narrowest ${c.widths.narrowestM} m, gali ${c.widths.narrowestGaliM} m)`);
+      opts.log(`[lanes] hero: ${c.hero.map((h) => `${h.spec} ${h.mismatches} mismatches over ${h.fieldsCompared} comparisons`).join(', ') || 'no spec'}; strips on each other in plan: ${c.overlap?.areaM2 ?? 0} m2 in ${c.overlap?.pairs ?? 0} pairs`);
+      opts.log(`[lanes] wrote ${files.model}, ${files.laneGraph}, ${files.layer} and ${pictures.join(', ')}`);
+      const heroBad = c.hero.reduce((sum, h) => sum + h.mismatches, 0);
+      check([
+        { id: 'LANES-01.continuity', ok: c.continuity.breaks === 0, detail: c.continuity.breaks === 0 ? `every lane at a strip end has a successor or an explained end (${c.continuity.lanePairs} lane pairs, ${build.ends.length} explained ends)` : `${c.continuity.breaks} lanes end with nothing after them: ${c.continuity.list.slice(0, 3).map((x) => `${x.strip} lane ${x.lane}`).join(', ')}` },
+        { id: 'LANES-02.zones', ok: c.zones.withoutGoreOrNose + c.zones.endsOffCentreLine === 0, detail: `${c.zones.zones} split zones: ${c.zones.withoutGoreOrNose} without a gore or a nose, ${c.zones.endsOffCentreLine} ending off a branch centre line (largest ${c.zones.maxEndErrorM} m)` },
+        { id: 'LANES-03.same_twice', ok: hash === again, detail: hash === again ? `the same hash twice (${hash})` : `two builds of one input differ: ${hash} and ${again}` },
+        { id: 'LANES-04.left_hand_and_widths', ok: c.trafficSide.wrongSide + c.widths.tooNarrow === 0, detail: `${c.trafficSide.wrongSide} two-way strips on the wrong side, ${c.widths.tooNarrow} lanes under their width limit` },
+        { id: 'LANES-05.hero', ok: heroBad === 0, detail: `${heroBad} hero spec mismatches` },
+      ]);
     } else if (step === 'tiles') {
       opts.log(`[tiles] not built yet: the tile writer lands with the production road, terrain and tile tasks (would write to ${report.tiles.out})`);
     }
@@ -278,6 +343,12 @@ export async function bake(args: BakeArgs, opts: BakeOptions): Promise<HealthRep
 }
 
 const round = (v: number): number => Math.round(v * 100) / 100;
+
+/** North-up pictures of the lane model: the two sites of the Phase 0 road bench (drawn when they lie in the stage). */
+const LANE_VIEWS: readonly { id: string; name: string; lat: number; lon: number; halfM: number }[] = [
+  { id: 'ito', name: 'ITO flyover and junction', lat: 28.6282, lon: 77.2471, halfM: 330 },
+  { id: 'cp', name: 'Connaught Place inner circle', lat: 28.6328, lon: 77.2197, halfM: 300 },
+];
 
 async function main(): Promise<void> {
   let args: BakeArgs;

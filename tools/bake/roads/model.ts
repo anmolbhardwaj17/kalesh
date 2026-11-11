@@ -18,6 +18,8 @@ export interface LaneDef {
   width: number;
   /** Height of the lane surface above the carriageway (a kerb, a footpath). */
   raise: number;
+  /** gali: the one shared lane of an old city lane, narrower than MIN_DRIVE_LANE_M by design (never below GALI_MIN_LANE_M). */
+  tag?: 'gali';
 }
 
 /** Lanes left to right and the lateral position of the leftmost border (positive is left of the reference line). */
@@ -152,6 +154,12 @@ export const DECK_DEPTH = 1.2;
 export const HEADROOM = 5.5;
 /** Gap between two carriageways at the physical nose of a gore: two kerbs and the nose between them. */
 export const NOSE_GAP = 1;
+/** No driving lane is narrower than this (m), except the one shared lane of a gali. */
+export const MIN_DRIVE_LANE_M = 2.4;
+/** The narrowest a gali lane may be (m): an auto rickshaw is 1.3 m wide and needs a hand's width each side. */
+export const GALI_MIN_LANE_M = 1.8;
+/** Every connecting lane path through a junction turns on at least this radius (m). */
+export const MIN_TURN_RADIUS_M = 4;
 
 export const classDefaults = (cls: string): ClassDefaults => CLASS_DEFAULTS[cls] ?? (CLASS_DEFAULTS['road'] as ClassDefaults);
 

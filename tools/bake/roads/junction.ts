@@ -9,6 +9,7 @@ import type { P2 } from '../geom.ts';
 import { Curve, area2, leftOf, lerp, segCross, selfCrossing, unit } from './curve.ts';
 import type { GEdge, GEnd, Graph } from './graph.ts';
 import { outward } from './graph.ts';
+import { endCrossSection } from './lanes.ts';
 import type { EdgePlan } from './lanes.ts';
 import { KERB_WIDTH, classDefaults, coreRange, csBorders, flipCS } from './model.ts';
 import type { CrossSection } from './model.ts';
@@ -52,7 +53,7 @@ export interface JunctionPlan {
   why?: string;
 }
 
-const edgePoint = (a: ArmPlan, lateral: number, t: number): P2 => {
+export const edgePoint = (a: ArmPlan, lateral: number, t: number): P2 => {
   if (t >= 0) {
     const f = a.curve.smoothAt(Math.min(t, a.curve.length));
     const n = leftOf(f.tx, f.tz);
@@ -63,7 +64,7 @@ const edgePoint = (a: ArmPlan, lateral: number, t: number): P2 => {
   return { x: f.x + f.tx * t + n.nx * lateral, z: f.z + f.tz * t + n.nz * lateral };
 };
 
-const tangentAt = (a: ArmPlan, t: number): { x: number; z: number } => {
+export const tangentAt = (a: ArmPlan, t: number): { x: number; z: number } => {
   const f = a.curve.smoothAt(Math.max(0, Math.min(t, a.curve.length)));
   return { x: f.tx, z: f.tz };
 };
@@ -102,7 +103,7 @@ function armPlan(graph: Graph, plans: EdgePlan[], end: GEnd, centre: P2): ArmPla
   const e = graph.edges[end.edge] as GEdge;
   const plan = plans[end.edge] as EdgePlan;
   const curve = outward(e, end.atStart);
-  const raw = (end.atStart ? plan.cs[0] : plan.cs[plan.cs.length - 1]) as CrossSection;
+  const raw = endCrossSection(plan, end.atStart);
   const cs = end.atStart ? raw : flipCS(raw);
   const [coreFirst, coreLast] = coreRange(cs.lanes);
   const p = curve.at(Math.min(12, curve.length * 0.5));
@@ -122,9 +123,9 @@ const samplesDown = (from: number, to: number, step = 2): number[] => {
 
 /**
  * Plans one junction: the corners, the cut of every arm (written into the edge plans) and the ring. `minCut` keeps
- * a little of every arm inside the junction even when no corner asks for it.
+ * a little of every arm inside the junction even when no corner asks for it; `minCutOf` is a longer cut one arm asks for.
  */
-export function planJunction(graph: Graph, plans: EdgePlan[], id: string, nodeIds: number[], ends: GEnd[], minCut = 1.5): JunctionPlan {
+export function planJunction(graph: Graph, plans: EdgePlan[], id: string, nodeIds: number[], ends: GEnd[], minCut = 1.5, minCutOf?: (end: GEnd) => number): JunctionPlan {
   const pts = nodeIds.map((n) => graph.nodes.get(n) as P2);
   const centre = { x: pts.reduce((s, p) => s + p.x, 0) / pts.length, z: pts.reduce((s, p) => s + p.z, 0) / pts.length };
   const arms = ends.map((e) => armPlan(graph, plans, e, centre)).sort((a, b) => a.angle - b.angle);
@@ -183,7 +184,8 @@ export function planJunction(graph: Graph, plans: EdgePlan[], id: string, nodeId
     a.cut = Math.max(a.cut, corner.di + 0.3, minCut);
     b.cut = Math.max(b.cut, corner.dj + 0.3, minCut);
   }
-  for (const a of arms) a.cut = Math.min(a.cut, Math.max(minCut, a.avail));
+  // an arm may ask for a longer cut of its own (room for a connecting lane path to turn on its radius)
+  for (const a of arms) a.cut = Math.min(Math.max(a.cut, minCutOf ? minCutOf(a.end) : 0), Math.max(minCut, a.avail, minCutOf ? minCutOf(a.end) : 0));
 
   const plan: JunctionPlan = { id, nodes: nodeIds, centre, arms, corners: [], ring: [], bands: [], method: 'J1' };
   const fill = (): void => {
@@ -316,7 +318,7 @@ export function planJunction(graph: Graph, plans: EdgePlan[], id: string, nodeId
       for (const a of arms) {
         let t = 0;
         while (t < a.avail && Math.hypot(a.curve.at(t).x - centre.x, a.curve.at(t).z - centre.z) < radius) t += 0.5;
-        a.cut = Math.max(minCut, t);
+        a.cut = Math.max(minCut, t, minCutOf ? minCutOf(a.end) : 0);
       }
       plan.ring = [];
       plan.bands = [];
