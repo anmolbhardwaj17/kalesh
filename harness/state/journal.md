@@ -346,3 +346,4 @@ One line per event, written by task.mjs (start, done, fail, phase changes, inbox
 - 2026-11-12 01:16 [P1-014] deps now: P1-013, P1-031
 - 2026-11-12 01:16 [P1-032] added: Turn restrictions and turn lanes from OSM, medians and mid-block crossings
 - 2026-11-12 01:16 [P1-012] done: Lane model for the whole pilot: 9,150 driving lanes (567 lane km), 141 split zones with gores, 21,140 junction lane paths (0 arm pairs without one), 0 continuity breaks, 0 wrong side strips, CP circle 0 mismatches, deterministic hash, 2.2 to 3.6 s. 5 of 8 items met as written; plan overlap 4,917 m2 and ITO split mismatch go to P1-031 before the mesh. Self-check: typecheck, 616 vitest, 70 Godot, offline lanes bake, quick OK; ITO render read.
+- 2026-11-12 01:17 [P1-031] start (attempt 1): Keep side by side roads apart: split branches and same direction neighbours
