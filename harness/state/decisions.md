@@ -330,3 +330,8 @@ Decision: the stitch bench (`node harness/bench/stitch.mjs`, code `tools/bake/st
 Not measured: FL2 as its own setup (the report lists every port by closure kind), SC3, the ITO district placed, physics at the far district (P0-017 covered 7 km). Found on the way and fixed: a way that starts at a shared node just inside the clip line was dropped as a nick, which left a road ending on the line with no port.
 Why: these numbers settle the composite map rows of the architecture table before the sign-off: district frames cost nothing and stay exact, polygons need hard edges to pay off, authored connectors pass every rule while a shortened real road fails below a ratio of about 0.45, four in five ports close by rule, and 32-bit floats are enough for the compressed map.
 By: builder (P0-029)
+
+## 2026-11-11: One seamless open city, no gaps
+Anmol on the stitch shot: "these seem very far from each other and a lot of empty spaces there in between ... some seamless connection should be there ... It's not like these should be different region. There should be easily blendable, like an open" (world).
+Decision: the map is one continuous open world. No bare ground between districts. Real in-between areas fill the gaps where they matter (Paharganj, Karol Bagh, Daryaganj, ITO, Mandi House, Pragati Maidan); everywhere else gets generated city from the nearest area profiles, blended across the edge so no border is visible. Streets cross district edges as one road network. Layout keeps real directions (every pair within 5 deg) with one even compression factor.
+Why: districts as islands feel like separate levels, not Delhi. Open-world feel is a pillar.

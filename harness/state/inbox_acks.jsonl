@@ -129,3 +129,4 @@
 {"id":"mmediatetly","ts":"2026-11-11T04:05:31.995Z","reply":"Paused. The map stitch builder is stopped; P0-029 stays in progress on its branch and resumes when you say continue.","tasks":[]}
 {"id":"mmwblj0k4","ts":"2026-11-11T04:05:43.077Z","reply":"Paused. The map stitch builder is stopped; its partial work stays on branch task/P0-029-map-stitch and P0-029 resumes when you say continue.","tasks":[]}
 {"id":"mmwbyi1a6","ts":"2026-11-11T10:08:48.734Z","reply":"That shot is a test of 4 pilot districts only; the green is empty test ground. The real map is one continuous city with the in-between areas filled. Passed to the architecture plan (P0-020).","tasks":["P0-020"]}
+{"id":"mmwbyltqa","ts":"2026-11-11T10:11:38.087Z","reply":"Yes, every gap gets filled. One seamless open world: real in-between areas where they matter, generated Delhi-style city everywhere else, roads running straight through, no visible borders.","tasks":["P0-020"]}
