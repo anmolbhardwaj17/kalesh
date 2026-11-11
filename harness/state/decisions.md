@@ -293,3 +293,8 @@ Decision: the data bench (`node harness/bench/pilot_data/fetch.mjs`, then `censu
 Why: these numbers settle the source, repair and tile rows of the architecture table before the sign-off. Not measured: a cold disk read, metro and foot bridge rules, building heights from Open Buildings 2.5D; "worst frame during attach" is not conclusive because idle frames in the bench window already jitter up to 24 ms.
 By: builder (P0-018)
 
+
+## 2026-11-11: One pull request per task
+Anmol: "also let work comit and pr by pr so we ca raise pr and then u only merge that so we have propr3state of game and also i can get moe pr points in github".
+Decision: every task runs on its own branch `task/<id>-<slug>`; when verified, it is pushed, a PR is opened with gh (logged in as Anmol, so the PR is his) and merged with a merge commit, then the branch is deleted. Main only receives verified work. No squash, rebase or force. Small state-only commits between tasks may go to main. Starts with P0-019 (its start commit was already on main).
+Why: main always holds a verified state, each task is one reviewable PR, and the PRs count on Anmol's GitHub profile.

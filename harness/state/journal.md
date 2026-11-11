@@ -257,3 +257,4 @@ One line per event, written by task.mjs (start, done, fail, phase changes, inbox
 - 2026-11-11 06:05 [P0-018] start (attempt 1): Arch bench: pilot data sources, map repair census and tile format
 - 2026-11-11 07:03 [P0-018] done: Pilot data for CP, India Gate, ITO, Chandni Chowk, Laxmi Nagar pinned in data/SOURCES.json (16 files). Census 1052 issues, 73% auto-repairable. Recs: B1 Node bake, OSM roads, Overture buildings, smoothed GEDTM30, OV1 overrides, LM1 landmarks (351 candidates), T1 binary 250 m tiles. Self-check: typecheck, 261 vitest, 59 Godot tests, quick OK; no file over 5 MB staged.
 - 2026-11-11 07:03 [P0-019] start (attempt 1): Arch bench: lane-level road, junction and terrain fit prototype
+- 2026-11-11 08:39 mentor message mmwbjimej handled: Done. Every task now gets its own branch and pull request from your account. I merge it once verified, so main always has a working state. Starts with the road test now running.
