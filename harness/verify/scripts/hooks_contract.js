@@ -9,7 +9,7 @@ need(G && G.ready === true, 'window.__game.ready is true');
 need(D, 'window.__game.debug exists (the page was opened with ?debug=1)');
 if (!D) return S.failed(problems.join('; '));
 const required = ['state', 'clock', 'frames', 'input', 'perf', 'load', 'teleport', 'setCamera', 'timeScale', 'hold', 'events', 'hud'];
-const optional = ['shotProblems', 'gpuBench', 'quality', 'save'];
+const optional = ['shotProblems', 'gpuBench', 'quality', 'save', 'timeOfDay'];
 for (const k of required) need(typeof D[k] === 'function', `debug.${k} is a function`);
 if (problems.length) return S.failed(`missing hooks: ${problems.join('; ')}`);
 const st = D.state();
@@ -34,5 +34,15 @@ const p = await D.perf(500);
 need(p && p.cpuMs && typeof p.cpuMs.p95 === 'number', 'debug.perf(ms) returns cpuMs {p50, p95, max}');
 need(p && typeof p.avgFps === 'number' && typeof p.drawCalls === 'number' && typeof p.triangles === 'number', 'debug.perf returns avgFps, drawCalls and triangles');
 need(Array.isArray(D.events()), 'debug.events() returns an array');
+// The day clock (P1-002): state().time reads it; timeOfDay sets and pins it, the way a mission pins an hour.
+if (typeof D.timeOfDay === 'function') {
+  const t0 = D.state().time;
+  need(t0 && typeof t0.hour === 'number' && typeof t0.pinned === 'boolean', 'debug.state().time has the day clock {hour, pinned}');
+  const set = await D.timeOfDay({ hour: 9.25, pin: true });
+  need(set && set.hour === 9.25 && set.pinned === true, 'debug.timeOfDay({hour, pin}) sets and pins the hour');
+  await S.frames(3);
+  need(D.state().time.hour === 9.25, 'a pinned day clock stands still and state() reports it');
+  if (t0) await D.timeOfDay({ hour: t0.hour, pin: t0.pinned });
+}
 S.log('optional hooks', optional.map((k) => `${k}:${typeof D[k] === 'function' ? 'yes' : 'no'}`).join(' '));
 return problems.length ? S.failed(problems.join('; ')) : S.ok({ perf: { cpuP95: p.cpuMs.p95, fps: p.avgFps, drawCalls: p.drawCalls }, optional: optional.filter((k) => typeof D[k] === 'function') });

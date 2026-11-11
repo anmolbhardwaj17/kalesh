@@ -30,6 +30,10 @@ func _process(_delta: float) -> bool:
 
 
 func _run_all() -> void:
+	# The GameArgs autoload starts the default look (stylised B) at boot; test nodes keep their stand-in materials.
+	var gargs := root.get_node_or_null("GameArgs")
+	if gargs != null:
+		gargs.stop_style_runner()
 	var passed := 0
 	var failed := 0
 	for path in SUITES:
