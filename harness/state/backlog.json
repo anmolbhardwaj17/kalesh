@@ -1,6 +1,6 @@
 {
   "_doc": "Written only by node harness/bin/task.mjs. Phases run in order; P0 (ADOPT + STYLE DISCOVERY) waits for the owner by design and needs task.mjs signoff and task.mjs archsignoff before its gate passes. Later phases are added by the planner at the end of P0 (task.mjs phase-add) from the game's real state.",
-  "updated": "2026-11-11T11:53:55.012Z",
+  "updated": "2026-11-11T12:11:53.252Z",
   "phases": [
     {
       "id": "P0",
@@ -636,11 +636,14 @@
       "agent": "planner",
       "priority": 2,
       "kind": "feature",
-      "status": "doing",
+      "status": "done",
       "attempts": 1,
       "notes": [],
       "created": "2026-11-10T13:04:46.154Z",
-      "started": "2026-11-11T11:53:55.012Z"
+      "started": "2026-11-11T11:53:55.012Z",
+      "done": "2026-11-11T12:11:53.235Z",
+      "summary": "Signed design written into TECH.md, docs/ARCHITECTURE.md (target module map and size rule), MAP_REPAIR.md (connector format, repair bounds), DELHI_WORLD.md and GAME.md (seamless city, cutscene runtime), districts.json (signed method, corrected offsets), perf_budgets.json (per-system budgets, city draw calls 2500/3500), shared_paths.json, READ_MAP.md; decisions.md entry with the quote. Self-check: JSON parses, typecheck, 315 vitest, 59 Godot tests.",
+      "commit": "fc01470"
     },
     {
       "id": "P0-023",
@@ -670,7 +673,8 @@
         "Standing rule (decisions.md 'Every area is built from real references'): every area or district build task in later phases depends on its area sheet in harness/design/areas/ and has an acceptance line comparing game shots with the reference board.",
         "From P0-015 (style bible): first phase starts with (1) stylised_b as the default look driven by the day clock, lookproof compare still passing; (2) after its gate, fold stylised and stylised_grime into stylised_b and remove their sets; (3) polish from the bible known gaps: night lamp pools at street_eye, dark asphalt patches at the night junction, painted boards instead of Label3D, an OFL Devanagari font, AI texture cards, real car, people and tree models; (4) area sheets (P0-035) before any area build; (5) streamed-city budgets from the architecture record; (6) optional: lookproof --approve for several sets.",
         "From P0-020: GAME.md still says no cinematic cutscenes (line 312) and describes the map as islands with a 7.2 km2 pilot; rewrite to the seamless city and cutscene runtime after archsignoff (P0-022 record). Per-system budgets into perf_budgets.json and TECH.md after sign-off.",
-        "From P0-035: area sheets in harness/design/areas/; ITO, Chandni Chowk galis, Jantar Mantar and Red Fort road views are thin on photos (low to medium confidence). Add a reference top-up task (Mapillary or street-view) before those areas are dressed."
+        "From P0-035: area sheets in harness/design/areas/; ITO, Chandni Chowk galis, Jantar Mantar and Red Fort road views are thin on photos (low to medium confidence). Add a reference top-up task (Mapillary or street-view) before those areas are dressed.",
+        "From P0-022 (first phase must include): perfbudget.mjs reads scene kind (city 2500/3500); set Jolt by name in project.godot; SimClock rework to C1; recentre world origin at first far bake; far district outlines and origins; stitch.mjs is island-only, retire or rewrite; CONSOLIDATE decisions.md (85 KB); car retune to 140 km/h; auto turn tune; collider chunk attach and deck joints."
       ],
       "created": "2026-11-10T13:04:46.154Z"
     },
