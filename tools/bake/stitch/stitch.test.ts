@@ -45,17 +45,55 @@ describe('district frames (X1)', () => {
     expect(layoutToWorld(file.layout, c.x, c.y + 1).z).toBeCloseTo(-1000, 9);
   });
 
-  it('has the districts of the bench at the offsets of layout C', () => {
-    expect(file.districts.map((d) => d.id)).toEqual(['cp', 'india_gate', 'chandni_chowk', 'laxmi_nagar']);
-    for (const d of file.districts) {
-      const o = draftOffset(file.layout, d.layoutBoxKm, d.layoutAnchor, d.origin);
+  it('places every district by the signed seamless method: pivot plus factor times the real vector from India Gate', () => {
+    // signed 2026-11-11 (P0-022): the centre block is at factor 1.0, far blocks at 0.5 (decisions.md "Architecture record (P0-022)")
+    const seamless = file as unknown as {
+      method: { pivot: { lat: number; lon: number; world: { x: number; z: number } }; centreFactor: number; farFactor: number };
+      blocks: { id: string; factor: number; frameOrigin: { lat: number; lon: number }; offset: { x: number; z: number } }[];
+      districts: (DistrictDef & { block: string })[];
+      planned: { id: string; block: string; origin: { lat: number; lon: number }; offset?: { x: number; z: number } }[];
+    };
+    const { pivot, centreFactor, farFactor } = seamless.method;
+    expect(centreFactor).toBe(1);
+    expect(farFactor).toBe(0.5);
+    const piv = projector(pivot);
+    const blockOf = (id: string) => seamless.blocks.find((b) => b.id === id) as { factor: number; frameOrigin: { lat: number; lon: number }; offset: { x: number; z: number } };
+    const want = (origin: { lat: number; lon: number }, factor: number) => {
+      const v = piv.toWorld(origin.lat, origin.lon);
+      return { x: pivot.world.x + factor * v.x, z: pivot.world.z + factor * v.z };
+    };
+    expect(seamless.districts.map((d) => d.id)).toEqual(['cp', 'india_gate', 'chandni_chowk', 'laxmi_nagar']);
+    for (const d of seamless.districts) {
+      expect(d.block).toBe('centre');
+      const o = want(d.origin, blockOf(d.block).factor);
       expect(Math.abs(o.x - d.offset.x)).toBeLessThan(0.06);
       expect(Math.abs(o.z - d.offset.z)).toBeLessThan(0.06);
-      // the anchor lands on the centre of the district's sketch box
-      const w = placer(d).toWorld(d.layoutAnchor.lat, d.layoutAnchor.lon);
-      const c = layoutToWorld(file.layout, d.layoutBoxKm[0] + d.layoutBoxKm[2] / 2, d.layoutBoxKm[1] + d.layoutBoxKm[3] / 2);
-      expect(Math.hypot(w.x - c.x, w.z - c.z)).toBeLessThan(0.1);
+      expect(d.heightOffset).toBe(0);
     }
+    for (const b of seamless.blocks) {
+      const o = want(b.frameOrigin, b.factor);
+      expect(Math.abs(o.x - b.offset.x)).toBeLessThan(0.06);
+      expect(Math.abs(o.z - b.offset.z)).toBeLessThan(0.06);
+    }
+    for (const p of seamless.planned.filter((q) => q.offset)) {
+      const o = want(p.origin, blockOf(p.block).factor);
+      expect(Math.hypot(o.x - (p.offset as { x: number }).x, o.z - (p.offset as { z: number }).z)).toBeLessThan(0.1);
+    }
+    // centre gate: every pair of centre districts keeps its real bearing within 0.5 degrees and its real distance within 0.5%
+    const centre = seamless.districts;
+    for (let i = 0; i < centre.length; i++) {
+      for (let j = i + 1; j < centre.length; j++) {
+        const a = centre[i] as DistrictDef;
+        const b = centre[j] as DistrictDef;
+        const pair = layoutPair({ name: a.id, geo: a.origin, world: placer(a).toWorld(a.origin.lat, a.origin.lon) }, { name: b.id, geo: b.origin, world: placer(b).toWorld(b.origin.lat, b.origin.lon) });
+        expect(pair.bearingErrorDeg).toBeLessThan(0.5);
+        expect(pair.errorM / pair.realM).toBeLessThan(0.005);
+      }
+    }
+    // the island draft of layout C is gone: draftOffset no longer gives the placement of Connaught Place
+    const cp = def('cp');
+    const draft = draftOffset(file.layout, cp.layoutBoxKm, cp.layoutAnchor, cp.origin);
+    expect(Math.hypot(draft.x - cp.offset.x, draft.z - cp.offset.z)).toBeGreaterThan(100);
   });
 
   it('places by translation only: no rotation, no scale, no mirror, north is -Z', () => {

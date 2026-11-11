@@ -1,6 +1,6 @@
 # Architecture options
 
-Written by the planner in Phase 0 (mode ARCH_DISCOVERY). Draft 1 (P0-010, 2026-11-10) held estimates. This is draft 2 (P0-020, 2026-11-11): the benches P0-016 to P0-019 and P0-029 have run, the estimates are replaced by measured numbers, and every wrong estimate is marked. Nothing here is decided until Anmol signs off with `task.mjs archsignoff "<his words>"`.
+Written by the planner in Phase 0 (mode ARCH_DISCOVERY). Draft 1 (P0-010, 2026-11-10) held estimates. This is draft 2 (P0-020, 2026-11-11): the benches P0-016 to P0-019 and P0-029 have run, the estimates are replaced by measured numbers, and every wrong estimate is marked. Signed by Anmol on 2026-11-11 with every recommendation below (see "Sign-off"). This file stays as the measured comparison; the binding design is in TECH.md, docs/ARCHITECTURE.md, MAP_REPAIR.md and DELHI_WORLD.md.
 
 ## Summary for Anmol
 
@@ -649,4 +649,4 @@ For architecture round 2. Each has a recommended answer.
 
 ## Sign-off
 
-Not signed. Quote and date go here and in decisions.md (`task.mjs archsignoff "<his words>"`).
+Signed 2026-11-11 by Anmol: "Yes, I sign off on the architecture." His round 2 answers took every recommended answer: (1) clipper2-ts and earcut allowed in the map tool only; (2) city draw calls warn 2,500 and fail 3,500, look test scenes keep 600 and 1,000; (3) top speed 140 km/h, gears retuned in the first driving phase; (4) the centre at true scale and the far south at 0.5 of real distance; (5) a simple jaw now, lip sync and faces once voices exist, Hinglish and English subtitles from the start; (6) building heights from area profiles, landmarks by hand. Recorded in decisions.md "Architecture answers, round 2", "architecture signed off by Anmol" and "Architecture record (P0-022)".

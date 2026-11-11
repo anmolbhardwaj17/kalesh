@@ -14,6 +14,9 @@
   },
   "devDependencies": {
     "@duckdb/node-api": "^2.0.0-r.1",
+    "@types/earcut": "^3.0.0",
+    "clipper2-ts": "^2.0.1-19",
+    "earcut": "^3.2.4",
     "geotiff": "^3.0.5",
     "playwright": "^1.65.0",
     "sharp": "^0.35.5",

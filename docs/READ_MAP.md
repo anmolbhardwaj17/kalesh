@@ -41,17 +41,46 @@ Notes: `harness/state/knowledge/assets-and-ingest.md`
 
 ## Driving and camera
 Notes: `harness/state/knowledge/driving-and-camera.md` (create on first gotcha)
-- ARCH: "Systems" (Driving).
-- TECH: "Main loop and time", "Coordinates (binding, owner 2026-11-10)".
+- ARCH: "Systems" (Driving), "Target module map" (rows `core/`, `vehicles/`, `camera/`).
+- TECH: "Main loop and time (C1)", "Coordinates (binding, owner 2026-11-10)", "Vehicles (V2)", "Performance budgets" (CPU rows physics and vehicles).
 - GAME: "Movement and camera feel".
-- Source: `game/scripts/car_model.gd`, `car.gd`, `chase_camera.gd`, `game/tests/test_car.gd`. Bench versions of the clock, both vehicle options, the walker with its step-up and the colliders: `game/bench/physics/` (P0-017, `--arch=physics`; results in decisions.md "Physics bench results (P0-017)").
+- Source: `game/scripts/car_model.gd`, `car.gd`, `chase_camera.gd`, `game/tests/test_car.gd`; planned `game/vehicles/`, `game/camera/`, tunes in `game/data/vehicles/`. Bench versions of the clock, both vehicle options, the walker with its step-up and the colliders: `game/bench/physics/` (P0-017, `--arch=physics`; results in decisions.md "Physics bench results (P0-017)").
 
 ## World, map data and bake
 Notes: `harness/state/knowledge/world-and-map.md` (create on first gotcha)
-- TECH: "Coordinates (binding, owner 2026-11-10)" and the world sections written after the architecture sign-off.
-- Design: `harness/design/MAP_REPAIR.md` (all), `harness/design/DELHI_WORLD.md` (section 0 composite map, 1 landmarks, 2 area profiles, 10 pipeline choices: read the section for your task), `harness/design/ARCH_OPTIONS.md` (the rows for your system by option id, "Budgets per system", "Bench tasks"; a draft until the architecture sign-off).
-- Data (each once added): `harness/data/districts.json` and `harness/data/districts/`, `harness/data/connectors/`, `harness/data/overrides/`, `harness/data/hero_roads/`, `harness/data/landmarks/`, `harness/data/areas/`. Source data downloads live in the gitignored `data/` folder with `data/SOURCES.json`.
+- ARCH: "Target module map" (the bake and tools table).
+- TECH: "Coordinates (binding, owner 2026-11-10)", "World layout (signed 2026-11-11)", "Tile format (T1, `KTL1`)", "World pipeline (offline bake)".
+- Design: `harness/design/MAP_REPAIR.md` (the sections for your task: "Pipeline", "District frames and stitching", "Connector format", "Rule engine", "Auto-repair bounds", "Elevation solver", "Lane-level road model", "Hero roads", "Junction mesh builder", "Terrain that fits the roads", "Verification"), `harness/design/DELHI_WORLD.md` (section 0 the signed map, 1 landmarks, 2 area profiles and 2a the pilot area sheets, 10 the signed pipeline), `harness/design/ARCH_OPTIONS.md` (the measured rows for your system by id, for the numbers behind a choice).
+- Data (each once added): `harness/data/districts.json` (signed: blocks, method, focus and planned districts, corridors) and `harness/data/districts/`, `harness/data/connectors/`, `harness/data/overrides/`, `harness/data/hero_roads/`, `harness/data/landmarks/`, `harness/data/areas/`. Source data downloads live in the gitignored `data/` folder with `data/SOURCES.json`.
 - Source: `tools/geo/` (the reference projection and its tests), its Godot port `game/geo/projection.gd` with `game/tests/test_projection.gd` and the fixture `harness/data/fixtures/projection_points.json`, the offline bake under `tools/bake/` (rules in `tools/bake/rules/`, tests beside the code), the data bench drivers `harness/bench/pilot_data/` (`fetch.mjs`, `census.mjs`, `tiles.mjs`, boxes in `harness/bench/pilot_areas.json`), the tile bench scene `game/bench/tiles/` (`--arch=tiles`) with the T1 reader `tile_t1.gd`; other Godot bench scenes under `game/bench/<name>/` (game arg `--arch=<name>`). Results of the data bench: decisions.md "Pilot data bench results (P0-018)". The lane-level road model prototype: `tools/bake/roads/` (tests `roads.test.ts`), driver `harness/bench/roads.mjs`, scene `game/bench/roads/` (`--arch=roads:ito|cp`), hero road specs `harness/data/hero_roads/`; results: decisions.md "Road prototype results (P0-019)". The composite map stitch prototype: `tools/bake/stitch/` (tests `stitch.test.ts`), drivers `harness/bench/stitch.mjs` and `harness/bench/stitch_draft.mjs`, scene `game/bench/stitch/` (`--arch=stitch`), data `harness/data/districts.json`, `harness/data/districts/`, `harness/data/connectors/`; results: decisions.md "Map stitch results (P0-029)".
+
+## Streaming and world runtime
+Notes: `harness/state/knowledge/world-runtime.md` (create on first gotcha)
+- ARCH: "Target module map" (rows `world/streaming/`, `world/systems/`, `geo/`, `world/tiles/`).
+- TECH: "World layout (signed 2026-11-11)", "Tile format (T1, `KTL1`)", "Streaming (ST1, TL1)", "Rendering of the city (I3, LD1, OC2, TX1)", "Performance budgets".
+- Budgets: `harness/verify/perf_budgets.json` blocks `systems`, `world`, `streaming`, `scenes.city`.
+- Source: planned `game/world/`; today the bench readers `game/bench/tiles/tile_t1.gd` (`--arch=tiles`), `game/bench/render/` (`--arch=render`), `game/bench/stitch/` (`--arch=stitch`).
+
+## Characters, AI and combat
+Notes: `harness/state/knowledge/characters-ai-combat.md` (create on first gotcha)
+- ARCH: "Target module map" (rows `characters/`, `ai/`, `combat/`).
+- TECH: "On foot and combat (F1, CB1)", "Characters, crowds and navigation (N1, AN2, AL1)", "Performance budgets" (CPU rows).
+- GAME: "Player verbs", "Combat and on foot", "Police and wanted", "Civilians and violence".
+- Source: planned `game/characters/`, `game/ai/`, `game/combat/`; bench versions in `game/bench/physics/` (`walker.gd`, `ragdoll.gd`, `t_combat.gd`, `t_agents.gd`, `t_traffic.gd`) and the crowd in `game/bench/render/crowd.gd`.
+
+## Story runtime (cutscenes, dialogue, subtitles)
+Notes: `harness/state/knowledge/story-runtime.md` (create on first gotcha)
+- ARCH: "Target module map" (rows `story/`, `missions/`, `data/`).
+- TECH: "Story runtime (CS2, DG1, LIP2 then LIP1, FC2, SB1, SK1)", "Save".
+- GAME: "Mission system", "Camera, presentation and UI". STORY_OUTLINE.md section 5 for the talk rules.
+- Source: planned `game/story/`, `game/missions/`, data in `game/data/cutscenes/` and `game/data/dialogue/`.
+
+## Map inspector
+Notes: `harness/state/knowledge/world-and-map.md`
+- ARCH: "Target module map" (row `inspector/`).
+- TECH: "Map inspector".
+- Design: `harness/design/MAP_REPAIR.md` "Map inspector (human in the loop)", "Overrides format", "Issue record"; `harness/design/DELHI_WORLD.md` "Map inspector: area view".
+- Source: planned `tools/inspector/`, served by `harness/bin/dashboard.mjs`; it reads the baked tiles and `issues.json` and writes `harness/data/overrides/` and the inbox.
 
 ## Old game reference (read only)
 - `/Users/apple/Desktop/code/delhi-drive`: never edit, build or install there. Read `harness/design/SALVAGE_AUDIT.md` first (written in Phase 0) instead of the old code.
