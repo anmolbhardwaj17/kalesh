@@ -1,0 +1,1035 @@
+{
+  "bench": "tile_format",
+  "writtenBy": "node harness/bench/pilot_data/tiles.mjs (bake and pack), which runs node harness/bench/arch.mjs tiles (scene game/bench/tiles/, --arch=tiles)",
+  "at": "2026-11-11T01:25:30.137Z",
+  "machine": "macbook-pro, darwin arm64, Apple M2 Pro, 12 cores, 16 GB",
+  "godotVersion": "4.7.2.stable.official.ed1daf0bf",
+  "renderer": "Forward+",
+  "gpuAdapter": "Apple M2 Pro (Apple8)",
+  "hostLoad": {
+    "avg1": 11.01,
+    "cores": 12,
+    "perCore": 0.92
+  },
+  "node": "v22.22.3",
+  "how": {
+    "content": "Stand-in geometry from the real pilot data in the district frame: a 12.5 m ground grid with heights from GEDTM30 smoothed over 60 m, one ribbon per road segment at its class or tagged width, one extruded prism per building (Overture footprints (BS1); height from the tag, else levels times 3.2 m, else 9 m), and 16 collider chunks per 250 m tile (62.5 m cells) holding every surface and shell triangle. Vertices are relative to the tile origin. The final tiles (lane model, area generator, modules) will be heavier; the format comparison holds because every format carries the same arrays.",
+    "formats": "T1: our binary tile (a JSON header plus float32 and uint32 arrays), read by GDScript on a WorkerThreadPool thread with one packed-array call per array. T2: the same nodes saved as a Godot .res (a PackedScene) by a headless Godot pack script, loaded with ResourceLoader.load_threaded_request and instantiated on a worker thread. T3: a .glb (one mesh node per material, collider chunks as col_* mesh nodes) loaded with GLTFDocument on a worker thread, the col_* meshes turned into trimesh shapes there.",
+    "godot": "One game run per setup on Jolt Physics, Metal, CPU times only. Memory first: 8 copies of the tile (4 for the 500 m cases) are loaded and kept, and the growth of the process (ps) and of the engine counters is divided by the copies. Then 20 timed loads after one warm-up load: the load runs off the main thread (threadMs is the work on worker threads, requestToReadyMs the wall time until the nodes exist), the main thread attaches the meshes in one step and then one collider chunk per frame (attach step times are around the add_child calls), and frame times are recorded while loading and while attaching against idle frames. Read a worst frame against the idle frame of the same run (frames.idle): when the display caps the window at 120 fps an idle frame is 8.3 ms, when it does not it is under 1 ms. Files are in the OS file cache after the first load.",
+    "worstFrame": "The window was not capped by the display in these runs: an idle frame is 0.5 to 1.7 ms at the median, and single idle frames reach 4 to 22 ms with nothing loading (idleFrameMs.max). So a worst frame is read against the idle frames of the same run, and the firm number for hitches is worstMainThreadStepMs: the longest single attach step on the main thread.",
+    "bake": "bakeMs is the median of 5 runs in Node 22 on this machine: the shared content build plus the encode of that format (for T2 plus the Godot pack of the tile)."
+  },
+  "tiles": {
+    "dense": {
+      "district": "chandni_chowk",
+      "tx": 1,
+      "tz": 1,
+      "buildings": 601,
+      "roadM": 925,
+      "vertices": 22341,
+      "triangles": 7447,
+      "colliderTriangles": 7447,
+      "colliderChunks": 16,
+      "placements": 0,
+      "origin": [
+        250,
+        224,
+        250
+      ]
+    },
+    "open": {
+      "district": "india_gate",
+      "tx": 1,
+      "tz": -1,
+      "buildings": 2,
+      "roadM": 373,
+      "vertices": 2604,
+      "triangles": 868,
+      "colliderTriangles": 868,
+      "colliderChunks": 16,
+      "placements": 0,
+      "origin": [
+        250,
+        210,
+        -250
+      ]
+    },
+    "square500": {
+      "district": "chandni_chowk",
+      "tx": 0,
+      "tz": 0,
+      "size": 500,
+      "vertices": 78231,
+      "triangles": 26077,
+      "colliderTriangles": 26077,
+      "colliderChunks": 64,
+      "placements": 0,
+      "the250mTiles": [
+        {
+          "tx": 0,
+          "tz": 0,
+          "triangles": 6608,
+          "colliderChunks": 16
+        },
+        {
+          "tx": 1,
+          "tz": 0,
+          "triangles": 5084,
+          "colliderChunks": 16
+        },
+        {
+          "tx": 0,
+          "tz": 1,
+          "triangles": 6938,
+          "colliderChunks": 16
+        },
+        {
+          "tx": 1,
+          "tz": 1,
+          "triangles": 7447,
+          "colliderChunks": 16
+        }
+      ]
+    }
+  },
+  "formats": {
+    "dense": {
+      "T1": {
+        "option": "T1",
+        "case": "dense250",
+        "format": "t1",
+        "tiles": 1,
+        "fileBytes": 894908,
+        "fileMB": 0.853,
+        "bakeMs": 22.38,
+        "bakeParts": {
+          "contentMs": 18.63,
+          "encodeMs": 3.75
+        },
+        "loadOffMainThreadMs": {
+          "max": 1.491,
+          "mean": 1.0724,
+          "n": 20,
+          "p50": 1.038,
+          "p95": 1.149
+        },
+        "requestToReadyMs": {
+          "max": 2.208,
+          "mean": 1.8668,
+          "n": 20,
+          "p50": 1.848,
+          "p95": 2.2
+        },
+        "instantiateMs": null,
+        "attachMs": {
+          "max": 4.708,
+          "mean": 4.5653,
+          "n": 20,
+          "p50": 4.592,
+          "p95": 4.701
+        },
+        "attachMeshStepMs": {
+          "max": 0.192,
+          "mean": 0.1751,
+          "n": 20,
+          "p50": 0.175,
+          "p95": 0.19
+        },
+        "attachChunkStepMs": {
+          "max": 0.488,
+          "mean": 0.2744,
+          "n": 320,
+          "p50": 0.273,
+          "p95": 0.344
+        },
+        "worstFrameWhileAttachingMs": 3.225,
+        "frameP95WhileAttachingMs": 2.384,
+        "frameP50WhileAttachingMs": 1.871,
+        "worstFrameWhileLoadingMs": 3.363,
+        "frameP95WhileLoadingMs": 2.231,
+        "idleFrameMs": {
+          "p50": 2.149,
+          "p95": 2.643,
+          "max": 24.475
+        },
+        "worstMainThreadStepMs": 0.488,
+        "worstFrameReading": "no hitch: the worst frame while attaching is no longer than the worst idle frame of the same run",
+        "memoryMBPerTileSet": {
+          "process": 0.85,
+          "engineStatic": 0.614,
+          "renderBuffers": 0.469,
+          "copies": 8
+        },
+        "counts": {
+          "colliderChunks": 16,
+          "colliderTriangles": 7447,
+          "placements": 0,
+          "triangles": 7447
+        },
+        "engineErrorLines": 0,
+        "shot": "harness/reports/arch/tiles/t1_dense.png",
+        "hostLoad": {
+          "before": {
+            "avg1": 8.92,
+            "cores": 12,
+            "perCore": 0.74
+          },
+          "after": {
+            "avg1": 11.01,
+            "cores": 12,
+            "perCore": 0.92
+          }
+        }
+      },
+      "T2": {
+        "option": "T2",
+        "case": "dense250",
+        "format": "t2",
+        "tiles": 1,
+        "fileBytes": 765223,
+        "fileMB": 0.73,
+        "bakeMs": 36.27,
+        "bakeParts": {
+          "contentMs": 18.63,
+          "encodeT1Ms": 3.75,
+          "godotPackMs": 13.89,
+          "note": "the pack reads the T1 tile in a headless Godot process, which also takes about a second to start (pack.process.wallMs)"
+        },
+        "loadOffMainThreadMs": {
+          "max": 10.306,
+          "mean": 3.8084,
+          "n": 20,
+          "p50": 3.316,
+          "p95": 5.506
+        },
+        "requestToReadyMs": {
+          "max": 26.21,
+          "mean": 5.7758,
+          "n": 20,
+          "p50": 4.741,
+          "p95": 7.529
+        },
+        "instantiateMs": {
+          "max": 0.222,
+          "mean": 0.1275,
+          "n": 20,
+          "p50": 0.112,
+          "p95": 0.18
+        },
+        "attachMs": {
+          "max": 4.204,
+          "mean": 4.0767,
+          "n": 20,
+          "p50": 4.065,
+          "p95": 4.188
+        },
+        "attachMeshStepMs": {
+          "max": 0.036,
+          "mean": 0.0222,
+          "n": 20,
+          "p50": 0.021,
+          "p95": 0.027
+        },
+        "attachChunkStepMs": {
+          "max": 0.447,
+          "mean": 0.2534,
+          "n": 320,
+          "p50": 0.253,
+          "p95": 0.346
+        },
+        "worstFrameWhileAttachingMs": 16.787,
+        "frameP95WhileAttachingMs": 2.423,
+        "frameP50WhileAttachingMs": 1.705,
+        "worstFrameWhileLoadingMs": 7.944,
+        "frameP95WhileLoadingMs": 2.277,
+        "idleFrameMs": {
+          "p50": 1.839,
+          "p95": 2.351,
+          "max": 18.707
+        },
+        "worstMainThreadStepMs": 0.447,
+        "worstFrameReading": "no hitch: the worst frame while attaching is no longer than the worst idle frame of the same run",
+        "memoryMBPerTileSet": {
+          "process": 1.18,
+          "engineStatic": 0.621,
+          "renderBuffers": 0.469,
+          "copies": 8
+        },
+        "counts": {
+          "colliderChunks": 16,
+          "colliderTriangles": 7447,
+          "placements": 0,
+          "triangles": 7447
+        },
+        "engineErrorLines": 0,
+        "shot": "harness/reports/arch/tiles/t2_dense.png",
+        "hostLoad": {
+          "before": {
+            "avg1": 4.63,
+            "cores": 12,
+            "perCore": 0.39
+          },
+          "after": {
+            "avg1": 5.38,
+            "cores": 12,
+            "perCore": 0.45
+          }
+        }
+      },
+      "T3": {
+        "option": "T3",
+        "case": "dense250",
+        "format": "t3",
+        "tiles": 1,
+        "fileBytes": 993608,
+        "fileMB": 0.948,
+        "bakeMs": 26.15,
+        "bakeParts": {
+          "contentMs": 18.63,
+          "encodeMs": 7.52
+        },
+        "loadOffMainThreadMs": {
+          "max": 48.511,
+          "mean": 34.5758,
+          "n": 20,
+          "p50": 33.706,
+          "p95": 39.72
+        },
+        "requestToReadyMs": {
+          "max": 49.584,
+          "mean": 37.1038,
+          "n": 20,
+          "p50": 35.631,
+          "p95": 46.576
+        },
+        "instantiateMs": null,
+        "attachMs": {
+          "max": 4.532,
+          "mean": 4.2591,
+          "n": 20,
+          "p50": 4.213,
+          "p95": 4.508
+        },
+        "attachMeshStepMs": {
+          "max": 0.222,
+          "mean": 0.1059,
+          "n": 20,
+          "p50": 0.041,
+          "p95": 0.211
+        },
+        "attachChunkStepMs": {
+          "max": 0.378,
+          "mean": 0.2596,
+          "n": 320,
+          "p50": 0.263,
+          "p95": 0.332
+        },
+        "worstFrameWhileAttachingMs": 15.631,
+        "frameP95WhileAttachingMs": 6.878,
+        "frameP50WhileAttachingMs": 1.322,
+        "worstFrameWhileLoadingMs": 8.297,
+        "frameP95WhileLoadingMs": 2.916,
+        "idleFrameMs": {
+          "p50": 1.553,
+          "p95": 3.629,
+          "max": 21.583
+        },
+        "worstMainThreadStepMs": 0.378,
+        "worstFrameReading": "no hitch: the worst frame while attaching is no longer than the worst idle frame of the same run",
+        "memoryMBPerTileSet": {
+          "process": 5.4,
+          "engineStatic": 0.653,
+          "renderBuffers": 0.299,
+          "copies": 8
+        },
+        "counts": {
+          "colliderChunks": 16,
+          "colliderTriangles": 7447,
+          "placements": 0,
+          "triangles": 7447
+        },
+        "engineErrorLines": 0,
+        "shot": "harness/reports/arch/tiles/t3_dense.png",
+        "hostLoad": {
+          "before": {
+            "avg1": 10.55,
+            "cores": 12,
+            "perCore": 0.88
+          },
+          "after": {
+            "avg1": 10.19,
+            "cores": 12,
+            "perCore": 0.85
+          }
+        }
+      }
+    },
+    "open": {
+      "T1": {
+        "option": "T1",
+        "case": "open250",
+        "format": "t1",
+        "tiles": 1,
+        "fileBytes": 105388,
+        "fileMB": 0.101,
+        "bakeMs": 3.56,
+        "bakeParts": {
+          "contentMs": 3.25,
+          "encodeMs": 0.31
+        },
+        "loadOffMainThreadMs": {
+          "max": 0.944,
+          "mean": 0.4606,
+          "n": 20,
+          "p50": 0.45,
+          "p95": 0.553
+        },
+        "requestToReadyMs": {
+          "max": 7.289,
+          "mean": 1.91,
+          "n": 20,
+          "p50": 1.813,
+          "p95": 2.498
+        },
+        "instantiateMs": null,
+        "attachMs": {
+          "max": 0.894,
+          "mean": 0.8242,
+          "n": 20,
+          "p50": 0.844,
+          "p95": 0.893
+        },
+        "attachMeshStepMs": {
+          "max": 0.161,
+          "mean": 0.1234,
+          "n": 20,
+          "p50": 0.12,
+          "p95": 0.158
+        },
+        "attachChunkStepMs": {
+          "max": 0.116,
+          "mean": 0.0438,
+          "n": 320,
+          "p50": 0.041,
+          "p95": 0.06
+        },
+        "worstFrameWhileAttachingMs": 16.473,
+        "frameP95WhileAttachingMs": 2.298,
+        "frameP50WhileAttachingMs": 1.545,
+        "worstFrameWhileLoadingMs": 7.023,
+        "frameP95WhileLoadingMs": 2.71,
+        "idleFrameMs": {
+          "p50": 1.347,
+          "p95": 4.626,
+          "max": 7.659
+        },
+        "worstMainThreadStepMs": 0.161,
+        "worstFrameReading": "the worst frame while attaching (16.473 ms) is longer than the worst idle frame (7.659 ms), while the longest attach step on the main thread is 0.16 ms: the rest is frame jitter of the window, not attach work",
+        "memoryMBPerTileSet": {
+          "process": 0.5,
+          "engineStatic": 0.388,
+          "renderBuffers": 0.055,
+          "copies": 8
+        },
+        "counts": {
+          "colliderChunks": 16,
+          "colliderTriangles": 868,
+          "placements": 0,
+          "triangles": 868
+        },
+        "engineErrorLines": 0,
+        "shot": "harness/reports/arch/tiles/t1_open.png",
+        "hostLoad": {
+          "before": {
+            "avg1": 10.19,
+            "cores": 12,
+            "perCore": 0.85
+          },
+          "after": {
+            "avg1": 9.77,
+            "cores": 12,
+            "perCore": 0.81
+          }
+        }
+      },
+      "T2": {
+        "option": "T2",
+        "case": "open250",
+        "format": "t2",
+        "tiles": 1,
+        "fileBytes": 94169,
+        "fileMB": 0.09,
+        "bakeMs": 6.17,
+        "bakeParts": {
+          "contentMs": 3.25,
+          "encodeT1Ms": 0.31,
+          "godotPackMs": 2.61,
+          "note": "the pack reads the T1 tile in a headless Godot process, which also takes about a second to start (pack.process.wallMs)"
+        },
+        "loadOffMainThreadMs": {
+          "max": 5.078,
+          "mean": 3.6594,
+          "n": 20,
+          "p50": 3.789,
+          "p95": 4.889
+        },
+        "requestToReadyMs": {
+          "max": 7.745,
+          "mean": 5.2511,
+          "n": 20,
+          "p50": 5.519,
+          "p95": 6.804
+        },
+        "instantiateMs": {
+          "max": 0.125,
+          "mean": 0.1069,
+          "n": 20,
+          "p50": 0.104,
+          "p95": 0.124
+        },
+        "attachMs": {
+          "max": 0.749,
+          "mean": 0.6665,
+          "n": 20,
+          "p50": 0.67,
+          "p95": 0.71
+        },
+        "attachMeshStepMs": {
+          "max": 0.023,
+          "mean": 0.0168,
+          "n": 20,
+          "p50": 0.016,
+          "p95": 0.021
+        },
+        "attachChunkStepMs": {
+          "max": 0.088,
+          "mean": 0.0406,
+          "n": 320,
+          "p50": 0.039,
+          "p95": 0.064
+        },
+        "worstFrameWhileAttachingMs": 20.45,
+        "frameP95WhileAttachingMs": 2.475,
+        "frameP50WhileAttachingMs": 1.81,
+        "worstFrameWhileLoadingMs": 3.489,
+        "frameP95WhileLoadingMs": 2.49,
+        "idleFrameMs": {
+          "p50": 1.739,
+          "p95": 2.296,
+          "max": 3.197
+        },
+        "worstMainThreadStepMs": 0.088,
+        "worstFrameReading": "the worst frame while attaching (20.45 ms) is longer than the worst idle frame (3.197 ms), while the longest attach step on the main thread is 0.09 ms: the rest is frame jitter of the window, not attach work",
+        "memoryMBPerTileSet": {
+          "process": 0.65,
+          "engineStatic": 0.395,
+          "renderBuffers": 0.055,
+          "copies": 8
+        },
+        "counts": {
+          "colliderChunks": 16,
+          "colliderTriangles": 868,
+          "placements": 0,
+          "triangles": 868
+        },
+        "engineErrorLines": 0,
+        "shot": "harness/reports/arch/tiles/t2_open.png",
+        "hostLoad": {
+          "before": {
+            "avg1": 5.38,
+            "cores": 12,
+            "perCore": 0.45
+          },
+          "after": {
+            "avg1": 5.67,
+            "cores": 12,
+            "perCore": 0.47
+          }
+        }
+      },
+      "T3": {
+        "option": "T3",
+        "case": "open250",
+        "format": "t3",
+        "tiles": 1,
+        "fileBytes": 124372,
+        "fileMB": 0.119,
+        "bakeMs": 3.73,
+        "bakeParts": {
+          "contentMs": 3.25,
+          "encodeMs": 0.48
+        },
+        "loadOffMainThreadMs": {
+          "max": 50.606,
+          "mean": 32.1263,
+          "n": 20,
+          "p50": 30.414,
+          "p95": 49.56
+        },
+        "requestToReadyMs": {
+          "max": 50.772,
+          "mean": 33.4333,
+          "n": 20,
+          "p50": 30.806,
+          "p95": 49.772
+        },
+        "instantiateMs": null,
+        "attachMs": {
+          "max": 1.017,
+          "mean": 0.9203,
+          "n": 20,
+          "p50": 0.908,
+          "p95": 1.005
+        },
+        "attachMeshStepMs": {
+          "max": 0.22,
+          "mean": 0.171,
+          "n": 20,
+          "p50": 0.179,
+          "p95": 0.215
+        },
+        "attachChunkStepMs": {
+          "max": 0.097,
+          "mean": 0.0468,
+          "n": 320,
+          "p50": 0.045,
+          "p95": 0.066
+        },
+        "worstFrameWhileAttachingMs": 19.079,
+        "frameP95WhileAttachingMs": 7.54,
+        "frameP50WhileAttachingMs": 1.14,
+        "worstFrameWhileLoadingMs": 16.15,
+        "frameP95WhileLoadingMs": 7.111,
+        "idleFrameMs": {
+          "p50": 1.593,
+          "p95": 2.806,
+          "max": 7.947
+        },
+        "worstMainThreadStepMs": 0.22,
+        "worstFrameReading": "the worst frame while attaching (19.079 ms) is longer than the worst idle frame (7.947 ms), while the longest attach step on the main thread is 0.22 ms: the rest is frame jitter of the window, not attach work",
+        "memoryMBPerTileSet": {
+          "process": 0.94,
+          "engineStatic": 0.427,
+          "renderBuffers": 0.035,
+          "copies": 8
+        },
+        "counts": {
+          "colliderChunks": 16,
+          "colliderTriangles": 868,
+          "placements": 0,
+          "triangles": 868
+        },
+        "engineErrorLines": 0,
+        "shot": "harness/reports/arch/tiles/t3_open.png",
+        "hostLoad": {
+          "before": {
+            "avg1": 9.77,
+            "cores": 12,
+            "perCore": 0.81
+          },
+          "after": {
+            "avg1": 9.54,
+            "cores": 12,
+            "perCore": 0.8
+          }
+        }
+      }
+    }
+  },
+  "tileSize": {
+    "how": "The same 500 m square of Chandni Chowk as one 500 m T1 tile (ST2) and as four 250 m T1 tiles loaded one after another (ST1). Numbers are per set: the whole square.",
+    "t1_500": {
+      "option": "ST2",
+      "case": "dense500",
+      "format": "t1",
+      "tiles": 1,
+      "fileBytes": 3132972,
+      "fileMB": 2.988,
+      "bakeMs": 46.74,
+      "bakeParts": {
+        "contentMs": 35.81,
+        "encodeMs": 10.93
+      },
+      "loadOffMainThreadMs": {
+        "max": 3.589,
+        "mean": 3.2711,
+        "n": 20,
+        "p50": 3.301,
+        "p95": 3.547
+      },
+      "requestToReadyMs": {
+        "max": 6.129,
+        "mean": 4.3511,
+        "n": 20,
+        "p50": 4.147,
+        "p95": 5.627
+      },
+      "instantiateMs": null,
+      "attachMs": {
+        "max": 17.421,
+        "mean": 15.811,
+        "n": 20,
+        "p50": 15.64,
+        "p95": 17.282
+      },
+      "attachMeshStepMs": {
+        "max": 0.191,
+        "mean": 0.0816,
+        "n": 20,
+        "p50": 0.034,
+        "p95": 0.148
+      },
+      "attachChunkStepMs": {
+        "max": 1.201,
+        "mean": 0.2458,
+        "n": 1280,
+        "p50": 0.256,
+        "p95": 0.33
+      },
+      "worstFrameWhileAttachingMs": 21.249,
+      "frameP95WhileAttachingMs": 2.558,
+      "frameP50WhileAttachingMs": 1.633,
+      "worstFrameWhileLoadingMs": 3.102,
+      "frameP95WhileLoadingMs": 2.139,
+      "idleFrameMs": {
+        "p50": 1.711,
+        "p95": 2.271,
+        "max": 19.855
+      },
+      "worstMainThreadStepMs": 1.201,
+      "worstFrameReading": "no hitch: the worst frame while attaching is no longer than the worst idle frame of the same run",
+      "memoryMBPerTileSet": {
+        "process": 5.71,
+        "engineStatic": 1.813,
+        "renderBuffers": 1.77,
+        "copies": 4
+      },
+      "counts": {
+        "colliderChunks": 64,
+        "colliderTriangles": 26077,
+        "placements": 0,
+        "triangles": 26077
+      },
+      "engineErrorLines": 0,
+      "shot": "harness/reports/arch/tiles/t1_500.png",
+      "hostLoad": {
+        "before": {
+          "avg1": 9.54,
+          "cores": 12,
+          "perCore": 0.8
+        },
+        "after": {
+          "avg1": 9.26,
+          "cores": 12,
+          "perCore": 0.77
+        }
+      }
+    },
+    "t1_250x4": {
+      "option": "ST1",
+      "case": "dense250x4",
+      "format": "t1",
+      "tiles": 4,
+      "fileBytes": 3134304,
+      "fileMB": 2.989,
+      "bakeMs": 44.5,
+      "bakeParts": {
+        "contentMs": 36.89,
+        "encodeMs": 7.61
+      },
+      "loadOffMainThreadMs": {
+        "max": 4.484,
+        "mean": 4.1271,
+        "n": 20,
+        "p50": 4.175,
+        "p95": 4.46
+      },
+      "requestToReadyMs": {
+        "max": 7.402,
+        "mean": 1.84,
+        "n": 80,
+        "p50": 1.654,
+        "p95": 2.947
+      },
+      "instantiateMs": null,
+      "attachMs": {
+        "max": 18.799,
+        "mean": 16.0498,
+        "n": 20,
+        "p50": 15.613,
+        "p95": 18.138
+      },
+      "attachMeshStepMs": {
+        "max": 0.2,
+        "mean": 0.0931,
+        "n": 80,
+        "p50": 0.08,
+        "p95": 0.172
+      },
+      "attachChunkStepMs": {
+        "max": 0.574,
+        "mean": 0.245,
+        "n": 1280,
+        "p50": 0.255,
+        "p95": 0.347
+      },
+      "worstFrameWhileAttachingMs": 19.439,
+      "frameP95WhileAttachingMs": 2.763,
+      "frameP50WhileAttachingMs": 1.098,
+      "worstFrameWhileLoadingMs": 21.847,
+      "frameP95WhileLoadingMs": 2.102,
+      "idleFrameMs": {
+        "p50": 0.909,
+        "p95": 7.136,
+        "max": 9.091
+      },
+      "worstMainThreadStepMs": 0.574,
+      "worstFrameReading": "the worst frame while attaching (19.439 ms) is longer than the worst idle frame (9.091 ms), while the longest attach step on the main thread is 0.57 ms: the rest is frame jitter of the window, not attach work",
+      "memoryMBPerTileSet": {
+        "process": 4.07,
+        "engineStatic": 1.89,
+        "renderBuffers": 1.641,
+        "copies": 4
+      },
+      "counts": {
+        "colliderChunks": 64,
+        "colliderTriangles": 26077,
+        "placements": 0,
+        "triangles": 26077
+      },
+      "engineErrorLines": 0,
+      "shot": "harness/reports/arch/tiles/t1_250x4.png",
+      "hostLoad": {
+        "before": {
+          "avg1": 9.26,
+          "cores": 12,
+          "perCore": 0.77
+        },
+        "after": {
+          "avg1": 8.76,
+          "cores": 12,
+          "perCore": 0.73
+        }
+      }
+    }
+  },
+  "placements": {
+    "how": "The dense tile again with facade module placements written into the tile (AG1): one transform per 3 m of wall per floor, read straight into a MultiMesh buffer.",
+    "t1_dense_placements": {
+      "option": "T1 (AG1)",
+      "case": "dense250p",
+      "format": "t1",
+      "tiles": 1,
+      "fileBytes": 1461024,
+      "fileMB": 1.393,
+      "bakeMs": 23.11,
+      "bakeParts": {
+        "contentMs": 19.1,
+        "encodeMs": 4.01
+      },
+      "loadOffMainThreadMs": {
+        "max": 1.301,
+        "mean": 1.169,
+        "n": 20,
+        "p50": 1.156,
+        "p95": 1.299
+      },
+      "requestToReadyMs": {
+        "max": 3.751,
+        "mean": 2.2519,
+        "n": 20,
+        "p50": 1.893,
+        "p95": 3.696
+      },
+      "instantiateMs": null,
+      "attachMs": {
+        "max": 5.851,
+        "mean": 5.2065,
+        "n": 20,
+        "p50": 5.162,
+        "p95": 5.704
+      },
+      "attachMeshStepMs": {
+        "max": 1.52,
+        "mean": 1.038,
+        "n": 20,
+        "p50": 0.947,
+        "p95": 1.44
+      },
+      "attachChunkStepMs": {
+        "max": 0.499,
+        "mean": 0.2605,
+        "n": 320,
+        "p50": 0.259,
+        "p95": 0.338
+      },
+      "worstFrameWhileAttachingMs": 20.858,
+      "frameP95WhileAttachingMs": 3.332,
+      "frameP50WhileAttachingMs": 1.473,
+      "worstFrameWhileLoadingMs": 1.875,
+      "frameP95WhileLoadingMs": 1.859,
+      "idleFrameMs": {
+        "p50": 1.728,
+        "p95": 2.535,
+        "max": 3.928
+      },
+      "worstMainThreadStepMs": 1.52,
+      "worstFrameReading": "the worst frame while attaching (20.858 ms) is longer than the worst idle frame (3.928 ms), while the longest attach step on the main thread is 1.52 ms: the rest is frame jitter of the window, not attach work",
+      "memoryMBPerTileSet": {
+        "process": 3.21,
+        "engineStatic": 2.248,
+        "renderBuffers": 1.009,
+        "copies": 8
+      },
+      "counts": {
+        "colliderChunks": 16,
+        "colliderTriangles": 7447,
+        "placements": 11793,
+        "triangles": 7447
+      },
+      "engineErrorLines": 0,
+      "shot": "harness/reports/arch/tiles/t1_dense_placements.png",
+      "hostLoad": {
+        "before": {
+          "avg1": 8.76,
+          "cores": 12,
+          "perCore": 0.73
+        },
+        "after": {
+          "avg1": 8.62,
+          "cores": 12,
+          "perCore": 0.72
+        }
+      }
+    },
+    "bytesPerPlacement": 48
+  },
+  "t2Pack": {
+    "process": {
+      "wallMs": 416,
+      "exit": 0
+    },
+    "tiles": {
+      "dense250": {
+        "ms": 13.89,
+        "bytes": 765223
+      },
+      "open250": {
+        "ms": 2.61,
+        "bytes": 94169
+      }
+    }
+  },
+  "bakeFiles": {
+    "dense250": {
+      "note": "the 250 m tile of Chandni Chowk with the most buildings (601)",
+      "bytes": {
+        "ktl": 894908,
+        "glb": 993608,
+        "res": 765223
+      },
+      "bakeMs": {
+        "content": 18.63,
+        "t1": 3.75,
+        "glb": 7.52,
+        "res": 13.89
+      },
+      "stats": {
+        "vertices": 22341,
+        "triangles": 7447,
+        "colliderTriangles": 7447,
+        "colliderChunks": 16,
+        "placements": 0
+      }
+    },
+    "open250": {
+      "note": "the India Gate 250 m tile with the fewest buildings that has roads (2 buildings, 373 m of road)",
+      "bytes": {
+        "ktl": 105388,
+        "glb": 124372,
+        "res": 94169
+      },
+      "bakeMs": {
+        "content": 3.25,
+        "t1": 0.31,
+        "glb": 0.48,
+        "res": 2.61
+      },
+      "stats": {
+        "vertices": 2604,
+        "triangles": 868,
+        "colliderTriangles": 868,
+        "colliderChunks": 16,
+        "placements": 0
+      }
+    },
+    "dense500": {
+      "note": "the 500 m tile around the dense tile",
+      "bytes": {
+        "ktl": 3132972
+      },
+      "bakeMs": {
+        "content": 35.81,
+        "t1": 10.93,
+        "glb": 0
+      },
+      "stats": {
+        "vertices": 78231,
+        "triangles": 26077,
+        "colliderTriangles": 26077,
+        "colliderChunks": 64,
+        "placements": 0
+      }
+    },
+    "dense250x4": {
+      "note": "the same 500 m square as four 250 m tiles",
+      "bytes": {
+        "ktl": 3134304
+      },
+      "bakeMs": {
+        "content": 36.89,
+        "t1": 7.61,
+        "glb": 0
+      },
+      "stats": {
+        "vertices": 78231,
+        "triangles": 26077,
+        "colliderTriangles": 26077,
+        "colliderChunks": 64,
+        "placements": 0
+      }
+    },
+    "dense250p": {
+      "note": "the dense tile with facade module placements",
+      "bytes": {
+        "ktl": 1461024
+      },
+      "bakeMs": {
+        "content": 19.1,
+        "t1": 4.01,
+        "glb": 0
+      },
+      "stats": {
+        "vertices": 22341,
+        "triangles": 7447,
+        "colliderTriangles": 7447,
+        "colliderChunks": 16,
+        "placements": 11793
+      }
+    }
+  },
+  "notMeasured": [
+    {
+      "id": "cold_disk",
+      "option": "T1, T2, T3",
+      "reason": "loads are measured with the files in the OS file cache; a cold read from disk was not measured (no way to drop the cache without sudo)",
+      "estimate": "adds the read of the file: under 5 ms for these sizes on an SSD"
+    },
+    {
+      "id": "tl3_loader_thread",
+      "option": "TL3",
+      "reason": "not a bench item (ARCH_OPTIONS.md lists no bench for it)",
+      "estimate": "no gain over the thread pool"
+    }
+  ]
+}

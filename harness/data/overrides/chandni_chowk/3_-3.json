@@ -1,0 +1,25 @@
+[
+  {
+    "id": "ov_chandni_chowk_0001",
+    "issue": "R-BRIDGE-01:way/264770688:node/938524424",
+    "action": "terminate",
+    "target": {
+      "ids": [
+        "way/264770688"
+      ],
+      "anchor": {
+        "lat": 28.6562739,
+        "lon": 77.2384467
+      },
+      "tolerance_m": 15
+    },
+    "params": {
+      "with": "abutment",
+      "kinds": "road"
+    },
+    "why": "Sample patch of the data bench: No road goes on from this end of the bridge: close it with an abutment and a barrier, or find the missing approach",
+    "by": "builder",
+    "source": "bench",
+    "date": "2026-11-11"
+  }
+]

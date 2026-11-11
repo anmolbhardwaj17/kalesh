@@ -1,0 +1,1959 @@
+{
+  "at": "2026-11-11T01:30:13.635Z",
+  "machine": "macbook-pro, darwin arm64, Apple M2 Pro, 12 cores, 16 GB",
+  "node": "v22.22.3",
+  "bench": "terrain_sources",
+  "writtenBy": "node harness/bench/pilot_data/census.mjs",
+  "how": "Every source is sampled by bilinear interpolation in WGS84. Heights are metres above the EGM2008 geoid in all three files. GS2: GLO-30 cells of each box (plus 150 m) are kept only when at most 10 percent of the cell lies under a building (5 by 5 points against the Overture footprints) and then a Gaussian surface (60 m) is fitted, dropping samples more than 1.5 m above the fit and fitting again (tools/bake/ground.ts fitGround). There is no surveyed truth here: FABDEM is the yardstick for the differences, and the roughness, step and outlier numbers judge each source on its own. Control points are centres of the largest OSM parks, pitches and lawns with no building within 40 m (5 per pilot district; a district with too few takes 15 m, then any lawn, and says so per point). Road profiles are the longest ground level ways of class tertiary and above (5 per pilot district), sampled every 15 m. Dense block lines are six east to west lines of 600 m through the 250 m cell with the most buildings in Chandni Chowk and in Laxmi Nagar.",
+  "sources": {
+    "gs1": {
+      "what": "GEDTM30 v1.2, read by bilinear interpolation",
+      "pinned": {
+        "file": "data/pilot/dem/gedtm30_pilot_window.json",
+        "url": "https://s3.opengeohub.org/global/dtm/v1.2/gedtm_rf_m_30m_s_20060101_20151231_go_epsg.4326.3855_v1.2.tif",
+        "sha256": "6658a8cb20ebb5e8b0d2bea22e6ad990abecc9d4e799207dc782e512738b6682",
+        "bytes": 1508079,
+        "date": "2026-11-11",
+        "note": "window of 348 x 274 cells cut from the global file with HTTP range requests (scale 1); sha256 is of the saved window, remote names the global file"
+      }
+    },
+    "gs2": {
+      "what": "Copernicus GLO-30 with the ground filter",
+      "pinned": {
+        "file": "data/pilot/dem/glo30_N28_E077.tif",
+        "url": "https://copernicus-dem-30m.s3.amazonaws.com/Copernicus_DSM_COG_10_N28_00_E077_00_DEM/Copernicus_DSM_COG_10_N28_00_E077_00_DEM.tif",
+        "sha256": "a8e69d432869bf85a63b7cfcaa61b5a770c7705125b3cfde9b892d65dfed98b4",
+        "bytes": 41680243,
+        "date": "2026-11-11",
+        "note": "Copernicus DEM GLO-30 Public, the 1 degree tile N28 E077 (a surface model: roofs and trees are in it)"
+      }
+    },
+    "gs3": {
+      "what": "FABDEM V1-2 (yardstick only)",
+      "pinned": {
+        "file": "data/pilot/dem/fabdem_N28E077.tif",
+        "url": "https://data.bris.ac.uk/datasets/s5hqmjcdj8yo2ibzi9b4ew3sn/N20E070-N30E080_FABDEM_V1-2.zip",
+        "sha256": "6764c2c6b277a4dfda138286aca880119a755c2a2f00b836c6b91db035775050",
+        "bytes": 15466352,
+        "date": "2026-11-11",
+        "note": "the entry N28E077_FABDEM_V1-2.tif read out of the 10 degree zip with byte range requests. Comparison only: never shipped, never baked into tiles"
+      }
+    }
+  },
+  "gs2Filter": {
+    "cp": {
+      "cells": 4176,
+      "openCells": 2410,
+      "openShare": 0.577,
+      "keptAfterFit": 1591,
+      "droppedAboveFit": 819
+    },
+    "india_gate": {
+      "cells": 4260,
+      "openCells": 3135,
+      "openShare": 0.736,
+      "keptAfterFit": 2016,
+      "droppedAboveFit": 1119
+    },
+    "ito": {
+      "cells": 6675,
+      "openCells": 4750,
+      "openShare": 0.712,
+      "keptAfterFit": 3297,
+      "droppedAboveFit": 1453
+    },
+    "chandni_chowk": {
+      "cells": 7455,
+      "openCells": 3876,
+      "openShare": 0.52,
+      "keptAfterFit": 2601,
+      "droppedAboveFit": 1275
+    },
+    "laxmi_nagar": {
+      "cells": 3705,
+      "openCells": 2152,
+      "openShare": 0.581,
+      "keptAfterFit": 1513,
+      "droppedAboveFit": 639
+    }
+  },
+  "controlPoints": {
+    "count": 20,
+    "differencesM": {
+      "gs1_minus_gs3": {
+        "n": 20,
+        "mean": 0.44,
+        "rms": 1.67,
+        "maxAbs": 4.33
+      },
+      "gs1s_minus_gs3": {
+        "n": 20,
+        "mean": 1.75,
+        "rms": 1.94,
+        "maxAbs": 3.27
+      },
+      "gs2_minus_gs3": {
+        "n": 20,
+        "mean": 1.44,
+        "rms": 1.65,
+        "maxAbs": 2.59
+      },
+      "gs1_minus_gs2": {
+        "n": 20,
+        "mean": -1.01,
+        "rms": 1.81,
+        "maxAbs": 5.61
+      },
+      "raw_minus_gs3": {
+        "n": 20,
+        "mean": 1.42,
+        "rms": 2.41,
+        "maxAbs": 6.99
+      }
+    },
+    "perDistrict": {
+      "cp": {
+        "gs1_minus_gs3": {
+          "n": 5,
+          "mean": 0.01,
+          "rms": 1.58,
+          "maxAbs": 3.02
+        },
+        "gs1s_minus_gs3": {
+          "n": 5,
+          "mean": 1.44,
+          "rms": 1.73,
+          "maxAbs": 2.77
+        },
+        "gs2_minus_gs3": {
+          "n": 5,
+          "mean": 1.99,
+          "rms": 2.02,
+          "maxAbs": 2.59
+        }
+      },
+      "india_gate": {
+        "gs1_minus_gs3": {
+          "n": 5,
+          "mean": 0.66,
+          "rms": 1.97,
+          "maxAbs": 4.33
+        },
+        "gs1s_minus_gs3": {
+          "n": 5,
+          "mean": 1.26,
+          "rms": 1.43,
+          "maxAbs": 2.12
+        },
+        "gs2_minus_gs3": {
+          "n": 5,
+          "mean": 1.13,
+          "rms": 1.43,
+          "maxAbs": 2.21
+        }
+      },
+      "ito": {
+        "gs1_minus_gs3": {
+          "n": 5,
+          "mean": 0.42,
+          "rms": 0.84,
+          "maxAbs": 1.39
+        },
+        "gs1s_minus_gs3": {
+          "n": 5,
+          "mean": 1.81,
+          "rms": 1.89,
+          "maxAbs": 2.39
+        },
+        "gs2_minus_gs3": {
+          "n": 5,
+          "mean": 1.46,
+          "rms": 1.55,
+          "maxAbs": 2.07
+        }
+      },
+      "chandni_chowk": {
+        "gs1_minus_gs3": {
+          "n": 5,
+          "mean": 0.66,
+          "rms": 2.01,
+          "maxAbs": 4.13
+        },
+        "gs1s_minus_gs3": {
+          "n": 5,
+          "mean": 2.48,
+          "rms": 2.55,
+          "maxAbs": 3.27
+        },
+        "gs2_minus_gs3": {
+          "n": 5,
+          "mean": 1.2,
+          "rms": 1.52,
+          "maxAbs": 2.41
+        }
+      }
+    },
+    "points": [
+      {
+        "district": "cp",
+        "osm": "way/80926762",
+        "kind": "leisure=stadium",
+        "areaM2": 11587,
+        "clearOfBuildingsM": 40,
+        "lat": 28.632615,
+        "lon": 77.21389,
+        "x": -274.7,
+        "z": -123.6,
+        "gs1": 211.74,
+        "gs1s": 216.25,
+        "gs2": 217.35,
+        "gs3": 214.76,
+        "raw": 215.09
+      },
+      {
+        "district": "cp",
+        "osm": "way/1301423172",
+        "kind": "leisure=park",
+        "areaM2": 1477,
+        "clearOfBuildingsM": 40,
+        "lat": 28.6347,
+        "lon": 77.216387,
+        "x": -30.6,
+        "z": -354.6,
+        "gs1": 216.07,
+        "gs1s": 217.87,
+        "gs2": 216.77,
+        "gs3": 215.1,
+        "raw": 215.91
+      },
+      {
+        "district": "cp",
+        "osm": "way/164675825",
+        "kind": "leisure=park",
+        "areaM2": 41393,
+        "clearOfBuildingsM": 15,
+        "lat": 28.632806,
+        "lon": 77.21971,
+        "x": 294.3,
+        "z": -144.7,
+        "gs1": 213.42,
+        "gs1s": 212.92,
+        "gs2": 214.66,
+        "gs3": 213.16,
+        "raw": 215.05
+      },
+      {
+        "district": "cp",
+        "osm": "way/700298283",
+        "kind": "leisure=park",
+        "areaM2": 21195,
+        "clearOfBuildingsM": 15,
+        "lat": 28.630942,
+        "lon": 77.211785,
+        "x": -480.6,
+        "z": 61.9,
+        "gs1": 216.34,
+        "gs1s": 217.47,
+        "gs2": 218.11,
+        "gs3": 215.98,
+        "raw": 218.33
+      },
+      {
+        "district": "cp",
+        "osm": "way/485053607",
+        "kind": "leisure=park",
+        "areaM2": 13275,
+        "clearOfBuildingsM": 15,
+        "lat": 28.630689,
+        "lon": 77.218966,
+        "x": 221.6,
+        "z": 89.9,
+        "gs1": 215.27,
+        "gs1s": 215.45,
+        "gs2": 215.81,
+        "gs3": 213.77,
+        "raw": 216.28
+      },
+      {
+        "district": "india_gate",
+        "osm": "way/697101341",
+        "kind": "leisure=park",
+        "areaM2": 48218,
+        "clearOfBuildingsM": 40,
+        "lat": 28.610778,
+        "lon": 77.231006,
+        "x": 152.6,
+        "z": 234.5,
+        "gs1": 211.25,
+        "gs1s": 212.52,
+        "gs2": 213.19,
+        "gs3": 210.98,
+        "raw": 213.04
+      },
+      {
+        "district": "india_gate",
+        "osm": "way/1034069905",
+        "kind": "leisure=park",
+        "areaM2": 47545,
+        "clearOfBuildingsM": 40,
+        "lat": 28.614922,
+        "lon": 77.23124,
+        "x": 175.4,
+        "z": -224.8,
+        "gs1": 212.75,
+        "gs1s": 213.19,
+        "gs2": 212.74,
+        "gs3": 213.12,
+        "raw": 214.61
+      },
+      {
+        "district": "india_gate",
+        "osm": "way/58719250",
+        "kind": "leisure=park",
+        "areaM2": 46716,
+        "clearOfBuildingsM": 40,
+        "lat": 28.611925,
+        "lon": 77.228999,
+        "x": -43.7,
+        "z": 107.4,
+        "gs1": 215.05,
+        "gs1s": 212.84,
+        "gs2": 212.46,
+        "gs3": 210.72,
+        "raw": 216.18
+      },
+      {
+        "district": "india_gate",
+        "osm": "way/1034067799",
+        "kind": "leisure=park",
+        "areaM2": 14911,
+        "clearOfBuildingsM": 40,
+        "lat": 28.611728,
+        "lon": 77.233774,
+        "x": 423.3,
+        "z": 129.2,
+        "gs1": 210.09,
+        "gs1s": 212.02,
+        "gs2": 211.5,
+        "gs3": 210.6,
+        "raw": 210.23
+      },
+      {
+        "district": "india_gate",
+        "osm": "way/1034069165",
+        "kind": "leisure=park",
+        "areaM2": 14875,
+        "clearOfBuildingsM": 40,
+        "lat": 28.613684,
+        "lon": 77.233892,
+        "x": 434.9,
+        "z": -87.6,
+        "gs1": 210.12,
+        "gs1s": 211.72,
+        "gs2": 211.74,
+        "gs3": 210.56,
+        "raw": 209.72
+      },
+      {
+        "district": "ito",
+        "osm": "way/1136942137",
+        "kind": "leisure=park",
+        "areaM2": 5741,
+        "clearOfBuildingsM": 40,
+        "lat": 28.625909,
+        "lon": 77.236421,
+        "x": -486.9,
+        "z": 287.1,
+        "gs1": 212.11,
+        "gs1s": 213.09,
+        "gs2": 212.79,
+        "gs3": 210.72,
+        "raw": 212.98
+      },
+      {
+        "district": "ito",
+        "osm": "way/1494414497",
+        "kind": "leisure=garden",
+        "areaM2": 3406,
+        "clearOfBuildingsM": 40,
+        "lat": 28.632621,
+        "lon": 77.250533,
+        "x": 893,
+        "z": -456.7,
+        "gs1": 206.41,
+        "gs1s": 207.99,
+        "gs2": 207.56,
+        "gs3": 206.14,
+        "raw": 207.03
+      },
+      {
+        "district": "ito",
+        "osm": "way/1494414495",
+        "kind": "leisure=garden",
+        "areaM2": 2524,
+        "clearOfBuildingsM": 40,
+        "lat": 28.631985,
+        "lon": 77.248732,
+        "x": 717,
+        "z": -386.2,
+        "gs1": 207.21,
+        "gs1s": 208.53,
+        "gs2": 207.97,
+        "gs3": 206.14,
+        "raw": 207.11
+      },
+      {
+        "district": "ito",
+        "osm": "way/435426340",
+        "kind": "leisure=pitch",
+        "areaM2": 2519,
+        "clearOfBuildingsM": 40,
+        "lat": 28.615739,
+        "lon": 77.239209,
+        "x": -214.3,
+        "z": 1414.3,
+        "gs1": 206.34,
+        "gs1s": 207.8,
+        "gs2": 207.79,
+        "gs3": 206.36,
+        "raw": 206.81
+      },
+      {
+        "district": "ito",
+        "osm": "way/1248031166",
+        "kind": "landuse=grass",
+        "areaM2": 1027,
+        "clearOfBuildingsM": 40,
+        "lat": 28.612344,
+        "lon": 77.246195,
+        "x": 468.9,
+        "z": 1790.6,
+        "gs1": 205.25,
+        "gs1s": 206.86,
+        "gs2": 206.37,
+        "gs3": 205.84,
+        "raw": 205.89
+      },
+      {
+        "district": "chandni_chowk",
+        "osm": "way/80429811",
+        "kind": "leisure=park",
+        "areaM2": 37944,
+        "clearOfBuildingsM": 40,
+        "lat": 28.648282,
+        "lon": 77.245288,
+        "x": 1465.3,
+        "z": 256.8,
+        "gs1": 206.42,
+        "gs1s": 208.91,
+        "gs2": 207.67,
+        "gs3": 206.79,
+        "raw": 206.17
+      },
+      {
+        "district": "chandni_chowk",
+        "osm": "way/266768779",
+        "kind": "leisure=park",
+        "areaM2": 23283,
+        "clearOfBuildingsM": 40,
+        "lat": 28.649242,
+        "lon": 77.240884,
+        "x": 1034.8,
+        "z": 150.4,
+        "gs1": 219.49,
+        "gs1s": 218.63,
+        "gs2": 217.77,
+        "gs3": 215.36,
+        "raw": 222.35
+      },
+      {
+        "district": "chandni_chowk",
+        "osm": "way/80940709",
+        "kind": "leisure=park",
+        "areaM2": 23069,
+        "clearOfBuildingsM": 40,
+        "lat": 28.658735,
+        "lon": 77.227611,
+        "x": -262.9,
+        "z": -901.6,
+        "gs1": 214.91,
+        "gs1s": 217.59,
+        "gs2": 215.79,
+        "gs3": 215.81,
+        "raw": 215.07
+      },
+      {
+        "district": "chandni_chowk",
+        "osm": "way/266778953",
+        "kind": "leisure=park",
+        "areaM2": 12584,
+        "clearOfBuildingsM": 40,
+        "lat": 28.651339,
+        "lon": 77.236803,
+        "x": 635.8,
+        "z": -82,
+        "gs1": 214.81,
+        "gs1s": 215.66,
+        "gs2": 215.73,
+        "gs3": 213.57,
+        "raw": 215.95
+      },
+      {
+        "district": "chandni_chowk",
+        "osm": "way/80940704",
+        "kind": "leisure=park",
+        "areaM2": 10813,
+        "clearOfBuildingsM": 40,
+        "lat": 28.657427,
+        "lon": 77.229737,
+        "x": -55,
+        "z": -756.7,
+        "gs1": 215.17,
+        "gs1s": 219.1,
+        "gs2": 216.56,
+        "gs3": 215.97,
+        "raw": 215.95
+      }
+    ]
+  },
+  "roadProfiles": {
+    "count": 20,
+    "stepM": 15,
+    "summary": {
+      "gs1": {
+        "meanRoughnessM": 0.545,
+        "worstRoughnessM": 0.853,
+        "meanMaxStepM": 1.574,
+        "worstStepM": 2.721,
+        "worstGradePct": 18.1,
+        "outlierSamples": 40,
+        "samples": 921,
+        "meanRmsToGs3M": 2.092
+      },
+      "gs1s": {
+        "meanRoughnessM": 0.032,
+        "worstRoughnessM": 0.057,
+        "meanMaxStepM": 0.251,
+        "worstStepM": 0.486,
+        "worstGradePct": 3.2,
+        "outlierSamples": 0,
+        "samples": 921,
+        "meanRmsToGs3M": 2.363
+      },
+      "gs2": {
+        "meanRoughnessM": 0.036,
+        "worstRoughnessM": 0.101,
+        "meanMaxStepM": 0.308,
+        "worstStepM": 0.697,
+        "worstGradePct": 4.6,
+        "outlierSamples": 0,
+        "samples": 921,
+        "meanRmsToGs3M": 1.977
+      },
+      "gs3": {
+        "meanRoughnessM": 0.127,
+        "worstRoughnessM": 0.436,
+        "meanMaxStepM": 0.356,
+        "worstStepM": 0.977,
+        "worstGradePct": 6.5,
+        "outlierSamples": 0,
+        "samples": 921,
+        "meanRmsToGs3M": 0
+      },
+      "raw": {
+        "meanRoughnessM": 0.774,
+        "worstRoughnessM": 1.274,
+        "meanMaxStepM": 2.007,
+        "worstStepM": 3.094,
+        "worstGradePct": 20.6,
+        "outlierSamples": 96,
+        "samples": 921,
+        "meanRmsToGs3M": 3.207
+      }
+    },
+    "profiles": [
+      {
+        "district": "cp",
+        "way": "way/38699591",
+        "name": "Deen Dayal Upadhyay Road",
+        "cls": "secondary",
+        "metres": 2027,
+        "samples": 17,
+        "gs1": {
+          "samples": 17,
+          "roughness": 0.399,
+          "maxStep": 0.995,
+          "maxGradePct": 6.6,
+          "min": 213.44,
+          "max": 215.8,
+          "outliers": 0,
+          "rmsToGs3": 1.13
+        },
+        "gs1s": {
+          "samples": 17,
+          "roughness": 0.042,
+          "maxStep": 0.189,
+          "maxGradePct": 1.3,
+          "min": 214.94,
+          "max": 216.39,
+          "outliers": 0,
+          "rmsToGs3": 2.21
+        },
+        "gs2": {
+          "samples": 17,
+          "roughness": 0.033,
+          "maxStep": 0.135,
+          "maxGradePct": 0.9,
+          "min": 214.79,
+          "max": 215.99,
+          "outliers": 0,
+          "rmsToGs3": 1.93
+        },
+        "gs3": {
+          "samples": 17,
+          "roughness": 0.038,
+          "maxStep": 0.081,
+          "maxGradePct": 0.5,
+          "min": 213.38,
+          "max": 213.62,
+          "outliers": 0,
+          "rmsToGs3": 0
+        },
+        "raw": {
+          "samples": 17,
+          "roughness": 0.66,
+          "maxStep": 1.374,
+          "maxGradePct": 9.2,
+          "min": 213.83,
+          "max": 216.93,
+          "outliers": 0,
+          "rmsToGs3": 1.93
+        }
+      },
+      {
+        "district": "cp",
+        "way": "way/24583332",
+        "name": "Baba Kharak Singh Marg",
+        "cls": "secondary",
+        "metres": 1036,
+        "samples": 61,
+        "gs1": {
+          "samples": 61,
+          "roughness": 0.542,
+          "maxStep": 1.987,
+          "maxGradePct": 13.2,
+          "min": 212.94,
+          "max": 218.62,
+          "outliers": 3,
+          "rmsToGs3": 1.39
+        },
+        "gs1s": {
+          "samples": 61,
+          "roughness": 0.042,
+          "maxStep": 0.256,
+          "maxGradePct": 1.7,
+          "min": 216.24,
+          "max": 218.97,
+          "outliers": 0,
+          "rmsToGs3": 2.27
+        },
+        "gs2": {
+          "samples": 61,
+          "roughness": 0.031,
+          "maxStep": 0.305,
+          "maxGradePct": 2,
+          "min": 215.07,
+          "max": 218.26,
+          "outliers": 0,
+          "rmsToGs3": 1.32
+        },
+        "gs3": {
+          "samples": 61,
+          "roughness": 0.084,
+          "maxStep": 0.362,
+          "maxGradePct": 2.4,
+          "min": 214.04,
+          "max": 216.49,
+          "outliers": 0,
+          "rmsToGs3": 0
+        },
+        "raw": {
+          "samples": 61,
+          "roughness": 0.82,
+          "maxStep": 2.207,
+          "maxGradePct": 14.7,
+          "min": 214.42,
+          "max": 221.07,
+          "outliers": 8,
+          "rmsToGs3": 2.42
+        }
+      },
+      {
+        "district": "cp",
+        "way": "way/80926759",
+        "name": "Panchkuian Road",
+        "cls": "secondary",
+        "metres": 961,
+        "samples": 43,
+        "gs1": {
+          "samples": 43,
+          "roughness": 0.514,
+          "maxStep": 1.411,
+          "maxGradePct": 9.4,
+          "min": 215.13,
+          "max": 223.89,
+          "outliers": 0,
+          "rmsToGs3": 2.68
+        },
+        "gs1s": {
+          "samples": 43,
+          "roughness": 0.037,
+          "maxStep": 0.305,
+          "maxGradePct": 2,
+          "min": 217.58,
+          "max": 221.37,
+          "outliers": 0,
+          "rmsToGs3": 2.68
+        },
+        "gs2": {
+          "samples": 43,
+          "roughness": 0.027,
+          "maxStep": 0.292,
+          "maxGradePct": 1.9,
+          "min": 216.37,
+          "max": 221.5,
+          "outliers": 0,
+          "rmsToGs3": 2.03
+        },
+        "gs3": {
+          "samples": 43,
+          "roughness": 0.114,
+          "maxStep": 0.308,
+          "maxGradePct": 2.1,
+          "min": 214.68,
+          "max": 218.35,
+          "outliers": 0,
+          "rmsToGs3": 0
+        },
+        "raw": {
+          "samples": 43,
+          "roughness": 0.845,
+          "maxStep": 2.108,
+          "maxGradePct": 14.1,
+          "min": 215.95,
+          "max": 225.9,
+          "outliers": 9,
+          "rmsToGs3": 3.69
+        }
+      },
+      {
+        "district": "cp",
+        "way": "way/23133486",
+        "name": "Inner Circle",
+        "cls": "tertiary",
+        "metres": 789,
+        "samples": 54,
+        "gs1": {
+          "samples": 54,
+          "roughness": 0.352,
+          "maxStep": 0.9,
+          "maxGradePct": 6,
+          "min": 211.47,
+          "max": 213.97,
+          "outliers": 0,
+          "rmsToGs3": 0.99
+        },
+        "gs1s": {
+          "samples": 54,
+          "roughness": 0.036,
+          "maxStep": 0.237,
+          "maxGradePct": 1.6,
+          "min": 213.75,
+          "max": 215.4,
+          "outliers": 0,
+          "rmsToGs3": 1.32
+        },
+        "gs2": {
+          "samples": 54,
+          "roughness": 0.02,
+          "maxStep": 0.217,
+          "maxGradePct": 1.4,
+          "min": 213.65,
+          "max": 215.3,
+          "outliers": 0,
+          "rmsToGs3": 1.23
+        },
+        "gs3": {
+          "samples": 54,
+          "roughness": 0.028,
+          "maxStep": 0.096,
+          "maxGradePct": 0.6,
+          "min": 213.3,
+          "max": 213.52,
+          "outliers": 0,
+          "rmsToGs3": 0
+        },
+        "raw": {
+          "samples": 54,
+          "roughness": 0.423,
+          "maxStep": 0.984,
+          "maxGradePct": 6.6,
+          "min": 212.75,
+          "max": 216.35,
+          "outliers": 0,
+          "rmsToGs3": 1.02
+        }
+      },
+      {
+        "district": "cp",
+        "way": "way/28103794",
+        "name": "Vivekanand Marg",
+        "cls": "secondary",
+        "metres": 762,
+        "samples": 21,
+        "gs1": {
+          "samples": 21,
+          "roughness": 0.655,
+          "maxStep": 1.467,
+          "maxGradePct": 9.8,
+          "min": 212.81,
+          "max": 215.98,
+          "outliers": 1,
+          "rmsToGs3": 0.95
+        },
+        "gs1s": {
+          "samples": 21,
+          "roughness": 0.007,
+          "maxStep": 0.09,
+          "maxGradePct": 0.6,
+          "min": 215.18,
+          "max": 216.66,
+          "outliers": 0,
+          "rmsToGs3": 2.24
+        },
+        "gs2": {
+          "samples": 21,
+          "roughness": 0.033,
+          "maxStep": 0.165,
+          "maxGradePct": 1.1,
+          "min": 214.77,
+          "max": 215.94,
+          "outliers": 0,
+          "rmsToGs3": 1.69
+        },
+        "gs3": {
+          "samples": 21,
+          "roughness": 0.035,
+          "maxStep": 0.156,
+          "maxGradePct": 1,
+          "min": 213.37,
+          "max": 214.13,
+          "outliers": 0,
+          "rmsToGs3": 0
+        },
+        "raw": {
+          "samples": 21,
+          "roughness": 1.011,
+          "maxStep": 2.075,
+          "maxGradePct": 13.8,
+          "min": 212.78,
+          "max": 217.08,
+          "outliers": 1,
+          "rmsToGs3": 1.48
+        }
+      },
+      {
+        "district": "india_gate",
+        "way": "way/80499762",
+        "name": "Tilak Marg",
+        "cls": "secondary",
+        "metres": 1306,
+        "samples": 43,
+        "gs1": {
+          "samples": 43,
+          "roughness": 0.486,
+          "maxStep": 1.406,
+          "maxGradePct": 9.4,
+          "min": 212.4,
+          "max": 217.34,
+          "outliers": 0,
+          "rmsToGs3": 3.38
+        },
+        "gs1s": {
+          "samples": 43,
+          "roughness": 0.044,
+          "maxStep": 0.248,
+          "maxGradePct": 1.7,
+          "min": 212.98,
+          "max": 215.41,
+          "outliers": 0,
+          "rmsToGs3": 2.62
+        },
+        "gs2": {
+          "samples": 43,
+          "roughness": 0.054,
+          "maxStep": 0.469,
+          "maxGradePct": 3.1,
+          "min": 213.63,
+          "max": 216.34,
+          "outliers": 0,
+          "rmsToGs3": 2.96
+        },
+        "gs3": {
+          "samples": 43,
+          "roughness": 0.145,
+          "maxStep": 0.303,
+          "maxGradePct": 2,
+          "min": 211.37,
+          "max": 212.29,
+          "outliers": 0,
+          "rmsToGs3": 0
+        },
+        "raw": {
+          "samples": 43,
+          "roughness": 1.027,
+          "maxStep": 2.305,
+          "maxGradePct": 15.4,
+          "min": 215.03,
+          "max": 220.19,
+          "outliers": 11,
+          "rmsToGs3": 6.26
+        }
+      },
+      {
+        "district": "india_gate",
+        "way": "way/656933877",
+        "name": "Copernicus Marg",
+        "cls": "tertiary",
+        "metres": 939,
+        "samples": 26,
+        "gs1": {
+          "samples": 26,
+          "roughness": 0.805,
+          "maxStep": 2.721,
+          "maxGradePct": 18.1,
+          "min": 214.75,
+          "max": 222.63,
+          "outliers": 9,
+          "rmsToGs3": 4.14
+        },
+        "gs1s": {
+          "samples": 26,
+          "roughness": 0.049,
+          "maxStep": 0.291,
+          "maxGradePct": 1.9,
+          "min": 214.99,
+          "max": 217.79,
+          "outliers": 0,
+          "rmsToGs3": 2.79
+        },
+        "gs2": {
+          "samples": 26,
+          "roughness": 0.076,
+          "maxStep": 0.57,
+          "maxGradePct": 3.8,
+          "min": 214.66,
+          "max": 217.93,
+          "outliers": 0,
+          "rmsToGs3": 2.88
+        },
+        "gs3": {
+          "samples": 26,
+          "roughness": 0.125,
+          "maxStep": 0.51,
+          "maxGradePct": 3.4,
+          "min": 212.82,
+          "max": 214.34,
+          "outliers": 0,
+          "rmsToGs3": 0
+        },
+        "raw": {
+          "samples": 26,
+          "roughness": 0.937,
+          "maxStep": 3.094,
+          "maxGradePct": 20.6,
+          "min": 217.65,
+          "max": 225.64,
+          "outliers": 7,
+          "rmsToGs3": 7.24
+        }
+      },
+      {
+        "district": "india_gate",
+        "way": "way/537797267",
+        "name": "Kartavya Path",
+        "cls": "secondary",
+        "metres": 901,
+        "samples": 42,
+        "gs1": {
+          "samples": 42,
+          "roughness": 0.276,
+          "maxStep": 0.879,
+          "maxGradePct": 5.9,
+          "min": 209.5,
+          "max": 212.55,
+          "outliers": 0,
+          "rmsToGs3": 0.75
+        },
+        "gs1s": {
+          "samples": 42,
+          "roughness": 0.019,
+          "maxStep": 0.151,
+          "maxGradePct": 1,
+          "min": 211.9,
+          "max": 213.01,
+          "outliers": 0,
+          "rmsToGs3": 1.67
+        },
+        "gs2": {
+          "samples": 42,
+          "roughness": 0.011,
+          "maxStep": 0.073,
+          "maxGradePct": 0.5,
+          "min": 211.58,
+          "max": 212.52,
+          "outliers": 0,
+          "rmsToGs3": 1.34
+        },
+        "gs3": {
+          "samples": 42,
+          "roughness": 0.027,
+          "maxStep": 0.113,
+          "maxGradePct": 0.8,
+          "min": 210.45,
+          "max": 211.01,
+          "outliers": 0,
+          "rmsToGs3": 0
+        },
+        "raw": {
+          "samples": 42,
+          "roughness": 0.45,
+          "maxStep": 1.574,
+          "maxGradePct": 10.5,
+          "min": 210.06,
+          "max": 213.55,
+          "outliers": 1,
+          "rmsToGs3": 0.77
+        }
+      },
+      {
+        "district": "india_gate",
+        "way": "way/296963058",
+        "name": "Shahjahan Road",
+        "cls": "secondary",
+        "metres": 864,
+        "samples": 40,
+        "gs1": {
+          "samples": 40,
+          "roughness": 0.553,
+          "maxStep": 1.801,
+          "maxGradePct": 12,
+          "min": 211.54,
+          "max": 218.06,
+          "outliers": 1,
+          "rmsToGs3": 3.73
+        },
+        "gs1s": {
+          "samples": 40,
+          "roughness": 0.03,
+          "maxStep": 0.242,
+          "maxGradePct": 1.6,
+          "min": 212.64,
+          "max": 215.44,
+          "outliers": 0,
+          "rmsToGs3": 2.58
+        },
+        "gs2": {
+          "samples": 40,
+          "roughness": 0.035,
+          "maxStep": 0.243,
+          "maxGradePct": 1.6,
+          "min": 213.5,
+          "max": 215.92,
+          "outliers": 0,
+          "rmsToGs3": 3.18
+        },
+        "gs3": {
+          "samples": 40,
+          "roughness": 0.094,
+          "maxStep": 0.22,
+          "maxGradePct": 1.5,
+          "min": 210.81,
+          "max": 212.07,
+          "outliers": 0,
+          "rmsToGs3": 0
+        },
+        "raw": {
+          "samples": 40,
+          "roughness": 0.94,
+          "maxStep": 1.978,
+          "maxGradePct": 13.2,
+          "min": 213.47,
+          "max": 219.5,
+          "outliers": 2,
+          "rmsToGs3": 5.49
+        }
+      },
+      {
+        "district": "india_gate",
+        "way": "way/24577372",
+        "name": "Pandara Road",
+        "cls": "secondary",
+        "metres": 742,
+        "samples": 28,
+        "gs1": {
+          "samples": 28,
+          "roughness": 0.766,
+          "maxStep": 1.627,
+          "maxGradePct": 10.8,
+          "min": 210.47,
+          "max": 215.07,
+          "outliers": 2,
+          "rmsToGs3": 1.92
+        },
+        "gs1s": {
+          "samples": 28,
+          "roughness": 0.015,
+          "maxStep": 0.077,
+          "maxGradePct": 0.5,
+          "min": 213.25,
+          "max": 213.8,
+          "outliers": 0,
+          "rmsToGs3": 1.79
+        },
+        "gs2": {
+          "samples": 28,
+          "roughness": 0.023,
+          "maxStep": 0.185,
+          "maxGradePct": 1.2,
+          "min": 213.68,
+          "max": 215.31,
+          "outliers": 0,
+          "rmsToGs3": 3.06
+        },
+        "gs3": {
+          "samples": 28,
+          "roughness": 0.034,
+          "maxStep": 0.092,
+          "maxGradePct": 0.6,
+          "min": 211.51,
+          "max": 212.02,
+          "outliers": 0,
+          "rmsToGs3": 0
+        },
+        "raw": {
+          "samples": 28,
+          "roughness": 1.162,
+          "maxStep": 2.55,
+          "maxGradePct": 17,
+          "min": 210.89,
+          "max": 218.42,
+          "outliers": 7,
+          "rmsToGs3": 3.83
+        }
+      },
+      {
+        "district": "ito",
+        "way": "way/70258948",
+        "name": "Mahatma Gandhi Marg",
+        "cls": "trunk",
+        "metres": 2794,
+        "samples": 102,
+        "gs1": {
+          "samples": 102,
+          "roughness": 0.504,
+          "maxStep": 1.786,
+          "maxGradePct": 11.9,
+          "min": 203.84,
+          "max": 210.96,
+          "outliers": 2,
+          "rmsToGs3": 1.58
+        },
+        "gs1s": {
+          "samples": 102,
+          "roughness": 0.023,
+          "maxStep": 0.166,
+          "maxGradePct": 1.1,
+          "min": 206.23,
+          "max": 209.54,
+          "outliers": 0,
+          "rmsToGs3": 1.72
+        },
+        "gs2": {
+          "samples": 102,
+          "roughness": 0.016,
+          "maxStep": 0.137,
+          "maxGradePct": 0.9,
+          "min": 206.54,
+          "max": 209.63,
+          "outliers": 0,
+          "rmsToGs3": 1.86
+        },
+        "gs3": {
+          "samples": 102,
+          "roughness": 0.057,
+          "maxStep": 0.182,
+          "maxGradePct": 1.2,
+          "min": 205.85,
+          "max": 207.16,
+          "outliers": 0,
+          "rmsToGs3": 0
+        },
+        "raw": {
+          "samples": 102,
+          "roughness": 0.742,
+          "maxStep": 2.305,
+          "maxGradePct": 15.4,
+          "min": 204.63,
+          "max": 213.03,
+          "outliers": 11,
+          "rmsToGs3": 2.34
+        }
+      },
+      {
+        "district": "ito",
+        "way": "way/38699591",
+        "name": "Deen Dayal Upadhyay Road",
+        "cls": "secondary",
+        "metres": 2027,
+        "samples": 36,
+        "gs1": {
+          "samples": 36,
+          "roughness": 0.75,
+          "maxStep": 1.825,
+          "maxGradePct": 12.2,
+          "min": 212.45,
+          "max": 219.04,
+          "outliers": 7,
+          "rmsToGs3": 4.56
+        },
+        "gs1s": {
+          "samples": 36,
+          "roughness": 0.026,
+          "maxStep": 0.343,
+          "maxGradePct": 2.3,
+          "min": 211.61,
+          "max": 216.36,
+          "outliers": 0,
+          "rmsToGs3": 3.42
+        },
+        "gs2": {
+          "samples": 36,
+          "roughness": 0.044,
+          "maxStep": 0.527,
+          "maxGradePct": 3.5,
+          "min": 209.88,
+          "max": 215.57,
+          "outliers": 0,
+          "rmsToGs3": 2.61
+        },
+        "gs3": {
+          "samples": 36,
+          "roughness": 0.268,
+          "maxStep": 0.555,
+          "maxGradePct": 3.7,
+          "min": 208.74,
+          "max": 213.29,
+          "outliers": 0,
+          "rmsToGs3": 0
+        },
+        "raw": {
+          "samples": 36,
+          "roughness": 0.912,
+          "maxStep": 2.115,
+          "maxGradePct": 14.1,
+          "min": 215.2,
+          "max": 220.42,
+          "outliers": 9,
+          "rmsToGs3": 5.97
+        }
+      },
+      {
+        "district": "ito",
+        "way": "way/80499762",
+        "name": "Tilak Marg",
+        "cls": "secondary",
+        "metres": 1306,
+        "samples": 51,
+        "gs1": {
+          "samples": 51,
+          "roughness": 0.514,
+          "maxStep": 1.874,
+          "maxGradePct": 12.5,
+          "min": 208.17,
+          "max": 214.51,
+          "outliers": 2,
+          "rmsToGs3": 2.45
+        },
+        "gs1s": {
+          "samples": 51,
+          "roughness": 0.036,
+          "maxStep": 0.4,
+          "maxGradePct": 2.7,
+          "min": 209.39,
+          "max": 213.54,
+          "outliers": 0,
+          "rmsToGs3": 2.24
+        },
+        "gs2": {
+          "samples": 51,
+          "roughness": 0.032,
+          "maxStep": 0.372,
+          "maxGradePct": 2.5,
+          "min": 209.65,
+          "max": 215.34,
+          "outliers": 0,
+          "rmsToGs3": 2.79
+        },
+        "gs3": {
+          "samples": 51,
+          "roughness": 0.291,
+          "maxStep": 0.759,
+          "maxGradePct": 5.1,
+          "min": 207.4,
+          "max": 211.95,
+          "outliers": 0,
+          "rmsToGs3": 0
+        },
+        "raw": {
+          "samples": 51,
+          "roughness": 0.762,
+          "maxStep": 2.089,
+          "maxGradePct": 13.9,
+          "min": 209.08,
+          "max": 217.95,
+          "outliers": 6,
+          "rmsToGs3": 5.03
+        }
+      },
+      {
+        "district": "ito",
+        "way": "way/80499263",
+        "name": "Bahadur Shah Zafar Marg",
+        "cls": "secondary",
+        "metres": 1127,
+        "samples": 47,
+        "gs1": {
+          "samples": 47,
+          "roughness": 0.625,
+          "maxStep": 1.602,
+          "maxGradePct": 10.7,
+          "min": 206.27,
+          "max": 216.82,
+          "outliers": 1,
+          "rmsToGs3": 1.76
+        },
+        "gs1s": {
+          "samples": 47,
+          "roughness": 0.036,
+          "maxStep": 0.34,
+          "maxGradePct": 2.3,
+          "min": 208.55,
+          "max": 216.19,
+          "outliers": 0,
+          "rmsToGs3": 2.82
+        },
+        "gs2": {
+          "samples": 47,
+          "roughness": 0.03,
+          "maxStep": 0.342,
+          "maxGradePct": 2.3,
+          "min": 208.22,
+          "max": 215.58,
+          "outliers": 0,
+          "rmsToGs3": 1.98
+        },
+        "gs3": {
+          "samples": 47,
+          "roughness": 0.168,
+          "maxStep": 0.532,
+          "maxGradePct": 3.5,
+          "min": 206.48,
+          "max": 213.54,
+          "outliers": 0,
+          "rmsToGs3": 0
+        },
+        "raw": {
+          "samples": 47,
+          "roughness": 0.566,
+          "maxStep": 1.255,
+          "maxGradePct": 8.4,
+          "min": 207.17,
+          "max": 216.69,
+          "outliers": 1,
+          "rmsToGs3": 2.01
+        }
+      },
+      {
+        "district": "ito",
+        "way": "way/175800282",
+        "name": "Velodrome Road",
+        "cls": "tertiary",
+        "metres": 899,
+        "samples": 20,
+        "gs1": {
+          "samples": 20,
+          "roughness": 0.283,
+          "maxStep": 0.847,
+          "maxGradePct": 5.6,
+          "min": 205.03,
+          "max": 208.98,
+          "outliers": 0,
+          "rmsToGs3": 1.25
+        },
+        "gs1s": {
+          "samples": 20,
+          "roughness": 0.022,
+          "maxStep": 0.179,
+          "maxGradePct": 1.2,
+          "min": 206.81,
+          "max": 207.88,
+          "outliers": 0,
+          "rmsToGs3": 1.14
+        },
+        "gs2": {
+          "samples": 20,
+          "roughness": 0.014,
+          "maxStep": 0.151,
+          "maxGradePct": 1,
+          "min": 206.67,
+          "max": 208.1,
+          "outliers": 0,
+          "rmsToGs3": 1.24
+        },
+        "gs3": {
+          "samples": 20,
+          "roughness": 0.002,
+          "maxStep": 0.008,
+          "maxGradePct": 0.1,
+          "min": 205.94,
+          "max": 205.99,
+          "outliers": 0,
+          "rmsToGs3": 0
+        },
+        "raw": {
+          "samples": 20,
+          "roughness": 0.336,
+          "maxStep": 1.152,
+          "maxGradePct": 7.7,
+          "min": 206.39,
+          "max": 211.28,
+          "outliers": 0,
+          "rmsToGs3": 2.14
+        }
+      },
+      {
+        "district": "chandni_chowk",
+        "way": "way/744248532",
+        "name": "Shraddhanand Road",
+        "cls": "tertiary",
+        "metres": 2026,
+        "samples": 52,
+        "gs1": {
+          "samples": 52,
+          "roughness": 0.542,
+          "maxStep": 1.901,
+          "maxGradePct": 12.7,
+          "min": 216.33,
+          "max": 223.36,
+          "outliers": 2,
+          "rmsToGs3": 2.86
+        },
+        "gs1s": {
+          "samples": 52,
+          "roughness": 0.026,
+          "maxStep": 0.318,
+          "maxGradePct": 2.1,
+          "min": 218,
+          "max": 222.1,
+          "outliers": 0,
+          "rmsToGs3": 3.31
+        },
+        "gs2": {
+          "samples": 52,
+          "roughness": 0.025,
+          "maxStep": 0.187,
+          "maxGradePct": 1.2,
+          "min": 217.73,
+          "max": 219.37,
+          "outliers": 0,
+          "rmsToGs3": 1.14
+        },
+        "gs3": {
+          "samples": 52,
+          "roughness": 0.436,
+          "maxStep": 0.977,
+          "maxGradePct": 6.5,
+          "min": 215.73,
+          "max": 219,
+          "outliers": 0,
+          "rmsToGs3": 0
+        },
+        "raw": {
+          "samples": 52,
+          "roughness": 0.766,
+          "maxStep": 2.781,
+          "maxGradePct": 18.5,
+          "min": 216.87,
+          "max": 224.39,
+          "outliers": 4,
+          "rmsToGs3": 3.52
+        }
+      },
+      {
+        "district": "chandni_chowk",
+        "way": "way/44830361",
+        "name": "Netaji Subhash Marg",
+        "cls": "secondary",
+        "metres": 1743,
+        "samples": 88,
+        "gs1": {
+          "samples": 88,
+          "roughness": 0.576,
+          "maxStep": 1.815,
+          "maxGradePct": 12.1,
+          "min": 213.32,
+          "max": 221.23,
+          "outliers": 3,
+          "rmsToGs3": 1.9
+        },
+        "gs1s": {
+          "samples": 88,
+          "roughness": 0.032,
+          "maxStep": 0.31,
+          "maxGradePct": 2.1,
+          "min": 214.65,
+          "max": 220.08,
+          "outliers": 0,
+          "rmsToGs3": 2.19
+        },
+        "gs2": {
+          "samples": 88,
+          "roughness": 0.04,
+          "maxStep": 0.406,
+          "maxGradePct": 2.7,
+          "min": 214.48,
+          "max": 219.38,
+          "outliers": 0,
+          "rmsToGs3": 1.7
+        },
+        "gs3": {
+          "samples": 88,
+          "roughness": 0.131,
+          "maxStep": 0.417,
+          "maxGradePct": 2.8,
+          "min": 212.67,
+          "max": 217.33,
+          "outliers": 0,
+          "rmsToGs3": 0
+        },
+        "raw": {
+          "samples": 88,
+          "roughness": 0.688,
+          "maxStep": 2.1,
+          "maxGradePct": 14,
+          "min": 213.88,
+          "max": 223.49,
+          "outliers": 5,
+          "rmsToGs3": 2.86
+        }
+      },
+      {
+        "district": "chandni_chowk",
+        "way": "way/80429798",
+        "name": "Ansari Road",
+        "cls": "tertiary",
+        "metres": 1312,
+        "samples": 42,
+        "gs1": {
+          "samples": 42,
+          "roughness": 0.853,
+          "maxStep": 1.897,
+          "maxGradePct": 12.6,
+          "min": 213.48,
+          "max": 219.89,
+          "outliers": 4,
+          "rmsToGs3": 2.22
+        },
+        "gs1s": {
+          "samples": 42,
+          "roughness": 0.057,
+          "maxStep": 0.246,
+          "maxGradePct": 1.6,
+          "min": 216.63,
+          "max": 219.21,
+          "outliers": 0,
+          "rmsToGs3": 3.04
+        },
+        "gs2": {
+          "samples": 42,
+          "roughness": 0.101,
+          "maxStep": 0.697,
+          "maxGradePct": 4.6,
+          "min": 214.13,
+          "max": 218.52,
+          "outliers": 0,
+          "rmsToGs3": 2.2
+        },
+        "gs3": {
+          "samples": 42,
+          "roughness": 0.277,
+          "maxStep": 0.816,
+          "maxGradePct": 5.4,
+          "min": 212.96,
+          "max": 215.85,
+          "outliers": 0,
+          "rmsToGs3": 0
+        },
+        "raw": {
+          "samples": 42,
+          "roughness": 1.274,
+          "maxStep": 2.942,
+          "maxGradePct": 19.6,
+          "min": 214.85,
+          "max": 223.36,
+          "outliers": 8,
+          "rmsToGs3": 3.24
+        }
+      },
+      {
+        "district": "chandni_chowk",
+        "way": "way/80940694",
+        "name": "Chandni Chowk",
+        "cls": "tertiary",
+        "metres": 1289,
+        "samples": 87,
+        "gs1": {
+          "samples": 87,
+          "roughness": 0.434,
+          "maxStep": 1.747,
+          "maxGradePct": 11.6,
+          "min": 214.48,
+          "max": 222.04,
+          "outliers": 3,
+          "rmsToGs3": 1.55
+        },
+        "gs1s": {
+          "samples": 87,
+          "roughness": 0.04,
+          "maxStep": 0.486,
+          "maxGradePct": 3.2,
+          "min": 216.15,
+          "max": 224.62,
+          "outliers": 0,
+          "rmsToGs3": 3.75
+        },
+        "gs2": {
+          "samples": 87,
+          "roughness": 0.061,
+          "maxStep": 0.566,
+          "maxGradePct": 3.8,
+          "min": 214.99,
+          "max": 220.76,
+          "outliers": 0,
+          "rmsToGs3": 1.22
+        },
+        "gs3": {
+          "samples": 87,
+          "roughness": 0.15,
+          "maxStep": 0.53,
+          "maxGradePct": 3.5,
+          "min": 213.23,
+          "max": 221.43,
+          "outliers": 0,
+          "rmsToGs3": 0
+        },
+        "raw": {
+          "samples": 87,
+          "roughness": 0.512,
+          "maxStep": 2.075,
+          "maxGradePct": 13.8,
+          "min": 215.39,
+          "max": 222.99,
+          "outliers": 6,
+          "rmsToGs3": 1.9
+        }
+      },
+      {
+        "district": "chandni_chowk",
+        "way": "way/320354820",
+        "name": "Mahatma Gandhi Marg",
+        "cls": "secondary",
+        "metres": 1280,
+        "samples": 21,
+        "gs1": {
+          "samples": 21,
+          "roughness": 0.467,
+          "maxStep": 1,
+          "maxGradePct": 6.7,
+          "min": 205.81,
+          "max": 208.15,
+          "outliers": 0,
+          "rmsToGs3": 0.65
+        },
+        "gs1s": {
+          "samples": 21,
+          "roughness": 0.023,
+          "maxStep": 0.154,
+          "maxGradePct": 1,
+          "min": 207.39,
+          "max": 209.18,
+          "outliers": 0,
+          "rmsToGs3": 1.45
+        },
+        "gs2": {
+          "samples": 21,
+          "roughness": 0.021,
+          "maxStep": 0.122,
+          "maxGradePct": 0.8,
+          "min": 207.69,
+          "max": 208.58,
+          "outliers": 0,
+          "rmsToGs3": 1.17
+        },
+        "gs3": {
+          "samples": 21,
+          "roughness": 0.028,
+          "maxStep": 0.096,
+          "maxGradePct": 0.6,
+          "min": 206.69,
+          "max": 207.06,
+          "outliers": 0,
+          "rmsToGs3": 0
+        },
+        "raw": {
+          "samples": 21,
+          "roughness": 0.65,
+          "maxStep": 1.071,
+          "maxGradePct": 7.1,
+          "min": 206.22,
+          "max": 208.55,
+          "outliers": 0,
+          "rmsToGs3": 1
+        }
+      }
+    ]
+  },
+  "denseBlocks": {
+    "chandni_chowk": {
+      "cell": "0,-2",
+      "buildingsInCell": 503,
+      "lines": 6,
+      "gs1": {
+        "meanRoughnessM": 0.422,
+        "worstStepM": 3,
+        "heightRangeM": 13.55
+      },
+      "gs1s": {
+        "meanRoughnessM": 0.035,
+        "worstStepM": 0.8,
+        "heightRangeM": 10.99
+      },
+      "gs2": {
+        "meanRoughnessM": 0.25,
+        "worstStepM": 2.97,
+        "heightRangeM": 13.35
+      },
+      "gs3": {
+        "meanRoughnessM": 0.234,
+        "worstStepM": 2.15,
+        "heightRangeM": 10.08
+      },
+      "raw": {
+        "meanRoughnessM": 0.607,
+        "worstStepM": 3.07,
+        "heightRangeM": 13.21
+      }
+    },
+    "laxmi_nagar": {
+      "cell": "0,0",
+      "buildingsInCell": 254,
+      "lines": 6,
+      "gs1": {
+        "meanRoughnessM": 0.583,
+        "worstStepM": 2.21,
+        "heightRangeM": 8.99
+      },
+      "gs1s": {
+        "meanRoughnessM": 0.038,
+        "worstStepM": 0.55,
+        "heightRangeM": 5.51
+      },
+      "gs2": {
+        "meanRoughnessM": 0.131,
+        "worstStepM": 1.34,
+        "heightRangeM": 6.29
+      },
+      "gs3": {
+        "meanRoughnessM": 0.16,
+        "worstStepM": 0.68,
+        "heightRangeM": 4.24
+      },
+      "raw": {
+        "meanRoughnessM": 0.902,
+        "worstStepM": 3.35,
+        "heightRangeM": 10.67
+      }
+    }
+  },
+  "outlierRule": {
+    "rule": "R-TERR-03",
+    "how": "roads with at least one sample more than 1.5 m off the running median or a step steeper than 10 percent",
+    "sites": {
+      "cp": {
+        "groundRoads": 370,
+        "gs1": 172,
+        "gs1s": 0,
+        "gs2": 1,
+        "gs3": 0,
+        "raw": 262
+      },
+      "india_gate": {
+        "groundRoads": 259,
+        "gs1": 111,
+        "gs1s": 0,
+        "gs2": 0,
+        "gs3": 1,
+        "raw": 185
+      },
+      "ito": {
+        "groundRoads": 287,
+        "gs1": 103,
+        "gs1s": 1,
+        "gs2": 3,
+        "gs3": 1,
+        "raw": 152
+      },
+      "chandni_chowk": {
+        "groundRoads": 444,
+        "gs1": 184,
+        "gs1s": 7,
+        "gs2": 56,
+        "gs3": 34,
+        "raw": 243
+      },
+      "laxmi_nagar": {
+        "groundRoads": 460,
+        "gs1": 171,
+        "gs1s": 0,
+        "gs2": 5,
+        "gs3": 4,
+        "raw": 234
+      }
+    }
+  },
+  "licences": [
+    {
+      "id": "gedtm30",
+      "source": "GEDTM30 v1.2 (OpenLandMap, Open-Earth-Monitor)",
+      "layer": "height",
+      "use": "bare-earth ground height (GS1)",
+      "licence": "CC BY 4.0",
+      "licenceUrl": "https://zenodo.org/api/records/18887460",
+      "licenceText": null,
+      "credit": "GEDTM30: Ho, Y.-F. et al., OpenLandMap, CC BY 4.0, doi 10.5281/zenodo.18887460",
+      "freePublicGame": "yes, with the credit line",
+      "soldGame": "yes, with the credit line",
+      "conditions": "The record says the release is for testing purposes and is provided as is.",
+      "shipped": true,
+      "dateChecked": "2026-11-11",
+      "checked": {
+        "httpStatus": 200,
+        "phraseFound": true,
+        "phrasesFound": [
+          "cc-by-4.0"
+        ],
+        "quote": ", 13, e19673.\"], \"resource_type\": {\"title\": \"Dataset\", \"type\": \"dataset\"}, \"journal\": {\"pages\": \"e19673\", \"title\": \"Peerj\", \"volume\": \"13\"}, \"license\": {\"id\": \"cc-by-4.0\"}, \"grants\": [{\"code\": \"101059548\", \"internal_id\": \"10.13039/501100000780::101059548\", \"funder\": {\"name\": \"European Commission\", \"doi\": \"10.13039/5011",
+        "pageSha256": "5fbb173885f5c7f894539acdef5f6445ada5e6967a9e19218e858d0e55673a86",
+        "error": null,
+        "statementFrom": "the licence page itself (fetched 2026-11-11, phrase found by the script)"
+      }
+    },
+    {
+      "id": "glo30",
+      "source": "Copernicus DEM GLO-30 Public",
+      "layer": "height",
+      "use": "surface height with our own ground filter (GS2)",
+      "licence": "Copernicus DEM licence (free of charge, any use including commercial, with the notice)",
+      "licenceUrl": "https://registry.opendata.aws/copernicus-dem/",
+      "licenceText": "https://docs.sentinel-hub.com/api/latest/static/files/data/dem/resources/license/License-COPDEM-30.pdf",
+      "credit": "© DLR e.V. 2010-2014 and © Airbus Defence and Space GmbH 2014-2018 provided under COPERNICUS by the European Union and ESA; all rights reserved",
+      "freePublicGame": "yes, with the notice",
+      "soldGame": "yes, with the notice",
+      "conditions": "The notice must be shown. Adapted data must say it was modified.",
+      "shipped": true,
+      "dateChecked": "2026-11-11",
+      "checked": {
+        "httpStatus": 200,
+        "phraseFound": true,
+        "phrasesFound": [
+          "free basis",
+          "License"
+        ],
+        "quote": "al to zero. Data is provided as Cloud Optimized GeoTIFFs and comes from Copernicus DEM 2021 release.\", \"license\" : \"GLO-30 Public and GLO-90 are available on a free basis for the general public under the terms and conditions of the Licence found on \\u003ca href=\\\"https://dataspace.copernicus.eu/explore-data/data-collec",
+        "pageSha256": "04b2d63198acecd854a2a04100feb63d71aeecd83773c692b7f5093a0a4defca",
+        "error": null,
+        "statementFrom": "the licence page itself (fetched 2026-11-11, phrase found by the script)"
+      }
+    },
+    {
+      "id": "fabdem",
+      "source": "FABDEM V1-2 (University of Bristol)",
+      "layer": "height",
+      "use": "yardstick in the bench only (GS3)",
+      "licence": "CC BY-NC-SA 4.0",
+      "licenceUrl": "https://data.bris.ac.uk/data/dataset/s5hqmjcdj8yo2ibzi9b4ew3sn",
+      "licenceText": null,
+      "credit": "Hawker, L. et al. (2022), FABDEM V1-2, University of Bristol",
+      "freePublicGame": "only as non-commercial with share-alike on what is built from it",
+      "soldGame": "no",
+      "conditions": "Non-commercial and share-alike. Never shipped and never baked into tiles (decisions.md \"Architecture answers, round 1\").",
+      "shipped": false,
+      "dateChecked": "2026-11-11",
+      "checked": {
+        "httpStatus": 200,
+        "phraseFound": true,
+        "phrasesFound": [
+          "CC BY-NC-SA 4.0",
+          "Non-Commercial"
+        ],
+        "quote": ". The data is available at 1 arc second grid spacing (approximately 30m at the equator) for the globe. The FABDEM dataset is licensed under a Creative Commons \"CC BY-NC-SA 4.0\" license. For commercial use queries, please contact fabdem@fathom.global This dataset is published in support of the paper \"A 30 m global map o",
+        "pageSha256": "597bf264d57314c9e30d303e97c843f145bdd3f59ec1381ef20e0ca20ef29a52",
+        "error": null,
+        "statementFrom": "the licence page itself (fetched 2026-11-11, phrase found by the script)"
+      }
+    },
+    {
+      "id": "cartodem",
+      "source": "CartoDEM (ISRO, Bhuvan)",
+      "layer": "height",
+      "use": "out (GS4)",
+      "licence": "needs a Bhuvan account; reuse terms not open",
+      "licenceUrl": "https://bhuvan-app3.nrsc.gov.in/data/download/index.php",
+      "licenceText": null,
+      "credit": "n/a",
+      "freePublicGame": "unclear",
+      "soldGame": "unclear",
+      "conditions": "Not fetched: an account is an owner action and the terms are not an open licence.",
+      "shipped": false,
+      "dateChecked": "2026-11-11",
+      "checked": {
+        "httpStatus": 200,
+        "phraseFound": null,
+        "phrasesFound": [],
+        "quote": null,
+        "pageSha256": "a69ac3b123ec39872edb3edabb7be3c3dade53edcf3d5afb8f393b8a558729c9",
+        "error": null,
+        "statementFrom": "the publisher's page was reached (2026-11-11) but the script could not read the licence phrase from it (a PDF, a script-built page, or no licence stated): the statement is the builder's reading and stays a belief"
+      }
+    }
+  ],
+  "reading": {
+    "gs1": "GEDTM30: 1.67 m RMS from the yardstick at 20 open points (mean 0.44), road roughness 0.545 m, worst step 2.721 m in 15 m, 40 outlier samples of 921",
+    "gs1s": "GEDTM30 smoothed over 60 m: 1.94 m RMS (mean 1.75), road roughness 0.032 m, worst step 0.486 m, 0 outlier samples",
+    "gs2": "GLO-30 with the ground filter: 1.65 m RMS (mean 1.44), road roughness 0.036 m, worst step 0.697 m, 0 outlier samples",
+    "gs3": "FABDEM: road roughness 0.127 m, worst step 0.977 m, 0 outlier samples; never shipped",
+    "raw": "GLO-30 unfiltered: 2.41 m RMS (mean 1.42), road roughness 0.774 m, worst step 3.094 m"
+  },
+  "notMeasured": []
+}

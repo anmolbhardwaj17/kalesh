@@ -1,0 +1,10 @@
+{
+  "_doc": "Fetch boxes of the pilot districts for the data bench (P0-018). These are download boxes in WGS84 degrees, a little larger than the districts: the clip polygons that follow real edges are drawn in P0-029. centre is the district frame origin used by the bench (ARCH_OPTIONS X1). role far marks the far district of the stitch bench.",
+  "areas": [
+    { "id": "cp", "name": "Connaught Place with Jantar Mantar", "role": "pilot", "bbox": { "south": 28.6240, "west": 77.2085, "north": 28.6375, "east": 77.2255 }, "centre": { "lat": 28.6315, "lon": 77.2167 } },
+    { "id": "india_gate", "name": "India Gate", "role": "pilot", "bbox": { "south": 28.6060, "west": 77.2215, "north": 28.6200, "east": 77.2380 }, "centre": { "lat": 28.612894, "lon": 77.229446 } },
+    { "id": "ito", "name": "ITO with Pragati Maidan", "role": "pilot", "bbox": { "south": 28.6120, "west": 77.2360, "north": 28.6340, "east": 77.2540 }, "centre": { "lat": 28.6285, "lon": 77.2414 } },
+    { "id": "chandni_chowk", "name": "Chandni Chowk with Red Fort", "role": "pilot", "bbox": { "south": 28.6450, "west": 77.2200, "north": 28.6620, "east": 77.2460 }, "centre": { "lat": 28.6506, "lon": 77.2303 } },
+    { "id": "laxmi_nagar", "name": "Laxmi Nagar", "role": "far", "bbox": { "south": 28.6240, "west": 77.2700, "north": 28.6370, "east": 77.2850 }, "centre": { "lat": 28.6304, "lon": 77.2777 } }
+  ]
+}

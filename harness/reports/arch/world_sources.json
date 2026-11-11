@@ -1,0 +1,682 @@
+{
+  "at": "2026-11-11T01:30:13.635Z",
+  "machine": "macbook-pro, darwin arm64, Apple M2 Pro, 12 cores, 16 GB",
+  "node": "v22.22.3",
+  "bench": "world_sources",
+  "writtenBy": "node harness/bench/pilot_data/census.mjs",
+  "how": "Every landmark and area source named in DELHI_WORLD.md \"Sources\" and \"Area division from open data\". Each licence page was fetched by fetch.mjs on dateChecked; checked.statementFrom says whether the script read the licence phrase on the page or the row stays a belief.",
+  "landmarkSources": [
+    {
+      "id": "osm",
+      "source": "OpenStreetMap",
+      "layer": "map",
+      "use": "road network, building footprints, land use, landmark footprints",
+      "licence": "ODbL 1.0",
+      "licenceUrl": "https://www.openstreetmap.org/copyright",
+      "licenceText": null,
+      "credit": "© OpenStreetMap contributors",
+      "freePublicGame": "yes, with the credit line",
+      "soldGame": "yes, with the credit line",
+      "conditions": "A derived database that is shared must be offered under ODbL: the repaired map data is published openly. The game itself is a produced work and only needs the credit.",
+      "shipped": true,
+      "dateChecked": "2026-11-11",
+      "checked": {
+        "httpStatus": 200,
+        "phraseFound": true,
+        "phrasesFound": [
+          "Open Data Commons Open Database License",
+          "ODbL"
+        ],
+        "quote": "SM community . Support the project by joining the OSM Foundation and making a donation . OpenStreetMap licensing OpenStreetMap is open data, licensed under the Open Data Commons Open Database License (ODbL) by the OpenStreetMap Foundation (OSMF). In summary: You are free to copy, distribute, transmit and adapt our data",
+        "pageSha256": "1a738e9a7b3f8e8b3b1cb662e472a5cdf37479d4aa5423e23adb80dcbd452dfa",
+        "error": null,
+        "statementFrom": "the licence page itself (fetched 2026-11-11, phrase found by the script)"
+      }
+    },
+    {
+      "id": "wikidata",
+      "source": "Wikidata",
+      "layer": "landmark",
+      "use": "landmark coordinates, era, height, ASI monument id, sitelink count",
+      "licence": "CC0 1.0",
+      "licenceUrl": "https://www.wikidata.org/wiki/Wikidata:Copyright",
+      "licenceText": null,
+      "credit": "none needed (Wikidata, CC0)",
+      "freePublicGame": "yes",
+      "soldGame": "yes",
+      "conditions": "None.",
+      "shipped": true,
+      "dateChecked": "2026-11-11",
+      "checked": {
+        "httpStatus": 200,
+        "phraseFound": true,
+        "phrasesFound": [
+          "Creative Commons CC0",
+          "CC0"
+        ],
+        "quote": "data item Appearance move to sidebar hide From Wikidata All structured data from the main, Property, Lexeme, and EntitySchema namespaces is available under the Creative Commons CC0 License ; text in the other namespaces is available under the Creative Commons Attribution-ShareAlike License ; additional terms may apply.",
+        "pageSha256": "2ec1f1865beb90e0c2eca875c532b79c2540159d232be87fe3565dbdedf16ad6",
+        "error": null,
+        "statementFrom": "the licence page itself (fetched 2026-11-11, phrase found by the script)"
+      }
+    },
+    {
+      "id": "wikipedia",
+      "source": "Wikipedia",
+      "layer": "reference",
+      "use": "reference notes for art cards; text never shipped",
+      "licence": "CC BY-SA 4.0",
+      "licenceUrl": "https://en.wikipedia.org/wiki/Wikipedia:Copyrights",
+      "licenceText": null,
+      "credit": "per article",
+      "freePublicGame": "reference only",
+      "soldGame": "reference only",
+      "conditions": "Share-alike on copied text, so no text is copied into the game.",
+      "shipped": false,
+      "dateChecked": "2026-11-11",
+      "checked": {
+        "httpStatus": 200,
+        "phraseFound": true,
+        "phrasesFound": [
+          "Creative Commons Attribution-ShareAlike"
+        ],
+        "quote": "ontent from Wikipedia, read [[#Reusers' rights and obligations|§ Reusers' rights and obligations]] first. Then review the licenses: the [[Wikipedia:Text of the Creative Commons Attribution-ShareAlike 4.0 International License|Creative Commons Attribution-ShareAlike 4.0 International License]] and the [[Wikipedia:Text o",
+        "pageSha256": "70e0e97e1144b92d1f2095f8379f59c8d69b04236b457e2a2fcdd2537668e3f3",
+        "error": null,
+        "statementFrom": "the licence page itself (fetched 2026-11-11, phrase found by the script)"
+      }
+    },
+    {
+      "id": "commons",
+      "source": "Wikimedia Commons photos",
+      "layer": "reference",
+      "use": "reference photos for landmarks and hero roads, linked by URL",
+      "licence": "per file (mostly CC BY or CC BY-SA, some public domain)",
+      "licenceUrl": "https://commons.wikimedia.org/wiki/Commons:Licensing",
+      "licenceText": null,
+      "credit": "per file",
+      "freePublicGame": "reference only unless that file allows it",
+      "soldGame": "reference only unless that file allows it",
+      "conditions": "Never baked in or shipped unless that file's licence allows it and it is recorded.",
+      "shipped": false,
+      "dateChecked": "2026-11-11",
+      "checked": {
+        "httpStatus": 200,
+        "phraseFound": true,
+        "phrasesFound": [
+          "free content",
+          "Creative Commons"
+        ],
+        "quote": "re-user looking for information on how to use Commons content in your own work, see Commons:Reusing content outside Wikimedia . Wikimedia Commons only accepts free content , that is, images and other media files that are not subject to copyright restrictions which would prevent them being used by anyone, anytime, for a",
+        "pageSha256": "5be4ceb13bbe00d77a78ca599fec33c02b962e6ca20555519fc01821d76d1729",
+        "error": null,
+        "statementFrom": "the licence page itself (fetched 2026-11-11, phrase found by the script)"
+      }
+    },
+    {
+      "id": "mapillary",
+      "source": "Mapillary street photos",
+      "layer": "reference",
+      "use": "reference for hero roads and repairs",
+      "licence": "CC BY-SA 4.0 (images)",
+      "licenceUrl": "https://www.mapillary.com/terms",
+      "licenceText": null,
+      "credit": "per image",
+      "freePublicGame": "reference only",
+      "soldGame": "reference only",
+      "conditions": "Share-alike on copies, so images are only looked at.",
+      "shipped": false,
+      "dateChecked": "2026-11-11",
+      "checked": {
+        "httpStatus": 200,
+        "phraseFound": true,
+        "phrasesFound": [
+          "CC BY-SA"
+        ],
+        "quote": "es is subject to the additional terms in Section 12 below. Your use of any User Content provided by other users is subject to the Creative Commons Share Alike (CC BY-SA) license , unless we indicate otherwise. For instance, we may provide access to certain User Content (alone or in combination with other data sets) und",
+        "pageSha256": "3e5caafa4aa9dd97471d932be079cd9a2ede112ff2ee77ec779f9d9981ff6a6a",
+        "error": null,
+        "statementFrom": "the licence page itself (fetched 2026-11-11, phrase found by the script)"
+      }
+    },
+    {
+      "id": "asi_list",
+      "source": "ASI list of centrally protected monuments, Delhi circle",
+      "layer": "landmark",
+      "use": "which monuments must exist (names and ids only)",
+      "licence": "government website, no open licence; names and list membership are facts",
+      "licenceUrl": "https://asi.nic.in/copyright-policy/",
+      "licenceText": null,
+      "credit": "Archaeological Survey of India (as the source of the list)",
+      "freePublicGame": "yes for facts (names, ids, protection status)",
+      "soldGame": "yes for facts",
+      "conditions": "No text or photo is copied from the site. The ASI id comes through Wikidata (P1371, CC0).",
+      "shipped": true,
+      "dateChecked": "2026-11-11",
+      "checked": {
+        "httpStatus": 200,
+        "phraseFound": false,
+        "phrasesFound": [],
+        "quote": null,
+        "pageSha256": "4056f2652029b03a1561a96b0b6ed3d798fb0ed4e52d4b9bc698869651548c43",
+        "error": null,
+        "statementFrom": "the publisher's page was reached (2026-11-11) but the script could not read the licence phrase from it (a PDF, a script-built page, or no licence stated): the statement is the builder's reading and stays a belief"
+      }
+    }
+  ],
+  "areaSources": [
+    {
+      "id": "google_open_buildings",
+      "source": "Google Open Buildings v3",
+      "layer": "map",
+      "use": "building footprints for our own merge (BS2); footprint density for area profiles",
+      "licence": "CC BY 4.0 or ODbL 1.0 (the user picks)",
+      "licenceUrl": "https://sites.research.google/gr/open-buildings/",
+      "licenceText": null,
+      "credit": "Google Open Buildings (W. Sirko et al., 2021)",
+      "freePublicGame": "yes, with the credit line",
+      "soldGame": "yes, with the credit line",
+      "conditions": "Under CC BY 4.0 there is no share-alike.",
+      "shipped": true,
+      "dateChecked": "2026-11-11",
+      "checked": {
+        "httpStatus": 200,
+        "phraseFound": true,
+        "phrasesFound": [
+          "CC BY-4.0",
+          "ODbL"
+        ],
+        "quote": "however made further improvements for the subsequent versions, v2 and v3. How is the data licensed? The data is shared under the Creative Commons Attribution (CC BY-4.0) license and the Open Data Commons Open Database License (ODbL) v1.0 license . As the user, you can pick which of the two licenses you prefer and use t",
+        "pageSha256": "1be95e3316e0cb6d4cba01e4c4114bcb68c6123d5c474530d5133d83b359c658",
+        "error": null,
+        "statementFrom": "the licence page itself (fetched 2026-11-11, phrase found by the script)"
+      }
+    },
+    {
+      "id": "ms_footprints",
+      "source": "Microsoft Global ML Building Footprints",
+      "layer": "map",
+      "use": "building footprints for our own merge (BS2)",
+      "licence": "CDLA Permissive 2.0",
+      "licenceUrl": "https://raw.githubusercontent.com/microsoft/GlobalMLBuildingFootprints/main/README.md",
+      "licenceText": null,
+      "credit": "Microsoft Global ML Building Footprints",
+      "freePublicGame": "yes",
+      "soldGame": "yes",
+      "conditions": "The licence text must go with any copy of the data that is shared. No share-alike. The design docs believed ODbL: the repository readme now says CDLA Permissive 2.0 (older releases were ODbL).",
+      "shipped": true,
+      "dateChecked": "2026-11-11",
+      "checked": {
+        "httpStatus": 200,
+        "phraseFound": true,
+        "phrasesFound": [
+          "CDLA Permissive 2.0"
+        ],
+        "quote": "buildings from Bing Maps imagery between 2014 and 2024 including Maxar, Airbus, and IGN France imagery. The data is freely available for download and use under CDLA Permissive 2.0. This dataset includes our [other releases](#will-there-be-more-data-coming-for-other-geographies). ## Updates * 2026-08-13 - Refreshed the ",
+        "pageSha256": "1d0d93f6696611940628e98a79378cc632e72172ff25f412d51dd21553492850",
+        "error": null,
+        "statementFrom": "the licence page itself (fetched 2026-11-11, phrase found by the script)"
+      }
+    },
+    {
+      "id": "mpd_landuse",
+      "source": "Master Plan of Delhi land use maps (DDA)",
+      "layer": "area",
+      "use": "evidence for area polygons",
+      "licence": "government publication, no open licence found",
+      "licenceUrl": "https://dda.gov.in/",
+      "licenceText": null,
+      "credit": "Delhi Development Authority (as a reference)",
+      "freePublicGame": "reference only",
+      "soldGame": "reference only",
+      "conditions": "Scanned PDFs. Read as evidence, never traced into shipped data.",
+      "shipped": false,
+      "dateChecked": "2026-11-11",
+      "checked": {
+        "httpStatus": null,
+        "phraseFound": null,
+        "phrasesFound": [],
+        "quote": null,
+        "pageSha256": null,
+        "error": "https://dda.gov.in/: fetch failed (after 3 tries)",
+        "statementFrom": "the page could not be reached by the script (https://dda.gov.in/: fetch failed (after 3 tries)): the statement is a belief from the design docs"
+      }
+    },
+    {
+      "id": "census2011",
+      "source": "Census of India 2011 ward and town data (data.gov.in)",
+      "layer": "area",
+      "use": "population and density per ward",
+      "licence": "Government Open Data License, India (GODL)",
+      "licenceUrl": "https://www.data.gov.in/Godl",
+      "licenceText": "https://www.data.gov.in/sites/default/files/Gazette_Notification_OGDL.pdf",
+      "credit": "Office of the Registrar General and Census Commissioner, India; data.gov.in",
+      "freePublicGame": "yes, with the credit line",
+      "soldGame": "yes, with the credit line",
+      "conditions": "Attribution. Applies to data published on data.gov.in.",
+      "shipped": true,
+      "dateChecked": "2026-11-11",
+      "checked": {
+        "httpStatus": 200,
+        "phraseFound": true,
+        "phrasesFound": [
+          "Government Open Data License"
+        ],
+        "quote": "Government Open Data License - India | Open Government Data (OGD) Platform India /*! * Bootstrap (https://getbootstrap.com/) * Copyright 2011-2022 The Bootstrap Authors * Copyright 2011-2022 Twitter, Inc. * Licensed under MIT (h",
+        "pageSha256": "10ce24b57ff9bac84f1a24c8264331c182eb2a3dc34928367080b3b2f0f6c682",
+        "error": null,
+        "statementFrom": "the licence page itself (fetched 2026-11-11, phrase found by the script)"
+      }
+    },
+    {
+      "id": "ward_boundaries",
+      "source": "Ward boundaries from open repositories (DataMeet Municipal_Spatial_Data)",
+      "layer": "area",
+      "use": "polygons to hang profiles on",
+      "licence": "CC BY 4.0 (the repository readme: every dataset unless it says otherwise)",
+      "licenceUrl": "https://raw.githubusercontent.com/datameet/Municipal_Spatial_Data/master/Readme.md",
+      "licenceText": null,
+      "credit": "DataMeet Municipal Spatial Data (with a link to the dataset)",
+      "freePublicGame": "yes, with the credit line",
+      "soldGame": "yes, with the credit line",
+      "conditions": "The Delhi folder must be read for a note that says otherwise before use. Not downloaded: AD2 does not need wards.",
+      "shipped": false,
+      "dateChecked": "2026-11-11",
+      "checked": {
+        "httpStatus": 200,
+        "phraseFound": true,
+        "phrasesFound": [
+          "CC BY 4.0"
+        ],
+        "quote": "If you need to view them in a Desktop GIS, I'll recommend QGis ==== ## Data License Unless explicitly stated, all datasets in this repository is shared under [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/) license. Please mention and link to relevant dataset in the attribution, eg. *[Ahmedabad Municipal Spati",
+        "pageSha256": "5ae36907511aa3d6d08cd978951a66582400e444809062e988bd2b4925b0bc65",
+        "error": null,
+        "statementFrom": "the licence page itself (fetched 2026-11-11, phrase found by the script)"
+      }
+    },
+    {
+      "id": "osm_landuse",
+      "source": "OSM landuse, place and colony tags",
+      "layer": "area",
+      "use": "seeds of the area polygons",
+      "licence": "ODbL 1.0",
+      "licenceUrl": "https://www.openstreetmap.org/copyright",
+      "licenceText": null,
+      "credit": "© OpenStreetMap contributors",
+      "freePublicGame": "yes, with the credit line",
+      "soldGame": "yes, with the credit line",
+      "conditions": "As OSM above.",
+      "shipped": true,
+      "dateChecked": "2026-11-11",
+      "checked": {
+        "httpStatus": 200,
+        "phraseFound": true,
+        "phrasesFound": [
+          "Open Data Commons Open Database License",
+          "ODbL"
+        ],
+        "quote": "SM community . Support the project by joining the OSM Foundation and making a donation . OpenStreetMap licensing OpenStreetMap is open data, licensed under the Open Data Commons Open Database License (ODbL) by the OpenStreetMap Foundation (OSMF). In summary: You are free to copy, distribute, transmit and adapt our data",
+        "pageSha256": "d1b5450bd61960d84f8bc672e2fd813223edbdbc1de4c98141b34bfa071845f6",
+        "error": null,
+        "statementFrom": "the licence page itself (fetched 2026-11-11, phrase found by the script)"
+      }
+    },
+    {
+      "id": "sentinel2",
+      "source": "Sentinel-2 imagery (NDVI, reference)",
+      "layer": "area",
+      "use": "greenery per cell; reference for repairs",
+      "licence": "Copernicus Sentinel data terms (free, full and open)",
+      "licenceUrl": "https://sentinels.copernicus.eu/documents/247904/690755/Sentinel_Data_Legal_Notice",
+      "licenceText": null,
+      "credit": "Contains modified Copernicus Sentinel data [year]",
+      "freePublicGame": "yes, with the notice",
+      "soldGame": "yes, with the notice",
+      "conditions": "The notice must be shown when data is adapted.",
+      "shipped": false,
+      "dateChecked": "2026-11-11",
+      "checked": {
+        "httpStatus": 200,
+        "phraseFound": null,
+        "phrasesFound": [],
+        "quote": null,
+        "pageSha256": "fa2955ff48a1d82e77fc7296d63681670ecdb9d2811a0505ae60d0683b62fa64",
+        "error": null,
+        "statementFrom": "the publisher's page was reached (2026-11-11) but the script could not read the licence phrase from it (a PDF, a script-built page, or no licence stated): the statement is the builder's reading and stays a belief"
+      }
+    },
+    {
+      "id": "viirs",
+      "source": "VIIRS night lights (EOG annual VNL)",
+      "layer": "area",
+      "use": "activity proxy at coarse scale",
+      "licence": "CC BY 4.0",
+      "licenceUrl": "https://eogdata.mines.edu/products/vnl/",
+      "licenceText": null,
+      "credit": "Earth Observation Group, Payne Institute for Public Policy, Colorado School of Mines",
+      "freePublicGame": "yes, with the credit line",
+      "soldGame": "yes, with the credit line",
+      "conditions": "Downloads need a free account (an owner action). About 500 m cells: too coarse for the pilot districts.",
+      "shipped": false,
+      "dateChecked": "2026-11-11",
+      "checked": {
+        "httpStatus": 200,
+        "phraseFound": true,
+        "phrasesFound": [
+          "Creative Commons"
+        ],
+        "quote": "remain, the retina of the eye is sensible of it.” - Jules Verne, Journey to the Center of the Earth Many of the VIIRS Nighttime Lights data are available under Creative Commons Attribution 4.0 International license. Please refer to the document HERE for further details. Please cite EOG as the data source and papers rel",
+        "pageSha256": "6c5c3af1f6e27d39f78ea7057ef17e65dba612828238f2a97d35bc78576bc8ce",
+        "error": null,
+        "statementFrom": "the licence page itself (fetched 2026-11-11, phrase found by the script)"
+      }
+    },
+    {
+      "id": "open_buildings_25d",
+      "source": "Google Open Buildings 2.5D Temporal",
+      "layer": "map",
+      "use": "building heights (if time)",
+      "licence": "CC BY 4.0",
+      "licenceUrl": "https://sites.research.google/gr/open-buildings/temporal/",
+      "licenceText": null,
+      "credit": "Google Open Buildings 2.5D Temporal (W. Sirko et al., 2023)",
+      "freePublicGame": "yes, with the credit line",
+      "soldGame": "yes, with the credit line",
+      "conditions": "Served through Earth Engine or large tiles; the fetch needs an account (an owner action).",
+      "shipped": false,
+      "dateChecked": "2026-11-11",
+      "checked": {
+        "httpStatus": 200,
+        "phraseFound": true,
+        "phrasesFound": [
+          "CC BY-4.0"
+        ],
+        "quote": "See the paper for more details about our approach and evaluation metrics. How is the data licensed? The data is shared under the Creative Commons Attribution (CC BY-4.0) license and the Open Data Commons Open Database License (ODbL) v1.0 license. Users can review the terms for both licenses and select the license they ",
+        "pageSha256": "014294eb2799d0e9ad6dc1dfb004d1d31997b3c21d34a6a6e4aff6b74a0f809f",
+        "error": null,
+        "statementFrom": "the licence page itself (fetched 2026-11-11, phrase found by the script)"
+      }
+    }
+  ],
+  "coverageOfThePilot": {
+    "how": "Counted from the pinned downloads for the sources that were fetched. Census wards, ward boundaries, MPD maps, Sentinel-2 and VIIRS were not downloaded in this bench: AD2 (hand-drawn areas seeded by OSM land use and colony names, with the footprint grid as evidence) does not need them, and three of them need an account or have no open licence.",
+    "sites": {
+      "cp": {
+        "osmLandusePolygons": 66,
+        "osmLanduseKinds": [
+          "commercial (41)",
+          "retail (13)",
+          "residential (5)",
+          "grass (2)",
+          "institutional (2)",
+          "railway (1)",
+          "construction (1)",
+          "brownfield (1)"
+        ],
+        "osmPlaceNames": [
+          "Connaught Place",
+          "Shankar Market",
+          "Palika Niketan",
+          "Kashmiri Market",
+          "Sector 4"
+        ],
+        "osmOpenGroundPolygons": 19,
+        "footprints": {
+          "osm": 643,
+          "google": 2471,
+          "microsoft": 981,
+          "overture": 1535
+        }
+      },
+      "india_gate": {
+        "osmLandusePolygons": 107,
+        "osmLanduseKinds": [
+          "grass (70)",
+          "residential (16)",
+          "commercial (10)",
+          "military (4)",
+          "construction (4)",
+          "allotments (1)",
+          "religious (1)",
+          "brownfield (1)"
+        ],
+        "osmPlaceNames": [
+          "Pandara Park"
+        ],
+        "osmOpenGroundPolygons": 99,
+        "footprints": {
+          "osm": 318,
+          "google": 1514,
+          "microsoft": 461,
+          "overture": 1276
+        }
+      },
+      "ito": {
+        "osmLandusePolygons": 67,
+        "osmLanduseKinds": [
+          "commercial (32)",
+          "grass (16)",
+          "residential (8)",
+          "industrial (4)",
+          "recreation_ground (2)",
+          "institutional (2)",
+          "garages (1)",
+          "education (1)"
+        ],
+        "osmPlaceNames": [
+          "Indraprastha Estate"
+        ],
+        "osmOpenGroundPolygons": 54,
+        "footprints": {
+          "osm": 476,
+          "google": 2545,
+          "microsoft": 491,
+          "overture": 2145
+        }
+      },
+      "chandni_chowk": {
+        "osmLandusePolygons": 13,
+        "osmLanduseKinds": [
+          "residential (4)",
+          "commercial (3)",
+          "retail (2)",
+          "farmland (1)",
+          "railway (1)",
+          "religious (1)",
+          "grass (1)"
+        ],
+        "osmPlaceNames": [
+          "Matia Mahal",
+          "Daryaganj",
+          "Dharampura",
+          "Chandni Chowk",
+          "Ballimaran",
+          "Chawri Bazaar",
+          "Meena Bazaar",
+          "Sita Ram Bazaar",
+          "Old Delhi",
+          "Vakilpura"
+        ],
+        "osmOpenGroundPolygons": 22,
+        "footprints": {
+          "osm": 1118,
+          "google": 15725,
+          "microsoft": 1048,
+          "overture": 16923
+        }
+      },
+      "laxmi_nagar": {
+        "osmLandusePolygons": 7,
+        "osmLanduseKinds": [
+          "railway (3)",
+          "farmland (2)",
+          "floodplains (1)",
+          "forest (1)"
+        ],
+        "osmPlaceNames": [
+          "Laxmi Nagar",
+          "Shakarpur"
+        ],
+        "osmOpenGroundPolygons": 19,
+        "footprints": {
+          "osm": 1032,
+          "google": 8223,
+          "microsoft": 1077,
+          "overture": 4536
+        }
+      }
+    },
+    "notFetched": [
+      {
+        "id": "census2011",
+        "reason": "ward tables are on data.gov.in and censusindia.gov.in as spreadsheets per district; not needed for AD2, usable under GODL when wanted"
+      },
+      {
+        "id": "ward_boundaries",
+        "reason": "not needed for AD2; the DataMeet repository has a Delhi folder and its readme states CC BY 4.0 for every dataset unless it says otherwise"
+      },
+      {
+        "id": "mpd_landuse",
+        "reason": "scanned PDFs with no open licence: reference only"
+      },
+      {
+        "id": "sentinel2",
+        "reason": "needs a Copernicus Data Space account for bulk download (an owner action); 10 m cells; only used as a greenery hint"
+      },
+      {
+        "id": "viirs",
+        "reason": "needs a free account at the Earth Observation Group; about 500 m cells are coarser than a pilot district"
+      }
+    ]
+  },
+  "featureTable100m": {
+    "how": "If time item, done for three pilot districts: per 100 m cell the building count and coverage, median footprint, road metres, open ground share and a mean height hint. The full tables are files beside this report.",
+    "sites": {
+      "cp": {
+        "file": "harness/reports/arch/pilot_data/features_100m_cp.json",
+        "cells": 276,
+        "buildingsPerCell": {
+          "p10": 1,
+          "median": 4,
+          "p90": 11
+        },
+        "coverage": {
+          "p10": 0.009,
+          "median": 0.157,
+          "p90": 0.469
+        },
+        "medianFootprintM2": {
+          "p10": 29.2,
+          "median": 125.2,
+          "p90": 1135
+        },
+        "roadMPerCell": {
+          "median": 260,
+          "p90": 550
+        },
+        "cellsWithHeightHint": 59
+      },
+      "ito": {
+        "file": "harness/reports/arch/pilot_data/features_100m_ito.json",
+        "cells": 441,
+        "buildingsPerCell": {
+          "p10": 0,
+          "median": 3,
+          "p90": 10
+        },
+        "coverage": {
+          "p10": 0,
+          "median": 0.063,
+          "p90": 0.317
+        },
+        "medianFootprintM2": {
+          "p10": 0,
+          "median": 64.6,
+          "p90": 763
+        },
+        "roadMPerCell": {
+          "median": 130,
+          "p90": 440
+        },
+        "cellsWithHeightHint": 19
+      },
+      "chandni_chowk": {
+        "file": "harness/reports/arch/pilot_data/features_100m_chandni_chowk.json",
+        "cells": 516,
+        "buildingsPerCell": {
+          "p10": 1,
+          "median": 14,
+          "p90": 86
+        },
+        "coverage": {
+          "p10": 0.003,
+          "median": 0.226,
+          "p90": 0.464
+        },
+        "medianFootprintM2": {
+          "p10": 23,
+          "median": 48.6,
+          "p90": 237.1
+        },
+        "roadMPerCell": {
+          "median": 180,
+          "p90": 400
+        },
+        "cellsWithHeightHint": 42
+      }
+    }
+  },
+  "landmarkSummary": {
+    "note": "the four pilot districts",
+    "candidates": 351,
+    "perTier": {
+      "hero": 3,
+      "signature": 29,
+      "marker": 319
+    },
+    "perSource": {
+      "osm": 182,
+      "wikidata": 238,
+      "asi": 12
+    },
+    "withOsmFootprint": 96,
+    "heroAndSignatureWithFootprint": 15,
+    "heroAndSignature": 32,
+    "osmToWikidata": {
+      "n": 69,
+      "medianM": 27.5,
+      "p90M": 140.4,
+      "over50": 21,
+      "maxM": 362.7
+    },
+    "osmToWikidataWithFootprint": {
+      "n": 46,
+      "medianM": 19.7,
+      "p90M": 66,
+      "over50": 8,
+      "maxM": 272.8
+    },
+    "fallbackNameMatches": 7,
+    "asiDelhiCircle": {
+      "wikidataRowsWithAsiId": 164,
+      "distinctIds": 160,
+      "withCoordinate": 150,
+      "inPilotBoxes": 12
+    },
+    "asiListPage": {
+      "url": "https://asi.nic.in/alphabetical-list-of-monuments-delhi/",
+      "bytes": 8355901,
+      "sha256": "05a94732db188ba9e1a1726d011919d31ec499658784907d45272f77de2f0cb1",
+      "note": "the page was reached and pinned, but the list is not in the served HTML (no table rows; it is loaded another way), so the official count could not be read here. The ASI ids come through Wikidata P1371 only",
+      "tableRows": 0,
+      "textLines": 449,
+      "machineReadable": false
+    }
+  },
+  "notMeasured": [
+    {
+      "id": "building_heights_open_buildings_25d",
+      "reason": "if time item, not done: the Open Buildings 2.5D Temporal data is served through Earth Engine, which needs a Google account (an owner action). Licence checked: CC BY 4.0 or ODbL, so it may be used once fetched"
+    }
+  ]
+}

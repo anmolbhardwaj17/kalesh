@@ -1,0 +1,26 @@
+[
+  {
+    "id": "ov_cp_stale_sample",
+    "issue": "R-ROAD-01:way/1:way/2:node/3",
+    "action": "connect",
+    "target": {
+      "ids": [
+        "way/1",
+        "way/2"
+      ],
+      "anchor": {
+        "lat": 28.6242,
+        "lon": 77.20870000000001
+      },
+      "tolerance_m": 1
+    },
+    "params": {
+      "to": "way/2",
+      "kinds": "road,road"
+    },
+    "why": "Sample of a stale patch: its ways are not in the extract and nothing lies within 1 m of the anchor. It must be reported, never dropped.",
+    "by": "builder",
+    "source": "bench",
+    "date": "2026-11-11"
+  }
+]

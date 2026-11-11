@@ -1,0 +1,2920 @@
+{
+  "at": "2026-11-11T01:30:13.635Z",
+  "machine": "macbook-pro, darwin arm64, Apple M2 Pro, 12 cores, 16 GB",
+  "node": "v22.22.3",
+  "bench": "pilot_data",
+  "writtenBy": "node harness/bench/pilot_data/fetch.mjs, then node harness/bench/pilot_data/census.mjs",
+  "bakeLanguage": "B1: Node and TypeScript (tools/bake/, run by Node 22 without a build step); DuckDB for Node reads Overture, geotiff.js reads the height files. No Python was needed (B3 not used).",
+  "areas": [
+    {
+      "id": "cp",
+      "name": "Connaught Place with Jantar Mantar",
+      "role": "pilot",
+      "bbox": {
+        "south": 28.624,
+        "west": 77.2085,
+        "north": 28.6375,
+        "east": 77.2255
+      },
+      "centre": {
+        "lat": 28.6315,
+        "lon": 77.2167
+      }
+    },
+    {
+      "id": "india_gate",
+      "name": "India Gate",
+      "role": "pilot",
+      "bbox": {
+        "south": 28.606,
+        "west": 77.2215,
+        "north": 28.62,
+        "east": 77.238
+      },
+      "centre": {
+        "lat": 28.612894,
+        "lon": 77.229446
+      }
+    },
+    {
+      "id": "ito",
+      "name": "ITO with Pragati Maidan",
+      "role": "pilot",
+      "bbox": {
+        "south": 28.612,
+        "west": 77.236,
+        "north": 28.634,
+        "east": 77.254
+      },
+      "centre": {
+        "lat": 28.6285,
+        "lon": 77.2414
+      }
+    },
+    {
+      "id": "chandni_chowk",
+      "name": "Chandni Chowk with Red Fort",
+      "role": "pilot",
+      "bbox": {
+        "south": 28.645,
+        "west": 77.22,
+        "north": 28.662,
+        "east": 77.246
+      },
+      "centre": {
+        "lat": 28.6506,
+        "lon": 77.2303
+      }
+    },
+    {
+      "id": "laxmi_nagar",
+      "name": "Laxmi Nagar",
+      "role": "far",
+      "bbox": {
+        "south": 28.624,
+        "west": 77.27,
+        "north": 28.637,
+        "east": 77.285
+      },
+      "centre": {
+        "lat": 28.6304,
+        "lon": 77.2777
+      }
+    }
+  ],
+  "sources": {
+    "pinnedFiles": [
+      {
+        "id": "asi_delhi_list",
+        "file": "data/pilot/landmarks/asi_delhi_list.html",
+        "url": "https://asi.nic.in/alphabetical-list-of-monuments-delhi/",
+        "date": "2026-11-11",
+        "licence": "government website, no open licence; names and list membership are facts",
+        "licenceUrl": "https://asi.nic.in/copyright-policy/",
+        "credit": "Archaeological Survey of India (as the source of the list)",
+        "bytes": 8355901,
+        "sha256": "05a94732db188ba9e1a1726d011919d31ec499658784907d45272f77de2f0cb1",
+        "release": null,
+        "osmBase": null,
+        "remote": null,
+        "note": "the list page as served; only names and protection status are read from it"
+      },
+      {
+        "id": "fabdem",
+        "file": "data/pilot/dem/fabdem_N28E077.tif",
+        "url": "https://data.bris.ac.uk/datasets/s5hqmjcdj8yo2ibzi9b4ew3sn/N20E070-N30E080_FABDEM_V1-2.zip",
+        "date": "2026-11-11",
+        "licence": "CC BY-NC-SA 4.0",
+        "licenceUrl": "https://data.bris.ac.uk/data/dataset/s5hqmjcdj8yo2ibzi9b4ew3sn",
+        "credit": "Hawker, L. et al. (2022), FABDEM V1-2, University of Bristol",
+        "bytes": 15466352,
+        "sha256": "6764c2c6b277a4dfda138286aca880119a755c2a2f00b836c6b91db035775050",
+        "release": null,
+        "osmBase": null,
+        "remote": {
+          "contentLength": 1878878515,
+          "lastModified": "Mon, 12 Dec 2022 18:25:02 GMT"
+        },
+        "note": "the entry N28E077_FABDEM_V1-2.tif read out of the 10 degree zip with byte range requests. Comparison only: never shipped, never baked into tiles"
+      },
+      {
+        "id": "gedtm30",
+        "file": "data/pilot/dem/gedtm30_pilot_window.json",
+        "url": "https://s3.opengeohub.org/global/dtm/v1.2/gedtm_rf_m_30m_s_20060101_20151231_go_epsg.4326.3855_v1.2.tif",
+        "date": "2026-11-11",
+        "licence": "CC BY 4.0",
+        "licenceUrl": "https://zenodo.org/api/records/18887460",
+        "credit": "GEDTM30: Ho, Y.-F. et al., OpenLandMap, CC BY 4.0, doi 10.5281/zenodo.18887460",
+        "bytes": 1508079,
+        "sha256": "6658a8cb20ebb5e8b0d2bea22e6ad990abecc9d4e799207dc782e512738b6682",
+        "release": null,
+        "osmBase": null,
+        "remote": {
+          "contentLength": 432407644715,
+          "lastModified": "Wed, 23 Sep 2026 14:42:14 GMT",
+          "etag": "\"8bf9b35f45e9befaa9b91d877bf230d7-3107\""
+        },
+        "note": "window of 348 x 274 cells cut from the global file with HTTP range requests (scale 1); sha256 is of the saved window, remote names the global file"
+      },
+      {
+        "id": "glo30",
+        "file": "data/pilot/dem/glo30_N28_E077.tif",
+        "url": "https://copernicus-dem-30m.s3.amazonaws.com/Copernicus_DSM_COG_10_N28_00_E077_00_DEM/Copernicus_DSM_COG_10_N28_00_E077_00_DEM.tif",
+        "date": "2026-11-11",
+        "licence": "Copernicus DEM licence (free of charge, any use including commercial, with the notice)",
+        "licenceUrl": "https://registry.opendata.aws/copernicus-dem/",
+        "credit": "© DLR e.V. 2010-2014 and © Airbus Defence and Space GmbH 2014-2018 provided under COPERNICUS by the European Union and ESA; all rights reserved",
+        "bytes": 41680243,
+        "sha256": "a8e69d432869bf85a63b7cfcaa61b5a770c7705125b3cfde9b892d65dfed98b4",
+        "release": null,
+        "osmBase": null,
+        "remote": {
+          "etag": "\"6550b4ed06eb808f109da99fbe12365a\"",
+          "lastModified": "Mon, 09 May 2022 14:13:11 GMT",
+          "contentLength": 41680243
+        },
+        "note": "Copernicus DEM GLO-30 Public, the 1 degree tile N28 E077 (a surface model: roofs and trees are in it)"
+      },
+      {
+        "id": "google_open_buildings_pilot",
+        "file": "data/pilot/buildings/google_open_buildings_pilot.csv",
+        "url": "https://storage.googleapis.com/open-buildings-data/v3/polygons_s2_level_4_gzip/391_buildings.csv.gz",
+        "date": "2026-11-11",
+        "licence": "CC BY 4.0 or ODbL 1.0 (the user picks)",
+        "licenceUrl": "https://sites.research.google/gr/open-buildings/",
+        "credit": "Google Open Buildings (W. Sirko et al., 2021)",
+        "bytes": 11112228,
+        "sha256": "c3cd10ca5155bd1724a8b51b6d652eff1ca739ad653e2842d446430e2804b9b3",
+        "release": null,
+        "osmBase": null,
+        "remote": {
+          "contentLength": 7189068430,
+          "sha256": "9058ebdff86e53c4fc2a7b8c5d83817fe776b2939d1cb695fb94efb4cfbda6ed",
+          "lastModified": "Fri, 23 Jun 2023 09:59:36 GMT",
+          "rows": 73380259
+        },
+        "note": "rows of the S2 cell 391 file inside the pilot boxes (43003 of 73380259); the remote file was streamed once and hashed (remote.sha256), not kept"
+      },
+      {
+        "id": "ms_dataset_links",
+        "file": "data/pilot/buildings/ms_dataset_links.csv",
+        "url": "https://minedbuildings.z5.web.core.windows.net/global-buildings/dataset-links.csv",
+        "date": "2026-11-11",
+        "licence": "CDLA Permissive 2.0",
+        "licenceUrl": "https://raw.githubusercontent.com/microsoft/GlobalMLBuildingFootprints/main/README.md",
+        "credit": "Microsoft Global ML Building Footprints",
+        "bytes": 7171802,
+        "sha256": "9371e9fd27f1e82856b2ed7a3c0397c685ee0396b1078a0af77dbe91269f9be6",
+        "release": null,
+        "osmBase": null,
+        "remote": null,
+        "note": "index of the Microsoft footprint files by quadkey"
+      },
+      {
+        "id": "ms_footprints_123121303_India",
+        "file": "data/pilot/buildings/ms_123121303_India.csv.gz",
+        "url": "https://minedbuildings.z5.web.core.windows.net/global-buildings/2026-02-03/global-buildings.geojsonl/RegionName=India/quadkey=123121303/part-00170-4feead82-d499-422b-94cb-c036c212127a.c000.csv.gz",
+        "date": "2026-11-11",
+        "licence": "CDLA Permissive 2.0",
+        "licenceUrl": "https://raw.githubusercontent.com/microsoft/GlobalMLBuildingFootprints/main/README.md",
+        "credit": "Microsoft Global ML Building Footprints",
+        "bytes": 131318014,
+        "sha256": "1bc81ee894ab1bfd791df6f97c8e5e78dadc7d8cddedd70277df0dafeb100b95",
+        "release": null,
+        "osmBase": null,
+        "remote": {
+          "etag": "\"0x8DE637D0A8A603D\"",
+          "lastModified": "Tue, 03 Feb 2026 23:36:23 GMT",
+          "contentLength": 131318014
+        },
+        "note": "Microsoft footprints, quadkey 123121303 (India), GeoJSON lines"
+      },
+      {
+        "id": "ms_footprints_pilot",
+        "file": "data/pilot/buildings/ms_pilot.geojsonl",
+        "url": "https://minedbuildings.z5.web.core.windows.net/global-buildings/dataset-links.csv",
+        "date": "2026-11-11",
+        "licence": "CDLA Permissive 2.0",
+        "licenceUrl": "https://raw.githubusercontent.com/microsoft/GlobalMLBuildingFootprints/main/README.md",
+        "credit": "Microsoft Global ML Building Footprints",
+        "bytes": 1950789,
+        "sha256": "792552e177d28e6043d5b218aa9471581148787f2347effbb35b8707396b8f52",
+        "release": null,
+        "osmBase": null,
+        "remote": null,
+        "note": "the footprints of the quadkey files whose first vertex is inside a pilot box (4055 footprints)"
+      },
+      {
+        "id": "osm_chandni_chowk",
+        "file": "data/pilot/osm/chandni_chowk.json",
+        "url": "https://overpass-api.de/api/interpreter",
+        "date": "2026-11-11",
+        "licence": "ODbL 1.0",
+        "licenceUrl": "https://www.openstreetmap.org/copyright",
+        "credit": "© OpenStreetMap contributors",
+        "bytes": 3013855,
+        "sha256": "33dd0055cec1425ea01989cd692734acc49328a77a81407585ed9a98d5ca6dc7",
+        "release": null,
+        "osmBase": "2026-11-11T00:48:48Z",
+        "remote": null,
+        "note": "Overpass box query of Chandni Chowk with Red Fort; osmBase is the date of the OSM data"
+      },
+      {
+        "id": "osm_cp",
+        "file": "data/pilot/osm/cp.json",
+        "url": "https://overpass-api.de/api/interpreter",
+        "date": "2026-11-11",
+        "licence": "ODbL 1.0",
+        "licenceUrl": "https://www.openstreetmap.org/copyright",
+        "credit": "© OpenStreetMap contributors",
+        "bytes": 3747876,
+        "sha256": "03599484a1d11c9801ce67f492aad74accf0f9c54baf8291b7d89cff0ba9635e",
+        "release": null,
+        "osmBase": "2026-11-11T00:46:50Z",
+        "remote": null,
+        "note": "Overpass box query of Connaught Place with Jantar Mantar; osmBase is the date of the OSM data"
+      },
+      {
+        "id": "osm_india_gate",
+        "file": "data/pilot/osm/india_gate.json",
+        "url": "https://overpass-api.de/api/interpreter",
+        "date": "2026-11-11",
+        "licence": "ODbL 1.0",
+        "licenceUrl": "https://www.openstreetmap.org/copyright",
+        "credit": "© OpenStreetMap contributors",
+        "bytes": 1585340,
+        "sha256": "e8cf6868cd061bcdd410d0c01ae2fe05810adf52c1d1fda716f600d46fcf2543",
+        "release": null,
+        "osmBase": "2026-11-11T00:46:50Z",
+        "remote": null,
+        "note": "Overpass box query of India Gate; osmBase is the date of the OSM data"
+      },
+      {
+        "id": "osm_ito",
+        "file": "data/pilot/osm/ito.json",
+        "url": "https://overpass-api.de/api/interpreter",
+        "date": "2026-11-11",
+        "licence": "ODbL 1.0",
+        "licenceUrl": "https://www.openstreetmap.org/copyright",
+        "credit": "© OpenStreetMap contributors",
+        "bytes": 2224812,
+        "sha256": "f63dc180fceba6db99375a13d140707ec721a7940ed143f5145643f69c98ba26",
+        "release": null,
+        "osmBase": "2026-11-11T00:47:51Z",
+        "remote": null,
+        "note": "Overpass box query of ITO with Pragati Maidan; osmBase is the date of the OSM data"
+      },
+      {
+        "id": "osm_laxmi_nagar",
+        "file": "data/pilot/osm/laxmi_nagar.json",
+        "url": "https://overpass-api.de/api/interpreter",
+        "date": "2026-11-11",
+        "licence": "ODbL 1.0",
+        "licenceUrl": "https://www.openstreetmap.org/copyright",
+        "credit": "© OpenStreetMap contributors",
+        "bytes": 1844894,
+        "sha256": "988c516142e89a65edcbea85680ba53e783572092c79f97472c4b6e857385e92",
+        "release": null,
+        "osmBase": "2026-11-11T00:48:48Z",
+        "remote": null,
+        "note": "Overpass box query of Laxmi Nagar; osmBase is the date of the OSM data"
+      },
+      {
+        "id": "overture_buildings",
+        "file": "data/pilot/overture/buildings.json",
+        "url": "s3://overturemaps-us-west-2/release/2026-10-21.0/theme=buildings/type=building/*",
+        "date": "2026-11-11",
+        "licence": "ODbL 1.0",
+        "licenceUrl": "https://docs.overturemaps.org/attribution/",
+        "credit": "© OpenStreetMap contributors, Overture Maps Foundation",
+        "bytes": 26548967,
+        "sha256": "41188aaa947b7929dfbe66faafa27a09d39fd1c1e420e13a34f9bc7eb00233d3",
+        "release": "2026-10-21.0",
+        "osmBase": null,
+        "remote": null,
+        "note": "DuckDB (httpfs, spatial) read of the public release, rows whose bbox meets a pilot box, geometry as GeoJSON text"
+      },
+      {
+        "id": "overture_segments",
+        "file": "data/pilot/overture/segments.json",
+        "url": "s3://overturemaps-us-west-2/release/2026-10-21.0/theme=transportation/type=segment/*",
+        "date": "2026-11-11",
+        "licence": "ODbL 1.0",
+        "licenceUrl": "https://docs.overturemaps.org/attribution/",
+        "credit": "© OpenStreetMap contributors, Overture Maps Foundation",
+        "bytes": 8092741,
+        "sha256": "8ef5129415faec49ceecfcca34e900b518f5e5e88494a420cde036203b604bf3",
+        "release": "2026-10-21.0",
+        "osmBase": null,
+        "remote": null,
+        "note": "DuckDB (httpfs, spatial) read of the public release, rows whose bbox meets a pilot box, geometry as GeoJSON text"
+      },
+      {
+        "id": "wikidata_pilot",
+        "file": "data/pilot/landmarks/wikidata.json",
+        "url": "https://query.wikidata.org/sparql",
+        "date": "2026-11-11",
+        "licence": "CC0 1.0",
+        "licenceUrl": "https://www.wikidata.org/wiki/Wikidata:Copyright",
+        "credit": "none needed (Wikidata, CC0)",
+        "bytes": 252811,
+        "sha256": "44a545fe3141cc14ae88420a04215d435a76df87bd728ea800a60bb0f083b1d3",
+        "release": null,
+        "osmBase": null,
+        "remote": null,
+        "note": "SPARQL: items with P625 inside each pilot box, and 164 rows with an ASI id N-DL-*"
+      }
+    ],
+    "unreachable": {},
+    "pinList": "data/SOURCES.json",
+    "licences": [
+      {
+        "id": "osm",
+        "source": "OpenStreetMap",
+        "layer": "map",
+        "use": "road network, building footprints, land use, landmark footprints",
+        "licence": "ODbL 1.0",
+        "licenceUrl": "https://www.openstreetmap.org/copyright",
+        "licenceText": null,
+        "credit": "© OpenStreetMap contributors",
+        "freePublicGame": "yes, with the credit line",
+        "soldGame": "yes, with the credit line",
+        "conditions": "A derived database that is shared must be offered under ODbL: the repaired map data is published openly. The game itself is a produced work and only needs the credit.",
+        "shipped": true,
+        "dateChecked": "2026-11-11",
+        "checked": {
+          "httpStatus": 200,
+          "phraseFound": true,
+          "phrasesFound": [
+            "Open Data Commons Open Database License",
+            "ODbL"
+          ],
+          "quote": "SM community . Support the project by joining the OSM Foundation and making a donation . OpenStreetMap licensing OpenStreetMap is open data, licensed under the Open Data Commons Open Database License (ODbL) by the OpenStreetMap Foundation (OSMF). In summary: You are free to copy, distribute, transmit and adapt our data",
+          "pageSha256": "1a738e9a7b3f8e8b3b1cb662e472a5cdf37479d4aa5423e23adb80dcbd452dfa",
+          "error": null,
+          "statementFrom": "the licence page itself (fetched 2026-11-11, phrase found by the script)"
+        }
+      },
+      {
+        "id": "overture_buildings",
+        "source": "Overture Maps, buildings theme",
+        "layer": "map",
+        "use": "building footprints merged from OSM, Microsoft, Google Open Buildings and Esri (BS1)",
+        "licence": "ODbL 1.0",
+        "licenceUrl": "https://docs.overturemaps.org/attribution/",
+        "licenceText": null,
+        "credit": "© OpenStreetMap contributors, Overture Maps Foundation",
+        "freePublicGame": "yes, with the credit line",
+        "soldGame": "yes, with the credit line",
+        "conditions": "Same share-alike duty on a shared derived database as OSM.",
+        "shipped": true,
+        "dateChecked": "2026-11-11",
+        "checked": {
+          "httpStatus": 200,
+          "phraseFound": true,
+          "phrasesFound": [
+            "ODbL",
+            "Open Database License"
+          ],
+          "quote": "embó, Treinta y Tres). Available under the Licencia de Datos Abiertos – Uruguay . Distributed by OpenAddresses. Accessed: 2026-09-30. Base ​ License for theme: ODbL © OpenStreetMap contributors. Available under the Open Database License . Data from the Daylight Map Distribution ESA WorldCover . © ESA WorldCover project",
+          "pageSha256": "54d6be41c3dfe4945830fdcb76cad18475f502799dd49541748d4bce46054d9b",
+          "error": null,
+          "statementFrom": "the licence page itself (fetched 2026-11-11, phrase found by the script)"
+        }
+      },
+      {
+        "id": "overture_transportation",
+        "source": "Overture Maps, transportation theme",
+        "layer": "map",
+        "use": "second look at the road network (RS1)",
+        "licence": "ODbL 1.0",
+        "licenceUrl": "https://docs.overturemaps.org/attribution/",
+        "licenceText": null,
+        "credit": "© OpenStreetMap contributors, Overture Maps Foundation",
+        "freePublicGame": "yes, with the credit line",
+        "soldGame": "yes, with the credit line",
+        "conditions": "Built from OSM. Same share-alike duty.",
+        "shipped": false,
+        "dateChecked": "2026-11-11",
+        "checked": {
+          "httpStatus": 200,
+          "phraseFound": true,
+          "phrasesFound": [
+            "ODbL",
+            "Open Database License"
+          ],
+          "quote": "embó, Treinta y Tres). Available under the Licencia de Datos Abiertos – Uruguay . Distributed by OpenAddresses. Accessed: 2026-09-30. Base ​ License for theme: ODbL © OpenStreetMap contributors. Available under the Open Database License . Data from the Daylight Map Distribution ESA WorldCover . © ESA WorldCover project",
+          "pageSha256": "54d6be41c3dfe4945830fdcb76cad18475f502799dd49541748d4bce46054d9b",
+          "error": null,
+          "statementFrom": "the licence page itself (fetched 2026-11-11, phrase found by the script)"
+        }
+      },
+      {
+        "id": "google_open_buildings",
+        "source": "Google Open Buildings v3",
+        "layer": "map",
+        "use": "building footprints for our own merge (BS2); footprint density for area profiles",
+        "licence": "CC BY 4.0 or ODbL 1.0 (the user picks)",
+        "licenceUrl": "https://sites.research.google/gr/open-buildings/",
+        "licenceText": null,
+        "credit": "Google Open Buildings (W. Sirko et al., 2021)",
+        "freePublicGame": "yes, with the credit line",
+        "soldGame": "yes, with the credit line",
+        "conditions": "Under CC BY 4.0 there is no share-alike.",
+        "shipped": true,
+        "dateChecked": "2026-11-11",
+        "checked": {
+          "httpStatus": 200,
+          "phraseFound": true,
+          "phrasesFound": [
+            "CC BY-4.0",
+            "ODbL"
+          ],
+          "quote": "however made further improvements for the subsequent versions, v2 and v3. How is the data licensed? The data is shared under the Creative Commons Attribution (CC BY-4.0) license and the Open Data Commons Open Database License (ODbL) v1.0 license . As the user, you can pick which of the two licenses you prefer and use t",
+          "pageSha256": "1be95e3316e0cb6d4cba01e4c4114bcb68c6123d5c474530d5133d83b359c658",
+          "error": null,
+          "statementFrom": "the licence page itself (fetched 2026-11-11, phrase found by the script)"
+        }
+      },
+      {
+        "id": "ms_footprints",
+        "source": "Microsoft Global ML Building Footprints",
+        "layer": "map",
+        "use": "building footprints for our own merge (BS2)",
+        "licence": "CDLA Permissive 2.0",
+        "licenceUrl": "https://raw.githubusercontent.com/microsoft/GlobalMLBuildingFootprints/main/README.md",
+        "licenceText": null,
+        "credit": "Microsoft Global ML Building Footprints",
+        "freePublicGame": "yes",
+        "soldGame": "yes",
+        "conditions": "The licence text must go with any copy of the data that is shared. No share-alike. The design docs believed ODbL: the repository readme now says CDLA Permissive 2.0 (older releases were ODbL).",
+        "shipped": true,
+        "dateChecked": "2026-11-11",
+        "checked": {
+          "httpStatus": 200,
+          "phraseFound": true,
+          "phrasesFound": [
+            "CDLA Permissive 2.0"
+          ],
+          "quote": "buildings from Bing Maps imagery between 2014 and 2024 including Maxar, Airbus, and IGN France imagery. The data is freely available for download and use under CDLA Permissive 2.0. This dataset includes our [other releases](#will-there-be-more-data-coming-for-other-geographies). ## Updates * 2026-08-13 - Refreshed the ",
+          "pageSha256": "1d0d93f6696611940628e98a79378cc632e72172ff25f412d51dd21553492850",
+          "error": null,
+          "statementFrom": "the licence page itself (fetched 2026-11-11, phrase found by the script)"
+        }
+      },
+      {
+        "id": "gedtm30",
+        "source": "GEDTM30 v1.2 (OpenLandMap, Open-Earth-Monitor)",
+        "layer": "height",
+        "use": "bare-earth ground height (GS1)",
+        "licence": "CC BY 4.0",
+        "licenceUrl": "https://zenodo.org/api/records/18887460",
+        "licenceText": null,
+        "credit": "GEDTM30: Ho, Y.-F. et al., OpenLandMap, CC BY 4.0, doi 10.5281/zenodo.18887460",
+        "freePublicGame": "yes, with the credit line",
+        "soldGame": "yes, with the credit line",
+        "conditions": "The record says the release is for testing purposes and is provided as is.",
+        "shipped": true,
+        "dateChecked": "2026-11-11",
+        "checked": {
+          "httpStatus": 200,
+          "phraseFound": true,
+          "phrasesFound": [
+            "cc-by-4.0"
+          ],
+          "quote": ", 13, e19673.\"], \"resource_type\": {\"title\": \"Dataset\", \"type\": \"dataset\"}, \"journal\": {\"pages\": \"e19673\", \"title\": \"Peerj\", \"volume\": \"13\"}, \"license\": {\"id\": \"cc-by-4.0\"}, \"grants\": [{\"code\": \"101059548\", \"internal_id\": \"10.13039/501100000780::101059548\", \"funder\": {\"name\": \"European Commission\", \"doi\": \"10.13039/5011",
+          "pageSha256": "5fbb173885f5c7f894539acdef5f6445ada5e6967a9e19218e858d0e55673a86",
+          "error": null,
+          "statementFrom": "the licence page itself (fetched 2026-11-11, phrase found by the script)"
+        }
+      },
+      {
+        "id": "glo30",
+        "source": "Copernicus DEM GLO-30 Public",
+        "layer": "height",
+        "use": "surface height with our own ground filter (GS2)",
+        "licence": "Copernicus DEM licence (free of charge, any use including commercial, with the notice)",
+        "licenceUrl": "https://registry.opendata.aws/copernicus-dem/",
+        "licenceText": "https://docs.sentinel-hub.com/api/latest/static/files/data/dem/resources/license/License-COPDEM-30.pdf",
+        "credit": "© DLR e.V. 2010-2014 and © Airbus Defence and Space GmbH 2014-2018 provided under COPERNICUS by the European Union and ESA; all rights reserved",
+        "freePublicGame": "yes, with the notice",
+        "soldGame": "yes, with the notice",
+        "conditions": "The notice must be shown. Adapted data must say it was modified.",
+        "shipped": true,
+        "dateChecked": "2026-11-11",
+        "checked": {
+          "httpStatus": 200,
+          "phraseFound": true,
+          "phrasesFound": [
+            "free basis",
+            "License"
+          ],
+          "quote": "al to zero. Data is provided as Cloud Optimized GeoTIFFs and comes from Copernicus DEM 2021 release.\", \"license\" : \"GLO-30 Public and GLO-90 are available on a free basis for the general public under the terms and conditions of the Licence found on \\u003ca href=\\\"https://dataspace.copernicus.eu/explore-data/data-collec",
+          "pageSha256": "04b2d63198acecd854a2a04100feb63d71aeecd83773c692b7f5093a0a4defca",
+          "error": null,
+          "statementFrom": "the licence page itself (fetched 2026-11-11, phrase found by the script)"
+        }
+      },
+      {
+        "id": "fabdem",
+        "source": "FABDEM V1-2 (University of Bristol)",
+        "layer": "height",
+        "use": "yardstick in the bench only (GS3)",
+        "licence": "CC BY-NC-SA 4.0",
+        "licenceUrl": "https://data.bris.ac.uk/data/dataset/s5hqmjcdj8yo2ibzi9b4ew3sn",
+        "licenceText": null,
+        "credit": "Hawker, L. et al. (2022), FABDEM V1-2, University of Bristol",
+        "freePublicGame": "only as non-commercial with share-alike on what is built from it",
+        "soldGame": "no",
+        "conditions": "Non-commercial and share-alike. Never shipped and never baked into tiles (decisions.md \"Architecture answers, round 1\").",
+        "shipped": false,
+        "dateChecked": "2026-11-11",
+        "checked": {
+          "httpStatus": 200,
+          "phraseFound": true,
+          "phrasesFound": [
+            "CC BY-NC-SA 4.0",
+            "Non-Commercial"
+          ],
+          "quote": ". The data is available at 1 arc second grid spacing (approximately 30m at the equator) for the globe. The FABDEM dataset is licensed under a Creative Commons \"CC BY-NC-SA 4.0\" license. For commercial use queries, please contact fabdem@fathom.global This dataset is published in support of the paper \"A 30 m global map o",
+          "pageSha256": "597bf264d57314c9e30d303e97c843f145bdd3f59ec1381ef20e0ca20ef29a52",
+          "error": null,
+          "statementFrom": "the licence page itself (fetched 2026-11-11, phrase found by the script)"
+        }
+      },
+      {
+        "id": "cartodem",
+        "source": "CartoDEM (ISRO, Bhuvan)",
+        "layer": "height",
+        "use": "out (GS4)",
+        "licence": "needs a Bhuvan account; reuse terms not open",
+        "licenceUrl": "https://bhuvan-app3.nrsc.gov.in/data/download/index.php",
+        "licenceText": null,
+        "credit": "n/a",
+        "freePublicGame": "unclear",
+        "soldGame": "unclear",
+        "conditions": "Not fetched: an account is an owner action and the terms are not an open licence.",
+        "shipped": false,
+        "dateChecked": "2026-11-11",
+        "checked": {
+          "httpStatus": 200,
+          "phraseFound": null,
+          "phrasesFound": [],
+          "quote": null,
+          "pageSha256": "a69ac3b123ec39872edb3edabb7be3c3dade53edcf3d5afb8f393b8a558729c9",
+          "error": null,
+          "statementFrom": "the publisher's page was reached (2026-11-11) but the script could not read the licence phrase from it (a PDF, a script-built page, or no licence stated): the statement is the builder's reading and stays a belief"
+        }
+      },
+      {
+        "id": "commons",
+        "source": "Wikimedia Commons photos",
+        "layer": "reference",
+        "use": "reference photos for landmarks and hero roads, linked by URL",
+        "licence": "per file (mostly CC BY or CC BY-SA, some public domain)",
+        "licenceUrl": "https://commons.wikimedia.org/wiki/Commons:Licensing",
+        "licenceText": null,
+        "credit": "per file",
+        "freePublicGame": "reference only unless that file allows it",
+        "soldGame": "reference only unless that file allows it",
+        "conditions": "Never baked in or shipped unless that file's licence allows it and it is recorded.",
+        "shipped": false,
+        "dateChecked": "2026-11-11",
+        "checked": {
+          "httpStatus": 200,
+          "phraseFound": true,
+          "phrasesFound": [
+            "free content",
+            "Creative Commons"
+          ],
+          "quote": "re-user looking for information on how to use Commons content in your own work, see Commons:Reusing content outside Wikimedia . Wikimedia Commons only accepts free content , that is, images and other media files that are not subject to copyright restrictions which would prevent them being used by anyone, anytime, for a",
+          "pageSha256": "5be4ceb13bbe00d77a78ca599fec33c02b962e6ca20555519fc01821d76d1729",
+          "error": null,
+          "statementFrom": "the licence page itself (fetched 2026-11-11, phrase found by the script)"
+        }
+      },
+      {
+        "id": "mapillary",
+        "source": "Mapillary street photos",
+        "layer": "reference",
+        "use": "reference for hero roads and repairs",
+        "licence": "CC BY-SA 4.0 (images)",
+        "licenceUrl": "https://www.mapillary.com/terms",
+        "licenceText": null,
+        "credit": "per image",
+        "freePublicGame": "reference only",
+        "soldGame": "reference only",
+        "conditions": "Share-alike on copies, so images are only looked at.",
+        "shipped": false,
+        "dateChecked": "2026-11-11",
+        "checked": {
+          "httpStatus": 200,
+          "phraseFound": true,
+          "phrasesFound": [
+            "CC BY-SA"
+          ],
+          "quote": "es is subject to the additional terms in Section 12 below. Your use of any User Content provided by other users is subject to the Creative Commons Share Alike (CC BY-SA) license , unless we indicate otherwise. For instance, we may provide access to certain User Content (alone or in combination with other data sets) und",
+          "pageSha256": "3e5caafa4aa9dd97471d932be079cd9a2ede112ff2ee77ec779f9d9981ff6a6a",
+          "error": null,
+          "statementFrom": "the licence page itself (fetched 2026-11-11, phrase found by the script)"
+        }
+      },
+      {
+        "id": "sentinel2",
+        "source": "Sentinel-2 imagery (NDVI, reference)",
+        "layer": "area",
+        "use": "greenery per cell; reference for repairs",
+        "licence": "Copernicus Sentinel data terms (free, full and open)",
+        "licenceUrl": "https://sentinels.copernicus.eu/documents/247904/690755/Sentinel_Data_Legal_Notice",
+        "licenceText": null,
+        "credit": "Contains modified Copernicus Sentinel data [year]",
+        "freePublicGame": "yes, with the notice",
+        "soldGame": "yes, with the notice",
+        "conditions": "The notice must be shown when data is adapted.",
+        "shipped": false,
+        "dateChecked": "2026-11-11",
+        "checked": {
+          "httpStatus": 200,
+          "phraseFound": null,
+          "phrasesFound": [],
+          "quote": null,
+          "pageSha256": "fa2955ff48a1d82e77fc7296d63681670ecdb9d2811a0505ae60d0683b62fa64",
+          "error": null,
+          "statementFrom": "the publisher's page was reached (2026-11-11) but the script could not read the licence phrase from it (a PDF, a script-built page, or no licence stated): the statement is the builder's reading and stays a belief"
+        }
+      },
+      {
+        "id": "open_buildings_25d",
+        "source": "Google Open Buildings 2.5D Temporal",
+        "layer": "map",
+        "use": "building heights (if time)",
+        "licence": "CC BY 4.0",
+        "licenceUrl": "https://sites.research.google/gr/open-buildings/temporal/",
+        "licenceText": null,
+        "credit": "Google Open Buildings 2.5D Temporal (W. Sirko et al., 2023)",
+        "freePublicGame": "yes, with the credit line",
+        "soldGame": "yes, with the credit line",
+        "conditions": "Served through Earth Engine or large tiles; the fetch needs an account (an owner action).",
+        "shipped": false,
+        "dateChecked": "2026-11-11",
+        "checked": {
+          "httpStatus": 200,
+          "phraseFound": true,
+          "phrasesFound": [
+            "CC BY-4.0"
+          ],
+          "quote": "See the paper for more details about our approach and evaluation metrics. How is the data licensed? The data is shared under the Creative Commons Attribution (CC BY-4.0) license and the Open Data Commons Open Database License (ODbL) v1.0 license. Users can review the terms for both licenses and select the license they ",
+          "pageSha256": "014294eb2799d0e9ad6dc1dfb004d1d31997b3c21d34a6a6e4aff6b74a0f809f",
+          "error": null,
+          "statementFrom": "the licence page itself (fetched 2026-11-11, phrase found by the script)"
+        }
+      }
+    ]
+  },
+  "ruleEngine": {
+    "option": "RE1",
+    "catalogue": [
+      {
+        "id": "R-ROAD-01",
+        "area": "roads",
+        "title": "Dangling end near another road",
+        "confidence": 0.7,
+        "repairs": true
+      },
+      {
+        "id": "R-ROAD-02",
+        "area": "roads",
+        "title": "Crossing without a shared node on the same layer",
+        "confidence": 0.75,
+        "repairs": true
+      },
+      {
+        "id": "R-ROAD-04",
+        "area": "roads",
+        "title": "One-way carriageway with no opposite pair",
+        "confidence": 0.5,
+        "repairs": false
+      },
+      {
+        "id": "R-BRIDGE-01",
+        "area": "bridges",
+        "title": "Bridge or flyover end without support, or a bridge without a layer",
+        "confidence": 0.8,
+        "repairs": true
+      },
+      {
+        "id": "R-BRIDGE-02",
+        "area": "bridges",
+        "title": "Ramp that ends in the air",
+        "confidence": 0.7,
+        "repairs": true
+      },
+      {
+        "id": "R-BLDG-01",
+        "area": "buildings",
+        "title": "Building overlaps a road",
+        "confidence": 0.8,
+        "repairs": true
+      },
+      {
+        "id": "R-BLDG-03",
+        "area": "buildings",
+        "title": "Duplicate or nested footprint",
+        "confidence": 0.8,
+        "repairs": true
+      },
+      {
+        "id": "R-TERR-03",
+        "area": "terrain",
+        "title": "Ground height outlier along a road",
+        "confidence": 0.8,
+        "repairs": true
+      }
+    ],
+    "order": [
+      "R-ROAD-01",
+      "R-ROAD-02",
+      "R-ROAD-04",
+      "R-BRIDGE-01",
+      "R-BRIDGE-02",
+      "R-BLDG-01",
+      "R-BLDG-03",
+      "R-TERR-03"
+    ],
+    "code": "tools/bake/rules/"
+  },
+  "autoRepair": {
+    "option": "AR1",
+    "rule": "an issue repairs on its own when a proposal has confidence 0.8 or more and a low impact; low impact is defined per rule: a join of 5 m or less, a bridge layer tag, a building reaching 1.5 m or less into a class-default width, an exact duplicate footprint, a height outlier of 3 m or less",
+    "totals": {
+      "note": "the four pilot districts (the far district is listed per site only)",
+      "issues": 1052,
+      "autoRepair": 768,
+      "perRule": {
+        "R-ROAD-01": {
+          "title": "Dangling end near another road",
+          "issues": 80,
+          "auto": 8,
+          "autoShare": 0.1
+        },
+        "R-ROAD-02": {
+          "title": "Crossing without a shared node on the same layer",
+          "issues": 1,
+          "auto": 0,
+          "autoShare": 0
+        },
+        "R-ROAD-04": {
+          "title": "One-way carriageway with no opposite pair",
+          "issues": 26,
+          "auto": 0,
+          "autoShare": 0
+        },
+        "R-BRIDGE-01": {
+          "title": "Bridge or flyover end without support, or a bridge without a layer",
+          "issues": 1,
+          "auto": 0,
+          "autoShare": 0
+        },
+        "R-BRIDGE-02": {
+          "title": "Ramp that ends in the air",
+          "issues": 0,
+          "auto": 0,
+          "autoShare": 0
+        },
+        "R-BLDG-01": {
+          "title": "Building overlaps a road",
+          "issues": 371,
+          "auto": 263,
+          "autoShare": 0.709
+        },
+        "R-BLDG-03": {
+          "title": "Duplicate or nested footprint",
+          "issues": 3,
+          "auto": 0,
+          "autoShare": 0
+        },
+        "R-TERR-03": {
+          "title": "Ground height outlier along a road",
+          "issues": 570,
+          "auto": 497,
+          "autoShare": 0.872
+        }
+      },
+      "autoShare": 0.73,
+      "withoutTerrainRule": {
+        "issues": 482,
+        "autoRepair": 271,
+        "autoShare": 0.562
+      }
+    }
+  },
+  "census": {
+    "how": "Rules run per district on the OSM extract in the district frame (origin at the area centre). R-TERR-03 uses GEDTM30 here; terrain_sources.json runs it with every height source. Ends outside the download box are not counted as dangling.",
+    "sites": {
+      "cp": {
+        "name": "Connaught Place with Jantar Mantar",
+        "role": "pilot",
+        "osmBase": "2026-11-11T00:46:50Z",
+        "boxKm2": 2.49,
+        "ruleMs": 54,
+        "issues": 331,
+        "autoRepair": 241,
+        "autoShare": 0.728,
+        "queued": 90,
+        "perRule": {
+          "R-ROAD-01": {
+            "issues": 30,
+            "auto": 0,
+            "queued": 30
+          },
+          "R-ROAD-02": {
+            "issues": 0,
+            "auto": 0,
+            "queued": 0
+          },
+          "R-ROAD-04": {
+            "issues": 9,
+            "auto": 0,
+            "queued": 9
+          },
+          "R-BRIDGE-01": {
+            "issues": 0,
+            "auto": 0,
+            "queued": 0
+          },
+          "R-BRIDGE-02": {
+            "issues": 0,
+            "auto": 0,
+            "queued": 0
+          },
+          "R-BLDG-01": {
+            "issues": 118,
+            "auto": 92,
+            "queued": 26
+          },
+          "R-BLDG-03": {
+            "issues": 2,
+            "auto": 0,
+            "queued": 2
+          },
+          "R-TERR-03": {
+            "issues": 172,
+            "auto": 149,
+            "queued": 23
+          }
+        },
+        "highImpactQueued": 3,
+        "tagCoverage": {
+          "roads": 671,
+          "roadKm": 87.88,
+          "lanes": 0.0745,
+          "width": 0,
+          "layer": 0.0075,
+          "oneway": 0.2459,
+          "name": 0.2116,
+          "bridges": 0,
+          "tunnels": 8,
+          "buildings": 643,
+          "height": 0.0016,
+          "levels": 0.1882,
+          "heightOrLevels": 0.1897,
+          "byClass": {
+            "service": {
+              "ways": 396,
+              "km": 32.9,
+              "lanes": 0,
+              "width": 0
+            },
+            "residential": {
+              "ways": 130,
+              "km": 23.39,
+              "lanes": 0.0077,
+              "width": 0
+            },
+            "tertiary": {
+              "ways": 30,
+              "km": 6.44,
+              "lanes": 0.4,
+              "width": 0
+            },
+            "secondary": {
+              "ways": 99,
+              "km": 22.83,
+              "lanes": 0.3737,
+              "width": 0
+            },
+            "pedestrian": {
+              "ways": 4,
+              "km": 0.14,
+              "lanes": 0,
+              "width": 0
+            },
+            "unclassified": {
+              "ways": 8,
+              "km": 1.49,
+              "lanes": 0,
+              "width": 0
+            },
+            "living_street": {
+              "ways": 4,
+              "km": 0.68,
+              "lanes": 0,
+              "width": 0
+            }
+          }
+        },
+        "footways": 516,
+        "undergroundFootprintsLeftOut": 1,
+        "onewayPairs": {
+          "candidates": 55,
+          "paired": 44,
+          "metresPaired": 18604,
+          "metresUnpaired": 4355
+        },
+        "bridges": {
+          "chains": 0,
+          "metres": 0,
+          "withoutLayer": 0
+        },
+        "worst": [
+          {
+            "id": "R-ROAD-01:way/1122228219:way/996679779:node/10264328241",
+            "impact": 0.7,
+            "note": "gap 11.6 m",
+            "lat": 28.6244568,
+            "lon": 77.2137834
+          },
+          {
+            "id": "R-ROAD-04:way/38699591",
+            "impact": 0.7,
+            "note": "1 ways, 2027 m of \"Deen Dayal Upadhyay Road\"",
+            "lat": 28.6345507,
+            "lon": 77.228316
+          },
+          {
+            "id": "R-BLDG-01:way/657956580:way/446922590",
+            "impact": 0.7,
+            "note": "1.1 m into a 12.8 m carriageway (lanes)",
+            "lat": 28.6351943,
+            "lon": 77.2212545
+          },
+          {
+            "id": "R-ROAD-01:way/1154173903:way/24577487:node/10734111728",
+            "impact": 0.55,
+            "note": "gap 10.1 m",
+            "lat": 28.633435,
+            "lon": 77.2183755
+          },
+          {
+            "id": "R-ROAD-01:way/164683611:way/174274680:node/1763007738",
+            "impact": 0.55,
+            "note": "gap 7.8 m",
+            "lat": 28.6339593,
+            "lon": 77.2204562
+          }
+        ]
+      },
+      "india_gate": {
+        "name": "India Gate",
+        "role": "pilot",
+        "osmBase": "2026-11-11T00:46:50Z",
+        "boxKm2": 2.5,
+        "ruleMs": 14,
+        "issues": 161,
+        "autoRepair": 127,
+        "autoShare": 0.789,
+        "queued": 34,
+        "perRule": {
+          "R-ROAD-01": {
+            "issues": 17,
+            "auto": 0,
+            "queued": 17
+          },
+          "R-ROAD-02": {
+            "issues": 0,
+            "auto": 0,
+            "queued": 0
+          },
+          "R-ROAD-04": {
+            "issues": 3,
+            "auto": 0,
+            "queued": 3
+          },
+          "R-BRIDGE-01": {
+            "issues": 0,
+            "auto": 0,
+            "queued": 0
+          },
+          "R-BRIDGE-02": {
+            "issues": 0,
+            "auto": 0,
+            "queued": 0
+          },
+          "R-BLDG-01": {
+            "issues": 30,
+            "auto": 25,
+            "queued": 5
+          },
+          "R-BLDG-03": {
+            "issues": 0,
+            "auto": 0,
+            "queued": 0
+          },
+          "R-TERR-03": {
+            "issues": 111,
+            "auto": 102,
+            "queued": 9
+          }
+        },
+        "highImpactQueued": 8,
+        "tagCoverage": {
+          "roads": 401,
+          "roadKm": 71.38,
+          "lanes": 0.0848,
+          "width": 0,
+          "layer": 0.0249,
+          "oneway": 0.2319,
+          "name": 0.212,
+          "bridges": 0,
+          "tunnels": 3,
+          "buildings": 318,
+          "height": 0.0283,
+          "levels": 0.0252,
+          "heightOrLevels": 0.0409,
+          "byClass": {
+            "pedestrian": {
+              "ways": 29,
+              "km": 2.67,
+              "lanes": 0,
+              "width": 0
+            },
+            "residential": {
+              "ways": 74,
+              "km": 16.8,
+              "lanes": 0.0135,
+              "width": 0
+            },
+            "service": {
+              "ways": 207,
+              "km": 22.58,
+              "lanes": 0,
+              "width": 0
+            },
+            "unclassified": {
+              "ways": 7,
+              "km": 1.34,
+              "lanes": 0,
+              "width": 0
+            },
+            "secondary": {
+              "ways": 67,
+              "km": 21.94,
+              "lanes": 0.3881,
+              "width": 0
+            },
+            "tertiary": {
+              "ways": 17,
+              "km": 6.06,
+              "lanes": 0.4118,
+              "width": 0
+            }
+          }
+        },
+        "footways": 118,
+        "undergroundFootprintsLeftOut": 0,
+        "onewayPairs": {
+          "candidates": 49,
+          "paired": 46,
+          "metresPaired": 22678,
+          "metresUnpaired": 743
+        },
+        "bridges": {
+          "chains": 0,
+          "metres": 0,
+          "withoutLayer": 0
+        },
+        "worst": [
+          {
+            "id": "R-ROAD-01:way/423539769:way/24563449:node/12246307150",
+            "impact": 0.7,
+            "note": "gap 10.2 m",
+            "lat": 28.6165296,
+            "lon": 77.2253991
+          },
+          {
+            "id": "R-ROAD-04:way/1512381487",
+            "impact": 0.7,
+            "note": "1 ways, 312 m of \"Purana Quila Road\"",
+            "lat": 28.6169884,
+            "lon": 77.2399437
+          },
+          {
+            "id": "R-ROAD-04:way/579781482",
+            "impact": 0.7,
+            "note": "1 ways, 355 m of \"Kasturba Gandhi Marg\"",
+            "lat": 28.622001,
+            "lon": 77.2258389
+          },
+          {
+            "id": "R-TERR-03:way/116046168",
+            "impact": 0.7,
+            "note": "5 of 34 samples, worst 3.57 m off the median, steepest 13 percent",
+            "lat": 28.6155069,
+            "lon": 77.2295382
+          },
+          {
+            "id": "R-TERR-03:way/24577095",
+            "impact": 0.7,
+            "note": "2 of 44 samples, worst 3.3 m off the median, steepest 12.1 percent",
+            "lat": 28.6164693,
+            "lon": 77.2246984
+          }
+        ]
+      },
+      "ito": {
+        "name": "ITO with Pragati Maidan",
+        "role": "pilot",
+        "osmBase": "2026-11-11T00:47:51Z",
+        "boxKm2": 4.29,
+        "ruleMs": 19,
+        "issues": 147,
+        "autoRepair": 115,
+        "autoShare": 0.782,
+        "queued": 32,
+        "perRule": {
+          "R-ROAD-01": {
+            "issues": 13,
+            "auto": 1,
+            "queued": 12
+          },
+          "R-ROAD-02": {
+            "issues": 0,
+            "auto": 0,
+            "queued": 0
+          },
+          "R-ROAD-04": {
+            "issues": 7,
+            "auto": 0,
+            "queued": 7
+          },
+          "R-BRIDGE-01": {
+            "issues": 0,
+            "auto": 0,
+            "queued": 0
+          },
+          "R-BRIDGE-02": {
+            "issues": 0,
+            "auto": 0,
+            "queued": 0
+          },
+          "R-BLDG-01": {
+            "issues": 24,
+            "auto": 18,
+            "queued": 6
+          },
+          "R-BLDG-03": {
+            "issues": 0,
+            "auto": 0,
+            "queued": 0
+          },
+          "R-TERR-03": {
+            "issues": 103,
+            "auto": 96,
+            "queued": 7
+          }
+        },
+        "highImpactQueued": 10,
+        "tagCoverage": {
+          "roads": 474,
+          "roadKm": 92.32,
+          "lanes": 0.0759,
+          "width": 0.0021,
+          "layer": 0.0949,
+          "oneway": 0.5169,
+          "name": 0.3186,
+          "bridges": 20,
+          "tunnels": 24,
+          "buildings": 476,
+          "height": 0.0147,
+          "levels": 0.0483,
+          "heightOrLevels": 0.0525,
+          "byClass": {
+            "service": {
+              "ways": 201,
+              "km": 32.4,
+              "lanes": 0,
+              "width": 0
+            },
+            "secondary": {
+              "ways": 144,
+              "km": 31.37,
+              "lanes": 0.1597,
+              "width": 0.0069
+            },
+            "residential": {
+              "ways": 45,
+              "km": 9.4,
+              "lanes": 0,
+              "width": 0
+            },
+            "living_street": {
+              "ways": 7,
+              "km": 0.61,
+              "lanes": 0,
+              "width": 0
+            },
+            "trunk": {
+              "ways": 40,
+              "km": 11.79,
+              "lanes": 0.15,
+              "width": 0
+            },
+            "primary": {
+              "ways": 35,
+              "km": 5.3,
+              "lanes": 0.1429,
+              "width": 0
+            },
+            "tertiary": {
+              "ways": 1,
+              "km": 0.9,
+              "lanes": 1,
+              "width": 0
+            },
+            "unclassified": {
+              "ways": 1,
+              "km": 0.55,
+              "lanes": 1,
+              "width": 0
+            }
+          }
+        },
+        "footways": 171,
+        "undergroundFootprintsLeftOut": 0,
+        "onewayPairs": {
+          "candidates": 72,
+          "paired": 61,
+          "metresPaired": 28096,
+          "metresUnpaired": 3977
+        },
+        "bridges": {
+          "chains": 9,
+          "metres": 4702,
+          "withoutLayer": 0
+        },
+        "worst": [
+          {
+            "id": "R-ROAD-04:way/125736543:way/614071992",
+            "impact": 0.95,
+            "note": "2 ways, 860 m of \"Sachivalaya Road Flyover\"",
+            "lat": 28.6352281,
+            "lon": 77.2472964
+          },
+          {
+            "id": "R-ROAD-01:way/1510588948:way/973071391:node/13809072106",
+            "impact": 0.85,
+            "note": "gap 10.9 m",
+            "lat": 28.6162967,
+            "lon": 77.2508275
+          },
+          {
+            "id": "R-TERR-03:way/691886474",
+            "impact": 0.85,
+            "note": "2 of 10 samples, worst 4.72 m off the median, steepest 22 percent",
+            "lat": 28.6279117,
+            "lon": 77.2532613
+          },
+          {
+            "id": "R-TERR-03:way/70255398",
+            "impact": 0.85,
+            "note": "3 of 10 samples, worst 3.24 m off the median, steepest 21.6 percent",
+            "lat": 28.6281379,
+            "lon": 77.2532209
+          },
+          {
+            "id": "R-ROAD-01:way/562205292:way/995113416:node/10603883043",
+            "impact": 0.7,
+            "note": "gap 11.3 m",
+            "lat": 28.6204843,
+            "lon": 77.2373292
+          }
+        ]
+      },
+      "chandni_chowk": {
+        "name": "Chandni Chowk with Red Fort",
+        "role": "pilot",
+        "osmBase": "2026-11-11T00:48:48Z",
+        "boxKm2": 4.79,
+        "ruleMs": 26,
+        "issues": 413,
+        "autoRepair": 285,
+        "autoShare": 0.69,
+        "queued": 128,
+        "perRule": {
+          "R-ROAD-01": {
+            "issues": 20,
+            "auto": 7,
+            "queued": 13
+          },
+          "R-ROAD-02": {
+            "issues": 1,
+            "auto": 0,
+            "queued": 1
+          },
+          "R-ROAD-04": {
+            "issues": 7,
+            "auto": 0,
+            "queued": 7
+          },
+          "R-BRIDGE-01": {
+            "issues": 1,
+            "auto": 0,
+            "queued": 1
+          },
+          "R-BRIDGE-02": {
+            "issues": 0,
+            "auto": 0,
+            "queued": 0
+          },
+          "R-BLDG-01": {
+            "issues": 199,
+            "auto": 128,
+            "queued": 71
+          },
+          "R-BLDG-03": {
+            "issues": 1,
+            "auto": 0,
+            "queued": 1
+          },
+          "R-TERR-03": {
+            "issues": 184,
+            "auto": 150,
+            "queued": 34
+          }
+        },
+        "highImpactQueued": 6,
+        "tagCoverage": {
+          "roads": 707,
+          "roadKm": 112.54,
+          "lanes": 0.0099,
+          "width": 0.0339,
+          "layer": 0.0127,
+          "oneway": 0.2008,
+          "name": 0.3112,
+          "bridges": 9,
+          "tunnels": 4,
+          "buildings": 1118,
+          "height": 0.0045,
+          "levels": 0.0796,
+          "heightOrLevels": 0.0832,
+          "byClass": {
+            "residential": {
+              "ways": 340,
+              "km": 46.9,
+              "lanes": 0,
+              "width": 0.0088
+            },
+            "service": {
+              "ways": 143,
+              "km": 15.98,
+              "lanes": 0,
+              "width": 0
+            },
+            "living_street": {
+              "ways": 30,
+              "km": 2.9,
+              "lanes": 0,
+              "width": 0.7
+            },
+            "unclassified": {
+              "ways": 14,
+              "km": 3.86,
+              "lanes": 0,
+              "width": 0
+            },
+            "trunk": {
+              "ways": 10,
+              "km": 2.34,
+              "lanes": 0.4,
+              "width": 0
+            },
+            "tertiary": {
+              "ways": 58,
+              "km": 17.97,
+              "lanes": 0,
+              "width": 0
+            },
+            "pedestrian": {
+              "ways": 23,
+              "km": 3.39,
+              "lanes": 0,
+              "width": 0
+            },
+            "secondary": {
+              "ways": 86,
+              "km": 19.04,
+              "lanes": 0.0349,
+              "width": 0
+            },
+            "primary": {
+              "ways": 3,
+              "km": 0.17,
+              "lanes": 0,
+              "width": 0
+            }
+          }
+        },
+        "footways": 285,
+        "undergroundFootprintsLeftOut": 3,
+        "onewayPairs": {
+          "candidates": 52,
+          "paired": 37,
+          "metresPaired": 22581,
+          "metresUnpaired": 4806
+        },
+        "bridges": {
+          "chains": 8,
+          "metres": 824,
+          "withoutLayer": 0
+        },
+        "worst": [
+          {
+            "id": "R-ROAD-04:way/1070839797:way/70220650:way/77617172",
+            "impact": 0.95,
+            "note": "3 ways, 1641 m of \"Ring Road\"",
+            "lat": 28.6623859,
+            "lon": 77.2434878
+          },
+          {
+            "id": "R-ROAD-01:way/993539137:way/154355889:node/9179112378",
+            "impact": 0.7,
+            "note": "gap 7.3 m",
+            "lat": 28.6481466,
+            "lon": 77.2399964
+          },
+          {
+            "id": "R-ROAD-04:way/1313200453:way/1313200454:way/1313200460:way/175800226",
+            "impact": 0.7,
+            "note": "5 ways, 659 m of \"Hanuman Mandir Flyover\"",
+            "lat": 28.6619737,
+            "lon": 77.2388533
+          },
+          {
+            "id": "R-ROAD-04:way/706609567",
+            "impact": 0.7,
+            "note": "1 ways, 550 m of \"Shyama Prasad Mukherji Marg\"",
+            "lat": 28.6623561,
+            "lon": 77.2184218
+          },
+          {
+            "id": "R-BLDG-01:way/351561052:way/154355889",
+            "impact": 0.7,
+            "note": "0.4 m into a 6.4 m carriageway (lanes)",
+            "lat": 28.6458749,
+            "lon": 77.2400523
+          }
+        ]
+      },
+      "laxmi_nagar": {
+        "name": "Laxmi Nagar",
+        "role": "far",
+        "osmBase": "2026-11-11T00:48:48Z",
+        "boxKm2": 2.11,
+        "ruleMs": 28,
+        "issues": 882,
+        "autoRepair": 625,
+        "autoShare": 0.709,
+        "queued": 257,
+        "perRule": {
+          "R-ROAD-01": {
+            "issues": 14,
+            "auto": 1,
+            "queued": 13
+          },
+          "R-ROAD-02": {
+            "issues": 0,
+            "auto": 0,
+            "queued": 0
+          },
+          "R-ROAD-04": {
+            "issues": 3,
+            "auto": 0,
+            "queued": 3
+          },
+          "R-BRIDGE-01": {
+            "issues": 0,
+            "auto": 0,
+            "queued": 0
+          },
+          "R-BRIDGE-02": {
+            "issues": 0,
+            "auto": 0,
+            "queued": 0
+          },
+          "R-BLDG-01": {
+            "issues": 694,
+            "auto": 472,
+            "queued": 222
+          },
+          "R-BLDG-03": {
+            "issues": 0,
+            "auto": 0,
+            "queued": 0
+          },
+          "R-TERR-03": {
+            "issues": 171,
+            "auto": 152,
+            "queued": 19
+          }
+        },
+        "highImpactQueued": 6,
+        "tagCoverage": {
+          "roads": 717,
+          "roadKm": 96.94,
+          "lanes": 0.053,
+          "width": 0,
+          "layer": 0.0251,
+          "oneway": 0.1046,
+          "name": 0.1437,
+          "bridges": 7,
+          "tunnels": 0,
+          "buildings": 1032,
+          "height": 0.001,
+          "levels": 0.0523,
+          "heightOrLevels": 0.0523,
+          "byClass": {
+            "secondary": {
+              "ways": 13,
+              "km": 2.01,
+              "lanes": 0.4615,
+              "width": 0
+            },
+            "residential": {
+              "ways": 516,
+              "km": 68.94,
+              "lanes": 0,
+              "width": 0
+            },
+            "living_street": {
+              "ways": 19,
+              "km": 2.04,
+              "lanes": 0,
+              "width": 0
+            },
+            "service": {
+              "ways": 36,
+              "km": 4.43,
+              "lanes": 0,
+              "width": 0
+            },
+            "tertiary": {
+              "ways": 11,
+              "km": 2.18,
+              "lanes": 0.0909,
+              "width": 0
+            },
+            "primary": {
+              "ways": 24,
+              "km": 5.59,
+              "lanes": 0.375,
+              "width": 0
+            },
+            "unclassified": {
+              "ways": 70,
+              "km": 5.74,
+              "lanes": 0,
+              "width": 0
+            },
+            "trunk": {
+              "ways": 27,
+              "km": 5.97,
+              "lanes": 0.7778,
+              "width": 0
+            },
+            "motorway": {
+              "ways": 1,
+              "km": 0.04,
+              "lanes": 1,
+              "width": 0
+            }
+          }
+        },
+        "footways": 112,
+        "undergroundFootprintsLeftOut": 0,
+        "onewayPairs": {
+          "candidates": 31,
+          "paired": 28,
+          "metresPaired": 8142,
+          "metresUnpaired": 2034
+        },
+        "bridges": {
+          "chains": 4,
+          "metres": 1164,
+          "withoutLayer": 0
+        },
+        "worst": [
+          {
+            "id": "R-ROAD-01:way/1219352663:way/81061297:node/11298353390",
+            "impact": 0.85,
+            "note": "gap 10.4 m",
+            "lat": 28.6302881,
+            "lon": 77.272273
+          },
+          {
+            "id": "R-ROAD-01:way/421290420:way/81061297:node/11502353250",
+            "impact": 0.85,
+            "note": "gap 11.5 m",
+            "lat": 28.6297642,
+            "lon": 77.272632
+          },
+          {
+            "id": "R-ROAD-01:way/705388397:way/81061297:node/11502353251",
+            "impact": 0.85,
+            "note": "gap 11.4 m",
+            "lat": 28.6292863,
+            "lon": 77.2729474
+          },
+          {
+            "id": "R-ROAD-01:way/994845117:way/81061297:node/11502353249",
+            "impact": 0.85,
+            "note": "gap 8.6 m",
+            "lat": 28.6300913,
+            "lon": 77.2723834
+          },
+          {
+            "id": "R-ROAD-04:way/81061296",
+            "impact": 0.85,
+            "note": "1 ways, 1154 m of \"Vikas Marg\"",
+            "lat": 28.628028,
+            "lon": 77.2605383
+          }
+        ]
+      }
+    }
+  },
+  "buildings": {
+    "how": "BS1 is the Overture buildings theme as downloaded. BS2 is our own merge in priority order OSM, Google Open Buildings (confidence 0.7 or more), Microsoft: a later footprint is added only where it covers less than 20 percent of footprints already taken, dropped as the same building from 50 percent, and logged as a conflict in between (tools/bake/buildings.ts). Duplicates left are pairs where the smaller footprint lies 60 percent or more inside the larger. Coverage is the share of the box under any footprint (sample grid, no double count).",
+    "sites": {
+      "cp": {
+        "osm": {
+          "count": 643,
+          "areaM2": 566723,
+          "coverage": 0.2279,
+          "duplicatePairs": 2,
+          "exactDuplicatePairs": 0,
+          "medianAreaM2": 447.5,
+          "withHeightOrLevels": 122,
+          "coveredShare": 0.2067,
+          "roadOverlaps": {
+            "issues": 118,
+            "auto": 92,
+            "centreLineThroughFootprint": 8
+          }
+        },
+        "bs1": {
+          "count": 1535,
+          "areaM2": 632012,
+          "coverage": 0.2541,
+          "duplicatePairs": 3,
+          "exactDuplicatePairs": 0,
+          "medianAreaM2": 99.3,
+          "withHeightOrLevels": 114,
+          "coveredShare": 0.2417,
+          "bySource": {
+            "Google Open Buildings": 675,
+            "OpenStreetMap": 611,
+            "Microsoft ML Buildings": 249
+          },
+          "osmBuildingsFoundById": 610,
+          "osmBuildings": 643,
+          "osmTagsKeptShare": 0.721,
+          "osmTagsKeptShareWithoutBuildingKey": 0.539,
+          "tagKeys": [
+            {
+              "key": "building",
+              "osm": 643,
+              "kept": 610
+            },
+            {
+              "key": "addr:*",
+              "osm": 125,
+              "kept": 0
+            },
+            {
+              "key": "roof:shape",
+              "osm": 124,
+              "kept": 116
+            },
+            {
+              "key": "building:levels",
+              "osm": 121,
+              "kept": 113
+            },
+            {
+              "key": "building:colour",
+              "osm": 85,
+              "kept": 76
+            },
+            {
+              "key": "name",
+              "osm": 77,
+              "kept": 72
+            },
+            {
+              "key": "type",
+              "osm": 33,
+              "kept": 0
+            },
+            {
+              "key": "building:use",
+              "osm": 29,
+              "kept": 0
+            },
+            {
+              "key": "amenity",
+              "osm": 18,
+              "kept": 0
+            },
+            {
+              "key": "layer",
+              "osm": 15,
+              "kept": 15
+            },
+            {
+              "key": "name:hi",
+              "osm": 12,
+              "kept": 12
+            },
+            {
+              "key": "roof:colour",
+              "osm": 11,
+              "kept": 11
+            },
+            {
+              "key": "check_date",
+              "osm": 10,
+              "kept": 0
+            },
+            {
+              "key": "alt_name",
+              "osm": 8,
+              "kept": 0
+            }
+          ],
+          "lostKeys": [
+            "addr:* (125)",
+            "type (33)",
+            "building:use (29)",
+            "amenity (18)",
+            "check_date (10)",
+            "alt_name (8)",
+            "tourism (8)",
+            "nohousenumber (7)",
+            "historic (7)",
+            "man_made (7)",
+            "operator (6)",
+            "religion (6)"
+          ],
+          "withHeightOrLevelsShare": 0.074,
+          "roadOverlaps": {
+            "issues": 220,
+            "auto": 141,
+            "centreLineThroughFootprint": 25
+          }
+        },
+        "bs2": {
+          "count": 1782,
+          "areaM2": 695361,
+          "coverage": 0.2796,
+          "duplicatePairs": 2,
+          "exactDuplicatePairs": 0,
+          "medianAreaM2": 116.6,
+          "withHeightOrLevels": 122,
+          "coveredShare": 0.254,
+          "bySource": {
+            "osm": {
+              "input": 643,
+              "added": 643,
+              "duplicate": 0,
+              "conflict": 0,
+              "tiny": 0
+            },
+            "google": {
+              "input": 2471,
+              "added": 986,
+              "duplicate": 1207,
+              "conflict": 278,
+              "tiny": 0
+            },
+            "ms": {
+              "input": 981,
+              "added": 153,
+              "duplicate": 745,
+              "conflict": 83,
+              "tiny": 0
+            }
+          },
+          "mergeMs": 50,
+          "inputs": {
+            "osm": 643,
+            "google": 2471,
+            "googleBelowConfidence": 957,
+            "ms": 981
+          },
+          "osmTagsKeptShare": 1,
+          "withHeightOrLevelsShare": 0.068,
+          "roadOverlaps": {
+            "issues": 450,
+            "auto": 175,
+            "centreLineThroughFootprint": 218
+          }
+        },
+        "bs3": {
+          "note": "OSM footprints only: the osm row above",
+          "coveredShare": 0.2067,
+          "count": 643
+        }
+      },
+      "india_gate": {
+        "osm": {
+          "count": 318,
+          "areaM2": 323115,
+          "coverage": 0.129,
+          "duplicatePairs": 0,
+          "exactDuplicatePairs": 0,
+          "medianAreaM2": 473.2,
+          "withHeightOrLevels": 13,
+          "coveredShare": 0.1183,
+          "roadOverlaps": {
+            "issues": 30,
+            "auto": 25,
+            "centreLineThroughFootprint": 0
+          }
+        },
+        "bs1": {
+          "count": 1276,
+          "areaM2": 377052,
+          "coverage": 0.1506,
+          "duplicatePairs": 1,
+          "exactDuplicatePairs": 0,
+          "medianAreaM2": 64.2,
+          "withHeightOrLevels": 12,
+          "coveredShare": 0.1477,
+          "bySource": {
+            "Google Open Buildings": 809,
+            "Microsoft ML Buildings": 169,
+            "OpenStreetMap": 298
+          },
+          "osmBuildingsFoundById": 298,
+          "osmBuildings": 318,
+          "osmTagsKeptShare": 0.8,
+          "osmTagsKeptShareWithoutBuildingKey": 0.438,
+          "tagKeys": [
+            {
+              "key": "building",
+              "osm": 318,
+              "kept": 298
+            },
+            {
+              "key": "name",
+              "osm": 16,
+              "kept": 16
+            },
+            {
+              "key": "type",
+              "osm": 16,
+              "kept": 0
+            },
+            {
+              "key": "addr:*",
+              "osm": 13,
+              "kept": 0
+            },
+            {
+              "key": "office",
+              "osm": 12,
+              "kept": 0
+            },
+            {
+              "key": "height",
+              "osm": 9,
+              "kept": 9
+            },
+            {
+              "key": "building:levels",
+              "osm": 8,
+              "kept": 7
+            },
+            {
+              "key": "name:hi",
+              "osm": 8,
+              "kept": 8
+            },
+            {
+              "key": "government",
+              "osm": 6,
+              "kept": 0
+            },
+            {
+              "key": "roof:shape",
+              "osm": 5,
+              "kept": 4
+            },
+            {
+              "key": "check_date",
+              "osm": 4,
+              "kept": 0
+            },
+            {
+              "key": "layer",
+              "osm": 4,
+              "kept": 4
+            },
+            {
+              "key": "amenity",
+              "osm": 4,
+              "kept": 0
+            },
+            {
+              "key": "website",
+              "osm": 3,
+              "kept": 0
+            }
+          ],
+          "lostKeys": [
+            "type (16)",
+            "addr:* (13)",
+            "office (12)",
+            "government (6)",
+            "check_date (4)",
+            "amenity (4)",
+            "website (3)",
+            "nohousenumber (1)",
+            "source (1)",
+            "phone (1)",
+            "wikidata (1)",
+            "wikipedia (1)"
+          ],
+          "withHeightOrLevelsShare": 0.009,
+          "roadOverlaps": {
+            "issues": 109,
+            "auto": 66,
+            "centreLineThroughFootprint": 12
+          }
+        },
+        "bs2": {
+          "count": 1239,
+          "areaM2": 430397,
+          "coverage": 0.1719,
+          "duplicatePairs": 0,
+          "exactDuplicatePairs": 0,
+          "medianAreaM2": 86.3,
+          "withHeightOrLevels": 13,
+          "coveredShare": 0.1619,
+          "bySource": {
+            "osm": {
+              "input": 318,
+              "added": 318,
+              "duplicate": 0,
+              "conflict": 0,
+              "tiny": 0
+            },
+            "google": {
+              "input": 1514,
+              "added": 837,
+              "duplicate": 561,
+              "conflict": 116,
+              "tiny": 0
+            },
+            "ms": {
+              "input": 461,
+              "added": 84,
+              "duplicate": 321,
+              "conflict": 56,
+              "tiny": 0
+            }
+          },
+          "mergeMs": 18,
+          "inputs": {
+            "osm": 318,
+            "google": 1514,
+            "googleBelowConfidence": 622,
+            "ms": 461
+          },
+          "osmTagsKeptShare": 1,
+          "withHeightOrLevelsShare": 0.01,
+          "roadOverlaps": {
+            "issues": 158,
+            "auto": 68,
+            "centreLineThroughFootprint": 66
+          }
+        },
+        "bs3": {
+          "note": "OSM footprints only: the osm row above",
+          "coveredShare": 0.1183,
+          "count": 318
+        }
+      },
+      "ito": {
+        "osm": {
+          "count": 476,
+          "areaM2": 601022,
+          "coverage": 0.14,
+          "duplicatePairs": 0,
+          "exactDuplicatePairs": 0,
+          "medianAreaM2": 418.3,
+          "withHeightOrLevels": 25,
+          "coveredShare": 0.1342,
+          "roadOverlaps": {
+            "issues": 24,
+            "auto": 18,
+            "centreLineThroughFootprint": 0
+          }
+        },
+        "bs1": {
+          "count": 2145,
+          "areaM2": 696654,
+          "coverage": 0.1623,
+          "duplicatePairs": 1,
+          "exactDuplicatePairs": 0,
+          "medianAreaM2": 53.4,
+          "withHeightOrLevels": 25,
+          "coveredShare": 0.1621,
+          "bySource": {
+            "Google Open Buildings": 1496,
+            "OpenStreetMap": 460,
+            "Microsoft ML Buildings": 189
+          },
+          "osmBuildingsFoundById": 460,
+          "osmBuildings": 476,
+          "osmTagsKeptShare": 0.812,
+          "osmTagsKeptShareWithoutBuildingKey": 0.542,
+          "tagKeys": [
+            {
+              "key": "building",
+              "osm": 476,
+              "kept": 460
+            },
+            {
+              "key": "name",
+              "osm": 50,
+              "kept": 47
+            },
+            {
+              "key": "addr:*",
+              "osm": 45,
+              "kept": 0
+            },
+            {
+              "key": "roof:shape",
+              "osm": 27,
+              "kept": 24
+            },
+            {
+              "key": "building:levels",
+              "osm": 23,
+              "kept": 23
+            },
+            {
+              "key": "layer",
+              "osm": 14,
+              "kept": 13
+            },
+            {
+              "key": "building:colour",
+              "osm": 13,
+              "kept": 13
+            },
+            {
+              "key": "type",
+              "osm": 12,
+              "kept": 0
+            },
+            {
+              "key": "name:hi",
+              "osm": 8,
+              "kept": 7
+            },
+            {
+              "key": "man_made",
+              "osm": 8,
+              "kept": 0
+            },
+            {
+              "key": "height",
+              "osm": 7,
+              "kept": 7
+            },
+            {
+              "key": "building:use",
+              "osm": 7,
+              "kept": 0
+            },
+            {
+              "key": "check_date",
+              "osm": 5,
+              "kept": 0
+            },
+            {
+              "key": "amenity",
+              "osm": 3,
+              "kept": 0
+            }
+          ],
+          "lostKeys": [
+            "addr:* (45)",
+            "type (12)",
+            "man_made (8)",
+            "building:use (7)",
+            "check_date (5)",
+            "amenity (3)",
+            "wikidata (3)",
+            "wikipedia (3)",
+            "nohousenumber (2)",
+            "phone (2)",
+            "leisure (2)",
+            "name:etymology:wikidata (2)"
+          ],
+          "withHeightOrLevelsShare": 0.012,
+          "roadOverlaps": {
+            "issues": 126,
+            "auto": 65,
+            "centreLineThroughFootprint": 16
+          }
+        },
+        "bs2": {
+          "count": 2262,
+          "areaM2": 769682,
+          "coverage": 0.1793,
+          "duplicatePairs": 0,
+          "exactDuplicatePairs": 0,
+          "medianAreaM2": 65.9,
+          "withHeightOrLevels": 25,
+          "coveredShare": 0.1737,
+          "bySource": {
+            "osm": {
+              "input": 476,
+              "added": 476,
+              "duplicate": 0,
+              "conflict": 0,
+              "tiny": 0
+            },
+            "google": {
+              "input": 2545,
+              "added": 1677,
+              "duplicate": 729,
+              "conflict": 134,
+              "tiny": 5
+            },
+            "ms": {
+              "input": 491,
+              "added": 109,
+              "duplicate": 334,
+              "conflict": 48,
+              "tiny": 0
+            }
+          },
+          "mergeMs": 32,
+          "inputs": {
+            "osm": 476,
+            "google": 2545,
+            "googleBelowConfidence": 1056,
+            "ms": 491
+          },
+          "osmTagsKeptShare": 1,
+          "withHeightOrLevelsShare": 0.011,
+          "roadOverlaps": {
+            "issues": 273,
+            "auto": 80,
+            "centreLineThroughFootprint": 141
+          }
+        },
+        "bs3": {
+          "note": "OSM footprints only: the osm row above",
+          "coveredShare": 0.1342,
+          "count": 476
+        }
+      },
+      "chandni_chowk": {
+        "osm": {
+          "count": 1118,
+          "areaM2": 342998,
+          "coverage": 0.0716,
+          "duplicatePairs": 1,
+          "exactDuplicatePairs": 0,
+          "medianAreaM2": 115.7,
+          "withHeightOrLevels": 93,
+          "coveredShare": 0.0713,
+          "roadOverlaps": {
+            "issues": 199,
+            "auto": 128,
+            "centreLineThroughFootprint": 6
+          }
+        },
+        "bs1": {
+          "count": 16923,
+          "areaM2": 1234854,
+          "coverage": 0.2579,
+          "duplicatePairs": 4,
+          "exactDuplicatePairs": 0,
+          "medianAreaM2": 42,
+          "withHeightOrLevels": 91,
+          "coveredShare": 0.2617,
+          "bySource": {
+            "Microsoft ML Buildings": 435,
+            "Google Open Buildings": 15377,
+            "OpenStreetMap": 1111
+          },
+          "osmBuildingsFoundById": 1107,
+          "osmBuildings": 1118,
+          "osmTagsKeptShare": 0.845,
+          "osmTagsKeptShareWithoutBuildingKey": 0.543,
+          "tagKeys": [
+            {
+              "key": "building",
+              "osm": 1118,
+              "kept": 1107
+            },
+            {
+              "key": "building:levels",
+              "osm": 89,
+              "kept": 87
+            },
+            {
+              "key": "roof:shape",
+              "osm": 73,
+              "kept": 73
+            },
+            {
+              "key": "name",
+              "osm": 44,
+              "kept": 43
+            },
+            {
+              "key": "addr:*",
+              "osm": 40,
+              "kept": 0
+            },
+            {
+              "key": "building:colour",
+              "osm": 34,
+              "kept": 32
+            },
+            {
+              "key": "amenity",
+              "osm": 26,
+              "kept": 0
+            },
+            {
+              "key": "historic",
+              "osm": 22,
+              "kept": 0
+            },
+            {
+              "key": "building:material",
+              "osm": 21,
+              "kept": 14
+            },
+            {
+              "key": "name:hi",
+              "osm": 19,
+              "kept": 19
+            },
+            {
+              "key": "building:use",
+              "osm": 17,
+              "kept": 0
+            },
+            {
+              "key": "type",
+              "osm": 15,
+              "kept": 0
+            },
+            {
+              "key": "wikipedia",
+              "osm": 14,
+              "kept": 0
+            },
+            {
+              "key": "religion",
+              "osm": 13,
+              "kept": 0
+            }
+          ],
+          "lostKeys": [
+            "addr:* (40)",
+            "amenity (26)",
+            "historic (22)",
+            "building:use (17)",
+            "type (15)",
+            "wikipedia (14)",
+            "religion (13)",
+            "wikidata (12)",
+            "wikimedia_commons (10)",
+            "alt_name (6)",
+            "wheelchair (5)",
+            "tourism (3)"
+          ],
+          "withHeightOrLevelsShare": 0.005,
+          "roadOverlaps": {
+            "issues": 2374,
+            "auto": 1293,
+            "centreLineThroughFootprint": 7
+          }
+        },
+        "bs2": {
+          "count": 15421,
+          "areaM2": 1360659,
+          "coverage": 0.2841,
+          "duplicatePairs": 1,
+          "exactDuplicatePairs": 0,
+          "medianAreaM2": 53.6,
+          "withHeightOrLevels": 93,
+          "coveredShare": 0.2849,
+          "bySource": {
+            "osm": {
+              "input": 1118,
+              "added": 1117,
+              "duplicate": 0,
+              "conflict": 0,
+              "tiny": 1
+            },
+            "google": {
+              "input": 15725,
+              "added": 14114,
+              "duplicate": 1056,
+              "conflict": 525,
+              "tiny": 30
+            },
+            "ms": {
+              "input": 1048,
+              "added": 190,
+              "duplicate": 763,
+              "conflict": 95,
+              "tiny": 0
+            }
+          },
+          "mergeMs": 269,
+          "inputs": {
+            "osm": 1118,
+            "google": 15725,
+            "googleBelowConfidence": 8082,
+            "ms": 1048
+          },
+          "osmTagsKeptShare": 1,
+          "withHeightOrLevelsShare": 0.006,
+          "roadOverlaps": {
+            "issues": 4280,
+            "auto": 1282,
+            "centreLineThroughFootprint": 1858
+          }
+        },
+        "bs3": {
+          "note": "OSM footprints only: the osm row above",
+          "coveredShare": 0.0713,
+          "count": 1118
+        }
+      },
+      "laxmi_nagar": {
+        "osm": {
+          "count": 1032,
+          "areaM2": 162987,
+          "coverage": 0.0771,
+          "duplicatePairs": 0,
+          "exactDuplicatePairs": 0,
+          "medianAreaM2": 110.2,
+          "withHeightOrLevels": 54,
+          "coveredShare": 0.0755,
+          "roadOverlaps": {
+            "issues": 694,
+            "auto": 472,
+            "centreLineThroughFootprint": 7
+          }
+        },
+        "bs1": {
+          "count": 4536,
+          "areaM2": 476789,
+          "coverage": 0.2256,
+          "duplicatePairs": 1,
+          "exactDuplicatePairs": 0,
+          "medianAreaM2": 77.3,
+          "withHeightOrLevels": 54,
+          "coveredShare": 0.2259,
+          "bySource": {
+            "Google Open Buildings": 3269,
+            "Microsoft ML Buildings": 252,
+            "OpenStreetMap": 1015
+          },
+          "osmBuildingsFoundById": 1013,
+          "osmBuildings": 1032,
+          "osmTagsKeptShare": 0.854,
+          "osmTagsKeptShareWithoutBuildingKey": 0.53,
+          "tagKeys": [
+            {
+              "key": "building",
+              "osm": 1032,
+              "kept": 1013
+            },
+            {
+              "key": "roof:shape",
+              "osm": 97,
+              "kept": 97
+            },
+            {
+              "key": "addr:*",
+              "osm": 89,
+              "kept": 0
+            },
+            {
+              "key": "building:levels",
+              "osm": 54,
+              "kept": 54
+            },
+            {
+              "key": "name",
+              "osm": 34,
+              "kept": 34
+            },
+            {
+              "key": "amenity",
+              "osm": 22,
+              "kept": 0
+            },
+            {
+              "key": "religion",
+              "osm": 14,
+              "kept": 0
+            },
+            {
+              "key": "building:colour",
+              "osm": 11,
+              "kept": 10
+            },
+            {
+              "key": "layer",
+              "osm": 9,
+              "kept": 9
+            },
+            {
+              "key": "shop",
+              "osm": 8,
+              "kept": 0
+            },
+            {
+              "key": "type",
+              "osm": 4,
+              "kept": 0
+            },
+            {
+              "key": "wheelchair",
+              "osm": 4,
+              "kept": 0
+            },
+            {
+              "key": "name:hi",
+              "osm": 4,
+              "kept": 4
+            },
+            {
+              "key": "building:levels:underground",
+              "osm": 3,
+              "kept": 3
+            }
+          ],
+          "lostKeys": [
+            "addr:* (89)",
+            "amenity (22)",
+            "religion (14)",
+            "shop (8)",
+            "type (4)",
+            "wheelchair (4)",
+            "air_conditioning (3)",
+            "shelter_type (3)",
+            "contact:phone (3)",
+            "check_date (2)",
+            "internet_access (2)",
+            "payment:cards (2)"
+          ],
+          "withHeightOrLevelsShare": 0.012,
+          "roadOverlaps": {
+            "issues": 1983,
+            "auto": 1158,
+            "centreLineThroughFootprint": 17
+          }
+        },
+        "bs2": {
+          "count": 8091,
+          "areaM2": 882103,
+          "coverage": 0.4174,
+          "duplicatePairs": 0,
+          "exactDuplicatePairs": 0,
+          "medianAreaM2": 87.8,
+          "withHeightOrLevels": 54,
+          "coveredShare": 0.4146,
+          "bySource": {
+            "osm": {
+              "input": 1032,
+              "added": 1032,
+              "duplicate": 0,
+              "conflict": 0,
+              "tiny": 0
+            },
+            "google": {
+              "input": 8223,
+              "added": 6971,
+              "duplicate": 903,
+              "conflict": 346,
+              "tiny": 3
+            },
+            "ms": {
+              "input": 1077,
+              "added": 88,
+              "duplicate": 940,
+              "conflict": 49,
+              "tiny": 0
+            }
+          },
+          "mergeMs": 179,
+          "inputs": {
+            "osm": 1032,
+            "google": 8223,
+            "googleBelowConfidence": 2024,
+            "ms": 1077
+          },
+          "osmTagsKeptShare": 1,
+          "withHeightOrLevelsShare": 0.007,
+          "roadOverlaps": {
+            "issues": 5706,
+            "auto": 1755,
+            "centreLineThroughFootprint": 2734
+          }
+        },
+        "bs3": {
+          "note": "OSM footprints only: the osm row above",
+          "coveredShare": 0.0755,
+          "count": 1032
+        }
+      }
+    },
+    "chandniChowk": {
+      "coveredShare": {
+        "bs1": 0.2617,
+        "bs2": 0.2849,
+        "bs3": 0.0713
+      },
+      "count": {
+        "bs1": 16923,
+        "bs2": 15421,
+        "bs3": 1118
+      },
+      "duplicatePairsLeft": {
+        "bs1": 4,
+        "bs2": 1
+      },
+      "medianAreaM2": {
+        "bs1": 42,
+        "bs2": 53.6
+      },
+      "roadOverlaps": {
+        "bs1": 2374,
+        "bs2": 4280,
+        "bs3": 199
+      }
+    }
+  },
+  "roads": {
+    "how": "Overture transportation segments (subtype road) that touch each box, against the OSM carriageways of the same box. A segment counts as OSM-only when every entry of its sources names OpenStreetMap.",
+    "sites": {
+      "cp": {
+        "overtureSegments": 1269,
+        "overtureCarriagewaySegments": 830,
+        "overtureCarriagewayKm": 81.79,
+        "osmCarriagewayWays": 671,
+        "osmCarriagewayKm": 87.88,
+        "segmentsOsmOnly": 830,
+        "segmentsWithOtherSource": 0,
+        "otherSources": [],
+        "otherSourceProperties": [],
+        "withSpeedLimit": 0.012,
+        "withWidthRule": 0,
+        "withLevelRule": 0.006,
+        "withSurface": 0.327,
+        "classUnknown": 43
+      },
+      "india_gate": {
+        "overtureSegments": 655,
+        "overtureCarriagewaySegments": 511,
+        "overtureCarriagewayKm": 65.16,
+        "osmCarriagewayWays": 401,
+        "osmCarriagewayKm": 71.38,
+        "segmentsOsmOnly": 511,
+        "segmentsWithOtherSource": 0,
+        "otherSources": [],
+        "otherSourceProperties": [],
+        "withSpeedLimit": 0.055,
+        "withWidthRule": 0,
+        "withLevelRule": 0.02,
+        "withSurface": 0.305,
+        "classUnknown": 36
+      },
+      "ito": {
+        "overtureSegments": 869,
+        "overtureCarriagewaySegments": 534,
+        "overtureCarriagewayKm": 84.57,
+        "osmCarriagewayWays": 474,
+        "osmCarriagewayKm": 92.32,
+        "segmentsOsmOnly": 531,
+        "segmentsWithOtherSource": 3,
+        "otherSources": [
+          "TomTom"
+        ],
+        "otherSourceProperties": [
+          ""
+        ],
+        "withSpeedLimit": 0.062,
+        "withWidthRule": 0.002,
+        "withLevelRule": 0.056,
+        "withSurface": 0.268,
+        "classUnknown": 184
+      },
+      "chandni_chowk": {
+        "overtureSegments": 1702,
+        "overtureCarriagewaySegments": 1257,
+        "overtureCarriagewayKm": 108.49,
+        "osmCarriagewayWays": 707,
+        "osmCarriagewayKm": 112.54,
+        "segmentsOsmOnly": 1254,
+        "segmentsWithOtherSource": 3,
+        "otherSources": [
+          "TomTom"
+        ],
+        "otherSourceProperties": [
+          ""
+        ],
+        "withSpeedLimit": 0.033,
+        "withWidthRule": 0.033,
+        "withLevelRule": 0.01,
+        "withSurface": 0.165,
+        "classUnknown": 167
+      },
+      "laxmi_nagar": {
+        "overtureSegments": 1776,
+        "overtureCarriagewaySegments": 1580,
+        "overtureCarriagewayKm": 92.86,
+        "osmCarriagewayWays": 717,
+        "osmCarriagewayKm": 96.94,
+        "segmentsOsmOnly": 1580,
+        "segmentsWithOtherSource": 0,
+        "otherSources": [],
+        "otherSourceProperties": [],
+        "withSpeedLimit": 0,
+        "withWidthRule": 0.001,
+        "withLevelRule": 0.018,
+        "withSurface": 0.104,
+        "classUnknown": 103
+      }
+    }
+  },
+  "overrides": {
+    "how": "Sample OV1 patches in harness/data/overrides/<district>/<tileX>_<tileZ>.json (250 m tiles of the district frame, filed under the tile of the anchor). Run 1 applies them to the extract as fetched: targets are found by id. Run 2 is the same extract with every way id changed (a stand-in for a new extract where ways were redrawn): targets must be found again by the anchor. After each run the rules run again: a patch that changes the map (set_tag, remove) makes its issue go away (gone); a patch that only decides (terminate, connect) leaves the issue found and marks it overridden, so it is not raised again.",
+    "files": [
+      {
+        "file": "harness/data/overrides/chandni_chowk/3_-3.json",
+        "patches": 1
+      },
+      {
+        "file": "harness/data/overrides/cp/-4_3.json",
+        "patches": 1
+      },
+      {
+        "file": "harness/data/overrides/cp/2_1.json",
+        "patches": 1
+      }
+    ],
+    "run1": [
+      {
+        "id": "ov_chandni_chowk_0001",
+        "district": "chandni_chowk",
+        "action": "terminate",
+        "resolution": "by_id",
+        "targets": [
+          "way/264770688"
+        ],
+        "applied": true,
+        "issueAfterRerun": "overridden",
+        "note": "every target id is in this extract"
+      },
+      {
+        "id": "ov_cp_stale_sample",
+        "district": "cp",
+        "action": "connect",
+        "resolution": "stale",
+        "targets": [],
+        "applied": false,
+        "issueAfterRerun": "stale",
+        "note": "way/1 is not in this extract and no road lies within 1 m of the anchor"
+      },
+      {
+        "id": "ov_cp_0002",
+        "district": "cp",
+        "action": "remove",
+        "resolution": "by_id",
+        "targets": [
+          "way/1290403901",
+          "way/164782723"
+        ],
+        "applied": true,
+        "issueAfterRerun": "gone",
+        "note": "every target id is in this extract"
+      }
+    ],
+    "run2": [
+      {
+        "id": "ov_chandni_chowk_0001",
+        "district": "chandni_chowk",
+        "action": "terminate",
+        "resolution": "by_anchor",
+        "targets": [
+          "way/9000264770688"
+        ],
+        "applied": true,
+        "issueAfterRerun": "overridden",
+        "note": "way/264770688 is gone; way/9000264770688 lies 0 m from the anchor"
+      },
+      {
+        "id": "ov_cp_stale_sample",
+        "district": "cp",
+        "action": "connect",
+        "resolution": "stale",
+        "targets": [],
+        "applied": false,
+        "issueAfterRerun": "stale",
+        "note": "way/1 is not in this extract and no road lies within 1 m of the anchor"
+      },
+      {
+        "id": "ov_cp_0002",
+        "district": "cp",
+        "action": "remove",
+        "resolution": "by_anchor",
+        "targets": [
+          "way/9001290403901",
+          "way/9000164782723"
+        ],
+        "applied": true,
+        "issueAfterRerun": "gone",
+        "note": "way/1290403901 is gone; way/9001290403901 lies 0 m from the anchor; way/164782723 is gone; way/9000164782723 lies 0.2 m from the anchor"
+      }
+    ],
+    "stale": [
+      {
+        "district": "cp",
+        "id": "ov_cp_stale_sample",
+        "issue": "R-ROAD-01:way/1:way/2:node/3",
+        "note": "way/1 is not in this extract and no road lies within 1 m of the anchor"
+      }
+    ],
+    "summary": {
+      "patches": 3,
+      "run1ById": 2,
+      "run2ByAnchor": 2,
+      "staleReported": 1,
+      "keptInFile": true,
+      "sameOutcomeBothRuns": true
+    }
+  },
+  "debugRenders": [
+    {
+      "file": "harness/reports/arch/pilot_data/issues_cp.png",
+      "district": "cp",
+      "shows": [
+        "R-ROAD-01",
+        "R-ROAD-02",
+        "R-ROAD-04",
+        "R-BRIDGE-01",
+        "R-BRIDGE-02",
+        "R-BLDG-01",
+        "R-BLDG-03"
+      ],
+      "counts": {
+        "R-ROAD-01": 30,
+        "R-ROAD-02": 0,
+        "R-ROAD-04": 9,
+        "R-BRIDGE-01": 0,
+        "R-BRIDGE-02": 0,
+        "R-BLDG-01": 118,
+        "R-BLDG-03": 2
+      }
+    },
+    {
+      "file": "harness/reports/arch/pilot_data/issues_india_gate.png",
+      "district": "india_gate",
+      "shows": [
+        "R-ROAD-01",
+        "R-ROAD-02",
+        "R-ROAD-04",
+        "R-BRIDGE-01",
+        "R-BRIDGE-02",
+        "R-BLDG-01",
+        "R-BLDG-03"
+      ],
+      "counts": {
+        "R-ROAD-01": 17,
+        "R-ROAD-02": 0,
+        "R-ROAD-04": 3,
+        "R-BRIDGE-01": 0,
+        "R-BRIDGE-02": 0,
+        "R-BLDG-01": 30,
+        "R-BLDG-03": 0
+      }
+    },
+    {
+      "file": "harness/reports/arch/pilot_data/issues_ito.png",
+      "district": "ito",
+      "shows": [
+        "R-ROAD-01",
+        "R-ROAD-02",
+        "R-ROAD-04",
+        "R-BRIDGE-01",
+        "R-BRIDGE-02",
+        "R-BLDG-01",
+        "R-BLDG-03"
+      ],
+      "counts": {
+        "R-ROAD-01": 13,
+        "R-ROAD-02": 0,
+        "R-ROAD-04": 7,
+        "R-BRIDGE-01": 0,
+        "R-BRIDGE-02": 0,
+        "R-BLDG-01": 24,
+        "R-BLDG-03": 0
+      }
+    },
+    {
+      "file": "harness/reports/arch/pilot_data/issues_chandni_chowk.png",
+      "district": "chandni_chowk",
+      "shows": [
+        "R-ROAD-01",
+        "R-ROAD-02",
+        "R-ROAD-04",
+        "R-BRIDGE-01",
+        "R-BRIDGE-02",
+        "R-BLDG-01",
+        "R-BLDG-03"
+      ],
+      "counts": {
+        "R-ROAD-01": 20,
+        "R-ROAD-02": 1,
+        "R-ROAD-04": 7,
+        "R-BRIDGE-01": 1,
+        "R-BRIDGE-02": 0,
+        "R-BLDG-01": 199,
+        "R-BLDG-03": 1
+      }
+    },
+    {
+      "file": "harness/reports/arch/pilot_data/terrain_outliers_chandni_chowk.png",
+      "district": "chandni_chowk",
+      "shows": [
+        "R-TERR-03"
+      ]
+    },
+    {
+      "file": "harness/reports/arch/pilot_data/buildings_bs1_chandni_chowk.png",
+      "district": "chandni_chowk",
+      "shows": [
+        "BS1 footprints by source"
+      ]
+    }
+  ],
+  "wallMs": 6238,
+  "notMeasured": [
+    {
+      "id": "osmium_extract",
+      "reason": "not needed: Overpass answered every box, so no regional extract was cut"
+    },
+    {
+      "id": "metro_and_fob_rules",
+      "reason": "R-RAIL and R-FOB are not in the MUST list of this bench; they come with the repair layer build"
+    }
+  ]
+}

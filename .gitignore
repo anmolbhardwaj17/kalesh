@@ -28,3 +28,9 @@ game/.godot/
 game/bench/render/tex_gen/
 # project settings of one architecture bench run (harness/bench/arch.mjs writes and removes it)
 game/override.cfg
+# source data downloads of the bake and the data bench: never committed. Only the pin list data/SOURCES.json
+# (URL, date, licence, sha256 of every download) is versioned.
+/data/*
+!/data/SOURCES.json
+# tiles written by the tile format bench (harness/bench/pilot_data/tiles.mjs)
+game/bench/tiles/gen/

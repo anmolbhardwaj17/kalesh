@@ -1,4 +1,6 @@
 // Geographic projection: latitude and longitude (WGS84 degrees) to world metres and back, around one named origin.
+// The only projection of the offline tooling: every function takes the origin as an argument (default: India Gate),
+// so district frames (ARCH_OPTIONS X1) use this same code with their own origin.
 // World axes (the one coordinate system of this game, TECH.md "Coordinates"): east +X, north -Z, up +Y, 1 unit = 1 metre.
 // No mirroring and no axis flips: a point north of the origin has a negative z, a point east has a positive x.
 //
@@ -69,14 +71,41 @@ function tmInverse(e: number, n: number, lon0: number): LatLon {
 
 const NORTHING_AT_ORIGIN = tmForward(ORIGIN.lat, ORIGIN.lon, ORIGIN.lon).n;
 
-/** Latitude and longitude to world metres. East is +x, north is -z. */
-export function geoToWorld(lat: number, lon: number): WorldXZ {
-  const { e, n } = tmForward(lat, lon, ORIGIN.lon);
-  // `0 -` keeps a due-north z of exactly 0 as +0 and a point due north has x exactly 0.
-  return { x: e, z: -(n - NORTHING_AT_ORIGIN) };
+/** Northing of an origin on its own central meridian (cached for the world origin). */
+function northingAt(origin: Readonly<LatLon>): number {
+  return origin === ORIGIN ? NORTHING_AT_ORIGIN : tmForward(origin.lat, origin.lon, origin.lon).n;
 }
 
-/** World metres back to latitude and longitude. */
-export function worldToGeo(x: number, z: number): LatLon {
-  return tmInverse(x, NORTHING_AT_ORIGIN - z, ORIGIN.lon);
+/**
+ * Latitude and longitude to metres around `origin` (default: the world origin, India Gate). East is +x, north is -z.
+ * A district frame (ARCH_OPTIONS X1) passes its own origin: the central meridian runs through it.
+ */
+export function geoToWorld(lat: number, lon: number, origin: Readonly<LatLon> = ORIGIN): WorldXZ {
+  const { e, n } = tmForward(lat, lon, origin.lon);
+  // `0 -` keeps a due-north z of exactly 0 as +0 and a point due north has x exactly 0.
+  return { x: e, z: -(n - northingAt(origin)) };
+}
+
+/** Metres around `origin` back to latitude and longitude. */
+export function worldToGeo(x: number, z: number, origin: Readonly<LatLon> = ORIGIN): LatLon {
+  return tmInverse(x, northingAt(origin) - z, origin.lon);
+}
+
+/** A projection bound to one origin, for code that converts many points of one district. */
+export interface Projector {
+  readonly origin: Readonly<LatLon>;
+  toWorld(lat: number, lon: number): WorldXZ;
+  toGeo(x: number, z: number): LatLon;
+}
+
+export function projector(origin: Readonly<LatLon> = ORIGIN): Projector {
+  const n0 = northingAt(origin);
+  return {
+    origin,
+    toWorld: (lat, lon) => {
+      const { e, n } = tmForward(lat, lon, origin.lon);
+      return { x: e, z: -(n - n0) };
+    },
+    toGeo: (x, z) => tmInverse(x, n0 - z, origin.lon),
+  };
 }

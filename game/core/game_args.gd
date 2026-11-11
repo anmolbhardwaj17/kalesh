@@ -33,6 +33,7 @@ const SCENES := {
 const ARCH_SCENES := {
 	"render": "res://bench/render/render_bench.tscn",
 	"physics": "res://bench/physics/physics_bench.tscn",
+	"tiles": "res://bench/tiles/tiles_bench.tscn",
 }
 
 var debug := false

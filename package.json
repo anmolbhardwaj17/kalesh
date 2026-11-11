@@ -13,6 +13,8 @@
     "godot:parse": "node harness/bin/godot.mjs parse"
   },
   "devDependencies": {
+    "@duckdb/node-api": "^2.0.0-r.1",
+    "geotiff": "^3.0.5",
     "playwright": "^1.65.0",
     "sharp": "^0.35.5",
     "typescript": "~5.9.3",

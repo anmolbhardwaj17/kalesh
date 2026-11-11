@@ -1,0 +1,26 @@
+[
+  {
+    "id": "ov_cp_0002",
+    "issue": "R-BLDG-03:way/1290403901:way/164782723",
+    "action": "remove",
+    "target": {
+      "ids": [
+        "way/1290403901",
+        "way/164782723"
+      ],
+      "anchor": {
+        "lat": 28.6287272,
+        "lon": 77.2229333
+      },
+      "tolerance_m": 15
+    },
+    "params": {
+      "drop": "way/1290403901",
+      "kinds": "building,building"
+    },
+    "why": "Sample patch of the data bench: way/1290403901 lies 100 percent inside way/164782723: a part drawn as a building, or a courtyard block",
+    "by": "builder",
+    "source": "bench",
+    "date": "2026-11-11"
+  }
+]
