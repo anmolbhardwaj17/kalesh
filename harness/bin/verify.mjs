@@ -196,7 +196,7 @@ async function runScenario(browser, base, sc, solo) {
   const b = judgeBudgets({ perf: res.perf, loadMs: res.loadMs, quality: sc.quality, budgets: BUDGETS, software: !!report.gl?.software, scenario: sc });
   for (const w of b.warnings) report.warnings.push(`${sc.name}: ${w}`);
   if (b.fails.length) { res.ok = false; res.errors.push(...b.fails); }
-  if (res.perf) Object.assign(res.perf, { judged: !report.gl.software, frameGate: b.frame?.level ?? null, frameP95Ms: b.frame?.p95 ?? null });
+  if (res.perf) Object.assign(res.perf, { judged: !report.gl.software, frameGate: b.frame?.level ?? null, frameP95Ms: b.frame?.p95 ?? null, sceneKind: b.sceneKind });
   if (!res.ok) fail(`scenario ${sc.name}: ${res.errors[0]}`);
   res.ms = Date.now() - t0;
   res.parallel = !solo;

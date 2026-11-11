@@ -1,5 +1,6 @@
 import { describe, it, expect } from 'vitest';
-import { perfMeta, checkPoses, sheetLabels, sheetCost } from './lookproof.mjs';
+import { perfMeta, checkPoses, sheetLabels, sheetCost, sceneKindFromArgs, perfFileHeader } from './lookproof.mjs';
+import { normalize, judgeBudgets } from './perfbudget.mjs';
 
 describe('lookproof perf.json header', () => {
   it('quotes the machine, Godot version, renderer, GPU adapter and load', () => {
@@ -56,5 +57,29 @@ describe('perfRow', () => {
   it('keeps the plain reading when no ballast ran', async () => {
     const { perfRow } = await import('./lookproof.mjs');
     expect(perfRow({ perf: { cpuMs: { p95: 0.9 }, gpuMs: { p95: 6.6 } }, j, loadMs: 1, load: null })).toMatchObject({ gpuP95: 6.6, gpuP95Capped: 6.6, gpuCostMs: null });
+  });
+});
+
+describe('lookproof --scene-kind', () => {
+  const budgets = normalize({
+    presets: { default: { drawCalls: { warn: 600, fail: 1000 } } },
+    scenes: { look: { drawCalls: { warn: 600, fail: 1000 } }, city: { drawCalls: { warn: 2500, fail: 3500 } } },
+  });
+  const perf = { cpuMs: { p95: 1 }, p95FrameMs: 8, avgFps: 120, drawCalls: 2600, triangles: 1000 };
+
+  it('defaults to look, accepts look and city, and rejects other names', async () => {
+    expect(sceneKindFromArgs({})).toBe('look');
+    expect(sceneKindFromArgs({ 'scene-kind': 'city' })).toBe('city');
+    expect(() => sceneKindFromArgs({ 'scene-kind': 'moon' })).toThrow(/look, city/);
+    expect(() => sceneKindFromArgs({ 'scene-kind': true })).toThrow(/--scene-kind/);
+  });
+
+  it('writes the kind into perf.json and judges with the city numbers', async () => {
+    const { perfRow } = await import('./lookproof.mjs');
+    const city = judgeBudgets({ perf, budgets, sceneKind: 'city' });
+    const look = judgeBudgets({ perf, budgets, sceneKind: 'look' });
+    expect(perfRow({ perf, j: city, loadMs: 1, load: null })).toMatchObject({ sceneKind: 'city', verdict: 'warn' });
+    expect(perfRow({ perf, j: look, loadMs: 1, load: null })).toMatchObject({ sceneKind: 'look', verdict: 'FAIL' });
+    expect(perfFileHeader({ meta: { driver: 'godot' }, gl: { renderer: 'x' }, budgets, sceneKind: 'city' })).toMatchObject({ driver: 'godot', gl: 'x', sceneKind: 'city' });
   });
 });

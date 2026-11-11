@@ -131,7 +131,7 @@ The hook contract is checked on every `verify --quick` by the `hooks_contract` s
 | `harness/bin/shoot.mjs` | Ad hoc screenshots and play-throughs. |
 | `harness/bin/ballast.mjs` | GPU readings under the 120 fps cap (P0-039): calibrates a GPU ballast, reads the GPU p95 with the GPU kept busy and the frame cost (ballast frame minus ballast alone). `ballastPerf` adds `perf.gpuCost` to a plain perf window; used by `lookproof --perf`, the verify perf gate and `arch.mjs`. Tests: `ballast.test.mjs`. |
 | `harness/bin/lookproof.mjs` | Look proof sets on the active driver (Godot: one game run per view, `--query` becomes game args), compare against the approved reference, side by side sheets, perf per view (with the GPU ballast, `ballast.mjs`). `perf.json` quotes machine, Godot version, renderer (Forward+ or Mobile), GPU adapter and load. Tests: `lookproof.test.mjs`. |
-| `harness/bin/perfbudget.mjs`, `perfgate.mjs`, `gpucost.mjs` | Budgets from `perf_budgets.json`, the frame time gate, the stable GPU cost. |
+| `harness/bin/perfbudget.mjs`, `perfgate.mjs`, `gpucost.mjs` | Budgets from `perf_budgets.json` (draw call, triangle and memory limits by scene kind, look or city), the frame time gate, the stable GPU cost. |
 | `harness/bin/quickset.mjs`, `harness/verify/quick.json` | The `--quick` scenario set. |
 | `harness/bin/freshreport.mjs`, `lib.mjs treeHash` | Reuse of a quick run on the identical tree. |
 | `harness/bin/gatecheck.mjs`, `gateretry.mjs`, `harness/verify/shared_paths.json` | Phase gate paths: the full run, or a retry when no shared file changed. |

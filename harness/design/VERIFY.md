@@ -123,7 +123,7 @@ Verifier output: `PASS` or `FAIL` with a numbered list of concrete problems and 
 
 ## Perf probes
 
-Perf scenarios (`perf: true`) measure one `debug.perf` window after their steps and are judged against `harness/verify/perf_budgets.json` (`perfbudget.mjs`): p95 frame time (warn and fail), fps floor, draw calls, triangles and GPU memory per quality preset, and the page load time. A frame time fail is measured once more before it counts. On software GL frame time is not judged. On a loaded machine (load per core over 1) a frame time fail becomes "not judged: machine loaded". `HARNESS_PERF_STRICT=1` makes the GPU timer a hard limit.
+Perf scenarios (`perf: true`) measure one `debug.perf` window after their steps and are judged against `harness/verify/perf_budgets.json` (`perfbudget.mjs`): p95 frame time (warn and fail), fps floor, draw calls, triangles and GPU memory per quality preset, and the page load time. A scenario names its scene kind with `scene: "look"` (default) or `"city"` and the draw call, triangle and memory budgets come from `perf_budgets.json` `scenes.<kind>` (`lookproof --perf --scene-kind city` does the same and writes `sceneKind` into perf.json). A frame time fail is measured once more before it counts. On software GL frame time is not judged. On a loaded machine (load per core over 1) a frame time fail becomes "not judged: machine loaded". `HARNESS_PERF_STRICT=1` makes the GPU timer a hard limit.
 
 ## Look proof workflow (`lookproof.mjs`)
 

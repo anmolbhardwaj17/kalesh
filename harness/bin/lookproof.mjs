@@ -5,7 +5,7 @@
 //
 //   node harness/bin/lookproof.mjs --check
 //       validates harness/look_proof/poses.json (exit 1 on a problem)
-//   node harness/bin/lookproof.mjs --set <name> [--views a,b] [--query "style=toon"] [--perf] [--no-build]
+//   node harness/bin/lookproof.mjs --set <name> [--views a,b] [--query "style=toon"] [--perf [--scene-kind look|city]] [--no-build]
 //       shoots every view of poses.json into harness/look_proof/<name>/<view>.png (+ shots.json). --query adds game args
 //       on Godot ("style=toon" becomes --style=toon) or page params on the web target (a style test task switches the
 //       look with one). --perf also measures each view (debug.perf, judged against harness/verify/perf_budgets.json)
@@ -14,7 +14,8 @@
 //       vulkan" adds GPU times on macOS (the Metal driver reports none). Since P0-039 every view also runs the GPU ballast
 //       (harness/bin/ballast.mjs): `gpuP95` is the GPU p95 with the GPU kept busy (the scene's cost at full clock, Vulkan
 //       only), `frameCostP50` and `frameCostP95` the same cost from frame times (also on Metal), `gpuP95Capped` the plain
-//       reading under this Mac's 120 fps cap. The budgets judge the ballast cost.
+//       reading under this Mac's 120 fps cap. The budgets judge the ballast cost. --scene-kind picks the draw call, triangle and
+//       video memory budgets (perf_budgets.json scenes.<kind>: look, the default, or city) and is written to perf.json.
 //   node harness/bin/lookproof.mjs --approve <name>
 //       makes that set the approved reference (harness/look_proof/approved/), recorded in approved.json. Only after the
 //       owner said yes to it (Phase 0 sign-off, or a look task he accepted).
@@ -37,7 +38,7 @@ import { ROOT, R, readJSON, writeJSON, nowISO, parseArgs, git, config } from './
 import os from 'node:os';
 import { loadDriver } from './driver.mjs';
 import { ballastPerf, ballastText } from './ballast.mjs';
-import { loadBudgets, judgeBudgets } from './perfbudget.mjs';
+import { loadBudgets, judgeBudgets, SCENE_KINDS, DEFAULT_SCENE_KIND } from './perfbudget.mjs';
 
 /** The driver of kit.config.json "target" (driver.mjs): godot runs the pinned Godot, web the built page in Chromium. */
 const DRV = await loadDriver(config());
@@ -67,6 +68,19 @@ export function checkPoses(p) {
 
 const RENDER_METHODS = { forward_plus: 'Forward+', mobile: 'Mobile', gl_compatibility: 'Compatibility' };
 
+/** The --scene-kind value: "look" when absent, else one of SCENE_KINDS. Throws on any other name. */
+export function sceneKindFromArgs(a) {
+  const v = a['scene-kind'];
+  if (v === undefined) return DEFAULT_SCENE_KIND;
+  if (!SCENE_KINDS.includes(v)) throw new Error(`--scene-kind must be one of ${SCENE_KINDS.join(', ')} (got ${v === true ? 'nothing' : v})`);
+  return v;
+}
+
+/** The header fields written into perf.json next to the rows: the run's meta, the GL renderer, the budgets file and the scene kind. */
+export function perfFileHeader({ meta, gl, budgets, sceneKind }) {
+  return { ...meta, gl: gl?.renderer, budgets: budgets.source, sceneKind };
+}
+
 /** What a perf.json quotes about the run: machine, engine version, renderer, GPU adapter and the machine load. */
 export function perfMeta({ gl = {}, browser = {}, hello = null, kind = DRV.kind, load = null } = {}) {
   const cpus = os.cpus();
@@ -91,11 +105,11 @@ async function sharpOrNull() { try { return (await import('sharp')).default; } c
  * from frame times (a ballast frame minus the ballast alone, also on Metal); gpuCostMs is the number the gate judged.
  * A window without a ballast keeps the plain reading in gpuP95.
  */
-export function perfRow({ perf, j, loadMs, load, quality }) {
+export function perfRow({ perf, j, loadMs, load, quality, sceneKind = j.sceneKind || DEFAULT_SCENE_KIND }) {
   const c = perf.gpuCost && perf.gpuCost.ms != null ? perf.gpuCost : null;
   const capped = (c ? perf.gpuMsCapped?.p95 : perf.gpuMs?.p95) ?? null;
   return {
-    quality: quality || null, loadMs, hostLoad: load, cpuP95: perf.cpuMs?.p95 ?? null,
+    quality: quality || null, sceneKind, loadMs, hostLoad: load, cpuP95: perf.cpuMs?.p95 ?? null,
     gpuP95: c ? c.gpuP95 : (perf.gpuMs?.p95 ?? null), gpuP95Capped: capped,
     frameCostP50: c?.frameCostP50 ?? null, frameCostP95: c?.frameCostP95 ?? null, gpuCostMs: c?.ms ?? null, ballastN: c?.n ?? null,
     fps: perf.avgFps ?? null, drawCalls: perf.drawCalls ?? null, triangles: perf.triangles ?? null, frameP95: j.frame?.p95 ?? null,
@@ -104,6 +118,8 @@ export function perfRow({ perf, j, loadMs, load, quality }) {
 }
 
 async function shootSet(name) {
+  let sceneKind;
+  try { sceneKind = sceneKindFromArgs(args); } catch (e) { console.log(e.message); process.exit(1); }
   const poses = readJSON(POSES, null);
   const errs = checkPoses(poses);
   if (errs.length) { console.log(errs.join('\n')); process.exit(1); }
@@ -140,7 +156,7 @@ async function shootSet(name) {
         // The window is capped at 120 fps: a plain gpuMs is the idle frame. Keep the GPU busy for the real cost (ballast.mjs).
         if (r.ok && ctx.perf && GODOT && page.client) ctx.perf = await ballastPerf(page.client, ctx.perf, { windowMs: budgets.windowMs, cache: ballastCache, key: `${meta.renderingDriver || DRV.kind}:${v.size?.join('x') || ''}` });
         if (r.ok && ctx.perf) {
-          const j = judgeBudgets({ perf: ctx.perf, loadMs, quality: v.quality, budgets, software: gl.software });
+          const j = judgeBudgets({ perf: ctx.perf, loadMs, quality: v.quality, sceneKind, budgets, software: gl.software });
           perf.rows[v.name] = perfRow({ perf: ctx.perf, j, loadMs, load, quality: v.quality });
         } else err = `perf: ${r.error}`;
       }
@@ -153,7 +169,7 @@ async function shootSet(name) {
   } finally { await browser.close(); await server?.close(); }
   shots.commit = git('rev-parse --short HEAD'); shots.gl = gl.renderer; shots.at = nowISO();
   writeJSON(path.join(dir, 'shots.json'), shots);
-  if (args.perf) { Object.assign(perf, meta); perf.gl = gl.renderer; perf.budgets = budgets.source; writeJSON(path.join(dir, 'perf.json'), perf); }
+  if (args.perf) { Object.assign(perf, perfFileHeader({ meta, gl, budgets, sceneKind })); writeJSON(path.join(dir, 'perf.json'), perf); }
   console.log(`LOOKPROOF SET ${name}: ${bad ? 'FAIL' : 'OK'} (${views.length} views) -> ${path.relative(ROOT, dir)}`);
   process.exitCode = bad ? 1 : 0;
 }
