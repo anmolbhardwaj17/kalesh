@@ -1,6 +1,6 @@
 {
   "_doc": "Written only by node harness/bin/task.mjs. Phases run in order; P0 (ADOPT + STYLE DISCOVERY) waits for the owner by design and needs task.mjs signoff and task.mjs archsignoff before its gate passes. Later phases are added by the planner at the end of P0 (task.mjs phase-add) from the game's real state.",
-  "updated": "2026-11-11T04:05:43.118Z",
+  "updated": "2026-11-11T09:17:03.257Z",
   "phases": [
     {
       "id": "P0",
@@ -824,7 +824,8 @@
       "notes": [
         "P0-010 (2026-11-10): desc and acceptance rewritten to match ARCH_OPTIONS.md draft 1 (option ids, MUST and IF TIME lists, scene, runner and report names). ARCH_OPTIONS.md wins if they differ.",
         "Paused by owner 2026-11-11 about 15 min into attempt 1; no files written yet. Resume with a fresh builder on branch task/P0-029-map-stitch.",
-        "Correction: the builder had written partial work (tools/bake/stitch/, harness/data/districts.json and districts/, harness/bench/stitch_draft.mjs, edits to roads.mjs and roads/site.ts), left uncommitted on the branch. Continue from the working tree."
+        "Correction: the builder had written partial work (tools/bake/stitch/, harness/data/districts.json and districts/, harness/bench/stitch_draft.mjs, edits to roads.mjs and roads/site.ts), left uncommitted on the branch. Continue from the working tree.",
+        "Resumed by owner ('continue'); fresh builder continues from the working tree."
       ],
       "created": "2026-11-10T14:08:49.921Z",
       "model": "fable",
