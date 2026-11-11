@@ -78,7 +78,7 @@ export function tileOf(x: number, z: number, size: number): { tx: number; tz: nu
   return { tx: Math.floor(x / size), tz: Math.floor(z / size) };
 }
 
-class MeshBuilder {
+export class MeshBuilder {
   readonly mesh: MeshData;
   constructor(name: string, material: string) {
     this.mesh = { name, material, pos: [], nrm: [], idx: [] };

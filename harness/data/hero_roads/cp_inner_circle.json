@@ -1,0 +1,100 @@
+{
+  "_doc": "Hero road spec (ARCH_OPTIONS HR1, MAP_REPAIR.md 'Hero roads'). DRAFT from P0-019: the layout comes from reference photos found online, the widths are read from the photos by scale cues (a car is about 1.7 m wide and 4.3 m long, a person about 1.7 m tall) and are not surveyed. The spec overrides OSM tags and class defaults for the ways it covers; the bake never changes a hero road's cross-section on its own (rule R-HERO). Every field names the photos it was read from (ids in refs). Photos are reference only: never copied into the game or the repo.",
+  "id": "cp_inner_circle",
+  "name": "Connaught Place, Inner Circle",
+  "status": "draft",
+  "checked": "2026-11-11",
+  "covers": {
+    "osmWays": [23133486],
+    "note": "The closed way 'Inner Circle' (tertiary, junction=roundabout, lanes=3 in OSM on 2026-11-11). The spec says 4 lanes: it overrides the tag.",
+    "ref": ["tag_osm"]
+  },
+  "traffic": {
+    "oneway": true,
+    "sense": "clockwise seen from above: Central Park is on the right of the direction of travel, the colonnade blocks on the left",
+    "ref": ["tag_osm", "cp_empty_road_2020"]
+  },
+  "crossSection": {
+    "_doc": "Left to right in the direction of travel (colonnade side first). width in metres per lane, raise in metres above the carriageway. The drive lanes are centred on the OSM way.",
+    "lanes": [
+      { "id": "outer_footpath", "type": "footpath", "width": 6.0, "raise": 0.15, "surface": "stone paving in front of the colonnade, bollards at the kerb", "confidence": "medium", "ref": ["cp_footpath_2011", "cp_columns_2013", "cp_block_parking_2015"] },
+      { "id": "parking", "type": "parking", "width": 5.0, "raise": 0, "surface": "angled parking bay between the footpath and the planter", "confidence": "medium", "ref": ["cp_block_2010", "cp_block_parking_2015", "cp_empty_road_2020"] },
+      { "id": "outer_planter", "type": "planter", "width": 1.5, "raise": 0.15, "hedge": true, "surface": "kerbed planter with a clipped hedge between the carriageway and the parking bay", "confidence": "medium", "ref": ["cp_empty_road_2020"] },
+      { "id": "lanes", "type": "drive", "count": 4, "width": 3.25, "raise": 0, "surface": "asphalt, white dashed lane lines, solid white edge line on the park side", "confidence": "medium", "ref": ["cp_empty_road_2020", "cp_block_dusk_2015"] },
+      { "id": "inner_kerb", "type": "kerb", "width": 0.3, "raise": 0.15, "surface": "grey stone kerb", "confidence": "high", "ref": ["cp_park_footpath_2020", "cp_empty_road_2020"] },
+      { "id": "inner_planter", "type": "planter", "width": 1.2, "raise": 0.15, "hedge": false, "surface": "flower bed between the kerb and the park footpath", "confidence": "medium", "ref": ["cp_park_footpath_2020", "cp_empty_road_2020"] },
+      { "id": "inner_footpath", "type": "footpath", "width": 3.0, "raise": 0.15, "surface": "stone paving with a tactile strip", "confidence": "medium", "ref": ["cp_park_footpath_2020"] }
+    ]
+  },
+  "median": { "type": "none", "width": 0, "note": "one carriageway, no divider", "ref": ["cp_empty_road_2020", "cp_block_dusk_2015"] },
+  "kerbs": { "type": "stone kerb", "height": 0.15, "note": "on the park side directly at the carriageway; on the colonnade side around the planter and at the footpath", "ref": ["cp_park_footpath_2020", "cp_empty_road_2020"] },
+  "footpaths": {
+    "left": { "width": 6.0, "note": "colonnade side, widened in the 2010 to 2013 renovation", "ref": ["cp_footpath_2011", "cp_columns_2013"] },
+    "right": { "width": 3.0, "note": "Central Park side, behind a flower bed", "ref": ["cp_park_footpath_2020"] }
+  },
+  "colonnadeEdge": {
+    "side": "left",
+    "setback": 0,
+    "note": "the column line stands at the back of the left footpath; behind it a covered walk, above it the first floor",
+    "bay": 3.0,
+    "columnDiameter": 0.55,
+    "columnHeight": 4.6,
+    "walkDepth": 3.5,
+    "blockHeight": 11.5,
+    "blockDepth": 22,
+    "colour": "#f1eee6",
+    "style": "two storeys, white render, Tuscan columns on the ground floor, windows above, a parapet; arched pavilions at the block ends",
+    "confidence": "medium",
+    "ref": ["cp_block_2010", "cp_block_corner_2010", "cp_colonnade_2013", "cp_columns_2013", "cp_block_parking_2015"]
+  },
+  "treeLine": {
+    "side": "left",
+    "lane": "outer_footpath",
+    "offsetFromLaneEdge": 1.2,
+    "spacing": 14,
+    "species": "large deciduous street trees (semal and others), in pits in the paving; uneven spacing",
+    "height": 12,
+    "confidence": "low",
+    "ref": ["cp_empty_road_2020", "cp_footpath_2011"]
+  },
+  "lamps": {
+    "side": "left",
+    "lane": "outer_planter",
+    "offsetFromLaneEdge": 0.75,
+    "spacing": 28,
+    "type": "steel pole with two arms",
+    "height": 9,
+    "confidence": "low",
+    "ref": ["cp_block_parking_2015", "cp_radial_night_2026"]
+  },
+  "parkEdge": {
+    "side": "right",
+    "type": "green steel railing on a low plinth at the back of the park footpath",
+    "height": 1.2,
+    "colour": "#2f7d3a",
+    "confidence": "medium",
+    "ref": ["cp_park_footpath_2020"]
+  },
+  "poses": [
+    {
+      "id": "across_to_colonnade",
+      "photo": "cp_empty_road_2020",
+      "note": "standing in the flower bed on the park side, eye height, looking across the carriageway at the colonnade blocks, slightly along the road. The exact spot on the circle is not known from the photo.",
+      "from": { "lane": "inner_planter", "height": 1.5 },
+      "lookAcross": true
+    }
+  ],
+  "refs": {
+    "cp_empty_road_2020": { "url": "https://commons.wikimedia.org/wiki/File:Day_before_Janata_curfew_effect_of_ban_on_social_gathering_over_5_people_deserted_inner_circle_in_Connaught_place_IMG_20200321_163639.jpg", "licence": "CC BY-SA 4.0", "licenceUrl": "https://creativecommons.org/licenses/by-sa/4.0", "author": "Sumita Roy Dutta", "date": "2020-03-21", "shows": "the empty inner circle carriageway from the park side: lane lines, the hedge planter, parked cars behind it, trees and the colonnade" },
+    "cp_park_footpath_2020": { "url": "https://commons.wikimedia.org/wiki/File:Empty_connaught_place,_inner_circle_at_New_Delhi_during_the_COVID-19_pandemic_in_DelhiIMG_20200321_163957.jpg", "licence": "CC BY-SA 4.0", "licenceUrl": "https://creativecommons.org/licenses/by-sa/4.0", "author": "Sumita Roy Dutta", "date": "2020-03-21", "shows": "the park side: kerb, flower bed, paved footpath with a tactile strip, green railing" },
+    "cp_block_dusk_2015": { "url": "https://commons.wikimedia.org/wiki/File:Connaught_Place,_New_Delhi_(04).jpg", "licence": "CC BY-SA 4.0", "licenceUrl": "https://creativecommons.org/licenses/by-sa/4.0", "author": "Nahid Sultan", "date": "2015-06-18", "shows": "the carriageway with traffic, dashed lane lines, a block across the road" },
+    "cp_block_parking_2015": { "url": "https://commons.wikimedia.org/wiki/File:Connaught_Place,_New_Delhi_(01).jpg", "licence": "CC BY-SA 4.0", "licenceUrl": "https://creativecommons.org/licenses/by-sa/4.0", "author": "Nahid Sultan", "date": "2015-06-18", "shows": "the colonnade side: paved footpath with bollards, parked cars, a lamp pole with two arms" },
+    "cp_block_2010": { "url": "https://commons.wikimedia.org/wiki/File:Connaught_Place.JPG", "licence": "CC BY-SA 3.0", "licenceUrl": "https://creativecommons.org/licenses/by-sa/3.0", "author": "ShashankSharma2511", "date": "2010-11-06", "shows": "a block front: columns, first floor windows, parapet, cars parked at an angle in front" },
+    "cp_block_corner_2010": { "url": "https://commons.wikimedia.org/wiki/File:Connaught_Place,_New_Delhi_-_IMG_1967.JPG", "licence": "Public domain", "licenceUrl": "https://commons.wikimedia.org/wiki/File:Connaught_Place,_New_Delhi_-_IMG_1967.JPG", "author": "Daderot", "date": "2010-08-31", "shows": "a block end pavilion and the colonnade beside it" },
+    "cp_colonnade_2013": { "url": "https://commons.wikimedia.org/wiki/File:Colonnade_of_f_block.JPG", "licence": "CC BY-SA 3.0", "licenceUrl": "https://creativecommons.org/licenses/by-sa/3.0", "author": "Arjuncm3", "date": "2013-03-25", "shows": "the column line of F block at night, bay spacing and column size against people" },
+    "cp_columns_2013": { "url": "https://commons.wikimedia.org/wiki/File:Columns_at_Connaught_place.JPG", "licence": "CC BY-SA 3.0", "licenceUrl": "https://creativecommons.org/licenses/by-sa/3.0", "author": "Arjuncm3", "date": "2013-03-25", "shows": "columns and the paved footpath in front of them" },
+    "cp_footpath_2011": { "url": "https://commons.wikimedia.org/wiki/File:Delhi_Connaught_Place.jpg", "licence": "CC BY-SA 4.0", "licenceUrl": "https://creativecommons.org/licenses/by-sa/4.0", "author": "Marcin Białek", "date": "2011-01-01", "shows": "the wide footpath in front of the colonnade during the renovation, a tree, the colonnade on the right" },
+    "cp_radial_night_2026": { "url": "https://commons.wikimedia.org/wiki/File:Looking_towards_Radial_Road_Number_3,_Connaught_Place,_New_Delhi.jpg", "licence": "CC0", "licenceUrl": "http://creativecommons.org/publicdomain/zero/1.0/deed.en", "author": "Dgp4004", "date": "2026-04-02", "shows": "the junction of the inner circle with Radial Road 3 at night: the open junction surface, lamps, block ends" },
+    "tag_osm": { "url": "https://www.openstreetmap.org/way/23133486", "licence": "ODbL 1.0", "licenceUrl": "https://opendatacommons.org/licenses/odbl/1-0/", "author": "OpenStreetMap contributors", "date": "2026-11-11", "shows": "the way's geometry, direction and tags (not a photo: the map record the spec overrides)" }
+  }
+}
