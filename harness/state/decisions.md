@@ -380,3 +380,14 @@ Planner calls inside it, each changeable by Anmol through the inbox:
 Open: Noida and Shahdara are later unlocks in GAME.md but Act 4 uses them (settled when P11 is planned); a few story places are on no map list (the Okhla studio, the Seva hospital, police HQ).
 Why: the signed design, style and architecture need one build order that proves the base before the look, the look before the systems, the systems before missions, and the pilot before the wider city.
 By: planner (P0-023)
+
+## 2026-11-11: HUD answers (P1-003)
+Anmol saw the four HUD mockups (harness/design/hud_mockups/) and chose:
+- Overall feel: "Louder and more filmi": bigger type, bolder colour, poster-style titles (not the quiet glass of the mockups).
+- Route: road chevrons near turns plus the minimap line.
+- Minimap turns while driving, north up on foot.
+- English UI, Hindi place names and titles in both scripts, Hinglish subtitles.
+- Wanted level: Lal Batti, 5 red beacons.
+- Mission passed: a big filmi freeze frame with the title, then stats, stamps and cash.
+- Character colours: Bittu green, Meera blue, Danny pink.
+How to apply: HUD.md and the HUD build (P3-002) follow these; the mockups are redrawn louder before the build, without asking again.

@@ -306,3 +306,12 @@ One line per event, written by task.mjs (start, done, fail, phase changes, inbox
 - 2026-11-11 18:04 phase P1 planned
 - 2026-11-11 18:04 phase P2 planned
 - 2026-11-11 18:07 [P0-023] done: 14 phases after P0 with goals, exits and pillars; P1 (27 tasks) and P2 (28) detailed; P3, P4, P14 seeded with planning tasks; 10 Fable-tagged core tasks; M11 to M67 in milestones.json; HUD mockup check as P1-003; polish items in P14; gameSizeEstimate 580. Self-check: JSON parses, 315 vitest.
+- 2026-11-11 18:07 [P1-003] start (attempt 1): Show Anmol the HUD mockups
+- 2026-11-11 18:49 mentor message mmwc5bzo2 handled: Recorded for the HUD (P1-003).
+- 2026-11-11 18:49 mentor message mmwc5bzq0 handled: Recorded for the HUD (P1-003).
+- 2026-11-11 18:49 mentor message mmwc5bzs1 handled: Recorded for the HUD (P1-003).
+- 2026-11-11 18:49 mentor message mmwc5bzu0 handled: Recorded for the HUD (P1-003).
+- 2026-11-11 18:49 mentor message mmwc5bzvw handled: Recorded for the HUD (P1-003).
+- 2026-11-11 18:49 mentor message mmwc5bzxr handled: Recorded for the HUD (P1-003).
+- 2026-11-11 18:49 mentor message mmwc5bzzo handled: Recorded for the HUD (P1-003).
+- 2026-11-11 18:49 [P1-003] done: Showed Anmol the 4 HUD mockups; 7 answers recorded: louder and more filmi, road chevrons plus minimap line, minimap turns while driving, English UI with bilingual names, Lal Batti 5 beacons, filmi freeze-frame pass card, character colours kept.

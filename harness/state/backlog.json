@@ -1,6 +1,6 @@
 {
   "_doc": "Written only by node harness/bin/task.mjs. Phases run in order; P0 (ADOPT + STYLE DISCOVERY) waits for the owner by design and needs task.mjs signoff and task.mjs archsignoff before its gate passes. Later phases are added by the planner at the end of P0 (task.mjs phase-add) from the game's real state.",
-  "updated": "2026-11-11T12:37:09.290Z",
+  "updated": "2026-11-11T13:19:57.002Z",
   "phases": [
     {
       "id": "P0",
@@ -1494,10 +1494,14 @@
       "agent": "orchestrator",
       "priority": 5,
       "kind": "mentor",
-      "status": "todo",
-      "attempts": 0,
+      "status": "done",
+      "attempts": 1,
       "notes": [],
-      "created": "2026-11-11T12:29:04.868Z"
+      "created": "2026-11-11T12:29:04.868Z",
+      "started": "2026-11-11T12:37:38.020Z",
+      "done": "2026-11-11T13:19:56.986Z",
+      "summary": "Showed Anmol the 4 HUD mockups; 7 answers recorded: louder and more filmi, road chevrons plus minimap line, minimap turns while driving, English UI with bilingual names, Lal Batti 5 beacons, filmi freeze-frame pass card, character colours kept.",
+      "commit": "649ec32"
     },
     {
       "id": "P1-004",
