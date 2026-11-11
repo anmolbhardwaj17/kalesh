@@ -1,8 +1,8 @@
 {
-  "currentTask": "P1-002",
-  "updated": "2026-11-11T14:13:37.663Z",
-  "lastTaskDone": "P1-001",
-  "tasksDoneSinceArtPass": 4,
+  "currentTask": null,
+  "updated": "2026-11-11T14:35:19.670Z",
+  "lastTaskDone": "P1-002",
+  "tasksDoneSinceArtPass": 5,
   "designSignoff": {
     "at": "2026-11-10T15:10:59.599Z",
     "quote": "yes, I sign off on this game design"

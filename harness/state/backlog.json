@@ -1,6 +1,6 @@
 {
   "_doc": "Written only by node harness/bin/task.mjs. Phases run in order; P0 (ADOPT + STYLE DISCOVERY) waits for the owner by design and needs task.mjs signoff and task.mjs archsignoff before its gate passes. Later phases are added by the planner at the end of P0 (task.mjs phase-add) from the game's real state.",
-  "updated": "2026-11-11T14:13:37.662Z",
+  "updated": "2026-11-11T14:35:19.668Z",
   "phases": [
     {
       "id": "P0",
@@ -1483,12 +1483,15 @@
       "agent": "builder",
       "priority": 1,
       "kind": "feature",
-      "status": "doing",
+      "status": "done",
       "attempts": 1,
       "notes": [],
       "created": "2026-11-11T12:29:04.868Z",
       "model": "opus",
-      "started": "2026-11-11T14:13:37.662Z"
+      "started": "2026-11-11T14:13:37.662Z",
+      "done": "2026-11-11T14:35:19.648Z",
+      "summary": "No --style now loads stylised B; DayClock autoload starts at 15:00 and drives the light; --time and --light pin it; --style=none keeps the flat look for fast scenarios; time of day in state() and settable by hook. Look unchanged: golden compare mean 0.00 to 0.03. Self-check: typecheck, 335 vitest, 64 Godot tests, smoke 40/40, quick OK. Follow-up: live relight task added.",
+      "commit": "f377b64"
     },
     {
       "id": "P1-003",
@@ -3121,6 +3124,27 @@
       "notes": [],
       "created": "2026-11-11T12:33:40.827Z",
       "model": "sonnet"
+    },
+    {
+      "id": "P1-028",
+      "phase": "P1",
+      "title": "Live relight from the day clock",
+      "desc": "From P1-002: inside a loaded scene the light only changes on a scene load. Sky, sun, fog and the night lights (lamps, windows, shops) should follow DayClock live without a rebuild, with no frame over budget during the change. Also restyle or replace the scaffold boot scene (main.tscn): its sand ground reads near white under stylised B and far road edges look wavy.",
+      "accept": [
+        "A scene left running from 17:00 to 20:00 at a fast clock rate goes from golden to night with lamps and windows switching on, no rebuild",
+        "no frame over 12 ms p95 during the change (ballast method)",
+        "boot scene reads correctly under stylised B",
+        "verify --quick OK"
+      ],
+      "deps": [],
+      "agent": "builder",
+      "priority": 3,
+      "kind": "feature",
+      "status": "todo",
+      "attempts": 0,
+      "notes": [],
+      "created": "2026-11-11T14:35:19.606Z",
+      "model": "opus"
     }
   ]
 }
