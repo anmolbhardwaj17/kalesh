@@ -1,14 +1,36 @@
 {
-  "_doc": "Performance budgets (harness/bin/perfbudget.mjs). SIGNED with the style (P0-015, 2026-11-11, decisions.md 'Style bible and signed budgets'). The target is Anmol's (decisions.md 'Performance target'): 'The game should be able to run on Mac M2 smoothly. No struggles.' Minimum machine is the M2 Pro, 60 fps steady at play speed, rendered near 1080p and upscaled. frameMs is the p95 frame time (the larger of CPU and GPU) of the LOOK scenes: graphics may use about 10 to 11 ms so 5 to 6 ms of the 16.6 ms frame stay free for gameplay, AI, physics and streaming. warn 10.0 is the low end of that band, fail 12.0 still leaves 4.6 ms. Measured stylised_b on the stand-ins after P0-037 and re-measured with the GPU ballast in P0-039 (Vulkan, M2 Pro, vsync off, sim held, calm machine, 4 lights x 9 views): ballast GPU p95 4.0 to 9.0 ms (worst view per light 7.56 to 8.97, the on_foot_bazaar view in every light; typical 4.7 to 8.0), the same cost from frame times (ballast frame minus ballast alone) within 0.3 ms, CPU p95 under 1.5 ms, 96 to 315 draw calls, 0.77 to 3.2 M triangles with shadow passes, load 1.06 to 1.08 s. The earlier readings of 6.5 to 9.3 ms were plain windows under the 120 fps cap of a Godot window on this Mac and read 6 to 7 ms for every light view (landmark_tiers reads 6.5 capped and costs 4.0 to 4.9). Judge GPU cost with the ballast (harness/bin/ballast.mjs: lookproof --perf and the verify perf gate do it); a plain gpuMs under 8.3 ms is the idle frame. Draw calls, triangles and memory keep room for the real content that the stand-ins lack (kit textures, crowds, traffic, vehicles, landmarks): about 2x the worst measured view at warn and 3x at fail; the per-system and streamed-city numbers come from the architecture sign-off (TECH.md 'Performance budgets'). Night GPU time reads 3 to 5 ms higher when other GPU work runs on the machine (a browser, another game): judge budgets on a calm machine (check `ps -r`), rerun a fail once before it counts. The Metal driver reports no GPU time: use HARNESS_GODOT_ARGS='--rendering-driver vulkan --disable-vsync' for GPU numbers. Every light (dawn, afternoon, golden, night) shares these numbers.",
+  "_doc": "Performance budgets (harness/bin/perfbudget.mjs). SIGNED with the style (P0-015, 2026-11-11, decisions.md 'Style bible and signed budgets'). The target is Anmol's (decisions.md 'Performance target'): 'The game should be able to run on Mac M2 smoothly. No struggles.' Minimum machine is the M2 Pro, 60 fps steady at play speed, rendered near 1080p and upscaled. frameMs is the p95 frame time (the larger of CPU and GPU) of the LOOK scenes: graphics may use about 10 to 11 ms so 5 to 6 ms of the 16.6 ms frame stay free for gameplay, AI, physics and streaming. warn 10.0 is the low end of that band, fail 12.0 still leaves 4.6 ms. Measured stylised_b on the stand-ins after P0-037 and re-measured with the GPU ballast in P0-039 (Vulkan, M2 Pro, vsync off, sim held, calm machine, 4 lights x 9 views): ballast GPU p95 4.0 to 9.0 ms (worst view per light 7.56 to 8.97, the on_foot_bazaar view in every light; typical 4.7 to 8.0), the same cost from frame times (ballast frame minus ballast alone) within 0.3 ms, CPU p95 under 1.5 ms, 96 to 315 draw calls, 0.77 to 3.2 M triangles with shadow passes, load 1.06 to 1.08 s. The earlier readings of 6.5 to 9.3 ms were plain windows under the 120 fps cap of a Godot window on this Mac and read 6 to 7 ms for every light view (landmark_tiers reads 6.5 capped and costs 4.0 to 4.9). Judge GPU cost with the ballast (harness/bin/ballast.mjs: lookproof --perf and the verify perf gate do it); a plain gpuMs under 8.3 ms is the idle frame. Draw calls, triangles and memory keep room for the real content that the stand-ins lack (kit textures, crowds, traffic, vehicles, landmarks): about 2x the worst measured view at warn and 3x at fail; the per-system and streamed-city numbers are signed with the architecture (2026-11-11, blocks 'scenes', 'systems', 'world', 'streaming' and 'bake' below; TECH.md 'Performance budgets'). Night GPU time reads 3 to 5 ms higher when other GPU work runs on the machine (a browser, another game): judge budgets on a calm machine (check `ps -r`), rerun a fail once before it counts. The Metal driver reports no GPU time: use HARNESS_GODOT_ARGS='--rendering-driver vulkan --disable-vsync' for GPU numbers. Every light (dawn, afternoon, golden, night) shares these numbers.",
   "status": "signed",
-  "signed": { "at": "2026-11-11", "by": "Anmol (style sign-off 'Yes, I sign off on stylised B as the Kalesh style.' and the performance target); numbers set by the planner from the target and the P0-037 measurements" },
+  "signed": {
+    "at": "2026-11-11",
+    "by": "Anmol (style sign-off 'Yes, I sign off on stylised B as the Kalesh style.' and the performance target); numbers set by the planner from the target and the P0-037 measurements"
+  },
   "target": "Apple M2 Pro MacBook Pro (12 CPU cores, 19 core GPU, 16 GB) is the minimum machine: 60 fps steady at play speed, 1920x1080 render scale 1.0 (or about 1080p upscaled to the display), Godot 4.7.2.stable standard build, Forward+ renderer (Vulkan through MoltenVK for GPU times, Metal for play), one game window, calm machine (load per core under 0.6)",
   "windowMs": 3000,
-  "frameMs": { "warn": 10.0, "fail": 12.0 },
+  "frameMs": {
+    "warn": 10.0,
+    "fail": 12.0
+  },
   "fpsFloor": 55,
-  "loadMs": { "warn": 3000, "fail": 10000 },
+  "loadMs": {
+    "warn": 3000,
+    "fail": 10000
+  },
   "presets": {
-    "default": { "drawCalls": { "warn": 600, "fail": 1000 }, "triangles": { "warn": 6000000, "fail": 9000000 }, "gpuMB": { "warn": 1200, "fail": 2000 } }
+    "default": {
+      "drawCalls": {
+        "warn": 600,
+        "fail": 1000
+      },
+      "triangles": {
+        "warn": 6000000,
+        "fail": 9000000
+      },
+      "gpuMB": {
+        "warn": 1200,
+        "fail": 2000
+      }
+    }
   },
   "measured": {
     "style": "stylised_b",
@@ -53,5 +75,223 @@
       1075
     ],
     "source": "harness/look_proof/style_stylised_b_{dawn,afternoon,golden,night}_ballast/perf.json"
+  },
+  "signedArchitecture": {
+    "at": "2026-11-11",
+    "by": "Anmol (architecture sign-off \"Yes, I sign off on the architecture.\"; round 2 answer: city draw calls warn 2,500 and fail 3,500, look scenes keep 600 and 1,000, frame time stays the real guard)",
+    "source": "harness/design/ARCH_OPTIONS.md \"Budgets per system\" (P0-020, measured on this M2 Pro), recorded by P0-022"
+  },
+  "scenes": {
+    "_doc": "Which draw call budget a scenario is judged against. \"look\" is presets.default (the stand-in look scenes and lookproof sets). \"city\" is for scenarios in the streamed city (real tiles, crowds, traffic): until perfbudget.mjs reads a scene kind by name, a city scenario copies this block into its own \"budget\" object (scenario option). Frame time, fps floor and load are the same signed numbers for both.",
+    "look": {
+      "drawCalls": {
+        "warn": 600,
+        "fail": 1000
+      },
+      "triangles": {
+        "warn": 6000000,
+        "fail": 9000000
+      },
+      "gpuMB": {
+        "warn": 1200,
+        "fail": 2000
+      }
+    },
+    "city": {
+      "drawCalls": {
+        "warn": 2500,
+        "fail": 3500
+      },
+      "triangles": {
+        "warn": 6000000,
+        "fail": 9000000
+      },
+      "gpuMB": {
+        "warn": 1200,
+        "fail": 2000
+      },
+      "measured": "2 km bench city under stylised B: 1,609 draw calls, 1,814 with 300 people, 1.10 M triangles (4.0 M with 300 people), 307 MB video memory, GPU p95 7.06 ms at 140 km/h (render.json)"
+    }
+  },
+  "systems": {
+    "_doc": "Per-system budgets in Godot terms for 60 fps on the M2 Pro at 1920x1080. CPU work of a frame and GPU work of the frame before overlap, so each side has its own 10 ms column (the signed warn line); as a second guard GPU time plus the gameplay CPU subtotal stays under 16.6 ms (10.0 + 5.9 = 15.9). A task that adds work to a system re-measures that system with its perf scenario; a system over its line says so in the task report even when the frame is green. Not in the budget: TAA (1.23 ms measured), a settings switch, off by default. The worst case is night in a crowded bazaar lane: every look task re-measures it.",
+    "gpuMs": {
+      "look": {
+        "ms": 3.6,
+        "measured": "3.55 ms: sky, sun shadows, SSAO, SSIL low, glow, haze, grade (render.json r1_look_only_1080)"
+      },
+      "city": {
+        "ms": 3.5,
+        "measured": "3.51 ms: roads, ground, buildings and kit modules with LOD in the 2 km bench city (render.json, base minus look); split in the world block"
+      },
+      "people": {
+        "ms": 0.6,
+        "measured": "0.88 ms for 300 on a light rig (render.json an2); estimate 0.4 ms for 120; re-measure with the real rig"
+      },
+      "vehicles": {
+        "ms": 0.4,
+        "measured": "estimate: traffic, parked and the player vehicle"
+      },
+      "dressing": {
+        "ms": 0.5,
+        "measured": "decals about 0.5 ms (TECH.md); dressing, signs and grime not yet in a bench"
+      },
+      "lightExtras": {
+        "ms": 0.8,
+        "measured": "night lamps or heat shimmer, never both; 40 lamps in a lane about 2 ms, shimmer 1 to 2 ms, so about 16 real lamps in view (estimate)"
+      },
+      "hud": {
+        "ms": 0.1,
+        "measured": "estimate: HUD and subtitles"
+      },
+      "upscale": {
+        "ms": 0.5,
+        "measured": "bilinear stretch 0.43 ms Vulkan, 0.51 ms Metal; MetalFX spatial 0.96 ms (render.json)"
+      },
+      "total": {
+        "ms": 10.0,
+        "measured": "bench city 7.06 ms; stand-in views 3.98 to 8.97 ms"
+      }
+    },
+    "cpuMs": {
+      "physics": {
+        "ms": 1.0,
+        "measured": "Jolt step p95 0.74 ms with 200 static and 30 dynamic bodies, 1.15 ms with 150 dynamic (physics.json)"
+      },
+      "vehicles": {
+        "ms": 0.6,
+        "measured": "up to 16 V2 cars (player, pursuit, woken traffic) at 0.035 ms each; 11 measured at 0.38 ms"
+      },
+      "agents": {
+        "ms": 1.0,
+        "measured": "traffic and pedestrian thinking: 230 agents 0.80 ms p95 in turns, 1.14 ms all at once"
+      },
+      "onFoot": {
+        "ms": 0.3,
+        "measured": "up to 8 physics characters at 0.032 ms each"
+      },
+      "combat": {
+        "ms": 0.6,
+        "measured": "rays 0.03 ms, ragdolls 0.06 ms each, at most 8; 10 ragdolls 0.82 ms p95"
+      },
+      "animation": {
+        "ms": 1.0,
+        "measured": "0.32 ms for 300 people on a light rig, a floor; 40 skinned within 25 m plus the far crowd"
+      },
+      "streamingAttach": {
+        "ms": 1.0,
+        "measured": "cap per frame: collider chunks 0.33 ms p95 each, mesh step under 0.2 ms (0.9 ms with placements); at most 3 chunks a frame, none in a mesh step frame"
+      },
+      "gameplay": {
+        "ms": 0.4,
+        "measured": "estimate: missions, HUD, audio, cutscene and dialogue runtime"
+      },
+      "gameplaySubtotal": {
+        "ms": 5.9,
+        "measured": "sum of the rows above"
+      },
+      "render": {
+        "ms": 2.0,
+        "measured": "culling and draw lists: 1.2 ms CPU p95 at 1,609 draw calls (render.json)"
+      },
+      "total": {
+        "ms": 7.9,
+        "measured": "slack to the warn line 2.1 ms"
+      }
+    },
+    "memory": {
+      "videoMB": {
+        "warn": 1200,
+        "fail": 2000,
+        "measured": "307 MB in the bench city with one kit"
+      },
+      "kitTexturesMBPerKit": {
+        "max": 60,
+        "measured": "24.1 MB compressed for the bench kit"
+      },
+      "meshBuffersMB": {
+        "max": 150,
+        "measured": "75 MB in the 2 km bench city"
+      },
+      "processGB": {
+        "warn": 4,
+        "measured": "not measured for a full game"
+      }
+    }
+  },
+  "world": {
+    "_doc": "Budgets of the Delhi world layers (DELHI_WORLD.md section 5). The GPU ms split the measured 3.5 ms city line by estimate; the counts are design limits checked by the bake and the ingest.",
+    "gpuMs": {
+      "roadsAndGround": 1.0,
+      "generatedBuildings": 2.0,
+      "landmarks": 0.5,
+      "note": "sum 3.5 ms = systems.gpuMs.city; street dressing is systems.gpuMs.dressing, life is systems.gpuMs.people and vehicles"
+    },
+    "generatedBuildings": {
+      "kitModulesPerArea": [
+        40,
+        80
+      ],
+      "textureMBPerKit": 60,
+      "lod": "modules to about 180 m, a merged shell per 125 m cell to about 700 m, the skyline beyond",
+      "placementsMBPerDenseTile": 0.6,
+      "measured": "11,793 facade bays add 0.57 MB and 0.9 ms to the mesh step of a dense tile (tile_format.json)"
+    },
+    "dressing": {
+      "decalRangeM": 55,
+      "shadowsFromSmallDressing": false,
+      "realLightsInView": 16
+    },
+    "landmarks": {
+      "heroPartsMax": 8,
+      "heroTrianglesPerPart": 25000,
+      "heroMaterialsMax": 6,
+      "heroLods": 3,
+      "farSilhouetteTriangles": 2000,
+      "heroTexturesMB": 60,
+      "heroesAtFullDetailInView": 2,
+      "positionErrorM": {
+        "hero": 5,
+        "signature": 10,
+        "marker": 15
+      }
+    },
+    "life": {
+      "peopleSlice": [
+        30,
+        60
+      ],
+      "peopleRelease": 120,
+      "skinnedWithin25m": 40,
+      "vertexAnimatedTo120m": true,
+      "physicsVehiclesNearPlayer": 16,
+      "ragdollsAtOnce": 8
+    }
+  },
+  "streaming": {
+    "tileSizeM": 250,
+    "rings": "full detail to about 375 m, block shells to about 900 m, one skyline mesh per 1 km cell always loaded",
+    "tileFileMB": {
+      "average": 1.5,
+      "worst": 4.0,
+      "measured": "0.89 MB dense stand-in, 1.46 MB with placements; ITO road site 3.47 MB uncut"
+    },
+    "tileReadMsWorst": 10,
+    "colliderChunkTriangles": 500,
+    "colliderChunkMsWorst": 0.5,
+    "attachMsPerFrame": 1.0,
+    "framesOver33msAt200kmh": 0,
+    "mapDataGB": {
+      "firstRelease": 3.0,
+      "estimate": "1.0 to 1.5 GB for about 1,090 tiles"
+    }
+  },
+  "bake": {
+    "firstReleaseFullMin": 30,
+    "oneTileChangeS": 60,
+    "gateCounts": "open ports, floating ends, overlapping road faces, lane continuity breaks and tapers out of limits: 0, or each one explained in harness/reports/map/health.json",
+    "roadToGroundGapM": 0.02,
+    "colliderToDrawnSurfaceM": 0.05,
+    "centrePairBearingDeg": 0.5
   }
 }

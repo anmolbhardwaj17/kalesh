@@ -1,5 +1,5 @@
 {
-  "_doc": "Shared-system paths for the phase gate retry (harness/bin/gatecheck.mjs). If any file changed since the phase's verify --all commit matches one of these, the gate needs a new verify --all; otherwise a retry (node harness/bin/gateretry.mjs <P>) of the failed items, verify --quick and every playable milestone is enough. An entry ending in / covers everything under it; other entries are single files. List the systems every milestone runs through: the game entry, the core loop and input, the player (movement and camera), physics, AI, save, loading, audio, the HUD core, the milestone runtime, the debug hooks every scenario drives, the render frame, the build setup and the verify harness itself. The ADOPT phase fills this in from the real source tree. P0-026: the game is Godot, so the list names game/ (the autoloads in game/core/, the debug server in game/debug/, the main scene, the car and camera, the projection) and the Godot driver files (driver.mjs, godotdriver.mjs, godotshim.mjs, godotclient.mjs, godot.mjs). src/ (three.js) is no longer run by verify.",
+  "_doc": "Shared-system paths for the phase gate retry (harness/bin/gatecheck.mjs). If any file changed since the phase's verify --all commit matches one of these, the gate needs a new verify --all; otherwise a retry (node harness/bin/gateretry.mjs <P>) of the failed items, verify --quick and every playable milestone is enough. An entry ending in / covers everything under it; other entries are single files. List the systems every milestone runs through: the game entry, the core loop and input, the player (movement and camera), physics, AI, save, loading, audio, the HUD core, the milestone runtime, the debug hooks every scenario drives, the render frame, the build setup and the verify harness itself. The ADOPT phase fills this in from the real source tree. P0-026: the game is Godot, so the list names game/ (the autoloads in game/core/, the debug server in game/debug/, the main scene, the car and camera, the projection) and the Godot driver files (driver.mjs, godotdriver.mjs, godotshim.mjs, godotclient.mjs, godot.mjs). src/ (three.js) is no longer run by verify. P0-022 (architecture record): the planned shared systems of docs/ARCHITECTURE.md 'Target module map' are listed ahead of time (streaming core and streamed systems, vehicles, characters, camera, missions, story runtime, the render frame, the tile codec, the projection and the signed layout data), so the gate knows them from their first commit.",
   "shared": [
     "game/project.godot",
     "game/core/",
@@ -25,6 +25,21 @@
     "harness/bin/budgetwait.mjs",
     "harness/bin/lib.mjs",
     "harness/verify/scripts/lib/",
-    "harness/bin/lookproof.mjs"
+    "harness/bin/lookproof.mjs",
+    "game/render/",
+    "game/world/streaming/",
+    "game/world/systems/",
+    "game/vehicles/",
+    "game/characters/",
+    "game/camera/",
+    "game/ai/",
+    "game/combat/",
+    "game/missions/",
+    "game/story/",
+    "game/data/vehicles/",
+    "tools/geo/",
+    "tools/bake/tile/",
+    "tools/bake/tile.ts",
+    "harness/data/districts.json"
   ]
 }

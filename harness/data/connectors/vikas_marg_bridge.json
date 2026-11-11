@@ -1,10 +1,10 @@
 {
-  "_doc": "Authored connector of the composite map (ARCH_OPTIONS SC1; P0-029 stitch bench draft). Control points are world metres (east +X, north -Z, origin at the centre of the layout C map box). The first and the last point lie on the boundary ports named in from and to. spans name the control points a bridge runs between. Not signed off.",
+  "_doc": "Authored connector of the composite map (ARCH_OPTIONS SC1; P0-029 stitch bench draft). Control points are world metres (east +X, north -Z, origin at the centre of the layout C map box). The first and the last point lie on the boundary ports named in from and to. spans name the control points a bridge runs between. Bench only (P0-022): these control points were authored for the island layout of the stitch bench and no longer meet the signed district offsets. Inside the centre block the real road replaces this connector; the format stays (MAP_REPAIR.md \"Connector format\").",
   "id": "vikas_marg_bridge",
   "name": "Vikas Marg",
   "standsFor": "Vikas Marg and the ITO bridge over the Yamuna into East Delhi; its west end stands for Purana Quila Road and Mathura Road up to ITO",
   "kind": "bridge",
-  "status": "draft",
+  "status": "bench_only",
   "class": "primary",
   "lanes": { "forward": 3, "backward": 3 },
   "from": { "district": "india_gate", "port": "Purana Quila Road" },

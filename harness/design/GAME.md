@@ -284,12 +284,12 @@ A tag changes only with a decisions.md entry. Each phase plan checks this list a
 
 | Capability | When | Notes |
 |---|---|---|
-| Pilot districts on the lane model | SLICE | About 7.2 km2 |
+| Pilot centre on the lane model | SLICE | About 20 km2, one seamless piece of the centre at true scale |
 | Traffic: light to medium, signals, buses, autos, bikes | SLICE | Delhi lane discipline, with honking |
 | Time of day: hot hazy afternoon, golden evening | SLICE | Owner's test lights; night RELEASE |
 | Full day and night cycle | RELEASE | |
 | Weather: winter fog, monsoon rain | LATER | |
-| First release map (layout B plus Gurugram, Laxmi Nagar, Kashmere Gate, Humayun's Tomb) | RELEASE | |
+| First release map: the whole centre at true scale with Laxmi Nagar, plus the far south (Qutub, Vasant Kunj, the airport, Gurugram) | RELEASE | About 68 km2, one seamless city |
 | Later unlocks (Noida, Shahdara, Akshardham) | LATER | |
 | Interiors (a few: police station, safe houses, a dhaba) | RELEASE | Most buildings closed |
 
@@ -309,7 +309,9 @@ A tag changes only with a decisions.md entry. Each phase plan checks this list a
 |---|---|---|
 | Third person behind, on foot and in vehicles | SLICE | Owner: third person behind |
 | HUD: minimap, wanted, health, weapon, money, objective | SLICE | |
-| Short in-engine story scenes with subtitles | SLICE | No cinematic cutscenes at AAA level |
+| Short in-engine story scenes with subtitles | SLICE | Data-file cutscenes on one player (cuts, push in, dolly, orbit, handheld sway; library clips and look-at for acting); talking characters move their jaw; Hinglish and English subtitles; one button skip, always |
+| Drive talk, phone, inner voice and radio lines | SLICE | Our own line player: drive talk pauses for action and resumes with a pickup line |
+| Big cutscenes with lip sync and face expressions | RELEASE | Lip sync from the voice files and a small face set on the three leads and the named cast, once voices exist |
 | Full map screen with districts | SLICE | |
 | Voiced dialogue | RELEASE | Requests on the dashboard; text placeholders until then |
 | Photo mode | LATER | |
@@ -391,15 +393,18 @@ Camera (owner: third person behind):
 
 ## Map and districts
 
-Signed in the map round (owner, 2026-11-10); details in `harness/design/DELHI_WORLD.md` section 0 and `MAP_REPAIR.md`.
-- A compressed Delhi: real districts at true scale from OSM data, moved closer by translation only (no rotation, no mirror), joined by authored connectors, the ring roads, the river and the bridges. "smaller than gta5 but not too small to feel boring and not vast" (owner).
-- Layout C (Delhi plus NCR) is the full map, built in stages (owner):
-  - **Pilot** (Act 1 and the slice): Connaught Place with Jantar Mantar, India Gate, ITO, Chandni Chowk with Red Fort. About 7.2 km2.
-  - **First release:** layout B's districts plus Gurugram, Laxmi Nagar, Kashmere Gate with ISBT, Humayun's Tomb with Nizamuddin.
+Signed in the map round (owner, 2026-11-10), changed on the stitch shot (owner, 2026-11-11) and fixed by the architecture sign-off (owner, 2026-11-11). Details in `harness/design/DELHI_WORLD.md` section 0, `MAP_REPAIR.md` "District frames and stitching" and TECH.md "World layout".
+- **One seamless open city.** No islands, no empty ground between places, no visible borders. Streets run straight through as one road network. "smaller than gta5 but not too small to feel boring and not vast" (owner).
+- **The centre at true scale.** Central Delhi is one continuous real piece, built from OSM data at its real size and positions: Kashmere Gate to Nizamuddin, Karol Bagh and the Ridge to the Yamuna, and Laxmi Nagar across the river. Every direction and distance inside it is real. The places between the famous ones (Paharganj, Daryaganj, Mandi House, Pragati Maidan and the rest) are real streets too.
+- **The far south pulled closer on its real bearing.** Mehrauli with Qutub, Vasant Kunj, the airport and Gurugram Cyber City sit in their real direction from India Gate at half their real distance (owner). Gurugram is about 9.5 km from India Gate, about 5 minutes by car. Roads to them carry their real names (Aurobindo Marg, NH-48, MG Road), lined with generated Delhi-style city blended from the neighbouring areas.
+- No rotation and no mirroring anywhere; north is up on the map.
+- **Stages** (owner):
+  - **Pilot** (Act 1 and the slice): the pilot centre, about 20 km2: Connaught Place with Jantar Mantar, India Gate, ITO with Pragati Maidan, Chandni Chowk with Red Fort, and Paharganj with the New Delhi station, GB Road and everything between them.
+  - **First release:** the rest of the centre (Kashmere Gate with ISBT, Lutyens and Delhi Gymkhana, Khan Market, Lodhi and the Golf Club, Nizamuddin with Humayun's Tomb, the Ridge with Malcha Mahal, the Yamuna and its bridges, Laxmi Nagar), then Qutub, Vasant Kunj, the airport and Gurugram. About 68 km2.
   - **Later unlocks:** Noida, Shahdara, Akshardham.
 - Hero landmarks first: Connaught Place circle, India Gate, Red Fort (owner).
 - Story places (owner): GB Road (treatment in the respect rule), Jantar Mantar (protests), Vasant Kunj, Delhi Gymkhana, the Golf Club, Khan Market, and Malcha Mahal as the haunted place.
-- The map pipeline and engine choices are set by the architecture sign-off (ARCH_OPTIONS.md, TECH.md).
+- The map pipeline and engine are set by the architecture sign-off (TECH.md, MAP_REPAIR.md).
 
 ## Milestones
 
@@ -424,7 +429,7 @@ Owner direction (2026-11-10, GTA V style): each life gets its own run; the next 
 
 ### First playable slice (required)
 
-The slice is four solo missions from Act 1, in the pilot districts. No merge and no switching in the slice (owner, 2026-11-10): switching is built for the Act 1 finale (M10). The order is the play order: the driver first (owner). The slice is orders 1, 2, 3 and 6 of Act 1.
+The slice is four solo missions from Act 1, in the pilot centre. No merge and no switching in the slice (owner, 2026-11-10): switching is built for the Act 1 finale (M10). The order is the play order: the driver first (owner). The slice is orders 1, 2, 3 and 6 of Act 1.
 
 | ID | Mission | Lead | Shows |
 |---|---|---|---|
@@ -433,9 +438,9 @@ The slice is four solo missions from Act 1, in the pilot districts. No merge and
 | M03 | Barricade at ITO | Cop | Pursuit over the ITO flyovers, a barricade call, a foot chase and takedown |
 | M04 | Chandni Chowk pickup | Fixer | On foot in the bazaar crowd, a fistfight, a scooter getaway at wanted 1 |
 
-By the end of the slice the player has met all three lives, each introduced by another's mission, and the bag links them. The slice stays inside the pilot districts.
+By the end of the slice the player has met all three lives, each introduced by another's mission, and the bag links them. The slice stays inside the pilot centre.
 
-Pilot gap (Claude call): M01 ends at New Delhi railway station, which sits in district D07 (Paharganj), outside the signed pilot. The pilot adds the station forecourt on the Ajmeri Gate side (about 0.2 km2, estimate) as part of the connector between CP and Chandni Chowk. If the pilot build cannot fit it, the content writer moves the drop-off to a station gate inside the pilot instead; the beats stay. M07 (not in the slice) uses the same forecourt.
+Station (resolved by the seamless map, 2026-11-11): M01 ends at New Delhi railway station on the Ajmeri Gate side. Paharganj with the station is inside the pilot centre, so no extra piece is needed. M07 (not in the slice) uses the same forecourt.
 
 ### Mission and activity list (round 2, scored)
 
