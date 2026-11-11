@@ -44,7 +44,7 @@ Notes: `harness/state/knowledge/driving-and-camera.md` (create on first gotcha)
 - ARCH: "Systems" (Driving).
 - TECH: "Main loop and time", "Coordinates (binding, owner 2026-11-10)".
 - GAME: "Movement and camera feel".
-- Source: `game/scripts/car_model.gd`, `car.gd`, `chase_camera.gd`, `game/tests/test_car.gd`.
+- Source: `game/scripts/car_model.gd`, `car.gd`, `chase_camera.gd`, `game/tests/test_car.gd`. Bench versions of the clock, both vehicle options, the walker with its step-up and the colliders: `game/bench/physics/` (P0-017, `--arch=physics`; results in decisions.md "Physics bench results (P0-017)").
 
 ## World, map data and bake
 Notes: `harness/state/knowledge/world-and-map.md` (create on first gotcha)

@@ -32,6 +32,7 @@ const SCENES := {
 ## Loaded by path only when --arch is given; the default game never loads them.
 const ARCH_SCENES := {
 	"render": "res://bench/render/render_bench.tscn",
+	"physics": "res://bench/physics/physics_bench.tscn",
 }
 
 var debug := false

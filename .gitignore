@@ -26,3 +26,5 @@ tools/godot/
 game/.godot/
 # generated kit textures of the render bench texture test (harness/bench/render.plan.mjs writes and removes them)
 game/bench/render/tex_gen/
+# project settings of one architecture bench run (harness/bench/arch.mjs writes and removes it)
+game/override.cfg

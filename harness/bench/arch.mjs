@@ -23,8 +23,13 @@
 //
 // A plan module (harness/bench/<name>.plan.mjs) default-exports:
 //   { name, scene, defaults: { resolution, windowMs, warmMs }, setups: [ { id, option, group, tokens, paths, primary,
-//     shot, driver, resolution, engine, note, must } ], notMeasured: [ { id, option, reason, estimate } ],
+//     shot, driver, resolution, engine, note, must, gpu, project } ], notMeasured: [ { id, option, reason, estimate } ],
 //     before(ctx), extra: { <setup id>: async (ctx, game, row) => {} }, after(ctx, report) }
+// A setup with gpu: false is a CPU bench (physics, scripting): no camera paths, no perf windows and no ballast; its
+// numbers come from the plan's extra(ctx, game, row), which talks to the bench scene (bench('run'), bench('poll')).
+// A setup with project: { section: { key: value } } starts the game with those project settings: the runner writes
+// game/override.cfg just before the launch and removes it as soon as the game answers (settings are read at start).
+// That is how one bench runs on Jolt and on Godot Physics (physics/3d/physics_engine has no command line switch).
 import fs from 'node:fs';
 import os from 'node:os';
 import path from 'node:path';
@@ -77,6 +82,32 @@ export function perfRow(p) {
   };
 }
 
+/** The text of an override.cfg for { section: { key: value } }. */
+export function overrideText(project) {
+  const lines = ['; written by harness/bench/arch.mjs for one bench run, removed when the game has started'];
+  for (const [section, keys] of Object.entries(project)) {
+    lines.push('', `[${section}]`, '');
+    for (const [k, v] of Object.entries(keys)) lines.push(`${k}=${JSON.stringify(v)}`);
+  }
+  return lines.join('\n') + '\n';
+}
+
+const OVERRIDE_FILE = path.join(ROOT, 'game', 'override.cfg');
+const OVERRIDE_MARK = '; written by harness/bench/arch.mjs';
+
+function writeOverride(project) {
+  if (fs.existsSync(OVERRIDE_FILE) && !fs.readFileSync(OVERRIDE_FILE, 'utf8').startsWith(OVERRIDE_MARK)) {
+    throw new Error('game/override.cfg exists and was not written by this runner: remove it first');
+  }
+  fs.writeFileSync(OVERRIDE_FILE, overrideText(project));
+}
+
+function removeOverride() {
+  try {
+    if (fs.existsSync(OVERRIDE_FILE) && fs.readFileSync(OVERRIDE_FILE, 'utf8').startsWith(OVERRIDE_MARK)) fs.unlinkSync(OVERRIDE_FILE);
+  } catch { /* nothing to remove */ }
+}
+
 async function waitCalm(log) {
   let l = hostLoad();
   for (let i = 0; i < 6 && l.perCore >= 1; i++) {
@@ -116,65 +147,99 @@ async function runSetup(ctx, setup) {
   const warmMs = plan.defaults.warmMs;
   const before = await waitCalm(log);
   const t0 = Date.now();
-  const game = await launchGame({
-    binary, resolution, quitAfter: 400000, connectTimeoutMs: 120000,
-    extra: [`--arch=${plan.name}:${setup.tokens}`, '--mute'], engineExtra: engineArgs(setup),
-  });
+  if (setup.project) writeOverride(setup.project);
+  let game;
+  try {
+    game = await launchGame({
+      binary, resolution, quitAfter: setup.quitAfter || 400000, connectTimeoutMs: 120000,
+      extra: [`--arch=${plan.name}:${setup.tokens}`, '--mute'], engineExtra: engineArgs(setup),
+    });
+  } finally {
+    if (setup.project) removeOverride();
+  }
   const row = {
     id: setup.id, option: setup.option, group: setup.group, tokens: setup.tokens, must: setup.must !== false,
     driver: setup.driver || 'vulkan', resolution, windowMs, note: setup.note || null, at: new Date().toISOString(),
   };
+  if (setup.project) row.project = setup.project;
   try {
     const info = await waitReady(game);
     row.loadMs = Date.now() - t0;
     row.buildMs = info.buildMs ?? null;
     row.renderer = game.client.hello?.renderer || null;
     await game.client.call('frames', 20);
-    row.paths = {};
-    const n = await calibrateBallast(ctx, game, setup.driver || 'vulkan');
-    for (const name of setup.paths) {
-      // pass 1, as a player would see it: frame times (the display caps them), CPU, draw calls, memory
-      await game.client.call('bench', 'path', { name, seconds: warmMs / 1000 + 0.5 });
-      await game.client.call('perf', warmMs);
-      await game.client.call('bench', 'path', { name, seconds: windowMs / 1000 + 1 });
-      const plain = await game.client.call('perf', windowMs);
-      // pass 2, with the GPU kept busy by the ballast: the root viewport's GPU time at full GPU clock
-      await game.client.call('bench', 'ballast', { n });
-      await game.client.call('bench', 'path', { name, seconds: windowMs / 1000 + 1.6 });
-      await game.client.call('perf', 500);
-      const busy = await game.client.call('perf', windowMs);
-      await game.client.call('bench', 'ballast', { n: 0 });
-      const r = perfRow(plain);
-      r.gpuP95Capped = r.gpuP95;
-      r.gpuP50Capped = r.gpuP50;
-      r.gpuP95 = busy.gpuMs ? round(busy.gpuMs.p95) : null;
-      r.gpuP50 = busy.gpuMs ? round(busy.gpuMs.p50) : null;
-      r.ballastFrameP50 = round(busy.frameMs?.p50);
-      r.ballastFrameP95 = round(busy.frameMs?.p95);
-      row.paths[name] = r;
+    if (setup.gpu === false) {
+      // a CPU bench: the plan's extra does the measuring; then one shot of whatever the test left on screen
+      row.cpuOnly = true;
+      delete row.windowMs;
+      if (plan.extra?.[setup.id]) await plan.extra[setup.id](ctx, game, row);
+      if (setup.shot !== false) {
+        const file = path.join(ctx.shotDir, `${setup.id}.png`);
+        if (typeof setup.shot === 'string') await game.client.call('bench', 'pose', { name: setup.shot });
+        await game.client.call('frames', 12);
+        const s = await game.client.call('shot', file);
+        row.shot = path.relative(ROOT, file);
+        row.shotSize = `${s.width}x${s.height}`;
+      }
+      row.scene = await game.client.call('bench', 'info');
+    } else {
+      await measureRender(ctx, game, setup, row, windowMs, warmMs);
     }
-    // the ballast alone (the root viewport draws no 3D): what to take off a ballast frame to get the scene's cost
-    const blank = await measureBlank(game.client, n, { warmMs: 400, windowMs: 1200 });
-    row.ballast = { n, blankFrameP50: round(blank.frameMs?.p50), blankFrameP95: round(blank.frameMs?.p95) };
-    for (const r of Object.values(row.paths)) {
-      r.frameCostP50 = round(r.ballastFrameP50 - row.ballast.blankFrameP50);
-      r.frameCostP95 = round(r.ballastFrameP95 - row.ballast.blankFrameP95);
-    }
-    const primary = setup.primary || setup.paths[0];
-    Object.assign(row, { primary }, row.paths[primary]);
-    if (plan.extra?.[setup.id]) await plan.extra[setup.id](ctx, game, row);
-    const shot = path.join(ctx.shotDir, `${setup.id}.png`);
-    await game.client.call('bench', 'pose', { name: setup.shot || primary });
-    await game.client.call('frames', 12);
-    const s = await game.client.call('shot', shot);
-    row.shot = path.relative(ROOT, shot);
-    row.shotSize = `${s.width}x${s.height}`;
-    row.scene = await game.client.call('bench', 'info');
   } finally {
     try { await game.client.call('quit'); } catch { /* already gone */ }
     const code = await Promise.race([game.exited, sleep(8000).then(() => 'timeout')]);
     if (code === 'timeout') game.proc.kill('SIGKILL');
   }
+  return finishRow(game, row, before);
+}
+
+/** The render measurement of one setup: every camera path plain and with the ballast, the blank window, one shot. */
+async function measureRender(ctx, game, setup, row, windowMs, warmMs) {
+  const { plan } = ctx;
+  row.paths = {};
+  const n = await calibrateBallast(ctx, game, setup.driver || 'vulkan');
+  for (const name of setup.paths) {
+    // pass 1, as a player would see it: frame times (the display caps them), CPU, draw calls, memory
+    await game.client.call('bench', 'path', { name, seconds: warmMs / 1000 + 0.5 });
+    await game.client.call('perf', warmMs);
+    await game.client.call('bench', 'path', { name, seconds: windowMs / 1000 + 1 });
+    const plain = await game.client.call('perf', windowMs);
+    // pass 2, with the GPU kept busy by the ballast: the root viewport's GPU time at full GPU clock
+    await game.client.call('bench', 'ballast', { n });
+    await game.client.call('bench', 'path', { name, seconds: windowMs / 1000 + 1.6 });
+    await game.client.call('perf', 500);
+    const busy = await game.client.call('perf', windowMs);
+    await game.client.call('bench', 'ballast', { n: 0 });
+    const r = perfRow(plain);
+    r.gpuP95Capped = r.gpuP95;
+    r.gpuP50Capped = r.gpuP50;
+    r.gpuP95 = busy.gpuMs ? round(busy.gpuMs.p95) : null;
+    r.gpuP50 = busy.gpuMs ? round(busy.gpuMs.p50) : null;
+    r.ballastFrameP50 = round(busy.frameMs?.p50);
+    r.ballastFrameP95 = round(busy.frameMs?.p95);
+    row.paths[name] = r;
+  }
+  // the ballast alone (the root viewport draws no 3D): what to take off a ballast frame to get the scene's cost
+  const blank = await measureBlank(game.client, n, { warmMs: 400, windowMs: 1200 });
+  row.ballast = { n, blankFrameP50: round(blank.frameMs?.p50), blankFrameP95: round(blank.frameMs?.p95) };
+  for (const r of Object.values(row.paths)) {
+    r.frameCostP50 = round(r.ballastFrameP50 - row.ballast.blankFrameP50);
+    r.frameCostP95 = round(r.ballastFrameP95 - row.ballast.blankFrameP95);
+  }
+  const primary = setup.primary || setup.paths[0];
+  Object.assign(row, { primary }, row.paths[primary]);
+  if (plan.extra?.[setup.id]) await plan.extra[setup.id](ctx, game, row);
+  const shot = path.join(ctx.shotDir, `${setup.id}.png`);
+  await game.client.call('bench', 'pose', { name: setup.shot || primary });
+  await game.client.call('frames', 12);
+  const s = await game.client.call('shot', shot);
+  row.shot = path.relative(ROOT, shot);
+  row.shotSize = `${s.width}x${s.height}`;
+  row.scene = await game.client.call('bench', 'info');
+}
+
+/** Adds the engine's error and warning lines and the host load to a finished row. */
+function finishRow(game, row, before) {
   const errors = game.log.filter((l) => /^(ERROR|SCRIPT ERROR|USER ERROR)/.test(l));
   if (errors.length) row.engineErrors = errors.slice(0, 6);
   const warnings = game.log.filter((l) => /^(WARNING|USER WARNING)/.test(l));
@@ -199,7 +264,7 @@ async function main() {
   if (args.only) setups = setups.filter((s) => args.only.includes(s.id));
   if (args.group) setups = setups.filter((s) => args.group.includes(s.group));
   if (args.list) {
-    for (const s of plan.setups) console.log(`${s.id.padEnd(22)} ${String(s.group).padEnd(10)} ${s.option.padEnd(8)} ${s.driver || 'vulkan'} ${s.tokens}  [${s.paths.join(', ')}]`);
+    for (const s of plan.setups) console.log(`${s.id.padEnd(22)} ${String(s.group).padEnd(10)} ${s.option.padEnd(8)} ${s.driver || 'vulkan'} ${s.tokens}  [${(s.paths || []).join(', ')}]`);
     return;
   }
   const outDir = path.join(ROOT, 'harness', 'reports', 'arch');
@@ -247,7 +312,9 @@ async function main() {
       report.gpuAdapter = row.renderer.adapter;
     }
     report.hostLoad = hostLoad();
-    if (!row.failed) {
+    if (!row.failed && row.cpuOnly) {
+      log(`  load ${row.loadMs} ms  ${row.line || ''}  (load per core ${row.hostLoad.before.perCore} to ${row.hostLoad.after.perCore})`);
+    } else if (!row.failed) {
       log(`  load ${row.loadMs} ms  frame p50 ${row.frameP50} p95 ${row.frameP95}  cost ${row.frameCostP50}  cpu p95 ${row.cpuP95}  gpu p95 ${row.gpuP95 ?? 'n/a'} (capped ${row.gpuP95Capped ?? 'n/a'})  draws ${row.drawCalls}  prims ${row.primitives}  video ${row.videoMB} MB  (load per core ${row.hostLoad.before.perCore} to ${row.hostLoad.after.perCore})`);
     }
     save();
