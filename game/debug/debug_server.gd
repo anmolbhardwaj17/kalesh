@@ -24,7 +24,7 @@ const COMPOSITE := {
 }
 const METHODS := [
 	"ping", "state", "clock", "frames", "input", "perf", "load", "teleport", "setCamera", "timeScale", "hold",
-	"events", "hud", "shot", "quality", "bench", "quit",
+	"events", "hud", "shot", "quality", "timeOfDay", "bench", "quit",
 ]
 const QUALITY_PRESETS := ["low", "medium", "high"]
 
@@ -231,6 +231,25 @@ func _call(method: String, a: Array) -> Dictionary:
 				_args().quality = a[0]
 				_events().emit_event("quality", {"preset": a[0]})
 			return _ok({"preset": _args().quality, "presets": QUALITY_PRESETS})
+		"timeOfDay":
+			var t = a[0] if a.size() > 0 and a[0] != null else {}
+			if not (t is Dictionary):
+				return _fail("timeOfDay(opts): opts must be an object {hour, rate, pin, reload}")
+			for k in ["hour", "rate"]:
+				if t.has(k) and t[k] != null and not (t[k] is float or t[k] is int):
+					return _fail("timeOfDay(opts): %s must be a number" % k)
+			if t.has("rate") and t.rate != null and float(t.rate) < 0.0:
+				return _fail("timeOfDay(opts): rate must be >= 0 (game hours per sim second)")
+			var before: Dictionary = _day().state()
+			_day().set_time(t)
+			if before.hour != _day().hour or before.rate != _day().rate or before.pinned != _day().pinned:
+				_events().emit_event("time:set", _day().state())
+			if t.get("reload", false) and _args().current_scene_id() != "":
+				# the look follows the clock when a scene loads: reload the current one to see the new hour
+				var r: Dictionary = await _load(_args().current_scene_id())
+				if not r.ok:
+					return r
+			return _ok(time_state())
 		"bench":
 			# bench('ballast', {n}) and bench('blank', {on}) work in any scene (honest GPU readings under this Mac's 120 fps
 			# cap, harness/bin/ballast.mjs). Every other command goes to the bench scene's bench_call(cmd, opts) (--arch=<name>).
@@ -302,8 +321,18 @@ func state() -> Dictionary:
 	return {
 		"scene": id, "level": id, "milestone": null, "player": player, "camera": camera, "hud": _hud_on,
 		"debugOverlay": _overlay != null and _overlay.visible, "quality": gargs.quality, "style": gargs.style, "light": gargs.light,
-		"arch": gargs.arch, "lockstep": gargs.lockstep, "frame": _frame_no(),
+		"arch": gargs.arch, "lockstep": gargs.lockstep, "time": time_state(), "frame": _frame_no(),
 	}
+
+
+## The time of day: the day clock (game/core/day_clock.gd) {hour, clock, rate, pinned} plus the look's own hour
+## (`lookHour`, the hour the current scene's light was built for; null with --style=none) and its light id.
+func time_state() -> Dictionary:
+	var out: Dictionary = _day().state()
+	var look: Dictionary = _args().look()
+	out["lookHour"] = look.hour
+	out["light"] = look.light
+	return out
 
 
 # ---------------------------------------------------------------- hooks
@@ -535,6 +564,10 @@ func _args() -> Node:
 
 func _clock() -> Node:
 	return get_node("/root/SimClock")
+
+
+func _day() -> Node:
+	return get_node("/root/DayClock")
 
 
 func _events() -> Node:

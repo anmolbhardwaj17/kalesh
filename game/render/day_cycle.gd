@@ -1,6 +1,7 @@
-## The day-night curve of the Phase 0 style tests (game arg --time=<0..24>, STYLE_OPTIONS.md batch B): one continuous
-## sun, sky, fog, exposure and night-lights curve through the hours, built from the light presets as keys
-## (game/render/styles/light_<id>.tres). --light=<id> is the key itself, so a preset and its hour look the same.
+## The day-night curve (STYLE_OPTIONS.md batch B, the signed look's lights): one continuous sun, sky, fog, exposure and
+## night-lights curve through the hours, built from the light presets as keys (game/render/styles/light_<id>.tres).
+## The game's day clock (game/core/day_clock.gd) picks the hour; --time=<0..24> pins one. --light=<id> is the key
+## itself, so a preset and its hour look the same.
 ## The directional light is the sun by day and a faint moon by night; the change happens at dusk and before dawn,
 ## where the light is nearly off. Pure (no nodes): tested in game/tests/test_style.gd.
 extends RefCounted
@@ -29,6 +30,12 @@ static func at(hour: float) -> Resource:
 		var b: Array = KEYS[i + 1]
 		if h >= a[0] and h <= b[0]:
 			var t: float = 0.0 if b[0] == a[0] else (h - a[0]) / (b[0] - a[0])
+			# on a key hour the preset itself (a blend at 0 or 1 can be one float step off it): --time=17.75 and
+			# --light=golden, and the day clock's 15:00 start and the afternoon preset, are the same look
+			if t <= 0.0:
+				return key(a[1]).duplicate()
+			if t >= 1.0:
+				return key(b[1]).duplicate()
 			return blend(key(a[1]), key(b[1]), smoothstep(0.0, 1.0, t))
 	return key("night").duplicate()
 

@@ -3,9 +3,11 @@
 ##   --debug-port=N       its port on 127.0.0.1 (default DEFAULT_DEBUG_PORT, same as kit.config.json godot.debugPort)
 ##   --verify             hide every debug overlay (the harness always passes it)
 ##   --quality=<preset>   start on that quality preset
-##   --style=<name>       Phase 0 style test (game/render/style_runner.gd; ids in its STYLES)
-##   --light=<preset>     light preset for a style test: dawn, afternoon (default), golden or night
-##   --time=<0..24>       style test hour of day on the day-night curve (game/render/day_cycle.gd); overrides --light
+##   --style=<name>       the look (game/render/style_runner.gd; ids in its STYLES). Absent: DEFAULT_STYLE, the signed
+##                        stylised B. `none`: the flat stand-in look, no style code (fast verification)
+##   --light=<preset>     pins the day clock to a light preset: dawn, afternoon, golden or night
+##   --time=<0..24>       pins the day clock to that hour on the day curve (game/render/day_cycle.gd); overrides
+##                        --light. Without either the day clock (game/core/day_clock.gd) starts at 15:00 and runs
 ##   --style-off=<a,b>    style test features to switch off for cost measuring (stylised_b: volfog, shimmer, dressing,
 ##                        lights, textures, decals, ssao, ssil, glow, sunshadow; p34 = the P0-034 setup)
 ##   --scene=<id>         start in that scene (ids in SCENES)
@@ -20,6 +22,9 @@ extends Node
 const DEFAULT_DEBUG_PORT := 47181
 const DEBUG_SERVER_PATH := "res://debug/debug_server.gd"
 const STYLE_RUNNER_PATH := "res://render/style_runner.gd"
+## The look with no --style arg: the signed stylised B (STYLE_BIBLE.md). --style=NO_STYLE keeps the flat stand-in look.
+const DEFAULT_STYLE := "stylised_b"
+const NO_STYLE := "none"
 ## Scene ids the game can load (debug load(id) and --scene=<id>).
 const SCENES := {
 	"scaffold": "res://scenes/main.tscn",
@@ -101,10 +106,13 @@ static func parse(args: PackedStringArray) -> Dictionary:
 
 func _ready() -> void:
 	apply(parse(OS.get_cmdline_user_args()))
-	if style != "":
-		# Loaded by path only for a style test, so the default look runs no style code at all. It restyles every
-		# scene as its nodes enter the tree (SceneTree.node_added), so it must start before the main scene loads.
-		_style_runner = load(STYLE_RUNNER_PATH).new(get_tree(), style, light, time, style_off)
+	# It restyles every scene as its nodes enter the tree (SceneTree.node_added), so it must start before the main
+	# scene loads. Loaded by path: --style=none runs no style code at all.
+	_style_runner = make_style_runner(get_tree())
+	var boot_scene := get_tree().current_scene
+	if _style_runner != null and boot_scene != null:
+		# the main scene is already in the tree when autoloads get _ready: restyle what node_added missed
+		print("style: restyled the boot scene (%d nodes)" % _style_runner.restyle_tree(boot_scene))
 	if mute:
 		AudioServer.set_bus_mute(0, true)
 	if arch != "" and ARCH_SCENES.has(arch_name()):
@@ -123,12 +131,44 @@ func _ready() -> void:
 	print("game: boot debug=%s verify=%s lockstep=%s quality=%s" % [debug, verify, lockstep, quality])
 
 
+## The look id for a --style value: "" is DEFAULT_STYLE, anything else stays. Architecture benches (--arch) set up
+## their own look, so there "" is NO_STYLE. Pure, unit tested.
+static func style_id(value: String, arch_value := "") -> String:
+	if value != "":
+		return value
+	return NO_STYLE if arch_value != "" else DEFAULT_STYLE
+
+
+## The style runner for the current args on a tree, or null for --style=none. Tests call it on the test tree (and
+## stop() the runner after).
+func make_style_runner(tree: SceneTree) -> RefCounted:
+	if style == NO_STYLE:
+		return null
+	return load(STYLE_RUNNER_PATH).new(tree, style, light, time, style_off)
+
+
+## Stops the boot style runner (the headless test runner does this first: its test nodes must keep their stand-in
+## materials unless a test restyles them on purpose).
+func stop_style_runner() -> void:
+	if _style_runner != null:
+		_style_runner.stop()
+	_style_runner = null
+
+
+## The look now: {style, light (the runner's light id), hour (the hour its light was built for)}. With --style=none
+## light is "" and hour null.
+func look() -> Dictionary:
+	if _style_runner == null or _style_runner.style == null:
+		return {"style": style, "light": "", "hour": null}
+	return {"style": _style_runner.style_id, "light": _style_runner.light_id, "hour": _style_runner.hour}
+
+
 func apply(p: Dictionary) -> void:
 	debug = p.debug
 	debug_port = p.debug_port
 	verify = p.verify
 	quality = p.quality
-	style = p.style
+	style = style_id(p.style, p.arch)
 	light = p.light
 	time = p.time
 	style_off = p.style_off

@@ -5,14 +5,14 @@
 // - the synchronous hooks (state, clock, events, hold with no args) read the newest snapshot the game pushed after its
 //   last frame (docs/GAME_HOOKS.md "Snapshot vs request"), with no round trip;
 // - every other hook is a request to the server (frames, perf, load, input, teleport, setCamera, timeScale, hud, quality,
-//   hold with args). Hooks that are synchronous in the browser (input, hold, timeScale, hud, setCamera) send the request
+//   timeOfDay, hold with args). Hooks that are synchronous in the browser (input, hold, timeScale, hud, setCamera) send the request
 //   and return at once; TCP keeps the order, so a following `await D.frames(1)` runs after them in the game. A request
 //   nobody awaits that fails is recorded (onAsyncError) instead of being lost.
 import vm from 'node:vm';
 import { performance } from 'node:perf_hooks';
 
-/** The hooks a script may call on window.__game.debug (GAME_HOOKS.md "Required" plus quality). */
-export const SHIM_HOOKS = ['state', 'clock', 'frames', 'input', 'perf', 'load', 'teleport', 'setCamera', 'timeScale', 'hold', 'events', 'hud', 'quality'];
+/** The hooks a script may call on window.__game.debug (GAME_HOOKS.md "Required" plus quality and timeOfDay). */
+export const SHIM_HOOKS = ['state', 'clock', 'frames', 'input', 'perf', 'load', 'teleport', 'setCamera', 'timeScale', 'hold', 'events', 'hud', 'quality', 'timeOfDay'];
 
 /**
  * window.__game for a connected GodotDebugClient (or any object with hello, snapshot, events and call(method, ...args)).
@@ -34,6 +34,8 @@ export function makeGame(client, { onAsyncError = () => {} } = {}) {
     load: (id, opts) => client.call('load', ...(opts === undefined ? [id] : [id, opts])),
     teleport: (where) => client.call('teleport', where),
     quality: (...a) => client.call('quality', ...a),
+    /** Reads ({}) or sets the day clock: {hour, rate, pin, reload} (GAME_HOOKS.md "timeOfDay"). */
+    timeOfDay: (opts) => client.call('timeOfDay', ...(opts === undefined ? [] : [opts])),
     input: (action, value = 1) => { fire('input', action, value); },
     setCamera: (pose) => { fire('setCamera', pose ?? null); },
     timeScale: (n) => { fire('timeScale', n); },

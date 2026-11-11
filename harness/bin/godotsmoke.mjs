@@ -6,7 +6,7 @@
 //
 // 1. Without --debug: launches the game headless with -- --debug-port=<free port> --verify and checks that nothing
 //    listens on that port (nor on the default port) while the game runs.
-// 2. With --debug --verify: launches the pinned Godot windowed, calls every required hook plus shot, quality and quit,
+// 2. With --debug --verify: launches the pinned Godot windowed, calls every required hook plus shot, quality, timeOfDay and quit,
 //    prints each result, and checks each answers in the documented shape. Also checks the sim hold: hold({at}) pauses
 //    within one physics tick of `at`, and a held sim does not move for 0.2 s of wall time while frames keep drawing.
 // Writes <out>/smoke.json and <out>/smoke_shot.png (default out: harness/reports/godot). Exits 1 on any failure,
@@ -123,6 +123,16 @@ async function debugRun() {
 
   const q = await call('quality()', 'quality');
   check('quality reads the preset', typeof q.preset === 'string' && Array.isArray(q.presets));
+
+  // Day clock (P1-002): state().time reads it, timeOfDay sets and pins it.
+  const st0 = (await c.call('state')).time;
+  check('state().time has the day clock', st0 && isNum(st0.hour) && isNum(st0.rate) && typeof st0.pinned === 'boolean', JSON.stringify(st0));
+  const tod = await call('timeOfDay({hour: 18.5, pin: true})', 'timeOfDay', { hour: 18.5, pin: true });
+  await c.call('frames', 5);
+  const st1 = (await c.call('state')).time;
+  check('timeOfDay sets and pins the hour', tod.hour === 18.5 && tod.pinned === true && st1.hour === 18.5, JSON.stringify(st1));
+  try { await c.call('timeOfDay', { hour: 'noon' }); check('timeOfDay with a bad hour is an error response', false); } catch (e) { check('timeOfDay with a bad hour is an error response', /must be a number/.test(e.message)); }
+  await c.call('timeOfDay', { hour: st0.hour, pin: st0.pinned });
 
   // Sim hold: drive, hold at t + 0.5 s, check it stops within one tick and stays still for 0.2 s of wall time.
   await c.call('load', 'scaffold');

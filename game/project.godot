@@ -17,6 +17,7 @@ config/features=PackedStringArray("4.7", "Forward Plus")
 GameArgs="*res://core/game_args.gd"
 SimClock="*res://core/sim_clock.gd"
 GameEvents="*res://core/game_events.gd"
+DayClock="*res://core/day_clock.gd"
 
 [display]
 

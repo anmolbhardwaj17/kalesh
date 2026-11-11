@@ -318,3 +318,6 @@ One line per event, written by task.mjs (start, done, fail, phase changes, inbox
 - 2026-11-11 18:50 PHASE P0 DONE: Adopt, style discovery and architecture discovery. Next: P1 Foundation: drive and walk the real pilot centre
 - 2026-11-11 18:50 [P1-001] start (attempt 1): Map inspector step 1: the issues view
 - 2026-11-11 19:43 [P1-001] done: Map inspector page in tools/inspector/, served on the dashboard at /inspector/: north-up top view, 1052 pilot issues with the 27 high impact first, click to fly, proposals as preview lines, picks write per-tile override patches and an inbox line, Open in game teleports. Self-check: 9 Playwright tests, typecheck, 335 vitest, 59 Godot tests, quick OK.
+- 2026-11-11 19:43 [P1-002] start (attempt 1): Stylised B is the default look, driven by the day clock
+- 2026-11-11 20:05 [P1-028] added: Live relight from the day clock
+- 2026-11-11 20:05 [P1-002] done: No --style now loads stylised B; DayClock autoload starts at 15:00 and drives the light; --time and --light pin it; --style=none keeps the flat look for fast scenarios; time of day in state() and settable by hook. Look unchanged: golden compare mean 0.00 to 0.03. Self-check: typecheck, 335 vitest, 64 Godot tests, smoke 40/40, quick OK. Follow-up: live relight task added.

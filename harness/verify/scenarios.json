@@ -1,5 +1,5 @@
 {
-  "_doc": "Scenarios for verify.mjs (format in harness/design/VERIFY.md 'Scenario options' and the step list in browser.mjs runStep). Each scenario opens a fresh page (index.html?<pageQuery>) or, with kit.config.json target godot, a fresh Godot run (godotdriver.mjs; `headless: true` runs it headless, no shots or perf), runs its steps in order and fails on the first failed step, any console error, a problem a shot rule reports (debug.shotProblems) or a budget over its fail limit (harness/verify/perf_budgets.json). Keep each scenario small and about one thing. Name it <area>_<what>. Add a `_note` that says what it proves and which task added it.",
+  "_doc": "Scenarios for verify.mjs (format in harness/design/VERIFY.md 'Scenario options' and the step list in browser.mjs runStep). Each scenario opens a fresh page (index.html?<pageQuery>) or, with kit.config.json target godot, a fresh Godot run (godotdriver.mjs; `headless: true` runs it headless, no shots or perf), runs its steps in order and fails on the first failed step, any console error, a problem a shot rule reports (debug.shotProblems) or a budget over its fail limit (harness/verify/perf_budgets.json). Keep each scenario small and about one thing. Name it <area>_<what>. Add a `_note` that says what it proves and which task added it. Look rule (P1-002): the game's default look is the signed stylised B (no --style arg). Scenarios that do not judge the look run with `\"query\": \"style=none\"` (the flat stand-in look, faster to load): hooks_contract, drive_north, drive_turn_right and coords_north_marker. The others (boot_title, perf_baseline, hooks_no_debug, street_boot, landmarks_boot, areas_boot) run the default look.",
   "scenarios": [
     {
       "name": "boot_title",
@@ -11,10 +11,11 @@
           "shot": "boot_title"
         }
       ],
-      "_note": "Kit sample. The first screen the player sees, after the game says ready."
+      "_note": "Kit sample. The first screen the player sees, after the game says ready. Runs the default look (stylised B since P1-002)."
     },
     {
       "name": "hooks_contract",
+      "query": "style=none",
       "steps": [
         {
           "script": "harness/verify/scripts/hooks_contract.js",
@@ -24,7 +25,7 @@
           "shot": "hooks_contract"
         }
       ],
-      "_note": "Kit sample. Proves window.__game implements docs/GAME_HOOKS.md: state, clock, frames, input, perf, load, teleport, setCamera, timeScale and the sim hold. The ADOPT phase makes this pass first."
+      "_note": "Kit sample. Proves window.__game implements docs/GAME_HOOKS.md: state, clock, frames, input, perf, load, teleport, setCamera, timeScale and the sim hold. The ADOPT phase makes this pass first. Does not judge the look: runs with style=none (P1-002)."
     },
     {
       "name": "perf_baseline",
@@ -38,7 +39,7 @@
           "shot": "perf_baseline"
         }
       ],
-      "_note": "Kit sample. One perf window on the first scene, judged against perf_budgets.json. perfQuick keeps it in --quick; heavier perf scenes should leave perfQuick out so they run in --only and --all."
+      "_note": "Kit sample. One perf window on the first scene, judged against perf_budgets.json. perfQuick keeps it in --quick; heavier perf scenes should leave perfQuick out so they run in --only and --all. Runs the default look (stylised B since P1-002)."
     },
     {
       "name": "hooks_no_debug",
@@ -48,11 +49,12 @@
           "timeout": 40000
         }
       ],
-      "_note": "P0-001, ported to Godot in P0-026. Web: opens the game URL without ?debug=1 in an iframe, window.__game.debug is undefined. Godot: the driver launches the game headless without --debug and no port answers (its own and the default), no debug server line, no ERROR lines (GAME_HOOKS.md Rules). The scenario's own debug run is headless (no shot).",
+      "_note": "P0-001, ported to Godot in P0-026. Web: opens the game URL without ?debug=1 in an iframe, window.__game.debug is undefined. Godot: the driver launches the game headless without --debug and no port answers (its own and the default), no debug server line, no ERROR lines (GAME_HOOKS.md Rules). The scenario's own debug run is headless (no shot). Runs the default look (stylised B since P1-002).",
       "headless": true
     },
     {
       "name": "drive_north",
+      "query": "style=none",
       "lockstep": true,
       "steps": [
         {
@@ -60,10 +62,11 @@
           "timeout": 60000
         }
       ],
-      "_note": "P0-001. Input only: throttle 3 s of sim from heading 0, z falls by over 10 m and abs x stays under 0.5 m (north is -Z)."
+      "_note": "P0-001. Input only: throttle 3 s of sim from heading 0, z falls by over 10 m and abs x stays under 0.5 m (north is -Z). Does not judge the look: runs with style=none (P1-002)."
     },
     {
       "name": "drive_turn_right",
+      "query": "style=none",
       "lockstep": true,
       "steps": [
         {
@@ -71,10 +74,11 @@
           "timeout": 60000
         }
       ],
-      "_note": "P0-001. Input only: throttle plus steer right, heading grows and x becomes positive (east is +X)."
+      "_note": "P0-001. Input only: throttle plus steer right, heading grows and x becomes positive (east is +X). Does not judge the look: runs with style=none (P1-002)."
     },
     {
       "name": "coords_north_marker",
+      "query": "style=none",
       "steps": [
         {
           "call": "load",
@@ -106,7 +110,7 @@
           "shot": "coords_north_marker"
         }
       ],
-      "_note": "P0-001. Camera at the origin looking north (-Z): the red north post (0,-50) must be in the centre third of the shot. The builder reads the shot."
+      "_note": "P0-001. Camera at the origin looking north (-Z): the red north post (0,-50) must be in the centre third of the shot. The builder reads the shot. Does not judge the look: runs with style=none (P1-002)."
     },
     {
       "name": "street_boot",
@@ -129,7 +133,7 @@
           "shot": "street_boot"
         }
       ],
-      "_note": "P0-009. debug.load('street') builds the stand-in Delhi arterial (median, kerbs, service lane, signal junction, flyover ramp stub, shops, traffic, people); the scene reports its id, the sim runs, a shot is taken, no console errors."
+      "_note": "P0-009. debug.load('street') builds the stand-in Delhi arterial (median, kerbs, service lane, signal junction, flyover ramp stub, shops, traffic, people); the scene reports its id, the sim runs, a shot is taken, no console errors. Runs the default look (stylised B since P1-002)."
     },
     {
       "name": "landmarks_boot",
@@ -152,7 +156,7 @@
           "shot": "landmarks_boot"
         }
       ],
-      "_note": "P0-009. debug.load('landmarks') builds one landmark stand-in per tier (hero arch, signature domed tomb, marker block) with surroundings; the scene reports its id, the sim runs, a shot is taken, no console errors."
+      "_note": "P0-009. debug.load('landmarks') builds one landmark stand-in per tier (hero arch, signature domed tomb, marker block) with surroundings; the scene reports its id, the sim runs, a shot is taken, no console errors. Runs the default look (stylised B since P1-002)."
     },
     {
       "name": "areas_boot",
@@ -175,7 +179,7 @@
           "shot": "areas_boot"
         }
       ],
-      "_note": "P0-009. debug.load('areas') builds the two area kit blocks (old city bazaar strip, Lutyens bungalow road) and the third person character stand-in; the scene reports its id, the sim runs, a shot is taken, no console errors."
+      "_note": "P0-009. debug.load('areas') builds the two area kit blocks (old city bazaar strip, Lutyens bungalow road) and the third person character stand-in; the scene reports its id, the sim runs, a shot is taken, no console errors. Runs the default look (stylised B since P1-002)."
     }
   ]
 }

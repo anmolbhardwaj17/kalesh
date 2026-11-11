@@ -193,3 +193,102 @@ func test_builder_records_dressing_anchors_without_geometry() -> void:
 		t.ok(kinds.get(k, 0) > 0, "bazaar records %s anchors (%d)" % [k, kinds.get(k, 0)])
 	t.ok(not root.get_node("Bazaar").has_node("Dressing"), "the default look adds no dressing")
 	root.free()
+
+
+# ---------------------------------------------------------------- default look and the day clock (P1-002)
+
+const DayClockScript := preload("res://core/day_clock.gd")
+const SimClockScript := preload("res://core/sim_clock.gd")
+const RUNNER := "res://render/style_runner.gd"
+
+
+func test_no_style_arg_is_stylised_b_and_none_loads_no_runner() -> void:
+	t.ok(GameArgs.style_id(GameArgs.parse(PackedStringArray()).style) == "stylised_b", "no --style gives stylised_b")
+	t.ok(GameArgs.style_id("none") == "none" and GameArgs.style_id("stylised") == "stylised", "--style=<id> is kept")
+	t.ok(GameArgs.style_id("", "render") == "none", "an architecture bench sets up its own look")
+	var keep: String = GameArgs.style
+	GameArgs.style = GameArgs.style_id("")
+	var r: RefCounted = GameArgs.make_style_runner(tree)
+	t.ok(r != null and r.style_id == "stylised_b" and r.style != null, "the default args make a stylised_b runner")
+	if r != null:
+		t.near(r.hour, 15.0, 1e-9, "the default look starts at 15:00")
+		t.near(r.style.light.sun_elevation_deg, DayCycle.key("afternoon").sun_elevation_deg, 1e-9,
+			"15:00 is the afternoon preset itself")
+		r.stop()
+	GameArgs.style = "none"
+	t.ok(GameArgs.make_style_runner(tree) == null, "--style=none loads no style runner")
+	GameArgs.style = keep
+
+
+func test_day_clock_start_from_args() -> void:
+	var s: Dictionary = DayClockScript.start("", "")
+	t.ok(s.hour == 15.0 and not s.pinned, "no args: 15:00, running")
+	s = DayClockScript.start("golden", "")
+	t.ok(s.hour == 17.75 and s.pinned, "--light=golden pins 17.75")
+	s = DayClockScript.start("night", "9.5")
+	t.ok(s.hour == 9.5 and s.pinned, "--time wins over --light and pins")
+	s = DayClockScript.start("", "25")
+	t.near(s.hour, 1.0, 1e-9, "--time wraps into 0..24")
+	t.ok(DayClockScript.label(17.75) == "17:45" and DayClockScript.label(23.999) == "00:00", "clock labels")
+	# the exact key hour is the preset itself, so --time=17.75 is the approved --light=golden look
+	var g: Resource = DayCycle.at(17.75)
+	var k: Resource = DayCycle.key("golden")
+	t.ok(g.sun_color == k.sun_color and g.exposure == k.exposure and g.fog_density == k.fog_density,
+		"--time=17.75 is exactly the golden preset")
+
+
+func test_day_clock_advances_one_game_hour_on_the_sim_clock() -> void:
+	var sim: Node = SimClockScript.new()
+	var day: Node = DayClockScript.new()
+	sim.sim_tick.connect(day.advance)
+	var before: Resource = DayCycle.at(day.hour)
+	sim.advance(1.0 / DayClockScript.DEFAULT_RATE) # one game hour of sim seconds, in fixed ticks
+	t.near(day.hour, 16.0, 1e-6, "one game hour after %.0f sim seconds" % (1.0 / DayClockScript.DEFAULT_RATE))
+	var after: Resource = DayCycle.at(day.hour)
+	t.ok(absf(after.sun_elevation_deg - before.sun_elevation_deg) > 1.0 and after.sun_color != before.sun_color,
+		"the blended light changes: sun %.1f to %.1f degrees" % [before.sun_elevation_deg, after.sun_elevation_deg])
+	sim.set_scale(2.0)
+	sim.advance(60.0)
+	t.near(day.hour, 17.0, 1e-6, "time scale 2 runs the day twice as fast")
+	sim.set_scale(1.0)
+	sim.hold({"at": sim.t})
+	sim.advance(60.0)
+	t.near(day.hour, 17.0, 1e-6, "a held sim holds the day")
+	sim.hold({"release": true})
+	day.set_time({"pin": true})
+	sim.advance(60.0)
+	t.near(day.hour, 17.0, 1e-6, "a pinned clock stands still")
+	day.set_time({"hour": 23.9, "pin": false})
+	sim.advance(24.0)
+	t.near(day.hour, 0.1, 1e-6, "midnight wraps")
+	sim.free()
+	day.free()
+
+
+func test_scene_load_follows_the_day_clock() -> void:
+	var clock: Node = tree.root.get_node("DayClock")
+	var keep: Dictionary = clock.state()
+	var r: RefCounted = load(RUNNER).new(tree, "stylised_b", "", "", "")
+	var afternoon: float = r.style.light.sun_elevation_deg
+	clock.set_time({"hour": 15.0 + 0.5 / 60.0})
+	t.ok(not r.follow_clock(), "under a game minute: the light is kept")
+	clock.set_time({"hour": 16.0})
+	t.ok(r.follow_clock(), "a game hour later a scene load builds the light again")
+	t.near(r.hour, 16.0, 1e-9, "the look's hour is the clock's")
+	t.ok(absf(r.style.light.sun_elevation_deg - afternoon) > 1.0, "the new light is the 16:00 blend")
+	r.stop()
+	clock.set_time({"hour": keep.hour, "rate": keep.rate, "pin": keep.pinned})
+
+
+func test_time_of_day_is_in_state() -> void:
+	var keep_port: int = GameArgs.debug_port
+	GameArgs.debug_port = 47181 + 613
+	var server: Node = load(GameArgs.DEBUG_SERVER_PATH).new()
+	tree.root.add_child(server)
+	var st: Dictionary = server.state()
+	t.ok(st.has("time") and st.time.hour is float and st.time.clock is String and st.time.pinned is bool
+		and st.time.rate is float, "state().time has hour, clock, rate and pinned: %s" % [st.get("time")])
+	t.ok("timeOfDay" in server.METHODS, "timeOfDay is a debug server method")
+	tree.root.remove_child(server)
+	server.free()
+	GameArgs.debug_port = keep_port
