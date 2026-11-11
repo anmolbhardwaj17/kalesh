@@ -184,6 +184,19 @@ export function planJunction(graph: Graph, plans: EdgePlan[], id: string, nodeId
     a.cut = Math.max(a.cut, corner.di + 0.3, minCut);
     b.cut = Math.max(b.cut, corner.dj + 0.3, minCut);
   }
+  // the whole surfaces of two neighbouring arms, raised edges too, are clear of each other beyond their cut lines:
+  // both arms are cut behind the point where their outer edges cross (an acute corner, a footpath wider than the
+  // arc). Arms that never cross within their room run side by side: the edges give way there (edges.ts)
+  if (n > 1) {
+    for (let i = 0; i < n; i++) {
+      const a = arms[i] as ArmPlan;
+      const b = arms[(i + 1) % n] as ArmPlan;
+      const o = meet(a, ol(a), b, or(b));
+      if (!o || o.ti < 0 || o.tj < 0 || o.ti > a.avail || o.tj > b.avail) continue;
+      a.cut = Math.max(a.cut, o.ti + 0.3);
+      b.cut = Math.max(b.cut, o.tj + 0.3);
+    }
+  }
   // an arm may ask for a longer cut of its own (room for a connecting lane path to turn on its radius)
   for (const a of arms) a.cut = Math.min(Math.max(a.cut, minCutOf ? minCutOf(a.end) : 0), Math.max(minCut, a.avail, minCutOf ? minCutOf(a.end) : 0));
 

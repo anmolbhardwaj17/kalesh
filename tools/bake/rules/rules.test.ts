@@ -152,6 +152,12 @@ const CASES: Record<string, { hit: () => Case; clean: () => Case; also?: (issues
     hit: () => ({ s: sketch((s) => diverge(s, [[20, -2]])) }),
     clean: () => ({ s: sketch((s) => diverge(s, [[80, -10], [250, -30]])) }),
   },
+  'R-LANE-05': {
+    // a service road drawn 4 m from a one-way secondary road; 9 m apart they keep their kerbs
+    hit: () => ({ s: sketch((s) => { s.way([[-200, 0], [200, 0]], { highway: 'secondary', oneway: 'yes', name: 'Barakhamba Road' }); s.way([[-120, 4], [120, 4]], { highway: 'service' }); }) }),
+    clean: () => ({ s: sketch((s) => { s.way([[-200, 0], [200, 0]], { highway: 'secondary', oneway: 'yes', name: 'Barakhamba Road' }); s.way([[-120, 9], [120, 9]], { highway: 'service' }); }) }),
+    also: (i) => { expect(i[0]!.proposals[0]!.params).toMatchObject({ op: 'shift_apart', move_nodes: true }); },
+  },
   'R-JUNC-01': {
     hit: () => ({ s: sketch((s) => { const n = s.node(0, 0); s.way([[-100, 0], n], { highway: 'residential' }); s.way([n, [100, 0]], { highway: 'residential' }); s.way([n, [100, 8.7]], { highway: 'service' }); }) }),
     clean: () => ({ s: sketch((s) => { const n = s.node(0, 0); s.way([[-100, 0], n], { highway: 'residential' }); s.way([n, [100, 0]], { highway: 'residential' }); s.way([n, [0, 100]], { highway: 'service' }); }) }),
@@ -269,7 +275,7 @@ describe('rule catalogue (RE1)', () => {
       'R-ROAD-01', 'R-ROAD-02', 'R-ROAD-03', 'R-ROAD-04', 'R-ROAD-05', 'R-ROAD-07',
       'R-BRIDGE-01', 'R-BRIDGE-02', 'R-BRIDGE-03', 'R-BRIDGE-04', 'R-BRIDGE-05',
       'R-LANE-FIT-01', 'R-LANE-FIT-02', 'R-LANE-FIT-03',
-      'R-ROAD-06', 'R-LANE-01', 'R-LANE-02', 'R-LANE-03', 'R-LANE-04',
+      'R-ROAD-06', 'R-LANE-01', 'R-LANE-02', 'R-LANE-03', 'R-LANE-04', 'R-LANE-05',
       'R-JUNC-01', 'R-JUNC-02', 'R-JUNC-03', 'R-JUNC-04',
       'R-FOOT-01', 'R-FOOT-02',
       'R-BLDG-01', 'R-BLDG-02', 'R-BLDG-03', 'R-BLDG-04',

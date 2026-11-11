@@ -10,10 +10,9 @@ import type { GEnd } from './graph.ts';
 import { checkHero } from './hero.ts';
 import type { HeroCheck, HeroSpec } from './hero.ts';
 import { GALI_MIN_LANE_M, MIN_DRIVE_LANE_M, MIN_TURN_RADIUS_M, NOSE_GAP } from './model.ts';
-import type { Junction, LaneDef, Station, Strip, StripEnd } from './model.ts';
+import type { Joint, Junction, LaneDef, Station, Strip, StripEnd } from './model.ts';
 import type { LaneBuild } from './network.ts';
-import { TriGrid, overlapArea } from './trigrid.ts';
-import type { Tri3, Vec3 } from './trigrid.ts';
+import { stripOverlaps } from './overlap.ts';
 
 const r = (v: number, d = 3): number => Math.round(v * 10 ** d) / 10 ** d;
 const endOf = (s: Strip, end: StripEnd): Station => (end === 'start' ? s.st[0] : s.st[s.st.length - 1]) as Station;
@@ -200,65 +199,23 @@ export interface PlanOverlapCheck {
   worst: { a: string; b: string; areaM2: number; x: number; z: number }[];
 }
 
-interface StripTri extends Tri3 {
-  strip: number;
-  level: number;
-}
-
 /**
- * Strips lying on each other in plan: every station pair of a strip is one quad over its whole width; quads of two
- * strips on one level (layer and bridge flag) that share area overlap. Junction surfaces are the mesh builder's.
+ * Strips lying on each other in plan (overlap.ts): quads of two strips on one level that share area. The two quads at
+ * a joint share its line and are one surface. Junction surfaces are the mesh builder's.
  */
-export function checkPlanOverlap(strips: readonly Strip[], only?: (s: Strip) => boolean): PlanOverlapCheck {
-  const grid = new TriGrid<StripTri>(8);
-  strips.forEach((s, si) => {
-    if (only && !only(s)) return;
-    for (let i = 0; i + 1 < s.st.length; i++) {
-      const p = s.st[i] as Station;
-      const q = s.st[i + 1] as Station;
-      const n = p.b.length - 1;
-      const v = (st: Station, lat: number): Vec3 => [st.x + st.nx * lat, 0, st.z + st.nz * lat];
-      const a = v(p, p.b[0] as number);
-      const c = v(p, p.b[n] as number);
-      const d = v(q, q.b[0] as number);
-      const e = v(q, q.b[n] as number);
-      const level = p.layer * 2 + (p.bridge ? 1 : 0);
-      grid.add({ p: [a, c, d], strip: si, level });
-      grid.add({ p: [c, e, d], strip: si, level });
-    }
-  });
-  const cell = grid.cellSize();
-  const tris = grid.tris;
-  const box = tris.map((t) => ({
-    minX: Math.min(t.p[0][0], t.p[1][0], t.p[2][0]), maxX: Math.max(t.p[0][0], t.p[1][0], t.p[2][0]),
-    minZ: Math.min(t.p[0][2], t.p[1][2], t.p[2][2]), maxZ: Math.max(t.p[0][2], t.p[1][2], t.p[2][2]),
-  }));
+export function checkPlanOverlap(strips: readonly Strip[], joints: readonly Joint[], only?: (s: Strip) => boolean): PlanOverlapCheck {
+  const { overlaps, tested } = stripOverlaps(strips, joints, only);
   const pairs = new Map<string, { area: number; x: number; z: number }>();
   let area = 0;
-  let tested = 0;
-  grid.eachCell((ids, ci, cj) => {
-    for (let x = 0; x < ids.length; x++) {
-      for (let y = x + 1; y < ids.length; y++) {
-        const i = ids[x] as number;
-        const j = ids[y] as number;
-        const ta = tris[i] as StripTri;
-        const tb = tris[j] as StripTri;
-        if (ta.strip === tb.strip || ta.level !== tb.level) continue;
-        const a = box[i] as { minX: number; maxX: number; minZ: number; maxZ: number };
-        const c = box[j] as { minX: number; maxX: number; minZ: number; maxZ: number };
-        if (a.minX >= c.maxX || c.minX >= a.maxX || a.minZ >= c.maxZ || c.minZ >= a.maxZ) continue;
-        if (Math.floor(Math.max(a.minX, c.minX) / cell) !== ci || Math.floor(Math.max(a.minZ, c.minZ) / cell) !== cj) continue;
-        tested++;
-        const shared = overlapArea(ta.p, tb.p);
-        if (shared < 1e-4) continue;
-        area += shared;
-        const k = ta.strip < tb.strip ? `${ta.strip},${tb.strip}` : `${tb.strip},${ta.strip}`;
-        const rec = pairs.get(k);
-        if (rec) rec.area += shared;
-        else pairs.set(k, { area: shared, x: (Math.max(a.minX, c.minX) + Math.min(a.maxX, c.maxX)) / 2, z: (Math.max(a.minZ, c.minZ) + Math.min(a.maxZ, c.maxZ)) / 2 });
-      }
-    }
-  });
+  for (const o of overlaps) {
+    area += o.area;
+    const k = `${o.a.strip},${o.b.strip}`;
+    const rec = pairs.get(k);
+    const x = o.poly.reduce((t, p) => t + p[0], 0) / o.poly.length;
+    const z = o.poly.reduce((t, p) => t + p[1], 0) / o.poly.length;
+    if (rec) rec.area += o.area;
+    else pairs.set(k, { area: o.area, x, z });
+  }
   const worst = [...pairs].sort((p, q) => q[1].area - p[1].area || (p[0] < q[0] ? -1 : 1)).slice(0, 8).map(([k, v]) => {
     const [p, q] = k.split(',').map(Number) as [number, number];
     return { a: (strips[p] as Strip).id, b: (strips[q] as Strip).id, areaM2: r(v.area, 2), x: r(v.x, 1), z: r(v.z, 1) };
@@ -303,6 +260,6 @@ export function checkLaneModel(b: LaneBuild, heroes: readonly HeroSpec[] = [], o
   }
   return {
     continuity, explainedEnds, tapers: { ...tapers, explained, unexplained }, zones: checkZones(b), trafficSide: checkLeftHand(b.strips), widths: checkWidths(b.strips), paths: checkPaths(b),
-    hero: heroes.map((h) => checkHero(h, b.strips)), overlap: overlap ? checkPlanOverlap(b.strips) : null,
+    hero: heroes.map((h) => checkHero(h, b.strips)), overlap: overlap ? checkPlanOverlap(b.strips, b.joints) : null,
   };
 }

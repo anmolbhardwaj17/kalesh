@@ -4,6 +4,7 @@
 import { describe, expect, it } from 'vitest';
 import { checkGraph, graphHash } from '../graph/checks';
 import type { BlockGraph } from '../graph/build';
+import { projectOn } from '../rules/context';
 import { pairGaps } from '../rules/lanes';
 import type { Issue, RuleEnv } from '../rules/types';
 import { Sketch, rulesOn, testEnv } from '../testmap';
@@ -113,16 +114,18 @@ describe('auto-repair bounds (AR1)', () => {
     const [issue] = of(r, 'R-LANE-FIT-01');
     expect(issue!.proposals[0]!.params).toMatchObject({ shift_m: 2.5, min_sep: 7.2 });
     expect(issue!.status).toBe('auto_repaired');
-    // away from their ends the two lines now keep their distance (within the rule's 0.25 m), and their end nodes did not move
+    // away from their ends the two lines now keep their distance (within the rule's 0.25 m); the pair shift fades at
+    // their end nodes, and R-LANE-05 then moves those (dead ends here) apart too
     const gaps = pairGaps(rulesOn(r.graph));
     expect(gaps).toHaveLength(1);
     expect(gaps[0]!.minD).toBeGreaterThanOrEqual(7.2 - 0.25);
     expect(gaps[0]!.minD).toBeLessThan(7.3);
+    expect(r.repairs[0]!.after).toMatchObject({ a: { moved_m: 2.52 }, b: { moved_m: 2.52 } });
+    expect(r.repairs.map((x) => x.rule)).toEqual(['R-LANE-FIT-01', 'R-LANE-05']);
     for (const e of r.graph.edges) {
       expect(Math.abs(e.pts[0]!.x)).toBe(200);
-      expect(Math.abs(e.pts[0]!.z)).toBe(1.1);
+      expect(Math.abs(e.pts[0]!.z)).toBeGreaterThan(1.1);
     }
-    expect(r.repairs[0]!.after).toMatchObject({ a: { moved_m: 2.52 }, b: { moved_m: 2.52 } });
     const q = run(closePair(2.0));
     expect(of(q, 'R-LANE-FIT-01')[0]!.proposals[0]!.params).toMatchObject({ shift_m: 2.6 });
     expect(of(q, 'R-LANE-FIT-01')[0]!.status).toBe('open');
@@ -282,5 +285,63 @@ describe('auto-repair bounds (AR1)', () => {
     g.marks = { [g.edges[0]!.id]: { width_from: 'buildings', by: 'R-BLDG-01:way/1:w100.0' } };
     const r = repairGraph(g, testEnv({ heroList }));
     expect(of(r, 'R-HERO-03').map((i) => [i.status, i.proposals[0]!.action])).toEqual([['open', 'disable_repair']]);
+  });
+});
+
+describe('roads beside each other (R-LANE-05, P1-031)', () => {
+  /** A service road drawn 4 m beside a one-way secondary road for 200 m, with a side street at each end. */
+  function besideRoad(): Sketch {
+    const s = new Sketch();
+    s.way([[-200, 0], [200, 0]], { highway: 'secondary', oneway: 'yes', name: 'Barakhamba Road' });
+    const m = s.node(-100, 4);
+    const n = s.node(100, 4);
+    s.way([[-100, 60], m], { highway: 'residential' });
+    s.way([m, n], { highway: 'service' });
+    s.way([n, [100, 60]], { highway: 'residential' });
+    return s;
+  }
+  it('moves both roads apart, the node at the end too, and the road there follows; a second run applies none', () => {
+    const r = run(besideRoad());
+    // the side street's node cuts the main road there too: one issue per piece of it
+    const hit = of(r, 'R-LANE-05');
+    expect(hit.length).toBeGreaterThan(0);
+    for (const i of hit) expect(i.status).toBe('auto_repaired');
+    const line = r.repairs.find((x) => x.rule === 'R-LANE-05')!;
+    expect((line.after as { nodes: unknown[] }).nodes.length).toBeGreaterThan(0);
+    const g = r.graph;
+    const main = g.edges.find((e) => e.road.cls === 'secondary')!;
+    const service = g.edges.find((e) => e.road.cls === 'service')!;
+    // 3.3 + 1.75 + 0.6: the service road keeps the separation (the shift adds 2 cm each); near its two end nodes the
+    // main road's shift fades (1 m per 5 m) beyond the stretch they share, so the nearest point there is a little closer
+    for (const p of service.pts.filter((q) => Math.abs(q.x) <= 90)) expect(projectOn(p, main.pts).d).toBeGreaterThanOrEqual(5.65 - 0.001);
+    for (const p of [service.pts[0]!, service.pts[service.pts.length - 1]!]) expect(projectOn(p, main.pts).d).toBeGreaterThan(4.8);
+    // the side street still starts at the node, which moved with the service road
+    const node = g.nodes.find((x) => x.id === service.b)!;
+    const side = g.edges.find((e) => e.a === node.id && e.road.cls === 'residential')!;
+    expect(side.pts[0]).toEqual({ x: node.x, z: node.z });
+    expect(Math.abs(node.z) - 4).toBeGreaterThan(0.8);
+    expect(repairGraph(r.graph, testEnv()).repairs).toHaveLength(0);
+  });
+  it('a branch with no room for a gore moves out from the split node (R-LANE-04 provisional), growing 1 m per slip ratio', () => {
+    const s = new Sketch();
+    const n = s.node(0, 0);
+    s.way([[-300, 0], n], { highway: 'trunk', oneway: 'yes', name: 'Ring Road' });
+    s.way([n, [300, 0]], { highway: 'trunk', oneway: 'yes', name: 'Ring Road' });
+    const end = s.node(250, -6);
+    s.way([n, [80, -5], end], { highway: 'trunk_link', oneway: 'yes' });
+    s.way([end, [250, -120]], { highway: 'residential' });
+    const r = run(s);
+    const gore = of(r, 'R-LANE-04');
+    expect(gore).toHaveLength(1);
+    expect(gore[0]!.provisional).toBe(true);
+    const slip = r.graph.edges.find((e) => e.road.link)!;
+    // the split node stays; out along the branch it moves away from the main line (north 0 is z 0, the slip is south)
+    expect(slip.pts[0]).toEqual({ x: 0, z: 0 });
+    const far = slip.pts[slip.pts.length - 1]!;
+    // 8.5 m apart where the branch ends: the gore has room, and the road at its far node followed
+    expect(far.z).toBeGreaterThan(8.4);
+    expect(r.graph.edges.find((e) => e.road.cls === 'residential')!.pts[0]).toEqual(far);
+    expect(of(run(s), 'R-LANE-04')[0]!.provisional).toBe(true);
+    expect(r.summary.unconverged).toBe(0);
   });
 });

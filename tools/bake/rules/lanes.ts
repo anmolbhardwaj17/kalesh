@@ -7,11 +7,14 @@ import type { P2 } from '../geom.ts';
 import type { GraphEdge, GraphNode, GraphPair } from '../graph/build.ts';
 import { PAIR_GAP } from '../graph/pairs.ts';
 import { NOSE_GAP, classDefaults } from '../roads/model.ts';
+import { besidePairs, blendLength, densify } from './beside.ts';
 import { byId, leftOf, projectOn, r2, r3, sameLevel } from './context.ts';
 import type { End, Rule, RuleContext } from './context.ts';
 import { taperNeed } from './roads.ts';
 import { patchOf } from './types.ts';
 import type { Issue } from './types.ts';
+
+export { blendLength, densify } from './beside.ts';
 
 export interface Split {
   node: GraphNode;
@@ -140,8 +143,6 @@ export const doubleTaper: Rule = {
   repair: (i, p) => patchOf(i, p),
 };
 
-/** The stretch at each end of an edge where a sideways shift fades to nothing (its nodes stay where they are). */
-export const blendLength = (e: GraphEdge): number => Math.min(30, e.len / 3);
 /** Distance two paired carriageways must keep: half of each width and a median of two kerbs. */
 export const pairSeparation = (a: GraphEdge, b: GraphEdge): number => r2(a.road.width / 2 + b.road.width / 2 + 0.6);
 
@@ -220,6 +221,8 @@ export const goreRoom: Rule = {
   detect(ctx: RuleContext): Issue[] {
     const out: Issue[] = [];
     for (const s of splits(ctx)) {
+      // the branch was moved out already (its shift ramps from the node): what is left is the zone's
+      if (ctx.marks[s.minor.edge.id]?.['gore_shift_m'] !== undefined) continue;
       const minSep = r2((s.main.edge.road.width + s.minor.edge.road.width) / 2 + NOSE_GAP);
       // the branches as roads, not as single edges: a branch cut by a side street runs on
       const main = lineFrom(ctx, s.main, GORE_MAX);
@@ -245,23 +248,26 @@ export const goreRoom: Rule = {
   repair: (i, p) => patchOf(i, p),
 };
 
+export const besideRoads: Rule = {
+  id: 'R-LANE-05',
+  area: 'lanes',
+  title: 'Carriageways of two roads beside each other lie on each other',
+  confidence: 0.8,
+  detect(ctx: RuleContext): Issue[] {
+    return besidePairs(ctx).map((g) => {
+      const shift = r3((g.minSep - g.minD) / 2);
+      return ctx.issue(besideRoads, g.at, [g.a.id, g.b.id], [g.a, g.b], 0.8, `${g.minD} m between the centre lines where they run alongside, ${g.minSep} m needed`, [
+        ctx.proposal('move_node', { op: 'shift_apart', a: g.a.id, b: g.b.id, min_sep: g.minSep, shift_m: shift, move_nodes: true }, 0.8, { kind: 'carriageway_shift', m: shift }, `${g.a.id} and ${g.b.id} run alongside ${g.minD} m apart, but their carriageways and kerbs need ${g.minSep} m: each moves up to ${shift} m sideways, away from the other, and a node at the end of the stretch moves with it (the roads there follow)`, g.a.pts),
+      ]);
+    });
+  },
+  repair: (i, p) => patchOf(i, p),
+};
+
 const smoothstep = (t: number): number => {
   const v = Math.max(0, Math.min(1, t));
   return v * v * (3 - 2 * v);
 };
-
-/** A polyline with extra points so no segment is longer than `step`. */
-export function densify(pts: readonly P2[], step: number): P2[] {
-  const out: P2[] = [];
-  for (let i = 0; i + 1 < pts.length; i++) {
-    const a = pts[i] as P2;
-    const b = pts[i + 1] as P2;
-    const n = Math.max(1, Math.ceil(Math.hypot(b.x - a.x, b.z - a.z) / step));
-    for (let k = 0; k < n; k++) out.push({ x: a.x + ((b.x - a.x) * k) / n, z: a.z + ((b.z - a.z) * k) / n });
-  }
-  if (pts.length) out.push({ ...(pts[pts.length - 1] as P2) });
-  return out;
-}
 
 /**
  * The centre line of `a` moved sideways away from `b` until the two keep `minSep` (a takes `share` of what is
