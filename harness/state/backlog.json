@@ -1,6 +1,6 @@
 {
   "_doc": "Written only by node harness/bin/task.mjs. Phases run in order; P0 (ADOPT + STYLE DISCOVERY) waits for the owner by design and needs task.mjs signoff and task.mjs archsignoff before its gate passes. Later phases are added by the planner at the end of P0 (task.mjs phase-add) from the game's real state.",
-  "updated": "2026-11-11T10:27:51.391Z",
+  "updated": "2026-11-11T10:28:12.300Z",
   "phases": [
     {
       "id": "P0",
@@ -610,12 +610,13 @@
       "agent": "orchestrator",
       "priority": 2,
       "kind": "feature",
-      "status": "todo",
-      "attempts": 0,
+      "status": "doing",
+      "attempts": 1,
       "notes": [
         "Ask what P0-014 could not (benches not run then): pilot landmark census (landmarks_pilot_draft.json), confirm pilot heroes and later hero list, area order after the pilot, the composite map layout and district list with the stitch bench shots (stitch.json), any skipped P0-005 questions (posters, ETS2, top speed)."
       ],
-      "created": "2026-11-10T13:04:46.154Z"
+      "created": "2026-11-10T13:04:46.154Z",
+      "started": "2026-11-11T10:28:12.300Z"
     },
     {
       "id": "P0-022",
