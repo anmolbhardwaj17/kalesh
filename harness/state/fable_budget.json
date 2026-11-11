@@ -1,5 +1,5 @@
 {
   "_doc": "Fable run budget (CLAUDE.md \"Fable tier\"). The orchestrator adds 1 to used before each Fable spawn. When used reaches limit, spawn on Opus and note it. Ask Anmol to raise the limit through a dashboard notice when 3 or fewer are left.",
   "limit": 25,
-  "used": 13
+  "used": 14
 }
