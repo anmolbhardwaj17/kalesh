@@ -342,6 +342,27 @@ Part of the map inspector page from `MAP_REPAIR.md`:
 - Save writes the area override file (versioned in git) and an inbox entry with source `inspector`.
 - Landmark layer: tier icons, click to fly to a landmark, see its registry entry and flagged issues (position disagreement, missing footprint).
 
+### 2a. Pilot area reference sheets (P0-035, 2026-11-11)
+
+Each pilot area has a sheet `harness/design/areas/<area_id>.md` (20 or more cited sources with licences, every fixed heading filled, a "what makes this area unlike the others" section and an edge-blending note) and a thumbnail board `harness/design/areas/<area_id>_board.jpg` (internal reference only, never shipped, never full-size third-party photos in git). The profile values below are read from those sheets and are the start values for `harness/data/areas/profiles/<area_id>.json`. They differ on purpose. Decisions.md "Every area is built from real references".
+
+| Area id (sheet) | Lamps | Footpaths | Boundaries | Buildings | Wear | Confidence |
+|---|---|---|---|---|---|---|
+| `cp_inner_circle` | steel pole, two arms, 9 m, 28 m spacing, warm white | 6 m cream stone under the colonnade, 3 m with flower bed on the park side, tactile strip | green steel railing 1.2 m, hedge planter, cast bollards | 2 storey white render colonnade, Tuscan columns, parapet, arched pavilions, towers behind | 0.15 | medium |
+| `cp_outer_circle` | same two-arm pole plus highmast at big junctions, sodium | 4 to 5 m under the arcade, 2 to 3 m on the road side, yellow-black kerb | pedestrian railing, jersey barriers, subway mouths, gantry signs | 2 storey arcade facing in, 8 to 20 storey glass and concrete towers facing out | 0.2 | medium |
+| `janpath` | tall double-arm poles in a median, sodium, fairy lights on market trees | 3 m red and cream chequer walk at the market, 2.5 m grey paver with yellow-black kerb | low black median railing, green NDMC signs, rolled shutters | low 2 storey Tibetan Market row, 4 to 6 storey brand-board offices | 0.25 | medium |
+| `india_gate_kartavya_path` | black cast lantern posts 6 to 8 m, 30 m spacing, warm | 6 to 8 m pink crushed stone and paved band, then lawn | green iron railing, white stone posts with chains, barricade stripes | India Gate 42 m buff arch, red and cream sandstone North and South Block, no shops | 0.03 | medium |
+| `ito` | highmast and curved-arm poles on flyovers, sodium | 3 to 4 m broken grey or red paver, 535 m skywalk | flyover railing, jersey barriers, brick colonial walls on side streets | 10 to 15 floor grey concrete and glass slab offices, media buildings, metro viaducts | 0.4 | low (thin photos) |
+| `chandni_chowk_main` | tall double-arm sodium poles on the median, bare shop bulbs, neon at night | 1 to 1.5 m taken by stalls (old state); red sandstone pedestrian priority (redeveloped state) | median iron railing, shutters, temple and gurudwara gates | 3 to 5 storey bazaar blocks, lime plaster and brick, domes, hoardings, hanging wires | 0.9 | medium |
+| `chandni_chowk_galis` | bare bulbs and tubes on shopfronts, few brackets at lane mouths | none; one worn stone or concrete surface 2 to 4 m wide with a drain | shutters, haveli iron gates, arches, tarps | 3 to 5 storey, cantilever and jharokha, painted haveli faces, tangled wires | 1.0 | medium to low (few gali photos) |
+| `red_fort_surroundings` | steel curved-arm poles 9 to 10 m, ground floodlights up the fort wall | 2.5 m broken concrete on Netaji Subhash Marg, open stone and asphalt plaza | red sandstone rampart and dry moat, retaining wall railing, yellow barricades | red Agra sandstone fort 18 to 33 m, plain white 3 to 4 storey police blocks | 0.35 | medium |
+| `jantar_mantar` | black cast lanterns on stone pillars in the garden, double-arm poles outside | red stone paths in the garden, 3 m paver outside | low stone wall, green iron railing, protest barricades | red-orange plaster instruments with cream trim, 5 to 12 storey government blocks around | 0.1 | low to medium (thin street photos) |
+| `paharganj_station` | bare bulbs, a few sodium poles, neon hotel signs, lit roof hoardings | about 1 m broken shop-front strip; granite forecourt at the station | coloured roll-down shutters, arch entrances, station railings | 4 to 6 storey stacked hotels, rooftop masts, old haveli fragments, station concourse and flyover | 0.8 | medium |
+
+Edge blending (what changes first when walking from one area to the next): buildings (age, height, colour) change first, then footpath width and material, then lamp type, then boundary type. Lamps and kerb stripes carry over for about two blocks. Details per area are in the last section of each sheet. This feeds the blend bands in "Smooth edges" above.
+
+Gaps: ITO and the galis are thin on Commons (use Mapillary or street view in a later task); Mapillary and Flickr were not used because they need a token or manual browsing.
+
 ## 3. Respect rule
 
 Every community is shown with respect and accuracy, from data and reference, never caricature.

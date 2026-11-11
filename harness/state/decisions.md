@@ -351,3 +351,7 @@ Anmol (interview, P0-021), all recommended options:
 - No Earth Engine account; building heights from area profiles, landmarks by hand.
 - Draw calls: city scenes warn 2,500, fail 3,500; look test scenes keep 600 and 1,000. Frame time stays the real guard.
 Sign-off: "Not yet, I have questions". Round continues.
+
+## 2026-11-11: architecture signed off by Anmol
+Quote: "Yes, I sign off on the architecture."
+See harness/design/ARCH_OPTIONS.md, TECH.md and docs/ARCHITECTURE.md.

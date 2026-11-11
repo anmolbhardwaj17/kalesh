@@ -136,3 +136,5 @@
 {"id":"mmwc1l92v","ts":"2026-11-11T11:35:10.135Z","text":"Architecture round 2 Q5 building heights: No account; heights from area style (Recommended)","source":"interview"}
 {"id":"mmwc1l953","ts":"2026-11-11T11:35:10.215Z","text":"Architecture round 2 Q6 draw calls: City limit 2,500 warn, 3,500 fail (Recommended)","source":"interview"}
 {"id":"mmwc1l979","ts":"2026-11-11T11:35:10.293Z","text":"Architecture sign-off asked: Not yet, I have questions","source":"interview"}
+{"id":"mmwc1m7se","ts":"2026-11-11T11:35:55.118Z","text":"questions are pretty basic regarding the performance analysis. If you have done for all these engines and all, and based on the images of the reference images that we have made, thinking that this is how our app should look, do you think what you have made will provide that like the library services that you are","source":"interview"}
+{"id":"mmwc1mrwi","ts":"2026-11-11T11:36:21.186Z","text":"Yes, I sign off on the architecture.","source":"interview"}

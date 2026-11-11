@@ -275,3 +275,9 @@ One line per event, written by task.mjs (start, done, fail, phase changes, inbox
 - 2026-11-11 17:05 mentor message mmwc1l92v handled: Recorded for the architecture round 2.
 - 2026-11-11 17:05 mentor message mmwc1l953 handled: Recorded for the architecture round 2.
 - 2026-11-11 17:05 mentor message mmwc1l979 handled: Recorded for the architecture round 2.
+- 2026-11-11 17:05 [P0-035] start (attempt 1): Area reference research: real photos and an area sheet per pilot area
+- 2026-11-11 17:05 mentor message mmwc1m7se handled: Answered in the terminal: the architecture fits the signed stylised B look with 1 to 3 ms headroom; the concept image richness comes from art and dressing density, which the budgets allow if kept in check.
+- 2026-11-11 17:06 architecture sign-off recorded: Yes, I sign off on the architecture.
+- 2026-11-11 17:06 mentor message mmwc1mrwi handled: Architecture sign-off recorded. Phase 0 sign-offs complete; the architecture record and the game plan come next.
+- 2026-11-11 17:06 [P0-021] done: Architecture round 2: six answers recorded (libraries allowed, 140 km/h, far south at 0.5 with centre at true scale, simple cutscene faces then lip sync, heights from area profiles, city draw calls 2500/3500). Shown the 14-row summary table covering the Godot stack, map pipeline, landmark registry and area profiles, seamless city and pilot. Signed: 'Yes, I sign off on the architecture.'
+- 2026-11-11 17:23 [P0-035] done: 10 area sheets and reference boards (CP inner and outer, Janpath, India Gate and Kartavya Path, ITO, Chandni Chowk main and galis, Red Fort, Jantar Mantar, Paharganj), 247 cited sources, mostly Wikimedia Commons; DELHI_WORLD.md section 2a with per-area profile values and edge blending. Self-check: files exist, boards under 2 MB, no em dashes. Gaps: ITO and galis thin.
