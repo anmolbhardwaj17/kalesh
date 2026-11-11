@@ -1,6 +1,6 @@
 {
   "_doc": "Written only by node harness/bin/task.mjs. Phases run in order; P0 (ADOPT + STYLE DISCOVERY) waits for the owner by design and needs task.mjs signoff and task.mjs archsignoff before its gate passes. Later phases are added by the planner at the end of P0 (task.mjs phase-add) from the game's real state.",
-  "updated": "2026-11-11T13:20:06.106Z",
+  "updated": "2026-11-11T14:13:17.433Z",
   "phases": [
     {
       "id": "P0",
@@ -1457,10 +1457,14 @@
       "agent": "builder",
       "priority": 1,
       "kind": "feature",
-      "status": "todo",
-      "attempts": 0,
+      "status": "done",
+      "attempts": 1,
       "notes": [],
-      "created": "2026-11-11T12:29:04.867Z"
+      "created": "2026-11-11T12:29:04.867Z",
+      "started": "2026-11-11T13:20:15.411Z",
+      "done": "2026-11-11T14:13:17.417Z",
+      "summary": "Map inspector page in tools/inspector/, served on the dashboard at /inspector/: north-up top view, 1052 pilot issues with the 27 high impact first, click to fly, proposals as preview lines, picks write per-tile override patches and an inbox line, Open in game teleports. Self-check: 9 Playwright tests, typecheck, 335 vitest, 59 Godot tests, quick OK.",
+      "commit": "172c8cb"
     },
     {
       "id": "P1-002",

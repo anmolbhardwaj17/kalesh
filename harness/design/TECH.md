@@ -29,7 +29,7 @@ Contracts here are binding: a builder who changes one updates this file and adds
 | Roads and ground | Lane-level road model (LN1), whole-graph height solver (EL1), hero road specs (HR1), junction builder with an overlap proof (J3), ground cut to the road edge (TF2) | ITO and CP: 0 overlap, 0 height steps, 0 m road to ground gap |
 | Sources | OSM roads (RS2), Overture buildings (BS1), GEDTM30 ground smoothed over 60 m (GS1) | All allow a later sale |
 | World layers | Landmark registry (LM1, LS2, LP2, HM2), area profiles and a bake-time generator (AD2, PS1, AG1, KT2, EB1) | 351 pilot landmark candidates; placements 0.57 MB per dense tile |
-| Map inspector | A small web page on the dashboard, issues first (MI1, IV1 in the order of IV3) | Not built yet |
+| Map inspector | A small web page on the dashboard, issues first (MI1, IV1 in the order of IV3) | Step 1 (issues) built in P1-001; runs on the pilot census through an adapter until the production bake (P1-011) |
 | Story runtime | Data-file cutscenes with one player (CS2), our own line player (DG1), jaw by loudness now and lip sync later (LIP2 then LIP1), face set on the leads (FC2), Hinglish and English subtitles (SB1), declared end states for skip (SK1) | Estimate under 0.5 ms |
 | Verify and shipping | The Godot driver with bench scenes (VH2); unsigned Mac and Windows test builds (EM1, EW1) | Benches ran on it |
 
@@ -69,7 +69,7 @@ The bake gets its own script when the first production bake task lands (`bake`: 
 ## Source layout
 
 - `game/`: the Godot project. What exists today is listed in `docs/ARCHITECTURE.md` "Source map"; the signed target layout is `docs/ARCHITECTURE.md` "Target module map".
-- `tools/`: offline Node and TypeScript. `tools/geo/` (the reference projection), `tools/bake/` (map bake), `tools/inspector/` (the map inspector page, planned), `tools/fixtures/`. `tools/godot/` holds a downloaded engine on machines without one (gitignored).
+- `tools/`: offline Node and TypeScript. `tools/geo/` (the reference projection), `tools/bake/` (map bake), `tools/inspector/` (the map inspector page), `tools/fixtures/`. `tools/godot/` holds a downloaded engine on machines without one (gitignored).
 - `harness/data/`: versioned map data that people edit: `districts.json` and `districts/` (block and focus outlines), `connectors/`, `overrides/`, `hero_roads/`, `landmarks/`, `areas/`, `milestones.json`.
 - `data/`: downloaded sources (gitignored) with the pin list `data/SOURCES.json` (versioned).
 - `game/world/tiles/`: baked tiles (gitignored, rebuilt by the bake; a release build packs them per stage).

@@ -80,7 +80,7 @@ Notes: `harness/state/knowledge/world-and-map.md`
 - ARCH: "Target module map" (row `inspector/`).
 - TECH: "Map inspector".
 - Design: `harness/design/MAP_REPAIR.md` "Map inspector (human in the loop)", "Overrides format", "Issue record"; `harness/design/DELHI_WORLD.md` "Map inspector: area view".
-- Source: planned `tools/inspector/`, served by `harness/bin/dashboard.mjs`; it reads the baked tiles and `issues.json` and writes `harness/data/overrides/` and the inbox.
+- Source: `tools/inspector/` (`lib.ts`, `ktl1.ts`, `adapter.mjs`, `server.mjs`, `serve.mjs`, `web/app.js`, tests `lib.test.ts`, `page.test.mjs`), served by `harness/bin/dashboard.mjs` at `/inspector/`; it reads the tiles and `issues.json` (file contract in the header of `adapter.mjs`) and writes `harness/data/overrides/<tileX>_<tileZ>.json` and the inbox (source `inspector`). Step 1 (issues) is built; lanes, hero roads and landmarks are steps 2 to 4.
 
 ## Old game reference (read only)
 - `/Users/apple/Desktop/code/delhi-drive`: never edit, build or install there. Read `harness/design/SALVAGE_AUDIT.md` first (written in Phase 0) instead of the old code.

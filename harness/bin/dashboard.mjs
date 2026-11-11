@@ -12,6 +12,7 @@ import { readNotices, openNotices } from './notice.mjs';
 import { signoffStates } from './signoffs.mjs';
 import { scriptIds, milestoneCounts, isRequired, loadMilestones } from './milestoneset.mjs';
 import { readCopies, COPY_ROOT, PLAY_COMMAND } from './playcopy.mjs';
+import { inspectorHandler } from '../../tools/inspector/server.mjs';
 
 const PORT = Number(process.env.HARNESS_DASHBOARD_PORT || config().dashboardPort || 4477);
 const MIME = { '.html': 'text/html; charset=utf-8', '.js': 'text/javascript', '.css': 'text/css', '.json': 'application/json', '.png': 'image/png', '.jpg': 'image/jpeg', '.webp': 'image/webp', '.svg': 'image/svg+xml', '.wasm': 'application/wasm', '.mp3': 'audio/mpeg', '.ogg': 'audio/ogg', '.wav': 'audio/wav', '.glb': 'model/gltf-binary', '.woff2': 'font/woff2', '.woff': 'font/woff', '.ttf': 'font/ttf', '.otf': 'font/otf', '.webmanifest': 'application/manifest+json' };
@@ -252,11 +253,15 @@ function tunnelAllowed(req, url, res) {
   return false;
 }
 
+// The map inspector (tools/inspector/, P1-001) lives on this port under /inspector/ and /api/inspector/.
+const inspector = inspectorHandler();
+
 const server = http.createServer(async (req, res) => {
   try {
     const url = new URL(req.url, `http://localhost:${PORT}`);
     const p = url.pathname;
     if (!tunnelAllowed(req, url, res)) return send(res, 403, 'Forbidden', 'text/plain');
+    if (await inspector(req, res, url)) return;
     if (req.method === 'GET' && (p === '/' || p === '/index.html')) return serveFile(res, [H('dashboard')], 'index.html') || send(res, 404, 'missing dashboard', 'text/plain');
     if (req.method === 'GET' && p.startsWith('/fonts/')) return serveFile(res, [H('dashboard/fonts')], p.slice(7), 'public, max-age=86400') || send(res, 404, 'no font', 'text/plain');
     if (req.method === 'GET' && p === '/logo') { const f = ['logo.png', 'logo.jpg', 'logo.webp'].find((n) => fs.existsSync(H('dashboard', n))); return (f && serveFile(res, [H('dashboard')], f)) || send(res, 404, 'no logo', 'text/plain'); }
