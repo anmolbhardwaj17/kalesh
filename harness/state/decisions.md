@@ -341,3 +341,13 @@ Decision: `harness/design/ARCH_OPTIONS.md` is draft 2. Every estimate that a ben
 Layout recommendation for "One seamless open city, no gaps": the centre of Delhi is one continuous real block at factor 1.0 with one frame and one road graph, so every pair in it keeps its real bearing; far districts (Vasant Kunj, Qutub, the airport, Cyber City) sit on their real bearing from India Gate at one shared factor (0.5 recommended; the owner decides), joined by corridors of generated city on authored connectors. Corrected offsets for the four drafted frames at factor 1.0 with India Gate kept: Connaught Place (-624.7, -1595.0), Chandni Chowk (705.1, -3711.7), Laxmi Nagar (5340.0, -1473.9). Method: world position = pivot + factor x geoToWorld(place, pivot), then re-centre the world origin on the map box.
 Why: computed with `tools/geo/projection.ts` from `harness/data/districts.json`: the drafted layout had ratios from 0.62 to 0.96 and Connaught Place up to 22 degrees off. Real pilot districts are 0.4 to 1.2 km apart and the in-between areas the owner wants (Paharganj, GB Road, Daryaganj) already touch their neighbours, so no even factor under 1.0 fits the centre. The rule "every pair within 5 degrees" can hold for the far south only at a factor of 0.8 or more (Cyber City 15 km out); at 0.5, 34 of 120 pairs are over 5 degrees (worst 19.8), all of them a centre place paired with a far place. The filled first release is about 68 km2 and about 1,090 tiles (estimates) against 26 km2 as islands; frame cost does not change because streaming holds a fixed ring of tiles.
 By: planner (P0-020)
+
+## 2026-11-11: Architecture answers, round 2
+Anmol (interview, P0-021), all recommended options:
+- clipper2-ts (BSL-1.0) and earcut (ISC) allowed in the map tool only.
+- Top speed 140 km/h as in GAME.md; gears retuned in the first driving phase.
+- Seamless city: centre at true scale (factor 1.0); far south on its real bearing from India Gate at 0.5 of real distance.
+- Cutscenes: simple jaw movement now, lip sync and face sets once voices exist; Hinglish plus English subtitles from the start.
+- No Earth Engine account; building heights from area profiles, landmarks by hand.
+- Draw calls: city scenes warn 2,500, fail 3,500; look test scenes keep 600 and 1,000. Frame time stays the real guard.
+Sign-off: "Not yet, I have questions". Round continues.

@@ -268,3 +268,10 @@ One line per event, written by task.mjs (start, done, fail, phase changes, inbox
 - 2026-11-11 15:41 mentor message mmwbyltqa handled: Yes, every gap gets filled. One seamless open world: real in-between areas where they matter, generated Delhi-style city everywhere else, roads running straight through, no visible borders.
 - 2026-11-11 15:57 [P0-020] done: ARCH_OPTIONS.md draft 2: measured numbers from 9 bench reports, 27 wrong estimates marked, one recommendation per row, budgets in Godot terms, seamless city layout (centre at true scale, far districts on true bearing at 0.5), map repair and inspector plan, cutscene runtime rows, owner table of 20 rows and 6 questions. MAP_REPAIR.md and DELHI_WORLD.md licences fixed. Self-check: doc read in summary.
 - 2026-11-11 15:58 [P0-021] start (attempt 1): Architecture rounds until the architecture sign-off
+- 2026-11-11 17:05 mentor message mmwc1l8oj handled: Recorded for the architecture round 2.
+- 2026-11-11 17:05 mentor message mmwc1l8v6 handled: Recorded for the architecture round 2.
+- 2026-11-11 17:05 mentor message mmwc1l8xn handled: Recorded for the architecture round 2.
+- 2026-11-11 17:05 mentor message mmwc1l90d handled: Recorded for the architecture round 2.
+- 2026-11-11 17:05 mentor message mmwc1l92v handled: Recorded for the architecture round 2.
+- 2026-11-11 17:05 mentor message mmwc1l953 handled: Recorded for the architecture round 2.
+- 2026-11-11 17:05 mentor message mmwc1l979 handled: Recorded for the architecture round 2.

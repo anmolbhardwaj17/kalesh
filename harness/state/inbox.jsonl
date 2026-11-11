@@ -129,3 +129,10 @@
 {"id":"mmwblj0k4","ts":"2026-11-11T04:05:31.924Z","text":"pause work immediatetly, i'llc otninuw later by saying continue","source":"terminal"}
 {"id":"mmwbyi1a6","ts":"2026-11-11T10:08:41.214Z","text":"bro what is this man, so much gap plus what are these areas in map? (on the stitch top-down shot: four districts as islands on empty green ground)","source":"terminal"}
 {"id":"mmwbyltqa","ts":"2026-11-11T10:11:38.050Z","text":"Okay, one more thing I want to confirm is that, okay, these seem very far from each other and a lot of empty spaces there in between. Do you think that's okay, or we will fill all these areas? we can fill it with whatever, I don't know yet. But some seamless connection should be there. This looks weird like this. It's not like these should be different region. There should be easily blendable, like an open","source":"terminal"}
+{"id":"mmwc1l8oj","ts":"2026-11-11T11:35:09.619Z","text":"Architecture round 2 Q1 libraries clipper2-ts and earcut: Yes, allow both (Recommended)","source":"interview"}
+{"id":"mmwc1l8v6","ts":"2026-11-11T11:35:09.858Z","text":"Architecture round 2 Q2 top speed: 140 km/h (Recommended)","source":"interview"}
+{"id":"mmwc1l8xn","ts":"2026-11-11T11:35:09.947Z","text":"Architecture round 2 Q3 far districts distance: Half the real distance (Recommended)","source":"interview"}
+{"id":"mmwc1l90d","ts":"2026-11-11T11:35:10.045Z","text":"Architecture round 2 Q4 cutscenes in the slice: Simple now, lip sync later (Recommended)","source":"interview"}
+{"id":"mmwc1l92v","ts":"2026-11-11T11:35:10.135Z","text":"Architecture round 2 Q5 building heights: No account; heights from area style (Recommended)","source":"interview"}
+{"id":"mmwc1l953","ts":"2026-11-11T11:35:10.215Z","text":"Architecture round 2 Q6 draw calls: City limit 2,500 warn, 3,500 fail (Recommended)","source":"interview"}
+{"id":"mmwc1l979","ts":"2026-11-11T11:35:10.293Z","text":"Architecture sign-off asked: Not yet, I have questions","source":"interview"}
