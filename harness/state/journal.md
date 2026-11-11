@@ -276,3 +276,4 @@ One line per event, written by task.mjs (start, done, fail, phase changes, inbox
 - 2026-11-11 17:05 mentor message mmwc1l953 handled: Recorded for the architecture round 2.
 - 2026-11-11 17:05 mentor message mmwc1l979 handled: Recorded for the architecture round 2.
 - 2026-11-11 17:05 [P0-035] start (attempt 1): Area reference research: real photos and an area sheet per pilot area
+- 2026-11-11 17:05 mentor message mmwc1m7se handled: Answered in the terminal: the architecture fits the signed stylised B look with 1 to 3 ms headroom; the concept image richness comes from art and dressing density, which the budgets allow if kept in check.
