@@ -6,9 +6,10 @@ import type { GraphCounts } from '../graph/checks.ts';
 import type { RepairResult, RepairSummary } from '../repair/engine.ts';
 import type { OverrideCounts, OverrideRecord } from '../repair/overrides.ts';
 
+import type { ElevationRecord } from '../elevation/elevout.ts';
 import type { LanesRecord } from '../roads/laneout.ts';
 
-export const HEALTH_VERSION = 6;
+export const HEALTH_VERSION = 7;
 
 export interface InvariantResult {
   id: string;
@@ -82,6 +83,8 @@ export interface HealthReport {
   repair: RepairRecord | null;
   /** The lane model (tools/bake/roads/network.ts): counts, checks with every explained end and taper finding, hash and build time; null until the lanes step runs. */
   lanes: LanesRecord | null;
+  /** The elevation solve (tools/bake/elevation/): the solver's counts and time, the checks, every structure with its kind, sunk and structureM; null until the elevation step runs. */
+  elevation: ElevationRecord | null;
   /** The pair table of the centre block (rule R-STITCH-03): real against game bearing and distance for every pair of centre places. */
   pairs: PairRecord[];
   /** What rule R-STITCH measured on the layout (tools/bake/layout/gate.ts); null when it did not run. */
@@ -164,7 +167,7 @@ export function emptyHealth(stage: string, block: string, outline: HealthReport[
   const gates: Record<string, number | null> = {};
   for (const k of GATE_KEYS) gates[k] = null;
   return {
-    _doc: 'Map health report of the last bake (MAP_REPAIR.md "Verification"), written by tools/bake/main.ts. issues, repairs, overrides, counts and gates are filled by the steps that measure them; null means not measured yet. counts is the short form for the dashboard (found by rule, repaired on their own, fixed by overrides, stale overrides, left open); overrides lists every patch read with its outcome (fixed, kept, idle, stale). pairs and layout come from rule R-STITCH, which runs in every bake before the first step. graph holds the block graph counts (nodes, edges, paired carriageways, footprints, rail, water), its checks and hash. repair holds the rule engine and auto-repair result (issues by rule, repaired on their own, queued, explained, the time per rule). A failed invariant stops the bake before tiles are written (stoppedBeforeTiles).',
+    _doc: 'Map health report of the last bake (MAP_REPAIR.md "Verification"), written by tools/bake/main.ts. issues, repairs, overrides, counts and gates are filled by the steps that measure them; null means not measured yet. counts is the short form for the dashboard (found by rule, repaired on their own, fixed by overrides, stale overrides, left open); overrides lists every patch read with its outcome (fixed, kept, idle, stale). pairs and layout come from rule R-STITCH, which runs in every bake before the first step. graph holds the block graph counts (nodes, edges, paired carriageways, footprints, rail, water), its checks and hash. elevation holds the height solve (its checks, every structure with its kind, sunk and structureM, the map edge ties). repair holds the rule engine and auto-repair result (issues by rule, repaired on their own, queued, explained, the time per rule). A failed invariant stops the bake before tiles are written (stoppedBeforeTiles).',
     version: HEALTH_VERSION,
     stage,
     block,
@@ -180,6 +183,7 @@ export function emptyHealth(stage: string, block: string, outline: HealthReport[
     graph: null,
     repair: null,
     lanes: null,
+    elevation: null,
     pairs: [],
     layout: null,
     invariants: [],

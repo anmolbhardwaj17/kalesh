@@ -10,7 +10,9 @@
 // tools/bake/repair/: the repaired graph in <dataDir>/graph_repaired.json, issues.json and repairs.jsonl beside the
 // health report, a north-up picture of the issues), lanes (the lane model of tools/bake/roads/network.ts on the repaired
 // graph: lanes.json and lane_graph.json in <dataDir>, the inspector's lanes layer and north-up pictures beside the
-// health report), tiles (written by a later task). Invariants run after each step; a failed one
+// health report), elevation (one height solve over the whole lane model, tools/bake/elevation/: elevation.json in
+// <dataDir>, a north-up height map and the side view of the ITO flyover beside the health report), tiles (written by
+// a later task). Invariants run after each step; a failed one
 // stops the bake before tiles are written. harness/reports/map/health.json is written at the end of every run.
 import fs from 'node:fs';
 import path from 'node:path';
@@ -54,7 +56,14 @@ import { checkLaneModel } from './roads/lanechecks.ts';
 import { laneGraph, laneModelFile, laneModelHash, lanesLayer, lanesRecord } from './roads/laneout.ts';
 import { lanesSvg } from './roads/lanerender.ts';
 import { buildLaneModel } from './roads/network.ts';
-import type { LaneModelInput } from './roads/network.ts';
+import type { LaneBuild, LaneModelInput } from './roads/network.ts';
+import { checkElevation } from './elevation/checks.ts';
+import { elevationFile, elevationHash, elevationRecord } from './elevation/elevout.ts';
+import { elevationInput } from './elevation/input.ts';
+import { heightMapSvg, profileSvg } from './elevation/render.ts';
+import { solveBlockElevation } from './elevation/solve.ts';
+import { readStructures } from './elevation/structures.ts';
+import { writeElevation } from './sources/elevationio.ts';
 import { writeLanes } from './sources/lanesio.ts';
 import { readGedtmFile, readGlo30File } from './sources/ground.ts';
 import { readGraphInput, writeGraph, writePicture } from './sources/graphinput.ts';
@@ -175,7 +184,8 @@ export async function bake(args: BakeArgs, opts: BakeOptions): Promise<HealthRep
   let heightSource: HeightGrid | null = null;
   let graphInput: GraphInput | null = null;
   /** The lane model the repair step's feedback built last, on the repaired graph. */
-  let laneBuild: ReturnType<typeof buildLaneModel> | null = null;
+  let laneBuild: LaneBuild | null = null;
+  let lanesHash = '';
   let graph: BlockGraph | null = null;
   let repaired: RepairedGraph | null = null;
   for (const step of args.steps as Step[]) {
@@ -296,10 +306,12 @@ export async function bake(args: BakeArgs, opts: BakeOptions): Promise<HealthRep
       const input: LaneModelInput = { nodes: repaired.nodes, edges: repaired.edges, marks: repaired.marks, ...laneInputs(graphInput, plan, heroes) };
       const t0 = clock.now();
       // the repair step's last lane model is this model (the same graph and inputs); built again for the hash check
-      const build = laneBuild ?? buildLaneModel(input);
+      const build: LaneBuild = laneBuild ?? buildLaneModel(input);
       const buildMs = laneBuild ? Math.round(laneBuild.ms['total'] ?? 0) : Math.round(clock.now() - t0);
       const model = laneModelFile(build, plan.def.block, plan.id);
       const hash = laneModelHash(model);
+      laneBuild = build;
+      lanesHash = hash;
       // the same input again: the model must not depend on anything but its input
       const again = laneModelHash(laneModelFile(buildLaneModel(input), plan.def.block, plan.id));
       const c = checkLaneModel(build, heroes);
@@ -330,6 +342,50 @@ export async function bake(args: BakeArgs, opts: BakeOptions): Promise<HealthRep
         { id: 'LANES-03.same_twice', ok: hash === again, detail: hash === again ? `the same hash twice (${hash})` : `two builds of one input differ: ${hash} and ${again}` },
         { id: 'LANES-04.left_hand_and_widths', ok: c.trafficSide.wrongSide + c.widths.tooNarrow === 0, detail: `${c.trafficSide.wrongSide} two-way strips on the wrong side, ${c.widths.tooNarrow} lanes under their width limit` },
         { id: 'LANES-05.hero', ok: heroBad === 0, detail: `${heroBad} hero spec mismatches` },
+      ]);
+    } else if (step === 'elevation') {
+      if (!laneBuild || !repaired || !groundModel || !lanesHash) throw new Error('the elevation step needs the ground and the lanes step before it');
+      const build = laneBuild;
+      const ground = groundModel;
+      const offset = blockFrame(districts, plan.def.block).offset;
+      // the same lane model the lanes step wrote; solved twice, the second time to show the heights do not depend on the run
+      const input = elevationInput(build, repaired, (x, z) => ground.at(x, z));
+      const first = solveBlockElevation(input);
+      const before = build.strips.map((s) => s.st.map((st) => st.h));
+      const res = solveBlockElevation(input);
+      let twoRuns = 0;
+      build.strips.forEach((s, si) => s.st.forEach((st, i) => (twoRuns = Math.max(twoRuns, Math.abs(st.h - ((before[si] as number[])[i] as number))))));
+      res.junctionHeights.forEach((h, i) => (twoRuns = Math.max(twoRuns, Math.abs(h - (first.junctionHeights[i] as number)))));
+      const c = checkElevation(build.strips, build.joints, input.junctions, res);
+      const st = readStructures({ strips: build.strips, joints: build.joints, junctions: input.junctions, junctionHeights: res.junctionHeights, tunnels: res.tunnels, crossings: res.crossings, pairSamples: res.pairSamples, water: input.water ?? [], ties: input.ties ?? [], ground: input.ground });
+      const file = elevationFile(build.strips, build.junctions.map((j) => j.id), res, st, input.rails ?? [], plan.def.block, plan.id, lanesHash);
+      const hash = elevationHash(file);
+      const heights = writeElevation(opts.root, plan, file);
+      const ring = outlineRing(plan.outline.coords, plan.origin);
+      const box = { minX: Math.min(...ring.map((p) => p.x)), maxX: Math.max(...ring.map((p) => p.x)), minZ: Math.min(...ring.map((p) => p.z)), maxZ: Math.max(...ring.map((p) => p.z)) };
+      const pictures = await writePicture(opts.root, `harness/reports/map/elevation_${plan.id}.png`, heightMapSvg(build.strips, st.structures, box, `Heights above the ground model, north up (${plan.id}): ${st.structures.length} structures`), 2400);
+      for (const v of PROFILE_VIEWS) {
+        if (build.strips.some((s) => v.match.test(s.name))) pictures.push(...(await writePicture(opts.root, `harness/reports/map/elevation_${plan.id}_${v.id}.png`, profileSvg(build.strips, (s) => v.match.test(s.name), `${v.name} (${plan.id})`), 2200)));
+      }
+      const rec = elevationRecord(build.strips, res, c, st, offset, hash, twoRuns, { heights, pictures });
+      rec.solveMs = first.report.ms['total'] ?? 0;
+      rec.solver = first.report;
+      report.elevation = rec;
+      report.gates['floatingEnds'] = rec.openEnds.floating;
+      const s = first.report;
+      opts.log(`[elevation] solved in ${(rec.solveMs / 1000).toFixed(2)} s (${s.rounds} rounds, ${s.factorisations} factorisations, ${s.converged ? 'converged' : 'NOT converged'}): ${s.strips} strips and ${s.stations} stations in ${s.chains} chains, ${s.knots} knots, ${s.unknowns} unknowns (${s.branches} branches follow their main line, ${s.ties} map edge ties), matrix ${s.matrix} values, factor ${s.factor}; ms ${Object.entries(s.ms).map(([k, v]) => `${k} ${v}`).join(', ')}`);
+      opts.log(`[elevation] limits held: ${Object.entries(s.active).filter(([, n]) => n > 0).map(([k, n]) => `${k} ${n} of ${s.limits[k as keyof typeof s.limits]}`).join(', ')}; given up ${res.unmet.length}`);
+      opts.log(`[elevation] steps: largest mismatch ${c.steps.maxMismatchM} m at ${c.steps.joints} joints, steepest junction surface ${c.steps.steepestJunctionPct} percent over ${c.steps.junctionArms} arms; grades: ${c.grade.violations} over the class limit in ${c.grade.segments} segments (steepest ${c.grade.steepestPct} percent on ${c.grade.steepest?.strip ?? 'none'}, limit ${c.grade.steepest?.limitPct ?? 0}); vertical curves: ${c.curves.violations} under the class limit of ${c.curves.measured} measured (closest to its limit: ${c.curves.tightest?.radiusM ?? 0} m against ${c.curves.tightest?.limitM ?? 0} m on ${c.curves.tightest?.strip ?? 'none'})`);
+      opts.log(`[elevation] clearances: ${c.clearance.violations} short; road over road ${c.clearance.roadCrossings} crossings (${c.clearance.roadSamples} places, least headroom ${c.clearance.minRoadM} m), ${c.clearance.junctionCrossings} over or under a junction (least ${c.clearance.minJunctionM} m), ${c.clearance.roadOverRail} places over a railway line (least ${c.clearance.minRoadOverRailM} m), ${c.clearance.roadUnderRail} under a railway bridge (least ${c.clearance.minRoadUnderRailM} m), ${c.clearance.waterCrossings} decks over water (least ${c.clearance.minOverWaterM} m above it), ${c.clearance.tunnelStations} tunnel stations (least cover ${c.clearance.minCoverM} m); crossfall: ${c.crossfall.violations} over the limit at ${c.crossfall.limited} places (worst ${c.crossfall.worstPct} percent); ties: ${c.ties.ends} map edge ends, ${c.ties.moved} moved by a clearance (largest ${c.ties.maxOffM} m)`);
+      opts.log(`[elevation] structures: ${st.structures.length} (${Object.entries(rec.structureCounts).map(([k, n]) => `${n} ${k}`).join(', ')}), ${rec.structureM} m of road on or in them, ${rec.abutments} ends (${rec.openEnds.mapEdge} at the map edge, ${rec.openEnds.underGround} dead ends under the ground, ${rec.openEnds.floating} hanging in the air); two runs differ by at most ${twoRuns} m; hash ${hash}`);
+      for (const x of st.structures.slice().sort((p, q) => q.structureM - p.structureM).slice(0, 8)) opts.log(`[elevation]   ${x.id} ${x.kind} ${x.name || '(no name)'}: structureM ${x.structureM}, sunk ${x.sunk}, up to ${x.maxAboveM} m above and ${x.maxBelowM} m under the ground`);
+      opts.log(`[elevation] wrote ${heights} and ${pictures.join(', ')}`);
+      check([
+        { id: 'ELEV-01.no_steps', ok: c.steps.maxMismatchM < 0.01, detail: `largest height mismatch where strips meet: ${c.steps.maxMismatchM} m (${c.steps.joints} joints)` },
+        { id: 'ELEV-02.grades_and_curves', ok: c.grade.violations + c.curves.violations === 0 && c.steps.steepestJunctionPct <= 5.0001, detail: `${c.grade.violations} grades over the class limit, ${c.curves.violations} vertical curves under the class limit, steepest junction surface ${c.steps.steepestJunctionPct} percent` },
+        { id: 'ELEV-03.clearances', ok: c.clearance.violations === 0, detail: c.clearance.violations === 0 ? `every one of ${c.clearance.roadCrossings} road crossings, ${c.clearance.junctionCrossings} junction crossings, ${c.clearance.roadOverRail + c.clearance.roadUnderRail} railway crossings and ${c.clearance.waterCrossings} decks over water has its clearance` : `${c.clearance.violations} clearances short: ${c.findings.filter((x) => x.kind === 'clearance').slice(0, 3).map((x) => `${x.strip} ${x.value} m (${x.why})`).join(', ')}` },
+        { id: 'ELEV-04.solved', ok: s.converged && res.unmet.length === 0 && c.crossfall.violations === 0, detail: `the solve ${s.converged ? 'converged' : 'did not converge'} in ${s.rounds} rounds, ${res.unmet.length} limits given up, ${c.crossfall.violations} crossfalls over the limit` },
+        { id: 'ELEV-05.same_twice', ok: twoRuns <= 1e-6, detail: `two solves of the same lane model differ by at most ${twoRuns} m` },
       ]);
     } else if (step === 'tiles') {
       opts.log(`[tiles] not built yet: the tile writer lands with the production road, terrain and tile tasks (would write to ${report.tiles.out})`);
@@ -364,6 +420,9 @@ const LANE_VIEWS: readonly { id: string; name: string; lat: number; lon: number;
   { id: 'ito', name: 'ITO flyover and junction', lat: 28.6282, lon: 77.2471, halfM: 330 },
   { id: 'cp', name: 'Connaught Place inner circle', lat: 28.6328, lon: 77.2197, halfM: 300 },
 ];
+
+/** Side views drawn by the elevation step: roads by name (drawn when the stage has them). */
+const PROFILE_VIEWS: readonly { id: string; name: string; match: RegExp }[] = [{ id: 'ito', name: 'ITO flyover and its ramps', match: /^ITO Flyover/ }];
 
 async function main(): Promise<void> {
   let args: BakeArgs;
