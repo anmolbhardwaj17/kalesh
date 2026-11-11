@@ -1,6 +1,6 @@
 {
   "_doc": "Written only by node harness/bin/task.mjs. Phases run in order; P0 (ADOPT + STYLE DISCOVERY) waits for the owner by design and needs task.mjs signoff and task.mjs archsignoff before its gate passes. Later phases are added by the planner at the end of P0 (task.mjs phase-add) from the game's real state.",
-  "updated": "2026-11-11T10:09:50.235Z",
+  "updated": "2026-11-11T10:27:51.391Z",
   "phases": [
     {
       "id": "P0",
@@ -572,7 +572,7 @@
       "agent": "planner",
       "priority": 2,
       "kind": "feature",
-      "status": "doing",
+      "status": "done",
       "attempts": 1,
       "notes": [
         "From P0-010: harness/reports/ is not in git, so copy every measured number into ARCH_OPTIONS.md (replace Est cells, mark wrong estimates). Reports to read: render.json, physics.json, pilot_data.json, tile_format.json, terrain_sources.json, world_sources.json, landmarks_pilot_draft.json, roads.json, stitch.json in harness/reports/arch/. Update the Rec marks in MAP_REPAIR.md and DELHI_WORLD.md section 10 if a recommendation changes, fill the Measured column of \"Budgets per system\", and fold in the answers to the 6 owner questions.",
@@ -588,7 +588,10 @@
       ],
       "created": "2026-11-10T13:04:46.154Z",
       "model": "fable",
-      "started": "2026-11-11T10:01:01.268Z"
+      "started": "2026-11-11T10:01:01.268Z",
+      "done": "2026-11-11T10:27:51.371Z",
+      "summary": "ARCH_OPTIONS.md draft 2: measured numbers from 9 bench reports, 27 wrong estimates marked, one recommendation per row, budgets in Godot terms, seamless city layout (centre at true scale, far districts on true bearing at 0.5), map repair and inspector plan, cutscene runtime rows, owner table of 20 rows and 6 questions. MAP_REPAIR.md and DELHI_WORLD.md licences fixed. Self-check: doc read in summary.",
+      "commit": "a7433d1"
     },
     {
       "id": "P0-021",
@@ -660,7 +663,8 @@
         "Owner 2026-11-10: plan hero road tasks for the pilot (decisions.md 'Hero roads').",
         "Owner (mmwb0yga2): plan a cutscene and dialogue system phase item (decisions.md 'Cutscenes and story telling'): slice gets in-engine scenes with subtitles and drive talk; RELEASE gets directed cutscenes with camera cuts and lip sync.",
         "Standing rule (decisions.md 'Every area is built from real references'): every area or district build task in later phases depends on its area sheet in harness/design/areas/ and has an acceptance line comparing game shots with the reference board.",
-        "From P0-015 (style bible): first phase starts with (1) stylised_b as the default look driven by the day clock, lookproof compare still passing; (2) after its gate, fold stylised and stylised_grime into stylised_b and remove their sets; (3) polish from the bible known gaps: night lamp pools at street_eye, dark asphalt patches at the night junction, painted boards instead of Label3D, an OFL Devanagari font, AI texture cards, real car, people and tree models; (4) area sheets (P0-035) before any area build; (5) streamed-city budgets from the architecture record; (6) optional: lookproof --approve for several sets."
+        "From P0-015 (style bible): first phase starts with (1) stylised_b as the default look driven by the day clock, lookproof compare still passing; (2) after its gate, fold stylised and stylised_grime into stylised_b and remove their sets; (3) polish from the bible known gaps: night lamp pools at street_eye, dark asphalt patches at the night junction, painted boards instead of Label3D, an OFL Devanagari font, AI texture cards, real car, people and tree models; (4) area sheets (P0-035) before any area build; (5) streamed-city budgets from the architecture record; (6) optional: lookproof --approve for several sets.",
+        "From P0-020: GAME.md still says no cinematic cutscenes (line 312) and describes the map as islands with a 7.2 km2 pilot; rewrite to the seamless city and cutscene runtime after archsignoff (P0-022 record). Per-system budgets into perf_budgets.json and TECH.md after sign-off."
       ],
       "created": "2026-11-10T13:04:46.154Z"
     },
