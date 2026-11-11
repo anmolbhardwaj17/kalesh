@@ -1,6 +1,6 @@
 {
   "_doc": "Written only by node harness/bin/task.mjs. Phases run in order; P0 (ADOPT + STYLE DISCOVERY) waits for the owner by design and needs task.mjs signoff and task.mjs archsignoff before its gate passes. Later phases are added by the planner at the end of P0 (task.mjs phase-add) from the game's real state.",
-  "updated": "2026-11-11T10:01:01.269Z",
+  "updated": "2026-11-11T10:08:41.248Z",
   "phases": [
     {
       "id": "P0",
@@ -582,7 +582,8 @@
         "From P0-017: tile streaming attaches colliders in chunks of about 1300 triangles (one-piece K3 tile is a 17 ms frame); colliders bridge deck joints (4 cm gap drops a wheel ray); KEEP tune tops at 106 km/h against 140 in design, auto cannot hold 40 km/h at full lock: tune tasks; SimClock rework to C1 after sign-off; N1/N2, K2, LANG2 not measured.",
         "From P0-018: Microsoft footprints are CDLA Permissive 2.0 (MAP_REPAIR.md and DELHI_WORLD.md still say ODbL, correct them); confirm per-rule low impact bounds for AR1; metro and foot bridge rules not benched; Open Buildings 2.5D heights need an Earth Engine account (owner); LM 50 m rule becomes inside footprint or within 50 m; GEDTM30 must be smoothed (raw fails).",
         "From P0-019: road model passes all checks at ITO and CP (0 overlap, 0 continuity breaks, 0 floating). Owner decision: allow npm packages clipper2-ts (polygon union, Boost licence) and earcut (ISC) for junction union and ground triangulation; install was refused by permissions. Production needs: fit step as logged repairs, constrained Delaunay ground, lane UVs and shader markings, hero widths need a survey or owner check.",
-        "From P0-029: stitch passes (0 open ports, 27 barrier-closed waiting for authored connectors, landmark error under 1 mm, no rotation or mirror, bake 2.3 s). Unexplained thin spur below Chandni Chowk in top_all (likely the SC2 trial cross street) to name or remove in production. Production needs: one road graph per district plus connectors, clip lines square across big roads, 27 connectors, band vs generated street rule, TF2 under connectors, rail and river connectors, inspector editing."
+        "From P0-029: stitch passes (0 open ports, 27 barrier-closed waiting for authored connectors, landmark error under 1 mm, no rotation or mirror, bake 2.3 s). Unexplained thin spur below Chandni Chowk in top_all (likely the SC2 trial cross street) to name or remove in production. Production needs: one road graph per district plus connectors, clip lines square across big roads, 27 connectors, band vs generated street rule, TF2 under connectors, rail and river connectors, inspector editing.",
+        "Owner 2026-11-11 on the stitch top-down shot: 'so much gap plus what are these areas in map?'. The final map must read as one continuous city: no empty green between districts. Gaps are filled by real in-between areas (Paharganj, Karol Bagh, Daryaganj, ITO, Mandi House, Pragati Maidan, etc.) or generated filler city from area profiles, never bare ground. The layout recommendation must show this and how much compression closes the gaps."
       ],
       "created": "2026-11-10T13:04:46.154Z",
       "model": "fable",
