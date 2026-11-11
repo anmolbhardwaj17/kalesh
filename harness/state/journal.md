@@ -321,3 +321,4 @@ One line per event, written by task.mjs (start, done, fail, phase changes, inbox
 - 2026-11-11 19:43 [P1-002] start (attempt 1): Stylised B is the default look, driven by the day clock
 - 2026-11-11 20:05 [P1-028] added: Live relight from the day clock
 - 2026-11-11 20:05 [P1-002] done: No --style now loads stylised B; DayClock autoload starts at 15:00 and drives the light; --time and --light pin it; --style=none keeps the flat look for fast scenarios; time of day in state() and settable by hook. Look unchanged: golden compare mean 0.00 to 0.03. Self-check: typecheck, 335 vitest, 64 Godot tests, smoke 40/40, quick OK. Follow-up: live relight task added.
+- 2026-11-11 20:05 [P1-004] start (attempt 1): Consolidate decisions.md and the knowledge files
