@@ -157,6 +157,26 @@ export function giveWay(strips: readonly Strip[], joints: readonly Joint[]): Edg
   return { strips: touched.size, stations, areaM2: Math.round(area * 10) / 10, rounds };
 }
 
+/**
+ * The raised edge widths every junction arm meets at its strip end, [left, right] looking away from the junction
+ * (P1-033): the junction builder's raised corners take these, not the nominal cross-section. Written into the arms.
+ */
+export function armEdges(strips: readonly Strip[], junctions: readonly { arms: { strip: number; end: 'start' | 'end'; edges: [number, number] }[] }[]): void {
+  const r3 = (v: number): number => Math.round(v * 1000) / 1000 + 0;
+  for (const j of junctions) {
+    for (const a of j.arms) {
+      const s = strips[a.strip] as Strip;
+      const [cf, cl] = coreRange(s.lanes);
+      const f: Frame = { cf, cr: cl + 1 };
+      const st = (a.end === 'start' ? s.st[0] : s.st[s.st.length - 1]) as Station;
+      const l = widthOf(st, f, 'L');
+      const r = widthOf(st, f, 'R');
+      // looking away from the junction runs with the station order at a start, against it at an end
+      a.edges = a.end === 'start' ? [r3(l), r3(r)] : [r3(r), r3(l)];
+    }
+  }
+}
+
 /** Each edge narrows at most EDGE_SLOPE metres per metre along the strip: a trim spreads to its neighbours. */
 function smooth(s: Strip, f: Frame, was: readonly [number, number][]): void {
   const n = s.st.length;

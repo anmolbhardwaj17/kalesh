@@ -81,16 +81,23 @@ function moveNode(g: BlockGraph, id: string, v: P2, own: ReadonlySet<GraphEdge>)
 
 const nodeKind = (g: BlockGraph, id: string): GraphNode['kind'] | null => g.nodes.find((n) => n.id === id)?.kind ?? null;
 
-/** Rule R-LANE-05: both roads move apart; the ends whose nodes may move go with them. */
+/**
+ * Rules R-LANE-05 and R-LANE-06: both roads move apart; the ends whose nodes may move go with them. `hold` names a
+ * road that stays (a hero road): the other one takes the whole move. `mark` is the mark that settles the pair
+ * (beside_with for R-LANE-05, surface_with for R-LANE-06).
+ */
 export function shiftBeside(state: ShiftState, a: GraphEdge, b: GraphEdge, p: Params, issue: string): ShiftResult {
   const g = state.graph;
   const minSep = Number(p['min_sep']);
+  const hold = p['hold'] === undefined ? null : String(p['hold']);
+  const mark = p['mark'] === 'surface_with' ? 'surface_with' : 'beside_with';
+  const share = (e: GraphEdge): number => (hold === null ? 0.5 : e.id === hold ? 0 : 1);
   const shared = new Set([a.a, a.b].filter((n) => n === b.a || n === b.b));
-  const stays = (e: GraphEdge, id: string): boolean => e.a === e.b || shared.has(id) || nodeKind(g, id) === 'map_edge';
-  const fa = shiftField(a, b.pts, minSep, 0.5, { start: stays(a, a.a), end: stays(a, a.b) }, blendLength(a));
-  const fb = shiftField(b, a.pts, minSep, 0.5, { start: stays(b, b.a), end: stays(b, b.b) }, blendLength(b));
+  const stays = (e: GraphEdge, id: string): boolean => e.a === e.b || shared.has(id) || nodeKind(g, id) === 'map_edge' || e.id === hold;
+  const fa = shiftField(a, b.pts, minSep, share(a), { start: stays(a, a.a), end: stays(a, a.b) }, blendLength(a));
+  const fb = shiftField(b, a.pts, minSep, share(b), { start: stays(b, b.a), end: stays(b, b.b) }, blendLength(b));
   const done = (e: GraphEdge, other: GraphEdge, m: number): void => {
-    addMark(state.marks, e.id, { shifted_m: Math.max(Number(state.marks[e.id]?.['shifted_m'] ?? 0), m), beside_with: withList(state.marks[e.id]?.['beside_with'], other.id), by: issue });
+    addMark(state.marks, e.id, { shifted_m: Math.max(Number(state.marks[e.id]?.['shifted_m'] ?? 0), m), [mark]: withList(state.marks[e.id]?.[mark], other.id), by: issue });
   };
   if (fa.maxShift < 0.001 && fb.maxShift < 0.001) {
     // the two come close only where both fade (beside a fixed end): the pair is settled as drawn

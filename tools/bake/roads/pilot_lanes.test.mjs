@@ -66,9 +66,13 @@ describe.skipIf(missing.length > 0)(`pilot centre lane model${reason ? ` (skippe
     expect(lanes.counts.strips).toBeGreaterThan(5000);
     expect(lanes.counts.driveLanes).toBeGreaterThan(8000);
     expect(lanes.problems).toEqual([]);
-    // strips on each other in plan on the whole pilot (P1-012: 4,917 m2 in 494 pairs; P1-031: 819 m2 in 55 pairs, the
-    // ones left are listed in decisions.md "Side by side roads (P1-031)")
-    expect(lanes.overlap.areaM2).toBeLessThan(850);
+    // strips on each other in plan on the whole pilot (P1-012: 4,917 m2 in 494 pairs; P1-031: 819 m2 in 55 pairs;
+    // P1-033: under 1 m2, the pairs left are listed in decisions.md "The last road overlaps (P1-033)")
+    expect(lanes.overlap.areaM2).toBeLessThan(1);
+    // the repair step's lane feedback (rule R-LANE-06) ends with no new conflict to hand back
+    const fb = health.repair.laneFeedback;
+    expect(fb.rounds.length).toBeGreaterThan(0);
+    expect(fb.rounds[fb.rounds.length - 1].overlapM2).toBe(lanes.overlap.areaM2);
     for (const f of [lanes.files.model, lanes.files.laneGraph]) expect(fs.existsSync(path.join(ROOT, f))).toBe(true);
     expect(lanes.files.pictures.filter((p) => p.endsWith('.png')).map((p) => path.basename(p)).sort()).toEqual(['lanes_pilot_cp.png', 'lanes_pilot_ito.png']);
   }, T);

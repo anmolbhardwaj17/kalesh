@@ -264,6 +264,53 @@ export const besideRoads: Rule = {
   repair: (i, p) => patchOf(i, p),
 };
 
+/** How far from a lane conflict's point R-LANE-06 looks for an edge of its ways under a new id (m). */
+const CONFLICT_REACH_M = 25;
+
+export const laneSurfaces: Rule = {
+  id: 'R-LANE-06',
+  area: 'lanes',
+  title: 'Lane surfaces of two roads lie on each other',
+  confidence: 0.8,
+  detect(ctx: RuleContext): Issue[] {
+    const out: Issue[] = [];
+    // conflicts the lane model handed back (roads/surfaces.ts): what the graph widths do not show
+    for (const c of ctx.env.laneConflicts ?? []) {
+      const at = { x: c.x, z: c.z };
+      // by id, else the edge of the same ways nearest the point: a repair may have cut or joined it under another id
+      const find = (id: string, ways: readonly string[]): GraphEdge | null => {
+        const e = ctx.edges.get(id);
+        if (e) return e;
+        let best: GraphEdge | null = null;
+        let bestD = CONFLICT_REACH_M;
+        for (const n of ctx.near(at, CONFLICT_REACH_M)) {
+          const cand = n.seg.edge;
+          if (n.d < bestD && cand.pieces.some((p) => ways.includes(p.way))) {
+            best = cand;
+            bestD = n.d;
+          }
+        }
+        return best;
+      };
+      const a = find(c.a, c.waysA);
+      const b = find(c.b, c.waysB);
+      if (!a || !b || a === b || String(ctx.marks[a.id]?.['surface_with'] ?? '').split(',').includes(b.id)) continue;
+      const pa = projectOn(at, a.pts);
+      const d = projectOn({ x: pa.x, z: pa.z }, b.pts).d;
+      if (d >= c.minSep - 0.05) continue;
+      const hold = c.hold === null ? null : c.hold === c.a ? a : b;
+      const shift = r3((c.minSep - d) / (hold ? 1 : 2));
+      const moves = hold === a ? [b] : hold === b ? [a] : [a, b];
+      const how = hold ? `${moves[0]!.id} moves up to ${shift} m away from the hero road ${hold.id}` : `each moves up to ${shift} m sideways, away from the other`;
+      out.push(ctx.issue(laneSurfaces, at, [a.id, b.id], moves, 0.8, `${r2(d)} m between the centre lines, the lane model needs ${c.minSep} m (${c.areaM2} m2 of surface on each other)`, [
+        ctx.proposal('move_node', { op: 'shift_apart', a: a.id, b: b.id, min_sep: c.minSep, shift_m: shift, move_nodes: true, mark: 'surface_with', ...(hold ? { hold: hold.id } : {}) }, 0.8, { kind: 'carriageway_shift', m: shift }, `The lane model builds ${a.id} and ${b.id} wider than their graph widths (a hero cross-section, a split zone, more lanes than the width tag): their surfaces lie on each other over ${c.areaM2} m2. ${how}, and a node at the end of the stretch moves with it`, moves[0]!.pts),
+      ]));
+    }
+    return out;
+  },
+  repair: (i, p) => patchOf(i, p),
+};
+
 const smoothstep = (t: number): number => {
   const v = Math.max(0, Math.min(1, t));
   return v * v * (3 - 2 * v);

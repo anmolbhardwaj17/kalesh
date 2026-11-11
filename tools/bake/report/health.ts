@@ -154,6 +154,8 @@ export interface RepairRecord {
   /** Queued issues with no proposal that has a confidence, a reasoning line and a preview: 0, or the bake stops. */
   queuedWithoutProposal: number;
   heroEdges: number;
+  /** The lane model's feedback (repair/feedback.ts, rule R-LANE-06): each round's strip overlap and the conflicts handed back. */
+  laneFeedback?: { rounds: { overlapM2: number; pairs: number; conflicts: number; skipped: Record<string, number> }[]; conflicts: number };
 }
 
 export const GATE_KEYS = ['openPorts', 'floatingEnds', 'unjoinedEnds', 'overlappingRoadFaces', 'laneContinuityBreaks', 'tapersOutOfLimits'] as const;

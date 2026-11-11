@@ -179,7 +179,7 @@ export function buildPaths(c: NetCtx, cl: ClusterPhase, sp: StripPhase): PathPha
         const a = arms[i] as At;
         const s = strips[a.strip] as Strip;
         const crossing = (control === 'signals' || near(crossingsAt, 30) || (MAIN.has(s.cls) && s.lanes.some((l) => l.type === 'footpath'))) && !s.link && Math.abs(endOf(s, 'end').s - endOf(s, 'start').s) > 14;
-        return { strip: a.strip, end: a.end, edge: (source[ap.end.edge] as GraphEdge).id, cut: Math.round(ap.cut * 1000) / 1000, stopBack: crossing ? 4 : 0, crossing };
+        return { strip: a.strip, end: a.end, edge: (source[ap.end.edge] as GraphEdge).id, cut: Math.round(ap.cut * 1000) / 1000, stopBack: crossing ? 4 : 0, crossing, edges: [0, 0] as [number, number] };
       }),
       pairs: pl.pairs, paths,
     });

@@ -142,7 +142,7 @@ export function shiftField(a: GraphEdge, b: readonly P2[], minSep: number, share
     // beyond the end of b: nothing beside this point
     if ((pr.i === 0 && pr.t <= 0) || (pr.i === last && pr.t >= 1)) return 0;
     const need = minSep - pr.d;
-    return need <= 0 ? 0 : need * share + 0.02;
+    return need <= 0 || share <= 0 ? 0 : need * share + 0.02;
   });
   // the move spreads along the road, growing 1 m per SHIFT_RAMP m
   for (let i = 1; i < size.length; i++) size[i] = Math.max(size[i] as number, (size[i - 1] as number) - ((cum[i] as number) - (cum[i - 1] as number)) / SHIFT_RAMP);

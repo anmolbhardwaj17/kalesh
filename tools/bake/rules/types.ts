@@ -5,6 +5,7 @@
 import type { P2 } from '../geom.ts';
 import type { Tags } from '../osm.ts';
 import type { HeroSpec } from '../roads/hero.ts';
+import type { LaneConflict } from '../roads/surfaces.ts';
 
 export type PatchAction = 'connect' | 'terminate' | 'remove' | 'set_tag' | 'move_node' | 'set_lanes' | 'set_height' | 'replace_geometry' | 'disable_repair';
 
@@ -114,6 +115,8 @@ export interface RuleEnv {
   walkways?: readonly (readonly P2[])[];
   /** 'stage': the outline is a stage inside its block, roads go on in a later stage; 'map': the true map edge. */
   mapEdge?: 'stage' | 'map';
+  /** Lane surfaces on each other that the lane model handed back (roads/surfaces.ts, rule R-LANE-06). */
+  laneConflicts?: readonly LaneConflict[];
   /** Map edge node id to the authored connector that takes the road over. */
   connectors?: ReadonlyMap<string, string>;
 }

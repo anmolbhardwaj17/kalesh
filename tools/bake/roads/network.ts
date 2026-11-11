@@ -7,11 +7,13 @@
 // merge; streets that change their count at a junction widen over a taper on the narrower side (netzones.ts);
 // junction clusters with the cut of every arm; an edge too short to hold its cuts, or to give a turn its radius,
 // becomes part of the junction (netclusters.ts); strips; joints; connecting lane paths; the explained ends
-// (netstrips.ts). Last, the edge lanes of strips side by side give way (edges.ts). Then two fit rounds at most: a road too short for the taper it needs takes the lane count it would
+// (netstrips.ts). Last, the edge lanes of strips side by side give way (edges.ts) and a free end that runs into another
+// road stops short of it (clip.ts). Then two fit rounds at most: a road too short for the taper it needs takes the lane count it would
 // taper to, and the model is built again. Pure.
 import type { GraphEdge } from '../graph/build.ts';
 import { roadGraph, filterEdges } from './blockgraph.ts';
-import { giveWay } from './edges.ts';
+import { clipEnds } from './clip.ts';
+import { armEdges, giveWay } from './edges.ts';
 import type { RoadGraph } from './blockgraph.ts';
 import type { HeroSpec } from './hero.ts';
 import type { CrossSection } from './model.ts';
@@ -58,8 +60,14 @@ export function buildLaneModel(input: LaneModelInput): LaneBuild {
   const te = Date.now();
   build.edgeTrims = giveWay(build.strips, build.joints);
   build.ms['edges'] = Date.now() - te;
+  // a free end (a dead end, the stage edge) that runs into another road's surface stops where that surface begins
+  const tc = Date.now();
+  build.endClips = clipEnds(build.strips, build.joints, build.ends);
+  build.ms['clips'] = Date.now() - tc;
   build.ms['total'] = Date.now() - t0;
   roundModel(build);
+  // the raised edge widths each junction arm meets, after the edges gave way (for the junction mesh, P1-014)
+  armEdges(build.strips, build.junctions);
   return build;
 }
 
@@ -92,7 +100,7 @@ function attempt(input: LaneModelInput, road: RoadGraph, fixed: Map<string, numb
   lap('junctions');
   const base = {
     road, plans: z.plans, streets: z.streets, zones: z.zones, forks: z.forks, widenings, fitted: [], problems: c.problems, rounds: 0, ms,
-    edgeTrims: { strips: 0, stations: 0, areaM2: 0, rounds: 0 },
+    edgeTrims: { strips: 0, stations: 0, areaM2: 0, rounds: 0 }, endClips: { ends: 0, stations: 0, metres: 0 },
   };
   if (cl.retry) {
     return {

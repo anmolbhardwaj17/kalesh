@@ -4,7 +4,9 @@
 // two carriageways of one street are closed by a straight median nose. Every arm is cut back behind its corners,
 // and the ring of cut lines and corners is one surface. Raised corners (kerb and footpath) are bands outside it.
 // If the construction fails (a ring that crosses itself), the plain fallback takes over: every arm is cut on a
-// circle and the cut lines are joined by straight chords (stand-in for the J2 polygon union, see site.ts).
+// circle and the cut lines are joined by straight chords (stand-in for the J2 polygon union, see site.ts). Arms whose
+// carriageways lie on each other beyond their cuts (a slow fork, arms that leave side by side) are cut back to where
+// they come clear (clearCuts, P1-033).
 import type { P2 } from '../geom.ts';
 import { Curve, area2, leftOf, lerp, segCross, selfCrossing, unit } from './curve.ts';
 import type { GEdge, GEnd, Graph } from './graph.ts';
@@ -26,6 +28,8 @@ export interface ArmPlan {
   avail: number;
   cut: number;
   radius: number;
+  /** The cut that keeps this arm's carriageway clear of the other arms' (P1-033); the J2 fallback keeps it too. */
+  clear: number;
 }
 
 /** One vertex of a planned ring: a lane border on an arm's cut line (exact strip vertex later), or a free point. */
@@ -109,7 +113,7 @@ function armPlan(graph: Graph, plans: EdgePlan[], end: GEnd, centre: P2): ArmPla
   const p = curve.at(Math.min(12, curve.length * 0.5));
   return {
     end, curve, cs, borders: csBorders(cs), coreFirst, coreLast, angle: Math.atan2(-(p.z - centre.z), p.x - centre.x),
-    avail: Math.max(1, (plan.t1 - plan.t0) * 0.45), cut: 1.5, radius: classDefaults(e.cls).cornerRadius,
+    avail: Math.max(1, (plan.t1 - plan.t0) * 0.45), cut: 1.5, radius: classDefaults(e.cls).cornerRadius, clear: 0,
   };
 }
 
@@ -124,8 +128,10 @@ const samplesDown = (from: number, to: number, step = 2): number[] => {
 /**
  * Plans one junction: the corners, the cut of every arm (written into the edge plans) and the ring. `minCut` keeps
  * a little of every arm inside the junction even when no corner asks for it; `minCutOf` is a longer cut one arm asks for.
+ * With `roomOf` (the longest cut an arm may take), arms whose carriageways lie on each other beyond their cuts (a fork
+ * whose branches separate slowly, two arms running side by side) are cut back to where they come apart (clearCuts).
  */
-export function planJunction(graph: Graph, plans: EdgePlan[], id: string, nodeIds: number[], ends: GEnd[], minCut = 1.5, minCutOf?: (end: GEnd) => number): JunctionPlan {
+export function planJunction(graph: Graph, plans: EdgePlan[], id: string, nodeIds: number[], ends: GEnd[], minCut = 1.5, minCutOf?: (end: GEnd) => number, roomOf?: (end: GEnd, arm: ArmPlan) => number): JunctionPlan {
   const pts = nodeIds.map((n) => graph.nodes.get(n) as P2);
   const centre = { x: pts.reduce((s, p) => s + p.x, 0) / pts.length, z: pts.reduce((s, p) => s + p.z, 0) / pts.length };
   const arms = ends.map((e) => armPlan(graph, plans, e, centre)).sort((a, b) => a.angle - b.angle);
@@ -199,6 +205,10 @@ export function planJunction(graph: Graph, plans: EdgePlan[], id: string, nodeId
   }
   // an arm may ask for a longer cut of its own (room for a connecting lane path to turn on its radius)
   for (const a of arms) a.cut = Math.min(Math.max(a.cut, minCutOf ? minCutOf(a.end) : 0), Math.max(minCut, a.avail, minCutOf ? minCutOf(a.end) : 0));
+  if (roomOf && n > 1) {
+    clearCuts(arms, (a) => roomOf(a.end, a));
+    for (const a of arms) a.cut = Math.max(a.cut, a.clear);
+  }
 
   const plan: JunctionPlan = { id, nodes: nodeIds, centre, arms, corners: [], ring: [], bands: [], method: 'J1' };
   const fill = (): void => {
@@ -331,7 +341,7 @@ export function planJunction(graph: Graph, plans: EdgePlan[], id: string, nodeId
       for (const a of arms) {
         let t = 0;
         while (t < a.avail && Math.hypot(a.curve.at(t).x - centre.x, a.curve.at(t).z - centre.z) < radius) t += 0.5;
-        a.cut = Math.max(minCut, t, minCutOf ? minCutOf(a.end) : 0);
+        a.cut = Math.max(minCut, t, minCutOf ? minCutOf(a.end) : 0, a.clear);
       }
       plan.ring = [];
       plan.bands = [];
@@ -352,6 +362,129 @@ export function planJunction(graph: Graph, plans: EdgePlan[], id: string, nodeId
     else p.t1 = Math.min(p.t1, p.edge.len - a.cut);
   }
   return plan;
+}
+
+const CLEAR_STEP_M = 2;
+/** How far out along an arm clearCuts looks for another arm on it (m). */
+const CLEAR_REACH_M = 400;
+/** Carriageways closer than this (m of overlap along an axis) count as lying on each other. */
+const CLEAR_EPS_M = 0.02;
+
+interface BandQuad {
+  t0: number;
+  t1: number;
+  p: P2[];
+  minX: number;
+  maxX: number;
+  minZ: number;
+  maxZ: number;
+}
+
+/** The carriageway of an arm as quads of CLEAR_STEP_M, from its node out to `range` metres. */
+function bandQuads(a: ArmPlan, range: number): BandQuad[] {
+  const l = a.borders[a.coreFirst] as number;
+  const r = a.borders[a.coreLast + 1] as number;
+  const out: BandQuad[] = [];
+  // the curve's own points (a reference line is sampled every metre) with the tangent over a few metres, like smoothAt
+  const { pts, cum } = a.curve;
+  const n = pts.length;
+  const edge = (k: number): { l: P2; r: P2 } => {
+    const p = pts[k] as P2;
+    const u = pts[Math.max(0, k - 3)] as P2;
+    const v = pts[Math.min(n - 1, k + 3)] as P2;
+    const t = unit(v.x - u.x, v.z - u.z);
+    const nn = leftOf(t.x, t.z);
+    return { l: { x: p.x + nn.nx * l, z: p.z + nn.nz * l }, r: { x: p.x + nn.nx * r, z: p.z + nn.nz * r } };
+  };
+  let k = 0;
+  let prev = edge(0);
+  while (k < n - 1 && (cum[k] as number) < range) {
+    let m = k + 1;
+    while (m < n - 1 && (cum[m] as number) - (cum[k] as number) < CLEAR_STEP_M) m++;
+    const next = edge(m);
+    const p = [prev.l, prev.r, next.r, next.l];
+    out.push({ t0: cum[k] as number, t1: cum[m] as number, p, minX: Math.min(p[0]!.x, p[1]!.x, p[2]!.x, p[3]!.x), maxX: Math.max(p[0]!.x, p[1]!.x, p[2]!.x, p[3]!.x), minZ: Math.min(p[0]!.z, p[1]!.z, p[2]!.z, p[3]!.z), maxZ: Math.max(p[0]!.z, p[1]!.z, p[2]!.z, p[3]!.z) });
+    prev = next;
+    k = m;
+  }
+  return out;
+}
+
+/** True when two convex polygons overlap by more than `eps` along every separating axis. */
+export function convexOverlap(p: readonly P2[], q: readonly P2[], eps: number): boolean {
+  for (const poly of [p, q]) {
+    for (let i = 0; i < poly.length; i++) {
+      const a = poly[i] as P2;
+      const b = poly[(i + 1) % poly.length] as P2;
+      const len = Math.hypot(b.x - a.x, b.z - a.z);
+      if (len < 1e-9) continue;
+      const ax = -(b.z - a.z) / len;
+      const az = (b.x - a.x) / len;
+      let p0 = Infinity;
+      let p1 = -Infinity;
+      let q0 = Infinity;
+      let q1 = -Infinity;
+      for (const v of p) {
+        const d = v.x * ax + v.z * az;
+        p0 = Math.min(p0, d);
+        p1 = Math.max(p1, d);
+      }
+      for (const v of q) {
+        const d = v.x * ax + v.z * az;
+        q0 = Math.min(q0, d);
+        q1 = Math.max(q1, d);
+      }
+      if (Math.min(p1, q1) - Math.max(p0, q0) <= eps) return false;
+    }
+  }
+  return true;
+}
+
+/**
+ * Arms whose carriageways lie on each other beyond their cuts (P1-033): a one-way fork the cluster rule builds as a
+ * junction, whose branches come apart over tens of metres, or two arms that leave a junction side by side. For every
+ * pair of carriageway quads that overlap outside the junction, the arm that needs the shorter step takes it: its cut
+ * moves past the quad. A cut never goes past the arm's room. Writes `clear` of every arm.
+ */
+export function clearCuts(arms: readonly ArmPlan[], roomOf: (a: ArmPlan) => number): void {
+  const room = arms.map((a) => Math.max(a.cut, roomOf(a)));
+  // the whole arm is looked at (to CLEAR_REACH_M): an arm may have to step past a stretch of another arm far out
+  const quads = arms.map((a) => bandQuads(a, CLEAR_REACH_M));
+  const inRoom = quads.map((q, i) => q.filter((x) => x.t1 <= (room[i] as number) + 1e-6));
+  const boxOf = (list: readonly BandQuad[]): { minX: number; maxX: number; minZ: number; maxZ: number } => ({
+    minX: Math.min(...list.map((x) => x.minX)), maxX: Math.max(...list.map((x) => x.maxX)), minZ: Math.min(...list.map((x) => x.minZ)), maxZ: Math.max(...list.map((x) => x.maxZ)),
+  });
+  const boxes = inRoom.map((q) => (q.length ? boxOf(q) : null));
+  const hits = (q: BandQuad, b: { minX: number; maxX: number; minZ: number; maxZ: number } | null): boolean => b !== null && q.minX < b.maxX && b.minX < q.maxX && q.minZ < b.maxZ && b.minZ < q.maxZ;
+  const want = arms.map((a) => a.cut);
+  for (let round = 0; round < 3; round++) {
+    let moved = false;
+    for (let i = 0; i < arms.length; i++) {
+      for (let j = i + 1; j < arms.length; j++) {
+        // pairs of quads where at least one side could step past: one in its arm's room, the other anywhere near
+        const pairs: [BandQuad, BandQuad][] = [];
+        for (const qa of inRoom[i] as BandQuad[]) for (const qb of quads[j] as BandQuad[]) if (hits(qb, boxes[i] ?? null)) pairs.push([qa, qb]);
+        for (const qb of inRoom[j] as BandQuad[]) for (const qa of quads[i] as BandQuad[]) if (qa.t1 > (room[i] as number) + 1e-6 && hits(qa, boxes[j] ?? null)) pairs.push([qa, qb]);
+        for (const [qa, qb] of pairs) {
+          if (qa.t1 <= (want[i] as number) + 1e-6 || qb.t1 <= (want[j] as number) + 1e-6) continue;
+          if (qa.minX >= qb.maxX || qb.minX >= qa.maxX || qa.minZ >= qb.maxZ || qb.minZ >= qa.maxZ) continue;
+          if (!convexOverlap(qa.p, qb.p, CLEAR_EPS_M)) continue;
+          const fitsA = qa.t1 <= (room[i] as number) + 1e-6;
+          const fitsB = qb.t1 <= (room[j] as number) + 1e-6;
+          const needA = qa.t1 - (want[i] as number);
+          const needB = qb.t1 - (want[j] as number);
+          if (fitsA && (needA <= needB || !fitsB)) want[i] = qa.t1;
+          else if (fitsB) want[j] = qb.t1;
+          else continue;
+          moved = true;
+        }
+      }
+    }
+    if (!moved) break;
+  }
+  arms.forEach((a, i) => {
+    a.clear = (want[i] as number) > a.cut + 1e-6 ? Math.min(room[i] as number, (want[i] as number) + 0.3) : 0;
+  });
 }
 
 /** The planned position of a ring (cut vertices from the arm curves, not yet the exact strip vertices). */

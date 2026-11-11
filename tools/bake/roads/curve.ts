@@ -101,9 +101,12 @@ export class Curve {
 /**
  * A reference line from an OSM way: a Catmull-Rom spline through its points, sampled every `step` metres, so the
  * tangent turns smoothly and a ribbon does not fold at a vertex. Ends keep their points exactly; an end direction
- * (a unit vector along the line) makes two edges that meet at a node leave it on one tangent.
+ * (a unit vector along the line) makes two edges that meet at a node leave it on one tangent. `maxDev` (metres) caps how
+ * far a span may bow out from its chord: both tangents of a span shorten together until the bound holds (a cubic
+ * Hermite span lies within 4/27 of the sum of its tangents' sideways parts), so a long straight run into a right angle
+ * corner keeps to its line and turns near the corner instead of bowing several metres off it.
  */
-export function smoothLine(pts: readonly P2[], step = 1, startDir?: P2, endDir?: P2): Curve {
+export function smoothLine(pts: readonly P2[], step = 1, startDir?: P2, endDir?: P2, maxDev = Infinity): Curve {
   const raw = new Curve(pts);
   const p = raw.pts;
   const out: P2[] = [];
@@ -120,8 +123,18 @@ export function smoothLine(pts: readonly P2[], step = 1, startDir?: P2, endDir?:
       return l > len && l > 0 ? { x: (ax / l) * len, z: (az / l) * len } : { x: ax, z: az };
     };
     // an end may be given a direction: the one it shares with the road it runs on into at its node
-    const m1 = i === 0 && startDir ? { x: startDir.x * len, z: startDir.z * len } : lim((p2.x - p0.x) / 2, (p2.z - p0.z) / 2);
-    const m2 = i + 2 === p.length && endDir ? { x: endDir.x * len, z: endDir.z * len } : lim((p3.x - p1.x) / 2, (p3.z - p1.z) / 2);
+    let m1 = i === 0 && startDir ? { x: startDir.x * len, z: startDir.z * len } : lim((p2.x - p0.x) / 2, (p2.z - p0.z) / 2);
+    let m2 = i + 2 === p.length && endDir ? { x: endDir.x * len, z: endDir.z * len } : lim((p3.x - p1.x) / 2, (p3.z - p1.z) / 2);
+    if (maxDev < Infinity && len > 0) {
+      const cx = (p2.x - p1.x) / len;
+      const cz = (p2.z - p1.z) / len;
+      const side = (4 / 27) * (Math.abs(m1.x * cz - m1.z * cx) + Math.abs(m2.x * cz - m2.z * cx));
+      if (side > maxDev) {
+        const k = maxDev / side;
+        m1 = { x: m1.x * k, z: m1.z * k };
+        m2 = { x: m2.x * k, z: m2.z * k };
+      }
+    }
     for (let k = 0; k < n; k++) {
       const t = k / n;
       const t2 = t * t;
