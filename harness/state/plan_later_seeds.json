@@ -1,0 +1,264 @@
+[
+  {
+    "agent": "planner",
+    "priority": 1,
+    "kind": "feature",
+    "deps": [],
+    "phase": "P3",
+    "title": "Plan phase P3: life and action systems",
+    "desc": "Planner mode PLAN_PHASE P3. This phase holds seed tasks from the game plan (P0-023), and task.mjs phase-add does not mark a phase as unplanned, so this task is the planning step: every seed depends on it. Read the phase in harness/state/backlog.json (goal, exit, milestones), harness/state/next_phase_notes.md (the section for P3), GAME.md (pillars, capability list, the sections the phase needs), TECH.md, VERIFY.md \"Writing acceptance criteria\" and the knowledge files. Write 12 to 35 tasks to harness/state/plan_P3.json and add them with task.mjs add-json. Fold in the seed tasks already in the phase with task.mjs deps --add, task.mjs edit and task.mjs order: split a seed that is too big, never duplicate one. Every task names its pillar; every mission task carries the four fun criteria, the driving share check and the respect rule check; every area or art task carries the respect rule and its area sheet. Check the GAME.md capability list and say which items the phase builds. Then run task.mjs planned P3. For this phase the notes list the systems in build order (nav and lane graph export first) and the items moved here from the foundation phase (the combat foundation and police). The HUD build seed stays dependent on P1-003 (Show Anmol the HUD mockups): if he has not answered when this phase starts, put P1-003 first and plan everything else so it does not wait for the HUD. Pillar: base task, it plans the work that serves the pillars named in the phase goal.",
+    "accept": [
+      "harness/state/plan_P3.json exists and the phase has 12 to 35 open tasks, each with a \"Pillar:\" line and checkable acceptance",
+      "Every seed task of the phase is folded in (kept, edited or split with a note), none duplicated",
+      "node harness/bin/task.mjs planned P3 has been run",
+      "The return lists the ids and titles added, and any design change with its decisions.md entry"
+    ]
+  },
+  {
+    "agent": "builder",
+    "priority": 3,
+    "kind": "feature",
+    "deps": [
+      "#1",
+      "P1-003"
+    ],
+    "phase": "P3",
+    "title": "HUD build: the slice components",
+    "model": "opus",
+    "desc": "Seed from the game plan. No HUD is built before Anmol has seen the mockups (decisions.md \"HUD gets its own discovery (Anmol)\"): this task depends on P1-003 and follows his answers in harness/design/HUD.md \"Answers\". Build the SLICE components of HUD.md \"Component list\" in game/ui/ in the signed look (STYLE_BIBLE.md \"UI\"): the minimap with the objective marker and police, health, the wanted level beacons, money, weapon and ammo, the goal line and the mission timer, speed in a vehicle, prompts, and the hide rules (story scenes, the map screen, pause). Fonts are OFL faces that cover Devanagari (HUD.md names Teko and Mukta), added with their licence to the credits data. Every element is readable through debug.hud. The stand-in HUD (game/ui/standin_hud.gd) is retired. The planner of P3 may split this seed (minimap and route guidance, wanted and combat, the mission cards). Pillar: three lives, one city (the HUD carries the lead, the goal and the wanted level of each life), and filmi, never cheap (quiet until needed).",
+    "accept": [
+      "Driving pose (lookproof view hud_play): the HUD covers under 9% of the frame and nothing but world markers sits in the centre 40% by 50% box",
+      "Safe margins of at least 64 px left and right and 56 px top and bottom at 1920x1080; no text under 15 px at 1080p",
+      "Devanagari renders with correct conjuncts and matras: a shot of the place names in HUD.md \"Checkable rules\" is read against the mockups",
+      "The objective shows within 1 s of a mission start and after every new objective (event hud_objective with the text)",
+      "The beacon count equals the wanted level at every change and the state word matches seen or searching (scenario)",
+      "Every HUD element is readable through debug.hud (visible, text, value); the HUD and subtitles never cover the player (debug.shotProblems)",
+      "HUD frame cost is 0.1 ms GPU or less in the perf scenario (perf_budgets.json systems), or the measured number is recorded with a reason",
+      "The verifier reads 4 shots (driving, on foot, combat with wanted, mission passed) against HUD.md and Anmol's answers; npm run typecheck, npm test and node harness/bin/verify.mjs --quick are green, with no engine or console errors"
+    ]
+  },
+  {
+    "agent": "builder",
+    "priority": 3,
+    "kind": "feature",
+    "deps": [
+      "#1"
+    ],
+    "phase": "P3",
+    "title": "Cutscene runtime: data-file scenes, one player, skip to a declared end state",
+    "desc": "Seed from the game plan (owner: decisions.md \"Cutscenes and story telling\"; signed design: TECH.md \"Story runtime (CS2, DG1, LIP2 then LIP1, FC2, SB1, SK1)\"). The slice gets short in-engine scenes; the big directed cutscenes with lip sync and face sets are RELEASE and come with the acts once voices exist. game/story/cutscene_player.gd and game/camera/cutscene_camera.gd: a cutscene is a data file game/data/cutscenes/<id>.json with shots (camera mark, lens, move, length: cuts, push in, dolly, orbit, handheld sway), actor marks, library animation clip names, look-at targets, lines by id and events. One player runs them on the sim clock. The verifier can seek to any time. Every cutscene declares its end state (actors, vehicles, camera, mission flags, clock); skip is one button, always, and jumps there through the same code as a normal ending with a 0.3 s fade and a one-line recap; a checkpoint is saved when a cutscene starts. The HUD hides in story scenes. Build one test scene with two actors and three shots. Pillar: three lives, one city (the story of the three is told in scenes), and filmi, never cheap.",
+    "accept": [
+      "Test: the test scene played to the end and the same scene skipped at 3 different times give the same end state (actors, vehicles, camera, flags, clock)",
+      "Scenario cutscene_seek: at 5 seeked times every actor named in the shot is inside the frame (a hook reports screen boxes), and across the whole scene no actor that the shot names leaves the frame; flakecheck 3 runs (5 when low usage mode is off)",
+      "Skip returns control in under 1 s of sim after the fade and writes the recap line; a checkpoint exists from the scene start",
+      "A schema test rejects a cutscene file with no declared end state",
+      "Cutscene and dialogue work together stays inside the 0.4 ms CPU line of perf_budgets.json systems (measured); npm run typecheck, npm test and node harness/bin/verify.mjs --quick are green, with no engine or console errors"
+    ]
+  },
+  {
+    "agent": "builder",
+    "priority": 3,
+    "kind": "feature",
+    "deps": [
+      "#1"
+    ],
+    "phase": "P3",
+    "title": "Dialogue line player, Hinglish and English subtitles, and the jaw",
+    "desc": "Seed from the game plan (TECH.md \"Story runtime\": DG1, SB1, LIP2; STORY_OUTLINE.md section 5 for the talk rules). game/story/dialogue_player.gd and subtitles.gd, with game/characters/face.gd for the jaw. A line is data in game/data/dialogue/ (id, speaker, channel, priority, text per language, voice file id, length), written by the content writer. Channels: drive talk, phone, inner voice, radio, ambient; one queue per channel. A crash, a chase start or a higher priority line pauses drive talk, which resumes with a short pickup line. Inner voice and radio duck under talk; the Dialogue bus ducks Music and Ambience. Subtitles: every line has a Hinglish text (Latin letters) and an English text from the start, with the speaker name and a colour per speaker, on by default, in Godot translation tables (CSV); a Devanagari track can be added later as a third language. Mouths: with a voice file the jaw follows its baked loudness curve; with none, a timed talk flap for as long as the subtitle shows. Lip sync from voice files and the small face set are RELEASE (LIP1, FC2) and are not built here. Voice lines are requests on the dashboard; text placeholders until then. Pillar: three lives, one city (most of the story is told in play: drive talk, phone, inner voice).",
+    "accept": [
+      "Scenario dialogue_interrupt: a drive talk line is paused by a crash event within 0.2 s and resumes with a pickup line after the action ends; a higher priority line cuts in and the queue order is kept",
+      "Test: every line in game/data/dialogue/ has a Hinglish and an English text, a speaker and a length; no line is over 25 words",
+      "Subtitle shots in both languages are read by the verifier: speaker name and colour shown, text never over the player (debug.shotProblems), no missing glyph",
+      "The jaw moves while a line of its speaker shows and is still otherwise (hook reads the jaw value over a line with and without a voice file)",
+      "Ducking test on the audio buses: Music and Ambience drop while the Dialogue bus plays; npm run typecheck, npm test and node harness/bin/verify.mjs --quick are green, with no engine or console errors"
+    ]
+  },
+  {
+    "agent": "planner",
+    "priority": 1,
+    "kind": "feature",
+    "deps": [],
+    "phase": "P4",
+    "title": "Plan phase P4: the first playable slice",
+    "desc": "Planner mode PLAN_PHASE P4. This phase holds seed tasks from the game plan (P0-023), and task.mjs phase-add does not mark a phase as unplanned, so this task is the planning step: every seed depends on it. Read the phase in harness/state/backlog.json (goal, exit, milestones), harness/state/next_phase_notes.md (the section for P4), GAME.md (pillars, capability list, the sections the phase needs), TECH.md, VERIFY.md \"Writing acceptance criteria\" and the knowledge files. Write 12 to 35 tasks to harness/state/plan_P4.json and add them with task.mjs add-json. Fold in the seed tasks already in the phase with task.mjs deps --add, task.mjs edit and task.mjs order: split a seed that is too big, never duplicate one. Every task names its pillar; every mission task carries the four fun criteria, the driving share check and the respect rule check; every area or art task carries the respect rule and its area sheet. Check the GAME.md capability list and say which items the phase builds. Then run task.mjs planned P4. For this phase: the slice is M01 to M04, four solo missions with Bittu first, no merge and no switching (GAME.md \"First playable slice\"; decisions.md \"Act 1 story flow, no early merge\"). The content writer's task comes first so missions use its lines; one art task for the slice assets; a set piece polish task and the playtest build last. Play scripts live in harness/verify/milestones/<ID>.js. Align the M03 beats in milestones.json with decisions.md \"Pistol stays in the slice, used in M03\" if they still differ. Pillar: base task, it plans the work that serves the pillars named in the phase goal.",
+    "accept": [
+      "harness/state/plan_P4.json exists and the phase has 12 to 35 open tasks, each with a \"Pillar:\" line and checkable acceptance",
+      "Every seed task of the phase is folded in (kept, edited or split with a note), none duplicated",
+      "node harness/bin/task.mjs planned P4 has been run",
+      "The return lists the ids and titles added, and any design change with its decisions.md entry"
+    ]
+  },
+  {
+    "agent": "content-writer",
+    "priority": 3,
+    "kind": "content",
+    "deps": [
+      "#5"
+    ],
+    "phase": "P4",
+    "title": "Slice script: lines, scenes and passenger talk for M01 to M04",
+    "desc": "Seed from the game plan. From STORY_OUTLINE.md (Act 1, missions M01, M02, M03 and M04, with section 13 overriding) and milestones.json: write the lines for the four slice missions as dialogue data (game/data/dialogue/, the format of the line player) and the short scene scripts as cutscene data drafts (game/data/cutscenes/): the opening at the auto stand and the bag left behind (M01); Meera's cameo through the windscreen and the bag opened under a streetlight (M02); the station scene and the arrest (M03); Madam's first call (M04). Tag every line with its channel (drive talk, phone, inner voice, radio, ambient). Hinglish as written in Latin letters, plus the English text. Lines stay short (under 15 words as a rule, never over 25). Goal lines and fail reasons for each mission, in words a player reads in a second. Register every voice line as a request for Anmol; text carries the game until voices arrive. Pillar: three lives, one city (each lead has their own voice: Bittu jokes, Meera lists, Danny prices).",
+    "accept": [
+      "The dialogue and cutscene files for M01 to M04 parse and pass the line player's data test (Hinglish and English on every line, a speaker, a channel, a length)",
+      "Every beat of the four milestones.json entries has its lines, and every fail has a reason line",
+      "harness/requests/voice.json parses with one request per voice line",
+      "Respect rule: the verifier reads the named shots and the mission text against GAME.md \"Respect rule\" and VERIFY.md rubric line 21; any breach is a fail (no real people, parties or brands; no joke at anyone's expense)"
+    ]
+  },
+  {
+    "agent": "builder",
+    "priority": 3,
+    "kind": "feature",
+    "deps": [
+      "#5",
+      "#6"
+    ],
+    "phase": "P4",
+    "title": "M01: Train at 6:10 (Driver)",
+    "desc": "Seed from the game plan: the mission task of M01 (the planner of P4 may split it into a scene task and a mission task). Build M01 as data (game/data/missions/M01.json) plus its script on the mission runner, beat by beat from harness/data/milestones.json and GAME.md \"Act 1: Sawari\" and \"First playable slice\", with anchors by block id and world metres, a checkpoint at least every 90 s, and its lines and scenes from the slice script. The first mission of the game, Bittu in the auto: the stand near Chandni Chowk in a hot hazy afternoon, the family with luggage, the deadline to New Delhi station (Ajmeri Gate side) with the main road jammed and the gali shortcut marked, gap weaving and the horn, the drop-off, then the nervous second passenger to Connaught Place who leaves the bag. No on-foot part. It teaches driving, the horn and the gali in a safe first minute before the timer matters. Write the play script harness/verify/milestones/M01.js (VERIFY.md \"Play scripts\"): real inputs only, no teleport and no flag writes, waits in sim time, a log line and a shot per beat, the time on foot and in a vehicle logged, inside its budgetMs. Pillar: three lives, one city (the bag starts all three stories), and the city opens up (the gali only a driver knows).",
+    "accept": [
+      "M01 matches its milestones.json entry and GAME.md beat by beat (the play script logs each beat and shoots it)",
+      "node harness/bin/verify.mjs --milestone M01 passes with harness/verify/milestones/M01.js, and node harness/bin/task.mjs milestone M01 playable is run",
+      "Fun 1, clear goal: state().mission.goal is set and the marker is on screen by 5 s of sim after the start (asserted by the play script; shot M01_goal)",
+      "Fun 2, fair fail: the timer running out (\"The train left\"), the auto wrecked, and the family thrown out by a crash each raise mission:fail with a reason in words (shot M01_fail) and the instant retry gives control back at the last checkpoint in under 3 s of sim (scenario m01_fail_retry)",
+      "Fun 3, a reason to retry: the completion screen shows the time next to the best so far (shot M01_done)",
+      "Fun 4, a reward that matters: the completion screen shows the fare money and the bag with the diary as the story turn and the play script finds it in the save (state().progress)",
+      "Driving stays central: the whole mission is driven; the play script logs 0% on foot",
+      "Routes: the gali shortcut and the main road are each completed by an input-only route scenario (route_m01_gali_shortcut, route_m01_main_road) with player-height shots",
+      "Passengers talk and react (a line on a near miss and on a crash); the horn makes traffic and people react (scenario m01_horn_reaction); near misses are counted and shown",
+      "The verifier reads the beat shots against the VERIFY.md rubric (readable goal, HUD never over the player, the signed look); frame p95 is 10 ms or less at the mission's busiest beat (perf scenario, scene kind city)",
+      "Respect rule: the verifier reads the named shots and the mission text against GAME.md \"Respect rule\" and VERIFY.md rubric line 21; any breach is a fail",
+      "npm run typecheck, npm test and node harness/bin/verify.mjs --quick are green, with no engine or console errors"
+    ]
+  },
+  {
+    "agent": "builder",
+    "priority": 3,
+    "kind": "feature",
+    "deps": [
+      "#5",
+      "#6"
+    ],
+    "phase": "P4",
+    "title": "M02: Who wants the bag (Driver)",
+    "desc": "Seed from the game plan: the mission task of M02 (the planner of P4 may split it into a scene task and a mission task). Build M02 as data (game/data/missions/M02.json) plus its script on the mission runner, beat by beat from harness/data/milestones.json and GAME.md \"Act 1: Sawari\" and \"First playable slice\", with anchors by block id and world metres, a checkpoint at least every 90 s, and its lines and scenes from the slice script. The same night: the dark car chases the auto through the Connaught Place circles and out toward Barakhamba Road, the police jeep joins with SI Meera Rana at the wheel for a few seconds (her cameo, framed so she is recognised later; she is not playable here), Bittu loses both in the galis near Janpath, hides in a quiet lane and looks in the bag. Night light with the readability floor holding. Write the play script harness/verify/milestones/M02.js (VERIFY.md \"Play scripts\"): real inputs only, no teleport and no flag writes, waits in sim time, a log line and a shot per beat, the time on foot and in a vehicle logged, inside its budgetMs. Pillar: three lives, one city (the cop is introduced inside the driver's mission), and filmi, never cheap (the Connaught Place chase).",
+    "accept": [
+      "M02 matches its milestones.json entry and GAME.md beat by beat (the play script logs each beat and shoots it)",
+      "node harness/bin/verify.mjs --milestone M02 passes with harness/verify/milestones/M02.js, and node harness/bin/task.mjs milestone M02 playable is run",
+      "Fun 1, clear goal: state().mission.goal is set and the marker is on screen by 5 s of sim after the start (asserted by the play script; shot M02_goal)",
+      "Fun 2, fair fail: being caught by the dark car for 8 s (\"They got you\"), the auto wrecked, and the police pinning the auto (\"The police stopped you\") each raise mission:fail with a reason in words (shot M02_fail) and the instant retry gives control back at the last checkpoint in under 3 s of sim (scenario m02_fail_retry)",
+      "Fun 3, a reason to retry: the completion screen shows the escape time next to the best so far (shot M02_done)",
+      "Fun 4, a reward that matters: the completion screen shows the fare money and the story turn (the dead passenger, the jeep that has his number) and the play script finds it in the save (state().progress)",
+      "Driving stays central: the whole chase is driven; the on-foot share logged by the play script is under 40% (the look in the bag is a scene)",
+      "Routes: the main road and the service lane behind the blocks are each completed by an input-only route scenario (route_m02_main_road, route_m02_service_lane) with player-height shots",
+      "The jeep cameo scene: Meera is in frame and recognisable for the whole 8 s scene, with the moving jeep and the auto both covered (seeked shots at 3 times); flakecheck 3 runs (5 when low usage mode is off)",
+      "The verifier reads the beat shots against the VERIFY.md rubric (readable goal, HUD never over the player, the signed look); frame p95 is 10 ms or less at the mission's busiest beat (perf scenario, scene kind city)",
+      "Respect rule: the verifier reads the named shots and the mission text against GAME.md \"Respect rule\" and VERIFY.md rubric line 21; any breach is a fail",
+      "npm run typecheck, npm test and node harness/bin/verify.mjs --quick are green, with no engine or console errors"
+    ]
+  },
+  {
+    "agent": "builder",
+    "priority": 3,
+    "kind": "feature",
+    "deps": [
+      "#5",
+      "#6"
+    ],
+    "phase": "P4",
+    "title": "M03: Barricade at ITO (Cop)",
+    "desc": "Seed from the game plan: the mission task of M03 (the planner of P4 may split it into a scene task and a mission task). Build M03 as data (game/data/missions/M03.json) plus its script on the mission runner, beat by beat from harness/data/milestones.json and GAME.md \"Act 1: Sawari\" and \"First playable slice\", with anchors by block id and world metres, a checkpoint at least every 90 s, and its lines and scenes from the slice script. Meera's first mission: the station near ITO, the radio call, the patrol car, the pursuit of the stolen car from Connaught Place over the ITO flyovers, \"Call a barricade\" (B) at the next real junction ahead, the crash, a short standoff and exchange of fire with the pistol (decisions.md \"Pistol stays in the slice, used in M03\"), the foot chase, melee and the takedown, the arrest held, the clue in the car, Khanna on the radio. The police force, its units and its officers are invented. Write the play script harness/verify/milestones/M03.js (VERIFY.md \"Play scripts\"): real inputs only, no teleport and no flag writes, waits in sim time, a log line and a shot per beat, the time on foot and in a vehicle logged, inside its budgetMs. Pillar: filmi, never cheap (pursuit, barricade, standoff, takedown, each with a reason), and three lives, one city (her case is the driver's dead passenger).",
+    "accept": [
+      "M03 matches its milestones.json entry and GAME.md beat by beat (the play script logs each beat and shoots it)",
+      "node harness/bin/verify.mjs --milestone M03 passes with harness/verify/milestones/M03.js, and node harness/bin/task.mjs milestone M03 playable is run",
+      "Fun 1, clear goal: state().mission.goal is set and the marker is on screen by 5 s of sim after the start (asserted by the play script; shot M03_goal)",
+      "Fun 2, fair fail: the suspect getting away (over 300 m for 10 s: \"He got away\"), a civilian killed, and the patrol car wrecked each raise mission:fail with a reason in words (shot M03_fail) and the instant retry gives control back at the last checkpoint in under 3 s of sim (scenario m03_fail_retry)",
+      "Fun 3, a reason to retry: the completion screen shows the pursuit time next to the best so far (shot M03_done)",
+      "Fun 4, a reward that matters: the completion screen shows the case reward and the story turn (the auto number and the fixer's name) and the play script finds it in the save (state().progress)",
+      "Driving stays central: the pursuit is the main objective; the on-foot share logged by the play script is about 40% or less",
+      "Routes: over the flyover and under it are each completed by an input-only route scenario (route_m03_over_flyover, route_m03_under_flyover); the barricade stands at a real junction of the lane model (shot M03_barricade)",
+      "Combat effects are bold but small and never cruel (VERIFY.md rubric line 23: a shot within 0.3 s of a muzzle flash); a civilian near the standoff flees and is never a target that rewards",
+      "The verifier reads the beat shots against the VERIFY.md rubric (readable goal, HUD never over the player, the signed look); frame p95 is 10 ms or less at the mission's busiest beat (perf scenario, scene kind city)",
+      "Respect rule: the verifier reads the named shots and the mission text against GAME.md \"Respect rule\" and VERIFY.md rubric line 21; any breach is a fail",
+      "npm run typecheck, npm test and node harness/bin/verify.mjs --quick are green, with no engine or console errors"
+    ]
+  },
+  {
+    "agent": "builder",
+    "priority": 3,
+    "kind": "feature",
+    "deps": [
+      "#5",
+      "#6"
+    ],
+    "phase": "P4",
+    "title": "M04: Chandni Chowk pickup (Fixer)",
+    "desc": "Seed from the game plan: the mission task of M04 (the planner of P4 may split it into a scene task and a mission task). Build M04 as data (game/data/missions/M04.json) plus its script on the mission runner, beat by beat from harness/data/milestones.json and GAME.md \"Act 1: Sawari\" and \"First playable slice\", with anchors by block id and world metres, a checkpoint at least every 90 s, and its lines and scenes from the slice script. Danny's first playable mission: on foot in a Chandni Chowk lane, through a bazaar crowd of 30 to 60 people that parts and flees, the shuttered shop and the boy with the auto number, the rival crew of 3 melee thugs (combo, block, dodge, one takedown), police whistles and wanted level 1, the scooter, the escape through the galis or the main road, losing the wanted level (leave the search circle, stay unseen 15 s). Children in the crowd are never damageable; nobody is rewarded for hurting a civilian; Jama Masjid and every place of worship stay out of the fight space. Write the play script harness/verify/milestones/M04.js (VERIFY.md \"Play scripts\"): real inputs only, no teleport and no flag writes, waits in sim time, a log line and a shot per beat, the time on foot and in a vehicle logged, inside its budgetMs. Pillar: three lives, one city (the fixer is hired for the driver's bag), and filmi, never cheap (the bazaar fight and the getaway).",
+    "accept": [
+      "M04 matches its milestones.json entry and GAME.md beat by beat (the play script logs each beat and shoots it)",
+      "node harness/bin/verify.mjs --milestone M04 passes with harness/verify/milestones/M04.js, and node harness/bin/task.mjs milestone M04 playable is run",
+      "Fun 1, clear goal: state().mission.goal is set and the marker is on screen by 5 s of sim after the start (asserted by the play script; shot M04_goal)",
+      "Fun 2, fair fail: the fixer downed (\"You were beaten\") and busted (\"The police got you\") each raise mission:fail with a reason in words (shot M04_fail) and the instant retry gives control back at the last checkpoint in under 3 s of sim (scenario m04_fail_retry)",
+      "Fun 3, a reason to retry: the completion screen shows the escape time next to the best so far (shot M04_done)",
+      "Fun 4, a reward that matters: the completion screen shows the payment and the story turn (the auto number and the hunt for the bag) and the play script finds it in the save (state().progress)",
+      "Driving stays central: the scooter getaway is an objective that matters; the play script logs the on-foot share, and if the signed beats cannot keep it at about 40% the planner records the exception for this mission in decisions.md before the build",
+      "Routes: the galis and the main road are each completed by an input-only scooter route scenario (route_m04_galis, route_m04_main_road) with player-height shots",
+      "Crowd shots are read for the people rubric (VERIFY.md line 22: at least 6 clothing colours and 3 builds in a bazaar frame, nobody stretched); the wanted level beacon count equals the level through the escape (scenario m04_wanted_escape)",
+      "The verifier reads the beat shots against the VERIFY.md rubric (readable goal, HUD never over the player, the signed look); frame p95 is 10 ms or less at the mission's busiest beat (perf scenario, scene kind city)",
+      "Respect rule: the verifier reads the named shots and the mission text against GAME.md \"Respect rule\" and VERIFY.md rubric line 21; any breach is a fail",
+      "npm run typecheck, npm test and node harness/bin/verify.mjs --quick are green, with no engine or console errors"
+    ]
+  },
+  {
+    "agent": "planner",
+    "priority": 1,
+    "kind": "feature",
+    "deps": [],
+    "phase": "P14",
+    "title": "Plan phase P14: polish and first release",
+    "desc": "Planner mode PLAN_PHASE P14. This phase holds seed tasks from the game plan (P0-023), and task.mjs phase-add does not mark a phase as unplanned, so this task is the planning step: every seed depends on it. Read the phase in harness/state/backlog.json (goal, exit, milestones), harness/state/next_phase_notes.md (the section for P14), GAME.md (pillars, capability list, the sections the phase needs), TECH.md, VERIFY.md \"Writing acceptance criteria\" and the knowledge files. Write 12 to 35 tasks to harness/state/plan_P14.json and add them with task.mjs add-json. Fold in the seed tasks already in the phase with task.mjs deps --add, task.mjs edit and task.mjs order: split a seed that is too big, never duplicate one. Every task names its pillar; every mission task carries the four fun criteria, the driving share check and the respect rule check; every area or art task carries the respect rule and its area sheet. Check the GAME.md capability list and say which items the phase builds. Then run task.mjs planned P14. For this phase: the collected polish items (verifier POLISH lists and the seeds below) become one polish task per area of docs/READ_MAP.md. Check every RELEASE item of the GAME.md capability list is built or moved with a decisions.md entry. Pillar: base task, it plans the work that serves the pillars named in the phase goal.",
+    "accept": [
+      "harness/state/plan_P14.json exists and the phase has 12 to 35 open tasks, each with a \"Pillar:\" line and checkable acceptance",
+      "Every seed task of the phase is folded in (kept, edited or split with a note), none duplicated",
+      "node harness/bin/task.mjs planned P14 has been run",
+      "The return lists the ids and titles added, and any design change with its decisions.md entry"
+    ]
+  },
+  {
+    "agent": "builder",
+    "priority": 4,
+    "kind": "polish",
+    "deps": [
+      "#11"
+    ],
+    "phase": "P14",
+    "title": "Polish: rendering and look (night lamps, night asphalt, painted boards)",
+    "model": "opus",
+    "desc": "Seed from the game plan: the polish items collected in Phase 0 (STYLE_BIBLE.md \"Known gaps\" 1 to 3; verifier notes of P0-034 and P0-037). Verifier POLISH items for this area are added to this task as notes during the build. (1) Night lamp pools at the street_eye view: the sodium lamps light the road but the pools blend into the moonlit fill; make a clear bright pool under each lamp that fades over 10 to 15 m, by cheap means (tuned spot falloff or a projected decal, no SSR and no volumetric fog). (2) Dark asphalt patches at the night junction: the oil and wet patches read near black; lift them or lighten the asphalt layer at night. (3) Shop sign boards: any board that is still Label3D text on a box becomes a painted board (the hand-painted board textures from the art cards where delivered, the procedural painted board otherwise). Pillar: filmi, never cheap (night must read as rich, never as dark).",
+    "accept": [
+      "lookproof night set, view street_eye: each lamp in view has a pool whose centre is at least 1.5 times as bright as the road 15 m away (measured on the shot), read by the verifier",
+      "lookproof night set, view junction: no asphalt patch darker than the readability floor of STYLE_BIBLE.md; the verifier reads the shot",
+      "A test finds no Label3D on a sign board in the streamed city",
+      "The night views stay at or under warn 10 ms; the changed sets are compared against the approved night reference, and the reference is re-approved only after Anmol accepts the change on the dashboard",
+      "npm run typecheck, npm test and node harness/bin/verify.mjs --quick are green, with no engine or console errors"
+    ]
+  },
+  {
+    "agent": "builder",
+    "priority": 4,
+    "kind": "polish",
+    "deps": [
+      "#11"
+    ],
+    "phase": "P14",
+    "title": "Polish: UI and text (an OFL Devanagari font everywhere)",
+    "model": "sonnet",
+    "desc": "Seed from the game plan: STYLE_BIBLE.md \"Known gaps\" 3. Devanagari in the world still falls back to a system font. Use one OFL face that covers Devanagari for every text in the game: world sign boards, the HUD, subtitles and menus (the HUD build brings Teko and Mukta in; this task finishes what is left and removes every system font fallback), with the licence in the credits data. Verifier POLISH items for UI and text are added to this task as notes during the build. Pillar: the city opens up (signs in the scripts each area really uses, readable and real).",
+    "accept": [
+      "A test finds no text node in the game that resolves to a system font",
+      "Shots of 6 Devanagari sign boards and the two place names of HUD.md \"Checkable rules\" show correct conjuncts and matras and no missing-glyph box (verifier reads them)",
+      "The font licence files are in the repo and the credits screen lists them",
+      "npm run typecheck, npm test and node harness/bin/verify.mjs --quick are green, with no engine or console errors"
+    ]
+  }
+]

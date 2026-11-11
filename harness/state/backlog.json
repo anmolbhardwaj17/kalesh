@@ -1,6 +1,6 @@
 {
   "_doc": "Written only by node harness/bin/task.mjs. Phases run in order; P0 (ADOPT + STYLE DISCOVERY) waits for the owner by design and needs task.mjs signoff and task.mjs archsignoff before its gate passes. Later phases are added by the planner at the end of P0 (task.mjs phase-add) from the game's real state.",
-  "updated": "2026-11-11T12:12:10.470Z",
+  "updated": "2026-11-11T12:34:04.947Z",
   "phases": [
     {
       "id": "P0",
@@ -23,6 +23,328 @@
       "playtest": [],
       "archSignoff": true,
       "designSignoff": true
+    },
+    {
+      "id": "P1",
+      "name": "Foundation: drive and walk the real pilot centre",
+      "goal": "Pillar 3 (the city opens up) and the base under all three pillars. The pilot centre (about 20 km2: Connaught Place with Jantar Mantar, India Gate, ITO with Pragati Maidan, Chandni Chowk with Red Fort, Paharganj with the station, GB Road and everything between) is baked from real map data through the repair layer and the lane-level road model, streams in Godot, and can be driven and walked with the signed vehicle and on-foot numbers. Solid before rich: no overlaps, no floating roads, collisions match what is drawn, north is up. The map inspector comes first so Anmol can review issues during the pilot.",
+      "exit": [
+        "npm run bake -- pilot builds the pilot centre twice with identical tile hashes, and the map health report gate counts (open ports, floating ends, unjoined ends, overlapping road faces, broken lane continuity, tapers out of limits) are 0 or each one is explained",
+        "the base tests the owner asked for pass in the real city: landmark pins within tolerance and on the right side of the map, collider against drawn surface within 0.05 m, north up on the map and -Z in the world, no mirrored node",
+        "streaming at 200 km/h has no frame over 33 ms and the city path perf scenarios are inside the signed budgets",
+        "the car reaches 140 km/h and the car, auto, scooter and on-foot numbers are inside the GAME.md ranges, measured by feel probe scenarios",
+        "stylised B is the default look on the day clock and the lookproof compare against the approved reference passes",
+        "the map inspector shows issues and lanes, and an override written from it is used by the next bake",
+        "FD0 plays in the real pilot centre and a Mac test build runs it",
+        "verify --all is green"
+      ],
+      "milestones": [
+        "FD0"
+      ],
+      "status": "planned",
+      "playtest": [],
+      "planned": true
+    },
+    {
+      "id": "P2",
+      "name": "Pilot made rich: landmarks, areas and hero roads in stylised B",
+      "goal": "Pillar 3 (the city opens up: real Delhi is the reward and first sight of a landmark is a moment) and pillar 2 (filmi, never cheap: places worth a set piece). The pilot centre looks and reads like its real places: the landmark registry and placement, the stand-in heroes (Connaught Place circle, India Gate, Red Fort), area profiles and the generator, area kits, street dressing, hero roads, LOD rings and the Blue Line viaduct, each area built from its area sheet under the respect rule. Procedural first: art cards with prompts are on the dashboard and nothing waits for art.",
+      "exit": [
+        "landmark position tests pass against real coordinates (hero 5 m and 5 degrees, signature 10 m, marker 15 m)",
+        "the side by side sheets of every pilot area and hero against its reference photos are read by the verifier and pass (silhouette, colour, density, street life), with no generic look",
+        "the area difference metric passes for every pair of pilot areas, with variety inside each area and smooth edges",
+        "perf on the pilot camera paths at 60, 140 and 200 km/h in four lights is inside the signed budgets, the night bazaar lane included",
+        "the map inspector has all four steps (issues, lanes, hero roads and outlines, areas and landmarks) and its edits reach the next bake",
+        "OSM attribution and every other source credit show in the game",
+        "art cards for the pilot heroes, area kits, vehicles, people and trees are on the dashboard",
+        "both routes of every slice mission space (main road and gali or service lane) are drivable or walkable by input-only route scenarios",
+        "the respect rule check passes on every area",
+        "verify --all is green"
+      ],
+      "milestones": [],
+      "status": "planned",
+      "playtest": [],
+      "planned": true
+    },
+    {
+      "id": "P3",
+      "name": "Life and action: traffic, crowds, combat, police, HUD and story tools",
+      "goal": "Pillar 2 (filmi, never cheap: chases, fistfights, gunfights and a wanted level, each with weight) and pillar 1 (three lives, one city: all three character states saved from day 1). Every SLICE system of the GAME.md capability list exists, is measured and has its scenarios: traffic and signals, crowds and civilians, melee, pistol and thrown items, wanted levels 1 to 3 with barricades at real junctions, the mission system with checkpoints and instant retry, the save, the HUD (built only after Anmol has seen the mockups), menus, the cutscene and dialogue runtime with Hinglish and English subtitles, the audio base, and the slice vehicles with passengers, horn and damage.",
+      "exit": [
+        "navmesh and lane graph are in the tiles; traffic at light to medium density follows lanes and signals and reacts to the horn; 30 to 60 people in the bazaar walk, part, flee and cower",
+        "melee (3-hit combo, block, dodge, takedown), lathi or bat, pistol with soft lock-on and headshots, one thrown item, hit reactions and up to 8 ragdolls work by scenario with the GAME.md numbers",
+        "wanted levels 1 to 3 work by scenario: raises, witnesses, search circle and line-of-sight escape, barricade at the next real junction, busted and wasted",
+        "a test mission proves the four fun criteria end to end: goal within 5 s, each fail with its reason and a retry under 3 s, a score to beat, a reward that reaches the save",
+        "the save holds all three character states, with a version and a migration test",
+        "the HUD follows HUD.md with Anmol's answers and passes its checkable rules; title, pause, map screen and settings exist",
+        "the cutscene player passes its played against skipped end state test, and the dialogue line player pauses drive talk for action and resumes with a pickup line, with Hinglish and English subtitles and a jaw that moves",
+        "every system is inside its line of perf_budgets.json systems, measured in the pilot",
+        "civilian and respect rules hold by test: children never damageable, no reward for hurting civilians, no combat at a place of worship",
+        "verify --all is green"
+      ],
+      "milestones": [],
+      "status": "planned",
+      "playtest": []
+    },
+    {
+      "id": "P4",
+      "name": "First playable slice: M01 to M04",
+      "goal": "Pillar 1 (three lives, one city: the player meets all three lives, each introduced inside another's mission, and the bag links them), pillar 2 (a deadline drive, a chase through Connaught Place, a pursuit with a barricade and a standoff, a bazaar fistfight and a scooter getaway) and pillar 3 (Chandni Chowk, the station, Connaught Place and ITO on mission routes). Four solo missions, Bittu first, no merge and no switching (GAME.md \"First playable slice\").",
+      "exit": [
+        "M01, M02, M03 and M04 each match their milestones.json entry and GAME.md beat by beat, and verify --milestone passes for each with a play script that uses real inputs only",
+        "each mission passes the four fun criteria of VERIFY.md (clear goal, fair fail, a reason to retry, a reward that matters)",
+        "each mission has at least one drive that matters and its on-foot share is about 40% or less, logged by its play script",
+        "every chase and getaway has two routes, each proven by an input-only route scenario and player-height shots",
+        "mission shots pass the VERIFY.md rubric and the respect rule check",
+        "the frame stays inside the signed budgets during every mission",
+        "the four missions play in order from a new save, and the playtest checklist for Anmol is on the dashboard with a Mac build (a Windows build with a notice)",
+        "verify --all is green"
+      ],
+      "milestones": [
+        "M01",
+        "M02",
+        "M03",
+        "M04"
+      ],
+      "status": "planned",
+      "playtest": []
+    },
+    {
+      "id": "P5",
+      "name": "Act 1 complete: M05 to M10 and the first switch",
+      "goal": "Pillar 1 (three lives, one city: the first tense crossing of the three in M07 and the first merged mission, the Red Fort finale, with switching at story beats), pillar 2 (a tail through the galis, a pistol fight in the Red Fort parking, the four big scenes of Act 1) and pillar 3 (the Red Fort first sight). Builds the RELEASE items these missions need: switching at beats, tailing, the police motorcycle, night, the graded flashback look.",
+      "exit": [
+        "M05 to M10 are required in milestones.json, each matches its entry beat by beat and passes verify --milestone with its play script and the four fun criteria",
+        "M10 switches twice, each switch under 2 s, with all three states saved at each switch",
+        "the four big scenes of Act 1 (STORY_OUTLINE.md) run as data-file cutscenes with skip tests and every actor in frame",
+        "Act 1 plays from a new save to the call \"Gurugram mein milte hain\" in order",
+        "the respect rule check and the driving share check pass for every mission",
+        "the Act 1 playtest checklist is on the dashboard",
+        "verify --all is green"
+      ],
+      "milestones": [
+        "M05",
+        "M06",
+        "M07",
+        "M08",
+        "M09",
+        "M10"
+      ],
+      "status": "planned",
+      "playtest": []
+    },
+    {
+      "id": "P6",
+      "name": "City life in the pilot: fares, patrol calls, jobs and strangers",
+      "goal": "Pillar 1 (three lives, one city: each life has its own work, money and trouble between missions) and pillar 3 (the city opens up: stamps, first sights and activities at real places). GAME.md asks for about half city life: after this phase the pilot has a session loop with a next story marker and 2 or 3 city life options nearby at any time.",
+      "exit": [
+        "endless city life per character works by scenario: fares with twists (driver), patrol calls (cop), contact jobs (fixer), each with the four fun criteria",
+        "at least 3 stranger chains of 2 to 4 missions each are playable in the pilot",
+        "activities at real places are playable: CP laps, the night auto race and the Paharganj street fight",
+        "landmark first sight moments and the stamp book work for the pilot heroes",
+        "money per character, buying through the fixer's contacts and mission replay with best scores work and reach the save",
+        "ambient life per area profile and panic that spreads (60 to 120 people) run inside the people budget",
+        "the full day and night cycle runs in play inside the signed budgets",
+        "the respect rule check passes on every activity and stranger",
+        "verify --all is green"
+      ],
+      "milestones": [],
+      "status": "planned",
+      "playtest": []
+    },
+    {
+      "id": "P7",
+      "name": "The centre opens: the rest of the centre block with Laxmi Nagar",
+      "goal": "Pillar 3 (the city opens up: districts open through the story, never an invisible wall). The rest of the centre block at true scale, in the area order Anmol gave: Kashmere Gate with ISBT, Lutyens and Delhi Gymkhana, Khan Market, Lodhi and the Golf Club, Nizamuddin with Humayun's Tomb, the Ridge with Malcha Mahal, the Yamuna with its bridges and floodplain, Laxmi Nagar, and the real streets between them. Every area gets its area sheet and reference board before it is built.",
+      "exit": [
+        "an area sheet and reference board exist for every new area before its build task starts",
+        "the whole centre block bakes with gate counts 0 or explained, and every centre pair keeps its real bearing within 0.5 degrees and distance within 0.5%",
+        "landmark position tests, the area difference metric and the side by side sheets pass for the new areas",
+        "perf on camera paths through the new areas and over the Yamuna bridges is inside the signed budgets",
+        "districts that the story has not opened are closed for a story reason and shown as unopened on the map",
+        "the high impact issues of the new areas are in the map inspector queue for Anmol",
+        "the respect rule check passes on every new area",
+        "verify --all is green"
+      ],
+      "milestones": [],
+      "status": "planned",
+      "playtest": []
+    },
+    {
+      "id": "P8",
+      "name": "The far south: Qutub, Vasant Kunj, the airport and Gurugram",
+      "goal": "Pillar 3 (the city opens up: the map grows to the first release, about 68 km2 as one seamless city). The far blocks sit on their real bearing from India Gate at half their real distance, joined by authored corridors with real road names (Aurobindo Marg, MG Road, NH-48, the Ring Road, the airport road) lined with generated city blended from the neighbouring areas. The world origin is recentred at the first far bake.",
+      "exit": [
+        "the world origin is recentred with its tests passing and no position is more than about 7 km from it",
+        "every far place is exact as seen from India Gate (bearing within 0.1 degree, distance 0.5 of real), and centre pairs are unchanged",
+        "every corridor passes the grade, radius and clearance rules and shows no visible border",
+        "Gurugram Cyber City is about 5 minutes from India Gate by car, measured by a drive scenario",
+        "streaming at 200 km/h on NH-48 has no frame over 33 ms",
+        "the first release map bakes in under 30 minutes and its data is under 3 GB",
+        "area sheets, landmark tests (Qutub Minar as a hero), the area metric and the respect rule check pass for the far areas",
+        "verify --all is green"
+      ],
+      "milestones": [],
+      "status": "planned",
+      "playtest": []
+    },
+    {
+      "id": "P9",
+      "name": "Act 2: Paisa (M11 to M24)",
+      "goal": "Pillar 1 (three lives, one city: the forced alliance and the first crossing at ISBT), pillar 2 (the GB Road raid, the tower heist as the merged peak) and pillar 3 (Laxmi Nagar, Daryaganj, Kashmere Gate, Delhi Gymkhana and Gurugram open through the story). Fourteen missions from STORY_OUTLINE.md, with the RELEASE systems they need. The GB Road missions follow the GB Road line of the respect rule.",
+      "exit": [
+        "M11 to M24 are required in milestones.json with beats, each passes verify --milestone with its play script, the four fun criteria, the driving share check and the respect rule check",
+        "the big scenes of Act 2 run as cutscenes with skip tests",
+        "the districts Act 2 opens are opened by the story and saved",
+        "Act 2 plays in order from the end of Act 1",
+        "the Act 2 playtest checklist is on the dashboard",
+        "verify --all is green"
+      ],
+      "milestones": [
+        "M11",
+        "M12",
+        "M13",
+        "M14",
+        "M15",
+        "M16",
+        "M17",
+        "M18",
+        "M19",
+        "M20",
+        "M21",
+        "M22",
+        "M23",
+        "M24"
+      ],
+      "status": "planned",
+      "playtest": []
+    },
+    {
+      "id": "P10",
+      "name": "Act 3: Gaddari (M25 to M38)",
+      "goal": "Pillar 1 (three lives, one city: Khanna's betrayal reaches all three, and the encounter choice is carried forward), pillar 2 (the fake encounter order, the runway chase as the merged peak) and pillar 3 (Vasant Kunj, Khan Market, Nizamuddin, Malcha Mahal and the airport open through the story). Fourteen missions from STORY_OUTLINE.md.",
+      "exit": [
+        "M25 to M38 are required in milestones.json with beats, each passes verify --milestone with its play script, the four fun criteria, the driving share check and the respect rule check",
+        "the encounter choice (M32) is saved and both versions of M33 are playable",
+        "the big scenes of Act 3 run as cutscenes with skip tests",
+        "Act 3 plays in order from the end of Act 2",
+        "the Act 3 playtest checklist is on the dashboard",
+        "verify --all is green"
+      ],
+      "milestones": [
+        "M25",
+        "M26",
+        "M27",
+        "M28",
+        "M29",
+        "M30",
+        "M31",
+        "M32",
+        "M33",
+        "M34",
+        "M35",
+        "M36",
+        "M37",
+        "M38"
+      ],
+      "status": "planned",
+      "playtest": []
+    },
+    {
+      "id": "P11",
+      "name": "East of the river for Act 4: the floodplain, Shahdara and Noida",
+      "goal": "Pillar 3 (the city opens up). The places Act 4 needs: the Yamuna floodplain with the invented Bela basti, Shahdara with its rail yard, and Noida on its expressway. The basti and the lower income areas get the same craft as the rich ones (respect rule). GAME.md tags Noida and Shahdara as later unlocks while the story uses them in Act 4: the tag is settled with a decisions.md entry when this phase is planned.",
+      "exit": [
+        "the map stage of Noida and Shahdara is settled in decisions.md before any build task",
+        "area sheets and reference boards exist for every new area before its build",
+        "the new areas bake with gate counts 0 or explained and pass the landmark, area metric and perf checks",
+        "the respect rule check passes on the basti, Shahdara and Noida",
+        "verify --all is green"
+      ],
+      "milestones": [],
+      "status": "planned",
+      "playtest": []
+    },
+    {
+      "id": "P12",
+      "name": "Act 4: Jalaawatan (M39 to M52)",
+      "goal": "Pillar 1 (three lives, one city: exile together, the truth about the fire between Bittu and Danny), pillar 2 (the bulldozers at dawn, the playable fire night, Loha Pul) and pillar 3 (the east of the river and Malcha Mahal). Fourteen missions from STORY_OUTLINE.md. Controversy comes from systems (demolitions, fake encounters), never from a community.",
+      "exit": [
+        "M39 to M52 are required in milestones.json with beats, each passes verify --milestone with its play script, the four fun criteria, the driving share check and the respect rule check",
+        "both versions of M47 are playable and the second choice (M50) is saved",
+        "the big scenes of Act 4 run as cutscenes with skip tests",
+        "Act 4 plays in order from the end of Act 3",
+        "the Act 4 playtest checklist is on the dashboard",
+        "verify --all is green"
+      ],
+      "milestones": [
+        "M39",
+        "M40",
+        "M41",
+        "M42",
+        "M43",
+        "M44",
+        "M45",
+        "M46",
+        "M47",
+        "M48",
+        "M49",
+        "M50",
+        "M51",
+        "M52"
+      ],
+      "status": "planned",
+      "playtest": []
+    },
+    {
+      "id": "P13",
+      "name": "Act 5: Kalesh (M53 to M67)",
+      "goal": "Pillar 1 (three lives, one city: the three stories close in one night and end together at the Red Fort), pillar 2 (election night set pieces, the rampart finale at 6:10) and pillar 3 (core Delhi changed for election night; every place the player opened comes back). Fifteen missions from STORY_OUTLINE.md with three endings and the hidden fourth.",
+      "exit": [
+        "M53 to M67 are required in milestones.json with beats, each passes verify --milestone with its play script, the four fun criteria, the driving share check and the respect rule check",
+        "the three endings and the hidden fourth are each reachable by a play script from the right save state",
+        "the big scenes of Act 5 run as cutscenes with skip tests",
+        "the whole story plays from M01 to M67 in order",
+        "the Act 5 playtest checklist is on the dashboard",
+        "verify --all is green"
+      ],
+      "milestones": [
+        "M53",
+        "M54",
+        "M55",
+        "M56",
+        "M57",
+        "M58",
+        "M59",
+        "M60",
+        "M61",
+        "M62",
+        "M63",
+        "M64",
+        "M65",
+        "M66",
+        "M67"
+      ],
+      "status": "planned",
+      "playtest": []
+    },
+    {
+      "id": "P14",
+      "name": "Polish and first release",
+      "goal": "All three pillars, finished: three lives, one city; filmi, never cheap; the city opens up. Every RELEASE item of the GAME.md capability list is built or moved with a decisions.md entry. Polish per area from the collected lists, voiced dialogue and lip sync on the big cutscenes once voices exist, gamepad and remapping, quality presets, the Windows build tested on real hardware, and the free public release build.",
+      "exit": [
+        "every RELEASE item of the GAME.md capability list is built, or its tag was changed with a decisions.md entry",
+        "the collected polish items are fixed or closed with a reason, one polish task per area",
+        "every story mission M01 to M67 is required and playable, and the final gate passes",
+        "gamepad (Xbox layout) and key remapping work by scenario",
+        "Mac and Windows release builds pass the smoke run on real hardware, with the signing decision asked of Anmol again",
+        "credits list every source and asset licence, and the repaired map data is published as ODbL asks",
+        "the whole game holds 60 fps on the M2 Pro inside the signed budgets",
+        "verify --all is green"
+      ],
+      "milestones": [],
+      "status": "planned",
+      "playtest": []
     }
   ],
   "tasks": [
@@ -1106,6 +1428,1681 @@
       "done": "2026-11-10T23:13:06.731Z",
       "summary": "Shared ballast (harness/bin/ballast.mjs, game/debug/gpu_ballast.gd) now used by lookproof --perf, verify perf and the arch bench. Stylised B real GPU cost 4.0 to 9.0 ms across four lights, all under warn 10. Cap is in the Metal present path (OpenGL runs 600+ fps), cause not found. Self-check: typecheck, 219 vitest, 47 Godot tests, quick OK.",
       "commit": "522f45b"
+    },
+    {
+      "id": "P1-001",
+      "phase": "P1",
+      "title": "Map inspector step 1: the issues view",
+      "desc": "The first task after Phase 0 (TECH.md \"Map inspector\", MAP_REPAIR.md \"Map inspector (human in the loop)\"), so Anmol can review map issues while the pilot is built. It never blocks other work. Build the page in tools/inspector/ and serve it on the dashboard port with a link from the dashboard. It reads two things through one file contract: the baked KTL1 tiles with their index, and issues.json in the MAP_REPAIR.md \"Issue record\" format. The production bake does not exist yet, so feed it from the Phase 0 outputs through a small adapter: the pilot census (harness/bench/pilot_data, 1,052 issues, 27 of them high impact) turned into issue records, and the bench tiles of ITO and Connaught Place. P1-011 replaces the adapter with the production files. The page: a 3D view with a north-up top view (north is up on screen and -Z in the world, no mirroring), every open issue marked, the issue queue sorted by impact with the 27 high impact ones first, click an issue and the camera flies to it, the proposals drawn as preview lines with confidence and reasoning, pick one or type a note. A pick writes a patch in the MAP_REPAIR.md \"Overrides format\" to harness/data/overrides/<tileX>_<tileZ>.json (one file per world tile of the 250 m grid) and an inbox entry with source inspector. An \"Open in game\" button teleports the running game to the same spot through the debug server. three.js is allowed as a dev dependency of the harness only (TECH.md \"Stack\"); add it with a decisions.md entry (licence, size, why). If the install is refused by the permission system, do not work around it: build the top view on a plain canvas first, report it, and the orchestrator adds a Needs-you notice. The page uses no outside map tiles or services. Pillar: the city opens up (Anmol steers how his city is repaired; base for every later map task).",
+      "accept": [
+        "A Playwright test (tools/inspector/) loads the page with 0 console errors and 0 requests to any host but localhost",
+        "The issue list count equals the issues.json count, and the first 27 rows are the high impact issues",
+        "Clicking an issue moves the camera target to within 30 m of the issue position (read through a page hook)",
+        "North-up check in the test: the Red Fort marker is above and to the right of the India Gate marker on screen, and Connaught Place is above and to the left",
+        "Picking a proposal in the test (temp folder) writes a patch with the issue id to the override file of the right world tile and one inbox line with source inspector",
+        "With the game running under --debug, \"Open in game\" puts the player within 5 m of the issue position (godotclient check); without a running game the button says so and nothing fails",
+        "The dashboard shows a \"Map inspector\" link; a screenshot harness/reports/inspector/issues.png is read by the verifier (issues visible, north up, readable)",
+        "docs/ARCHITECTURE.md and docs/READ_MAP.md name the new files; npm run typecheck and npm test are green"
+      ],
+      "deps": [],
+      "agent": "builder",
+      "priority": 1,
+      "kind": "feature",
+      "status": "todo",
+      "attempts": 0,
+      "notes": [],
+      "created": "2026-11-11T12:29:04.867Z"
+    },
+    {
+      "id": "P1-002",
+      "phase": "P1",
+      "title": "Stylised B is the default look, driven by the day clock",
+      "desc": "From the style bible (decisions.md \"Style bible and signed budgets (P0-015)\", TECH.md \"Render pipeline\"): with no --style arg the game loads stylised_b. Add a day clock on the sim clock (game/core/day_clock.gd: game time of day, a rate, a start time of 15:00, the hot hazy afternoon the slice starts in) that drives the day curve the way --time does today; --time=<h> and --light=<preset> pin it for verify. --style=none keeps the flat stand-in look for fast verification. stylised, stylised_grime and realistic stay behind --style= as reference sets until the P1 gate (P2-001 folds them). Hooks: the time of day is readable in state() and settable through the debug server (docs/GAME_HOOKS.md updated). Scenarios that do not judge the look may keep running with --style=none to stay fast; say in harness/verify/scenarios.json which do. No change to the look itself: this task only changes what loads by default. Pillar: filmi, never cheap (the signed look is what every later shot is judged in).",
+      "accept": [
+        "node harness/bin/lookproof.mjs --set default_golden with the game arg --time=17.75 and no --style, then --compare default_golden against the approved reference (style_stylised_b_golden) passes within harness/verify/look_rules.json",
+        "lookproof --set none_check with --style=none, then --compare none_check --against baseline passes (the flat look is unchanged)",
+        "game/tests/test_style.gd: no --style gives style id stylised_b; --style=none loads no style runner; the day clock test advances one game hour and the blended light preset changes; the time of day is in state()",
+        "lookproof --set default_golden --perf: every view is inside the signed budgets (warn 10 ms on the GPU ballast cost)",
+        "The verifier reads 3 shots of the default look (street_eye, on_foot_bazaar, hud_play) against VERIFY.md rubric lines 14 to 24",
+        "npm run typecheck, npm test and node harness/bin/verify.mjs --quick are green, with no engine or console errors"
+      ],
+      "deps": [],
+      "agent": "builder",
+      "priority": 1,
+      "kind": "feature",
+      "status": "todo",
+      "attempts": 0,
+      "notes": [],
+      "created": "2026-11-11T12:29:04.868Z",
+      "model": "opus"
+    },
+    {
+      "id": "P1-003",
+      "phase": "P1",
+      "title": "Show Anmol the HUD mockups",
+      "desc": "The one remaining look check with Anmol (decisions.md \"HUD gets its own discovery (Anmol)\"): no HUD is built before he has seen the mockups. The HUD build task in P3 depends on this task. Show him the four mockups in harness/design/hud_mockups/ (01_driving.png, 02_on_foot.png, 03_combat_wanted.png, 04_mission_passed.png) and ask the six questions of harness/design/HUD.md \"Questions for Anmol\" (overall feel, route guidance, minimap turning, Hindi and English, the wanted level name and icon, the mission passed card), plus whether a character colour feels wrong. Record his words with task.mjs inbox-add --source interview and ack them. Then write the answers into HUD.md (replace \"Questions for Anmol\" with \"Answers\", update \"Changes from GAME.md\" and GAME.md \"HUD\" where his answer differs) and add a decisions.md entry with his words. This task never blocks other work. It sits at priority 5 so task.mjs next does not hand it out before the other P1 tasks: take it by id at the first moment Anmol is at the terminal. Until then keep one Needs-you notice on the dashboard (node harness/bin/notice.mjs add \"HUD mockups are ready for your look: harness/design/hud_mockups/\"). If the P1 gate is reached with no answer, move it on (task.mjs move <id> --phase P2 --priority 5, then --phase P3 --priority 1). Pillar: three lives, one city (the HUD carries the lead, the wanted level and the goal for each life).",
+      "accept": [
+        "His answers to the six questions are in the inbox with source interview and are acked",
+        "HUD.md has an \"Answers\" section with his words, and GAME.md \"HUD\" agrees with it",
+        "A decisions.md entry records the answers with the date",
+        "The Needs-you notice is resolved"
+      ],
+      "deps": [],
+      "agent": "orchestrator",
+      "priority": 5,
+      "kind": "mentor",
+      "status": "todo",
+      "attempts": 0,
+      "notes": [],
+      "created": "2026-11-11T12:29:04.868Z"
+    },
+    {
+      "id": "P1-004",
+      "phase": "P1",
+      "title": "Consolidate decisions.md and the knowledge files",
+      "desc": "Planner mode CONSOLIDATE. harness/state/decisions.md is 85 KB and every agent reads it first. Keep in decisions.md only what still binds, a few lines each: the three sign-off quotes word for word, the standing rules, the KEEP numbers from the old game (car tune, chase camera, the four sounds) and one line per signed choice that points at TECH.md, GAME.md, STYLE_BIBLE.md or MAP_REPAIR.md. Move the full text of older entries, bench results and interview records to harness/state/decisions_archive.md under their original headings and dates. Nothing is deleted. Also tidy harness/state/knowledge.md (core, under 12 KB) and each harness/state/knowledge/<area>.md (under about 12 KB): merge duplicates, drop items a test now enforces, move the long GPU cap note to the rendering area file with a two line pointer in the core file. Create the area files docs/READ_MAP.md names but that do not exist yet (world-runtime, characters-ai-combat, story-runtime) with a header line. Plain English, no em dashes. Pillar: base task, it unblocks all three pillars (three lives, one city; filmi, never cheap; the city opens up).",
+      "accept": [
+        "wc -c harness/state/decisions.md is under 14,000 bytes and docs/READ_MAP.md still calls it short truthfully",
+        "Every \"## 2026\" heading that left decisions.md is in decisions_archive.md (heading count before equals the count across both files after)",
+        "grep finds the three sign-off quotes, \"KEEP from delhi-drive\" car and camera numbers and the no-attribution git rule in decisions.md",
+        "harness/state/knowledge.md is under 12 KB and each area file is under 12.5 KB; the three new area files exist",
+        "No em dash in any of the files (grep)"
+      ],
+      "deps": [],
+      "agent": "planner",
+      "priority": 2,
+      "kind": "polish",
+      "status": "todo",
+      "attempts": 0,
+      "notes": [],
+      "created": "2026-11-11T12:29:04.868Z",
+      "model": "sonnet"
+    },
+    {
+      "id": "P1-005",
+      "phase": "P1",
+      "title": "Perf budgets read the scene kind (look or city)",
+      "desc": "From the architecture record (TECH.md \"Performance budgets\"): harness/bin/perfbudget.mjs picks the draw call, triangle and video memory budgets by scene kind. A scenario or a lookproof set names its kind (scene: \"look\" or \"city\"; default look), and the budget comes from harness/verify/perf_budgets.json scenes.<kind> (city: draw calls warn 2,500 and fail 3,500, owner answer). Remove the need for a city scenario to copy the block into its own budget object. Frame time, fps floor and load stay the same signed numbers for both. lookproof.mjs --perf takes --scene-kind. Pillar: base task, it unblocks all three pillars (three lives, one city; filmi, never cheap; the city opens up).",
+      "accept": [
+        "harness/bin/perfbudget.test.mjs: a city scene with 2,600 draw calls is warn and with 3,600 is fail; a look scene with 700 is warn and with 1,100 is fail; a scene with no kind is judged as look",
+        "lookproof --perf --scene-kind city writes the kind into perf.json and judges with the city numbers (lookproof.test.mjs)",
+        "VERIFY.md \"Perf probes\" and TECH.md \"Performance budgets\" describe the scene kind in one line each",
+        "npm run typecheck and npm test are green"
+      ],
+      "deps": [],
+      "agent": "builder",
+      "priority": 2,
+      "kind": "feature",
+      "status": "todo",
+      "attempts": 0,
+      "notes": [],
+      "created": "2026-11-11T12:29:04.868Z",
+      "model": "sonnet"
+    },
+    {
+      "id": "P1-006",
+      "phase": "P1",
+      "title": "Core runtime: Jolt by name, the C1 sim clock and the module size tests",
+      "desc": "From the architecture record (TECH.md \"Stack\", \"Main loop and time (C1)\", docs/ARCHITECTURE.md \"Target module map\"). (1) Set physics/3d/physics_engine=\"Jolt Physics\" in game/project.godot (the project default resolves to GodotPhysics3D on this build) and add a test that proves the running physics server is Jolt, the way the physics bench did. (2) Move the C1 clock of the physics bench (game/bench/physics/bench_clock.gd) into game/core/sim_clock.gd: one engine physics frame is one sim tick of 1/60 s; time scale sets Engine.time_scale and Engine.physics_ticks_per_second together; the hold stops the clock and calls PhysicsServer3D.set_active(false) only at the start of a physics frame, frames keep drawing; --lockstep sets Engine.max_physics_steps_per_frame to 1; cameras follow in _physics_process with a higher process_physics_priority. Every stepping system connects to SimClock.sim_tick. The debug server hooks (clock, time scale, sim hold, frames) keep their contract and the harness driver stays green. (3) Add the module size tests: game/tests/test_module_size.gd (a GDScript file over 600 lines fails) and tools/module_size.test.ts (a TypeScript file over 800 lines fails). Phase 0 bench and prototype files over the limit go on a short named exception list inside the test, each with the task that will split or retire it. Pillar: base task, it unblocks all three pillars (three lives, one city; filmi, never cheap; the city opens up).",
+      "accept": [
+        "A Godot test reads back the physics engine setting and proves the running server is Jolt",
+        "Replay test: one input script run at time scale 0.25, 1 and 4 ends at the same position within 0.001 m; a run held and resumed equals a run never held within 0.001 m",
+        "A test lists every _physics_process under game/ outside game/bench/ and allows only the clock and the camera files",
+        "Scenarios hooks_contract, hooks_no_debug, drive_north, drive_turn_right and coords_north_marker pass",
+        "Both module size tests pass, and the exception list names a retiring task for every entry",
+        "npm run typecheck, npm test and node harness/bin/verify.mjs --quick are green, with no engine or console errors"
+      ],
+      "deps": [],
+      "agent": "builder",
+      "priority": 2,
+      "kind": "feature",
+      "status": "todo",
+      "attempts": 0,
+      "notes": [],
+      "created": "2026-11-11T12:29:04.868Z"
+    },
+    {
+      "id": "P1-007",
+      "phase": "P1",
+      "title": "Bake driver, pinned sources and the pilot centre outline",
+      "desc": "Start of the production bake (TECH.md \"World pipeline (offline bake)\", docs/ARCHITECTURE.md rows bake/main.ts, bake/sources/, bake/rand.ts; MAP_REPAIR.md \"Sources\"). tools/bake/main.ts is the only driver: it alone (with tools/bake/sources/) touches files and the network; everything below it is pure functions. Add the npm script bake (node tools/bake/main.ts <stage|block>, with --tiles x_z,... for a partial bake and --out for another tile folder). Move the readers out of the bench drivers (harness/bench/pilot_data/fetch.mjs) into tools/bake/sources/: OSM roads and features, Overture buildings through DuckDB, the GEDTM30 ground window through geotiff smoothed over 60 m with filtered Copernicus GLO-30 as the fallback, Wikidata. Every file is pinned in data/SOURCES.json with its hash, licence and credit text. FABDEM is never read. Draw the pilot centre outline as data (harness/data/districts/pilot_centre.geojson, about 20 km2): Connaught Place with Jantar Mantar, India Gate, ITO with Pragati Maidan, Chandni Chowk with Red Fort, Paharganj with the New Delhi station (the Ajmeri Gate forecourt of mission M01 inside it), GB Road, the Yamuna bank at ITO, and everything between. Add draft focus outlines for ito, paharganj_station and gb_road to harness/data/districts.json. Fetch one continuous extract for the outline plus a margin and define the stage \"pilot\". Write tools/bake/rand.ts, the one seeded random generator (seeds from the world tile and a parcel id), and the skeleton of harness/reports/map/health.json. The bake is deterministic and stops before writing tiles when an invariant fails. Pillar: the city opens up.",
+      "accept": [
+        "npm run bake -- pilot --stage sources fetches or reuses every pinned file and prints its hash; a second run makes no network request (test with a fake fetcher)",
+        "A vitest purity test fails if any file under tools/bake/ except main.ts and sources/ imports node:fs, node:net, node:http or calls fetch",
+        "A test computes the area of pilot_centre.geojson between 18 and 23 km2 and finds inside it the centres of Connaught Place, Jantar Mantar, India Gate, the ITO crossing, Pragati Maidan, Red Fort, Jama Masjid, the New Delhi station forecourt on the Ajmeri Gate side and GB Road",
+        "rand.ts tests: the same seed gives the same sequence; seeds built from (tileX, tileZ, parcelId) differ between neighbours",
+        "data/SOURCES.json has a licence and a credit line for every source, and a test fails on a source without one",
+        "npm run typecheck and npm test are green"
+      ],
+      "deps": [],
+      "agent": "builder",
+      "priority": 2,
+      "kind": "feature",
+      "status": "todo",
+      "attempts": 0,
+      "notes": [],
+      "created": "2026-11-11T12:29:04.868Z"
+    },
+    {
+      "id": "P1-008",
+      "phase": "P1",
+      "title": "Layout and block frames in the bake",
+      "desc": "Core system (Fable tier: the coordinate system and map bake pipeline, with district selection and stitching). TECH.md \"Coordinates\", \"World layout (signed 2026-11-11)\"; MAP_REPAIR.md \"District frames and stitching\"; data harness/data/districts.json. Build tools/bake/layout/: blocks and focus outlines read from districts.json; the placement method offset = pivot.world + factor x geoToWorld(origin, pivot) with India Gate as the pivot, the centre block at factor 1.0 and far blocks at 0.5; the world origin (the layout C box centre for now) and a recentre step that subtracts one vector everywhere (tiles, pins, mission anchors, saves), written and tested now and used by the first bake that includes a far block (P8); the one 250 m world grid (tile ids from world metres, shared by the tile cutter, the overrides and the inspector); the centre pair gate as rule R-STITCH (bearing within 0.5 degrees and distance within 0.5% for every pair of centre places). Translation only: no rotation, no scale, no mirror, with a check that proves it for every block. Write the far block outlines and origins as checked data for qutub_mehrauli, vasant_kunj, airport_t3 and cyber_city (harness/data/districts/<id>.geojson; today their offsets are estimates to about 200 m), so the far skyline and the later corridors have real targets. Retire the island layout code: move what is still needed from tools/bake/stitch/ (the placer, transformCheck, the Vincenty geodesic) into layout/, and retire or rewrite the island-only parts (clip ports and closures, harness/bench/stitch.mjs and stitch_draft.mjs, the game/bench/stitch scene), saying which in docs/ARCHITECTURE.md. The three bench_only connector files stay as data. Update MAP_REPAIR.md row R-STITCH to the signed seamless rule. Old game lesson: the mirrored world (worldGroup.scale.x = -1) broke every system. Nothing here may flip an axis. Pillar: the city opens up (every real place sits where it really is).",
+      "accept": [
+        "tools/bake/layout/layout.test.ts: for at least 12 named centre places every pair keeps its bearing within 0.5 degrees and its distance within 0.5% against the geodesic",
+        "Each far block origin is on its real bearing from India Gate within 0.1 degree at 0.5 of its real distance within 0.5%",
+        "The transform check proves translation only for every block: north on -Z, east on +X, determinant +1, no scale",
+        "Landmark test: India Gate lands at world (621.6, 467.2) within 0.5 m; Connaught Place has a smaller x and a smaller z than India Gate (north-west); Red Fort a larger x and a smaller z (north-east)",
+        "Recentre test: tiles, pins and anchors after the step equal their positions before minus the vector, within 1 mm",
+        "With every planned block placed the map box is under 16 km wide and no position is more than 8 km from the box centre",
+        "The world tile id function round trips for 1,000 seeded points, negative coordinates included",
+        "node harness/bench/arch.mjs stitch either still passes or is removed with docs/ARCHITECTURE.md and TECH.md \"Known limits and debt\" updated; npm run typecheck and npm test are green"
+      ],
+      "deps": [
+        "P1-007"
+      ],
+      "agent": "builder",
+      "priority": 2,
+      "kind": "feature",
+      "status": "todo",
+      "attempts": 0,
+      "notes": [],
+      "created": "2026-11-11T12:29:04.868Z",
+      "model": "fable"
+    },
+    {
+      "id": "P1-009",
+      "phase": "P1",
+      "title": "Block graph: ingest, normalise, pair and classify the pilot centre",
+      "desc": "tools/bake/graph/ (docs/ARCHITECTURE.md row bake/graph/, MAP_REPAIR.md \"Pipeline\"), from the prototypes tools/bake/osm.ts and tools/bake/roads/graph.ts. One topology graph for the whole pilot centre block, not one per site: ways clipped at the stage outline (a road that leaves the stage ends as a \"map edge\" end, kept for the later scale-up), cut at shared nodes, chains joined, one tangent through a node; one-way carriageways of one street paired; every road classified with the Delhi class defaults (class, default lanes, footpaths, left-hand traffic); rail and metro lines, foot over bridges, water and open ground; building footprints from Overture with our own merge rule (BS1; Overture drops about half the footprints in dense blocks). Ids are stable (source id plus part) so overrides survive a new extract. Add flatbush only if needed, with a decisions.md entry. Pillar: the city opens up.",
+      "accept": [
+        "Tests on the pilot graph: 0 duplicate edges, 0 zero-length edges, every edge end is a node, every clipped road ends in a map edge end",
+        "A fixture list of at least 10 divided streets (Vikas Marg, Bahadur Shah Zafar Marg, Barakhamba Road, Netaji Subhas Marg, Mathura Road and others) are each found as a pair; the Connaught Place radials stay unpaired one-ways",
+        "Two runs give the same ids and the same graph hash",
+        "Counts (nodes, edges, pairs, footprints, rail, water) are written to harness/reports/map/health.json",
+        "The graph build for the pilot centre runs in under 20 s (time printed)",
+        "npm run typecheck and npm test are green"
+      ],
+      "deps": [
+        "P1-008"
+      ],
+      "agent": "builder",
+      "priority": 2,
+      "kind": "feature",
+      "status": "todo",
+      "attempts": 0,
+      "notes": [],
+      "created": "2026-11-11T12:29:04.868Z"
+    },
+    {
+      "id": "P1-010",
+      "phase": "P1",
+      "title": "Repair rules and auto-repair for a whole block",
+      "desc": "Core system (Fable tier: the map repair layer rules, rule engine and auto-repair). MAP_REPAIR.md \"Rule engine\", \"Rules added before the pilot bake\", \"Auto-repair bounds\", \"Issue record\", \"Repair log\". Start from tools/bake/rules/ (eight census rules, RE1) and autoProposal (AR1). Complete the catalogue to the full table of MAP_REPAIR.md: roads, bridges and flyovers, intersections, lanes (R-LANE-FIT: shift a carriageway drawn closer than its lanes are wide, redraw a slip road drawn as a short diagonal, take a lane count from the road ahead), footpaths, buildings, metro and rail, foot over bridges, stitch, hero roads (detect only, never repaired automatically) and terrain. Each rule has an id, a detect function, an optional repair, a confidence and unit tests on small synthetic maps (tools/bake/testmap.ts), and runs in a fixed tested order. Auto-repair in tools/bake/repair/: a repair applies on its own only at confidence 0.8 or more and low impact, exactly as the bounds list says (a join of 5 m or less, a missing bridge layer tag, a building reaching 1.5 m or less into a road width, an exact duplicate footprint, a height outlier of 3 m or less, a carriageway shift of 2.5 m or less). Never automatic: anything on a hero road, a one-way with no pair (explained, never changed), a slip road redraw over 2.5 m, a lane count change on a trunk or primary road. Every repair is logged (repairs.jsonl: rule, issue id, before, after, confidence, the patch). Every queued issue gets ranked proposals with a preview line, a confidence and the reasoning. A queued issue never blocks a bake: its top proposal is applied as provisional. Repair instead of drop; every drop is logged. Old game lesson: roads that did not join and railings in the wrong places came from trusting raw data. The rules are where that is caught. Pillar: the city opens up.",
+      "accept": [
+        "Every rule area in the MAP_REPAIR.md table has its file, and every rule id has at least 2 unit tests (one that detects, one clean map)",
+        "Bound tests: a 5.0 m join repairs on its own and a 5.1 m join is queued; a 2.5 m carriageway shift repairs and 2.6 m is queued; a 3.0 m height outlier repairs and 3.1 m is queued; an issue on a hero road is never repaired; a one-way with no pair is marked explained and unchanged; a lane count change on a trunk road is queued",
+        "On the pilot centre graph: the report lists counts by rule; at least 65% of issues repair on their own (census: 73%); every queued issue has at least 1 proposal with a confidence, a reasoning line and a preview polyline",
+        "repairs.jsonl has one line per applied repair with before and after, and a second run on the repaired graph applies 0 new repairs",
+        "All rules run on the pilot centre in under 3 s (time per rule printed) and give the same output twice",
+        "npm run typecheck and npm test are green"
+      ],
+      "deps": [
+        "P1-009"
+      ],
+      "agent": "builder",
+      "priority": 2,
+      "kind": "feature",
+      "status": "todo",
+      "attempts": 0,
+      "notes": [],
+      "created": "2026-11-11T12:29:04.868Z",
+      "model": "fable"
+    },
+    {
+      "id": "P1-011",
+      "phase": "P1",
+      "title": "Overrides per world tile, issues.json and the map health report",
+      "desc": "MAP_REPAIR.md \"Overrides format\", \"Issue record\", \"Verification\"; docs/ARCHITECTURE.md rows bake/repair/ and bake/report/. From the prototype tools/bake/overrides.ts (OV1). Overrides: patches found by id first, then by the anchor within its tolerance; a patch whose target is gone is listed as stale and stays in the file; a patch can switch off a repair by its issue id. Files are per world tile (harness/data/overrides/<tileX>_<tileZ>.json): move the sample files under harness/data/overrides/cp and chandni_chowk to that layout. Reports in tools/bake/report/: harness/reports/map/health.json (found by rule, repaired automatically, fixed by overrides, stale overrides, left open, the gate counts), issues.json in the issue record format, and the centre pair table. The map inspector (P1-001) now reads the production issues.json: remove its bench adapter. Add the map health panel to the dashboard (latest report and a link to the inspector). Pillar: the city opens up (Anmol's picks in the inspector change the city).",
+      "accept": [
+        "Tests: a patch applies by id; with the id gone it applies by anchor inside the tolerance and not outside it; a stale patch is reported and kept; disable_repair switches off that repair",
+        "End to end test in a temp folder: a pick written by the inspector server is read by the next bake and that issue shows as fixed by override in health.json",
+        "The inspector test of P1-001 passes on the production issues.json with the adapter removed",
+        "The dashboard health panel shows the same counts as health.json (dashboard or Playwright test) and links to the inspector",
+        "No file remains under harness/data/overrides/<district>/; the moved patches still apply",
+        "npm run typecheck and npm test are green"
+      ],
+      "deps": [
+        "P1-001",
+        "P1-010"
+      ],
+      "agent": "builder",
+      "priority": 2,
+      "kind": "feature",
+      "status": "todo",
+      "attempts": 0,
+      "notes": [],
+      "created": "2026-11-11T12:29:04.868Z"
+    },
+    {
+      "id": "P1-012",
+      "phase": "P1",
+      "title": "Lane-level road model for the pilot centre",
+      "desc": "Core system and the top Fable task (MAP_REPAIR.md \"Lane-level road model\", \"Hero roads\"; ARCH_OPTIONS.md rows LN1 and HR1; decisions \"Road prototype results (P0-019)\" lists what the production version needs). Production code in tools/bake/roads/ from the prototype (model.ts, curve.ts, lanes.ts, fit.ts, hero.ts), now for the whole pilot centre graph instead of one site. The model: strips with stations, a frame, and every lane border; lane sections; left-hand traffic; Delhi class defaults; lane counts inferred along a whole street, not per way (the 4 taper findings at ITO); lane sets from a hero road spec where one exists; tapers as lane rows inside the class limits; split zones for every diverge and merge with a gore and a nose, ending exactly on both branches' own centre lines; flyover, ramp and service lanes; medians; footpath strips and crossings; and connecting lane paths through every junction (turn lanes, turn restrictions, stop line positions) for traffic, pursuit and barricades. The fit steps (carriageways pushed apart, slip road redraw) run as rule repairs with a log (P1-010), not as silent geometry changes. Output: the lane model for the mesh builder and the solver, the lane graph for the tiles, and the lanes layer data for the inspector. One implementation: the game only reads it. Old game lesson: overlapping road meshes came from building each way alone. Lanes that continue through every split and merge are the proof against that. Pillar: the city opens up and pillar 2 (chases over flyovers need lanes that join).",
+      "accept": [
+        "The prototype tests (tools/bake/roads/roads.test.ts) stay green on the production modules",
+        "On the whole pilot centre: lane continuity breaks 0 (every lane at a section end has a successor or an explained end in health.json); tapers out of limits 0 or each explained",
+        "Every diverge and merge has a gore and a nose, and each split zone ends on both branches' centre lines within 0.01 m",
+        "Left-hand traffic test on a fixture list of two-way streets; no driving lane narrower than 2.4 m except lanes tagged as galis (their limit named in the test)",
+        "Whole-street inference test: one lane count along Bahadur Shah Zafar Marg and Vikas Marg between junctions, changing only at a taper inside the class limits",
+        "ITO reproduces the Phase 0 result (10 split zones, strips do not overlap) and the Connaught Place inner circle equals its hero spec lane for lane",
+        "Every pair of junction arms that the turn rules allow has a connecting lane path with a radius of 4 m or more",
+        "The model for the pilot centre builds in under 30 s and gives the same hash twice; npm run typecheck and npm test are green"
+      ],
+      "deps": [
+        "P1-010"
+      ],
+      "agent": "builder",
+      "priority": 2,
+      "kind": "feature",
+      "status": "todo",
+      "attempts": 0,
+      "notes": [],
+      "created": "2026-11-11T12:29:04.868Z",
+      "model": "fable"
+    },
+    {
+      "id": "P1-013",
+      "phase": "P1",
+      "title": "Elevation solver for a whole block",
+      "desc": "Core system (Fable tier). MAP_REPAIR.md \"Elevation solver\"; ARCH_OPTIONS.md row EL1. Production code from tools/bake/roads/elevation.ts: the prototype solves a dense system (cubic in size) for one site; the block needs a sparse solver. One height per knot over the whole block graph by sparse least squares: the ground (GEDTM30 smoothed over 60 m) as the soft target; grade limits per class; clearance limits at every crossing of different layers; vertical curve limits; crossfall; a tie at every map edge end; and structures and abutments read from the result (deck, fill, cut, tunnel, with the Pragati Maidan tunnel as the pilot case). Add the \"deck over water\" rule the prototype lacks: a bridge over a river bed is set by its clearance above the water, not only by its two banks. The solver never breaks a grade limit; when a ramp is too short it starts earlier and then lowers the road under it, and it reports that (sunk, structureM). Old game lesson: roads floating over or sunk into the ground came from heights sampled per vertex. One solve over the whole graph is the fix. Pillar: the city opens up and pillar 2 (the ITO flyovers are a set piece).",
+      "accept": [
+        "On the pilot centre: 0 height steps at nodes (largest mismatch under 0.01 m); grade violations 0 or each explained in health.json; no vertical curve under its class limit",
+        "Every crossing of two layers has at least its class clearance (5.5 m for a road over a road; the limits named in the test)",
+        "The ITO flyover and its ramps come out within 0.3 m of the Phase 0 site result, and the Minto Road rail bridge keeps its clearance",
+        "Unit tests on synthetic maps for each constraint: grade, clearance, vertical curve, crossfall, the map edge tie and the deck over water",
+        "Every structure is listed in health.json with its kind, sunk and structureM",
+        "The solve for the pilot centre takes under 60 s (printed) and two runs agree to 0.000001 m; npm run typecheck and npm test are green"
+      ],
+      "deps": [
+        "P1-012"
+      ],
+      "agent": "builder",
+      "priority": 2,
+      "kind": "feature",
+      "status": "todo",
+      "attempts": 0,
+      "notes": [],
+      "created": "2026-11-11T12:29:04.868Z",
+      "model": "fable"
+    },
+    {
+      "id": "P1-014",
+      "phase": "P1",
+      "title": "Junction and road mesh builder with the overlap proof",
+      "desc": "Core system (Fable tier). MAP_REPAIR.md \"Junction mesh builder\"; ARCH_OPTIONS.md row J3. Production code from tools/bake/roads/junction.ts, mesh.ts and checks.ts. Junctions: cluster nodes into one junction object by rule (the 8-arm ITO junction, the India Gate hexagon, the Connaught Place circles as roundabouts); corner arcs between arms; cut lines; raised corner bands; median noses inside the junction ring; stop lines; and the proof that no two road faces overlap, by polygon union with clipper2-ts (allowed for the map tool). Road meshes: top surfaces, kerb faces at 0.15 m, footpaths, markings as lane UVs, parapets and railings only on structures and where a rule places them, retaining walls, decks with their joints, piers and supports that stand clear of every lane below. The at-grade road mesh is watertight (boundary loops with every edge used once), because the ground is cut to those loops in P1-015. Old game lesson: overlapping road meshes, railings in the wrong places, junctions that did not join. Each has a count here that must be 0. Pillar: the city opens up and pillar 2 (barricades stand at real junctions).",
+      "accept": [
+        "On the pilot centre: overlapping road faces 0 (the union area test: pairwise overlap under 0.01 m2 at every junction, total printed); open boundary edges 0; unjoined ends 0; floating ends 0",
+        "Railings: 0 railing or parapet segments at grade away from a structure or a rule (count in health.json); piers: 0 piers inside a lane polygon below",
+        "Kerb height 0.15 m within 0.01 m on sampled kerbs; the markings UV test passes; every junction has a stop line on each arm that the lane model says stops",
+        "The bench scenes --arch=roads:ito and roads:cp render from the production modules, or are retired with a note in docs/ARCHITECTURE.md",
+        "The verifier reads the shots roads_ito_top, roads_ito_eye, roads_cp_top, roads_india_gate_top and roads_chandni_chowk_eye: no overlaps, no gaps, arms join, railings only on decks and ramps",
+        "The meshes for the pilot centre build in under 60 s; npm run typecheck and npm test are green"
+      ],
+      "deps": [
+        "P1-013"
+      ],
+      "agent": "builder",
+      "priority": 2,
+      "kind": "feature",
+      "status": "todo",
+      "attempts": 0,
+      "notes": [],
+      "created": "2026-11-11T12:29:04.868Z",
+      "model": "fable"
+    },
+    {
+      "id": "P1-015",
+      "phase": "P1",
+      "title": "Ground that fits the roads",
+      "desc": "Core system (Fable tier: terrain that conforms to roads). MAP_REPAIR.md \"Terrain that fits the roads\"; ARCH_OPTIONS.md row TF2. tools/bake/terrain/ from the prototype tools/bake/roads/terrain.ts and tri.ts. A constrained Delaunay ground with points inside the blocks, cut to the road mesh's own boundary loops and to footpath and building edges (the prototype's ear clipping gives 80% needle triangles and no relief inside a block; earcut only for simple faces). A height grid for open land (lawns, the Ridge edge, the river bank). The Yamuna bank at ITO and the water surface. Ground runs on under a deck; a ramp on fill cuts the ground at the foot of its walls. The R-TERR checks. Faces are cut at the 250 m world grid with seams that match exactly. Write our own constrained Delaunay or add a package with a decisions.md entry (licence, size); if the install is refused, write it. Old game lesson: terrain and roads did not fit. The ground is cut to the road edge, so there is no second surface to disagree. Pillar: the city opens up.",
+      "accept": [
+        "On the pilot centre: road to ground gap 0.02 m or less on sampled boundary points (perf_budgets.json world); 0 ground vertices above a road inside its corridor",
+        "Triangles with a smallest angle under 1 degree are under 2% of the ground (the prototype had 80%)",
+        "Vertices on both sides of every tile seam are equal within 0.0001 m",
+        "No hole: ground plus road plus footpath plus building footprint area equals the stage outline area within 0.1%",
+        "The verifier reads the shots ground_cp_eye, ground_ito_ramp_foot and ground_yamuna_bank: no floating or sunk road, no ground through a ramp, no streaks",
+        "The ground for the pilot centre builds in under 120 s and gives the same hash twice; npm run typecheck and npm test are green"
+      ],
+      "deps": [
+        "P1-014"
+      ],
+      "agent": "builder",
+      "priority": 2,
+      "kind": "feature",
+      "status": "todo",
+      "attempts": 0,
+      "notes": [],
+      "created": "2026-11-11T12:29:04.868Z",
+      "model": "fable"
+    },
+    {
+      "id": "P1-016",
+      "phase": "P1",
+      "title": "Tile writer: production KTL1, the world grid cutter and collider chunks",
+      "desc": "TECH.md \"Tile format (T1, KTL1)\", \"Streaming\"; docs/ARCHITECTURE.md row bake/tile/; ARCH_OPTIONS.md rows T1 and K3. Move the codec from tools/bake/tile.ts into tools/bake/tile/ with its fixture tests. The 250 m world grid cutter (vertices relative to the tile, the magnitude rule); meshes merged per material; collider chunks of about 500 triangles made from the drawn vertices, one shell per building; a closed collider strip over every deck joint (an open 4 cm joint drops a wheel ray, measured in Phase 0); plain building shells from the repaired footprints with class default heights as stand-ins until the area generator of P2 (they give the base world its walls and colliders); the lanes array (the lane graph per tile); pins; and index.json (tiles, blocks, bytes, the bake hash). The header fields nav, life and placements stay reserved for P2 and P3. A tile over its byte budget or with a bad vertex is reported and skipped, never written silently. Pillar: the city opens up (collisions match what is drawn).",
+      "accept": [
+        "Round trip tests: write then read gives every array back within 0.000001; a wrong version fails loudly; a vertex outside the tile plus its margin is rejected",
+        "Collider against drawn surface within 0.05 m on 1,000 seeded points in each of 5 named tiles (Connaught Place, the ITO flyover, Chandni Chowk, India Gate, the Yamuna bank)",
+        "Deck joint test: rays cast down every 5 cm along the ITO flyover deck never miss the collider",
+        "No collider chunk has more than 600 triangles",
+        "The fixture harness/data/fixtures/tile_t1_sample.json is regenerated and the GDScript reader test passes on a production tile",
+        "For the pilot centre the average tile is 1.5 MB or less and the largest 4 MB or less (printed); npm run typecheck and npm test are green"
+      ],
+      "deps": [
+        "P1-015"
+      ],
+      "agent": "builder",
+      "priority": 2,
+      "kind": "feature",
+      "status": "todo",
+      "attempts": 0,
+      "notes": [],
+      "created": "2026-11-11T12:29:04.868Z"
+    },
+    {
+      "id": "P1-017",
+      "phase": "P1",
+      "title": "Pilot centre base bake, end to end, with the gate counts",
+      "desc": "Wire every stage in tools/bake/main.ts for the stage \"pilot\" in the order of TECH.md \"World pipeline\": sources, layout, graph, rules and auto-repair, overrides, lane model with the fit repairs, elevation, junctions and meshes, ground, tiles, reports. Invariants stop the bake before tiles are written (an open port, a floating end, overlapping road faces, a lane break, a mirror, a centre pair over 0.5 degrees). A one tile rebake after an override change. Then run it on the whole pilot centre, fix what is cheap to fix through rules or override patches written after reading shots of the site, and list every remaining gate count as explained in the report. Measure and write down: the full bake time, the one tile rebake time, tile count and bytes. The health report is linked on the dashboard. Pillar: the city opens up.",
+      "accept": [
+        "npm run bake -- pilot completes and writes game/world/tiles/ with index.json",
+        "health.json gate counts: open boundary ports, floating ends, unjoined ends, overlapping road faces, broken lane continuity and tapers out of limits are each 0 or explained by an entry",
+        "Two bakes give identical tile hashes",
+        "The full pilot bake takes under 10 minutes and a one tile rebake after an override under 60 s (both printed and written to perf_budgets.json bake as measured)",
+        "A test bake with a deliberately mirrored block, and one with a broken lane, each stop before tiles are written, with the reason",
+        "The verifier reads 4 top view shots of repaired sites (before and after where possible); npm run typecheck and npm test are green"
+      ],
+      "deps": [
+        "P1-011",
+        "P1-016"
+      ],
+      "agent": "builder",
+      "priority": 2,
+      "kind": "feature",
+      "status": "todo",
+      "attempts": 0,
+      "notes": [],
+      "created": "2026-11-11T12:29:04.868Z"
+    },
+    {
+      "id": "P1-018",
+      "phase": "P1",
+      "title": "Tile sets for verify: a test block, the bake hash, snapshots and play copies",
+      "desc": "Baked tiles and the downloaded sources are gitignored, so a fresh clone, the verifier's snapshot worktree (harness/bin/snapshot.mjs) and the play copy (harness/bin/playcopy.mjs) have no city. Fix that before the game depends on tiles. (1) A small committed test block at game/world/test_tiles/ (about 9 tiles: the ITO flyover with its junction and a Connaught Place radial with part of the circle), baked with npm run bake -- pilot --tiles ... --out game/world/test_tiles, loaded with the game arg --tiles=test, so scenarios boot in under 3 s (TECH.md \"Verify harness and shipping\"). (2) The full tile set carries its bake hash in index.json, and the expected hash is committed in game/world/tiles.hash. snapshot.mjs and playcopy.mjs link or copy game/world/tiles/ from the main checkout and fail with a clear message when the hashes differ (\"rebake: npm run bake -- pilot\"). (3) The tree hash that freshreport.mjs uses includes tiles.hash and not the tiles. Pillar: base task, it unblocks all three pillars (three lives, one city; filmi, never cheap; the city opens up).",
+      "accept": [
+        "In a fresh git worktree with no data/ and no game/world/tiles/, the game boots with --tiles=test and a drive scenario on the test block passes",
+        "The committed test block is 12 MB or less in total with no file over 5 MB",
+        "Boot to playing on the test block takes under 3 s (the signed load warn line)",
+        "snapshot.mjs gives the worktree the full tile set, and a hash mismatch stops it with the rebake message (test)",
+        "playcopy.mjs --verified carries the tiles the same way (test)",
+        "npm run typecheck, npm test and node harness/bin/verify.mjs --quick are green, with no engine or console errors"
+      ],
+      "deps": [
+        "P1-017"
+      ],
+      "agent": "builder",
+      "priority": 2,
+      "kind": "feature",
+      "status": "todo",
+      "attempts": 0,
+      "notes": [],
+      "created": "2026-11-11T12:29:04.868Z",
+      "model": "sonnet"
+    },
+    {
+      "id": "P1-019",
+      "phase": "P1",
+      "title": "Streaming core and the first streamed systems",
+      "desc": "Core system (Fable tier: tile streaming and memory). TECH.md \"Streaming (ST1, TL1)\", \"Tile format\"; docs/ARCHITECTURE.md rows world/streaming/, world/systems/, geo/; budgets in perf_budgets.json blocks streaming and systems. Reader prototype: game/bench/tiles/tile_t1.gd. game/world/streaming/: stream_core.gd (tile choice by distance and heading, three rings with the full detail ring to about 375 m now and the two far rings as registered hooks for P2, a hysteresis ring for unload, a memory cap, the attach queue capped at 1 ms of main thread work per frame, and the system registry), tile_reader.gd (KTL1 on a WorkerThreadPool task, version and magnitude checks, a bad tile is reported and skipped and never empties the world), tile_index.gd, and game/geo/world_frame.gd (block offsets from the index). game/world/systems/, one file per system, each with its own build(tile) and dispose(tile) and its own budget: ground_roads.gd, colliders.gd (chunks attached at most 3 a frame and none in a frame that attaches meshes; Jolt builds a mesh shape on the main thread when the body enters the space), buildings.gd (the plain shells for now) and lanes.gd (holds the lane graph per tile for the later traffic). The streaming core knows nothing about what a system builds. Hooks: state() reports the loaded tiles and the attach queue; teleport returns only when the ring around the target is attached with its colliders; load reports ready when the player's ring is attached. Old game lesson: one 4,065 line tile manager owned streaming, building, physics and cleanup. Here no file owns more than one of them, and the module size test enforces it. Pillar: the city opens up and pillar 2 (a chase at 200 km/h must never hitch).",
+      "accept": [
+        "Scenario stream_200 (perf, scene kind city): a scripted path across the pilot centre at 200 km/h for 60 s of sim has no frame over 33 ms after the first 2 s, attach work at most 1 ms per frame at p99, and at most 3 collider chunks attached in any frame",
+        "Scenario stream_teleport: after a teleport to Connaught Place, ITO, Chandni Chowk and India Gate there is ground under the player within 2 s of sim, and a ray down hits a collider within 0.05 m of the drawn surface",
+        "Memory: a 5 minute loop across the pilot ends with the loaded tile count at or under the cap, process memory growth under 50 MB after the first lap, and the engine object count back within 2% after an unload",
+        "A tile with a wrong version is reported and skipped and the tiles around it still load (test)",
+        "Frame p95 is inside warn 10 ms on the same path at 140 km/h (city budgets)",
+        "game/tests/test_streaming.gd covers ring choice, hysteresis, the attach cap and dispose; no file in game/world/ breaks the module size rule",
+        "harness/verify/quick.json and shared_paths.json cover game/world/; docs/ARCHITECTURE.md lists the new modules; npm run typecheck, npm test and node harness/bin/verify.mjs --quick are green, with no engine or console errors"
+      ],
+      "deps": [
+        "P1-006",
+        "P1-018"
+      ],
+      "agent": "builder",
+      "priority": 2,
+      "kind": "feature",
+      "status": "todo",
+      "attempts": 0,
+      "notes": [],
+      "created": "2026-11-11T12:29:04.868Z",
+      "model": "fable"
+    },
+    {
+      "id": "P1-020",
+      "phase": "P1",
+      "title": "Vehicle model V2 and the car at 140 km/h",
+      "desc": "TECH.md \"Vehicles (V2)\"; GAME.md \"Movement and camera feel\", \"Vehicles and driving\"; docs/ARCHITECTURE.md rows vehicles/ and camera/. From the bench vehicle game/bench/physics/vehicle_v2.gd, tune.gd and drive_logic.gd. Runs on Opus: the bench version already measures well; by the standing rule it goes to Fable only on a third attempt. game/vehicles/: vehicle.gd (our raycast vehicle on a Jolt RigidBody3D for any wheel count: suspension rays, grip per axle, steer lock by speed, yaw damping, handbrake), tyre_model.gd, drive_input.gd, vehicle_tune.gd (a resource), and game/data/vehicles/car.tres. Retune the kept delhi-drive numbers (they top out at 106 km/h with low suspension damping, 0.82 and 0.88 against a stiffness of 28) to GAME.md: top speed about 140 km/h (owner answer), 0 to 100 km/h in 10 to 12 s, 100 to 0 in 38 to 45 m, arcade and forgiving at speed. Vehicle health 1000 exists as data only. game/camera/chase_camera.gd with the kept rig: wide chase 6.6 m behind and 2.5 m up, close chase 4.5 m and 2.05 m, FOV 70 degrees plus up to 21 at speed, never under 0.5 m above the vehicle, the view toggle (V) and look back (C). Replace the kinematic box car in the main scene and move its tests. Tuning is time boxed: one fix round and one test round, then report the numbers. Anmol judges the feel at the playtest. Pillar: filmi, never cheap (driving stays central: every mission has a drive that matters).",
+      "accept": [
+        "Feel probe scenarios in sim time on the physics course or the test block: car_accel 0 to 100 km/h in 10 to 12 s; car_top 138 to 143 km/h; car_brake 100 to 0 in 38 to 45 m; car_lock full lock radius 6 to 8 m at 38 km/h",
+        "car_kerb: a one-sided 0.15 m kerb at 40 km/h gives under 10 degrees of roll, no flip and under 5% speed loss; car_flyover: over the deck joints at 100 km/h all wheels are in contact for at least 95% of ticks",
+        "Input is answered in 1 tick; the same input script at time scale 0.25, 1 and 4 ends within 0.001 m",
+        "Coordinates: heading 0 moves toward -Z and PI/2 toward +X, the node uses rotation.y = -heading; drive_north and drive_turn_right pass with the new car",
+        "Camera scenario chase_cam_floor: over a 20 s drive with a reverse into a wall and a flyover crest the camera stays 0.5 m or more above the vehicle and never inside geometry, in 6 named poses and on every frame of the run; flakecheck 3 runs (5 when low usage mode is off)",
+        "Cost per car is 0.05 ms or less (printed); the numbers table is in the task summary; npm run typecheck, npm test and node harness/bin/verify.mjs --quick are green, with no engine or console errors"
+      ],
+      "deps": [
+        "P1-006"
+      ],
+      "agent": "builder",
+      "priority": 3,
+      "kind": "feature",
+      "status": "todo",
+      "attempts": 0,
+      "notes": [],
+      "created": "2026-11-11T12:29:04.868Z"
+    },
+    {
+      "id": "P1-021",
+      "phase": "P1",
+      "title": "Auto and scooter tunes, with the auto turn tune for galis",
+      "desc": "GAME.md \"Movement and camera feel\" (vehicle table), \"The three characters\". One vehicle model, one tuning file per vehicle. game/data/vehicles/auto.tres (three wheels; the bench first guess reached 61.9 km/h and 0 to 60 in 9.2 s): top speed about 65 km/h, 0 to 40 km/h in 5 to 6 s, 60 to 0 in 18 to 22 m, and the turn tune: a tight turning circle at low speed so it takes a gali corner, and no tip over on full lock at speed. scooter.tres (two wheels with a hidden stabiliser and a visual lean): top about 90 km/h, 0 to 60 in 5 to 6 s, 80 to 0 in 25 to 32 m. patrol_car.tres starts as the car tune. The auto uses the close chase camera by default. Bodies are stand-ins from the stand-in kit. Time boxed like the car: one fix round and one test round, then report the numbers. Pillar: three lives, one city (each life has its own vehicle: the driver's auto, the fixer's scooter, the cop's patrol car).",
+      "accept": [
+        "auto_top 63 to 67 km/h; auto_accel 0 to 40 km/h in 5 to 6 s; auto_brake 60 to 0 in 18 to 22 m",
+        "auto_lock: full lock radius 3.5 to 4.5 m at 15 km/h; auto_tip: full lock at 40 km/h gives under 12 degrees of roll and no flip; auto_kerb passes like car_kerb",
+        "auto_gali_corner: with scripted inputs the auto takes a 90 degree corner between two lanes 3 m wide without touching a wall",
+        "scooter_top 88 to 92 km/h; scooter_accel 0 to 60 in 5 to 6 s; scooter_brake 80 to 0 in 25 to 32 m; scooter_stable: 30 s straight and a slalom at 40 km/h with no fall",
+        "The camera floor check of P1-020 passes for the auto and the scooter in 6 poses each",
+        "npm run typecheck, npm test and node harness/bin/verify.mjs --quick are green, with no engine or console errors"
+      ],
+      "deps": [
+        "P1-020"
+      ],
+      "agent": "builder",
+      "priority": 3,
+      "kind": "feature",
+      "status": "todo",
+      "attempts": 0,
+      "notes": [],
+      "created": "2026-11-11T12:29:04.868Z"
+    },
+    {
+      "id": "P1-022",
+      "phase": "P1",
+      "title": "On-foot controller and camera",
+      "desc": "TECH.md \"On foot and combat (F1, CB1)\"; GAME.md \"Player verbs\", \"Movement and camera feel\"; docs/ARCHITECTURE.md rows characters/ and camera/. From the bench walker game/bench/physics/walker.gd. game/characters/on_foot.gd: a CharacterBody3D capsule with our own step-up (kerbs of 0.15 m, stair risers of 0.18 m). Walk 1.6 m/s, jog 3.8, sprint 6.5 for 8 s of stamina (regen in 5 s), crouch 1.2; jump apex 0.45 m in 0.30 s; vault a wall or railing up to 1.2 m in 0.6 s when facing one; turn 180 degrees in 0.25 s while jogging. game/camera/on_foot_camera.gd: 3.0 m behind the head pivot at 1.65 m, shoulder offset 0.45 m to the right, FOV 65 degrees (plus 5 when sprinting); walls between the camera and the player fade; the camera never comes closer than 0.6 m to the head and never clips into geometry. Enter and exit a vehicle with F, with the camera handed over. New input actions are remappable (keyboard and mouse first). The body is a capsule stand-in until P1-023. Pillar: three lives, one city (the fixer's bazaar and the cop's foot chase are on foot).",
+      "accept": [
+        "foot_speeds: walk, jog, sprint and crouch each within 3% of the GAME.md numbers; foot_stamina: 8 s within 0.3 s, regen 5 s within 0.3 s",
+        "foot_jump: apex 0.42 to 0.48 m reached in 0.27 to 0.33 s; foot_vault: a 1.2 m wall is vaulted in 0.5 to 0.7 s and a 1.3 m wall is not; foot_turn: 180 degrees in 0.20 to 0.30 s",
+        "foot_kerb_stairs: under 5% speed loss over 10 kerbs, a 12 step stair and a ramp, with no snag",
+        "foot_cam_walls: on a 20 s route with 6 named poses near walls and through a lane 2 m wide, while turning and while backing into a corner, the camera stays 0.6 m or more from the head, never inside geometry (ray check through a hook), and the player is never hidden; flakecheck 3 runs (5 when low usage mode is off)",
+        "enter_exit_vehicle: on foot to driving and back in under 2 s each, with no overlap after the exit and the right camera each time; state() reports the player mode",
+        "Cost per character is 0.05 ms or less; npm run typecheck, npm test and node harness/bin/verify.mjs --quick are green, with no engine or console errors"
+      ],
+      "deps": [
+        "P1-006"
+      ],
+      "agent": "builder",
+      "priority": 3,
+      "kind": "feature",
+      "status": "todo",
+      "attempts": 0,
+      "notes": [],
+      "created": "2026-11-11T12:29:04.868Z"
+    },
+    {
+      "id": "P1-023",
+      "phase": "P1",
+      "title": "Humanoid stand-in on the CC0 animation library",
+      "desc": "TECH.md \"Characters, crowds and navigation (N1, AN2, AL1)\"; STYLE_BIBLE.md \"Characters\". Import the Quaternius Universal Animation Library 1 and 2 (CC0), retarget it to one humanoid profile, and build game/characters/humanoid_anim.gd (an AnimationTree for idle, walk, jog, sprint, crouch, jump, vault, and sit, enter and exit for vehicles). One stand-in humanoid from the library serves the three leads, told apart by their fixed looks as colours until art arrives (Bittu: khaki shirt and gamchha; SI Meera Rana: khaki uniform; Danny: maroon jacket). Missing moves (the auto driver seat, the scooter ride) are registered as art requests with harness/bin/assets.mjs and use a stand-in pose. Record the licence file and a credit line for the credits screen. If the library cannot be downloaded, report it and keep the capsule: nothing waits. Pillar: three lives, one city (three leads the player can tell apart at a glance).",
+      "accept": [
+        "A test finds every clip of the locomotion set and checks the looping ones loop",
+        "foot_anim: foot slide under 5% at walk and at jog (foot speed against ground speed over one cycle, read through a hook)",
+        "The verifier reads the shots foot_anim_walk, foot_anim_sprint, foot_anim_vault and lead_lineup from the play camera: real proportions, nothing stretched or flattened, the three leads told apart (VERIFY.md rubric lines 11 and 22)",
+        "Respect rule: the verifier checks the three looks against GAME.md \"Respect rule\" (no caricature)",
+        "The CC0 licence file and the credit line are in the repo; animation for one character costs under 0.05 ms",
+        "npm run typecheck, npm test and node harness/bin/verify.mjs --quick are green, with no engine or console errors"
+      ],
+      "deps": [
+        "P1-022"
+      ],
+      "agent": "builder",
+      "priority": 3,
+      "kind": "feature",
+      "status": "todo",
+      "attempts": 0,
+      "notes": [],
+      "created": "2026-11-11T12:29:04.868Z",
+      "model": "opus"
+    },
+    {
+      "id": "P1-024",
+      "phase": "P1",
+      "title": "Drive and walk the real pilot: the game scene on the streamed city, with the base tests",
+      "desc": "The game scene becomes the streamed pilot centre (the stand-in scenes stay behind --scene= for look tests). Default spawn: an auto stand near Connaught Place; --spawn=<pin> for verify. Rewrite the FD0 play script (harness/verify/milestones/FD0.js, the id stays in milestones.json): boot, drive 300 m along a Connaught Place radial, round part of the inner circle, stop, with real inputs only. Add the base tests Anmol asked for, in the real city: (1) a known landmark lands at its projected position and on the right side of the map: pins for India Gate, the Connaught Place central park, Red Fort, Jama Masjid, the ITO crossing and the New Delhi station forecourt; (2) collision shapes match the visible meshes: ray probes against the drawn mesh at 200 seeded points over 10 tiles, and drives over the ITO flyover, a Connaught Place circle lap, Chandni Chowk main road and a walk through a gali where wheels and feet stay on the drawn surface; (3) north is up on the map and -Z in the world; (4) no node under World has a negative scale or a mirrored basis, checked on the live tree after streaming. Update harness/verify/quick.json (a core set of about 12 scenarios now) and keep one or two progress shots (harness/bin/keepshot.mjs). Pillar: the city opens up (the first real streets you can drive).",
+      "accept": [
+        "node harness/bin/verify.mjs --milestone FD0 passes, and task.mjs milestone FD0 playable is run",
+        "city_landmark_pins: each pin within 5 m of its projected position, Red Fort north-east of India Gate and Connaught Place north-west",
+        "city_collide_probe: every probe within 0.05 m; city_ito_flyover_drive, city_cp_circle_lap and city_chandni_walk: wheels and feet never more than 0.05 m off the drawn surface, no fall through, no stuck",
+        "city_north_up: a debug top view has north up, and the port of coords_north_marker passes in the real city",
+        "The mirror test passes on the streamed tree (0 nodes with a negative scale or a mirrored basis)",
+        "The verifier reads the shots city_cp_radial_eye, city_ito_flyover_eye, city_chandni_gali_foot and city_india_gate_hexagon at the play camera: no floating or sunk roads, no overlaps, readable under the default look (plain building shells are expected in this phase)",
+        "npm run typecheck, npm test and node harness/bin/verify.mjs --quick are green, with no engine or console errors"
+      ],
+      "deps": [
+        "P1-019",
+        "P1-020",
+        "P1-022"
+      ],
+      "agent": "builder",
+      "priority": 3,
+      "kind": "feature",
+      "status": "todo",
+      "attempts": 0,
+      "notes": [],
+      "created": "2026-11-11T12:29:04.868Z"
+    },
+    {
+      "id": "P1-025",
+      "phase": "P1",
+      "title": "Map inspector step 2: the lanes layer",
+      "desc": "MAP_REPAIR.md \"Map inspector\" build order, step 2. A lanes layer drawn from the tiles' lanes data: widths, lane counts, splits, merges and tapers, so Anmol can check ramps. Split zones and taper findings are highlighted and listed, ITO first (10 split zones and the taper findings). Clicking a lane section shows its width, lane count and where the count came from (class default, inferred along the street, hero spec, override). A set_lanes note writes an override patch and an inbox entry. Pillar: the city opens up.",
+      "accept": [
+        "Playwright: the lanes layer toggles; at ITO the page lists the split zones and taper findings of health.json with the same counts; clicking one flies to it",
+        "End to end in a temp folder: a set_lanes patch written from the page changes that section's lane count in the next bake of that tile",
+        "0 console errors and 0 requests to any host but localhost",
+        "A screenshot harness/reports/inspector/lanes_ito.png is read by the verifier (lanes readable, north up)",
+        "npm run typecheck and npm test are green"
+      ],
+      "deps": [
+        "P1-011",
+        "P1-017"
+      ],
+      "agent": "builder",
+      "priority": 2,
+      "kind": "feature",
+      "status": "todo",
+      "attempts": 0,
+      "notes": [],
+      "created": "2026-11-11T12:29:04.868Z"
+    },
+    {
+      "id": "P1-026",
+      "phase": "P1",
+      "title": "City perf paths and look poses in the real pilot",
+      "desc": "TECH.md \"Performance budgets\"; VERIFY.md \"Perf probes\", \"Look proof workflow\". Fixed vehicle paths as perf scenarios with scene kind city, each at 60, 140 and 200 km/h: a Connaught Place radial into the circle, the ITO flyover run, Chandni Chowk main road, the India Gate hexagon. A city group of 6 views in harness/look_proof/poses.json (street eye at Connaught Place, the ITO junction, a flyover ramp, a gali on foot, the India Gate lawns, the busiest 40 m) for the sets city_afternoon and city_golden. Measure with the GPU ballast on a calm machine (harness/state/knowledge.md), and write the numbers to perf_budgets.json as measured city_base, with the per system readings (roads and ground GPU ms, streaming attach, physics step, vehicles) against the systems block. This is the base line that P2 is judged against when dressing arrives. Pillar: the city opens up and the performance target (60 fps on the M2 Pro).",
+      "accept": [
+        "node harness/bin/verify.mjs --only on the city_path scenarios: every one inside the signed budgets (frame p95 warn 10 ms and fail 12 ms, city draw calls 2,500 and 3,500), or each miss is listed with its numbers as a bug task",
+        "lookproof --set city_afternoon --perf --scene-kind city and city_golden write every view and a perf.json that quotes the machine, the renderer and the load",
+        "The per system table is printed and written to perf_budgets.json measured",
+        "4 of the city shots are read (downscaled to about 1600 px)",
+        "npm run typecheck, npm test and node harness/bin/verify.mjs --quick are green, with no engine or console errors"
+      ],
+      "deps": [
+        "P1-002",
+        "P1-005",
+        "P1-024"
+      ],
+      "agent": "builder",
+      "priority": 3,
+      "kind": "feature",
+      "status": "todo",
+      "attempts": 0,
+      "notes": [],
+      "created": "2026-11-11T12:29:04.868Z",
+      "model": "sonnet"
+    },
+    {
+      "id": "P1-027",
+      "phase": "P1",
+      "title": "Test builds: the Mac app and the Windows export",
+      "desc": "TECH.md \"Verify harness and shipping\" (EM1, EW1). Export presets and harness/bin/export.mjs: mac gives an ad hoc signed universal app in a zip under harness/reports/builds/ (gitignored), with the pilot tiles as a data pack for the stage (loaded at start with ProjectSettings.load_resource_pack); windows gives an exe plus data packs exported from this Mac, unsigned. Smoke run: launch the exported Mac app with --debug and run boot_title and FD0 against it through the driver; without --debug the export has no debug server. The Windows build cannot be tested on this machine: when the first one exists add a Needs-you notice so Anmol and his friend can try it (node harness/bin/notice.mjs add ...). It never blocks. Developer ID signing waits for Anmol's decision and is asked again before release. Pillar: the city opens up (a build Anmol can hand to a friend).",
+      "accept": [
+        "The Mac zip exists, and the exported app passes boot_title, hooks_no_debug and FD0 through the driver",
+        "The Windows export completes with its exe and pack files listed with sizes, and the export logs have no ERROR line",
+        "No build output or file over 50 MB is committed (git status check)",
+        "The notice for the Windows test is on the dashboard",
+        "TECH.md \"Verify harness and shipping\" lists the export commands; npm run typecheck, npm test and node harness/bin/verify.mjs --quick are green, with no engine or console errors"
+      ],
+      "deps": [
+        "P1-024"
+      ],
+      "agent": "builder",
+      "priority": 3,
+      "kind": "feature",
+      "status": "todo",
+      "attempts": 0,
+      "notes": [],
+      "created": "2026-11-11T12:29:04.868Z",
+      "model": "sonnet"
+    },
+    {
+      "id": "P2-001",
+      "phase": "P2",
+      "title": "Fold the old style switches into stylised B, and one approved reference per light",
+      "desc": "After the P1 gate (decisions.md \"Style bible and signed budgets (P0-015)\", TECH.md \"Render pipeline\" last paragraph): fold game/render/styles/stylised.gd and stylised_grime.gd into stylised_b.gd, remove the --style=stylised and --style=stylised_grime switches with their lookproof sets (style_stylised_*, style_stylised_grime_* and their _vulkan copies) and the stale batch B lines in STYLE_OPTIONS.md. realistic stays as an unmaintained, documented reference. --style=none stays as the flat fast-verify look. Extend harness/bin/lookproof.mjs so --approve can hold one approved set per light (dawn, afternoon, golden, night) and --compare picks the reference by the light of the set. Approve the four existing stylised B sets as they are: this is the look Anmol already signed, not a new look. No change to how stylised B looks. Pillar: filmi, never cheap (one look, kept honest by a reference in every light).",
+      "accept": [
+        "lookproof --set fold_dawn, fold_afternoon, fold_golden and fold_night, each compared against the stylised B set of its light, pass within harness/verify/look_rules.json",
+        "game/tests/test_style.gd passes; grep finds the removed style ids only in decisions.md, the archive and STYLE_OPTIONS.md history",
+        "harness/look_proof/approved.json lists four sets, one per light, and lookproof.test.mjs covers the choice by light",
+        "The removed lookproof set folders are gone from the repo",
+        "npm run typecheck, npm test and node harness/bin/verify.mjs --quick are green, with no engine or console errors"
+      ],
+      "deps": [],
+      "agent": "builder",
+      "priority": 2,
+      "kind": "feature",
+      "status": "todo",
+      "attempts": 0,
+      "notes": [],
+      "created": "2026-11-11T12:31:54.058Z",
+      "model": "opus"
+    },
+    {
+      "id": "P2-002",
+      "phase": "P2",
+      "title": "Area reference top-up: ITO, the Chandni Chowk galis, Jantar Mantar, Red Fort roads and GB Road",
+      "desc": "Standing rule (decisions.md \"Every area is built from real references\"): no area is dressed before its sheet is solid. The Phase 0 research (P0-035) left ITO, the Chandni Chowk galis, Jantar Mantar and the Red Fort road views thin on photos (low to medium confidence). Top them up with street-level sources (Mapillary, Wikimedia Commons street views, other openly viewable photo sets), each with its link and licence, and update the sheets in harness/design/areas/: footpaths, road surface, street lamps, boundaries, buildings, trees, street life, clutter, and what sets the area apart. Rebuild each reference board. Add one new sheet with a board for GB Road and Ajmeri Gate, written under the GB Road line of the respect rule (hardware shops at street level; the trade is background only; people shown with dignity). Add a short note on the New Delhi station forecourt on the Ajmeri Gate side to the Paharganj sheet if it is thin. Photos are internal reference only: none goes into game/ or public/. Update DELHI_WORLD.md section 2a for the changed values. Pillar: the city opens up (a generic Delhi is the failure the owner named).",
+      "accept": [
+        "Each of the four thin sheets lists at least 15 new street-level sources with link and licence, and its confidence line is medium or high, or says why it cannot be",
+        "harness/design/areas/gb_road.md and its board exist with at least 20 sources and the respect line",
+        "Every board is a JPEG under 2 MB",
+        "No reference photo is under game/ or public/ (find check)",
+        "Respect rule: the orchestrator reads the GB Road sheet against GAME.md \"Respect rule\"; no em dashes in the sheets"
+      ],
+      "deps": [],
+      "agent": "art-director",
+      "priority": 2,
+      "kind": "art",
+      "status": "todo",
+      "attempts": 0,
+      "notes": [],
+      "created": "2026-11-11T12:31:54.058Z",
+      "model": "sonnet"
+    },
+    {
+      "id": "P2-003",
+      "phase": "P2",
+      "title": "Invented names for signs in the pilot areas",
+      "desc": "The city needs hundreds of sign boards and none may carry a real brand, a real party or a real person (GAME.md \"Respect rule\"; STYLE_BIBLE.md). Write invented names per pilot area, in the scripts that area really uses (Devanagari, Latin, and Urdu script where the area sheet shows it), by kind: shops by trade, eating places, hotels and lodges, offices, clinics, coaching centres, transport, hardware shops for GB Road, wall writing and invented poster lines (the invented party Nav Dilli Dal and the other names of STORY_OUTLINE.md section 13 where they fit). Names must sound like the place without mocking it: no joke names at anyone's expense, no caste, community or religion as a punchline. Data files game/data/names/<area>.json (kind, text per script, weight), read by the kit and dressing tasks. Area ids match harness/design/areas/. Pillar: the city opens up (each area reads as itself, down to its boards).",
+      "accept": [
+        "One file per pilot area sheet (the ten sheets and GB Road) parses, with at least 60 names each and at least 8 kinds",
+        "A test checks every name against a block list of real brands, parties and well known chains (list in the test) and finds none",
+        "Every Devanagari name has a Latin form for the fallback font",
+        "Respect rule: the orchestrator reads a sample of 40 names across the areas against GAME.md \"Respect rule\" and finds no breach"
+      ],
+      "deps": [],
+      "agent": "content-writer",
+      "priority": 3,
+      "kind": "content",
+      "status": "todo",
+      "attempts": 0,
+      "notes": [],
+      "created": "2026-11-11T12:31:54.058Z"
+    },
+    {
+      "id": "P2-004",
+      "phase": "P2",
+      "title": "Area division and area profile data for the pilot",
+      "desc": "DELHI_WORLD.md section 2 (\"Area division from open data\", \"Files\", \"Profile schema\"), section 2a (the pilot sheets) and section 10 (AD2, PS1). Not a Fable task. Write harness/data/areas/: the archetype defaults; area polygons, 3 to 8 per focus district, drawn along roads and rail and seeded by OSM land use and colony outlines; an archetype by rule (from land use and the footprint grid) for the in-between areas of the pilot centre; one small file per area holding only what differs from its archetype; and an overrides file for inspector edits. Fill the profiles from the area sheets: building types and their mix, floor counts (building heights come from these where OSM has no tag), facade colours, footpaths, lamps, boundaries, trees, props per 100 m, sign density, life densities, the sound bed, and wear from 0 to 1 (it drives the grime of the signed look). Every value that is not a default carries an evidence line (a sheet section, an OSM statistic or a photo set). No value comes from a cliche. Add tools/bake/areas/profiles.ts (loader, schema check, archetype merge). Pillar: the city opens up (each area has its own style, from real references).",
+      "accept": [
+        "Schema test: every area file is valid, and a test fails on any non-default value without an evidence line",
+        "Coverage test: every point of a 50 m grid over the pilot outline falls in exactly one area or archetype; no two polygons overlap by more than 1 m2",
+        "The ten sheet areas and GB Road exist by id, each citing its sheet",
+        "Variety test (respect rule): no single building type is over 70% of an area unless its evidence line cites data",
+        "Wear from the sheets: the Chandni Chowk galis are 0.8 or more, India Gate and Kartavya Path 0.1 or less",
+        "Respect rule: the orchestrator reads the profile texts against DELHI_WORLD.md section 3 (no stereotype labels; places of worship only from OSM or the registry, never as a label of an area)",
+        "npm run typecheck and npm test are green"
+      ],
+      "deps": [
+        "P2-002"
+      ],
+      "agent": "builder",
+      "priority": 3,
+      "kind": "feature",
+      "status": "todo",
+      "attempts": 0,
+      "notes": [],
+      "created": "2026-11-11T12:31:54.058Z"
+    },
+    {
+      "id": "P2-005",
+      "phase": "P2",
+      "title": "Landmark registry build",
+      "desc": "Core system (Fable tier, task text of P0-023). DELHI_WORLD.md section 1 and section 10 \"Landmark registry pipeline\" (LM1, LS2). From the prototype tools/bake/landmarks.ts (351 pilot candidates). tools/bake/landmarks/registry.ts: join on ids, not names (OSM objects carry a wikidata tag; Wikidata gives coordinates, era, height, heritage status and the ASI monument id; Overture drops the tag, so read OSM directly); name and distance matching only as a fallback, and every fallback match is flagged. The tier score proposes hero, signature or marker (named by Anmol, ASI listed, Wikidata sitelinks, footprint size, seen from an arterial or a hero road); Anmol's list and inspector edits win. Storage: harness/data/landmarks/<id>.json per hero and signature, landmarks_markers.json generated, landmarks.overrides.json for edits, with the fields block, district and far. Source agreement: a Wikidata point outside the OSM footprint and more than 50 m from its centre becomes a flagged issue in issues.json and is never placed silently. Pilot heroes from the owner: the Connaught Place circle, India Gate, Red Fort; Jama Masjid is a signature until its hero model. Heroes and signatures get their real heights by hand, each with an evidence line. Far landmarks for the backdrop are listed with their real bearing. Respect rule: places of worship appear only where the sources place them, with a field that says they are never a combat arena. Pillar: the city opens up (first sight of a landmark is a moment).",
+      "accept": [
+        "The registry build on the pilot centre gives at least 300 candidates, each with a source id and an evidence line, and the same output hash twice",
+        "The three heroes and Jama Masjid are present with tier, height and a hand-checked position within 5 m of the OSM footprint centre (cited)",
+        "Every name-fallback match is flagged, and every entry whose sources disagree by more than 50 m is in issues.json",
+        "Tier tests: the owner list wins over the score; an override wins over both; the score orders a fixture of 10 landmarks as expected",
+        "Schema test on every file in harness/data/landmarks/; every place of worship entry carries the no-combat field",
+        "npm run typecheck and npm test are green"
+      ],
+      "deps": [
+        "P1-017"
+      ],
+      "agent": "builder",
+      "priority": 3,
+      "kind": "feature",
+      "status": "todo",
+      "attempts": 0,
+      "notes": [],
+      "created": "2026-11-11T12:31:54.058Z",
+      "model": "fable"
+    },
+    {
+      "id": "P2-006",
+      "phase": "P2",
+      "title": "Landmark placement pipeline",
+      "desc": "Core system (Fable tier). DELHI_WORLD.md \"Placement rules\" and section 10 (LP2, HM2). tools/bake/landmarks/place.ts. Inside a block a landmark sits at the block offset plus its projected position in the block frame. Take the footprint and the orientation from the OSM footprint (principal axis, or an override). Fit a flattened pad or plinth into the ground and re-cut the ground around it. Mark the landmark zone and replace the buildings inside it (logged). Lay the surroundings as ground classes (lawns, forecourt, walls, a moat line). Write pins into the tiles. Hook up the LOD slots: the hero LOD chain and one far silhouette under 2,000 triangles. Outside every block a far landmark stands on the backdrop on its real bearing as a silhouette, and is never a place the player can reach. At most 2 heroes at full detail in view, as data the streaming system reads. Pillar: the city opens up.",
+      "accept": [
+        "Position test in the block frame for every registry entry with a high position confidence: hero within 5 m and 5 degrees, signature within 10 m, marker within 15 m (perf_budgets.json world)",
+        "Pad test: the ground under each pad is flat within 0.05 m and meets the ground around it with no gap over 0.02 m",
+        "No generated or plain building stands inside a landmark zone (count 0; the replaced ones are in the log)",
+        "Relative layout: India Gate to Red Fort and India Gate to Connaught Place keep bearing within 0.5 degrees and distance within 0.5%",
+        "A far landmark is never inside a reachable tile (test); the bake gives the same tile hashes twice and tiles stay inside the byte budget",
+        "npm run typecheck and npm test are green"
+      ],
+      "deps": [
+        "P2-005"
+      ],
+      "agent": "builder",
+      "priority": 3,
+      "kind": "feature",
+      "status": "todo",
+      "attempts": 0,
+      "notes": [],
+      "created": "2026-11-11T12:31:54.058Z",
+      "model": "fable"
+    },
+    {
+      "id": "P2-007",
+      "phase": "P2",
+      "title": "Landmark stand-in parts kit and the pilot heroes as stand-ins",
+      "desc": "DELHI_WORLD.md \"Art cards and stand-ins\" and section 10 (HM3 as the placeholder, HM2 limits); STYLE_BIBLE.md \"Landmark tiers and area kits\". A parts kit driven by the registry fields: domes, chhatris, arches, colonnades, minarets, shikharas and slabs. It is the stand-in for every hero until its model arrives and the final build for the signature tier. Build the pilot heroes as stand-ins from their area sheets: the Connaught Place circle (the colonnaded blocks), India Gate (the arch, the canopy, the lawns), Red Fort (the Lahori Gate front, the walls and ramparts along Netaji Subhas Marg), and Jama Masjid as a signature. game/world/systems/landmarks.gd streams them (hero LOD chains, signature and marker builds, far silhouettes). Give harness/bin/ingest.mjs the hero rule (up to 8 parts of up to 25,000 triangles, up to 6 materials, 3 LODs per part, one far silhouette under 2,000 triangles) so a delivered model replaces a stand-in by its id. Each hero gets a first-sight pose on a mission route (GAME.md \"Level design rules\"). Pillar: the city opens up and pillar 2 (the Red Fort finale needs a Red Fort).",
+      "accept": [
+        "The verifier reads the shots hero_india_gate_first_sight, hero_red_fort_first_sight, hero_cp_circle and sig_jama_masjid, taken at player height on a mission route, against the reference boards of their area sheets: the silhouette and proportions are recognisable",
+        "Each hero's built height is within 5% of its registry height (read through a hook)",
+        "Perf scenario landmarks_two_heroes: landmark GPU cost 0.5 ms or less; the far silhouette of India Gate shows from 1.5 km (shot); a frame sequence at 140 km/h toward India Gate shows no pop a player would notice",
+        "Ingest test: a model over any hero limit is rejected with the reason; a model inside them replaces the stand-in by id",
+        "Respect rule: the verifier reads the named shots and texts against GAME.md \"Respect rule\", DELHI_WORLD.md section 3 and VERIFY.md rubric line 21; any breach is a fail, never a polish item (Jama Masjid built with care, flagged as never a combat arena)",
+        "npm run typecheck, npm test and node harness/bin/verify.mjs --quick are green, with no engine or console errors"
+      ],
+      "deps": [
+        "P2-006"
+      ],
+      "agent": "builder",
+      "priority": 3,
+      "kind": "feature",
+      "status": "todo",
+      "attempts": 0,
+      "notes": [],
+      "created": "2026-11-11T12:31:54.058Z",
+      "model": "opus"
+    },
+    {
+      "id": "P2-008",
+      "phase": "P2",
+      "title": "Art cards: the pilot hero landmarks",
+      "desc": "Cards on the dashboard with prompts and reference notes for the pilot heroes and the first signature: the Connaught Place circle blocks, India Gate, Red Fort (Lahori Gate front and walls) and Jama Masjid. Use the style anchors and technical tails of STYLE_BIBLE.md \"AI image prompts\" and \"Landmark and kit prompts\", the hero model limits of DELHI_WORLD.md section 10 (HM2), and 3 or more cited reference photos per card from the area sheets. Card ids match the registry ids so ingest replaces the stand-in. Order the batch so Anmol can make the most useful ones first. Nothing waits for these: the stand-ins of P2-007 carry the game. Pillar: the city opens up.",
+      "accept": [
+        "harness/requests/assets.json parses and has one card per pilot hero plus Jama Masjid, each with the style anchor, the technical tail, the limits and at least 3 cited references",
+        "Card ids equal the registry ids",
+        "Respect rule: each card says real proportions, no real brand or person, and for Jama Masjid built with care; the orchestrator reads the four cards"
+      ],
+      "deps": [
+        "P2-005"
+      ],
+      "agent": "art-director",
+      "priority": 3,
+      "kind": "art",
+      "status": "todo",
+      "attempts": 0,
+      "notes": [],
+      "created": "2026-11-11T12:31:54.059Z",
+      "model": "sonnet"
+    },
+    {
+      "id": "P2-009",
+      "phase": "P2",
+      "title": "Area profile generator: parcels, building shells, facade placements and edge blending",
+      "desc": "Core system (Fable tier: the area profile generator). DELHI_WORLD.md \"The generator (Fable tier)\" and section 10 \"Area profile pipeline\" (AG1, EB1); TECH.md \"Rendering of the city\". tools/bake/areas/generator.ts, at bake time, written into the tiles. Parcels from the repaired footprints and the block faces (subdivide a block where footprints are missing). Building shells with heights from OSM tags where present and otherwise from the profile's floor counts, roof types and setbacks, one collider shell per building. Facade module placements (bays, by the profile's mix) as tile placements with custom data for tint and wear. Every pick is seeded from the world tile and a parcel id made from the footprint (tools/bake/rand.ts), so a rebake gives the same city. Edge blending: inside each area's blend band the generator mixes the two profiles by distance, shorter at roads and rail. Variety rules of the respect rule (no type over about 70% of an area unless the data says so). Landmark zones are left out. This replaces the plain shells of P1. Kits, dressing and LOD are their own tasks: place modules by fixed id only. Pillar: the city opens up (the streets between the famous places are real city too).",
+      "accept": [
+        "On the pilot centre every footprint inside an area gets a shell or a log line; OSM-tagged buildings are within 1 floor of their tag; each area's floor count histogram is within 10% of its profile",
+        "Two bakes give identical tile hashes, and changing one parcel changes only the tiles it touches",
+        "Edge blend test on transects across the Connaught Place and Paharganj edge and the Chandni Chowk and Daryaganj edge: the profile mix changes in one direction across the band with no step over 20% between samples 25 m apart",
+        "Variety test per area; 0 shells cross a road polygon (or each is an issue where the road width gives way, as the repair bounds say)",
+        "Placements are 0.6 MB or less in the densest tile and the average tile stays 1.5 MB or less (printed)",
+        "The generator runs on the pilot centre in under 5 minutes; npm run typecheck and npm test are green"
+      ],
+      "deps": [
+        "P2-004",
+        "P2-006"
+      ],
+      "agent": "builder",
+      "priority": 3,
+      "kind": "feature",
+      "status": "todo",
+      "attempts": 0,
+      "notes": [],
+      "created": "2026-11-11T12:31:54.059Z",
+      "model": "fable"
+    },
+    {
+      "id": "P2-010",
+      "phase": "P2",
+      "title": "Area kits: procedural modules, atlases and instanced buildings",
+      "desc": "DELHI_WORLD.md \"Area kits\" and section 10 (KT2, TX1); TECH.md \"Rendering of the city (I3, LD1, OC2, TX1)\"; STYLE_BIBLE.md \"Materials and shading\", \"Landmark tiers and area kits\". Procedural modules first, replaced module by module through ingest later, with fixed module ids so baked placements never change. One kit per pilot archetype, each built from its area sheet: the colonial colonnade (Connaught Place), the bazaar shop house (Chandni Chowk main road), the gali house (the galis), the hotel and lodge strip (Paharganj), office and institutional blocks (ITO), the Lutyens bungalow and wall (India Gate edges), the market stall row (Janpath) and the hardware shop row (GB Road at street level). Each kit has one Texture2DArray for tiling materials and one trim and decal atlas, VRAM compressed with both import sets, 60 MB at most. Sign boards are modules that take a name from game/data/names/<area>.json. game/world/systems/buildings.gd: unique shells merged per tile and material, repeated modules as MultiMesh per module per 125 m cell. Wear and tint travel in the MultiMesh custom data and the stylised B surface shader reads them there (a per-instance uniform has room for about 4,096 instances only). Pillar: the city opens up and pillar 2 (a bazaar lane worth a fight scene).",
+      "accept": [
+        "Perf scenario city_buildings_busiest: draw calls 2,500 or fewer and buildings GPU cost 2.0 ms or less in the busiest pilot view (perf_budgets.json systems)",
+        "Each kit uses 60 MB of texture memory or less (printed), and has at least 8 modules and at least 6 facade colours",
+        "A test replaces one module mesh by id and the baked placements are unchanged",
+        "The verifier reads one street shot per kit at player height against its area sheet board (not generic), and the pair kit_wear_bazaar and kit_wear_lutyens for grime by area (VERIFY.md rubric)",
+        "Board names come only from the invented name files (test); Respect rule: the verifier reads the named shots and texts against GAME.md \"Respect rule\", DELHI_WORLD.md section 3 and VERIFY.md rubric line 21; any breach is a fail, never a polish item",
+        "npm run typecheck, npm test and node harness/bin/verify.mjs --quick are green, with no engine or console errors"
+      ],
+      "deps": [
+        "P2-003",
+        "P2-009"
+      ],
+      "agent": "builder",
+      "priority": 3,
+      "kind": "feature",
+      "status": "todo",
+      "attempts": 0,
+      "notes": [],
+      "created": "2026-11-11T12:31:54.059Z",
+      "model": "opus"
+    },
+    {
+      "id": "P2-011",
+      "phase": "P2",
+      "title": "Art cards: area kit textures, sign boards, vehicles, people and trees",
+      "desc": "The art pass for the pilot (STYLE_BIBLE.md \"Known gaps\" 3, 4 and 5 and \"AI image prompts\"). Cards with final prompts, style anchors and technical tails, in batches Anmol can make in one sitting, the most useful first: (1) the AI texture cards that replace the procedural PNG layers slot for slot, per area kit; (2) hand-painted sign board textures, with invented names only; (3) vehicles for the slice: the auto, the scooter, a hatchback, a sedan, the patrol car, and a DTC style bus for traffic with an invented operator name; (4) people: the three leads with their fixed looks, and at least 12 crowd variants that cover the variety rule (age, gender, clothing, build, activity) with no group defined by one costume or job; (5) trees: the avenue and street trees named in the area sheets. Nothing waits for these cards: the game runs on the procedural kits and stand-ins. Pillar: filmi, never cheap (rich and warm, never a cheap copy).",
+      "accept": [
+        "harness/requests/assets.json parses; there is at least one card per texture slot of the pilot kits, per slice vehicle (5 and the bus), per lead (3), at least 12 crowd variants and one per tree species named in the sheets",
+        "Every card has the style anchor and the technical tail for its asset kind, and an id that matches the slot or module it replaces",
+        "Respect rule: the orchestrator reads the people cards (variety, dignity, no caricature) and checks no card names a real brand, person or party"
+      ],
+      "deps": [
+        "P2-010"
+      ],
+      "agent": "art-director",
+      "priority": 3,
+      "kind": "art",
+      "status": "todo",
+      "attempts": 0,
+      "notes": [],
+      "created": "2026-11-11T12:31:54.059Z",
+      "model": "sonnet"
+    },
+    {
+      "id": "P2-012",
+      "phase": "P2",
+      "title": "LOD rings: block shells, the skyline and mesh LODs",
+      "desc": "TECH.md \"Streaming\", \"Rendering of the city\" (LD1); docs/ARCHITECTURE.md rows bake/lod/ and world/systems/skyline.gd. tools/bake/lod/: one merged block shell per 125 m cell for 180 to 700 m, one skyline mesh per 1 km cell that is always loaded, mesh LOD index buffers made in the bake (meshoptimizer, added with a decisions.md entry). Visibility ranges with a cross-fade, measured at speed (the cross-fade was not measured in Phase 0). Turn on the two far rings of the streaming core. Far landmark silhouettes stand on the backdrop. Pillar: the city opens up and pillar 2 (speed without pop).",
+      "accept": [
+        "Perf scenario city_lod_140 on the Connaught Place to ITO path: triangles drawn are cut by 85% or more against no LOD (bench: 92%) and frame p95 is 10 ms or less",
+        "A frame sequence at 140 km/h is read by the verifier: no block pops in a way a player would notice",
+        "8 compass shots from the India Gate lawns show a skyline with no hole",
+        "stream_200 still passes (no frame over 33 ms); mesh buffers use 150 MB or less",
+        "npm run typecheck, npm test and node harness/bin/verify.mjs --quick are green, with no engine or console errors"
+      ],
+      "deps": [
+        "P2-010"
+      ],
+      "agent": "builder",
+      "priority": 3,
+      "kind": "feature",
+      "status": "todo",
+      "attempts": 0,
+      "notes": [],
+      "created": "2026-11-11T12:31:54.059Z"
+    },
+    {
+      "id": "P2-013",
+      "phase": "P2",
+      "title": "Street dressing and life points from the area profiles",
+      "desc": "DELHI_WORLD.md section 2 (profile schema: props, trees, signs, life) and section 5; STYLE_BIBLE.md \"Shapes\" and the Delhi detail list; GAME.md \"Level design rules\" (the small-detail rule). tools/bake/areas/dressing.ts and game/world/systems/dressing.gd. Place the props each profile asks for per 100 m of road: street lamps by area type, wires, electric boxes, boards, stalls, carts, parked two-wheelers, benches, bins, bollards, barricades, boundary walls and railings as the sheet shows, and trees by the sheet's species. Props stand along the lane model's footpath edges and never in a lane, a crossing, a junction or a doorway. Decals only within 55 m and no shadows from small dressing. Write the seeded life points into the tiles' life array (people, vendors, animals, parked two-wheelers) for the crowd system of P3. Night lights come from the placements: lamps, one open shop in three, a share of lit windows. Respect rule: a religious symbol is never used as decoration to label an area; lower income areas get the same craft as rich ones. Pillar: the city opens up (the space near the player is alive with the right small things).",
+      "accept": [
+        "The metric tool reports props per 100 m for each area within 15% of its profile",
+        "Test: 0 props inside a lane, crossing or junction polygon",
+        "Perf scenario city_dressing_busiest: dressing, decals and signs cost 0.5 ms GPU or less",
+        "Every tile with a footpath has life points (count per area printed)",
+        "The verifier reads player-height shots in 5 areas for the small-detail rule, and city_night_chandni for lamps and windows that come from placements",
+        "Test: dressing ids of a religious kind appear only inside a registry place of worship zone; Respect rule: the verifier reads the named shots and texts against GAME.md \"Respect rule\", DELHI_WORLD.md section 3 and VERIFY.md rubric line 21; any breach is a fail, never a polish item",
+        "npm run typecheck, npm test and node harness/bin/verify.mjs --quick are green, with no engine or console errors"
+      ],
+      "deps": [
+        "P2-010"
+      ],
+      "agent": "builder",
+      "priority": 3,
+      "kind": "feature",
+      "status": "todo",
+      "attempts": 0,
+      "notes": [],
+      "created": "2026-11-11T12:31:54.059Z",
+      "model": "opus"
+    },
+    {
+      "id": "P2-014",
+      "phase": "P2",
+      "title": "Stylised B on the streamed city, in four lights",
+      "desc": "TECH.md \"Render pipeline\" and \"Performance budgets\"; STYLE_BIBLE.md \"Lighting presets\", \"Readability floor\". The signed look now runs on real tiles: wear and tint from the MultiMesh custom data, per-area haze from the profile, vertex AO baked into the tiles (a bake step), reflection probes at the hero places, and the day curve over the city in dawn, afternoon, golden and night. Night lamps and the heat shimmer never run together. Re-measure the worst case (night, a crowded bazaar lane). A look feature that adds more than 0.5 ms is measured with its --style-off token and named. This task does not change the signed look; it carries it onto the city. The stand-in scenes stay as the look regression set. Pillar: filmi, never cheap.",
+      "accept": [
+        "lookproof --set city_dawn, city_afternoon, city_golden and city_night with --perf --scene-kind city: every view is at or under warn 10 ms on the GPU ballast cost",
+        "The look stack costs 3.6 ms or less, and night lamps or the heat shimmer 0.8 ms or less (--style-off readings printed)",
+        "The verifier reads 6 city shots against VERIFY.md rubric lines 14 to 24; the readability floor numbers of STYLE_BIBLE.md hold in the night bazaar lane",
+        "The stand-in look sets still compare inside look_rules.json against their approved references (no regression)",
+        "npm run typecheck, npm test and node harness/bin/verify.mjs --quick are green, with no engine or console errors"
+      ],
+      "deps": [
+        "P2-012",
+        "P2-013"
+      ],
+      "agent": "builder",
+      "priority": 3,
+      "kind": "feature",
+      "status": "todo",
+      "attempts": 0,
+      "notes": [],
+      "created": "2026-11-11T12:31:54.059Z",
+      "model": "opus"
+    },
+    {
+      "id": "P2-015",
+      "phase": "P2",
+      "title": "Hero roads 1: the Connaught Place circles and radials",
+      "desc": "Owner (decisions.md \"Hero roads (Anmol)\"): some roads must be realistic. MAP_REPAIR.md \"Hero roads\" (HR1), rule R-HERO. Hero road specs in harness/data/hero_roads/ for the inner, middle and outer circles and the radials of Connaught Place (the inner circle spec exists from Phase 0): checked lane counts, medians, kerbs, footpaths, the colonnade edge, parking bays, tree lines and street furniture, each field with a reference from the cp_inner_circle and cp_outer_circle sheets. The repair layer never changes a hero road on its own. Bake them and compare with the reference photos. Pillar: the city opens up (Connaught Place must read as Connaught Place from the driving seat).",
+      "accept": [
+        "The spec check passes for every hero road, and the baked lane counts, widths, medians, kerbs and footpaths equal the spec (test)",
+        "Gate counts on the hero roads are 0 (overlaps, lane breaks, tapers)",
+        "A side by side sheet hero_cp with at least 6 game poses matched to reference photos (view direction and focal length) is read by the verifier against the board (area reference rule): pass on layout, edges, trees and furniture",
+        "Respect rule: the verifier reads the named shots and texts against GAME.md \"Respect rule\", DELHI_WORLD.md section 3 and VERIFY.md rubric line 21; any breach is a fail, never a polish item",
+        "npm run typecheck, npm test and node harness/bin/verify.mjs --quick are green, with no engine or console errors"
+      ],
+      "deps": [
+        "P2-013"
+      ],
+      "agent": "builder",
+      "priority": 3,
+      "kind": "feature",
+      "status": "todo",
+      "attempts": 0,
+      "notes": [],
+      "created": "2026-11-11T12:31:54.059Z",
+      "model": "opus"
+    },
+    {
+      "id": "P2-016",
+      "phase": "P2",
+      "title": "Hero roads 2: Janpath, Kartavya Path and the India Gate hexagon",
+      "desc": "The next hero roads of the owner's list inside the pilot: Janpath with its market edge; Kartavya Path with its lawns, water channels, lamp posts and bollards; the India Gate hexagon with its radial avenues and their Lutyens avenue trees; and the garden edge of the India Gate lawns. Specs with references from the janpath and india_gate_kartavya_path sheets, the same rules as P2-015. Pillar: the city opens up (India Gate at the end of Kartavya Path is a first-sight moment).",
+      "accept": [
+        "The spec check passes and the bake equals the spec for every road (test); avenue tree spacing is within 15% of the spec",
+        "Gate counts on these roads are 0",
+        "A side by side sheet hero_india_gate_janpath with at least 6 matched poses is read by the verifier against the boards: pass on layout, edges, trees and furniture",
+        "Respect rule: the verifier reads the named shots and texts against GAME.md \"Respect rule\", DELHI_WORLD.md section 3 and VERIFY.md rubric line 21; any breach is a fail, never a polish item",
+        "npm run typecheck, npm test and node harness/bin/verify.mjs --quick are green, with no engine or console errors"
+      ],
+      "deps": [
+        "P2-015"
+      ],
+      "agent": "builder",
+      "priority": 3,
+      "kind": "feature",
+      "status": "todo",
+      "attempts": 0,
+      "notes": [],
+      "created": "2026-11-11T12:31:54.059Z",
+      "model": "opus"
+    },
+    {
+      "id": "P2-017",
+      "phase": "P2",
+      "title": "Map inspector step 3: hero roads, focus outlines and map edges",
+      "desc": "MAP_REPAIR.md \"Map inspector\" build order, step 3. Hero roads listed beside their reference photos (local files from the area sheets, no outside request), with their spec fields and references; the focus outlines; and the roads that end at the map edge. Editing a spec field writes a spec override and an inbox entry with source inspector. Corridors get their layer when the first far block is built (P8). Pillar: the city opens up.",
+      "accept": [
+        "Playwright: the hero road list equals the spec files; clicking one flies to it and shows its references; an edit writes the override and one inbox line (temp folder)",
+        "Focus outlines and map edge ends are drawn and counted the same as the bake report",
+        "0 console errors and 0 requests to any host but localhost",
+        "A screenshot harness/reports/inspector/hero_cp.png is read by the verifier",
+        "npm run typecheck and npm test are green"
+      ],
+      "deps": [
+        "P2-015"
+      ],
+      "agent": "builder",
+      "priority": 3,
+      "kind": "feature",
+      "status": "todo",
+      "attempts": 0,
+      "notes": [],
+      "created": "2026-11-11T12:31:54.059Z"
+    },
+    {
+      "id": "P2-018",
+      "phase": "P2",
+      "title": "Map inspector step 4: the area view and the landmark view",
+      "desc": "DELHI_WORLD.md \"Map inspector: area view\" and section 10 \"Inspector views\"; MAP_REPAIR.md build order, step 4. The area view: the map coloured by area; click an area to see its profile fields with their evidence lines and a generated block preview; edit a field. The landmark view: tier icons, fly to, the registry entry, the flags; the pilot candidates with their proposed tiers, and the name-fallback matches as a filter. Every edit writes an override file (areas or landmarks) and an inbox entry with source inspector. Pillar: the city opens up (Anmol can correct how an area or a landmark is read).",
+      "accept": [
+        "Playwright: the number of area colours equals the number of areas; clicking an area shows its fields with evidence",
+        "End to end in a temp folder: editing wear writes the areas override and the next bake of that tile carries the new wear in its custom data",
+        "The landmark list count equals the registry; a tier change writes landmarks.overrides.json; the fallback filter shows exactly the flagged matches",
+        "0 console errors and 0 requests to any host but localhost; two screenshots are read by the verifier",
+        "npm run typecheck and npm test are green"
+      ],
+      "deps": [
+        "P2-005",
+        "P2-009"
+      ],
+      "agent": "builder",
+      "priority": 3,
+      "kind": "feature",
+      "status": "todo",
+      "attempts": 0,
+      "notes": [],
+      "created": "2026-11-11T12:31:54.059Z"
+    },
+    {
+      "id": "P2-019",
+      "phase": "P2",
+      "title": "The Blue Line viaduct, its stations and the foot over bridges",
+      "desc": "The pilot metro line (DELHI_WORLD.md section 4, MAP_REPAIR.md \"Pilot\"): the elevated Blue Line stretch from Mandi House past Pragati Maidan to Indraprastha, beside ITO. Build the viaduct through the lane model's structure rules with piers that stand clear of every lane (rules R-RAIL), the stations from the stand-in parts with stairs that reach the footpath, and the foot over bridges where OSM has them (R-FOB: stairs or ramps join footpaths at both ends). Colliders match what is drawn. A running train is a RELEASE item and is not built here. Pillar: the city opens up (the Metro overhead is part of how Delhi looks).",
+      "accept": [
+        "0 piers inside a lane polygon; clearance over every road 5.5 m or more; the viaduct is continuous across tile seams",
+        "Gate counts for the rail and foot bridge rules are 0 or explained",
+        "Collider against drawn surface within 0.05 m on the foot over bridge decks and stairs; the on-foot controller walks one from footpath to footpath (scenario fob_ito_walk)",
+        "The verifier reads the shots metro_pragati_maidan_eye and fob_ito against reference photos",
+        "npm run typecheck, npm test and node harness/bin/verify.mjs --quick are green, with no engine or console errors"
+      ],
+      "deps": [
+        "P2-009"
+      ],
+      "agent": "builder",
+      "priority": 3,
+      "kind": "feature",
+      "status": "todo",
+      "attempts": 0,
+      "notes": [],
+      "created": "2026-11-11T12:31:54.059Z"
+    },
+    {
+      "id": "P2-020",
+      "phase": "P2",
+      "title": "Area pass: Connaught Place circles, Janpath and Jantar Mantar",
+      "desc": "Area build pass, one per group of pilot areas. Standing rule (decisions.md \"Every area is built from real references\"): this task works from the area sheets and reference boards named below and its verifier compares game shots with the boards and fails a generic look. Sheets: cp_inner_circle, cp_outer_circle, janpath, jantar_mantar. Mission spaces: the Connaught Place auto stand and the outer circle drop of M01; the chase of M02 through the circles and out toward Barakhamba Road with its two routes (the main road, and the service lane behind the blocks); the quiet lane near Janpath where the bag is hidden. Jantar Mantar is a protest place in the story: build the place, no protest yet. Work through data first: tune the area profile files, the kit modules, the dressing rules and override patches; hand-place only at hero places and mission spaces. Check every mission space at player height (GAME.md \"Level design rules\"): the goal readable, two routes for every chase or getaway, the props the profile asks for near the player. Collect cosmetic close-up flaws as polish notes for P14. Pillar: the city opens up, and pillar 2 (the Connaught Place chase).",
+      "accept": [
+        "A side by side sheet area_cp with at least 6 game poses matched to reference photos of the sheets (view direction and focal length) is read by the verifier against the reference boards: pass on silhouette, colour, density and street life, and not a generic look",
+        "Route scenarios with inputs only: route_m02_main_road and route_m02_service_lane each run from the inner circle to the hide-out lane without leaving the road or getting stuck",
+        "The small-detail rule holds in at least 3 player-height shots of the named mission spaces",
+        "Frame p95 is 10 ms or less at the busiest pose of the group (scene kind city, GPU ballast cost)",
+        "Respect rule: the verifier reads the named shots and texts against GAME.md \"Respect rule\", DELHI_WORLD.md section 3 and VERIFY.md rubric line 21; any breach is a fail, never a polish item",
+        "npm run typecheck, npm test and node harness/bin/verify.mjs --quick are green, with no engine or console errors"
+      ],
+      "deps": [
+        "P2-014",
+        "P2-016"
+      ],
+      "agent": "builder",
+      "priority": 3,
+      "kind": "feature",
+      "status": "todo",
+      "attempts": 0,
+      "notes": [],
+      "created": "2026-11-11T12:31:54.059Z",
+      "model": "opus"
+    },
+    {
+      "id": "P2-021",
+      "phase": "P2",
+      "title": "Area pass: India Gate and Kartavya Path",
+      "desc": "Area build pass, one per group of pilot areas. Standing rule (decisions.md \"Every area is built from real references\"): this task works from the area sheets and reference boards named below and its verifier compares game shots with the boards and fails a generic look. Sheet: india_gate_kartavya_path. The lawns, the hexagon, the canopy, the avenue edges and the Lutyens walls, calm and clean (wear 0.1 or less). The first-sight pose of India Gate down Kartavya Path. Work through data first: tune the area profile files, the kit modules, the dressing rules and override patches; hand-place only at hero places and mission spaces. Check every mission space at player height (GAME.md \"Level design rules\"): the goal readable, two routes for every chase or getaway, the props the profile asks for near the player. Collect cosmetic close-up flaws as polish notes for P14. Pillar: the city opens up (first sight of a landmark is a moment).",
+      "accept": [
+        "A side by side sheet area_india_gate with at least 6 game poses matched to reference photos of the sheets (view direction and focal length) is read by the verifier against the reference boards: pass on silhouette, colour, density and street life, and not a generic look",
+        "The first-sight shot hero_india_gate_first_sight frames the arch from Kartavya Path at player height in afternoon and golden light",
+        "The small-detail rule holds in at least 3 player-height shots of the named mission spaces",
+        "Frame p95 is 10 ms or less at the busiest pose of the group (scene kind city, GPU ballast cost)",
+        "Respect rule: the verifier reads the named shots and texts against GAME.md \"Respect rule\", DELHI_WORLD.md section 3 and VERIFY.md rubric line 21; any breach is a fail, never a polish item",
+        "npm run typecheck, npm test and node harness/bin/verify.mjs --quick are green, with no engine or console errors"
+      ],
+      "deps": [
+        "P2-014",
+        "P2-016"
+      ],
+      "agent": "builder",
+      "priority": 3,
+      "kind": "feature",
+      "status": "todo",
+      "attempts": 0,
+      "notes": [],
+      "created": "2026-11-11T12:31:54.059Z",
+      "model": "opus"
+    },
+    {
+      "id": "P2-022",
+      "phase": "P2",
+      "title": "Area pass: ITO with Pragati Maidan",
+      "desc": "Area build pass, one per group of pilot areas. Standing rule (decisions.md \"Every area is built from real references\"): this task works from the area sheets and reference boards named below and its verifier compares game shots with the boards and fails a generic look. Sheet: ito (after its top-up, P2-002). The office and institutional blocks, the flyovers and their ramps, the Blue Line overhead, the Yamuna bank. Mission spaces of M03: an invented police station place near ITO, the pursuit line from Connaught Place to the ITO flyovers with the flyover split, the junction ahead where the barricade stands, and the space of the short standoff and foot chase. Work through data first: tune the area profile files, the kit modules, the dressing rules and override patches; hand-place only at hero places and mission spaces. Check every mission space at player height (GAME.md \"Level design rules\"): the goal readable, two routes for every chase or getaway, the props the profile asks for near the player. Collect cosmetic close-up flaws as polish notes for P14. Pillar: filmi, never cheap (the flyover pursuit and the barricade), and the city opens up.",
+      "accept": [
+        "A side by side sheet area_ito with at least 6 game poses matched to reference photos of the sheets (view direction and focal length) is read by the verifier against the reference boards: pass on silhouette, colour, density and street life, and not a generic look",
+        "Route scenarios with inputs only: route_m03_over_flyover and route_m03_under_flyover each run from the Connaught Place side to the barricade junction without leaving the road or getting stuck",
+        "The police station carries only the invented force name (no real unit, officer or case)",
+        "The small-detail rule holds in at least 3 player-height shots of the named mission spaces",
+        "Frame p95 is 10 ms or less at the busiest pose of the group (scene kind city, GPU ballast cost)",
+        "Respect rule: the verifier reads the named shots and texts against GAME.md \"Respect rule\", DELHI_WORLD.md section 3 and VERIFY.md rubric line 21; any breach is a fail, never a polish item",
+        "npm run typecheck, npm test and node harness/bin/verify.mjs --quick are green, with no engine or console errors"
+      ],
+      "deps": [
+        "P2-014",
+        "P2-019"
+      ],
+      "agent": "builder",
+      "priority": 3,
+      "kind": "feature",
+      "status": "todo",
+      "attempts": 0,
+      "notes": [],
+      "created": "2026-11-11T12:31:54.059Z",
+      "model": "opus"
+    },
+    {
+      "id": "P2-023",
+      "phase": "P2",
+      "title": "Area pass: Chandni Chowk main road, the galis and the Red Fort surroundings",
+      "desc": "Area build pass, one per group of pilot areas. Standing rule (decisions.md \"Every area is built from real references\"): this task works from the area sheets and reference boards named below and its verifier compares game shots with the boards and fails a generic look. Sheets: chandni_chowk_main, chandni_chowk_galis (after its top-up), red_fort_surroundings. The bazaar main road, the narrow galis with their wires and shutters (wear 0.8 or more), the Red Fort front, its parking and Netaji Subhas Marg. Mission spaces: the auto stand where M01 starts and its gali shortcut; the lane, the contact's shop and the fight space of M04 with its two scooter escape routes (the galis, the main road); the Red Fort parking for the later finale. Jama Masjid stands where it really is, built with care, and no mission space uses it as an arena. The occlusion culling switch may be tried in the galis (TECH.md) and kept only if it measures better. Work through data first: tune the area profile files, the kit modules, the dressing rules and override patches; hand-place only at hero places and mission spaces. Check every mission space at player height (GAME.md \"Level design rules\"): the goal readable, two routes for every chase or getaway, the props the profile asks for near the player. Collect cosmetic close-up flaws as polish notes for P14. Pillar: the city opens up, and pillar 2 (the bazaar fight and the getaway).",
+      "accept": [
+        "A side by side sheet area_old_delhi with at least 6 game poses matched to reference photos of the sheets (view direction and focal length) is read by the verifier against the reference boards: pass on silhouette, colour, density and street life, and not a generic look",
+        "Route scenarios with inputs only: route_m01_gali_shortcut and route_m01_main_road by auto from the stand toward the station, and route_m04_galis and route_m04_main_road by scooter out of the bazaar, each without touching a wall for more than 1 s or getting stuck",
+        "The galis hold poverty and wear as part of the city and never as its only face: the verifier reads 2 gali shots for craft and variety",
+        "The small-detail rule holds in at least 3 player-height shots of the named mission spaces",
+        "Frame p95 is 10 ms or less at the busiest pose of the group (scene kind city, GPU ballast cost)",
+        "Respect rule: the verifier reads the named shots and texts against GAME.md \"Respect rule\", DELHI_WORLD.md section 3 and VERIFY.md rubric line 21; any breach is a fail, never a polish item",
+        "npm run typecheck, npm test and node harness/bin/verify.mjs --quick are green, with no engine or console errors"
+      ],
+      "deps": [
+        "P2-007",
+        "P2-014"
+      ],
+      "agent": "builder",
+      "priority": 3,
+      "kind": "feature",
+      "status": "todo",
+      "attempts": 0,
+      "notes": [],
+      "created": "2026-11-11T12:31:54.059Z",
+      "model": "opus"
+    },
+    {
+      "id": "P2-024",
+      "phase": "P2",
+      "title": "Area pass: Paharganj, the New Delhi station forecourt and GB Road",
+      "desc": "Area build pass, one per group of pilot areas. Standing rule (decisions.md \"Every area is built from real references\"): this task works from the area sheets and reference boards named below and its verifier compares game shots with the boards and fails a generic look. Sheets: paharganj_station and gb_road (P2-002). The hotel and lodge strips of Paharganj, the station forecourt on the Ajmeri Gate side with its drop-off (the end of M01, and the stand of the later M07), and GB Road as hardware shops at street level with the upper floors as background only. Work through data first: tune the area profile files, the kit modules, the dressing rules and override patches; hand-place only at hero places and mission spaces. Check every mission space at player height (GAME.md \"Level design rules\"): the goal readable, two routes for every chase or getaway, the props the profile asks for near the player. Collect cosmetic close-up flaws as polish notes for P14. Pillar: the city opens up, and pillar 1 (the station is where the three lives first cross).",
+      "accept": [
+        "A side by side sheet area_paharganj with at least 6 game poses matched to reference photos of the sheets (view direction and focal length) is read by the verifier against the reference boards: pass on silhouette, colour, density and street life, and not a generic look",
+        "Route scenario with inputs only: route_m01_station_dropoff reaches the forecourt drop-off from Ajmeri Gate by auto and stops in the bay",
+        "GB Road follows the GB Road line of the respect rule: hardware shops at street level, the trade as background only, no sexual content, people-facing props with dignity (the verifier reads 2 shots)",
+        "The small-detail rule holds in at least 3 player-height shots of the named mission spaces",
+        "Frame p95 is 10 ms or less at the busiest pose of the group (scene kind city, GPU ballast cost)",
+        "Respect rule: the verifier reads the named shots and texts against GAME.md \"Respect rule\", DELHI_WORLD.md section 3 and VERIFY.md rubric line 21; any breach is a fail, never a polish item",
+        "npm run typecheck, npm test and node harness/bin/verify.mjs --quick are green, with no engine or console errors"
+      ],
+      "deps": [
+        "P2-014"
+      ],
+      "agent": "builder",
+      "priority": 3,
+      "kind": "feature",
+      "status": "todo",
+      "attempts": 0,
+      "notes": [],
+      "created": "2026-11-11T12:31:54.059Z",
+      "model": "opus"
+    },
+    {
+      "id": "P2-025",
+      "phase": "P2",
+      "title": "Pilot verification: landmark positions and the area difference metric",
+      "desc": "DELHI_WORLD.md section 6 and section 4 (the exit for the pilot). (1) A unit test projects every registry entry with a high position confidence and checks the baked position and orientation in its block frame (hero 5 m and 5 degrees, signature 10 m, marker 15 m). (2) A scenario teleports to each pilot hero and reads its world position through the hooks: north is -Z and the landmark is on the right side of the map. (3) The area difference metric tool harness/bin/areametric.mjs: per area, from the generated output and from lookproof shots, the building height histogram, the facade colour histogram in Lab, props per 100 m of road, tree cover and sign density; the distance between every pair of pilot areas against a threshold set from this first measurement and written to DELHI_WORLD.md section 6; variety inside an area; smooth edges on transects. Pillar: the city opens up (each area visibly its own).",
+      "accept": [
+        "npm test includes the landmark position test and it passes for every entry",
+        "Scenario pilot_hero_positions passes for the Connaught Place circle, India Gate, Red Fort and Jama Masjid",
+        "node harness/bin/areametric.mjs --pilot exits 0: every pair of the pilot areas is above the threshold, variety inside each area is above its floor, and the transects are smooth; the report is harness/reports/map/area_metric.json",
+        "The threshold and how it was set are written in DELHI_WORLD.md section 6",
+        "npm run typecheck, npm test and node harness/bin/verify.mjs --quick are green, with no engine or console errors"
+      ],
+      "deps": [
+        "P2-020",
+        "P2-021",
+        "P2-022",
+        "P2-023",
+        "P2-024"
+      ],
+      "agent": "builder",
+      "priority": 3,
+      "kind": "feature",
+      "status": "todo",
+      "attempts": 0,
+      "notes": [],
+      "created": "2026-11-11T12:31:54.059Z",
+      "model": "sonnet"
+    },
+    {
+      "id": "P2-026",
+      "phase": "P2",
+      "title": "Pilot verification: side by side sheets against the reference photos",
+      "desc": "DELHI_WORLD.md section 6 (\"Side by side\"). Build the final sheets with lookproof.mjs --sheet: each game pose beside its reference photo (same view direction, similar focal length), grouped into six combined sheets of about 1600 px so the verifier can read them all: Connaught Place with Janpath and Jantar Mantar; India Gate and Kartavya Path; ITO with Pragati Maidan; Chandni Chowk with the galis and Red Fort; Paharganj with the station and GB Road; and the heroes. The verifier reads them by eye against the rubric (silhouette, colour, density, street life) and the respect rule. Reference photos stay out of the shipped build. Cosmetic misses go to the polish list for P14; real misses become bug tasks. Pillar: the city opens up.",
+      "accept": [
+        "Six combined sheets exist under harness/reports/look/ as JPEGs under 2 MB",
+        "The verifier reads all six and passes each on silhouette, colour, density and street life, or lists each fail as a bug task with its shot",
+        "Test: no reference photo is under game/ or public/, and the export of P1-027 does not contain one",
+        "Respect rule: the verifier reads the named shots and texts against GAME.md \"Respect rule\", DELHI_WORLD.md section 3 and VERIFY.md rubric line 21; any breach is a fail, never a polish item"
+      ],
+      "deps": [
+        "P2-020",
+        "P2-021",
+        "P2-022",
+        "P2-023",
+        "P2-024"
+      ],
+      "agent": "builder",
+      "priority": 3,
+      "kind": "feature",
+      "status": "todo",
+      "attempts": 0,
+      "notes": [],
+      "created": "2026-11-11T12:31:54.059Z",
+      "model": "sonnet"
+    },
+    {
+      "id": "P2-027",
+      "phase": "P2",
+      "title": "Pilot verification: perf on the pilot camera paths",
+      "desc": "DELHI_WORLD.md section 5 (last line) and section 4. Fixed camera paths through all five area groups with the full dressing and LOD, at 60, 140 and 200 km/h, in the four lights, plus the worst case on foot (night, the crowded bazaar lane). Per system GPU and CPU readings against perf_budgets.json systems (roads and ground 1.0, generated buildings 2.0, landmarks 0.5, dressing 0.5, the look stack 3.6, night lamps or shimmer 0.8, streaming attach 1.0). The bake totals: time, tile count and bytes. Measure with the GPU ballast on a calm machine. Write the numbers to perf_budgets.json as measured pilot. This is the measurement that must pass before any scale-up (GAME.md \"Map grows in steps\"). Pillar: the city opens up and the performance target (60 fps on the M2 Pro, no struggles).",
+      "accept": [
+        "Every pilot_path scenario is inside the signed budgets: frame p95 warn 10 ms and fail 12 ms, city draw calls 2,500 and 3,500, triangles 6 M and 9 M, video memory 1,200 and 2,000 MB, load 3 s and 10 s",
+        "No frame over 33 ms at 200 km/h on any path",
+        "Each system line is inside its budget, or a bug task is filed with the numbers",
+        "The full pilot bake with all layers takes under 15 minutes and the average tile is 1.5 MB or less",
+        "The numbers are in perf_budgets.json measured and quoted in the task summary with the machine, renderer and load"
+      ],
+      "deps": [
+        "P2-012",
+        "P2-020",
+        "P2-021",
+        "P2-022",
+        "P2-023",
+        "P2-024"
+      ],
+      "agent": "builder",
+      "priority": 3,
+      "kind": "feature",
+      "status": "todo",
+      "attempts": 0,
+      "notes": [],
+      "created": "2026-11-11T12:31:54.059Z",
+      "model": "sonnet"
+    },
+    {
+      "id": "P2-028",
+      "phase": "P2",
+      "title": "Credits: OSM attribution and every source credit in the game",
+      "desc": "ODbL asks for attribution, and every other source and asset licence must be credited (TECH.md \"World pipeline\"; DELHI_WORLD.md section 8 item 8). Show \"© OpenStreetMap contributors\" on the title screen stand-in and wherever the game shows a map, and add a credits screen that is generated from data so a new source cannot be missed: every credit line of data/SOURCES.json (OSM, Overture, GEDTM30, Copernicus GLO-30 if used, Wikidata) plus an asset licence file (the Quaternius CC0 library, the four CC0 sounds, fonts under OFL when added). The menus of P3 link to the same screen. Add a short doc note on how the repaired map data is published as ODbL asks, as a release step for P14. Pillar: the city opens up (the real city is built on open data, and says so).",
+      "accept": [
+        "Scenario credits_screen: the set of credit lines on the screen equals the set in data/SOURCES.json plus the asset licence file (read through debug.hud)",
+        "A test fails when a source or an asset licence entry has no credit text",
+        "The OSM line shows on the title stand-in (shot credits_osm_line, text read through debug.hud)",
+        "The publishing note is in docs/ and linked from TECH.md \"World pipeline\"",
+        "npm run typecheck, npm test and node harness/bin/verify.mjs --quick are green, with no engine or console errors"
+      ],
+      "deps": [
+        "P1-007"
+      ],
+      "agent": "builder",
+      "priority": 3,
+      "kind": "feature",
+      "status": "todo",
+      "attempts": 0,
+      "notes": [],
+      "created": "2026-11-11T12:31:54.059Z",
+      "model": "sonnet"
+    },
+    {
+      "id": "P3-001",
+      "phase": "P3",
+      "title": "Plan phase P3: life and action systems",
+      "desc": "Planner mode PLAN_PHASE P3. This phase holds seed tasks from the game plan (P0-023), and task.mjs phase-add does not mark a phase as unplanned, so this task is the planning step: every seed depends on it. Read the phase in harness/state/backlog.json (goal, exit, milestones), harness/state/next_phase_notes.md (the section for P3), GAME.md (pillars, capability list, the sections the phase needs), TECH.md, VERIFY.md \"Writing acceptance criteria\" and the knowledge files. Write 12 to 35 tasks to harness/state/plan_P3.json and add them with task.mjs add-json. Fold in the seed tasks already in the phase with task.mjs deps --add, task.mjs edit and task.mjs order: split a seed that is too big, never duplicate one. Every task names its pillar; every mission task carries the four fun criteria, the driving share check and the respect rule check; every area or art task carries the respect rule and its area sheet. Check the GAME.md capability list and say which items the phase builds. Then run task.mjs planned P3. For this phase the notes list the systems in build order (nav and lane graph export first) and the items moved here from the foundation phase (the combat foundation and police). The HUD build seed stays dependent on P1-003 (Show Anmol the HUD mockups): if he has not answered when this phase starts, put P1-003 first and plan everything else so it does not wait for the HUD. Pillar: base task, it plans the work that serves the pillars named in the phase goal.",
+      "accept": [
+        "harness/state/plan_P3.json exists and the phase has 12 to 35 open tasks, each with a \"Pillar:\" line and checkable acceptance",
+        "Every seed task of the phase is folded in (kept, edited or split with a note), none duplicated",
+        "node harness/bin/task.mjs planned P3 has been run",
+        "The return lists the ids and titles added, and any design change with its decisions.md entry"
+      ],
+      "deps": [],
+      "agent": "planner",
+      "priority": 1,
+      "kind": "feature",
+      "status": "todo",
+      "attempts": 0,
+      "notes": [],
+      "created": "2026-11-11T12:33:40.827Z"
+    },
+    {
+      "id": "P3-002",
+      "phase": "P3",
+      "title": "HUD build: the slice components",
+      "desc": "Seed from the game plan. No HUD is built before Anmol has seen the mockups (decisions.md \"HUD gets its own discovery (Anmol)\"): this task depends on P1-003 and follows his answers in harness/design/HUD.md \"Answers\". Build the SLICE components of HUD.md \"Component list\" in game/ui/ in the signed look (STYLE_BIBLE.md \"UI\"): the minimap with the objective marker and police, health, the wanted level beacons, money, weapon and ammo, the goal line and the mission timer, speed in a vehicle, prompts, and the hide rules (story scenes, the map screen, pause). Fonts are OFL faces that cover Devanagari (HUD.md names Teko and Mukta), added with their licence to the credits data. Every element is readable through debug.hud. The stand-in HUD (game/ui/standin_hud.gd) is retired. The planner of P3 may split this seed (minimap and route guidance, wanted and combat, the mission cards). Pillar: three lives, one city (the HUD carries the lead, the goal and the wanted level of each life), and filmi, never cheap (quiet until needed).",
+      "accept": [
+        "Driving pose (lookproof view hud_play): the HUD covers under 9% of the frame and nothing but world markers sits in the centre 40% by 50% box",
+        "Safe margins of at least 64 px left and right and 56 px top and bottom at 1920x1080; no text under 15 px at 1080p",
+        "Devanagari renders with correct conjuncts and matras: a shot of the place names in HUD.md \"Checkable rules\" is read against the mockups",
+        "The objective shows within 1 s of a mission start and after every new objective (event hud_objective with the text)",
+        "The beacon count equals the wanted level at every change and the state word matches seen or searching (scenario)",
+        "Every HUD element is readable through debug.hud (visible, text, value); the HUD and subtitles never cover the player (debug.shotProblems)",
+        "HUD frame cost is 0.1 ms GPU or less in the perf scenario (perf_budgets.json systems), or the measured number is recorded with a reason",
+        "The verifier reads 4 shots (driving, on foot, combat with wanted, mission passed) against HUD.md and Anmol's answers; npm run typecheck, npm test and node harness/bin/verify.mjs --quick are green, with no engine or console errors"
+      ],
+      "deps": [
+        "P3-001",
+        "P1-003"
+      ],
+      "agent": "builder",
+      "priority": 3,
+      "kind": "feature",
+      "status": "todo",
+      "attempts": 0,
+      "notes": [],
+      "created": "2026-11-11T12:33:40.827Z",
+      "model": "opus"
+    },
+    {
+      "id": "P3-003",
+      "phase": "P3",
+      "title": "Cutscene runtime: data-file scenes, one player, skip to a declared end state",
+      "desc": "Seed from the game plan (owner: decisions.md \"Cutscenes and story telling\"; signed design: TECH.md \"Story runtime (CS2, DG1, LIP2 then LIP1, FC2, SB1, SK1)\"). The slice gets short in-engine scenes; the big directed cutscenes with lip sync and face sets are RELEASE and come with the acts once voices exist. game/story/cutscene_player.gd and game/camera/cutscene_camera.gd: a cutscene is a data file game/data/cutscenes/<id>.json with shots (camera mark, lens, move, length: cuts, push in, dolly, orbit, handheld sway), actor marks, library animation clip names, look-at targets, lines by id and events. One player runs them on the sim clock. The verifier can seek to any time. Every cutscene declares its end state (actors, vehicles, camera, mission flags, clock); skip is one button, always, and jumps there through the same code as a normal ending with a 0.3 s fade and a one-line recap; a checkpoint is saved when a cutscene starts. The HUD hides in story scenes. Build one test scene with two actors and three shots. Pillar: three lives, one city (the story of the three is told in scenes), and filmi, never cheap.",
+      "accept": [
+        "Test: the test scene played to the end and the same scene skipped at 3 different times give the same end state (actors, vehicles, camera, flags, clock)",
+        "Scenario cutscene_seek: at 5 seeked times every actor named in the shot is inside the frame (a hook reports screen boxes), and across the whole scene no actor that the shot names leaves the frame; flakecheck 3 runs (5 when low usage mode is off)",
+        "Skip returns control in under 1 s of sim after the fade and writes the recap line; a checkpoint exists from the scene start",
+        "A schema test rejects a cutscene file with no declared end state",
+        "Cutscene and dialogue work together stays inside the 0.4 ms CPU line of perf_budgets.json systems (measured); npm run typecheck, npm test and node harness/bin/verify.mjs --quick are green, with no engine or console errors"
+      ],
+      "deps": [
+        "P3-001"
+      ],
+      "agent": "builder",
+      "priority": 3,
+      "kind": "feature",
+      "status": "todo",
+      "attempts": 0,
+      "notes": [],
+      "created": "2026-11-11T12:33:40.827Z"
+    },
+    {
+      "id": "P3-004",
+      "phase": "P3",
+      "title": "Dialogue line player, Hinglish and English subtitles, and the jaw",
+      "desc": "Seed from the game plan (TECH.md \"Story runtime\": DG1, SB1, LIP2; STORY_OUTLINE.md section 5 for the talk rules). game/story/dialogue_player.gd and subtitles.gd, with game/characters/face.gd for the jaw. A line is data in game/data/dialogue/ (id, speaker, channel, priority, text per language, voice file id, length), written by the content writer. Channels: drive talk, phone, inner voice, radio, ambient; one queue per channel. A crash, a chase start or a higher priority line pauses drive talk, which resumes with a short pickup line. Inner voice and radio duck under talk; the Dialogue bus ducks Music and Ambience. Subtitles: every line has a Hinglish text (Latin letters) and an English text from the start, with the speaker name and a colour per speaker, on by default, in Godot translation tables (CSV); a Devanagari track can be added later as a third language. Mouths: with a voice file the jaw follows its baked loudness curve; with none, a timed talk flap for as long as the subtitle shows. Lip sync from voice files and the small face set are RELEASE (LIP1, FC2) and are not built here. Voice lines are requests on the dashboard; text placeholders until then. Pillar: three lives, one city (most of the story is told in play: drive talk, phone, inner voice).",
+      "accept": [
+        "Scenario dialogue_interrupt: a drive talk line is paused by a crash event within 0.2 s and resumes with a pickup line after the action ends; a higher priority line cuts in and the queue order is kept",
+        "Test: every line in game/data/dialogue/ has a Hinglish and an English text, a speaker and a length; no line is over 25 words",
+        "Subtitle shots in both languages are read by the verifier: speaker name and colour shown, text never over the player (debug.shotProblems), no missing glyph",
+        "The jaw moves while a line of its speaker shows and is still otherwise (hook reads the jaw value over a line with and without a voice file)",
+        "Ducking test on the audio buses: Music and Ambience drop while the Dialogue bus plays; npm run typecheck, npm test and node harness/bin/verify.mjs --quick are green, with no engine or console errors"
+      ],
+      "deps": [
+        "P3-001"
+      ],
+      "agent": "builder",
+      "priority": 3,
+      "kind": "feature",
+      "status": "todo",
+      "attempts": 0,
+      "notes": [],
+      "created": "2026-11-11T12:33:40.827Z"
+    },
+    {
+      "id": "P4-001",
+      "phase": "P4",
+      "title": "Plan phase P4: the first playable slice",
+      "desc": "Planner mode PLAN_PHASE P4. This phase holds seed tasks from the game plan (P0-023), and task.mjs phase-add does not mark a phase as unplanned, so this task is the planning step: every seed depends on it. Read the phase in harness/state/backlog.json (goal, exit, milestones), harness/state/next_phase_notes.md (the section for P4), GAME.md (pillars, capability list, the sections the phase needs), TECH.md, VERIFY.md \"Writing acceptance criteria\" and the knowledge files. Write 12 to 35 tasks to harness/state/plan_P4.json and add them with task.mjs add-json. Fold in the seed tasks already in the phase with task.mjs deps --add, task.mjs edit and task.mjs order: split a seed that is too big, never duplicate one. Every task names its pillar; every mission task carries the four fun criteria, the driving share check and the respect rule check; every area or art task carries the respect rule and its area sheet. Check the GAME.md capability list and say which items the phase builds. Then run task.mjs planned P4. For this phase: the slice is M01 to M04, four solo missions with Bittu first, no merge and no switching (GAME.md \"First playable slice\"; decisions.md \"Act 1 story flow, no early merge\"). The content writer's task comes first so missions use its lines; one art task for the slice assets; a set piece polish task and the playtest build last. Play scripts live in harness/verify/milestones/<ID>.js. Align the M03 beats in milestones.json with decisions.md \"Pistol stays in the slice, used in M03\" if they still differ. Pillar: base task, it plans the work that serves the pillars named in the phase goal.",
+      "accept": [
+        "harness/state/plan_P4.json exists and the phase has 12 to 35 open tasks, each with a \"Pillar:\" line and checkable acceptance",
+        "Every seed task of the phase is folded in (kept, edited or split with a note), none duplicated",
+        "node harness/bin/task.mjs planned P4 has been run",
+        "The return lists the ids and titles added, and any design change with its decisions.md entry"
+      ],
+      "deps": [],
+      "agent": "planner",
+      "priority": 1,
+      "kind": "feature",
+      "status": "todo",
+      "attempts": 0,
+      "notes": [],
+      "created": "2026-11-11T12:33:40.827Z"
+    },
+    {
+      "id": "P4-002",
+      "phase": "P4",
+      "title": "Slice script: lines, scenes and passenger talk for M01 to M04",
+      "desc": "Seed from the game plan. From STORY_OUTLINE.md (Act 1, missions M01, M02, M03 and M04, with section 13 overriding) and milestones.json: write the lines for the four slice missions as dialogue data (game/data/dialogue/, the format of the line player) and the short scene scripts as cutscene data drafts (game/data/cutscenes/): the opening at the auto stand and the bag left behind (M01); Meera's cameo through the windscreen and the bag opened under a streetlight (M02); the station scene and the arrest (M03); Madam's first call (M04). Tag every line with its channel (drive talk, phone, inner voice, radio, ambient). Hinglish as written in Latin letters, plus the English text. Lines stay short (under 15 words as a rule, never over 25). Goal lines and fail reasons for each mission, in words a player reads in a second. Register every voice line as a request for Anmol; text carries the game until voices arrive. Pillar: three lives, one city (each lead has their own voice: Bittu jokes, Meera lists, Danny prices).",
+      "accept": [
+        "The dialogue and cutscene files for M01 to M04 parse and pass the line player's data test (Hinglish and English on every line, a speaker, a channel, a length)",
+        "Every beat of the four milestones.json entries has its lines, and every fail has a reason line",
+        "harness/requests/voice.json parses with one request per voice line",
+        "Respect rule: the verifier reads the named shots and the mission text against GAME.md \"Respect rule\" and VERIFY.md rubric line 21; any breach is a fail (no real people, parties or brands; no joke at anyone's expense)"
+      ],
+      "deps": [
+        "P4-001"
+      ],
+      "agent": "content-writer",
+      "priority": 3,
+      "kind": "content",
+      "status": "todo",
+      "attempts": 0,
+      "notes": [],
+      "created": "2026-11-11T12:33:40.827Z"
+    },
+    {
+      "id": "P4-003",
+      "phase": "P4",
+      "title": "M01: Train at 6:10 (Driver)",
+      "desc": "Seed from the game plan: the mission task of M01 (the planner of P4 may split it into a scene task and a mission task). Build M01 as data (game/data/missions/M01.json) plus its script on the mission runner, beat by beat from harness/data/milestones.json and GAME.md \"Act 1: Sawari\" and \"First playable slice\", with anchors by block id and world metres, a checkpoint at least every 90 s, and its lines and scenes from the slice script. The first mission of the game, Bittu in the auto: the stand near Chandni Chowk in a hot hazy afternoon, the family with luggage, the deadline to New Delhi station (Ajmeri Gate side) with the main road jammed and the gali shortcut marked, gap weaving and the horn, the drop-off, then the nervous second passenger to Connaught Place who leaves the bag. No on-foot part. It teaches driving, the horn and the gali in a safe first minute before the timer matters. Write the play script harness/verify/milestones/M01.js (VERIFY.md \"Play scripts\"): real inputs only, no teleport and no flag writes, waits in sim time, a log line and a shot per beat, the time on foot and in a vehicle logged, inside its budgetMs. Pillar: three lives, one city (the bag starts all three stories), and the city opens up (the gali only a driver knows).",
+      "accept": [
+        "M01 matches its milestones.json entry and GAME.md beat by beat (the play script logs each beat and shoots it)",
+        "node harness/bin/verify.mjs --milestone M01 passes with harness/verify/milestones/M01.js, and node harness/bin/task.mjs milestone M01 playable is run",
+        "Fun 1, clear goal: state().mission.goal is set and the marker is on screen by 5 s of sim after the start (asserted by the play script; shot M01_goal)",
+        "Fun 2, fair fail: the timer running out (\"The train left\"), the auto wrecked, and the family thrown out by a crash each raise mission:fail with a reason in words (shot M01_fail) and the instant retry gives control back at the last checkpoint in under 3 s of sim (scenario m01_fail_retry)",
+        "Fun 3, a reason to retry: the completion screen shows the time next to the best so far (shot M01_done)",
+        "Fun 4, a reward that matters: the completion screen shows the fare money and the bag with the diary as the story turn and the play script finds it in the save (state().progress)",
+        "Driving stays central: the whole mission is driven; the play script logs 0% on foot",
+        "Routes: the gali shortcut and the main road are each completed by an input-only route scenario (route_m01_gali_shortcut, route_m01_main_road) with player-height shots",
+        "Passengers talk and react (a line on a near miss and on a crash); the horn makes traffic and people react (scenario m01_horn_reaction); near misses are counted and shown",
+        "The verifier reads the beat shots against the VERIFY.md rubric (readable goal, HUD never over the player, the signed look); frame p95 is 10 ms or less at the mission's busiest beat (perf scenario, scene kind city)",
+        "Respect rule: the verifier reads the named shots and the mission text against GAME.md \"Respect rule\" and VERIFY.md rubric line 21; any breach is a fail",
+        "npm run typecheck, npm test and node harness/bin/verify.mjs --quick are green, with no engine or console errors"
+      ],
+      "deps": [
+        "P4-001",
+        "P4-002"
+      ],
+      "agent": "builder",
+      "priority": 3,
+      "kind": "feature",
+      "status": "todo",
+      "attempts": 0,
+      "notes": [],
+      "created": "2026-11-11T12:33:40.827Z"
+    },
+    {
+      "id": "P4-004",
+      "phase": "P4",
+      "title": "M02: Who wants the bag (Driver)",
+      "desc": "Seed from the game plan: the mission task of M02 (the planner of P4 may split it into a scene task and a mission task). Build M02 as data (game/data/missions/M02.json) plus its script on the mission runner, beat by beat from harness/data/milestones.json and GAME.md \"Act 1: Sawari\" and \"First playable slice\", with anchors by block id and world metres, a checkpoint at least every 90 s, and its lines and scenes from the slice script. The same night: the dark car chases the auto through the Connaught Place circles and out toward Barakhamba Road, the police jeep joins with SI Meera Rana at the wheel for a few seconds (her cameo, framed so she is recognised later; she is not playable here), Bittu loses both in the galis near Janpath, hides in a quiet lane and looks in the bag. Night light with the readability floor holding. Write the play script harness/verify/milestones/M02.js (VERIFY.md \"Play scripts\"): real inputs only, no teleport and no flag writes, waits in sim time, a log line and a shot per beat, the time on foot and in a vehicle logged, inside its budgetMs. Pillar: three lives, one city (the cop is introduced inside the driver's mission), and filmi, never cheap (the Connaught Place chase).",
+      "accept": [
+        "M02 matches its milestones.json entry and GAME.md beat by beat (the play script logs each beat and shoots it)",
+        "node harness/bin/verify.mjs --milestone M02 passes with harness/verify/milestones/M02.js, and node harness/bin/task.mjs milestone M02 playable is run",
+        "Fun 1, clear goal: state().mission.goal is set and the marker is on screen by 5 s of sim after the start (asserted by the play script; shot M02_goal)",
+        "Fun 2, fair fail: being caught by the dark car for 8 s (\"They got you\"), the auto wrecked, and the police pinning the auto (\"The police stopped you\") each raise mission:fail with a reason in words (shot M02_fail) and the instant retry gives control back at the last checkpoint in under 3 s of sim (scenario m02_fail_retry)",
+        "Fun 3, a reason to retry: the completion screen shows the escape time next to the best so far (shot M02_done)",
+        "Fun 4, a reward that matters: the completion screen shows the fare money and the story turn (the dead passenger, the jeep that has his number) and the play script finds it in the save (state().progress)",
+        "Driving stays central: the whole chase is driven; the on-foot share logged by the play script is under 40% (the look in the bag is a scene)",
+        "Routes: the main road and the service lane behind the blocks are each completed by an input-only route scenario (route_m02_main_road, route_m02_service_lane) with player-height shots",
+        "The jeep cameo scene: Meera is in frame and recognisable for the whole 8 s scene, with the moving jeep and the auto both covered (seeked shots at 3 times); flakecheck 3 runs (5 when low usage mode is off)",
+        "The verifier reads the beat shots against the VERIFY.md rubric (readable goal, HUD never over the player, the signed look); frame p95 is 10 ms or less at the mission's busiest beat (perf scenario, scene kind city)",
+        "Respect rule: the verifier reads the named shots and the mission text against GAME.md \"Respect rule\" and VERIFY.md rubric line 21; any breach is a fail",
+        "npm run typecheck, npm test and node harness/bin/verify.mjs --quick are green, with no engine or console errors"
+      ],
+      "deps": [
+        "P4-001",
+        "P4-002"
+      ],
+      "agent": "builder",
+      "priority": 3,
+      "kind": "feature",
+      "status": "todo",
+      "attempts": 0,
+      "notes": [],
+      "created": "2026-11-11T12:33:40.827Z"
+    },
+    {
+      "id": "P4-005",
+      "phase": "P4",
+      "title": "M03: Barricade at ITO (Cop)",
+      "desc": "Seed from the game plan: the mission task of M03 (the planner of P4 may split it into a scene task and a mission task). Build M03 as data (game/data/missions/M03.json) plus its script on the mission runner, beat by beat from harness/data/milestones.json and GAME.md \"Act 1: Sawari\" and \"First playable slice\", with anchors by block id and world metres, a checkpoint at least every 90 s, and its lines and scenes from the slice script. Meera's first mission: the station near ITO, the radio call, the patrol car, the pursuit of the stolen car from Connaught Place over the ITO flyovers, \"Call a barricade\" (B) at the next real junction ahead, the crash, a short standoff and exchange of fire with the pistol (decisions.md \"Pistol stays in the slice, used in M03\"), the foot chase, melee and the takedown, the arrest held, the clue in the car, Khanna on the radio. The police force, its units and its officers are invented. Write the play script harness/verify/milestones/M03.js (VERIFY.md \"Play scripts\"): real inputs only, no teleport and no flag writes, waits in sim time, a log line and a shot per beat, the time on foot and in a vehicle logged, inside its budgetMs. Pillar: filmi, never cheap (pursuit, barricade, standoff, takedown, each with a reason), and three lives, one city (her case is the driver's dead passenger).",
+      "accept": [
+        "M03 matches its milestones.json entry and GAME.md beat by beat (the play script logs each beat and shoots it)",
+        "node harness/bin/verify.mjs --milestone M03 passes with harness/verify/milestones/M03.js, and node harness/bin/task.mjs milestone M03 playable is run",
+        "Fun 1, clear goal: state().mission.goal is set and the marker is on screen by 5 s of sim after the start (asserted by the play script; shot M03_goal)",
+        "Fun 2, fair fail: the suspect getting away (over 300 m for 10 s: \"He got away\"), a civilian killed, and the patrol car wrecked each raise mission:fail with a reason in words (shot M03_fail) and the instant retry gives control back at the last checkpoint in under 3 s of sim (scenario m03_fail_retry)",
+        "Fun 3, a reason to retry: the completion screen shows the pursuit time next to the best so far (shot M03_done)",
+        "Fun 4, a reward that matters: the completion screen shows the case reward and the story turn (the auto number and the fixer's name) and the play script finds it in the save (state().progress)",
+        "Driving stays central: the pursuit is the main objective; the on-foot share logged by the play script is about 40% or less",
+        "Routes: over the flyover and under it are each completed by an input-only route scenario (route_m03_over_flyover, route_m03_under_flyover); the barricade stands at a real junction of the lane model (shot M03_barricade)",
+        "Combat effects are bold but small and never cruel (VERIFY.md rubric line 23: a shot within 0.3 s of a muzzle flash); a civilian near the standoff flees and is never a target that rewards",
+        "The verifier reads the beat shots against the VERIFY.md rubric (readable goal, HUD never over the player, the signed look); frame p95 is 10 ms or less at the mission's busiest beat (perf scenario, scene kind city)",
+        "Respect rule: the verifier reads the named shots and the mission text against GAME.md \"Respect rule\" and VERIFY.md rubric line 21; any breach is a fail",
+        "npm run typecheck, npm test and node harness/bin/verify.mjs --quick are green, with no engine or console errors"
+      ],
+      "deps": [
+        "P4-001",
+        "P4-002"
+      ],
+      "agent": "builder",
+      "priority": 3,
+      "kind": "feature",
+      "status": "todo",
+      "attempts": 0,
+      "notes": [],
+      "created": "2026-11-11T12:33:40.827Z"
+    },
+    {
+      "id": "P4-006",
+      "phase": "P4",
+      "title": "M04: Chandni Chowk pickup (Fixer)",
+      "desc": "Seed from the game plan: the mission task of M04 (the planner of P4 may split it into a scene task and a mission task). Build M04 as data (game/data/missions/M04.json) plus its script on the mission runner, beat by beat from harness/data/milestones.json and GAME.md \"Act 1: Sawari\" and \"First playable slice\", with anchors by block id and world metres, a checkpoint at least every 90 s, and its lines and scenes from the slice script. Danny's first playable mission: on foot in a Chandni Chowk lane, through a bazaar crowd of 30 to 60 people that parts and flees, the shuttered shop and the boy with the auto number, the rival crew of 3 melee thugs (combo, block, dodge, one takedown), police whistles and wanted level 1, the scooter, the escape through the galis or the main road, losing the wanted level (leave the search circle, stay unseen 15 s). Children in the crowd are never damageable; nobody is rewarded for hurting a civilian; Jama Masjid and every place of worship stay out of the fight space. Write the play script harness/verify/milestones/M04.js (VERIFY.md \"Play scripts\"): real inputs only, no teleport and no flag writes, waits in sim time, a log line and a shot per beat, the time on foot and in a vehicle logged, inside its budgetMs. Pillar: three lives, one city (the fixer is hired for the driver's bag), and filmi, never cheap (the bazaar fight and the getaway).",
+      "accept": [
+        "M04 matches its milestones.json entry and GAME.md beat by beat (the play script logs each beat and shoots it)",
+        "node harness/bin/verify.mjs --milestone M04 passes with harness/verify/milestones/M04.js, and node harness/bin/task.mjs milestone M04 playable is run",
+        "Fun 1, clear goal: state().mission.goal is set and the marker is on screen by 5 s of sim after the start (asserted by the play script; shot M04_goal)",
+        "Fun 2, fair fail: the fixer downed (\"You were beaten\") and busted (\"The police got you\") each raise mission:fail with a reason in words (shot M04_fail) and the instant retry gives control back at the last checkpoint in under 3 s of sim (scenario m04_fail_retry)",
+        "Fun 3, a reason to retry: the completion screen shows the escape time next to the best so far (shot M04_done)",
+        "Fun 4, a reward that matters: the completion screen shows the payment and the story turn (the auto number and the hunt for the bag) and the play script finds it in the save (state().progress)",
+        "Driving stays central: the scooter getaway is an objective that matters; the play script logs the on-foot share, and if the signed beats cannot keep it at about 40% the planner records the exception for this mission in decisions.md before the build",
+        "Routes: the galis and the main road are each completed by an input-only scooter route scenario (route_m04_galis, route_m04_main_road) with player-height shots",
+        "Crowd shots are read for the people rubric (VERIFY.md line 22: at least 6 clothing colours and 3 builds in a bazaar frame, nobody stretched); the wanted level beacon count equals the level through the escape (scenario m04_wanted_escape)",
+        "The verifier reads the beat shots against the VERIFY.md rubric (readable goal, HUD never over the player, the signed look); frame p95 is 10 ms or less at the mission's busiest beat (perf scenario, scene kind city)",
+        "Respect rule: the verifier reads the named shots and the mission text against GAME.md \"Respect rule\" and VERIFY.md rubric line 21; any breach is a fail",
+        "npm run typecheck, npm test and node harness/bin/verify.mjs --quick are green, with no engine or console errors"
+      ],
+      "deps": [
+        "P4-001",
+        "P4-002"
+      ],
+      "agent": "builder",
+      "priority": 3,
+      "kind": "feature",
+      "status": "todo",
+      "attempts": 0,
+      "notes": [],
+      "created": "2026-11-11T12:33:40.827Z"
+    },
+    {
+      "id": "P14-001",
+      "phase": "P14",
+      "title": "Plan phase P14: polish and first release",
+      "desc": "Planner mode PLAN_PHASE P14. This phase holds seed tasks from the game plan (P0-023), and task.mjs phase-add does not mark a phase as unplanned, so this task is the planning step: every seed depends on it. Read the phase in harness/state/backlog.json (goal, exit, milestones), harness/state/next_phase_notes.md (the section for P14), GAME.md (pillars, capability list, the sections the phase needs), TECH.md, VERIFY.md \"Writing acceptance criteria\" and the knowledge files. Write 12 to 35 tasks to harness/state/plan_P14.json and add them with task.mjs add-json. Fold in the seed tasks already in the phase with task.mjs deps --add, task.mjs edit and task.mjs order: split a seed that is too big, never duplicate one. Every task names its pillar; every mission task carries the four fun criteria, the driving share check and the respect rule check; every area or art task carries the respect rule and its area sheet. Check the GAME.md capability list and say which items the phase builds. Then run task.mjs planned P14. For this phase: the collected polish items (verifier POLISH lists and the seeds below) become one polish task per area of docs/READ_MAP.md. Check every RELEASE item of the GAME.md capability list is built or moved with a decisions.md entry. Pillar: base task, it plans the work that serves the pillars named in the phase goal.",
+      "accept": [
+        "harness/state/plan_P14.json exists and the phase has 12 to 35 open tasks, each with a \"Pillar:\" line and checkable acceptance",
+        "Every seed task of the phase is folded in (kept, edited or split with a note), none duplicated",
+        "node harness/bin/task.mjs planned P14 has been run",
+        "The return lists the ids and titles added, and any design change with its decisions.md entry"
+      ],
+      "deps": [],
+      "agent": "planner",
+      "priority": 1,
+      "kind": "feature",
+      "status": "todo",
+      "attempts": 0,
+      "notes": [],
+      "created": "2026-11-11T12:33:40.827Z"
+    },
+    {
+      "id": "P14-002",
+      "phase": "P14",
+      "title": "Polish: rendering and look (night lamps, night asphalt, painted boards)",
+      "desc": "Seed from the game plan: the polish items collected in Phase 0 (STYLE_BIBLE.md \"Known gaps\" 1 to 3; verifier notes of P0-034 and P0-037). Verifier POLISH items for this area are added to this task as notes during the build. (1) Night lamp pools at the street_eye view: the sodium lamps light the road but the pools blend into the moonlit fill; make a clear bright pool under each lamp that fades over 10 to 15 m, by cheap means (tuned spot falloff or a projected decal, no SSR and no volumetric fog). (2) Dark asphalt patches at the night junction: the oil and wet patches read near black; lift them or lighten the asphalt layer at night. (3) Shop sign boards: any board that is still Label3D text on a box becomes a painted board (the hand-painted board textures from the art cards where delivered, the procedural painted board otherwise). Pillar: filmi, never cheap (night must read as rich, never as dark).",
+      "accept": [
+        "lookproof night set, view street_eye: each lamp in view has a pool whose centre is at least 1.5 times as bright as the road 15 m away (measured on the shot), read by the verifier",
+        "lookproof night set, view junction: no asphalt patch darker than the readability floor of STYLE_BIBLE.md; the verifier reads the shot",
+        "A test finds no Label3D on a sign board in the streamed city",
+        "The night views stay at or under warn 10 ms; the changed sets are compared against the approved night reference, and the reference is re-approved only after Anmol accepts the change on the dashboard",
+        "npm run typecheck, npm test and node harness/bin/verify.mjs --quick are green, with no engine or console errors"
+      ],
+      "deps": [
+        "P14-001"
+      ],
+      "agent": "builder",
+      "priority": 4,
+      "kind": "polish",
+      "status": "todo",
+      "attempts": 0,
+      "notes": [],
+      "created": "2026-11-11T12:33:40.827Z",
+      "model": "opus"
+    },
+    {
+      "id": "P14-003",
+      "phase": "P14",
+      "title": "Polish: UI and text (an OFL Devanagari font everywhere)",
+      "desc": "Seed from the game plan: STYLE_BIBLE.md \"Known gaps\" 3. Devanagari in the world still falls back to a system font. Use one OFL face that covers Devanagari for every text in the game: world sign boards, the HUD, subtitles and menus (the HUD build brings Teko and Mukta in; this task finishes what is left and removes every system font fallback), with the licence in the credits data. Verifier POLISH items for UI and text are added to this task as notes during the build. Pillar: the city opens up (signs in the scripts each area really uses, readable and real).",
+      "accept": [
+        "A test finds no text node in the game that resolves to a system font",
+        "Shots of 6 Devanagari sign boards and the two place names of HUD.md \"Checkable rules\" show correct conjuncts and matras and no missing-glyph box (verifier reads them)",
+        "The font licence files are in the repo and the credits screen lists them",
+        "npm run typecheck, npm test and node harness/bin/verify.mjs --quick are green, with no engine or console errors"
+      ],
+      "deps": [
+        "P14-001"
+      ],
+      "agent": "builder",
+      "priority": 4,
+      "kind": "polish",
+      "status": "todo",
+      "attempts": 0,
+      "notes": [],
+      "created": "2026-11-11T12:33:40.827Z",
+      "model": "sonnet"
     }
   ]
 }

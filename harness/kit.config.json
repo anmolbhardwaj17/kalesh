@@ -18,8 +18,8 @@
   "sessionLogLimitMB": 15,
   "perfBudgetsFile": "harness/verify/perf_budgets.json",
   "gameSizeEstimate": {
-    "tasks": 250,
-    "_doc": "Rough size of the whole game in tasks. The dashboard's whole game percent uses at least this many until every phase is planned. Raise or lower it when the planner sizes the game."
+    "tasks": 580,
+    "_doc": "Rough size of the whole game in tasks. The dashboard's whole game percent uses at least this many until every phase is planned. Raise or lower it when the planner sizes the game. Sized by the game plan (P0-023, 2026-11-11): P0 39, P1 27 and P2 28 planned in detail; estimates for the rest: P3 34, P4 24, P5 30, P6 32, P7 32, P8 26, P9 45, P10 45, P11 20, P12 45, P13 48, P14 30 (67 story missions at about 2.5 tasks each plus systems, content and art), about 505 in all, plus about 15% for bug and fix tasks. Re-size at each PLAN_PHASE."
   },
   "godot": {
     "_doc": "The pinned Godot engine. harness/bin/godot.mjs finds the binary in candidate order (env GODOT, then tools/godot/, then the macOS app), checks --version starts with version, and only on a machine with no match downloads the official portable build into tools/godot/ (gitignored, SHA512 checked). project is the Godot project folder. debugPort is the default port of the in-game debug server (game/core/game_args.gd DEFAULT_DEBUG_PORT must match; the harness passes --debug-port=<free port> per run).",

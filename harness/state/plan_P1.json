@@ -1,0 +1,523 @@
+[
+  {
+    "phase": "P1",
+    "agent": "builder",
+    "priority": 1,
+    "kind": "feature",
+    "deps": [],
+    "title": "Map inspector step 1: the issues view",
+    "desc": "The first task after Phase 0 (TECH.md \"Map inspector\", MAP_REPAIR.md \"Map inspector (human in the loop)\"), so Anmol can review map issues while the pilot is built. It never blocks other work. Build the page in tools/inspector/ and serve it on the dashboard port with a link from the dashboard. It reads two things through one file contract: the baked KTL1 tiles with their index, and issues.json in the MAP_REPAIR.md \"Issue record\" format. The production bake does not exist yet, so feed it from the Phase 0 outputs through a small adapter: the pilot census (harness/bench/pilot_data, 1,052 issues, 27 of them high impact) turned into issue records, and the bench tiles of ITO and Connaught Place. P1-011 replaces the adapter with the production files. The page: a 3D view with a north-up top view (north is up on screen and -Z in the world, no mirroring), every open issue marked, the issue queue sorted by impact with the 27 high impact ones first, click an issue and the camera flies to it, the proposals drawn as preview lines with confidence and reasoning, pick one or type a note. A pick writes a patch in the MAP_REPAIR.md \"Overrides format\" to harness/data/overrides/<tileX>_<tileZ>.json (one file per world tile of the 250 m grid) and an inbox entry with source inspector. An \"Open in game\" button teleports the running game to the same spot through the debug server. three.js is allowed as a dev dependency of the harness only (TECH.md \"Stack\"); add it with a decisions.md entry (licence, size, why). If the install is refused by the permission system, do not work around it: build the top view on a plain canvas first, report it, and the orchestrator adds a Needs-you notice. The page uses no outside map tiles or services. Pillar: the city opens up (Anmol steers how his city is repaired; base for every later map task).",
+    "accept": [
+      "A Playwright test (tools/inspector/) loads the page with 0 console errors and 0 requests to any host but localhost",
+      "The issue list count equals the issues.json count, and the first 27 rows are the high impact issues",
+      "Clicking an issue moves the camera target to within 30 m of the issue position (read through a page hook)",
+      "North-up check in the test: the Red Fort marker is above and to the right of the India Gate marker on screen, and Connaught Place is above and to the left",
+      "Picking a proposal in the test (temp folder) writes a patch with the issue id to the override file of the right world tile and one inbox line with source inspector",
+      "With the game running under --debug, \"Open in game\" puts the player within 5 m of the issue position (godotclient check); without a running game the button says so and nothing fails",
+      "The dashboard shows a \"Map inspector\" link; a screenshot harness/reports/inspector/issues.png is read by the verifier (issues visible, north up, readable)",
+      "docs/ARCHITECTURE.md and docs/READ_MAP.md name the new files; npm run typecheck and npm test are green"
+    ]
+  },
+  {
+    "phase": "P1",
+    "agent": "builder",
+    "priority": 1,
+    "kind": "feature",
+    "deps": [],
+    "title": "Stylised B is the default look, driven by the day clock",
+    "model": "opus",
+    "desc": "From the style bible (decisions.md \"Style bible and signed budgets (P0-015)\", TECH.md \"Render pipeline\"): with no --style arg the game loads stylised_b. Add a day clock on the sim clock (game/core/day_clock.gd: game time of day, a rate, a start time of 15:00, the hot hazy afternoon the slice starts in) that drives the day curve the way --time does today; --time=<h> and --light=<preset> pin it for verify. --style=none keeps the flat stand-in look for fast verification. stylised, stylised_grime and realistic stay behind --style= as reference sets until the P1 gate (P2-001 folds them). Hooks: the time of day is readable in state() and settable through the debug server (docs/GAME_HOOKS.md updated). Scenarios that do not judge the look may keep running with --style=none to stay fast; say in harness/verify/scenarios.json which do. No change to the look itself: this task only changes what loads by default. Pillar: filmi, never cheap (the signed look is what every later shot is judged in).",
+    "accept": [
+      "node harness/bin/lookproof.mjs --set default_golden with the game arg --time=17.75 and no --style, then --compare default_golden against the approved reference (style_stylised_b_golden) passes within harness/verify/look_rules.json",
+      "lookproof --set none_check with --style=none, then --compare none_check --against baseline passes (the flat look is unchanged)",
+      "game/tests/test_style.gd: no --style gives style id stylised_b; --style=none loads no style runner; the day clock test advances one game hour and the blended light preset changes; the time of day is in state()",
+      "lookproof --set default_golden --perf: every view is inside the signed budgets (warn 10 ms on the GPU ballast cost)",
+      "The verifier reads 3 shots of the default look (street_eye, on_foot_bazaar, hud_play) against VERIFY.md rubric lines 14 to 24",
+      "npm run typecheck, npm test and node harness/bin/verify.mjs --quick are green, with no engine or console errors"
+    ]
+  },
+  {
+    "phase": "P1",
+    "agent": "orchestrator",
+    "priority": 5,
+    "kind": "mentor",
+    "deps": [],
+    "title": "Show Anmol the HUD mockups",
+    "desc": "The one remaining look check with Anmol (decisions.md \"HUD gets its own discovery (Anmol)\"): no HUD is built before he has seen the mockups. The HUD build task in P3 depends on this task. Show him the four mockups in harness/design/hud_mockups/ (01_driving.png, 02_on_foot.png, 03_combat_wanted.png, 04_mission_passed.png) and ask the six questions of harness/design/HUD.md \"Questions for Anmol\" (overall feel, route guidance, minimap turning, Hindi and English, the wanted level name and icon, the mission passed card), plus whether a character colour feels wrong. Record his words with task.mjs inbox-add --source interview and ack them. Then write the answers into HUD.md (replace \"Questions for Anmol\" with \"Answers\", update \"Changes from GAME.md\" and GAME.md \"HUD\" where his answer differs) and add a decisions.md entry with his words. This task never blocks other work. It sits at priority 5 so task.mjs next does not hand it out before the other P1 tasks: take it by id at the first moment Anmol is at the terminal. Until then keep one Needs-you notice on the dashboard (node harness/bin/notice.mjs add \"HUD mockups are ready for your look: harness/design/hud_mockups/\"). If the P1 gate is reached with no answer, move it on (task.mjs move <id> --phase P2 --priority 5, then --phase P3 --priority 1). Pillar: three lives, one city (the HUD carries the lead, the wanted level and the goal for each life).",
+    "accept": [
+      "His answers to the six questions are in the inbox with source interview and are acked",
+      "HUD.md has an \"Answers\" section with his words, and GAME.md \"HUD\" agrees with it",
+      "A decisions.md entry records the answers with the date",
+      "The Needs-you notice is resolved"
+    ]
+  },
+  {
+    "phase": "P1",
+    "agent": "planner",
+    "priority": 2,
+    "kind": "polish",
+    "deps": [],
+    "title": "Consolidate decisions.md and the knowledge files",
+    "model": "sonnet",
+    "desc": "Planner mode CONSOLIDATE. harness/state/decisions.md is 85 KB and every agent reads it first. Keep in decisions.md only what still binds, a few lines each: the three sign-off quotes word for word, the standing rules, the KEEP numbers from the old game (car tune, chase camera, the four sounds) and one line per signed choice that points at TECH.md, GAME.md, STYLE_BIBLE.md or MAP_REPAIR.md. Move the full text of older entries, bench results and interview records to harness/state/decisions_archive.md under their original headings and dates. Nothing is deleted. Also tidy harness/state/knowledge.md (core, under 12 KB) and each harness/state/knowledge/<area>.md (under about 12 KB): merge duplicates, drop items a test now enforces, move the long GPU cap note to the rendering area file with a two line pointer in the core file. Create the area files docs/READ_MAP.md names but that do not exist yet (world-runtime, characters-ai-combat, story-runtime) with a header line. Plain English, no em dashes. Pillar: base task, it unblocks all three pillars (three lives, one city; filmi, never cheap; the city opens up).",
+    "accept": [
+      "wc -c harness/state/decisions.md is under 14,000 bytes and docs/READ_MAP.md still calls it short truthfully",
+      "Every \"## 2026\" heading that left decisions.md is in decisions_archive.md (heading count before equals the count across both files after)",
+      "grep finds the three sign-off quotes, \"KEEP from delhi-drive\" car and camera numbers and the no-attribution git rule in decisions.md",
+      "harness/state/knowledge.md is under 12 KB and each area file is under 12.5 KB; the three new area files exist",
+      "No em dash in any of the files (grep)"
+    ]
+  },
+  {
+    "phase": "P1",
+    "agent": "builder",
+    "priority": 2,
+    "kind": "feature",
+    "deps": [],
+    "title": "Perf budgets read the scene kind (look or city)",
+    "model": "sonnet",
+    "desc": "From the architecture record (TECH.md \"Performance budgets\"): harness/bin/perfbudget.mjs picks the draw call, triangle and video memory budgets by scene kind. A scenario or a lookproof set names its kind (scene: \"look\" or \"city\"; default look), and the budget comes from harness/verify/perf_budgets.json scenes.<kind> (city: draw calls warn 2,500 and fail 3,500, owner answer). Remove the need for a city scenario to copy the block into its own budget object. Frame time, fps floor and load stay the same signed numbers for both. lookproof.mjs --perf takes --scene-kind. Pillar: base task, it unblocks all three pillars (three lives, one city; filmi, never cheap; the city opens up).",
+    "accept": [
+      "harness/bin/perfbudget.test.mjs: a city scene with 2,600 draw calls is warn and with 3,600 is fail; a look scene with 700 is warn and with 1,100 is fail; a scene with no kind is judged as look",
+      "lookproof --perf --scene-kind city writes the kind into perf.json and judges with the city numbers (lookproof.test.mjs)",
+      "VERIFY.md \"Perf probes\" and TECH.md \"Performance budgets\" describe the scene kind in one line each",
+      "npm run typecheck and npm test are green"
+    ]
+  },
+  {
+    "phase": "P1",
+    "agent": "builder",
+    "priority": 2,
+    "kind": "feature",
+    "deps": [],
+    "title": "Core runtime: Jolt by name, the C1 sim clock and the module size tests",
+    "desc": "From the architecture record (TECH.md \"Stack\", \"Main loop and time (C1)\", docs/ARCHITECTURE.md \"Target module map\"). (1) Set physics/3d/physics_engine=\"Jolt Physics\" in game/project.godot (the project default resolves to GodotPhysics3D on this build) and add a test that proves the running physics server is Jolt, the way the physics bench did. (2) Move the C1 clock of the physics bench (game/bench/physics/bench_clock.gd) into game/core/sim_clock.gd: one engine physics frame is one sim tick of 1/60 s; time scale sets Engine.time_scale and Engine.physics_ticks_per_second together; the hold stops the clock and calls PhysicsServer3D.set_active(false) only at the start of a physics frame, frames keep drawing; --lockstep sets Engine.max_physics_steps_per_frame to 1; cameras follow in _physics_process with a higher process_physics_priority. Every stepping system connects to SimClock.sim_tick. The debug server hooks (clock, time scale, sim hold, frames) keep their contract and the harness driver stays green. (3) Add the module size tests: game/tests/test_module_size.gd (a GDScript file over 600 lines fails) and tools/module_size.test.ts (a TypeScript file over 800 lines fails). Phase 0 bench and prototype files over the limit go on a short named exception list inside the test, each with the task that will split or retire it. Pillar: base task, it unblocks all three pillars (three lives, one city; filmi, never cheap; the city opens up).",
+    "accept": [
+      "A Godot test reads back the physics engine setting and proves the running server is Jolt",
+      "Replay test: one input script run at time scale 0.25, 1 and 4 ends at the same position within 0.001 m; a run held and resumed equals a run never held within 0.001 m",
+      "A test lists every _physics_process under game/ outside game/bench/ and allows only the clock and the camera files",
+      "Scenarios hooks_contract, hooks_no_debug, drive_north, drive_turn_right and coords_north_marker pass",
+      "Both module size tests pass, and the exception list names a retiring task for every entry",
+      "npm run typecheck, npm test and node harness/bin/verify.mjs --quick are green, with no engine or console errors"
+    ]
+  },
+  {
+    "phase": "P1",
+    "agent": "builder",
+    "priority": 2,
+    "kind": "feature",
+    "deps": [],
+    "title": "Bake driver, pinned sources and the pilot centre outline",
+    "desc": "Start of the production bake (TECH.md \"World pipeline (offline bake)\", docs/ARCHITECTURE.md rows bake/main.ts, bake/sources/, bake/rand.ts; MAP_REPAIR.md \"Sources\"). tools/bake/main.ts is the only driver: it alone (with tools/bake/sources/) touches files and the network; everything below it is pure functions. Add the npm script bake (node tools/bake/main.ts <stage|block>, with --tiles x_z,... for a partial bake and --out for another tile folder). Move the readers out of the bench drivers (harness/bench/pilot_data/fetch.mjs) into tools/bake/sources/: OSM roads and features, Overture buildings through DuckDB, the GEDTM30 ground window through geotiff smoothed over 60 m with filtered Copernicus GLO-30 as the fallback, Wikidata. Every file is pinned in data/SOURCES.json with its hash, licence and credit text. FABDEM is never read. Draw the pilot centre outline as data (harness/data/districts/pilot_centre.geojson, about 20 km2): Connaught Place with Jantar Mantar, India Gate, ITO with Pragati Maidan, Chandni Chowk with Red Fort, Paharganj with the New Delhi station (the Ajmeri Gate forecourt of mission M01 inside it), GB Road, the Yamuna bank at ITO, and everything between. Add draft focus outlines for ito, paharganj_station and gb_road to harness/data/districts.json. Fetch one continuous extract for the outline plus a margin and define the stage \"pilot\". Write tools/bake/rand.ts, the one seeded random generator (seeds from the world tile and a parcel id), and the skeleton of harness/reports/map/health.json. The bake is deterministic and stops before writing tiles when an invariant fails. Pillar: the city opens up.",
+    "accept": [
+      "npm run bake -- pilot --stage sources fetches or reuses every pinned file and prints its hash; a second run makes no network request (test with a fake fetcher)",
+      "A vitest purity test fails if any file under tools/bake/ except main.ts and sources/ imports node:fs, node:net, node:http or calls fetch",
+      "A test computes the area of pilot_centre.geojson between 18 and 23 km2 and finds inside it the centres of Connaught Place, Jantar Mantar, India Gate, the ITO crossing, Pragati Maidan, Red Fort, Jama Masjid, the New Delhi station forecourt on the Ajmeri Gate side and GB Road",
+      "rand.ts tests: the same seed gives the same sequence; seeds built from (tileX, tileZ, parcelId) differ between neighbours",
+      "data/SOURCES.json has a licence and a credit line for every source, and a test fails on a source without one",
+      "npm run typecheck and npm test are green"
+    ]
+  },
+  {
+    "phase": "P1",
+    "agent": "builder",
+    "priority": 2,
+    "kind": "feature",
+    "deps": [
+      "#7"
+    ],
+    "title": "Layout and block frames in the bake",
+    "model": "fable",
+    "desc": "Core system (Fable tier: the coordinate system and map bake pipeline, with district selection and stitching). TECH.md \"Coordinates\", \"World layout (signed 2026-11-11)\"; MAP_REPAIR.md \"District frames and stitching\"; data harness/data/districts.json. Build tools/bake/layout/: blocks and focus outlines read from districts.json; the placement method offset = pivot.world + factor x geoToWorld(origin, pivot) with India Gate as the pivot, the centre block at factor 1.0 and far blocks at 0.5; the world origin (the layout C box centre for now) and a recentre step that subtracts one vector everywhere (tiles, pins, mission anchors, saves), written and tested now and used by the first bake that includes a far block (P8); the one 250 m world grid (tile ids from world metres, shared by the tile cutter, the overrides and the inspector); the centre pair gate as rule R-STITCH (bearing within 0.5 degrees and distance within 0.5% for every pair of centre places). Translation only: no rotation, no scale, no mirror, with a check that proves it for every block. Write the far block outlines and origins as checked data for qutub_mehrauli, vasant_kunj, airport_t3 and cyber_city (harness/data/districts/<id>.geojson; today their offsets are estimates to about 200 m), so the far skyline and the later corridors have real targets. Retire the island layout code: move what is still needed from tools/bake/stitch/ (the placer, transformCheck, the Vincenty geodesic) into layout/, and retire or rewrite the island-only parts (clip ports and closures, harness/bench/stitch.mjs and stitch_draft.mjs, the game/bench/stitch scene), saying which in docs/ARCHITECTURE.md. The three bench_only connector files stay as data. Update MAP_REPAIR.md row R-STITCH to the signed seamless rule. Old game lesson: the mirrored world (worldGroup.scale.x = -1) broke every system. Nothing here may flip an axis. Pillar: the city opens up (every real place sits where it really is).",
+    "accept": [
+      "tools/bake/layout/layout.test.ts: for at least 12 named centre places every pair keeps its bearing within 0.5 degrees and its distance within 0.5% against the geodesic",
+      "Each far block origin is on its real bearing from India Gate within 0.1 degree at 0.5 of its real distance within 0.5%",
+      "The transform check proves translation only for every block: north on -Z, east on +X, determinant +1, no scale",
+      "Landmark test: India Gate lands at world (621.6, 467.2) within 0.5 m; Connaught Place has a smaller x and a smaller z than India Gate (north-west); Red Fort a larger x and a smaller z (north-east)",
+      "Recentre test: tiles, pins and anchors after the step equal their positions before minus the vector, within 1 mm",
+      "With every planned block placed the map box is under 16 km wide and no position is more than 8 km from the box centre",
+      "The world tile id function round trips for 1,000 seeded points, negative coordinates included",
+      "node harness/bench/arch.mjs stitch either still passes or is removed with docs/ARCHITECTURE.md and TECH.md \"Known limits and debt\" updated; npm run typecheck and npm test are green"
+    ]
+  },
+  {
+    "phase": "P1",
+    "agent": "builder",
+    "priority": 2,
+    "kind": "feature",
+    "deps": [
+      "#8"
+    ],
+    "title": "Block graph: ingest, normalise, pair and classify the pilot centre",
+    "desc": "tools/bake/graph/ (docs/ARCHITECTURE.md row bake/graph/, MAP_REPAIR.md \"Pipeline\"), from the prototypes tools/bake/osm.ts and tools/bake/roads/graph.ts. One topology graph for the whole pilot centre block, not one per site: ways clipped at the stage outline (a road that leaves the stage ends as a \"map edge\" end, kept for the later scale-up), cut at shared nodes, chains joined, one tangent through a node; one-way carriageways of one street paired; every road classified with the Delhi class defaults (class, default lanes, footpaths, left-hand traffic); rail and metro lines, foot over bridges, water and open ground; building footprints from Overture with our own merge rule (BS1; Overture drops about half the footprints in dense blocks). Ids are stable (source id plus part) so overrides survive a new extract. Add flatbush only if needed, with a decisions.md entry. Pillar: the city opens up.",
+    "accept": [
+      "Tests on the pilot graph: 0 duplicate edges, 0 zero-length edges, every edge end is a node, every clipped road ends in a map edge end",
+      "A fixture list of at least 10 divided streets (Vikas Marg, Bahadur Shah Zafar Marg, Barakhamba Road, Netaji Subhas Marg, Mathura Road and others) are each found as a pair; the Connaught Place radials stay unpaired one-ways",
+      "Two runs give the same ids and the same graph hash",
+      "Counts (nodes, edges, pairs, footprints, rail, water) are written to harness/reports/map/health.json",
+      "The graph build for the pilot centre runs in under 20 s (time printed)",
+      "npm run typecheck and npm test are green"
+    ]
+  },
+  {
+    "phase": "P1",
+    "agent": "builder",
+    "priority": 2,
+    "kind": "feature",
+    "deps": [
+      "#9"
+    ],
+    "title": "Repair rules and auto-repair for a whole block",
+    "model": "fable",
+    "desc": "Core system (Fable tier: the map repair layer rules, rule engine and auto-repair). MAP_REPAIR.md \"Rule engine\", \"Rules added before the pilot bake\", \"Auto-repair bounds\", \"Issue record\", \"Repair log\". Start from tools/bake/rules/ (eight census rules, RE1) and autoProposal (AR1). Complete the catalogue to the full table of MAP_REPAIR.md: roads, bridges and flyovers, intersections, lanes (R-LANE-FIT: shift a carriageway drawn closer than its lanes are wide, redraw a slip road drawn as a short diagonal, take a lane count from the road ahead), footpaths, buildings, metro and rail, foot over bridges, stitch, hero roads (detect only, never repaired automatically) and terrain. Each rule has an id, a detect function, an optional repair, a confidence and unit tests on small synthetic maps (tools/bake/testmap.ts), and runs in a fixed tested order. Auto-repair in tools/bake/repair/: a repair applies on its own only at confidence 0.8 or more and low impact, exactly as the bounds list says (a join of 5 m or less, a missing bridge layer tag, a building reaching 1.5 m or less into a road width, an exact duplicate footprint, a height outlier of 3 m or less, a carriageway shift of 2.5 m or less). Never automatic: anything on a hero road, a one-way with no pair (explained, never changed), a slip road redraw over 2.5 m, a lane count change on a trunk or primary road. Every repair is logged (repairs.jsonl: rule, issue id, before, after, confidence, the patch). Every queued issue gets ranked proposals with a preview line, a confidence and the reasoning. A queued issue never blocks a bake: its top proposal is applied as provisional. Repair instead of drop; every drop is logged. Old game lesson: roads that did not join and railings in the wrong places came from trusting raw data. The rules are where that is caught. Pillar: the city opens up.",
+    "accept": [
+      "Every rule area in the MAP_REPAIR.md table has its file, and every rule id has at least 2 unit tests (one that detects, one clean map)",
+      "Bound tests: a 5.0 m join repairs on its own and a 5.1 m join is queued; a 2.5 m carriageway shift repairs and 2.6 m is queued; a 3.0 m height outlier repairs and 3.1 m is queued; an issue on a hero road is never repaired; a one-way with no pair is marked explained and unchanged; a lane count change on a trunk road is queued",
+      "On the pilot centre graph: the report lists counts by rule; at least 65% of issues repair on their own (census: 73%); every queued issue has at least 1 proposal with a confidence, a reasoning line and a preview polyline",
+      "repairs.jsonl has one line per applied repair with before and after, and a second run on the repaired graph applies 0 new repairs",
+      "All rules run on the pilot centre in under 3 s (time per rule printed) and give the same output twice",
+      "npm run typecheck and npm test are green"
+    ]
+  },
+  {
+    "phase": "P1",
+    "agent": "builder",
+    "priority": 2,
+    "kind": "feature",
+    "deps": [
+      "#1",
+      "#10"
+    ],
+    "title": "Overrides per world tile, issues.json and the map health report",
+    "desc": "MAP_REPAIR.md \"Overrides format\", \"Issue record\", \"Verification\"; docs/ARCHITECTURE.md rows bake/repair/ and bake/report/. From the prototype tools/bake/overrides.ts (OV1). Overrides: patches found by id first, then by the anchor within its tolerance; a patch whose target is gone is listed as stale and stays in the file; a patch can switch off a repair by its issue id. Files are per world tile (harness/data/overrides/<tileX>_<tileZ>.json): move the sample files under harness/data/overrides/cp and chandni_chowk to that layout. Reports in tools/bake/report/: harness/reports/map/health.json (found by rule, repaired automatically, fixed by overrides, stale overrides, left open, the gate counts), issues.json in the issue record format, and the centre pair table. The map inspector (P1-001) now reads the production issues.json: remove its bench adapter. Add the map health panel to the dashboard (latest report and a link to the inspector). Pillar: the city opens up (Anmol's picks in the inspector change the city).",
+    "accept": [
+      "Tests: a patch applies by id; with the id gone it applies by anchor inside the tolerance and not outside it; a stale patch is reported and kept; disable_repair switches off that repair",
+      "End to end test in a temp folder: a pick written by the inspector server is read by the next bake and that issue shows as fixed by override in health.json",
+      "The inspector test of P1-001 passes on the production issues.json with the adapter removed",
+      "The dashboard health panel shows the same counts as health.json (dashboard or Playwright test) and links to the inspector",
+      "No file remains under harness/data/overrides/<district>/; the moved patches still apply",
+      "npm run typecheck and npm test are green"
+    ]
+  },
+  {
+    "phase": "P1",
+    "agent": "builder",
+    "priority": 2,
+    "kind": "feature",
+    "deps": [
+      "#10"
+    ],
+    "title": "Lane-level road model for the pilot centre",
+    "model": "fable",
+    "desc": "Core system and the top Fable task (MAP_REPAIR.md \"Lane-level road model\", \"Hero roads\"; ARCH_OPTIONS.md rows LN1 and HR1; decisions \"Road prototype results (P0-019)\" lists what the production version needs). Production code in tools/bake/roads/ from the prototype (model.ts, curve.ts, lanes.ts, fit.ts, hero.ts), now for the whole pilot centre graph instead of one site. The model: strips with stations, a frame, and every lane border; lane sections; left-hand traffic; Delhi class defaults; lane counts inferred along a whole street, not per way (the 4 taper findings at ITO); lane sets from a hero road spec where one exists; tapers as lane rows inside the class limits; split zones for every diverge and merge with a gore and a nose, ending exactly on both branches' own centre lines; flyover, ramp and service lanes; medians; footpath strips and crossings; and connecting lane paths through every junction (turn lanes, turn restrictions, stop line positions) for traffic, pursuit and barricades. The fit steps (carriageways pushed apart, slip road redraw) run as rule repairs with a log (P1-010), not as silent geometry changes. Output: the lane model for the mesh builder and the solver, the lane graph for the tiles, and the lanes layer data for the inspector. One implementation: the game only reads it. Old game lesson: overlapping road meshes came from building each way alone. Lanes that continue through every split and merge are the proof against that. Pillar: the city opens up and pillar 2 (chases over flyovers need lanes that join).",
+    "accept": [
+      "The prototype tests (tools/bake/roads/roads.test.ts) stay green on the production modules",
+      "On the whole pilot centre: lane continuity breaks 0 (every lane at a section end has a successor or an explained end in health.json); tapers out of limits 0 or each explained",
+      "Every diverge and merge has a gore and a nose, and each split zone ends on both branches' centre lines within 0.01 m",
+      "Left-hand traffic test on a fixture list of two-way streets; no driving lane narrower than 2.4 m except lanes tagged as galis (their limit named in the test)",
+      "Whole-street inference test: one lane count along Bahadur Shah Zafar Marg and Vikas Marg between junctions, changing only at a taper inside the class limits",
+      "ITO reproduces the Phase 0 result (10 split zones, strips do not overlap) and the Connaught Place inner circle equals its hero spec lane for lane",
+      "Every pair of junction arms that the turn rules allow has a connecting lane path with a radius of 4 m or more",
+      "The model for the pilot centre builds in under 30 s and gives the same hash twice; npm run typecheck and npm test are green"
+    ]
+  },
+  {
+    "phase": "P1",
+    "agent": "builder",
+    "priority": 2,
+    "kind": "feature",
+    "deps": [
+      "#12"
+    ],
+    "title": "Elevation solver for a whole block",
+    "model": "fable",
+    "desc": "Core system (Fable tier). MAP_REPAIR.md \"Elevation solver\"; ARCH_OPTIONS.md row EL1. Production code from tools/bake/roads/elevation.ts: the prototype solves a dense system (cubic in size) for one site; the block needs a sparse solver. One height per knot over the whole block graph by sparse least squares: the ground (GEDTM30 smoothed over 60 m) as the soft target; grade limits per class; clearance limits at every crossing of different layers; vertical curve limits; crossfall; a tie at every map edge end; and structures and abutments read from the result (deck, fill, cut, tunnel, with the Pragati Maidan tunnel as the pilot case). Add the \"deck over water\" rule the prototype lacks: a bridge over a river bed is set by its clearance above the water, not only by its two banks. The solver never breaks a grade limit; when a ramp is too short it starts earlier and then lowers the road under it, and it reports that (sunk, structureM). Old game lesson: roads floating over or sunk into the ground came from heights sampled per vertex. One solve over the whole graph is the fix. Pillar: the city opens up and pillar 2 (the ITO flyovers are a set piece).",
+    "accept": [
+      "On the pilot centre: 0 height steps at nodes (largest mismatch under 0.01 m); grade violations 0 or each explained in health.json; no vertical curve under its class limit",
+      "Every crossing of two layers has at least its class clearance (5.5 m for a road over a road; the limits named in the test)",
+      "The ITO flyover and its ramps come out within 0.3 m of the Phase 0 site result, and the Minto Road rail bridge keeps its clearance",
+      "Unit tests on synthetic maps for each constraint: grade, clearance, vertical curve, crossfall, the map edge tie and the deck over water",
+      "Every structure is listed in health.json with its kind, sunk and structureM",
+      "The solve for the pilot centre takes under 60 s (printed) and two runs agree to 0.000001 m; npm run typecheck and npm test are green"
+    ]
+  },
+  {
+    "phase": "P1",
+    "agent": "builder",
+    "priority": 2,
+    "kind": "feature",
+    "deps": [
+      "#13"
+    ],
+    "title": "Junction and road mesh builder with the overlap proof",
+    "model": "fable",
+    "desc": "Core system (Fable tier). MAP_REPAIR.md \"Junction mesh builder\"; ARCH_OPTIONS.md row J3. Production code from tools/bake/roads/junction.ts, mesh.ts and checks.ts. Junctions: cluster nodes into one junction object by rule (the 8-arm ITO junction, the India Gate hexagon, the Connaught Place circles as roundabouts); corner arcs between arms; cut lines; raised corner bands; median noses inside the junction ring; stop lines; and the proof that no two road faces overlap, by polygon union with clipper2-ts (allowed for the map tool). Road meshes: top surfaces, kerb faces at 0.15 m, footpaths, markings as lane UVs, parapets and railings only on structures and where a rule places them, retaining walls, decks with their joints, piers and supports that stand clear of every lane below. The at-grade road mesh is watertight (boundary loops with every edge used once), because the ground is cut to those loops in P1-015. Old game lesson: overlapping road meshes, railings in the wrong places, junctions that did not join. Each has a count here that must be 0. Pillar: the city opens up and pillar 2 (barricades stand at real junctions).",
+    "accept": [
+      "On the pilot centre: overlapping road faces 0 (the union area test: pairwise overlap under 0.01 m2 at every junction, total printed); open boundary edges 0; unjoined ends 0; floating ends 0",
+      "Railings: 0 railing or parapet segments at grade away from a structure or a rule (count in health.json); piers: 0 piers inside a lane polygon below",
+      "Kerb height 0.15 m within 0.01 m on sampled kerbs; the markings UV test passes; every junction has a stop line on each arm that the lane model says stops",
+      "The bench scenes --arch=roads:ito and roads:cp render from the production modules, or are retired with a note in docs/ARCHITECTURE.md",
+      "The verifier reads the shots roads_ito_top, roads_ito_eye, roads_cp_top, roads_india_gate_top and roads_chandni_chowk_eye: no overlaps, no gaps, arms join, railings only on decks and ramps",
+      "The meshes for the pilot centre build in under 60 s; npm run typecheck and npm test are green"
+    ]
+  },
+  {
+    "phase": "P1",
+    "agent": "builder",
+    "priority": 2,
+    "kind": "feature",
+    "deps": [
+      "#14"
+    ],
+    "title": "Ground that fits the roads",
+    "model": "fable",
+    "desc": "Core system (Fable tier: terrain that conforms to roads). MAP_REPAIR.md \"Terrain that fits the roads\"; ARCH_OPTIONS.md row TF2. tools/bake/terrain/ from the prototype tools/bake/roads/terrain.ts and tri.ts. A constrained Delaunay ground with points inside the blocks, cut to the road mesh's own boundary loops and to footpath and building edges (the prototype's ear clipping gives 80% needle triangles and no relief inside a block; earcut only for simple faces). A height grid for open land (lawns, the Ridge edge, the river bank). The Yamuna bank at ITO and the water surface. Ground runs on under a deck; a ramp on fill cuts the ground at the foot of its walls. The R-TERR checks. Faces are cut at the 250 m world grid with seams that match exactly. Write our own constrained Delaunay or add a package with a decisions.md entry (licence, size); if the install is refused, write it. Old game lesson: terrain and roads did not fit. The ground is cut to the road edge, so there is no second surface to disagree. Pillar: the city opens up.",
+    "accept": [
+      "On the pilot centre: road to ground gap 0.02 m or less on sampled boundary points (perf_budgets.json world); 0 ground vertices above a road inside its corridor",
+      "Triangles with a smallest angle under 1 degree are under 2% of the ground (the prototype had 80%)",
+      "Vertices on both sides of every tile seam are equal within 0.0001 m",
+      "No hole: ground plus road plus footpath plus building footprint area equals the stage outline area within 0.1%",
+      "The verifier reads the shots ground_cp_eye, ground_ito_ramp_foot and ground_yamuna_bank: no floating or sunk road, no ground through a ramp, no streaks",
+      "The ground for the pilot centre builds in under 120 s and gives the same hash twice; npm run typecheck and npm test are green"
+    ]
+  },
+  {
+    "phase": "P1",
+    "agent": "builder",
+    "priority": 2,
+    "kind": "feature",
+    "deps": [
+      "#15"
+    ],
+    "title": "Tile writer: production KTL1, the world grid cutter and collider chunks",
+    "desc": "TECH.md \"Tile format (T1, KTL1)\", \"Streaming\"; docs/ARCHITECTURE.md row bake/tile/; ARCH_OPTIONS.md rows T1 and K3. Move the codec from tools/bake/tile.ts into tools/bake/tile/ with its fixture tests. The 250 m world grid cutter (vertices relative to the tile, the magnitude rule); meshes merged per material; collider chunks of about 500 triangles made from the drawn vertices, one shell per building; a closed collider strip over every deck joint (an open 4 cm joint drops a wheel ray, measured in Phase 0); plain building shells from the repaired footprints with class default heights as stand-ins until the area generator of P2 (they give the base world its walls and colliders); the lanes array (the lane graph per tile); pins; and index.json (tiles, blocks, bytes, the bake hash). The header fields nav, life and placements stay reserved for P2 and P3. A tile over its byte budget or with a bad vertex is reported and skipped, never written silently. Pillar: the city opens up (collisions match what is drawn).",
+    "accept": [
+      "Round trip tests: write then read gives every array back within 0.000001; a wrong version fails loudly; a vertex outside the tile plus its margin is rejected",
+      "Collider against drawn surface within 0.05 m on 1,000 seeded points in each of 5 named tiles (Connaught Place, the ITO flyover, Chandni Chowk, India Gate, the Yamuna bank)",
+      "Deck joint test: rays cast down every 5 cm along the ITO flyover deck never miss the collider",
+      "No collider chunk has more than 600 triangles",
+      "The fixture harness/data/fixtures/tile_t1_sample.json is regenerated and the GDScript reader test passes on a production tile",
+      "For the pilot centre the average tile is 1.5 MB or less and the largest 4 MB or less (printed); npm run typecheck and npm test are green"
+    ]
+  },
+  {
+    "phase": "P1",
+    "agent": "builder",
+    "priority": 2,
+    "kind": "feature",
+    "deps": [
+      "#11",
+      "#16"
+    ],
+    "title": "Pilot centre base bake, end to end, with the gate counts",
+    "desc": "Wire every stage in tools/bake/main.ts for the stage \"pilot\" in the order of TECH.md \"World pipeline\": sources, layout, graph, rules and auto-repair, overrides, lane model with the fit repairs, elevation, junctions and meshes, ground, tiles, reports. Invariants stop the bake before tiles are written (an open port, a floating end, overlapping road faces, a lane break, a mirror, a centre pair over 0.5 degrees). A one tile rebake after an override change. Then run it on the whole pilot centre, fix what is cheap to fix through rules or override patches written after reading shots of the site, and list every remaining gate count as explained in the report. Measure and write down: the full bake time, the one tile rebake time, tile count and bytes. The health report is linked on the dashboard. Pillar: the city opens up.",
+    "accept": [
+      "npm run bake -- pilot completes and writes game/world/tiles/ with index.json",
+      "health.json gate counts: open boundary ports, floating ends, unjoined ends, overlapping road faces, broken lane continuity and tapers out of limits are each 0 or explained by an entry",
+      "Two bakes give identical tile hashes",
+      "The full pilot bake takes under 10 minutes and a one tile rebake after an override under 60 s (both printed and written to perf_budgets.json bake as measured)",
+      "A test bake with a deliberately mirrored block, and one with a broken lane, each stop before tiles are written, with the reason",
+      "The verifier reads 4 top view shots of repaired sites (before and after where possible); npm run typecheck and npm test are green"
+    ]
+  },
+  {
+    "phase": "P1",
+    "agent": "builder",
+    "priority": 2,
+    "kind": "feature",
+    "deps": [
+      "#17"
+    ],
+    "title": "Tile sets for verify: a test block, the bake hash, snapshots and play copies",
+    "model": "sonnet",
+    "desc": "Baked tiles and the downloaded sources are gitignored, so a fresh clone, the verifier's snapshot worktree (harness/bin/snapshot.mjs) and the play copy (harness/bin/playcopy.mjs) have no city. Fix that before the game depends on tiles. (1) A small committed test block at game/world/test_tiles/ (about 9 tiles: the ITO flyover with its junction and a Connaught Place radial with part of the circle), baked with npm run bake -- pilot --tiles ... --out game/world/test_tiles, loaded with the game arg --tiles=test, so scenarios boot in under 3 s (TECH.md \"Verify harness and shipping\"). (2) The full tile set carries its bake hash in index.json, and the expected hash is committed in game/world/tiles.hash. snapshot.mjs and playcopy.mjs link or copy game/world/tiles/ from the main checkout and fail with a clear message when the hashes differ (\"rebake: npm run bake -- pilot\"). (3) The tree hash that freshreport.mjs uses includes tiles.hash and not the tiles. Pillar: base task, it unblocks all three pillars (three lives, one city; filmi, never cheap; the city opens up).",
+    "accept": [
+      "In a fresh git worktree with no data/ and no game/world/tiles/, the game boots with --tiles=test and a drive scenario on the test block passes",
+      "The committed test block is 12 MB or less in total with no file over 5 MB",
+      "Boot to playing on the test block takes under 3 s (the signed load warn line)",
+      "snapshot.mjs gives the worktree the full tile set, and a hash mismatch stops it with the rebake message (test)",
+      "playcopy.mjs --verified carries the tiles the same way (test)",
+      "npm run typecheck, npm test and node harness/bin/verify.mjs --quick are green, with no engine or console errors"
+    ]
+  },
+  {
+    "phase": "P1",
+    "agent": "builder",
+    "priority": 2,
+    "kind": "feature",
+    "deps": [
+      "#6",
+      "#18"
+    ],
+    "title": "Streaming core and the first streamed systems",
+    "model": "fable",
+    "desc": "Core system (Fable tier: tile streaming and memory). TECH.md \"Streaming (ST1, TL1)\", \"Tile format\"; docs/ARCHITECTURE.md rows world/streaming/, world/systems/, geo/; budgets in perf_budgets.json blocks streaming and systems. Reader prototype: game/bench/tiles/tile_t1.gd. game/world/streaming/: stream_core.gd (tile choice by distance and heading, three rings with the full detail ring to about 375 m now and the two far rings as registered hooks for P2, a hysteresis ring for unload, a memory cap, the attach queue capped at 1 ms of main thread work per frame, and the system registry), tile_reader.gd (KTL1 on a WorkerThreadPool task, version and magnitude checks, a bad tile is reported and skipped and never empties the world), tile_index.gd, and game/geo/world_frame.gd (block offsets from the index). game/world/systems/, one file per system, each with its own build(tile) and dispose(tile) and its own budget: ground_roads.gd, colliders.gd (chunks attached at most 3 a frame and none in a frame that attaches meshes; Jolt builds a mesh shape on the main thread when the body enters the space), buildings.gd (the plain shells for now) and lanes.gd (holds the lane graph per tile for the later traffic). The streaming core knows nothing about what a system builds. Hooks: state() reports the loaded tiles and the attach queue; teleport returns only when the ring around the target is attached with its colliders; load reports ready when the player's ring is attached. Old game lesson: one 4,065 line tile manager owned streaming, building, physics and cleanup. Here no file owns more than one of them, and the module size test enforces it. Pillar: the city opens up and pillar 2 (a chase at 200 km/h must never hitch).",
+    "accept": [
+      "Scenario stream_200 (perf, scene kind city): a scripted path across the pilot centre at 200 km/h for 60 s of sim has no frame over 33 ms after the first 2 s, attach work at most 1 ms per frame at p99, and at most 3 collider chunks attached in any frame",
+      "Scenario stream_teleport: after a teleport to Connaught Place, ITO, Chandni Chowk and India Gate there is ground under the player within 2 s of sim, and a ray down hits a collider within 0.05 m of the drawn surface",
+      "Memory: a 5 minute loop across the pilot ends with the loaded tile count at or under the cap, process memory growth under 50 MB after the first lap, and the engine object count back within 2% after an unload",
+      "A tile with a wrong version is reported and skipped and the tiles around it still load (test)",
+      "Frame p95 is inside warn 10 ms on the same path at 140 km/h (city budgets)",
+      "game/tests/test_streaming.gd covers ring choice, hysteresis, the attach cap and dispose; no file in game/world/ breaks the module size rule",
+      "harness/verify/quick.json and shared_paths.json cover game/world/; docs/ARCHITECTURE.md lists the new modules; npm run typecheck, npm test and node harness/bin/verify.mjs --quick are green, with no engine or console errors"
+    ]
+  },
+  {
+    "phase": "P1",
+    "agent": "builder",
+    "priority": 3,
+    "kind": "feature",
+    "deps": [
+      "#6"
+    ],
+    "title": "Vehicle model V2 and the car at 140 km/h",
+    "desc": "TECH.md \"Vehicles (V2)\"; GAME.md \"Movement and camera feel\", \"Vehicles and driving\"; docs/ARCHITECTURE.md rows vehicles/ and camera/. From the bench vehicle game/bench/physics/vehicle_v2.gd, tune.gd and drive_logic.gd. Runs on Opus: the bench version already measures well; by the standing rule it goes to Fable only on a third attempt. game/vehicles/: vehicle.gd (our raycast vehicle on a Jolt RigidBody3D for any wheel count: suspension rays, grip per axle, steer lock by speed, yaw damping, handbrake), tyre_model.gd, drive_input.gd, vehicle_tune.gd (a resource), and game/data/vehicles/car.tres. Retune the kept delhi-drive numbers (they top out at 106 km/h with low suspension damping, 0.82 and 0.88 against a stiffness of 28) to GAME.md: top speed about 140 km/h (owner answer), 0 to 100 km/h in 10 to 12 s, 100 to 0 in 38 to 45 m, arcade and forgiving at speed. Vehicle health 1000 exists as data only. game/camera/chase_camera.gd with the kept rig: wide chase 6.6 m behind and 2.5 m up, close chase 4.5 m and 2.05 m, FOV 70 degrees plus up to 21 at speed, never under 0.5 m above the vehicle, the view toggle (V) and look back (C). Replace the kinematic box car in the main scene and move its tests. Tuning is time boxed: one fix round and one test round, then report the numbers. Anmol judges the feel at the playtest. Pillar: filmi, never cheap (driving stays central: every mission has a drive that matters).",
+    "accept": [
+      "Feel probe scenarios in sim time on the physics course or the test block: car_accel 0 to 100 km/h in 10 to 12 s; car_top 138 to 143 km/h; car_brake 100 to 0 in 38 to 45 m; car_lock full lock radius 6 to 8 m at 38 km/h",
+      "car_kerb: a one-sided 0.15 m kerb at 40 km/h gives under 10 degrees of roll, no flip and under 5% speed loss; car_flyover: over the deck joints at 100 km/h all wheels are in contact for at least 95% of ticks",
+      "Input is answered in 1 tick; the same input script at time scale 0.25, 1 and 4 ends within 0.001 m",
+      "Coordinates: heading 0 moves toward -Z and PI/2 toward +X, the node uses rotation.y = -heading; drive_north and drive_turn_right pass with the new car",
+      "Camera scenario chase_cam_floor: over a 20 s drive with a reverse into a wall and a flyover crest the camera stays 0.5 m or more above the vehicle and never inside geometry, in 6 named poses and on every frame of the run; flakecheck 3 runs (5 when low usage mode is off)",
+      "Cost per car is 0.05 ms or less (printed); the numbers table is in the task summary; npm run typecheck, npm test and node harness/bin/verify.mjs --quick are green, with no engine or console errors"
+    ]
+  },
+  {
+    "phase": "P1",
+    "agent": "builder",
+    "priority": 3,
+    "kind": "feature",
+    "deps": [
+      "#20"
+    ],
+    "title": "Auto and scooter tunes, with the auto turn tune for galis",
+    "desc": "GAME.md \"Movement and camera feel\" (vehicle table), \"The three characters\". One vehicle model, one tuning file per vehicle. game/data/vehicles/auto.tres (three wheels; the bench first guess reached 61.9 km/h and 0 to 60 in 9.2 s): top speed about 65 km/h, 0 to 40 km/h in 5 to 6 s, 60 to 0 in 18 to 22 m, and the turn tune: a tight turning circle at low speed so it takes a gali corner, and no tip over on full lock at speed. scooter.tres (two wheels with a hidden stabiliser and a visual lean): top about 90 km/h, 0 to 60 in 5 to 6 s, 80 to 0 in 25 to 32 m. patrol_car.tres starts as the car tune. The auto uses the close chase camera by default. Bodies are stand-ins from the stand-in kit. Time boxed like the car: one fix round and one test round, then report the numbers. Pillar: three lives, one city (each life has its own vehicle: the driver's auto, the fixer's scooter, the cop's patrol car).",
+    "accept": [
+      "auto_top 63 to 67 km/h; auto_accel 0 to 40 km/h in 5 to 6 s; auto_brake 60 to 0 in 18 to 22 m",
+      "auto_lock: full lock radius 3.5 to 4.5 m at 15 km/h; auto_tip: full lock at 40 km/h gives under 12 degrees of roll and no flip; auto_kerb passes like car_kerb",
+      "auto_gali_corner: with scripted inputs the auto takes a 90 degree corner between two lanes 3 m wide without touching a wall",
+      "scooter_top 88 to 92 km/h; scooter_accel 0 to 60 in 5 to 6 s; scooter_brake 80 to 0 in 25 to 32 m; scooter_stable: 30 s straight and a slalom at 40 km/h with no fall",
+      "The camera floor check of P1-020 passes for the auto and the scooter in 6 poses each",
+      "npm run typecheck, npm test and node harness/bin/verify.mjs --quick are green, with no engine or console errors"
+    ]
+  },
+  {
+    "phase": "P1",
+    "agent": "builder",
+    "priority": 3,
+    "kind": "feature",
+    "deps": [
+      "#6"
+    ],
+    "title": "On-foot controller and camera",
+    "desc": "TECH.md \"On foot and combat (F1, CB1)\"; GAME.md \"Player verbs\", \"Movement and camera feel\"; docs/ARCHITECTURE.md rows characters/ and camera/. From the bench walker game/bench/physics/walker.gd. game/characters/on_foot.gd: a CharacterBody3D capsule with our own step-up (kerbs of 0.15 m, stair risers of 0.18 m). Walk 1.6 m/s, jog 3.8, sprint 6.5 for 8 s of stamina (regen in 5 s), crouch 1.2; jump apex 0.45 m in 0.30 s; vault a wall or railing up to 1.2 m in 0.6 s when facing one; turn 180 degrees in 0.25 s while jogging. game/camera/on_foot_camera.gd: 3.0 m behind the head pivot at 1.65 m, shoulder offset 0.45 m to the right, FOV 65 degrees (plus 5 when sprinting); walls between the camera and the player fade; the camera never comes closer than 0.6 m to the head and never clips into geometry. Enter and exit a vehicle with F, with the camera handed over. New input actions are remappable (keyboard and mouse first). The body is a capsule stand-in until P1-023. Pillar: three lives, one city (the fixer's bazaar and the cop's foot chase are on foot).",
+    "accept": [
+      "foot_speeds: walk, jog, sprint and crouch each within 3% of the GAME.md numbers; foot_stamina: 8 s within 0.3 s, regen 5 s within 0.3 s",
+      "foot_jump: apex 0.42 to 0.48 m reached in 0.27 to 0.33 s; foot_vault: a 1.2 m wall is vaulted in 0.5 to 0.7 s and a 1.3 m wall is not; foot_turn: 180 degrees in 0.20 to 0.30 s",
+      "foot_kerb_stairs: under 5% speed loss over 10 kerbs, a 12 step stair and a ramp, with no snag",
+      "foot_cam_walls: on a 20 s route with 6 named poses near walls and through a lane 2 m wide, while turning and while backing into a corner, the camera stays 0.6 m or more from the head, never inside geometry (ray check through a hook), and the player is never hidden; flakecheck 3 runs (5 when low usage mode is off)",
+      "enter_exit_vehicle: on foot to driving and back in under 2 s each, with no overlap after the exit and the right camera each time; state() reports the player mode",
+      "Cost per character is 0.05 ms or less; npm run typecheck, npm test and node harness/bin/verify.mjs --quick are green, with no engine or console errors"
+    ]
+  },
+  {
+    "phase": "P1",
+    "agent": "builder",
+    "priority": 3,
+    "kind": "feature",
+    "deps": [
+      "#22"
+    ],
+    "title": "Humanoid stand-in on the CC0 animation library",
+    "model": "opus",
+    "desc": "TECH.md \"Characters, crowds and navigation (N1, AN2, AL1)\"; STYLE_BIBLE.md \"Characters\". Import the Quaternius Universal Animation Library 1 and 2 (CC0), retarget it to one humanoid profile, and build game/characters/humanoid_anim.gd (an AnimationTree for idle, walk, jog, sprint, crouch, jump, vault, and sit, enter and exit for vehicles). One stand-in humanoid from the library serves the three leads, told apart by their fixed looks as colours until art arrives (Bittu: khaki shirt and gamchha; SI Meera Rana: khaki uniform; Danny: maroon jacket). Missing moves (the auto driver seat, the scooter ride) are registered as art requests with harness/bin/assets.mjs and use a stand-in pose. Record the licence file and a credit line for the credits screen. If the library cannot be downloaded, report it and keep the capsule: nothing waits. Pillar: three lives, one city (three leads the player can tell apart at a glance).",
+    "accept": [
+      "A test finds every clip of the locomotion set and checks the looping ones loop",
+      "foot_anim: foot slide under 5% at walk and at jog (foot speed against ground speed over one cycle, read through a hook)",
+      "The verifier reads the shots foot_anim_walk, foot_anim_sprint, foot_anim_vault and lead_lineup from the play camera: real proportions, nothing stretched or flattened, the three leads told apart (VERIFY.md rubric lines 11 and 22)",
+      "Respect rule: the verifier checks the three looks against GAME.md \"Respect rule\" (no caricature)",
+      "The CC0 licence file and the credit line are in the repo; animation for one character costs under 0.05 ms",
+      "npm run typecheck, npm test and node harness/bin/verify.mjs --quick are green, with no engine or console errors"
+    ]
+  },
+  {
+    "phase": "P1",
+    "agent": "builder",
+    "priority": 3,
+    "kind": "feature",
+    "deps": [
+      "#19",
+      "#20",
+      "#22"
+    ],
+    "title": "Drive and walk the real pilot: the game scene on the streamed city, with the base tests",
+    "desc": "The game scene becomes the streamed pilot centre (the stand-in scenes stay behind --scene= for look tests). Default spawn: an auto stand near Connaught Place; --spawn=<pin> for verify. Rewrite the FD0 play script (harness/verify/milestones/FD0.js, the id stays in milestones.json): boot, drive 300 m along a Connaught Place radial, round part of the inner circle, stop, with real inputs only. Add the base tests Anmol asked for, in the real city: (1) a known landmark lands at its projected position and on the right side of the map: pins for India Gate, the Connaught Place central park, Red Fort, Jama Masjid, the ITO crossing and the New Delhi station forecourt; (2) collision shapes match the visible meshes: ray probes against the drawn mesh at 200 seeded points over 10 tiles, and drives over the ITO flyover, a Connaught Place circle lap, Chandni Chowk main road and a walk through a gali where wheels and feet stay on the drawn surface; (3) north is up on the map and -Z in the world; (4) no node under World has a negative scale or a mirrored basis, checked on the live tree after streaming. Update harness/verify/quick.json (a core set of about 12 scenarios now) and keep one or two progress shots (harness/bin/keepshot.mjs). Pillar: the city opens up (the first real streets you can drive).",
+    "accept": [
+      "node harness/bin/verify.mjs --milestone FD0 passes, and task.mjs milestone FD0 playable is run",
+      "city_landmark_pins: each pin within 5 m of its projected position, Red Fort north-east of India Gate and Connaught Place north-west",
+      "city_collide_probe: every probe within 0.05 m; city_ito_flyover_drive, city_cp_circle_lap and city_chandni_walk: wheels and feet never more than 0.05 m off the drawn surface, no fall through, no stuck",
+      "city_north_up: a debug top view has north up, and the port of coords_north_marker passes in the real city",
+      "The mirror test passes on the streamed tree (0 nodes with a negative scale or a mirrored basis)",
+      "The verifier reads the shots city_cp_radial_eye, city_ito_flyover_eye, city_chandni_gali_foot and city_india_gate_hexagon at the play camera: no floating or sunk roads, no overlaps, readable under the default look (plain building shells are expected in this phase)",
+      "npm run typecheck, npm test and node harness/bin/verify.mjs --quick are green, with no engine or console errors"
+    ]
+  },
+  {
+    "phase": "P1",
+    "agent": "builder",
+    "priority": 2,
+    "kind": "feature",
+    "deps": [
+      "#11",
+      "#17"
+    ],
+    "title": "Map inspector step 2: the lanes layer",
+    "desc": "MAP_REPAIR.md \"Map inspector\" build order, step 2. A lanes layer drawn from the tiles' lanes data: widths, lane counts, splits, merges and tapers, so Anmol can check ramps. Split zones and taper findings are highlighted and listed, ITO first (10 split zones and the taper findings). Clicking a lane section shows its width, lane count and where the count came from (class default, inferred along the street, hero spec, override). A set_lanes note writes an override patch and an inbox entry. Pillar: the city opens up.",
+    "accept": [
+      "Playwright: the lanes layer toggles; at ITO the page lists the split zones and taper findings of health.json with the same counts; clicking one flies to it",
+      "End to end in a temp folder: a set_lanes patch written from the page changes that section's lane count in the next bake of that tile",
+      "0 console errors and 0 requests to any host but localhost",
+      "A screenshot harness/reports/inspector/lanes_ito.png is read by the verifier (lanes readable, north up)",
+      "npm run typecheck and npm test are green"
+    ]
+  },
+  {
+    "phase": "P1",
+    "agent": "builder",
+    "priority": 3,
+    "kind": "feature",
+    "deps": [
+      "#2",
+      "#5",
+      "#24"
+    ],
+    "title": "City perf paths and look poses in the real pilot",
+    "model": "sonnet",
+    "desc": "TECH.md \"Performance budgets\"; VERIFY.md \"Perf probes\", \"Look proof workflow\". Fixed vehicle paths as perf scenarios with scene kind city, each at 60, 140 and 200 km/h: a Connaught Place radial into the circle, the ITO flyover run, Chandni Chowk main road, the India Gate hexagon. A city group of 6 views in harness/look_proof/poses.json (street eye at Connaught Place, the ITO junction, a flyover ramp, a gali on foot, the India Gate lawns, the busiest 40 m) for the sets city_afternoon and city_golden. Measure with the GPU ballast on a calm machine (harness/state/knowledge.md), and write the numbers to perf_budgets.json as measured city_base, with the per system readings (roads and ground GPU ms, streaming attach, physics step, vehicles) against the systems block. This is the base line that P2 is judged against when dressing arrives. Pillar: the city opens up and the performance target (60 fps on the M2 Pro).",
+    "accept": [
+      "node harness/bin/verify.mjs --only on the city_path scenarios: every one inside the signed budgets (frame p95 warn 10 ms and fail 12 ms, city draw calls 2,500 and 3,500), or each miss is listed with its numbers as a bug task",
+      "lookproof --set city_afternoon --perf --scene-kind city and city_golden write every view and a perf.json that quotes the machine, the renderer and the load",
+      "The per system table is printed and written to perf_budgets.json measured",
+      "4 of the city shots are read (downscaled to about 1600 px)",
+      "npm run typecheck, npm test and node harness/bin/verify.mjs --quick are green, with no engine or console errors"
+    ]
+  },
+  {
+    "phase": "P1",
+    "agent": "builder",
+    "priority": 3,
+    "kind": "feature",
+    "deps": [
+      "#24"
+    ],
+    "title": "Test builds: the Mac app and the Windows export",
+    "model": "sonnet",
+    "desc": "TECH.md \"Verify harness and shipping\" (EM1, EW1). Export presets and harness/bin/export.mjs: mac gives an ad hoc signed universal app in a zip under harness/reports/builds/ (gitignored), with the pilot tiles as a data pack for the stage (loaded at start with ProjectSettings.load_resource_pack); windows gives an exe plus data packs exported from this Mac, unsigned. Smoke run: launch the exported Mac app with --debug and run boot_title and FD0 against it through the driver; without --debug the export has no debug server. The Windows build cannot be tested on this machine: when the first one exists add a Needs-you notice so Anmol and his friend can try it (node harness/bin/notice.mjs add ...). It never blocks. Developer ID signing waits for Anmol's decision and is asked again before release. Pillar: the city opens up (a build Anmol can hand to a friend).",
+    "accept": [
+      "The Mac zip exists, and the exported app passes boot_title, hooks_no_debug and FD0 through the driver",
+      "The Windows export completes with its exe and pack files listed with sizes, and the export logs have no ERROR line",
+      "No build output or file over 50 MB is committed (git status check)",
+      "The notice for the Windows test is on the dashboard",
+      "TECH.md \"Verify harness and shipping\" lists the export commands; npm run typecheck, npm test and node harness/bin/verify.mjs --quick are green, with no engine or console errors"
+    ]
+  }
+]
