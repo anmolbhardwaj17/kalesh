@@ -108,6 +108,9 @@ export interface RepairOptions {
 
 const share = (a: number, b: number): number => (b === 0 ? 1 : Math.round((a / b) * 1000) / 1000);
 
+/** Rounds of provisional proposals: a provisional change can open new queued issues (P1-033). */
+const PROVISIONAL_ROUNDS = 3;
+
 export function repairGraph(raw: BlockGraph, env: RuleEnv, opts: RepairOptions = {}): RepairResult {
   const rules = opts.rules ?? CATALOGUE;
   const order = new Map(rules.map((r, i) => [r.id, i]));
@@ -193,25 +196,34 @@ export function repairGraph(raw: BlockGraph, env: RuleEnv, opts: RepairOptions =
 
   // what is left on the repaired map: explained, or queued for a person
   const left: Issue[] = [];
-  for (const rule of rules) {
-    for (const issue of detect(rule, ctx)) {
-      const d = decide(issue);
-      if (repaired.has(issue.id)) continue;
-      const ov = overrideFor(ovs, issue);
-      if (ov) {
-        claim(issue, ov);
-        continue;
+  const leftIds = new Set<string>();
+  /** Issues not repaired and not seen before; an owner's patch settles its own. */
+  const collect = (): Issue[] => {
+    const found: Issue[] = [];
+    for (const rule of rules) {
+      for (const issue of detect(rule, ctx)) {
+        const d = decide(issue);
+        if (repaired.has(issue.id) || leftIds.has(issue.id)) continue;
+        const ov = overrideFor(ovs, issue);
+        if (ov) {
+          claim(issue, ov);
+          continue;
+        }
+        issue.status = d.mode === 'explained' ? 'explained' : 'open';
+        leftIds.add(issue.id);
+        left.push(issue);
+        found.push(issue);
       }
-      issue.status = d.mode === 'explained' ? 'explained' : 'open';
-      left.push(issue);
     }
-  }
+    return found;
+  };
 
   // a queued issue never blocks the bake: its top proposal goes in as provisional (never on a hero road)
   const provisional: ProvisionalLine[] = [];
-  if (opts.provisional !== false) {
-    const byRule = new Map(rules.map((r) => [r.id, r]));
-    for (const issue of left) {
+  const byRule = new Map(rules.map((r) => [r.id, r]));
+  const applyProvisional = (list: readonly Issue[]): boolean => {
+    let any = false;
+    for (const issue of list) {
       if (issue.status !== 'open') continue;
       const rule = byRule.get(issue.rule) as Rule;
       const top = topProposal(issue);
@@ -223,17 +235,22 @@ export function repairGraph(raw: BlockGraph, env: RuleEnv, opts: RepairOptions =
       const patch = patchOf(issue, top, 'bake-provisional');
       const r = applyPatch(state, patch);
       issue.provisional = r.applied;
+      any = any || r.applied;
       provisional.push({ rule: issue.rule, issue: issue.id, action: top.action, applied: r.applied, how: r.how, note: r.note, patch });
       for (const id of r.drops) drops.push({ id, rule: issue.rule, issue: issue.id, provisional: true });
     }
-  }
-
-  // a provisional change can open a repair the bounds allow (a new edge of a split road, a width that now fits):
-  // settle again, so a second run on the result finds nothing to repair
-  if (provisional.some((p) => p.applied)) {
+    return any;
+  };
+  // a provisional change can open a repair the bounds allow (a new edge of a split road, a width that now fits) or a
+  // new queued issue (a branch moved closer to another road): settle again and give the new queued issues their
+  // provisional too (PROVISIONAL_ROUNDS at most), so a second run on the result finds nothing to repair
+  let batch = collect();
+  for (let round = 0; round < PROVISIONAL_ROUNDS && opts.provisional !== false; round++) {
+    if (!applyProvisional(batch)) break;
     state.geometryChanged = true;
     fresh();
     settle();
+    batch = collect();
   }
   let unconverged = 0;
   const unconvergedBy: Record<string, number> = {};

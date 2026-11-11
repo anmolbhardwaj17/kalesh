@@ -38,6 +38,7 @@ import type { GroundModel } from './heights.ts';
 import { outlineRing } from './layout/outline.ts';
 import { blockFrame } from './layout/placement.ts';
 import { repairGraph } from './repair/engine.ts';
+import { repairWithLanes } from './repair/feedback.ts';
 import type { OverrideEntry } from './repair/overrides.ts';
 import { buildRuleEnv } from './repair/env.ts';
 import { issuesSvg } from './repair/render.ts';
@@ -173,6 +174,8 @@ export async function bake(args: BakeArgs, opts: BakeOptions): Promise<HealthRep
   let groundModel: GroundModel | null = null;
   let heightSource: HeightGrid | null = null;
   let graphInput: GraphInput | null = null;
+  /** The lane model the repair step's feedback built last, on the repaired graph. */
+  let laneBuild: ReturnType<typeof buildLaneModel> | null = null;
   let graph: BlockGraph | null = null;
   let repaired: RepairedGraph | null = null;
   for (const step of args.steps as Step[]) {
@@ -249,17 +252,22 @@ export async function bake(args: BakeArgs, opts: BakeOptions): Promise<HealthRep
       const timed = timeRules(new RuleContext(graph, env), () => clock.now());
       opts.log(`[rules] ${timed.issues.length} issues on the raw graph in ${timed.totalMs} ms: ${Object.entries(timed.ms).map(([id, ms]) => `${id} ${ms}`).join(', ')} (ms per rule)`);
       const t0 = clock.now();
-      const res = repairGraph(graph, env, { overrides: { entries, project: toBlock } });
+      // the repair, then the lane model on its result: lane surfaces on each other go back as conflicts (R-LANE-06)
+      const lin = laneInputs(graphInput, plan, readRepairInput(opts.root).heroSpecs);
+      const fb = repairWithLanes(graph, env, { overrides: { entries, project: toBlock } }, (g) => ({ nodes: g.nodes, edges: g.edges, marks: g.marks, ...lin }));
+      const res = fb.res;
       const repairMs = Math.round(clock.now() - t0);
-      const again = repairGraph(res.graph, env, { overrides: { entries, project: toBlock, applied: true } });
+      const again = repairGraph(res.graph, fb.env, { overrides: { entries, project: toBlock, applied: true } });
+      opts.log(`[repair] lane feedback: ${fb.rounds.map((r, i) => `round ${i} ${r.overlapM2} m2 in ${r.pairs} pairs, ${r.conflicts} new conflicts (not handed back: ${Object.entries(r.skipped).map(([k, v]) => `${k} ${v}`).join(', ') || 'none'})`).join('; ')}; ${fb.conflicts.length} conflicts in the rule environment`);
       repaired = res.graph;
+      laneBuild = fb.build;
       const s = res.summary;
       const c = checkGraph(res.graph);
       const noProposal = res.issues.filter((i) => i.status === 'open' && !i.proposals.some((p) => p.confidence > 0 && p.reasoning.length > 0 && p.preview.length > 0)).length;
       const files = writeRepair(opts.root, plan, path.dirname(healthFile), res, `production bake, stage ${plan.id}, graph ${graphHash(graph)}`, { offset, outline: stageRing, places: extra.places, toBlock });
       const picture = await writePicture(opts.root, `harness/reports/map/issues_${plan.id}.png`, issuesSvg(res.graph, res.issues), 2400);
-      const ctx = new RuleContext(res.graph, env, res.graph.marks);
-      report.repair = { files: { ...files, picture }, hash: graphHash(res.graph), rulesMs: timed.ms, rulesTotalMs: timed.totalMs, repairMs, summary: s, secondRunRepairs: again.repairs.length, queuedWithoutProposal: noProposal, heroEdges: res.graph.edges.filter((e) => ctx.heroOf(e)).length };
+      const ctx = new RuleContext(res.graph, fb.env, res.graph.marks);
+      report.repair = { files: { ...files, picture }, hash: graphHash(res.graph), rulesMs: timed.ms, rulesTotalMs: timed.totalMs, repairMs, summary: s, secondRunRepairs: again.repairs.length, queuedWithoutProposal: noProposal, heroEdges: res.graph.edges.filter((e) => ctx.heroOf(e)).length, laneFeedback: { rounds: fb.rounds, conflicts: fb.conflicts.length } };
       const byRule: Record<string, number> = {};
       const autoByRule: Record<string, number> = {};
       for (const r of s.byRule) {
@@ -276,7 +284,7 @@ export async function bake(args: BakeArgs, opts: BakeOptions): Promise<HealthRep
       opts.log(`[overrides] ${ov.patches} patches in ${ov.files} files for this stage (${outsideStage} outside it): ${ov.byId} found by id, ${ov.byAnchor} by anchor, ${ov.stale} stale (kept in their files), ${ov.applied} applied, ${ov.switchedOff} repairs switched off, ${ov.idle} idle; ${ov.issuesSettled} issues settled`);
       opts.log(`[repair] wrote ${files.graph}, ${files.issues}, ${files.repairs} and ${picture.join(', ')}`);
       check([
-        { id: 'REPAIR-01.fixed_point', ok: again.repairs.length === 0 && s.unconverged === 0, detail: again.repairs.length === 0 && s.unconverged === 0 ? `a second run on the repaired graph applies 0 repairs (${s.passes} passes)` : `a second run applies ${again.repairs.length} repairs, ${s.unconverged} issues could still repair after ${s.passes} passes (${Object.entries(s.unconvergedBy).map(([k, v]) => `${k} ${v}`).join(', ')})` },
+        { id: 'REPAIR-01.fixed_point', ok: again.repairs.length === 0 && s.unconverged === 0, detail: again.repairs.length === 0 && s.unconverged === 0 ? `a second run on the repaired graph applies 0 repairs (${s.passes} passes)` : `a second run applies ${again.repairs.length} repairs (${again.repairs.slice(0, 3).map((x) => x.issue).join(', ')}), ${s.unconverged} issues could still repair after ${s.passes} passes (${Object.entries(s.unconvergedBy).map(([k, v]) => `${k} ${v}`).join(', ')})` },
         { id: 'REPAIR-02.proposals', ok: noProposal === 0, detail: noProposal === 0 ? `every one of the ${s.queued} queued issues has a proposal with a confidence, a reasoning line and a preview` : `${noProposal} queued issues have no usable proposal` },
         { id: 'REPAIR-03.topology', ok: c.duplicateEdges.length + c.zeroLengthEdges.length + c.missingNodes.length + c.orphanNodes.length === 0, detail: `repaired graph: ${res.graph.nodes.length} nodes, ${res.graph.edges.length} edges, ${c.duplicateEdges.length} duplicate edges, ${c.zeroLengthEdges.length} zero length, ${c.missingNodes.length} missing nodes, ${c.orphanNodes.length} orphan nodes` },
       ]);
@@ -285,21 +293,11 @@ export async function bake(args: BakeArgs, opts: BakeOptions): Promise<HealthRep
       const proj = projector(plan.origin);
       const offset = blockFrame(districts, plan.def.block).offset;
       const heroes = readRepairInput(opts.root).heroSpecs;
-      const wayLanes = new Map<string, number>();
-      const points: NonNullable<LaneModelInput['points']>[number][] = [];
-      for (const el of graphInput.elements) {
-        if (el.type === 'way' && el.tags?.['highway']) {
-          const n = taggedLanes(el.tags);
-          if (n !== null) wayLanes.set(`way/${el.id}`, n);
-        } else if (el.type === 'node' && el.lat !== undefined && el.lon !== undefined && (el.tags?.['highway'] === 'crossing' || el.tags?.['highway'] === 'traffic_signals')) {
-          const p = proj.toWorld(el.lat, el.lon);
-          points.push({ x: p.x, z: p.z, kind: el.tags['highway'] === 'crossing' ? 'crossing' : 'signals' });
-        }
-      }
-      const input: LaneModelInput = { nodes: repaired.nodes, edges: repaired.edges, marks: repaired.marks, wayLanes, heroes, points };
+      const input: LaneModelInput = { nodes: repaired.nodes, edges: repaired.edges, marks: repaired.marks, ...laneInputs(graphInput, plan, heroes) };
       const t0 = clock.now();
-      const build = buildLaneModel(input);
-      const buildMs = Math.round(clock.now() - t0);
+      // the repair step's last lane model is this model (the same graph and inputs); built again for the hash check
+      const build = laneBuild ?? buildLaneModel(input);
+      const buildMs = laneBuild ? Math.round(laneBuild.ms['total'] ?? 0) : Math.round(clock.now() - t0);
       const model = laneModelFile(build, plan.def.block, plan.id);
       const hash = laneModelHash(model);
       // the same input again: the model must not depend on anything but its input
@@ -343,6 +341,23 @@ export async function bake(args: BakeArgs, opts: BakeOptions): Promise<HealthRep
 }
 
 const round = (v: number): number => Math.round(v * 100) / 100;
+
+/** What the lane model reads besides the graph: the lanes tag of every way, crossings and signals, the hero specs. */
+export function laneInputs(input: GraphInput, plan: StagePlan, heroes: LaneModelInput['heroes']): Pick<LaneModelInput, 'wayLanes' | 'points' | 'heroes'> {
+  const proj = projector(plan.origin);
+  const wayLanes = new Map<string, number>();
+  const points: NonNullable<LaneModelInput['points']>[number][] = [];
+  for (const el of input.elements) {
+    if (el.type === 'way' && el.tags?.['highway']) {
+      const n = taggedLanes(el.tags);
+      if (n !== null) wayLanes.set(`way/${el.id}`, n);
+    } else if (el.type === 'node' && el.lat !== undefined && el.lon !== undefined && (el.tags?.['highway'] === 'crossing' || el.tags?.['highway'] === 'traffic_signals')) {
+      const p = proj.toWorld(el.lat, el.lon);
+      points.push({ x: p.x, z: p.z, kind: el.tags['highway'] === 'crossing' ? 'crossing' : 'signals' });
+    }
+  }
+  return { wayLanes, points, ...(heroes ? { heroes } : {}) };
+}
 
 /** North-up pictures of the lane model: the two sites of the Phase 0 road bench (drawn when they lie in the stage). */
 const LANE_VIEWS: readonly { id: string; name: string; lat: number; lon: number; halfM: number }[] = [

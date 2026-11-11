@@ -5,6 +5,7 @@ import type { P2 } from '../geom.ts';
 import type { GraphEdge, GraphNode } from '../graph/build.ts';
 import type { RoadFilter, RoadGraph } from './blockgraph.ts';
 import type { ArmView, Turn, TurnKind, TurnRestriction } from './connect.ts';
+import type { EndClips } from './clip.ts';
 import type { EdgeTrims } from './edges.ts';
 import type { Graph } from './graph.ts';
 import type { HeroSpec } from './hero.ts';
@@ -40,6 +41,12 @@ export interface LaneArm {
   /** Metres from the strip end back to the stop line (a crossing lies between them); 0: the stop line is the cut line. */
   stopBack: number;
   crossing: boolean;
+  /**
+   * Width of the raised edge (kerb, footpath, planter) on the arm's left and right, looking away from the junction, at
+   * the strip end after the edges gave way (edges.ts) and free ends were clipped: what the junction's raised corners
+   * must meet (P1-033). The junction plan itself (JunctionPlan bands) still holds the nominal cross-section.
+   */
+  edges: [number, number];
 }
 
 export interface LanePath {
@@ -102,6 +109,8 @@ export interface LaneBuild {
   tightPaths: { junction: string; fromArm: number; toArm: number; radius: number; why: string }[];
   /** Where the edge lanes (footpath, kerb, planter) of two strips beside each other give way so the surfaces do not overlap (edges.ts). */
   edgeTrims: EdgeTrims;
+  /** Free ends (dead ends, the stage edge) shortened where they ran into another road's surface (clip.ts). */
+  endClips: EndClips;
   /** First and last strip of every edge that has strips, and the strip lane of every lane of its end cross-sections. */
   built: Map<number, { first: number; last: number; startLanes: number[]; endLanes: number[] }>;
   problems: string[];

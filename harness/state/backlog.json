@@ -1,6 +1,6 @@
 {
   "_doc": "Written only by node harness/bin/task.mjs. Phases run in order; P0 (ADOPT + STYLE DISCOVERY) waits for the owner by design and needs task.mjs signoff and task.mjs archsignoff before its gate passes. Later phases are added by the planner at the end of P0 (task.mjs phase-add) from the game's real state.",
-  "updated": "2026-11-11T20:30:26.556Z",
+  "updated": "2026-11-11T21:51:07.629Z",
   "phases": [
     {
       "id": "P0",
@@ -3301,10 +3301,35 @@
       "agent": "builder",
       "priority": 1,
       "kind": "feature",
+      "status": "done",
+      "attempts": 1,
+      "notes": [],
+      "created": "2026-11-11T20:30:26.456Z",
+      "started": "2026-11-11T20:30:46.605Z",
+      "done": "2026-11-11T21:51:07.607Z",
+      "summary": "Junction arms cut back to where carriageways separate, reference lines bow at most 0.5 m, rule R-LANE-06 with lane model feedback into the repair (2 rounds), free ends stop at other roads, stations at level changes; junction arms carry trimmed edge widths for P1-014. Pilot overlap 819 to 0.84 m2 (3 pairs, tunnel mouth left to P1-034); 0 continuity breaks. Lanes bake about 90 s (P1-034 speeds it up). Self-check: typecheck, 627 vitest, 70 Godot, offline lanes bake, quick OK.",
+      "commit": "2b14a56"
+    },
+    {
+      "id": "P1-034",
+      "phase": "P1",
+      "title": "Faster lanes bake and the tunnel mouth crossing",
+      "desc": "Follow-up from P1-033. The lanes bake went from about 32 s to 90 s: the repair step builds the lane model 3 times and clearCuts adds about 1.5 s per round. Re-plan only around the conflicts in later rounds. Also add a portal or level rule at the Pragati Maidan tunnel mouth, where w1248027222.0 crosses w973071388.0 just outside the OSM tunnel end (0.78 m2 overlap).",
+      "accept": [
+        "Lanes bake back under 45 s on an idle machine with the same hash as a full rebuild",
+        "Tunnel mouth overlap 0; pilot overlap under 0.1 m2",
+        "typecheck, tests and the offline lanes bake green"
+      ],
+      "deps": [
+        "P1-033"
+      ],
+      "agent": "builder",
+      "priority": 3,
+      "kind": "feature",
       "status": "todo",
       "attempts": 0,
       "notes": [],
-      "created": "2026-11-11T20:30:26.456Z"
+      "created": "2026-11-11T21:49:42.141Z"
     }
   ]
 }

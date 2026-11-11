@@ -97,7 +97,9 @@ export function planClusters(c: NetCtx, z: ZonePhase): ClusterPhase {
         p.t0 = base0[e.edge] as number;
         p.t1 = base1[e.edge] as number;
       }
-      const jp = planJunction(graph, plans, `j${nodeId[ids[0] as number]}`, ids, ends, 1.5, (e) => ask.get(key(e)) ?? 0);
+      // an arm may be cut back to where it comes clear of the others, up to the room a turn may take on it
+      const roomOf = (e: GEnd, arm: ArmPlan): number => (zoneEnds.has(e.edge) ? arm.avail : ((base1[e.edge] as number) - (base0[e.edge] as number)) * 0.9);
+      const jp = planJunction(graph, plans, `j${nodeId[ids[0] as number]}`, ids, ends, 1.5, (e) => ask.get(key(e)) ?? 0, roomOf);
       const views = jp.arms.map(view);
       const pose = (arm: number, lane: ArmLane, into: boolean) => lanePose(views[arm] as ArmView, lane, into);
       const tp = planTurns(views, input.restrictions ?? [], (f, fl, t, tl) => turnPath(pose(f, fl, true), pose(t, tl, false)).radius, PLAN_RADIUS_M + 0.15);

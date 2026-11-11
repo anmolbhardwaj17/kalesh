@@ -372,3 +372,50 @@ describe('edges give way (P1-031)', () => {
     expect(stripsOf(apart, far).length).toBeGreaterThan(0);
   });
 });
+
+describe('slow forks and free ends (P1-033)', () => {
+  it('a fork built as a junction (a side street at the split node) is cut back to where its branches come apart', () => {
+    // a one-way road splits at a node a side street also meets (so it is a junction, not a split zone); the branch
+    // that leaves runs 4 m from the one that goes on for 90 m before it bends away
+    const s = new Sketch();
+    const m = s.node(0, 0);
+    s.way([[-200, 0], m], { highway: 'secondary', oneway: 'yes' });
+    s.way([m, [300, 0]], { highway: 'secondary', oneway: 'yes' });
+    s.way([m, [90, 4], [300, 80]], { highway: 'secondary', oneway: 'yes' });
+    s.way([m, [0, -150]], { highway: 'residential' });
+    const { b } = model(s);
+    expect(b.zones.length).toBe(0);
+    expect(checkPlanOverlap(b.strips, b.joints).areaM2).toBe(0);
+    const j = b.junctionPlans.find((p) => p.arms.length === 4)!;
+    // the two branches leave the junction where their carriageways (6.6 m each) are clear of each other
+    const branches = j.arms.filter((a) => Math.abs(a.angle) < 0.5);
+    expect(branches.length).toBe(2);
+    // one of them is enough: its strip starts where the other one's surface has gone
+    expect(Math.max(...branches.map((a) => a.cut))).toBeGreaterThan(80);
+    // every arm names the raised edge widths its strip end has, looking away from the junction
+    const lj = b.junctions.find((x) => x.arms.length === 4)!;
+    for (const a of lj.arms) {
+      const st = b.strips[a.strip]!;
+      const end = a.end === 'start' ? st.st[0]! : st.st[st.st.length - 1]!;
+      const drv = st.lanes.map((l, k) => (l.type === 'drive' ? k : -1)).filter((k) => k >= 0);
+      const left = end.b[0]! - end.b[drv[0]!]!;
+      const right = end.b[drv[drv.length - 1]! + 1]! - end.b[end.b.length - 1]!;
+      expect(a.edges[0]).toBeCloseTo(a.end === 'start' ? left : right, 2);
+      expect(a.edges[1]).toBeCloseTo(a.end === 'start' ? right : left, 2);
+    }
+  });
+  it('a dead end drawn into another road stops where that road begins, and keeps its explained end', () => {
+    const s = new Sketch();
+    s.way([[-200, 0], [200, 0]], { highway: 'secondary', oneway: 'yes' });
+    const lane = s.way([[0, 80], [0, 1]], { highway: 'service' });
+    const { b } = model(s);
+    expect(checkPlanOverlap(b.strips, b.joints).areaM2).toBe(0);
+    expect(b.endClips.ends).toBe(1);
+    const st = stripsOf(b, lane);
+    expect(st.length).toBe(1);
+    expect(b.ends.some((e) => e.strip === b.strips.indexOf(st[0]!) && e.kind === 'dead_end')).toBe(true);
+    // drawn to 1 m from the secondary road's centre line, it stops at its carriageway edge (3.3 m) or before
+    const end = st[0]!.st[st[0]!.st.length - 1]!;
+    expect(Math.abs(end.z)).toBeGreaterThan(3.3);
+  });
+});

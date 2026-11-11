@@ -28,6 +28,19 @@ function issuesOf(rule: string, c: Case): Issue[] {
   return runRules(rulesOn(g, { nodeTags: c.s.nodeTags(), ...env }, c.marks ? c.marks(g) : {})).filter((i) => i.rule === rule);
 }
 
+/** Two parallel one-way roads `d` metres apart (R-LANE-06). */
+const twoRoads = (d: number): Sketch => {
+  const s = new Sketch();
+  s.way([[-200, 0], [200, 0]], { highway: 'secondary', oneway: 'yes', name: 'Barakhamba Road' });
+  s.way([[-120, d], [120, d]], { highway: 'secondary', oneway: 'yes', name: 'Tolstoy Marg' });
+  return s;
+};
+/** A lane conflict between the two roads of twoRoads near x 0. */
+const conflict = (g: BlockGraph, minSep: number): NonNullable<RuleEnv['laneConflicts']>[number] => {
+  const [a, b] = [...g.edges].sort((p, q) => (p.id < q.id ? -1 : 1)) as [BlockGraph['edges'][number], BlockGraph['edges'][number]];
+  return { a: a.id, b: b.id, waysA: a.pieces.map((p) => p.way), waysB: b.pieces.map((p) => p.way), x: 0, z: 0, minSep, hold: null, areaM2: 40 };
+};
+
 const sketch = (draw: (s: Sketch) => void): Sketch => {
   const s = new Sketch();
   draw(s);
@@ -158,6 +171,13 @@ const CASES: Record<string, { hit: () => Case; clean: () => Case; also?: (issues
     clean: () => ({ s: sketch((s) => { s.way([[-200, 0], [200, 0]], { highway: 'secondary', oneway: 'yes', name: 'Barakhamba Road' }); s.way([[-120, 9], [120, 9]], { highway: 'service' }); }) }),
     also: (i) => { expect(i[0]!.proposals[0]!.params).toMatchObject({ op: 'shift_apart', move_nodes: true }); },
   },
+  'R-LANE-06': {
+    // the lane model handed back two roads 10 m apart whose surfaces lie on each other (a wider cross-section than
+    // the graph widths): they must keep 12 m. Once 12 m apart, or with no conflict, nothing is found
+    hit: () => ({ s: twoRoads(10), env: (g) => ({ laneConflicts: [conflict(g, 12)] }) }),
+    clean: () => ({ s: twoRoads(12.5), env: (g) => ({ laneConflicts: [conflict(g, 12)] }) }),
+    also: (i) => { expect(i[0]!.proposals[0]!.params).toMatchObject({ op: 'shift_apart', move_nodes: true, mark: 'surface_with', min_sep: 12 }); },
+  },
   'R-JUNC-01': {
     hit: () => ({ s: sketch((s) => { const n = s.node(0, 0); s.way([[-100, 0], n], { highway: 'residential' }); s.way([n, [100, 0]], { highway: 'residential' }); s.way([n, [100, 8.7]], { highway: 'service' }); }) }),
     clean: () => ({ s: sketch((s) => { const n = s.node(0, 0); s.way([[-100, 0], n], { highway: 'residential' }); s.way([n, [100, 0]], { highway: 'residential' }); s.way([n, [0, 100]], { highway: 'service' }); }) }),
@@ -275,7 +295,7 @@ describe('rule catalogue (RE1)', () => {
       'R-ROAD-01', 'R-ROAD-02', 'R-ROAD-03', 'R-ROAD-04', 'R-ROAD-05', 'R-ROAD-07',
       'R-BRIDGE-01', 'R-BRIDGE-02', 'R-BRIDGE-03', 'R-BRIDGE-04', 'R-BRIDGE-05',
       'R-LANE-FIT-01', 'R-LANE-FIT-02', 'R-LANE-FIT-03',
-      'R-ROAD-06', 'R-LANE-01', 'R-LANE-02', 'R-LANE-03', 'R-LANE-04', 'R-LANE-05',
+      'R-ROAD-06', 'R-LANE-01', 'R-LANE-02', 'R-LANE-03', 'R-LANE-04', 'R-LANE-05', 'R-LANE-06',
       'R-JUNC-01', 'R-JUNC-02', 'R-JUNC-03', 'R-JUNC-04',
       'R-FOOT-01', 'R-FOOT-02',
       'R-BLDG-01', 'R-BLDG-02', 'R-BLDG-03', 'R-BLDG-04',

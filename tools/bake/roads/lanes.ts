@@ -462,6 +462,8 @@ interface Span {
 }
 
 const BLEND_M = 12;
+/** A station past a level change stands this far after it (m), so it takes the new level (pieceAt). */
+const LEVEL_STEP_M = 0.001;
 
 /** The strips of one edge between its trims: constant sections, tapers between them, tapers to split zones. */
 export function buildEdgeStrips(plan: EdgePlan, step = 4): EdgeStrips {
@@ -538,15 +540,30 @@ export function buildEdgeStrips(plan: EdgePlan, step = 4): EdgeStrips {
   const strips: Strip[] = [];
   const joints: Joint[] = [];
   const ways = [...new Set(e.pieces.map((p) => p.way))];
+  // a station stands just past every level change (a tunnel or bridge starts): no quad lies on two levels (P1-033)
+  const levelBreaks: number[] = [];
+  e.pieces.forEach((p, k) => {
+    const q = e.pieces[k + 1];
+    if (q && (p.layer !== q.layer || p.bridge !== q.bridge)) levelBreaks.push(p.s1 + LEVEL_STEP_M);
+  });
   spans.forEach((sp, i) => {
     const n = Math.max(1, Math.ceil((sp.s1 - sp.s0) / step));
     const st: Station[] = [];
     const bd = sp.rows ? rowBorders(sp.rows, sp.a, sp.b) : null;
     const constant = csBorders(sp.a);
-    for (let k = 0; k <= n; k++) {
-      const s = lerp(sp.s0, sp.s1, k / n);
+    const at: number[] = [];
+    for (let k = 0; k <= n; k++) at.push(lerp(sp.s0, sp.s1, k / n));
+    for (const sb of levelBreaks) {
+      if (sb <= sp.s0 + 0.5 || sb >= sp.s1 - 0.5) continue;
+      // a station within half a metre moves onto the change, else one more station
+      const near = at.findIndex((v, k) => k > 0 && k < at.length - 1 && Math.abs(v - sb) < 0.5);
+      if (near >= 0) at[near] = sb;
+      else at.push(sb);
+    }
+    at.sort((x, y) => x - y);
+    for (const s of at) {
       const f = frameAt(s);
-      const t = smoothstep(k / n);
+      const t = smoothstep((s - sp.s0) / (sp.s1 - sp.s0));
       const b = bd ? bd.a.map((v, j) => lerp(v, bd.b[j] as number, t)) : constant.slice();
       const piece = pieceAt(e, s);
       st.push({ ...f, s, h: 0, g: 0, b, layer: piece.layer, bridge: piece.bridge, structure: 0, edgeRaise: 0 });

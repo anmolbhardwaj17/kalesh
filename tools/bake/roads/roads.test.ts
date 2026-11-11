@@ -105,6 +105,22 @@ describe('helpers', () => {
     const t = c.smoothAt(0.5, 0.5);
     expect(t.tz).toBeGreaterThan(0.7);
   });
+  it('a smoothed line bows out from its points by no more than maxDev (a service loop with right angle corners)', () => {
+    const square = [{ x: 0, z: 0 }, { x: 60, z: 0 }, { x: 60, z: 40 }, { x: 0, z: 40 }, { x: 0, z: 0 }];
+    const off = (c: ReturnType<typeof smoothLine>): number => Math.max(...c.pts.map((p) => {
+      let d = Infinity;
+      for (let i = 0; i + 1 < square.length; i++) {
+        const a = square[i]!;
+        const b = square[i + 1]!;
+        const l2 = (b.x - a.x) ** 2 + (b.z - a.z) ** 2;
+        const u = Math.max(0, Math.min(1, ((p.x - a.x) * (b.x - a.x) + (p.z - a.z) * (b.z - a.z)) / l2));
+        d = Math.min(d, Math.hypot(p.x - a.x - u * (b.x - a.x), p.z - a.z - u * (b.z - a.z)));
+      }
+      return d;
+    }));
+    expect(off(smoothLine(square, 1))).toBeGreaterThan(4);
+    expect(off(smoothLine(square, 1, undefined, undefined, 0.5))).toBeLessThan(0.51);
+  });
 });
 
 describe('graph', () => {

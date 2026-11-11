@@ -15,15 +15,15 @@ import { smoothedGround } from '../heights.ts';
 import { outlineRing } from '../layout/outline.ts';
 import { blockFrame } from '../layout/placement.ts';
 import { stagePlan } from '../layout/stages.ts';
-import { bake, boxMetres, offlineNet } from '../main.ts';
+import { bake, boxMetres, laneInputs, offlineNet } from '../main.ts';
 import { CATALOGUE, timeRules } from '../rules/catalogue.ts';
 import { RuleContext } from '../rules/context.ts';
 import { readGraphInput } from '../sources/graphinput.ts';
 import { readGedtmFile } from '../sources/ground.ts';
 import { readRepairInput } from '../sources/repairio.ts';
 import { startInspector } from '../../inspector/serve.mjs';
-import { repairGraph } from './engine.ts';
 import { buildRuleEnv } from './env.ts';
+import { repairWithLanes } from './feedback.ts';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..', '..', '..');
 const districts = JSON.parse(fs.readFileSync(path.join(ROOT, 'harness/data/districts.json'), 'utf8'));
@@ -149,8 +149,9 @@ describe.skipIf(missing.length > 0)(`pilot centre repair${reason ? ` (skipped: $
     expect(b.totalMs).toBeLessThan(3000);
     expect(health.repair.rulesTotalMs).toBeLessThan(3000);
     expect(JSON.stringify(b.issues)).toBe(JSON.stringify(a.issues));
-    // the whole repair, run here on its own, gives the graph the driver wrote
-    const res = repairGraph(g, env);
+    // the whole repair with the lane model's feedback (R-LANE-06), run here on its own, gives the graph the driver wrote
+    const lin = laneInputs(input, plan, extra.heroSpecs);
+    const { res } = repairWithLanes(g, env, {}, (rg) => ({ nodes: rg.nodes, edges: rg.edges, marks: rg.marks, ...lin }));
     expect(graphHash(res.graph)).toBe(health.repair.hash);
     expect(res.summary.total).toBe(health.repair.summary.total);
     expect(res.repairs.length).toBe(health.repair.summary.auto);

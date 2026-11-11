@@ -8,6 +8,13 @@ import type { GraphEdge, GraphNode } from '../graph/build.ts';
 import { smoothLine } from './curve.ts';
 import type { EdgePiece, GEdge, GNode, Graph } from './graph.ts';
 
+/**
+ * How far a reference line may bow out from the graph line between two of its points (P1-033): the repair rules
+ * (R-LANE-05, the building rules) read the graph line, so a line smoothed several metres off it (a service loop drawn
+ * with right angle corners and 60 m sides bowed 8 m) lands on roads the repair kept apart.
+ */
+export const MAX_LINE_DEV_M = 0.5;
+
 export interface RoadFilter {
   /** Road classes taken (links of a class come with it). */
   classes?: readonly string[];
@@ -59,7 +66,7 @@ export function roadGraph(nodes: readonly GraphNode[], edgesIn: readonly GraphEd
     const a = number.get(e.a);
     const b = number.get(e.b);
     if (a === undefined || b === undefined) continue;
-    const curve = smoothLine(e.pts as P2[], 1, e.ta, e.tb);
+    const curve = smoothLine(e.pts as P2[], 1, e.ta, e.tb, MAX_LINE_DEV_M);
     if (curve.length < 0.5) continue;
     const scale = curve.length / (e.len || 1);
     const pieces: EdgePiece[] = e.pieces.map((p) => ({
