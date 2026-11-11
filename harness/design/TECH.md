@@ -249,7 +249,7 @@ Frame and scenes:
 | Video memory | warn 1,200 MB, fail 2,000 MB | the same |
 | Load, launch to playing | warn 3 s, fail 10 s | the same |
 
-A city scenario sets the city numbers in its own `budget` object (perf_budgets.json `scenes.city`) until `perfbudget.mjs` reads the scene kind by name. Frame time is the real guard.
+A scenario (`scene: "city"`) or a lookproof run (`--scene-kind city`) names its scene kind and `perfbudget.mjs` takes the draw call, triangle and video memory budgets from perf_budgets.json `scenes.<kind>` (`look` is the default); no copy of the block in a scenario. Frame time is the real guard.
 
 GPU per frame (each column has 10 ms; GPU plus the gameplay CPU subtotal stays under 16.6 ms):
 

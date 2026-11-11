@@ -82,7 +82,7 @@
     "source": "harness/design/ARCH_OPTIONS.md \"Budgets per system\" (P0-020, measured on this M2 Pro), recorded by P0-022"
   },
   "scenes": {
-    "_doc": "Which draw call budget a scenario is judged against. \"look\" is presets.default (the stand-in look scenes and lookproof sets). \"city\" is for scenarios in the streamed city (real tiles, crowds, traffic): until perfbudget.mjs reads a scene kind by name, a city scenario copies this block into its own \"budget\" object (scenario option). Frame time, fps floor and load are the same signed numbers for both.",
+    "_doc": "Which draw call, triangle and video memory budget a scenario is judged against, by scene kind (perfbudget.mjs, P1-005). A scenario sets \"scene\": \"look\" or \"city\" and lookproof --perf takes --scene-kind; none means look. \"look\" is the stand-in look scenes and lookproof sets (the same numbers as presets.default). \"city\" is for scenarios in the streamed city (real tiles, crowds, traffic). No scenario copies the block into its own \"budget\" object any more. Frame time, fps floor and load are the same signed numbers for both.",
     "look": {
       "drawCalls": {
         "warn": 600,

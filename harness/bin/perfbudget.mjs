@@ -14,12 +14,23 @@
 //       "default": { "drawCalls": { "warn": 300, "fail": 600 }, "triangles": { "warn": 500000, "fail": 1500000 }, "gpuMB": { "warn": 256, "fail": 512 } }
 //     }
 //   }
+//     "scenes": {                            per scene KIND: the draw call, triangle and video memory budgets
+//       "look": { "drawCalls": {...}, "triangles": {...}, "gpuMB": {...} },   stand-in look scenes, lookproof sets (the default kind)
+//       "city": { "drawCalls": {...}, ... }                                    streamed city scenes (real tiles, crowds, traffic)
+//     }
+// A scenario (`scene: "city"`) or a lookproof run (`--scene-kind city`) names its kind; none means "look". The kind's block
+// replaces the preset's limits for the keys it carries (a city scene needs no copy of the block in its own `budget`). Frame time,
+// fps floor and load do not depend on the kind. SCENE_KINDS lists the kinds.
 // A scenario may carry its own `budget` object with the same keys (frameMs, fpsFloor, loadMs, drawCalls, triangles, gpuMB)
 // to tighten or loosen one number for that scene; say why in its `_note`.
 // Software GL (no GPU) never judges frame time or fps: the numbers mean nothing there.
 import path from 'node:path';
 import { ROOT, readJSON, config } from './lib.mjs';
 import { frameTimeGate } from './perfgate.mjs';
+
+export const SCENE_KINDS = ['look', 'city'];
+export const DEFAULT_SCENE_KIND = 'look';
+const SCENE_KEYS = ['drawCalls', 'triangles', 'gpuMB'];
 
 export const DEFAULTS = {
   status: 'default',
@@ -41,6 +52,7 @@ export function normalize(raw, source = 'inline') {
   b.frameMs = { ...DEFAULTS.frameMs, ...(raw?.frameMs || {}) };
   b.loadMs = { ...DEFAULTS.loadMs, ...(raw?.loadMs || {}) };
   b.presets = { ...DEFAULTS.presets, ...(raw?.presets || {}) };
+  b.scenes = raw?.scenes && typeof raw.scenes === 'object' ? raw.scenes : {};
   b.frameMsWarn = b.frameMs.warn;
   b.frameMsFail = b.frameMs.fail;
   b.gateOpts = { warnMs: b.frameMs.warn, failMs: b.frameMs.fail, fpsFloor: b.fpsFloor };
@@ -49,6 +61,28 @@ export function normalize(raw, source = 'inline') {
 }
 
 const num = (v) => typeof v === 'number' && Number.isFinite(v);
+
+/**
+ * The scene kind to judge with: an explicit `sceneKind`, else the scenario's `scene`, else "look". Returns { kind, unknown }
+ * (an unknown name is judged as look and reported as a warning).
+ */
+export function resolveSceneKind(sceneKind, scenario) {
+  const asked = sceneKind ?? scenario?.scene ?? null;
+  if (asked == null || asked === '') return { kind: DEFAULT_SCENE_KIND, unknown: null };
+  return SCENE_KINDS.includes(asked) ? { kind: asked, unknown: null } : { kind: DEFAULT_SCENE_KIND, unknown: String(asked) };
+}
+
+/** The draw call, triangle and video memory limits for a quality preset and a scene kind (see the file format above). */
+export function sceneLimits(budgets, kind = DEFAULT_SCENE_KIND, quality = null) {
+  const preset = { ...(budgets.presets.default || {}), ...(budgets.presets[quality] || {}) };
+  const scene = budgets.scenes?.[kind] || {};
+  const out = {};
+  for (const k of SCENE_KEYS) {
+    // The look kind keeps the quality preset first (the older rule); every other kind's own block wins over the preset.
+    out[k] = kind === DEFAULT_SCENE_KIND ? (preset[k] || scene[k]) : (scene[k] || preset[k]);
+  }
+  return out;
+}
 
 /** One limit check: value against {warn, fail}. Pushes into fails / warnings. */
 function limit(name, value, lim, unit, fails, warnings) {
@@ -59,15 +93,18 @@ function limit(name, value, lim, unit, fails, warnings) {
 
 /**
  * Judge one page against the budgets. perf: the debug.perf block (or null); loadMs: page open to ready; quality: the
- * scenario's preset; scenario: its own `budget` overrides. Returns { fails: [], warnings: [], frame } (frame = the
+ * scenario's preset; sceneKind: "look" or "city" (default: scenario.scene, else look); scenario: its own `budget`
+ * overrides. Returns { fails: [], warnings: [], frame, sceneKind } (frame = the
  * perfgate verdict, or null when no perf was measured).
  */
-export function judgeBudgets({ perf = null, loadMs = null, quality = null, budgets = normalize(null), software = false, scenario = {} }) {
+export function judgeBudgets({ perf = null, loadMs = null, quality = null, sceneKind = null, budgets = normalize(null), software = false, scenario = {} }) {
   const fails = [];
   const warnings = [];
   const o = scenario?.budget || {};
-  const preset = { ...(budgets.presets.default || {}), ...(budgets.presets[quality] || {}) };
-  const lim = (k) => o[k] || preset[k];
+  const { kind, unknown } = resolveSceneKind(sceneKind, scenario);
+  if (unknown) warnings.push(`scene kind "${unknown}" is not one of ${SCENE_KINDS.join(', ')}: judged as ${kind}`);
+  const limits = sceneLimits(budgets, kind, quality);
+  const lim = (k) => o[k] || limits[k];
   limit('load time', loadMs, o.loadMs || budgets.loadMs, ' ms', fails, warnings);
   let frame = null;
   if (perf) {
@@ -82,5 +119,5 @@ export function judgeBudgets({ perf = null, loadMs = null, quality = null, budge
     const gpuMB = num(perf.gpuMB) ? perf.gpuMB : num(perf.textureMB) ? perf.textureMB + (perf.renderbufferMB || 0) : null;
     limit('GPU memory', gpuMB, lim('gpuMB'), ' MB', fails, warnings);
   }
-  return { fails, warnings, frame };
+  return { fails, warnings, frame, sceneKind: kind };
 }
