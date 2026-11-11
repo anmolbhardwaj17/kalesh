@@ -14,6 +14,7 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { projector } from '../geo/projection.ts';
+import { pointInRing } from './geom.ts';
 import type { Box2 } from './geom.ts';
 import { parseArgs } from './cli.ts';
 import type { BakeArgs, Step } from './cli.ts';
@@ -26,7 +27,7 @@ import type { GeoBox } from './layout/outline.ts';
 import type { LayoutFile } from './layout/placement.ts';
 import { stageDefs, stagePlan } from './layout/stages.ts';
 import type { DistrictsWithStages, StagePlan } from './layout/stages.ts';
-import { BakeStop, emptyHealth, recordInvariants } from './report/health.ts';
+import { BakeStop, emptyHealth, mapCounts, recordInvariants } from './report/health.ts';
 import type { HealthReport } from './report/health.ts';
 import { buildBlockGraph } from './graph/build.ts';
 import type { BlockGraph, GraphInput } from './graph/build.ts';
@@ -35,10 +36,12 @@ import type { GroundModel } from './heights.ts';
 import { outlineRing } from './layout/outline.ts';
 import { blockFrame } from './layout/placement.ts';
 import { repairGraph } from './repair/engine.ts';
+import type { OverrideEntry } from './repair/overrides.ts';
 import { buildRuleEnv } from './repair/env.ts';
 import { issuesSvg } from './repair/render.ts';
 import { timeRules } from './rules/catalogue.ts';
 import { RuleContext } from './rules/context.ts';
+import { readOverrides } from './sources/overridesio.ts';
 import { readRepairInput, writeRepair } from './sources/repairio.ts';
 import { checkGraph, graphCounts, graphHash, graphInvariants } from './graph/checks.ts';
 import { graphSvg } from './graph/render.ts';
@@ -110,6 +113,8 @@ export interface BakeOptions {
   log: (line: string) => void;
   /** Where health.json goes (default harness/reports/map/health.json under root). */
   healthFile?: string;
+  /** Where the override files are read from (default harness/data/overrides under root). */
+  overridesDir?: string;
 }
 
 /** Runs a bake for parsed arguments; returns the report (also written to disk). Throws BakeStop after writing it. */
@@ -132,6 +137,8 @@ export async function bake(args: BakeArgs, opts: BakeOptions): Promise<HealthRep
   const finish = (): void => {
     fs.mkdirSync(path.dirname(healthFile), { recursive: true });
     fs.writeFileSync(healthFile, JSON.stringify(report, null, 2) + '\n');
+    // the pair table of the centre block (rule R-STITCH-03) on its own, for the pages that show it
+    if (report.pairs.length) fs.writeFileSync(path.join(path.dirname(healthFile), 'pairs.json'), JSON.stringify({ version: 1, block: report.block, worstPairBearingDeg: report.layout?.worstPairBearingDeg ?? null, worstPairDistancePct: report.layout?.worstPairDistancePct ?? null, pairs: report.pairs }, null, 2) + '\n');
   };
   const check = (results: Parameters<typeof recordInvariants>[1]): void => {
     for (const r of results) opts.log(`[invariant] ${r.ok ? 'ok  ' : 'FAIL'} ${r.id}: ${r.detail}`);
@@ -207,10 +214,22 @@ export async function bake(args: BakeArgs, opts: BakeOptions): Promise<HealthRep
     } else if (step === 'repair') {
       if (!graph || !graphInput) throw new Error('the repair step needs the graph step before it');
       const extra = readRepairInput(opts.root);
+      const proj = projector(plan.origin);
+      const offset = blockFrame(districts, plan.def.block).offset;
+      const stageRing = outlineRing(plan.outline.coords, plan.origin);
+      const toBlock = (lat: number, lon: number) => proj.toWorld(lat, lon);
+      // override patches (harness/data/overrides/): the ones whose anchor lies inside this stage's outline
+      const entries: OverrideEntry[] = [];
+      let outsideStage = 0;
+      for (const e of readOverrides(opts.root, opts.overridesDir)) {
+        const a = e.patch.target.anchor;
+        if (pointInRing(toBlock(a.lat, a.lon), stageRing)) entries.push(e);
+        else outsideStage++;
+      }
       const focusIds = new Set(districts.districts.filter((d) => d.block === plan.def.block).map((d) => d.id));
       const ground = groundModel;
       const env = buildRuleEnv({
-        proj: projector(plan.origin), offset: blockFrame(districts, plan.def.block).offset,
+        proj, offset,
         focus: layout.input.outlines.filter((o) => focusIds.has(o.id)).map((o) => ({ id: o.id, ring: outlineRing(o.coords, plan.origin) })),
         ground: ground ? (x, z) => ground.at(x, z) : null, heightSource, heroSpecs: extra.heroSpecs, heroList: extra.heroList,
         places: extra.places.filter((p) => p.block === plan.def.block), elements: graphInput.elements, graph, mapEdge: 'stage',
@@ -219,13 +238,13 @@ export async function bake(args: BakeArgs, opts: BakeOptions): Promise<HealthRep
       const timed = timeRules(new RuleContext(graph, env), () => clock.now());
       opts.log(`[rules] ${timed.issues.length} issues on the raw graph in ${timed.totalMs} ms: ${Object.entries(timed.ms).map(([id, ms]) => `${id} ${ms}`).join(', ')} (ms per rule)`);
       const t0 = clock.now();
-      const res = repairGraph(graph, env);
+      const res = repairGraph(graph, env, { overrides: { entries, project: toBlock } });
       const repairMs = Math.round(clock.now() - t0);
-      const again = repairGraph(res.graph, env);
+      const again = repairGraph(res.graph, env, { overrides: { entries, project: toBlock, applied: true } });
       const s = res.summary;
       const c = checkGraph(res.graph);
       const noProposal = res.issues.filter((i) => i.status === 'open' && !i.proposals.some((p) => p.confidence > 0 && p.reasoning.length > 0 && p.preview.length > 0)).length;
-      const files = writeRepair(opts.root, plan, path.dirname(healthFile), res, `production bake, stage ${plan.id}, graph ${graphHash(graph)}`);
+      const files = writeRepair(opts.root, plan, path.dirname(healthFile), res, `production bake, stage ${plan.id}, graph ${graphHash(graph)}`, { offset, outline: stageRing, places: extra.places, toBlock });
       const picture = await writePicture(opts.root, `harness/reports/map/issues_${plan.id}.png`, issuesSvg(res.graph, res.issues), 2400);
       const ctx = new RuleContext(res.graph, env, res.graph.marks);
       report.repair = { files: { ...files, picture }, hash: graphHash(res.graph), rulesMs: timed.ms, rulesTotalMs: timed.totalMs, repairMs, summary: s, secondRunRepairs: again.repairs.length, queuedWithoutProposal: noProposal, heroEdges: res.graph.edges.filter((e) => ctx.heroOf(e)).length };
@@ -237,8 +256,12 @@ export async function bake(args: BakeArgs, opts: BakeOptions): Promise<HealthRep
       }
       report.issues = { total: s.total, byRule, open: s.queued };
       report.repairs = { auto: s.auto, byRule: autoByRule };
-      for (const r of s.byRule) if (r.issues) opts.log(`[repair] ${r.rule.padEnd(14)} ${String(r.issues).padStart(5)} issues: ${r.auto} repaired, ${r.queued} queued, ${r.explained} explained (${r.title})`);
-      opts.log(`[repair] ${s.total} issues in ${s.passes} passes (${(repairMs / 1000).toFixed(2)} s): ${s.auto} repaired on their own (${(s.autoShare * 100).toFixed(1)} percent; ${(s.autoShareOfChanged * 100).toFixed(1)} percent of repaired plus queued; ${(s.withoutTerrainOutliers.autoShare * 100).toFixed(1)} percent without the terrain outlier rule), ${s.queued} queued (${s.highImpact} high impact, ${s.provisionalApplied} top proposals applied as provisional), ${s.explained} explained, ${s.drops} drops logged; a second run applies ${again.repairs.length} repairs`);
+      report.overrides = { ...res.overrideCounts, outsideStage, records: res.overrides };
+      report.counts = mapCounts(res);
+      for (const r of s.byRule) if (r.issues) opts.log(`[repair] ${r.rule.padEnd(14)} ${String(r.issues).padStart(5)} issues: ${r.auto} repaired, ${r.queued} queued, ${r.explained} explained${r.overridden ? `, ${r.overridden} settled by overrides` : ''} (${r.title})`);
+      opts.log(`[repair] ${s.total} issues in ${s.passes} passes (${(repairMs / 1000).toFixed(2)} s): ${s.auto} repaired on their own (${(s.autoShare * 100).toFixed(1)} percent; ${(s.autoShareOfChanged * 100).toFixed(1)} percent of repaired plus queued; ${(s.withoutTerrainOutliers.autoShare * 100).toFixed(1)} percent without the terrain outlier rule), ${s.queued} queued (${s.highImpact} high impact, ${s.provisionalApplied} top proposals applied as provisional), ${s.explained} explained, ${s.overridden} settled by overrides, ${s.drops} drops logged; a second run applies ${again.repairs.length} repairs`);
+      const ov = res.overrideCounts;
+      opts.log(`[overrides] ${ov.patches} patches in ${ov.files} files for this stage (${outsideStage} outside it): ${ov.byId} found by id, ${ov.byAnchor} by anchor, ${ov.stale} stale (kept in their files), ${ov.applied} applied, ${ov.switchedOff} repairs switched off, ${ov.idle} idle; ${ov.issuesSettled} issues settled`);
       opts.log(`[repair] wrote ${files.graph}, ${files.issues}, ${files.repairs} and ${picture.join(', ')}`);
       check([
         { id: 'REPAIR-01.fixed_point', ok: again.repairs.length === 0 && s.unconverged === 0, detail: again.repairs.length === 0 && s.unconverged === 0 ? `a second run on the repaired graph applies 0 repairs (${s.passes} passes)` : `a second run applies ${again.repairs.length} repairs, ${s.unconverged} issues could still repair after ${s.passes} passes` },

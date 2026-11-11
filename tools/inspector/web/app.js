@@ -1,6 +1,8 @@
-// Map inspector page (P1-001). Reads /inspector/data/issues.json and the KTL1 tiles of /inspector/data/tiles/, draws
-// them with three.js, lists the issues sorted by impact and writes the owner's pick through /api/inspector/pick.
-// Coordinates: block metres of the centre block (origin India Gate), east +X, north -Z, up +Y, no mirroring. The top
+// Map inspector page (P1-001, P1-011). Reads the production issues.json of the bake (harness/reports/map/), its
+// context.json (a plan of the repaired roads and footprints, the stage outline) and the KTL1 tiles of
+// /inspector/data/tiles/ when there are any, draws them with three.js, lists the issues sorted by impact and writes
+// the owner's pick through /api/inspector/pick.
+// Coordinates: world metres (the one world grid of 250 m tiles), east +X, north -Z, up +Y, no mirroring. The top
 // view looks straight down with the camera slightly south of its target, so north is up on screen.
 import * as THREE from 'three';
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
@@ -68,10 +70,17 @@ const dotMaterial = new THREE.ShaderMaterial({
   fragmentShader: 'varying vec3 vC; varying float vA; void main(){ float d = length(gl_PointCoord - 0.5); if (d > 0.5) discard; vec3 c = d > 0.36 ? vec3(1.0) : vC; gl_FragColor = vec4(c, vA); }',
 });
 
+/** Issues the owner picked a fix for (a pick file) or that a bake has settled with a patch (status overridden). */
+function pickedIds() {
+  const out = new Set(Object.keys(state.picks));
+  for (const i of state.issues) if (i.status === 'overridden') out.add(i.id);
+  return out;
+}
+
 function statusClass(i) {
-  if (state.picks[i.id]) return 'picked';
+  if (state.picks[i.id] || i.status === 'overridden') return 'picked';
   if (isHigh(i)) return 'high';
-  return i.status === 'auto_repaired' ? 'auto' : 'open';
+  return i.status === 'auto_repaired' || i.status === 'explained' ? 'auto' : 'open';
 }
 const DOT = { high: { c: [0.84, 0.2, 0.17], s: 15, a: 1 }, open: { c: [0.94, 0.54, 0.09], s: 11, a: 1 }, auto: { c: [0.23, 0.62, 0.56], s: 7, a: 0.7 }, picked: { c: [0.17, 0.42, 0.83], s: 13, a: 1 } };
 
@@ -164,6 +173,13 @@ function addContext(ctxFile) {
   const bg = new THREE.BufferGeometry();
   bg.setAttribute('position', new THREE.Float32BufferAttribute(outline, 3));
   contextGroup.add(new THREE.LineSegments(bg, new THREE.LineBasicMaterial({ color: 0xb2ab98 })));
+  // the outline of the baked stage, so the edge of the map is on the page
+  const edge = ctxFile.outline ?? [];
+  if (edge.length > 1) {
+    const eg = new THREE.BufferGeometry();
+    eg.setAttribute('position', new THREE.Float32BufferAttribute(edge.flatMap(([x, z]) => [x, 0.4, z]), 3));
+    contextGroup.add(new THREE.Line(eg, new THREE.LineBasicMaterial({ color: 0x1f6fd0 })));
+  }
   dirty = true;
 }
 
@@ -318,20 +334,20 @@ const pct = (v) => `${Math.round(v * 100)}%`;
 
 function renderChips() {
   const all = state.issues;
-  const picked = new Set(Object.keys(state.picks));
+  const picked = pickedIds();
   const defs = [['all', 'All', all.length], ['needs', 'Needs you', filterIssues(all, 'needs', picked).length], ['auto', 'Fixed by itself', filterIssues(all, 'auto', picked).length], ['picked', 'You picked', picked.size]];
   $('#chips').innerHTML = defs.map(([k, label, n]) => `<button type="button" data-filter="${k}" class="${state.filter === k ? 'on' : ''}">${label} ${n}</button>`).join('');
 }
 
-const GROUP_LABEL = { high: 'High impact: look at these first', open: 'Needs you', picked: 'You picked', auto: 'Fixed by itself (check them if you like)' };
+const GROUP_LABEL = { high: 'High impact: look at these first', open: 'Needs you', picked: 'You picked', auto: 'Fixed by itself or left as it is (check them if you like)' };
 function groupOf(i, picked) {
   if (picked.has(i.id)) return 'picked';
   if (isHigh(i)) return 'high';
-  return i.status === 'auto_repaired' ? 'auto' : 'open';
+  return i.status === 'auto_repaired' || i.status === 'explained' ? 'auto' : 'open';
 }
 
 function renderList() {
-  const picked = new Set(Object.keys(state.picks));
+  const picked = pickedIds();
   const rows = filterIssues(sortIssues(state.issues), state.filter, picked);
   // the queue order of lib.ts, with what you already picked after what still needs you
   const buckets = { high: [], open: [], picked: [], auto: [] };
@@ -357,7 +373,7 @@ function renderDetail() {
   if (!i) return;
   const pick = state.picks[i.id];
   const cls = statusClass(i);
-  const badge = pick ? '<span class="badge picked">You picked a fix</span>' : isHigh(i) ? '<span class="badge high">High impact</span>' : i.status === 'auto_repaired' ? '<span class="badge auto">Fixed by itself</span>' : '<span class="badge open">Needs you</span>';
+  const badge = pick ? '<span class="badge picked">You picked a fix</span>' : i.status === 'overridden' ? '<span class="badge picked">Your fix is in the map</span>' : isHigh(i) ? '<span class="badge high">High impact</span>' : i.status === 'auto_repaired' ? '<span class="badge auto">Fixed by itself</span>' : i.status === 'explained' ? '<span class="badge auto">Looks like the real road</span>' : '<span class="badge open">Needs you</span>';
   const props = i.proposals.map((p, k) => `<button type="button" class="prop${state.proposal === k ? ' sel' : ''}" data-prop="${k}"><span class="sw" style="background:${PROP_COLOURS[k % PROP_COLOURS.length]}"></span><span><span class="h"><span>${esc(actionWords(p.action))}</span><span class="c">${pct(p.confidence)} sure</span></span><span class="r">${esc(p.reasoning)}</span></span></button>`).join('');
   const hasProps = i.proposals.length > 0;
   $('#issue').innerHTML = `
@@ -466,7 +482,7 @@ renderer.domElement.addEventListener('pointerup', (e) => {
 function nearestIssue(cx, cy, radius) {
   let best = null;
   let bestScore = Infinity;
-  const picked = new Set(Object.keys(state.picks));
+  const picked = pickedIds();
   for (const i of state.issues) {
     const s = project(i.x, (i.y ?? 0) + 1, i.z);
     if (!s) continue;
@@ -508,24 +524,13 @@ async function getJson(url) {
 }
 
 async function ensureData() {
-  let s = await getJson('/api/inspector/status');
-  if (!s.ready) {
-    banner('Making the map data for the first time. This takes a few seconds.');
-    await fetch('/api/inspector/build', { method: 'POST' });
-    for (let n = 0; n < 120; n++) {
-      await new Promise((r) => setTimeout(r, 1000));
-      s = await getJson('/api/inspector/status');
-      if (s.ready && !s.building) break;
-      if (s.error) throw new Error(s.error);
-    }
-    if (!s.ready) throw new Error('The map data could not be made.');
-    banner('');
-  }
+  const s = await getJson('/api/inspector/status');
+  if (!s.ready) throw new Error('There is no map report yet. Run "npm run bake -- pilot --stage repair --offline" once, then reload this page.');
 }
 
 async function init() {
   await ensureData();
-  const [file, index, picks, context] = await Promise.all([getJson('/inspector/data/issues.json'), getJson('/inspector/data/tiles/index.json'), getJson('/api/inspector/picks'), getJson('/inspector/data/context.json').catch(() => null)]);
+  const [file, index, picks, context] = await Promise.all([getJson('/inspector/data/issues.json'), getJson('/inspector/data/tiles/index.json').catch(() => ({ tiles: [], places: [] })), getJson('/api/inspector/picks'), getJson('/inspector/data/context.json').catch(() => null)]);
   state.issues = file.issues;
   state.byId = new Map(file.issues.map((i) => [i.id, i]));
   state.rules = file.rules;

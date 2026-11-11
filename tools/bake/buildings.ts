@@ -3,7 +3,6 @@
 import { Grid, boxOf, boxesMeet, openRing, overlapShare, ringArea, ringCentroid } from './geom.ts';
 import type { P2 } from './geom.ts';
 import type { Footprint, Tags } from './osm.ts';
-import { duplicatePairs } from './rules/census/buildings.ts';
 
 /** A footprint from any source, in district metres. */
 export function footprint(id: string, source: string, ring: readonly P2[], tags: Tags = {}, height: number | null = null, levels: number | null = null): Footprint | null {
@@ -67,6 +66,34 @@ export function mergeFootprints(layers: readonly (readonly Footprint[])[], opts:
     }
   });
   return { merged, bySource };
+}
+
+/** The smaller footprint's share inside the larger from which a pair counts as overlapping. */
+export const INSIDE_SHARE = 0.6;
+
+export interface DuplicatePair {
+  a: Footprint;
+  b: Footprint;
+  /** Share of the smaller footprint inside the larger, and of the larger inside the smaller. */
+  smallInLarge: number;
+  largeInSmall: number;
+}
+
+/** Pairs of footprints in one set that cover each other (the smaller at least INSIDE_SHARE inside the larger). */
+export function duplicatePairs(footprints: readonly Footprint[], minShare = INSIDE_SHARE): DuplicatePair[] {
+  const grid = new Grid<Footprint>(40);
+  for (const f of footprints) grid.insert(f.box, f);
+  const out: DuplicatePair[] = [];
+  for (const f of footprints) {
+    for (const g of grid.query(f.box)) {
+      if (g.id <= f.id || !boxesMeet(f.box, g.box)) continue;
+      const [small, large] = f.area <= g.area ? [f, g] : [g, f];
+      const smallInLarge = overlapShare(small.ring, large.ring);
+      if (smallInLarge < minShare) continue;
+      out.push({ a: f, b: g, smallInLarge, largeInSmall: overlapShare(large.ring, small.ring) });
+    }
+  }
+  return out;
 }
 
 export interface FootprintStats {

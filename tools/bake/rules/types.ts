@@ -1,9 +1,7 @@
 // Rule engine types of the production bake (ARCH_OPTIONS RE1, MAP_REPAIR.md "Rule engine", "Issue record",
 // "Overrides format"). A rule is a module with an id, an area, a detect function, an optional repair (the patch of a
 // proposal, in the overrides form) and a confidence. Rules read the block graph of tools/bake/graph/ through a
-// RuleContext (tools/bake/rules/context.ts); they never change it: tools/bake/repair/ applies patches. The Phase 0
-// census rules, which read the raw OSM map model, are kept in tools/bake/rules/census/ until the inspector reads the
-// production issues.json (P1-011). Pure.
+// RuleContext (tools/bake/rules/context.ts); they never change it: tools/bake/repair/ applies patches. Pure.
 import type { P2 } from '../geom.ts';
 import type { Tags } from '../osm.ts';
 import type { HeroSpec } from '../roads/hero.ts';

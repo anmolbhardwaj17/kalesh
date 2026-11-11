@@ -186,6 +186,7 @@
       <button data-tab="missions" id="msTab">Milestones</button>
       <button data-tab="tasks">Tasks</button>
       <button data-tab="perf">Performance</button>
+      <button data-tab="map">Map health</button>
       <button data-tab="messages">Messages<span class="badge" id="msgBadge" hidden></span></button>
       <button data-tab="journal">Journal</button>
     </nav>
@@ -195,6 +196,7 @@
     <section data-panel="missions" id="p-missions" hidden></section>
     <section data-panel="tasks" id="p-tasks" hidden></section>
     <section data-panel="perf" id="p-perf" hidden></section>
+    <section data-panel="map" id="p-map" hidden></section>
     <section data-panel="messages" hidden>
       <h2>Message Claude</h2>
       <p class="muted">Claude reads new messages before it starts its next task, then replies here. You can also type straight into the Claude Code terminal.</p>
@@ -387,6 +389,36 @@ function renderPerf() {
     ${notes.length ? `<p class="muted small">${notes.map(esc).join('<br>')}</p>` : ''}`;
 }
 
+// Map health (P1-011): the numbers of harness/reports/map/health.json from the last bake, in plain words, with a link to
+// the map inspector where the owner's picks change the map.
+function renderMap() {
+  const m = S.mapHealth;
+  const link = '<a class="play" href="/inspector/" target="_blank" rel="noopener" style="display:inline-block;text-decoration:none;margin:0 0 14px">Open the map inspector</a>';
+  if (!m) return `<h2>Map health</h2>${link}<div class="empty">No map report yet. Run <code>npm run bake -- pilot --stage repair --offline</code> in the project folder and this page fills in.</div>`;
+  if (m.error) return `<h2>Map health</h2>${link}<div class="empty">${esc(m.error)}</div>`;
+  const n = (v) => (typeof v === 'number' ? v.toLocaleString('en-US') : '-');
+  const tile = (id, label, value, note, cls) => `<div class="signoff" data-health="${id}"><div class="muted small">${esc(label)}</div><div style="font-size:26px;font-weight:600;color:var(--white);margin:2px 0 4px${cls === 'warn' ? ';color:var(--sodium)' : ''}">${n(value)}</div><div class="muted small">${esc(note)}</div></div>`;
+  const tiles = [
+    tile('found', 'Problems found', m.found, 'Checked by the map rules, for example a road that stops just short of another.'),
+    tile('auto', 'Fixed by themselves', m.repairedAuto, 'Small fixes the bake is allowed to make on its own.'),
+    tile('overrides', 'Fixed by your picks', m.fixedByOverrides, m.repairsSwitchedOff ? `${n(m.repairsSwitchedOff)} more where you said leave it as drawn.` : 'Fixes you chose in the map inspector.'),
+    tile('stale', 'Picks that no longer fit', m.staleOverrides, m.staleOverrides ? 'The road or building they point at is gone. They stay in their files.' : 'Every pick still finds its place on the map.', m.staleOverrides ? 'warn' : ''),
+    tile('open', 'Still waiting for you', m.leftOpen, `${n(m.highImpactOpen)} of these matter most (big roads, hero streets).`),
+  ].join('');
+  const rules = m.byRule.slice(0, 8).map((r) => `<tr><td>${esc(r.rule)}</td><td class="ms"><b>${n(r.found)}</b></td><td class="dim">${n(r.auto)}</td></tr>`).join('');
+  const gates = m.gates.map((g) => `<tr><td>${esc(g.name)}</td><td class="ms">${g.count === null ? '<span class="muted">not measured yet</span>' : `<b>${n(g.count)}</b>`}</td></tr>`).join('');
+  const stale = m.overrides.stale.length ? `<h2>Picks that no longer fit</h2><ul class="journal">${m.overrides.stale.map((s) => `<li><code>${esc(s.id)}</code> in ${esc(s.file)}: ${esc(s.note)}</li>`).join('')}</ul>` : '';
+  const failed = m.invariantsFailed.length ? `<div class="notice"><div class="text">The last bake stopped on a check: ${m.invariantsFailed.map((f) => esc(f.id + ': ' + f.detail)).join('; ')}</div></div>` : '';
+  const w = m.pairs.worst;
+  return `<h2>Map health</h2>${link}
+    <p class="muted small" style="margin:0 0 10px">From the last bake of stage <b>${esc(m.stage)}</b>, ${ago(m.at)}. This is the road and building map under the game, not the game itself.</p>${failed}
+    <div class="signoffs" id="mapTiles">${tiles}</div>
+    <p class="muted small">${n(m.overrides.patches)} picks read from ${n(m.overrides.files)} files (${n(m.overrides.byId)} found by id, ${n(m.overrides.byAnchor)} found again by place)${m.overrides.outsideStage ? `, ${n(m.overrides.outsideStage)} belong to another part of the map` : ''}. ${n(m.explained)} problems are explained as real streets.</p>
+    <h2>Gate counts</h2><div class="perfwrap"><table class="perf"><tbody>${gates}</tbody></table></div>
+    <h2>Found by rule</h2><div class="perfwrap"><table class="perf"><thead><tr><th>Rule</th><th style="text-align:right">Found</th><th style="text-align:right">Fixed by itself</th></tr></thead><tbody>${rules}</tbody></table></div>
+    <h2>Centre places</h2><p class="small">${n(m.pairs.count)} pairs of places checked for direction and distance: ${m.pairs.failed ? `<span class="chip fail">${n(m.pairs.failed)} off</span>` : '<span class="chip ok">all within the limits</span>'}${w ? ` Worst direction error ${w.bearingDeg} degrees, worst distance error ${w.distancePct} percent.` : ''}</p>${stale}`;
+}
+
 // The Phase 0 sign-offs: style, architecture, game design. Signed shows the owner's words; not yet shows how it is recorded.
 function signoffBlock() {
   const list = S.signoffs || [];
@@ -530,6 +562,7 @@ const panels = {
   missions: [() => ({ m: S.missions, s: S.shots.filter((x) => /_(start|end)\.png$/.test(x.name)) }), renderMissions, '#p-missions'],
   tasks: [() => ({ t: S.tasks, p: S.phases }), renderTasks, '#p-tasks'],
   perf: [() => S.perf, renderPerf, '#p-perf'],
+  map: [() => S.mapHealth, renderMap, '#p-map'],
   messages: [() => S.inbox, renderMessages, '#p-messages'],
   journal: [() => S.journal, renderJournal, '#p-journal'],
 };

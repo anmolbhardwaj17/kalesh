@@ -13,9 +13,12 @@ import { RuleContext, byId } from '../rules/context.ts';
 import type { Rule } from '../rules/context.ts';
 import { patchOf, topProposal } from '../rules/types.ts';
 import type { Issue, Marks, Patch, RuleEnv } from '../rules/types.ts';
+import type { P2 } from '../geom.ts';
 import { applyPatch } from './apply.ts';
 import type { RepairState } from './apply.ts';
 import { decide } from './bounds.ts';
+import { isDisable, overrideCounts, overrideFor, overrideRecords, resolveOverrides } from './overrides.ts';
+import type { OverrideCounts, OverrideEntry, OverrideRecord, ResolvedOverride } from './overrides.ts';
 
 /** The block graph after the repair step: the same form, with the marks repairs left for later stages. */
 export type RepairedGraph = BlockGraph & { marks: Marks };
@@ -31,6 +34,8 @@ export interface RepairLine {
   patch: Patch;
   pass: number;
   note?: string;
+  /** True for a patch of harness/data/overrides/ (an owner pick or a hand written patch), not a rule's repair. */
+  override?: boolean;
 }
 
 export interface ProvisionalLine {
@@ -55,6 +60,8 @@ export interface RepairSummary {
   auto: number;
   queued: number;
   explained: number;
+  /** Issues a patch of harness/data/overrides/ took the place of (a fix, or a repair switched off). */
+  overridden: number;
   /** auto / total, and auto / (auto + queued): the share of the issues that needed a change. */
   autoShare: number;
   autoShareOfChanged: number;
@@ -79,6 +86,9 @@ export interface RepairResult {
   provisional: ProvisionalLine[];
   drops: DropLine[];
   summary: RepairSummary;
+  /** One record per override patch read, with what became of it (empty when no overrides were given). */
+  overrides: OverrideRecord[];
+  overrideCounts: OverrideCounts;
 }
 
 export interface RepairOptions {
@@ -86,6 +96,12 @@ export interface RepairOptions {
   maxPasses?: number;
   /** Apply the top proposal of queued issues (default true). */
   provisional?: boolean;
+  /**
+   * Override patches (harness/data/overrides/) and the projection that turns an anchor into block metres. A patch takes
+   * the place of the repair of its issue. `applied` says the graph already holds them (the second run of the bake
+   * checking the fixed point): they then only switch repairs off.
+   */
+  overrides?: { entries: readonly OverrideEntry[]; project: (lat: number, lon: number) => P2; applied?: boolean };
 }
 
 const share = (a: number, b: number): number => (b === 0 ? 1 : Math.round((a / b) * 1000) / 1000);
@@ -98,6 +114,16 @@ export function repairGraph(raw: BlockGraph, env: RuleEnv, opts: RepairOptions =
   const repairs: RepairLine[] = [];
   const drops: DropLine[] = [];
   const repaired = new Map<string, Issue>();
+  // override patches: found in the raw graph by id, then by anchor; they take the place of a repair
+  const ovs: ResolvedOverride[] = opts.overrides ? resolveOverrides(raw, opts.overrides.entries, opts.overrides.project) : [];
+  if (opts.overrides?.applied) for (const o of ovs) if (!isDisable(o) && o.resolution !== 'stale') o.applied = true;
+  const refused = new Map<ResolvedOverride, string>();
+  const settled = new Map<string, Issue>();
+  const claim = (issue: Issue, o: ResolvedOverride): void => {
+    issue.status = 'overridden';
+    settled.set(issue.id, issue);
+    if (!o.issues.includes(issue.id)) o.issues.push(issue.id);
+  };
   let ctx = new RuleContext(state.graph, env, state.marks);
   const fresh = (): void => {
     if (state.geometryChanged) ctx = new RuleContext(state.graph, env, state.marks);
@@ -115,6 +141,11 @@ export function repairGraph(raw: BlockGraph, env: RuleEnv, opts: RepairOptions =
         if (!rule.repair) continue;
         let mine = 0;
         for (const issue of detect(rule, ctx)) {
+          const ov = overrideFor(ovs, issue);
+          if (ov) {
+            claim(issue, ov);
+            continue;
+          }
           const d = decide(issue);
           if (d.mode !== 'auto') continue;
           const patch = rule.repair(issue, d.proposal);
@@ -133,7 +164,30 @@ export function repairGraph(raw: BlockGraph, env: RuleEnv, opts: RepairOptions =
       if (!applied) break;
     }
   };
+  /** Applies the patches of the owner that no repair has met yet; true when one changed the graph or a decision. */
+  const applyOverrides = (): boolean => {
+    let any = false;
+    for (const o of ovs) {
+      if (o.applied || isDisable(o) || o.resolution === 'stale' || refused.has(o)) continue;
+      const r = applyPatch(state, o.patch);
+      if (!r.applied) {
+        refused.set(o, r.note);
+        continue;
+      }
+      o.applied = true;
+      any = true;
+      const p = o.entry.patch;
+      repairs.push({ rule: p.issue.split(':')[0] as string, issue: p.issue, before: r.before, after: r.after, confidence: 1, patch: o.patch, pass: passes, override: true, note: `${o.entry.file} ${p.id}${r.note ? `: ${r.note}` : ''}` });
+      for (const id of r.drops) drops.push({ id, rule: p.issue.split(':')[0] as string, issue: p.issue, provisional: false });
+    }
+    if (any) {
+      state.geometryChanged = true;
+      fresh();
+    }
+    return any;
+  };
   settle();
+  if (applyOverrides()) settle();
 
   // what is left on the repaired map: explained, or queued for a person
   const left: Issue[] = [];
@@ -141,6 +195,11 @@ export function repairGraph(raw: BlockGraph, env: RuleEnv, opts: RepairOptions =
     for (const issue of detect(rule, ctx)) {
       const d = decide(issue);
       if (repaired.has(issue.id)) continue;
+      const ov = overrideFor(ovs, issue);
+      if (ov) {
+        claim(issue, ov);
+        continue;
+      }
       issue.status = d.mode === 'explained' ? 'explained' : 'open';
       left.push(issue);
     }
@@ -175,7 +234,7 @@ export function repairGraph(raw: BlockGraph, env: RuleEnv, opts: RepairOptions =
     settle();
   }
   let unconverged = 0;
-  for (const rule of rules) if (rule.repair) for (const issue of detect(rule, ctx)) if (decide(issue).mode === 'auto') unconverged++;
+  for (const rule of rules) if (rule.repair) for (const issue of detect(rule, ctx)) if (decide(issue).mode === 'auto' && !overrideFor(ovs, issue)) unconverged++;
 
   // heights the data gives through levels only; a footprint with neither waits for its area profile
   let heightFromLevels = 0;
@@ -196,16 +255,18 @@ export function repairGraph(raw: BlockGraph, env: RuleEnv, opts: RepairOptions =
   const out = state.graph as RepairedGraph;
   out.marks = marks;
 
-  const issues = [...repaired.values(), ...left].sort((a, b) => (order.get(a.rule) ?? 0) - (order.get(b.rule) ?? 0) || byId(a, b));
+  const issues = [...repaired.values(), ...left, ...settled.values()].sort((a, b) => (order.get(a.rule) ?? 0) - (order.get(b.rule) ?? 0) || byId(a, b));
   const auto = issues.filter((i) => i.status === 'auto_repaired').length;
   const explained = issues.filter((i) => i.status === 'explained').length;
-  const queued = issues.length - auto - explained;
+  const overridden = issues.filter((i) => i.status === 'overridden').length;
+  const queued = issues.length - auto - explained - overridden;
+  const records = overrideRecords(ovs, refused);
   const rest = issues.filter((i) => i.rule !== 'R-TERR-03');
   const restAuto = rest.filter((i) => i.status === 'auto_repaired').length;
   return {
-    graph: out, issues, repairs, provisional, drops,
+    graph: out, issues, repairs, provisional, drops, overrides: records, overrideCounts: overrideCounts(records, overridden),
     summary: {
-      total: issues.length, auto, queued, explained, autoShare: share(auto, issues.length), autoShareOfChanged: share(auto, auto + queued),
+      total: issues.length, auto, queued, explained, overridden, autoShare: share(auto, issues.length), autoShareOfChanged: share(auto, auto + queued),
       highImpact: issues.filter((i) => i.status === 'open' && i.impact >= 0.7).length, byRule: countByRule(issues, rules),
       withoutTerrainOutliers: { total: rest.length, auto: restAuto, autoShare: share(restAuto, rest.length) },
       provisionalApplied: provisional.filter((p) => p.applied).length, provisionalNotApplied: provisional.filter((p) => !p.applied).length,
@@ -214,12 +275,20 @@ export function repairGraph(raw: BlockGraph, env: RuleEnv, opts: RepairOptions =
   };
 }
 
-/** The issue records of issues.json (MAP_REPAIR.md "Issue record"): the fields the inspector reads, nothing internal. */
-export function issueRecords(issues: readonly Issue[]): Record<string, unknown>[] {
+const r1 = (v: number): number => Math.round(v * 10) / 10 + 0;
+
+/**
+ * The issue records of issues.json (MAP_REPAIR.md "Issue record"): the fields the inspector reads, nothing internal.
+ * `offset` is the block's world offset: with it x, z and every preview point are world metres (the inspector, the
+ * overrides files and the tiles all use the one world grid); without it they stay block metres.
+ */
+export function issueRecords(issues: readonly Issue[], offset: P2 = { x: 0, z: 0 }): Record<string, unknown>[] {
+  const shift = offset.x !== 0 || offset.z !== 0;
+  const pt = (p: P2): P2 => (shift ? { x: r1(p.x + offset.x), z: r1(p.z + offset.z) } : p);
   return issues.map((i) => ({
-    id: i.id, rule: i.rule, block: i.block, district: i.district, tile: i.tile, lat: i.lat, lon: i.lon, x: i.x, z: i.z, features: i.features, impact: i.impact, confidence: i.confidence, status: i.status, note: i.note,
+    id: i.id, rule: i.rule, block: i.block, district: i.district, tile: i.tile, lat: i.lat, lon: i.lon, x: shift ? r1(i.x + offset.x) : i.x, z: shift ? r1(i.z + offset.z) : i.z, features: i.features, impact: i.impact, confidence: i.confidence, status: i.status, note: i.note,
     ...(i.hero ? { hero: i.hero } : {}), ...(i.provisional !== undefined ? { provisional: i.provisional } : {}),
-    proposals: i.proposals.map((p) => ({ action: p.action, params: p.params, confidence: p.confidence, reasoning: p.reasoning, preview: p.preview })),
+    proposals: i.proposals.map((p) => ({ action: p.action, params: p.params, confidence: p.confidence, reasoning: p.reasoning, preview: p.preview.map(pt) })),
   }));
 }
 

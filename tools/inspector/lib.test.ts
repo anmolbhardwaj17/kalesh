@@ -1,13 +1,13 @@
 import { describe, expect, it } from 'vitest';
 import { encodeT1 } from '../bake/tile.ts';
 import type { TileContent } from '../bake/tile.ts';
-import { HIGH_IMPACT, buildPatch, filterIssues, inboxText, isHigh, mergePatch, nextPatchId, overrideFileName, sortIssues, worldTile } from './lib.ts';
+import { HIGH_IMPACT, buildPatch, filterIssues, inboxText, isHigh, isNodeId, mergePatch, nextPatchId, overrideFileName, sortIssues, worldTile } from './lib.ts';
 import type { IssueRecord, Proposal } from './lib.ts';
 import { readKtl1 } from './ktl1.ts';
 
 const prop = (action: Proposal['action'], confidence = 0.5): Proposal => ({ action, params: { to: 'way/2' }, confidence, reasoning: `because ${action}`, preview: [{ x: 1, z: 2 }, { x: 3, z: 4 }] });
 const issue = (id: string, impact: number, status: IssueRecord['status'] = 'open', x = 10, z = -20): IssueRecord => ({
-  id, rule: 'R-ROAD-01', block: 'centre', district: 'cp', tile: worldTile(x, z), lat: 28.63, lon: 77.22, x, z, features: ['way/1', 'way/2', 'node/9'],
+  id, rule: 'R-ROAD-01', block: 'centre', district: 'cp', tile: worldTile(x, z), lat: 28.63, lon: 77.22, x, z, features: ['way/1', 'w7.0', 'n9'],
   impact, confidence: 0.7, status, proposals: [prop('connect', 0.5), prop('terminate', 0.6)],
 });
 
@@ -19,9 +19,19 @@ describe('queue order', () => {
   it('is stable on ties (by id)', () => {
     expect(sortIssues([issue('z', 0.4), issue('m', 0.4)]).map((i) => i.id)).toEqual(['m', 'z']);
   });
-  it('a repaired issue is never high impact', () => {
+  it('only an open issue is high impact: repaired, explained and overridden ones are not', () => {
     expect(isHigh(issue('x', HIGH_IMPACT))).toBe(true);
-    expect(isHigh(issue('x', 0.99, 'auto_repaired'))).toBe(false);
+    for (const s of ['auto_repaired', 'explained', 'overridden'] as const) expect(isHigh(issue('x', 0.99, s))).toBe(false);
+  });
+  it('an issue a bake settled with a patch counts as picked, an explained one as left alone', () => {
+    const list = [issue('a', 0.3), issue('b', 0.4, 'overridden'), issue('c', 0.5, 'explained')];
+    expect(filterIssues(list, 'picked', new Set()).map((i) => i.id)).toEqual(['b']);
+    expect(filterIssues(list, 'auto', new Set()).map((i) => i.id)).toEqual(['c']);
+    expect(filterIssues(list, 'needs', new Set()).map((i) => i.id)).toEqual(['a']);
+  });
+  it('knows which ids are graph nodes', () => {
+    expect(['n123', 'm4.0', 'xn1_n2'].every(isNodeId)).toBe(true);
+    expect(['w123.0', 'way/9', 'overture/ab', 'node/5'].some(isNodeId)).toBe(false);
   });
   it('filters', () => {
     const list = [issue('a', 0.3), issue('b', 0.9, 'auto_repaired'), issue('c', 0.7)];
@@ -42,9 +52,9 @@ describe('world tiles and overrides', () => {
     expect(overrideFileName([4, -19])).toBe('4_-19.json');
   });
   it('builds a patch in the Overrides format', () => {
-    const p = buildPatch(issue('R-ROAD-01:way/1:way/2:node/9', 0.8), prop('connect'), { note: ' joins here ', date: '2026-11-12', id: 'ov_0_-1_0001' });
-    expect(p).toMatchObject({ id: 'ov_0_-1_0001', issue: 'R-ROAD-01:way/1:way/2:node/9', action: 'connect', why: 'joins here', by: 'owner', source: 'inspector', date: '2026-11-12' });
-    expect(p.target).toEqual({ ids: ['way/1', 'way/2'], anchor: { lat: 28.63, lon: 77.22 }, tolerance_m: 15 });
+    const p = buildPatch(issue('R-ROAD-01:way/1:w7.0:n9', 0.8), prop('connect'), { note: ' joins here ', date: '2026-11-12', id: 'ov_0_-1_0001' });
+    expect(p).toMatchObject({ id: 'ov_0_-1_0001', issue: 'R-ROAD-01:way/1:w7.0:n9', action: 'connect', why: 'joins here', by: 'owner', source: 'inspector', date: '2026-11-12' });
+    expect(p.target).toEqual({ ids: ['way/1', 'w7.0'], anchor: { lat: 28.63, lon: 77.22 }, tolerance_m: 15 });
   });
   it('uses the reasoning when there is no note', () => {
     expect(buildPatch(issue('i', 0.8), prop('remove'), { date: 'd', id: 'x' }).why).toBe('because remove');

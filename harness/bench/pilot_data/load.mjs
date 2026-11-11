@@ -1,5 +1,5 @@
 // Loaders of the pilot data bench (P0-018): the pinned downloads in data/pilot/ turned into the bake's typed model
-// (tools/bake/). Used by census.mjs and tiles.mjs.
+// (tools/bake/). Used by tiles.mjs (census.mjs was retired in P1-011).
 import fs from 'node:fs';
 import path from 'node:path';
 import { projector } from '../../../tools/geo/projection.ts';

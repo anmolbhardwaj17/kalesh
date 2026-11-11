@@ -12,6 +12,7 @@ import { readNotices, openNotices } from './notice.mjs';
 import { signoffStates } from './signoffs.mjs';
 import { scriptIds, milestoneCounts, isRequired, loadMilestones } from './milestoneset.mjs';
 import { readCopies, COPY_ROOT, PLAY_COMMAND } from './playcopy.mjs';
+import { mapHealth } from './maphealth.mjs';
 import { inspectorHandler } from '../../tools/inspector/server.mjs';
 
 const PORT = Number(process.env.HARNESS_DASHBOARD_PORT || config().dashboardPort || 4477);
@@ -180,6 +181,8 @@ function buildState() {
     })(),
     report: report && { mode: report.mode, ok: report.ok, finishedAt: report.finishedAt, durationMs: report.durationMs, gl: report.gl, failReason: report.failReason, consoleErrors: (report.consoleErrors || []).slice(0, 5), checks: Object.fromEntries(Object.entries(report.checks || {}).map(([k, v]) => [k, { ran: v.ran, ok: v.ok }])), scenarios: Object.fromEntries(Object.entries(report.scenarios || {}).map(([k, v]) => [k, { ok: v.ok, error: v.errors?.[0] || null, perf: v.perf || null }])), missionsRun: Object.keys(report.milestones || {}).length, missionsOk: Object.values(report.milestones || {}).filter((m) => m.ok).length },
     perf: lastPerf(),
+    // The map health of the last bake (P1-011), the same numbers as harness/reports/map/health.json.
+    mapHealth: mapHealth(),
     shots: shotsList(),
     live: { builder: liveShots(PATHS.shots), verifier: liveShots(VERIFY_SHOTS), look: liveLook() },
     requests: { images: req(PATHS.reqAssets, 'requests'), sfx: req(PATHS.reqSfx, 'requests'), music: req(PATHS.reqMusic, 'requests'), voices: voice.voices || [], lines: (voice.lines || []).map((l) => ({ ...l, status: statusOf(l.id, l, man), file: man.audio?.[l.id]?.path || null })) },

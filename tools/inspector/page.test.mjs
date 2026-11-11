@@ -1,6 +1,7 @@
-// Map inspector page tests (P1-001): Playwright drives the real page against the adapter data of the pilot census.
-// They need the pilot downloads (data/pilot) or a built data folder (node tools/inspector/adapter.mjs) and the
-// Chromium of Playwright; without them the tests are skipped with a reason, never failed. The "Open in game" test also
+// Map inspector page tests (P1-001, P1-011): Playwright drives the real page against the production report of the bake
+// (harness/reports/map/issues.json, context.json). When that report is missing the test makes one with an offline
+// bake into a temp folder; it needs the pilot downloads (data/pilot_centre) and the Chromium of Playwright, and
+// without them the tests are skipped with a reason, never failed. The "Open in game" test also
 // needs the pinned Godot (it starts the game headless with --debug).
 import fs from 'node:fs';
 import os from 'node:os';
@@ -8,12 +9,14 @@ import path from 'node:path';
 import { afterAll, beforeAll, describe, expect, it } from 'vitest';
 import { launch } from '../../harness/bin/browser.mjs';
 import { launchGame, freePort } from '../../harness/bin/godotclient.mjs';
-import { DEFAULT_OUT, buildData } from './adapter.mjs';
+import { parseArgs } from '../bake/cli.ts';
+import { bake, offlineNet, ROOT } from '../bake/main.ts';
 import { startInspector } from './serve.mjs';
 
 const SHOTS = path.resolve(import.meta.dirname, '..', '..', 'harness', 'reports', 'inspector');
 let skip = '';
-let dataDir = DEFAULT_OUT;
+const REPORT = path.join(ROOT, 'harness', 'reports', 'map');
+let dataDir = REPORT;
 let browser = null;
 let issuesFile = null;
 let server = null;
@@ -24,16 +27,20 @@ const consoleErrors = [];
 const hosts = new Set();
 let page = null;
 
+/** The production report of the last bake, or a fresh offline bake of the pilot into a temp folder. */
 async function ensureData() {
-  if (fs.existsSync(path.join(dataDir, 'issues.json')) && fs.existsSync(path.join(dataDir, 'context.json'))) return;
-  await buildData(dataDir);
+  const have = (d) => fs.existsSync(path.join(d, 'issues.json')) && fs.existsSync(path.join(d, 'context.json')) && fs.existsSync(path.join(d, 'tiles', 'index.json'));
+  if (have(dataDir)) return;
+  const dir = fs.mkdtempSync(path.join(os.tmpdir(), 'inspector-bake-'));
+  await bake(parseArgs(['pilot', '--stage', 'repair', '--offline']), { root: ROOT, net: offlineNet, today: '2026-11-12', log: () => {}, healthFile: path.join(dir, 'health.json'), overridesDir: path.join(dir, 'no_overrides') });
+  dataDir = dir;
 }
 
 beforeAll(async () => {
   try {
     await ensureData();
   } catch (e) {
-    skip = `no map data and the adapter could not make it (${String(e.message).split('\n')[0]})`;
+    skip = `no bake report (harness/reports/map) and an offline pilot bake could not make one (${String(e.message).split('\n')[0]})`;
     return;
   }
   try {
@@ -80,12 +87,12 @@ describe('map inspector page', () => {
     expect(st.listCount).toBe(issuesFile.issues.length);
     expect(await page.locator('#list .row').count()).toBe(issuesFile.issues.length);
     const high = issuesFile.issues.filter((i) => i.status === 'open' && i.impact >= 0.7);
-    expect(high).toHaveLength(27);
+    expect(high.length).toBeGreaterThan(10);
     const ids = await hook(() => window.__inspector.listIds());
     const byId = new Map(issuesFile.issues.map((i) => [i.id, i]));
-    for (const id of ids.slice(0, 27)) { const i = byId.get(id); expect(i.status).toBe('open'); expect(i.impact).toBeGreaterThanOrEqual(0.7); }
-    expect(new Set(ids.slice(0, 27))).toEqual(new Set(high.map((i) => i.id)));
-    const rest = ids.slice(27).map((id) => byId.get(id));
+    for (const id of ids.slice(0, high.length)) { const i = byId.get(id); expect(i.status).toBe('open'); expect(i.impact).toBeGreaterThanOrEqual(0.7); }
+    expect(new Set(ids.slice(0, high.length))).toEqual(new Set(high.map((i) => i.id)));
+    const rest = ids.slice(high.length).map((id) => byId.get(id));
     expect(rest.every((i) => !(i.status === 'open' && i.impact >= 0.7))).toBe(true);
   });
 
@@ -177,7 +184,9 @@ describe('map inspector page', () => {
     expect(JSON.parse(fs.readFileSync(file, 'utf8'))).toHaveLength(1);
     expect(JSON.parse(fs.readFileSync(file, 'utf8'))[0].action).toBe(issue.proposals[0].action);
     expect(await hook(() => window.__inspector.state().picks)).toContain(id);
-    expect(await page.locator('.chips button', { hasText: 'You picked' }).textContent()).toContain('1');
+    // "You picked" counts this pick and the issues an earlier bake settled with a patch (status overridden)
+    const settled = new Set(issuesFile.issues.filter((i) => i.status === 'overridden').map((i) => i.id)).add(id);
+    expect((await page.locator('.chips button', { hasText: 'You picked' }).textContent()).trim()).toBe(`You picked ${settled.size}`);
   });
 
   run('Open in game says so when no game is running and nothing fails', async () => {
