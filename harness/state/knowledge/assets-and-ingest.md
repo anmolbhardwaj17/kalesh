@@ -1,3 +1,3 @@
 # assets-and-ingest
 
-One line per gotcha.
+One line per gotcha. None yet.
