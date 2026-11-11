@@ -357,3 +357,4 @@ One line per event, written by task.mjs (start, done, fail, phase changes, inbox
 - 2026-11-12 03:21 [P1-013] start (attempt 1): Elevation solver for a whole block
 - 2026-11-12 05:04 [P1-035] added: Elevation follow-ups: ITO ramps, metro and foot bridges, short ramp sinks
 - 2026-11-12 05:13 [P1-013] done: Elevation solver for the whole pilot: 38,539 unknowns, converged, solve about 10 s, deterministic; 0 steps, 0 grade violations, 0 short vertical curves, 0 short clearances (road over road at least 5.50 m), 36 structures in health.json. ITO decks within 0.13 m of Phase 0, ramps 0.3 to 1.46 m off: P1-035 with metro, foot bridges, short ramp sinks and 1 floating end. Self-check: typecheck, 653 vitest, 70 Godot, offline elevation bake, quick OK; ITO profile read.
+- 2026-11-12 05:13 [P1-014] start (attempt 1): Junction and road mesh builder with the overlap proof
