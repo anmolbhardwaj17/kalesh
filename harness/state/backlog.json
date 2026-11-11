@@ -1,6 +1,6 @@
 {
   "_doc": "Written only by node harness/bin/task.mjs. Phases run in order; P0 (ADOPT + STYLE DISCOVERY) waits for the owner by design and needs task.mjs signoff and task.mjs archsignoff before its gate passes. Later phases are added by the planner at the end of P0 (task.mjs phase-add) from the game's real state.",
-  "updated": "2026-11-11T11:36:21.437Z",
+  "updated": "2026-11-11T11:53:33.117Z",
   "phases": [
     {
       "id": "P0",
@@ -668,7 +668,8 @@
         "Owner (mmwb0yga2): plan a cutscene and dialogue system phase item (decisions.md 'Cutscenes and story telling'): slice gets in-engine scenes with subtitles and drive talk; RELEASE gets directed cutscenes with camera cuts and lip sync.",
         "Standing rule (decisions.md 'Every area is built from real references'): every area or district build task in later phases depends on its area sheet in harness/design/areas/ and has an acceptance line comparing game shots with the reference board.",
         "From P0-015 (style bible): first phase starts with (1) stylised_b as the default look driven by the day clock, lookproof compare still passing; (2) after its gate, fold stylised and stylised_grime into stylised_b and remove their sets; (3) polish from the bible known gaps: night lamp pools at street_eye, dark asphalt patches at the night junction, painted boards instead of Label3D, an OFL Devanagari font, AI texture cards, real car, people and tree models; (4) area sheets (P0-035) before any area build; (5) streamed-city budgets from the architecture record; (6) optional: lookproof --approve for several sets.",
-        "From P0-020: GAME.md still says no cinematic cutscenes (line 312) and describes the map as islands with a 7.2 km2 pilot; rewrite to the seamless city and cutscene runtime after archsignoff (P0-022 record). Per-system budgets into perf_budgets.json and TECH.md after sign-off."
+        "From P0-020: GAME.md still says no cinematic cutscenes (line 312) and describes the map as islands with a 7.2 km2 pilot; rewrite to the seamless city and cutscene runtime after archsignoff (P0-022 record). Per-system budgets into perf_budgets.json and TECH.md after sign-off.",
+        "From P0-035: area sheets in harness/design/areas/; ITO, Chandni Chowk galis, Jantar Mantar and Red Fort road views are thin on photos (low to medium confidence). Add a reference top-up task (Mapillary or street-view) before those areas are dressed."
       ],
       "created": "2026-11-10T13:04:46.154Z"
     },
@@ -982,12 +983,15 @@
       "agent": "art-director",
       "priority": 2,
       "kind": "mentor",
-      "status": "doing",
+      "status": "done",
       "attempts": 1,
       "notes": [],
       "created": "2026-11-10T19:12:49.464Z",
       "model": "sonnet",
-      "started": "2026-11-11T11:35:36.155Z"
+      "started": "2026-11-11T11:35:36.155Z",
+      "done": "2026-11-11T11:53:33.096Z",
+      "summary": "10 area sheets and reference boards (CP inner and outer, Janpath, India Gate and Kartavya Path, ITO, Chandni Chowk main and galis, Red Fort, Jantar Mantar, Paharganj), 247 cited sources, mostly Wikimedia Commons; DELHI_WORLD.md section 2a with per-area profile values and edge blending. Self-check: files exist, boards under 2 MB, no em dashes. Gaps: ITO and galis thin.",
+      "commit": "9f6b6a9"
     },
     {
       "id": "P0-036",
