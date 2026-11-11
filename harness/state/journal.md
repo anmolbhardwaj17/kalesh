@@ -283,3 +283,26 @@ One line per event, written by task.mjs (start, done, fail, phase changes, inbox
 - 2026-11-11 17:23 [P0-035] done: 10 area sheets and reference boards (CP inner and outer, Janpath, India Gate and Kartavya Path, ITO, Chandni Chowk main and galis, Red Fort, Jantar Mantar, Paharganj), 247 cited sources, mostly Wikimedia Commons; DELHI_WORLD.md section 2a with per-area profile values and edge blending. Self-check: files exist, boards under 2 MB, no em dashes. Gaps: ITO and galis thin.
 - 2026-11-11 17:23 [P0-022] start (attempt 1): Architecture record
 - 2026-11-11 17:41 [P0-022] done: Signed design written into TECH.md, docs/ARCHITECTURE.md (target module map and size rule), MAP_REPAIR.md (connector format, repair bounds), DELHI_WORLD.md and GAME.md (seamless city, cutscene runtime), districts.json (signed method, corrected offsets), perf_budgets.json (per-system budgets, city draw calls 2500/3500), shared_paths.json, READ_MAP.md; decisions.md entry with the quote. Self-check: JSON parses, typecheck, 315 vitest, 59 Godot tests.
+- 2026-11-11 17:42 [P0-023] start (attempt 1): Plan the game: phases after P0
+- 2026-11-11 17:51 mentor message mmwc39ba7 handled: No empty spaces: the centre is one continuous filled city at real size, the far south pulled to half distance and filled. Asked whether to squeeze the centre too.
+- 2026-11-11 17:51 mentor message mmwc39dx9 handled: Yes: one seamless open world, drive anywhere, no loading screens, no empty gaps.
+- 2026-11-11 17:55 phase added: P1 Foundation: drive and walk the real pilot centre
+- 2026-11-11 17:55 phase added: P2 Pilot made rich: landmarks, areas and hero roads in stylised B
+- 2026-11-11 17:55 phase added: P3 Life and action: traffic, crowds, combat, police, HUD and story tools
+- 2026-11-11 17:55 phase added: P4 First playable slice: M01 to M04
+- 2026-11-11 17:55 phase added: P5 Act 1 complete: M05 to M10 and the first switch
+- 2026-11-11 17:55 phase added: P6 City life in the pilot: fares, patrol calls, jobs and strangers
+- 2026-11-11 17:55 phase added: P7 The centre opens: the rest of the centre block with Laxmi Nagar
+- 2026-11-11 17:55 phase added: P8 The far south: Qutub, Vasant Kunj, the airport and Gurugram
+- 2026-11-11 17:55 phase added: P9 Act 2: Paisa (M11 to M24)
+- 2026-11-11 17:55 phase added: P10 Act 3: Gaddari (M25 to M38)
+- 2026-11-11 17:55 phase added: P11 East of the river for Act 4: the floodplain, Shahdara and Noida
+- 2026-11-11 17:55 phase added: P12 Act 4: Jalaawatan (M39 to M52)
+- 2026-11-11 17:55 phase added: P13 Act 5: Kalesh (M53 to M67)
+- 2026-11-11 17:55 phase added: P14 Polish and first release
+- 2026-11-11 17:59 added 27 tasks: P1-001, P1-002, P1-003, P1-004, P1-005, P1-006, P1-007, P1-008, P1-009, P1-010, P1-011, P1-012, P1-013, P1-014, P1-015, P1-016, P1-017, P1-018, P1-019, P1-020, P1-021, P1-022, P1-023, P1-024, P1-025, P1-026, P1-027
+- 2026-11-11 18:01 added 28 tasks: P2-001, P2-002, P2-003, P2-004, P2-005, P2-006, P2-007, P2-008, P2-009, P2-010, P2-011, P2-012, P2-013, P2-014, P2-015, P2-016, P2-017, P2-018, P2-019, P2-020, P2-021, P2-022, P2-023, P2-024, P2-025, P2-026, P2-027, P2-028
+- 2026-11-11 18:03 added 13 tasks: P3-001, P3-002, P3-003, P3-004, P4-001, P4-002, P4-003, P4-004, P4-005, P4-006, P14-001, P14-002, P14-003
+- 2026-11-11 18:04 phase P1 planned
+- 2026-11-11 18:04 phase P2 planned
+- 2026-11-11 18:07 [P0-023] done: 14 phases after P0 with goals, exits and pillars; P1 (27 tasks) and P2 (28) detailed; P3, P4, P14 seeded with planning tasks; 10 Fable-tagged core tasks; M11 to M67 in milestones.json; HUD mockup check as P1-003; polish items in P14; gameSizeEstimate 580. Self-check: JSON parses, 315 vitest.

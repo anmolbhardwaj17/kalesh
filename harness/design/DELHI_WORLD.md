@@ -346,6 +346,8 @@ Signed with the architecture (TECH.md "Rendering of the city", budgets in `perf_
 
 ## 8. Build tasks for the world layers (P0-023 plans them)
 
+Planned in phase P2 (2026-11-11): item 1 is P2-005, item 2 is P2-006, item 3 is P2-007 with the art cards P2-008, item 4 is P2-004 (after the reference top-up P2-002), item 5 is P2-009 with the kits P2-010, LOD P2-012 and dressing P2-013, item 6 is P2-018, item 7 is P2-025, P2-026 and P2-027, item 8 is P2-028.
+
 1. Landmark registry build: sources ingest, match and merge, tier scoring, `landmarks.json` and overrides (Fable tier).
 2. Landmark placement pipeline: footprint, orientation, plinth fit, landmark zone, surroundings, LOD hook-up (Fable tier).
 3. Landmark stand-in parts kit and the pilot heroes as stand-ins; art cards for the pilot heroes (art-director).

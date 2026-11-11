@@ -1,0 +1,554 @@
+[
+  {
+    "phase": "P2",
+    "agent": "builder",
+    "priority": 2,
+    "kind": "feature",
+    "deps": [],
+    "title": "Fold the old style switches into stylised B, and one approved reference per light",
+    "model": "opus",
+    "desc": "After the P1 gate (decisions.md \"Style bible and signed budgets (P0-015)\", TECH.md \"Render pipeline\" last paragraph): fold game/render/styles/stylised.gd and stylised_grime.gd into stylised_b.gd, remove the --style=stylised and --style=stylised_grime switches with their lookproof sets (style_stylised_*, style_stylised_grime_* and their _vulkan copies) and the stale batch B lines in STYLE_OPTIONS.md. realistic stays as an unmaintained, documented reference. --style=none stays as the flat fast-verify look. Extend harness/bin/lookproof.mjs so --approve can hold one approved set per light (dawn, afternoon, golden, night) and --compare picks the reference by the light of the set. Approve the four existing stylised B sets as they are: this is the look Anmol already signed, not a new look. No change to how stylised B looks. Pillar: filmi, never cheap (one look, kept honest by a reference in every light).",
+    "accept": [
+      "lookproof --set fold_dawn, fold_afternoon, fold_golden and fold_night, each compared against the stylised B set of its light, pass within harness/verify/look_rules.json",
+      "game/tests/test_style.gd passes; grep finds the removed style ids only in decisions.md, the archive and STYLE_OPTIONS.md history",
+      "harness/look_proof/approved.json lists four sets, one per light, and lookproof.test.mjs covers the choice by light",
+      "The removed lookproof set folders are gone from the repo",
+      "npm run typecheck, npm test and node harness/bin/verify.mjs --quick are green, with no engine or console errors"
+    ]
+  },
+  {
+    "phase": "P2",
+    "agent": "art-director",
+    "priority": 2,
+    "kind": "art",
+    "deps": [],
+    "title": "Area reference top-up: ITO, the Chandni Chowk galis, Jantar Mantar, Red Fort roads and GB Road",
+    "model": "sonnet",
+    "desc": "Standing rule (decisions.md \"Every area is built from real references\"): no area is dressed before its sheet is solid. The Phase 0 research (P0-035) left ITO, the Chandni Chowk galis, Jantar Mantar and the Red Fort road views thin on photos (low to medium confidence). Top them up with street-level sources (Mapillary, Wikimedia Commons street views, other openly viewable photo sets), each with its link and licence, and update the sheets in harness/design/areas/: footpaths, road surface, street lamps, boundaries, buildings, trees, street life, clutter, and what sets the area apart. Rebuild each reference board. Add one new sheet with a board for GB Road and Ajmeri Gate, written under the GB Road line of the respect rule (hardware shops at street level; the trade is background only; people shown with dignity). Add a short note on the New Delhi station forecourt on the Ajmeri Gate side to the Paharganj sheet if it is thin. Photos are internal reference only: none goes into game/ or public/. Update DELHI_WORLD.md section 2a for the changed values. Pillar: the city opens up (a generic Delhi is the failure the owner named).",
+    "accept": [
+      "Each of the four thin sheets lists at least 15 new street-level sources with link and licence, and its confidence line is medium or high, or says why it cannot be",
+      "harness/design/areas/gb_road.md and its board exist with at least 20 sources and the respect line",
+      "Every board is a JPEG under 2 MB",
+      "No reference photo is under game/ or public/ (find check)",
+      "Respect rule: the orchestrator reads the GB Road sheet against GAME.md \"Respect rule\"; no em dashes in the sheets"
+    ]
+  },
+  {
+    "phase": "P2",
+    "agent": "content-writer",
+    "priority": 3,
+    "kind": "content",
+    "deps": [],
+    "title": "Invented names for signs in the pilot areas",
+    "desc": "The city needs hundreds of sign boards and none may carry a real brand, a real party or a real person (GAME.md \"Respect rule\"; STYLE_BIBLE.md). Write invented names per pilot area, in the scripts that area really uses (Devanagari, Latin, and Urdu script where the area sheet shows it), by kind: shops by trade, eating places, hotels and lodges, offices, clinics, coaching centres, transport, hardware shops for GB Road, wall writing and invented poster lines (the invented party Nav Dilli Dal and the other names of STORY_OUTLINE.md section 13 where they fit). Names must sound like the place without mocking it: no joke names at anyone's expense, no caste, community or religion as a punchline. Data files game/data/names/<area>.json (kind, text per script, weight), read by the kit and dressing tasks. Area ids match harness/design/areas/. Pillar: the city opens up (each area reads as itself, down to its boards).",
+    "accept": [
+      "One file per pilot area sheet (the ten sheets and GB Road) parses, with at least 60 names each and at least 8 kinds",
+      "A test checks every name against a block list of real brands, parties and well known chains (list in the test) and finds none",
+      "Every Devanagari name has a Latin form for the fallback font",
+      "Respect rule: the orchestrator reads a sample of 40 names across the areas against GAME.md \"Respect rule\" and finds no breach"
+    ]
+  },
+  {
+    "phase": "P2",
+    "agent": "builder",
+    "priority": 3,
+    "kind": "feature",
+    "deps": [
+      "#2"
+    ],
+    "title": "Area division and area profile data for the pilot",
+    "desc": "DELHI_WORLD.md section 2 (\"Area division from open data\", \"Files\", \"Profile schema\"), section 2a (the pilot sheets) and section 10 (AD2, PS1). Not a Fable task. Write harness/data/areas/: the archetype defaults; area polygons, 3 to 8 per focus district, drawn along roads and rail and seeded by OSM land use and colony outlines; an archetype by rule (from land use and the footprint grid) for the in-between areas of the pilot centre; one small file per area holding only what differs from its archetype; and an overrides file for inspector edits. Fill the profiles from the area sheets: building types and their mix, floor counts (building heights come from these where OSM has no tag), facade colours, footpaths, lamps, boundaries, trees, props per 100 m, sign density, life densities, the sound bed, and wear from 0 to 1 (it drives the grime of the signed look). Every value that is not a default carries an evidence line (a sheet section, an OSM statistic or a photo set). No value comes from a cliche. Add tools/bake/areas/profiles.ts (loader, schema check, archetype merge). Pillar: the city opens up (each area has its own style, from real references).",
+    "accept": [
+      "Schema test: every area file is valid, and a test fails on any non-default value without an evidence line",
+      "Coverage test: every point of a 50 m grid over the pilot outline falls in exactly one area or archetype; no two polygons overlap by more than 1 m2",
+      "The ten sheet areas and GB Road exist by id, each citing its sheet",
+      "Variety test (respect rule): no single building type is over 70% of an area unless its evidence line cites data",
+      "Wear from the sheets: the Chandni Chowk galis are 0.8 or more, India Gate and Kartavya Path 0.1 or less",
+      "Respect rule: the orchestrator reads the profile texts against DELHI_WORLD.md section 3 (no stereotype labels; places of worship only from OSM or the registry, never as a label of an area)",
+      "npm run typecheck and npm test are green"
+    ]
+  },
+  {
+    "phase": "P2",
+    "agent": "builder",
+    "priority": 3,
+    "kind": "feature",
+    "deps": [
+      "P1-017"
+    ],
+    "title": "Landmark registry build",
+    "model": "fable",
+    "desc": "Core system (Fable tier, task text of P0-023). DELHI_WORLD.md section 1 and section 10 \"Landmark registry pipeline\" (LM1, LS2). From the prototype tools/bake/landmarks.ts (351 pilot candidates). tools/bake/landmarks/registry.ts: join on ids, not names (OSM objects carry a wikidata tag; Wikidata gives coordinates, era, height, heritage status and the ASI monument id; Overture drops the tag, so read OSM directly); name and distance matching only as a fallback, and every fallback match is flagged. The tier score proposes hero, signature or marker (named by Anmol, ASI listed, Wikidata sitelinks, footprint size, seen from an arterial or a hero road); Anmol's list and inspector edits win. Storage: harness/data/landmarks/<id>.json per hero and signature, landmarks_markers.json generated, landmarks.overrides.json for edits, with the fields block, district and far. Source agreement: a Wikidata point outside the OSM footprint and more than 50 m from its centre becomes a flagged issue in issues.json and is never placed silently. Pilot heroes from the owner: the Connaught Place circle, India Gate, Red Fort; Jama Masjid is a signature until its hero model. Heroes and signatures get their real heights by hand, each with an evidence line. Far landmarks for the backdrop are listed with their real bearing. Respect rule: places of worship appear only where the sources place them, with a field that says they are never a combat arena. Pillar: the city opens up (first sight of a landmark is a moment).",
+    "accept": [
+      "The registry build on the pilot centre gives at least 300 candidates, each with a source id and an evidence line, and the same output hash twice",
+      "The three heroes and Jama Masjid are present with tier, height and a hand-checked position within 5 m of the OSM footprint centre (cited)",
+      "Every name-fallback match is flagged, and every entry whose sources disagree by more than 50 m is in issues.json",
+      "Tier tests: the owner list wins over the score; an override wins over both; the score orders a fixture of 10 landmarks as expected",
+      "Schema test on every file in harness/data/landmarks/; every place of worship entry carries the no-combat field",
+      "npm run typecheck and npm test are green"
+    ]
+  },
+  {
+    "phase": "P2",
+    "agent": "builder",
+    "priority": 3,
+    "kind": "feature",
+    "deps": [
+      "#5"
+    ],
+    "title": "Landmark placement pipeline",
+    "model": "fable",
+    "desc": "Core system (Fable tier). DELHI_WORLD.md \"Placement rules\" and section 10 (LP2, HM2). tools/bake/landmarks/place.ts. Inside a block a landmark sits at the block offset plus its projected position in the block frame. Take the footprint and the orientation from the OSM footprint (principal axis, or an override). Fit a flattened pad or plinth into the ground and re-cut the ground around it. Mark the landmark zone and replace the buildings inside it (logged). Lay the surroundings as ground classes (lawns, forecourt, walls, a moat line). Write pins into the tiles. Hook up the LOD slots: the hero LOD chain and one far silhouette under 2,000 triangles. Outside every block a far landmark stands on the backdrop on its real bearing as a silhouette, and is never a place the player can reach. At most 2 heroes at full detail in view, as data the streaming system reads. Pillar: the city opens up.",
+    "accept": [
+      "Position test in the block frame for every registry entry with a high position confidence: hero within 5 m and 5 degrees, signature within 10 m, marker within 15 m (perf_budgets.json world)",
+      "Pad test: the ground under each pad is flat within 0.05 m and meets the ground around it with no gap over 0.02 m",
+      "No generated or plain building stands inside a landmark zone (count 0; the replaced ones are in the log)",
+      "Relative layout: India Gate to Red Fort and India Gate to Connaught Place keep bearing within 0.5 degrees and distance within 0.5%",
+      "A far landmark is never inside a reachable tile (test); the bake gives the same tile hashes twice and tiles stay inside the byte budget",
+      "npm run typecheck and npm test are green"
+    ]
+  },
+  {
+    "phase": "P2",
+    "agent": "builder",
+    "priority": 3,
+    "kind": "feature",
+    "deps": [
+      "#6"
+    ],
+    "title": "Landmark stand-in parts kit and the pilot heroes as stand-ins",
+    "model": "opus",
+    "desc": "DELHI_WORLD.md \"Art cards and stand-ins\" and section 10 (HM3 as the placeholder, HM2 limits); STYLE_BIBLE.md \"Landmark tiers and area kits\". A parts kit driven by the registry fields: domes, chhatris, arches, colonnades, minarets, shikharas and slabs. It is the stand-in for every hero until its model arrives and the final build for the signature tier. Build the pilot heroes as stand-ins from their area sheets: the Connaught Place circle (the colonnaded blocks), India Gate (the arch, the canopy, the lawns), Red Fort (the Lahori Gate front, the walls and ramparts along Netaji Subhas Marg), and Jama Masjid as a signature. game/world/systems/landmarks.gd streams them (hero LOD chains, signature and marker builds, far silhouettes). Give harness/bin/ingest.mjs the hero rule (up to 8 parts of up to 25,000 triangles, up to 6 materials, 3 LODs per part, one far silhouette under 2,000 triangles) so a delivered model replaces a stand-in by its id. Each hero gets a first-sight pose on a mission route (GAME.md \"Level design rules\"). Pillar: the city opens up and pillar 2 (the Red Fort finale needs a Red Fort).",
+    "accept": [
+      "The verifier reads the shots hero_india_gate_first_sight, hero_red_fort_first_sight, hero_cp_circle and sig_jama_masjid, taken at player height on a mission route, against the reference boards of their area sheets: the silhouette and proportions are recognisable",
+      "Each hero's built height is within 5% of its registry height (read through a hook)",
+      "Perf scenario landmarks_two_heroes: landmark GPU cost 0.5 ms or less; the far silhouette of India Gate shows from 1.5 km (shot); a frame sequence at 140 km/h toward India Gate shows no pop a player would notice",
+      "Ingest test: a model over any hero limit is rejected with the reason; a model inside them replaces the stand-in by id",
+      "Respect rule: the verifier reads the named shots and texts against GAME.md \"Respect rule\", DELHI_WORLD.md section 3 and VERIFY.md rubric line 21; any breach is a fail, never a polish item (Jama Masjid built with care, flagged as never a combat arena)",
+      "npm run typecheck, npm test and node harness/bin/verify.mjs --quick are green, with no engine or console errors"
+    ]
+  },
+  {
+    "phase": "P2",
+    "agent": "art-director",
+    "priority": 3,
+    "kind": "art",
+    "deps": [
+      "#5"
+    ],
+    "title": "Art cards: the pilot hero landmarks",
+    "model": "sonnet",
+    "desc": "Cards on the dashboard with prompts and reference notes for the pilot heroes and the first signature: the Connaught Place circle blocks, India Gate, Red Fort (Lahori Gate front and walls) and Jama Masjid. Use the style anchors and technical tails of STYLE_BIBLE.md \"AI image prompts\" and \"Landmark and kit prompts\", the hero model limits of DELHI_WORLD.md section 10 (HM2), and 3 or more cited reference photos per card from the area sheets. Card ids match the registry ids so ingest replaces the stand-in. Order the batch so Anmol can make the most useful ones first. Nothing waits for these: the stand-ins of P2-007 carry the game. Pillar: the city opens up.",
+    "accept": [
+      "harness/requests/assets.json parses and has one card per pilot hero plus Jama Masjid, each with the style anchor, the technical tail, the limits and at least 3 cited references",
+      "Card ids equal the registry ids",
+      "Respect rule: each card says real proportions, no real brand or person, and for Jama Masjid built with care; the orchestrator reads the four cards"
+    ]
+  },
+  {
+    "phase": "P2",
+    "agent": "builder",
+    "priority": 3,
+    "kind": "feature",
+    "deps": [
+      "#4",
+      "#6"
+    ],
+    "title": "Area profile generator: parcels, building shells, facade placements and edge blending",
+    "model": "fable",
+    "desc": "Core system (Fable tier: the area profile generator). DELHI_WORLD.md \"The generator (Fable tier)\" and section 10 \"Area profile pipeline\" (AG1, EB1); TECH.md \"Rendering of the city\". tools/bake/areas/generator.ts, at bake time, written into the tiles. Parcels from the repaired footprints and the block faces (subdivide a block where footprints are missing). Building shells with heights from OSM tags where present and otherwise from the profile's floor counts, roof types and setbacks, one collider shell per building. Facade module placements (bays, by the profile's mix) as tile placements with custom data for tint and wear. Every pick is seeded from the world tile and a parcel id made from the footprint (tools/bake/rand.ts), so a rebake gives the same city. Edge blending: inside each area's blend band the generator mixes the two profiles by distance, shorter at roads and rail. Variety rules of the respect rule (no type over about 70% of an area unless the data says so). Landmark zones are left out. This replaces the plain shells of P1. Kits, dressing and LOD are their own tasks: place modules by fixed id only. Pillar: the city opens up (the streets between the famous places are real city too).",
+    "accept": [
+      "On the pilot centre every footprint inside an area gets a shell or a log line; OSM-tagged buildings are within 1 floor of their tag; each area's floor count histogram is within 10% of its profile",
+      "Two bakes give identical tile hashes, and changing one parcel changes only the tiles it touches",
+      "Edge blend test on transects across the Connaught Place and Paharganj edge and the Chandni Chowk and Daryaganj edge: the profile mix changes in one direction across the band with no step over 20% between samples 25 m apart",
+      "Variety test per area; 0 shells cross a road polygon (or each is an issue where the road width gives way, as the repair bounds say)",
+      "Placements are 0.6 MB or less in the densest tile and the average tile stays 1.5 MB or less (printed)",
+      "The generator runs on the pilot centre in under 5 minutes; npm run typecheck and npm test are green"
+    ]
+  },
+  {
+    "phase": "P2",
+    "agent": "builder",
+    "priority": 3,
+    "kind": "feature",
+    "deps": [
+      "#3",
+      "#9"
+    ],
+    "title": "Area kits: procedural modules, atlases and instanced buildings",
+    "model": "opus",
+    "desc": "DELHI_WORLD.md \"Area kits\" and section 10 (KT2, TX1); TECH.md \"Rendering of the city (I3, LD1, OC2, TX1)\"; STYLE_BIBLE.md \"Materials and shading\", \"Landmark tiers and area kits\". Procedural modules first, replaced module by module through ingest later, with fixed module ids so baked placements never change. One kit per pilot archetype, each built from its area sheet: the colonial colonnade (Connaught Place), the bazaar shop house (Chandni Chowk main road), the gali house (the galis), the hotel and lodge strip (Paharganj), office and institutional blocks (ITO), the Lutyens bungalow and wall (India Gate edges), the market stall row (Janpath) and the hardware shop row (GB Road at street level). Each kit has one Texture2DArray for tiling materials and one trim and decal atlas, VRAM compressed with both import sets, 60 MB at most. Sign boards are modules that take a name from game/data/names/<area>.json. game/world/systems/buildings.gd: unique shells merged per tile and material, repeated modules as MultiMesh per module per 125 m cell. Wear and tint travel in the MultiMesh custom data and the stylised B surface shader reads them there (a per-instance uniform has room for about 4,096 instances only). Pillar: the city opens up and pillar 2 (a bazaar lane worth a fight scene).",
+    "accept": [
+      "Perf scenario city_buildings_busiest: draw calls 2,500 or fewer and buildings GPU cost 2.0 ms or less in the busiest pilot view (perf_budgets.json systems)",
+      "Each kit uses 60 MB of texture memory or less (printed), and has at least 8 modules and at least 6 facade colours",
+      "A test replaces one module mesh by id and the baked placements are unchanged",
+      "The verifier reads one street shot per kit at player height against its area sheet board (not generic), and the pair kit_wear_bazaar and kit_wear_lutyens for grime by area (VERIFY.md rubric)",
+      "Board names come only from the invented name files (test); Respect rule: the verifier reads the named shots and texts against GAME.md \"Respect rule\", DELHI_WORLD.md section 3 and VERIFY.md rubric line 21; any breach is a fail, never a polish item",
+      "npm run typecheck, npm test and node harness/bin/verify.mjs --quick are green, with no engine or console errors"
+    ]
+  },
+  {
+    "phase": "P2",
+    "agent": "art-director",
+    "priority": 3,
+    "kind": "art",
+    "deps": [
+      "#10"
+    ],
+    "title": "Art cards: area kit textures, sign boards, vehicles, people and trees",
+    "model": "sonnet",
+    "desc": "The art pass for the pilot (STYLE_BIBLE.md \"Known gaps\" 3, 4 and 5 and \"AI image prompts\"). Cards with final prompts, style anchors and technical tails, in batches Anmol can make in one sitting, the most useful first: (1) the AI texture cards that replace the procedural PNG layers slot for slot, per area kit; (2) hand-painted sign board textures, with invented names only; (3) vehicles for the slice: the auto, the scooter, a hatchback, a sedan, the patrol car, and a DTC style bus for traffic with an invented operator name; (4) people: the three leads with their fixed looks, and at least 12 crowd variants that cover the variety rule (age, gender, clothing, build, activity) with no group defined by one costume or job; (5) trees: the avenue and street trees named in the area sheets. Nothing waits for these cards: the game runs on the procedural kits and stand-ins. Pillar: filmi, never cheap (rich and warm, never a cheap copy).",
+    "accept": [
+      "harness/requests/assets.json parses; there is at least one card per texture slot of the pilot kits, per slice vehicle (5 and the bus), per lead (3), at least 12 crowd variants and one per tree species named in the sheets",
+      "Every card has the style anchor and the technical tail for its asset kind, and an id that matches the slot or module it replaces",
+      "Respect rule: the orchestrator reads the people cards (variety, dignity, no caricature) and checks no card names a real brand, person or party"
+    ]
+  },
+  {
+    "phase": "P2",
+    "agent": "builder",
+    "priority": 3,
+    "kind": "feature",
+    "deps": [
+      "#10"
+    ],
+    "title": "LOD rings: block shells, the skyline and mesh LODs",
+    "desc": "TECH.md \"Streaming\", \"Rendering of the city\" (LD1); docs/ARCHITECTURE.md rows bake/lod/ and world/systems/skyline.gd. tools/bake/lod/: one merged block shell per 125 m cell for 180 to 700 m, one skyline mesh per 1 km cell that is always loaded, mesh LOD index buffers made in the bake (meshoptimizer, added with a decisions.md entry). Visibility ranges with a cross-fade, measured at speed (the cross-fade was not measured in Phase 0). Turn on the two far rings of the streaming core. Far landmark silhouettes stand on the backdrop. Pillar: the city opens up and pillar 2 (speed without pop).",
+    "accept": [
+      "Perf scenario city_lod_140 on the Connaught Place to ITO path: triangles drawn are cut by 85% or more against no LOD (bench: 92%) and frame p95 is 10 ms or less",
+      "A frame sequence at 140 km/h is read by the verifier: no block pops in a way a player would notice",
+      "8 compass shots from the India Gate lawns show a skyline with no hole",
+      "stream_200 still passes (no frame over 33 ms); mesh buffers use 150 MB or less",
+      "npm run typecheck, npm test and node harness/bin/verify.mjs --quick are green, with no engine or console errors"
+    ]
+  },
+  {
+    "phase": "P2",
+    "agent": "builder",
+    "priority": 3,
+    "kind": "feature",
+    "deps": [
+      "#10"
+    ],
+    "title": "Street dressing and life points from the area profiles",
+    "model": "opus",
+    "desc": "DELHI_WORLD.md section 2 (profile schema: props, trees, signs, life) and section 5; STYLE_BIBLE.md \"Shapes\" and the Delhi detail list; GAME.md \"Level design rules\" (the small-detail rule). tools/bake/areas/dressing.ts and game/world/systems/dressing.gd. Place the props each profile asks for per 100 m of road: street lamps by area type, wires, electric boxes, boards, stalls, carts, parked two-wheelers, benches, bins, bollards, barricades, boundary walls and railings as the sheet shows, and trees by the sheet's species. Props stand along the lane model's footpath edges and never in a lane, a crossing, a junction or a doorway. Decals only within 55 m and no shadows from small dressing. Write the seeded life points into the tiles' life array (people, vendors, animals, parked two-wheelers) for the crowd system of P3. Night lights come from the placements: lamps, one open shop in three, a share of lit windows. Respect rule: a religious symbol is never used as decoration to label an area; lower income areas get the same craft as rich ones. Pillar: the city opens up (the space near the player is alive with the right small things).",
+    "accept": [
+      "The metric tool reports props per 100 m for each area within 15% of its profile",
+      "Test: 0 props inside a lane, crossing or junction polygon",
+      "Perf scenario city_dressing_busiest: dressing, decals and signs cost 0.5 ms GPU or less",
+      "Every tile with a footpath has life points (count per area printed)",
+      "The verifier reads player-height shots in 5 areas for the small-detail rule, and city_night_chandni for lamps and windows that come from placements",
+      "Test: dressing ids of a religious kind appear only inside a registry place of worship zone; Respect rule: the verifier reads the named shots and texts against GAME.md \"Respect rule\", DELHI_WORLD.md section 3 and VERIFY.md rubric line 21; any breach is a fail, never a polish item",
+      "npm run typecheck, npm test and node harness/bin/verify.mjs --quick are green, with no engine or console errors"
+    ]
+  },
+  {
+    "phase": "P2",
+    "agent": "builder",
+    "priority": 3,
+    "kind": "feature",
+    "deps": [
+      "#12",
+      "#13"
+    ],
+    "title": "Stylised B on the streamed city, in four lights",
+    "model": "opus",
+    "desc": "TECH.md \"Render pipeline\" and \"Performance budgets\"; STYLE_BIBLE.md \"Lighting presets\", \"Readability floor\". The signed look now runs on real tiles: wear and tint from the MultiMesh custom data, per-area haze from the profile, vertex AO baked into the tiles (a bake step), reflection probes at the hero places, and the day curve over the city in dawn, afternoon, golden and night. Night lamps and the heat shimmer never run together. Re-measure the worst case (night, a crowded bazaar lane). A look feature that adds more than 0.5 ms is measured with its --style-off token and named. This task does not change the signed look; it carries it onto the city. The stand-in scenes stay as the look regression set. Pillar: filmi, never cheap.",
+    "accept": [
+      "lookproof --set city_dawn, city_afternoon, city_golden and city_night with --perf --scene-kind city: every view is at or under warn 10 ms on the GPU ballast cost",
+      "The look stack costs 3.6 ms or less, and night lamps or the heat shimmer 0.8 ms or less (--style-off readings printed)",
+      "The verifier reads 6 city shots against VERIFY.md rubric lines 14 to 24; the readability floor numbers of STYLE_BIBLE.md hold in the night bazaar lane",
+      "The stand-in look sets still compare inside look_rules.json against their approved references (no regression)",
+      "npm run typecheck, npm test and node harness/bin/verify.mjs --quick are green, with no engine or console errors"
+    ]
+  },
+  {
+    "phase": "P2",
+    "agent": "builder",
+    "priority": 3,
+    "kind": "feature",
+    "deps": [
+      "#13"
+    ],
+    "title": "Hero roads 1: the Connaught Place circles and radials",
+    "model": "opus",
+    "desc": "Owner (decisions.md \"Hero roads (Anmol)\"): some roads must be realistic. MAP_REPAIR.md \"Hero roads\" (HR1), rule R-HERO. Hero road specs in harness/data/hero_roads/ for the inner, middle and outer circles and the radials of Connaught Place (the inner circle spec exists from Phase 0): checked lane counts, medians, kerbs, footpaths, the colonnade edge, parking bays, tree lines and street furniture, each field with a reference from the cp_inner_circle and cp_outer_circle sheets. The repair layer never changes a hero road on its own. Bake them and compare with the reference photos. Pillar: the city opens up (Connaught Place must read as Connaught Place from the driving seat).",
+    "accept": [
+      "The spec check passes for every hero road, and the baked lane counts, widths, medians, kerbs and footpaths equal the spec (test)",
+      "Gate counts on the hero roads are 0 (overlaps, lane breaks, tapers)",
+      "A side by side sheet hero_cp with at least 6 game poses matched to reference photos (view direction and focal length) is read by the verifier against the board (area reference rule): pass on layout, edges, trees and furniture",
+      "Respect rule: the verifier reads the named shots and texts against GAME.md \"Respect rule\", DELHI_WORLD.md section 3 and VERIFY.md rubric line 21; any breach is a fail, never a polish item",
+      "npm run typecheck, npm test and node harness/bin/verify.mjs --quick are green, with no engine or console errors"
+    ]
+  },
+  {
+    "phase": "P2",
+    "agent": "builder",
+    "priority": 3,
+    "kind": "feature",
+    "deps": [
+      "#15"
+    ],
+    "title": "Hero roads 2: Janpath, Kartavya Path and the India Gate hexagon",
+    "model": "opus",
+    "desc": "The next hero roads of the owner's list inside the pilot: Janpath with its market edge; Kartavya Path with its lawns, water channels, lamp posts and bollards; the India Gate hexagon with its radial avenues and their Lutyens avenue trees; and the garden edge of the India Gate lawns. Specs with references from the janpath and india_gate_kartavya_path sheets, the same rules as P2-015. Pillar: the city opens up (India Gate at the end of Kartavya Path is a first-sight moment).",
+    "accept": [
+      "The spec check passes and the bake equals the spec for every road (test); avenue tree spacing is within 15% of the spec",
+      "Gate counts on these roads are 0",
+      "A side by side sheet hero_india_gate_janpath with at least 6 matched poses is read by the verifier against the boards: pass on layout, edges, trees and furniture",
+      "Respect rule: the verifier reads the named shots and texts against GAME.md \"Respect rule\", DELHI_WORLD.md section 3 and VERIFY.md rubric line 21; any breach is a fail, never a polish item",
+      "npm run typecheck, npm test and node harness/bin/verify.mjs --quick are green, with no engine or console errors"
+    ]
+  },
+  {
+    "phase": "P2",
+    "agent": "builder",
+    "priority": 3,
+    "kind": "feature",
+    "deps": [
+      "#15"
+    ],
+    "title": "Map inspector step 3: hero roads, focus outlines and map edges",
+    "desc": "MAP_REPAIR.md \"Map inspector\" build order, step 3. Hero roads listed beside their reference photos (local files from the area sheets, no outside request), with their spec fields and references; the focus outlines; and the roads that end at the map edge. Editing a spec field writes a spec override and an inbox entry with source inspector. Corridors get their layer when the first far block is built (P8). Pillar: the city opens up.",
+    "accept": [
+      "Playwright: the hero road list equals the spec files; clicking one flies to it and shows its references; an edit writes the override and one inbox line (temp folder)",
+      "Focus outlines and map edge ends are drawn and counted the same as the bake report",
+      "0 console errors and 0 requests to any host but localhost",
+      "A screenshot harness/reports/inspector/hero_cp.png is read by the verifier",
+      "npm run typecheck and npm test are green"
+    ]
+  },
+  {
+    "phase": "P2",
+    "agent": "builder",
+    "priority": 3,
+    "kind": "feature",
+    "deps": [
+      "#5",
+      "#9"
+    ],
+    "title": "Map inspector step 4: the area view and the landmark view",
+    "desc": "DELHI_WORLD.md \"Map inspector: area view\" and section 10 \"Inspector views\"; MAP_REPAIR.md build order, step 4. The area view: the map coloured by area; click an area to see its profile fields with their evidence lines and a generated block preview; edit a field. The landmark view: tier icons, fly to, the registry entry, the flags; the pilot candidates with their proposed tiers, and the name-fallback matches as a filter. Every edit writes an override file (areas or landmarks) and an inbox entry with source inspector. Pillar: the city opens up (Anmol can correct how an area or a landmark is read).",
+    "accept": [
+      "Playwright: the number of area colours equals the number of areas; clicking an area shows its fields with evidence",
+      "End to end in a temp folder: editing wear writes the areas override and the next bake of that tile carries the new wear in its custom data",
+      "The landmark list count equals the registry; a tier change writes landmarks.overrides.json; the fallback filter shows exactly the flagged matches",
+      "0 console errors and 0 requests to any host but localhost; two screenshots are read by the verifier",
+      "npm run typecheck and npm test are green"
+    ]
+  },
+  {
+    "phase": "P2",
+    "agent": "builder",
+    "priority": 3,
+    "kind": "feature",
+    "deps": [
+      "#9"
+    ],
+    "title": "The Blue Line viaduct, its stations and the foot over bridges",
+    "desc": "The pilot metro line (DELHI_WORLD.md section 4, MAP_REPAIR.md \"Pilot\"): the elevated Blue Line stretch from Mandi House past Pragati Maidan to Indraprastha, beside ITO. Build the viaduct through the lane model's structure rules with piers that stand clear of every lane (rules R-RAIL), the stations from the stand-in parts with stairs that reach the footpath, and the foot over bridges where OSM has them (R-FOB: stairs or ramps join footpaths at both ends). Colliders match what is drawn. A running train is a RELEASE item and is not built here. Pillar: the city opens up (the Metro overhead is part of how Delhi looks).",
+    "accept": [
+      "0 piers inside a lane polygon; clearance over every road 5.5 m or more; the viaduct is continuous across tile seams",
+      "Gate counts for the rail and foot bridge rules are 0 or explained",
+      "Collider against drawn surface within 0.05 m on the foot over bridge decks and stairs; the on-foot controller walks one from footpath to footpath (scenario fob_ito_walk)",
+      "The verifier reads the shots metro_pragati_maidan_eye and fob_ito against reference photos",
+      "npm run typecheck, npm test and node harness/bin/verify.mjs --quick are green, with no engine or console errors"
+    ]
+  },
+  {
+    "phase": "P2",
+    "agent": "builder",
+    "priority": 3,
+    "kind": "feature",
+    "deps": [
+      "#14",
+      "#16"
+    ],
+    "model": "opus",
+    "title": "Area pass: Connaught Place circles, Janpath and Jantar Mantar",
+    "desc": "Area build pass, one per group of pilot areas. Standing rule (decisions.md \"Every area is built from real references\"): this task works from the area sheets and reference boards named below and its verifier compares game shots with the boards and fails a generic look. Sheets: cp_inner_circle, cp_outer_circle, janpath, jantar_mantar. Mission spaces: the Connaught Place auto stand and the outer circle drop of M01; the chase of M02 through the circles and out toward Barakhamba Road with its two routes (the main road, and the service lane behind the blocks); the quiet lane near Janpath where the bag is hidden. Jantar Mantar is a protest place in the story: build the place, no protest yet. Work through data first: tune the area profile files, the kit modules, the dressing rules and override patches; hand-place only at hero places and mission spaces. Check every mission space at player height (GAME.md \"Level design rules\"): the goal readable, two routes for every chase or getaway, the props the profile asks for near the player. Collect cosmetic close-up flaws as polish notes for P14. Pillar: the city opens up, and pillar 2 (the Connaught Place chase).",
+    "accept": [
+      "A side by side sheet area_cp with at least 6 game poses matched to reference photos of the sheets (view direction and focal length) is read by the verifier against the reference boards: pass on silhouette, colour, density and street life, and not a generic look",
+      "Route scenarios with inputs only: route_m02_main_road and route_m02_service_lane each run from the inner circle to the hide-out lane without leaving the road or getting stuck",
+      "The small-detail rule holds in at least 3 player-height shots of the named mission spaces",
+      "Frame p95 is 10 ms or less at the busiest pose of the group (scene kind city, GPU ballast cost)",
+      "Respect rule: the verifier reads the named shots and texts against GAME.md \"Respect rule\", DELHI_WORLD.md section 3 and VERIFY.md rubric line 21; any breach is a fail, never a polish item",
+      "npm run typecheck, npm test and node harness/bin/verify.mjs --quick are green, with no engine or console errors"
+    ]
+  },
+  {
+    "phase": "P2",
+    "agent": "builder",
+    "priority": 3,
+    "kind": "feature",
+    "deps": [
+      "#14",
+      "#16"
+    ],
+    "model": "opus",
+    "title": "Area pass: India Gate and Kartavya Path",
+    "desc": "Area build pass, one per group of pilot areas. Standing rule (decisions.md \"Every area is built from real references\"): this task works from the area sheets and reference boards named below and its verifier compares game shots with the boards and fails a generic look. Sheet: india_gate_kartavya_path. The lawns, the hexagon, the canopy, the avenue edges and the Lutyens walls, calm and clean (wear 0.1 or less). The first-sight pose of India Gate down Kartavya Path. Work through data first: tune the area profile files, the kit modules, the dressing rules and override patches; hand-place only at hero places and mission spaces. Check every mission space at player height (GAME.md \"Level design rules\"): the goal readable, two routes for every chase or getaway, the props the profile asks for near the player. Collect cosmetic close-up flaws as polish notes for P14. Pillar: the city opens up (first sight of a landmark is a moment).",
+    "accept": [
+      "A side by side sheet area_india_gate with at least 6 game poses matched to reference photos of the sheets (view direction and focal length) is read by the verifier against the reference boards: pass on silhouette, colour, density and street life, and not a generic look",
+      "The first-sight shot hero_india_gate_first_sight frames the arch from Kartavya Path at player height in afternoon and golden light",
+      "The small-detail rule holds in at least 3 player-height shots of the named mission spaces",
+      "Frame p95 is 10 ms or less at the busiest pose of the group (scene kind city, GPU ballast cost)",
+      "Respect rule: the verifier reads the named shots and texts against GAME.md \"Respect rule\", DELHI_WORLD.md section 3 and VERIFY.md rubric line 21; any breach is a fail, never a polish item",
+      "npm run typecheck, npm test and node harness/bin/verify.mjs --quick are green, with no engine or console errors"
+    ]
+  },
+  {
+    "phase": "P2",
+    "agent": "builder",
+    "priority": 3,
+    "kind": "feature",
+    "deps": [
+      "#14",
+      "#19"
+    ],
+    "model": "opus",
+    "title": "Area pass: ITO with Pragati Maidan",
+    "desc": "Area build pass, one per group of pilot areas. Standing rule (decisions.md \"Every area is built from real references\"): this task works from the area sheets and reference boards named below and its verifier compares game shots with the boards and fails a generic look. Sheet: ito (after its top-up, P2-002). The office and institutional blocks, the flyovers and their ramps, the Blue Line overhead, the Yamuna bank. Mission spaces of M03: an invented police station place near ITO, the pursuit line from Connaught Place to the ITO flyovers with the flyover split, the junction ahead where the barricade stands, and the space of the short standoff and foot chase. Work through data first: tune the area profile files, the kit modules, the dressing rules and override patches; hand-place only at hero places and mission spaces. Check every mission space at player height (GAME.md \"Level design rules\"): the goal readable, two routes for every chase or getaway, the props the profile asks for near the player. Collect cosmetic close-up flaws as polish notes for P14. Pillar: filmi, never cheap (the flyover pursuit and the barricade), and the city opens up.",
+    "accept": [
+      "A side by side sheet area_ito with at least 6 game poses matched to reference photos of the sheets (view direction and focal length) is read by the verifier against the reference boards: pass on silhouette, colour, density and street life, and not a generic look",
+      "Route scenarios with inputs only: route_m03_over_flyover and route_m03_under_flyover each run from the Connaught Place side to the barricade junction without leaving the road or getting stuck",
+      "The police station carries only the invented force name (no real unit, officer or case)",
+      "The small-detail rule holds in at least 3 player-height shots of the named mission spaces",
+      "Frame p95 is 10 ms or less at the busiest pose of the group (scene kind city, GPU ballast cost)",
+      "Respect rule: the verifier reads the named shots and texts against GAME.md \"Respect rule\", DELHI_WORLD.md section 3 and VERIFY.md rubric line 21; any breach is a fail, never a polish item",
+      "npm run typecheck, npm test and node harness/bin/verify.mjs --quick are green, with no engine or console errors"
+    ]
+  },
+  {
+    "phase": "P2",
+    "agent": "builder",
+    "priority": 3,
+    "kind": "feature",
+    "deps": [
+      "#7",
+      "#14"
+    ],
+    "model": "opus",
+    "title": "Area pass: Chandni Chowk main road, the galis and the Red Fort surroundings",
+    "desc": "Area build pass, one per group of pilot areas. Standing rule (decisions.md \"Every area is built from real references\"): this task works from the area sheets and reference boards named below and its verifier compares game shots with the boards and fails a generic look. Sheets: chandni_chowk_main, chandni_chowk_galis (after its top-up), red_fort_surroundings. The bazaar main road, the narrow galis with their wires and shutters (wear 0.8 or more), the Red Fort front, its parking and Netaji Subhas Marg. Mission spaces: the auto stand where M01 starts and its gali shortcut; the lane, the contact's shop and the fight space of M04 with its two scooter escape routes (the galis, the main road); the Red Fort parking for the later finale. Jama Masjid stands where it really is, built with care, and no mission space uses it as an arena. The occlusion culling switch may be tried in the galis (TECH.md) and kept only if it measures better. Work through data first: tune the area profile files, the kit modules, the dressing rules and override patches; hand-place only at hero places and mission spaces. Check every mission space at player height (GAME.md \"Level design rules\"): the goal readable, two routes for every chase or getaway, the props the profile asks for near the player. Collect cosmetic close-up flaws as polish notes for P14. Pillar: the city opens up, and pillar 2 (the bazaar fight and the getaway).",
+    "accept": [
+      "A side by side sheet area_old_delhi with at least 6 game poses matched to reference photos of the sheets (view direction and focal length) is read by the verifier against the reference boards: pass on silhouette, colour, density and street life, and not a generic look",
+      "Route scenarios with inputs only: route_m01_gali_shortcut and route_m01_main_road by auto from the stand toward the station, and route_m04_galis and route_m04_main_road by scooter out of the bazaar, each without touching a wall for more than 1 s or getting stuck",
+      "The galis hold poverty and wear as part of the city and never as its only face: the verifier reads 2 gali shots for craft and variety",
+      "The small-detail rule holds in at least 3 player-height shots of the named mission spaces",
+      "Frame p95 is 10 ms or less at the busiest pose of the group (scene kind city, GPU ballast cost)",
+      "Respect rule: the verifier reads the named shots and texts against GAME.md \"Respect rule\", DELHI_WORLD.md section 3 and VERIFY.md rubric line 21; any breach is a fail, never a polish item",
+      "npm run typecheck, npm test and node harness/bin/verify.mjs --quick are green, with no engine or console errors"
+    ]
+  },
+  {
+    "phase": "P2",
+    "agent": "builder",
+    "priority": 3,
+    "kind": "feature",
+    "deps": [
+      "#14"
+    ],
+    "model": "opus",
+    "title": "Area pass: Paharganj, the New Delhi station forecourt and GB Road",
+    "desc": "Area build pass, one per group of pilot areas. Standing rule (decisions.md \"Every area is built from real references\"): this task works from the area sheets and reference boards named below and its verifier compares game shots with the boards and fails a generic look. Sheets: paharganj_station and gb_road (P2-002). The hotel and lodge strips of Paharganj, the station forecourt on the Ajmeri Gate side with its drop-off (the end of M01, and the stand of the later M07), and GB Road as hardware shops at street level with the upper floors as background only. Work through data first: tune the area profile files, the kit modules, the dressing rules and override patches; hand-place only at hero places and mission spaces. Check every mission space at player height (GAME.md \"Level design rules\"): the goal readable, two routes for every chase or getaway, the props the profile asks for near the player. Collect cosmetic close-up flaws as polish notes for P14. Pillar: the city opens up, and pillar 1 (the station is where the three lives first cross).",
+    "accept": [
+      "A side by side sheet area_paharganj with at least 6 game poses matched to reference photos of the sheets (view direction and focal length) is read by the verifier against the reference boards: pass on silhouette, colour, density and street life, and not a generic look",
+      "Route scenario with inputs only: route_m01_station_dropoff reaches the forecourt drop-off from Ajmeri Gate by auto and stops in the bay",
+      "GB Road follows the GB Road line of the respect rule: hardware shops at street level, the trade as background only, no sexual content, people-facing props with dignity (the verifier reads 2 shots)",
+      "The small-detail rule holds in at least 3 player-height shots of the named mission spaces",
+      "Frame p95 is 10 ms or less at the busiest pose of the group (scene kind city, GPU ballast cost)",
+      "Respect rule: the verifier reads the named shots and texts against GAME.md \"Respect rule\", DELHI_WORLD.md section 3 and VERIFY.md rubric line 21; any breach is a fail, never a polish item",
+      "npm run typecheck, npm test and node harness/bin/verify.mjs --quick are green, with no engine or console errors"
+    ]
+  },
+  {
+    "phase": "P2",
+    "agent": "builder",
+    "priority": 3,
+    "kind": "feature",
+    "deps": [
+      "#20",
+      "#21",
+      "#22",
+      "#23",
+      "#24"
+    ],
+    "title": "Pilot verification: landmark positions and the area difference metric",
+    "model": "sonnet",
+    "desc": "DELHI_WORLD.md section 6 and section 4 (the exit for the pilot). (1) A unit test projects every registry entry with a high position confidence and checks the baked position and orientation in its block frame (hero 5 m and 5 degrees, signature 10 m, marker 15 m). (2) A scenario teleports to each pilot hero and reads its world position through the hooks: north is -Z and the landmark is on the right side of the map. (3) The area difference metric tool harness/bin/areametric.mjs: per area, from the generated output and from lookproof shots, the building height histogram, the facade colour histogram in Lab, props per 100 m of road, tree cover and sign density; the distance between every pair of pilot areas against a threshold set from this first measurement and written to DELHI_WORLD.md section 6; variety inside an area; smooth edges on transects. Pillar: the city opens up (each area visibly its own).",
+    "accept": [
+      "npm test includes the landmark position test and it passes for every entry",
+      "Scenario pilot_hero_positions passes for the Connaught Place circle, India Gate, Red Fort and Jama Masjid",
+      "node harness/bin/areametric.mjs --pilot exits 0: every pair of the pilot areas is above the threshold, variety inside each area is above its floor, and the transects are smooth; the report is harness/reports/map/area_metric.json",
+      "The threshold and how it was set are written in DELHI_WORLD.md section 6",
+      "npm run typecheck, npm test and node harness/bin/verify.mjs --quick are green, with no engine or console errors"
+    ]
+  },
+  {
+    "phase": "P2",
+    "agent": "builder",
+    "priority": 3,
+    "kind": "feature",
+    "deps": [
+      "#20",
+      "#21",
+      "#22",
+      "#23",
+      "#24"
+    ],
+    "title": "Pilot verification: side by side sheets against the reference photos",
+    "model": "sonnet",
+    "desc": "DELHI_WORLD.md section 6 (\"Side by side\"). Build the final sheets with lookproof.mjs --sheet: each game pose beside its reference photo (same view direction, similar focal length), grouped into six combined sheets of about 1600 px so the verifier can read them all: Connaught Place with Janpath and Jantar Mantar; India Gate and Kartavya Path; ITO with Pragati Maidan; Chandni Chowk with the galis and Red Fort; Paharganj with the station and GB Road; and the heroes. The verifier reads them by eye against the rubric (silhouette, colour, density, street life) and the respect rule. Reference photos stay out of the shipped build. Cosmetic misses go to the polish list for P14; real misses become bug tasks. Pillar: the city opens up.",
+    "accept": [
+      "Six combined sheets exist under harness/reports/look/ as JPEGs under 2 MB",
+      "The verifier reads all six and passes each on silhouette, colour, density and street life, or lists each fail as a bug task with its shot",
+      "Test: no reference photo is under game/ or public/, and the export of P1-027 does not contain one",
+      "Respect rule: the verifier reads the named shots and texts against GAME.md \"Respect rule\", DELHI_WORLD.md section 3 and VERIFY.md rubric line 21; any breach is a fail, never a polish item"
+    ]
+  },
+  {
+    "phase": "P2",
+    "agent": "builder",
+    "priority": 3,
+    "kind": "feature",
+    "deps": [
+      "#12",
+      "#20",
+      "#21",
+      "#22",
+      "#23",
+      "#24"
+    ],
+    "title": "Pilot verification: perf on the pilot camera paths",
+    "model": "sonnet",
+    "desc": "DELHI_WORLD.md section 5 (last line) and section 4. Fixed camera paths through all five area groups with the full dressing and LOD, at 60, 140 and 200 km/h, in the four lights, plus the worst case on foot (night, the crowded bazaar lane). Per system GPU and CPU readings against perf_budgets.json systems (roads and ground 1.0, generated buildings 2.0, landmarks 0.5, dressing 0.5, the look stack 3.6, night lamps or shimmer 0.8, streaming attach 1.0). The bake totals: time, tile count and bytes. Measure with the GPU ballast on a calm machine. Write the numbers to perf_budgets.json as measured pilot. This is the measurement that must pass before any scale-up (GAME.md \"Map grows in steps\"). Pillar: the city opens up and the performance target (60 fps on the M2 Pro, no struggles).",
+    "accept": [
+      "Every pilot_path scenario is inside the signed budgets: frame p95 warn 10 ms and fail 12 ms, city draw calls 2,500 and 3,500, triangles 6 M and 9 M, video memory 1,200 and 2,000 MB, load 3 s and 10 s",
+      "No frame over 33 ms at 200 km/h on any path",
+      "Each system line is inside its budget, or a bug task is filed with the numbers",
+      "The full pilot bake with all layers takes under 15 minutes and the average tile is 1.5 MB or less",
+      "The numbers are in perf_budgets.json measured and quoted in the task summary with the machine, renderer and load"
+    ]
+  },
+  {
+    "phase": "P2",
+    "agent": "builder",
+    "priority": 3,
+    "kind": "feature",
+    "deps": [
+      "P1-007"
+    ],
+    "title": "Credits: OSM attribution and every source credit in the game",
+    "model": "sonnet",
+    "desc": "ODbL asks for attribution, and every other source and asset licence must be credited (TECH.md \"World pipeline\"; DELHI_WORLD.md section 8 item 8). Show \"© OpenStreetMap contributors\" on the title screen stand-in and wherever the game shows a map, and add a credits screen that is generated from data so a new source cannot be missed: every credit line of data/SOURCES.json (OSM, Overture, GEDTM30, Copernicus GLO-30 if used, Wikidata) plus an asset licence file (the Quaternius CC0 library, the four CC0 sounds, fonts under OFL when added). The menus of P3 link to the same screen. Add a short doc note on how the repaired map data is published as ODbL asks, as a release step for P14. Pillar: the city opens up (the real city is built on open data, and says so).",
+    "accept": [
+      "Scenario credits_screen: the set of credit lines on the screen equals the set in data/SOURCES.json plus the asset licence file (read through debug.hud)",
+      "A test fails when a source or an asset licence entry has no credit text",
+      "The OSM line shows on the title stand-in (shot credits_osm_line, text read through debug.hud)",
+      "The publishing note is in docs/ and linked from TECH.md \"World pipeline\"",
+      "npm run typecheck, npm test and node harness/bin/verify.mjs --quick are green, with no engine or console errors"
+    ]
+  }
+]

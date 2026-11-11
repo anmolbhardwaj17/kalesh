@@ -363,3 +363,20 @@ Decision: the signed design is written into the binding docs. TECH.md (stack, si
 Planner calls inside the signed design, each changeable by Anmol through the inbox: (1) Laxmi Nagar and the east bank are inside the centre block (factor 1.0 across the real river), so the Yamuna bridges are real OSM roads on the lane model, not connectors; (2) overrides are filed per world tile (`harness/data/overrides/<tileX>_<tileZ>.json`); (3) the pilot metro line is the elevated Blue Line stretch at Pragati Maidan (it proves the viaduct rules; the Yellow Line is underground in the pilot); (4) heroes after the first three: Jama Masjid, Humayun's Tomb, Qutub Minar; (5) the world origin stays at the layout C box centre until the first bake with a far block recentres it; (6) Noida, when planned, is a far block at 0.5.
 Why: the sign-off needs one binding record so builders never read a comparison table as a plan; the seamless layout must be data the bake and the tests check, not prose.
 By: planner (P0-022)
+
+## 2026-11-11: Game plan after Phase 0 (P0-023)
+Decision: fourteen phases follow P0 (list and notes in harness/state/next_phase_notes.md). P1 Foundation (the pilot centre baked, streamed, driven and walked; 27 tasks) and P2 Pilot made rich (landmarks, areas, hero roads; 28 tasks) are planned in detail. P3 life and action systems, P4 the slice M01 to M04, P5 Act 1 complete, P6 city life in the pilot, P7 the rest of the centre block, P8 the far south, P9 Act 2, P10 Act 3, P11 the east for Act 4, P12 Act 4, P13 Act 5 and P14 polish and first release have goals, exits and milestones and are planned when reached. Each phase goal names the pillars it serves.
+Planner calls inside it, each changeable by Anmol through the inbox:
+- The slice is M01 to M04 solo with Bittu first (GAME.md and "Act 1 story flow, no early merge" win over the older task text that said one mission per character plus a merged one).
+- The pilot plays well before any scale-up (GAME.md "Map grows in steps"): the slice (P4), Act 1 (P5) and city life (P6) come before the centre (P7) and the far south (P8). Scale-up then follows Anmol's area order.
+- The combat foundation and police move from the foundation phase to P3: they need the navmesh, the lane graph and the crowd, and P1 is full with the base world. The on-foot controller and camera stay in P1.
+- Fable tags: 10 tasks (P1-008, P1-010, P1-012, P1-013, P1-014, P1-015, P1-019, P2-005, P2-006, P2-009), leaving 5 of the 25 runs for third attempts and hard bugs. The vehicle model (P1-020) runs on Opus because the bench version already measures well.
+- P1 base buildings are plain shells from the repaired footprints; the area generator of P2 replaces them.
+- Baked tiles are gitignored, so P1-018 adds a small committed test block, a bake hash and tiles for the snapshot worktree and the play copy.
+- Seeded later phases (P3, P4, P14) start with a planner task "Plan phase <P>" that every seed depends on, because task.mjs phase-add does not mark a phase as unplanned.
+- milestones.json now lists M11 to M67 from STORY_OUTLINE.md as optional entries with short summaries; each act's planner writes the beats and sets them required. M03 gained its standoff beat ("Pistol stays in the slice, used in M03").
+- The HUD is the one remaining look check with Anmol: P1-003 (orchestrator) shows him the mockups, never blocks other work, and the HUD build seed P3-002 depends on it.
+- kit.config.json gameSizeEstimate is 580 tasks.
+Open: Noida and Shahdara are later unlocks in GAME.md but Act 4 uses them (settled when P11 is planned); a few story places are on no map list (the Okhla studio, the Seva hospital, police HQ).
+Why: the signed design, style and architecture need one build order that proves the base before the look, the look before the systems, the systems before missions, and the pilot before the wider city.
+By: planner (P0-023)
