@@ -284,3 +284,4 @@ One line per event, written by task.mjs (start, done, fail, phase changes, inbox
 - 2026-11-11 17:23 [P0-022] start (attempt 1): Architecture record
 - 2026-11-11 17:41 [P0-022] done: Signed design written into TECH.md, docs/ARCHITECTURE.md (target module map and size rule), MAP_REPAIR.md (connector format, repair bounds), DELHI_WORLD.md and GAME.md (seamless city, cutscene runtime), districts.json (signed method, corrected offsets), perf_budgets.json (per-system budgets, city draw calls 2500/3500), shared_paths.json, READ_MAP.md; decisions.md entry with the quote. Self-check: JSON parses, typecheck, 315 vitest, 59 Godot tests.
 - 2026-11-11 17:42 [P0-023] start (attempt 1): Plan the game: phases after P0
+- 2026-11-11 17:51 mentor message mmwc39ba7 handled: No empty spaces: the centre is one continuous filled city at real size, the far south pulled to half distance and filled. Asked whether to squeeze the centre too.
