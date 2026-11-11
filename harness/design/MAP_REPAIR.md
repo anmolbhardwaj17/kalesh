@@ -1,6 +1,6 @@
 # Map repair layer
 
-Design for Kalesh (the game was called Dilli Darshan until 2026-11-10). First written at setup, replanned for Godot 4 and the composite map, and refined in architecture discovery (P0-010, 2026-11-10). The choices marked "Rec" are the planner's recommendations in [`ARCH_OPTIONS.md`](ARCH_OPTIONS.md) section 7; nothing is decided until Anmol's architecture sign-off. Every number is an estimate unless it names a report file. The benches P0-018 (data), P0-019 (roads) and P0-029 (stitch) measure them.
+Design for Kalesh (the game was called Dilli Darshan until 2026-11-10). First written at setup, replanned for Godot 4 and the composite map, and refined in architecture discovery (P0-010, 2026-11-10). Updated after the benches (P0-020, 2026-11-11). The choices marked "Rec" are the planner's recommendations in [`ARCH_OPTIONS.md`](ARCH_OPTIONS.md) sections 4 and 7; nothing is decided until Anmol's architecture sign-off. Every number is an estimate unless it names a report file. The benches P0-018 (data), P0-019 (roads) and P0-029 (stitch) have run; their numbers and the plan built on them are in ARCH_OPTIONS.md "Map repair layer and map inspector plan" and "District layout recommendation".
 
 Related: [`DELHI_WORLD.md`](DELHI_WORLD.md) (the composite map, landmarks and area profiles), `SALVAGE_AUDIT.md` sections 5 and 8 (why the old game's base layer failed).
 
@@ -12,17 +12,17 @@ The bake runs offline in Node and TypeScript under `tools/bake/` (Rec B1). The G
 
 ## Sources
 
-Licences below are what the planner found on 2026-11-10 (web search of the publishers' and catalogue pages). P0-018 checks each one at the source, records the URL, the date and the licence text in `harness/reports/arch/pilot_data.json` and `world_sources.json`, and pins every downloaded file by date and checksum. Anmol's release is free and public; the standing preference is sources that would still allow a later sale (decisions.md "Speeds and map size").
+Licences below were checked at the source by P0-018 on 2026-11-11 (URL, date and the licence phrase are in `harness/reports/arch/pilot_data.json` and `world_sources.json`; every downloaded file is pinned by date and checksum in `data/SOURCES.json`). Not readable by the script and still beliefs: the ASI copyright page, the Sentinel notice, CartoDEM. One belief was wrong: the Microsoft footprints are CDLA Permissive 2.0, not ODbL. Anmol's release is free and public; the standing preference is sources that would still allow a later sale (decisions.md "Speeds and map size").
 
 | Use | Source | Licence and credit | Quality check in the pilot | Status |
 |---|---|---|---|---|
 | Road network | OpenStreetMap, a fresh extract of the district boxes | ODbL 1.0. Credit "© OpenStreetMap contributors" in the game. A derived database that is shared must be offered under ODbL, so the repaired map data is published openly (question 1 in ARCH_OPTIONS.md) | Share of roads with `lanes`, `width`, `oneway`, `layer` and `bridge` tags; dangling ends; unjoined crossings | Base (Rec RS1) |
-| Road cross-check | Overture Maps, transportation theme | ODbL (believed) | What it has that OSM lacks. It is built mostly from OSM, so expect little | Second look only |
+| Road cross-check | Overture Maps, transportation theme | ODbL 1.0 (checked) | Measured (pilot_data.json): every carriageway segment is OSM (6 of 4,712 also carry a TomTom property). It adds nothing | Not used (Rec RS2: OSM only) |
 | Buildings | Overture Maps, buildings theme: OSM, Microsoft, Google Open Buildings and Esri already merged, with a source tag per building | ODbL (Overture release notes). Credit OSM and Overture | Duplicates left, OSM tags kept, coverage in Old Delhi | Rec BS1 |
-| Buildings, fallback | Our own merge of OSM, Google Open Buildings (CC BY 4.0 or ODbL, believed) and Microsoft footprints (ODbL, believed) | as listed | Overlap and centroid match rates | If BS1 is poor (BS2) |
+| Buildings, fallback | Our own merge of OSM, Google Open Buildings (CC BY 4.0 or ODbL, checked) and Microsoft footprints (CDLA Permissive 2.0, checked: the licence text goes with any shared copy of the data, no share-alike) | as listed | Measured (pilot_data.json): more coverage (28% against 26% in Chandni Chowk) but 1,858 footprints with a road centre line through them against 7 | Not needed: BS1 is better on roads (BS2) |
 | Building heights | OSM `height` and `building:levels`, Overture `height`, then the area profile's floor counts | as above | Share of buildings with any height | In order |
-| Ground height | GEDTM30, a 30 m bare-earth model | CC BY (project page and lecture record; the Zenodo licence field is checked in P0-018). Credit line | Height at 20 open-ground control points, roughness along 20 road profiles, steps under dense blocks | Rec GS1 if it passes |
-| Ground height, fallback | Copernicus GLO-30 (a surface model) with our own ground filter: sample only roads, parks and open ground, drop cells under buildings, fit a smooth surface | Free with a credit line, commercial use allowed | Same checks | Rec GS2 |
+| Ground height | GEDTM30, a 30 m bare-earth model, smoothed over 60 m | CC BY 4.0 (checked on the Zenodo record, which calls the release a test release). Credit line | Measured (terrain_sources.json): raw it fails (worst step 2.72 m in 15 m along roads); smoothed over 60 m it passes (roughness 0.03 m, worst step 0.49 m, 0 outliers) | Rec GS1, smoothed |
+| Ground height, fallback | Copernicus GLO-30 (a surface model) with our own ground filter: sample only roads, parks and open ground, drop cells under buildings, fit a smooth surface | Free with a credit line, commercial use allowed | Same checks | Fallback (GS2) |
 | Ground height, cross-check only | FABDEM | CC BY-NC-SA 4.0: non-commercial and share-alike. Never shipped, never baked into tiles | Used as the yardstick in the bench | GS3 |
 | Ground height, out | CartoDEM | Needs a Bhuvan account (an owner action); reuse terms unclear | none | Out unless GS1 and GS2 both fail |
 | Reference for hero roads and repairs | Street photos (Mapillary, Wikimedia Commons) and Sentinel-2 imagery | Per image; reference only. Linked by URL with the licence noted. Never baked into the game | Read by eye | Reference |
@@ -31,28 +31,28 @@ Why not a surface model as it is: rooftops and trees in the data make roads floa
 
 ## Pipeline (runs on every bake)
 
-0. **District selection** (once, then on change). `harness/data/districts.json` lists the chosen districts: id, name, stage (pilot, release, later), frame origin (lat and lon), placement offset in game metres, height offset, and the file of its clip polygon (`harness/data/districts/<id>.geojson`). Clip polygons follow real edges (arterials, rail lines, walls, the river, park edges), with an edge band of 60 to 100 m kept as low detail shells (Rec DC3). Only data inside a clip polygon plus the band is ingested.
-1. **Ingest and normalise** every source into one topology graph per district: nodes, edges with layer, level, width, surface and class, and polygons for buildings, areas and platforms. One coordinate space from here on: district-local metres, east +X, north -Z. Every space has a named type in the code, and a magnitude check runs where baked data enters the game.
+0. **Map selection** (once, then on change). `harness/data/districts.json` lists the blocks and districts. A block is one continuous piece of real city with one frame (the centre block is the whole centre of Delhi at true scale; each far district is its own block). A district has a block, a stage (pilot, release, later) and a focus flag. Outlines follow real edges (arterials, rail lines, walls, the river, park edges). The outer edge of the map and the corridors get an edge band of 60 to 100 m of low detail shells. Only data inside a block outline plus the band is ingested (Rec CG2, DC2, FL4; owner decision "One seamless open city, no gaps").
+1. **Ingest and normalise** every source into one topology graph per block: nodes, edges with layer, level, width, surface and class, and polygons for buildings, areas and platforms. One coordinate space from here on: block-local metres, east +X, north -Z. Every space has a named type in the code, and a magnitude check runs where baked data enters the game.
 2. **Pair and classify.** Two one-way OSM ways of one street are recognised as one street before any width is assigned. Each road gets a class with Delhi defaults (left-hand traffic).
 3. **Validate** with the rule engine. Every issue gets a stable id, a rule id, a place (lat and lon, district metres, tile), an impact score and a confidence.
-4. **Auto-repair**, deterministic and logged (Rec AR1): a repair applies on its own when its confidence is 0.8 or more and its impact is low. Everything else is queued for the map inspector with proposals.
+4. **Auto-repair**, deterministic and logged (Rec AR1): a repair applies on its own when its confidence is 0.8 or more and its impact is low (the bounds per rule are in ARCH_OPTIONS.md "The plan"). Everything else is queued for the map inspector with proposals. A queued issue never blocks a bake: its top proposal is applied as provisional until Anmol picks. Measured on the pilot (pilot_data.json): 1,052 issues, 73% automatic, 27 high impact ones queued.
 5. **Overrides**: patch files per tile, versioned in git, applied after auto-repair. They survive re-bakes and new extracts.
 6. **Lane model**: roads become reference lines with lane sections; junctions become objects (below).
-7. **Stitching and connectors**: roads that leave a district through its clip line end at a boundary port. Authored connectors (`harness/data/connectors/<id>.json`: control points in game metres, road class, lane set, real name) join ports of different districts and are built by the same lane model (Rec SC1). Small ports are closed by a short generated street net in the filler, a gate, a loop or an explained dead end (Rec FL1).
+7. **Corridors and the map edge**: inside a block streets simply run on, with no ports. Far districts are joined to the centre by corridors: authored connectors (`harness/data/connectors/<id>.json`: control points in game metres, road class, lane set, real name) built by the same lane model (Rec SC1), with generated city from the neighbouring area profiles on both sides (Rec FL4). Roads that leave the map through its outer edge end at a boundary port and are closed by rule: a gate, a loop, a barricade or an explained dead end (measured: 80.2% of ports close by rule, stitch.json).
 8. **Elevation solver**: one height per node on the whole graph, connectors included (below).
 9. **Mesh build** from the repaired, stitched and solved graph only: lane surfaces, junction surfaces, kerbs, railings and parapets from deck edges, ground fitted to the road edges, colliders from the same vertices, navmesh polygons, lane graph for traffic.
 10. **Tiles and reports**: 250 m tiles with a version stamp and a byte budget; the map health report; the issue list for the inspector. A failed invariant stops the bake before it writes tiles.
 
 ## District frames and stitching
 
-Signed in the map round by Anmol: a composite map of real districts, layout C in stages (`DELHI_WORLD.md` section 0). The mechanics below are Rec X1, DC3, SC1 and FL1 in ARCH_OPTIONS.md.
+Signed in the map round by Anmol: a composite map of real districts, layout C in stages (`DELHI_WORLD.md` section 0). Changed by Anmol on the stitch shot (2026-11-11, decisions.md "One seamless open city, no gaps"): the map is one continuous open world with no bare ground, real in-between areas, generated city blended from the neighbouring profiles, one road network across edges, and real directions. The mechanics below are Rec X1 (block frames), CG2, DC2, SC1 and FL4 in ARCH_OPTIONS.md; the numbers, the corrected offsets and the method are in its "District layout recommendation". Pending the architecture sign-off.
 
-- **One frame per district.** A district is projected with the transverse Mercator of `tools/geo/projection.ts` around its own frame origin, so distances and angles inside it stay true to within centimetres. Then it is moved by its placement offset. Translation only: no rotation, no scale, no mirroring, so north stays -Z everywhere.
-- **World position** of a real point = district offset + project(lat, lon, district origin). The bake records the district id with every tile, landmark, mission anchor and spawn point.
+- **One frame per block.** The centre block is projected with the transverse Mercator of `tools/geo/projection.ts` around India Gate, at factor 1.0: every real place in it sits at its real position, so every pair keeps its real bearing and distance. A far district is its own block with its own frame origin, moved by a placement offset: the real vector from India Gate times one factor shared by all far districts (0.5 recommended, the owner decides). Translation only: no rotation, no scale, no mirroring, so north stays -Z everywhere.
+- **World position** of a real point = block offset + project(lat, lon, block origin). The bake records the district id with every tile, landmark, mission anchor and spawn point.
 - **World origin** is the centre of the map box, so no position is more than about 6 km from it and 32-bit floats are enough (Rec FP1).
 - **Landmark tests** check the position inside the district frame, within the tier tolerance (`DELHI_WORLD.md` "6. Verification"). A second test checks the layout inside a district (Red Fort is north-east of Jama Masjid at the true distance).
-- **Height**: each district keeps its real ground heights, shifted by one district height offset so neighbours meet near the same level (Delhi is mostly flat, about 200 to 230 m). Filler ground blends between district edges.
-- **Gaps between districts** are filled by connector roads, the river, parks, rail corridors, generated filler blocks from area profiles, and terrain. Filler never claims to be a real place.
+- **Height**: a block has one ground model and one height solve. A far district keeps its real ground heights, shifted by one height offset solved over all its joins together (Delhi is mostly flat, about 200 to 230 m).
+- **No bare ground.** Inside the centre the space between focus districts is real city from the same sources (Paharganj, Karol Bagh, Daryaganj, Mandi House, Pragati Maidan and the rest). Corridors to far districts carry generated city from the neighbouring area profiles, blended across the edge. Real open land (the river and floodplain, the Ridge, lawns, rail yards) is drawn as the real place. Generated city never takes the name of a real colony.
 - **Map and minimap** show the game layout, north up. Real names stay on real places; a connector carries the real name of the road it stands for (Ring Road, NH-48).
 
 ## Rule engine
@@ -173,14 +173,14 @@ It is an early task right after the architecture sign-off, so Anmol can start re
 
 ## Pilot
 
-Anmol's pick (sitting 2): Connaught Place with Jantar Mantar, India Gate, ITO with Pragati Maidan, and Chandni Chowk with Red Fort, about 7.2 km2, joined by Janpath, Barakhamba Road and BSZ Marg as connectors. The New Delhi station forecourt may join as a small extra for mission M01 (decisions.md "Game design record"). The hard cases are all inside it:
+Anmol's pick (sitting 2): Connaught Place with Jantar Mantar, India Gate, ITO with Pragati Maidan, and Chandni Chowk with Red Fort. As one seamless piece (recommended after his feedback on the stitch shot) the pilot is the pilot centre: those four as focus districts plus Paharganj with the station, GB Road and everything between them, about 20 km2 (estimate) against 7.2 km2 as islands. Janpath, Barakhamba Road and BSZ Marg are then ordinary real roads inside it, not connectors. The New Delhi station forecourt may join as a small extra for mission M01 (decisions.md "Game design record"). The hard cases are all inside it:
 
 - Connaught Place: radial roads, inner and outer circles, the first hero roads.
 - The ITO and Pragati Maidan flyovers: stacked flyovers, ramps, the tunnel.
 - Chandni Chowk: dense old city, narrow lanes, buildings tight to roads.
 - India Gate: the hexagon and the Lutyens avenues.
 - One metro line: an elevated viaduct, stations, foot over bridges (which line is still open, `DELHI_WORLD.md` section 9).
-- Three connectors, so stitching is proven in the pilot too.
+- The Vikas Marg bridge and one corridor, so connectors are proven in the pilot too.
 
 Then the first release districts, then the later unlocks.
 

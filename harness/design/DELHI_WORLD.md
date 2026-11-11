@@ -37,7 +37,9 @@ sources -> district selection -> map repair (graph, footprints, DTM) -> stitchin
 - Homes as proposed in 0.1. The haunted place is Malcha Mahal (in the Central Ridge clip, D17). The police force is invented and Delhi-like.
 - `harness/data/districts.json` gives every district a `stage` (pilot, release, later), so the bake and the story open them in order.
 
-The text below is the P0-028 draft that he answered. The mechanics (district frames, clip polygons along real edges with an edge band, authored connectors, filler) are Rec X1, DC3, SC1 and FL1 in `ARCH_OPTIONS.md` section 4 and are described in `MAP_REPAIR.md` "District frames and stitching".
+**Changed on 2026-11-11 (Anmol on the stitch shot; decisions.md "One seamless open city, no gaps"):** the map is one continuous open world. No bare ground between districts, real in-between areas where they matter (Paharganj, Karol Bagh, Daryaganj, ITO, Mandi House, Pragati Maidan), generated city blended from the neighbouring area profiles elsewhere, one road network across edges, and real directions. The recommended layout for that (the centre as one real block at factor 1.0, far districts on their real bearing at one factor, the corrected offsets, and the tile and bake cost of about 68 km2) is in `ARCH_OPTIONS.md` "District layout recommendation", pending the architecture sign-off. Where the draft below says islands, open-land filler, hand-set offsets or "filler never claimed as a real place", that section now wins; this section is rewritten by the architecture record task after the sign-off.
+
+The text below is the P0-028 draft that he answered. The mechanics are Rec X1 (block frames), CG2, DC2, SC1 and FL4 in `ARCH_OPTIONS.md` section 4 and are described in `MAP_REPAIR.md` "District frames and stitching".
 
 Anmol (inbox mmwarg8cw, 2026-11-10): a compressed Delhi, the way big open world games treat a real city: main areas, monuments, localities, roads, the Yamuna, the airport, parts of NCR and East Delhi, merged into one smaller map. Not a 1:1 copy.
 
@@ -178,7 +180,7 @@ Already answered and not asked again: the district groups, the story places, the
 
 ### Sources
 
-Licences below are what the planner believes today. Each one is checked in the P0-018 data bench before use, and the result goes into `harness/reports/arch/world_sources.json`.
+Licences below were checked at the source by the P0-018 data bench on 2026-11-11 (`harness/reports/arch/world_sources.json`). Still a belief, because the script could not read the page: the ASI copyright page.
 
 | Source | What it gives | Licence (to verify) | Use |
 |---|---|---|---|
@@ -261,7 +263,7 @@ Tier rule: an automatic score proposes the tier (ASI listed, Wikidata sitelinks,
 
 ### Area division from open data
 
-Licences are beliefs until the P0-018 data bench checks them.
+Licences were checked at the source by the P0-018 data bench on 2026-11-11 (`harness/reports/arch/world_sources.json`): census data is under the Government Open Data License India, the DataMeet ward boundaries are CC BY 4.0, VIIRS night lights are CC BY 4.0, Google Open Buildings is CC BY 4.0 or ODbL, and the Microsoft footprints are CDLA Permissive 2.0 (this doc said ODbL before). Still beliefs: the Master Plan maps (the DDA site was unreachable) and the Sentinel notice. Measured: OSM land use, colony names and the footprint grid cover the pilot; wards, census, Sentinel-2 and VIIRS were not needed.
 
 | Source | Gives | Licence (to verify) |
 |---|---|---|
@@ -269,7 +271,7 @@ Licences are beliefs until the P0-018 data bench checks them.
 | Census 2011 ward and town data (data.gov.in) | Population, density, households | Government Open Data Licence India (believed) |
 | Ward boundaries (MCD wards, NDMC, cantonment) from open repositories | Polygons to hang profiles on | Varies per repository (some ODbL or CC BY) |
 | OSM `landuse=*`, `place=suburb|neighbourhood|quarter`, colony names | Land use, colony names and outlines | ODbL |
-| Building footprint density (merged footprints from map repair) | Grain: footprint size, coverage, spacing | Google Open Buildings (CC BY 4.0 or ODbL, believed), Microsoft footprints (ODbL) |
+| Building footprint density (merged footprints from map repair) | Grain: footprint size, coverage, spacing | Google Open Buildings (CC BY 4.0 or ODbL), Microsoft footprints (CDLA Permissive 2.0) |
 | NDVI from Sentinel-2 | Greenery per cell | Copernicus data, free with attribution |
 | Night lights (VIIRS) | Activity and wealth proxy at coarse scale | Believed public or CC BY; check |
 
@@ -424,7 +426,7 @@ Still open:
 
 ## 10. Pipeline choices (architecture discovery, P0-010)
 
-The full comparison with options, costs and risks is in [`ARCH_OPTIONS.md`](ARCH_OPTIONS.md) section 8 (world layers), section 4 (composite map) and section 7 (inspector). This is the recommended pipeline in one place. All of it runs in the offline bake (`tools/bake/`, Node and TypeScript) after map repair; the game reads the result from the tiles.
+The full comparison with options, costs, risks and the measured numbers (P0-020) is in [`ARCH_OPTIONS.md`](ARCH_OPTIONS.md) section 8 (world layers), section 4 (composite map) and section 7 (inspector). This is the recommended pipeline in one place. All of it runs in the offline bake (`tools/bake/`, Node and TypeScript) after map repair; the game reads the result from the tiles.
 
 ### Landmark registry pipeline
 
@@ -434,11 +436,11 @@ The full comparison with options, costs and risks is in [`ARCH_OPTIONS.md`](ARCH
 4. **Placement (Rec LP2).** Inside a clip: district offset plus the projected position in the district frame, on a flattened pad, replacing the repaired buildings in its zone (logged). Outside every clip: a far landmark on the backdrop, placed by its real bearing from the nearest district, as a silhouette. A far landmark is never a place the player can reach, and the map does not mark it as one.
 5. **Hero models (Rec HM2).** Up to 8 parts per hero, up to 25,000 triangles each, up to 6 materials in all, 3 LODs per part, one far silhouette under 2,000 triangles. LODs are made with Blender in background mode (it is installed on this Mac) or meshoptimizer. The ingest tool gets a hero rule with these limits.
 6. **Stand-in parts kit (HM3 as the placeholder).** Domes, chhatris, arches, colonnades, minarets, shikharas and slabs, driven by the registry fields. It is the stand-in for every hero until its model arrives, and the final build for the signature tier.
-7. **Checks.** OSM centroid against Wikidata within 50 m or the entry is flagged; the position test in the district frame; the relative layout test inside a district.
+7. **Checks.** The Wikidata point lies inside the OSM footprint or within 50 m of its centre, or the entry is flagged (measured on the pilot: 21 of 69 are over 50 m by centre alone, 8 of 46 with a footprint; Red Fort is 76 m off only because the site is large); the position test in the block frame; the relative layout test.
 
 ### Area profile pipeline
 
-1. **Area division (Rec AD2).** Claude draws 3 to 8 area polygons per district along roads and rail, seeded by OSM land use and colony outlines, with the 100 m feature grid as evidence. Anmol edits them in the inspector. Filler between districts uses archetypes marked `filler`.
+1. **Area division (Rec AD2).** Claude draws 3 to 8 area polygons per focus district along roads and rail, seeded by OSM land use and colony outlines, with the 100 m feature grid as evidence. Anmol edits them in the inspector. In-between areas of the seamless centre get an archetype profile by rule first (from land use and the footprint grid) and a hand-drawn polygon when they become a focus district. Generated city along corridors blends the profiles of its two neighbours.
 2. **Profile storage (Rec PS1).** Archetype defaults, a small file per area with only what differs, and an overrides file for inspector edits. Every value has an evidence line. The `wear` value (0 to 1) drives the grime layer of look B+D.
 3. **Generator at bake time (Rec AG1).** Parcels, building shells, facade module placements, street dressing and colliders are written into the tiles. Only life (people, vendors, animals, parked two-wheelers) is spawned in the game, from seeded points in the tile.
 4. **Kits and atlases (Rec KT2, TX1).** Procedural modules first, replaced module by module through ingest. One Texture2DArray and one trim and decal atlas per kit. Fixed module ids.
