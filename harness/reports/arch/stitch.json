@@ -1,0 +1,2255 @@
+{
+  "bench": "stitch",
+  "setups": {
+    "world": {
+      "id": "world",
+      "option": "X1 FP1 DC3 SC1 FL1 LP2",
+      "group": "world",
+      "tokens": "world",
+      "must": true,
+      "driver": "metal",
+      "resolution": "1600x1000",
+      "note": "the pilot districts at their offsets with the edge bands, the three authored connectors and every port closure",
+      "at": "2026-11-11T09:57:17.727Z",
+      "loadMs": 1039,
+      "buildMs": 239,
+      "renderer": {
+        "adapter": "Apple M2 Pro (Apple8)",
+        "driver": "metal",
+        "method": "forward_plus",
+        "vendor": "Apple"
+      },
+      "cpuOnly": true,
+      "scene": {
+        "buildMs": 239,
+        "pan": "far_pan",
+        "pins": 60,
+        "poses": [
+          "top_all",
+          "port_eye",
+          "port_top",
+          "bridge_eye",
+          "flyover_side",
+          "far_eye"
+        ],
+        "ready": true,
+        "tileBytes": 52841644,
+        "tileReadMs": 149.3,
+        "tiles": 749,
+        "tilesByLayer": {
+          "band_chandni_chowk": 34,
+          "band_cp": 24,
+          "band_india_gate": 19,
+          "band_laxmi_nagar": 20,
+          "chandni_chowk": 61,
+          "connector": 45,
+          "cp": 18,
+          "filler": 489,
+          "india_gate": 20,
+          "laxmi_nagar": 19
+        },
+        "triangles": 625922
+      },
+      "shots": [
+        {
+          "pose": "top_all",
+          "kind": "top",
+          "file": "harness/reports/arch/stitch/top_all.png",
+          "note": "every district from above, north up: the districts at their offsets, the connectors between them, the river"
+        },
+        {
+          "pose": "port_eye",
+          "kind": "eye",
+          "file": "harness/reports/arch/stitch/port_eye.png",
+          "note": "player height on the Ring Road connector, 60 m before its port at Chandni Chowk: the connector meets the district road at the clip line"
+        },
+        {
+          "pose": "port_top",
+          "kind": "top",
+          "file": "harness/reports/arch/stitch/port_top.png",
+          "note": "the south east corner of Chandni Chowk from above: the Ring Road connector on its port, street nets and gates on the small ports, a barrier on a big port with no connector yet, the edge band of shells"
+        },
+        {
+          "pose": "bridge_eye",
+          "kind": "eye",
+          "file": "harness/reports/arch/stitch/bridge_eye.png",
+          "note": "player height on the Vikas Marg bridge over the river stand-in, looking east to Laxmi Nagar"
+        },
+        {
+          "pose": "flyover_side",
+          "kind": "eye",
+          "file": "harness/reports/arch/stitch/flyover_side.png",
+          "note": "the flyover connector from the south west: it climbs over the railway stand-in and comes back to the ground"
+        },
+        {
+          "pose": "far_eye",
+          "kind": "eye",
+          "file": "harness/reports/arch/stitch/far_eye.png",
+          "note": "player height on Vikas Marg in Laxmi Nagar, 4141 m from the world origin"
+        }
+      ],
+      "landmarksInEngine": {
+        "pins": 60,
+        "missing": 0,
+        "maxErrorM": 0.00017,
+        "perLandmarkMaxM": {
+          "red_fort": 0.00011,
+          "jama_masjid": 0.00014,
+          "india_gate": 0.00006,
+          "cp_inner_circle": 0.0001,
+          "jantar_mantar": 0.00007,
+          "war_memorial": 0.00009,
+          "laxmi_nagar_metro": 0.00017,
+          "laxmi_nagar_hospital": 0.00013
+        },
+        "note": "the pin position in the running game (node position of the tile plus the mesh centre, 32-bit floats) against district offset plus projection"
+      },
+      "transforms": {
+        "checked": 2217,
+        "first": "",
+        "notIdentity": 0
+      },
+      "fp1Pan": {
+        "pose": "far_eye",
+        "district": "laxmi_nagar",
+        "distanceFromOriginM": 4141,
+        "frames": 24,
+        "stepMm": 2,
+        "yawStepDeg": 0.01,
+        "modes": [
+          {
+            "id": "far",
+            "movedBy": [
+              0,
+              0
+            ],
+            "what": "the world as baked: the camera is at its true distance from the origin"
+          },
+          {
+            "id": "near",
+            "movedBy": [
+              3750,
+              -1500
+            ],
+            "what": "the world moved so that the camera tile sits at the engine origin"
+          },
+          {
+            "id": "near2",
+            "movedBy": [
+              4250,
+              -1750
+            ],
+            "what": "the world moved by another 500 m and 250 m: the yardstick for what a move alone changes (shadow texel phase)"
+          }
+        ],
+        "frameToFrame": {
+          "far": {
+            "frames": 23,
+            "meanAbs": 0.0584,
+            "meanAbsMin": 0.0406,
+            "meanAbsMax": 0.0961,
+            "changedShare": 0.000765,
+            "changedShareMax": 0.001422
+          },
+          "near": {
+            "frames": 23,
+            "meanAbs": 0.0462,
+            "meanAbsMin": 0.0412,
+            "meanAbsMax": 0.0504,
+            "changedShare": 0.000569,
+            "changedShareMax": 0.000687
+          },
+          "near2": {
+            "frames": 23,
+            "meanAbs": 0.0461,
+            "meanAbsMin": 0.0417,
+            "meanAbsMax": 0.0512,
+            "changedShare": 0.000568,
+            "changedShareMax": 0.000687
+          }
+        },
+        "farAgainstNear": {
+          "frames": 24,
+          "meanAbs": 0.0285,
+          "meanAbsMin": 0.0134,
+          "meanAbsMax": 0.0451,
+          "changedShare": 0.000328,
+          "changedShareMax": 0.000573
+        },
+        "nearAgainstNear2": {
+          "frames": 24,
+          "meanAbs": 0.0589,
+          "meanAbsMin": 0.0584,
+          "meanAbsMax": 0.0596,
+          "changedShare": 0.001037,
+          "changedShareMax": 0.001053
+        },
+        "extraChangeFrameToFrameAtFar": 0.0122,
+        "extraDifferenceFarOverYardstick": -0.0304,
+        "stepSpread": {
+          "far": 0.95,
+          "near": 0.2,
+          "near2": 0.21,
+          "note": "(largest less smallest frame to frame change) over the mean: 0 is a perfectly even pan"
+        },
+        "shimmerVisible": false,
+        "reading": "no shimmer or shadow crawl to see at 4141 m from the origin: frame k at the far place differs from frame k at the engine origin by less than two moved worlds differ from each other. What can be measured: the pan is less even at the far place (frame to frame change 0.0406 to 0.0961 against 0.0412 to 0.0504 near the origin), because a 2 mm camera step lands on a 0.24 mm grid there. That is under a pixel at this step size",
+        "files": {
+          "frames": "harness/reports/arch/stitch/pan",
+          "first": "harness/reports/arch/stitch/pan/far_00.png",
+          "last": "harness/reports/arch/stitch/pan/far_23.png",
+          "worstDifference": "harness/reports/arch/stitch/pan_far_vs_near_diff.png",
+          "worstFrame": 7
+        },
+        "note": "frameToFrame: mean absolute difference (0 to 255) between one pan frame and the next, per mode. farAgainstNear: frame k at the far place against frame k with the world moved to the engine origin; nearAgainstNear2 is the same comparison between two moved worlds, both near the origin. changedShare is the share of pixels that differ by more than 16 of 255. The worst far against near pair is saved eight times stronger as a picture."
+      },
+      "line": "749 tiles, 625922 triangles, 6 shots, pins max 0.00017 m (0 missing), nodes not identity 0 of 2217, pan far frame to frame 0.0584 (near 0.0462), far against near 0.0285 (yardstick 0.0589), shimmer none",
+      "hostLoad": {
+        "before": {
+          "avg1": 6.71,
+          "cores": 12,
+          "perCore": 0.56
+        },
+        "after": {
+          "avg1": 5.81,
+          "cores": 12,
+          "perCore": 0.48
+        }
+      }
+    }
+  },
+  "scene": "game/bench/stitch/",
+  "writtenBy": "node harness/bench/arch.mjs stitch",
+  "at": "2026-11-11T09:57:16.703Z",
+  "machine": "macbook-pro, darwin arm64, Apple M2 Pro, 12 cores, 16 GB",
+  "godotVersion": "4.7.2.stable.official.ed1daf0bf",
+  "defaults": {
+    "resolution": "1600x1000",
+    "windowMs": 1000,
+    "warmMs": 500
+  },
+  "howMeasured": "The stitch code (tools/bake/stitch/, TypeScript, run by node harness/bench/stitch.mjs) bakes the whole stitched world twice in one Node process; bake.ms is the second run. Counts are read from the finished data: ports from the roads cut at the clip line, closures one per port, connector grades and clearances from the lane model that built them, landmark positions from the T1 tile bytes. The Godot run loads the 250 m tiles (each placed by its origin only), takes one shot per pose, reads the landmark pins and node transforms back from the engine, and runs a slow pan of 24 frames at the far district three times: as baked, and twice with the whole world moved so that the place sits near the engine origin.",
+  "data": {
+    "osmBase": "2026-11-11T00:46:50Z",
+    "buildings": "Overture footprints (BS1)",
+    "ground": "GEDTM30 v1.2 smoothed over 60 m (the P0-018 pick) inside a district; outside, the districts' grounds blended by 1 / distance squared to each clip line; one 12.5 m lattice"
+  },
+  "districts": [
+    {
+      "id": "cp",
+      "name": "Connaught Place with Jantar Mantar",
+      "stage": "pilot",
+      "group": "core",
+      "layoutId": "D0102",
+      "origin": {
+        "lat": 28.6315,
+        "lon": 77.2167
+      },
+      "offset": {
+        "x": -950,
+        "z": -1221.7
+      },
+      "heightOffset": -1.6,
+      "clip": "districts/cp.geojson",
+      "clipAreaKm2": 0.7,
+      "clipPoints": 55,
+      "worldBox": {
+        "minX": -1121,
+        "maxX": -263,
+        "minZ": -1725,
+        "maxZ": -563
+      },
+      "farthestFromOriginM": 1905,
+      "roadPiecesInside": 262
+    },
+    {
+      "id": "india_gate",
+      "name": "India Gate",
+      "stage": "pilot",
+      "group": "core",
+      "layoutId": "D03",
+      "origin": {
+        "lat": 28.612894,
+        "lon": 77.229446
+      },
+      "offset": {
+        "x": 621.6,
+        "z": 467.2
+      },
+      "heightOffset": 1,
+      "clip": "districts/india_gate.geojson",
+      "clipAreaKm2": 0.665,
+      "clipPoints": 48,
+      "worldBox": {
+        "minX": 110,
+        "maxX": 1166,
+        "minZ": 68,
+        "maxZ": 882
+      },
+      "farthestFromOriginM": 1327,
+      "roadPiecesInside": 104
+    },
+    {
+      "id": "chandni_chowk",
+      "name": "Chandni Chowk with Red Fort",
+      "stage": "pilot",
+      "group": "old_delhi",
+      "layoutId": "D09",
+      "origin": {
+        "lat": 28.6506,
+        "lon": 77.2303
+      },
+      "offset": {
+        "x": 590.5,
+        "z": -2334
+      },
+      "heightOffset": -3.1,
+      "clip": "districts/chandni_chowk.geojson",
+      "clipAreaKm2": 2.636,
+      "clipPoints": 77,
+      "worldBox": {
+        "minX": -316,
+        "maxX": 2085,
+        "minZ": -3590,
+        "maxZ": -2142
+      },
+      "farthestFromOriginM": 3886,
+      "roadPiecesInside": 459
+    },
+    {
+      "id": "laxmi_nagar",
+      "name": "Laxmi Nagar",
+      "stage": "release",
+      "group": "east",
+      "layoutId": "D12",
+      "origin": {
+        "lat": 28.6304,
+        "lon": 77.2777
+      },
+      "offset": {
+        "x": 3468.4,
+        "z": -883.5
+      },
+      "heightOffset": 3.6,
+      "clip": "districts/laxmi_nagar.geojson",
+      "clipAreaKm2": 0.605,
+      "clipPoints": 57,
+      "worldBox": {
+        "minX": 2933,
+        "maxX": 4016,
+        "minZ": -1426,
+        "maxZ": -593
+      },
+      "farthestFromOriginM": 4214,
+      "roadPiecesInside": 308
+    }
+  ],
+  "districtsNote": "The task names three districts: Connaught Place with India Gate, Chandni Chowk with Red Fort, and Laxmi Nagar. Layout C has Connaught Place (D01 with D02) and India Gate (D03) as two boxes with their own offsets, and the pilot download has them as two extracts, so they are two frames here (group \"core\"): four frames in three groups.",
+  "layout": {
+    "id": "C",
+    "source": "harness/design/map_sketches/make_sketches.mjs",
+    "worldOrigin": "the centre of the layout map box",
+    "worldBox": {
+      "minX": -1500,
+      "maxX": 4500,
+      "minZ": -4000,
+      "maxZ": 1250
+    },
+    "river": {
+      "x": 6.95,
+      "width": 0.5,
+      "y1": 6.7,
+      "y2": -2.2,
+      "bend": 0.2
+    },
+    "riverStandIn": {
+      "waterLevelM": 202.29,
+      "bedLevelM": 199.29,
+      "widthM": 500,
+      "note": "one water level, 1.2 m under the lowest bank in the world box; not a real river profile"
+    }
+  },
+  "coordinates": {
+    "x1": "project(lat, lon, district origin) + offset",
+    "x2": "project(lat, lon, one origin at India Gate 28.612894, 77.229446) + a translation that puts the district's frame origin on the same world point",
+    "perDistrict": [
+      {
+        "district": "cp",
+        "originDistanceM": 2409.5,
+        "maxM": 0.1014,
+        "maxAt": "south east corner",
+        "convergenceDeg": 0.00611,
+        "scaleMmPerKm": 0.019,
+        "points": [
+          {
+            "name": "north west corner",
+            "dM": 0.0567,
+            "dxM": 0.0537,
+            "dzM": -0.0182
+          },
+          {
+            "name": "north east corner",
+            "dM": 0.0908,
+            "dxM": 0.0537,
+            "dzM": 0.0732
+          },
+          {
+            "name": "south east corner",
+            "dM": 0.1014,
+            "dxM": -0.0702,
+            "dzM": 0.0732
+          },
+          {
+            "name": "south west corner",
+            "dM": 0.0725,
+            "dxM": -0.0702,
+            "dzM": -0.0182
+          },
+          {
+            "name": "Connaught Place inner circle",
+            "dM": 0.035,
+            "dxM": 0.0166,
+            "dzM": 0.0309
+          },
+          {
+            "name": "Jantar Mantar",
+            "dM": 0.0534,
+            "dxM": -0.0533,
+            "dzM": -0.0013
+          }
+        ]
+      },
+      {
+        "district": "india_gate",
+        "originDistanceM": 0,
+        "maxM": 0,
+        "maxAt": "",
+        "convergenceDeg": 0,
+        "scaleMmPerKm": 0,
+        "points": [
+          {
+            "name": "north west corner",
+            "dM": 0,
+            "dxM": 0,
+            "dzM": 0
+          },
+          {
+            "name": "north east corner",
+            "dM": 0,
+            "dxM": 0,
+            "dzM": 0
+          },
+          {
+            "name": "south east corner",
+            "dM": 0,
+            "dxM": 0,
+            "dzM": 0
+          },
+          {
+            "name": "south west corner",
+            "dM": 0,
+            "dxM": 0,
+            "dzM": 0
+          },
+          {
+            "name": "India Gate",
+            "dM": 0,
+            "dxM": 0,
+            "dzM": 0
+          },
+          {
+            "name": "National War Memorial",
+            "dM": 0,
+            "dxM": 0,
+            "dzM": 0
+          }
+        ]
+      },
+      {
+        "district": "chandni_chowk",
+        "originDistanceM": 4179.8,
+        "maxM": 0.014,
+        "maxAt": "north east corner",
+        "convergenceDeg": -0.00041,
+        "scaleMmPerKm": 0,
+        "points": [
+          {
+            "name": "north west corner",
+            "dM": 0.0111,
+            "dxM": -0.009,
+            "dzM": 0.0065
+          },
+          {
+            "name": "north east corner",
+            "dM": 0.014,
+            "dxM": -0.009,
+            "dzM": -0.0107
+          },
+          {
+            "name": "south east corner",
+            "dM": 0.0108,
+            "dxM": 0.0014,
+            "dzM": -0.0107
+          },
+          {
+            "name": "south west corner",
+            "dM": 0.0066,
+            "dxM": 0.0014,
+            "dzM": 0.0065
+          },
+          {
+            "name": "Red Fort",
+            "dM": 0.0079,
+            "dxM": -0.0031,
+            "dzM": -0.0073
+          },
+          {
+            "name": "Jama Masjid",
+            "dM": 0.0023,
+            "dxM": -0.0001,
+            "dzM": -0.0023
+          }
+        ]
+      },
+      {
+        "district": "laxmi_nagar",
+        "originDistanceM": 5102.1,
+        "maxM": 0.3109,
+        "maxAt": "north east corner",
+        "convergenceDeg": -0.02312,
+        "scaleMmPerKm": 0.275,
+        "points": [
+          {
+            "name": "north west corner",
+            "dM": 0.3077,
+            "dxM": -0.219,
+            "dzM": 0.2162
+          },
+          {
+            "name": "north east corner",
+            "dM": 0.3109,
+            "dxM": -0.2188,
+            "dzM": -0.2209
+          },
+          {
+            "name": "south east corner",
+            "dM": 0.2501,
+            "dxM": 0.1175,
+            "dzM": -0.2207
+          },
+          {
+            "name": "south west corner",
+            "dM": 0.2461,
+            "dxM": 0.1173,
+            "dzM": 0.2163
+          },
+          {
+            "name": "Laxmi Nagar Metro Station",
+            "dM": 0.0102,
+            "dxM": -0.0068,
+            "dzM": 0.0077
+          },
+          {
+            "name": "Government Maternity Hospital, Laxmi Nagar",
+            "dM": 0.2103,
+            "dxM": -0.2096,
+            "dzM": -0.0163
+          }
+        ]
+      }
+    ],
+    "maxDifferenceM": 0.3109,
+    "maxAt": "laxmi_nagar",
+    "reading": "X1 against X2 at the corners of each clip box and at the landmarks. The difference is the turn of north (meridian convergence) and the scale of the far origin; it is 0 for India Gate, whose frame origin is the X2 origin."
+  },
+  "clip": {
+    "perDistrict": {
+      "cp": {
+        "dc1": {
+          "areaKm2": 1.92,
+          "ringLengthM": 5600,
+          "ports": 53,
+          "big": 12,
+          "small": 41,
+          "byClass": {
+            "secondary": 12,
+            "tertiary": 4,
+            "unclassified": 1,
+            "residential": 19,
+            "service": 16,
+            "pedestrian": 1
+          },
+          "portsPerKmOfLine": 9.5,
+          "buildingsCut": 53,
+          "excursionsKept": 8,
+          "nicksDropped": 2
+        },
+        "dc2": {
+          "areaKm2": 0.7,
+          "ringLengthM": 3689,
+          "ports": 45,
+          "big": 9,
+          "small": 36,
+          "byClass": {
+            "secondary": 9,
+            "tertiary": 4,
+            "unclassified": 3,
+            "residential": 10,
+            "service": 19
+          },
+          "portsPerKmOfLine": 12.2,
+          "buildingsCut": 31,
+          "excursionsKept": 1,
+          "nicksDropped": 3
+        },
+        "roadEndsOnTheLineWithoutAPort": 0,
+        "edges": "south: Tolstoy Marg (Jantar Mantar stays inside); west: Sansad Marg, then the Outer Circle; north: the Outer Circle; east: the Outer Circle and Kasturba Gandhi Marg"
+      },
+      "india_gate": {
+        "dc1": {
+          "areaKm2": 1.04,
+          "ringLengthM": 4200,
+          "ports": 46,
+          "big": 14,
+          "small": 32,
+          "byClass": {
+            "secondary": 14,
+            "tertiary": 2,
+            "unclassified": 1,
+            "residential": 4,
+            "service": 24,
+            "pedestrian": 1
+          },
+          "portsPerKmOfLine": 11,
+          "buildingsCut": 36,
+          "excursionsKept": 3,
+          "nicksDropped": 1
+        },
+        "dc2": {
+          "areaKm2": 0.665,
+          "ringLengthM": 3441,
+          "ports": 32,
+          "big": 12,
+          "small": 20,
+          "byClass": {
+            "secondary": 12,
+            "tertiary": 1,
+            "unclassified": 1,
+            "residential": 1,
+            "service": 16,
+            "pedestrian": 1
+          },
+          "portsPerKmOfLine": 9.3,
+          "buildingsCut": 19,
+          "excursionsKept": 1,
+          "nicksDropped": 2
+        },
+        "roadEndsOnTheLineWithoutAPort": 0,
+        "edges": "the C-Hexagon all round; west: Man Singh Road between Ashoka Road and Akbar Road"
+      },
+      "chandni_chowk": {
+        "dc1": {
+          "areaKm2": 1.76,
+          "ringLengthM": 5400,
+          "ports": 51,
+          "big": 3,
+          "small": 48,
+          "byClass": {
+            "secondary": 3,
+            "tertiary": 5,
+            "unclassified": 3,
+            "residential": 33,
+            "living_street": 2,
+            "service": 4,
+            "pedestrian": 1
+          },
+          "portsPerKmOfLine": 9.4,
+          "buildingsCut": 167,
+          "excursionsKept": 0,
+          "nicksDropped": 0
+        },
+        "dc2": {
+          "areaKm2": 2.636,
+          "ringLengthM": 6916,
+          "ports": 49,
+          "big": 7,
+          "small": 42,
+          "byClass": {
+            "trunk": 2,
+            "secondary": 5,
+            "tertiary": 7,
+            "unclassified": 4,
+            "residential": 20,
+            "service": 10,
+            "pedestrian": 1
+          },
+          "portsPerKmOfLine": 7.1,
+          "buildingsCut": 207,
+          "excursionsKept": 3,
+          "nicksDropped": 0
+        },
+        "roadEndsOnTheLineWithoutAPort": 0,
+        "edges": "north: Shyama Prasad Mukherji Marg (the rail yard beyond); east: Mahatma Gandhi Marg (the Ring Road) behind the Red Fort; south: Nishadraj Marg, the park edge, Urdu Bazaar Road and Chawri Bazar; west: Lal Kuan Bazar and Church Mission Road"
+      },
+      "laxmi_nagar": {
+        "dc1": {
+          "areaKm2": 1.2,
+          "ringLengthM": 4400,
+          "ports": 57,
+          "big": 9,
+          "small": 48,
+          "byClass": {
+            "trunk": 7,
+            "primary": 1,
+            "secondary": 1,
+            "tertiary": 1,
+            "unclassified": 3,
+            "residential": 44
+          },
+          "portsPerKmOfLine": 13,
+          "buildingsCut": 126,
+          "excursionsKept": 1,
+          "nicksDropped": 2
+        },
+        "dc2": {
+          "areaKm2": 0.605,
+          "ringLengthM": 3439,
+          "ports": 46,
+          "big": 6,
+          "small": 40,
+          "byClass": {
+            "trunk": 1,
+            "primary": 4,
+            "secondary": 1,
+            "unclassified": 3,
+            "residential": 35,
+            "service": 2
+          },
+          "portsPerKmOfLine": 13.4,
+          "buildingsCut": 109,
+          "excursionsKept": 1,
+          "nicksDropped": 3
+        },
+        "roadEndsOnTheLineWithoutAPort": 0,
+        "edges": "west: Dadri Road (the interchange with the river bank road stays outside); south: Vikas Marg and Mother Dairy Road; north and east have no hard edge: the line follows residential streets of Shakarpur and Laxmi Nagar"
+      }
+    },
+    "totals": {
+      "dc1Ports": 207,
+      "dc2Ports": 172,
+      "dc1BuildingsCut": 382,
+      "dc2BuildingsCut": 366
+    },
+    "portRule": "a port is where a carriageway crosses the clip line; crossings within 32 m that leave the same way are one port; a road that leaves and is back inside within 160 m stays whole; a road inside for under 15 m is dropped",
+    "dc3": {
+      "bandM": 80,
+      "shellsDroppedForStreetsAndConnectors": 417,
+      "perDistrict": {
+        "cp": {
+          "buildingsInside": 271,
+          "shells": 161,
+          "lineWithDataOutside": 1,
+          "bandBytes": 214016,
+          "districtBytes": 1503200,
+          "share": 0.142
+        },
+        "india_gate": {
+          "buildingsInside": 87,
+          "shells": 159,
+          "lineWithDataOutside": 1,
+          "bandBytes": 181396,
+          "districtBytes": 898940,
+          "share": 0.202
+        },
+        "chandni_chowk": {
+          "buildingsInside": 7121,
+          "shells": 1540,
+          "lineWithDataOutside": 0.84,
+          "bandBytes": 1466232,
+          "districtBytes": 10150112,
+          "share": 0.144
+        },
+        "laxmi_nagar": {
+          "buildingsInside": 1589,
+          "shells": 599,
+          "lineWithDataOutside": 1,
+          "bandBytes": 548892,
+          "districtBytes": 2356932,
+          "share": 0.233
+        }
+      },
+      "bandBytes": 2410536,
+      "districtBytes": 14909184,
+      "share": 0.162,
+      "note": "T1 tile bytes of the band shells (extruded footprints whose centre is up to 80 m outside the clip line, no roads, no ground) against the tiles of the district itself (ground, road ribbons, footprints). Stand-in geometry on both sides."
+    }
+  },
+  "connectors": {
+    "sc1": [
+      {
+        "id": "minto_road_flyover",
+        "file": "connectors/minto_road_flyover.json",
+        "built": true,
+        "name": "Ranjit Singh Flyover",
+        "standsFor": "Swami Vivekanand Marg (Minto Road) out of Connaught Place, the Ranjit Singh Flyover over the railway lines east of New Delhi station, then Jawaharlal Nehru Marg to Delhi Gate and Netaji Subhash Marg",
+        "kind": "flyover",
+        "class": "secondary",
+        "lanes": {
+          "forward": 2,
+          "backward": 2
+        },
+        "controlPoints": 11,
+        "from": {
+          "district": "cp",
+          "port": "Vivekanand Marg",
+          "ports": [
+            "cp:p22"
+          ],
+          "portAt": {
+            "x": -463.06,
+            "z": -1665.01
+          },
+          "portDirection": {
+            "x": 0.537,
+            "z": -0.843
+          },
+          "endOffPortM": 0.04
+        },
+        "to": {
+          "district": "chandni_chowk",
+          "port": "Netaji Subhash Marg",
+          "ports": [
+            "chandni_chowk:p23"
+          ],
+          "portAt": {
+            "x": 1472.66,
+            "z": -2210.52
+          },
+          "portDirection": {
+            "x": 0.539,
+            "z": 0.842
+          },
+          "endOffPortM": 0.04
+        },
+        "lengthM": 2444,
+        "widthM": 17.8,
+        "radius": {
+          "minM": 64,
+          "limitM": 50,
+          "violations": 0
+        },
+        "grade": {
+          "maxPct": 4.74,
+          "limitPct": 6,
+          "violations": 0
+        },
+        "clearance": {
+          "minM": 5.72,
+          "violations": 0,
+          "neededM": 5.5
+        },
+        "structureM": 368,
+        "maxAboveGroundM": 7,
+        "floating": 1,
+        "sunk": 1,
+        "heights": {
+          "startM": 214.88,
+          "endM": 214.23,
+          "climbM": -0.65,
+          "portGroundStartM": 214.89,
+          "portGroundEndM": 214.24,
+          "stepAtStartM": 0.01,
+          "stepAtEndM": 0.01
+        },
+        "laneModel": {
+          "strips": 2,
+          "triangles": 20844,
+          "overlapM2": 0,
+          "continuityBreaks": 0,
+          "taperViolations": 0,
+          "heightSteps": 0,
+          "problems": []
+        },
+        "buildMs": 125
+      },
+      {
+        "id": "ring_road_arc",
+        "file": "connectors/ring_road_arc.json",
+        "built": true,
+        "name": "Ring Road",
+        "standsFor": "Mahatma Gandhi Marg (the Ring Road) on the west bank of the Yamuna from the Red Fort down to ITO, then Tilak Marg to the C-Hexagon",
+        "kind": "ring_arc",
+        "class": "trunk",
+        "lanes": {
+          "forward": 3,
+          "backward": 3
+        },
+        "controlPoints": 10,
+        "from": {
+          "district": "chandni_chowk",
+          "port": "Mahatma Gandhi Marg",
+          "ports": [
+            "chandni_chowk:p18"
+          ],
+          "portAt": {
+            "x": 2051.69,
+            "z": -2317.67
+          },
+          "portDirection": {
+            "x": 0.379,
+            "z": 0.925
+          },
+          "endOffPortM": 0.03
+        },
+        "to": {
+          "district": "india_gate",
+          "port": "Tilak Marg",
+          "ports": [
+            "india_gate:p05"
+          ],
+          "portAt": {
+            "x": 990.53,
+            "z": 167.04
+          },
+          "portDirection": {
+            "x": 0.561,
+            "z": -0.828
+          },
+          "endOffPortM": 0.05
+        },
+        "lengthM": 2945,
+        "widthM": 21.6,
+        "radius": {
+          "minM": 193,
+          "limitM": 120,
+          "violations": 0
+        },
+        "grade": {
+          "maxPct": 2.12,
+          "limitPct": 5,
+          "violations": 0
+        },
+        "clearance": {
+          "minM": null,
+          "violations": 0,
+          "neededM": 5.5
+        },
+        "structureM": 0,
+        "maxAboveGroundM": 0.1,
+        "floating": 0,
+        "sunk": 0,
+        "heights": {
+          "startM": 205.74,
+          "endM": 215.07,
+          "climbM": 9.33,
+          "portGroundStartM": 205.76,
+          "portGroundEndM": 215.04,
+          "stepAtStartM": 0.02,
+          "stepAtEndM": 0.03
+        },
+        "laneModel": {
+          "strips": 1,
+          "triangles": 24674,
+          "overlapM2": 0,
+          "continuityBreaks": 0,
+          "taperViolations": 0,
+          "heightSteps": 0,
+          "problems": []
+        },
+        "buildMs": 74
+      },
+      {
+        "id": "vikas_marg_bridge",
+        "file": "connectors/vikas_marg_bridge.json",
+        "built": true,
+        "name": "Vikas Marg",
+        "standsFor": "Vikas Marg and the ITO bridge over the Yamuna into East Delhi; its west end stands for Purana Quila Road and Mathura Road up to ITO",
+        "kind": "bridge",
+        "class": "primary",
+        "lanes": {
+          "forward": 3,
+          "backward": 3
+        },
+        "controlPoints": 8,
+        "from": {
+          "district": "india_gate",
+          "port": "Purana Quila Road",
+          "ports": [
+            "india_gate:p09"
+          ],
+          "portAt": {
+            "x": 1147.59,
+            "z": 293.03
+          },
+          "portDirection": {
+            "x": 0.916,
+            "z": -0.401
+          },
+          "endOffPortM": 0.03
+        },
+        "to": {
+          "district": "laxmi_nagar",
+          "port": "Vikas Marg",
+          "ports": [
+            "laxmi_nagar:p00",
+            "laxmi_nagar:p01"
+          ],
+          "portAt": {
+            "x": 3033.66,
+            "z": -639.32
+          },
+          "portDirection": {
+            "x": -0.994,
+            "z": 0.11
+          },
+          "endOffPortM": 0.02
+        },
+        "lengthM": 2120,
+        "widthM": 25.6,
+        "radius": {
+          "minM": 147,
+          "limitM": 80,
+          "violations": 0
+        },
+        "grade": {
+          "maxPct": 0.56,
+          "limitPct": 5,
+          "violations": 0
+        },
+        "clearance": {
+          "minM": null,
+          "violations": 0,
+          "neededM": 5.5
+        },
+        "structureM": 631,
+        "maxAboveGroundM": 13.72,
+        "floating": 0,
+        "sunk": 0,
+        "heights": {
+          "startM": 214.6,
+          "endM": 212.89,
+          "climbM": -1.71,
+          "portGroundStartM": 214.58,
+          "portGroundEndM": 212.61,
+          "stepAtStartM": 0.02,
+          "stepAtEndM": 0.28
+        },
+        "laneModel": {
+          "strips": 1,
+          "triangles": 21004,
+          "overlapM2": 0,
+          "continuityBreaks": 0,
+          "taperViolations": 0,
+          "heightSteps": 0,
+          "problems": []
+        },
+        "buildMs": 50
+      }
+    ],
+    "byClass": {
+      "secondary": {
+        "connectors": 1,
+        "gradeViolations": 0,
+        "radiusViolations": 0,
+        "clearanceViolations": 0
+      },
+      "trunk": {
+        "connectors": 1,
+        "gradeViolations": 0,
+        "radiusViolations": 0,
+        "clearanceViolations": 0
+      },
+      "primary": {
+        "connectors": 1,
+        "gradeViolations": 0,
+        "radiusViolations": 0,
+        "clearanceViolations": 0
+      }
+    },
+    "sc2": {
+      "tried": true,
+      "what": "the real Ring Road from the Red Fort port to the Bhairon Marg junction (abeam of India Gate), moved onto the two ports of the authored ring road arc by one similarity (one scale, one turn)",
+      "realLengthM": 4205,
+      "fromDataM": 2938,
+      "straightFillM": 1267,
+      "osmNodes": 38,
+      "authoredArcLengthM": 2945,
+      "realRadius": {
+        "minM": 219,
+        "violations": 0
+      },
+      "under": [
+        {
+          "name": "Indra Prasth Marg",
+          "carriageways": 2
+        }
+      ],
+      "ratio": 0.646,
+      "turnDeg": 30.7,
+      "gameLengthM": 2718,
+      "radius": {
+        "limitM": 120,
+        "minM": 214,
+        "violations": 0,
+        "lengthBelowM": 0
+      },
+      "bridges": [
+        {
+          "realLengthM": 557,
+          "shortenedLengthM": 360
+        }
+      ],
+      "layout": {
+        "metresInTheRiver": 0,
+        "metresInsideOtherDistricts": 0
+      },
+      "built": true,
+      "grade": {
+        "limitPct": 5,
+        "maxPct": 4.85,
+        "violations": 0
+      },
+      "clearance": {
+        "minM": 5.73,
+        "violations": 0,
+        "neededM": 5.5
+      },
+      "floating": 0,
+      "sunk": 0,
+      "structureM": 360,
+      "maxAboveGroundM": 6.94,
+      "crossStreetBelowGroundM": 0.32,
+      "laneModel": {
+        "taperViolations": 0,
+        "overlapM2": 0,
+        "problems": [],
+        "buildMs": 92
+      },
+      "sweep": [
+        {
+          "ratio": 0.5,
+          "gameLengthM": 2104,
+          "radiusMinM": 202,
+          "radiusViolations": 0,
+          "bridgeLengthM": [
+            279
+          ],
+          "built": true,
+          "gradeMaxPct": 5.04,
+          "gradeViolations": 0,
+          "clearanceMinM": 5.7,
+          "clearanceViolations": 0,
+          "floating": 0,
+          "sunk": 0,
+          "deckAboveGroundM": 6.74,
+          "crossStreetBelowGroundM": 0.32,
+          "structureM": 304,
+          "structureShare": 0.144
+        },
+        {
+          "ratio": 0.4,
+          "gameLengthM": 1683,
+          "radiusMinM": 181,
+          "radiusViolations": 0,
+          "bridgeLengthM": [
+            223
+          ],
+          "built": true,
+          "gradeMaxPct": 5.09,
+          "gradeViolations": 0,
+          "clearanceMinM": 5.65,
+          "clearanceViolations": 0,
+          "floating": 0,
+          "sunk": 1,
+          "deckAboveGroundM": 6.41,
+          "crossStreetBelowGroundM": 0.65,
+          "structureM": 272,
+          "structureShare": 0.162
+        },
+        {
+          "ratio": 0.3,
+          "gameLengthM": 1262,
+          "radiusMinM": 156,
+          "radiusViolations": 0,
+          "bridgeLengthM": [
+            167
+          ],
+          "built": true,
+          "gradeMaxPct": 5.16,
+          "gradeViolations": 0,
+          "clearanceMinM": 5.54,
+          "clearanceViolations": 0,
+          "floating": 0,
+          "sunk": 1,
+          "deckAboveGroundM": 5.5,
+          "crossStreetBelowGroundM": 1.6,
+          "structureM": 239,
+          "structureShare": 0.189
+        },
+        {
+          "ratio": 0.2,
+          "gameLengthM": 842,
+          "radiusMinM": 125,
+          "radiusViolations": 0,
+          "bridgeLengthM": [
+            111
+          ],
+          "built": true,
+          "gradeMaxPct": 5.2,
+          "gradeViolations": 0,
+          "clearanceMinM": 5.35,
+          "clearanceViolations": 1,
+          "floating": 0,
+          "sunk": 1,
+          "deckAboveGroundM": 4.82,
+          "crossStreetBelowGroundM": 2.25,
+          "structureM": 204,
+          "structureShare": 0.242
+        }
+      ],
+      "sweepNote": "the same real shape at smaller ratios, from the same start port and with the same turn. The cross street under the flyover keeps its width; the deck must still clear it by 5.5 m. The solver keeps the grade limit by starting the ramps earlier, outside the stretch that the real road has as a bridge: structureM grows past bridgeLengthM, and structureShare is the part of the whole connector that is ramp or deck.",
+      "spec": {
+        "id": "sc2_ring_road_trial",
+        "name": "Ring Road (real shape, shortened)",
+        "standsFor": "Mahatma Gandhi Marg (the Ring Road) on the west bank of the Yamuna from the Red Fort down to ITO, then Tilak Marg to the C-Hexagon",
+        "kind": "ring_arc",
+        "status": "generated",
+        "class": "trunk",
+        "lanes": {
+          "forward": 3,
+          "backward": 3
+        },
+        "from": {
+          "district": "chandni_chowk",
+          "port": "Mahatma Gandhi Marg"
+        },
+        "to": {
+          "district": "india_gate",
+          "port": "Tilak Marg"
+        },
+        "points": [
+          {
+            "x": 2051.69,
+            "z": -2317.67
+          },
+          {
+            "x": 1716.6,
+            "z": -1570.61
+          },
+          {
+            "x": 1707.03,
+            "z": -1553.6
+          },
+          {
+            "x": 1646.61,
+            "z": -1449.93
+          },
+          {
+            "x": 1540.08,
+            "z": -1271.65
+          },
+          {
+            "x": 1523.98,
+            "z": -1244.56
+          },
+          {
+            "x": 1494.48,
+            "z": -1194.94
+          },
+          {
+            "x": 1472.28,
+            "z": -1156.89
+          },
+          {
+            "x": 1469.88,
+            "z": -1152.77
+          },
+          {
+            "x": 1467.15,
+            "z": -1147.88
+          },
+          {
+            "x": 1424.92,
+            "z": -1069.89
+          },
+          {
+            "x": 1416.58,
+            "z": -1055.09
+          },
+          {
+            "x": 1332.01,
+            "z": -908.27
+          },
+          {
+            "x": 1317.36,
+            "z": -883.81
+          },
+          {
+            "x": 1300.24,
+            "z": -854.36
+          },
+          {
+            "x": 1294.12,
+            "z": -844.26
+          },
+          {
+            "x": 1268.22,
+            "z": -800.09
+          },
+          {
+            "x": 1259.53,
+            "z": -785.69
+          },
+          {
+            "x": 1238.38,
+            "z": -742.32
+          },
+          {
+            "x": 1226.32,
+            "z": -707.1
+          },
+          {
+            "x": 1225.43,
+            "z": -703.61
+          },
+          {
+            "x": 1223.4,
+            "z": -696.96
+          },
+          {
+            "x": 1177.66,
+            "z": -548.34
+          },
+          {
+            "x": 1145.9,
+            "z": -426.74
+          },
+          {
+            "x": 1132.54,
+            "z": -375.88
+          },
+          {
+            "x": 1128.84,
+            "z": -361.84
+          },
+          {
+            "x": 1111.62,
+            "z": -296.16
+          },
+          {
+            "x": 1096.95,
+            "z": -240.22
+          },
+          {
+            "x": 1092.65,
+            "z": -223.83
+          },
+          {
+            "x": 1086.36,
+            "z": -199.87
+          },
+          {
+            "x": 1082.2,
+            "z": -184.02
+          },
+          {
+            "x": 1076.79,
+            "z": -163.39
+          },
+          {
+            "x": 1067.11,
+            "z": -126.47
+          },
+          {
+            "x": 1053.25,
+            "z": -70.35
+          },
+          {
+            "x": 1026.99,
+            "z": 31.3
+          },
+          {
+            "x": 1015.81,
+            "z": 75.3
+          },
+          {
+            "x": 994.26,
+            "z": 149.93
+          },
+          {
+            "x": 990.53,
+            "z": 167.04
+          }
+        ],
+        "spans": [
+          {
+            "from": 11,
+            "to": 18,
+            "kind": "bridge",
+            "layer": 1,
+            "over": "what the real bridge passes over"
+          }
+        ],
+        "under": [
+          {
+            "id": "under_0",
+            "name": "Indra Prasth Marg",
+            "class": "secondary",
+            "lanes": 4,
+            "points": [
+              {
+                "x": 1384.07,
+                "z": -859.01
+              },
+              {
+                "x": 1262.13,
+                "z": -927.78
+              }
+            ]
+          }
+        ]
+      }
+    }
+  },
+  "filler": {
+    "rule": "FL1: small ports closer than 140 m along the clip line are joined by a generated back street 26 m outside; a single through street ends in a turning loop; a service road in a gate; a lane at a wall. Big ports (secondary and up) need an authored connector.",
+    "perDistrict": {
+      "cp": {
+        "ports": 45,
+        "big": 9,
+        "small": 36,
+        "byKind": {
+          "connector": 1,
+          "street_net": 31,
+          "loop": 4,
+          "gate": 1,
+          "dead_end": 0,
+          "open": 8
+        },
+        "auto": 36,
+        "autoReview": 1,
+        "authored": 1,
+        "open": 8,
+        "autoShare": 0.8,
+        "withoutClosure": 0,
+        "review": [
+          "Shaheed Bhagat Singh Marg has no neighbour within 140 m: it ends in a turning loop (a through street: check that a loop is right)"
+        ]
+      },
+      "india_gate": {
+        "ports": 32,
+        "big": 12,
+        "small": 20,
+        "byKind": {
+          "connector": 2,
+          "street_net": 12,
+          "loop": 1,
+          "gate": 7,
+          "dead_end": 0,
+          "open": 10
+        },
+        "auto": 20,
+        "autoReview": 0,
+        "authored": 2,
+        "open": 10,
+        "autoShare": 0.625,
+        "withoutClosure": 0,
+        "review": []
+      },
+      "chandni_chowk": {
+        "ports": 49,
+        "big": 7,
+        "small": 42,
+        "byKind": {
+          "connector": 2,
+          "street_net": 36,
+          "loop": 2,
+          "gate": 3,
+          "dead_end": 1,
+          "open": 5
+        },
+        "auto": 42,
+        "autoReview": 0,
+        "authored": 2,
+        "open": 5,
+        "autoShare": 0.857,
+        "withoutClosure": 0,
+        "review": []
+      },
+      "laxmi_nagar": {
+        "ports": 46,
+        "big": 6,
+        "small": 40,
+        "byKind": {
+          "connector": 2,
+          "street_net": 39,
+          "loop": 1,
+          "gate": 0,
+          "dead_end": 0,
+          "open": 4
+        },
+        "auto": 40,
+        "autoReview": 0,
+        "authored": 2,
+        "open": 4,
+        "autoShare": 0.87,
+        "withoutClosure": 0,
+        "review": []
+      }
+    },
+    "totals": {
+      "ports": 172,
+      "big": 34,
+      "small": 138,
+      "closedAutomatically": 138,
+      "automaticButToReview": 1,
+      "joinedByAuthoredConnector": 7,
+      "needAnAuthoredConnector": 27,
+      "autoShare": 0.802,
+      "needAuthoredShare": 0.198
+    },
+    "byKind": {
+      "connector": 7,
+      "street_net": 118,
+      "loop": 8,
+      "gate": 11,
+      "dead_end": 1,
+      "open": 27
+    },
+    "needAnAuthoredConnector": [
+      {
+        "district": "cp",
+        "port": "cp:p06",
+        "reason": "needs an authored connector: Sansad Marg (secondary)"
+      },
+      {
+        "district": "cp",
+        "port": "cp:p15",
+        "reason": "needs an authored connector: Baba Kharak Singh Marg (secondary)"
+      },
+      {
+        "district": "cp",
+        "port": "cp:p17",
+        "reason": "needs an authored connector: Panchkuian Road (secondary)"
+      },
+      {
+        "district": "cp",
+        "port": "cp:p19",
+        "reason": "needs an authored connector: Chelmsford Road (secondary)"
+      },
+      {
+        "district": "cp",
+        "port": "cp:p29",
+        "reason": "needs an authored connector: Barakhamba Road (secondary)"
+      },
+      {
+        "district": "cp",
+        "port": "cp:p38",
+        "reason": "needs an authored connector: Tolstoy Marg (secondary)"
+      },
+      {
+        "district": "cp",
+        "port": "cp:p39",
+        "reason": "needs an authored connector: Kasturba Gandhi Marg (secondary)"
+      },
+      {
+        "district": "cp",
+        "port": "cp:p44",
+        "reason": "needs an authored connector: Janpath (secondary)"
+      },
+      {
+        "district": "india_gate",
+        "port": "india_gate:p02",
+        "reason": "needs an authored connector: Kasturba Gandhi Marg (secondary)"
+      },
+      {
+        "district": "india_gate",
+        "port": "india_gate:p13",
+        "reason": "needs an authored connector: Sher Shah Road (secondary)"
+      },
+      {
+        "district": "india_gate",
+        "port": "india_gate:p16",
+        "reason": "needs an authored connector: Doctor Zakir Hussain Marg (secondary)"
+      },
+      {
+        "district": "india_gate",
+        "port": "india_gate:p20",
+        "reason": "needs an authored connector: Pandara Road (secondary)"
+      },
+      {
+        "district": "india_gate",
+        "port": "india_gate:p21",
+        "reason": "needs an authored connector: Pandara Road (secondary)"
+      },
+      {
+        "district": "india_gate",
+        "port": "india_gate:p23",
+        "reason": "needs an authored connector: Shahjahan Road (secondary)"
+      },
+      {
+        "district": "india_gate",
+        "port": "india_gate:p25",
+        "reason": "needs an authored connector: rotary no 15 (secondary)"
+      },
+      {
+        "district": "india_gate",
+        "port": "india_gate:p26",
+        "reason": "needs an authored connector: Maulana Azad Road (secondary)"
+      },
+      {
+        "district": "india_gate",
+        "port": "india_gate:p28",
+        "reason": "needs an authored connector: Kartavya Path (secondary)"
+      },
+      {
+        "district": "india_gate",
+        "port": "india_gate:p31",
+        "reason": "needs an authored connector: Doctor Rajendra Prasad Road (secondary)"
+      },
+      {
+        "district": "chandni_chowk",
+        "port": "chandni_chowk:p05",
+        "reason": "needs an authored connector: Kela Ghat Marg (secondary)"
+      },
+      {
+        "district": "chandni_chowk",
+        "port": "chandni_chowk:p08",
+        "reason": "needs an authored connector: Hanuman Mandir Flyover (trunk)"
+      },
+      {
+        "district": "chandni_chowk",
+        "port": "chandni_chowk:p12",
+        "reason": "needs an authored connector: Ring Road (trunk)"
+      },
+      {
+        "district": "chandni_chowk",
+        "port": "chandni_chowk:p17",
+        "reason": "needs an authored connector: Raja Ram Kohli Marg (secondary)"
+      },
+      {
+        "district": "chandni_chowk",
+        "port": "chandni_chowk:p48",
+        "reason": "needs an authored connector: Shyama Prasad Mukherji Marg (secondary)"
+      },
+      {
+        "district": "laxmi_nagar",
+        "port": "laxmi_nagar:p02",
+        "reason": "needs an authored connector: Dadri Road (primary link)"
+      },
+      {
+        "district": "laxmi_nagar",
+        "port": "laxmi_nagar:p23",
+        "reason": "needs an authored connector: Vikas Marg (primary)"
+      },
+      {
+        "district": "laxmi_nagar",
+        "port": "laxmi_nagar:p37",
+        "reason": "needs an authored connector: Mother Dairy Road (secondary)"
+      },
+      {
+        "district": "laxmi_nagar",
+        "port": "laxmi_nagar:p45",
+        "reason": "needs an authored connector: unnamed road (trunk link)"
+      }
+    ]
+  },
+  "checks": {
+    "openBoundaryPorts": 0,
+    "openBoundaryPortsNote": "ports with no closure at all (a road that would end in the air). Big ports with no connector yet are closed by a barrier and listed under portsWaitingForAConnector.",
+    "portsWaitingForAConnector": 27,
+    "roadEndsOnTheClipLineWithoutAPort": 0,
+    "connectorGradeViolations": 0,
+    "connectorRadiusViolations": 0,
+    "connectorViolationsByClass": {
+      "secondary": {
+        "connectors": 1,
+        "gradeViolations": 0,
+        "radiusViolations": 0,
+        "clearanceViolations": 0
+      },
+      "trunk": {
+        "connectors": 1,
+        "gradeViolations": 0,
+        "radiusViolations": 0,
+        "clearanceViolations": 0
+      },
+      "primary": {
+        "connectors": 1,
+        "gradeViolations": 0,
+        "radiusViolations": 0,
+        "clearanceViolations": 0
+      }
+    },
+    "connectorEndsOffPort": 0,
+    "overlappingClipPolygons": 0,
+    "overlapAreaM2": 0,
+    "minGapM": 803.6,
+    "minGapBetween": [
+      "cp",
+      "chandni_chowk"
+    ],
+    "clipPairs": [
+      {
+        "a": "cp",
+        "b": "india_gate",
+        "overlapM2": 0,
+        "gapM": 812.5
+      },
+      {
+        "a": "cp",
+        "b": "chandni_chowk",
+        "overlapM2": 0,
+        "gapM": 803.6
+      },
+      {
+        "a": "cp",
+        "b": "laxmi_nagar",
+        "overlapM2": 0,
+        "gapM": 3206.7
+      },
+      {
+        "a": "india_gate",
+        "b": "chandni_chowk",
+        "overlapM2": 0,
+        "gapM": 2213.4
+      },
+      {
+        "a": "india_gate",
+        "b": "laxmi_nagar",
+        "overlapM2": 0,
+        "gapM": 2089.9
+      },
+      {
+        "a": "chandni_chowk",
+        "b": "laxmi_nagar",
+        "overlapM2": 0,
+        "gapM": 1420.5
+      }
+    ],
+    "landmarkErrorMaxM": 0.000006,
+    "landmarkPinsMissing": 0,
+    "landmarks": [
+      {
+        "id": "red_fort",
+        "name": "Red Fort",
+        "district": "chandni_chowk",
+        "osm": "way/264863907",
+        "points": 8,
+        "missing": 0,
+        "maxM": 0.000004,
+        "meanM": 0.000002,
+        "expected": {
+          "x": 1607.564,
+          "z": -2772.048
+        },
+        "baked": {
+          "x": 1607.564,
+          "z": -2772.048
+        },
+        "insideClip": true
+      },
+      {
+        "id": "jama_masjid",
+        "name": "Jama Masjid",
+        "district": "chandni_chowk",
+        "osm": "way/265824669",
+        "points": 8,
+        "missing": 0,
+        "maxM": 0.000004,
+        "meanM": 0.000003,
+        "expected": {
+          "x": 907.894,
+          "z": -2352.517
+        },
+        "baked": {
+          "x": 907.894,
+          "z": -2352.517
+        },
+        "insideClip": true
+      },
+      {
+        "id": "india_gate",
+        "name": "India Gate",
+        "district": "india_gate",
+        "osm": "way/361709652",
+        "points": 8,
+        "missing": 0,
+        "maxM": 0.000006,
+        "meanM": 0.000004,
+        "expected": {
+          "x": 626.11,
+          "z": 462.918
+        },
+        "baked": {
+          "x": 626.11,
+          "z": 462.918
+        },
+        "insideClip": true
+      },
+      {
+        "id": "cp_inner_circle",
+        "name": "Connaught Place inner circle",
+        "district": "cp",
+        "osm": "way/23133486",
+        "points": 8,
+        "missing": 0,
+        "maxM": 0.000004,
+        "meanM": 0.000002,
+        "expected": {
+          "x": -660.384,
+          "z": -1376.999
+        },
+        "baked": {
+          "x": -660.384,
+          "z": -1376.999
+        },
+        "insideClip": true
+      }
+    ],
+    "otherLandmarks": [
+      {
+        "id": "jantar_mantar",
+        "name": "Jantar Mantar",
+        "district": "cp",
+        "osm": "way/223456559",
+        "points": 8,
+        "missing": 0,
+        "maxM": 0.000004,
+        "meanM": 0.000002,
+        "expected": {
+          "x": -962.133,
+          "z": -721.21
+        },
+        "baked": {
+          "x": -962.133,
+          "z": -721.21
+        },
+        "insideClip": true
+      },
+      {
+        "id": "war_memorial",
+        "name": "National War Memorial",
+        "district": "india_gate",
+        "osm": "way/839844477",
+        "points": 8,
+        "missing": 0,
+        "maxM": 0.000006,
+        "meanM": 0.000002,
+        "expected": {
+          "x": 972.162,
+          "z": 482.27
+        },
+        "baked": {
+          "x": 972.162,
+          "z": 482.27
+        },
+        "insideClip": true
+      },
+      {
+        "id": "laxmi_nagar_metro",
+        "name": "Laxmi Nagar Metro Station",
+        "district": "laxmi_nagar",
+        "osm": "way/700096133",
+        "points": 8,
+        "missing": 0,
+        "maxM": 0.000004,
+        "meanM": 0.000002,
+        "expected": {
+          "x": 3449.419,
+          "z": -900.23
+        },
+        "baked": {
+          "x": 3449.419,
+          "z": -900.23
+        },
+        "insideClip": true
+      },
+      {
+        "id": "laxmi_nagar_hospital",
+        "name": "Government Maternity Hospital, Laxmi Nagar",
+        "district": "laxmi_nagar",
+        "osm": "way/386327383",
+        "points": 4,
+        "missing": 0,
+        "maxM": 0.000004,
+        "meanM": 0.000003,
+        "expected": {
+          "x": 3508.507,
+          "z": -1402.956
+        },
+        "baked": {
+          "x": 3508.507,
+          "z": -1402.956
+        },
+        "insideClip": false
+      }
+    ],
+    "landmarkNote": "expected: district offset plus the projection of the OSM node (degrees) around the district origin. baked: the pin of that node read back from the T1 tile bytes (32-bit floats relative to the tile, plus the tile origin). The pin was placed from the projected map model, so the error covers the origin, the offset, the tile cut and the float format.",
+    "relativeLayout": {
+      "maxDistanceErrorM": 0.0009,
+      "maxBearingErrorDeg": 0.00173,
+      "redFortNorthEastOfJamaMasjid": true,
+      "pairs": [
+        {
+          "from": "Jama Masjid",
+          "to": "Red Fort",
+          "realM": 815.807,
+          "bakedM": 815.808,
+          "errorM": 0.0009,
+          "realBearingDeg": 59.0543,
+          "bakedBearingDeg": 59.0526,
+          "bearingErrorDeg": 0.00173
+        },
+        {
+          "from": "India Gate",
+          "to": "National War Memorial",
+          "realM": 346.593,
+          "bakedM": 346.593,
+          "errorM": 0,
+          "realBearingDeg": 93.2009,
+          "bakedBearingDeg": 93.2008,
+          "bearingErrorDeg": 0.00003
+        },
+        {
+          "from": "Connaught Place inner circle",
+          "to": "Jantar Mantar",
+          "realM": 721.88,
+          "bakedM": 721.88,
+          "errorM": 0.0002,
+          "realBearingDeg": 204.71,
+          "bakedBearingDeg": 204.7086,
+          "bearingErrorDeg": 0.00143
+        },
+        {
+          "from": "Laxmi Nagar Metro Station",
+          "to": "Government Maternity Hospital, Laxmi Nagar",
+          "realM": 506.187,
+          "bakedM": 506.187,
+          "errorM": 0.0001,
+          "realBearingDeg": 6.7034,
+          "bakedBearingDeg": 6.7035,
+          "bearingErrorDeg": 0.00011
+        }
+      ],
+      "note": "real: geodesic distance and bearing on the WGS84 ellipsoid (Vincenty), which shares no code with the projection. baked: between the mean pin positions read from the tiles."
+    },
+    "rotation": {
+      "transformsChecked": 4,
+      "notPureTranslation": 0,
+      "maxJacobianError": 4.440892098500626e-16,
+      "maxNorthOffDeg": 0,
+      "mirrored": 0,
+      "forbiddenKeysInData": [],
+      "tilesCarry": "an origin only: a T1 tile has no rotation or scale field",
+      "note": "per district: the Jacobian of district metres to world metres against the identity, the angle between true north at the frame origin and -Z, and the sign of east x north. The Godot scene adds its own count of nodes whose basis is not the identity."
+    }
+  },
+  "fp1": {
+    "farDistrict": "laxmi_nagar",
+    "farthestClipPointM": 4214,
+    "largestCoordinateThereM": 4016,
+    "float32StepThereMm": 0.244,
+    "layoutCLargestCoordinateM": 5050,
+    "float32StepAtLayoutEdgeMm": 0.488,
+    "float32StepNote": "a 32-bit float steps by 0.244 mm between 2,048 and 4,096 m and by 0.488 mm between 4,096 and 8,192 m, per axis",
+    "tileSizeM": 250,
+    "maxVertexCoordinateInATileM": 630.1,
+    "float32StepInATileMm": 0.0153,
+    "pan": {
+      "name": "far_pan",
+      "pose": "far_eye",
+      "frames": 24,
+      "stepM": [
+        0.001213,
+        0,
+        0.00159
+      ],
+      "yawStepDeg": 0.01,
+      "distanceFromOriginM": 4141,
+      "district": "laxmi_nagar",
+      "tileOrigin": [
+        3750,
+        0,
+        -1500
+      ]
+    },
+    "note": "vertices are stored relative to their 250 m tile, so their own rounding is 0.015 to 0.03 mm; what is left is the tile origin and the camera, which are world positions in 32-bit floats. The pan numbers are in the Godot part of the report."
+  },
+  "bake": {
+    "ms": {
+      "frames": 2,
+      "clip": 48,
+      "connectorEnds": 1,
+      "ground": 1088,
+      "connectors": 254,
+      "closures": 18,
+      "content": 799,
+      "tiles": 182,
+      "checks": 11,
+      "total": 2403
+    },
+    "firstRunMs": 2461,
+    "sourceLoadMs": 1641,
+    "hostLoadPerCore": 0.56,
+    "note": "ms is the second of two runs in one Node process (the first includes code warm-up). It covers frames, clip, ports, the ground lattice, the three connectors through the lane model, closures, content, the T1 encode and the checks. sourceLoadMs is reading the pilot downloads and smoothing the height data, before the bake. The times double when another program keeps the machine busy (hostLoadPerCore over 1): a calm run is about 2.4 s.",
+    "tiles": 749,
+    "bytes": 52841644,
+    "bytesByLayer": {
+      "band_chandni_chowk": 1466232,
+      "band_cp": 214016,
+      "band_india_gate": 181396,
+      "band_laxmi_nagar": 548892,
+      "chandni_chowk": 10150112,
+      "connector": 6197164,
+      "cp": 1503200,
+      "filler": 29324760,
+      "india_gate": 898940,
+      "laxmi_nagar": 2356932
+    },
+    "trianglesByLayer": {
+      "band_chandni_chowk": 17350,
+      "band_cp": 2477,
+      "band_india_gate": 2103,
+      "band_laxmi_nagar": 6473,
+      "chandni_chowk": 120434,
+      "connector": 73420,
+      "cp": 17750,
+      "filler": 347436,
+      "india_gate": 10556,
+      "laxmi_nagar": 27923
+    },
+    "groundCells": 201600,
+    "groundPointsLaidUnderConnectors": 2621,
+    "at": "2026-11-11T09:57:16.412Z",
+    "node": "v22.22.3",
+    "writtenBy": "node harness/bench/stitch.mjs"
+  },
+  "problems": [],
+  "productionNeeds": [
+    "One road graph for a district and its connectors. Here a district road is a plain ribbon that stops at the clip line and the connector is a separate lane model site, so the join is two meshes that meet (with an apron where the clip line is oblique). Production cuts the district graph at the port node and gives that node to the connector, so lanes, kerbs and heights run through.",
+    "Clip lines that cross a big road at a right angle, at a place with no slip road. Where the line is oblique the two carriageways of one street become two ports (Vikas Marg at Laxmi Nagar: 27 m apart along the road).",
+    "A connector for every big port, or a rule that turns the port into a district-internal end. The list is in filler.needAnAuthoredConnector.",
+    "The edge band and the generated back streets want the same strip of land. Here a shell is dropped where a generated street or a connector runs; production should run the back street behind the first row of shells, or pick per port.",
+    "Filler ground with a height rule of its own (river banks, embankments) and filler blocks from area profiles along connectors: the bench has ground and water only.",
+    "A constrained ground under connectors (TF2 from the road bench) in place of the lattice that is pressed to the connector height.",
+    "Rail, river and metro as their own connector kinds: the thing under the flyover is a two lane road standing in for the railway.",
+    "Clip polygons and connectors drawn and reviewed in the map inspector; the waypoint table lives in a script today.",
+    "Height offsets solved over all districts and ports together (least squares over the port height steps), not one median per district.",
+    "The download box of a district 100 m larger than its clip on every side, so the edge band is complete (clip.dc3.perDistrict.lineWithDataOutside)."
+  ],
+  "files": {
+    "tiles": "game/bench/stitch/gen",
+    "index": "game/bench/stitch/gen/index.json",
+    "plan": "harness/reports/arch/stitch/plan.png",
+    "districtPlans": [
+      "harness/reports/arch/stitch/plan_cp.png",
+      "harness/reports/arch/stitch/plan_india_gate.png",
+      "harness/reports/arch/stitch/plan_chandni_chowk.png",
+      "harness/reports/arch/stitch/plan_laxmi_nagar.png"
+    ],
+    "sc2Spec": "harness/reports/arch/stitch/sc2_trial.json"
+  },
+  "renderer": "Forward+",
+  "gpuAdapter": "Apple M2 Pro (Apple8)",
+  "hostLoad": {
+    "avg1": 5.81,
+    "cores": 12,
+    "perCore": 0.48
+  },
+  "notMeasured": [
+    {
+      "id": "filler_blocks",
+      "option": "FL1",
+      "reason": "generated filler blocks from area profiles along connectors were not built: the area profile generator does not exist yet. The bench has filler ground, the river band and the port closures",
+      "estimate": "ARCH_OPTIONS puts a filler tile at 20 to 40 percent of a district tile"
+    },
+    {
+      "id": "fl2",
+      "option": "FL2",
+      "reason": "open land only was not built as its own setup: it is FL1 without the street nets, and the report lists every port by closure kind, so the FL2 count can be read from it (every street net port becomes a gate, a wall or a loop)",
+      "estimate": "no extra cost"
+    },
+    {
+      "id": "sc3",
+      "option": "SC3",
+      "reason": "drawing connectors in the map inspector is a later editor feature",
+      "estimate": "L"
+    },
+    {
+      "id": "one_graph",
+      "option": "SC1",
+      "reason": "a connector and the district road it meets are two meshes that end on the same port; the lane model was not run over a district and its connectors as one graph",
+      "estimate": "the lane model work of the map repair pilot"
+    },
+    {
+      "id": "ito_district",
+      "option": "MC",
+      "reason": "the ITO pilot district is not placed in this bench (the task names Connaught Place with India Gate, Chandni Chowk and Laxmi Nagar); its data is used for the SC2 trial only",
+      "estimate": "the same steps as the four frames here"
+    }
+  ],
+  "summary": {
+    "openBoundaryPorts": 0,
+    "portsWaitingForAConnector": 27,
+    "connectorGradeViolations": 0,
+    "connectorRadiusViolations": 0,
+    "connectorViolationsByClass": {
+      "secondary": {
+        "connectors": 1,
+        "gradeViolations": 0,
+        "radiusViolations": 0,
+        "clearanceViolations": 0
+      },
+      "trunk": {
+        "connectors": 1,
+        "gradeViolations": 0,
+        "radiusViolations": 0,
+        "clearanceViolations": 0
+      },
+      "primary": {
+        "connectors": 1,
+        "gradeViolations": 0,
+        "radiusViolations": 0,
+        "clearanceViolations": 0
+      }
+    },
+    "sc2": {
+      "ratio": 0.646,
+      "radiusViolations": 0,
+      "gradeViolations": 0,
+      "sunk": 0,
+      "firstRatioWithASunkCrossStreet": 0.4
+    },
+    "overlappingClipPolygons": 0,
+    "minGapM": 803.6,
+    "landmarkErrorMaxM": {
+      "tiles": 0.000006,
+      "engine": 0.00017
+    },
+    "relativeLayout": {
+      "maxDistanceErrorM": 0.0009,
+      "maxBearingErrorDeg": 0.00173,
+      "redFortNorthEastOfJamaMasjid": true
+    },
+    "rotation": {
+      "districtTransformsNotPureTranslation": 0,
+      "mirrored": 0,
+      "forbiddenKeysInData": 0,
+      "engineNodesNotIdentity": 0,
+      "engineNodesChecked": 2217
+    },
+    "x1AgainstX2MaxM": 0.3109,
+    "x1AgainstX2PerDistrictM": {
+      "cp": 0.1014,
+      "india_gate": 0,
+      "chandni_chowk": 0.014,
+      "laxmi_nagar": 0.3109
+    },
+    "portsPerDistrict": {
+      "cp": {
+        "dc1": 53,
+        "dc2": 45,
+        "dc1ByClass": {
+          "secondary": 12,
+          "tertiary": 4,
+          "unclassified": 1,
+          "residential": 19,
+          "service": 16,
+          "pedestrian": 1
+        },
+        "dc2ByClass": {
+          "secondary": 9,
+          "tertiary": 4,
+          "unclassified": 3,
+          "residential": 10,
+          "service": 19
+        }
+      },
+      "india_gate": {
+        "dc1": 46,
+        "dc2": 32,
+        "dc1ByClass": {
+          "secondary": 14,
+          "tertiary": 2,
+          "unclassified": 1,
+          "residential": 4,
+          "service": 24,
+          "pedestrian": 1
+        },
+        "dc2ByClass": {
+          "secondary": 12,
+          "tertiary": 1,
+          "unclassified": 1,
+          "residential": 1,
+          "service": 16,
+          "pedestrian": 1
+        }
+      },
+      "chandni_chowk": {
+        "dc1": 51,
+        "dc2": 49,
+        "dc1ByClass": {
+          "secondary": 3,
+          "tertiary": 5,
+          "unclassified": 3,
+          "residential": 33,
+          "living_street": 2,
+          "service": 4,
+          "pedestrian": 1
+        },
+        "dc2ByClass": {
+          "trunk": 2,
+          "secondary": 5,
+          "tertiary": 7,
+          "unclassified": 4,
+          "residential": 20,
+          "service": 10,
+          "pedestrian": 1
+        }
+      },
+      "laxmi_nagar": {
+        "dc1": 57,
+        "dc2": 46,
+        "dc1ByClass": {
+          "trunk": 7,
+          "primary": 1,
+          "secondary": 1,
+          "tertiary": 1,
+          "unclassified": 3,
+          "residential": 44
+        },
+        "dc2ByClass": {
+          "trunk": 1,
+          "primary": 4,
+          "secondary": 1,
+          "unclassified": 3,
+          "residential": 35,
+          "service": 2
+        }
+      }
+    },
+    "portsTotal": {
+      "dc1": 207,
+      "dc2": 172
+    },
+    "shareOfPortsClosedAutomatically": 0.802,
+    "shareNeedingAnAuthoredConnector": 0.198,
+    "edgeBandShareOfDistrictTileBytes": 0.162,
+    "bakeMs": 2403,
+    "fp1": {
+      "district": "laxmi_nagar",
+      "distanceFromOriginM": 4141,
+      "shimmerVisible": false,
+      "reading": "no shimmer or shadow crawl to see at 4141 m from the origin: frame k at the far place differs from frame k at the engine origin by less than two moved worlds differ from each other. What can be measured: the pan is less even at the far place (frame to frame change 0.0406 to 0.0961 against 0.0412 to 0.0504 near the origin), because a 2 mm camera step lands on a 0.24 mm grid there. That is under a pixel at this step size"
+    },
+    "shots": [
+      "harness/reports/arch/stitch/top_all.png",
+      "harness/reports/arch/stitch/port_eye.png",
+      "harness/reports/arch/stitch/port_top.png",
+      "harness/reports/arch/stitch/bridge_eye.png",
+      "harness/reports/arch/stitch/flyover_side.png",
+      "harness/reports/arch/stitch/far_eye.png"
+    ]
+  }
+}

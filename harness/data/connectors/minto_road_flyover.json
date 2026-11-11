@@ -1,0 +1,38 @@
+{
+  "_doc": "Authored connector of the composite map (ARCH_OPTIONS SC1; P0-029 stitch bench draft). Control points are world metres (east +X, north -Z, origin at the centre of the layout C map box). The first and the last point lie on the boundary ports named in from and to. spans name the control points a bridge runs between; under lists what it passes over, authored the same way. Not signed off.",
+  "id": "minto_road_flyover",
+  "name": "Ranjit Singh Flyover",
+  "standsFor": "Swami Vivekanand Marg (Minto Road) out of Connaught Place, the Ranjit Singh Flyover over the railway lines east of New Delhi station, then Jawaharlal Nehru Marg to Delhi Gate and Netaji Subhash Marg",
+  "kind": "flyover",
+  "status": "draft",
+  "class": "secondary",
+  "lanes": { "forward": 2, "backward": 2 },
+  "from": { "district": "cp", "port": "Vivekanand Marg" },
+  "to": { "district": "chandni_chowk", "port": "Netaji Subhash Marg" },
+  "points": [
+    { "x": -463.1, "z": -1665 },
+    { "x": -380, "z": -1795 },
+    { "x": -200, "z": -1930 },
+    { "x": 60, "z": -1985 },
+    { "x": 420, "z": -1990 },
+    { "x": 850, "z": -1960 },
+    { "x": 1250, "z": -1890 },
+    { "x": 1440, "z": -1900 },
+    { "x": 1560, "z": -1975 },
+    { "x": 1553.5, "z": -2084 },
+    { "x": 1472.7, "z": -2210.5 }
+  ],
+  "spans": [
+    { "from": 3, "to": 4, "kind": "bridge", "layer": 1, "over": "the railway lines" }
+  ],
+  "under": [
+    {
+      "id": "rail_line",
+      "name": "Railway line (stand-in, built as a two lane road)",
+      "class": "tertiary",
+      "lanes": 2,
+      "points": [ { "x": 240, "z": -2080 }, { "x": 240, "z": -1700 } ]
+    }
+  ],
+  "notes": "The railway is a stand-in: the lane model has no track type yet, so the thing under the flyover is a short two lane road. It is there to make the solver lift the deck."
+}

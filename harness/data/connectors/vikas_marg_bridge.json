@@ -1,0 +1,26 @@
+{
+  "_doc": "Authored connector of the composite map (ARCH_OPTIONS SC1; P0-029 stitch bench draft). Control points are world metres (east +X, north -Z, origin at the centre of the layout C map box). The first and the last point lie on the boundary ports named in from and to. spans name the control points a bridge runs between. Not signed off.",
+  "id": "vikas_marg_bridge",
+  "name": "Vikas Marg",
+  "standsFor": "Vikas Marg and the ITO bridge over the Yamuna into East Delhi; its west end stands for Purana Quila Road and Mathura Road up to ITO",
+  "kind": "bridge",
+  "status": "draft",
+  "class": "primary",
+  "lanes": { "forward": 3, "backward": 3 },
+  "from": { "district": "india_gate", "port": "Purana Quila Road" },
+  "to": { "district": "laxmi_nagar", "port": "Vikas Marg" },
+  "points": [
+    { "x": 1147.6, "z": 293 },
+    { "x": 1300, "z": 226 },
+    { "x": 1650, "z": 90 },
+    { "x": 1985, "z": -80 },
+    { "x": 2330, "z": -290 },
+    { "x": 2680, "z": -485 },
+    { "x": 2885, "z": -623 },
+    { "x": 3033.65, "z": -639.3 }
+  ],
+  "spans": [
+    { "from": 3, "to": 5, "kind": "bridge", "layer": 1, "over": "the Yamuna (stand-in: the river band of layout C)" }
+  ],
+  "notes": "At Laxmi Nagar the two carriageways of Vikas Marg cross the clip line 27 m apart along the road (the line is oblique there), so this end sits on the point between the two ports."
+}

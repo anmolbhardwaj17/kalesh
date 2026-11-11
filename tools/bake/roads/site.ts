@@ -38,6 +38,8 @@ export interface SiteInput {
   heroes?: readonly HeroSpec[];
   /** Station spacing in metres. */
   step?: number;
+  /** false: no terrain is built (neither TF1 nor TF2) and no ground mesh is written: the caller brings its own ground (the stitch bench, whose roads lie in one ground for the whole map). */
+  terrain?: boolean;
 }
 
 export interface Pose {
@@ -443,13 +445,17 @@ export function buildSite(input: SiteInput): SiteResult {
   const siteRing = regionRing(input.site.region, 30);
   const boundary = surfaceBoundary(surf);
   lap('boundary');
-  const tf2 = buildTf2(boundary, siteRing, input.ground);
-  const groundMesh = set.get('ground');
-  // one normal for the whole ground: the ear clipped triangles are long needles and their own normals would show as streaks
-  for (const t of tf2.tris) groundMesh.tri(t[0], t[1], t[2], [0, 1, 0]);
-  const gap2 = gapTf2(boundary, tf2);
+  const terrain = input.terrain !== false;
+  const noGap: GapStats = { samples: 0, maxM: 0, meanM: 0, p95M: 0, missing: 0, pokeThrough: 0, pokeMaxM: 0, worst: null };
+  const tf2 = terrain ? buildTf2(boundary, siteRing, input.ground) : { tris: [], polygons: 0, needles: 0, forced: 0, areaError: 0 };
+  if (terrain) {
+    const groundMesh = set.get('ground');
+    // one normal for the whole ground: the ear clipped triangles are long needles and their own normals would show as streaks
+    for (const t of tf2.tris) groundMesh.tri(t[0], t[1], t[2], [0, 1, 0]);
+  }
+  const gap2 = terrain ? gapTf2(boundary, tf2) : noGap;
   lap('tf2');
-  const tf1 = buildTf1(surf, boundary, siteRing, input.ground);
+  const tf1 = terrain ? buildTf1(surf, boundary, siteRing, input.ground) : { gap: noGap, triangles: 0 };
   lap('tf1');
 
   // checks

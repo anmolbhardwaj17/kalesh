@@ -1,0 +1,25 @@
+{
+  "_doc": "Authored connector of the composite map (ARCH_OPTIONS SC1; P0-029 stitch bench draft). Control points are world metres (east +X, north -Z, origin at the centre of the layout C map box). The first and the last point lie on the boundary ports named in from and to. Built by the lane model of tools/bake/roads/ through tools/bake/stitch/connectors.ts. Not signed off.",
+  "id": "ring_road_arc",
+  "name": "Ring Road",
+  "standsFor": "Mahatma Gandhi Marg (the Ring Road) on the west bank of the Yamuna from the Red Fort down to ITO, then Tilak Marg to the C-Hexagon",
+  "kind": "ring_arc",
+  "status": "draft",
+  "class": "trunk",
+  "lanes": { "forward": 3, "backward": 3 },
+  "from": { "district": "chandni_chowk", "port": "Mahatma Gandhi Marg" },
+  "to": { "district": "india_gate", "port": "Tilak Marg" },
+  "points": [
+    { "x": 2051.7, "z": -2317.7 },
+    { "x": 2125, "z": -2160 },
+    { "x": 2150, "z": -1800 },
+    { "x": 2110, "z": -1350 },
+    { "x": 2000, "z": -900 },
+    { "x": 1790, "z": -560 },
+    { "x": 1500, "z": -330 },
+    { "x": 1230, "z": -140 },
+    { "x": 1075, "z": 43 },
+    { "x": 990.5, "z": 167 }
+  ],
+  "notes": "Runs down the river bank, 60 m or more from the water, then swings south west to India Gate. In layout C the ITO district sits on this arc; the bench has no ITO district, so the arc runs through filler."
+}
