@@ -6,7 +6,7 @@ import type { P2 } from './geom.ts';
 import { TILE_M, overrideFile, tileOf } from './layout/grid.ts';
 import { roadWidth } from './osm.ts';
 import type { Footprint, MapData, Road } from './osm.ts';
-import type { Issue, Patch } from './rules/types.ts';
+import type { Issue, Patch } from './rules/census/types.ts';
 
 export type Resolution = 'by_id' | 'by_anchor' | 'stale';
 

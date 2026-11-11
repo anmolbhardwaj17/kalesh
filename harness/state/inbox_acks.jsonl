@@ -148,3 +148,4 @@
 {"id":"mmwc5bzvw","ts":"2026-11-11T13:19:56.814Z","reply":"Recorded for the HUD (P1-003).","tasks":["P1-003"]}
 {"id":"mmwc5bzxr","ts":"2026-11-11T13:19:56.880Z","reply":"Recorded for the HUD (P1-003).","tasks":["P1-003"]}
 {"id":"mmwc5bzzo","ts":"2026-11-11T13:19:56.950Z","reply":"Recorded for the HUD (P1-003).","tasks":["P1-003"]}
+{"id":"mmwcftk26","ts":"2026-11-11T18:13:32.271Z","reply":"Answered: recent tasks are offline map pipeline code (no game frames); their debug maps go to harness/reports/map/, which the live strip does not show. Visible city comes with the tile writer and streaming tasks.","tasks":[]}

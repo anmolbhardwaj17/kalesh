@@ -15,7 +15,11 @@ export interface RoadClass {
   /** Delhi drives on the left (every road; kept on the record so the lane model never guesses). */
   traffic: 'left';
   lanes: number;
-  lanesFrom: 'tag' | 'class';
+  /**
+   * tag: the way's own lanes tag; class: the Delhi class default; ahead: set by the repair layer, from the same
+   * street's tagged count (rule R-LANE-FIT-03) or by another lane repair; spec: from a hero road spec.
+   */
+  lanesFrom: 'tag' | 'class' | 'ahead' | 'spec';
   laneWidth: number;
   /** Carriageway width in metres (kerb to kerb for this carriageway). */
   width: number;

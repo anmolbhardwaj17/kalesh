@@ -2,7 +2,12 @@
 // the projection of the tests is ({ x: lon, z: -lat }) and shapes are easy to read.
 import { buildMap } from './osm.ts';
 import type { MapData, OsmElement } from './osm.ts';
-import type { RuleContext } from './rules/types.ts';
+import { buildBlockGraph } from './graph/build.ts';
+import type { BlockGraph } from './graph/build.ts';
+import type { OvertureRow } from './graph/footprints.ts';
+import type { RuleContext as CensusContext } from './rules/census/types.ts';
+import { RuleContext } from './rules/context.ts';
+import type { Marks, RuleEnv } from './rules/types.ts';
 import { buildTile } from './tile.ts';
 import type { TileContent } from './tile.ts';
 
@@ -38,9 +43,33 @@ export class Sketch {
     return buildMap(this.elements, flat);
   }
 
-  ctx(ground?: (x: number, z: number) => number | null): RuleContext {
-    return { district: 'test', map: this.map(), box: { minX: -1000, minZ: -1000, maxX: 1000, maxZ: 1000 }, toGeo: (x, z) => ({ lat: -z, lon: x }), ...(ground ? { ground } : {}) };
+  /** The context of the Phase 0 census rules (tools/bake/rules/census/), which read the raw map model. */
+  ctx(ground?: (x: number, z: number) => number | null): CensusContext {
+    return { district: 'test', map: this.map(), box: { minX: -1000, minZ: -1000, maxX: 1000, maxZ: 1000 }, toGeo: (x: number, z: number) => ({ lat: -z, lon: x }), ...(ground ? { ground } : {}) };
   }
+
+  /** The block graph of the sketch inside a square outline of half size h metres around 0. */
+  graph(h = 500, overture: OvertureRow[] = []): BlockGraph {
+    const outline: [number, number][] = [[-h, -h], [h, -h], [h, h], [-h, h], [-h, -h]];
+    return buildBlockGraph({ block: 'test', stage: 'test', origin: { lat: 0, lon: 0 }, outline, elements: this.elements, overture, project: flat });
+  }
+
+  /** OSM tags of the sketch's nodes that have any, by graph node id. */
+  nodeTags(): Map<string, Record<string, string>> {
+    const out = new Map<string, Record<string, string>>();
+    for (const e of this.elements) if (e.type === 'node' && e.tags) out.set(`n${e.id}`, e.tags);
+    return out;
+  }
+}
+
+/** The rule environment of the tests: flat metres, tile by 250 m, nothing else unless given. */
+export function testEnv(extra: Partial<RuleEnv> = {}): RuleEnv {
+  return { toGeo: (x, z) => ({ lat: -z, lon: x }), tile: (x, z) => [Math.floor(x / 250), Math.floor(z / 250)], ...extra };
+}
+
+/** A rule context on a graph (the production rules of tools/bake/rules/). */
+export function rulesOn(g: BlockGraph, extra: Partial<RuleEnv> = {}, marks: Marks = {}): RuleContext {
+  return new RuleContext(g, testEnv(extra), marks);
 }
 
 /**
