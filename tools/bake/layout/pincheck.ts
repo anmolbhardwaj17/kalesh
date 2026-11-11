@@ -1,44 +1,13 @@
-// Checks on the stitched world (ARCH_OPTIONS X1, LP2; MAP_REPAIR.md "District frames and stitching"): clip
-// polygons after placement, and landmark positions read back from the baked tile bytes. Pure.
+// Landmark positions read back from the baked tile bytes (LP2; MAP_REPAIR.md "District frames and stitching",
+// "Landmark tests": the position in the block frame, and the relative layout against reality). Moved in P1-008 from the
+// Phase 0 stitch bench (tools/bake/stitch/checks.ts): a landmark now names its block, not an island district. Pure.
 import type { LatLon } from '../../geo/projection.ts';
 import type { P2 } from '../geom.ts';
 import { decodeT1 } from '../tile.ts';
-import { ringGap, ringOverlapArea } from './clip.ts';
-import { layoutPair, placer } from './frames.ts';
-import type { DistrictDef, LayoutPair } from './frames.ts';
-
-export interface PairCheck {
-  pairs: { a: string; b: string; overlapM2: number; gapM: number }[];
-  /** Pairs of clip polygons that share area after placement. */
-  overlapping: number;
-  overlapAreaM2: number;
-  minGapM: number;
-  minGapBetween: [string, string] | null;
-}
-
-/** Every pair of placed clip rings (world metres): shared area and the smallest distance between them. */
-export function pairCheck(rings: readonly { id: string; ring: readonly P2[] }[]): PairCheck {
-  const out: PairCheck = { pairs: [], overlapping: 0, overlapAreaM2: 0, minGapM: Infinity, minGapBetween: null };
-  for (let i = 0; i < rings.length; i++) {
-    for (let j = i + 1; j < rings.length; j++) {
-      const a = rings[i] as { id: string; ring: readonly P2[] };
-      const b = rings[j] as { id: string; ring: readonly P2[] };
-      const overlapM2 = Math.round(ringOverlapArea(a.ring, b.ring) * 10) / 10;
-      const gapM = Math.round(ringGap(a.ring, b.ring) * 10) / 10;
-      out.pairs.push({ a: a.id, b: b.id, overlapM2, gapM });
-      if (overlapM2 > 0.5) {
-        out.overlapping++;
-        out.overlapAreaM2 += overlapM2;
-      }
-      if (gapM < out.minGapM) {
-        out.minGapM = gapM;
-        out.minGapBetween = [a.id, b.id];
-      }
-    }
-  }
-  if (rings.length < 2) out.minGapM = 0;
-  return out;
-}
+import { layoutPair } from './geodesic.ts';
+import type { LayoutPair } from './geodesic.ts';
+import { placer } from './placement.ts';
+import type { Frame } from './placement.ts';
 
 /** The name of a pin mesh: one small marker per reference point of a landmark. */
 export const pinName = (landmark: string, k: number): string => `pin__${landmark}__${k}`;
@@ -71,7 +40,8 @@ export function pinCentres(tiles: readonly Uint8Array[]): Map<string, { x: numbe
 export interface LandmarkRef {
   id: string;
   name: string;
-  district: string;
+  /** The block the landmark stands in. */
+  block: string;
   /** The OSM object the points come from. */
   osm: string;
   /** Reference points in degrees, straight from the source (never from the projected map model). */
@@ -81,24 +51,24 @@ export interface LandmarkRef {
 export interface LandmarkError {
   id: string;
   name: string;
-  district: string;
+  block: string;
   osm: string;
   points: number;
   /** Pins of this landmark that were not found in the tiles. */
   missing: number;
   maxM: number;
   meanM: number;
-  /** Mean position: where it should be (district offset plus projection) and where the tiles have it. */
+  /** Mean position: where it should be (block offset plus projection) and where the tiles have it. */
   expected: P2;
   baked: P2;
 }
 
-/** Expected position (district offset plus the projection around the district's own origin) against the baked pins. */
-export function landmarkErrors(refs: readonly LandmarkRef[], districts: readonly DistrictDef[], baked: ReadonlyMap<string, { x: number; z: number }>): LandmarkError[] {
+/** Expected position (block offset plus the projection around the block's own origin) against the baked pins. */
+export function landmarkErrors(refs: readonly LandmarkRef[], frames: readonly Frame[], baked: ReadonlyMap<string, { x: number; z: number }>): LandmarkError[] {
   return refs.map((ref) => {
-    const def = districts.find((d) => d.id === ref.district);
-    if (!def) throw new Error(`landmark ${ref.id}: no district ${ref.district}`);
-    const p = placer(def);
+    const frame = frames.find((f) => f.id === ref.block);
+    if (!frame) throw new Error(`landmark ${ref.id}: no block ${ref.block}`);
+    const p = placer(frame);
     let max = 0;
     let sum = 0;
     let missing = 0;
@@ -122,15 +92,15 @@ export function landmarkErrors(refs: readonly LandmarkRef[], districts: readonly
       b.z += got.z;
     });
     const k = Math.max(1, n);
-    return { id: ref.id, name: ref.name, district: ref.district, osm: ref.osm, points: ref.points.length, missing, maxM: max, meanM: sum / k, expected: { x: e.x / k, z: e.z / k }, baked: { x: b.x / k, z: b.z / k } };
+    return { id: ref.id, name: ref.name, block: ref.block, osm: ref.osm, points: ref.points.length, missing, maxM: max, meanM: sum / k, expected: { x: e.x / k, z: e.z / k }, baked: { x: b.x / k, z: b.z / k } };
   });
 }
 
 const meanGeo = (pts: readonly LatLon[]): LatLon => ({ lat: pts.reduce((s, p) => s + p.lat, 0) / pts.length, lon: pts.reduce((s, p) => s + p.lon, 0) / pts.length });
 
 /**
- * Relative layout inside a district against reality: for two landmarks of one district, the baked distance and
- * bearing between their centres against the geodesic ones on the ellipsoid (which share no code with the projection).
+ * Relative layout inside a block against reality: for two landmarks of one block, the baked distance and bearing
+ * between their centres against the geodesic ones on the ellipsoid (which share no code with the projection).
  */
 export function layoutChecks(pairs: readonly [string, string][], refs: readonly LandmarkRef[], errors: readonly LandmarkError[]): LayoutPair[] {
   return pairs.map(([ia, ib]) => {
@@ -139,7 +109,7 @@ export function layoutChecks(pairs: readonly [string, string][], refs: readonly 
     const ea = errors.find((r) => r.id === ia);
     const eb = errors.find((r) => r.id === ib);
     if (!ra || !rb || !ea || !eb) throw new Error(`layout pair ${ia}, ${ib}: unknown landmark`);
-    if (ra.district !== rb.district) throw new Error(`layout pair ${ia}, ${ib}: the two landmarks are in different districts`);
+    if (ra.block !== rb.block) throw new Error(`layout pair ${ia}, ${ib}: the two landmarks are in different blocks`);
     return layoutPair({ name: ra.name, geo: meanGeo(ra.points), world: ea.baked }, { name: rb.name, geo: meanGeo(rb.points), world: eb.baked });
   });
 }

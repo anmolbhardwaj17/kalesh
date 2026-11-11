@@ -1,5 +1,5 @@
 {
-  "_doc": "District list of the seamless Kalesh map, as signed (architecture sign-off 2026-11-11; decisions.md 'One seamless open city, no gaps' and 'Architecture record (P0-022)'; MAP_REPAIR.md 'District frames and stitching'; TECH.md 'World layout'). A block is one continuous piece of the map with one frame and one road graph. A district is a focus area inside a block (hand-drawn outline, hero roads, inspector review); everything between focus districts inside a block is real city from the same sources. Placement method: offset = pivot.world + block.factor x geoToWorld(district origin, pivot). The centre block has factor 1.0, so every real place in it sits at its real position relative to India Gate; each far district is its own block at factor 0.5, on its real bearing from India Gate. world = offset + project(lat, lon, district origin) is a translation only: no rotation, scale or mirror, north is -Z. Inside the centre block the production bake projects every tile in the block frame (origin India Gate); a district's own origin and offset give the same point within 0.31 m at 5 km (measured, stitch.json), so the per-district fields stay for the bench tooling (tools/bake/stitch). heightOffset is 0 inside the centre block (one ground model, one height solve); a far block gets one height offset solved over all its joins. 'planned' lists districts that have a block and a placement but no outline or data yet; they move into 'districts' when their outline is drawn. The layout C fields (layout, layoutId, layoutBoxKm, layoutAnchor, draftRect) are kept only because the bench code reads them: 'layout' fixes the world origin (the centre of the layout C map box) until the first bake of the far districts recentres it on the final map box, and its river is a stand-in band at the real Yamuna position near the ITO bridge until the river is baked from OSM water polygons.",
+  "_doc": "District list of the seamless Kalesh map, as signed (architecture sign-off 2026-11-11; decisions.md 'One seamless open city, no gaps' and 'Architecture record (P0-022)'; MAP_REPAIR.md 'District frames and stitching'; TECH.md 'World layout'). Read by tools/bake/layout/ (P1-008). A block is one continuous piece of the map with one frame and one road graph. A district is a focus area inside a block (hand-drawn outline, hero roads, inspector review): an outline, not a cut and not a frame. Everything between focus districts inside a block is real city from the same sources. Placement method: offset = pivot.world + block.factor x geoToWorld(block frame origin, pivot). The centre block has factor 1.0, so every real place in it sits at its real position relative to India Gate; each far district is its own block at factor 0.5, on its real bearing from India Gate. A real point lands at offset + geoToWorld(lat, lon, block frame origin): a translation only, with no rotation, scale or mirror, north is -Z. The offsets in this file are a record to 0.1 m: the bake computes them from the method and rule R-STITCH fails if a recorded one differs. A far block keeps its real ground with one height offset solved over all its joins; the centre block has one ground model and one height solve. 'planned' lists focus districts that have a block but no focus outline or data yet; they move into 'districts' when their outline is drawn. The island layout of the Phase 0 stitch bench (layout C boxes, per-district frames and offsets, draft rectangles, the stand-in river) was removed from this file in P1-008; the measured results stay in decisions_archive.md 'Map stitch results (P0-029)'.",
   "status": "signed",
   "signed": {
     "at": "2026-11-11",
@@ -8,254 +8,53 @@
     "answers": "Centre at true scale (factor 1.0); far south on its real bearing from India Gate at 0.5 of real distance (decisions.md 'Architecture answers, round 2')"
   },
   "method": {
-    "pivot": { "name": "India Gate", "lat": 28.612894, "lon": 77.229446, "world": { "x": 621.6, "z": 467.2 } },
-    "rule": "offset = pivot.world + block.factor * geoToWorld(origin, pivot), tools/geo/projection.ts",
+    "pivot": {
+      "name": "India Gate",
+      "lat": 28.612894,
+      "lon": 77.229446,
+      "world": {
+        "x": 621.6,
+        "z": 467.2
+      }
+    },
+    "rule": "offset = pivot.world + block.factor * geoToWorld(frameOrigin, pivot), tools/geo/projection.ts; code tools/bake/layout/placement.ts",
     "centreFactor": 1.0,
     "farFactor": 0.5,
     "gates": {
       "centrePairBearingDeg": 0.5,
       "centrePairDistancePct": 0.5,
-      "note": "Checked by the bake (rule R-STITCH) and by tools/bake/stitch/stitch.test.ts: every pair of places in the centre block keeps its real bearing and distance. Pairs of a centre place and a far place may be off by up to about 20 degrees at factor 0.5 (computed, ARCH_OPTIONS.md 'The far south'); far places are exact as seen from India Gate."
+      "farBearingDeg": 0.1,
+      "farDistancePct": 0.5,
+      "mapWidthMaxKm": 16,
+      "reachMaxKm": 8.192,
+      "blockGapMinM": 250,
+      "note": "Rule R-STITCH (tools/bake/layout/gate.ts), run in every bake before tiles are written and by tools/bake/layout/layout.test.ts. Centre pairs: every pair of the centre places in districts/places.json keeps its real bearing and distance (geodesic on the ellipsoid). Far blocks: each frame origin is on its real bearing from the pivot at farFactor times its real distance. A centre place paired with a far place may be off by up to about 20 degrees at factor 0.5 (computed, ARCH_OPTIONS.md 'The far south'); far places are exact as seen from India Gate. mapWidthMaxKm and reachMaxKm are FP1: a 32-bit float keeps 0.49 mm steps up to 8,192 m (2 to the 13th), the band measured fine at 7 km, and 0.98 mm beyond; a wider map needs a new measurement. Measured in P1-008 with every planned block placed: map box 13.03 by 13.37 km; the smallest circle round the map has a radius of 7.98 km (Cyber City, Laxmi Nagar and Kashmere Gate set it), so no world origin gets every position under 8 km by more than a few metres; the centre of the map box would leave Cyber City 9.0 km out. blockGapMinM: two placed block outlines stay this far apart, room for an edge band of up to 100 m on each block and a corridor between them."
     },
-    "worldOrigin": "the centre of the layout C map box for now (India Gate sits at x 621.6, z 467.2). The first bake that includes a far block moves the world origin to the centre of the final map box (one vector subtracted from every position) so no point is more than about 7 km out (FP1, measured fine at 7 km)."
-  },
-  "layout": {
-    "id": "C",
-    "source": "harness/design/map_sketches/make_sketches.mjs",
-    "boxKm": {
-      "x0": -0.4,
-      "x1": 9.7,
-      "y0": -2.2,
-      "y1": 6.7
-    },
-    "river": {
-      "x": 7.85,
-      "width": 0.5,
-      "y1": 6.7,
-      "y2": -2.2,
-      "bend": 0.2
-    },
-    "riverNote": "stand-in Yamuna band in layout km (x east, y north), moved in P0-022 to the real river near the ITO bridge (world x about 3,200; the real bank runs from about x 2,500 at Loha Pul to x 4,100 at the Nizamuddin bridge). Replaced by the OSM river when the centre block is baked.",
-    "worldOrigin": "the centre of the layout map box",
-    "worldOriginKm": [
-      4.65,
-      2.25
-    ]
-  },
-  "x2Origin": {
-    "lat": 28.612894,
-    "lon": 77.229446,
-    "name": "India Gate (the pivot and the centre block frame origin)"
-  },
-  "heightLevelM": 215,
-  "blocks": [
-    {
-      "id": "centre",
-      "name": "Central Delhi, both banks of the Yamuna",
-      "frameOrigin": { "lat": 28.612894, "lon": 77.229446, "name": "India Gate" },
-      "factor": 1.0,
-      "offset": { "x": 621.6, "z": 467.2 },
-      "covers": "Kashmere Gate to Nizamuddin, Karol Bagh and the Central Ridge to the east bank with Laxmi Nagar: real data at true scale, the river and floodplain drawn as the real place, real bridges built by the lane model. About 45 km2 west of the river plus about 7 km2 of river and floodplain and about 2.2 km2 on the east bank (estimates).",
-      "pilot": "the pilot centre: Connaught Place with Jantar Mantar, India Gate, ITO with Pragati Maidan, Chandni Chowk with Red Fort, Paharganj with the station, GB Road and everything between them, about 20 km2 (estimate)",
-      "outline": "drawn along real edges by the first map pilot task (harness/data/districts/centre.geojson)"
-    },
-    {
-      "id": "qutub_mehrauli",
-      "name": "Mehrauli and Qutub Minar",
-      "frameOrigin": { "lat": 28.5245, "lon": 77.1855, "name": "D20 centre, estimate to about 200 m" },
-      "factor": 0.5,
-      "offset": { "x": -1529.2, "z": 5365.1 },
-      "covers": "far district, release stage"
-    },
-    {
-      "id": "vasant_kunj",
-      "name": "Vasant Kunj",
-      "frameOrigin": { "lat": 28.541, "lon": 77.156, "name": "D19 centre, estimate to about 200 m" },
-      "factor": 0.5,
-      "offset": { "x": -2972.3, "z": 4450.1 },
-      "covers": "far district, release stage"
-    },
-    {
-      "id": "airport_t3",
-      "name": "IGI Airport T3 and Aerocity",
-      "frameOrigin": { "lat": 28.553, "lon": 77.1, "name": "D21 centre, estimate to about 200 m" },
-      "factor": 0.5,
-      "offset": { "x": -5711.9, "z": 3782.8 },
-      "covers": "far district, release stage"
-    },
-    {
-      "id": "cyber_city",
-      "name": "Gurugram Cyber City and Cyber Hub",
-      "frameOrigin": { "lat": 28.495, "lon": 77.089, "name": "D22 centre, estimate to about 200 m" },
-      "factor": 0.5,
-      "offset": { "x": -6253.8, "z": 6996.2 },
-      "covers": "far district, release stage"
+    "worldOrigin": "the centre of the layout C map box for now (India Gate sits at x 621.6, z 467.2). The first bake that includes a far block (P8) runs the recentre step (tools/bake/layout/recentre.ts): one vector, a whole number of 250 m tiles, is subtracted from every stored position (the pivot, tiles, pins, mission anchors, connector points, saves), so the world origin sits on the centre of the smallest circle round the final map and no position is more than about 8 km out (FP1). Not the centre of the map box: measured in P1-008, that leaves Cyber City 9.0 km out.",
+    "grid": {
+      "tileM": 250,
+      "note": "The one world grid (tools/bake/layout/grid.ts): tile ids come from world metres, tile (0, 0) has its north-west corner on the world origin. A recentre moves the origin by a whole number of tiles."
     }
+  },
+  "blocks": [
+    {"id": "centre", "name": "Central Delhi, both banks of the Yamuna", "frameOrigin": {"lat": 28.612894, "lon": 77.229446, "name": "India Gate"}, "factor": 1.0, "offset": {"x": 621.6, "z": 467.2}, "covers": "Kashmere Gate to Nizamuddin, Karol Bagh and the Central Ridge to the east bank with Laxmi Nagar: real data at true scale, the river and floodplain drawn as the real place, real bridges built by the lane model. About 45 km2 west of the river plus about 7 km2 of river and floodplain and about 2.2 km2 on the east bank (estimates).", "pilot": "the pilot centre: Connaught Place with Jantar Mantar, India Gate, ITO with Pragati Maidan, Chandni Chowk with Red Fort, Paharganj with the station, GB Road and everything between them, about 20 km2 (estimate)", "outlineNote": "not drawn yet: the pilot stage outline is districts/pilot_centre.geojson; the whole block's outline is drawn along real edges when the first release is baked (harness/data/districts/centre.geojson)"},
+    {"id": "qutub_mehrauli", "name": "Mehrauli and Qutub Minar", "frameOrigin": {"lat": 28.52442, "lon": 77.18545, "name": "Qutub Minar", "from": "OSM way 369140381 Qutb Minar, centre of its box (osmBase 2026-11-11T16:34:37Z)"}, "factor": 0.5, "offset": {"x": -1531.6, "z": 5369.5}, "outline": "districts/qutub_mehrauli.geojson", "covers": "far district, release stage"},
+    {"id": "vasant_kunj", "name": "Vasant Kunj", "frameOrigin": {"lat": 28.54247, "lon": 77.156, "name": "DLF Promenade, Nelson Mandela Marg", "from": "OSM way 191980803 DLF Promenade, centre of its box (osmBase 2026-11-11T16:34:37Z)"}, "factor": 0.5, "offset": {"x": -2972.3, "z": 4368.6}, "outline": "districts/vasant_kunj.geojson", "covers": "far district, release stage"},
+    {"id": "airport_t3", "name": "IGI Airport T3 and Aerocity", "frameOrigin": {"lat": 28.55485, "lon": 77.08417, "name": "IGI Airport Terminal 3", "from": "OSM way 51419058 Terminal 3, centre of its box (osmBase 2026-11-11T16:34:37Z)"}, "factor": 0.5, "offset": {"x": -6486.3, "z": 3679.4}, "outline": "districts/airport_t3.geojson", "covers": "far district, release stage"},
+    {"id": "cyber_city", "name": "Gurugram Cyber City and Cyber Hub", "frameOrigin": {"lat": 28.4949, "lon": 77.0887, "name": "DLF Cyber Hub", "from": "OSM way 1449268449 DLF Cyber Hub, centre of its box (osmBase 2026-11-11T16:34:37Z)"}, "factor": 0.5, "offset": {"x": -6268.5, "z": 7001.7}, "outline": "districts/cyber_city.geojson", "covers": "far district, release stage"}
   ],
   "corridors": [
-    { "id": "aurobindo_marg", "standsFor": "Aurobindo Marg", "joins": ["centre", "qutub_mehrauli"], "kind": "authored connector with generated city on both sides" },
-    { "id": "mg_road", "standsFor": "Mehrauli-Gurgaon Road with the elevated Metro beside it", "joins": ["qutub_mehrauli", "cyber_city"], "kind": "authored connector with generated city on both sides" },
-    { "id": "ring_road_south", "standsFor": "Ring Road south arc to Dhaula Kuan", "joins": ["centre", "vasant_kunj"], "kind": "authored connector; Dhaula Kuan is an authored junction" },
-    { "id": "nh48", "standsFor": "NH-48 from Dhaula Kuan", "joins": ["vasant_kunj", "airport_t3", "cyber_city"], "kind": "authored connector with cantonment green and generated city" },
-    { "id": "airport_road", "standsFor": "the T3 link", "joins": ["nh48", "airport_t3"], "kind": "authored connector" }
+    {"id": "aurobindo_marg", "standsFor": "Aurobindo Marg", "joins": ["centre", "qutub_mehrauli"], "kind": "authored connector with generated city on both sides"},
+    {"id": "mg_road", "standsFor": "Mehrauli-Gurgaon Road with the elevated Metro beside it", "joins": ["qutub_mehrauli", "cyber_city"], "kind": "authored connector with generated city on both sides"},
+    {"id": "ring_road_south", "standsFor": "Ring Road south arc to Dhaula Kuan", "joins": ["centre", "vasant_kunj"], "kind": "authored connector; Dhaula Kuan is an authored junction"},
+    {"id": "nh48", "standsFor": "NH-48 from Dhaula Kuan", "joins": ["vasant_kunj", "airport_t3", "cyber_city"], "kind": "authored connector with cantonment green and generated city"},
+    {"id": "airport_road", "standsFor": "the T3 link", "joins": ["nh48", "airport_t3"], "kind": "authored connector"}
   ],
   "districts": [
-    {
-      "id": "cp",
-      "name": "Connaught Place with Jantar Mantar",
-      "stage": "pilot",
-      "block": "centre",
-      "focus": true,
-      "group": "core",
-      "area": "cp",
-      "layoutId": "D0102",
-      "layoutBoxKm": [
-        3.1,
-        2.45,
-        1.2,
-        1.6
-      ],
-      "layoutAnchor": {
-        "lat": 28.6295,
-        "lon": 77.2167
-      },
-      "origin": {
-        "lat": 28.6315,
-        "lon": 77.2167
-      },
-      "offset": {
-        "x": -624.7,
-        "z": -1595
-      },
-      "heightOffset": 0,
-      "clip": "districts/cp.geojson",
-      "draftRect": {
-        "centre": {
-          "lat": 28.6295,
-          "lon": 77.2167
-        },
-        "widthM": 1200,
-        "heightM": 1600
-      },
-      "note": "focus district in the centre block; offset by the seamless method at factor 1.0 (was -950, -1221.7 in the island bench)"
-    },
-    {
-      "id": "india_gate",
-      "name": "India Gate",
-      "stage": "pilot",
-      "block": "centre",
-      "focus": true,
-      "group": "core",
-      "area": "india_gate",
-      "layoutId": "D03",
-      "layoutBoxKm": [
-        3.15,
-        1.45,
-        2.2,
-        0.8
-      ],
-      "layoutAnchor": {
-        "lat": 28.6135,
-        "lon": 77.219
-      },
-      "origin": {
-        "lat": 28.612894,
-        "lon": 77.229446
-      },
-      "offset": {
-        "x": 621.6,
-        "z": 467.2
-      },
-      "heightOffset": 0,
-      "clip": "districts/india_gate.geojson",
-      "draftRect": {
-        "centre": {
-          "lat": 28.6129,
-          "lon": 77.2285
-        },
-        "widthM": 1300,
-        "heightM": 800
-      },
-      "note": "the pivot: its origin is the centre block frame origin, so its offset is the pivot's world position"
-    },
-    {
-      "id": "chandni_chowk",
-      "name": "Chandni Chowk with Red Fort",
-      "stage": "pilot",
-      "block": "centre",
-      "focus": true,
-      "group": "old_delhi",
-      "area": "chandni_chowk",
-      "layoutId": "D09",
-      "layoutBoxKm": [
-        4.9,
-        4.3,
-        1.6,
-        1.1
-      ],
-      "layoutAnchor": {
-        "lat": 28.653,
-        "lon": 77.235
-      },
-      "origin": {
-        "lat": 28.6506,
-        "lon": 77.2303
-      },
-      "offset": {
-        "x": 705.1,
-        "z": -3711.7
-      },
-      "heightOffset": 0,
-      "clip": "districts/chandni_chowk.geojson",
-      "draftRect": {
-        "centre": {
-          "lat": 28.653,
-          "lon": 77.235
-        },
-        "widthM": 1600,
-        "heightM": 1100
-      },
-      "note": "focus district in the centre block; offset by the seamless method at factor 1.0 (was 590.5, -2334 in the island bench)"
-    },
-    {
-      "id": "laxmi_nagar",
-      "name": "Laxmi Nagar",
-      "stage": "release",
-      "block": "centre",
-      "focus": true,
-      "group": "east",
-      "area": "laxmi_nagar",
-      "layoutId": "D12",
-      "layoutBoxKm": [
-        7.45,
-        2.7,
-        1.2,
-        1
-      ],
-      "layoutAnchor": {
-        "lat": 28.631,
-        "lon": 77.277
-      },
-      "origin": {
-        "lat": 28.6304,
-        "lon": 77.2777
-      },
-      "offset": {
-        "x": 5340,
-        "z": -1473.9
-      },
-      "heightOffset": 0,
-      "clip": "districts/laxmi_nagar.geojson",
-      "draftRect": {
-        "centre": {
-          "lat": 28.631,
-          "lon": 77.277
-        },
-        "widthM": 1200,
-        "heightM": 1000
-      },
-      "note": "focus district on the east bank, inside the centre block across the real river; offset by the seamless method at factor 1.0 (was 3468.4, -883.5 in the island bench)"
-    }
+    {"id": "cp", "name": "Connaught Place with Jantar Mantar", "stage": "pilot", "block": "centre", "focus": true, "group": "core", "area": "cp", "origin": {"lat": 28.6315, "lon": 77.2167}, "outline": "districts/cp.geojson", "note": "focus district in the centre block; 'origin' is a real point inside it (a label and camera target, not a frame); 'area' is its Phase 0 data bench download (harness/bench/pilot_areas.json)"},
+    {"id": "india_gate", "name": "India Gate", "stage": "pilot", "block": "centre", "focus": true, "group": "core", "area": "india_gate", "origin": {"lat": 28.612894, "lon": 77.229446}, "outline": "districts/india_gate.geojson", "note": "focus district in the centre block; its origin is the pivot; 'origin' is a real point inside it (a label and camera target, not a frame); 'area' is its Phase 0 data bench download (harness/bench/pilot_areas.json)"},
+    {"id": "chandni_chowk", "name": "Chandni Chowk with Red Fort", "stage": "pilot", "block": "centre", "focus": true, "group": "old_delhi", "area": "chandni_chowk", "origin": {"lat": 28.6506, "lon": 77.2303}, "outline": "districts/chandni_chowk.geojson", "note": "focus district in the centre block; 'origin' is a real point inside it (a label and camera target, not a frame); 'area' is its Phase 0 data bench download (harness/bench/pilot_areas.json)"},
+    {"id": "laxmi_nagar", "name": "Laxmi Nagar", "stage": "release", "block": "centre", "focus": true, "group": "east", "area": "laxmi_nagar", "origin": {"lat": 28.6304, "lon": 77.2777}, "outline": "districts/laxmi_nagar.geojson", "note": "focus district on the east bank, inside the centre block across the real river; 'origin' is a real point inside it (a label and camera target, not a frame); 'area' is its Phase 0 data bench download (harness/bench/pilot_areas.json)"}
   ],
   "stages": {
     "_doc": "Bake stages (P1-007, TECH.md 'World layout' Stages): `npm run bake -- <stage>`. A stage is one continuous outline inside a block. Every source is fetched once for the outline's box plus the margin (one continuous extract) into dataDir (gitignored) and pinned in data/SOURCES.json. ground: GEDTM30 smoothed over smoothM metres, filtered Copernicus GLO-30 as the fallback; FABDEM is never read.",
@@ -265,25 +64,35 @@
       "outline": "districts/pilot_centre.geojson",
       "marginM": 400,
       "dataDir": "data/pilot_centre",
-      "sources": ["osm", "overture_buildings", "gedtm30", "glo30", "wikidata"],
-      "ground": { "primary": "gedtm30", "smoothM": 60, "fallback": "glo30" }
+      "sources": [
+        "osm",
+        "overture_buildings",
+        "gedtm30",
+        "glo30",
+        "wikidata"
+      ],
+      "ground": {
+        "primary": "gedtm30",
+        "smoothM": 60,
+        "fallback": "glo30"
+      }
     }
   },
   "planned": [
-    { "id": "ito", "name": "ITO with Pragati Maidan", "stage": "pilot", "block": "centre", "focus": true, "origin": { "lat": 28.629, "lon": 77.243 }, "note": "draft focus outline (P1-007) inside the pilot centre", "outline": {"status": "draft", "edges": "north: Bahadur Shah Zafar Marg at Delhi Gate; east: Ring Road past Rajghat, out to the Yamuna west bank at the ITO bridge; south: Bhairon Marg and Mathura Road round Pragati Maidan (Bharat Mandapam); west: Tilak Marg and Deen Dayal Upadhyaya Marg", "drawn": "P1-007: waypoints read from the pilot stage OSM extract (osmBase 2026-11-11), straight lines between them; [lon, lat] pairs, counter-clockwise, closed", "ring": [[77.2375, 28.635], [77.236, 28.629], [77.236, 28.62], [77.2405, 28.611], [77.247, 28.611], [77.25, 28.6155], [77.255, 28.623], [77.255, 28.633], [77.248, 28.641], [77.2385, 28.641], [77.2375, 28.635]]} },
-    { "id": "paharganj_station", "name": "Paharganj and New Delhi station", "stage": "pilot", "block": "centre", "focus": true, "origin": { "lat": 28.643, "lon": 77.217 }, "note": "draft focus outline (P1-007): the station with both forecourts (Paharganj and Ajmeri Gate, where mission M01 ends) and the Main Bazar lanes", "outline": {"status": "draft", "edges": "north: Desh Bandhu Gupta Road; east: the Ajmeri Gate forecourt of New Delhi station; south: Chelmsford Road and Panchkuian Road; west: Chitragupta Road", "drawn": "P1-007: waypoints read from the pilot stage OSM extract (osmBase 2026-11-11), straight lines between them; [lon, lat] pairs, counter-clockwise, closed", "ring": [[77.2085, 28.6395], [77.212, 28.638], [77.2195, 28.6385], [77.2252, 28.6415], [77.2252, 28.646], [77.215, 28.6478], [77.209, 28.6458], [77.2085, 28.6395]]} },
-    { "id": "gb_road", "name": "GB Road and Ajmeri Gate", "stage": "pilot", "block": "centre", "focus": true, "origin": { "lat": 28.648, "lon": 77.224 }, "note": "draft focus outline (P1-007): Shraddhanand Road (GB Road) from Ajmeri Gate to the Khari Baoli end with about 100 m on each side", "outline": {"status": "draft", "edges": "a band of about 100 m on each side of Shraddhanand Road (GB Road), from Ajmeri Gate in the south-east to the Khari Baoli end in the north", "drawn": "P1-007: waypoints read from the pilot stage OSM extract (osmBase 2026-11-11), straight lines between them; [lon, lat] pairs, counter-clockwise, closed", "ring": [[77.2245, 28.6445], [77.2262, 28.6462], [77.2234, 28.6498], [77.2205, 28.6542], [77.22, 28.66], [77.2168, 28.66], [77.2172, 28.6525], [77.2205, 28.6478], [77.2222, 28.645], [77.2245, 28.6445]]} },
-    { "id": "lutyens_gymkhana", "name": "Lutyens bungalows and Delhi Gymkhana", "stage": "release", "block": "centre", "focus": true, "origin": { "lat": 28.6033, "lon": 77.2003 } },
-    { "id": "khan_market_lodhi", "name": "Khan Market, Lodhi Garden and the Golf Club", "stage": "release", "block": "centre", "focus": true, "origin": { "lat": 28.596, "lon": 77.228 } },
-    { "id": "kashmere_gate", "name": "Kashmere Gate and ISBT", "stage": "release", "block": "centre", "focus": true, "origin": { "lat": 28.667, "lon": 77.228 } },
-    { "id": "nizamuddin", "name": "Nizamuddin and Humayun's Tomb", "stage": "release", "block": "centre", "focus": true, "origin": { "lat": 28.592, "lon": 77.247 } },
-    { "id": "central_ridge", "name": "Central Ridge with Malcha Mahal", "stage": "release", "block": "centre", "focus": true, "origin": { "lat": 28.642, "lon": 77.202 } },
-    { "id": "qutub_mehrauli", "name": "Mehrauli and Qutub Minar", "stage": "release", "block": "qutub_mehrauli", "focus": true, "origin": { "lat": 28.5245, "lon": 77.1855 }, "offset": { "x": -1529.2, "z": 5365.1 } },
-    { "id": "vasant_kunj", "name": "Vasant Kunj", "stage": "release", "block": "vasant_kunj", "focus": true, "origin": { "lat": 28.541, "lon": 77.156 }, "offset": { "x": -2972.3, "z": 4450.1 } },
-    { "id": "airport_t3", "name": "IGI Airport T3 and Aerocity", "stage": "release", "block": "airport_t3", "focus": true, "origin": { "lat": 28.553, "lon": 77.1 }, "offset": { "x": -5711.9, "z": 3782.8 } },
-    { "id": "cyber_city", "name": "Gurugram Cyber City and Cyber Hub", "stage": "release", "block": "cyber_city", "focus": true, "origin": { "lat": 28.495, "lon": 77.089 }, "offset": { "x": -6253.8, "z": 6996.2 } },
-    { "id": "shahdara", "name": "Shahdara and Seelampur", "stage": "later", "block": "centre", "focus": true, "origin": { "lat": 28.673, "lon": 77.289 } },
-    { "id": "akshardham", "name": "Akshardham and the Games Village edge", "stage": "later", "block": "centre", "focus": true, "origin": { "lat": 28.6127, "lon": 77.2773 } },
-    { "id": "noida", "name": "Noida Sector 18 and Film City", "stage": "later", "block": "noida (a far block at factor 0.5 on its real bearing from India Gate, added when the stage is planned)", "focus": true, "origin": { "lat": 28.57, "lon": 77.323 } }
+    {"id": "ito", "name": "ITO with Pragati Maidan", "stage": "pilot", "block": "centre", "focus": true, "origin": {"lat": 28.629, "lon": 77.243}, "note": "draft focus outline (P1-007) inside the pilot centre", "outline": {"status": "draft", "edges": "north: Bahadur Shah Zafar Marg at Delhi Gate; east: Ring Road past Rajghat, out to the Yamuna west bank at the ITO bridge; south: Bhairon Marg and Mathura Road round Pragati Maidan (Bharat Mandapam); west: Tilak Marg and Deen Dayal Upadhyaya Marg", "drawn": "P1-007: waypoints read from the pilot stage OSM extract (osmBase 2026-11-11), straight lines between them; [lon, lat] pairs, counter-clockwise, closed", "ring": [[77.2375, 28.635], [77.236, 28.629], [77.236, 28.62], [77.2405, 28.611], [77.247, 28.611], [77.25, 28.6155], [77.255, 28.623], [77.255, 28.633], [77.248, 28.641], [77.2385, 28.641], [77.2375, 28.635]]}},
+    {"id": "paharganj_station", "name": "Paharganj and New Delhi station", "stage": "pilot", "block": "centre", "focus": true, "origin": {"lat": 28.643, "lon": 77.217}, "note": "draft focus outline (P1-007): the station with both forecourts (Paharganj and Ajmeri Gate, where mission M01 ends) and the Main Bazar lanes", "outline": {"status": "draft", "edges": "north: Desh Bandhu Gupta Road; east: the Ajmeri Gate forecourt of New Delhi station; south: Chelmsford Road and Panchkuian Road; west: Chitragupta Road", "drawn": "P1-007: waypoints read from the pilot stage OSM extract (osmBase 2026-11-11), straight lines between them; [lon, lat] pairs, counter-clockwise, closed", "ring": [[77.2085, 28.6395], [77.212, 28.638], [77.2195, 28.6385], [77.2252, 28.6415], [77.2252, 28.646], [77.215, 28.6478], [77.209, 28.6458], [77.2085, 28.6395]]}},
+    {"id": "gb_road", "name": "GB Road and Ajmeri Gate", "stage": "pilot", "block": "centre", "focus": true, "origin": {"lat": 28.648, "lon": 77.224}, "note": "draft focus outline (P1-007): Shraddhanand Road (GB Road) from Ajmeri Gate to the Khari Baoli end with about 100 m on each side", "outline": {"status": "draft", "edges": "a band of about 100 m on each side of Shraddhanand Road (GB Road), from Ajmeri Gate in the south-east to the Khari Baoli end in the north", "drawn": "P1-007: waypoints read from the pilot stage OSM extract (osmBase 2026-11-11), straight lines between them; [lon, lat] pairs, counter-clockwise, closed", "ring": [[77.2245, 28.6445], [77.2262, 28.6462], [77.2234, 28.6498], [77.2205, 28.6542], [77.22, 28.66], [77.2168, 28.66], [77.2172, 28.6525], [77.2205, 28.6478], [77.2222, 28.645], [77.2245, 28.6445]]}},
+    {"id": "lutyens_gymkhana", "name": "Lutyens bungalows and Delhi Gymkhana", "stage": "release", "block": "centre", "focus": true, "origin": {"lat": 28.6033, "lon": 77.2003}},
+    {"id": "khan_market_lodhi", "name": "Khan Market, Lodhi Garden and the Golf Club", "stage": "release", "block": "centre", "focus": true, "origin": {"lat": 28.596, "lon": 77.228}},
+    {"id": "kashmere_gate", "name": "Kashmere Gate and ISBT", "stage": "release", "block": "centre", "focus": true, "origin": {"lat": 28.667, "lon": 77.228}},
+    {"id": "nizamuddin", "name": "Nizamuddin and Humayun's Tomb", "stage": "release", "block": "centre", "focus": true, "origin": {"lat": 28.592, "lon": 77.247}},
+    {"id": "central_ridge", "name": "Central Ridge with Malcha Mahal", "stage": "release", "block": "centre", "focus": true, "origin": {"lat": 28.642, "lon": 77.202}},
+    {"id": "qutub_mehrauli", "name": "Mehrauli and Qutub Minar", "stage": "release", "block": "qutub_mehrauli", "focus": true, "origin": {"lat": 28.52442, "lon": 77.18545}, "note": "the far block's own district: the block outline is drawn (blocks[].outline), the focus work starts with its stage"},
+    {"id": "vasant_kunj", "name": "Vasant Kunj", "stage": "release", "block": "vasant_kunj", "focus": true, "origin": {"lat": 28.54247, "lon": 77.156}, "note": "the far block's own district: the block outline is drawn (blocks[].outline), the focus work starts with its stage"},
+    {"id": "airport_t3", "name": "IGI Airport T3 and Aerocity", "stage": "release", "block": "airport_t3", "focus": true, "origin": {"lat": 28.55485, "lon": 77.08417}, "note": "the far block's own district: the block outline is drawn (blocks[].outline), the focus work starts with its stage"},
+    {"id": "cyber_city", "name": "Gurugram Cyber City and Cyber Hub", "stage": "release", "block": "cyber_city", "focus": true, "origin": {"lat": 28.4949, "lon": 77.0887}, "note": "the far block's own district: the block outline is drawn (blocks[].outline), the focus work starts with its stage"},
+    {"id": "shahdara", "name": "Shahdara and Seelampur", "stage": "later", "block": "centre", "focus": true, "origin": {"lat": 28.673, "lon": 77.289}},
+    {"id": "akshardham", "name": "Akshardham and the Games Village edge", "stage": "later", "block": "centre", "focus": true, "origin": {"lat": 28.6127, "lon": 77.2773}},
+    {"id": "noida", "name": "Noida Sector 18 and Film City", "stage": "later", "block": "noida", "focus": true, "origin": {"lat": 28.57, "lon": 77.323}, "note": "a far block at factor 0.5 on its real bearing from India Gate, added to 'blocks' when the stage is planned"}
   ]
 }

@@ -330,3 +330,5 @@ One line per event, written by task.mjs (start, done, fail, phase changes, inbox
 - 2026-11-11 20:26 [P1-007] start (attempt 1): Bake driver, pinned sources and the pilot centre outline
 - 2026-11-11 22:00 [P1-007] done: tools/bake/main.ts is the only bake driver (npm run bake); readers moved to tools/bake/sources/; pilot stage pins OSM, Overture, GEDTM30 smoothed 60 m, GLO-30, Wikidata with hash, licence, credit; second run makes 0 requests; pilot centre outline 21.82 km2; seeded rand.ts; health.json skeleton; purity test. Self-check: typecheck, 392 vitest, 70 Godot tests, quick OK. Flake noted: inspector page test afterAll timeout under load 18, passed on rerun.
 - 2026-11-11 22:00 [P1-008] start (attempt 1): Layout and block frames in the bake
+- 2026-11-11 22:45 [P1-008] edited: accept
+- 2026-11-11 22:45 [P1-029] added: Float precision check at 9 to 10 km

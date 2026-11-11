@@ -78,7 +78,12 @@ export function sortIssues(list: readonly IssueRecord[]): IssueRecord[] {
   });
 }
 
-/** The world tile (250 m grid, indices from the block origin) of a block metre position. */
+/**
+ * The tile of a position on the 250 m grid. The same rule as the one world grid of the bake
+ * (tools/bake/layout/grid.ts `tileOf`; tools/bake/layout/grid.test.ts holds the two in step). This file stays free of
+ * imports so the page can load it as it is. Until the production bake feeds the inspector (P1-011) the adapter passes
+ * block metres of the centre block; from then on world metres.
+ */
 export function worldTile(x: number, z: number): [number, number] {
   return [Math.floor(x / TILE_SIZE), Math.floor(z / TILE_SIZE)];
 }

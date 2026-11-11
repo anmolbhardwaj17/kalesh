@@ -14,6 +14,7 @@
 import { triangulate } from './geom.ts';
 import type { P2 } from './geom.ts';
 import type { Footprint, Road } from './osm.ts';
+import { tileOf } from './layout/grid.ts';
 
 export interface MeshData {
   name: string;
@@ -73,10 +74,9 @@ const DEFAULT_HEIGHT = 9;
 
 export const buildingHeight = (b: Footprint): number => (b.height !== null && b.height > 2 ? b.height : b.levels !== null && b.levels >= 1 ? b.levels * FLOOR_M : DEFAULT_HEIGHT);
 
-/** Tile indices of a point in district metres. */
-export function tileOf(x: number, z: number, size: number): { tx: number; tz: number } {
-  return { tx: Math.floor(x / size), tz: Math.floor(z / size) };
-}
+// Tile indices come from the one world grid (tools/bake/layout/grid.ts); the Phase 0 benches pass a size and metres
+// of their own frame.
+export { tileOf };
 
 export class MeshBuilder {
   readonly mesh: MeshData;

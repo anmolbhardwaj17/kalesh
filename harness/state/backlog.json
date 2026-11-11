@@ -1,6 +1,6 @@
 {
   "_doc": "Written only by node harness/bin/task.mjs. Phases run in order; P0 (ADOPT + STYLE DISCOVERY) waits for the owner by design and needs task.mjs signoff and task.mjs archsignoff before its gate passes. Later phases are added by the planner at the end of P0 (task.mjs phase-add) from the game's real state.",
-  "updated": "2026-11-11T16:30:35.449Z",
+  "updated": "2026-11-11T17:15:43.198Z",
   "phases": [
     {
       "id": "P0",
@@ -1631,9 +1631,9 @@
         "The transform check proves translation only for every block: north on -Z, east on +X, determinant +1, no scale",
         "Landmark test: India Gate lands at world (621.6, 467.2) within 0.5 m; Connaught Place has a smaller x and a smaller z than India Gate (north-west); Red Fort a larger x and a smaller z (north-east)",
         "Recentre test: tiles, pins and anchors after the step equal their positions before minus the vector, within 1 mm",
-        "With every planned block placed the map box is under 16 km wide and no position is more than 8 km from the box centre",
+        "With every planned block placed the map box is under 16 km wide and no position is more than 8,192 m from the recentred origin (orchestrator change 2026-11-11, decisions.md)",
         "The world tile id function round trips for 1,000 seeded points, negative coordinates included",
-        "node harness/bench/arch.mjs stitch either still passes or is removed with docs/ARCHITECTURE.md and TECH.md \"Known limits and debt\" updated; npm run typecheck and npm test are green"
+        "node harness/bench/arch.mjs stitch either still passes or is removed with docs/ARCHITECTURE.md and TECH.md Known limits and debt updated; npm run typecheck and npm test are green"
       ],
       "deps": [
         "P1-007"
@@ -1719,7 +1719,9 @@
       "kind": "feature",
       "status": "todo",
       "attempts": 0,
-      "notes": [],
+      "notes": [
+        "From P1-008: move the inspector and the sample overrides to world metres; inspector worldTile is a copy of the grid rule held in step by grid.test.ts. Draw the centre block outline (centre.geojson); R-STITCH-06 may then fail."
+      ],
       "created": "2026-11-11T12:29:04.868Z"
     },
     {
@@ -3166,6 +3168,26 @@
       "notes": [],
       "created": "2026-11-11T14:35:19.606Z",
       "model": "opus"
+    },
+    {
+      "id": "P1-029",
+      "phase": "P1",
+      "title": "Float precision check at 9 to 10 km",
+      "desc": "From P1-008: the farthest planned position is 8.03 km from the recentred origin. Re-run the physics bench far token (harness/bench/physics.plan.mjs, FP1) at 9 and 10 km: wheel contact noise, character jitter, vehicle numbers against the origin, and a slow camera pan for shimmer. If anything degrades, propose tightening the far factor or a second origin step.",
+      "accept": [
+        "FP1 numbers at 9 and 10 km in harness/reports/arch/physics.json or a new report",
+        "a verdict line in decisions.md",
+        "verify --quick OK"
+      ],
+      "deps": [],
+      "agent": "builder",
+      "priority": 3,
+      "kind": "feature",
+      "status": "todo",
+      "attempts": 0,
+      "notes": [],
+      "created": "2026-11-11T17:15:43.159Z",
+      "model": "sonnet"
     }
   ]
 }

@@ -7,6 +7,7 @@ import clipCc from '../../../harness/data/districts/chandni_chowk.geojson?raw';
 import clipCp from '../../../harness/data/districts/cp.geojson?raw';
 import clipIg from '../../../harness/data/districts/india_gate.geojson?raw';
 import pilotRaw from '../../../harness/data/districts/pilot_centre.geojson?raw';
+import placesRaw from '../../../harness/data/districts/places.json?raw';
 import { outlineAreaKm2, outlineBox, outlineContains, outlineRing, readOutline, ringProblems } from './outline';
 import { glo30Tile, stagePlan } from './stages';
 import type { DistrictsWithStages } from './stages';
@@ -14,20 +15,8 @@ import type { DistrictsWithStages } from './stages';
 const pilot = readOutline(pilotRaw, 'pilot');
 const districts = JSON.parse(districtsRaw) as DistrictsWithStages & { planned: { id: string; focus: boolean; stage: string; outline?: { status: string; ring: [number, number][] } }[] };
 
-/** Centres read from the pilot stage's OSM extract (osmBase 2026-11-11T15:09:21Z): the element named in `from`. */
-export const PILOT_PLACES: { name: string; lat: number; lon: number; from: string }[] = [
-  { name: 'Connaught Place', lat: 28.6328, lon: 77.2197, from: 'way 164675825 Rajiv Chowk Central Park, centroid' },
-  { name: 'Jantar Mantar', lat: 28.62663, lon: 77.21594, from: 'node 9214974876 Jantar Mantar' },
-  { name: 'India Gate', lat: 28.612894, lon: 77.229446, from: 'the centre block frame origin' },
-  { name: 'the ITO crossing', lat: 28.6282, lon: 77.2411, from: 'node 3580369626 ITO stop at the crossing of Vikas Marg, BSZ Marg and DDU Marg' },
-  { name: 'Pragati Maidan', lat: 28.6173, lon: 77.2432, from: 'way 28103691 Bharat Mandapam, centroid' },
-  { name: 'the Red Fort', lat: 28.65616, lon: 77.24014, from: 'node 10262580128 Red fort center' },
-  { name: 'Jama Masjid', lat: 28.6507, lon: 77.23345, from: 'relation 3926057 Jama Masjid, centroid of its member ways' },
-  { name: 'the New Delhi station forecourt on the Ajmeri Gate side', lat: 28.6427, lon: 77.2235, from: 'way 463710713 New Delhi Railway Station (Ajmeri Gate), centroid' },
-  { name: 'GB Road', lat: 28.6505, lon: 77.2207, from: 'node 5126547839 GB Road, on way 44141522 Shraddhanand Road' },
-  { name: 'the Ajmeri Gate end of GB Road', lat: 28.6462, lon: 77.2236, from: 'way 744248532 Shraddhanand Road, south end' },
-  { name: 'the Yamuna west bank at the ITO bridge', lat: 28.6281, lon: 77.2538, from: 'way 691886473 Vikas Marg, west end of the river crossing' },
-];
+/** The places the pilot must hold: read from the pilot stage's OSM extract, kept in districts/places.json (`pilot`). */
+export const PILOT_PLACES = (JSON.parse(placesRaw) as { places: { name: string; lat: number; lon: number; from: string; block: string; pilot?: boolean }[] }).places.filter((p) => p.pilot === true);
 
 describe('pilot centre outline', () => {
   it('is a simple ring of 18 to 23 km2', () => {
@@ -38,6 +27,11 @@ describe('pilot centre outline', () => {
     const first = pilot.coords[0];
     const last = pilot.coords[pilot.coords.length - 1];
     expect(first).toEqual(last);
+  });
+
+  it('names at least the eleven places the pilot was drawn round', () => {
+    expect(PILOT_PLACES.length).toBeGreaterThanOrEqual(11);
+    expect(PILOT_PLACES.every((p) => p.block === 'centre')).toBe(true);
   });
 
   it.each(PILOT_PLACES)('holds $name', ({ lat, lon }) => {

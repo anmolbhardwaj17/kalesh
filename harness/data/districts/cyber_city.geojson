@@ -1,0 +1,154 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "cyber_city",
+        "name": "Gurugram Cyber City and Cyber Hub",
+        "block": "cyber_city",
+        "status": "draft",
+        "areaKm2": 1.68,
+        "frameOrigin": {
+          "lat": 28.4949,
+          "lon": 77.0887,
+          "name": "DLF Cyber Hub",
+          "from": "OSM way 1449268449 DLF Cyber Hub, centre of its box"
+        },
+        "holds": "DLF Cyber City with Cyber Hub, the Rapid Metro loop with the Cyber City station, Shankar Chowk, Ambience Mall and DLF Downtown, and NH-48 along its edge",
+        "edges": "north-west: NH-48 (the Delhi-Gurugram Expressway) from the toll edge past Ambience Mall and Shankar Chowk to DLF Square; south: the south tip of the Rapid Metro loop towards Sikandarpur; east: the Rapid Metro loop and the east side of Ambience Mall",
+        "drawn": "waypoints picked by hand at junctions and edges read from OpenStreetMap by Overpass (osmBase 2026-11-11T16:40 to 16:56Z); straight lines between them, counter-clockwise, closed. A compact outline: a far block sits at half its real distance from India Gate but is true scale inside, so it must stay small enough to keep clear of its neighbours (rule R-STITCH-05). The production outline follows the real roads when the block is baked (P8)",
+        "waypoints": [
+          {
+            "name": "NH-48 toll edge north of Ambience Mall",
+            "lat": 28.5072,
+            "lon": 77.0958
+          },
+          {
+            "name": "NH-48 at Ambience Mall, west side",
+            "lat": 28.5053,
+            "lon": 77.094
+          },
+          {
+            "name": "Shankar Chowk, west side",
+            "lat": 28.5018,
+            "lon": 77.089
+          },
+          {
+            "name": "NH-48 west side at Cyber Hub",
+            "lat": 28.4984,
+            "lon": 77.0878
+          },
+          {
+            "name": "NH-48 west side",
+            "lat": 28.495,
+            "lon": 77.0846
+          },
+          {
+            "name": "NH-48 west side at DLF Square",
+            "lat": 28.4905,
+            "lon": 77.0815
+          },
+          {
+            "name": "south of DLF Square",
+            "lat": 28.4895,
+            "lon": 77.085
+          },
+          {
+            "name": "south tip of the Rapid Metro loop",
+            "lat": 28.4878,
+            "lon": 77.0918
+          },
+          {
+            "name": "Rapid Metro loop, east side",
+            "lat": 28.4934,
+            "lon": 77.0942
+          },
+          {
+            "name": "Rapid Metro loop, east side",
+            "lat": 28.4978,
+            "lon": 77.0969
+          },
+          {
+            "name": "Rapid Metro loop, north-east",
+            "lat": 28.4992,
+            "lon": 77.0972
+          },
+          {
+            "name": "Ambience Mall, south-east",
+            "lat": 28.5022,
+            "lon": 77.0982
+          },
+          {
+            "name": "Ambience Mall, north-east",
+            "lat": 28.5062,
+            "lon": 77.0966
+          }
+        ]
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              77.0958,
+              28.5072
+            ],
+            [
+              77.094,
+              28.5053
+            ],
+            [
+              77.089,
+              28.5018
+            ],
+            [
+              77.0878,
+              28.4984
+            ],
+            [
+              77.0846,
+              28.495
+            ],
+            [
+              77.0815,
+              28.4905
+            ],
+            [
+              77.085,
+              28.4895
+            ],
+            [
+              77.0918,
+              28.4878
+            ],
+            [
+              77.0942,
+              28.4934
+            ],
+            [
+              77.0969,
+              28.4978
+            ],
+            [
+              77.0972,
+              28.4992
+            ],
+            [
+              77.0982,
+              28.5022
+            ],
+            [
+              77.0966,
+              28.5062
+            ],
+            [
+              77.0958,
+              28.5072
+            ]
+          ]
+        ]
+      }
+    }
+  ]
+}

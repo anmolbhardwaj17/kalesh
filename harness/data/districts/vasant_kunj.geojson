@@ -1,0 +1,154 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "vasant_kunj",
+        "name": "Vasant Kunj",
+        "block": "vasant_kunj",
+        "status": "draft",
+        "areaKm2": 1.65,
+        "frameOrigin": {
+          "lat": 28.54247,
+          "lon": 77.156,
+          "name": "DLF Promenade, Nelson Mandela Marg",
+          "from": "OSM way 191980803 DLF Promenade, centre of its box"
+        },
+        "holds": "Ambience Mall, DLF Promenade and DLF Emporio on Nelson Mandela Marg, The Grand hotel, and the Vasant Kunj sector pockets east of the road",
+        "edges": "north-west: the edge of the Aravali Biodiversity Park behind the malls; south-west: The Grand hotel and Nelson Mandela Marg south of it; south and east: straight lines through Vasant Kunj Sectors B and C (no big road in the extract to follow); north: back to Nelson Mandela Marg north of DLF Emporio",
+        "drawn": "waypoints picked by hand at junctions and edges read from OpenStreetMap by Overpass (osmBase 2026-11-11T16:40 to 16:56Z); straight lines between them, counter-clockwise, closed. A compact outline: a far block sits at half its real distance from India Gate but is true scale inside, so it must stay small enough to keep clear of its neighbours (rule R-STITCH-05). The production outline follows the real roads when the block is baked (P8)",
+        "waypoints": [
+          {
+            "name": "Nelson Mandela Marg north of DLF Emporio",
+            "lat": 28.5471,
+            "lon": 77.1611
+          },
+          {
+            "name": "Aravali Biodiversity Park edge",
+            "lat": 28.5461,
+            "lon": 77.1593
+          },
+          {
+            "name": "Aravali Biodiversity Park edge",
+            "lat": 28.5468,
+            "lon": 77.1581
+          },
+          {
+            "name": "Aravali Biodiversity Park edge behind DLF Emporio",
+            "lat": 28.5461,
+            "lon": 77.156
+          },
+          {
+            "name": "Aravali Biodiversity Park edge behind Ambience Mall",
+            "lat": 28.5435,
+            "lon": 77.1547
+          },
+          {
+            "name": "Aravali Biodiversity Park, south corner",
+            "lat": 28.5406,
+            "lon": 77.1529
+          },
+          {
+            "name": "The Grand hotel, north-west corner",
+            "lat": 28.5401,
+            "lon": 77.1516
+          },
+          {
+            "name": "The Grand hotel, south corner",
+            "lat": 28.5375,
+            "lon": 77.152
+          },
+          {
+            "name": "Nelson Mandela Marg south of The Grand",
+            "lat": 28.5364,
+            "lon": 77.1537
+          },
+          {
+            "name": "Vasant Kunj Sector C, south",
+            "lat": 28.5335,
+            "lon": 77.16
+          },
+          {
+            "name": "Vasant Kunj Sector B, south-east",
+            "lat": 28.535,
+            "lon": 77.165
+          },
+          {
+            "name": "Vasant Kunj Sector B, east",
+            "lat": 28.54,
+            "lon": 77.1672
+          },
+          {
+            "name": "Vasant Kunj Sector B, north-east",
+            "lat": 28.545,
+            "lon": 77.1672
+          }
+        ]
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              77.1611,
+              28.5471
+            ],
+            [
+              77.1593,
+              28.5461
+            ],
+            [
+              77.1581,
+              28.5468
+            ],
+            [
+              77.156,
+              28.5461
+            ],
+            [
+              77.1547,
+              28.5435
+            ],
+            [
+              77.1529,
+              28.5406
+            ],
+            [
+              77.1516,
+              28.5401
+            ],
+            [
+              77.152,
+              28.5375
+            ],
+            [
+              77.1537,
+              28.5364
+            ],
+            [
+              77.16,
+              28.5335
+            ],
+            [
+              77.165,
+              28.535
+            ],
+            [
+              77.1672,
+              28.54
+            ],
+            [
+              77.1672,
+              28.545
+            ],
+            [
+              77.1611,
+              28.5471
+            ]
+          ]
+        ]
+      }
+    }
+  ]
+}

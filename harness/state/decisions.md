@@ -66,6 +66,12 @@ Decision: `tools/bake/main.ts` is the one bake driver (`npm run bake -- <stage>`
 Why: TECH.md "World pipeline": deterministic, pinned sources, stop before tiles on a failed invariant; a fake network proves the second run makes no request.
 By: builder, P1-007.
 
+## 2026-11-11: Layout, world grid and recentre in the bake; island stitch code retired (P1-008)
+Decision: `tools/bake/layout/` owns the layout. A block's offset is always computed by the signed method (the numbers in `districts.json` are a record, checked). Rule R-STITCH (01 data, 02 translation only, 03 centre pairs, 04 far blocks, 05 block gaps of 250 m, 06 extent) runs in every bake before the first step and stops it. One 250 m world grid (`grid.ts`), tile ids from world metres. Far block frame origins are checked OSM places: Qutub Minar, DLF Promenade, Terminal 3, DLF Cyber Hub; their outlines are compact drafts (1.7 to 2.9 km2). The airport block leaves Aerocity to the airport road corridor. The recentre step subtracts one vector, a whole number of tiles, and puts the world origin on the centre of the smallest circle round the map, not on the centre of the map box. The reach limit is 8,192 m. The stitch prototype is retired: needed parts moved (ARCHITECTURE.md row "Stitch prototype, retired"), the bench driver, plan and scene removed, the island fields taken out of `districts.json`.
+Why: measured with every planned block placed, the map box is 13.03 by 13.37 km and its centre leaves Cyber City 9.0 km out; the smallest circle has a radius of 7.98 km (8.03 km after snapping to tiles), inside the band where a 32-bit float steps by 0.49 mm, the band FP1 measured at 7 km. Aerocity at true scale lands on the Vasant Kunj malls, because the two block origins are only half their real distance apart. A whole-tile vector means no tile is cut again and overrides files are renamed, not re-filed.
+Open: the map is at the float limit and the centre block's own outline is not drawn; measure FP1 at 9 to 10 km or tighten the layout before the far blocks are baked (P8). Aerocity needs the owner's or planner's call (corridor city, or its own small block).
+By: builder, P1-008.
+
 ## Standing rules (short forms; full entries in decisions_archive.md under the bold title)
 
 Owner direction and rules:
@@ -96,3 +102,8 @@ KEEP numbers from the old game (numbers only, no code; checked in the salvage au
 ## Modes in force
 
 From the project rules "Modes" (every switch Anmol asks for gets a dated entry here): ONE AGENT AT A TIME on, LOW USAGE MODE on, LANE 2 off, MID-PHASE SWEEP off. Git: one branch and one pull request per task (entry above), and never the name Claude or Anthropic in any commit (entry "The game is named Kalesh").
+
+## 2026-11-11: Map origin limit 8,192 m and Aerocity (orchestrator call, P1-008)
+The smallest circle around every planned block has a radius of 7.98 km, so "8 km from the map box centre" cannot hold. Decision: the recentre uses that circle's centre snapped to 250 m tiles (8.03 km worst, Cyber City), and the far-from-origin gate is 8,192 m, where the 32-bit float step doubles. Physics showed no drift at 7 km; FP1 is re-measured at 9 to 10 km before the far south is built (P1-029).
+Aerocity is generated corridor city between the airport block and Vasant Kunj, not its own block (at true scale it lands on the Vasant Kunj malls).
+Why: keeps the signed seamless layout and real bearings; the float limit is the real constraint, not a round 8 km.

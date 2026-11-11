@@ -1,0 +1,226 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "qutub_mehrauli",
+        "name": "Mehrauli and Qutub Minar",
+        "block": "qutub_mehrauli",
+        "status": "draft",
+        "areaKm2": 1.99,
+        "frameOrigin": {
+          "lat": 28.52442,
+          "lon": 77.18545,
+          "name": "Qutub Minar",
+          "from": "OSM way 369140381 Qutb Minar, centre of its box"
+        },
+        "holds": "the Qutub complex with Qutub Minar, the Mehrauli Archaeological Park with Jamali Kamali, Adham Khan's Tomb, Mehrauli village with Hauz-i-Shamsi",
+        "edges": "north: the end of Aurobindo Marg at Anuvrat Marg and Kalka Das Marg round the Qutub complex; west: Kalka Das Marg, Bhulbhulaiya Road at Adham Khan's Tomb, then the west edge of Mehrauli village along the forest; south: Andheria Mor (Anuvrat Marg at Abdul Gaffar Khan Marg); east: Anuvrat Marg past the 100 Feet Road junction, Jamali Kamali and the Mehrauli Archaeological Park up to the Qutub complex",
+        "drawn": "waypoints picked by hand at junctions and edges read from OpenStreetMap by Overpass (osmBase 2026-11-11T16:40 to 16:56Z); straight lines between them, counter-clockwise, closed. A compact outline: a far block sits at half its real distance from India Gate but is true scale inside, so it must stay small enough to keep clear of its neighbours (rule R-STITCH-05). The production outline follows the real roads when the block is baked (P8)",
+        "waypoints": [
+          {
+            "name": "Aurobindo Marg at Anuvrat Marg",
+            "lat": 28.5282,
+            "lon": 77.189
+          },
+          {
+            "name": "Kalka Das Marg north of the Qutub complex",
+            "lat": 28.5271,
+            "lon": 77.1868
+          },
+          {
+            "name": "Kalka Das Marg, north-west bend",
+            "lat": 28.5269,
+            "lon": 77.1842
+          },
+          {
+            "name": "Kalka Das Marg west of the Qutub complex",
+            "lat": 28.5249,
+            "lon": 77.1838
+          },
+          {
+            "name": "Kalka Das Marg at Bhulbhulaiya Road, Adham Khan's Tomb",
+            "lat": 28.5229,
+            "lon": 77.1817
+          },
+          {
+            "name": "Bhulbhulaiya Road, west end",
+            "lat": 28.5214,
+            "lon": 77.1798
+          },
+          {
+            "name": "Mehrauli village, north-west edge",
+            "lat": 28.5195,
+            "lon": 77.1772
+          },
+          {
+            "name": "Mehrauli village west edge at the forest",
+            "lat": 28.517,
+            "lon": 77.1762
+          },
+          {
+            "name": "west of Hauz-i-Shamsi",
+            "lat": 28.5128,
+            "lon": 77.176
+          },
+          {
+            "name": "forest edge north of Andheria Mor",
+            "lat": 28.5105,
+            "lon": 77.1752
+          },
+          {
+            "name": "Andheria Mor, south-west of Anuvrat Marg at Abdul Gaffar Khan Marg",
+            "lat": 28.5072,
+            "lon": 77.1762
+          },
+          {
+            "name": "Anuvrat Marg east of Andheria Mor",
+            "lat": 28.5086,
+            "lon": 77.1782
+          },
+          {
+            "name": "Anuvrat Marg",
+            "lat": 28.5088,
+            "lon": 77.1795
+          },
+          {
+            "name": "Anuvrat Marg",
+            "lat": 28.5093,
+            "lon": 77.1806
+          },
+          {
+            "name": "Anuvrat Marg at 100 Feet Road",
+            "lat": 28.511,
+            "lon": 77.1838
+          },
+          {
+            "name": "Anuvrat Marg",
+            "lat": 28.5115,
+            "lon": 77.1849
+          },
+          {
+            "name": "Anuvrat Marg",
+            "lat": 28.5141,
+            "lon": 77.1872
+          },
+          {
+            "name": "Anuvrat Marg east of Jamali Kamali",
+            "lat": 28.518,
+            "lon": 77.1899
+          },
+          {
+            "name": "Anuvrat Marg at Mehrauli Badarpur Road",
+            "lat": 28.5229,
+            "lon": 77.1905
+          },
+          {
+            "name": "Anuvrat Marg east of the Qutub complex",
+            "lat": 28.527,
+            "lon": 77.1906
+          },
+          {
+            "name": "Anuvrat Marg, north end",
+            "lat": 28.528,
+            "lon": 77.1897
+          }
+        ]
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              77.189,
+              28.5282
+            ],
+            [
+              77.1868,
+              28.5271
+            ],
+            [
+              77.1842,
+              28.5269
+            ],
+            [
+              77.1838,
+              28.5249
+            ],
+            [
+              77.1817,
+              28.5229
+            ],
+            [
+              77.1798,
+              28.5214
+            ],
+            [
+              77.1772,
+              28.5195
+            ],
+            [
+              77.1762,
+              28.517
+            ],
+            [
+              77.176,
+              28.5128
+            ],
+            [
+              77.1752,
+              28.5105
+            ],
+            [
+              77.1762,
+              28.5072
+            ],
+            [
+              77.1782,
+              28.5086
+            ],
+            [
+              77.1795,
+              28.5088
+            ],
+            [
+              77.1806,
+              28.5093
+            ],
+            [
+              77.1838,
+              28.511
+            ],
+            [
+              77.1849,
+              28.5115
+            ],
+            [
+              77.1872,
+              28.5141
+            ],
+            [
+              77.1899,
+              28.518
+            ],
+            [
+              77.1905,
+              28.5229
+            ],
+            [
+              77.1906,
+              28.527
+            ],
+            [
+              77.1897,
+              28.528
+            ],
+            [
+              77.189,
+              28.5282
+            ]
+          ]
+        ]
+      }
+    }
+  ]
+}
