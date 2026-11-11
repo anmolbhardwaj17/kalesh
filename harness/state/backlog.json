@@ -1,6 +1,6 @@
 {
   "_doc": "Written only by node harness/bin/task.mjs. Phases run in order; P0 (ADOPT + STYLE DISCOVERY) waits for the owner by design and needs task.mjs signoff and task.mjs archsignoff before its gate passes. Later phases are added by the planner at the end of P0 (task.mjs phase-add) from the game's real state.",
-  "updated": "2026-11-11T03:37:26.143Z",
+  "updated": "2026-11-11T04:05:32.028Z",
   "phases": [
     {
       "id": "P0",
@@ -822,7 +822,8 @@
       "status": "doing",
       "attempts": 1,
       "notes": [
-        "P0-010 (2026-11-10): desc and acceptance rewritten to match ARCH_OPTIONS.md draft 1 (option ids, MUST and IF TIME lists, scene, runner and report names). ARCH_OPTIONS.md wins if they differ."
+        "P0-010 (2026-11-10): desc and acceptance rewritten to match ARCH_OPTIONS.md draft 1 (option ids, MUST and IF TIME lists, scene, runner and report names). ARCH_OPTIONS.md wins if they differ.",
+        "Paused by owner 2026-11-11 about 15 min into attempt 1; no files written yet. Resume with a fresh builder on branch task/P0-029-map-stitch."
       ],
       "created": "2026-11-10T14:08:49.921Z",
       "model": "fable",
