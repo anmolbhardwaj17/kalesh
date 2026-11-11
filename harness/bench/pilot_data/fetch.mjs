@@ -9,12 +9,17 @@
 // Everything lands in the gitignored data/pilot/ folder and is pinned in data/SOURCES.json (URL, date, licence,
 // credit line, bytes, sha256). A source that cannot be reached after three tries is listed under `unreachable` and
 // the run goes on. Boxes come from harness/bench/pilot_areas.json. No project or personal detail is sent: the
-// client name is a plain string.
+// client name is a plain string. The readers of the bake sources (GEDTM30 window, GLO-30 tile, Wikidata box query,
+// the Overture release list) live in tools/bake/sources/readers.ts since P1-007 and are shared with the production
+// bake driver (npm run bake); the steps here keep only the bench extras (per-district OSM boxes, Overture segments,
+// FABDEM, Microsoft and Google footprints, the ASI page, the licence pages).
 import fs from 'node:fs';
 import path from 'node:path';
 import zlib from 'node:zlib';
 import crypto from 'node:crypto';
 import { LICENCES } from './licences.mjs';
+import { GEDTM_URL, OVERPASS, SPARQL, glo30Url, latestOvertureRelease, readGedtm, readGlo30, readWikidata } from '../../../tools/bake/sources/readers.ts';
+import { realNet } from '../../../tools/bake/sources/net.ts';
 import {
   PILOT, TODAY, USER_AGENT, download, fetchRetry, inBox, loadSources, pilotAreas, pin, readJson, rel, sha256, sleep, unionBox, unreachable, writeJson,
 } from './lib.mjs';
@@ -31,10 +36,9 @@ const lic = (id) => {
 };
 const log = (m) => console.log(m);
 const have = (id, file) => !force && sources.files[id] && fs.existsSync(file);
+const net = realNet();
 
 // ------------------------------------------------------------------ OSM (Overpass, by box)
-
-const OVERPASS = 'https://overpass-api.de/api/interpreter';
 
 async function stepOsm() {
   for (const a of areas) {
@@ -64,18 +68,12 @@ async function stepOsm() {
 
 // ------------------------------------------------------------------ Overture (DuckDB over the public S3 release)
 
-async function latestOvertureRelease() {
-  const res = await fetchRetry('https://overturemaps-us-west-2.s3.amazonaws.com/?prefix=release/&delimiter=/');
-  const all = [...(await res.text()).matchAll(/<Prefix>release\/([^<\/]+)\/<\/Prefix>/g)].map((m) => m[1]).sort();
-  return all[all.length - 1];
-}
-
 async function stepOverture() {
   const files = { overture_buildings: path.join(PILOT, 'overture', 'buildings.json'), overture_segments: path.join(PILOT, 'overture', 'segments.json') };
   if (have('overture_buildings', files.overture_buildings) && have('overture_segments', files.overture_segments)) return;
   let release = null;
   try {
-    release = await latestOvertureRelease();
+    release = await latestOvertureRelease(net);
     const { DuckDBInstance } = await import('@duckdb/node-api');
     const db = await DuckDBInstance.create(':memory:');
     const con = await db.connect();
@@ -98,17 +96,15 @@ async function stepOverture() {
 
 // ------------------------------------------------------------------ ground height sources
 
-const GLO30_URL = 'https://copernicus-dem-30m.s3.amazonaws.com/Copernicus_DSM_COG_10_N28_00_E077_00_DEM/Copernicus_DSM_COG_10_N28_00_E077_00_DEM.tif';
-
 async function stepGlo30() {
   const file = path.join(PILOT, 'dem', 'glo30_N28_E077.tif');
   if (have('glo30', file)) return;
   try {
-    const head = await download(GLO30_URL, file);
-    const p = pin(sources, 'glo30', file, { url: GLO30_URL, remote: head, ...lic('glo30'), note: 'Copernicus DEM GLO-30 Public, the 1 degree tile N28 E077 (a surface model: roofs and trees are in it)' });
+    const got = await readGlo30({ net, file, box: null, tile: 'N28_E077', log });
+    const p = pin(sources, 'glo30', file, { url: got.url, ...(got.extra ?? {}), ...lic('glo30'), note: got.note });
     log(`glo30: ${p.bytes} bytes`);
   } catch (e) {
-    unreachable(sources, 'glo30', GLO30_URL, e);
+    unreachable(sources, 'glo30', glo30Url('N28_E077'), e);
     log(`glo30: UNREACHABLE ${e.message}`);
   }
 }
@@ -194,37 +190,15 @@ async function stepFabdem() {
   }
 }
 
-const GEDTM_URL = 'https://s3.opengeohub.org/global/dtm/v1.2/gedtm_rf_m_30m_s_20060101_20151231_go_epsg.4326.3855_v1.2.tif';
-
 /** GEDTM30 is one global cloud optimised GeoTIFF of many GB: only the pilot window is read, with range requests. */
 async function stepGedtm() {
   const file = path.join(PILOT, 'dem', 'gedtm30_pilot_window.json');
   if (have('gedtm30', file)) return;
   try {
-    const head = await fetchRetry(GEDTM_URL, { method: 'HEAD' });
-    if (!head.ok) throw new Error(`HTTP ${head.status}`);
-    const { fromUrl } = await import('geotiff');
-    const tiff = await fromUrl(GEDTM_URL, { headers: { 'User-Agent': USER_AGENT } });
-    const image = await tiff.getImage();
-    const [ox, oy] = image.getOrigin();
-    const [rx, ry] = image.getResolution();
     const pad = 0.01;
-    const x0 = Math.floor((union.west - pad - ox) / rx);
-    const x1 = Math.ceil((union.east + pad - ox) / rx);
-    const y0 = Math.floor((union.north + pad - oy) / ry);
-    const y1 = Math.ceil((union.south - pad - oy) / ry);
-    const rasters = await image.readRasters({ window: [x0, y0, x1, y1] });
-    const gdal = image.getGDALMetadata?.(0) || {};
-    const fd = image.getFileDirectory();
-    const out = {
-      _doc: 'Window of GEDTM30 v1.2 over the pilot boxes, read from the global cloud optimised GeoTIFF with range requests. values are the raw cell values (row 0 is the north row); metres = value * scale + offset.',
-      url: GEDTM_URL, west: ox + x0 * rx, north: oy + y0 * ry, dLon: rx, dLat: ry, width: x1 - x0, height: y1 - y0,
-      scale: Number(gdal.SCALE ?? 1), offset: Number(gdal.OFFSET ?? 0), noData: image.getGDALNoData(), gdalMetadata: gdal,
-      sampleFormat: fd.SampleFormat ?? null, bitsPerSample: fd.BitsPerSample ?? null, values: Array.from(rasters[0]),
-    };
-    writeJson(file, out, false);
-    const p = pin(sources, 'gedtm30', file, { url: GEDTM_URL, remote: { contentLength: Number(head.headers.get('content-length')), lastModified: head.headers.get('last-modified'), etag: head.headers.get('etag') }, ...lic('gedtm30'), note: `window of ${out.width} x ${out.height} cells cut from the global file with HTTP range requests (scale ${out.scale}); sha256 is of the saved window, remote names the global file` });
-    log(`gedtm30: window ${out.width} x ${out.height}, scale ${out.scale}, ${p.bytes} bytes`);
+    const got = await readGedtm({ net, file, box: { south: union.south - pad, west: union.west - pad, north: union.north + pad, east: union.east + pad }, log });
+    const p = pin(sources, 'gedtm30', file, { url: got.url, ...lic('gedtm30'), note: got.note });
+    log(`gedtm30: ${p.bytes} bytes`);
   } catch (e) {
     unreachable(sources, 'gedtm30', GEDTM_URL, e);
     log(`gedtm30: UNREACHABLE ${e.message}`);
@@ -349,8 +323,6 @@ async function stepGoogle() {
 
 // ------------------------------------------------------------------ landmarks
 
-const SPARQL = 'https://query.wikidata.org/sparql';
-
 async function sparql(query) {
   const res = await fetchRetry(`${SPARQL}?format=json&query=${encodeURIComponent(query)}`, { headers: { Accept: 'application/sparql-results+json' } }, 3, 90000);
   if (!res.ok) throw new Error(`HTTP ${res.status}`);
@@ -363,15 +335,10 @@ async function stepWikidata() {
   try {
     const out = { _doc: 'Wikidata items with a coordinate inside each pilot box (wikibase:box), and every item with an ASI monument id (P1371) that starts with N-DL (Delhi circle).', fetched: new Date().toISOString(), boxes: {}, asiDelhi: [] };
     for (const a of areas) {
-      const q = `SELECT ?item ?itemLabel ?hi ?coord ?sitelinks ?asi ?inception ?height ?instLabel ?heritageLabel ?commons WHERE {
-  SERVICE wikibase:box { ?item wdt:P625 ?coord . bd:serviceParam wikibase:cornerSouthWest "Point(${a.bbox.west} ${a.bbox.south})"^^geo:wktLiteral ; wikibase:cornerNorthEast "Point(${a.bbox.east} ${a.bbox.north})"^^geo:wktLiteral . }
-  ?item wikibase:sitelinks ?sitelinks .
-  OPTIONAL { ?item wdt:P1371 ?asi } OPTIONAL { ?item wdt:P571 ?inception } OPTIONAL { ?item wdt:P2048 ?height }
-  OPTIONAL { ?item wdt:P31 ?inst } OPTIONAL { ?item wdt:P1435 ?heritage } OPTIONAL { ?item wdt:P373 ?commons }
-  OPTIONAL { ?item rdfs:label ?hi FILTER(LANG(?hi) = "hi") }
-  SERVICE wikibase:label { bd:serviceParam wikibase:language "en". }
-}`;
-      out.boxes[a.id] = await sparql(q);
+      const tmp = path.join(PILOT, 'landmarks', `.wikidata_${a.id}.json`);
+      await readWikidata({ net, file: tmp, box: a.bbox, log });
+      out.boxes[a.id] = JSON.parse(fs.readFileSync(tmp, 'utf8')).rows;
+      fs.rmSync(tmp);
       log(`wikidata ${a.id}: ${out.boxes[a.id].length} rows`);
       await sleep(1500);
     }

@@ -63,8 +63,7 @@ kit.config.json `target` is `godot` (P0-026): verify.mjs and shoot.mjs run the G
 | `godot:check` | the same as `build` |
 | `godot:parse` | `node harness/bin/godot.mjs parse` on its own |
 | `play` | `node harness/bin/playcopy.mjs --play`: opens the pinned Godot on the newest verified commit's `game/` copy under `harness/reports/play/` |
-
-The bake gets its own script when the first production bake task lands (`bake`: `node tools/bake/main.ts <stage|block>`; writes `game/world/tiles/` and `harness/reports/map/health.json`).
+| `bake` | `node tools/bake/main.ts <stage or block>` with `--stage <sources, ground or tiles>`, `--tiles x_z,...`, `--out <dir>`, `--force`, `--offline` (P1-007): the offline bake. `npm run bake -- pilot --stage sources` fetches or reuses every pinned file of the stage and prints its hash; the steps run in order and stop before tiles when an invariant fails; writes `harness/reports/map/health.json` (tiles to `game/world/tiles/` once the tile writer lands) |
 
 ## Source layout
 
