@@ -305,3 +305,4 @@ One line per event, written by task.mjs (start, done, fail, phase changes, inbox
 - 2026-11-11 18:03 added 13 tasks: P3-001, P3-002, P3-003, P3-004, P4-001, P4-002, P4-003, P4-004, P4-005, P4-006, P14-001, P14-002, P14-003
 - 2026-11-11 18:04 phase P1 planned
 - 2026-11-11 18:04 phase P2 planned
+- 2026-11-11 18:07 [P0-023] done: 14 phases after P0 with goals, exits and pillars; P1 (27 tasks) and P2 (28) detailed; P3, P4, P14 seeded with planning tasks; 10 Fable-tagged core tasks; M11 to M67 in milestones.json; HUD mockup check as P1-003; polish items in P14; gameSizeEstimate 580. Self-check: JSON parses, 315 vitest.
