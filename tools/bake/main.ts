@@ -5,7 +5,8 @@
 // Before any step: rule R-STITCH on the layout (tools/bake/layout/gate.ts: the placement method, translation only,
 // the centre pair gate, far blocks, block gaps, the map extent), with the pair table written into the health report.
 // Steps so far: sources (fetch or reuse every pinned file and print its hash), ground (GEDTM30 smoothed over 60 m,
-// filtered GLO-30 as the fallback), tiles (written by a later task). Invariants run after each step; a failed one
+// filtered GLO-30 as the fallback), graph (the block graph of tools/bake/graph/, written to <dataDir>/graph.json with
+// a north-up picture in harness/reports/map/), tiles (written by a later task). Invariants run after each step; a failed one
 // stops the bake before tiles are written. harness/reports/map/health.json is written at the end of every run.
 import fs from 'node:fs';
 import path from 'node:path';
@@ -25,7 +26,11 @@ import { stageDefs, stagePlan } from './layout/stages.ts';
 import type { DistrictsWithStages, StagePlan } from './layout/stages.ts';
 import { BakeStop, emptyHealth, recordInvariants } from './report/health.ts';
 import type { HealthReport } from './report/health.ts';
+import { buildBlockGraph } from './graph/build.ts';
+import { checkGraph, graphCounts, graphHash, graphInvariants } from './graph/checks.ts';
+import { graphSvg } from './graph/render.ts';
 import { readGedtmFile, readGlo30File } from './sources/ground.ts';
+import { readGraphInput, writeGraph, writePicture } from './sources/graphinput.ts';
 import { OfflineError, realNet } from './sources/net.ts';
 import type { Net } from './sources/net.ts';
 import { loadSources } from './sources/pinfile.ts';
@@ -158,6 +163,25 @@ export async function bake(args: BakeArgs, opts: BakeOptions): Promise<HealthRep
       report.ground = { source: g.source, method: g.method, cols: g.cols, rows: g.rows, cell: g.cell, minM: round(g.stats.min), maxM: round(g.stats.max), meanM: round(g.stats.mean), samples: g.stats.samples, holes: g.stats.holes };
       opts.log(`[ground] ${g.method}: ${g.cols} x ${g.rows} values, ${round(g.stats.min)} to ${round(g.stats.max)} m, ${g.stats.holes} holes (${Date.now() - t0} ms)`);
       check(groundInvariants(g));
+    } else if (step === 'graph') {
+      const input = readGraphInput(opts.root, plan);
+      const t0 = Date.now();
+      const g = buildBlockGraph(input);
+      const buildMs = Date.now() - t0;
+      const json = JSON.stringify(g);
+      const counts = graphCounts(g);
+      const c = checkGraph(g);
+      const file = writeGraph(opts.root, plan, json);
+      const picture = await writePicture(opts.root, `harness/reports/map/graph_${plan.id}.png`, graphSvg(g), 2400);
+      report.graph = {
+        file, picture, hash: graphHash(g), buildMs, counts,
+        checks: { duplicateEdges: c.duplicateEdges.length, zeroLengthEdges: c.zeroLengthEdges.length, missingNodes: c.missingNodes.length, orphanNodes: c.orphanNodes.length, crossingsWithoutEnd: c.crossingsWithoutEnd, badMapEdgeNodes: c.badMapEdgeNodes.length, ok: c.ok },
+        normalised: { ...g.normalised, duplicateWays: g.normalised.duplicateWays.length },
+        footprintMerge: g.footprintSources,
+      };
+      opts.log(`[graph] built in ${(buildMs / 1000).toFixed(2)} s: ${counts.nodes} nodes, ${counts.edges} edges (${counts.roadKm} km), ${counts.mapEdgeEnds} map edge ends, ${counts.pairs} carriageway pairs on ${counts.pairedStreets} named streets, ${counts.footprints} footprints, ${counts.rail} rail and ${counts.metro} metro lines, ${counts.footBridges} foot bridges, ${counts.water} water areas, ${counts.open} open areas; hash ${report.graph.hash}`);
+      opts.log(`[graph] wrote ${file} and ${picture.join(', ')}`);
+      check(graphInvariants(c, counts));
     } else if (step === 'tiles') {
       opts.log(`[tiles] not built yet: the tile writer lands with the production road, terrain and tile tasks (would write to ${report.tiles.out})`);
     }

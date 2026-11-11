@@ -158,8 +158,8 @@ export interface Crossing extends P2 {
 }
 
 export interface ClipResult {
-  /** Road pieces inside the ring. */
-  inside: { road: Road; pts: P2[] }[];
+  /** Road pieces inside the ring; `ids` are the OSM node ids in step with `pts`, null where the ring cuts the road. */
+  inside: { road: Road; pts: P2[]; ids: (number | null)[] }[];
   crossings: Crossing[];
   /** Short stretches of a road outside the ring between two stretches inside it: kept, no port. */
   excursions: number;
@@ -224,7 +224,7 @@ export function clipRoads(roads: readonly Road[], ring: readonly P2[], opts: Cli
     cuts.sort((p, q) => p.at - q.at);
     const startsInside = pointInRing(pts[0] as P2, ring);
     if (cuts.length === 0) {
-      if (startsInside) out.inside.push({ road, pts: pts.map((p) => ({ x: p.x, z: p.z })) });
+      if (startsInside) out.inside.push({ road, pts: pts.map((p) => ({ x: p.x, z: p.z })), ids: road.nodes.slice() });
       continue;
     }
     // pieces between cuts, alternating inside and outside
@@ -283,9 +283,16 @@ export function clipRoads(roads: readonly Road[], ring: readonly P2[], opts: Cli
       const p = pieces[i] as Piece;
       if (!p.inside || p.to - p.from < 1e-6) continue;
       const line: P2[] = [pointAt(p.from)];
-      for (let k = 0; k < pts.length; k++) if ((cum[k] as number) > p.from + 1e-9 && (cum[k] as number) < p.to - 1e-9) line.push({ x: (pts[k] as P2).x, z: (pts[k] as P2).z });
+      const ids: (number | null)[] = [i === 0 ? (road.nodes[0] as number) : null];
+      for (let k = 0; k < pts.length; k++) {
+        if ((cum[k] as number) > p.from + 1e-9 && (cum[k] as number) < p.to - 1e-9) {
+          line.push({ x: (pts[k] as P2).x, z: (pts[k] as P2).z });
+          ids.push(road.nodes[k] as number);
+        }
+      }
       line.push(pointAt(p.to));
-      out.inside.push({ road, pts: line });
+      ids.push(i + 1 === pieces.length ? (road.nodes[road.nodes.length - 1] as number) : null);
+      out.inside.push({ road, pts: line, ids });
       // the piece ends on the ring where it has a neighbour outside
       if (i > 0) out.crossings.push({ ...pointAt(p.from), road, at: p.from, ...dirAt(p.from, -1) });
       if (i + 1 < pieces.length) out.crossings.push({ ...pointAt(p.to), road, at: p.to, ...dirAt(p.to, 1) });

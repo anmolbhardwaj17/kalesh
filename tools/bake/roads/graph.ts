@@ -4,6 +4,8 @@
 import type { P2 } from '../geom.ts';
 import type { Road, Tags } from '../osm.ts';
 import { Curve, smoothLine } from './curve.ts';
+import { cutAndJoin, throughHints } from '../graph/topology.ts';
+import type { Draft, DraftPart, Run } from '../graph/topology.ts';
 
 export type Region = { kind: 'box'; minX: number; minZ: number; maxX: number; maxZ: number } | { kind: 'circle'; cx: number; cz: number; r: number };
 
@@ -82,29 +84,12 @@ const num = (v: string | undefined): number | null => {
   return m ? Number(m[1]) : null;
 };
 
-interface Raw {
-  road: Road;
-  nodes: number[];
-  pts: P2[];
-}
-
-interface Draft {
-  a: number;
-  b: number;
-  cls: string;
-  link: boolean;
-  oneway: boolean;
-  name: string;
-  /** Way pieces in order, each with its own points (the first point of a piece is the last of the one before). */
-  parts: { road: Road; pts: P2[] }[];
-}
-
 /** The site graph. Every way of the listed classes that enters the region is taken and cut at the region's edge. */
 export function buildGraph(roads: readonly Road[], site: SiteSpec): Graph {
   const exclude = new Set(site.exclude ?? []);
   let synthetic = -1;
   const clippedNodes = new Set<number>();
-  const raws: Raw[] = [];
+  const raws: Run[] = [];
   for (const road of roads) {
     if (!site.classes.includes(road.cls) || exclude.has(road.id) || road.tunnel) continue;
     let nodes = road.nodes;
@@ -113,7 +98,7 @@ export function buildGraph(roads: readonly Road[], site: SiteSpec): Graph {
       nodes = nodes.slice().reverse();
       pts = pts.slice().reverse();
     }
-    let run: Raw | null = null;
+    let run: Run | null = null;
     for (let i = 0; i < pts.length; i++) {
       const p = pts[i] as P2;
       const inside = inRegion(site.region, p);
@@ -147,66 +132,8 @@ export function buildGraph(roads: readonly Road[], site: SiteSpec): Graph {
     if (run && run.pts.length >= 2) raws.push(run);
   }
 
-  // how often a node is used: an end counts once, a point inside a way twice
-  const use = new Map<number, number>();
-  for (const r of raws) {
-    r.nodes.forEach((id, i) => use.set(id, (use.get(id) ?? 0) + (i === 0 || i === r.nodes.length - 1 ? 1 : 2)));
-  }
-  let drafts: Draft[] = [];
-  const position = new Map<number, P2>();
-  for (const r of raws) {
-    let start = 0;
-    for (let i = 1; i < r.nodes.length; i++) {
-      const last = i === r.nodes.length - 1;
-      if (!last && (use.get(r.nodes[i] as number) ?? 0) <= 2) continue;
-      const pts = r.pts.slice(start, i + 1);
-      drafts.push({ a: r.nodes[start] as number, b: r.nodes[i] as number, cls: r.road.cls, link: r.road.link, oneway: r.road.oneway, name: r.road.name, parts: [{ road: r.road, pts }] });
-      position.set(r.nodes[start] as number, r.pts[start] as P2);
-      position.set(r.nodes[i] as number, r.pts[i] as P2);
-      start = i;
-    }
-  }
-
-  // join chains through nodes that only two edge ends use
-  const reverse = (d: Draft): void => {
-    [d.a, d.b] = [d.b, d.a];
-    d.parts = d.parts.reverse().map((p) => ({ road: p.road, pts: p.pts.slice().reverse() }));
-  };
-  for (let guard = 0; guard < 10000; guard++) {
-    const at = new Map<number, Draft[]>();
-    for (const d of drafts) {
-      for (const id of d.a === d.b ? [d.a] : [d.a, d.b]) {
-        const list = at.get(id);
-        if (list) list.push(d);
-        else at.set(id, [d]);
-      }
-    }
-    let merged = false;
-    for (const [id, list] of at) {
-      if (list.length !== 2 || clippedNodes.has(id)) continue;
-      const [p, q] = list as [Draft, Draft];
-      if (p === q || p.a === p.b || q.a === q.b) continue;
-      if (p.cls !== q.cls || p.link !== q.link || p.oneway !== q.oneway) continue;
-      let first = p;
-      let second = q;
-      if (p.oneway) {
-        if (p.b === id && q.a === id) [first, second] = [p, q];
-        else if (q.b === id && p.a === id) [first, second] = [q, p];
-        else continue;
-      } else {
-        if (first.b !== id) reverse(first);
-        if (second.a !== id) reverse(second);
-      }
-      first.b = second.b;
-      first.parts.push(...second.parts);
-      if (!first.name) first.name = second.name;
-      drafts = drafts.filter((d) => d !== second);
-      merged = true;
-      break;
-    }
-    if (!merged) break;
-  }
-
+  // cut at shared nodes, join chains, one tangent through a node (shared with the block graph: tools/bake/graph/topology.ts)
+  const { drafts, position } = cutAndJoin(raws, clippedNodes);
   const graph: Graph = { nodes: new Map(), edges: [] };
   const nodeOf = (id: number): GNode => {
     let n = graph.nodes.get(id);
@@ -217,69 +144,9 @@ export function buildGraph(roads: readonly Road[], site: SiteSpec): Graph {
     }
     return n;
   };
-  drafts.sort((x, y) => ((x.parts[0] as { road: Road }).road.id < (y.parts[0] as { road: Road }).road.id ? -1 : 1));
-  // tangents at nodes: an edge that runs on into another (the nearest in direction, under 45 degrees apart) shares
-  // one direction with it there, so the reference line does not kink at a node that only exists in the map
+  drafts.sort((x, y) => ((x.parts[0] as DraftPart).road.id < (y.parts[0] as DraftPart).road.id ? -1 : 1));
   const flat = (d: Draft): P2[] => d.parts.flatMap((part) => part.pts);
-  const dirAt = (d: Draft, atStart: boolean): P2 => {
-    const pts = flat(d);
-    const a = (atStart ? pts[0] : pts[pts.length - 2]) as P2;
-    const b = (atStart ? pts[1] : pts[pts.length - 1]) as P2;
-    const len = Math.hypot(b.x - a.x, b.z - a.z) || 1;
-    return { x: (b.x - a.x) / len, z: (b.z - a.z) / len };
-  };
-  const hint = new Map<Draft, { start?: P2; end?: P2 }>();
-  const endsAt = new Map<number, { d: Draft; atStart: boolean }[]>();
-  for (const d of drafts) {
-    for (const [id, atStart] of [[d.a, true], [d.b, false]] as [number, boolean][]) {
-      const list = endsAt.get(id);
-      if (list) list.push({ d, atStart });
-      else endsAt.set(id, [{ d, atStart }]);
-    }
-  }
-  for (const [id, list] of endsAt) {
-    if (clippedNodes.has(id) || list.length < 2) continue;
-    // directions through the node: an end that arrives keeps its direction, an end that leaves too
-    const cand: { i: number; j: number; dot: number }[] = [];
-    for (let i = 0; i < list.length; i++) {
-      for (let j = i + 1; j < list.length; j++) {
-        const p = list[i] as { d: Draft; atStart: boolean };
-        const q = list[j] as { d: Draft; atStart: boolean };
-        if (p.d === q.d) continue;
-        // walking through the node from p to q: p's direction towards the node, q's away from it
-        const dp = dirAt(p.d, p.atStart);
-        const dq = dirAt(q.d, q.atStart);
-        const tp = p.atStart ? { x: -dp.x, z: -dp.z } : dp;
-        const tq = q.atStart ? dq : { x: -dq.x, z: -dq.z };
-        if (p.d.oneway && q.d.oneway && p.atStart === q.atStart) continue; // two that arrive or two that leave
-        cand.push({ i, j, dot: tp.x * tq.x + tp.z * tq.z });
-      }
-    }
-    cand.sort((x, y) => y.dot - x.dot);
-    const taken = new Set<number>();
-    for (const c of cand) {
-      if (c.dot < Math.cos(Math.PI / 4) || taken.has(c.i) || taken.has(c.j)) continue;
-      taken.add(c.i);
-      taken.add(c.j);
-      const p = list[c.i] as { d: Draft; atStart: boolean };
-      const q = list[c.j] as { d: Draft; atStart: boolean };
-      const dp = dirAt(p.d, p.atStart);
-      const dq = dirAt(q.d, q.atStart);
-      const tp = p.atStart ? { x: -dp.x, z: -dp.z } : dp;
-      const tq = q.atStart ? dq : { x: -dq.x, z: -dq.z };
-      const len = Math.hypot(tp.x + tq.x, tp.z + tq.z) || 1;
-      const through = { x: (tp.x + tq.x) / len, z: (tp.z + tq.z) / len };
-      // as a direction along each edge's own order
-      const hp = hint.get(p.d) ?? {};
-      if (p.atStart) hp.start = { x: -through.x, z: -through.z };
-      else hp.end = through;
-      hint.set(p.d, hp);
-      const hq = hint.get(q.d) ?? {};
-      if (q.atStart) hq.start = through;
-      else hq.end = { x: -through.x, z: -through.z };
-      hint.set(q.d, hq);
-    }
-  }
+  const hint = throughHints(drafts, clippedNodes);
   for (const d of drafts) {
     const pts: P2[] = flat(d);
     const h = hint.get(d) ?? {};
