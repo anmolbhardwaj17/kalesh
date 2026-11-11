@@ -1,8 +1,8 @@
 {
-  "currentTask": "P0-035",
-  "updated": "2026-11-11T11:35:36.157Z",
-  "lastTaskDone": "P0-020",
-  "tasksDoneSinceArtPass": 33,
+  "currentTask": null,
+  "updated": "2026-11-11T11:36:21.441Z",
+  "lastTaskDone": "P0-021",
+  "tasksDoneSinceArtPass": 34,
   "designSignoff": {
     "at": "2026-11-10T15:10:59.599Z",
     "quote": "yes, I sign off on this game design"
@@ -10,5 +10,9 @@
   "styleSignoff": {
     "at": "2026-11-10T20:23:42.742Z",
     "quote": "Yes, I sign off on stylised B as the Kalesh style."
+  },
+  "archSignoff": {
+    "at": "2026-11-11T11:36:21.296Z",
+    "quote": "Yes, I sign off on the architecture."
   }
 }
