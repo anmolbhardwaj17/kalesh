@@ -333,3 +333,4 @@ One line per event, written by task.mjs (start, done, fail, phase changes, inbox
 - 2026-11-11 22:45 [P1-008] edited: accept
 - 2026-11-11 22:45 [P1-029] added: Float precision check at 9 to 10 km
 - 2026-11-11 22:45 [P1-008] done: tools/bake/layout/: placement (pivot India Gate, centre 1.0, far 0.5), R-STITCH gate (276 centre pairs, worst 0.023 deg), one 250 m world grid, recentre step, translation-only check; far block outlines and OSM origins for Qutub, Vasant Kunj, T3, Cyber City (0.0000 deg error); island stitch bench retired. Origin limit set to 8,192 m (decision). Self-check: typecheck, 443 vitest, 70 Godot tests, quick OK, offline bake ground stage OK.
+- 2026-11-11 22:46 [P1-009] start (attempt 1): Block graph: ingest, normalise, pair and classify the pilot centre
