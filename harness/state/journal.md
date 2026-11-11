@@ -324,3 +324,4 @@ One line per event, written by task.mjs (start, done, fail, phase changes, inbox
 - 2026-11-11 20:05 [P1-004] start (attempt 1): Consolidate decisions.md and the knowledge files
 - 2026-11-11 20:09 [P1-004] done: decisions.md 92,961 to 13,810 bytes; full text of 64 older entries moved to decisions_archive.md (all 74 headings kept, checked by script); owner rules and sign-off quotes word for word; knowledge files tidied, new area files created. Self-check: sizes and heading counts.
 - 2026-11-11 20:10 [P1-005] start (attempt 1): Perf budgets read the scene kind (look or city)
+- 2026-11-11 20:13 [P1-005] done: perfbudget.mjs picks draw call, triangle and memory budgets by scene kind (look default, city 2500/3500); lookproof --perf takes --scene-kind; sceneKind recorded in perf results. Self-check: typecheck, perfbudget tests, 345 vitest, 64 Godot tests, quick OK.
