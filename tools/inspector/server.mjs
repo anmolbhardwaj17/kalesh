@@ -6,10 +6,10 @@
 //   GET  /inspector/                      the page (tools/inspector/web/)
 //   GET  /inspector/<file>                page files; .ts files go out with their types stripped
 //   GET  /inspector/vendor/three/<path>   three.js from node_modules (a dev dependency of the harness only)
-//   GET  /inspector/data/<file>           issues.json, context.json, tiles/index.json, tiles/*.ktl from the data folder
+//   GET  /inspector/data/<file>           issues.json, context.json, lanes.json, tiles/index.json, tiles/*.ktl from the data folder
 //                                         (harness/reports/map/, written by `npm run bake -- pilot`; the file contract is in
 //                                         tools/bake/report/inspector.ts and tools/bake/repair/engine.ts issueRecords)
-//   GET  /api/inspector/status            { ready, counts }
+//   GET  /api/inspector/status            { ready, counts, layers: { lanes } } (lanes: the lane model's layer file is there)
 //   GET  /api/inspector/picks             what has been picked so far, read from the override files
 //   POST /api/inspector/pick              { issue, proposal: index | null, note } writes the patch and the inbox line
 //   POST /api/inspector/open-in-game      { x, z } teleports the running game (--debug) to the spot
@@ -153,19 +153,19 @@ export function inspectorHandler(options = {}) {
       }
       if (req.method === 'GET' && p.startsWith('/inspector/data/')) {
         const rel = p.slice('/inspector/data/'.length);
-        if (!/^(issues\.json|context\.json|tiles\/[\w.-]+)$/.test(rel)) return send(res, 404, 'not found', 'text/plain'), true;
+        if (!/^(issues\.json|context\.json|lanes\.json|tiles\/[\w.-]+)$/.test(rel)) return send(res, 404, 'not found', 'text/plain'), true;
         return serveStatic(res, dataDir, rel) || send(res, 404, 'not found', 'text/plain'), true;
       }
       if (req.method === 'GET' && p.startsWith('/inspector/')) {
         const rel = p.slice('/inspector/'.length);
-        if (!/^(web\/[\w.-]+|lib\.ts|ktl1\.ts)$/.test(rel) || rel.includes('.test.')) return send(res, 404, 'not found', 'text/plain'), true;
+        if (!/^(web\/[\w.-]+|lib\.ts|ktl1\.ts|describe\.ts)$/.test(rel) || rel.includes('.test.')) return send(res, 404, 'not found', 'text/plain'), true;
         return serveStatic(res, HERE, rel, { stripTs: true }) || send(res, 404, 'not found', 'text/plain'), true;
       }
       if (req.method === 'GET' && p === '/favicon.ico') return send(res, 204, '', 'text/plain'), true;
       if (!p.startsWith('/api/inspector/')) return false;
       if (req.method === 'GET' && p === '/api/inspector/status') {
         const f = ready() ? loadIssues() : null;
-        return send(res, 200, { ready: ready(), counts: f ? { issues: f.issues.length } : null }), true;
+        return send(res, 200, { ready: ready(), counts: f ? { issues: f.issues.length } : null, layers: { lanes: fs.existsSync(path.join(dataDir, 'lanes.json')) } }), true;
       }
       if (req.method === 'GET' && p === '/api/inspector/picks') return send(res, 200, picks()), true;
       if (req.method === 'POST' && p === '/api/inspector/pick') {

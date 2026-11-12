@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Map inspector</title>
-<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Ccircle cx='8' cy='8' r='6' fill='%23d6342c'/%3E%3C/svg%3E">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Crect width='16' height='16' rx='4' fill='%23110d0a'/%3E%3Ccircle cx='8' cy='8' r='3.6' fill='%23ffb224'/%3E%3C/svg%3E">
 <link rel="stylesheet" href="/inspector/web/style.css">
 <script type="importmap">
 { "imports": { "three": "/inspector/vendor/three/build/three.module.js", "three/addons/": "/inspector/vendor/three/examples/jsm/" } }
@@ -14,9 +14,13 @@
 <div class="app">
   <aside class="queue" aria-label="Issue queue">
     <header>
-      <h1>Map issues</h1>
-      <p class="help">Pick an issue. Look at the fixes drawn on the map. Choose one, or write a note.</p>
+      <div class="brand">
+        <div class="mark" aria-hidden="true">K</div>
+        <div><b>Map inspector</b><small id="sub">Kalesh map issues</small></div>
+      </div>
+      <p class="help">Pick an issue. The map flies there and draws each fix. Choose one, or write a note.</p>
       <div class="chips" id="chips" role="group" aria-label="Show"></div>
+      <label class="search"><span class="sr">Search</span><input id="search" type="search" placeholder="Search a road, a place or a problem" autocomplete="off" spellcheck="false"></label>
     </header>
     <div class="list" id="list" role="list"></div>
     <footer id="source" class="small"></footer>
@@ -25,26 +29,62 @@
   <main class="stage">
     <div id="map" class="map"></div>
     <div id="labels" class="labels" aria-hidden="true"></div>
-    <div id="ring" class="ring" hidden></div>
-    <div class="toolbar" role="group" aria-label="View">
-      <button id="viewTop" class="on" type="button">Top view</button>
-      <button id="view3d" type="button">3D view</button>
-      <button id="fit" type="button">Show everything</button>
+    <div id="hoverRing" class="hover-ring" hidden></div>
+    <div id="ring" class="ring" hidden><i></i></div>
+    <div id="selLabel" class="sel-label" hidden></div>
+    <div id="tip" class="tip" hidden></div>
+
+    <div class="toolbar glass" role="group" aria-label="View">
+      <div class="seg">
+        <button id="viewTop" class="on" type="button" title="Top view, north up (T)">Top view</button>
+        <button id="view3d" type="button" title="Tilted 3D view (3)">3D view</button>
+      </div>
+      <button id="fit" type="button" title="Show the whole map (F)">Show everything</button>
     </div>
-    <div class="compass" id="compass" title="North is up in the top view"><span>N</span></div>
-    <div class="legend small">
-      <span><i class="dot high"></i>High impact</span>
-      <span><i class="dot open"></i>Needs you</span>
-      <span><i class="dot auto"></i>Fixed by itself</span>
-      <span><i class="dot picked"></i>You picked</span>
+
+    <div class="nav">
+      <div class="compass glass" id="compass" title="North is up in the top view"><span>N</span></div>
+      <div class="zoom glass" role="group" aria-label="Zoom">
+        <button id="zoomIn" type="button" title="Zoom in (+)">+</button>
+        <button id="zoomOut" type="button" title="Zoom out (-)">&minus;</button>
+      </div>
     </div>
+
+    <div class="legend glass" id="legend">
+      <div class="lg-h">On the map</div>
+      <div class="sev" id="sevRows"></div>
+      <div class="lg-h">Layers</div>
+      <div class="layers" id="layerRows">
+        <button type="button" data-layer="lanes" class="on"><i class="sw lanes"></i>Lanes</button>
+        <button type="button" data-layer="buildings" class="on"><i class="sw bld"></i>Buildings</button>
+        <button type="button" data-layer="grid" class="on"><i class="sw grid"></i>Tile grid</button>
+      </div>
+    </div>
+
+    <div class="readout glass small" id="readout">
+      <div class="scale"><i id="scaleBar"></i><span id="scaleText"></span></div>
+      <span class="coords" id="coords">Move over the map</span>
+    </div>
+
+    <div class="mini glass">
+      <canvas id="minimap" width="200" height="150" aria-label="Overview of the whole map"></canvas>
+    </div>
+
     <div id="status" class="statusbar small" hidden></div>
+    <div id="loading" class="loading"><div class="spin"></div><span>Loading the map</span></div>
   </main>
 
   <section class="detail" id="detail" aria-label="Issue detail">
     <div class="empty" id="empty">
+      <div class="empty-mark" aria-hidden="true"></div>
       <h2>Nothing picked yet</h2>
-      <p>Click a dot on the map, or a row on the left. The map flies there and shows the fixes.</p>
+      <p>Click a dot on the map, or a card on the left. The map flies there and shows the fixes.</p>
+      <ul class="keys">
+        <li><kbd>J</kbd><kbd>K</kbd> next and previous issue</li>
+        <li><kbd>F</kbd> show everything</li>
+        <li><kbd>T</kbd><kbd>3</kbd> top view and 3D view</li>
+        <li><kbd>Esc</kbd> clear the selection</li>
+      </ul>
     </div>
     <div id="issue" hidden></div>
   </section>

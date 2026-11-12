@@ -13,9 +13,24 @@ export interface InspectorContext {
   block: string;
   /** The stage outline, closed, as [x, z] pairs. */
   outline: [number, number][];
-  roads: { k: string; w: number; p: number[] }[];
+  /** k class, w width, p x y z points; id the edge id the issues name, n its name and r its ref when it has them (P1-039). */
+  roads: { id: string; k: string; w: number; p: number[]; n?: string; r?: string }[];
   /** One flat list of x, y, z per footprint ring. */
   buildings: number[][];
+  /** Footprints with a name (P1-039): id, name, centre and a kind word (station, temple, building) for the inspector's labels. */
+  named: { id: string; n: string; x: number; z: number; k: string }[];
+}
+
+/** One word for what a named footprint is, from its tags. */
+function footprintKind(tags: Record<string, string | undefined>): string {
+  const t = (k: string): string => tags[k] ?? '';
+  if (t('railway') === 'station' || t('public_transport') === 'station' || t('building') === 'train_station') return 'station';
+  if (t('amenity') === 'place_of_worship') return t('religion') === 'muslim' ? 'mosque' : t('religion') === 'hindu' ? 'temple' : t('religion') === 'sikh' ? 'gurdwara' : t('religion') === 'christian' ? 'church' : 'place of worship';
+  if (t('historic')) return 'monument';
+  if (t('amenity')) return t('amenity').replace(/_/g, ' ');
+  if (t('shop')) return 'shop';
+  const b = t('building');
+  return b && b !== 'yes' ? b.replace(/_/g, ' ') : 'building';
 }
 
 /** A plan of the repaired graph: road ribbons (class, width, x y z points) and footprint rings. */
@@ -27,8 +42,12 @@ export function inspectorContext(graph: BlockGraph, offset: P2, outline: readonl
     version: 1,
     block: graph.block,
     outline: ring,
-    roads: graph.edges.map((e) => ({ k: e.road.cls, w: Math.round(e.road.width * 10) / 10, p: e.pts.flatMap(world) })),
+    roads: graph.edges.map((e) => ({ id: e.id, k: e.road.cls, w: Math.round(e.road.width * 10) / 10, p: e.pts.flatMap(world), ...(e.name ? { n: e.name } : {}), ...(e.ref ? { r: e.ref } : {}) })),
     buildings: graph.footprints.map((f) => f.ring.flatMap(world)),
+    named: graph.footprints.filter((f) => f.tags['name']).map((f) => {
+      const c = f.ring.reduce((a, q) => ({ x: a.x + q.x / f.ring.length, z: a.z + q.z / f.ring.length }), { x: 0, z: 0 });
+      return { id: f.id, n: String(f.tags['name']), x: r1(c.x + offset.x), z: r1(c.z + offset.z), k: footprintKind(f.tags as Record<string, string | undefined>) };
+    }),
   };
 }
 

@@ -143,6 +143,34 @@ describe('map inspector page', () => {
     expect(r.width).toBeGreaterThan(400);
   });
 
+  run('every card says what and where in words, what is wrong and the fix; a click labels it on the map (P1-039)', async () => {
+    const cards = await page.locator('#list .row').evaluateAll((rows) => rows.slice(0, 400).map((r) => ({ t: r.querySelector('.t').textContent, s: r.querySelector('.s').textContent })));
+    for (const c of cards) {
+      expect(c.t.length).toBeGreaterThan(5);
+      expect(c.t).not.toMatch(/\b(w\d+\.\d+|n\d{4,}|R-[A-Z]+-\d+)\b/);
+      expect(c.s).not.toMatch(/\bR-[A-Z]+-\d+\b/);
+    }
+    const id = await hook(() => [...document.querySelectorAll('#list .row')].find((r) => /^Unnamed /.test(r.querySelector('.t').textContent))?.dataset.id);
+    if (!id) return; // a report written before the names were in context.json
+    await page.locator(`.row[data-id="${id}"]`).click();
+    await flown();
+    const d = await hook((x) => window.__inspector.describe(x), id);
+    expect(d.title).toMatch(/^Unnamed .+ off .+, .*(of|at) /);
+    expect(await page.locator('#selLabel').isVisible()).toBe(true);
+    expect(await page.locator('#selLabel').textContent()).toContain(d.what);
+    expect(await page.locator('#issue h2').textContent()).toBe(d.what);
+    expect(await page.locator('#issue .block').first().textContent()).toContain(d.problem);
+  });
+
+  run('draws the lanes layer when the report has one', async () => {
+    if (!fs.existsSync(path.join(dataDir, 'lanes.json'))) return;
+    await page.waitForFunction(() => window.__inspector.state().lanesReady, null, { timeout: 60000 });
+    const st = await hook(() => window.__inspector.state());
+    expect(st.lanes.strips).toBeGreaterThan(1000);
+    expect(st.lanes.centreLines + st.lanes.laneLines).toBeGreaterThan(1000);
+    expect(consoleErrors).toEqual([]);
+  });
+
   run('screenshots', async () => {
     fs.mkdirSync(SHOTS, { recursive: true });
     const first = (await hook(() => window.__inspector.highIds()))[0];
