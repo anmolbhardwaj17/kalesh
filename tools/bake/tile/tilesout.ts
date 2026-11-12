@@ -1,5 +1,6 @@
 // What the tile step hands on (P1-016): the record for the health report, the index of the tile folder, the log
 // lines and the invariants. Pure; tools/bake/sources/tilestage.ts writes the files.
+import { hashText } from '../graph/checks.ts';
 import type { InvariantResult } from '../report/health.ts';
 import type { ColliderCheck, DeckRayCheck } from './checks.ts';
 import { CHUNK_LIMIT } from './colliders.ts';
@@ -40,13 +41,15 @@ export interface TileIndex {
 export function tileIndex(stage: string, block: string, offset: { x: number; z: number }, res: TileBakeResult, records: readonly TileRecord[]): TileIndex {
   const total = records.reduce((n, r) => n + r.bytes, 0);
   const largest = records.reduce<{ id: string; bytes: number } | null>((a, r) => (!a || r.bytes > a.bytes ? { id: r.id, bytes: r.bytes } : a), null);
+  const tiles = [...records].sort((p, q) => p.z - q.z || p.x - q.x);
   return {
     version: 1,
     _doc: 'Index of the KTL1 tiles of one bake stage (tools/bake/tile/write.ts, TECH.md "Tile format (T1, KTL1)"): one 250 m tile of the one world grid per file "<tileX>_<tileZ>.ktl", vertices relative to the tile origin (world metres of its north-west corner, y at its lowest ground). bakeHash changes when any tile byte changes. skipped lists tiles that were not written and why (a vertex outside the tile plus margin, or over the byte budget).',
-    stage, block, size: 250, margin: TILE_MARGIN_M, bakeHash: res.bakeHash, offset: [offset.x, offset.z],
+    // over every tile in the folder, so a partial bake that writes the same bytes leaves the same hash
+    stage, block, size: 250, margin: TILE_MARGIN_M, bakeHash: hashText(tiles.map((r) => `${r.id}:${r.hash}`).join('\n')), offset: [offset.x, offset.z],
     bytes: { total, average: records.length ? Math.round(total / records.length) : 0, largest },
     blocks: [{ id: block, tiles: records.length, bytes: total }],
-    tiles: [...records].sort((p, q) => p.z - q.z || p.x - q.x), skipped: res.skipped,
+    tiles, skipped: res.skipped,
   };
 }
 

@@ -41,6 +41,25 @@ describe('map health summary', () => {
     expect(m.gates.find((g) => g.key === 'openPorts').count).toBeNull();
     expect(m.pairs).toMatchObject({ count: 3, failed: 1 });
   });
+  it('carries the explained gate items, the findings, the bake time and the report link (P1-017)', () => {
+    const f = path.join(tmp, 'health_gates.json');
+    const g = (items) => ({ count: items.length, explained: items.filter((i) => i.explainedBy).length, unexplained: items.filter((i) => !i.explainedBy).length, items });
+    fs.writeFileSync(f, JSON.stringify({
+      ...health,
+      gates: { ...health.gates, floatingEnds: 2, unjoinedEnds: 1 },
+      gateReport: { ok: false, gates: { floatingEnds: g([{ id: 'a', explainedBy: 'P1-036: why' }, { id: 'b', explainedBy: 'P1-035 (d): why' }]), unjoinedEnds: g([{ id: 'c', explainedBy: null }]) }, idle: [], findings: [{ what: 'drains', measured: 'flat', owner: 'P1-037' }] },
+    }));
+    fs.writeFileSync(path.join(tmp, 'timing.json'), JSON.stringify({ stage: 'pilot', partial: false, totalMs: 160000, steps: {} }));
+    fs.writeFileSync(path.join(tmp, 'repair_pilot_kashmere_gate.png'), '');
+    const m = mapHealth(f);
+    expect(m.gates.find((x) => x.key === 'floatingEnds')).toMatchObject({ count: 2, explained: 2, owners: ['P1-036', 'P1-035 (d)'] });
+    expect(m.gates.find((x) => x.key === 'unjoinedEnds')).toMatchObject({ count: 1, explained: 0 });
+    expect(m.gates.find((x) => x.key === 'openPorts').explained).toBeNull();
+    expect(m.findings).toHaveLength(1);
+    expect(m.timing.totalMs).toBe(160000);
+    expect(m.report).toBe('health_gates.json');
+    expect(m.pictures).toEqual(['repair_pilot_kashmere_gate.png']);
+  });
   it('says so when there is no report, an unreadable one, or one from before the counts', () => {
     expect(mapHealth(path.join(tmp, 'none.json'))).toBeNull();
     const bad = path.join(tmp, 'bad.json');

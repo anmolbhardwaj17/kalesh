@@ -3,7 +3,8 @@
 // result, and where two strips lie on each other the two roads go back to the repair as conflicts with the centre line
 // distance they need; the repair runs again from the raw graph with every conflict found so far, up to
 // FEEDBACK_ROUNDS times. The last result is the repaired graph; its environment (with the conflicts) is the one the
-// fixed point check must use. Pure.
+// fixed point check must use. A partial bake (P1-017) starts from the conflicts the last whole bake handed back
+// (`seed`) with no further round: on an unchanged map that is the whole bake's last round, repair for repair. Pure.
 import type { BlockGraph } from '../graph/build.ts';
 import { buildLaneModel } from '../roads/network.ts';
 import type { LaneBuild, LaneModelInput } from '../roads/network.ts';
@@ -34,9 +35,10 @@ export interface FeedbackResult {
   build: LaneBuild;
 }
 
-export function repairWithLanes(raw: BlockGraph, env: RuleEnv, opts: RepairOptions, laneInput: (g: RepairedGraph) => LaneModelInput, rounds = FEEDBACK_ROUNDS): FeedbackResult {
+export function repairWithLanes(raw: BlockGraph, env: RuleEnv, opts: RepairOptions, laneInput: (g: RepairedGraph) => LaneModelInput, rounds = FEEDBACK_ROUNDS, seed: readonly LaneConflict[] = []): FeedbackResult {
   const all = new Map<string, LaneConflict>();
-  let curEnv = env;
+  for (const c of seed) all.set(`${c.a}|${c.b}`, c);
+  let curEnv = seed.length ? { ...env, laneConflicts: sortConflicts([...all.values()]) } : env;
   let res = repairGraph(raw, curEnv, opts);
   const log: FeedbackRound[] = [];
   let build = buildLaneModel(laneInput(res.graph));
@@ -56,8 +58,10 @@ export function repairWithLanes(raw: BlockGraph, env: RuleEnv, opts: RepairOptio
     }
     log.push({ overlapM2: Math.round(overlaps.reduce((s, o) => s + o.area, 0) * 100) / 100, pairs: new Set(overlaps.map((o) => `${o.a.strip}|${o.b.strip}`)).size, conflicts: added, skipped: found.skipped });
     if (added === 0 || round === rounds) break;
-    curEnv = { ...env, laneConflicts: [...all.values()].sort((p, q) => (p.a < q.a ? -1 : p.a > q.a ? 1 : p.b < q.b ? -1 : p.b > q.b ? 1 : 0)) };
+    curEnv = { ...env, laneConflicts: sortConflicts([...all.values()]) };
     res = repairGraph(raw, curEnv, opts);
   }
   return { res, env: curEnv, conflicts: [...(curEnv.laneConflicts ?? [])], rounds: log, build };
 }
+
+const sortConflicts = (list: LaneConflict[]): LaneConflict[] => list.sort((p, q) => (p.a < q.a ? -1 : p.a > q.a ? 1 : p.b < q.b ? -1 : p.b > q.b ? 1 : 0));

@@ -12,7 +12,7 @@ import { readNotices, openNotices } from './notice.mjs';
 import { signoffStates } from './signoffs.mjs';
 import { scriptIds, milestoneCounts, isRequired, loadMilestones } from './milestoneset.mjs';
 import { readCopies, COPY_ROOT, PLAY_COMMAND } from './playcopy.mjs';
-import { mapHealth } from './maphealth.mjs';
+import { HEALTH_FILE, mapHealth } from './maphealth.mjs';
 import { inspectorHandler } from '../../tools/inspector/server.mjs';
 
 const PORT = Number(process.env.HARNESS_DASHBOARD_PORT || config().dashboardPort || 4477);
@@ -272,6 +272,8 @@ const server = http.createServer(async (req, res) => {
     if (req.method === 'GET' && p === '/api/state') return send(res, 200, buildState());
     if (req.method === 'GET' && p.startsWith('/lshots/')) return serveFile(res, [LOOK_ROOT], p.slice(8)) || send(res, 404, 'no shot', 'text/plain');
     if (req.method === 'GET' && p.startsWith('/vshots/')) return serveFile(res, [VERIFY_SHOTS], p.slice(8)) || send(res, 404, 'no shot', 'text/plain');
+    // the map report folder of the last bake (health.json, the repaired site pictures)
+    if (req.method === 'GET' && p.startsWith('/map/')) return serveFile(res, [path.dirname(HEALTH_FILE)], p.slice(5)) || send(res, 404, 'no map report', 'text/plain');
     if (req.method === 'GET' && p.startsWith('/shots/')) return serveFile(res, [PATHS.shots], p.slice(7)) || send(res, 404, 'no shot', 'text/plain');
     if (req.method === 'GET' && p.startsWith('/assets/')) return serveFile(res, [PATHS.publicAssets], p.slice(8)) || send(res, 404, 'no asset', 'text/plain');
     if (req.method === 'GET' && (p === '/play' || p.startsWith('/play/'))) {

@@ -16,7 +16,7 @@
 // bench scene in game/bench/roads/gen/ and north-up pictures beside the health report), terrain (the ground of
 // tools/bake/terrain/: cut to the road mesh's edges, footprints, water and the tile lines, with its checks; the bench
 // tiles again on that ground), tiles (the KTL1 tiles of tools/bake/tile/ on the one 250 m world grid, written by
-// sources/tilestage.ts to <stage data folder>/tiles with index.json, checked on the bytes read back). Invariants run
+// sources/tilestage.ts to game/world/tiles (the stage's tile folder) with index.json, checked on the bytes read back). Invariants run
 // after each step; a failed one stops the bake before tiles are written. harness/reports/map/health.json is written at the end of every run.
 import fs from 'node:fs';
 import path from 'node:path';
@@ -50,37 +50,34 @@ import { buildRuleEnv } from './repair/env.ts';
 import { issuesSvg } from './repair/render.ts';
 import { timeRules } from './rules/catalogue.ts';
 import { RuleContext } from './rules/context.ts';
+import type { Issue } from './rules/types.ts';
 import { readOverrides } from './sources/overridesio.ts';
 import { readRepairInput, writeRepair } from './sources/repairio.ts';
 import { checkGraph, graphCounts, graphHash, graphInvariants } from './graph/checks.ts';
 import { graphSvg } from './graph/render.ts';
 import type { RepairedGraph } from './repair/engine.ts';
 import { checkLaneModel } from './roads/lanechecks.ts';
+import type { LaneChecks } from './roads/lanechecks.ts';
+import type { LaneConflict } from './roads/surfaces.ts';
+import { explainGates, gateInvariant, gateLog } from './report/gates.ts';
+import type { GateFile } from './report/gates.ts';
+import { gateItems } from './report/gateitems.ts';
+import type { MeshChecks } from './mesh/checks.ts';
+import { NOT_TWICE, defaultBenchDir, runMeshStep, runTerrainStep } from './sources/meshstage.ts';
 import { laneGraph, laneModelFile, laneModelHash, lanesLayer, lanesRecord } from './roads/laneout.ts';
 import { lanesSvg } from './roads/lanerender.ts';
 import { buildLaneModel } from './roads/network.ts';
 import type { LaneBuild, LaneModelInput } from './roads/network.ts';
-import { GROUND_SITES, LANE_VIEWS, MESH_SITES, PROFILE_VIEWS, laneInputs } from './sites.ts';
+import { LANE_VIEWS, PROFILE_VIEWS, laneInputs } from './sites.ts';
 import { checkElevation } from './elevation/checks.ts';
 import { elevationFile, elevationHash, elevationRecord } from './elevation/elevout.ts';
 import { elevationInput } from './elevation/input.ts';
 import { heightMapSvg, profileSvg } from './elevation/render.ts';
 import { solveBlockElevation } from './elevation/solve.ts';
 import { readStructures } from './elevation/structures.ts';
-import { buildRoadMesh } from './mesh/build.ts';
 import type { RoadMesh } from './mesh/build.ts';
-import { checkRoadMesh } from './mesh/checks.ts';
-import { meshInput } from './mesh/input.ts';
 import type { MeshInput } from './mesh/input.ts';
-import { buildGround } from './terrain/build.ts';
 import type { Ground } from './terrain/build.ts';
-import { checkGround } from './terrain/checks.ts';
-import type { TerrainInput } from './terrain/collect.ts';
-import { groundHash, groundInBox, groundPoses, groundSvg, terrainInvariants, terrainLog, terrainRecord } from './terrain/terrainout.ts';
-import { meshHash, meshRecord, siteTile } from './mesh/meshout.ts';
-import { PAIR_LIMIT_M2 } from './mesh/proof.ts';
-import { meshSvg } from './mesh/render.ts';
-import { writeSiteTile } from './sources/meshio.ts';
 import { writeElevation } from './sources/elevationio.ts';
 import { writeLanes } from './sources/lanesio.ts';
 import { readGedtmFile, readGlo30File } from './sources/ground.ts';
@@ -155,12 +152,19 @@ export interface BakeOptions {
   overridesDir?: string;
   /** Where the mesh step writes the road bench scene's stand-in tiles (default game/bench/roads/gen under root); a test passes its own folder. */
   benchDir?: string;
+  /** The layout instead of harness/data/districts.json (a test bakes a mirrored block). */
+  districts?: DistrictsWithStages & LayoutFile;
+  /** Faults a test puts in on purpose, to show the invariants stop the bake (a broken lane). */
+  faults?: { lanes?: (b: LaneBuild) => void };
 }
 
 /** Runs a bake for parsed arguments; returns the report (also written to disk). Throws BakeStop after writing it. */
 export async function bake(args: BakeArgs, opts: BakeOptions): Promise<HealthReport> {
   const dataDir = path.join(opts.root, 'harness', 'data');
-  const districts = JSON.parse(fs.readFileSync(path.join(dataDir, 'districts.json'), 'utf8')) as DistrictsWithStages & LayoutFile;
+  const t0Bake = clock.now();
+  const districts = opts.districts ?? (JSON.parse(fs.readFileSync(path.join(dataDir, 'districts.json'), 'utf8')) as DistrictsWithStages & LayoutFile);
+  // a partial bake (--tiles): one build of each model, no pictures, the lane feedback from the last whole bake's conflicts
+  const quick = args.tiles !== null;
   const defs = stageDefs(districts);
   if (!defs[args.target]) {
     const block = districts.blocks.find((b) => b.id === args.target);
@@ -172,10 +176,13 @@ export async function bake(args: BakeArgs, opts: BakeOptions): Promise<HealthRep
   const b = plan.box;
   opts.log(`[bake] stage ${plan.id} (${plan.def.name}), block ${plan.def.block}: outline ${plan.areaKm2.toFixed(2)} km2, box ${b.south},${b.west} to ${b.north},${b.east} (margin ${plan.def.marginM} m)`);
   const report = emptyHealth(plan.id, plan.def.block, { file: path.relative(opts.root, outlineFile), areaKm2: Math.round(plan.areaKm2 * 1000) / 1000, box: b });
-  report.tiles = { written: 0, out: args.out ?? path.join(plan.def.dataDir, 'tiles'), only: args.tiles ? args.tiles.map((t) => `${t.x}_${t.z}`) : null };
+  report.tiles = { written: 0, out: args.out ?? tileFolder(plan), only: args.tiles ? args.tiles.map((t) => `${t.x}_${t.z}`) : null };
   const healthFile = opts.healthFile ?? path.join(opts.root, 'harness', 'reports', 'map', 'health.json');
+  const stepMs: Record<string, number> = {};
   const finish = (): void => {
     fs.mkdirSync(path.dirname(healthFile), { recursive: true });
+    // wall clock lives beside the report (timing.json), so the same inputs still give the same health.json
+    fs.writeFileSync(path.join(path.dirname(healthFile), 'timing.json'), JSON.stringify({ stage: plan.id, partial: quick, tiles: report.tiles.only, totalMs: Math.round(clock.now() - t0Bake), steps: stepMs }, null, 1) + '\n');
     fs.writeFileSync(healthFile, JSON.stringify(report, null, 2) + '\n');
     // the pair table of the centre block (rule R-STITCH-03) on its own, for the pages that show it
     if (report.pairs.length) fs.writeFileSync(path.join(path.dirname(healthFile), 'pairs.json'), JSON.stringify({ version: 1, block: report.block, worstPairBearingDeg: report.layout?.worstPairBearingDeg ?? null, worstPairDistancePct: report.layout?.worstPairDistancePct ?? null, pairs: report.pairs }, null, 2) + '\n');
@@ -214,7 +221,16 @@ export async function bake(args: BakeArgs, opts: BakeOptions): Promise<HealthRep
   let meshed: { input: MeshInput; mesh: RoadMesh } | null = null;
   /** What the terrain step hands the tile step: the ground with its tiles (kept in memory, no file). */
   let grounded: Ground | null = null;
+  let laneChecks: LaneChecks | null = null;
+  let repairIssues: Issue[] = [];
+  let meshChecks: MeshChecks | null = null;
+  const conflictsFile = path.join(opts.root, plan.def.dataDir, 'lane_conflicts.json');
+  const picture = async (file: string, svg: () => string, width: number): Promise<string[]> => (quick ? [] : writePicture(opts.root, file, svg(), width));
+  const stepCtx = { root: opts.root, plan, offset: blockFrame(districts, plan.def.block).offset, benchDir: opts.benchDir ?? defaultBenchDir, quick, log: opts.log };
+  let tStep = clock.now();
   for (const step of args.steps as Step[]) {
+    if (report.steps.length) stepMs[report.steps[report.steps.length - 1] as string] = Math.round(clock.now() - tStep);
+    tStep = clock.now();
     opts.log(`[bake] step ${step}`);
     report.steps.push(step);
     if (step === 'sources') {
@@ -251,15 +267,15 @@ export async function bake(args: BakeArgs, opts: BakeOptions): Promise<HealthRep
       const counts = graphCounts(g);
       const c = checkGraph(g);
       const file = writeGraph(opts.root, plan, json);
-      const picture = await writePicture(opts.root, `harness/reports/map/graph_${plan.id}.png`, graphSvg(g), 2400);
+      const pictures = await picture(`harness/reports/map/graph_${plan.id}.png`, () => graphSvg(g), 2400);
       report.graph = {
-        file, picture, hash: graphHash(g), buildMs, counts,
+        file, picture: pictures, hash: graphHash(g), buildMs, counts,
         checks: { duplicateEdges: c.duplicateEdges.length, zeroLengthEdges: c.zeroLengthEdges.length, missingNodes: c.missingNodes.length, orphanNodes: c.orphanNodes.length, crossingsWithoutEnd: c.crossingsWithoutEnd, badMapEdgeNodes: c.badMapEdgeNodes.length, ok: c.ok },
         normalised: { ...g.normalised, duplicateWays: g.normalised.duplicateWays.length },
         footprintMerge: g.footprintSources,
       };
       opts.log(`[graph] built in ${(buildMs / 1000).toFixed(2)} s: ${counts.nodes} nodes, ${counts.edges} edges (${counts.roadKm} km), ${counts.mapEdgeEnds} map edge ends, ${counts.pairs} carriageway pairs on ${counts.pairedStreets} named streets, ${counts.footprints} footprints, ${counts.rail} rail and ${counts.metro} metro lines, ${counts.footBridges} foot bridges, ${counts.water} water areas, ${counts.open} open areas; hash ${report.graph.hash}`);
-      opts.log(`[graph] wrote ${file} and ${picture.join(', ')}`);
+      opts.log(`[graph] wrote ${[file, ...pictures].join(', ')}`);
       check(graphInvariants(c, counts));
     } else if (step === 'repair') {
       if (!graph || !graphInput) throw new Error('the repair step needs the graph step before it');
@@ -290,20 +306,24 @@ export async function bake(args: BakeArgs, opts: BakeOptions): Promise<HealthRep
       const t0 = clock.now();
       // the repair, then the lane model on its result: lane surfaces on each other go back as conflicts (R-LANE-06)
       const lin = laneInputs(graphInput, plan, readRepairInput(opts.root).heroSpecs);
-      const fb = repairWithLanes(graph, env, { overrides: { entries, project: toBlock } }, (g) => ({ nodes: g.nodes, edges: g.edges, marks: g.marks, ...lin }));
+      const seed = quick ? readConflicts(conflictsFile) : [];
+      const fb = repairWithLanes(graph, env, { overrides: { entries, project: toBlock } }, (g) => ({ nodes: g.nodes, edges: g.edges, marks: g.marks, ...lin }), seed.length ? 0 : undefined, seed);
+      if (seed.length) opts.log(`[repair] partial bake: the lane feedback starts from the ${seed.length} conflicts of the last whole bake (${path.relative(opts.root, conflictsFile)}), one round`);
+      else if (!quick) fs.writeFileSync(conflictsFile, JSON.stringify({ _doc: 'Lane conflicts the last whole bake handed back to the repair (rule R-LANE-06); a partial bake starts from them (P1-017).', conflicts: fb.conflicts }) + '\n');
       const res = fb.res;
       const repairMs = Math.round(clock.now() - t0);
       const again = repairGraph(res.graph, fb.env, { overrides: { entries, project: toBlock, applied: true } });
       opts.log(`[repair] lane feedback: ${fb.rounds.map((r, i) => `round ${i} ${r.overlapM2} m2 in ${r.pairs} pairs, ${r.conflicts} new conflicts (not handed back: ${Object.entries(r.skipped).map(([k, v]) => `${k} ${v}`).join(', ') || 'none'})`).join('; ')}; ${fb.conflicts.length} conflicts in the rule environment`);
       repaired = res.graph;
+      repairIssues = res.issues;
       laneBuild = fb.build;
       const s = res.summary;
       const c = checkGraph(res.graph);
       const noProposal = res.issues.filter((i) => i.status === 'open' && !i.proposals.some((p) => p.confidence > 0 && p.reasoning.length > 0 && p.preview.length > 0)).length;
       const files = writeRepair(opts.root, plan, path.dirname(healthFile), res, `production bake, stage ${plan.id}, graph ${graphHash(graph)}`, { offset, outline: stageRing, places: extra.places, toBlock });
-      const picture = await writePicture(opts.root, `harness/reports/map/issues_${plan.id}.png`, issuesSvg(res.graph, res.issues), 2400);
+      const pictures = await picture(`harness/reports/map/issues_${plan.id}.png`, () => issuesSvg(res.graph, res.issues), 2400);
       const ctx = new RuleContext(res.graph, fb.env, res.graph.marks);
-      report.repair = { files: { ...files, picture }, hash: graphHash(res.graph), rulesMs: timed.ms, rulesTotalMs: timed.totalMs, repairMs, summary: s, secondRunRepairs: again.repairs.length, queuedWithoutProposal: noProposal, heroEdges: res.graph.edges.filter((e) => ctx.heroOf(e)).length, laneFeedback: { rounds: fb.rounds, conflicts: fb.conflicts.length } };
+      report.repair = { files: { ...files, picture: pictures }, hash: graphHash(res.graph), rulesMs: timed.ms, rulesTotalMs: timed.totalMs, repairMs, summary: s, secondRunRepairs: again.repairs.length, queuedWithoutProposal: noProposal, heroEdges: res.graph.edges.filter((e) => ctx.heroOf(e)).length, laneFeedback: { rounds: fb.rounds, conflicts: fb.conflicts.length } };
       const byRule: Record<string, number> = {};
       const autoByRule: Record<string, number> = {};
       for (const r of s.byRule) {
@@ -318,7 +338,7 @@ export async function bake(args: BakeArgs, opts: BakeOptions): Promise<HealthRep
       opts.log(`[repair] ${s.total} issues in ${s.passes} passes (${(repairMs / 1000).toFixed(2)} s): ${s.auto} repaired on their own (${(s.autoShare * 100).toFixed(1)} percent; ${(s.autoShareOfChanged * 100).toFixed(1)} percent of repaired plus queued; ${(s.withoutTerrainOutliers.autoShare * 100).toFixed(1)} percent without the terrain outlier rule), ${s.queued} queued (${s.highImpact} high impact, ${s.provisionalApplied} top proposals applied as provisional), ${s.explained} explained, ${s.overridden} settled by overrides, ${s.drops} drops logged; a second run applies ${again.repairs.length} repairs`);
       const ov = res.overrideCounts;
       opts.log(`[overrides] ${ov.patches} patches in ${ov.files} files for this stage (${outsideStage} outside it): ${ov.byId} found by id, ${ov.byAnchor} by anchor, ${ov.stale} stale (kept in their files), ${ov.applied} applied, ${ov.switchedOff} repairs switched off, ${ov.idle} idle; ${ov.issuesSettled} issues settled`);
-      opts.log(`[repair] wrote ${files.graph}, ${files.issues}, ${files.repairs} and ${picture.join(', ')}`);
+      opts.log(`[repair] wrote ${[files.graph, files.issues, files.repairs, ...pictures].join(', ')}`);
       check([
         { id: 'REPAIR-01.fixed_point', ok: again.repairs.length === 0 && s.unconverged === 0, detail: again.repairs.length === 0 && s.unconverged === 0 ? `a second run on the repaired graph applies 0 repairs (${s.passes} passes)` : `a second run applies ${again.repairs.length} repairs (${again.repairs.slice(0, 3).map((x) => x.issue).join(', ')}), ${s.unconverged} issues could still repair after ${s.passes} passes (${Object.entries(s.unconvergedBy).map(([k, v]) => `${k} ${v}`).join(', ')})` },
         { id: 'REPAIR-02.proposals', ok: noProposal === 0, detail: noProposal === 0 ? `every one of the ${s.queued} queued issues has a proposal with a confidence, a reasoning line and a preview` : `${noProposal} queued issues have no usable proposal` },
@@ -333,21 +353,23 @@ export async function bake(args: BakeArgs, opts: BakeOptions): Promise<HealthRep
       const t0 = clock.now();
       // the repair step's last lane model is this model (the same graph and inputs); built again for the hash check
       const build: LaneBuild = laneBuild ?? buildLaneModel(input);
+      opts.faults?.lanes?.(build);
       const buildMs = laneBuild ? Math.round(laneBuild.ms['total'] ?? 0) : Math.round(clock.now() - t0);
       const model = laneModelFile(build, plan.def.block, plan.id);
       const hash = laneModelHash(model);
       laneBuild = build;
       lanesHash = hash;
       // the same input again: the model must not depend on anything but its input
-      const again = laneModelHash(laneModelFile(buildLaneModel(input), plan.def.block, plan.id));
+      const again = quick ? hash : laneModelHash(laneModelFile(buildLaneModel(input), plan.def.block, plan.id));
       const c = checkLaneModel(build, heroes);
+      laneChecks = c;
       const files = writeLanes(opts.root, plan, path.dirname(healthFile), model, laneGraph(build, plan.def.block, offset), lanesLayer(build, plan.def.block, offset));
       const pictures: string[] = [];
       for (const v of LANE_VIEWS) {
         const at = proj.toWorld(v.lat, v.lon);
         if (!pointInRing(at, outlineRing(plan.outline.coords, plan.origin))) continue;
         const box = { minX: at.x - v.halfM, maxX: at.x + v.halfM, minZ: at.z - v.halfM, maxZ: at.z + v.halfM };
-        pictures.push(...(await writePicture(opts.root, `harness/reports/map/lanes_${plan.id}_${v.id}.png`, lanesSvg(build, box, `${v.name}: lane model, north up (${plan.id})`), 2400)));
+        pictures.push(...(await picture(`harness/reports/map/lanes_${plan.id}_${v.id}.png`, () => lanesSvg(build, box, `${v.name}: lane model, north up (${plan.id})`), 2400)));
       }
       const rec = lanesRecord(build, c, hash, buildMs, { ...files, pictures });
       report.lanes = rec;
@@ -365,7 +387,7 @@ export async function bake(args: BakeArgs, opts: BakeOptions): Promise<HealthRep
       check([
         { id: 'LANES-01.continuity', ok: c.continuity.breaks === 0, detail: c.continuity.breaks === 0 ? `every lane at a strip end has a successor or an explained end (${c.continuity.lanePairs} lane pairs, ${build.ends.length} explained ends)` : `${c.continuity.breaks} lanes end with nothing after them: ${c.continuity.list.slice(0, 3).map((x) => `${x.strip} lane ${x.lane}`).join(', ')}` },
         { id: 'LANES-02.zones', ok: c.zones.withoutGoreOrNose + c.zones.endsOffCentreLine === 0, detail: `${c.zones.zones} split zones: ${c.zones.withoutGoreOrNose} without a gore or a nose, ${c.zones.endsOffCentreLine} ending off a branch centre line (largest ${c.zones.maxEndErrorM} m)` },
-        { id: 'LANES-03.same_twice', ok: hash === again, detail: hash === again ? `the same hash twice (${hash})` : `two builds of one input differ: ${hash} and ${again}` },
+        { id: 'LANES-03.same_twice', ok: hash === again, detail: quick ? NOT_TWICE : hash === again ? `the same hash twice (${hash})` : `two builds of one input differ: ${hash} and ${again}` },
         { id: 'LANES-04.left_hand_and_widths', ok: c.trafficSide.wrongSide + c.widths.tooNarrow === 0, detail: `${c.trafficSide.wrongSide} two-way strips on the wrong side, ${c.widths.tooNarrow} lanes under their width limit` },
         { id: 'LANES-05.hero', ok: heroBad === 0, detail: `${heroBad} hero spec mismatches` },
       ]);
@@ -378,7 +400,7 @@ export async function bake(args: BakeArgs, opts: BakeOptions): Promise<HealthRep
       const input = elevationInput(build, repaired, (x, z) => ground.at(x, z));
       const first = solveBlockElevation(input);
       const before = build.strips.map((s) => s.st.map((st) => st.h));
-      const res = solveBlockElevation(input);
+      const res = quick ? first : solveBlockElevation(input);
       let twoRuns = 0;
       build.strips.forEach((s, si) => s.st.forEach((st, i) => (twoRuns = Math.max(twoRuns, Math.abs(st.h - ((before[si] as number[])[i] as number))))));
       res.junctionHeights.forEach((h, i) => (twoRuns = Math.max(twoRuns, Math.abs(h - (first.junctionHeights[i] as number)))));
@@ -389,9 +411,9 @@ export async function bake(args: BakeArgs, opts: BakeOptions): Promise<HealthRep
       const heights = writeElevation(opts.root, plan, file);
       const ring = outlineRing(plan.outline.coords, plan.origin);
       const box = { minX: Math.min(...ring.map((p) => p.x)), maxX: Math.max(...ring.map((p) => p.x)), minZ: Math.min(...ring.map((p) => p.z)), maxZ: Math.max(...ring.map((p) => p.z)) };
-      const pictures = await writePicture(opts.root, `harness/reports/map/elevation_${plan.id}.png`, heightMapSvg(build.strips, st.structures, box, `Heights above the ground model, north up (${plan.id}): ${st.structures.length} structures`), 2400);
+      const pictures = await picture(`harness/reports/map/elevation_${plan.id}.png`, () => heightMapSvg(build.strips, st.structures, box, `Heights above the ground model, north up (${plan.id}): ${st.structures.length} structures`), 2400);
       for (const v of PROFILE_VIEWS) {
-        if (build.strips.some((s) => v.match.test(s.name))) pictures.push(...(await writePicture(opts.root, `harness/reports/map/elevation_${plan.id}_${v.id}.png`, profileSvg(build.strips, (s) => v.match.test(s.name), `${v.name} (${plan.id})`), 2200)));
+        if (build.strips.some((s) => v.match.test(s.name))) pictures.push(...(await picture(`harness/reports/map/elevation_${plan.id}_${v.id}.png`, () => profileSvg(build.strips, (s) => v.match.test(s.name), `${v.name} (${plan.id})`), 2200)));
       }
       const rec = elevationRecord(build.strips, res, c, st, offset, hash, twoRuns, { heights, pictures });
       rec.solveMs = first.report.ms['total'] ?? 0;
@@ -412,118 +434,68 @@ export async function bake(args: BakeArgs, opts: BakeOptions): Promise<HealthRep
         { id: 'ELEV-02.grades_and_curves', ok: c.grade.violations + c.curves.violations === 0 && c.steps.steepestJunctionPct <= 5.0001, detail: `${c.grade.violations} grades over the class limit, ${c.curves.violations} vertical curves under the class limit, steepest junction surface ${c.steps.steepestJunctionPct} percent` },
         { id: 'ELEV-03.clearances', ok: c.clearance.violations === 0, detail: c.clearance.violations === 0 ? `every one of ${c.clearance.roadCrossings} road crossings, ${c.clearance.junctionCrossings} junction crossings, ${c.clearance.roadOverRail + c.clearance.roadUnderRail} railway crossings and ${c.clearance.waterCrossings} decks over water has its clearance` : `${c.clearance.violations} clearances short: ${c.findings.filter((x) => x.kind === 'clearance').slice(0, 3).map((x) => `${x.strip} ${x.value} m (${x.why})`).join(', ')}` },
         { id: 'ELEV-04.solved', ok: s.converged && res.unmet.length === 0 && c.crossfall.violations === 0, detail: `the solve ${s.converged ? 'converged' : 'did not converge'} in ${s.rounds} rounds, ${res.unmet.length} limits given up, ${c.crossfall.violations} crossfalls over the limit` },
-        { id: 'ELEV-05.same_twice', ok: twoRuns <= 1e-6, detail: `two solves of the same lane model differ by at most ${twoRuns} m` },
+        { id: 'ELEV-05.same_twice', ok: twoRuns <= 1e-6, detail: quick ? NOT_TWICE : `two solves of the same lane model differ by at most ${twoRuns} m` },
       ]);
     } else if (step === 'mesh') {
       if (!laneBuild || !elevated) throw new Error('the mesh step needs the lanes and the elevation step before it');
-      const proj = projector(plan.origin);
-      const offset = blockFrame(districts, plan.def.block).offset;
-      const input = meshInput(laneBuild, elevated.junctionHeights, elevated.kinds);
-      // built twice: the mesh must not depend on anything but the lane model and the heights
-      const mesh = buildRoadMesh(input);
-      meshed = { input, mesh };
-      const hash = meshHash(mesh);
-      const again = meshHash(buildRoadMesh(input));
-      const tc = clock.now();
-      const c = checkRoadMesh(input, mesh);
-      const checksMs = Math.round(clock.now() - tc);
-      const ring = outlineRing(plan.outline.coords, plan.origin);
-      const tiles: string[] = [];
-      const pictures: string[] = [];
-      const genDir = opts.benchDir ?? path.join('game', 'bench', 'roads', 'gen');
-      for (const v of MESH_SITES) {
-        const at = proj.toWorld(v.lat, v.lon);
-        if (!pointInRing(at, ring)) continue;
-        const site = siteTile(input, mesh, { id: v.id, name: v.name, x: at.x, z: at.z, halfM: v.halfM, eye: v.eye });
-        const w = writeSiteTile(opts.root, genDir, site);
-        tiles.push(w.tile, w.poses);
-        const box = { minX: at.x - v.halfM, maxX: at.x + v.halfM, minZ: at.z - v.halfM, maxZ: at.z + v.halfM };
-        const marks = {
-          setFaces: mesh.junctions.setFaces,
-          polys: mesh.structures.piers.map((p) => ({ ring: p.ring, fill: '#f2c14e' })),
-          lines: mesh.stops.lines.map((l) => ({ a: l.a, b: l.b, stroke: '#ffffff', width: 0.3 })),
-        };
-        pictures.push(...(await writePicture(opts.root, `harness/reports/map/mesh_${plan.id}_${v.id}.png`, meshSvg(mesh.fs, box, `${v.name}: road mesh faces, north up (${plan.id}). Junction surfaces outlined blue (as planned) or red (made or cut by the polygon set); yellow: piers; white: stop lines`, marks, input.strips.length), 2400)));
-        opts.log(`[mesh] site ${v.id}: ${site.triangles} triangles, ${w.bytes} bytes, poses ${site.meta.poses.map((p) => p.name).join(', ')}`);
-      }
-      const rec = meshRecord(input, mesh, c, checksMs, offset, hash, { siteTiles: tiles, pictures });
-      report.mesh = rec;
-      report.gates['overlappingRoadFaces'] = rec.gates.overlappingRoadFaces;
-      report.gates['openBoundaryEdges'] = rec.gates.openBoundaryEdges;
-      report.gates['unjoinedEnds'] = rec.gates.unjoinedEnds;
-      report.gates['floatingEnds'] = rec.gates.floatingEnds;
-      report.gates['railingsAtGrade'] = rec.gates.railingsAtGrade;
-      report.gates['piersInLane'] = rec.gates.piersInLane;
-      const n = rec.counts;
-      opts.log(`[mesh] built in ${(rec.buildMs / 1000).toFixed(2)} s (${Object.entries(rec.ms).filter(([k]) => k !== 'total').map(([k, v]) => `${k} ${v}`).join(', ')} ms), checks ${(checksMs / 1000).toFixed(2)} s: ${n.faces} faces over ${n.vertices} vertices (${n.laneQuads} lane quads), ${n.triangles} triangles; hash ${hash}`);
-      opts.log(`[mesh] junctions: ${n.junctions} (${n.j1} as planned, ${n.j2} from lane path corridors by the polygon set); ${n.clippedFaces} faces of ${n.clippedJunctions} junctions cut back off a neighbour (${n.clippedAreaM2} m2); raised corners ${n.bands} (${n.crossedBands} crossed and redrawn, ${n.droppedBands} left out); ${rec.oversize.length} surfaces over 3,000 m2`);
-      opts.log(`[mesh] overlap: ${c.overlap.pairsOver} pairs over ${PAIR_LIMIT_M2} m2 at ${c.overlap.junctionsOver} of ${c.overlap.junctions} junctions (${c.overlap.pairsTested} pairs tested, largest ${c.overlap.maxPairM2} m2, a junction on itself ${c.overlap.maxSelfM2} m2); strip on strip ${c.overlap.stripPairs.pairs} pairs, ${c.overlap.stripPairs.areaM2} m2${c.overlap.stripPairs.worst[0] ? ` (largest ${c.overlap.stripPairs.worst[0].a} on ${c.overlap.stripPairs.worst[0].b}: ${c.overlap.stripPairs.worst[0].areaM2} m2)` : ''}; total under more than one face ${c.overlap.totalM2} m2 (ground level ${c.overlap.groundM2} m2)`);
-      opts.log(`[mesh] watertight: open boundary edges ${c.watertight.openBoundaryEdges} (unclosed ${c.watertight.unclosed}, used twice ${c.watertight.doubled}, T joints left ${c.watertight.tJointsLeft}; ${c.watertight.tJointsRepaired} repaired), ${c.watertight.freeEdges} free edges in ${c.watertight.loops} loops (${c.watertight.outerLoops} around road, ${c.watertight.blockLoops} around blocks, ${c.watertight.sliverLoops} hairlines of ${c.watertight.sliverM2} m2)`);
-      opts.log(`[mesh] ends: ${c.ends.stripEnds} strip ends, ${c.ends.joined} joined, explained ${Object.entries(c.ends.explained).map(([k, v]) => `${k} ${v}`).join(', ')}; unjoined ${c.ends.unjoined}${c.ends.unjoinedList.length ? ` (${c.ends.unjoinedList.slice(0, 6).map((e) => `${e.strip} ${e.end}`).join(', ')})` : ''}; floating ${c.ends.floating}${c.ends.floatingList.length ? ` (${c.ends.floatingList.map((e) => `${e.strip} ${e.end} ${e.kind} ${e.aboveGroundM} m up`).join(', ')})` : ''}`);
-      opts.log(`[mesh] structures: ${c.railings.segments} edge segments (${Object.entries(c.railings.byKind).map(([k, v]) => `${k} ${v}`).join(', ')}), ${c.railings.parapets} with a parapet, ${c.railings.atGrade} of ${c.railings.parapetTriangles} parapet triangles at grade away from a structure; piers ${c.piers.piers} (${c.piers.moved} places passed over, longest span ${c.piers.maxSpanM} m), in a lane below: ${c.piers.inLane}; deck joints ${c.piers.joints}`);
-      opts.log(`[mesh] kerbs: ${c.kerbs.sampled} kerb faces sampled, ${c.kerbs.minM} to ${c.kerbs.maxM} m, ${c.kerbs.off} off 0.15 m by over 0.01 m (beside a surface the polygon set made: ${c.kerbs.beside.off} of ${c.kerbs.beside.sampled}); lane UV ${c.uv.ok ? 'ok' : 'FAILED'}: ${c.uv.lanes} lane quads, ${c.uv.corners} corners, bad u ${c.uv.badU}, bad v ${c.uv.badV}, border mismatches ${c.uv.borderMismatch}, joint mismatches ${c.uv.jointMismatch} of ${c.uv.jointPairs}; stop lines ${c.stopLines.lines} on ${c.stopLines.armsThatStop} arms that stop, missing ${c.stopLines.missing}, crossings ${c.stopLines.crossings}`);
-      opts.log(`[mesh] wrote ${[...tiles, ...pictures].join(', ')}`);
-      check([
-        { id: 'MESH-01.no_overlap_at_junctions', ok: c.overlap.pairsOver === 0, detail: c.overlap.pairsOver === 0 ? `no junction face shares more than ${PAIR_LIMIT_M2} m2 with a strip or another junction (${c.overlap.pairsTested} pairs, largest ${c.overlap.maxPairM2} m2)` : `${c.overlap.pairsOver} pairs over ${PAIR_LIMIT_M2} m2: ${c.overlap.worst.slice(0, 3).map((w) => `${w.a} on ${w.b} ${w.areaM2} m2`).join(', ')}` },
-        { id: 'MESH-02.watertight', ok: c.watertight.openBoundaryEdges === 0, detail: `${c.watertight.openBoundaryEdges} open boundary edges (${c.watertight.unclosed} unclosed, ${c.watertight.doubled} used twice, ${c.watertight.tJointsLeft} T joints left)` },
-        { id: 'MESH-03.structures', ok: c.railings.atGrade === 0 && c.piers.inLane === 0, detail: `${c.railings.atGrade} parapet triangles at grade away from a structure, ${c.piers.inLane} piers in a lane of another level` },
-        { id: 'MESH-04.kerbs_uv_stop_lines', ok: c.kerbs.off === 0 && c.uv.ok && c.stopLines.missing === 0, detail: `${c.kerbs.off} of ${c.kerbs.sampled} kerbs off 0.15 m, lane UV ${c.uv.ok ? 'ok' : 'failed'}, ${c.stopLines.missing} of ${c.stopLines.armsThatStop} stop lines missing` },
-        { id: 'MESH-05.same_twice', ok: hash === again, detail: hash === again ? `the same hash twice (${hash})` : `two builds of one input differ: ${hash} and ${again}` },
-      ]);
+      const m = await runMeshStep(stepCtx, laneBuild, elevated, graph && repaired ? { raw: graph, repaired, issues: repairIssues } : undefined);
+      meshed = { input: m.input, mesh: m.mesh };
+      meshChecks = m.checks;
+      report.mesh = m.rec;
+      for (const k of ['overlappingRoadFaces', 'openBoundaryEdges', 'unjoinedEnds', 'floatingEnds', 'railingsAtGrade', 'piersInLane'] as const) report.gates[k] = m.rec.gates[k];
+      check(m.invariants);
     } else if (step === 'terrain') {
       if (!meshed || !repaired || !groundModel) throw new Error('the terrain step needs the ground, the repair and the mesh step before it');
-      const proj = projector(plan.origin);
-      const offset = blockFrame(districts, plan.def.block).offset;
-      const model = groundModel;
-      const { input: mi, mesh } = meshed;
-      const input: TerrainInput = {
-        fs: mesh.fs, edges: mesh.edges, grid: mesh.grid, strips: mi.strips, kinds: mi.kinds, outline: repaired.outline, footprints: repaired.footprints.map((f) => f.ring),
-        water: repaired.features.water.map((w) => ({ id: w.id, name: w.name, rings: w.rings })), open: repaired.features.open.map((o) => o.rings), ground: (x, z) => model.at(x, z), offset,
-      };
-      // built twice: the ground must not depend on anything but the road mesh, the map and the ground model
-      const ground = buildGround(input);
-      grounded = ground;
-      const hash = groundHash(ground);
-      const again = groundHash(buildGround(input));
-      const tc = clock.now();
-      const c = checkGround(ground);
-      const checksMs = Math.round(clock.now() - tc);
-      const files: string[] = [];
-      const genDir = opts.benchDir ?? path.join('game', 'bench', 'roads', 'gen');
-      for (const v of GROUND_SITES) {
-        const at = proj.toWorld(v.lat, v.lon);
-        if (!pointInRing(at, repaired.outline)) continue;
-        const box = { minX: at.x - v.halfM, maxX: at.x + v.halfM, minZ: at.z - v.halfM, maxZ: at.z + v.halfM };
-        // the site tiles of the road bench scene again, now on the production ground, with the poses that look at it
-        const site = siteTile(mi, mesh, { id: v.id, name: v.name, x: at.x, z: at.z, halfM: v.halfM, eye: v.eye }, groundInBox(ground, box));
-        const o = site.meta.origin;
-        for (const p of site.meta.poses) if (p.kind === 'eye') p.shot = `ground_${v.id}_eye`;
-        for (const p of groundPoses(ground, { id: v.id, x: at.x, z: at.z, halfM: v.halfM })) site.meta.poses.push({ ...p, pos: [round(p.pos[0] - o[0]), round(p.pos[1] - o[1]), round(p.pos[2] - o[2])], target: [round(p.target[0] - o[0]), round(p.target[1] - o[1]), round(p.target[2] - o[2])] });
-        const w = writeSiteTile(opts.root, genDir, site);
-        files.push(w.tile, w.poses, ...(await writePicture(opts.root, `harness/reports/map/ground_${plan.id}_${v.id}.png`, groundSvg(ground, box, `${v.name}: ground triangles, north up (${plan.id}). Grey: ground, green: open land, sand: building footprints, blue: water; dark: the road mesh`), 2400)));
-        opts.log(`[terrain] site ${v.id}: ${site.triangles} triangles, ${w.bytes} bytes, poses ${site.meta.poses.map((p) => p.name).join(', ')}`);
-      }
-      const rec = terrainRecord(ground, c, checksMs, hash, { files });
-      report.terrain = rec;
-      for (const [k, n] of Object.entries(rec.gates)) report.gates[k] = n;
-      for (const l of terrainLog(rec)) opts.log(`[terrain] ${l}`);
-      check(terrainInvariants(rec, again));
+      const t = await runTerrainStep(stepCtx, meshed, repaired, groundModel);
+      grounded = t.ground;
+      report.terrain = t.rec;
+      for (const [k, n] of Object.entries(t.rec.gates)) report.gates[k] = n;
+      check(t.invariants);
     } else if (step === 'tiles') {
-      if (!laneBuild || !meshed || !grounded || !repaired) throw new Error('the tiles step needs the lanes, mesh and terrain steps before it');
+      if (!laneBuild || !meshed || !grounded || !repaired || !laneChecks || !meshChecks) throw new Error('the tiles step needs the lanes, mesh and terrain steps before it');
+      // the six gate counts with their items: each 0 or explained (harness/data/gate_explanations.json), or no tile is written
+      report.gateReport = explainGates(gateItems(repaired, laneBuild, laneChecks, meshChecks), readGateFile(opts.root));
+      report.gates['openPorts'] = report.gateReport.gates['openPorts']?.count ?? null;
+      for (const l of gateLog(report.gateReport)) opts.log(`[gates] ${l}`);
+      check([gateInvariant(report.gateReport)]);
       const res = runTileStep({
-        root: opts.root, out: report.tiles.out ?? path.join(plan.def.dataDir, 'tiles'), stage: plan.id, block: plan.def.block, origin: plan.origin, offset: blockFrame(districts, plan.def.block).offset,
+        root: opts.root, out: report.tiles.out ?? tileFolder(plan), stage: plan.id, block: plan.def.block, origin: plan.origin, offset: blockFrame(districts, plan.def.block).offset,
         outline: repaired.outline, lanes: laneBuild, meshed, ground: grounded, repaired, places: layout.input.places, only: report.tiles.only, log: opts.log,
       });
       report.tiles = { ...report.tiles, written: res.written, record: res.record };
       check(res.invariants);
     }
   }
+  if (report.steps.length) stepMs[report.steps[report.steps.length - 1] as string] = Math.round(clock.now() - tStep);
   finish();
+  const totalMs = Math.round(clock.now() - t0Bake);
+  opts.log(`[bake] ${quick ? `partial bake of ${report.tiles.only?.join(', ')}` : 'whole bake'} in ${(totalMs / 1000).toFixed(1)} s (${Object.entries(stepMs).map(([k, v]) => `${k} ${(v / 1000).toFixed(1)}`).join(', ')} s); ${report.tiles.written} tiles written`);
   opts.log(`[bake] health report: ${path.relative(opts.root, healthFile)}`);
   return report;
 }
 
 const round = (v: number): number => Math.round(v * 100) / 100;
+
+/** The lane conflicts the last whole bake wrote; none when the file is missing or half written (a cold start). */
+function readConflicts(file: string): LaneConflict[] {
+  try {
+    return (JSON.parse(fs.readFileSync(file, 'utf8')) as { conflicts: LaneConflict[] }).conflicts;
+  } catch {
+    return [];
+  }
+}
+
+/** harness/data/gate_explanations.json: the entries that explain the gate items left, and the known findings. */
+export function readGateFile(root: string): GateFile {
+  const f = path.join(root, 'harness', 'data', 'gate_explanations.json');
+  if (!fs.existsSync(f)) return { explanations: [], findings: [] };
+  const j = JSON.parse(fs.readFileSync(f, 'utf8')) as Partial<GateFile>;
+  return { explanations: j.explanations ?? [], findings: j.findings ?? [] };
+}
+
+/** The folder a stage's tiles go to: the stage's `tiles` field, else game/world/tiles (gitignored, read by the game). */
+export const tileFolder = (plan: StagePlan): string => plan.def.tiles ?? DEFAULT_TILES;
+export const DEFAULT_TILES = path.join('game', 'world', 'tiles');
 
 async function main(): Promise<void> {
   let args: BakeArgs;

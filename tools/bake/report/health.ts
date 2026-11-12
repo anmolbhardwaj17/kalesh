@@ -11,6 +11,7 @@ import type { LanesRecord } from '../roads/laneout.ts';
 import type { MeshRecord } from '../mesh/meshout.ts';
 import type { TerrainRecord } from '../terrain/terrainout.ts';
 import type { TilesRecord } from '../tile/tilesout.ts';
+import type { GateReport } from './gates.ts';
 
 export const HEALTH_VERSION = 8;
 
@@ -101,6 +102,8 @@ export interface HealthReport {
   stoppedBeforeTiles: boolean;
   /** The tile step (tools/bake/tile/): what was written, where, the checks on the bytes read back; record is null until it runs. */
   tiles: { written: number; out: string | null; only: string[] | null; record?: TilesRecord };
+  /** The six gate counts item by item, each explained or not, and the known findings with their owners (P1-017); set before the tile step. */
+  gateReport?: GateReport;
 }
 
 export interface OverrideHealth extends OverrideCounts {
