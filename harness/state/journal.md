@@ -360,3 +360,4 @@ One line per event, written by task.mjs (start, done, fail, phase changes, inbox
 - 2026-11-12 05:13 [P1-014] start (attempt 1): Junction and road mesh builder with the overlap proof
 - 2026-11-12 06:31 [P1-036] added: Road mesh follow-ups: unjoined arms, oversize junctions, deck to ground joint
 - 2026-11-12 06:40 [P1-014] done: Road and junction mesh for the whole pilot: 378,753 faces, 1.66 M triangles, 7 s, deterministic. Overlap 0 pairs over 0.01 m2 at 2,775 junctions; open boundary edges 0; parapets at grade 0; piers in lanes 0; kerbs 0.15 m; stop lines on every stopping arm. Unjoined ends 6 and floating ends 2 go to P1-036. Self-check: typecheck, 676 vitest, 70 Godot, offline mesh bake, quick OK; ITO eye and CP top shots read, ITO kept in progress.
+- 2026-11-12 06:41 [P1-015] start (attempt 1): Ground that fits the roads
