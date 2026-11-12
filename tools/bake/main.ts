@@ -11,8 +11,9 @@
 // health report, a north-up picture of the issues), lanes (the lane model of tools/bake/roads/network.ts on the repaired
 // graph: lanes.json and lane_graph.json in <dataDir>, the inspector's lanes layer and north-up pictures beside the
 // health report), elevation (one height solve over the whole lane model, tools/bake/elevation/: elevation.json in
-// <dataDir>, a north-up height map and the side view of the ITO flyover beside the health report), tiles (written by
-// a later task). Invariants run after each step; a failed one
+// <dataDir>, a north-up height map and the side view of the ITO flyover beside the health report), mesh (the road and
+// junction mesh of tools/bake/mesh/ with its overlap proof and gate counts; stand-in tiles of a few sites for the road
+// bench scene in game/bench/roads/gen/ and north-up pictures beside the health report), tiles (written by a later task). Invariants run after each step; a failed one
 // stops the bake before tiles are written. harness/reports/map/health.json is written at the end of every run.
 import fs from 'node:fs';
 import path from 'node:path';
@@ -63,6 +64,13 @@ import { elevationInput } from './elevation/input.ts';
 import { heightMapSvg, profileSvg } from './elevation/render.ts';
 import { solveBlockElevation } from './elevation/solve.ts';
 import { readStructures } from './elevation/structures.ts';
+import { buildRoadMesh } from './mesh/build.ts';
+import { checkRoadMesh } from './mesh/checks.ts';
+import { meshInput } from './mesh/input.ts';
+import { meshHash, meshRecord, siteTile } from './mesh/meshout.ts';
+import { PAIR_LIMIT_M2 } from './mesh/proof.ts';
+import { meshSvg } from './mesh/render.ts';
+import { writeSiteTile } from './sources/meshio.ts';
 import { writeElevation } from './sources/elevationio.ts';
 import { writeLanes } from './sources/lanesio.ts';
 import { readGedtmFile, readGlo30File } from './sources/ground.ts';
@@ -135,6 +143,8 @@ export interface BakeOptions {
   healthFile?: string;
   /** Where the override files are read from (default harness/data/overrides under root). */
   overridesDir?: string;
+  /** Where the mesh step writes the road bench scene's stand-in tiles (default game/bench/roads/gen under root); a test passes its own folder. */
+  benchDir?: string;
 }
 
 /** Runs a bake for parsed arguments; returns the report (also written to disk). Throws BakeStop after writing it. */
@@ -188,6 +198,8 @@ export async function bake(args: BakeArgs, opts: BakeOptions): Promise<HealthRep
   let lanesHash = '';
   let graph: BlockGraph | null = null;
   let repaired: RepairedGraph | null = null;
+  /** What the elevation step hands the mesh step: the junction centre heights and the kind of every station. */
+  let elevated: { junctionHeights: ArrayLike<number>; kinds: readonly ArrayLike<number>[] } | null = null;
   for (const step of args.steps as Step[]) {
     opts.log(`[bake] step ${step}`);
     report.steps.push(step);
@@ -371,6 +383,7 @@ export async function bake(args: BakeArgs, opts: BakeOptions): Promise<HealthRep
       rec.solveMs = first.report.ms['total'] ?? 0;
       rec.solver = first.report;
       report.elevation = rec;
+      elevated = { junctionHeights: res.junctionHeights, kinds: st.kinds };
       report.gates['floatingEnds'] = rec.openEnds.floating;
       const s = first.report;
       opts.log(`[elevation] solved in ${(rec.solveMs / 1000).toFixed(2)} s (${s.rounds} rounds, ${s.factorisations} factorisations, ${s.converged ? 'converged' : 'NOT converged'}): ${s.strips} strips and ${s.stations} stations in ${s.chains} chains, ${s.knots} knots, ${s.unknowns} unknowns (${s.branches} branches follow their main line, ${s.ties} map edge ties), matrix ${s.matrix} values, factor ${s.factor}; ms ${Object.entries(s.ms).map(([k, v]) => `${k} ${v}`).join(', ')}`);
@@ -386,6 +399,61 @@ export async function bake(args: BakeArgs, opts: BakeOptions): Promise<HealthRep
         { id: 'ELEV-03.clearances', ok: c.clearance.violations === 0, detail: c.clearance.violations === 0 ? `every one of ${c.clearance.roadCrossings} road crossings, ${c.clearance.junctionCrossings} junction crossings, ${c.clearance.roadOverRail + c.clearance.roadUnderRail} railway crossings and ${c.clearance.waterCrossings} decks over water has its clearance` : `${c.clearance.violations} clearances short: ${c.findings.filter((x) => x.kind === 'clearance').slice(0, 3).map((x) => `${x.strip} ${x.value} m (${x.why})`).join(', ')}` },
         { id: 'ELEV-04.solved', ok: s.converged && res.unmet.length === 0 && c.crossfall.violations === 0, detail: `the solve ${s.converged ? 'converged' : 'did not converge'} in ${s.rounds} rounds, ${res.unmet.length} limits given up, ${c.crossfall.violations} crossfalls over the limit` },
         { id: 'ELEV-05.same_twice', ok: twoRuns <= 1e-6, detail: `two solves of the same lane model differ by at most ${twoRuns} m` },
+      ]);
+    } else if (step === 'mesh') {
+      if (!laneBuild || !elevated) throw new Error('the mesh step needs the lanes and the elevation step before it');
+      const proj = projector(plan.origin);
+      const offset = blockFrame(districts, plan.def.block).offset;
+      const input = meshInput(laneBuild, elevated.junctionHeights, elevated.kinds);
+      // built twice: the mesh must not depend on anything but the lane model and the heights
+      const mesh = buildRoadMesh(input);
+      const hash = meshHash(mesh);
+      const again = meshHash(buildRoadMesh(input));
+      const tc = clock.now();
+      const c = checkRoadMesh(input, mesh);
+      const checksMs = Math.round(clock.now() - tc);
+      const ring = outlineRing(plan.outline.coords, plan.origin);
+      const tiles: string[] = [];
+      const pictures: string[] = [];
+      const genDir = opts.benchDir ?? path.join('game', 'bench', 'roads', 'gen');
+      for (const v of MESH_SITES) {
+        const at = proj.toWorld(v.lat, v.lon);
+        if (!pointInRing(at, ring)) continue;
+        const site = siteTile(input, mesh, { id: v.id, name: v.name, x: at.x, z: at.z, halfM: v.halfM, eye: v.eye });
+        const w = writeSiteTile(opts.root, genDir, site);
+        tiles.push(w.tile, w.poses);
+        const box = { minX: at.x - v.halfM, maxX: at.x + v.halfM, minZ: at.z - v.halfM, maxZ: at.z + v.halfM };
+        const marks = {
+          setFaces: mesh.junctions.setFaces,
+          polys: mesh.structures.piers.map((p) => ({ ring: p.ring, fill: '#f2c14e' })),
+          lines: mesh.stops.lines.map((l) => ({ a: l.a, b: l.b, stroke: '#ffffff', width: 0.3 })),
+        };
+        pictures.push(...(await writePicture(opts.root, `harness/reports/map/mesh_${plan.id}_${v.id}.png`, meshSvg(mesh.fs, box, `${v.name}: road mesh faces, north up (${plan.id}). Junction surfaces outlined blue (as planned) or red (made or cut by the polygon set); yellow: piers; white: stop lines`, marks, input.strips.length), 2400)));
+        opts.log(`[mesh] site ${v.id}: ${site.triangles} triangles, ${w.bytes} bytes, poses ${site.meta.poses.map((p) => p.name).join(', ')}`);
+      }
+      const rec = meshRecord(input, mesh, c, checksMs, offset, hash, { siteTiles: tiles, pictures });
+      report.mesh = rec;
+      report.gates['overlappingRoadFaces'] = rec.gates.overlappingRoadFaces;
+      report.gates['openBoundaryEdges'] = rec.gates.openBoundaryEdges;
+      report.gates['unjoinedEnds'] = rec.gates.unjoinedEnds;
+      report.gates['floatingEnds'] = rec.gates.floatingEnds;
+      report.gates['railingsAtGrade'] = rec.gates.railingsAtGrade;
+      report.gates['piersInLane'] = rec.gates.piersInLane;
+      const n = rec.counts;
+      opts.log(`[mesh] built in ${(rec.buildMs / 1000).toFixed(2)} s (${Object.entries(rec.ms).filter(([k]) => k !== 'total').map(([k, v]) => `${k} ${v}`).join(', ')} ms), checks ${(checksMs / 1000).toFixed(2)} s: ${n.faces} faces over ${n.vertices} vertices (${n.laneQuads} lane quads), ${n.triangles} triangles; hash ${hash}`);
+      opts.log(`[mesh] junctions: ${n.junctions} (${n.j1} as planned, ${n.j2} from lane path corridors by the polygon set); ${n.clippedFaces} faces of ${n.clippedJunctions} junctions cut back off a neighbour (${n.clippedAreaM2} m2); raised corners ${n.bands} (${n.crossedBands} crossed and redrawn, ${n.droppedBands} left out); ${rec.oversize.length} surfaces over 3,000 m2`);
+      opts.log(`[mesh] overlap: ${c.overlap.pairsOver} pairs over ${PAIR_LIMIT_M2} m2 at ${c.overlap.junctionsOver} of ${c.overlap.junctions} junctions (${c.overlap.pairsTested} pairs tested, largest ${c.overlap.maxPairM2} m2, a junction on itself ${c.overlap.maxSelfM2} m2); strip on strip ${c.overlap.stripPairs.pairs} pairs, ${c.overlap.stripPairs.areaM2} m2${c.overlap.stripPairs.worst[0] ? ` (largest ${c.overlap.stripPairs.worst[0].a} on ${c.overlap.stripPairs.worst[0].b}: ${c.overlap.stripPairs.worst[0].areaM2} m2)` : ''}; total under more than one face ${c.overlap.totalM2} m2 (ground level ${c.overlap.groundM2} m2)`);
+      opts.log(`[mesh] watertight: open boundary edges ${c.watertight.openBoundaryEdges} (unclosed ${c.watertight.unclosed}, used twice ${c.watertight.doubled}, T joints left ${c.watertight.tJointsLeft}; ${c.watertight.tJointsRepaired} repaired), ${c.watertight.freeEdges} free edges in ${c.watertight.loops} loops (${c.watertight.outerLoops} around road, ${c.watertight.blockLoops} around blocks, ${c.watertight.sliverLoops} hairlines of ${c.watertight.sliverM2} m2)`);
+      opts.log(`[mesh] ends: ${c.ends.stripEnds} strip ends, ${c.ends.joined} joined, explained ${Object.entries(c.ends.explained).map(([k, v]) => `${k} ${v}`).join(', ')}; unjoined ${c.ends.unjoined}${c.ends.unjoinedList.length ? ` (${c.ends.unjoinedList.slice(0, 6).map((e) => `${e.strip} ${e.end}`).join(', ')})` : ''}; floating ${c.ends.floating}${c.ends.floatingList.length ? ` (${c.ends.floatingList.map((e) => `${e.strip} ${e.end} ${e.kind} ${e.aboveGroundM} m up`).join(', ')})` : ''}`);
+      opts.log(`[mesh] structures: ${c.railings.segments} edge segments (${Object.entries(c.railings.byKind).map(([k, v]) => `${k} ${v}`).join(', ')}), ${c.railings.parapets} with a parapet, ${c.railings.atGrade} of ${c.railings.parapetTriangles} parapet triangles at grade away from a structure; piers ${c.piers.piers} (${c.piers.moved} places passed over, longest span ${c.piers.maxSpanM} m), in a lane below: ${c.piers.inLane}; deck joints ${c.piers.joints}`);
+      opts.log(`[mesh] kerbs: ${c.kerbs.sampled} kerb faces sampled, ${c.kerbs.minM} to ${c.kerbs.maxM} m, ${c.kerbs.off} off 0.15 m by over 0.01 m (beside a surface the polygon set made: ${c.kerbs.beside.off} of ${c.kerbs.beside.sampled}); lane UV ${c.uv.ok ? 'ok' : 'FAILED'}: ${c.uv.lanes} lane quads, ${c.uv.corners} corners, bad u ${c.uv.badU}, bad v ${c.uv.badV}, border mismatches ${c.uv.borderMismatch}, joint mismatches ${c.uv.jointMismatch} of ${c.uv.jointPairs}; stop lines ${c.stopLines.lines} on ${c.stopLines.armsThatStop} arms that stop, missing ${c.stopLines.missing}, crossings ${c.stopLines.crossings}`);
+      opts.log(`[mesh] wrote ${[...tiles, ...pictures].join(', ')}`);
+      check([
+        { id: 'MESH-01.no_overlap_at_junctions', ok: c.overlap.pairsOver === 0, detail: c.overlap.pairsOver === 0 ? `no junction face shares more than ${PAIR_LIMIT_M2} m2 with a strip or another junction (${c.overlap.pairsTested} pairs, largest ${c.overlap.maxPairM2} m2)` : `${c.overlap.pairsOver} pairs over ${PAIR_LIMIT_M2} m2: ${c.overlap.worst.slice(0, 3).map((w) => `${w.a} on ${w.b} ${w.areaM2} m2`).join(', ')}` },
+        { id: 'MESH-02.watertight', ok: c.watertight.openBoundaryEdges === 0, detail: `${c.watertight.openBoundaryEdges} open boundary edges (${c.watertight.unclosed} unclosed, ${c.watertight.doubled} used twice, ${c.watertight.tJointsLeft} T joints left)` },
+        { id: 'MESH-03.structures', ok: c.railings.atGrade === 0 && c.piers.inLane === 0, detail: `${c.railings.atGrade} parapet triangles at grade away from a structure, ${c.piers.inLane} piers in a lane of another level` },
+        { id: 'MESH-04.kerbs_uv_stop_lines', ok: c.kerbs.off === 0 && c.uv.ok && c.stopLines.missing === 0, detail: `${c.kerbs.off} of ${c.kerbs.sampled} kerbs off 0.15 m, lane UV ${c.uv.ok ? 'ok' : 'failed'}, ${c.stopLines.missing} of ${c.stopLines.armsThatStop} stop lines missing` },
+        { id: 'MESH-05.same_twice', ok: hash === again, detail: hash === again ? `the same hash twice (${hash})` : `two builds of one input differ: ${hash} and ${again}` },
       ]);
     } else if (step === 'tiles') {
       opts.log(`[tiles] not built yet: the tile writer lands with the production road, terrain and tile tasks (would write to ${report.tiles.out})`);
@@ -419,6 +487,14 @@ export function laneInputs(input: GraphInput, plan: StagePlan, heroes: LaneModel
 const LANE_VIEWS: readonly { id: string; name: string; lat: number; lon: number; halfM: number }[] = [
   { id: 'ito', name: 'ITO flyover and junction', lat: 28.6282, lon: 77.2471, halfM: 330 },
   { id: 'cp', name: 'Connaught Place inner circle', lat: 28.6328, lon: 77.2197, halfM: 300 },
+];
+
+/** Sites the mesh step cuts stand-in tiles and pictures for (the road bench scene, --arch=roads:<id>), when the stage holds them. */
+const MESH_SITES: readonly { id: string; name: string; lat: number; lon: number; halfM: number; eye: RegExp }[] = [
+  { id: 'ito', name: 'ITO flyover and junction', lat: 28.6282, lon: 77.2455, halfM: 330, eye: /^(Vikas Marg|Bahadur Shah Zafar Marg|Indraprastha Marg)/ },
+  { id: 'cp', name: 'Connaught Place inner circle', lat: 28.6328, lon: 77.2197, halfM: 300, eye: /^(Radial Road|Barakhamba Road|Janpath)/ },
+  { id: 'india_gate', name: 'India Gate hexagon', lat: 28.612894, lon: 77.229446, halfM: 380, eye: /^(Kartavya Path|Rajpath|Tilak Marg|Kasturba Gandhi Marg|Shahjahan Road)/ },
+  { id: 'chandni_chowk', name: 'Chandni Chowk', lat: 28.6561, lon: 77.2318, halfM: 300, eye: /^Chandni Chowk/ },
 ];
 
 /** Side views drawn by the elevation step: roads by name (drawn when the stage has them). */

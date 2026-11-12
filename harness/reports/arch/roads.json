@@ -3,21 +3,21 @@
   "setups": {
     "ito": {
       "id": "ito",
-      "option": "LN1 EL1 J3 TF2",
+      "option": "J3 production mesh",
       "group": "site",
       "tokens": "ito",
       "must": true,
       "driver": "metal",
       "resolution": "1600x1000",
-      "note": "the ITO flyover with its service lanes, the junction under it and the loop ramps",
-      "at": "2026-11-11T03:32:43.466Z",
+      "note": "the ITO flyover with its service lanes and the junctions under it",
+      "at": "2026-11-12T00:55:17.929Z",
       "project": {
         "physics": {
           "3d/physics_engine": "Jolt Physics"
         }
       },
-      "loadMs": 1449,
-      "buildMs": 510,
+      "loadMs": 1299,
+      "buildMs": 593,
       "renderer": {
         "adapter": "Apple M2 Pro (Apple8)",
         "driver": "metal",
@@ -26,252 +26,77 @@
       },
       "cpuOnly": true,
       "scene": {
-        "attachTotalMs": 16.63,
-        "attachWorstChunkMs": 2.08,
-        "buildMs": 510,
-        "colliderChunks": 83,
-        "colliderTriangles": 22197,
+        "attachTotalMs": 33.02,
+        "attachWorstChunkMs": 0.8,
+        "buildMs": 593,
+        "colliderChunks": 139,
+        "colliderTriangles": 53186,
         "engine": "Jolt Physics",
-        "loadMs": 6.02,
-        "name": "ITO flyover with its service lanes",
+        "loadMs": 9.73,
+        "name": "ITO flyover and junction",
         "placements": 0,
         "poses": [
           "top",
-          "zone0_top",
-          "zone0_eye",
-          "zone1_top",
-          "zone1_eye",
-          "zone2_top",
-          "zone2_eye",
-          "zone3_top",
-          "zone3_eye",
-          "zone4_top",
-          "zone4_eye",
-          "zone5_top",
-          "zone5_eye",
-          "zone6_top",
-          "zone6_eye",
-          "zone7_top",
-          "zone7_eye",
-          "zone8_top",
-          "zone8_eye",
-          "zone9_top",
-          "zone9_eye",
-          "junction0_top",
-          "interchange_top",
-          "flyover_side",
-          "under_deck",
-          "climb_eye",
-          "climb_oblique"
+          "eye"
         ],
         "ready": true,
         "site": "ito",
-        "tileBytes": 3473208,
-        "triangles": 31769
+        "tileBytes": 7411800,
+        "triangles": 65338
       },
       "shots": [
         {
           "pose": "top",
           "kind": "top",
-          "file": "harness/reports/arch/roads/ito_top.png",
-          "note": "the whole site from above, north up"
+          "file": "harness/reports/arch/roads/roads_ito_top.png",
+          "note": "ITO flyover and junction from above, north up"
         },
         {
-          "pose": "zone0_top",
-          "kind": "top",
-          "file": "harness/reports/arch/roads/ito_zone0_top.png",
-          "note": "diverge at node 838633289 from above: taper, shared lane line, gore, nose"
-        },
-        {
-          "pose": "zone0_eye",
+          "pose": "eye",
           "kind": "eye",
-          "file": "harness/reports/arch/roads/ito_zone0_eye.png",
-          "note": "diverge at node 838633289 at driver height, driving towards the nose"
-        },
-        {
-          "pose": "zone1_top",
-          "kind": "top",
-          "file": "harness/reports/arch/roads/ito_zone1_top.png",
-          "note": "merge at node 838633574 from above: taper, shared lane line, gore, nose"
-        },
-        {
-          "pose": "zone1_eye",
-          "kind": "eye",
-          "file": "harness/reports/arch/roads/ito_zone1_eye.png",
-          "note": "merge at node 838633574 at driver height, driving into the merge"
-        },
-        {
-          "pose": "zone2_top",
-          "kind": "top",
-          "file": "harness/reports/arch/roads/ito_zone2_top.png",
-          "note": "diverge at node 1395838315 from above: taper, shared lane line, gore, nose"
-        },
-        {
-          "pose": "zone2_eye",
-          "kind": "eye",
-          "file": "harness/reports/arch/roads/ito_zone2_eye.png",
-          "note": "diverge at node 1395838315 at driver height, driving towards the nose"
-        },
-        {
-          "pose": "zone3_top",
-          "kind": "top",
-          "file": "harness/reports/arch/roads/ito_zone3_top.png",
-          "note": "diverge at node 838633411 from above: taper, shared lane line, gore, nose"
-        },
-        {
-          "pose": "zone3_eye",
-          "kind": "eye",
-          "file": "harness/reports/arch/roads/ito_zone3_eye.png",
-          "note": "diverge at node 838633411 at driver height, driving towards the nose"
-        },
-        {
-          "pose": "zone4_top",
-          "kind": "top",
-          "file": "harness/reports/arch/roads/ito_zone4_top.png",
-          "note": "merge at node 838633363 from above: taper, shared lane line, gore, nose"
-        },
-        {
-          "pose": "zone4_eye",
-          "kind": "eye",
-          "file": "harness/reports/arch/roads/ito_zone4_eye.png",
-          "note": "merge at node 838633363 at driver height, driving into the merge"
-        },
-        {
-          "pose": "zone5_top",
-          "kind": "top",
-          "file": "harness/reports/arch/roads/ito_zone5_top.png",
-          "note": "diverge at node 13382615977 from above: taper, shared lane line, gore, nose"
-        },
-        {
-          "pose": "zone5_eye",
-          "kind": "eye",
-          "file": "harness/reports/arch/roads/ito_zone5_eye.png",
-          "note": "diverge at node 13382615977 at driver height, driving towards the nose"
-        },
-        {
-          "pose": "zone6_top",
-          "kind": "top",
-          "file": "harness/reports/arch/roads/ito_zone6_top.png",
-          "note": "merge at node 838633214 from above: taper, shared lane line, gore, nose"
-        },
-        {
-          "pose": "zone6_eye",
-          "kind": "eye",
-          "file": "harness/reports/arch/roads/ito_zone6_eye.png",
-          "note": "merge at node 838633214 at driver height, driving into the merge"
-        },
-        {
-          "pose": "zone7_top",
-          "kind": "top",
-          "file": "harness/reports/arch/roads/ito_zone7_top.png",
-          "note": "merge at node 838633475 from above: taper, shared lane line, gore, nose"
-        },
-        {
-          "pose": "zone7_eye",
-          "kind": "eye",
-          "file": "harness/reports/arch/roads/ito_zone7_eye.png",
-          "note": "merge at node 838633475 at driver height, driving into the merge"
-        },
-        {
-          "pose": "zone8_top",
-          "kind": "top",
-          "file": "harness/reports/arch/roads/ito_zone8_top.png",
-          "note": "diverge at node 458631457 from above: taper, shared lane line, gore, nose"
-        },
-        {
-          "pose": "zone8_eye",
-          "kind": "eye",
-          "file": "harness/reports/arch/roads/ito_zone8_eye.png",
-          "note": "diverge at node 458631457 at driver height, driving towards the nose"
-        },
-        {
-          "pose": "zone9_top",
-          "kind": "top",
-          "file": "harness/reports/arch/roads/ito_zone9_top.png",
-          "note": "diverge at node 838633507 from above: taper, shared lane line, gore, nose"
-        },
-        {
-          "pose": "zone9_eye",
-          "kind": "eye",
-          "file": "harness/reports/arch/roads/ito_zone9_eye.png",
-          "note": "diverge at node 838633507 at driver height, driving towards the nose"
-        },
-        {
-          "pose": "junction0_top",
-          "kind": "top",
-          "file": "harness/reports/arch/roads/ito_junction0_top.png",
-          "note": "junction j0_838495888 (J1) from above"
-        },
-        {
-          "pose": "interchange_top",
-          "kind": "top",
-          "file": "harness/reports/arch/roads/ito_interchange_top.png",
-          "note": "the interchange from above, north up: the two decks over the junction, the service lanes beside them, the loop ramps"
-        },
-        {
-          "pose": "flyover_side",
-          "kind": "eye",
-          "file": "harness/reports/arch/roads/ito_flyover_side.png",
-          "note": "the flyover from the west: the decks climb over the junction, the service lanes stay on the ground"
-        },
-        {
-          "pose": "under_deck",
-          "kind": "eye",
-          "file": "harness/reports/arch/roads/ito_under_deck.png",
-          "note": "driver height on the cross street, looking under the decks"
-        },
-        {
-          "pose": "climb_eye",
-          "kind": "eye",
-          "file": "harness/reports/arch/roads/ito_climb_eye.png",
-          "note": "driver height in the flyover lanes, 35 m before the painted nose: the gore ahead, the service lanes leave to the left and stay at grade, the flyover climbs"
-        },
-        {
-          "pose": "climb_oblique",
-          "kind": "eye",
-          "file": "harness/reports/arch/roads/ito_climb_oblique.png",
-          "note": "the same diverge from 16 m up: taper, shared lane line, gore and nose, then the flyover climbing while the service lanes stay at grade"
+          "file": "harness/reports/arch/roads/roads_ito_eye.png",
+          "note": "driver height on Indraprastha Marg, looking along it towards the middle of the site"
         }
       ],
       "probe": {
-        "hits": 17,
+        "hits": 12,
         "maxErrorM": 0,
         "meanErrorM": 0,
         "missing": 0,
-        "points": 17,
-        "worst": "e25_733804241_0 lane 1"
+        "points": 12,
+        "worst": "w70237521.0_0 lane 1"
       },
-      "line": "ito: 31769 triangles, 83 collider chunks (attach 16.63 ms, worst chunk 2.08 ms), 27 shots, ray probe 17/17 hits, max error 0 m",
+      "line": "ito: 65338 triangles, 139 collider chunks (attach 33.02 ms, worst chunk 0.8 ms), 2 shots, ray probe 12/12 hits, max error 0 m",
       "hostLoad": {
         "before": {
-          "avg1": 8.77,
+          "avg1": 1.96,
           "cores": 12,
-          "perCore": 0.73
+          "perCore": 0.16
         },
         "after": {
-          "avg1": 8.39,
+          "avg1": 1.97,
           "cores": 12,
-          "perCore": 0.7
+          "perCore": 0.16
         }
       }
     },
     "cp": {
       "id": "cp",
-      "option": "HR1 J3 TF2",
+      "option": "J3 production mesh",
       "group": "site",
       "tokens": "cp",
       "must": true,
       "driver": "metal",
       "resolution": "1600x1000",
-      "note": "the Connaught Place inner circle (hero road spec) with its radials",
-      "at": "2026-11-11T03:32:48.282Z",
+      "note": "the Connaught Place inner circle with its radials",
+      "at": "2026-11-12T00:55:19.412Z",
       "project": {
         "physics": {
           "3d/physics_engine": "Jolt Physics"
         }
       },
-      "loadMs": 1085,
-      "buildMs": 435,
+      "loadMs": 1155,
+      "buildMs": 571,
       "renderer": {
         "adapter": "Apple M2 Pro (Apple8)",
         "driver": "metal",
@@ -280,142 +105,222 @@
       },
       "cpuOnly": true,
       "scene": {
-        "attachTotalMs": 8.87,
-        "attachWorstChunkMs": 0.61,
-        "buildMs": 435,
-        "colliderChunks": 44,
-        "colliderTriangles": 12224,
+        "attachTotalMs": 30.3,
+        "attachWorstChunkMs": 0.76,
+        "buildMs": 571,
+        "colliderChunks": 111,
+        "colliderTriangles": 47059,
         "engine": "Jolt Physics",
-        "loadMs": 3.25,
-        "name": "Connaught Place inner circle with its radials",
-        "placements": 276,
+        "loadMs": 8.46,
+        "name": "Connaught Place inner circle",
+        "placements": 0,
         "poses": [
           "top",
-          "junction0_top",
-          "junction1_top",
-          "junction2_top",
-          "junction3_top",
-          "junction4_top",
-          "junction5_top",
-          "junction6_top",
-          "junction7_top",
-          "hero_across",
-          "radial_eye",
-          "circle_oblique"
+          "eye"
         ],
         "ready": true,
         "site": "cp",
-        "tileBytes": 1655664,
-        "triangles": 14270
+        "tileBytes": 6426464,
+        "triangles": 56254
       },
       "shots": [
         {
           "pose": "top",
           "kind": "top",
-          "file": "harness/reports/arch/roads/cp_top.png",
-          "note": "the whole site from above, north up"
+          "file": "harness/reports/arch/roads/roads_cp_top.png",
+          "note": "Connaught Place inner circle from above, north up"
         },
         {
-          "pose": "junction0_top",
-          "kind": "top",
-          "file": "harness/reports/arch/roads/cp_junction0_top.png",
-          "note": "junction j0_267198394 (J1) from above"
-        },
-        {
-          "pose": "junction1_top",
-          "kind": "top",
-          "file": "harness/reports/arch/roads/cp_junction1_top.png",
-          "note": "junction j1_939091095 (J1) from above"
-        },
-        {
-          "pose": "junction2_top",
-          "kind": "top",
-          "file": "harness/reports/arch/roads/cp_junction2_top.png",
-          "note": "junction j2_1191294765 (J1) from above"
-        },
-        {
-          "pose": "junction3_top",
-          "kind": "top",
-          "file": "harness/reports/arch/roads/cp_junction3_top.png",
-          "note": "junction j3_1191294803 (J1) from above"
-        },
-        {
-          "pose": "junction4_top",
-          "kind": "top",
-          "file": "harness/reports/arch/roads/cp_junction4_top.png",
-          "note": "junction j4_1869716889 (J1) from above"
-        },
-        {
-          "pose": "junction5_top",
-          "kind": "top",
-          "file": "harness/reports/arch/roads/cp_junction5_top.png",
-          "note": "junction j5_1869716891 (J1) from above"
-        },
-        {
-          "pose": "junction6_top",
-          "kind": "top",
-          "file": "harness/reports/arch/roads/cp_junction6_top.png",
-          "note": "junction j6_1869716906 (J1) from above"
-        },
-        {
-          "pose": "junction7_top",
-          "kind": "top",
-          "file": "harness/reports/arch/roads/cp_junction7_top.png",
-          "note": "junction j7_1869716913 (J1) from above"
-        },
-        {
-          "pose": "hero_across",
+          "pose": "eye",
           "kind": "eye",
-          "file": "harness/reports/arch/roads/cp_hero_across.png",
-          "note": "hero road pose matched to the reference photo cp_empty_road_2020: from the park side flower bed across the carriageway to the colonnade"
-        },
-        {
-          "pose": "radial_eye",
-          "kind": "eye",
-          "file": "harness/reports/arch/roads/cp_radial_eye.png",
-          "note": "driver height on Radial Road 1, driving into the inner circle: one junction surface, corner radii, the colonnade ahead"
-        },
-        {
-          "pose": "circle_oblique",
-          "kind": "eye",
-          "file": "harness/reports/arch/roads/cp_circle_oblique.png",
-          "note": "the radial junction and the inner circle from above the outer blocks"
+          "file": "harness/reports/arch/roads/roads_cp_eye.png",
+          "note": "driver height on Radial Road 4, looking along it towards the middle of the site"
         }
       ],
-      "heroPose": {
-        "pose": "hero_across",
-        "sheet": "harness/reports/arch/roads/hero_cp_pose_sheet.jpg",
-        "reference": "https://commons.wikimedia.org/wiki/File:Day_before_Janata_curfew_effect_of_ban_on_social_gathering_over_5_people_deserted_inner_circle_in_Connaught_place_IMG_20200321_163639.jpg",
-        "licence": "CC BY-SA 4.0",
-        "author": "Sumita Roy Dutta",
-        "note": "left: the reference photo (reference only, not in the repo); right: the bench scene from the matched pose"
+      "probe": {
+        "hits": 12,
+        "maxErrorM": 0.0001,
+        "meanErrorM": 0,
+        "missing": 0,
+        "points": 12,
+        "worst": "w24577486.0_0 lane 2"
       },
+      "line": "cp: 56254 triangles, 111 collider chunks (attach 30.3 ms, worst chunk 0.76 ms), 2 shots, ray probe 12/12 hits, max error 0.0001 m",
+      "hostLoad": {
+        "before": {
+          "avg1": 1.97,
+          "cores": 12,
+          "perCore": 0.16
+        },
+        "after": {
+          "avg1": 1.97,
+          "cores": 12,
+          "perCore": 0.16
+        }
+      }
+    },
+    "india_gate": {
+      "id": "india_gate",
+      "option": "J3 production mesh",
+      "group": "site",
+      "tokens": "india_gate",
+      "must": true,
+      "driver": "metal",
+      "resolution": "1600x1000",
+      "note": "the India Gate hexagon and its avenues",
+      "at": "2026-11-12T00:55:21.033Z",
+      "project": {
+        "physics": {
+          "3d/physics_engine": "Jolt Physics"
+        }
+      },
+      "loadMs": 1163,
+      "buildMs": 629,
+      "renderer": {
+        "adapter": "Apple M2 Pro (Apple8)",
+        "driver": "metal",
+        "method": "forward_plus",
+        "vendor": "Apple"
+      },
+      "cpuOnly": true,
+      "scene": {
+        "attachTotalMs": 33.02,
+        "attachWorstChunkMs": 0.84,
+        "buildMs": 629,
+        "colliderChunks": 160,
+        "colliderTriangles": 50255,
+        "engine": "Jolt Physics",
+        "loadMs": 8.22,
+        "name": "India Gate hexagon",
+        "placements": 0,
+        "poses": [
+          "top",
+          "eye"
+        ],
+        "ready": true,
+        "site": "india_gate",
+        "tileBytes": 6878688,
+        "triangles": 60238
+      },
+      "shots": [
+        {
+          "pose": "top",
+          "kind": "top",
+          "file": "harness/reports/arch/roads/roads_india_gate_top.png",
+          "note": "India Gate hexagon from above, north up"
+        },
+        {
+          "pose": "eye",
+          "kind": "eye",
+          "file": "harness/reports/arch/roads/roads_india_gate_eye.png",
+          "note": "driver height on Shahjahan Road, looking along it towards the middle of the site"
+        }
+      ],
       "probe": {
         "hits": 14,
         "maxErrorM": 0,
         "meanErrorM": 0,
         "missing": 0,
         "points": 14,
-        "worst": "j7_1869716913 centre"
+        "worst": "w680551212.1_0 lane 2"
       },
-      "line": "cp: 14270 triangles, 44 collider chunks (attach 8.87 ms, worst chunk 0.61 ms), 12 shots, ray probe 14/14 hits, max error 0 m",
+      "line": "india_gate: 60238 triangles, 160 collider chunks (attach 33.02 ms, worst chunk 0.84 ms), 2 shots, ray probe 14/14 hits, max error 0 m",
       "hostLoad": {
         "before": {
-          "avg1": 8.39,
+          "avg1": 1.97,
           "cores": 12,
-          "perCore": 0.7
+          "perCore": 0.16
         },
         "after": {
-          "avg1": 8.39,
+          "avg1": 1.97,
           "cores": 12,
-          "perCore": 0.7
+          "perCore": 0.16
+        }
+      }
+    },
+    "chandni_chowk": {
+      "id": "chandni_chowk",
+      "option": "J3 production mesh",
+      "group": "site",
+      "tokens": "chandni_chowk",
+      "must": true,
+      "driver": "metal",
+      "resolution": "1600x1000",
+      "note": "Chandni Chowk and the old city lanes beside it",
+      "at": "2026-11-12T00:55:22.842Z",
+      "project": {
+        "physics": {
+          "3d/physics_engine": "Jolt Physics"
+        }
+      },
+      "loadMs": 1182,
+      "buildMs": 582,
+      "renderer": {
+        "adapter": "Apple M2 Pro (Apple8)",
+        "driver": "metal",
+        "method": "forward_plus",
+        "vendor": "Apple"
+      },
+      "cpuOnly": true,
+      "scene": {
+        "attachTotalMs": 35.86,
+        "attachWorstChunkMs": 0.84,
+        "buildMs": 582,
+        "colliderChunks": 110,
+        "colliderTriangles": 56613,
+        "engine": "Jolt Physics",
+        "loadMs": 8.57,
+        "name": "Chandni Chowk",
+        "placements": 0,
+        "poses": [
+          "top",
+          "eye"
+        ],
+        "ready": true,
+        "site": "chandni_chowk",
+        "tileBytes": 7226256,
+        "triangles": 61685
+      },
+      "shots": [
+        {
+          "pose": "top",
+          "kind": "top",
+          "file": "harness/reports/arch/roads/roads_chandni_chowk_top.png",
+          "note": "Chandni Chowk from above, north up"
+        },
+        {
+          "pose": "eye",
+          "kind": "eye",
+          "file": "harness/reports/arch/roads/roads_chandni_chowk_eye.png",
+          "note": "driver height on Chandni Chowk, looking along it towards the middle of the site"
+        }
+      ],
+      "probe": {
+        "hits": 22,
+        "maxErrorM": 0,
+        "meanErrorM": 0,
+        "missing": 0,
+        "points": 22,
+        "worst": "w1184991595.0_0 lane 1"
+      },
+      "line": "chandni_chowk: 61685 triangles, 110 collider chunks (attach 35.86 ms, worst chunk 0.84 ms), 2 shots, ray probe 22/22 hits, max error 0 m",
+      "hostLoad": {
+        "before": {
+          "avg1": 1.97,
+          "cores": 12,
+          "perCore": 0.16
+        },
+        "after": {
+          "avg1": 1.97,
+          "cores": 12,
+          "perCore": 0.16
         }
       }
     }
   },
   "scene": "game/bench/roads/",
   "writtenBy": "node harness/bench/arch.mjs roads",
-  "at": "2026-11-11T03:32:42.441Z",
+  "at": "2026-11-12T00:55:17.154Z",
   "machine": "macbook-pro, darwin arm64, Apple M2 Pro, 12 cores, 16 GB",
   "godotVersion": "4.7.2.stable.official.ed1daf0bf",
   "defaults": {
@@ -423,1142 +328,107 @@
     "windowMs": 1000,
     "warmMs": 500
   },
-  "howMeasured": "The lane model prototype (tools/bake/roads/, TypeScript, run by node harness/bench/roads.mjs) bakes each site three times in one Node process; buildMs.best is the faster of the last two runs and covers graph, lane sections, split zones, junctions, heights, meshes, both terrains and every check. Check counts are read from the finished model and mesh, not from the builder: overlap is the area that pairs of road triangles share at one level, continuity compares the border points of every lane at every joint, the TF2 gap is the height difference on the edges that road and ground share, the TF1 gap samples a 2 m grid beside every road edge. The Godot run loads the baked T1 tile on Jolt, attaches one collider chunk per frame, takes one shot per pose and sends a ray down at the probe points.",
-  "bake": {
-    "at": "2026-11-11T03:32:42.140Z",
-    "node": "v22.22.3",
-    "writtenBy": "node harness/bench/roads.mjs"
-  },
-  "sites": {
-    "ito": {
-      "id": "ito",
-      "name": "ITO flyover with its service lanes",
-      "area": "ito",
-      "region": {
-        "kind": "box",
-        "minX": 400,
-        "minZ": -560,
-        "maxX": 720,
-        "maxZ": 620
+  "howMeasured": "The production road mesh (tools/bake/mesh/, the bake step mesh) is built once for the whole pilot centre; each site tile is the part of it inside the site box, plus lane lines as strips and a stand-in ground sheet. The gate counts are in harness/reports/map/health.json (mesh). The scene loads the tile, takes the shots and casts a ray down at every probe point against the collider.",
+  "mesh": {
+    "hash": "125b17e8e8abb6",
+    "buildMs": 7353,
+    "counts": {
+      "faces": 378753,
+      "vertices": 648870,
+      "laneQuads": 366686,
+      "triangles": 1661104,
+      "trianglesByMaterial": {
+        "footpath": 233819,
+        "gore": 1005,
+        "joint": 382,
+        "kerb": 333325,
+        "kerbface": 566958,
+        "marking": 18892,
+        "median": 44889,
+        "parapet": 27520,
+        "parking": 293,
+        "pier": 1528,
+        "planter": 565,
+        "road": 406644,
+        "underside": 5750,
+        "wall": 19534
       },
-      "classes": [
-        "trunk",
-        "secondary"
-      ],
-      "excluded": [
-        "way/1313447926",
-        "way/70237516",
-        "way/776652308",
-        "way/699562875",
-        "way/70237518",
-        "way/70237521"
-      ],
-      "osmBase": "2026-11-11T00:47:51Z",
-      "ground": {
-        "source": "GEDTM30 v1.2 smoothed over 60 m (the P0-018 pick), on a 10 m grid",
-        "samples": 1972
-      },
-      "buildMs": {
-        "best": 595,
-        "runs": [
-          696,
-          595,
-          608
-        ],
-        "steps": {
-          "graph": 285,
-          "splits": 2,
-          "junctions": 1,
-          "strips": 1,
-          "heights": 59,
-          "junctionSurfaces": 0,
-          "meshes": 19,
-          "boundary": 35,
-          "tf2": 67,
-          "tf1": 85,
-          "overlapCheck": 12,
-          "tile": 42,
-          "total": 608
-        },
-        "note": "the whole bake of the site in one Node process: graph to tile and checks; the first run includes code warm-up"
-      },
-      "solver": {
-        "knots": 421,
-        "iterations": 3,
-        "crossings": 2,
-        "sameLayerCrossings": 0,
-        "junctionCrossings": 4,
-        "activeClearance": 45,
-        "activeGrade": 11,
-        "ms": 59
-      },
-      "fit": {
-        "relations": 21,
-        "edgesMoved": 15,
-        "maxShiftM": 2.19,
-        "unresolved": 4,
-        "maxShortM": 0.64,
-        "moved": [
-          {
-            "edge": "e6_264916239",
-            "maxShiftM": 2.19
-          },
-          {
-            "edge": "e13_70220642",
-            "maxShiftM": 1.75
-          },
-          {
-            "edge": "e20_70258948",
-            "maxShiftM": 1.47
-          },
-          {
-            "edge": "e2_1313447929",
-            "maxShiftM": 0.88
-          },
-          {
-            "edge": "e1_125736544",
-            "maxShiftM": 0.83
-          },
-          {
-            "edge": "e12_614071993",
-            "maxShiftM": 0.78
-          },
-          {
-            "edge": "e14_70220645",
-            "maxShiftM": 0.6
-          },
-          {
-            "edge": "e0_1201364394",
-            "maxShiftM": 0.51
-          }
-        ],
-        "lanesInherited": 2,
-        "slipRoadsRedrawn": 4,
-        "slipRoadMaxMoveM": 9.17
-      },
-      "stats": {
-        "edges": 28,
-        "nodes": 24,
-        "strips": 46,
-        "stations": 1327,
-        "junctions": 1,
-        "junctionsJ1": 1,
-        "junctionsJ2": 0,
-        "zones": 10,
-        "pairs": 11,
-        "triangles": 31769,
-        "trianglesByMaterial": {
-          "kerb": 10774,
-          "road": 7065,
-          "wall": 1464,
-          "underside": 526,
-          "footpath": 363,
-          "gore": 135,
-          "marking": 9046,
-          "pier": 240,
-          "ground": 2156
-        },
-        "colliderTriangles": 22197,
-        "colliderChunks": 83,
-        "tf2Triangles": 2156,
-        "tf1Triangles": 235600,
-        "surfaceAreaM2": 51793,
-        "piers": 30,
-        "placements": {},
-        "lengthM": 4909
-      },
-      "checks": {
-        "overlapAreaM2": 0,
-        "overlapPairs": 0,
-        "laneContinuityBreaks": 0,
-        "taperViolations": 4,
-        "taperViolationsByClass": {
-          "trunk": {
-            "tapers": 9,
-            "violations": 2,
-            "ratio": 15
-          },
-          "secondary": {
-            "tapers": 2,
-            "violations": 2,
-            "ratio": 10
-          }
-        },
-        "nodeHeightSteps": 0,
-        "gradeViolations": 0,
-        "clearanceViolations": 0,
-        "roadToGroundGapMaxM": {
-          "tf1": 0.5029,
-          "tf2": 0
-        },
-        "floatingSegments": 0,
-        "sunkSegments": 0,
-        "heroSpecMismatches": 0,
-        "heroFieldsWithoutReference": 0,
-        "openMeshBoundaryEdges": 0,
-        "edgeColliderVerticesMissing": 0
-      },
-      "detail": {
-        "overlap": {
-          "areaM2": 0,
-          "pairs": 0,
-          "worst": [],
-          "trianglesTested": 40178,
-          "gradeSeparated": 5,
-          "clearanceViolations": 0,
-          "minClearanceM": 5.71,
-          "lowest": [
-            {
-              "a": "e0_1201364394_0",
-              "b": "e4_1459192051_0",
-              "clearanceM": 5.71,
-              "x": 569.8,
-              "z": -86.1
-            },
-            {
-              "a": "e8_293530131_0",
-              "b": "e18_70237513_0",
-              "clearanceM": 5.79,
-              "x": 565.2,
-              "z": 164.8
-            },
-            {
-              "a": "e2_1313447929_0",
-              "b": "j0_838495888",
-              "clearanceM": 5.86,
-              "x": 524.1,
-              "z": 58.4
-            },
-            {
-              "a": "e14_70220645_1",
-              "b": "j0_838495888",
-              "clearanceM": 5.86,
-              "x": 541.1,
-              "z": 58.4
-            },
-            {
-              "a": "e14_70220645_0",
-              "b": "j0_838495888",
-              "clearanceM": 5.92,
-              "x": 546.6,
-              "z": 25.7
-            }
-          ]
-        },
-        "continuity": {
-          "joints": 42,
-          "splitJoints": 30,
-          "lanePairs": 120,
-          "breaks": 0,
-          "maxOffsetM": 0.00011,
-          "junctionLanesWithoutConnection": 0,
-          "list": []
-        },
-        "tapers": {
-          "tapers": 11,
-          "violations": 4,
-          "byClass": {
-            "trunk": {
-              "tapers": 9,
-              "violations": 2,
-              "ratio": 15
-            },
-            "secondary": {
-              "tapers": 2,
-              "violations": 2,
-              "ratio": 10
-            }
-          },
-          "list": [
-            {
-              "strip": "e7_28103831_1",
-              "cls": "secondary",
-              "lengthM": 39.7,
-              "shiftM": 4.5,
-              "neededM": 45
-            },
-            {
-              "strip": "e10_370543240_0",
-              "cls": "secondary",
-              "lengthM": 32.9,
-              "shiftM": 4.5,
-              "neededM": 45
-            },
-            {
-              "strip": "e22_733803586_0",
-              "cls": "trunk",
-              "lengthM": 61.7,
-              "shiftM": 7,
-              "neededM": 105
-            },
-            {
-              "strip": "e22_733803586_2",
-              "cls": "trunk",
-              "lengthM": 60.4,
-              "shiftM": 6.6,
-              "neededM": 99
-            }
-          ]
-        },
-        "heights": {
-          "sharedVertices": 283,
-          "steps": 0,
-          "maxStepM": 0,
-          "gradeSegments": 1281,
-          "gradeViolations": 0,
-          "maxGradePct": 5.04,
-          "worstGrade": {
-            "strip": "e2_1313447929_0",
-            "gradePct": 5.04,
-            "limitPct": 5
-          },
-          "floating": 0,
-          "sunk": 0,
-          "maxAboveGroundM": 0.59,
-          "maxBelowGroundM": 0.43,
-          "structureStations": 364,
-          "abutments": 6,
-          "abutmentsOffGround": 0
-        },
-        "groundGap": {
-          "tf1": {
-            "samples": 5658,
-            "maxM": 0.5029,
-            "meanM": 0.111,
-            "p95M": 0.2155,
-            "missing": 0,
-            "pokeThrough": 71,
-            "pokeMaxM": 0.1899,
-            "worst": {
-              "x": 532.8031,
-              "z": -207.4712,
-              "gap": 0.5029
-            }
-          },
-          "tf2": {
-            "samples": 3772,
-            "maxM": 0,
-            "meanM": 0,
-            "p95M": 0,
-            "missing": 0,
-            "pokeThrough": 0,
-            "pokeMaxM": 0,
-            "worst": {
-              "x": 644.5822,
-              "z": 17.3022,
-              "gap": 0
-            }
-          }
-        },
-        "hero": [],
-        "heroRefs": [],
-        "colliders": {
-          "edgeVertices": 5594,
-          "missing": 0
-        },
-        "mesh": {
-          "openBoundaryEdges": 0,
-          "doubledEdges": 0,
-          "boundaryLoops": 1,
-          "groundPolygons": 1,
-          "forcedEars": 0,
-          "groundAreaErrorM2": 0,
-          "groundNeedles": 1724
-        }
-      },
-      "zones": [
-        {
-          "id": "zone_diverge_838633289",
-          "kind": "diverge",
-          "node": 838633289,
-          "paintedNoseM": 19.5,
-          "physicalNoseM": 22.1,
-          "lanes": 4
-        },
-        {
-          "id": "zone_merge_838633574",
-          "kind": "merge",
-          "node": 838633574,
-          "paintedNoseM": 14.3,
-          "physicalNoseM": 16,
-          "lanes": 4
-        },
-        {
-          "id": "zone_diverge_1395838315",
-          "kind": "diverge",
-          "node": 1395838315,
-          "paintedNoseM": 20,
-          "physicalNoseM": 22.5,
-          "lanes": 5
-        },
-        {
-          "id": "zone_diverge_838633411",
-          "kind": "diverge",
-          "node": 838633411,
-          "paintedNoseM": 64,
-          "physicalNoseM": 69.8,
-          "lanes": 6
-        },
-        {
-          "id": "zone_merge_838633363",
-          "kind": "merge",
-          "node": 838633363,
-          "paintedNoseM": 70,
-          "physicalNoseM": 80.6,
-          "lanes": 5
-        },
-        {
-          "id": "zone_diverge_13382615977",
-          "kind": "diverge",
-          "node": 13382615977,
-          "paintedNoseM": 6,
-          "physicalNoseM": 7,
-          "lanes": 2
-        },
-        {
-          "id": "zone_merge_838633214",
-          "kind": "merge",
-          "node": 838633214,
-          "paintedNoseM": 45.5,
-          "physicalNoseM": 51.4,
-          "lanes": 4
-        },
-        {
-          "id": "zone_merge_838633475",
-          "kind": "merge",
-          "node": 838633475,
-          "paintedNoseM": 13.8,
-          "physicalNoseM": 15.5,
-          "lanes": 4
-        },
-        {
-          "id": "zone_diverge_458631457",
-          "kind": "diverge",
-          "node": 458631457,
-          "paintedNoseM": 45.8,
-          "physicalNoseM": 51.6,
-          "lanes": 4
-        },
-        {
-          "id": "zone_diverge_838633507",
-          "kind": "diverge",
-          "node": 838633507,
-          "paintedNoseM": 12.5,
-          "physicalNoseM": 13.9,
-          "lanes": 4
-        }
-      ],
-      "junctions": [
-        {
-          "id": "j0_838495888",
-          "method": "J1",
-          "nodes": 4,
-          "arms": 8,
-          "corners": [
-            {
-              "radius": 9,
-              "kind": "fillet"
-            },
-            {
-              "radius": 0,
-              "kind": "gap"
-            },
-            {
-              "radius": 9,
-              "kind": "fillet"
-            },
-            {
-              "radius": 0,
-              "kind": "gap"
-            },
-            {
-              "radius": 9,
-              "kind": "fillet"
-            },
-            {
-              "radius": 0,
-              "kind": "gap"
-            },
-            {
-              "radius": 9,
-              "kind": "fillet"
-            },
-            {
-              "radius": 0,
-              "kind": "gap"
-            }
-          ],
-          "bands": 8,
-          "connections": 41,
-          "why": null
-        }
-      ],
-      "pairs": [
-        [
-          "e1_125736544",
-          "e12_614071993"
-        ],
-        [
-          "e1_125736544",
-          "e25_733804241"
-        ],
-        [
-          "e2_1313447929",
-          "e12_614071993"
-        ],
-        [
-          "e2_1313447929",
-          "e14_70220645"
-        ],
-        [
-          "e2_1313447929",
-          "e15_70220645"
-        ],
-        [
-          "e7_28103831",
-          "e10_370543240"
-        ],
-        [
-          "e9_370543237",
-          "e26_778549698"
-        ],
-        [
-          "e11_370543241",
-          "e21_733803583"
-        ],
-        [
-          "e12_614071993",
-          "e22_733803586"
-        ],
-        [
-          "e13_70220642",
-          "e20_70258948"
-        ],
-        [
-          "e24_733803588",
-          "e27_778549698"
-        ]
-      ],
-      "abutments": [
-        {
-          "strip": "e0_1201364394_0",
-          "x": 669.7,
-          "z": 7.4,
-          "heightAboveGround": 0.67
-        },
-        {
-          "strip": "e2_1313447929_0",
-          "x": 534.3,
-          "z": 289.4,
-          "heightAboveGround": 0.61
-        },
-        {
-          "strip": "e2_1313447929_0",
-          "x": 526.9,
-          "z": -181.4,
-          "heightAboveGround": 0.66
-        },
-        {
-          "strip": "e12_614071993_0",
-          "x": 538.4,
-          "z": -203.5,
-          "heightAboveGround": 0.67
-        },
-        {
-          "strip": "e15_70220645_0",
-          "x": 546.6,
-          "z": 291.5,
-          "heightAboveGround": 0.68
-        },
-        {
-          "strip": "e18_70237513_0",
-          "x": 674.8,
-          "z": 102.6,
-          "heightAboveGround": 0.65
-        }
-      ],
-      "problems": [],
-      "files": {
-        "tile": "game/bench/roads/gen/ito.ktl",
-        "tileBytes": 3473208,
-        "poses": "game/bench/roads/gen/ito.json",
-        "plan": "harness/reports/arch/roads/ito_plan.png",
-        "model": "harness/reports/arch/roads/ito_model.json"
-      }
+      "junctions": 2775,
+      "j1": 2712,
+      "j2": 63,
+      "junctionFaces": 12067,
+      "setFaces": 796,
+      "clippedFaces": 487,
+      "clippedJunctions": 315,
+      "clippedAreaM2": 4960.355,
+      "bands": 9291,
+      "crossedBands": 198,
+      "droppedBands": 245,
+      "holes": 32,
+      "fannedJunctions": 1911,
+      "foldedBorders": 4,
+      "foldedQuads": 3,
+      "jointPins": 2230,
+      "jointPinMaxM": 0.0015,
+      "jointsApart": 0,
+      "kerbFaces": 281270,
+      "endCaps": 2209,
+      "stopLines": 1326,
+      "crossings": 1264,
+      "undersides": 1657,
+      "roofs": 1218,
+      "abutmentWalls": 52
     },
-    "cp": {
-      "id": "cp",
-      "name": "Connaught Place inner circle with its radials",
-      "area": "cp",
-      "region": {
-        "kind": "circle",
-        "cx": 293.05,
-        "cz": -142.95,
-        "r": 186
-      },
-      "classes": [
-        "tertiary"
-      ],
-      "excluded": [],
-      "osmBase": "2026-11-11T00:46:50Z",
-      "ground": {
-        "source": "GEDTM30 v1.2 smoothed over 60 m (the P0-018 pick), on a 10 m grid",
-        "samples": 1085
-      },
-      "buildMs": {
-        "best": 91,
-        "runs": [
-          115,
-          97,
-          91
-        ],
-        "steps": {
-          "graph": 6,
-          "splits": 1,
-          "junctions": 4,
-          "strips": 0,
-          "heights": 1,
-          "junctionSurfaces": 1,
-          "meshes": 9,
-          "boundary": 7,
-          "tf2": 8,
-          "tf1": 32,
-          "overlapCheck": 6,
-          "tile": 16,
-          "total": 91
-        },
-        "note": "the whole bake of the site in one Node process: graph to tile and checks; the first run includes code warm-up"
-      },
-      "solver": {
-        "knots": 107,
-        "iterations": 1,
-        "crossings": 0,
-        "sameLayerCrossings": 0,
-        "junctionCrossings": 0,
-        "activeClearance": 0,
-        "activeGrade": 0,
-        "ms": 1
-      },
-      "fit": {
-        "relations": 0,
-        "edgesMoved": 0,
-        "maxShiftM": 0,
-        "unresolved": 0,
-        "maxShortM": 0,
-        "moved": [],
-        "lanesInherited": 0,
-        "slipRoadsRedrawn": 0,
-        "slipRoadMaxMoveM": 0
-      },
-      "stats": {
-        "edges": 16,
-        "nodes": 16,
-        "strips": 16,
-        "stations": 260,
-        "junctions": 8,
-        "junctionsJ1": 8,
-        "junctionsJ2": 0,
-        "zones": 0,
-        "pairs": 0,
-        "triangles": 14270,
-        "trianglesByMaterial": {
-          "footpath": 1812,
-          "kerb": 3398,
-          "road": 2068,
-          "parking": 314,
-          "planter": 628,
-          "marking": 2046,
-          "hedge": 942,
-          "railing": 628,
-          "colonnade": 1634,
-          "ground": 800
-        },
-        "colliderTriangles": 12224,
-        "colliderChunks": 44,
-        "tf2Triangles": 800,
-        "tf1Triangles": 94178,
-        "surfaceAreaM2": 28542.4,
-        "piers": 0,
-        "placements": {
-          "column": 211,
-          "tree": 44,
-          "lamp": 21,
-          "blocks": 8
-        },
-        "lengthM": 936
-      },
-      "checks": {
-        "overlapAreaM2": 0,
-        "overlapPairs": 0,
-        "laneContinuityBreaks": 0,
-        "taperViolations": 0,
-        "taperViolationsByClass": {},
-        "nodeHeightSteps": 0,
-        "gradeViolations": 0,
-        "clearanceViolations": 0,
-        "roadToGroundGapMaxM": {
-          "tf1": 0.3556,
-          "tf2": 0
-        },
-        "floatingSegments": 0,
-        "sunkSegments": 0,
-        "heroSpecMismatches": 0,
-        "heroFieldsWithoutReference": 0,
-        "openMeshBoundaryEdges": 0,
-        "edgeColliderVerticesMissing": 0
-      },
-      "detail": {
-        "overlap": {
-          "areaM2": 0,
-          "pairs": 0,
-          "worst": [],
-          "trianglesTested": 23735,
-          "gradeSeparated": 0,
-          "clearanceViolations": 0,
-          "minClearanceM": null,
-          "lowest": []
-        },
-        "continuity": {
-          "joints": 0,
-          "splitJoints": 0,
-          "lanePairs": 0,
-          "breaks": 0,
-          "maxOffsetM": 0,
-          "junctionLanesWithoutConnection": 0,
-          "list": []
-        },
-        "tapers": {
-          "tapers": 0,
-          "violations": 0,
-          "byClass": {},
-          "list": []
-        },
-        "heights": {
-          "sharedVertices": 108,
-          "steps": 0,
-          "maxStepM": 0,
-          "gradeSegments": 244,
-          "gradeViolations": 0,
-          "maxGradePct": 2.98,
-          "worstGrade": {
-            "strip": "e0_174274680_0",
-            "gradePct": 2.98,
-            "limitPct": 7
-          },
-          "floating": 0,
-          "sunk": 0,
-          "maxAboveGroundM": 0.09,
-          "maxBelowGroundM": 0.07,
-          "structureStations": 0,
-          "abutments": 0,
-          "abutmentsOffGround": 0
-        },
-        "groundGap": {
-          "tf1": {
-            "samples": 1908,
-            "maxM": 0.3556,
-            "meanM": 0.0551,
-            "p95M": 0.0986,
-            "missing": 0,
-            "pokeThrough": 3,
-            "pokeMaxM": 0.0673,
-            "worst": {
-              "x": 365.3438,
-              "z": -268.2321,
-              "gap": -0.3556
-            }
-          },
-          "tf2": {
-            "samples": 1272,
-            "maxM": 0,
-            "meanM": 0,
-            "p95M": 0,
-            "missing": 0,
-            "pokeThrough": 0,
-            "pokeMaxM": 0,
-            "worst": {
-              "x": 365.5028,
-              "z": -268.4795,
-              "gap": 0
-            }
-          }
-        },
-        "hero": [
-          {
-            "spec": "cp_inner_circle",
-            "strips": 8,
-            "stationsChecked": 165,
-            "fieldsCompared": 6816,
-            "mismatches": 0,
-            "list": [],
-            "baked": [
-              {
-                "type": "footpath",
-                "width": 6,
-                "raise": 0.15
-              },
-              {
-                "type": "parking",
-                "width": 5,
-                "raise": 0
-              },
-              {
-                "type": "planter",
-                "width": 1.5,
-                "raise": 0.15
-              },
-              {
-                "type": "drive",
-                "width": 3.25,
-                "raise": 0
-              },
-              {
-                "type": "drive",
-                "width": 3.25,
-                "raise": 0
-              },
-              {
-                "type": "drive",
-                "width": 3.25,
-                "raise": 0
-              },
-              {
-                "type": "drive",
-                "width": 3.25,
-                "raise": 0
-              },
-              {
-                "type": "kerb",
-                "width": 0.3,
-                "raise": 0.15
-              },
-              {
-                "type": "planter",
-                "width": 1.2,
-                "raise": 0.15
-              },
-              {
-                "type": "footpath",
-                "width": 3,
-                "raise": 0.15
-              }
-            ]
-          }
-        ],
-        "heroRefs": [
-          {
-            "spec": "cp_inner_circle",
-            "status": "draft",
-            "fieldsWithReferences": 17,
-            "photos": 11,
-            "withoutReference": []
-          }
-        ],
-        "colliders": {
-          "edgeVertices": 2410,
-          "missing": 0
-        },
-        "mesh": {
-          "openBoundaryEdges": 0,
-          "doubledEdges": 0,
-          "boundaryLoops": 2,
-          "groundPolygons": 2,
-          "forcedEars": 0,
-          "groundAreaErrorM2": 0,
-          "groundNeedles": 431
-        }
-      },
-      "zones": [],
-      "junctions": [
-        {
-          "id": "j0_267198394",
-          "method": "J1",
-          "nodes": 1,
-          "arms": 3,
-          "corners": [
-            {
-              "radius": 0,
-              "kind": "through"
-            },
-            {
-              "radius": 7.5,
-              "kind": "fillet"
-            },
-            {
-              "radius": 7.5,
-              "kind": "fillet"
-            }
-          ],
-          "bands": 3,
-          "connections": 8,
-          "why": null
-        },
-        {
-          "id": "j1_939091095",
-          "method": "J1",
-          "nodes": 1,
-          "arms": 3,
-          "corners": [
-            {
-              "radius": 7.5,
-              "kind": "fillet"
-            },
-            {
-              "radius": 7.5,
-              "kind": "fillet"
-            },
-            {
-              "radius": 0,
-              "kind": "through"
-            }
-          ],
-          "bands": 3,
-          "connections": 8,
-          "why": null
-        },
-        {
-          "id": "j2_1191294765",
-          "method": "J1",
-          "nodes": 1,
-          "arms": 3,
-          "corners": [
-            {
-              "radius": 7.5,
-              "kind": "fillet"
-            },
-            {
-              "radius": 0,
-              "kind": "through"
-            },
-            {
-              "radius": 7.5,
-              "kind": "fillet"
-            }
-          ],
-          "bands": 3,
-          "connections": 8,
-          "why": null
-        },
-        {
-          "id": "j3_1191294803",
-          "method": "J1",
-          "nodes": 1,
-          "arms": 3,
-          "corners": [
-            {
-              "radius": 7.5,
-              "kind": "fillet"
-            },
-            {
-              "radius": 0,
-              "kind": "through"
-            },
-            {
-              "radius": 7.5,
-              "kind": "fillet"
-            }
-          ],
-          "bands": 3,
-          "connections": 12,
-          "why": null
-        },
-        {
-          "id": "j4_1869716889",
-          "method": "J1",
-          "nodes": 1,
-          "arms": 3,
-          "corners": [
-            {
-              "radius": 7.5,
-              "kind": "fillet"
-            },
-            {
-              "radius": 7.5,
-              "kind": "fillet"
-            },
-            {
-              "radius": 0,
-              "kind": "through"
-            }
-          ],
-          "bands": 3,
-          "connections": 8,
-          "why": null
-        },
-        {
-          "id": "j5_1869716891",
-          "method": "J1",
-          "nodes": 1,
-          "arms": 3,
-          "corners": [
-            {
-              "radius": 7.5,
-              "kind": "fillet"
-            },
-            {
-              "radius": 0,
-              "kind": "through"
-            },
-            {
-              "radius": 7.5,
-              "kind": "fillet"
-            }
-          ],
-          "bands": 3,
-          "connections": 8,
-          "why": null
-        },
-        {
-          "id": "j6_1869716906",
-          "method": "J1",
-          "nodes": 1,
-          "arms": 3,
-          "corners": [
-            {
-              "radius": 7.5,
-              "kind": "fillet"
-            },
-            {
-              "radius": 7.5,
-              "kind": "fillet"
-            },
-            {
-              "radius": 0,
-              "kind": "through"
-            }
-          ],
-          "bands": 3,
-          "connections": 8,
-          "why": null
-        },
-        {
-          "id": "j7_1869716913",
-          "method": "J1",
-          "nodes": 1,
-          "arms": 3,
-          "corners": [
-            {
-              "radius": 0,
-              "kind": "through"
-            },
-            {
-              "radius": 7.5,
-              "kind": "fillet"
-            },
-            {
-              "radius": 7.5,
-              "kind": "fillet"
-            }
-          ],
-          "bands": 3,
-          "connections": 8,
-          "why": null
-        }
-      ],
-      "pairs": [],
-      "abutments": [],
-      "problems": [],
-      "files": {
-        "tile": "game/bench/roads/gen/cp.ktl",
-        "tileBytes": 1655664,
-        "poses": "game/bench/roads/gen/cp.json",
-        "plan": "harness/reports/arch/roads/cp_plan.png",
-        "model": "harness/reports/arch/roads/cp_model.json"
-      }
-    }
-  },
-  "checks": {
-    "ito": {
-      "overlapAreaM2": 0,
-      "overlapPairs": 0,
-      "laneContinuityBreaks": 0,
-      "taperViolations": 4,
-      "taperViolationsByClass": {
-        "trunk": {
-          "tapers": 9,
-          "violations": 2,
-          "ratio": 15
-        },
-        "secondary": {
-          "tapers": 2,
-          "violations": 2,
-          "ratio": 10
-        }
-      },
-      "nodeHeightSteps": 0,
-      "gradeViolations": 0,
-      "clearanceViolations": 0,
-      "roadToGroundGapMaxM": {
-        "tf1": 0.5029,
-        "tf2": 0
-      },
-      "floatingSegments": 0,
-      "sunkSegments": 0,
-      "heroSpecMismatches": 0,
-      "heroFieldsWithoutReference": 0,
-      "openMeshBoundaryEdges": 0,
-      "edgeColliderVerticesMissing": 0,
-      "buildMs": 595,
-      "triangles": 31769,
-      "tf2Triangles": 2156,
-      "tf1Triangles": 235600
+    "gates": {
+      "overlappingRoadFaces": 3,
+      "openBoundaryEdges": 0,
+      "unjoinedEnds": 6,
+      "floatingEnds": 2,
+      "railingsAtGrade": 0,
+      "piersInLane": 0
     },
-    "cp": {
-      "overlapAreaM2": 0,
-      "overlapPairs": 0,
-      "laneContinuityBreaks": 0,
-      "taperViolations": 0,
-      "taperViolationsByClass": {},
-      "nodeHeightSteps": 0,
-      "gradeViolations": 0,
-      "clearanceViolations": 0,
-      "roadToGroundGapMaxM": {
-        "tf1": 0.3556,
-        "tf2": 0
-      },
-      "floatingSegments": 0,
-      "sunkSegments": 0,
-      "heroSpecMismatches": 0,
-      "heroFieldsWithoutReference": 0,
-      "openMeshBoundaryEdges": 0,
-      "edgeColliderVerticesMissing": 0,
-      "buildMs": 91,
-      "triangles": 14270,
-      "tf2Triangles": 800,
-      "tf1Triangles": 94178
+    "files": {
+      "siteTiles": [
+        "game/bench/roads/gen/ito.ktl",
+        "game/bench/roads/gen/ito.json",
+        "game/bench/roads/gen/cp.ktl",
+        "game/bench/roads/gen/cp.json",
+        "game/bench/roads/gen/india_gate.ktl",
+        "game/bench/roads/gen/india_gate.json",
+        "game/bench/roads/gen/chandni_chowk.ktl",
+        "game/bench/roads/gen/chandni_chowk.json"
+      ],
+      "pictures": [
+        "harness/reports/map/mesh_pilot_ito.svg",
+        "harness/reports/map/mesh_pilot_ito.png",
+        "harness/reports/map/mesh_pilot_cp.svg",
+        "harness/reports/map/mesh_pilot_cp.png",
+        "harness/reports/map/mesh_pilot_india_gate.svg",
+        "harness/reports/map/mesh_pilot_india_gate.png",
+        "harness/reports/map/mesh_pilot_chandni_chowk.svg",
+        "harness/reports/map/mesh_pilot_chandni_chowk.png"
+      ]
     }
   },
   "renderer": "Forward+",
   "gpuAdapter": "Apple M2 Pro (Apple8)",
   "hostLoad": {
-    "avg1": 8.39,
+    "avg1": 1.97,
     "cores": 12,
-    "perCore": 0.7
+    "perCore": 0.16
   },
   "notMeasured": [
     {
-      "id": "india_gate",
-      "option": "HR1 (if time)",
-      "reason": "the India Gate hexagon with two avenues was not built: the time box went to the two must sites",
-      "estimate": "same builder as the CP ring; it needs its own spec and reference photos"
-    },
-    {
       "id": "lane_shader",
-      "option": "LN1 (if time)",
-      "reason": "lane markings are thin strips of geometry here, not drawn in the road shader from lane UVs; the T1 tile has no UV channel yet",
-      "estimate": "saves the marking triangles (28 percent of the ITO tile)"
+      "option": "LN1",
+      "reason": "lane lines are drawn as thin strips in this stand-in scene; the production mesh carries the lane UV and border codes, the T1 tile has no UV channel yet and the road shader is not written",
+      "estimate": "saves the marking triangles"
     },
     {
-      "id": "j2_union",
-      "option": "J2",
-      "reason": "the polygon union library (Clipper2) could not be added in this run (the dependency install was denied). The zero overlap proof is done on the mesh instead (every pair of road triangles clipped against each other), and the fallback is a plain polygon of chords",
-      "estimate": "a union would also give the fallback its exact outline"
-    },
-    {
-      "id": "tf1_drawn",
-      "option": "TF1",
-      "reason": "the TF1 grid is built and measured in the bake but not drawn in the scene",
-      "estimate": "none needed: the gap numbers decide"
+      "id": "terrain",
+      "option": "TF2",
+      "reason": "the ground in the scene is a stand-in sheet under the roads; the ground cut to the road edges is the terrain step",
+      "estimate": "none"
     }
   ]
 }
