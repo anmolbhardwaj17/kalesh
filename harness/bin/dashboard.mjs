@@ -52,6 +52,12 @@ function liveLook(n = 12) {
     for (const v of fs.readdirSync(d)) if (v.endsWith('.png')) out.push({ name: 'look_proof/' + set + '/' + v, t: fs.statSync(path.join(d, v)).mtimeMs }); } } catch { /* none yet */ }
   const sheets = path.join(LOOK_ROOT, 'reports', 'look');
   try { for (const v of fs.readdirSync(sheets)) if (/\.(jpg|png)$/.test(v)) out.push({ name: 'reports/look/' + v, t: fs.statSync(path.join(sheets, v)).mtimeMs }); } catch { /* none yet */ }
+  // Owner 2026-11-13: map renders, inspector shots, road and ground bench views and flakecheck shots show live too,
+  // so offline map work is visible. One directory listing each per poll; no image is read or resized.
+  for (const sub of ['reports/map', 'reports/inspector', 'reports/arch/roads', 'reports/flakecheck/shots']) {
+    const d = path.join(LOOK_ROOT, sub);
+    try { for (const v of fs.readdirSync(d)) if (/\.(jpg|png)$/.test(v)) out.push({ name: sub + '/' + v, t: fs.statSync(path.join(d, v)).mtimeMs }); } catch { /* none yet */ }
+  }
   return out.sort((a, b) => b.t - a.t).slice(0, n);
 }
 

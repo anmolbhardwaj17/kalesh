@@ -157,3 +157,4 @@
 {"id":"mmwd70yiw","ts":"2026-11-12T20:57:10.135Z","reply":"Paused, then resumed. Picking up P1-039 (inspector restyle with clear issue cards).","tasks":[]}
 {"id":"mmwe13u5b","ts":"2026-11-12T20:57:10.172Z","reply":"Paused, then resumed. Picking up P1-039 (inspector restyle with clear issue cards).","tasks":[]}
 {"id":"mmwe15kfj","ts":"2026-11-12T20:58:30.738Z","reply":"Will tell you as soon as P1-039 is merged and the dashboard is restarted.","tasks":["P1-039"]}
+{"id":"mmwe1nkgl","ts":"2026-11-12T21:12:30.612Z","reply":"Done: the Live now builder strip now also shows map renders, inspector shots, road and ground bench views and flakecheck shots. It only lists folders, no extra load.","tasks":[]}
