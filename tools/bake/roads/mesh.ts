@@ -344,15 +344,30 @@ export function buildPiers(strips: readonly Strip[], grid: TriGrid<SurfTri>, set
   return count;
 }
 
-/** Collider chunks of at most `limit` triangles from the drawn meshes of the named materials, by a coarse grid. */
+/** Twice the smallest area a collider triangle may have (m2): a square millimetre. */
+export const MIN_COLLIDER_AREA2 = 2e-6;
+
+/**
+ * Collider chunks of at most `limit` triangles from the drawn meshes of the named materials, by a coarse grid.
+ * A triangle with no area as 32-bit floats (a needle of the ground, under a square millimetre) is left out: it
+ * carries nothing and a physics engine may refuse it.
+ */
 export function colliderChunks(meshes: readonly MeshData[], materials: readonly string[], cell = 64, limit = 1300): ColliderChunk[] {
   const cells = new Map<string, number[]>();
+  const f = Math.fround;
   for (const m of meshes) {
     if (!materials.includes(m.material)) continue;
     for (let k = 0; k + 2 < m.idx.length; k += 3) {
       const ia = (m.idx[k] as number) * 3;
       const ib = (m.idx[k + 1] as number) * 3;
       const ic = (m.idx[k + 2] as number) * 3;
+      const ux = f(m.pos[ib] as number) - f(m.pos[ia] as number);
+      const uy = f(m.pos[ib + 1] as number) - f(m.pos[ia + 1] as number);
+      const uz = f(m.pos[ib + 2] as number) - f(m.pos[ia + 2] as number);
+      const vx = f(m.pos[ic] as number) - f(m.pos[ia] as number);
+      const vy = f(m.pos[ic + 1] as number) - f(m.pos[ia + 1] as number);
+      const vz = f(m.pos[ic + 2] as number) - f(m.pos[ia + 2] as number);
+      if (Math.hypot(uy * vz - uz * vy, uz * vx - ux * vz, ux * vy - uy * vx) < MIN_COLLIDER_AREA2) continue;
       const cx = ((m.pos[ia] as number) + (m.pos[ib] as number) + (m.pos[ic] as number)) / 3;
       const cz = ((m.pos[ia + 2] as number) + (m.pos[ib + 2] as number) + (m.pos[ic + 2] as number)) / 3;
       const key = `${Math.floor(cx / cell)}_${Math.floor(cz / cell)}`;

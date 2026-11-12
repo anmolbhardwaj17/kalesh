@@ -1,5 +1,6 @@
 ## Road bench scene (P0-019, ARCH_OPTIONS.md rows LN, HR, J, EL, TF; production mesh since P1-014). Started with the
-## game arg --arch=roads:<site> (ito, cp, india_gate, chandni_chowk). It shows the stand-in tile the bake step `mesh`
+## game arg --arch=roads:<site> (ito, cp, india_gate, chandni_chowk, yamuna). It shows the stand-in tile the bake steps `mesh`
+## and `terrain` (the production ground, P1-015)
 ## cut out of the production road mesh (tools/bake/mesh/; npm run bake -- pilot --stage mesh --offline):
 ## game/bench/roads/gen/<site>.ktl (the T1 tile, read by bench/tiles/tile_t1.gd) and <site>.json (tile origin, camera
 ## poses, probe points). One material per mesh name, one collider chunk per frame.
@@ -16,8 +17,10 @@ const GEN := "res://bench/roads/gen/"
 const COLOURS := {
 	"road": Color(0.2, 0.2, 0.21), "parking": Color(0.36, 0.36, 0.39), "gore": Color(0.42, 0.38, 0.27), "kerb": Color(0.74, 0.73, 0.69),
 	"footpath": Color(0.72, 0.65, 0.54), "planter": Color(0.36, 0.44, 0.24), "median": Color(0.5, 0.55, 0.42), "marking": Color(0.95, 0.95, 0.92),
-	"wall": Color(0.66, 0.65, 0.62), "underside": Color(0.5, 0.5, 0.48), "pier": Color(0.6, 0.59, 0.56), "ground": Color(0.37, 0.43, 0.27),
+	"wall": Color(0.66, 0.65, 0.62), "underside": Color(0.5, 0.5, 0.48), "pier": Color(0.6, 0.59, 0.56), "ground": Color(0.55, 0.51, 0.44),
 	"hedge": Color(0.2, 0.36, 0.17), "railing": Color(0.18, 0.49, 0.23), "colonnade": Color(0.945, 0.933, 0.902), "joint": Color(0.1, 0.1, 0.11),
+	# the production ground of the terrain step (P1-015): plain ground, open land, footprint pads, the river bed, water
+	"lawn": Color(0.35, 0.47, 0.25), "plot": Color(0.68, 0.61, 0.52), "bed": Color(0.42, 0.38, 0.3), "water": Color(0.22, 0.36, 0.42),
 }
 
 var info := {"ready": false}
@@ -39,6 +42,8 @@ func _ready() -> void:
 			m.roughness = 0.6
 			m.emission_enabled = true
 			m.emission = Color(0.35, 0.35, 0.33)
+		if key == "water":
+			m.roughness = 0.25
 		_materials[key] = m
 	site = get_node("/root/GameArgs").arch_setup()
 	if site == "":
@@ -133,6 +138,7 @@ func _probe() -> Dictionary:
 	var worst := 0.0
 	var worst_what := ""
 	var missing := 0
+	var missing_list: Array[String] = []
 	var sum := 0.0
 	var n := 0
 	for p: Dictionary in probes:
@@ -141,6 +147,7 @@ func _probe() -> Dictionary:
 		var hit := space.intersect_ray(q)
 		if hit.is_empty():
 			missing += 1
+			missing_list.append("%s at %.2f, %.2f, %.2f" % [str(p.what), float(p.x), float(p.y), float(p.z)])
 			continue
 		var err := absf(float(hit.position.y) - float(p.y))
 		sum += err
@@ -148,7 +155,7 @@ func _probe() -> Dictionary:
 		if err > worst:
 			worst = err
 			worst_what = str(p.what)
-	return {"points": probes.size(), "hits": n, "missing": missing, "maxErrorM": snappedf(worst, 0.0001), "meanErrorM": snappedf(sum / maxi(1, n), 0.0001), "worst": worst_what}
+	return {"points": probes.size(), "hits": n, "missing": missing, "missingList": missing_list, "maxErrorM": snappedf(worst, 0.0001), "meanErrorM": snappedf(sum / maxi(1, n), 0.0001), "worst": worst_what}
 
 
 ## Stand-in modules for the hero road's placements. An instance sits on the ground at its origin.

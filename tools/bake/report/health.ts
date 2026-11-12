@@ -9,6 +9,7 @@ import type { OverrideCounts, OverrideRecord } from '../repair/overrides.ts';
 import type { ElevationRecord } from '../elevation/elevout.ts';
 import type { LanesRecord } from '../roads/laneout.ts';
 import type { MeshRecord } from '../mesh/meshout.ts';
+import type { TerrainRecord } from '../terrain/terrainout.ts';
 
 export const HEALTH_VERSION = 8;
 
@@ -88,6 +89,8 @@ export interface HealthReport {
   elevation: ElevationRecord | null;
   /** The road mesh (tools/bake/mesh/): counts, build time, the overlap proof, the watertight check, ends, structures, kerbs, lane UV and stop lines; null until the mesh step runs. */
   mesh: MeshRecord | null;
+  /** The ground (tools/bake/terrain/): counts, build time, the road to ground gap, needles, tile seams, areas, water; null until the terrain step runs. */
+  terrain: TerrainRecord | null;
   /** The pair table of the centre block (rule R-STITCH-03): real against game bearing and distance for every pair of centre places. */
   pairs: PairRecord[];
   /** What rule R-STITCH measured on the layout (tools/bake/layout/gate.ts); null when it did not run. */
@@ -188,6 +191,7 @@ export function emptyHealth(stage: string, block: string, outline: HealthReport[
     lanes: null,
     elevation: null,
     mesh: null,
+    terrain: null,
     pairs: [],
     layout: null,
     invariants: [],

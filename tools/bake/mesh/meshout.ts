@@ -122,6 +122,8 @@ export interface SitePose {
   target: [number, number, number];
   size: number;
   note: string;
+  /** The road bench also saves this pose's shot under this name (the shots a task's acceptance names). */
+  shot?: string;
 }
 
 export interface SiteTile {
@@ -132,8 +134,11 @@ export interface SiteTile {
 
 const round = (v: number, d = 2): number => Math.round(v * 10 ** d) / 10 ** d;
 
-/** The stand-in tile of one site: the production meshes inside its box, lane lines as strips, a ground sheet and verges. */
-export function siteTile(input: MeshInput, mesh: RoadMesh, site: MeshSite): SiteTile {
+/**
+ * The stand-in tile of one site: the production meshes inside its box and lane lines as strips. With `groundMeshes` (the
+ * terrain step's meshes for the box, block metres) that is the ground; without it a plain sheet with verges.
+ */
+export function siteTile(input: MeshInput, mesh: RoadMesh, site: MeshSite, groundMeshes?: readonly MeshData[]): SiteTile {
   const { fs } = mesh;
   const box = { minX: site.x - site.halfM, maxX: site.x + site.halfM, minZ: site.z - site.halfM, maxZ: site.z + site.halfM };
   const inBox = (x: number, z: number): boolean => x >= box.minX && x <= box.maxX && z >= box.minZ && z <= box.maxZ;
@@ -163,7 +168,7 @@ export function siteTile(input: MeshInput, mesh: RoadMesh, site: MeshSite): Site
   });
   if (minY === Infinity) minY = 0;
   // nodes far from every road take their neighbours' height
-  for (let pass = 0; pass < cols + rows; pass++) {
+  for (let pass = 0; !groundMeshes && pass < cols + rows; pass++) {
     let changed = false;
     for (let j = 0; j < rows; j++) {
       for (let i = 0; i < cols; i++) {
@@ -186,9 +191,9 @@ export function siteTile(input: MeshInput, mesh: RoadMesh, site: MeshSite): Site
     if (!changed) break;
   }
   const G = (i: number, j: number): V3 => [box.minX + i * CELL, (low[j * cols + i] as number) < Infinity ? (low[j * cols + i] as number) : minY, box.minZ + j * CELL];
-  for (let j = 0; j + 1 < rows; j++) for (let i = 0; i + 1 < cols; i++) extra.quad('ground', G(i, j), G(i + 1, j), G(i + 1, j + 1), G(i, j + 1), [0, 1, 0]);
+  for (let j = 0; !groundMeshes && j + 1 < rows; j++) for (let i = 0; i + 1 < cols; i++) extra.quad('ground', G(i, j), G(i + 1, j), G(i + 1, j + 1), G(i, j + 1), [0, 1, 0]);
   // a verge from every free edge of the at-grade surface down to the sheet
-  for (const [key, c] of mesh.edges.at) {
+  for (const [key, c] of groundMeshes ? [] : mesh.edges.at) {
     const f = mesh.edges.owner[c] as number;
     if (fs.cut[f] === CUT_NONE) continue;
     const a = Math.floor(key / 4194304);
@@ -232,8 +237,9 @@ export function siteTile(input: MeshInput, mesh: RoadMesh, site: MeshSite): Site
   };
   for (const m of mesh.sink.meshes.values()) take(m.material, m.pos, m.nrm, m.idx, false);
   for (const m of extra.meshes.values()) take(m.material, m.pos, m.nrm, m.idx, true);
+  for (const m of groundMeshes ?? []) take(m.material, m.pos, m.nrm, m.idx, true);
   const meshes = [...by.values()].filter((m) => m.idx.length > 0);
-  const colliders = colliderChunks(meshes, ['road', 'parking', 'gore', 'kerb', 'footpath', 'planter', 'median', 'wall', 'ground', 'pier']);
+  const colliders = colliderChunks(meshes, ['road', 'parking', 'gore', 'kerb', 'footpath', 'planter', 'median', 'wall', 'ground', 'lawn', 'plot', 'bed', 'pier']);
   const tile: TileContent = { district: site.id, tx: 0, tz: 0, size: Math.ceil(site.halfM * 2), origin, meshes, colliders, placements: [] };
 
   // poses: the whole site from above, north up, and driver height on a named street looking to the middle
@@ -251,7 +257,17 @@ export function siteTile(input: MeshInput, mesh: RoadMesh, site: MeshSite): Site
     // probes stand well inside the tile: at its edge the triangle under one may belong to the next tile
     if (Math.abs(m.x - site.x) < site.halfM - 12 && Math.abs(m.z - site.z) < site.halfM - 12 && si % 7 === 0 && probes.length < 40 && (m.b[k] as number) - (m.b[k + 1] as number) > 1 && s.st.length > 3) {
       const lat = ((m.b[k] as number) + (m.b[k + 1] as number)) / 2;
-      probes.push({ x: round(m.x + m.nx * lat - origin[0], 3), y: round(m.h - origin[1], 4), z: round(m.z + m.nz * lat - origin[2], 3), what: `${s.id} lane ${k}` });
+      // five centimetres past the station line, along the lane: a point on the line itself lies on the edge two
+      // triangles share, and when those belong to two collider chunks a ray straight down that edge can pass
+      // between the two bodies (one probe at Connaught Place did, once the ground changed the chunks)
+      const q = s.st[mid + 1] as Station;
+      const lat2 = ((q.b[k] as number) + (q.b[k + 1] as number)) / 2;
+      const ax = m.x + m.nx * lat;
+      const az = m.z + m.nz * lat;
+      const bx = q.x + q.nx * lat2;
+      const bz = q.z + q.nz * lat2;
+      const t = Math.min(0.5, 0.05 / (Math.hypot(bx - ax, bz - az) || 1));
+      probes.push({ x: round(ax + (bx - ax) * t - origin[0], 3), y: round(m.h + (q.h - m.h) * t - origin[1], 4), z: round(az + (bz - az) * t - origin[2], 3), what: `${s.id} lane ${k}` });
     }
     if (!site.eye.test(s.name)) return;
     s.st.forEach((st: Station, i: number) => {
@@ -278,7 +294,9 @@ export function siteTile(input: MeshInput, mesh: RoadMesh, site: MeshSite): Site
     tile, triangles,
     meta: {
       site: site.id, name: site.name, tile: `${site.id}.ktl`, origin, poses, probes,
-      note: 'Cut from the production road mesh (tools/bake/mesh/, the bake step mesh). Stand-in only: lane lines drawn as strips from the lane UV codes, a ground sheet under the roads with a verge down to it (the real ground is the terrain step).',
+      note: groundMeshes
+        ? 'Cut from the production road mesh (tools/bake/mesh/, the bake step mesh) and the production ground (tools/bake/terrain/, the bake step terrain). Stand-in only: lane lines drawn as strips from the lane UV codes.'
+        : 'Cut from the production road mesh (tools/bake/mesh/, the bake step mesh). Stand-in only: lane lines drawn as strips from the lane UV codes, a ground sheet under the roads with a verge down to it (the real ground is the terrain step).',
     },
   };
 }

@@ -10,14 +10,14 @@
       "driver": "metal",
       "resolution": "1600x1000",
       "note": "the ITO flyover with its service lanes and the junctions under it",
-      "at": "2026-11-12T00:55:17.929Z",
+      "at": "2026-11-12T02:08:58.065Z",
       "project": {
         "physics": {
           "3d/physics_engine": "Jolt Physics"
         }
       },
-      "loadMs": 1299,
-      "buildMs": 593,
+      "loadMs": 1278,
+      "buildMs": 587,
       "renderer": {
         "adapter": "Apple M2 Pro (Apple8)",
         "driver": "metal",
@@ -26,23 +26,25 @@
       },
       "cpuOnly": true,
       "scene": {
-        "attachTotalMs": 33.02,
-        "attachWorstChunkMs": 0.8,
-        "buildMs": 593,
-        "colliderChunks": 139,
-        "colliderTriangles": 53186,
+        "attachTotalMs": 34.14,
+        "attachWorstChunkMs": 0.9,
+        "buildMs": 587,
+        "colliderChunks": 127,
+        "colliderTriangles": 49427,
         "engine": "Jolt Physics",
-        "loadMs": 9.73,
+        "loadMs": 9.27,
         "name": "ITO flyover and junction",
         "placements": 0,
         "poses": [
           "top",
-          "eye"
+          "eye",
+          "ramp_foot",
+          "bank"
         ],
         "ready": true,
         "site": "ito",
-        "tileBytes": 7411800,
-        "triangles": 65338
+        "tileBytes": 6969652,
+        "triangles": 61689
       },
       "shots": [
         {
@@ -56,6 +58,18 @@
           "kind": "eye",
           "file": "harness/reports/arch/roads/roads_ito_eye.png",
           "note": "driver height on Indraprastha Marg, looking along it towards the middle of the site"
+        },
+        {
+          "pose": "ramp_foot",
+          "kind": "eye",
+          "file": "harness/reports/arch/roads/roads_ito_ramp_foot.png",
+          "note": "the foot of a ramp wall 2.8 m high, seen from the ground beside it"
+        },
+        {
+          "pose": "bank",
+          "kind": "eye",
+          "file": "harness/reports/arch/roads/roads_ito_bank.png",
+          "note": "the water bank seen from the land: the ground runs down to the water, the surface lies flat"
         }
       ],
       "probe": {
@@ -63,20 +77,22 @@
         "maxErrorM": 0,
         "meanErrorM": 0,
         "missing": 0,
+        "missingList": [],
         "points": 12,
-        "worst": "w70237521.0_0 lane 1"
+        "worst": "w1190559813.0_0 lane 1"
       },
-      "line": "ito: 65338 triangles, 139 collider chunks (attach 33.02 ms, worst chunk 0.8 ms), 2 shots, ray probe 12/12 hits, max error 0 m",
+      "engineErrors": [],
+      "line": "ito: 61689 triangles, 127 collider chunks (attach 34.14 ms, worst chunk 0.9 ms), 4 shots, ray probe 12/12 hits, max error 0 m",
       "hostLoad": {
         "before": {
-          "avg1": 1.96,
+          "avg1": 1.67,
           "cores": 12,
-          "perCore": 0.16
+          "perCore": 0.14
         },
         "after": {
-          "avg1": 1.97,
+          "avg1": 1.78,
           "cores": 12,
-          "perCore": 0.16
+          "perCore": 0.15
         }
       }
     },
@@ -89,14 +105,14 @@
       "driver": "metal",
       "resolution": "1600x1000",
       "note": "the Connaught Place inner circle with its radials",
-      "at": "2026-11-12T00:55:19.412Z",
+      "at": "2026-11-12T02:08:59.824Z",
       "project": {
         "physics": {
           "3d/physics_engine": "Jolt Physics"
         }
       },
       "loadMs": 1155,
-      "buildMs": 571,
+      "buildMs": 606,
       "renderer": {
         "adapter": "Apple M2 Pro (Apple8)",
         "driver": "metal",
@@ -105,13 +121,13 @@
       },
       "cpuOnly": true,
       "scene": {
-        "attachTotalMs": 30.3,
-        "attachWorstChunkMs": 0.76,
-        "buildMs": 571,
-        "colliderChunks": 111,
-        "colliderTriangles": 47059,
+        "attachTotalMs": 27.75,
+        "attachWorstChunkMs": 0.66,
+        "buildMs": 606,
+        "colliderChunks": 100,
+        "colliderTriangles": 45645,
         "engine": "Jolt Physics",
-        "loadMs": 8.46,
+        "loadMs": 7.42,
         "name": "Connaught Place inner circle",
         "placements": 0,
         "poses": [
@@ -120,8 +136,8 @@
         ],
         "ready": true,
         "site": "cp",
-        "tileBytes": 6426464,
-        "triangles": 56254
+        "tileBytes": 6257520,
+        "triangles": 54853
       },
       "shots": [
         {
@@ -139,23 +155,25 @@
       ],
       "probe": {
         "hits": 12,
-        "maxErrorM": 0.0001,
+        "maxErrorM": 0,
         "meanErrorM": 0,
         "missing": 0,
+        "missingList": [],
         "points": 12,
-        "worst": "w24577486.0_0 lane 2"
+        "worst": "w23133486.6_0 lane 3"
       },
-      "line": "cp: 56254 triangles, 111 collider chunks (attach 30.3 ms, worst chunk 0.76 ms), 2 shots, ray probe 12/12 hits, max error 0.0001 m",
+      "engineErrors": [],
+      "line": "cp: 54853 triangles, 100 collider chunks (attach 27.75 ms, worst chunk 0.66 ms), 2 shots, ray probe 12/12 hits, max error 0 m",
       "hostLoad": {
         "before": {
-          "avg1": 1.97,
+          "avg1": 1.78,
           "cores": 12,
-          "perCore": 0.16
+          "perCore": 0.15
         },
         "after": {
-          "avg1": 1.97,
+          "avg1": 1.78,
           "cores": 12,
-          "perCore": 0.16
+          "perCore": 0.15
         }
       }
     },
@@ -168,14 +186,14 @@
       "driver": "metal",
       "resolution": "1600x1000",
       "note": "the India Gate hexagon and its avenues",
-      "at": "2026-11-12T00:55:21.033Z",
+      "at": "2026-11-12T02:09:01.429Z",
       "project": {
         "physics": {
           "3d/physics_engine": "Jolt Physics"
         }
       },
-      "loadMs": 1163,
-      "buildMs": 629,
+      "loadMs": 1160,
+      "buildMs": 601,
       "renderer": {
         "adapter": "Apple M2 Pro (Apple8)",
         "driver": "metal",
@@ -184,23 +202,24 @@
       },
       "cpuOnly": true,
       "scene": {
-        "attachTotalMs": 33.02,
-        "attachWorstChunkMs": 0.84,
-        "buildMs": 629,
-        "colliderChunks": 160,
-        "colliderTriangles": 50255,
+        "attachTotalMs": 31.73,
+        "attachWorstChunkMs": 0.78,
+        "buildMs": 601,
+        "colliderChunks": 144,
+        "colliderTriangles": 50007,
         "engine": "Jolt Physics",
-        "loadMs": 8.22,
+        "loadMs": 9.34,
         "name": "India Gate hexagon",
         "placements": 0,
         "poses": [
           "top",
-          "eye"
+          "eye",
+          "bank"
         ],
         "ready": true,
         "site": "india_gate",
-        "tileBytes": 6878688,
-        "triangles": 60238
+        "tileBytes": 6899528,
+        "triangles": 60597
       },
       "shots": [
         {
@@ -214,27 +233,35 @@
           "kind": "eye",
           "file": "harness/reports/arch/roads/roads_india_gate_eye.png",
           "note": "driver height on Shahjahan Road, looking along it towards the middle of the site"
+        },
+        {
+          "pose": "bank",
+          "kind": "eye",
+          "file": "harness/reports/arch/roads/roads_india_gate_bank.png",
+          "note": "the water bank seen from the land: the ground runs down to the water, the surface lies flat"
         }
       ],
       "probe": {
         "hits": 14,
-        "maxErrorM": 0,
+        "maxErrorM": 0.0001,
         "meanErrorM": 0,
         "missing": 0,
+        "missingList": [],
         "points": 14,
-        "worst": "w680551212.1_0 lane 2"
+        "worst": "w24563431.0_0 lane 2"
       },
-      "line": "india_gate: 60238 triangles, 160 collider chunks (attach 33.02 ms, worst chunk 0.84 ms), 2 shots, ray probe 14/14 hits, max error 0 m",
+      "engineErrors": [],
+      "line": "india_gate: 60597 triangles, 144 collider chunks (attach 31.73 ms, worst chunk 0.78 ms), 3 shots, ray probe 14/14 hits, max error 0.0001 m",
       "hostLoad": {
         "before": {
-          "avg1": 1.97,
+          "avg1": 1.78,
           "cores": 12,
-          "perCore": 0.16
+          "perCore": 0.15
         },
         "after": {
-          "avg1": 1.97,
+          "avg1": 1.78,
           "cores": 12,
-          "perCore": 0.16
+          "perCore": 0.15
         }
       }
     },
@@ -247,14 +274,14 @@
       "driver": "metal",
       "resolution": "1600x1000",
       "note": "Chandni Chowk and the old city lanes beside it",
-      "at": "2026-11-12T00:55:22.842Z",
+      "at": "2026-11-12T02:09:03.177Z",
       "project": {
         "physics": {
           "3d/physics_engine": "Jolt Physics"
         }
       },
-      "loadMs": 1182,
-      "buildMs": 582,
+      "loadMs": 1070,
+      "buildMs": 556,
       "renderer": {
         "adapter": "Apple M2 Pro (Apple8)",
         "driver": "metal",
@@ -263,13 +290,13 @@
       },
       "cpuOnly": true,
       "scene": {
-        "attachTotalMs": 35.86,
-        "attachWorstChunkMs": 0.84,
-        "buildMs": 582,
-        "colliderChunks": 110,
-        "colliderTriangles": 56613,
+        "attachTotalMs": 43.67,
+        "attachWorstChunkMs": 0.85,
+        "buildMs": 556,
+        "colliderChunks": 102,
+        "colliderTriangles": 70316,
         "engine": "Jolt Physics",
-        "loadMs": 8.57,
+        "loadMs": 11.82,
         "name": "Chandni Chowk",
         "placements": 0,
         "poses": [
@@ -278,8 +305,8 @@
         ],
         "ready": true,
         "site": "chandni_chowk",
-        "tileBytes": 7226256,
-        "triangles": 61685
+        "tileBytes": 8871684,
+        "triangles": 75403
       },
       "shots": [
         {
@@ -297,30 +324,120 @@
       ],
       "probe": {
         "hits": 22,
-        "maxErrorM": 0,
+        "maxErrorM": 0.0001,
         "meanErrorM": 0,
         "missing": 0,
+        "missingList": [],
         "points": 22,
-        "worst": "w1184991595.0_0 lane 1"
+        "worst": "w1360335943.0_0 lane 1"
       },
-      "line": "chandni_chowk: 61685 triangles, 110 collider chunks (attach 35.86 ms, worst chunk 0.84 ms), 2 shots, ray probe 22/22 hits, max error 0 m",
+      "engineErrors": [],
+      "line": "chandni_chowk: 75403 triangles, 102 collider chunks (attach 43.67 ms, worst chunk 0.85 ms), 2 shots, ray probe 22/22 hits, max error 0.0001 m",
       "hostLoad": {
         "before": {
-          "avg1": 1.97,
+          "avg1": 1.78,
           "cores": 12,
-          "perCore": 0.16
+          "perCore": 0.15
         },
         "after": {
-          "avg1": 1.97,
+          "avg1": 1.78,
           "cores": 12,
-          "perCore": 0.16
+          "perCore": 0.15
+        }
+      }
+    },
+    "yamuna": {
+      "id": "yamuna",
+      "option": "TF2 production ground",
+      "group": "site",
+      "tokens": "yamuna",
+      "must": true,
+      "driver": "metal",
+      "resolution": "1600x1000",
+      "note": "the west bank of the Yamuna at ITO: the bank, the bed and the water surface",
+      "at": "2026-11-12T02:09:04.919Z",
+      "project": {
+        "physics": {
+          "3d/physics_engine": "Jolt Physics"
+        }
+      },
+      "loadMs": 1080,
+      "buildMs": 522,
+      "renderer": {
+        "adapter": "Apple M2 Pro (Apple8)",
+        "driver": "metal",
+        "method": "forward_plus",
+        "vendor": "Apple"
+      },
+      "cpuOnly": true,
+      "scene": {
+        "attachTotalMs": 9.62,
+        "attachWorstChunkMs": 0.87,
+        "buildMs": 522,
+        "colliderChunks": 73,
+        "colliderTriangles": 13536,
+        "engine": "Jolt Physics",
+        "loadMs": 2.88,
+        "name": "Yamuna west bank at ITO",
+        "placements": 0,
+        "poses": [
+          "top",
+          "ramp_foot",
+          "bank"
+        ],
+        "ready": true,
+        "site": "yamuna",
+        "tileBytes": 1989044,
+        "triangles": 17813
+      },
+      "shots": [
+        {
+          "pose": "top",
+          "kind": "top",
+          "file": "harness/reports/arch/roads/roads_yamuna_top.png",
+          "note": "Yamuna west bank at ITO from above, north up"
+        },
+        {
+          "pose": "ramp_foot",
+          "kind": "eye",
+          "file": "harness/reports/arch/roads/roads_yamuna_ramp_foot.png",
+          "note": "the foot of a ramp wall 1.7 m high, seen from the ground beside it"
+        },
+        {
+          "pose": "bank",
+          "kind": "eye",
+          "file": "harness/reports/arch/roads/roads_yamuna_bank.png",
+          "note": "the water bank seen from the land: the ground runs down to the water, the surface lies flat"
+        }
+      ],
+      "probe": {
+        "hits": 1,
+        "maxErrorM": 0.0001,
+        "meanErrorM": 0.0001,
+        "missing": 0,
+        "missingList": [],
+        "points": 1,
+        "worst": "w691886473.0_0 lane 2"
+      },
+      "engineErrors": [],
+      "line": "yamuna: 17813 triangles, 73 collider chunks (attach 9.62 ms, worst chunk 0.87 ms), 3 shots, ray probe 1/1 hits, max error 0.0001 m",
+      "hostLoad": {
+        "before": {
+          "avg1": 1.78,
+          "cores": 12,
+          "perCore": 0.15
+        },
+        "after": {
+          "avg1": 2.11,
+          "cores": 12,
+          "perCore": 0.18
         }
       }
     }
   },
   "scene": "game/bench/roads/",
   "writtenBy": "node harness/bench/arch.mjs roads",
-  "at": "2026-11-12T00:55:17.154Z",
+  "at": "2026-11-12T02:08:57.294Z",
   "machine": "macbook-pro, darwin arm64, Apple M2 Pro, 12 cores, 16 GB",
   "godotVersion": "4.7.2.stable.official.ed1daf0bf",
   "defaults": {
@@ -331,7 +448,7 @@
   "howMeasured": "The production road mesh (tools/bake/mesh/, the bake step mesh) is built once for the whole pilot centre; each site tile is the part of it inside the site box, plus lane lines as strips and a stand-in ground sheet. The gate counts are in harness/reports/map/health.json (mesh). The scene loads the tile, takes the shots and casts a ray down at every probe point against the collider.",
   "mesh": {
     "hash": "125b17e8e8abb6",
-    "buildMs": 7353,
+    "buildMs": 7448,
     "counts": {
       "faces": 378753,
       "vertices": 648870,
@@ -410,12 +527,86 @@
       ]
     }
   },
+  "terrain": {
+    "hash": "11c5d583bfa2cd",
+    "buildMs": 5665,
+    "counts": {
+      "points": 680136,
+      "vertices": 718297,
+      "triangles": 1436588,
+      "emitted": 1068742,
+      "byClass": {
+        "ground": 717670,
+        "lawn": 45903,
+        "plot": 297379,
+        "water": 7790
+      },
+      "tiles": 389,
+      "drawTriangles": {
+        "ground": 721898,
+        "plot": 297379,
+        "lawn": 45903,
+        "bed": 7790,
+        "water": 7790
+      },
+      "roadVertices": 279016,
+      "freeEdges": 279041,
+      "wallEdges": 6584,
+      "ringEdges": 165984,
+      "splitPoints": 148654,
+      "gridPoints": 30438,
+      "latticePoints": 63387,
+      "welded": 49,
+      "pinned": 287641,
+      "wallVertices": 8521,
+      "stepVertices": 4226,
+      "stepCorners": 9571,
+      "unresolvedSteps": 0,
+      "skirts": 4225,
+      "waters": 24
+    },
+    "gates": {
+      "groundGapMaxM": 0.0015,
+      "groundAboveRoad": 0,
+      "needleShare": 0.0137,
+      "seamMismatches": 0,
+      "holeShare": 0.000019
+    },
+    "gap": {
+      "samples": 574330,
+      "maxM": 0.0015
+    },
+    "needles": {
+      "triangles": 771363,
+      "under1deg": 10569,
+      "share": 0.0137,
+      "under5deg": 42351,
+      "plots": 297379,
+      "plotsUnder1deg": 7240
+    },
+    "seams": {
+      "edges": 55000,
+      "mismatched": 0
+    },
+    "area": {
+      "outlineM2": 21815300.2,
+      "groundM2": 12468370.4,
+      "lawnM2": 1916398.8,
+      "waterM2": 393769.4,
+      "plotM2": 4221304.3,
+      "droppedM2": 0.105,
+      "roadFacesM2": 2815882.5,
+      "roadTrianglesM2": 2815456.1,
+      "holeM2": -425.3,
+      "holeShare": 0.000019
+    }
+  },
   "renderer": "Forward+",
   "gpuAdapter": "Apple M2 Pro (Apple8)",
   "hostLoad": {
-    "avg1": 1.97,
+    "avg1": 2.11,
     "cores": 12,
-    "perCore": 0.16
+    "perCore": 0.18
   },
   "notMeasured": [
     {
@@ -425,9 +616,9 @@
       "estimate": "saves the marking triangles"
     },
     {
-      "id": "terrain",
+      "id": "ground_materials",
       "option": "TF2",
-      "reason": "the ground in the scene is a stand-in sheet under the roads; the ground cut to the road edges is the terrain step",
+      "reason": "the ground in the scene is the production ground of the terrain step with flat stand-in colours: plain ground, open land, footprint pads (the building generator stands on them), the river bed and a flat water surface; no textures, no water shader yet",
       "estimate": "none"
     }
   ]
