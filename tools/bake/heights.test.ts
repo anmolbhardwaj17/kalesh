@@ -72,7 +72,7 @@ describe('ground model (heights.ts)', () => {
 
 describe('bake command line (cli.ts)', () => {
   it('reads a stage, the step, tiles, out and the switches', () => {
-    expect(parseArgs(['pilot'])).toEqual({ target: 'pilot', steps: ['sources', 'ground', 'graph', 'repair', 'lanes', 'elevation', 'mesh', 'tiles'], tiles: null, out: null, force: false, offline: false });
+    expect(parseArgs(['pilot'])).toEqual({ target: 'pilot', steps: ['sources', 'ground', 'graph', 'repair', 'lanes', 'elevation', 'mesh', 'terrain', 'tiles'], tiles: null, out: null, force: false, offline: false });
     expect(parseArgs(['pilot', '--stage', 'sources']).steps).toEqual(['sources']);
     expect(parseArgs(['pilot', '--stage', 'ground']).steps).toEqual(['sources', 'ground']);
     expect(parseArgs(['pilot', '--tiles', '3_-4,0_0', '--out', 'x/tiles']).tiles).toEqual([{ x: 3, z: -4 }, { x: 0, z: 0 }]);

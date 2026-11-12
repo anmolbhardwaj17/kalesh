@@ -13,7 +13,9 @@
 // health report), elevation (one height solve over the whole lane model, tools/bake/elevation/: elevation.json in
 // <dataDir>, a north-up height map and the side view of the ITO flyover beside the health report), mesh (the road and
 // junction mesh of tools/bake/mesh/ with its overlap proof and gate counts; stand-in tiles of a few sites for the road
-// bench scene in game/bench/roads/gen/ and north-up pictures beside the health report), tiles (written by a later task). Invariants run after each step; a failed one
+// bench scene in game/bench/roads/gen/ and north-up pictures beside the health report), terrain (the ground of
+// tools/bake/terrain/: cut to the road mesh's edges, footprints, water and the tile lines, with its checks; the bench
+// tiles again on that ground), tiles (written by a later task). Invariants run after each step; a failed one
 // stops the bake before tiles are written. harness/reports/map/health.json is written at the end of every run.
 import fs from 'node:fs';
 import path from 'node:path';
@@ -65,8 +67,14 @@ import { heightMapSvg, profileSvg } from './elevation/render.ts';
 import { solveBlockElevation } from './elevation/solve.ts';
 import { readStructures } from './elevation/structures.ts';
 import { buildRoadMesh } from './mesh/build.ts';
+import type { RoadMesh } from './mesh/build.ts';
 import { checkRoadMesh } from './mesh/checks.ts';
 import { meshInput } from './mesh/input.ts';
+import type { MeshInput } from './mesh/input.ts';
+import { buildGround } from './terrain/build.ts';
+import { checkGround } from './terrain/checks.ts';
+import type { TerrainInput } from './terrain/collect.ts';
+import { groundHash, groundInBox, groundPoses, groundSvg, terrainInvariants, terrainLog, terrainRecord } from './terrain/terrainout.ts';
 import { meshHash, meshRecord, siteTile } from './mesh/meshout.ts';
 import { PAIR_LIMIT_M2 } from './mesh/proof.ts';
 import { meshSvg } from './mesh/render.ts';
@@ -200,6 +208,8 @@ export async function bake(args: BakeArgs, opts: BakeOptions): Promise<HealthRep
   let repaired: RepairedGraph | null = null;
   /** What the elevation step hands the mesh step: the junction centre heights and the kind of every station. */
   let elevated: { junctionHeights: ArrayLike<number>; kinds: readonly ArrayLike<number>[] } | null = null;
+  /** What the mesh step hands the terrain step. */
+  let meshed: { input: MeshInput; mesh: RoadMesh } | null = null;
   for (const step of args.steps as Step[]) {
     opts.log(`[bake] step ${step}`);
     report.steps.push(step);
@@ -407,6 +417,7 @@ export async function bake(args: BakeArgs, opts: BakeOptions): Promise<HealthRep
       const input = meshInput(laneBuild, elevated.junctionHeights, elevated.kinds);
       // built twice: the mesh must not depend on anything but the lane model and the heights
       const mesh = buildRoadMesh(input);
+      meshed = { input, mesh };
       const hash = meshHash(mesh);
       const again = meshHash(buildRoadMesh(input));
       const tc = clock.now();
@@ -455,6 +466,43 @@ export async function bake(args: BakeArgs, opts: BakeOptions): Promise<HealthRep
         { id: 'MESH-04.kerbs_uv_stop_lines', ok: c.kerbs.off === 0 && c.uv.ok && c.stopLines.missing === 0, detail: `${c.kerbs.off} of ${c.kerbs.sampled} kerbs off 0.15 m, lane UV ${c.uv.ok ? 'ok' : 'failed'}, ${c.stopLines.missing} of ${c.stopLines.armsThatStop} stop lines missing` },
         { id: 'MESH-05.same_twice', ok: hash === again, detail: hash === again ? `the same hash twice (${hash})` : `two builds of one input differ: ${hash} and ${again}` },
       ]);
+    } else if (step === 'terrain') {
+      if (!meshed || !repaired || !groundModel) throw new Error('the terrain step needs the ground, the repair and the mesh step before it');
+      const proj = projector(plan.origin);
+      const offset = blockFrame(districts, plan.def.block).offset;
+      const model = groundModel;
+      const { input: mi, mesh } = meshed;
+      const input: TerrainInput = {
+        fs: mesh.fs, edges: mesh.edges, grid: mesh.grid, strips: mi.strips, kinds: mi.kinds, outline: repaired.outline, footprints: repaired.footprints.map((f) => f.ring),
+        water: repaired.features.water.map((w) => ({ id: w.id, name: w.name, rings: w.rings })), open: repaired.features.open.map((o) => o.rings), ground: (x, z) => model.at(x, z), offset,
+      };
+      // built twice: the ground must not depend on anything but the road mesh, the map and the ground model
+      const ground = buildGround(input);
+      const hash = groundHash(ground);
+      const again = groundHash(buildGround(input));
+      const tc = clock.now();
+      const c = checkGround(ground);
+      const checksMs = Math.round(clock.now() - tc);
+      const files: string[] = [];
+      const genDir = opts.benchDir ?? path.join('game', 'bench', 'roads', 'gen');
+      for (const v of GROUND_SITES) {
+        const at = proj.toWorld(v.lat, v.lon);
+        if (!pointInRing(at, repaired.outline)) continue;
+        const box = { minX: at.x - v.halfM, maxX: at.x + v.halfM, minZ: at.z - v.halfM, maxZ: at.z + v.halfM };
+        // the site tiles of the road bench scene again, now on the production ground, with the poses that look at it
+        const site = siteTile(mi, mesh, { id: v.id, name: v.name, x: at.x, z: at.z, halfM: v.halfM, eye: v.eye }, groundInBox(ground, box));
+        const o = site.meta.origin;
+        for (const p of site.meta.poses) if (p.kind === 'eye') p.shot = `ground_${v.id}_eye`;
+        for (const p of groundPoses(ground, { id: v.id, x: at.x, z: at.z, halfM: v.halfM })) site.meta.poses.push({ ...p, pos: [round(p.pos[0] - o[0]), round(p.pos[1] - o[1]), round(p.pos[2] - o[2])], target: [round(p.target[0] - o[0]), round(p.target[1] - o[1]), round(p.target[2] - o[2])] });
+        const w = writeSiteTile(opts.root, genDir, site);
+        files.push(w.tile, w.poses, ...(await writePicture(opts.root, `harness/reports/map/ground_${plan.id}_${v.id}.png`, groundSvg(ground, box, `${v.name}: ground triangles, north up (${plan.id}). Grey: ground, green: open land, sand: building footprints, blue: water; dark: the road mesh`), 2400)));
+        opts.log(`[terrain] site ${v.id}: ${site.triangles} triangles, ${w.bytes} bytes, poses ${site.meta.poses.map((p) => p.name).join(', ')}`);
+      }
+      const rec = terrainRecord(ground, c, checksMs, hash, { files });
+      report.terrain = rec;
+      for (const [k, n] of Object.entries(rec.gates)) report.gates[k] = n;
+      for (const l of terrainLog(rec)) opts.log(`[terrain] ${l}`);
+      check(terrainInvariants(rec, again));
     } else if (step === 'tiles') {
       opts.log(`[tiles] not built yet: the tile writer lands with the production road, terrain and tile tasks (would write to ${report.tiles.out})`);
     }
@@ -496,6 +544,8 @@ const MESH_SITES: readonly { id: string; name: string; lat: number; lon: number;
   { id: 'india_gate', name: 'India Gate hexagon', lat: 28.612894, lon: 77.229446, halfM: 380, eye: /^(Kartavya Path|Rajpath|Tilak Marg|Kasturba Gandhi Marg|Shahjahan Road)/ },
   { id: 'chandni_chowk', name: 'Chandni Chowk', lat: 28.6561, lon: 77.2318, halfM: 300, eye: /^Chandni Chowk/ },
 ];
+/** Sites the terrain step cuts: the mesh sites again on the production ground, and the river bank. */
+const GROUND_SITES: typeof MESH_SITES = [...MESH_SITES, { id: 'yamuna', name: 'Yamuna west bank at ITO', lat: 28.626, lon: 77.2533, halfM: 260, eye: /^(Vikas Marg|Mahatma Gandhi Marg|Ring Road)/ }];
 
 /** Side views drawn by the elevation step: roads by name (drawn when the stage has them). */
 const PROFILE_VIEWS: readonly { id: string; name: string; match: RegExp }[] = [{ id: 'ito', name: 'ITO flyover and its ramps', match: /^ITO Flyover/ }];

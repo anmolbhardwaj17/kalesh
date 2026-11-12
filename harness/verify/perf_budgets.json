@@ -227,6 +227,14 @@
       "landmarks": 0.5,
       "note": "sum 3.5 ms = systems.gpuMs.city; street dressing is systems.gpuMs.dressing, life is systems.gpuMs.people and vehicles"
     },
+    "ground": {
+      "roadGapM": 0.02,
+      "needleShare": 0.02,
+      "seamM": 0.0001,
+      "holeShare": 0.001,
+      "buildS": 120,
+      "measured": "pilot centre, bake step terrain (P1-015, 2026-11-12): largest road to ground gap 0.0015 m on 574,330 points of road edge, 0 ground vertices above a road, 1.37 percent of 771,363 ground triangles under 1 degree, 0 of 55,000 tile seam edges differ, areas miss the outline by 0.002 percent, one build 5.2 s; the limits are checked by the bake (invariants TERR-01 to TERR-06, tools/bake/terrain/terrainout.ts)"
+    },
     "generatedBuildings": {
       "kitModulesPerArea": [
         40,

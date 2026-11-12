@@ -3,13 +3,13 @@
 //   npm run bake -- <stage|block> [--stage <step>] [--tiles x_z,x_z] [--out <tile folder>] [--force] [--offline]
 //
 // <stage|block>  a stage of harness/data/districts.json "stages" (pilot) or a block id (once blocks have outlines)
-// --stage        run the steps up to and including this one: sources, ground, graph, repair, lanes, elevation, mesh, tiles (default: all)
+// --stage        run the steps up to and including this one: sources, ground, graph, repair, lanes, elevation, mesh, terrain, tiles (default: all)
 // --tiles        a partial bake: only these world tiles (x_z, integers) are written
 // --out          write tiles to this folder instead of game/world/tiles/
 // --force        fetch every source again even when a good pinned file is there
 // --offline      never touch the network: a source that is not pinned and on disk fails
 
-export const STEPS = ['sources', 'ground', 'graph', 'repair', 'lanes', 'elevation', 'mesh', 'tiles'] as const;
+export const STEPS = ['sources', 'ground', 'graph', 'repair', 'lanes', 'elevation', 'mesh', 'terrain', 'tiles'] as const;
 export type Step = (typeof STEPS)[number];
 
 export interface BakeArgs {
@@ -21,7 +21,7 @@ export interface BakeArgs {
   offline: boolean;
 }
 
-export const USAGE = 'usage: npm run bake -- <stage|block> [--stage sources|ground|graph|repair|lanes|elevation|mesh|tiles] [--tiles x_z,x_z] [--out <tile folder>] [--force] [--offline]';
+export const USAGE = 'usage: npm run bake -- <stage|block> [--stage sources|ground|graph|repair|lanes|elevation|mesh|terrain|tiles] [--tiles x_z,x_z] [--out <tile folder>] [--force] [--offline]';
 
 export function parseArgs(argv: readonly string[]): BakeArgs {
   const out: BakeArgs = { target: '', steps: [...STEPS], tiles: null, out: null, force: false, offline: false };
