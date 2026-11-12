@@ -1,0 +1,156 @@
+[
+  {
+    "issue": "R-BLDG-01:overture/ab2bc8a7-384b-43fd-8a4c-efca59cca7f5:w23133486.11",
+    "action": "set_tag",
+    "target": {
+      "ids": [
+        "overture/ab2bc8a7-384b-43fd-8a4c-efca59cca7f5",
+        "w23133486.11"
+      ],
+      "anchor": {
+        "lat": 28.6328033,
+        "lon": 77.2193236
+      },
+      "tolerance_m": 15
+    },
+    "params": {
+      "key": "tunnel",
+      "value": "building_passage",
+      "on": "w23133486.11",
+      "building": "overture/ab2bc8a7-384b-43fd-8a4c-efca59cca7f5"
+    },
+    "why": "The centre line runs through the footprint: a passage or a gate, or the footprint is wrong",
+    "by": "owner",
+    "source": "inspector",
+    "date": "2026-11-12",
+    "id": "ov_-2_-7_0001"
+  },
+  {
+    "issue": "R-BLDG-01:overture/ab2bc8a7-384b-43fd-8a4c-efca59cca7f5:w23133486.12",
+    "action": "replace_geometry",
+    "target": {
+      "ids": [
+        "overture/ab2bc8a7-384b-43fd-8a4c-efca59cca7f5",
+        "w23133486.12"
+      ],
+      "anchor": {
+        "lat": 28.6328033,
+        "lon": 77.2193236
+      },
+      "tolerance_m": 15
+    },
+    "params": {
+      "op": "trim",
+      "on": "overture/ab2bc8a7-384b-43fd-8a4c-efca59cca7f5",
+      "by_m": 3.9
+    },
+    "why": "Or the footprint is drawn too far out: pull its edge back",
+    "by": "owner",
+    "source": "inspector",
+    "date": "2026-11-12",
+    "id": "ov_-2_-7_0002"
+  },
+  {
+    "issue": "R-BLDG-01:overture/ab2bc8a7-384b-43fd-8a4c-efca59cca7f5:w23133486.13",
+    "action": "set_tag",
+    "target": {
+      "ids": [
+        "overture/ab2bc8a7-384b-43fd-8a4c-efca59cca7f5",
+        "w23133486.13"
+      ],
+      "anchor": {
+        "lat": 28.6328033,
+        "lon": 77.2193236
+      },
+      "tolerance_m": 15
+    },
+    "params": {
+      "key": "width",
+      "value": 11.3,
+      "on": "w23133486.13"
+    },
+    "why": "The tagged width 13 m of w23133486.13 does not fit between the buildings (11.3 m free)",
+    "by": "owner",
+    "source": "inspector",
+    "date": "2026-11-12",
+    "id": "ov_-2_-7_0003"
+  },
+  {
+    "issue": "R-BLDG-01:overture/ab2bc8a7-384b-43fd-8a4c-efca59cca7f5:w23133486.10",
+    "action": "set_tag",
+    "target": {
+      "ids": [
+        "overture/ab2bc8a7-384b-43fd-8a4c-efca59cca7f5",
+        "w23133486.10"
+      ],
+      "anchor": {
+        "lat": 28.6328033,
+        "lon": 77.2193236
+      },
+      "tolerance_m": 15
+    },
+    "params": {
+      "key": "tunnel",
+      "value": "building_passage",
+      "on": "w23133486.10",
+      "building": "overture/ab2bc8a7-384b-43fd-8a4c-efca59cca7f5"
+    },
+    "why": "The centre line runs through the footprint: a passage or a gate, or the footprint is wrong",
+    "by": "owner",
+    "source": "inspector",
+    "date": "2026-11-12",
+    "id": "ov_-2_-7_0004"
+  },
+  {
+    "issue": "R-BLDG-01:overture/ab2bc8a7-384b-43fd-8a4c-efca59cca7f5:w23133486.6",
+    "action": "set_tag",
+    "target": {
+      "ids": [
+        "overture/ab2bc8a7-384b-43fd-8a4c-efca59cca7f5",
+        "w23133486.6"
+      ],
+      "anchor": {
+        "lat": 28.6328033,
+        "lon": 77.2193236
+      },
+      "tolerance_m": 15
+    },
+    "params": {
+      "key": "tunnel",
+      "value": "building_passage",
+      "on": "w23133486.6",
+      "building": "overture/ab2bc8a7-384b-43fd-8a4c-efca59cca7f5"
+    },
+    "why": "The centre line runs through the footprint: a passage or a gate, or the footprint is wrong",
+    "by": "owner",
+    "source": "inspector",
+    "date": "2026-11-12",
+    "id": "ov_-2_-7_0005"
+  },
+  {
+    "issue": "R-BLDG-01:overture/ab2bc8a7-384b-43fd-8a4c-efca59cca7f5:w23133486.7",
+    "action": "set_tag",
+    "target": {
+      "ids": [
+        "overture/ab2bc8a7-384b-43fd-8a4c-efca59cca7f5",
+        "w23133486.7"
+      ],
+      "anchor": {
+        "lat": 28.6328033,
+        "lon": 77.2193236
+      },
+      "tolerance_m": 15
+    },
+    "params": {
+      "key": "tunnel",
+      "value": "building_passage",
+      "on": "w23133486.7",
+      "building": "overture/ab2bc8a7-384b-43fd-8a4c-efca59cca7f5"
+    },
+    "why": "The centre line runs through the footprint: a passage or a gate, or the footprint is wrong",
+    "by": "owner",
+    "source": "inspector",
+    "date": "2026-11-12",
+    "id": "ov_-2_-7_0006"
+  }
+]

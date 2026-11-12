@@ -1,6 +1,6 @@
 {
   "_doc": "Written only by node harness/bin/task.mjs. Phases run in order; P0 (ADOPT + STYLE DISCOVERY) waits for the owner by design and needs task.mjs signoff and task.mjs archsignoff before its gate passes. Later phases are added by the planner at the end of P0 (task.mjs phase-add) from the game's real state.",
-  "updated": "2026-11-12T21:10:34.116Z",
+  "updated": "2026-11-12T21:54:24.610Z",
   "phases": [
     {
       "id": "P0",
@@ -3527,6 +3527,29 @@
       "attempts": 0,
       "notes": [],
       "created": "2026-11-12T06:24:46.265Z"
+    },
+    {
+      "id": "P1-041",
+      "phase": "P1",
+      "title": "Underground structures: Rajiv Chowk station and Palika Bazaar are below ground, not buildings on the road",
+      "desc": "Anmol 2026-11-12: the big footprint inside the Connaught Place inner circle that the inspector flags with many red building on road issues is Rajiv Chowk metro station, which is below ground. Decision (orchestrator call on his word): a footprint is underground when its source tags say so (OSM or Overture: layer or level below 0, location=underground, building=train_station or station with subway=yes or underground, tunnel, or a known underground list in harness/data/underground.json that starts with Rajiv Chowk station and Palika Bazaar, the underground market in the same circle). Underground footprints: (1) never take part in any building versus road, footpath, lane or ground conflict rule (R-BLDG and the rest), so all those issues go away for good, not just get overridden; (2) get no shell in the tiles and do not cut the ground; (3) are kept in the bake output as underground features with their name, for the metro work (P2-019 Blue Line, P2-029 Yellow Line entrances) and for the minimap; (4) show in the inspector as a dashed outline labelled 'Underground: Rajiv Chowk metro station' and never as an issue. Also check the pilot for other underground footprints that cause false issues (other Yellow Line stations: Patel Chowk, Central Secretariat, Chawri Bazar, Chandni Chowk, plus underground car parks and subways) and handle them the same way, with a count in health.json.",
+      "accept": [
+        "The Rajiv Chowk station footprint and Palika Bazaar are classed underground; 0 issues of any kind reference them (issue ids listed before and after)",
+        "Every underground footprint in the pilot is listed in health.json with its reason (tag or list) and count; issues removed by the class counted",
+        "Underground footprints have no shell in the tiles and the ground over them is unbroken",
+        "The inspector shows them as labelled dashed outlines; verifier or orchestrator reads a CP shot",
+        "Rule tests: an underground footprint over a road raises nothing; the same footprint at ground level still raises R-BLDG",
+        "typecheck, tests and the offline bake green"
+      ],
+      "deps": [],
+      "agent": "builder",
+      "priority": 1,
+      "kind": "mentor",
+      "status": "todo",
+      "attempts": 0,
+      "notes": [],
+      "created": "2026-11-12T21:54:24.610Z",
+      "model": "opus"
     }
   ]
 }
