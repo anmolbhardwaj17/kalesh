@@ -7,6 +7,9 @@ extends Node3D
 const CarModel := preload("res://scripts/car_model.gd")
 
 var model := CarModel.new()
+## Height of the ground under the car (the kinematic stand-in does not follow terrain): 0 on the scaffold, the spawn lane's
+## height on a tile block (game/world/block_loader.gd).
+var ground_y := 0.0
 
 
 func _ready() -> void:
@@ -39,5 +42,5 @@ func place(x: float, z: float, heading: float = NAN) -> void:
 
 ## Writes the model's position and heading onto the node.
 func apply_model() -> void:
-	position = Vector3(model.x, 0.0, model.z)
+	position = Vector3(model.x, ground_y, model.z)
 	rotation = Vector3(0.0, -model.heading, 0.0)

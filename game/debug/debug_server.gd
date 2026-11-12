@@ -318,8 +318,10 @@ func state() -> Dictionary:
 		var look := -cam.global_transform.basis.z
 		camera = {"pos": [cp.x, cp.y, cp.z], "dir": [look.x, look.y, look.z], "fov": cam.fov,
 			"override": _camera != null and cam == _camera}
+	var block := get_tree().get_first_node_in_group("tile_block")
 	return {
 		"scene": id, "level": id, "milestone": null, "player": player, "camera": camera, "hud": _hud_on,
+		"world": block.info() if block != null else null,
 		"debugOverlay": _overlay != null and _overlay.visible, "quality": gargs.quality, "style": gargs.style, "light": gargs.light,
 		"arch": gargs.arch, "lockstep": gargs.lockstep, "time": time_state(), "frame": _frame_no(),
 	}

@@ -26,5 +26,5 @@ func follow() -> void:
 	var h: float = car.model.heading if "model" in car else -car.rotation.y
 	var f := CarModel.forward(h)
 	var p := car.global_position
-	global_position = Vector3(p.x - f.x * back, height, p.z - f.z * back)
-	look_at(Vector3(p.x + f.x * look_ahead, 1.0, p.z + f.z * look_ahead), Vector3.UP)
+	global_position = Vector3(p.x - f.x * back, p.y + height, p.z - f.z * back)
+	look_at(Vector3(p.x + f.x * look_ahead, p.y + 1.0, p.z + f.z * look_ahead), Vector3.UP)
