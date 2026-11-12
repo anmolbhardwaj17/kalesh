@@ -363,7 +363,7 @@ export async function bake(args: BakeArgs, opts: BakeOptions): Promise<HealthRep
       const again = quick ? hash : laneModelHash(laneModelFile(buildLaneModel(input), plan.def.block, plan.id));
       const c = checkLaneModel(build, heroes);
       laneChecks = c;
-      const files = writeLanes(opts.root, plan, path.dirname(healthFile), model, laneGraph(build, plan.def.block, offset), lanesLayer(build, plan.def.block, offset));
+      const files = writeLanes(opts.root, plan, path.dirname(healthFile), model, laneGraph(build, plan.def.block, offset), lanesLayer(build, plan.def.block, offset, plan.origin));
       const pictures: string[] = [];
       for (const v of LANE_VIEWS) {
         const at = proj.toWorld(v.lat, v.lon);

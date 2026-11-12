@@ -11,6 +11,7 @@ import { launch } from '../../harness/bin/browser.mjs';
 import { launchGame, freePort } from '../../harness/bin/godotclient.mjs';
 import { parseArgs } from '../bake/cli.ts';
 import { bake, offlineNet, ROOT } from '../bake/main.ts';
+import { worldToGeo } from '../geo/projection.ts';
 import { startInspector } from './serve.mjs';
 
 const SHOTS = path.resolve(import.meta.dirname, '..', '..', 'harness', 'reports', 'inspector');
@@ -222,6 +223,101 @@ describe('map inspector page', () => {
     await page.waitForFunction(() => /No game is running/.test(document.querySelector('#msg')?.textContent ?? ''));
     expect(consoleErrors).toEqual([]);
   });
+
+  run('the lanes layer toggles; the lanes tab lists the split zones and taper findings of health.json with the same counts', async () => {
+    const lanesFile = path.join(dataDir, 'lanes.json');
+    const healthFile = path.join(dataDir, 'health.json');
+    if (!fs.existsSync(lanesFile) || !fs.existsSync(healthFile)) return;
+    await page.waitForFunction(() => window.__inspector.state().lanesReady, null, { timeout: 60000 });
+    if (!(await hook(() => window.__inspector.lanes.strips()[0]?.edge))) return; // a lanes layer written before P1-025 has no edge ids
+    // the toggle
+    expect((await hook(() => window.__inspector.state())).lanesVisible).toBe(true);
+    await page.click('#layerRows [data-layer="lanes"]');
+    expect((await hook(() => window.__inspector.state())).lanesVisible).toBe(false);
+    await page.click('#layerRows [data-layer="lanes"]');
+    expect((await hook(() => window.__inspector.state())).lanesVisible).toBe(true);
+    // the list has the counts of the health report
+    const health = JSON.parse(fs.readFileSync(healthFile, 'utf8')).lanes;
+    await page.click('#lanesTab');
+    const c = await hook(() => window.__inspector.lanes.counts());
+    expect(c.zones).toBe(health.zones.zones);
+    expect(c.tapers).toBe(health.tapers.findings.length);
+    expect(c.health).toEqual({ zones: health.zones.zones, tapers: health.tapers.violations, findings: health.tapers.findings.length });
+    expect(c.rows).toBe(health.zones.zones + health.tapers.findings.length);
+    expect(c.summary).toContain(`${health.zones.zones} split zones (${health.zones.diverges} splits, ${health.zones.merges} merges)`);
+    expect(c.summary).toContain(`${health.tapers.violations} taper findings`);
+    // the first row is the one nearest the ITO crossing; a click flies to it and shows its card
+    const items = await hook(() => window.__inspector.lanes.items());
+    for (const it of [items[0], items.find((x) => x.kind === 'taper')]) {
+      if (!it) continue;
+      await page.locator(`#laneList .row[data-lane="${it.id}"]`).click();
+      await flown();
+      const st = await hook(() => window.__inspector.state());
+      expect(Math.hypot(st.camera.target[0] - it.x, st.camera.target[2] - it.z)).toBeLessThan(5);
+      expect((await hook(() => window.__inspector.lanes.selected())).item).toBe(it.id);
+      expect(await page.locator('#lane h2').isVisible()).toBe(true);
+      expect(await page.locator('#lane').textContent()).toMatch(/Where the lane count comes from/);
+    }
+    expect(consoleErrors).toEqual([]);
+    // the picture of the layer at ITO (read by the verifier)
+    fs.mkdirSync(SHOTS, { recursive: true });
+    const ito = items[0];
+    await page.locator(`#laneList .row[data-lane="${ito.id}"]`).click();
+    await flown();
+    await hook(([x, z]) => window.__inspector.view(x, z, 230), [ito.x, ito.z]);
+    await flown();
+    await page.mouse.move(5, 5);
+    await page.waitForTimeout(400);
+    await page.screenshot({ path: path.join(SHOTS, 'lanes_ito.png') });
+  });
+
+  run('clicking a road shows its lane section and where its count came from; saving writes a set_lanes patch and an inbox line', async () => {
+    if (!fs.existsSync(path.join(dataDir, 'lanes.json')) || !fs.existsSync(path.join(dataDir, 'health.json'))) return;
+    if (!(await hook(() => window.__inspector.lanes.strips()[0]?.edge))) return;
+    const layer = JSON.parse(fs.readFileSync(path.join(dataDir, 'lanes.json'), 'utf8'));
+    await page.click('#lanesTab');
+    // a plain road section near the camera whose middle has no issue dot within 25 px, so the click lands on the road
+    const t = (await hook(() => window.__inspector.state())).camera.target;
+    const near = layer.strips.filter((s) => s.kind === 'road' && Math.hypot(s.ref[0][0] - t[0], s.ref[0][1] - t[2]) < 150 && s.lanes.filter((l) => l[0] === 'drive').length >= 2);
+    await hook(([x, z]) => window.__inspector.view(x, z, 160), [t[0], t[2]]);
+    await flown();
+    const dots = await Promise.all(issuesFile.issues.filter((i) => Math.hypot(i.x - t[0], i.z - t[2]) < 250).map((i) => hook((id) => window.__inspector.issueScreen(id), i.id)));
+    let strip = null; let px = null;
+    for (const s of near) {
+      const m = s.ref[Math.floor(s.ref.length / 2)];
+      const p = await hook(([x, z]) => window.__inspector.lanes.screen(x, z), m);
+      if (!p || p.x < 400 || p.x > 1100 || p.y < 100 || p.y > 800) continue;
+      if (dots.some((d) => d && Math.hypot(d.x - p.x, d.y - p.y) < 25)) continue;
+      strip = s; px = p; break;
+    }
+    expect(strip).not.toBeNull();
+    await page.mouse.click(px.x, px.y);
+    const sel = await hook(() => window.__inspector.lanes.selected());
+    expect(sel).not.toBeNull();
+    expect(await page.locator('#lane').textContent()).toMatch(/Where the lane count comes from/);
+    const edgeStrips = layer.strips.filter((s) => s.edge === sel.edge);
+    expect(edgeStrips.length).toBeGreaterThan(0);
+    const before = sel.lanes;
+    await page.click('#lanesUp');
+    await page.fill('#laneNote', 'Counted on the street photo');
+    await page.click('#laneSave');
+    await page.waitForFunction(() => /Saved/.test(document.querySelector('#lmsg')?.textContent ?? ''));
+    const point = await hook(() => { const s = document.querySelector('#lane .ids').textContent; return s; });
+    const m = /x (-?\d+), z (-?\d+)/.exec(point);
+    const tile = [Math.floor(Number(m[1]) / 250), Math.floor(Number(m[2]) / 250)];
+    const file = path.join(overrides, `${tile[0]}_${tile[1]}.json`);
+    expect(fs.existsSync(file)).toBe(true);
+    const patch = JSON.parse(fs.readFileSync(file, 'utf8')).find((p) => p.issue === `lanes:${sel.edge}`);
+    expect(patch).toMatchObject({ action: 'set_lanes', source: 'inspector', by: 'owner', why: 'Counted on the street photo', params: { on: sel.edge, lanes: before + 1 }, target: { ids: [sel.edge] } });
+    // the anchor is the clicked spot as latitude and longitude of the block frame
+    const back = worldToGeo(Number(m[1]) - layer.offset[0], Number(m[2]) - layer.offset[1], layer.origin);
+    expect(Math.abs(patch.target.anchor.lat - back.lat)).toBeLessThan(0.0005);
+    expect(Math.abs(patch.target.anchor.lon - back.lon)).toBeLessThan(0.0005);
+    const lines = fs.readFileSync(inbox, 'utf8').trim().split('\n').map((l) => JSON.parse(l));
+    expect(lines[lines.length - 1].text).toContain(`from ${before} to ${before + 1}`);
+    expect(lines[lines.length - 1].source).toBe('inspector');
+    expect(consoleErrors).toEqual([]);
+  }, 60000);
 
 });
 

@@ -6,19 +6,22 @@
 //   GET  /inspector/                      the page (tools/inspector/web/)
 //   GET  /inspector/<file>                page files; .ts files go out with their types stripped
 //   GET  /inspector/vendor/three/<path>   three.js from node_modules (a dev dependency of the harness only)
-//   GET  /inspector/data/<file>           issues.json, context.json, lanes.json, tiles/index.json, tiles/*.ktl from the data folder
+//   GET  /inspector/data/<file>           issues.json, context.json, lanes.json, health.json, tiles/index.json, tiles/*.ktl from the data folder
 //                                         (harness/reports/map/, written by `npm run bake -- pilot`; the file contract is in
 //                                         tools/bake/report/inspector.ts and tools/bake/repair/engine.ts issueRecords)
-//   GET  /api/inspector/status            { ready, counts, layers: { lanes } } (lanes: the lane model's layer file is there)
+//   GET  /api/inspector/status            { ready, counts, layers: { lanes, health } } (lanes: the lane model's layer file is there)
 //   GET  /api/inspector/picks             what has been picked so far, read from the override files
 //   POST /api/inspector/pick              { issue, proposal: index | null, note } writes the patch and the inbox line
+//   POST /api/inspector/set-lanes         { edge, lanes, x, z, note } writes a set_lanes patch for a road edge of the lanes layer and the inbox line
 //   POST /api/inspector/open-in-game      { x, z } teleports the running game (--debug) to the spot
 import fs from 'node:fs';
 import path from 'node:path';
 import module from 'node:module';
 import { fileURLToPath } from 'node:url';
 import { GodotDebugClient } from '../../harness/bin/godotclient.mjs';
+import { worldToGeo } from '../geo/projection.ts';
 import { buildPatch, inboxText, mergePatch, overrideFileName, worldTile } from './lib.ts';
+import { driveLaneCount, lanesInboxText, lanesIssueId } from './lanes.ts';
 
 const HERE = path.dirname(fileURLToPath(import.meta.url));
 const ROOT = path.resolve(HERE, '..', '..');
@@ -84,7 +87,7 @@ export function inspectorHandler(options = {}) {
     if (!fs.existsSync(overridesDir)) return out;
     for (const f of fs.readdirSync(overridesDir)) {
       if (!/^-?\d+_-?\d+\.json$/.test(f)) continue;
-      for (const p of readJson(path.join(overridesDir, f), [])) if (p.source === 'inspector') out[p.issue] = { patch: p.id, action: p.action, why: p.why, file: f };
+      for (const p of readJson(path.join(overridesDir, f), [])) if (p.source === 'inspector') out[p.issue] = { patch: p.id, action: p.action, why: p.why, file: f, params: p.params };
     }
     return out;
   };
@@ -116,6 +119,53 @@ export function inspectorHandler(options = {}) {
     fs.mkdirSync(path.dirname(inboxFile), { recursive: true });
     fs.appendFileSync(inboxFile, JSON.stringify(entry) + '\n');
     return [200, { ok: true, patch, file: fileName, inbox: entry.id }];
+  }
+
+  // the lanes layer is about 10 MB: parsed once per file version, only when a lane count is set
+  let lanesCache = { mtime: 0, file: null };
+  const loadLanes = () => {
+    const f = path.join(dataDir, 'lanes.json');
+    const m = fs.existsSync(f) ? fs.statSync(f).mtimeMs : 0;
+    if (m !== lanesCache.mtime) lanesCache = { mtime: m, file: m ? readJson(f, null) : null };
+    return lanesCache.file;
+  };
+
+  /** A lane count the owner sets on a road edge of the lanes layer: a set_lanes patch in the override file of the clicked tile. */
+  async function setLanes(body) {
+    const layer = loadLanes();
+    if (!layer) return [404, { error: 'There is no lanes layer yet. Run "npm run bake -- pilot --stage lanes --offline" first.' }];
+    const edge = String(body.edge ?? '');
+    const strips = layer.strips.filter((s) => s.edge === edge);
+    if (!strips.length) return [404, { error: `no road ${edge} in the lanes layer` }];
+    if (strips.every((s) => s.kind === 'zone')) return [400, { error: 'A split zone has no lane count of its own. Set the lanes of one of the roads beside it.' }];
+    const lanes = Number(body.lanes);
+    if (!Number.isInteger(lanes) || lanes < 1 || lanes > 12) return [400, { error: 'The lane count must be a whole number from 1 to 12.' }];
+    const x = Number(body.x);
+    const z = Number(body.z);
+    if (!Number.isFinite(x) || !Number.isFinite(z)) return [400, { error: 'Missing position.' }];
+    if (!layer.origin || !layer.offset) return [400, { error: 'The lanes layer has no frame origin. Bake the lanes step again.' }];
+    // the anchor of the patch: the clicked spot as latitude and longitude, in the block frame of the bake (world = block + offset)
+    const geo = worldToGeo(x - layer.offset[0], z - layer.offset[1], layer.origin);
+    const note = String(body.note ?? '').trim();
+    const tile = worldTile(x, z);
+    const fileName = overrideFileName(tile);
+    const full = path.join(overridesDir, fileName);
+    const existing = readJson(full, []);
+    const from = Math.max(...strips.map(driveLaneCount));
+    const name = strips.find((s) => s.name)?.name || `the ${strips[0].cls.replace(/_link$/, '').replace('_', ' ')} ${edge}`;
+    const patch = {
+      issue: lanesIssueId(edge), action: 'set_lanes',
+      target: { ids: [edge], anchor: { lat: Math.round(geo.lat * 1e7) / 1e7, lon: Math.round(geo.lon * 1e7) / 1e7 }, tolerance_m: 15 },
+      params: { on: edge, lanes, from: 'ahead' },
+      why: note || `Lane count set to ${lanes} in the map inspector`, by: 'owner', source: 'inspector', date: today(),
+    };
+    const merged = mergePatch(existing, tile, patch);
+    fs.mkdirSync(overridesDir, { recursive: true });
+    fs.writeFileSync(full, JSON.stringify(merged.patches, null, 2) + '\n');
+    const entry = { id: `m${Date.now().toString(36)}`, ts: new Date().toISOString(), text: lanesInboxText(name, x, z, from, lanes, note, merged.patch.id, fileName), source: 'inspector' };
+    fs.mkdirSync(path.dirname(inboxFile), { recursive: true });
+    fs.appendFileSync(inboxFile, JSON.stringify(entry) + '\n');
+    return [200, { ok: true, patch: merged.patch, file: fileName, inbox: entry.id }];
   }
 
   async function openInGame(body) {
@@ -153,23 +203,27 @@ export function inspectorHandler(options = {}) {
       }
       if (req.method === 'GET' && p.startsWith('/inspector/data/')) {
         const rel = p.slice('/inspector/data/'.length);
-        if (!/^(issues\.json|context\.json|lanes\.json|tiles\/[\w.-]+)$/.test(rel)) return send(res, 404, 'not found', 'text/plain'), true;
+        if (!/^(issues\.json|context\.json|lanes\.json|health\.json|tiles\/[\w.-]+)$/.test(rel)) return send(res, 404, 'not found', 'text/plain'), true;
         return serveStatic(res, dataDir, rel) || send(res, 404, 'not found', 'text/plain'), true;
       }
       if (req.method === 'GET' && p.startsWith('/inspector/')) {
         const rel = p.slice('/inspector/'.length);
-        if (!/^(web\/[\w.-]+|lib\.ts|ktl1\.ts|describe\.ts)$/.test(rel) || rel.includes('.test.')) return send(res, 404, 'not found', 'text/plain'), true;
+        if (!/^(web\/[\w.-]+|lib\.ts|lanes\.ts|ktl1\.ts|describe\.ts)$/.test(rel) || rel.includes('.test.')) return send(res, 404, 'not found', 'text/plain'), true;
         return serveStatic(res, HERE, rel, { stripTs: true }) || send(res, 404, 'not found', 'text/plain'), true;
       }
       if (req.method === 'GET' && p === '/favicon.ico') return send(res, 204, '', 'text/plain'), true;
       if (!p.startsWith('/api/inspector/')) return false;
       if (req.method === 'GET' && p === '/api/inspector/status') {
         const f = ready() ? loadIssues() : null;
-        return send(res, 200, { ready: ready(), counts: f ? { issues: f.issues.length } : null, layers: { lanes: fs.existsSync(path.join(dataDir, 'lanes.json')) } }), true;
+        return send(res, 200, { ready: ready(), counts: f ? { issues: f.issues.length } : null, layers: { lanes: fs.existsSync(path.join(dataDir, 'lanes.json')), health: fs.existsSync(path.join(dataDir, 'health.json')) } }), true;
       }
       if (req.method === 'GET' && p === '/api/inspector/picks') return send(res, 200, picks()), true;
       if (req.method === 'POST' && p === '/api/inspector/pick') {
         const [code, body] = await pick(JSON.parse((await readBody(req)).toString() || '{}'));
+        return send(res, code, body), true;
+      }
+      if (req.method === 'POST' && p === '/api/inspector/set-lanes') {
+        const [code, body] = await setLanes(JSON.parse((await readBody(req)).toString() || '{}'));
         return send(res, code, body), true;
       }
       if (req.method === 'POST' && p === '/api/inspector/open-in-game') {

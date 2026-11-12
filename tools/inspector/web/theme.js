@@ -35,3 +35,6 @@ export const PROP_COLOURS = ['#5aaeff', '#ff8a3d', '#c08cff', '#46d67c', '#ff4f9
 /** Textures of the KTL1 tiles (when the bake has written tiles). */
 export const MATERIAL_COLOURS = { road: 0x56534d, footpath: 0x7a6f62, kerb: 0x9a958a, ground: 0x2a251f, parking: 0x4a4943, planter: 0x4f6a2c, marking: 0xf3f1e8, hedge: 0x3f6a32, railing: 0x8d8d8d, colonnade: 0xd8cfb5 };
 export const OFFSET_MATERIALS = new Set(['marking', 'kerb', 'planter', 'hedge', 'railing']);
+
+/** Split zones and taper findings of the lanes layer: a teal that no issue colour uses, and a coral for findings. */
+export const LANE_MARK = { zone: '#4fd1c5', taper: '#ff7a5c' };

@@ -23,6 +23,8 @@ export interface EdgeLanes {
   /** Drive lanes of the edge (both directions together on a two-way road). */
   lanes: number;
   from: LanesFrom;
+  /** For a count a repair or an owner override set (from "repair"): the id of the issue or patch it came from (a mark of the repair step). */
+  by?: string;
   laneWidth: number;
   gali: boolean;
   /** The street (chain) the edge belongs to. */
@@ -212,11 +214,14 @@ export function inferStreets(g: StreetGraph, wayLanes: ReadonlyMap<string, numbe
     return null;
   };
   /** The count an edge brings itself: a spec, its tags (the share of its length that is tagged decides), a logged repair. */
-  const own = (e: GraphEdge): { lanes: number; from: LanesFrom } | null => {
+  const own = (e: GraphEdge): { lanes: number; from: LanesFrom; by?: string } | null => {
     const hero = heroOf(e);
     if (hero) return { lanes: heroCrossSection(hero).lanes.filter((l) => l.type === 'drive').length, from: 'spec' };
     if (e.road.lanesFrom === 'spec') return { lanes: e.road.lanes, from: 'spec' };
-    if (e.road.lanesFrom === 'ahead') return { lanes: e.road.lanes, from: 'repair' };
+    if (e.road.lanesFrom === 'ahead') {
+      const by = g.marks?.[e.id]?.['by'];
+      return { lanes: e.road.lanes, from: 'repair', ...(typeof by === 'string' ? { by } : {}) };
+    }
     const byCount = new Map<number, number>();
     let tagged = 0;
     for (const p of e.pieces) {
@@ -269,7 +274,7 @@ export function inferStreets(g: StreetGraph, wayLanes: ReadonlyMap<string, numbe
       // a count the lane model settled itself holds for this edge only: the street beside it keeps its own
       const f = heroOf(c.e) ? undefined : fixed.get(c.e.id);
       if (f !== undefined) k = { lanes: f, from: 'fit' };
-      byEdge.set(c.e.id, { lanes: k.lanes, from: k.from, laneWidth: c.e.road.laneWidth, gali: false, street: si, cap: 12 });
+      byEdge.set(c.e.id, { lanes: k.lanes, from: k.from, ...(k.from === 'repair' && k.by ? { by: k.by } : {}), laneWidth: c.e.road.laneWidth, gali: false, street: si, cap: 12 });
     });
   });
   // a street with no count of its own takes the count of its other carriageway

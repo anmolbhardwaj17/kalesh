@@ -4,10 +4,10 @@
 // test in a fixed order (renderOrder), under the KTL1 tiles and the markers. World metres, east +X, north -Z.
 import * as THREE from 'three';
 import { laneBorder } from '../lib.ts';
-import { CENTRE_LINE, LANE_FILL, LANE_LINE, MAJOR, MAP, NET_MAJOR, NET_MINOR, ROAD_FILL } from './theme.js';
+import { CENTRE_LINE, LANE_FILL, LANE_LINE, LANE_MARK, MAJOR, MAP, NET_MAJOR, NET_MINOR, ROAD_FILL } from './theme.js';
 
 /** Layer order, lowest first. */
-export const ORDER = { ground: -60, grid: -55, buildings: -50, ribbons: -40, lanes: -35, laneLines: -30, buildingEdges: -25, network: -20, edge: -15 };
+export const ORDER = { ground: -60, grid: -55, buildings: -50, ribbons: -40, lanes: -35, laneLines: -30, laneMarks: -28, buildingEdges: -25, network: -20, edge: -15 };
 
 function flat(obj, order) {
   obj.renderOrder = order;
@@ -208,4 +208,65 @@ export function lanesLayer(file) {
       surfaces.visible = surf > 0.01;
     },
   };
+}
+
+/**
+ * Split zones and taper findings on the lanes layer: a tinted ribbon over the whole cross section of the strip and a
+ * line along its two outer borders, teal for a split zone and coral for a taper finding. `marks` is a list of
+ * { strip, kind } with kind "zone" or "taper".
+ */
+export function laneMarksLayer(file, marks) {
+  const byId = new Map(file.strips.map((s) => [s.id, s]));
+  const rib = { pos: [], idx: [], col: [] };
+  const edges = [];
+  const c = new THREE.Color();
+  for (const m of marks) {
+    const s = byId.get(m.strip);
+    if (!s) continue;
+    const n = s.ref.length;
+    const perPoint = Array.isArray(s.b[0]);
+    const row = (pt) => (perPoint ? s.b[pt] : s.b);
+    const at = (pt, o) => [s.ref[pt][0] + s.n[pt][0] * o, s.ref[pt][1] + s.n[pt][1] * o];
+    c.set(LANE_MARK[m.kind]);
+    const base = rib.pos.length / 3;
+    const left = []; const right = [];
+    for (let pt = 0; pt < n; pt++) {
+      const b = row(pt);
+      const l = at(pt, b[0] + 0.6); const r = at(pt, b[b.length - 1] - 0.6);
+      left.push(l); right.push(r);
+      rib.pos.push(l[0], 0, l[1], r[0], 0, r[1]);
+      rib.col.push(c.r, c.g, c.b, c.r, c.g, c.b);
+    }
+    for (let pt = 0; pt + 1 < n; pt++) { const a = base + pt * 2; rib.idx.push(a, a + 1, a + 2, a + 2, a + 1, a + 3); }
+    for (const side of [left, right]) for (let pt = 0; pt + 1 < n; pt++) edges.push(side[pt][0], 0, side[pt][1], side[pt + 1][0], 0, side[pt + 1][1], m.kind === 'zone' ? 0 : 1);
+  }
+  const group = new THREE.Group();
+  const g = new THREE.BufferGeometry();
+  g.setAttribute('position', new THREE.Float32BufferAttribute(rib.pos, 3));
+  g.setAttribute('color', new THREE.Float32BufferAttribute(rib.col, 3));
+  g.setIndex(rib.idx);
+  const ribbon = flat(new THREE.Mesh(g, new THREE.MeshBasicMaterial({ vertexColors: true, side: THREE.DoubleSide, transparent: true, opacity: 0.42 })), ORDER.laneMarks);
+  // the edge lines: two line sets, one colour each (a segment list has seven numbers per segment here: the last is the kind)
+  const lineSet = (kind, colour) => {
+    const arr = [];
+    for (let k = 0; k + 6 < edges.length; k += 7) if (edges[k + 6] === kind) arr.push(edges[k], edges[k + 1], edges[k + 2], edges[k + 3], edges[k + 4], edges[k + 5]);
+    const lg = new THREE.BufferGeometry();
+    lg.setAttribute('position', new THREE.Float32BufferAttribute(arr, 3));
+    return flat(new THREE.LineSegments(lg, new THREE.LineBasicMaterial({ color: colour, transparent: true, opacity: 0.95 })), ORDER.laneMarks + 1);
+  };
+  const zl = lineSet(0, LANE_MARK.zone);
+  const tl = lineSet(1, LANE_MARK.taper);
+  group.add(ribbon, zl, tl);
+  const api = {
+    group,
+    /** Set by the page from the layer toggle; update() applies it. */
+    enabled: true,
+    update(dist) {
+      const k = 1 - smooth(1200, 2400, dist);
+      ribbon.material.opacity = 0.42 * k;
+      zl.material.opacity = tl.material.opacity = 0.95 * k;
+      group.visible = k > 0.01 && api.enabled;
+    },
+  };
+  return api;
 }

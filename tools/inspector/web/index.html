@@ -18,11 +18,23 @@
         <div class="mark" aria-hidden="true">K</div>
         <div><b>Map inspector</b><small id="sub">Kalesh map issues</small></div>
       </div>
-      <p class="help">Pick an issue. The map flies there and draws each fix. Choose one, or write a note.</p>
-      <div class="chips" id="chips" role="group" aria-label="Show"></div>
-      <label class="search"><span class="sr">Search</span><input id="search" type="search" placeholder="Search a road, a place or a problem" autocomplete="off" spellcheck="false"></label>
+      <div class="tabs" id="tabs" role="tablist" aria-label="What to look at">
+        <button type="button" role="tab" data-tab="issues" class="on">Issues</button>
+        <button type="button" role="tab" data-tab="lanes" id="lanesTab" hidden>Lanes</button>
+      </div>
+      <div id="issuesHead">
+        <p class="help">Pick an issue. The map flies there and draws each fix. Choose one, or write a note.</p>
+        <div class="chips" id="chips" role="group" aria-label="Show"></div>
+        <label class="search"><span class="sr">Search</span><input id="search" type="search" placeholder="Search a road, a place or a problem" autocomplete="off" spellcheck="false"></label>
+      </div>
+      <div id="lanesHead" hidden>
+        <p class="help" id="lanesHelp">Where the road splits, merges or changes its lane widths. Pick one and the map flies there, or click any road on the map.</p>
+        <p class="lanes-sum" id="lanesSummary"></p>
+        <div class="chips" id="laneChips" role="group" aria-label="Show"></div>
+      </div>
     </header>
     <div class="list" id="list" role="list"></div>
+    <div class="list" id="laneList" role="list" hidden></div>
     <footer id="source" class="small"></footer>
   </aside>
 
@@ -56,6 +68,7 @@
       <div class="lg-h">Layers</div>
       <div class="layers" id="layerRows">
         <button type="button" data-layer="lanes" class="on"><i class="sw lanes"></i>Lanes</button>
+        <button type="button" data-layer="laneMarks" class="on"><i class="sw zones"></i>Splits and tapers<span class="c" id="laneMarkCount"></span></button>
         <button type="button" data-layer="buildings" class="on"><i class="sw bld"></i>Buildings</button>
         <button type="button" data-layer="grid" class="on"><i class="sw grid"></i>Tile grid</button>
       </div>
@@ -87,6 +100,7 @@
       </ul>
     </div>
     <div id="issue" hidden></div>
+    <div id="lane" hidden></div>
   </section>
 </div>
 <script type="module" src="/inspector/web/app.js"></script>

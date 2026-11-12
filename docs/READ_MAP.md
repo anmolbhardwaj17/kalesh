@@ -81,7 +81,7 @@ Notes: `harness/state/knowledge/world-and-map.md`
 - ARCH: "Target module map" (row `inspector/`).
 - TECH: "Map inspector".
 - Design: `harness/design/MAP_REPAIR.md` "Map inspector (human in the loop)", "Overrides format", "Issue record"; `harness/design/DELHI_WORLD.md` "Map inspector: area view".
-- Source: `tools/inspector/` (`lib.ts`, `describe.ts`, `ktl1.ts`, `server.mjs`, `serve.mjs`, `shots.mjs`, `web/app.js`, `web/layers.js`, `web/minimap.js`, `web/theme.js`, tests `describe.test.ts`, `lib.test.ts`, `page.test.mjs`, `pick_to_bake.test.mjs`), served by `harness/bin/dashboard.mjs` at `/inspector/`; it reads the tiles and `issues.json` (file contract in the header of `adapter.mjs`) and writes `harness/data/overrides/<tileX>_<tileZ>.json` and the inbox (source `inspector`). Step 1 (issues) is built; lanes, hero roads and landmarks are steps 2 to 4.
+- Source: `tools/inspector/` (`lib.ts`, `lanes.ts`, `describe.ts`, `ktl1.ts`, `server.mjs`, `serve.mjs`, `shots.mjs`, `web/app.js`, `web/layers.js`, `web/minimap.js`, `web/theme.js`, tests `describe.test.ts`, `lib.test.ts`, `lanes.test.ts`, `page.test.mjs`, `pick_to_bake.test.mjs`), served by `harness/bin/dashboard.mjs` at `/inspector/`; it reads the tiles and `issues.json` (file contract in the header of `adapter.mjs`) and writes `harness/data/overrides/<tileX>_<tileZ>.json` and the inbox (source `inspector`). Steps 1 (issues) and 2 (the lanes tab: `lanes.ts`, `laneMarksLayer` in `web/layers.js`, `POST /api/inspector/set-lanes`) are built; hero roads and landmarks are steps 3 and 4.
 
 ## Old game reference (read only)
 - `/Users/apple/Desktop/code/delhi-drive`: never edit, build or install there. Read `harness/design/SALVAGE_AUDIT.md` first (written in Phase 0) instead of the old code.
