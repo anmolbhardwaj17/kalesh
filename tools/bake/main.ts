@@ -76,6 +76,8 @@ import { elevationInput } from './elevation/input.ts';
 import { heightMapSvg, profileSvg } from './elevation/render.ts';
 import { solveBlockElevation } from './elevation/solve.ts';
 import { readStructures } from './elevation/structures.ts';
+import { overheadHeights } from './elevation/overhead.ts';
+import { RAIL_EMBANKMENT_M } from './elevation/limits.ts';
 import type { RoadMesh } from './mesh/build.ts';
 import type { MeshInput } from './mesh/input.ts';
 import type { Ground } from './terrain/build.ts';
@@ -412,7 +414,13 @@ export async function bake(args: BakeArgs, opts: BakeOptions): Promise<HealthRep
       res.junctionHeights.forEach((h, i) => (twoRuns = Math.max(twoRuns, Math.abs(h - (first.junctionHeights[i] as number)))));
       const c = checkElevation(build.strips, build.joints, input.junctions, res);
       const st = readStructures({ strips: build.strips, joints: build.joints, junctions: input.junctions, junctionHeights: res.junctionHeights, tunnels: res.tunnels, crossings: res.crossings, pairSamples: res.pairSamples, water: input.water ?? [], ties: input.ties ?? [], ground: input.ground });
-      const file = elevationFile(build.strips, build.junctions.map((j) => j.id), res, st, input.rails ?? [], plan.def.block, plan.id, lanesHash);
+      // metro viaducts and foot bridges stand over the solved roads (P1-035)
+      const over = overheadHeights({
+        strips: build.strips, junctions: input.junctions.map((j, ji) => ({ ...j, id: (build.junctions[ji] as { id: string }).id })), junctionHeights: res.junctionHeights,
+        rails: input.rails ?? [], metro: repaired.features.rail.filter((r) => r.kind === 'metro').map((r) => ({ id: r.id, name: r.name, pts: r.pts, layer: r.layer, bridge: r.bridge, tunnel: r.tunnel })),
+        footBridges: repaired.features.footBridges, water: input.water ?? [], ground: input.ground, railEmbankment: RAIL_EMBANKMENT_M,
+      });
+      const file = elevationFile(build.strips, build.junctions.map((j) => j.id), res, st, input.rails ?? [], plan.def.block, plan.id, lanesHash, over);
       const hash = elevationHash(file);
       const heights = writeElevation(opts.root, plan, file);
       const ring = outlineRing(plan.outline.coords, plan.origin);
@@ -421,7 +429,7 @@ export async function bake(args: BakeArgs, opts: BakeOptions): Promise<HealthRep
       for (const v of PROFILE_VIEWS) {
         if (build.strips.some((s) => v.match.test(s.name))) pictures.push(...(await picture(`harness/reports/map/elevation_${plan.id}_${v.id}.png`, () => profileSvg(build.strips, (s) => v.match.test(s.name), `${v.name} (${plan.id})`), 2200)));
       }
-      const rec = elevationRecord(build.strips, res, c, st, offset, hash, twoRuns, { heights, pictures });
+      const rec = elevationRecord(build.strips, res, c, st, offset, hash, twoRuns, { heights, pictures }, over);
       rec.solveMs = first.report.ms['total'] ?? 0;
       rec.solver = first.report;
       report.elevation = rec;
@@ -434,6 +442,9 @@ export async function bake(args: BakeArgs, opts: BakeOptions): Promise<HealthRep
       opts.log(`[elevation] clearances: ${c.clearance.violations} short; road over road ${c.clearance.roadCrossings} crossings (${c.clearance.roadSamples} places, least headroom ${c.clearance.minRoadM} m), ${c.clearance.junctionCrossings} over or under a junction (least ${c.clearance.minJunctionM} m), ${c.clearance.roadOverRail} places over a railway line (least ${c.clearance.minRoadOverRailM} m), ${c.clearance.roadUnderRail} under a railway bridge (least ${c.clearance.minRoadUnderRailM} m), ${c.clearance.waterCrossings} decks over water (least ${c.clearance.minOverWaterM} m above it), ${c.clearance.tunnelStations} tunnel stations (least cover ${c.clearance.minCoverM} m); crossfall: ${c.crossfall.violations} over the limit at ${c.crossfall.limited} places (worst ${c.crossfall.worstPct} percent); ties: ${c.ties.ends} map edge ends, ${c.ties.moved} moved by a clearance (largest ${c.ties.maxOffM} m)`);
       opts.log(`[elevation] structures: ${st.structures.length} (${Object.entries(rec.structureCounts).map(([k, n]) => `${n} ${k}`).join(', ')}), ${rec.structureM} m of road on or in them, ${rec.abutments} ends (${rec.openEnds.mapEdge} at the map edge, ${rec.openEnds.underGround} dead ends under the ground, ${rec.openEnds.floating} hanging in the air); two runs differ by at most ${twoRuns} m; hash ${hash}`);
       for (const x of st.structures.slice().sort((p, q) => q.structureM - p.structureM).slice(0, 8)) opts.log(`[elevation]   ${x.id} ${x.kind} ${x.name || '(no name)'}: structureM ${x.structureM}, sunk ${x.sunk}, up to ${x.maxAboveM} m above and ${x.maxBelowM} m under the ground`);
+      const o = rec.overhead;
+      if (o) opts.log(`[elevation] overhead: ${o.viaducts} metro viaducts (${o.viaductM} m, rail ${o.railAboveGroundM?.min ?? 0} to ${o.railAboveGroundM?.max ?? 0} m above the ground model, ${o.viaductCrossings} things under them, least road clearance ${o.viaductMinClearanceM ?? 'none'} m, short ${o.viaductShortM} m); ${o.footBridges} foot bridges (${o.solvedFootBridges} on the road graph, ${o.footCrossings} things under them, least road clearance ${o.footMinClearanceM ?? 'none'} m, short ${o.footShortM} m, ${o.stairs} stairs)`);
+      for (const x of o?.short ?? []) opts.log(`[elevation]   short: ${x.name} ${x.over} over ${x.kind} ${x.under} at ${x.x}, ${x.z}: ${x.clearanceM} m of ${x.needM} m`);
       opts.log(`[elevation] wrote ${heights} and ${pictures.join(', ')}`);
       check([
         { id: 'ELEV-01.no_steps', ok: c.steps.maxMismatchM < 0.01, detail: `largest height mismatch where strips meet: ${c.steps.maxMismatchM} m (${c.steps.joints} joints)` },
@@ -441,6 +452,8 @@ export async function bake(args: BakeArgs, opts: BakeOptions): Promise<HealthRep
         { id: 'ELEV-03.clearances', ok: c.clearance.violations === 0, detail: c.clearance.violations === 0 ? `every one of ${c.clearance.roadCrossings} road crossings, ${c.clearance.junctionCrossings} junction crossings, ${c.clearance.roadOverRail + c.clearance.roadUnderRail} railway crossings and ${c.clearance.waterCrossings} decks over water has its clearance` : `${c.clearance.violations} clearances short: ${c.findings.filter((x) => x.kind === 'clearance').slice(0, 3).map((x) => `${x.strip} ${x.value} m (${x.why})`).join(', ')}` },
         { id: 'ELEV-04.solved', ok: s.converged && res.unmet.length === 0 && c.crossfall.violations === 0, detail: `the solve ${s.converged ? 'converged' : 'did not converge'} in ${s.rounds} rounds, ${res.unmet.length} limits given up, ${c.crossfall.violations} crossfalls over the limit` },
         { id: 'ELEV-05.same_twice', ok: twoRuns <= 1e-6, detail: quick ? NOT_TWICE : `two solves of the same lane model differ by at most ${twoRuns} m` },
+        // the viaducts are built in P2-019: a headroom one of them cannot give is listed (overhead.short), not a stop
+        { id: 'ELEV-06.overhead', ok: over.viaducts.every((v) => v.profile.length >= 2 && v.profile.every((p) => Number.isFinite(p[2]))) && over.footBridges.every((f) => Number.isFinite(f.deckH)), detail: `${over.viaducts.length} metro viaducts with a rail level and ${over.footBridges.length} foot bridges with a walking level; ${o?.short.length ?? 0} crossings under them short of their headroom (viaducts by ${o?.viaductShortM ?? 0} m at most, foot bridges by ${o?.footShortM ?? 0} m)` },
       ]);
     } else if (step === 'mesh') {
       if (!laneBuild || !elevated) throw new Error('the mesh step needs the lanes and the elevation step before it');

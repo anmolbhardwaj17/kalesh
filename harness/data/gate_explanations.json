@@ -33,14 +33,6 @@
       "why": "the Vikas Marg deck arm of junction jn838495928 east of ITO ends 6.8 m up because the junction does not join it (the same arm is an unjoined end)."
     },
     {
-      "gate": "floatingEnds",
-      "items": [
-        "w80429832.0_0 start"
-      ],
-      "owner": "P1-035 (d)",
-      "why": "a pedestrian dead end on fill near Kashmere Gate stays 1.09 m above the ground: its height follows the ramp beside it."
-    },
-    {
       "gate": "overlappingRoadFaces",
       "items": [
         "w175800219.0_0|w292171521.1_0"
@@ -66,13 +58,13 @@
     },
     {
       "what": "ITO ramps against the Phase 0 profile",
-      "measured": "0.3 to 1.46 m mid ramp, decks within 0.13 m",
-      "owner": "P1-035 (a)"
+      "measured": "0.31 to 1.46 m mid ramp on four ramps, decks within 0.13 m; explained (P1-035): with the Phase 0 merge zone starts imposed (the block lane model starts the two merges 30 m and 56 m later) and the slip road under the loop ramp lowered 0.43 m as Phase 0 did (the solver holds it, 0.15 m), every one of 463 points is within 0.29 m",
+      "owner": "explained, decisions.md 2026-11-13 (no fix: both are rules of the block lane model and the solver)"
     },
     {
       "what": "roads under short ramp flyovers sunk",
-      "measured": "Geeta Colony 4.0 m, Hanuman Mandir 1.72 m",
-      "owner": "P1-035 (c)"
+      "measured": "Geeta Colony 0.88 m (was 4.0, fixed in P1-035: the slip ramp goes on past the stage edge); Hanuman Mandir 1.72 m is the centre of the Kashmere Gate 11-arm cluster jn1863525196, held 1.72 m down by its tunnel arm w77617193.0_0 cut 157 m out 6.7 m under the ground (5 percent junction slope), not by the flyover, which clears it by over 7 m",
+      "owner": "P1-036"
     },
     {
       "what": "junction clusters with no usable ring and oversize junction surfaces",

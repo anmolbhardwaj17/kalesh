@@ -13,7 +13,9 @@
 //   the cover of a tunnel; the crossfall between the two carriageways of a street where both are at grade.
 // A map edge end is tied to the ground model there by a spring thousands of times stiffer than the ground under a
 // station: the road leaves the map at ground height, to a centimetre or so, unless a clearance next to the edge needs
-// the end itself to move (a road that dips under a railway bridge 40 m inside the map); the height it got is in the
+// the end itself to move (a road that dips under a railway bridge 40 m inside the map). Where the road itself has to
+// stand over something within a ramp's length of the edge, the tie is softer than the road under it: the road goes
+// on outside, so its ramp may go on there too before the road under it is lowered. The height an end got is in the
 // result for the next stage or the connector to take. Limits are held by the method of multipliers: a broken limit
 // becomes a stiff spring whose target moves until the limit holds to a thousandth of a millimetre; a spring that
 // would pull the wrong way is dropped. Each round is a Newton step on the stretched springs, checked against the
@@ -62,6 +64,8 @@ export interface Tie {
   /** What the end is tied to: the ground model, or the height a deck or a tunnel has there. */
   target: number;
   kind: 'ground' | 'deck' | 'water' | 'tunnel';
+  /** The road stands over something within a ramp's length of the edge: the tie is soft, the ramp may go on outside. */
+  ramp?: boolean;
   /** The height the end got. */
   h: number;
 }
@@ -119,6 +123,14 @@ const W_SLOPE = 5;
 const W_PAIR = 2;
 const W_JUNCTION = 50;
 const W_TIE = 1e4;
+/**
+ * The tie of an end whose own road must stand over something (a clearance that lifts it) within TIE_RAMP_M of the
+ * edge along its chain: a quarter of a held road (P1-035). With the stiff tie the Geeta Colony slip, whose bridge
+ * stands 37 m inside the stage edge, could not rise and the service road under it went 4 m into the ground.
+ */
+const W_TIE_RAMP = 50;
+/** A ramp's length: 7 m of clearance at 5 percent and its two vertical curves. */
+const TIE_RAMP_M = 200;
 const W_DECK = 0.002;
 const W_HELD = 200;
 /** Two arms of a junction are one street running straight on when they leave it within 30 degrees of opposite. */
@@ -247,7 +259,6 @@ export function solveBlockElevation(input: ElevationInput): ElevationResult {
     }
     flush();
   });
-  for (const t of ties) term(P.station(t.strip, t.end === 'start' ? 0 : (strips[t.strip] as Strip).st.length - 1), t.target, W_TIE);
   // along every chain: a little pull to level, bending, and the grade and curve limits
   P.chains.forEach((c: Chain, ci) => {
     const first = c.parts[0] as { strip: number; reversed: boolean };
@@ -418,6 +429,21 @@ export function solveBlockElevation(input: ElevationInput): ElevationResult {
     }
   }
   for (const w of crossings.water) for (let i = w.first; i <= w.last; i++) limit('water', P.station(w.strip, i), w.level + DECK_OVER_WATER_M, w.strip, i, CAP, -1, true);
+  // the map edge ties: soft where the road must rise for something within a ramp's length of the edge
+  const lifted = new Map<number, number[]>();
+  for (const l of limits) {
+    if (!l.lifts) continue;
+    const at = P.xOf(l.strip, l.station);
+    const list = lifted.get(at.chain);
+    if (list) list.push(at.x);
+    else lifted.set(at.chain, [at.x]);
+  }
+  for (const t of ties) {
+    const i = t.end === 'start' ? 0 : (strips[t.strip] as Strip).st.length - 1;
+    const at = P.xOf(t.strip, i);
+    t.ramp = (lifted.get(at.chain) ?? []).some((x) => Math.abs(x - at.x) < TIE_RAMP_M);
+    term(P.station(t.strip, i), t.target, t.ramp ? W_TIE_RAMP : W_TIE);
+  }
   strips.forEach((s, si) => {
     s.st.forEach((st, i) => {
       if (tun(si, i) === 1) limit('cover', neg(P.station(si, i)), -(st.g - TUNNEL_COVER_M), si, i, CAP);

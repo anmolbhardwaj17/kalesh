@@ -140,7 +140,9 @@ export const CLASS_DEFAULTS: Readonly<Record<string, ClassDefaults>> = {
   residential: { oneWay: 1, twoWay: 2, laneWidth: 3, footpath: 0, taper: 6, maxGrade: 0.08, cornerRadius: 5 },
   living_street: { oneWay: 1, twoWay: 1, laneWidth: 3.5, footpath: 0, taper: 6, maxGrade: 0.08, cornerRadius: 4 },
   service: { oneWay: 1, twoWay: 1, laneWidth: 3.5, footpath: 0, taper: 6, maxGrade: 0.08, cornerRadius: 4 },
-  pedestrian: { oneWay: 1, twoWay: 1, laneWidth: 4, footpath: 0, taper: 6, maxGrade: 0.08, cornerRadius: 3 },
+  // a foot way has no steps in the lane model: on a foot bridge it climbs at the steepest a person walks without them
+  // (1:10; P1-035: at 8 percent the Salimgarh foot bridge, 7.7 m over a railway, ended 1.09 m in the air)
+  pedestrian: { oneWay: 1, twoWay: 1, laneWidth: 4, footpath: 0, taper: 6, maxGrade: 0.1, cornerRadius: 3 },
   road: { oneWay: 1, twoWay: 2, laneWidth: 3, footpath: 0, taper: 6, maxGrade: 0.08, cornerRadius: 5 },
 };
 /** A ramp or slip road without a lanes tag: one wide lane. Ramps may be steeper than the main line. */
