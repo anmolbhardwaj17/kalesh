@@ -1,7 +1,8 @@
-## Road bench scene (P0-019, ARCH_OPTIONS.md rows LN, HR, J, EL, TF). Started with the game arg --arch=roads:<site>
-## (ito or cp). It shows the stand-in tile that node harness/bench/roads.mjs baked from the lane model prototype
-## (tools/bake/roads/): game/bench/roads/gen/<site>.ktl (the T1 tile of P0-018, read by bench/tiles/tile_t1.gd) and
-## <site>.json (tile origin, camera poses, probe points). One material per mesh name, one collider chunk per frame.
+## Road bench scene (P0-019, ARCH_OPTIONS.md rows LN, HR, J, EL, TF; production mesh since P1-014). Started with the
+## game arg --arch=roads:<site> (ito, cp, india_gate, chandni_chowk). It shows the stand-in tile the bake step `mesh`
+## cut out of the production road mesh (tools/bake/mesh/; npm run bake -- pilot --stage mesh --offline):
+## game/bench/roads/gen/<site>.ktl (the T1 tile, read by bench/tiles/tile_t1.gd) and <site>.json (tile origin, camera
+## poses, probe points). One material per mesh name, one collider chunk per frame.
 ## Debug hook bench(cmd, opts):
 ##   info            what is loaded: triangles, collider chunks, load and attach times
 ##   poses           the pose names of the site
@@ -16,7 +17,7 @@ const COLOURS := {
 	"road": Color(0.2, 0.2, 0.21), "parking": Color(0.36, 0.36, 0.39), "gore": Color(0.42, 0.38, 0.27), "kerb": Color(0.74, 0.73, 0.69),
 	"footpath": Color(0.72, 0.65, 0.54), "planter": Color(0.36, 0.44, 0.24), "median": Color(0.5, 0.55, 0.42), "marking": Color(0.95, 0.95, 0.92),
 	"wall": Color(0.66, 0.65, 0.62), "underside": Color(0.5, 0.5, 0.48), "pier": Color(0.6, 0.59, 0.56), "ground": Color(0.37, 0.43, 0.27),
-	"hedge": Color(0.2, 0.36, 0.17), "railing": Color(0.18, 0.49, 0.23), "colonnade": Color(0.945, 0.933, 0.902),
+	"hedge": Color(0.2, 0.36, 0.17), "railing": Color(0.18, 0.49, 0.23), "colonnade": Color(0.945, 0.933, 0.902), "joint": Color(0.1, 0.1, 0.11),
 }
 
 var info := {"ready": false}
@@ -45,7 +46,7 @@ func _ready() -> void:
 	var meta_text := FileAccess.get_file_as_string(GEN + site + ".json")
 	var meta: Variant = JSON.parse_string(meta_text) if meta_text != "" else null
 	if typeof(meta) != TYPE_DICTIONARY:
-		info = {"ready": true, "error": "no baked site '%s' in %s: run node harness/bench/roads.mjs" % [site, GEN]}
+		info = {"ready": true, "error": "no baked site '%s' in %s: run npm run bake -- pilot --stage mesh --offline" % [site, GEN]}
 		print("bench roads: ", info.error)
 		return
 	for p: Dictionary in meta.poses:

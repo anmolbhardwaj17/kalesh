@@ -1,21 +1,23 @@
 #!/usr/bin/env node
-// Road bench driver (P0-019; ARCH_OPTIONS.md rows LN, HR, J, EL, TF). Runs the lane model prototype of
-// tools/bake/roads/ on the pilot data that P0-018 fetched (data/pilot/, pinned in data/SOURCES.json):
+// Road bench driver of Phase 0 (P0-019; ARCH_OPTIONS.md rows LN, HR, J, EL, TF). Runs the lane model prototype of
+// tools/bake/roads/ (site.ts) on the pilot data that P0-018 fetched (data/pilot/, pinned in data/SOURCES.json):
 //
-//   node harness/bench/roads.mjs               bake both sites, then the Godot scene (arch.mjs roads) for the shots
-//   node harness/bench/roads.mjs --no-godot    bake and check only (writes the tiles and roads_bake.json)
+//   node harness/bench/roads.mjs               bake both sites and check them (writes the tiles and roads_bake.json)
 //   node harness/bench/roads.mjs --only ito    one site
+//
+// Since P1-014 the Godot bench scene (game/bench/roads/, node harness/bench/arch.mjs roads) shows the production
+// road mesh of the bake step `mesh`, not these tiles: the prototype's tiles go to harness/reports/arch/roads/proto/
+// and this driver no longer starts the scene. It stays for its site definitions and ground sampler
+// (tools/fixtures/gen_ito_profile.mjs) and for the prototype's own numbers.
 //
 // Sites: (a) the ITO flyover with its service lanes, the junction under it and the two loop ramps on the deck;
 // (b) the Connaught Place inner circle with its radials, the inner circle built from the hero road spec
 // harness/data/hero_roads/cp_inner_circle.json. For each site it writes a stand-in tile (T1) and the camera poses
-// to game/bench/roads/gen/, a plan picture and the lane model summary to harness/reports/arch/roads/, and the
-// check counts, build times and triangle counts to harness/reports/arch/roads_bake.json. The Godot run
-// (harness/bench/roads.plan.mjs) folds that file into harness/reports/arch/roads.json and adds the shots.
+// to harness/reports/arch/roads/proto/, a plan picture and the lane model summary to harness/reports/arch/roads/, and the
+// check counts, build times and triangle counts to harness/reports/arch/roads_bake.json.
 // Ground: GEDTM30 smoothed over 60 m, the source P0-018 picked.
 import fs from 'node:fs';
 import path from 'node:path';
-import { spawnSync } from 'node:child_process';
 import sharp from 'sharp';
 import { fitGround } from '../../tools/bake/ground.ts';
 import { encodeT1 } from '../../tools/bake/tile.ts';
@@ -27,7 +29,7 @@ import { loadArea, loadHeights } from './pilot_data/load.mjs';
 
 const args = process.argv.slice(2);
 const only = args.includes('--only') ? String(args[args.indexOf('--only') + 1]).split(',') : null;
-const GEN = path.join(ROOT, 'game', 'bench', 'roads', 'gen');
+const GEN = path.join(REPORTS, 'roads', 'proto');
 const OUT = path.join(REPORTS, 'roads');
 const HERO_DIR = path.join(ROOT, 'harness', 'data', 'hero_roads');
 const round = (v, d = 2) => Math.round(v * 10 ** d) / 10 ** d;
@@ -248,7 +250,6 @@ async function bakeSite(def, areas) {
     p.eye('circle_oblique', [j.centre.x + 60, j.h + 55, j.centre.z + 120], [j.centre.x - 10, j.h, j.centre.z - 30], 'the radial junction and the inner circle from above the outer blocks', 55);
   }
   fs.mkdirSync(GEN, { recursive: true });
-  fs.writeFileSync(path.join(GEN, '.gdignore'), '');
   const bytes = encodeT1(r.tile);
   fs.writeFileSync(path.join(GEN, `${def.id}.ktl`), bytes);
   const o = r.tile.origin;
@@ -310,9 +311,7 @@ async function main() {
   }
   writeJson(bakeFile, { writtenBy: 'node harness/bench/roads.mjs', at: new Date().toISOString(), node: process.version, sites });
   console.log(`wrote ${rel(bakeFile)}`);
-  if (args.includes('--no-godot')) return;
-  const res = spawnSync(process.execPath, [path.join(ROOT, 'harness', 'bench', 'arch.mjs'), 'roads', ...(only ? ['--only', only.join(',')] : [])], { stdio: 'inherit' });
-  process.exit(res.status ?? 1);
+  console.log('the Godot bench scene shows the production mesh: npm run bake -- pilot --stage mesh --offline, then node harness/bench/arch.mjs roads');
 }
 
 if (process.argv[1] && path.resolve(process.argv[1]) === path.resolve(new URL(import.meta.url).pathname)) {
