@@ -12,7 +12,7 @@ import { describe, expect, it } from 'vitest';
 import { parseArgs } from '../cli.ts';
 import { stagePlan } from '../layout/stages.ts';
 import { bake, offlineNet } from '../main.ts';
-import { decodeT1 } from '../tile.ts';
+import { decodeT1 } from '../tile/codec.ts';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..', '..', '..');
 const districts = JSON.parse(fs.readFileSync(path.join(ROOT, 'harness/data/districts.json'), 'utf8'));

@@ -7,7 +7,9 @@ import { distanceStats, haversine, joinLandmarks, osmLandmarks } from './landmar
 import type { WikidataItem } from './landmarks';
 import { tagCoverage } from './osm';
 import { Sketch } from './testmap';
-import { buildTile, decodeT1, encodeGlb, encodeT1, tileOf, tileStats } from './tile';
+import { buildTile, tileOf, tileStats } from './tile/standin';
+import { decodeT1, encodeT1 } from './tile/codec';
+import { encodeGlb } from './tile/glb';
 
 describe('projection with an origin argument', () => {
   it('the default origin is unchanged and a district origin maps to (0, 0)', () => {

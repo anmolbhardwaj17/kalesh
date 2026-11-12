@@ -2,7 +2,7 @@ import { describe, expect, it } from 'vitest';
 import raw from '../../../harness/data/hero_roads/cp_inner_circle.json?raw';
 import type { Road } from '../osm';
 import { Sketch } from '../testmap';
-import { decodeT1, encodeT1 } from '../tile';
+import { decodeT1, encodeT1 } from '../tile/codec';
 import { checkContinuity, checkOverlap } from './checks';
 import { Curve, area2, smoothLine } from './curve';
 import { solveSPD } from './elevation';

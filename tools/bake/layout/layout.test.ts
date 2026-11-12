@@ -19,7 +19,7 @@ import outlineQutub from '../../../harness/data/districts/qutub_mehrauli.geojson
 import outlineVk from '../../../harness/data/districts/vasant_kunj.geojson?raw';
 import { geoToWorld, projector } from '../../geo/projection';
 import type { P2 } from '../geom';
-import { encodeT1 } from '../tile';
+import { encodeT1 } from '../tile/codec';
 import { TileSet, prism } from '../tileset';
 import { rectRing } from './edge';
 import { RULE, checkLayout, farBlockChecks, layoutPositions, pairRows, pairTable, placePoints } from './gate';

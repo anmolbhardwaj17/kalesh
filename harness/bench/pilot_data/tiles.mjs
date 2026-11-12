@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 // Tile format bench driver (P0-018, ARCH_OPTIONS.md rows T, TL, ST). Bakes stand-in tiles from the real pilot data
-// with the typed bake code (tools/bake/tile.ts), packs the T2 resources with a headless Godot step, runs the Godot
+// with the typed bake code (tools/bake/tile/standin.ts, codec.ts, glb.ts), packs the T2 resources with a headless Godot step, runs the Godot
 // bench (node harness/bench/arch.mjs tiles, scene game/bench/tiles/) and writes harness/reports/arch/tile_format.json.
 //
 //   node harness/bench/pilot_data/tiles.mjs            bake, pack, run the Godot bench, write the report
@@ -15,7 +15,9 @@ import fs from 'node:fs';
 import os from 'node:os';
 import path from 'node:path';
 import { spawnSync } from 'node:child_process';
-import { buildTile, decodeT1, encodeGlb, encodeT1, tileOf, tileStats } from '../../../tools/bake/tile.ts';
+import { buildTile, tileOf, tileStats } from '../../../tools/bake/tile/standin.ts';
+import { decodeT1, encodeT1 } from '../../../tools/bake/tile/codec.ts';
+import { encodeGlb } from '../../../tools/bake/tile/glb.ts';
 import { fitGround } from '../../../tools/bake/ground.ts';
 import { resolveGodot } from '../../bin/godot.mjs';
 import { REPORTS, ROOT, pilotAreas, readJson, rel, round, unionBox, writeJson } from './lib.mjs';

@@ -7,8 +7,8 @@
 import { pointInRing, triangulate } from './geom.ts';
 import type { P2 } from './geom.ts';
 import { TILE_M, tileOf, tileOrigin } from './layout/grid.ts';
-import { MeshBuilder } from './tile.ts';
-import type { MeshData, TileContent } from './tile.ts';
+import { MeshBuilder } from './tile/standin.ts';
+import type { MeshData, TileContent } from './tile/codec.ts';
 
 export type V3 = [number, number, number];
 /** Side of a world tile, metres (the one world grid). */

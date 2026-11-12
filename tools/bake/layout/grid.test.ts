@@ -3,7 +3,7 @@ import { describe, expect, it } from 'vitest';
 import { worldTile, overrideFileName, TILE_SIZE } from '../../inspector/lib';
 import { parseArgs } from '../cli';
 import { rng } from '../rand';
-import { tileOf as cutterTileOf } from '../tile';
+import { tileOf as cutterTileOf } from '../tile/standin';
 import { TILE, TileSet } from '../tileset';
 import { TILE_M, overrideFile, parseTileId, tileBox, tileId, tileIdAt, tileOf, tileOrigin, tilesInBox } from './grid';
 

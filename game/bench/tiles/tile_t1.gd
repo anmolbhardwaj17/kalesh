@@ -1,7 +1,11 @@
-## Reader of our own binary tile (ARCH_OPTIONS T1, written by tools/bake/tile.ts encodeT1). Safe to call on a
-## WorkerThreadPool thread: it reads the file, turns each array into a packed array in one call (no per-vertex
-## script work) and builds meshes, collider shapes and MultiMesh placements as nodes that are not in the tree yet.
+## Reader of our own binary tile (ARCH_OPTIONS T1, written by tools/bake/tile/codec.ts encodeT1; the production tiles
+## by tools/bake/tile/write.ts). Safe to call on a WorkerThreadPool thread: it reads the file, turns each array into a
+## packed array in one call (no per-vertex script work) and builds meshes, collider shapes and MultiMesh placements
+## as nodes that are not in the tree yet, plus the lane pieces and pins as data.
 ## File layout: "KTL1", u32 version, u32 header length, a JSON header, then float32 and uint32 arrays.
+## Magnitude rule (TECH.md "Tile format"): a production tile names a margin; a mesh whose bounds (worked out by the
+## engine when the surface is added) reach past the tile square plus that margin, or a lane point or pin past it,
+## refuses the whole tile. Collider faces are made from the same vertices by the bake (checked there and in tests).
 extends RefCounted
 
 const MAGIC := "KTL1"
@@ -43,6 +47,8 @@ static func build_tile(bytes: PackedByteArray) -> Dictionary:
 		return {"ok": false, "error": head.error}
 	var header: Dictionary = head.header
 	var base: int = head.base
+	var size := float(header.tile.size)
+	var margin := float(header.margin) if header.get("margin") != null else -1.0
 	var root := Node3D.new()
 	root.name = "Tile_%s_%d_%d" % [header.tile.district, int(header.tile.x), int(header.tile.z)]
 	var triangles := 0
@@ -53,8 +59,15 @@ static func build_tile(bytes: PackedByteArray) -> Dictionary:
 		arrays[Mesh.ARRAY_VERTEX] = _vec3(bytes, base + int(m.pos), n)
 		arrays[Mesh.ARRAY_NORMAL] = _vec3(bytes, base + int(m.nrm), n)
 		arrays[Mesh.ARRAY_INDEX] = bytes.slice(base + int(m.idx), base + int(m.idx) + int(m.indices) * 4).to_int32_array()
+		if m.has("uv"):
+			arrays[Mesh.ARRAY_TEX_UV] = bytes.slice(base + int(m.uv), base + int(m.uv) + n * 8).to_vector2_array()
+		if m.has("uv2"):
+			arrays[Mesh.ARRAY_TEX_UV2] = bytes.slice(base + int(m.uv2), base + int(m.uv2) + n * 8).to_vector2_array()
 		var mesh := ArrayMesh.new()
 		mesh.add_surface_from_arrays(Mesh.PRIMITIVE_TRIANGLES, arrays)
+		if margin >= 0.0 and not _inside(mesh.get_aabb(), size, margin):
+			root.free()
+			return {"ok": false, "error": "mesh %s reaches outside the tile plus its %.0f m margin (%s)" % [m.name, margin, mesh.get_aabb()]}
 		var mi := MeshInstance3D.new()
 		mi.name = str(m.name)
 		mi.mesh = mesh
@@ -85,7 +98,40 @@ static func build_tile(bytes: PackedByteArray) -> Dictionary:
 		mmi.set_meta("module", str(p.module))
 		root.add_child(mmi)
 		placements += int(p.count)
+	# the lane graph pieces and the pins, as data (traffic and missions read them); a few hundred points a tile
+	var lanes: Array[Dictionary] = []
+	var points := PackedVector3Array()
+	var lane_head: Variant = header.get("lanes")
+	if typeof(lane_head) == TYPE_DICTIONARY and (lane_head as Dictionary).has("list"):
+		points = _vec3(bytes, base + int(lane_head.pts), int(lane_head.points))
+		for l: Dictionary in lane_head.list:
+			var piece := l.duplicate()
+			piece["pts"] = points.slice(int(l.start), int(l.start) + int(l.count))
+			lanes.append(piece)
+	var pins: Array[Dictionary] = []
+	for p: Dictionary in header.get("pins", []):
+		var pos: Array = p.pos
+		var at := Vector3(pos[0], pos[1], pos[2])
+		points.append(at)
+		pins.append({"id": str(p.id), "name": str(p.name), "kind": str(p.kind), "pos": at})
+	if margin >= 0.0 and points.size() > 0:
+		var box := AABB(points[0], Vector3.ZERO)
+		for q in points:
+			box = box.expand(q)
+		if not _inside(box, size, margin):
+			root.free()
+			for b in bodies:
+				b.free()
+			return {"ok": false, "error": "a lane point or pin lies outside the tile plus its %.0f m margin" % margin}
 	return {
 		"ok": true, "root": root, "bodies": bodies, "header": header, "bytes": bytes.size(), "triangles": triangles,
-		"collider_triangles": collider_triangles, "placements": placements,
+		"collider_triangles": collider_triangles, "placements": placements, "lanes": lanes, "pins": pins,
 	}
+
+
+## The magnitude rule on a box of tile-relative metres: x and z within the square plus the margin, y within eight
+## margins (the bake's codec.ts badVertex).
+static func _inside(box: AABB, size: float, margin: float) -> bool:
+	var lo := box.position
+	var hi := box.end
+	return lo.x >= -margin and lo.z >= -margin and hi.x <= size + margin and hi.z <= size + margin and lo.y >= -margin * 8.0 and hi.y <= margin * 8.0

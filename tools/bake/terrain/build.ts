@@ -5,7 +5,7 @@
 // model and builds none of them again. The ground is cut to the road edge, so there is no second surface under a
 // road that could disagree with it (the old game's fault). Pure.
 import { TILE_M } from '../layout/grid.ts';
-import type { MeshData } from '../tile.ts';
+import type { MeshData } from '../tile/codec.ts';
 import { TERRAIN_DEFAULTS, collect } from './collect.ts';
 import type { Collected, TerrainInput, TerrainOptions } from './collect.ts';
 import { buildSurface } from './surface.ts';

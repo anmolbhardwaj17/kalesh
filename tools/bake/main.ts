@@ -15,8 +15,9 @@
 // junction mesh of tools/bake/mesh/ with its overlap proof and gate counts; stand-in tiles of a few sites for the road
 // bench scene in game/bench/roads/gen/ and north-up pictures beside the health report), terrain (the ground of
 // tools/bake/terrain/: cut to the road mesh's edges, footprints, water and the tile lines, with its checks; the bench
-// tiles again on that ground), tiles (written by a later task). Invariants run after each step; a failed one
-// stops the bake before tiles are written. harness/reports/map/health.json is written at the end of every run.
+// tiles again on that ground), tiles (the KTL1 tiles of tools/bake/tile/ on the one 250 m world grid, written by
+// sources/tilestage.ts to <stage data folder>/tiles with index.json, checked on the bytes read back). Invariants run
+// after each step; a failed one stops the bake before tiles are written. harness/reports/map/health.json is written at the end of every run.
 import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
@@ -53,13 +54,13 @@ import { readOverrides } from './sources/overridesio.ts';
 import { readRepairInput, writeRepair } from './sources/repairio.ts';
 import { checkGraph, graphCounts, graphHash, graphInvariants } from './graph/checks.ts';
 import { graphSvg } from './graph/render.ts';
-import { taggedLanes } from './graph/classify.ts';
 import type { RepairedGraph } from './repair/engine.ts';
 import { checkLaneModel } from './roads/lanechecks.ts';
 import { laneGraph, laneModelFile, laneModelHash, lanesLayer, lanesRecord } from './roads/laneout.ts';
 import { lanesSvg } from './roads/lanerender.ts';
 import { buildLaneModel } from './roads/network.ts';
 import type { LaneBuild, LaneModelInput } from './roads/network.ts';
+import { GROUND_SITES, LANE_VIEWS, MESH_SITES, PROFILE_VIEWS, laneInputs } from './sites.ts';
 import { checkElevation } from './elevation/checks.ts';
 import { elevationFile, elevationHash, elevationRecord } from './elevation/elevout.ts';
 import { elevationInput } from './elevation/input.ts';
@@ -72,6 +73,7 @@ import { checkRoadMesh } from './mesh/checks.ts';
 import { meshInput } from './mesh/input.ts';
 import type { MeshInput } from './mesh/input.ts';
 import { buildGround } from './terrain/build.ts';
+import type { Ground } from './terrain/build.ts';
 import { checkGround } from './terrain/checks.ts';
 import type { TerrainInput } from './terrain/collect.ts';
 import { groundHash, groundInBox, groundPoses, groundSvg, terrainInvariants, terrainLog, terrainRecord } from './terrain/terrainout.ts';
@@ -87,6 +89,7 @@ import { OfflineError, realNet } from './sources/net.ts';
 import type { Net } from './sources/net.ts';
 import { loadSources } from './sources/pinfile.ts';
 import { runSourcesStage } from './sources/stage.ts';
+import { runTileStep } from './sources/tilestage.ts';
 import type { SourceResult } from './sources/stage.ts';
 
 interface Proc {
@@ -98,7 +101,6 @@ const out = (globalThis as unknown as { console: { log(line: string): void } }).
 const clock = (globalThis as unknown as { performance: { now(): number } }).performance;
 
 export const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..', '..');
-const DEFAULT_OUT = 'game/world/tiles';
 
 /** A network that refuses every request (--offline). */
 export const offlineNet: Net = {
@@ -170,7 +172,7 @@ export async function bake(args: BakeArgs, opts: BakeOptions): Promise<HealthRep
   const b = plan.box;
   opts.log(`[bake] stage ${plan.id} (${plan.def.name}), block ${plan.def.block}: outline ${plan.areaKm2.toFixed(2)} km2, box ${b.south},${b.west} to ${b.north},${b.east} (margin ${plan.def.marginM} m)`);
   const report = emptyHealth(plan.id, plan.def.block, { file: path.relative(opts.root, outlineFile), areaKm2: Math.round(plan.areaKm2 * 1000) / 1000, box: b });
-  report.tiles = { written: 0, out: args.out ?? DEFAULT_OUT, only: args.tiles ? args.tiles.map((t) => `${t.x}_${t.z}`) : null };
+  report.tiles = { written: 0, out: args.out ?? path.join(plan.def.dataDir, 'tiles'), only: args.tiles ? args.tiles.map((t) => `${t.x}_${t.z}`) : null };
   const healthFile = opts.healthFile ?? path.join(opts.root, 'harness', 'reports', 'map', 'health.json');
   const finish = (): void => {
     fs.mkdirSync(path.dirname(healthFile), { recursive: true });
@@ -210,6 +212,8 @@ export async function bake(args: BakeArgs, opts: BakeOptions): Promise<HealthRep
   let elevated: { junctionHeights: ArrayLike<number>; kinds: readonly ArrayLike<number>[] } | null = null;
   /** What the mesh step hands the terrain step. */
   let meshed: { input: MeshInput; mesh: RoadMesh } | null = null;
+  /** What the terrain step hands the tile step: the ground with its tiles (kept in memory, no file). */
+  let grounded: Ground | null = null;
   for (const step of args.steps as Step[]) {
     opts.log(`[bake] step ${step}`);
     report.steps.push(step);
@@ -478,6 +482,7 @@ export async function bake(args: BakeArgs, opts: BakeOptions): Promise<HealthRep
       };
       // built twice: the ground must not depend on anything but the road mesh, the map and the ground model
       const ground = buildGround(input);
+      grounded = ground;
       const hash = groundHash(ground);
       const again = groundHash(buildGround(input));
       const tc = clock.now();
@@ -504,7 +509,13 @@ export async function bake(args: BakeArgs, opts: BakeOptions): Promise<HealthRep
       for (const l of terrainLog(rec)) opts.log(`[terrain] ${l}`);
       check(terrainInvariants(rec, again));
     } else if (step === 'tiles') {
-      opts.log(`[tiles] not built yet: the tile writer lands with the production road, terrain and tile tasks (would write to ${report.tiles.out})`);
+      if (!laneBuild || !meshed || !grounded || !repaired) throw new Error('the tiles step needs the lanes, mesh and terrain steps before it');
+      const res = runTileStep({
+        root: opts.root, out: report.tiles.out ?? path.join(plan.def.dataDir, 'tiles'), stage: plan.id, block: plan.def.block, origin: plan.origin, offset: blockFrame(districts, plan.def.block).offset,
+        outline: repaired.outline, lanes: laneBuild, meshed, ground: grounded, repaired, places: layout.input.places, only: report.tiles.only, log: opts.log,
+      });
+      report.tiles = { ...report.tiles, written: res.written, record: res.record };
+      check(res.invariants);
     }
   }
   finish();
@@ -513,42 +524,6 @@ export async function bake(args: BakeArgs, opts: BakeOptions): Promise<HealthRep
 }
 
 const round = (v: number): number => Math.round(v * 100) / 100;
-
-/** What the lane model reads besides the graph: the lanes tag of every way, crossings and signals, the hero specs. */
-export function laneInputs(input: GraphInput, plan: StagePlan, heroes: LaneModelInput['heroes']): Pick<LaneModelInput, 'wayLanes' | 'points' | 'heroes'> {
-  const proj = projector(plan.origin);
-  const wayLanes = new Map<string, number>();
-  const points: NonNullable<LaneModelInput['points']>[number][] = [];
-  for (const el of input.elements) {
-    if (el.type === 'way' && el.tags?.['highway']) {
-      const n = taggedLanes(el.tags);
-      if (n !== null) wayLanes.set(`way/${el.id}`, n);
-    } else if (el.type === 'node' && el.lat !== undefined && el.lon !== undefined && (el.tags?.['highway'] === 'crossing' || el.tags?.['highway'] === 'traffic_signals')) {
-      const p = proj.toWorld(el.lat, el.lon);
-      points.push({ x: p.x, z: p.z, kind: el.tags['highway'] === 'crossing' ? 'crossing' : 'signals' });
-    }
-  }
-  return { wayLanes, points, ...(heroes ? { heroes } : {}) };
-}
-
-/** North-up pictures of the lane model: the two sites of the Phase 0 road bench (drawn when they lie in the stage). */
-const LANE_VIEWS: readonly { id: string; name: string; lat: number; lon: number; halfM: number }[] = [
-  { id: 'ito', name: 'ITO flyover and junction', lat: 28.6282, lon: 77.2471, halfM: 330 },
-  { id: 'cp', name: 'Connaught Place inner circle', lat: 28.6328, lon: 77.2197, halfM: 300 },
-];
-
-/** Sites the mesh step cuts stand-in tiles and pictures for (the road bench scene, --arch=roads:<id>), when the stage holds them. */
-const MESH_SITES: readonly { id: string; name: string; lat: number; lon: number; halfM: number; eye: RegExp }[] = [
-  { id: 'ito', name: 'ITO flyover and junction', lat: 28.6282, lon: 77.2455, halfM: 330, eye: /^(Vikas Marg|Bahadur Shah Zafar Marg|Indraprastha Marg)/ },
-  { id: 'cp', name: 'Connaught Place inner circle', lat: 28.6328, lon: 77.2197, halfM: 300, eye: /^(Radial Road|Barakhamba Road|Janpath)/ },
-  { id: 'india_gate', name: 'India Gate hexagon', lat: 28.612894, lon: 77.229446, halfM: 380, eye: /^(Kartavya Path|Rajpath|Tilak Marg|Kasturba Gandhi Marg|Shahjahan Road)/ },
-  { id: 'chandni_chowk', name: 'Chandni Chowk', lat: 28.6561, lon: 77.2318, halfM: 300, eye: /^Chandni Chowk/ },
-];
-/** Sites the terrain step cuts: the mesh sites again on the production ground, and the river bank. */
-const GROUND_SITES: typeof MESH_SITES = [...MESH_SITES, { id: 'yamuna', name: 'Yamuna west bank at ITO', lat: 28.626, lon: 77.2533, halfM: 260, eye: /^(Vikas Marg|Mahatma Gandhi Marg|Ring Road)/ }];
-
-/** Side views drawn by the elevation step: roads by name (drawn when the stage has them). */
-const PROFILE_VIEWS: readonly { id: string; name: string; match: RegExp }[] = [{ id: 'ito', name: 'ITO flyover and its ramps', match: /^ITO Flyover/ }];
 
 async function main(): Promise<void> {
   let args: BakeArgs;

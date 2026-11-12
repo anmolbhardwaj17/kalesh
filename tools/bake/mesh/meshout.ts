@@ -6,7 +6,7 @@
 import { hashText } from '../graph/checks.ts';
 import { colliderChunks } from '../roads/mesh.ts';
 import type { LaneDef, Station, Strip } from '../roads/model.ts';
-import type { MeshData, TileContent } from '../tile.ts';
+import type { MeshData, TileContent } from '../tile/codec.ts';
 import type { RoadMesh } from './build.ts';
 import type { MeshChecks } from './checks.ts';
 import { edgeKey } from './conform.ts';

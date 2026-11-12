@@ -1,7 +1,7 @@
 // Hero roads (ARCH_OPTIONS HR1): a spec file gives a road its checked cross-section and the things along it
 // (colonnade edge, tree line, lamps, park railing). The spec overrides tags and class defaults, and the check
 // compares the baked strips with the spec lane by lane. Spec files: harness/data/hero_roads/<id>.json.
-import type { Placement } from '../tile.ts';
+import type { Placement } from '../tile/codec.ts';
 import { borderPoint, laneRaise } from './mesh.ts';
 import type { MeshSet } from './mesh.ts';
 import { lane } from './model.ts';
