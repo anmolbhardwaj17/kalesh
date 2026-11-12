@@ -1,6 +1,6 @@
 // Metro and rail rules (R-RAIL) on the block graph: an elevated viaduct gets piers, so it may not run along the
 // inside of a carriageway that has no median for them; a station links to its line and to the street. Pure.
-import { pointSegment } from '../geom.ts';
+import { pointInRing, pointSegment } from '../geom.ts';
 import type { P2 } from '../geom.ts';
 import type { GraphEdge } from '../graph/build.ts';
 import type { LineFeature } from '../graph/features.ts';
@@ -95,7 +95,9 @@ export const stationLinks: Rule = {
           ctx.proposal('remove', { drop: st.id }, 0.3, { kind: 'other' }, 'Or a station that is not built: leave it out', [st]),
         ], 0.6));
       }
-      if (!ctx.near(st, STATION_STREET_M).length) {
+      // a station inside an underground structure (P1-041) is reached by its entrances on the street, not by a forecourt
+      const below = (ctx.graph.underground ?? []).some((u) => pointInRing(st, u.ring));
+      if (!below && !ctx.near(st, STATION_STREET_M).length) {
         let best: { e: GraphEdge; d: number; x: number; z: number } | null = null;
         for (const s of ctx.segList) {
           const c = pointSegment(st, s.a, s.b);

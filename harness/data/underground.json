@@ -1,0 +1,30 @@
+{
+  "_doc": "Underground list of the bake (P1-041, decisions.md 'Underground structures are their own class (Anmol)'). Read by tools/bake/sources/graphinput.ts; the class is tools/bake/graph/underground.ts. 'underground': below ground whatever the tags say, also ways that are not buildings (a market mapped as land use); each becomes a named underground feature (no shell, no ground cut, no building rule). 'surface': on the ground whatever the tags say. Ids are source ids: way/<osm id>, relation/<osm id> or overture/<GERS id>. An Overture copy of an OSM way follows that way. Footprints whose own tags say below ground (layer or level under 0, location=underground, no floors above with floors below, a subway station building) need no line here.",
+  "underground": [
+    {
+      "id": "way/1158884368",
+      "name": "Rajiv Chowk metro station",
+      "kind": "metro_station",
+      "why": "Anmol 2026-11-12: the big footprint inside the CP inner circle is Rajiv Chowk metro station, below ground (OSM also tags it layer -2; Overture's copy has level -2)"
+    },
+    {
+      "id": "way/1393736849",
+      "name": "Palika Bazaar",
+      "kind": "market",
+      "why": "the underground market under Palika Park; OSM maps it as landuse=retail with its shops as rooms on level -2 and -1"
+    },
+    {
+      "id": "way/360264006",
+      "name": "Jama Masjid metro station",
+      "kind": "metro_station",
+      "why": "Violet Line station below ground; OSM tags it layer -1 with location=surface, so the tags alone do not settle it"
+    }
+  ],
+  "surface": [
+    {
+      "id": "way/80429800",
+      "name": "Chhatta Chowk",
+      "why": "the covered arcade inside the Red Fort stands at street level; its layer -1 only orders it under the roofed passage"
+    }
+  ]
+}

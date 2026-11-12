@@ -5,6 +5,7 @@ import type { MapData, OsmElement } from './osm.ts';
 import { buildBlockGraph } from './graph/build.ts';
 import type { BlockGraph } from './graph/build.ts';
 import type { OvertureRow } from './graph/footprints.ts';
+import type { UndergroundList } from './graph/underground.ts';
 import { RuleContext } from './rules/context.ts';
 import type { Marks, RuleEnv } from './rules/types.ts';
 import { buildTile } from './tile/standin.ts';
@@ -43,9 +44,9 @@ export class Sketch {
   }
 
   /** The block graph of the sketch inside a square outline of half size h metres around 0. */
-  graph(h = 500, overture: OvertureRow[] = []): BlockGraph {
+  graph(h = 500, overture: OvertureRow[] = [], underground?: UndergroundList): BlockGraph {
     const outline: [number, number][] = [[-h, -h], [h, -h], [h, h], [-h, h], [-h, -h]];
-    return buildBlockGraph({ block: 'test', stage: 'test', origin: { lat: 0, lon: 0 }, outline, elements: this.elements, overture, project: flat });
+    return buildBlockGraph({ block: 'test', stage: 'test', origin: { lat: 0, lon: 0 }, outline, elements: this.elements, overture, project: flat, ...(underground ? { underground } : {}) });
   }
 
   /** OSM tags of the sketch's nodes that have any, by graph node id. */

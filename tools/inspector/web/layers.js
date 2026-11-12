@@ -4,10 +4,10 @@
 // test in a fixed order (renderOrder), under the KTL1 tiles and the markers. World metres, east +X, north -Z.
 import * as THREE from 'three';
 import { laneBorder } from '../lib.ts';
-import { CENTRE_LINE, LANE_FILL, LANE_LINE, LANE_MARK, MAJOR, MAP, NET_MAJOR, NET_MINOR, ROAD_FILL } from './theme.js';
+import { CENTRE_LINE, LANE_FILL, LANE_LINE, LANE_MARK, MAJOR, MAP, NET_MAJOR, NET_MINOR, ROAD_FILL, UNDERGROUND } from './theme.js';
 
 /** Layer order, lowest first. */
-export const ORDER = { ground: -60, grid: -55, buildings: -50, ribbons: -40, lanes: -35, laneLines: -30, laneMarks: -28, buildingEdges: -25, network: -20, edge: -15 };
+export const ORDER = { ground: -60, grid: -55, buildings: -50, undergroundFill: -45, ribbons: -40, lanes: -35, laneLines: -30, laneMarks: -28, buildingEdges: -25, underground: -22, network: -20, edge: -15 };
 
 function flat(obj, order) {
   obj.renderOrder = order;
@@ -110,8 +110,26 @@ export function contextLayer(ctx) {
   const buildingEdges = flat(new THREE.LineSegments(eg, new THREE.LineBasicMaterial({ color: MAP.buildingEdge, transparent: true, opacity: 1 })), ORDER.buildingEdges);
   buildings.add(buildingEdges);
 
+  // underground structures (P1-041): a faint fill and a dashed outline, never an issue
+  const underground = new THREE.Group();
+  const ufill = [];
+  const udash = [];
+  for (const u of ctx.underground ?? []) {
+    const shape = [];
+    for (let k = 0; k + 2 < u.p.length; k += 3) shape.push(new THREE.Vector2(u.p[k], u.p[k + 2]));
+    if (shape.length < 3) continue;
+    for (const t of THREE.ShapeUtils.triangulateShape(shape, [])) for (const v of t) ufill.push(shape[v].x, 0, shape[v].y);
+    dashes([...shape, shape[0]].map((q) => [q.x, q.y]), 7, 5, udash);
+  }
+  const ufg = new THREE.BufferGeometry();
+  ufg.setAttribute('position', new THREE.Float32BufferAttribute(ufill, 3));
+  underground.add(flat(new THREE.Mesh(ufg, new THREE.MeshBasicMaterial({ color: UNDERGROUND.fill, transparent: true, opacity: UNDERGROUND.fillOpacity, side: THREE.DoubleSide })), ORDER.undergroundFill));
+  const udg = new THREE.BufferGeometry();
+  udg.setAttribute('position', new THREE.Float32BufferAttribute(udash, 3));
+  underground.add(flat(new THREE.LineSegments(udg, new THREE.LineBasicMaterial({ color: UNDERGROUND.line, transparent: true, opacity: 1 })), ORDER.underground));
+
   return {
-    roads, buildings,
+    roads, buildings, underground,
     /** Network lines fade out as the lanes and ribbons take over close up; building edges fade in. */
     update(dist) {
       network.material.opacity = 0.25 + 0.75 * smooth(250, 1400, dist);

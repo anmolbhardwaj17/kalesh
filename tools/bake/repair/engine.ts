@@ -17,7 +17,7 @@ import type { P2 } from '../geom.ts';
 import { applyPatch } from './apply.ts';
 import type { RepairState } from './apply.ts';
 import { decide } from './bounds.ts';
-import { isDisable, overrideCounts, overrideFor, overrideRecords, resolveOverrides } from './overrides.ts';
+import { isDisable, overrideCounts, overrideFor, overrideRecords, resolveOverrides, unresolved } from './overrides.ts';
 import type { OverrideCounts, OverrideEntry, OverrideRecord, ResolvedOverride } from './overrides.ts';
 
 /** The block graph after the repair step: the same form, with the marks repairs left for later stages. */
@@ -121,7 +121,7 @@ export function repairGraph(raw: BlockGraph, env: RuleEnv, opts: RepairOptions =
   const repaired = new Map<string, Issue>();
   // override patches: found in the raw graph by id, then by anchor; they take the place of a repair
   const ovs: ResolvedOverride[] = opts.overrides ? resolveOverrides(raw, opts.overrides.entries, opts.overrides.project) : [];
-  if (opts.overrides?.applied) for (const o of ovs) if (!isDisable(o) && o.resolution !== 'stale') o.applied = true;
+  if (opts.overrides?.applied) for (const o of ovs) if (!isDisable(o) && !unresolved(o)) o.applied = true;
   const refused = new Map<ResolvedOverride, string>();
   const settled = new Map<string, Issue>();
   const claim = (issue: Issue, o: ResolvedOverride): void => {
@@ -173,7 +173,7 @@ export function repairGraph(raw: BlockGraph, env: RuleEnv, opts: RepairOptions =
   const applyOverrides = (): boolean => {
     let any = false;
     for (const o of ovs) {
-      if (o.applied || isDisable(o) || o.resolution === 'stale' || refused.has(o)) continue;
+      if (o.applied || isDisable(o) || unresolved(o) || refused.has(o)) continue;
       const r = applyPatch(state, o.patch);
       if (!r.applied) {
         refused.set(o, r.note);

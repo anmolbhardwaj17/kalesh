@@ -104,6 +104,36 @@ export interface HealthReport {
   tiles: { written: number; out: string | null; only: string[] | null; record?: TilesRecord };
   /** The six gate counts item by item, each explained or not, and the known findings with their owners (P1-017); set before the tile step. */
   gateReport?: GateReport;
+  /** Underground structures (P1-041, graph/underground.ts): every one with its reason, and what the class took out; set by the graph and repair steps. */
+  underground?: UndergroundHealth;
+}
+
+export interface UndergroundHealth {
+  count: number;
+  /** By how the class was decided: "tag" or "list". */
+  by: Record<string, number>;
+  byKind: Record<string, number>;
+  /** List entries the extract does not have. */
+  missing: string[];
+  features: { id: string; name: string; kind: string; reason: string; by: string; source: string; areaM2: number; copies: string[]; footprint: boolean }[];
+  /** Issues the rules raise on the raw graph when the ones the source drew as buildings are put back as ordinary footprints: what the class removed. Null until the repair step runs. */
+  issuesRemoved: { total: number; byRule: Record<string, number>; byFeature: Record<string, number> } | null;
+  /** Override patches retired because they name an underground structure (kept in their files, not applied). */
+  overridesRetired: string[];
+}
+
+/** The health record of the underground features of a graph (the repair step adds issuesRemoved and overridesRetired). */
+export function undergroundHealth(features: readonly { id: string; name: string; kind: string; reason: string; by: string; source: string; area: number; copies: readonly string[]; footprint: boolean }[], missing: readonly string[]): UndergroundHealth {
+  const tally = (xs: readonly string[]): Record<string, number> => {
+    const out: Record<string, number> = {};
+    for (const x of xs) out[x] = (out[x] ?? 0) + 1;
+    return out;
+  };
+  return {
+    count: features.length, by: tally(features.map((f) => f.by)), byKind: tally(features.map((f) => f.kind)), missing: [...missing],
+    features: features.map((f) => ({ id: f.id, name: f.name, kind: f.kind, reason: f.reason, by: f.by, source: f.source, areaM2: f.area, copies: [...f.copies], footprint: f.footprint })),
+    issuesRemoved: null, overridesRetired: [],
+  };
 }
 
 export interface OverrideHealth extends OverrideCounts {
@@ -141,7 +171,7 @@ export function mapCounts(res: Pick<RepairResult, 'issues' | 'overrides' | 'over
   };
 }
 
-export const emptyOverrides = (): OverrideHealth => ({ files: 0, patches: 0, byId: 0, byAnchor: 0, stale: 0, applied: 0, switchedOff: 0, idle: 0, issuesSettled: 0, outsideStage: 0, records: [] });
+export const emptyOverrides = (): OverrideHealth => ({ files: 0, patches: 0, byId: 0, byAnchor: 0, stale: 0, applied: 0, switchedOff: 0, idle: 0, issuesSettled: 0, underground: 0, outsideStage: 0, records: [] });
 
 export interface GraphRecord {
   file: string;

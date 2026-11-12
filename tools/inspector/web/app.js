@@ -24,7 +24,7 @@ const esc = (s) => String(s).replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&l
 const state = {
   ready: false, issues: [], byId: new Map(), rules: {}, picks: {}, filter: 'all', search: '', selected: null, proposal: null,
   view: 'top', flying: false, places: [], source: '', markerIndex: [], hidden: new Set(), names: buildNameIndex(null, []),
-  desc: new Map(), buildings: [], outline: [], hover: null, layers: { lanes: true, laneMarks: true, buildings: true, grid: true },
+  desc: new Map(), buildings: [], under: [], outline: [], hover: null, layers: { lanes: true, laneMarks: true, buildings: true, grid: true },
   // the lanes tab (P1-025): the lanes layer file, the lanes record of health.json, the listed split zones and taper findings
   tab: 'issues', laneFile: null, health: null, laneItems: [], laneFilter: 'all', laneSel: null, lanePicks: {}, laneFocus: null,
 };
@@ -179,6 +179,7 @@ function applyLayers() {
   if (layers.laneMarks) { layers.laneMarks.enabled = state.layers.laneMarks && state.layers.lanes; lastView = ''; }
   if (laneDots) laneDots.visible = state.layers.laneMarks && state.layers.lanes;
   if (layers.context) layers.context.buildings.visible = state.layers.buildings;
+  if (layers.context) layers.context.underground.visible = state.layers.buildings;
   if (layers.ground) layers.ground.grid.visible = state.layers.grid;
   for (const b of document.querySelectorAll('#layerRows [data-layer]')) b.classList.toggle('on', !!state.layers[b.dataset.layer]);
   dirty = true;
@@ -250,6 +251,27 @@ function labelPlaces() {
     el.textContent = p.name;
     host.appendChild(el);
   }
+  // underground structures (P1-041): "Underground: Rajiv Chowk metro station", shown with the buildings layer
+  for (const u of state.under) {
+    const el = document.createElement('div');
+    el.className = 'place under';
+    el.dataset.under = u.id;
+    el.textContent = u.n;
+    host.appendChild(el);
+  }
+}
+
+/** Underground labels show close up only (under 3.5 km) and with the buildings layer; they sit just under the middle so a place label there stays readable. */
+function placeUnderLabels(r, dist) {
+  for (const u of state.under) {
+    const el = document.querySelector(`.place.under[data-under="${CSS.escape(u.id)}"]`);
+    if (!el) continue;
+    const s = state.layers.buildings && dist < 3500 ? project(u.x, 0, u.z) : null;
+    if (!s) { el.style.display = 'none'; continue; }
+    el.style.display = '';
+    el.style.left = `${s.x - r.left}px`;
+    el.style.top = `${s.y - r.top + 26}px`;
+  }
 }
 
 const v3 = new THREE.Vector3();
@@ -286,6 +308,7 @@ function placeLabels() {
     // a place label right under the selection label steps back
     el.style.opacity = sp && Math.abs(s.x - sp.x) < 150 && sp.y - s.y > -16 && sp.y - s.y < 90 ? '0.25' : '';
   }
+  placeUnderLabels(r, camera.position.distanceTo(controls.target));
   const ring = $('#ring');
   const label = $('#selLabel');
   ring.hidden = !sp;
@@ -993,6 +1016,7 @@ async function init() {
   state.source = file.source;
   state.outline = context?.outline ?? [];
   state.names = buildNameIndex(context, state.places);
+  state.under = context?.underground ?? [];
   state.buildings = (context?.buildings ?? []).map((b) => {
     const ring = [];
     for (let k = 0; k + 2 < b.length; k += 3) ring.push([b[k], b[k + 2]]);
@@ -1009,7 +1033,7 @@ async function init() {
   flatGroup.add(layers.ground.group);
   if (context) {
     layers.context = contextLayer(context);
-    flatGroup.add(layers.context.buildings, layers.context.roads);
+    flatGroup.add(layers.context.buildings, layers.context.underground, layers.context.roads);
   }
   buildDots();
   renderList();
@@ -1064,6 +1088,8 @@ window.__inspector = {
   listIds: () => [...document.querySelectorAll('#list .row')].map((r) => r.dataset.id),
   highIds: () => state.issues.filter((i) => isHigh(i) && !state.picks[i.id]).map((i) => i.id),
   places: () => Object.fromEntries(state.places.map((p) => [p.id, project(p.x, 0, p.z)])),
+  /** Underground structures (P1-041): id, label, kind, middle and whether the label is on screen. */
+  underground: () => state.under.map((u) => { const el = document.querySelector(`.place.under[data-under="${CSS.escape(u.id)}"]`); return { id: u.id, label: u.n, kind: u.k, x: u.x, z: u.z, shown: !!el && el.style.display !== 'none' }; }),
   issueScreen: (id) => { const i = state.byId.get(id); return i ? project(i.x, (i.y ?? 0) + 1, i.z) : null; },
   select: (id, opts) => select(id, opts),
   issue: (id) => state.byId.get(id) ?? null,

@@ -35,7 +35,8 @@ import type { GeoBox } from './layout/outline.ts';
 import type { LayoutFile } from './layout/placement.ts';
 import { stageDefs, stagePlan } from './layout/stages.ts';
 import type { DistrictsWithStages, StagePlan } from './layout/stages.ts';
-import { BakeStop, emptyHealth, mapCounts, recordInvariants } from './report/health.ts';
+import { BakeStop, emptyHealth, mapCounts, recordInvariants, undergroundHealth } from './report/health.ts';
+import { issuesRemovedByUnderground } from './report/underground.ts';
 import type { HealthReport } from './report/health.ts';
 import { buildBlockGraph } from './graph/build.ts';
 import type { BlockGraph, GraphInput } from './graph/build.ts';
@@ -275,6 +276,8 @@ export async function bake(args: BakeArgs, opts: BakeOptions): Promise<HealthRep
         footprintMerge: g.footprintSources,
       };
       opts.log(`[graph] built in ${(buildMs / 1000).toFixed(2)} s: ${counts.nodes} nodes, ${counts.edges} edges (${counts.roadKm} km), ${counts.mapEdgeEnds} map edge ends, ${counts.pairs} carriageway pairs on ${counts.pairedStreets} named streets, ${counts.footprints} footprints, ${counts.rail} rail and ${counts.metro} metro lines, ${counts.footBridges} foot bridges, ${counts.water} water areas, ${counts.open} open areas; hash ${report.graph.hash}`);
+      report.underground = undergroundHealth(g.underground, g.undergroundMissing);
+      opts.log(`[graph] ${g.underground.length} underground structures, left out of the footprints (no rule, shell or ground cut): ${g.underground.map((u) => `${u.name} (${u.reason})`).join('; ') || 'none'}${g.undergroundMissing.length ? `; list entries not in this extract: ${g.undergroundMissing.join(', ')}` : ''}`);
       opts.log(`[graph] wrote ${[file, ...pictures].join(', ')}`);
       check(graphInvariants(c, counts));
     } else if (step === 'repair') {
@@ -334,10 +337,13 @@ export async function bake(args: BakeArgs, opts: BakeOptions): Promise<HealthRep
       report.repairs = { auto: s.auto, byRule: autoByRule };
       report.overrides = { ...res.overrideCounts, outsideStage, records: res.overrides };
       report.counts = mapCounts(res);
+      const removed = issuesRemovedByUnderground(graph, env);
+      if (report.underground) report.underground = { ...report.underground, issuesRemoved: { total: removed.total, byRule: removed.byRule, byFeature: removed.byFeature }, overridesRetired: res.overrides.filter((o) => o.outcome === 'underground').map((o) => o.id) };
+      opts.log(`[underground] the class keeps ${removed.total} issues off the raw graph (${Object.entries(removed.byRule).map(([k, v]) => `${k} ${v}`).join(', ') || 'none'}); ${res.overrideCounts.underground} override patches retired (their footprint is underground)`);
       for (const r of s.byRule) if (r.issues) opts.log(`[repair] ${r.rule.padEnd(14)} ${String(r.issues).padStart(5)} issues: ${r.auto} repaired, ${r.queued} queued, ${r.explained} explained${r.overridden ? `, ${r.overridden} settled by overrides` : ''} (${r.title})`);
       opts.log(`[repair] ${s.total} issues in ${s.passes} passes (${(repairMs / 1000).toFixed(2)} s): ${s.auto} repaired on their own (${(s.autoShare * 100).toFixed(1)} percent; ${(s.autoShareOfChanged * 100).toFixed(1)} percent of repaired plus queued; ${(s.withoutTerrainOutliers.autoShare * 100).toFixed(1)} percent without the terrain outlier rule), ${s.queued} queued (${s.highImpact} high impact, ${s.provisionalApplied} top proposals applied as provisional), ${s.explained} explained, ${s.overridden} settled by overrides, ${s.drops} drops logged; a second run applies ${again.repairs.length} repairs`);
       const ov = res.overrideCounts;
-      opts.log(`[overrides] ${ov.patches} patches in ${ov.files} files for this stage (${outsideStage} outside it): ${ov.byId} found by id, ${ov.byAnchor} by anchor, ${ov.stale} stale (kept in their files), ${ov.applied} applied, ${ov.switchedOff} repairs switched off, ${ov.idle} idle; ${ov.issuesSettled} issues settled`);
+      opts.log(`[overrides] ${ov.patches} patches in ${ov.files} files for this stage (${outsideStage} outside it): ${ov.byId} found by id, ${ov.byAnchor} by anchor, ${ov.stale} stale (kept in their files), ${ov.applied} applied, ${ov.switchedOff} repairs switched off, ${ov.idle} idle, ${ov.underground} retired (underground); ${ov.issuesSettled} issues settled`);
       opts.log(`[repair] wrote ${[files.graph, files.issues, files.repairs, ...pictures].join(', ')}`);
       check([
         { id: 'REPAIR-01.fixed_point', ok: again.repairs.length === 0 && s.unconverged === 0, detail: again.repairs.length === 0 && s.unconverged === 0 ? `a second run on the repaired graph applies 0 repairs (${s.passes} passes)` : `a second run applies ${again.repairs.length} repairs (${again.repairs.slice(0, 3).map((x) => x.issue).join(', ')}), ${s.unconverged} issues could still repair after ${s.passes} passes (${Object.entries(s.unconvergedBy).map(([k, v]) => `${k} ${v}`).join(', ')})` },

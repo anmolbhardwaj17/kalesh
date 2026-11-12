@@ -53,6 +53,18 @@ describe.skipIf(missing.length > 0)(`pilot centre block graph${reason ? ` (skipp
     expect(graphHash(g2)).toBe(graphHash(g));
   }, 60000);
 
+  it('classes Rajiv Chowk station and Palika Bazaar underground: no footprint, named features (P1-041)', () => {
+    const g = graph();
+    const ids = new Set(g.footprints.map((f) => f.id));
+    const station = g.underground.find((u) => u.id === 'way/1158884368');
+    expect(station).toMatchObject({ name: 'Rajiv Chowk metro station', kind: 'metro_station', by: 'list' });
+    expect(station.copies).toEqual(['overture/ab2bc8a7-384b-43fd-8a4c-efca59cca7f5']);
+    expect(g.underground.find((u) => u.id === 'way/1393736849')).toMatchObject({ name: 'Palika Bazaar', kind: 'market' });
+    for (const u of g.underground) for (const id of [u.id, ...u.copies]) expect(ids.has(id)).toBe(false);
+    expect(ids.has('way/80429800')).toBe(true); // Chhatta Chowk: layer -1 but at street level (the list's surface entry)
+    expect(g.undergroundMissing).toEqual([]);
+  }, 60000);
+
   it('has no duplicate or zero-length edge, every edge end is a node, every clipped road ends in a map edge end', () => {
     const g = graph();
     const c = checkGraph(g);

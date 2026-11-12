@@ -97,6 +97,19 @@ describe('map inspector page', () => {
     expect(rest.every((i) => !(i.status === 'open' && i.impact >= 0.7))).toBe(true);
   });
 
+  run('shows the underground Rajiv Chowk station as a labelled outline and never as an issue (P1-041)', async () => {
+    const under = await hook(() => window.__inspector.underground());
+    const st = under.find((u) => u.label === 'Underground: Rajiv Chowk metro station');
+    expect(st).toBeTruthy();
+    expect(issuesFile.issues.filter((i) => i.features.some((f) => f === st.id || f.includes('ab2bc8a7')))).toEqual([]);
+    await hook(([x, z]) => window.__inspector.view(x, z, 520), [st.x, st.z]);
+    await flown();
+    await page.waitForTimeout(100);
+    const shown = (await hook(() => window.__inspector.underground())).find((u) => u.id === st.id);
+    expect(shown.shown).toBe(true);
+    await expect.poll(() => page.locator(`.place.under[data-under="${st.id}"]`).isVisible()).toBe(true);
+  }, 30000);
+
   run('north is up: Red Fort is above and right of India Gate, Connaught Place above and left', async () => {
     await page.click('#fit');
     await flown();

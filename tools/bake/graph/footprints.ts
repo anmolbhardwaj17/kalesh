@@ -3,7 +3,8 @@
 // landmark join needs (wikidata, historic, amenity) and leaves out machine-made footprints that touch a road. Our rule:
 // OSM footprints read from OSM itself come first and keep every tag; Overture's machine-made footprints (Microsoft,
 // Google, Esri) follow where they do not cover one already taken; Overture's copies of OSM footprints come last and
-// only fill a gap (an OSM building our extract cut off). Footprints below ground are left out. A footprint belongs to
+// only fill a gap (an OSM building our extract cut off). Footprints below ground are split off before the merge
+// (underground.ts; every Overture row comes back with its level fields in "overture:" tags). A footprint belongs to
 // the stage when its centre is inside the outline. Ids are the source's own: "way/<id>", "relation/<id>" for OSM,
 // "overture/<GERS id>" (plus "#<n>" for the parts of a multipolygon). Pure.
 import { MERGE_DEFAULTS, footprint, mergeFootprints } from '../buildings.ts';
@@ -11,13 +12,18 @@ import type { MergeResult } from '../buildings.ts';
 import { pointInRing } from '../geom.ts';
 import type { P2 } from '../geom.ts';
 import type { Footprint } from '../osm.ts';
+import { overtureBelowGround, overtureTags } from './underground.ts';
 
 /** One row of the Overture buildings file (data/<stage>/overture_buildings.json): only the fields the bake reads. */
 export interface OvertureRow {
   id: string;
-  sources?: { dataset?: string | null; provider?: string | null }[] | null;
+  sources?: { dataset?: string | null; provider?: string | null; record_id?: string | null }[] | null;
+  names?: { primary?: string | null } | null;
+  class?: string | null;
+  level?: number | null;
   height?: number | null;
   num_floors?: number | null;
+  num_floors_underground?: number | null;
   is_underground?: boolean | null;
   geojson: string | { type: string; coordinates: unknown };
 }
@@ -40,20 +46,22 @@ function outerRings(geom: { type: string; coordinates: unknown }): [number, numb
   return [];
 }
 
-/** Overture rows as footprints in block metres (source "overture:<provider>"). */
+/** Overture rows as footprints in block metres (source "overture:<provider>"), every row: the level fields ride in
+ * "overture:" tags for the underground class (underground.ts); `underground` counts the rows those fields put below
+ * ground. */
 export function overtureFootprints(rows: readonly OvertureRow[], project: (lat: number, lon: number) => P2): { list: Footprint[]; underground: number } {
   const list: Footprint[] = [];
   let underground = 0;
+  const n = (v: number | null | undefined): number | null => (typeof v === 'number' ? v : null);
   for (const row of rows) {
-    if (row.is_underground) {
-      underground++;
-      continue;
-    }
+    const fields = { record: row.sources?.[0]?.record_id ?? null, level: n(row.level), isUnderground: row.is_underground === true, floors: n(row.num_floors), floorsUnderground: n(row.num_floors_underground), name: row.names?.primary ?? null, cls: row.class ?? null };
+    if (overtureBelowGround(fields)) underground++;
+    const tags = overtureTags(fields);
     const geom = typeof row.geojson === 'string' ? (JSON.parse(row.geojson) as { type: string; coordinates: unknown }) : row.geojson;
     const rings = outerRings(geom);
     rings.forEach((ring, i) => {
       const pts = ring.map(([lon, lat]) => project(lat, lon));
-      const f = footprint(i === 0 ? `overture/${row.id}` : `overture/${row.id}#${i}`, `overture:${overtureProvider(row)}`, pts, {}, typeof row.height === 'number' ? row.height : null, typeof row.num_floors === 'number' ? row.num_floors : null);
+      const f = footprint(i === 0 ? `overture/${row.id}` : `overture/${row.id}#${i}`, `overture:${overtureProvider(row)}`, pts, tags, n(row.height), n(row.num_floors));
       if (f) list.push(f);
     });
   }
