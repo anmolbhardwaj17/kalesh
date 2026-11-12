@@ -366,3 +366,4 @@ One line per event, written by task.mjs (start, done, fail, phase changes, inbox
 - 2026-11-12 08:00 [P1-016] start (attempt 1): Tile writer: production KTL1, the world grid cutter and collider chunks
 - 2026-11-12 08:48 [P1-038] added: Faster npm test: share one pilot bake across the pilot tests
 - 2026-11-12 09:00 [P1-016] done: Production KTL1 writer: 417 pilot tiles, 358 MB, average 0.86 MB, largest 2.11 MB; round trip within 1e-6; collider vs drawn surface 1,000 points in 5 tiles, 0 holes, largest 0.02 m; 57,056 ITO deck rays, 0 misses; largest collider chunk 500 triangles; fixture from the production writer, GDScript reader passes. Self-check: typecheck, 720 vitest, 72 Godot, full offline bake, quick OK.
+- 2026-11-12 09:00 [P1-017] start (attempt 1): Pilot centre base bake, end to end, with the gate counts
