@@ -193,8 +193,10 @@ export async function launchGame(opts = {}) {
   const onOut = lineSplitter((l) => { log.push(stripAnsi(l)); opts.onLog?.(stripAnsi(l)); });
   proc.stdout.on('data', onOut);
   proc.stderr.on('data', onOut);
-  const exited = new Promise((resolve) => proc.on('exit', (code, signal) => resolve(code ?? (signal ? 1 : 0))));
-  const run = { proc, port, args, log, exited, client: null, binary: g.path };
+  const run = { proc, port, args, log, exited: null, exitSignal: null, client: null, binary: g.path };
+  // exitSignal names the signal of a run that was killed or crashed (SIGABRT, SIGSEGV), so a crash is told from a quit.
+  const exited = new Promise((resolve) => proc.on('exit', (code, signal) => { run.exitSignal = signal || null; resolve(code ?? (signal ? 1 : 0)); }));
+  run.exited = exited;
   if (opts.debug === false) return run;
   const client = new GodotDebugClient();
   try {

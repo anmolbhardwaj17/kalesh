@@ -24,7 +24,7 @@ const COMPOSITE := {
 }
 const METHODS := [
 	"ping", "state", "clock", "frames", "input", "perf", "load", "teleport", "setCamera", "timeScale", "hold",
-	"events", "hud", "shot", "quality", "timeOfDay", "bench", "quit",
+	"events", "hud", "shot", "quality", "timeOfDay", "bench", "stream", "quit",
 ]
 const QUALITY_PRESETS := ["low", "medium", "high"]
 
@@ -209,7 +209,9 @@ func _call(method: String, a: Array) -> Dictionary:
 				return _fail("load(id): id must be a string")
 			return await _load(a[0])
 		"teleport":
-			return _ok(_teleport(a[0] if a.size() > 0 else null))
+			return _ok(await _teleport(a[0] if a.size() > 0 else null))
+		"stream":
+			return await _stream_probe().hook(a)
 		"setCamera":
 			return _set_camera(a[0] if a.size() > 0 else null)
 		"hud":
@@ -318,7 +320,7 @@ func state() -> Dictionary:
 		var look := -cam.global_transform.basis.z
 		camera = {"pos": [cp.x, cp.y, cp.z], "dir": [look.x, look.y, look.z], "fov": cam.fov,
 			"override": _camera != null and cam == _camera}
-	var block := get_tree().get_first_node_in_group("tile_block")
+	var block := get_tree().get_first_node_in_group("world_stream")
 	return {
 		"scene": id, "level": id, "milestone": null, "player": player, "camera": camera, "hud": _hud_on,
 		"world": block.info() if block != null else null,
@@ -431,18 +433,28 @@ func _load(id: String) -> Dictionary:
 	await get_tree().process_frame
 	await _frame_signal()
 	await _frame_signal()
+	if _args().tiles != "" and get_tree().current_scene != null and get_tree().current_scene.get_node_or_null("World/Car") != null:
+		_args().attach_tiles() # the scaffold's car streams the --tiles folder again; the answer waits for its first ring
+		while not _args().world_ready:
+			await get_tree().process_frame
 	_events().emit_event("scene:load", {"id": id})
 	return _ok({"scene": _args().current_scene_id()})
 
 
-## Staging only (never in a milestone play script): puts the player at [x, y, z] (y is ignored, the car is on the
-## ground) and stops it. Names are anchors in the group "anchor"; there are none yet, so a name returns false.
+## Staging only (never in a milestone play script): puts the player at [x, y, z] and stops it. On the scaffold y is
+## ignored (the car is on the flat ground). In the streamed city it answers only when the ring round the target is
+## attached with its colliders and the player stands on the ground there (game/world/world_stream.gd teleport).
+## Names are anchors in the group "anchor"; there are none yet, so a name returns false.
 func _teleport(where: Variant) -> bool:
 	var p := get_tree().get_first_node_in_group("player") as Node3D
 	if p == null:
 		return false
 	if where is Array and where.size() == 3:
-		if p.has_method("place"):
+		var city := get_tree().get_first_node_in_group("world_stream")
+		if city != null:
+			if not await city.teleport(p, Vector3(float(where[0]), float(where[1]), float(where[2]))):
+				return false
+		elif p.has_method("place"):
 			p.place(float(where[0]), float(where[2]))
 		else:
 			p.global_position = Vector3(float(where[0]), float(where[1]), float(where[2]))
@@ -452,7 +464,7 @@ func _teleport(where: Variant) -> bool:
 		for a in get_tree().get_nodes_in_group("anchor"):
 			if a is Node3D and a.name == where:
 				var ap: Vector3 = a.global_position
-				return _teleport([ap.x, ap.y, ap.z])
+				return await _teleport([ap.x, ap.y, ap.z])
 	return false
 
 
@@ -553,7 +565,17 @@ func _renderer() -> Dictionary:
 
 
 func _ready_now() -> bool:
-	return _frame_no() > 0 and get_tree().current_scene != null
+	return _frame_no() > 0 and get_tree().current_scene != null and _args().world_ready
+
+
+## The streamed city's probes (stream_probe.gd: info, path, record, probe, mem), made on first use.
+func _stream_probe() -> Node:
+	var probe := get_node_or_null("StreamProbe")
+	if probe == null:
+		probe = load("res://debug/stream_probe.gd").new()
+		probe.name = "StreamProbe"
+		add_child(probe)
+	return probe
 
 
 func _version() -> String:

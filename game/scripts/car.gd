@@ -8,7 +8,7 @@ const CarModel := preload("res://scripts/car_model.gd")
 
 var model := CarModel.new()
 ## Height of the ground under the car (the kinematic stand-in does not follow terrain): 0 on the scaffold, the spawn lane's
-## height on a tile block (game/world/block_loader.gd).
+## height in the streamed city (game/world/world_stream.gd), the ground under a teleport.
 var ground_y := 0.0
 
 

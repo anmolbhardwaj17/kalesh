@@ -128,7 +128,30 @@
     {
       "path": "game/world/",
       "scenarios": [
-        "tiles_test_block_drive"
+        "tiles_test_block_drive",
+        "stream_teleport",
+        "hooks_contract"
+      ]
+    },
+    {
+      "path": "game/debug/stream_probe.gd",
+      "scenarios": [
+        "tiles_test_block_drive",
+        "stream_teleport"
+      ]
+    },
+    {
+      "path": "game/geo/world_frame.gd",
+      "scenarios": [
+        "tiles_test_block_drive",
+        "stream_teleport",
+        "coords_north_marker"
+      ]
+    },
+    {
+      "path": "harness/data/fixtures/stream_routes.json",
+      "scenarios": [
+        "stream_teleport"
       ]
     }
   ]
