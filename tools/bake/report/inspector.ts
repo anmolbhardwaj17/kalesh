@@ -5,6 +5,7 @@
 import { pointInRing } from '../geom.ts';
 import type { P2 } from '../geom.ts';
 import type { BlockGraph } from '../graph/build.ts';
+import { undergroundLabel } from '../graph/underground.ts';
 
 const r1 = (v: number): number => Math.round(v * 10) / 10 + 0;
 
@@ -19,6 +20,8 @@ export interface InspectorContext {
   buildings: number[][];
   /** Footprints with a name (P1-039): id, name, centre and a kind word (station, temple, building) for the inspector's labels. */
   named: { id: string; n: string; x: number; z: number; k: string }[];
+  /** Underground structures (P1-041): id, label ("Underground: Rajiv Chowk metro station"), kind, middle and the ring as one flat x, y, z list. Drawn dashed, never an issue. */
+  underground?: { id: string; n: string; k: string; x: number; z: number; p: number[] }[];
 }
 
 /** One word for what a named footprint is, from its tags. */
@@ -47,6 +50,10 @@ export function inspectorContext(graph: BlockGraph, offset: P2, outline: readonl
     named: graph.footprints.filter((f) => f.tags['name']).map((f) => {
       const c = f.ring.reduce((a, q) => ({ x: a.x + q.x / f.ring.length, z: a.z + q.z / f.ring.length }), { x: 0, z: 0 });
       return { id: f.id, n: String(f.tags['name']), x: r1(c.x + offset.x), z: r1(c.z + offset.z), k: footprintKind(f.tags as Record<string, string | undefined>) };
+    }),
+    underground: (graph.underground ?? []).map((u) => {
+      const c = u.ring.reduce((a, q) => ({ x: a.x + q.x / u.ring.length, z: a.z + q.z / u.ring.length }), { x: 0, z: 0 });
+      return { id: u.id, n: undergroundLabel(u), k: u.kind, x: r1(c.x + offset.x), z: r1(c.z + offset.z), p: u.ring.flatMap(world) };
     }),
   };
 }

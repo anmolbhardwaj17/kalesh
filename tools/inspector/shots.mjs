@@ -1,5 +1,6 @@
 #!/usr/bin/env node
-// Screenshots of the map inspector at Connaught Place and ITO, at 1280 and 1920 px wide (P1-039); P1-025 adds the lanes tab at each place.
+// Screenshots of the map inspector at Connaught Place and ITO, at 1280 and 1920 px wide (P1-039); P1-025 adds the lanes tab at each place,
+// P1-041 the underground Rajiv Chowk station (dashed, labelled) under the CP inner circle.
 //   node tools/inspector/shots.mjs [--prefix after] [--out harness/reports/inspector]
 // Uses the production report (harness/reports/map/) and a temp overrides folder and inbox, so nothing real is written.
 // Each place: the high impact issue nearest to it is selected (the map flies there), then the view zooms out a little
@@ -57,6 +58,19 @@ try {
       const file = path.join(out, `${prefix}_${tag}_${w}.png`);
       await page.screenshot({ path: file });
       console.log(file);
+    }
+    // the underground structures (P1-041): the Rajiv Chowk station under the CP inner circle, dashed and labelled
+    const under = await page.evaluate(() => window.__inspector.underground?.() ?? []);
+    const station = under.find((u) => /Rajiv Chowk/.test(u.label));
+    if (station) {
+      await page.evaluate(([x, z]) => window.__inspector.view(x, z, 520), [station.x, station.z]);
+      await page.waitForFunction(() => !window.__inspector.state().flying);
+      await page.mouse.move(5, 5);
+      await page.waitForTimeout(500);
+      const file = path.join(out, `${prefix}_underground_cp_${w}.png`);
+      await page.screenshot({ path: file });
+      const shown = (await page.evaluate(() => window.__inspector.underground())).filter((u) => u.shown).map((u) => u.label);
+      console.log(`${file} (labels on screen: ${shown.join('; ')})`);
     }
     if (unnamed) {
       // a click on its card, as Anmol does it, and no zoom: the frame the page picks

@@ -92,6 +92,8 @@ button { font: inherit; cursor: pointer; color: inherit; }
 .labels { pointer-events: none; overflow: hidden; }
 .place { position: absolute; transform: translate(-50%, -50%); display: flex; align-items: center; gap: 6px; padding: 3px 9px 3px 7px; border-radius: 6px; background: rgba(17, 13, 10, .78); border: 1px solid rgba(246, 239, 228, .14); font-size: 11.5px; font-weight: 600; letter-spacing: .01em; color: var(--ink); white-space: nowrap; }
 .place::before { content: ""; width: 7px; height: 7px; background: var(--accent); transform: rotate(45deg); flex: none; }
+.place.under { color: #cfe2f3; border: 1px dashed rgba(156, 195, 230, .7); background: rgba(14, 16, 20, .82); font-weight: 500; }
+.place.under::before { background: none; border: 1.5px dashed #9cc3e6; width: 6px; height: 6px; }
 .ring { position: absolute; width: 34px; height: 34px; margin: -17px 0 0 -17px; border: 2.5px solid var(--accent); border-radius: 50%; pointer-events: none; box-shadow: 0 0 0 2px rgba(17, 13, 10, .9), 0 0 18px rgba(255, 178, 36, .55); }
 .ring i { position: absolute; inset: -9px; border: 2px solid var(--accent); border-radius: 50%; animation: pulse 1.6s ease-out infinite; }
 @keyframes pulse { from { transform: scale(.55); opacity: .9; } to { transform: scale(1.6); opacity: 0; } }

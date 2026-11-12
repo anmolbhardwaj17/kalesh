@@ -19,6 +19,8 @@ import type { Features } from './features.ts';
 import { mergeStageFootprints, overtureFootprints } from './footprints.ts';
 import type { OvertureRow } from './footprints.ts';
 import { PAIR_CLASSES, pairCarriageways } from './pairs.ts';
+import { EMPTY_UNDERGROUND_LIST, splitUnderground } from './underground.ts';
+import type { UndergroundFeature, UndergroundList } from './underground.ts';
 import type { PairEdge } from './pairs.ts';
 import { cutAndJoin, draftPoints, throughHints } from './topology.ts';
 import type { Draft, Run } from './topology.ts';
@@ -118,6 +120,10 @@ export interface BlockGraph {
   pairs: GraphPair[];
   footprints: GraphFootprint[];
   footprintSources: ReturnType<typeof mergeStageFootprints>['bySource'];
+  /** Underground structures (graph/underground.ts, P1-041): not footprints, so no rule, shell or ground cut sees them. */
+  underground: UndergroundFeature[];
+  /** Entries of the underground list (harness/data/underground.json) this extract does not have. */
+  undergroundMissing: string[];
   features: Features;
   normalised: Normalised;
   /** Clip crossings: every one must end in a map edge node. */
@@ -134,6 +140,8 @@ export interface GraphInput {
   overture: readonly OvertureRow[];
   /** Tests only: a plain projection in place of the block projection around `origin`. */
   project?: (lat: number, lon: number) => P2;
+  /** harness/data/underground.json (footprints below ground or on the ground whatever their tags say). */
+  underground?: UndergroundList;
 }
 
 const r3 = (v: number): number => Math.round(v * 1000) / 1000 + 0;
@@ -324,20 +332,21 @@ export function buildBlockGraph(input: GraphInput): BlockGraph {
   nodes.sort((a, b) => (a.id < b.id ? -1 : a.id > b.id ? 1 : 0));
 
   // footprints, features
+  const features = readFeatures(input.elements, (id) => map.nodes.get(id), ring);
   const ov = overtureFootprints(input.overture, project);
-  const fp = mergeStageFootprints(map.buildings, ov.list, ring, map.underground, ov.underground);
+  const ug = splitUnderground({ osm: map.buildings, osmBelow: map.belowGround, overture: ov.list, list: input.underground ?? EMPTY_UNDERGROUND_LIST, elements: input.elements, node: (id) => map.nodes.get(id), ring, stations: features.stations });
+  const fp = mergeStageFootprints(ug.osm, ug.overture, ring, map.underground, ov.underground);
   const KEEP_TAGS = ['building', 'name', 'wikidata', 'historic', 'amenity', 'height', 'building:levels'];
   const footprints: GraphFootprint[] = fp.footprints.map((f) => {
     const tags: Record<string, string> = {};
     for (const k of KEEP_TAGS) if (f.tags[k] !== undefined) tags[k] = f.tags[k] as string;
     return { id: f.id, source: f.source, ring: f.ring.map((p) => ({ x: Math.round(p.x * 100) / 100 + 0, z: Math.round(p.z * 100) / 100 + 0 })), area: Math.round(f.area * 10) / 10, height: f.height, levels: f.levels, tags };
   });
-  const features = readFeatures(input.elements, (id) => map.nodes.get(id), ring);
   roundFeatures(features);
 
   return {
     version: GRAPH_VERSION, block: input.block, stage: input.stage, origin: { lat: input.origin.lat, lon: input.origin.lon }, outline: ring.map(rp),
-    nodes, edges, pairs, footprints, footprintSources: fp.bySource, features,
+    nodes, edges, pairs, footprints, footprintSources: fp.bySource, underground: ug.features, undergroundMissing: ug.missing, features,
     normalised: { snappedNodes: norm.snapped, duplicateWays: norm.duplicates, degenerateWays: norm.degenerate, nicks: clip.nicks, excursions: clip.excursions, footways: map.footways },
     crossings: clip.crossings.map((c) => rp(c)),
   };

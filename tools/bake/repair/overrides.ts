@@ -5,16 +5,21 @@
 // A resolved patch is applied by the one patch applier of the repair layer (apply.ts), the same one an automatic
 // repair uses, and it takes the place of the repair of its issue: that issue is marked overridden. A patch with the
 // action disable_repair switches off the repair of its issue instead of changing the map. Pure: the files are read
-// by tools/bake/sources/overridesio.ts.
+// by tools/bake/sources/overridesio.ts. A patch on an underground structure (graph/underground.ts, P1-041) is retired:
+// the class already takes the structure out of every building rule, so the patch is kept in its file, listed in the
+// health report with the outcome "underground" and not applied.
 import type { P2 } from '../geom.ts';
 import type { BlockGraph } from '../graph/build.ts';
 import { projectOn } from '../rules/context.ts';
 import type { Issue, Params, Patch } from '../rules/types.ts';
 
-export type Resolution = 'by_id' | 'by_anchor' | 'stale';
+export type Resolution = 'by_id' | 'by_anchor' | 'stale' | 'underground';
 
-/** What became of a patch in the bake: fixed (applied), kept (a repair switched off), idle (nothing asked for it), stale. */
-export type OverrideOutcome = 'fixed' | 'kept' | 'idle' | 'stale';
+/** What became of a patch in the bake: fixed (applied), kept (a repair switched off), idle (nothing asked for it), stale, underground (retired: its footprint is an underground structure). */
+export type OverrideOutcome = 'fixed' | 'kept' | 'idle' | 'stale' | 'underground';
+
+/** A patch the engine does not apply: its target is gone, or it is an underground structure. */
+export const unresolved = (o: { resolution: Resolution }): boolean => o.resolution === 'stale' || o.resolution === 'underground';
 
 export interface OverrideEntry {
   /** The file name the patch came from ("<tileX>_<tileZ>.json"). */
@@ -74,6 +79,8 @@ interface Index {
   stations: Set<string>;
   /** "way/<id>" (the source id the Phase 0 samples name roads by) to the first graph edge cut from that way. */
   ways: Map<string, string>;
+  /** Ids of underground structures and their copies, to the structure's name. */
+  underground: Map<string, string>;
 }
 
 function indexOf(g: BlockGraph): Index {
@@ -83,7 +90,9 @@ function indexOf(g: BlockGraph): Index {
     const key = m ? `way/${m[1]}` : '';
     if (key && (!ways.has(key) || e.id < (ways.get(key) as string))) ways.set(key, e.id);
   }
-  return { edges: new Set(g.edges.map((e) => e.id)), footprints: new Set(g.footprints.map((f) => f.id)), stations: new Set((g.features.stations ?? []).map((s) => s.id)), ways };
+  const underground = new Map<string, string>();
+  for (const u of g.underground ?? []) for (const id of [u.id, ...u.copies]) underground.set(id, u.name);
+  return { edges: new Set(g.edges.map((e) => e.id)), footprints: new Set(g.footprints.map((f) => f.id)), stations: new Set((g.features.stations ?? []).map((s) => s.id)), ways, underground };
 }
 
 /** The id this graph knows a patch id by: itself, or the edge cut from the way it names; null when it is not here. */
@@ -149,6 +158,8 @@ export function resolveOverride(g: BlockGraph, entry: OverrideEntry, project: (l
   const patch = entry.patch;
   const ids = patch.target.ids;
   const base = { entry, applied: false, issues: [] as string[] };
+  const named = [...ids, ...['on', 'building'].flatMap((k) => String(patch.params[k] ?? '').split(','))].map((t) => t.trim()).find((t) => ix.underground.has(t));
+  if (named !== undefined) return { ...base, resolution: 'underground', targets: [], patch, note: `${named} is ${ix.underground.get(named)}, an underground structure: no building rule sees it, so this patch is not needed and not applied` };
   const hints = String(patch.params['kinds'] ?? '').split(',');
   const found = ids.map((id) => known(ix, id));
   const taken = new Set(found.filter((f): f is string => f !== null));
@@ -189,8 +200,9 @@ export function resolveOverrides(g: BlockGraph, entries: readonly OverrideEntry[
  * features (the ids of the issue changed because the extract did, the place did not).
  */
 export function overrideMatches(o: ResolvedOverride, issue: Pick<Issue, 'id' | 'rule' | 'features'>): boolean {
+  if (o.resolution === 'underground') return false;
   if (o.entry.patch.issue === issue.id) return true;
-  if (o.resolution === 'stale' || !o.targets.length) return false;
+  if (unresolved(o) || !o.targets.length) return false;
   if (o.entry.patch.issue.split(':')[0] !== issue.rule) return false;
   const has = (t: string): boolean => issue.features.some((f) => f === t || f.startsWith(`${t}/`) || t.startsWith(`${f}/`));
   return o.targets.every(has);
@@ -208,6 +220,7 @@ export function overrideRecords(list: readonly ResolvedOverride[], failed: Reado
     let outcome: OverrideOutcome;
     let note = o.note;
     if (o.resolution === 'stale') outcome = 'stale';
+    else if (o.resolution === 'underground') outcome = 'underground';
     else if (refused !== undefined) {
       outcome = 'stale';
       note = `${o.note ? `${o.note}; ` : ''}the patch no longer fits: ${refused}`;
@@ -231,6 +244,8 @@ export interface OverrideCounts {
   idle: number;
   /** Issues settled by a patch (status overridden). */
   issuesSettled: number;
+  /** Patches retired because their footprint is an underground structure (kept in their files, not applied). */
+  underground: number;
 }
 
 export function overrideCounts(records: readonly OverrideRecord[], issuesSettled: number): OverrideCounts {
@@ -244,5 +259,6 @@ export function overrideCounts(records: readonly OverrideRecord[], issuesSettled
     switchedOff: records.filter((r) => r.outcome === 'kept').length,
     idle: records.filter((r) => r.outcome === 'idle').length,
     issuesSettled,
+    underground: records.filter((r) => r.outcome === 'underground').length,
   };
 }

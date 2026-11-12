@@ -17,6 +17,9 @@ export const MAP = {
   edge: 0xffb224,
 };
 
+/** Underground structures (P1-041): a cool steel blue no issue or lane colour uses, dashed. */
+export const UNDERGROUND = { line: 0x9cc3e6, fill: 0x9cc3e6, fillOpacity: 0.07, css: '#9cc3e6' };
+
 /** Context roads (OSM plan) by class: wider and lighter for the big roads. */
 export const ROAD_FILL = { motorway: 0x5e584e, trunk: 0x5e584e, primary: 0x58534a, secondary: 0x514c44, tertiary: 0x4a4640, unclassified: 0x44413b, residential: 0x423f39, living_street: 0x403d37, service: 0x3a3732, pedestrian: 0x3d3833 };
 export const MAJOR = new Set(['motorway', 'trunk', 'primary', 'secondary', 'motorway_link', 'trunk_link', 'primary_link']);

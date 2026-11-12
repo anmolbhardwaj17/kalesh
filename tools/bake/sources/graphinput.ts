@@ -4,6 +4,8 @@ import fs from 'node:fs';
 import path from 'node:path';
 import type { GraphInput } from '../graph/build.ts';
 import type { OvertureRow } from '../graph/footprints.ts';
+import { EMPTY_UNDERGROUND_LIST } from '../graph/underground.ts';
+import type { UndergroundList } from '../graph/underground.ts';
 import type { StagePlan } from '../layout/stages.ts';
 import type { OsmElement } from '../osm.ts';
 import { loadSources } from './pinfile.ts';
@@ -20,7 +22,19 @@ export function readGraphInput(root: string, plan: StagePlan): GraphInput {
   };
   const osm = JSON.parse(fs.readFileSync(fileOf('osm'), 'utf8')) as { elements: OsmElement[] };
   const overture = JSON.parse(fs.readFileSync(fileOf('overture_buildings'), 'utf8')) as OvertureRow[];
-  return { block: plan.def.block, stage: plan.id, origin: plan.origin, outline: plan.outline.coords, elements: osm.elements, overture };
+  return { block: plan.def.block, stage: plan.id, origin: plan.origin, outline: plan.outline.coords, elements: osm.elements, overture, underground: readUndergroundList(root) };
+}
+
+/** harness/data/underground.json: the underground list (P1-041). Empty lists when the file is missing; throws on a bad entry. */
+export function readUndergroundList(root: string): UndergroundList {
+  const file = path.join(root, 'harness', 'data', 'underground.json');
+  if (!fs.existsSync(file)) return EMPTY_UNDERGROUND_LIST;
+  const raw = JSON.parse(fs.readFileSync(file, 'utf8')) as Partial<UndergroundList>;
+  const list: UndergroundList = { underground: raw.underground ?? [], surface: raw.surface ?? [] };
+  for (const e of [...list.underground, ...list.surface]) {
+    if (typeof e.id !== 'string' || !/^(way|relation|overture)\//.test(e.id) || typeof e.why !== 'string' || !e.why) throw new Error(`harness/data/underground.json: entry ${JSON.stringify(e)} needs an id (way/, relation/ or overture/) and a why`);
+  }
+  return list;
 }
 
 /** Writes the graph JSON (a build product under the stage's data folder) and returns its repo-relative path. */

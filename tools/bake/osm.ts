@@ -2,6 +2,7 @@
 // class, layer and width, building footprints, open ground. Pure: the caller reads the file and passes a projection.
 import { boxOf, openRing, polylineLength, ringArea, ringCentroid } from './geom.ts';
 import type { Box2, P2 } from './geom.ts';
+import { osmBelowGround } from './graph/underground.ts';
 
 export interface OsmElement {
   type: 'node' | 'way' | 'relation';
@@ -70,8 +71,10 @@ export interface MapData {
   /** Ways with a highway tag that are not carriageways (footways, steps, paths, cycleways). */
   footways: number;
   buildings: Footprint[];
-  /** Footprints left out because they are below ground (layer under 0 or location=underground): metro halls, subways. */
+  /** Footprints left out because their tags put them below ground (graph/underground.ts osmBelowGround): metro halls, subways. */
   underground: number;
+  /** Those footprints, for the underground class of the block graph (graph/underground.ts). */
+  belowGround: Footprint[];
   open: OpenGround[];
   /** Road ways per node id: the degree of a node in the road graph. */
   roadsAtNode: Map<number, Road[]>;
@@ -148,16 +151,14 @@ export function buildMap(elements: readonly OsmElement[], project: (lat: number,
     }
     return out;
   };
-  const map: MapData = { nodes, roads: [], footways: 0, buildings: [], underground: 0, open: [], roadsAtNode: new Map() };
+  const map: MapData = { nodes, roads: [], footways: 0, buildings: [], underground: 0, belowGround: [], open: [], roadsAtNode: new Map() };
   const footprint = (id: string, ringIds: readonly number[], tags: Tags): void => {
     const ring = openRing(ptsOf(ringIds));
     if (ring.length < 3) return;
-    if ((num(tags['layer']) ?? 0) < 0 || tags['location'] === 'underground') {
-      map.underground++;
-      return;
-    }
     const levels = num(tags['building:levels']);
-    map.buildings.push({ id, source: 'osm', ring, area: Math.abs(ringArea(ring)), centre: ringCentroid(ring), box: boxOf(ring), tags, height: num(tags['height']), levels });
+    const below = osmBelowGround(tags) !== null;
+    if (below) map.underground++;
+    (below ? map.belowGround : map.buildings).push({ id, source: 'osm', ring, area: Math.abs(ringArea(ring)), centre: ringCentroid(ring), box: boxOf(ring), tags, height: num(tags['height']), levels });
   };
   for (const w of ways.values()) {
     const tags = w.tags ?? {};
@@ -218,6 +219,7 @@ export function buildMap(elements: readonly OsmElement[], project: (lat: number,
   }
   map.roads.sort((a, b) => (a.id < b.id ? -1 : a.id > b.id ? 1 : 0));
   map.buildings.sort((a, b) => (a.id < b.id ? -1 : a.id > b.id ? 1 : 0));
+  map.belowGround.sort((a, b) => (a.id < b.id ? -1 : a.id > b.id ? 1 : 0));
   return map;
 }
 
