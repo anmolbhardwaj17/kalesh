@@ -4,7 +4,7 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import type { SiteTile } from '../mesh/meshout.ts';
-import { encodeT1 } from '../tile.ts';
+import { encodeT1 } from '../tile/codec.ts';
 
 /** Writes one site's tile and poses and returns their repo-relative (or absolute, outside root) paths. */
 export function writeSiteTile(root: string, dir: string, site: SiteTile): { tile: string; poses: string; bytes: number } {

@@ -7,7 +7,7 @@
 // road triangles is clipped against each other, checks.ts), and the fallback is the plain polygon of junction.ts.
 import type { P2 } from '../geom.ts';
 import type { Road } from '../osm.ts';
-import type { MeshData, Placement, TileContent } from '../tile.ts';
+import type { MeshData, Placement, TileContent } from '../tile/codec.ts';
 import { checkContinuity, checkEdgeColliders, checkHeights, checkOverlap, checkTapers, surfaceArea } from './checks.ts';
 import type { ColliderCheck, ContinuityCheck, HeightCheck, OverlapCheck, TaperCheck } from './checks.ts';
 import { lerp, selfCrossing } from './curve.ts';

@@ -3,7 +3,7 @@
 // Phase 0 stitch bench (tools/bake/stitch/checks.ts): a landmark now names its block, not an island district. Pure.
 import type { LatLon } from '../../geo/projection.ts';
 import type { P2 } from '../geom.ts';
-import { decodeT1 } from '../tile.ts';
+import { decodeT1 } from '../tile/codec.ts';
 import { layoutPair } from './geodesic.ts';
 import type { LayoutPair } from './geodesic.ts';
 import { placer } from './placement.ts';

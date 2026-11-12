@@ -2,10 +2,10 @@
 // for the checks and the terrain) plus the faces that follow from them: kerb faces between lanes of different
 // height, parapets and side walls on structures, deck undersides, piers, lane markings. Kerbs, parapets and walls
 // come from the same lane borders as the carriageway, so the collider (all of these triangles) matches the drawn
-// surface by construction. Godot winding and normals are handled by tile.ts MeshBuilder.
+// surface by construction. Godot winding and normals are handled by tile/standin.ts MeshBuilder.
 import type { P2 } from '../geom.ts';
-import { MeshBuilder } from '../tile.ts';
-import type { ColliderChunk, MeshData } from '../tile.ts';
+import { MeshBuilder } from '../tile/standin.ts';
+import type { ColliderChunk, MeshData } from '../tile/codec.ts';
 import { area2, lerp, smoothstep } from './curve.ts';
 import { DECK_DEPTH, KERB_RAISE, PARAPET_RAISE } from './model.ts';
 import type { Junction, LaneDef, LaneType, Station, Strip } from './model.ts';

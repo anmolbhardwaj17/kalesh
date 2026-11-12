@@ -20,7 +20,7 @@ import fs from 'node:fs';
 import path from 'node:path';
 import sharp from 'sharp';
 import { fitGround } from '../../tools/bake/ground.ts';
-import { encodeT1 } from '../../tools/bake/tile.ts';
+import { encodeT1 } from '../../tools/bake/tile/codec.ts';
 import { buildSite, modelSummary } from '../../tools/bake/roads/site.ts';
 import { specRefProblems } from '../../tools/bake/roads/hero.ts';
 import { borderPoint } from '../../tools/bake/roads/mesh.ts';

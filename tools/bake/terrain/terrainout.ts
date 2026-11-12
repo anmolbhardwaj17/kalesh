@@ -4,7 +4,7 @@
 import { hashText } from '../graph/checks.ts';
 import type { SitePose } from '../mesh/meshout.ts';
 import type { InvariantResult } from '../report/health.ts';
-import type { MeshData } from '../tile.ts';
+import type { MeshData } from '../tile/codec.ts';
 import { emitGround } from './build.ts';
 import type { Ground } from './build.ts';
 import type { TerrainChecks } from './checks.ts';

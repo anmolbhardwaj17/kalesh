@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
-import { encodeT1 } from '../bake/tile.ts';
-import type { TileContent } from '../bake/tile.ts';
+import { encodeT1 } from '../bake/tile/codec.ts';
+import type { TileContent } from '../bake/tile/codec.ts';
 import { HIGH_IMPACT, buildPatch, filterIssues, inboxText, isHigh, isNodeId, mergePatch, nextPatchId, overrideFileName, sortIssues, worldTile } from './lib.ts';
 import type { IssueRecord, Proposal } from './lib.ts';
 import { readKtl1 } from './ktl1.ts';

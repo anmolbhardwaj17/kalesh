@@ -10,6 +10,7 @@ import type { ElevationRecord } from '../elevation/elevout.ts';
 import type { LanesRecord } from '../roads/laneout.ts';
 import type { MeshRecord } from '../mesh/meshout.ts';
 import type { TerrainRecord } from '../terrain/terrainout.ts';
+import type { TilesRecord } from '../tile/tilesout.ts';
 
 export const HEALTH_VERSION = 8;
 
@@ -98,7 +99,8 @@ export interface HealthReport {
   invariants: InvariantResult[];
   /** True when an invariant failed: no tile was written. */
   stoppedBeforeTiles: boolean;
-  tiles: { written: number; out: string | null; only: string[] | null };
+  /** The tile step (tools/bake/tile/): what was written, where, the checks on the bytes read back; record is null until it runs. */
+  tiles: { written: number; out: string | null; only: string[] | null; record?: TilesRecord };
 }
 
 export interface OverrideHealth extends OverrideCounts {

@@ -1,14 +1,14 @@
 import { describe, expect, it } from 'vitest';
-import raw from '../../harness/data/fixtures/tile_t1_sample.json?raw';
-import { sampleTile } from './testmap';
-import { encodeT1, tileStats } from './tile';
+import raw from '../../../harness/data/fixtures/tile_t1_sample.json?raw';
+import { decodeContent } from './codec';
+import { sampleProductionTile } from './sample';
 
 // harness/data/fixtures/tile_t1_sample.json is the cross-check for the GDScript tile reader
-// (game/bench/tiles/tile_t1.gd, game/tests/test_tiles.gd). It must stay in step with the TypeScript encoder:
+// (game/bench/tiles/tile_t1.gd, game/tests/test_tiles.gd). It must stay in step with the production tile writer:
 // regenerate with `node tools/fixtures/gen_tile_fixture.mjs`.
 interface Fixture {
   bytes: number;
-  expect: { triangles: number; colliderTriangles: number; placements: number };
+  expect: { triangles: number; colliderTriangles: number; colliderChunks: number; lanes: number; pins: number };
   base64: string;
 }
 const fixture = JSON.parse(raw) as Fixture;
@@ -29,11 +29,13 @@ function base64(bytes: Uint8Array): string {
 }
 
 describe('T1 tile fixture for the GDScript reader', () => {
-  it('is what the TypeScript encoder writes for the sample tile', () => {
-    const tile = sampleTile();
-    const bytes = encodeT1(tile);
+  it('is what the production tile writer writes for the sample tile', () => {
+    const { bytes, record } = sampleProductionTile();
     expect(bytes.length).toBe(fixture.bytes);
     expect(base64(bytes)).toBe(fixture.base64);
-    expect(fixture.expect).toMatchObject(tileStats(tile));
+    expect(fixture.expect).toMatchObject({ triangles: record.triangles, colliderTriangles: record.colliderTriangles, colliderChunks: record.chunks, lanes: record.lanes, pins: record.pins });
+    const t = decodeContent(bytes);
+    expect(t.margin).toBe(250);
+    expect(t.meshes.map((m) => m.material)).toEqual(['ground', 'road', 'kerb', 'building']);
   });
 });

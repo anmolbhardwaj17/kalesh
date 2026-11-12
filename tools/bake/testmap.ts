@@ -7,8 +7,8 @@ import type { BlockGraph } from './graph/build.ts';
 import type { OvertureRow } from './graph/footprints.ts';
 import { RuleContext } from './rules/context.ts';
 import type { Marks, RuleEnv } from './rules/types.ts';
-import { buildTile } from './tile.ts';
-import type { TileContent } from './tile.ts';
+import { buildTile } from './tile/standin.ts';
+import type { TileContent } from './tile/codec.ts';
 
 export const flat = (lat: number, lon: number) => ({ x: lon, z: -lat });
 

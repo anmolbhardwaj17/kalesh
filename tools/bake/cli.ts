@@ -5,7 +5,7 @@
 // <stage|block>  a stage of harness/data/districts.json "stages" (pilot) or a block id (once blocks have outlines)
 // --stage        run the steps up to and including this one: sources, ground, graph, repair, lanes, elevation, mesh, terrain, tiles (default: all)
 // --tiles        a partial bake: only these world tiles (x_z, integers) are written
-// --out          write tiles to this folder instead of game/world/tiles/
+// --out          write tiles to this folder instead of <stage data folder>/tiles/ (data/pilot_centre/tiles for the pilot)
 // --force        fetch every source again even when a good pinned file is there
 // --offline      never touch the network: a source that is not pinned and on disk fails
 
