@@ -12,7 +12,9 @@ export { DECK_DEPTH, HEADROOM, maxGrade };
  */
 const CURVE_RADIUS_M: Readonly<Record<string, number>> = {
   motorway: 500, trunk: 500, primary: 500, secondary: 400, tertiary: 300,
-  unclassified: 150, residential: 150, living_street: 150, service: 150, pedestrian: 150, road: 150,
+  unclassified: 150, residential: 150, living_street: 150, service: 150, road: 150,
+  // a foot way keeps no sight distance: its crests and sags are a walking ramp's landings (P1-035)
+  pedestrian: 30,
 };
 /** Ramps and slip roads turn tighter than the main line. */
 export const LINK_CURVE_RADIUS_M = 250;
@@ -57,3 +59,14 @@ export const AT_GRADE_M = 0.6;
 export const STRUCTURE_M = 2;
 /** Above this a raised road stands on piers (a deck); under it, on fill between walls. */
 export const DECK_MIN_M = 3;
+
+/** A metro viaduct (P1-035): rail top to the underside of its girder, a 2 m box girder and the track plinth. */
+export const METRO_DECK_DEPTH_M = 2.5;
+/** Rail level of a viaduct over nothing in particular: a road at grade fits under it anywhere (it runs over streets). */
+export const METRO_VIADUCT_M = HEADROOM + METRO_DECK_DEPTH_M;
+/** The steepest a metro ramp climbs (Delhi Metro: 4 percent on its elevated ramps). */
+export const METRO_MAX_GRADE = 0.04;
+/** A foot over bridge: walking surface to the underside of its truss. */
+export const FOOT_BRIDGE_DEPTH_M = 1;
+/** Half the width of a foot bridge's deck. */
+export const FOOT_BRIDGE_HALF_WIDTH_M = 1.5;

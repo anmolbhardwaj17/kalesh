@@ -7,6 +7,8 @@ import type { ElevationChecks, Finding } from './checks.ts';
 import type { RailLine } from './crossings.ts';
 import { AT_GRADE_M } from './limits.ts';
 import type { ElevationResult, SolveReport, Unmet } from './solve.ts';
+import { overheadRecord } from './overhead.ts';
+import type { FootBridgeHeights, OverheadResult, Viaduct } from './overhead.ts';
 import { STATION_KINDS } from './structures.ts';
 import type { Structure, StructureResult } from './structures.ts';
 
@@ -28,12 +30,15 @@ export interface ElevationFile {
   /** Railway lines at the places a road crosses them: the height the rail has there (block metres). */
   rails: { id: string; x: number; z: number; h: number; over: boolean }[];
   structures: Structure[];
+  /** Metro viaducts (rail level every 10 m) and foot bridges (walking level, stairs) with what passes under them and its clearance (overhead.ts). */
+  viaducts?: Viaduct[];
+  footBridges?: FootBridgeHeights[];
 }
 
 const r3 = (v: number): number => Math.round(v * 1000) / 1000 + 0;
 const r2 = (v: number): number => Math.round(v * 100) / 100 + 0;
 
-export function elevationFile(strips: readonly Strip[], junctionIds: readonly string[], res: ElevationResult, st: StructureResult, rails: readonly RailLine[], block: string, stage: string, lanesHash: string): ElevationFile {
+export function elevationFile(strips: readonly Strip[], junctionIds: readonly string[], res: ElevationResult, st: StructureResult, rails: readonly RailLine[], block: string, stage: string, lanesHash: string, over?: OverheadResult): ElevationFile {
   return {
     _doc: 'Heights of one bake stage (tools/bake/elevation/solve.ts): one solve over the whole lane model. Block metres above the geoid (the ground model is GEDTM30 smoothed over 60 m). strips follow lanes.json strip for strip and station for station: h the carriageway height, g the ground model, k the station kind (index into kinds). A deck stands on piers, a fill between walls, a cut between walls under the ground, a tunnel under a roof.',
     format: ELEVATION_FORMAT, block, stage, lanes: lanesHash, kinds: STATION_KINDS,
@@ -46,6 +51,7 @@ export function elevationFile(strips: readonly Strip[], junctionIds: readonly st
     }),
     rails: res.crossings.rails.map((x) => ({ id: (rails[x.rail] as RailLine).id, x: r2(x.x), z: r2(x.z), h: r3(x.railH), over: !x.roadAbove })),
     structures: st.structures,
+    ...(over ? { viaducts: over.viaducts, footBridges: over.footBridges } : {}),
   };
 }
 
@@ -81,9 +87,11 @@ export interface ElevationRecord {
   /** Structure ends that do not come back to the ground: at the map edge (the structure goes on outside), at a dead end under the ground, and raised ends that hang in the air (the gate count floatingEnds). */
   openEnds: { mapEdge: number; underGround: number; floating: number };
   files: Record<string, string | string[]>;
+  /** Metro viaducts and foot bridges (P1-035): counts, least clearance, headroom not given. */
+  overhead?: ReturnType<typeof overheadRecord>;
 }
 
-export function elevationRecord(strips: readonly Strip[], res: ElevationResult, checks: ElevationChecks, st: StructureResult, offset: P2, hash: string, twoRunsMaxDiffM: number, files: ElevationRecord['files']): ElevationRecord {
+export function elevationRecord(strips: readonly Strip[], res: ElevationResult, checks: ElevationChecks, st: StructureResult, offset: P2, hash: string, twoRunsMaxDiffM: number, files: ElevationRecord['files'], over?: OverheadResult): ElevationRecord {
   const world = <T extends { x: number; z: number }>(p: T): T => ({ ...p, x: r2(p.x + offset.x), z: r2(p.z + offset.z) });
   const counts: Record<string, number> = {};
   for (const s of st.structures) counts[s.kind] = (counts[s.kind] ?? 0) + 1;
@@ -110,7 +118,9 @@ export function elevationRecord(strips: readonly Strip[], res: ElevationResult, 
       ...checks.ties, byKind,
       movedEnds: res.ties.filter((t) => Math.abs(t.h - t.target) > 0.05).map((t) => ({
         strip: (strips[t.strip] as Strip).id, name: (strips[t.strip] as Strip).name, kind: t.kind, targetM: r2(t.target), heightM: r2(t.h),
-        why: 'a clearance next to the map edge needs the road to leave the stage at this height (the limits come before the tie)',
+        why: t.ramp
+          ? 'a clearance next to the map edge needs the road to leave the stage at this height: it stands over something within a ramp length of the edge, so its ramp goes on outside the stage before the road under it is lowered'
+          : 'a clearance next to the map edge needs the road to leave the stage at this height (the limits come before the tie)',
       })),
     },
     findings: checks.findings.map(world),
@@ -118,5 +128,6 @@ export function elevationRecord(strips: readonly Strip[], res: ElevationResult, 
     structures: st.structures.map(world), structureCounts: counts, structureM: Math.round(st.structures.reduce((n, s) => n + s.structureM, 0)),
     graded, abutments: st.abutments.length,
     openEnds: { mapEdge: st.abutments.filter((a) => a.mapEdge).length, underGround: st.abutments.filter((a) => a.open && !a.mapEdge && a.hag < 0).length, floating: st.abutments.filter((a) => a.open && !a.mapEdge && a.hag > 0).length }, files,
+    ...(over ? { overhead: overheadRecord(over) } : {}),
   };
 }
