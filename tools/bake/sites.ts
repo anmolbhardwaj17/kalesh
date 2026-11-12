@@ -37,6 +37,17 @@ export const MESH_SITES: readonly { id: string; name: string; lat: number; lon: 
   { id: 'india_gate', name: 'India Gate hexagon', lat: 28.612894, lon: 77.229446, halfM: 380, eye: /^(Kartavya Path|Rajpath|Tilak Marg|Kasturba Gandhi Marg|Shahjahan Road)/ },
   { id: 'chandni_chowk', name: 'Chandni Chowk', lat: 28.6561, lon: 77.2318, halfM: 300, eye: /^Chandni Chowk/ },
 ];
+/**
+ * Repaired sites drawn before and after by the mesh step of a whole bake (P1-017): places with the most road repairs
+ * (lane fits, carriageways pushed apart), and Kashmere Gate with its gate items (the Hanuman Mandir ramp overlap, two
+ * unjoined arms, the raised pedestrian end).
+ */
+export const REPAIR_SITES: readonly { id: string; name: string; lat: number; lon: number; halfM: number }[] = [
+  { id: 'kashmere_gate', name: 'Kashmere Gate: Ring Road and the Hanuman Mandir flyover', lat: 28.65765, lon: 77.24684, halfM: 200 },
+  { id: 'jaswant_singh_rotary', name: 'Ashoka Road and Jaswant Singh Road rotary', lat: 28.61721, lon: 77.22477, halfM: 180 },
+  { id: 'jantar_mantar', name: 'Jantar Mantar: Sansad Marg, Tolstoy Marg and Jai Singh Road', lat: 28.62698, lon: 77.21528, halfM: 180 },
+  { id: 'firoz_shah_road', name: 'Firoz Shah Road and Hailey Road', lat: 28.62507, lon: 77.22791, halfM: 180 },
+];
 /** Sites the terrain step cuts: the mesh sites again on the production ground, and the river bank. */
 export const GROUND_SITES: typeof MESH_SITES = [...MESH_SITES, { id: 'yamuna', name: 'Yamuna west bank at ITO', lat: 28.626, lon: 77.2533, halfM: 260, eye: /^(Vikas Marg|Mahatma Gandhi Marg|Ring Road)/ }];
 

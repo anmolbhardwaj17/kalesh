@@ -1,7 +1,7 @@
 // The tile step of the bake (P1-016): the files side of tools/bake/tile/. It takes what the earlier steps keep in
 // memory (the lane model with its heights, the road mesh, the ground with its tiles, the repaired footprints) and
 // builds none of them again; it writes one KTL1 file per world tile and index.json into the tile folder (default
-// <stage data folder>/tiles, gitignored), then reads the named check tiles back for the collider and deck checks.
+// game/world/tiles, gitignored), then reads the named check tiles back for the collider and deck checks.
 import fs from 'node:fs';
 import path from 'node:path';
 import { projector } from '../../geo/projection.ts';
@@ -110,7 +110,7 @@ export function runTileStep(s: TileStepInput): { record: TilesRecord; invariants
   fs.writeFileSync(indexFile, JSON.stringify(index, null, 1) + '\n');
   const rel = (f: string): string => (f.startsWith(s.root) ? path.relative(s.root, f) : f);
   const record: TilesRecord = {
-    dir: rel(dir), index: rel(indexFile), bakeHash: res.bakeHash, margin: TILE_MARGIN_M, budgetBytes: TILE_BUDGET_BYTES, averageBudgetBytes: TILE_AVERAGE_BYTES,
+    dir: rel(dir), index: rel(indexFile), bakeHash: index.bakeHash, margin: TILE_MARGIN_M, budgetBytes: TILE_BUDGET_BYTES, averageBudgetBytes: TILE_AVERAGE_BYTES,
     stats: res.stats, skipped: res.skipped, ms: res.ms, colliders, deck, shells: { footprints: s.repaired.footprints.length, shells: shells.length, rejected, byHeight },
   };
   for (const l of tilesLog(record)) s.log(`[tiles] ${l}`);

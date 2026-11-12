@@ -1,0 +1,98 @@
+{
+  "_doc": "Why each gate item left in the pilot bake is there and which task owns it (P1-017, MAP_REPAIR.md 'Verification': the six gate counts are 0 or each item is explained in the report). tools/bake/report/gates.ts matches an entry to an item by its id (a strip end 'w<way>.<piece>_<n> start|end', a map edge node 'm<way>.<n>', a face pair 'a|b') or by its kind. An item no entry explains stops the bake before tiles are written (invariant GATES-01). Entries that match nothing in a bake are listed in health.json gateReport.idle: delete them once their owner fixed the item. findings lists known defects outside the six gates with their owners, copied into health.json gateReport.findings.",
+  "explanations": [
+    {
+      "gate": "openPorts",
+      "kinds": [
+        "stage_edge_junction",
+        "stage_edge_junction_stub",
+        "stage_edge_no_strip"
+      ],
+      "owner": "stage edge (next centre block stage)",
+      "why": "a junction lies within its own cut length (up to 18 m, the cluster rule) of the pilot stage outline, so the lane model takes the map edge node into the junction (or keeps a stub) instead of ending the road at the outline. The pilot outline is a stage edge inside the centre block, not a block or map edge: the next stage bake carries these roads on. The real map edge gets closures (gate, loop, barricade) when the whole block is baked."
+    },
+    {
+      "gate": "unjoinedEnds",
+      "items": [
+        "w1242128093.0_0 start",
+        "w175800331.1_0 end",
+        "w446922583.1_0 start",
+        "w693912725.0_0 end",
+        "w70255392.0_0 start",
+        "w77617193.0_0 start"
+      ],
+      "owner": "P1-036",
+      "why": "arms of five junctions the mesh does not join (four polygon-set clusters, Kashmere Gate among them, plus jn838495928 and jn6514995326): the junction ring has no usable shape, so the arm end touches no junction face."
+    },
+    {
+      "gate": "floatingEnds",
+      "items": [
+        "w70255392.0_0 start"
+      ],
+      "owner": "P1-036",
+      "why": "the Vikas Marg deck arm of junction jn838495928 east of ITO ends 6.8 m up because the junction does not join it (the same arm is an unjoined end)."
+    },
+    {
+      "gate": "floatingEnds",
+      "items": [
+        "w80429832.0_0 start"
+      ],
+      "owner": "P1-035 (d)",
+      "why": "a pedestrian dead end on fill near Kashmere Gate stays 1.09 m above the ground: its height follows the ramp beside it."
+    },
+    {
+      "gate": "overlappingRoadFaces",
+      "items": [
+        "w175800219.0_0|w292171521.1_0"
+      ],
+      "owner": "P1-036",
+      "why": "the Hanuman Mandir flyover ramp on fill lies over a road at grade beside it at Kashmere Gate (13.41 m2): the lane model's overlap check reads the ramp as another level and does not hand the pair back to the repair."
+    },
+    {
+      "gate": "overlappingRoadFaces",
+      "items": [
+        "w778547435.0_0|w80499271.3_0",
+        "w77617201.0_0|zone_merge_4009"
+      ],
+      "owner": "P1-036",
+      "why": "hairline overlaps of 0.02 to 0.03 m2 where a one-way link meets the road it joins at a shallow angle (a link onto Sikandra Road near Mandi House, a link into a merge zone in Old Delhi): the kerb rows of the two strips cross over a few centimetres. Over the 0.01 m2 pair limit, far under anything a player sees."
+    }
+  ],
+  "findings": [
+    {
+      "what": "tunnel mouth crossing at Pragati Maidan (w1248027222.0 over w973071388.0 just outside the OSM tunnel end)",
+      "measured": "0.78 m2 overlap, on two levels so not in overlappingRoadFaces",
+      "owner": "P1-034"
+    },
+    {
+      "what": "ITO ramps against the Phase 0 profile",
+      "measured": "0.3 to 1.46 m mid ramp, decks within 0.13 m",
+      "owner": "P1-035 (a)"
+    },
+    {
+      "what": "roads under short ramp flyovers sunk",
+      "measured": "Geeta Colony 4.0 m, Hanuman Mandir 1.72 m",
+      "owner": "P1-035 (c)"
+    },
+    {
+      "what": "junction clusters with no usable ring and oversize junction surfaces",
+      "measured": "63 clusters, 10 surfaces over 3,000 m2 (health.json mesh.oversize)",
+      "owner": "P1-036"
+    },
+    {
+      "what": "tunnel ramp faces where an open ramp meets its roofed part",
+      "measured": "not built or checked yet",
+      "owner": "P1-037 (a)"
+    },
+    {
+      "what": "drains on a slope have one flat water level",
+      "measured": "every water body has one level",
+      "owner": "P1-037 (b)"
+    },
+    {
+      "what": "road edge with no ground along it (another road face lies there)",
+      "measured": "642 m",
+      "owner": "P1-037 (d)"
+    }
+  ]
+}

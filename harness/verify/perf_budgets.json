@@ -300,6 +300,8 @@
     "gateCounts": "open ports, floating ends, overlapping road faces, lane continuity breaks and tapers out of limits: 0, or each one explained in harness/reports/map/health.json",
     "roadToGroundGapM": 0.02,
     "colliderToDrawnSurfaceM": 0.05,
-    "centrePairBearingDeg": 0.5
+    "centrePairBearingDeg": 0.5,
+    "pilotFullMin": 10,
+    "measured": "pilot centre (P1-017, 2026-11-12, M2 Pro, npm run bake -- pilot --offline): whole bake 159.7 s (sources 0.1, ground 1.8, graph 2.8, repair 57.4, lanes 10.0, elevation 28.2, mesh 23.3, terrain 22.0, tiles 14.0 s), 417 tiles, 375,393,264 bytes (358 MB) in game/world/tiles, bake hash 072f410efab820 in two whole bakes; one tile rebake after an override (tile -5_-13, the largest, a building removed by a patch): 52.1 s, the other 416 tiles untouched; with the patch taken out again 52.8 s and the whole bake's hash back. The bake prints both times and writes them to harness/reports/map/timing.json (kept out of health.json, which holds no clock time)."
   }
 }

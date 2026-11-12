@@ -16,6 +16,8 @@ export interface StageDef {
   marginM: number;
   /** Folder of the stage's downloads (repo-relative, under the gitignored data/). */
   dataDir: string;
+  /** Folder the tile step writes (repo-relative, gitignored); default game/world/tiles, the folder the game reads. */
+  tiles?: string;
   sources: string[];
   ground: { primary: string; smoothM: number; fallback: string };
 }

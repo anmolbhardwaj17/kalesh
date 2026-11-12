@@ -39,7 +39,18 @@ export function mapHealth(file = HEALTH_FILE) {
   const c = h.counts;
   if (!c) return { at, stage: h.stage ?? null, error: 'This report was made before the counts were added. Run "npm run bake -- pilot --stage repair --offline" to make a new one.' };
   const ov = h.overrides ?? {};
-  const gates = Object.entries(GATE_NAMES).map(([key, name]) => ({ key, name, count: h.gates?.[key] ?? null }));
+  // each gate count with how many of its items an entry explains (P1-017: gateReport, set before the tile step)
+  const gates = Object.entries(GATE_NAMES).map(([key, name]) => {
+    const g = h.gateReport?.gates?.[key];
+    return { key, name, count: h.gates?.[key] ?? null, explained: g ? g.explained : null, owners: g ? [...new Set(g.items.filter((i) => i.explainedBy).map((i) => i.explainedBy.split(':')[0]))] : [] };
+  });
+  const dir = path.dirname(file);
+  let pictures = [];
+  try {
+    pictures = fs.readdirSync(dir).filter((f) => /^repair_.*\.png$/.test(f)).sort();
+  } catch {
+    // no report folder
+  }
   const worst = h.layout ? { bearingDeg: h.layout.worstPairBearingDeg, distancePct: h.layout.worstPairDistancePct } : null;
   const byRule = Object.entries(c.byRule ?? {}).sort((a, b) => b[1] - a[1]).map(([rule, found]) => ({ rule, found, auto: h.repairs?.byRule?.[rule] ?? 0 }));
   return {
@@ -59,5 +70,21 @@ export function mapHealth(file = HEALTH_FILE) {
     gates,
     pairs: { count: Array.isArray(h.pairs) ? h.pairs.length : 0, failed: Array.isArray(h.pairs) ? h.pairs.filter((p) => !p.ok).length : 0, worst },
     invariantsFailed: (h.invariants ?? []).filter((i) => !i.ok).map((i) => ({ id: i.id, detail: i.detail })),
+    findings: h.gateReport?.findings ?? [],
+    timing: readTiming(path.join(dir, 'timing.json'), h.stage),
+    tiles: h.tiles?.record ? { written: h.tiles.written, bytes: h.tiles.record.stats?.bytes ?? null, bakeHash: h.tiles.record.bakeHash ?? null, dir: h.tiles.record.dir ?? null } : null,
+    // files of the report folder the dashboard serves under /map/
+    report: path.basename(file),
+    pictures,
   };
+}
+
+/** The wall clock of the last bake (timing.json beside health.json, kept out of the report so it stays the same for the same inputs). */
+function readTiming(file, stage) {
+  try {
+    const t = JSON.parse(fs.readFileSync(file, 'utf8'));
+    return t.stage === stage ? t : null;
+  } catch {
+    return null;
+  }
 }

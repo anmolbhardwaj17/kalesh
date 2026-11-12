@@ -1,13 +1,13 @@
 ## The GDScript reader of our binary tile (game/bench/tiles/tile_t1.gd, P0-018) against the fixture written by the
 ## production tile writer (harness/data/fixtures/tile_t1_sample.json, tools/fixtures/gen_tile_fixture.mjs): the same
 ## counts, the same values, lane UVs, lanes and pins, and collider faces that match the drawn triangles. Then a real
-## production tile of the pilot bake (data/pilot_centre/tiles/, gitignored: skipped with a note when it is missing),
+## production tile of the pilot bake (game/world/tiles/, gitignored: skipped with a note when it is missing),
 ## and the magnitude rule.
 extends RefCounted
 
 const TileT1 := preload("res://bench/tiles/tile_t1.gd")
 const FIXTURE := "res://../harness/data/fixtures/tile_t1_sample.json"
-const PILOT_TILES := "res://../data/pilot_centre/tiles/"
+const PILOT_TILES := "res://world/tiles/"
 
 var t
 var tree: SceneTree

@@ -36,3 +36,5 @@ game/override.cfg
 game/bench/tiles/gen/
 # tiles and camera poses written by the road bench (harness/bench/roads.mjs)
 game/bench/roads/gen/
+# production tiles of the bake (tools/bake/main.ts, the tile step): hundreds of MB, rebuilt by `npm run bake -- pilot`
+game/world/tiles/
