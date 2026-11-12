@@ -363,3 +363,4 @@ One line per event, written by task.mjs (start, done, fail, phase changes, inbox
 - 2026-11-12 06:41 [P1-015] start (attempt 1): Ground that fits the roads
 - 2026-11-12 07:50 [P1-037] added: Ground follow-ups: tunnel ramp faces, sloped drains, ground gates on the dashboard
 - 2026-11-12 08:00 [P1-015] done: Ground as one constrained Delaunay triangulation conformed to the road mesh: largest road to ground gap 0.0015 m, 0 ground vertices over a road, 1.37 percent needles, 0 tile seam differences, area off the outline by 0.002 percent, build 5.5 s, deterministic; new world.ground limits. Self-check: typecheck, 701 vitest, 70 Godot, offline terrain bake, quick OK; ITO ramp foot shot read.
+- 2026-11-12 08:00 [P1-016] start (attempt 1): Tile writer: production KTL1, the world grid cutter and collider chunks
