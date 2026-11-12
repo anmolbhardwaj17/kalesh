@@ -12,10 +12,11 @@ import { LineMaterial } from 'three/addons/lines/LineMaterial.js';
 import { LineGeometry } from 'three/addons/lines/LineGeometry.js';
 import { readKtl1 } from '../ktl1.ts';
 import { actionWords, filterIssues, isHigh, niceScale, searchIssues, sortIssues, worldTile } from '../lib.ts';
-import { buildNameIndex, describeIssue, distToLine, fixWords, humanise } from '../describe.ts';
-import { contextLayer, groundLayer, lanesLayer } from './layers.js';
+import { buildNameIndex, classWords, describeIssue, distToLine, fixWords, humanise, whereWords } from '../describe.ts';
+import { LANE_TYPE_WORDS, NEAR_FOCUS_M, borderAt, driveLaneCount, laneItems, lanesIssueId, lanesSummary, metres, nearestStrip, sourceWords, stripWidths, isOwnerLanes } from '../lanes.ts';
+import { contextLayer, groundLayer, laneMarksLayer, lanesLayer } from './layers.js';
 import { Minimap } from './minimap.js';
-import { MAJOR, MAP, MATERIAL_COLOURS, OFFSET_MATERIALS, PROP_COLOURS, SEV } from './theme.js';
+import { LANE_FILL, LANE_MARK, MAJOR, MAP, MATERIAL_COLOURS, OFFSET_MATERIALS, PROP_COLOURS, SEV } from './theme.js';
 
 const $ = (s) => document.querySelector(s);
 const esc = (s) => String(s).replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' })[c]);
@@ -23,7 +24,9 @@ const esc = (s) => String(s).replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&l
 const state = {
   ready: false, issues: [], byId: new Map(), rules: {}, picks: {}, filter: 'all', search: '', selected: null, proposal: null,
   view: 'top', flying: false, places: [], source: '', markerIndex: [], hidden: new Set(), names: buildNameIndex(null, []),
-  desc: new Map(), buildings: [], outline: [], hover: null, layers: { lanes: true, buildings: true, grid: true },
+  desc: new Map(), buildings: [], outline: [], hover: null, layers: { lanes: true, laneMarks: true, buildings: true, grid: true },
+  // the lanes tab (P1-025): the lanes layer file, the lanes record of health.json, the listed split zones and taper findings
+  tab: 'issues', laneFile: null, health: null, laneItems: [], laneFilter: 'all', laneSel: null, lanePicks: {}, laneFocus: null,
 };
 
 // ------------------------------------------------------------------ three.js scene
@@ -56,7 +59,7 @@ const highlightGroup = new THREE.Group();
 const lineGroup = new THREE.Group();
 scene.add(flatGroup, tileGroup, highlightGroup, markerGroup, lineGroup);
 const lineMaterials = new Set();
-const layers = { ground: null, context: null, lanes: null };
+const layers = { ground: null, context: null, lanes: null, laneMarks: null };
 
 function resize() {
   const w = mapEl.clientWidth || 1;
@@ -173,6 +176,8 @@ function addTile(entry, buffer) {
 
 function applyLayers() {
   if (layers.lanes) layers.lanes.group.visible = state.layers.lanes;
+  if (layers.laneMarks) { layers.laneMarks.enabled = state.layers.laneMarks && state.layers.lanes; lastView = ''; }
+  if (laneDots) laneDots.visible = state.layers.laneMarks && state.layers.lanes;
   if (layers.context) layers.context.buildings.visible = state.layers.buildings;
   if (layers.ground) layers.ground.grid.visible = state.layers.grid;
   for (const b of document.querySelectorAll('#layerRows [data-layer]')) b.classList.toggle('on', !!state.layers[b.dataset.layer]);
@@ -268,7 +273,8 @@ function groundAt(nx, ny) {
 function placeLabels() {
   const r = mapEl.getBoundingClientRect();
   const sel = state.selected && state.byId.get(state.selected);
-  const sp = sel && project(sel.x, (sel.y ?? 0) + 1, sel.z);
+  const spot = sel ? [sel.x, (sel.y ?? 0) + 1, sel.z] : state.laneSel ? [state.laneSel.point[0], 1, state.laneSel.point[1]] : null;
+  const sp = spot && project(spot[0], spot[1], spot[2]);
   for (const p of state.places) {
     const el = $(`.place[data-place="${p.id}"]`);
     const s = project(p.x, 0, p.z);
@@ -313,6 +319,7 @@ function updateReadouts() {
   minimap.setView(corners.length >= 3 ? corners : null, [controls.target.x, controls.target.z]);
   layers.context?.update(dist);
   layers.lanes?.update(dist);
+  layers.laneMarks?.update(dist);
 }
 
 // ------------------------------------------------------------------ the selected issue on the map
@@ -469,8 +476,9 @@ function markSelectedRow() {
 
 function renderDetail() {
   const i = state.selected && state.byId.get(state.selected);
-  $('#empty').hidden = !!i;
+  $('#empty').hidden = !!i || !!state.laneSel;
   $('#issue').hidden = !i;
+  $('#lane').hidden = !!i || !state.laneSel;
   if (!i) return;
   const d = describe(i);
   const pick = state.picks[i.id];
@@ -524,6 +532,8 @@ function select(id, { fly = true } = {}) {
   const i = state.byId.get(id);
   if (!i) return;
   state.selected = id;
+  state.laneSel = null;
+  markLaneRow();
   state.proposal = null;
   state.noteDraft = '';
   markSelectedRow();
@@ -538,6 +548,8 @@ function select(id, { fly = true } = {}) {
 
 function clearSelection() {
   state.selected = null;
+  state.laneSel = null;
+  markLaneRow();
   state.proposal = null;
   markSelectedRow();
   renderDetail();
@@ -576,6 +588,233 @@ async function openInGame() {
   }
 }
 
+// ------------------------------------------------------------------ the lanes tab (P1-025)
+
+const roadLabel = (st) => st.name || `Unnamed ${classWords(st.cls)}`;
+const LANE_KIND_WORDS = { zone: 'Split zone', taper: 'Taper finding', road: 'Road section' };
+const kmWords = (m) => (m >= 1000 ? `${(m / 1000).toFixed(1)} km` : `${Math.round(m / 10) * 10} m`);
+
+let laneDots = null;
+function buildLaneDots() {
+  if (laneDots) { markerGroup.remove(laneDots); laneDots.geometry.dispose(); }
+  const items = state.laneItems;
+  const pos = new Float32Array(items.length * 3);
+  const col = new Float32Array(items.length * 3);
+  const size = new Float32Array(items.length).fill(13);
+  const alpha = new Float32Array(items.length).fill(1);
+  const kind = new Float32Array(items.length).fill(1);
+  const c = new THREE.Color();
+  items.forEach((it, k) => { pos.set([it.x, 1, it.z], k * 3); c.set(LANE_MARK[it.kind]); col.set([c.r, c.g, c.b], k * 3); });
+  const g = new THREE.BufferGeometry();
+  g.setAttribute('position', new THREE.BufferAttribute(pos, 3));
+  g.setAttribute('col', new THREE.BufferAttribute(col, 3));
+  g.setAttribute('size', new THREE.BufferAttribute(size, 1));
+  g.setAttribute('alpha', new THREE.BufferAttribute(alpha, 1));
+  g.setAttribute('kind', new THREE.BufferAttribute(kind, 1));
+  g.boundingSphere = new THREE.Sphere(new THREE.Vector3(), 1e6);
+  laneDots = new THREE.Points(g, dotMaterial);
+  laneDots.frustumCulled = false;
+  laneDots.renderOrder = 9;
+  markerGroup.add(laneDots);
+  laneDots.visible = state.layers.laneMarks && state.layers.lanes;
+  dirty = true;
+}
+
+function setupLanes(file, health) {
+  state.laneFile = file;
+  state.health = health;
+  state.laneStrips = new Map(file.strips.map((st) => [st.id, st]));
+  state.laneFocus = state.places.find((p) => p.id === 'ito_crossing') ?? null;
+  state.laneItems = laneItems(file, health, state.laneFocus);
+  layers.laneMarks = laneMarksLayer(file, state.laneItems.map((i) => ({ strip: i.strip, kind: i.kind })));
+  flatGroup.add(layers.laneMarks.group);
+  buildLaneDots();
+  $('#lanesTab').hidden = false;
+  $('#laneMarkCount').textContent = state.laneItems.length;
+  $('#lanesSummary').textContent = lanesSummary(health, file.strips.length);
+  renderLaneList();
+  applyLayers();
+}
+
+function setTab(tab) {
+  if (tab === 'lanes' && !state.laneFile) return;
+  state.tab = tab;
+  for (const b of document.querySelectorAll('#tabs [data-tab]')) b.classList.toggle('on', b.dataset.tab === tab);
+  $('#issuesHead').hidden = tab !== 'issues';
+  $('#list').hidden = tab !== 'issues';
+  $('#lanesHead').hidden = tab !== 'lanes';
+  $('#laneList').hidden = tab !== 'lanes';
+}
+
+const nearFocus = (it) => it.fromFocus <= NEAR_FOCUS_M;
+function visibleLaneItems() {
+  return state.laneItems.filter((it) => state.laneFilter === 'all' || (state.laneFilter === 'near' ? nearFocus(it) : it.kind === state.laneFilter));
+}
+
+function renderLaneList() {
+  if (!state.laneFile) return;
+  const all = state.laneItems;
+  const near = all.filter(nearFocus).length;
+  const focusName = state.laneFocus ? state.laneFocus.name.replace(/^the /, '') : '';
+  const defs = [['all', 'All', all.length], ['zone', 'Split zones', all.filter((i) => i.kind === 'zone').length], ['taper', 'Taper findings', all.filter((i) => i.kind === 'taper').length]];
+  if (state.laneFocus) defs.push(['near', `Near ${focusName}`, near]);
+  $('#laneChips').innerHTML = defs.map(([k, label, n]) => `<button type="button" data-lfilter="${k}" class="${state.laneFilter === k ? 'on' : ''}" title="${esc(label)}"><span class="l">${esc(label)}</span> <span class="n">${n.toLocaleString('en')}</span></button>`).join('');
+  const rows = visibleLaneItems();
+  const groups = state.laneFocus ? [['near', `Near ${state.laneFocus.name}`, rows.filter(nearFocus)], ['far', 'Elsewhere on the map', rows.filter((i) => !nearFocus(i))]] : [['far', 'All', rows]];
+  let html = '';
+  for (const [g, label, list] of groups) {
+    if (!list.length) continue;
+    html += `<div class="divider" data-group="${g}">${esc(label)} (${list.length.toLocaleString('en')})</div>`;
+    for (const it of list) {
+      const sel = state.laneSel?.item && state.laneSel.item.id === it.id;
+      html += `<div class="row ${it.kind}${sel ? ' sel' : ''}" role="listitem" data-lane="${esc(it.id)}">`
+        + `<div class="t">${esc(it.title)}</div><div class="b"><span class="dist">${state.laneFocus ? esc(kmWords(it.fromFocus)) : ''}</span></div>`
+        + `<div class="s">${esc(it.detail)}</div><div class="kmeta">${esc(LANE_KIND_WORDS[it.kind])} · ${esc(it.id)}</div></div>`;
+    }
+  }
+  const top = $('#laneList').scrollTop;
+  $('#laneList').innerHTML = html || '<div class="none">Nothing here.</div>';
+  $('#laneList').scrollTop = top;
+}
+
+function markLaneRow() {
+  for (const r of document.querySelectorAll('#laneList .row.sel')) r.classList.remove('sel');
+  const id = state.laneSel?.item?.id;
+  if (id) $(`#laneList .row[data-lane="${CSS.escape(id)}"]`)?.classList.add('sel');
+}
+
+function drawLaneHighlight(sel) {
+  clearGroup(highlightGroup);
+  clearGroup(lineGroup);
+  if (sel) {
+    const pts = sel.strip.ref;
+    if (pts.length > 1) {
+      highlightGroup.add(polyline(pts, 1.2, { color: new THREE.Color(SEV.open), linewidth: 13, opacity: 0.22 }, 15));
+      highlightGroup.add(polyline(pts, 1.2, { color: new THREE.Color(0x110d0a), linewidth: 6, opacity: 0.9 }, 16));
+      highlightGroup.add(polyline(pts, 1.2, { color: new THREE.Color(0xffd27a), linewidth: 3, opacity: 1 }, 17));
+    }
+  }
+  dirty = true;
+}
+
+/** Selects a lane section: from a list item (flies there) or from a click on the map (stays put). */
+function showLane(strip, point, item, { fly = true } = {}) {
+  state.selected = null;
+  state.proposal = null;
+  markSelectedRow();
+  drawProposals(null, null);
+  const at = Math.max(0, Math.min(strip.ref.length - 1, nearestIndex(strip, point)));
+  state.laneSel = { strip, point, item: item ?? state.laneItems.find((i) => i.strip === strip.id) ?? null, at, draft: driveLaneCount(strip), noteDraft: '' };
+  renderDetail();
+  renderLane();
+  markLaneRow();
+  drawLaneHighlight(state.laneSel);
+  const where = whereWords(state.names, point[0], point[1]);
+  $('#selLabel').innerHTML = `${esc(roadLabel(strip))}${where ? `<small>${esc(where)}</small>` : ''}`;
+  if (fly) flyTo([point[0], 0, point[1]], state.view === 'top' ? 150 : 120);
+  $(`#laneList .row[data-lane="${CSS.escape(state.laneSel.item?.id ?? '')}"]`)?.scrollIntoView({ block: 'nearest' });
+}
+function nearestIndex(strip, point) {
+  let best = 0; let bd = Infinity;
+  strip.ref.forEach(([x, z], k) => { const d = Math.hypot(x - point[0], z - point[1]); if (d < bd) { bd = d; best = k; } });
+  return best;
+}
+
+function selectLaneItem(id) {
+  const it = state.laneItems.find((i) => i.id === id);
+  const strip = it && state.laneStrips.get(it.strip);
+  if (it && strip) showLane(strip, [it.x, it.z], it);
+}
+
+function pickLaneAt(x, z) {
+  const hit = nearestStrip(state.laneFile.strips, x, z, 3);
+  if (hit) showLane(hit.strip, [x, z], null, { fly: false });
+  return hit?.strip.id ?? null;
+}
+
+function renderLane() {
+  const sel = state.laneSel;
+  const el = $('#lane');
+  if (!sel) { el.innerHTML = ''; return; }
+  const st = sel.strip;
+  const kind = st.kind === 'zone' ? 'zone' : sel.item?.kind === 'taper' || st.taper ? 'taper' : 'road';
+  const w = stripWidths(st);
+  const count = driveLaneCount(st);
+  const src = sourceWords(st.from ?? (st.kind === 'zone' ? 'zone' : undefined), st.by);
+  const owner = state.lanePicks[lanesIssueId(st.edge)];
+  const b = borderAt(st, sel.at);
+  const lanes = st.lanes.map(([type, dir], k) => {
+    const wd = (b[k] ?? 0) - (b[k + 1] ?? 0);
+    const colour = `#${(LANE_FILL[type] ?? LANE_FILL.drive).toString(16).padStart(6, '0')}`;
+    const way = type === 'drive' && dir === 0 ? '<span class="d">both ways</span>' : '';
+    return `<div class="ln"><i style="background:${colour}"></i><span>${esc(LANE_TYPE_WORDS[type] ?? type)}${way}</span><span class="w">${(Math.round(wd * 100) / 100).toFixed(2)} m</span></div>`;
+  }).join('');
+  const kicker = { zone: 'Split zone', taper: 'Taper finding', road: 'Road section' }[kind];
+  const sev = kind === 'zone' ? LANE_MARK.zone : kind === 'taper' ? LANE_MARK.taper : 'var(--accent)';
+  const where = whereWords(state.names, sel.point[0], sel.point[1]);
+  let extra = '';
+  if (kind === 'zone') {
+    const z = state.laneFile.zones.find((q) => q.id === st.id);
+    extra = `<div class="block"><h4>${z?.kind === 'diverge' ? 'The road splits here' : 'Two roads merge here'}</h4><p>${z ? `The painted island is ${Math.round(z.noseM * 10) / 10} m long from the split point to its nose. ` : ''}The lanes of both branches run side by side with an island between them.</p></div>`;
+  }
+  if (st.taper) {
+    const [len, shift, need] = st.taper;
+    extra += `<div class="block"><h4>Lane widths change here</h4><p>Over ${Math.round(len * 10) / 10} m the lanes shift ${Math.round(shift * 10) / 10} m. A road of this class needs ${Math.round(need * 10) / 10} m for that.</p>${sel.item?.kind === 'taper' ? `<p class="measured">${esc(sel.item.detail)}</p>` : ''}</div>`;
+  }
+  const canSet = st.kind !== 'zone';
+  const set = canSet ? `<h3>Change the lane count</h3>
+    ${owner ? `<div class="msg msg-saved">You set this road to ${owner.params?.lanes ?? '?'} lanes (overrides/${esc(owner.file)}). The next bake uses it. You can change it again.</div>` : ''}
+    <div class="setrow"><span class="l">Driving lanes</span><span class="stepper"><button type="button" id="lanesDown" aria-label="One lane fewer"${sel.draft <= 1 ? ' disabled' : ''}>&minus;</button><output id="lanesNow">${sel.draft}</output><button type="button" id="lanesUp" aria-label="One lane more"${sel.draft >= 12 ? ' disabled' : ''}>+</button></span></div>
+    <textarea id="laneNote" placeholder="Why, for example: three lanes each way at the ITO crossing, I counted them on the street photo.">${esc(sel.noteDraft)}</textarea>
+    <div class="actions"><button type="button" class="primary" id="laneSave"${sel.draft === count && !sel.noteDraft.trim() ? ' disabled' : ''}>Save lane count</button><button type="button" class="secondary" id="laneOpenGame">Open in game</button></div>
+    <div id="lmsg" class="msg" hidden></div>`
+    : `<p class="where">A split zone has no lane count of its own. Click one of the roads beside it to change its lanes.</p><div class="actions"><button type="button" class="secondary" id="laneOpenGame">Open in game</button></div><div id="lmsg" class="msg" hidden></div>`;
+  el.innerHTML = `
+    <div class="kicker" style="--sev:${sev}"><i class="dot" style="background:${sev}"></i>${esc(kicker)}</div>
+    <h2>${esc(roadLabel(st))}</h2>
+    ${where ? `<p class="where">${esc(where)}</p>` : ''}
+    <p class="rule-id">${esc(st.id)} · ${esc(classWords(st.cls))}${st.hero ? ` · hero road ${esc(st.hero)}` : ''}${st.bridge ? ' · on a bridge' : ''}</p>
+    <div class="stats lane-stats">
+      <div class="stat"><span class="l">Driving lanes</span><span class="v">${count}</span></div>
+      <div class="stat"><span class="l">Lane width</span><span class="v">${esc(metres(w.lane))}</span></div>
+      <div class="stat"><span class="l">Whole road</span><span class="v">${esc(metres(w.total))}</span></div>
+    </div>
+    <div class="block"><h4>Where the lane count comes from</h4><div class="srcline">${esc(src.label)}<span class="tag${isOwnerLanes(st.by) ? ' you' : ''}">${esc(st.from ?? st.kind)}</span></div><p>${esc(src.long)}</p></div>
+    ${extra}
+    <h3>Across the road, left to right</h3>
+    <div class="lane-sec">${lanes}</div>
+    ${set}
+    <div class="ids">${esc(st.id)}<br>edge ${esc(st.edge)} · x ${Math.round(sel.point[0])}, z ${Math.round(sel.point[1])}</div>`;
+}
+
+function laneMessage(text, bad = false) {
+  const m = $('#lmsg');
+  if (!m) return;
+  m.hidden = !text; m.textContent = text; m.className = `msg${bad ? ' bad' : ''}`;
+}
+
+async function saveLanes() {
+  const sel = state.laneSel;
+  if (!sel) return;
+  const res = await fetch('/api/inspector/set-lanes', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ edge: sel.strip.edge, lanes: sel.draft, x: sel.point[0], z: sel.point[1], note: sel.noteDraft }) });
+  const body = await res.json();
+  if (!res.ok) { laneMessage(body.error || 'Could not save.', true); return; }
+  state.lanePicks[lanesIssueId(sel.strip.edge)] = { patch: body.patch.id, action: body.patch.action, why: body.patch.why, file: body.file, params: body.patch.params };
+  renderLane();
+  laneMessage(`Saved. Patch ${body.patch.id} is in overrides/${body.file}. The next bake of that tile uses ${sel.draft} lanes here. Claude sees it in the inbox.`);
+}
+
+async function openLaneInGame() {
+  const sel = state.laneSel;
+  if (!sel) return;
+  laneMessage('Asking the game...');
+  try {
+    const res = await fetch('/api/inspector/open-in-game', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ x: sel.point[0], z: sel.point[1] }) });
+    const body = await res.json();
+    laneMessage(body.message ?? 'Done.', !body.ok);
+  } catch { laneMessage('Could not reach the inspector server.', true); }
+}
+
 // ------------------------------------------------------------------ events
 
 $('#chips').addEventListener('click', (e) => { const b = e.target.closest('[data-filter]'); if (b) { state.filter = b.dataset.filter; renderList(); } });
@@ -589,6 +828,24 @@ $('#issue').addEventListener('click', (e) => {
   if (e.target.closest('#openGame')) openInGame();
 });
 $('#issue').addEventListener('input', (e) => { if (e.target.id === 'note') { state.noteDraft = e.target.value; updateSave(); } });
+$('#tabs').addEventListener('click', (e) => { const b = e.target.closest('[data-tab]'); if (b) setTab(b.dataset.tab); });
+$('#laneChips').addEventListener('click', (e) => { const b = e.target.closest('[data-lfilter]'); if (b) { state.laneFilter = b.dataset.lfilter; renderLaneList(); } });
+$('#laneList').addEventListener('click', (e) => { const r = e.target.closest('.row'); if (r) selectLaneItem(r.dataset.lane); });
+$('#lane').addEventListener('click', (e) => {
+  const sel = state.laneSel;
+  if (!sel) return;
+  const step = (d) => { sel.draft = Math.min(12, Math.max(1, sel.draft + d)); renderLane(); };
+  if (e.target.closest('#lanesUp')) step(1);
+  else if (e.target.closest('#lanesDown')) step(-1);
+  else if (e.target.closest('#laneSave')) saveLanes();
+  else if (e.target.closest('#laneOpenGame')) openLaneInGame();
+});
+$('#lane').addEventListener('input', (e) => {
+  if (e.target.id !== 'laneNote' || !state.laneSel) return;
+  state.laneSel.noteDraft = e.target.value;
+  const save = $('#laneSave');
+  if (save) save.disabled = state.laneSel.draft === driveLaneCount(state.laneSel.strip) && !e.target.value.trim();
+});
 $('#viewTop').addEventListener('click', () => setView('top'));
 $('#view3d').addEventListener('click', () => setView('3d'));
 $('#fit').addEventListener('click', fitAll);
@@ -614,6 +871,14 @@ document.addEventListener('keydown', (e) => {
   else if (k === '+' || k === '=') zoomBy(0.6);
   else if (k === '-') zoomBy(1 / 0.6);
   else if (k === 'j' || k === 'k') {
+    if (state.tab === 'lanes') {
+      const ids = [...document.querySelectorAll('#laneList .row')].map((r) => r.dataset.lane);
+      if (!ids.length) return;
+      const at = ids.indexOf(state.laneSel?.item?.id);
+      selectLaneItem(ids[at < 0 ? 0 : Math.min(ids.length - 1, Math.max(0, at + (k === 'j' ? 1 : -1)))]);
+      e.preventDefault();
+      return;
+    }
     const ids = [...document.querySelectorAll('#list .row')].map((r) => r.dataset.id);
     if (!ids.length) return;
     const at = ids.indexOf(state.selected);
@@ -630,7 +895,13 @@ renderer.domElement.addEventListener('pointerup', (e) => {
   if (!down || Math.hypot(e.clientX - down.x, e.clientY - down.y) > 4) { down = null; return; }
   down = null;
   const hit = nearestIssue(e.clientX, e.clientY, 14);
-  if (hit) select(hit.id);
+  if (hit) { select(hit.id); return; }
+  // no issue under the click: the lane section under it, when the lanes layer is on and close enough to read
+  if (state.laneFile && state.layers.lanes && camera.position.distanceTo(controls.target) < 2200) {
+    const r = mapEl.getBoundingClientRect();
+    const g = groundAt(((e.clientX - r.left) / r.width) * 2 - 1, -((e.clientY - r.top) / r.height) * 2 + 1);
+    if (g) pickLaneAt(g.x, g.z);
+  }
 });
 let hoverAt = null;
 renderer.domElement.addEventListener('pointermove', (e) => { hoverAt = { x: e.clientX, y: e.clientY, buttons: e.buttons }; });
@@ -716,7 +987,8 @@ async function init() {
   state.issues = file.issues;
   state.byId = new Map(file.issues.map((i) => [i.id, i]));
   state.rules = file.rules;
-  state.picks = picks;
+  state.picks = {};
+  for (const [k, v] of Object.entries(picks)) (k.startsWith('lanes:') ? state.lanePicks : state.picks)[k] = v;
   state.places = index.places ?? [];
   state.source = file.source;
   state.outline = context?.outline ?? [];
@@ -768,8 +1040,11 @@ async function init() {
   // the lanes layer (P1-012) is big (about 10 MB): it comes last and only when the server has it
   if (status.layers?.lanes) {
     try {
-      layers.lanes = lanesLayer(await getJson('/inspector/data/lanes.json'));
+      const laneFile = await getJson('/inspector/data/lanes.json');
+      const health = status.layers.health ? await getJson('/inspector/data/health.json').then((h) => h.lanes ?? null).catch(() => null) : null;
+      layers.lanes = lanesLayer(laneFile);
       flatGroup.add(layers.lanes.group);
+      setupLanes(laneFile, health);
       lastView = '';
       applyLayers();
     } catch (e) { banner(`The lanes layer could not be read: ${e.message}`); }
@@ -784,6 +1059,7 @@ window.__inspector = {
     issueCount: state.issues.length, listCount: document.querySelectorAll('#list .row').length,
     camera: { target: controls.target.toArray(), distance: camera.position.distanceTo(controls.target), position: camera.position.toArray() },
     picks: Object.keys(state.picks), lanes: layers.lanes ? layers.lanes.counts : null, lanesReady: !!state.lanesReady,
+    layersOn: { ...state.layers }, lanesVisible: layers.lanes ? layers.lanes.group.visible : null, tab: state.tab,
   }),
   listIds: () => [...document.querySelectorAll('#list .row')].map((r) => r.dataset.id),
   highIds: () => state.issues.filter((i) => isHigh(i) && !state.picks[i.id]).map((i) => i.id),
@@ -793,6 +1069,21 @@ window.__inspector = {
   issue: (id) => state.byId.get(id) ?? null,
   /** The plain words of an issue card: title (what and where), problem, fix. */
   describe: (id) => { const i = state.byId.get(id); return i ? describe(i) : null; },
+  /** The lanes tab (P1-025): what the list shows, the selected lane section, the same numbers as the health report. */
+  lanes: {
+    tab: (t) => setTab(t),
+    items: () => state.laneItems.map(({ kind, id, x, z, title }) => ({ kind, id, x, z, title })),
+    counts: () => ({
+      zones: state.laneItems.filter((i) => i.kind === 'zone').length, tapers: state.laneItems.filter((i) => i.kind === 'taper').length,
+      rows: document.querySelectorAll('#laneList .row').length, summary: $('#lanesSummary').textContent,
+      health: state.health ? { zones: state.health.zones?.zones ?? null, tapers: state.health.tapers?.violations ?? null, findings: state.health.tapers?.findings?.length ?? null } : null,
+    }),
+    select: (id) => selectLaneItem(id),
+    selected: () => (state.laneSel ? { strip: state.laneSel.strip.id, edge: state.laneSel.strip.edge, lanes: driveLaneCount(state.laneSel.strip), from: state.laneSel.strip.from ?? null, by: state.laneSel.strip.by ?? null, item: state.laneSel.item?.id ?? null } : null),
+    pickAt: (x, z) => (state.laneFile ? pickLaneAt(x, z) : null),
+    screen: (x, z) => project(x, 0, z),
+    strips: () => state.laneFile?.strips ?? [],
+  },
   /** Fly the camera to a world spot (top view keeps north up). */
   view: (x, z, distance) => flyTo([x, 0, z], distance ?? camera.position.distanceTo(controls.target)),
 };

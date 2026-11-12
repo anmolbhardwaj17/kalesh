@@ -188,14 +188,22 @@ export interface LanesLayer {
   version: number;
   _doc: string;
   block: string;
-  strips: { id: string; kind: string; cls: string; hero: string | null; bridge: boolean; lanes: [string, number][]; ref: [number, number][]; n: [number, number][]; b: number[] | number[][] }[];
+  /** Block frame origin (latitude, longitude) and the block's world offset: world = block + offset. The inspector writes set_lanes patches with a latitude and longitude anchor. */
+  origin?: { lat: number; lon: number };
+  offset: [number, number];
+  strips: {
+    id: string; /** The graph edge the strip was cut from: the id a set_lanes patch names. */ edge: string; kind: string; cls: string; name: string; hero: string | null; bridge: boolean;
+    /** Where the lane count of the edge came from (street.ts LanesFrom) and, for "repair", the id of the issue or override patch. */
+    from?: string; by?: string; /** A taper: [length, shift, needed] in metres. */ taper?: [number, number, number];
+    lanes: [string, number][]; ref: [number, number][]; n: [number, number][]; b: number[] | number[][];
+  }[];
   zones: { id: string; kind: string; node: [number, number]; nose: [number, number]; noseM: number }[];
   junctions: { id: string; at: [number, number]; control: string; arms: number; paths: { turn: string; r: number | null; pts: [number, number][] }[] }[];
   ends: { at: [number, number]; kind: string }[];
 }
 
 /** The lanes layer the map inspector draws (step 2 of the inspector): world metres, borders once per strip where they do not change. */
-export function lanesLayer(b: LaneBuild, block: string, offset: P2): LanesLayer {
+export function lanesLayer(b: LaneBuild, block: string, offset: P2, origin?: { lat: number; lon: number }): LanesLayer {
   const w = (x: number, z: number): [number, number] => [r2(x + offset.x), r2(z + offset.z)];
   const endSt = (strip: number, end: StripEnd): Station => {
     const s = b.strips[strip] as Strip;
@@ -203,13 +211,19 @@ export function lanesLayer(b: LaneBuild, block: string, offset: P2): LanesLayer 
   };
   return {
     version: 1,
-    _doc: 'Lanes layer for the map inspector, written by the bake (tools/bake/roads/laneout.ts). World metres (x east, z south). strips: ref is the reference line, n the unit vector to the left at each point, lanes [type, direction] left to right, b the lateral position of every lane border (one list when it is the same at every point, else one list per point). junction paths: turn, smallest radius (null: straight) and points.',
+    _doc: 'Lanes layer for the map inspector, written by the bake (tools/bake/roads/laneout.ts). World metres (x east, z south). origin and offset: the block frame (world = block + offset). strips: edge is the graph edge the strip was cut from, from where its lane count came from (spec, tag, repair, street, pair, class, fit, width, room), by the issue or override patch behind a repair, taper [length, shift, needed] in metres, ref is the reference line, n the unit vector to the left at each point, lanes [type, direction] left to right, b the lateral position of every lane border (one list when it is the same at every point, else one list per point). junction paths: turn, smallest radius (null: straight) and points.',
     block,
+    ...(origin ? { origin: { lat: origin.lat, lon: origin.lon } } : {}),
+    offset: [offset.x, offset.z],
     strips: b.strips.map((s) => {
       const first = (s.st[0] as Station).b;
       const constant = s.st.every((st) => st.b.every((v, k) => Math.abs(v - (first[k] as number)) < 0.002));
+      const plan = b.streets.byEdge.get(s.edge);
       return {
-        id: s.id, kind: s.kind, cls: s.cls + (s.link ? '_link' : ''), hero: s.hero, bridge: s.st.some((st) => st.bridge), lanes: s.lanes.map((l) => [l.type, l.dir] as [string, number]),
+        id: s.id, edge: s.edge, kind: s.kind, cls: s.cls + (s.link ? '_link' : ''), name: s.name, hero: s.hero, bridge: s.st.some((st) => st.bridge),
+        ...(plan ? { from: plan.from, ...(plan.by ? { by: plan.by } : {}) } : {}),
+        ...(s.taper ? { taper: [r2(s.taper.length), r2(s.taper.shift), r2(s.taper.needed)] as [number, number, number] } : {}),
+        lanes: s.lanes.map((l) => [l.type, l.dir] as [string, number]),
         ref: s.st.map((st) => w(st.x, st.z)), n: s.st.map((st) => [Math.round(st.nx * 1000) / 1000 + 0, Math.round(st.nz * 1000) / 1000 + 0] as [number, number]),
         b: constant ? first.map(r2) : s.st.map((st) => st.b.map(r2)),
       };

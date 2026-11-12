@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-// Screenshots of the map inspector at Connaught Place and ITO, at 1280 and 1920 px wide (P1-039).
+// Screenshots of the map inspector at Connaught Place and ITO, at 1280 and 1920 px wide (P1-039); P1-025 adds the lanes tab at each place.
 //   node tools/inspector/shots.mjs [--prefix after] [--out harness/reports/inspector]
 // Uses the production report (harness/reports/map/) and a temp overrides folder and inbox, so nothing real is written.
 // Each place: the high impact issue nearest to it is selected (the map flies there), then the view zooms out a little
@@ -67,6 +67,23 @@ try {
       const file = path.join(out, `${prefix}_unnamed_${w}.png`);
       await page.screenshot({ path: file });
       console.log(file);
+    }
+    // the lanes tab (P1-025): the split zone or taper finding nearest each place, the layer zoomed to read the lanes
+    if (await page.locator('#lanesTab').isVisible()) {
+      await page.click('#lanesTab');
+      for (const [tag, place] of PLACES) {
+        const p = index.places.find((q) => q.id === place);
+        const it = await page.evaluate(([px, pz]) => window.__inspector.lanes.items().sort((a, b) => Math.hypot(a.x - px, a.z - pz) - Math.hypot(b.x - px, b.z - pz))[0], [p.x, p.z]);
+        await page.locator(`#laneList .row[data-lane="${it.id}"]`).click();
+        await page.waitForFunction(() => !window.__inspector.state().flying);
+        await page.evaluate(([x, z]) => window.__inspector.view(x, z, 230), [it.x, it.z]);
+        await page.waitForFunction(() => !window.__inspector.state().flying);
+        await page.mouse.move(5, 5);
+        await page.waitForTimeout(500);
+        const file = path.join(out, `${prefix}_lanes_${tag}_${w}.png`);
+        await page.screenshot({ path: file });
+        console.log(file);
+      }
     }
     await page.close();
   }
