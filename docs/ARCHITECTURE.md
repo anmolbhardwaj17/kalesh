@@ -41,7 +41,8 @@ Game (`game/`), planned folders (P marks the phase that first needs it, after th
 | `audio/` | Bus layout, area ambience beds, vehicle and horn players | TECH "Audio" |
 | `render/` | The signed look (as built), plus wear and tint read from MultiMesh custom data in the city | TECH "Render pipeline" |
 | `data/` | `vehicles/`, `cutscenes/<id>.json`, `dialogue/`, `translations/` (CSV) | |
-| `world/tiles/` | Baked tiles and `index.json` (gitignored, written by the bake) | T1 |
+| `world/tiles/` | Baked tiles and `index.json` (gitignored, written by the bake); `world/tiles.hash` is the committed bake hash the full set must carry, and `world/test_tiles/` the committed test block (9 tiles, 9.8 MB, `--tiles=test`) | T1 |
+| `world/block_loader.gd` | P1-018, until the streamer exists: loads a whole tile folder (`--tiles=test`, `--tiles=full`) into the scaffold scene, flat stand-in materials, collider chunks, lane pieces as data, spawn point of the car; reads KTL1 with the bench reader `bench/tiles/tile_t1.gd` | T1 |
 
 Bake and tools (`tools/`):
 

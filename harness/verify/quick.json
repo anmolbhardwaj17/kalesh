@@ -5,7 +5,8 @@
     "boot_title",
     "hooks_contract",
     "perf_baseline",
-    "drive_north"
+    "drive_north",
+    "tiles_test_block_drive"
   ],
   "areas": [
     {
@@ -122,6 +123,12 @@
       "path": "harness/bin/",
       "scenarios": [
         "hooks_contract"
+      ]
+    },
+    {
+      "path": "game/world/",
+      "scenarios": [
+        "tiles_test_block_drive"
       ]
     }
   ]

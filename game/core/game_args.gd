@@ -13,6 +13,9 @@
 ##   --scene=<id>         start in that scene (ids in SCENES)
 ##   --arch=<name>        architecture bench: loads the bench scene from ARCH_SCENES; a setup goes after a colon
 ##                        (--arch=render:city+i3+lod), read by the bench scene with arch_setup()
+##   --tiles=<name>       load a baked tile folder into the scaffold scene (game/world/block_loader.gd): `test` is the small
+##                        committed test block (game/world/test_tiles/), `full` the gitignored pilot set (game/world/tiles/),
+##                        or a res:// folder. The car starts on the block's longest lane at grade
 ##   --lockstep           one sim tick per rendered frame at most (a loaded machine runs slower, never catches up)
 ##   --mute               master bus muted
 ## Resolution is an engine arg (`--resolution WxH`, before `--`), handled by Godot itself.
@@ -52,6 +55,7 @@ var time := ""
 var style_off := ""
 var scene := ""
 var arch := ""
+var tiles := ""
 var lockstep := false
 var mute := false
 ## Args that were not understood (reported in debug state, never an error).
@@ -63,10 +67,10 @@ var _style_runner: RefCounted = null
 static func parse(args: PackedStringArray) -> Dictionary:
 	var out := {
 		"debug": false, "debug_port": DEFAULT_DEBUG_PORT, "verify": false, "quality": "medium", "style": "", "light": "", "time": "", "style_off": "",
-		"scene": "", "arch": "", "lockstep": false, "mute": false, "unknown": [] as Array[String],
+		"scene": "", "arch": "", "tiles": "", "lockstep": false, "mute": false, "unknown": [] as Array[String],
 	}
 	var flags := ["debug", "verify", "lockstep", "mute"]
-	var values := ["debug-port", "quality", "style", "light", "time", "style-off", "scene", "arch"]
+	var values := ["debug-port", "quality", "style", "light", "time", "style-off", "scene", "arch", "tiles"]
 	var i := 0
 	while i < args.size():
 		var a: String = args[i]
@@ -122,12 +126,26 @@ func _ready() -> void:
 		get_tree().change_scene_to_file.call_deferred(SCENES[scene])
 	elif scene != "" and not SCENES.has(scene):
 		print("game: unknown --scene=%s, staying on the main scene" % scene)
+	if tiles != "" and arch == "":
+		attach_tiles.call_deferred()
 	if debug:
 		# Loaded by path, never preloaded: without --debug the debug code is not loaded at all.
 		var server: Node = load(DEBUG_SERVER_PATH).new()
 		server.name = "DebugServer"
 		get_tree().root.add_child.call_deferred(server)
 	print("game: boot debug=%s verify=%s lockstep=%s quality=%s" % [debug, verify, lockstep, quality])
+
+
+## Loads the --tiles block into the boot scene (the scaffold: it has the World node and the car). An unknown name or a
+## missing folder is a warning line, never an error: the game stays on the stand-in ground.
+func attach_tiles() -> void:
+	var dir: String = load("res://world/block_loader.gd").folder_of(tiles)
+	if dir == "":
+		print("game: unknown --tiles=%s (use test, full or a res:// folder), no tiles loaded" % tiles)
+		return
+	var scene := get_tree().current_scene
+	if scene != null:
+		load("res://world/block_loader.gd").attach(scene, dir)
 
 
 ## The look id for a --style value: "" is DEFAULT_STYLE, anything else stays. Architecture benches (--arch) set up
@@ -173,6 +191,7 @@ func apply(p: Dictionary) -> void:
 	style_off = p.style_off
 	scene = p.scene
 	arch = p.arch
+	tiles = p.tiles
 	lockstep = p.lockstep
 	mute = p.mute
 	unknown = p.unknown
@@ -219,5 +238,5 @@ func current_scene_id() -> String:
 func as_dict() -> Dictionary:
 	return {
 		"debug": debug, "debugPort": debug_port, "verify": verify, "quality": quality, "style": style, "light": light, "time": time, "styleOff": style_off,
-		"scene": scene, "arch": arch, "lockstep": lockstep, "mute": mute, "unknown": unknown,
+		"scene": scene, "arch": arch, "tiles": tiles, "lockstep": lockstep, "mute": mute, "unknown": unknown,
 	}

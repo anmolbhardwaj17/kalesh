@@ -461,6 +461,8 @@ export async function bake(args: BakeArgs, opts: BakeOptions): Promise<HealthRep
       const res = runTileStep({
         root: opts.root, out: report.tiles.out ?? tileFolder(plan), stage: plan.id, block: plan.def.block, origin: plan.origin, offset: blockFrame(districts, plan.def.block).offset,
         outline: repaired.outline, lanes: laneBuild, meshed, ground: grounded, repaired, places: layout.input.places, only: report.tiles.only, log: opts.log,
+        // the committed expected hash follows a whole bake of the game's own tile folder (never a partial bake or an --out folder)
+        hashFile: report.tiles.only === null && report.tiles.out === DEFAULT_TILES ? TILES_HASH_FILE : undefined,
       });
       report.tiles = { ...report.tiles, written: res.written, record: res.record };
       check(res.invariants);
@@ -496,6 +498,8 @@ export function readGateFile(root: string): GateFile {
 /** The folder a stage's tiles go to: the stage's `tiles` field, else game/world/tiles (gitignored, read by the game). */
 export const tileFolder = (plan: StagePlan): string => plan.def.tiles ?? DEFAULT_TILES;
 export const DEFAULT_TILES = path.join('game', 'world', 'tiles');
+/** The bake hash of the full tile set the repo expects (harness/bin/tileset.mjs checks a worktree's tiles against it). */
+export const TILES_HASH_FILE = path.join('game', 'world', 'tiles.hash');
 
 async function main(): Promise<void> {
   let args: BakeArgs;

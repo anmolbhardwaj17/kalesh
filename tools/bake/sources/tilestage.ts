@@ -43,6 +43,8 @@ export interface TileStepInput {
   places: readonly Place[];
   /** A partial bake: only these tile ids. */
   only: readonly string[] | null;
+  /** Repo-relative file that gets the bake hash of the written set (a whole bake of the game's tile folder). */
+  hashFile?: string;
   log: (line: string) => void;
 }
 
@@ -108,6 +110,7 @@ export function runTileStep(s: TileStepInput): { record: TilesRecord; invariants
   const index = tileIndex(s.stage, s.block, s.offset, res, records);
   const indexFile = path.join(dir, 'index.json');
   fs.writeFileSync(indexFile, JSON.stringify(index, null, 1) + '\n');
+  if (s.hashFile) fs.writeFileSync(path.join(s.root, s.hashFile), JSON.stringify({ _doc: 'The bake hash of the full tile set (game/world/tiles/index.json bakeHash) that the repo expects. Written by a whole bake; harness/bin/tileset.mjs gives a snapshot or play copy the tiles only when they carry this hash.', stage: index.stage, bakeHash: index.bakeHash, tiles: records.length, bytes: index.bytes.total }, null, 1) + '\n');
   const rel = (f: string): string => (f.startsWith(s.root) ? path.relative(s.root, f) : f);
   const record: TilesRecord = {
     dir: rel(dir), index: rel(indexFile), bakeHash: index.bakeHash, margin: TILE_MARGIN_M, budgetBytes: TILE_BUDGET_BYTES, averageBudgetBytes: TILE_AVERAGE_BYTES,

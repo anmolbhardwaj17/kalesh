@@ -1,0 +1,341 @@
+{
+ "version": 1,
+ "_doc": "Index of the KTL1 tiles of one bake stage (tools/bake/tile/write.ts, TECH.md \"Tile format (T1, KTL1)\"): one 250 m tile of the one world grid per file \"<tileX>_<tileZ>.ktl\", vertices relative to the tile origin (world metres of its north-west corner, y at its lowest ground). bakeHash changes when any tile byte changes. skipped lists tiles that were not written and why (a vertex outside the tile plus margin, or over the byte budget).",
+ "stage": "pilot",
+ "block": "centre",
+ "size": 250,
+ "margin": 250,
+ "bakeHash": "1f5295f0c63d51",
+ "offset": [
+  621.6,
+  467.2
+ ],
+ "bytes": {
+  "total": 10284340,
+  "average": 1142704,
+  "largest": {
+   "id": "9_-5",
+   "bytes": 1564512
+  }
+ },
+ "blocks": [
+  {
+   "id": "centre",
+   "tiles": 9,
+   "bytes": 10284340
+  }
+ ],
+ "tiles": [
+  {
+   "id": "-4_-8",
+   "x": -4,
+   "z": -8,
+   "file": "-4_-8.ktl",
+   "bytes": 1027740,
+   "hash": "e117013751ae4e44",
+   "origin": [
+    -1000,
+    216,
+    -2000
+   ],
+   "meshes": 8,
+   "materials": [
+    "ground",
+    "lawn",
+    "plot",
+    "road",
+    "marking",
+    "footpath",
+    "kerb",
+    "building"
+   ],
+   "vertices": 16525,
+   "triangles": 8461,
+   "colliderTriangles": 8427,
+   "chunks": 24,
+   "largestChunk": 491,
+   "buildings": 35,
+   "lanes": 88,
+   "pins": 0,
+   "overhangM": 9.12
+  },
+  {
+   "id": "-3_-8",
+   "x": -3,
+   "z": -8,
+   "file": "-3_-8.ktl",
+   "bytes": 1079968,
+   "hash": "23ba12df9eb9fab0",
+   "origin": [
+    -750,
+    215,
+    -2000
+   ],
+   "meshes": 9,
+   "materials": [
+    "ground",
+    "lawn",
+    "plot",
+    "road",
+    "marking",
+    "median",
+    "footpath",
+    "kerb",
+    "building"
+   ],
+   "vertices": 17694,
+   "triangles": 8234,
+   "colliderTriangles": 8126,
+   "chunks": 25,
+   "largestChunk": 486,
+   "buildings": 21,
+   "lanes": 88,
+   "pins": 0,
+   "overhangM": 15.76
+  },
+  {
+   "id": "-4_-7",
+   "x": -4,
+   "z": -7,
+   "file": "-4_-7.ktl",
+   "bytes": 930868,
+   "hash": "4f8579f46af3a570",
+   "origin": [
+    -1000,
+    215,
+    -1750
+   ],
+   "meshes": 8,
+   "materials": [
+    "ground",
+    "lawn",
+    "plot",
+    "road",
+    "median",
+    "footpath",
+    "kerb",
+    "building"
+   ],
+   "vertices": 14925,
+   "triangles": 7751,
+   "colliderTriangles": 7751,
+   "chunks": 25,
+   "largestChunk": 499,
+   "buildings": 65,
+   "lanes": 85,
+   "pins": 0,
+   "overhangM": 25.99
+  },
+  {
+   "id": "-3_-7",
+   "x": -3,
+   "z": -7,
+   "file": "-3_-7.ktl",
+   "bytes": 1351568,
+   "hash": "d7e8639b8fe591fb",
+   "origin": [
+    -750,
+    214,
+    -1750
+   ],
+   "meshes": 9,
+   "materials": [
+    "ground",
+    "plot",
+    "road",
+    "gore",
+    "marking",
+    "median",
+    "footpath",
+    "kerb",
+    "building"
+   ],
+   "vertices": 21927,
+   "triangles": 10300,
+   "colliderTriangles": 10078,
+   "chunks": 28,
+   "largestChunk": 468,
+   "buildings": 44,
+   "lanes": 191,
+   "pins": 0,
+   "overhangM": 128.12
+  },
+  {
+   "id": "-3_-6",
+   "x": -3,
+   "z": -6,
+   "file": "-3_-6.ktl",
+   "bytes": 1426164,
+   "hash": "6d576493eb6010a6",
+   "origin": [
+    -750,
+    215,
+    -1500
+   ],
+   "meshes": 9,
+   "materials": [
+    "ground",
+    "lawn",
+    "plot",
+    "road",
+    "marking",
+    "median",
+    "footpath",
+    "kerb",
+    "building"
+   ],
+   "vertices": 22934,
+   "triangles": 10742,
+   "colliderTriangles": 10685,
+   "chunks": 30,
+   "largestChunk": 463,
+   "buildings": 36,
+   "lanes": 184,
+   "pins": 0,
+   "overhangM": 49.85
+  },
+  {
+   "id": "8_-6",
+   "x": 8,
+   "z": -6,
+   "file": "8_-6.ktl",
+   "bytes": 607156,
+   "hash": "b05fde7805e39fc5",
+   "origin": [
+    2000,
+    206,
+    -1500
+   ],
+   "meshes": 6,
+   "materials": [
+    "ground",
+    "plot",
+    "road",
+    "footpath",
+    "kerb",
+    "building"
+   ],
+   "vertices": 9592,
+   "triangles": 4985,
+   "colliderTriangles": 4985,
+   "chunks": 19,
+   "largestChunk": 448,
+   "buildings": 13,
+   "lanes": 47,
+   "pins": 0,
+   "overhangM": 29.29
+  },
+  {
+   "id": "9_-6",
+   "x": 9,
+   "z": -6,
+   "file": "9_-6.ktl",
+   "bytes": 1351256,
+   "hash": "728c95f6b6494bf6",
+   "origin": [
+    2250,
+    203,
+    -1500
+   ],
+   "meshes": 15,
+   "materials": [
+    "ground",
+    "plot",
+    "bed",
+    "water",
+    "road",
+    "gore",
+    "marking",
+    "joint",
+    "median",
+    "footpath",
+    "kerb",
+    "wall",
+    "pier",
+    "underside",
+    "building"
+   ],
+   "vertices": 22686,
+   "triangles": 10845,
+   "colliderTriangles": 10486,
+   "chunks": 31,
+   "largestChunk": 474,
+   "buildings": 1,
+   "lanes": 80,
+   "pins": 0,
+   "overhangM": 10.48
+  },
+  {
+   "id": "8_-5",
+   "x": 8,
+   "z": -5,
+   "file": "8_-5.ktl",
+   "bytes": 945108,
+   "hash": "778cd29e3c262cbf",
+   "origin": [
+    2000,
+    206,
+    -1250
+   ],
+   "meshes": 9,
+   "materials": [
+    "ground",
+    "plot",
+    "road",
+    "gore",
+    "marking",
+    "median",
+    "footpath",
+    "kerb",
+    "building"
+   ],
+   "vertices": 15400,
+   "triangles": 7182,
+   "colliderTriangles": 7086,
+   "chunks": 23,
+   "largestChunk": 455,
+   "buildings": 13,
+   "lanes": 77,
+   "pins": 0,
+   "overhangM": 62.64
+  },
+  {
+   "id": "9_-5",
+   "x": 9,
+   "z": -5,
+   "file": "9_-5.ktl",
+   "bytes": 1564512,
+   "hash": "3419e61f8bd1715c",
+   "origin": [
+    2250,
+    206,
+    -1250
+   ],
+   "meshes": 12,
+   "materials": [
+    "ground",
+    "plot",
+    "road",
+    "gore",
+    "marking",
+    "joint",
+    "median",
+    "footpath",
+    "kerb",
+    "wall",
+    "pier",
+    "underside"
+   ],
+   "vertices": 26137,
+   "triangles": 12024,
+   "colliderTriangles": 11717,
+   "chunks": 34,
+   "largestChunk": 477,
+   "buildings": 0,
+   "lanes": 125,
+   "pins": 0,
+   "overhangM": 2.56
+  }
+ ],
+ "skipped": []
+}

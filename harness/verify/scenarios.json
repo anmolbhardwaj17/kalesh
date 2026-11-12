@@ -65,6 +65,18 @@
       "_note": "P0-001. Input only: throttle 3 s of sim from heading 0, z falls by over 10 m and abs x stays under 0.5 m (north is -Z). Does not judge the look: runs with style=none (P1-002)."
     },
     {
+      "name": "tiles_test_block_drive",
+      "query": "style=none&tiles=test",
+      "lockstep": true,
+      "steps": [
+        {
+          "script": "harness/verify/scripts/drive_test_block.js",
+          "timeout": 60000
+        }
+      ],
+      "_note": "P1-018. Boots on the committed test block (game/world/test_tiles, 9 tiles of the ITO flyover and Connaught Place, --tiles=test) with no data/ and no game/world/tiles/: the car stands on a lane at the Delhi ground height and a throttle drive moves it along its heading. The load time is judged against the signed 3 s warn line (page open to ready). Does not judge the look: runs with style=none."
+    },
+    {
       "name": "drive_turn_right",
       "query": "style=none",
       "lockstep": true,

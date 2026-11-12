@@ -2,7 +2,9 @@
 // Stable game copy to play (P4-073, reworked for Godot in P0-027). Builders edit game/ all the time, so a copy of the
 // project exported from a commit is what Anmol plays: it changes only when this script runs (after a verified commit, or
 // the dashboard's "Refresh" button). A copy is `git archive <sha> game` unpacked into harness/reports/play/<sha>/game/ and
-// imported once by the pinned Godot (headless), then npm run play opens it in a window.
+// imported once by the pinned Godot (headless), then npm run play opens it in a window. The gitignored full tile set is
+// cloned in from the main checkout when its bake hash is the one the commit's game/world/tiles.hash names (tileset.mjs),
+// else the copy stops with "rebake: npm run bake -- pilot".
 //   npm run play                                  play the current copy (builds the newest verified commit if there is none)
 //   node harness/bin/playcopy.mjs                 build HEAD into a new copy and make it current
 //   node harness/bin/playcopy.mjs <commit>        build that commit
@@ -19,6 +21,7 @@ import { execFileSync, spawnSync } from 'node:child_process';
 import { fileURLToPath } from 'node:url';
 import { ROOT, R, PATHS, readJSON } from './lib.mjs';
 import { resolveGodot, errorLines, stripAnsi } from './godot.mjs';
+import { provideTiles } from './tileset.mjs';
 
 export const COPY_ROOT = R('harness', 'reports', 'play');
 export const CURRENT = path.join(COPY_ROOT, 'current.json');
@@ -72,6 +75,10 @@ async function buildCopy(sha, dest) {
     execFileSync('git', ['archive', '--format=tar', '-o', tar, sha, 'game'], { cwd: ROOT });
     execFileSync('tar', ['-xf', tar, '-C', tmp]);
     if (!fs.existsSync(path.join(tmp, 'game', 'project.godot'))) throw new Error(`commit ${sha} has no game/project.godot`);
+    // the baked tiles are gitignored: the copy gets the full set from the main checkout when it is the one the commit expects (P1-018)
+    const tiles = provideTiles(tmp, ROOT);
+    if (!tiles.ok) throw new Error(tiles.reason);
+    if (tiles.status !== 'none') console.log(`tiles: ${tiles.status} (${tiles.reason})`);
     const g = await resolveGodot({ allowDownload: true });
     const r = spawnSync(g.path, ['--headless', '--path', path.join(tmp, 'game'), '--import'], { encoding: 'utf8', timeout: 300_000, maxBuffer: 64 * 1024 * 1024 });
     const out = stripAnsi(`${r.stdout || ''}${r.stderr || ''}`);
