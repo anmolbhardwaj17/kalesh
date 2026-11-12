@@ -1,6 +1,6 @@
 {
   "_doc": "Written only by node harness/bin/task.mjs. Phases run in order; P0 (ADOPT + STYLE DISCOVERY) waits for the owner by design and needs task.mjs signoff and task.mjs archsignoff before its gate passes. Later phases are added by the planner at the end of P0 (task.mjs phase-add) from the game's real state.",
-  "updated": "2026-11-12T22:04:04.615Z",
+  "updated": "2026-11-12T22:58:05.241Z",
   "phases": [
     {
       "id": "P0",
@@ -3550,14 +3550,17 @@
       "agent": "builder",
       "priority": 1,
       "kind": "mentor",
-      "status": "doing",
+      "status": "done",
       "attempts": 1,
       "notes": [
         "Anmol's own inspector pick in harness/data/overrides/-2_-7.json sets tunnel on the station footprint (overture/ab2bc8a7-...). Keep it working; the underground class should make it unnecessary but must not break it."
       ],
       "created": "2026-11-12T21:54:24.610Z",
       "model": "opus",
-      "started": "2026-11-12T22:04:04.614Z"
+      "started": "2026-11-12T22:04:04.614Z",
+      "done": "2026-11-12T22:58:05.220Z",
+      "summary": "Underground class: 7 features (Rajiv Chowk, Jama Masjid and Lal Quila stations, Palika Bazaar, Palika Parking, 2 unnamed layer -1 structures) from tags or harness/data/underground.json; they never enter building versus road or ground rules, get no shell, and show dashed and named in the inspector. Issues naming the Rajiv Chowk station 15 to 0, any underground feature 18 to 0, total 6,555 to 6,536; Anmol's 6 picks retired as 'underground'. Verified: typecheck, 3 full bakes ok, quick 6/6 OK with npm test; before and inspector after shots read and kept.",
+      "commit": "13e2a3a"
     }
   ]
 }
