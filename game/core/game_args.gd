@@ -13,9 +13,9 @@
 ##   --scene=<id>         start in that scene (ids in SCENES)
 ##   --arch=<name>        architecture bench: loads the bench scene from ARCH_SCENES; a setup goes after a colon
 ##                        (--arch=render:city+i3+lod), read by the bench scene with arch_setup()
-##   --tiles=<name>       load a baked tile folder into the scaffold scene (game/world/block_loader.gd): `test` is the small
-##                        committed test block (game/world/test_tiles/), `full` the gitignored pilot set (game/world/tiles/),
-##                        or a res:// folder. The car starts on the block's longest lane at grade
+##   --tiles=<name>       stream a baked tile folder into the scaffold scene (game/world/world_stream.gd): `test` is the
+##                        small committed test block (game/world/test_tiles/), `full` the gitignored pilot set
+##                        (game/world/tiles/), or a res:// folder. The car starts on a lane near India Gate
 ##   --lockstep           one sim tick per rendered frame at most (a loaded machine runs slower, never catches up)
 ##   --mute               master bus muted
 ## Resolution is an engine arg (`--resolution WxH`, before `--`), handled by Godot itself.
@@ -58,6 +58,9 @@ var arch := ""
 var tiles := ""
 var lockstep := false
 var mute := false
+## False from the start of a --tiles load until the ring round the player is attached with its colliders (the debug
+## `ready` waits for it); true with no tiles, and when the tiles could not load.
+var world_ready := true
 ## Args that were not understood (reported in debug state, never an error).
 var unknown: Array[String] = []
 var _style_runner: RefCounted = null
@@ -127,6 +130,7 @@ func _ready() -> void:
 	elif scene != "" and not SCENES.has(scene):
 		print("game: unknown --scene=%s, staying on the main scene" % scene)
 	if tiles != "" and arch == "":
+		world_ready = false
 		attach_tiles.call_deferred()
 	if debug:
 		# Loaded by path, never preloaded: without --debug the debug code is not loaded at all.
@@ -136,16 +140,21 @@ func _ready() -> void:
 	print("game: boot debug=%s verify=%s lockstep=%s quality=%s" % [debug, verify, lockstep, quality])
 
 
-## Loads the --tiles block into the boot scene (the scaffold: it has the World node and the car). An unknown name or a
-## missing folder is a warning line, never an error: the game stays on the stand-in ground.
+## Streams the --tiles folder into the current scene (the scaffold: it has the World node and the car). An unknown
+## name or a missing folder is a log line, never an error: the game stays on the stand-in ground.
 func attach_tiles() -> void:
-	var dir: String = load("res://world/block_loader.gd").folder_of(tiles)
+	var dir: String = load("res://world/streaming/tile_index.gd").folder_of(tiles)
+	var scene := get_tree().current_scene
+	var city: Node = scene.get_node_or_null("World/City") if scene != null else null
+	if city != null:
+		world_ready = city.booted
+		return
+	world_ready = false
 	if dir == "":
 		print("game: unknown --tiles=%s (use test, full or a res:// folder), no tiles loaded" % tiles)
+	elif scene != null and load("res://world/world_stream.gd").attach(scene, dir) != null:
 		return
-	var scene := get_tree().current_scene
-	if scene != null:
-		load("res://world/block_loader.gd").attach(scene, dir)
+	world_ready = true
 
 
 ## The look id for a --style value: "" is DEFAULT_STYLE, anything else stays. Architecture benches (--arch) set up

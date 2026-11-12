@@ -74,7 +74,7 @@
           "timeout": 60000
         }
       ],
-      "_note": "P1-018. Boots on the committed test block (game/world/test_tiles, 9 tiles of the ITO flyover and Connaught Place, --tiles=test) with no data/ and no game/world/tiles/: the car stands on a lane at the Delhi ground height and a throttle drive moves it along its heading. The load time is judged against the signed 3 s warn line (page open to ready). Does not judge the look: runs with style=none."
+      "_note": "P1-018, streamed since P1-019. Boots on the committed test block (game/world/test_tiles, 9 tiles of the ITO flyover and Connaught Place, --tiles=test) with no data/ and no game/world/tiles/: the streamer loads the four ITO tiles round the start, the game says ready only when that ring is attached with its colliders, the car stands on a lane with a collider under it at the drawn height, and a throttle drive moves it along its heading. The load time is judged against the signed 3 s warn line (launch to ready). Does not judge the look: runs with style=none."
     },
     {
       "name": "drive_turn_right",
@@ -192,6 +192,72 @@
         }
       ],
       "_note": "P0-009. debug.load('areas') builds the two area kit blocks (old city bazaar strip, Lutyens bungalow road) and the third person character stand-in; the scene reports its id, the sim runs, a shot is taken, no console errors. Runs the default look (stylised B since P1-002)."
+    },
+    {
+      "name": "stream_200",
+      "query": "style=none&tiles=full",
+      "perf": true,
+      "scene": "city",
+      "allOnly": true,
+      "solo": true,
+      "steps": [
+        {
+          "script": "harness/verify/scripts/stream_200.js",
+          "timeout": 240000,
+          "data": "harness/data/fixtures/stream_routes.json"
+        }
+      ],
+      "_note": "P1-019. The streaming gate on the full pilot tiles (--tiles=full, needs npm run bake -- pilot): a scripted drive from India Gate to the Red Fort by ITO at 200 km/h for 60 s of sim. No frame over 33 ms after the first 2 s, streaming work at most 1 ms a frame at p99, at most 3 collider chunks a frame and never with a mesh step, tiles held under the cap. The drive goes on into the perf window (scene kind city). Stand-in look (style=none): the look of the streamed city is P2. Not in quick (over a minute, needs the full tiles)."
+    },
+    {
+      "name": "stream_140",
+      "query": "style=none&tiles=full",
+      "perf": true,
+      "scene": "city",
+      "allOnly": true,
+      "solo": true,
+      "budget": {
+        "frameMs": {
+          "warn": 10,
+          "fail": 10
+        }
+      },
+      "steps": [
+        {
+          "script": "harness/verify/scripts/stream_140.js",
+          "timeout": 180000,
+          "data": "harness/data/fixtures/stream_routes.json"
+        }
+      ],
+      "_note": "P1-019. Frame time while the city streams: the stream_200 drive at 140 km/h, measured by the perf window while tiles load and unload (scene kind city: draw calls warn 2,500 fail 3,500). budget: the acceptance is p95 inside the signed warn line of 10 ms, so warn is the fail line here. Stand-in look (style=none); P2 measures again with the city look."
+    },
+    {
+      "name": "stream_teleport",
+      "query": "style=none&tiles=full",
+      "allOnly": true,
+      "quickMapped": true,
+      "steps": [
+        {
+          "script": "harness/verify/scripts/stream_teleport.js",
+          "timeout": 180000,
+          "data": "harness/data/fixtures/stream_routes.json"
+        }
+      ],
+      "_note": "P1-019. Teleport to Connaught Place, the ITO crossing, Chandni Chowk and India Gate on the full pilot tiles: each answers within 2 s of sim with the ring attached, the player on the ground, and a ray down at 5 points hits a collider within 0.05 m of the drawn surface. quickMapped: a change under game/world/ pulls it into quick."
+    },
+    {
+      "name": "stream_memory",
+      "query": "style=none&tiles=full",
+      "allOnly": true,
+      "solo": true,
+      "steps": [
+        {
+          "script": "harness/verify/scripts/stream_memory.js",
+          "timeout": 420000,
+          "data": "harness/data/fixtures/stream_routes.json"
+        }
+      ],
+      "_note": "P1-019. Five minutes of sim (two laps India Gate, Connaught Place and back at 200 km/h, time scale 4) on the full pilot tiles: tiles held never pass the cap, process memory grows under 50 MB after the first lap, and back at the start the engine object count is within 2 percent of the first time. Not in quick (about 2 minutes)."
     }
   ]
 }

@@ -138,6 +138,8 @@ async function closePage(page) {
     try { await Promise.race([page.client.call('quit'), sleep(5000)]); } catch { /* already gone */ }
     const code = await Promise.race([run.exited, sleep(10000).then(() => 'timeout')]);
     if (code === 'timeout') { run.proc.kill('SIGKILL'); await run.exited; }
+    // A game that dies while it quits (an abort or a segfault in its cleanup, P1-019: a node freed twice) is a crash.
+    else if (code !== 0 || run.exitSignal) page.log.errors.push({ text: `godot crashed while quitting (exit code ${code}${run.exitSignal ? `, ${run.exitSignal}` : ''})` });
   }
   page.client?.close();
   const lines = page.log.errors.map((e) => e.text).join('\n');

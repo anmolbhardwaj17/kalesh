@@ -59,7 +59,8 @@ Notes: `harness/state/knowledge/world-runtime.md`
 - ARCH: "Target module map" (rows `world/streaming/`, `world/systems/`, `geo/`, `world/tiles/`).
 - TECH: "World layout (signed 2026-11-11)", "Tile format (T1, `KTL1`)", "Streaming (ST1, TL1)", "Rendering of the city (I3, LD1, OC2, TX1)", "Performance budgets".
 - Budgets: `harness/verify/perf_budgets.json` blocks `systems`, `world`, `streaming`, `scenes.city`.
-- Source: planned `game/world/`; today the bench readers `game/bench/tiles/tile_t1.gd` (`--arch=tiles`) and `game/bench/render/` (`--arch=render`).
+- Source (P1-019): `game/world/world_stream.gd` (the scene's streamed city, boot, teleport), `game/world/streaming/` (`stream_core.gd`, `ring_plan.gd`, `attach_queue.gd`, `tile_reader.gd`, `tile_index.gd`), `game/world/systems/` (`ground_roads.gd`, `buildings.gd`, `colliders.gd`, `lanes.gd`, `tile_mesh.gd`), `game/geo/world_frame.gd`, the debug probes `game/debug/stream_probe.gd` (hook `stream`), tests `game/tests/test_streaming.gd`, scenario scripts `harness/verify/scripts/stream_200.js`, `stream_140.js`, `stream_teleport.js`, `stream_memory.js` and `drive_test_block.js`, routes `harness/data/fixtures/stream_routes.json` (`tools/fixtures/gen_stream_routes.mjs`). Bench readers: `game/bench/tiles/tile_t1.gd` (`--arch=tiles`) and `game/bench/render/` (`--arch=render`).
+- HOOKS: "Godot transport" (`--tiles`, `state().world`, `ready`, `teleport`, `stream`).
 
 ## Characters, AI and combat
 Notes: `harness/state/knowledge/characters-ai-combat.md`

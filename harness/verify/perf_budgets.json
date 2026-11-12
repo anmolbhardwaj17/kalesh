@@ -292,7 +292,8 @@
     "mapDataGB": {
       "firstRelease": 3.0,
       "estimate": "1.0 to 1.5 GB for about 1,090 tiles"
-    }
+    },
+    "measured": "P1-019 (2026-11-12, full pilot tiles, stand-in look, Metal, M2 Pro): 60 s at 200 km/h has 0 frames over 33 ms (worst 10.4 ms), streaming work p99 0.65 ms a frame, at most 3 collider chunks a frame, a tile reads and prepares in 2.0 ms on average and 4.7 ms at worst, the worst collider chunk attaches in 0.30 to 0.57 ms, 22 tiles held at most (cap 40), pilot tiles average 0.90 MB and 2.21 MB at worst (scenarios stream_200, stream_140, stream_teleport, stream_memory; TECH.md 'Streaming (ST1, TL1)')"
   },
   "bake": {
     "firstReleaseFullMin": 30,

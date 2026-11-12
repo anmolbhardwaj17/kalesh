@@ -149,3 +149,5 @@
 {"id":"mmwc5bzxr","ts":"2026-11-11T13:19:56.880Z","reply":"Recorded for the HUD (P1-003).","tasks":["P1-003"]}
 {"id":"mmwc5bzzo","ts":"2026-11-11T13:19:56.950Z","reply":"Recorded for the HUD (P1-003).","tasks":["P1-003"]}
 {"id":"mmwcftk26","ts":"2026-11-11T18:13:32.271Z","reply":"Answered: recent tasks are offline map pipeline code (no game frames); their debug maps go to harness/reports/map/, which the live strip does not show. Visible city comes with the tile writer and streaming tasks.","tasks":[]}
+{"id":"mmwd4451x","ts":"2026-11-12T05:33:40.060Z","reply":"On it: P1-039 restyles the map inspector into a polished dark game tool (palette, crisp roads, clear issue markers, tidy panel, legend). It runs right after the streaming task finishes.","tasks":["P1-039"]}
+{"id":"mmwd4tder","ts":"2026-11-12T05:53:14.059Z","reply":"Not ok, it is a real crash in the new streaming code during the teleport test. The streaming task (P1-019) must find and fix it, plus a repeat teleport check, before it can pass. Click OK on the dialog.","tasks":["P1-019"]}
