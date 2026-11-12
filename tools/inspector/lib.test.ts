@@ -103,3 +103,29 @@ describe('KTL1 reader', () => {
     expect(() => readKtl1(bytes.buffer)).toThrow('version 9');
   });
 });
+
+describe('page helpers (P1-039)', () => {
+  it('searches title, note, district and id with every word', async () => {
+    const { searchIssues } = await import('./lib.ts');
+    const list = [{ ...issue('a', 0.3), note: 'gap 10 m', district: 'ito' }, { ...issue('b', 0.4), note: 'kerb', district: 'cp' }];
+    expect(searchIssues(list, '').map((i) => i.id)).toEqual(['a', 'b']);
+    expect(searchIssues(list, 'GAP ito').map((i) => i.id)).toEqual(['a']);
+    expect(searchIssues(list, 'dangling', () => 'Dangling end').map((i) => i.id)).toEqual(['a', 'b']);
+    expect(searchIssues(list, 'gap cp')).toEqual([]);
+  });
+  it('picks a round scale bar length', async () => {
+    const { niceScale } = await import('./lib.ts');
+    expect(niceScale(1)).toMatchObject({ metres: 100, label: '100 m' });
+    expect(niceScale(0.5)).toMatchObject({ metres: 50, px: 100 });
+    expect(niceScale(20)).toMatchObject({ metres: 2000, label: '2 km' });
+    expect(niceScale(0).label).toBe('');
+  });
+  it('paints a centre line between opposite drive lanes and a lane line between same direction ones', async () => {
+    const { laneBorder } = await import('./lib.ts');
+    expect(laneBorder(['drive', -1], ['drive', 1])).toBe('centre');
+    expect(laneBorder(['drive', 1], ['drive', 1])).toBe('lane');
+    expect(laneBorder(['drive', 0], ['drive', 0])).toBe('lane');
+    expect(laneBorder(['kerb', 0], ['drive', 1])).toBeNull();
+    expect(laneBorder(undefined, ['drive', 1])).toBeNull();
+  });
+});

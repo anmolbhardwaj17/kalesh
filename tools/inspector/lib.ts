@@ -175,3 +175,33 @@ export function bestProposal(i: Pick<IssueRecord, 'proposals'>): Proposal | null
   for (const p of i.proposals) if (!best || p.confidence > best.confidence) best = p;
   return best;
 }
+
+/** Free text search of the queue: every word must appear in the rule title, the note, the district or the id. */
+export function searchIssues<T extends Pick<IssueRecord, 'id' | 'rule' | 'note' | 'district'>>(list: readonly T[], query: string, title: (i: T) => string = (i) => i.rule): T[] {
+  const words = query.toLowerCase().split(/\s+/).filter(Boolean);
+  if (!words.length) return [...list];
+  return list.filter((i) => {
+    const hay = `${title(i)} ${i.rule} ${i.note ?? ''} ${i.district ?? ''} ${i.id}`.toLowerCase();
+    return words.every((w) => hay.includes(w));
+  });
+}
+
+/** Scale bar: a round length (1, 2 or 5 times a power of ten metres) about `targetPx` long at `metresPerPx`. */
+export function niceScale(metresPerPx: number, targetPx = 110): { metres: number; px: number; label: string } {
+  if (!(metresPerPx > 0) || !Number.isFinite(metresPerPx)) return { metres: 0, px: 0, label: '' };
+  const raw = metresPerPx * targetPx;
+  const pow = 10 ** Math.floor(Math.log10(raw));
+  const step = [1, 2, 5, 10].find((s) => s * pow >= raw * 0.75) ?? 10;
+  const metres = step * pow;
+  return { metres, px: metres / metresPerPx, label: metres >= 1000 ? `${metres / 1000} km` : `${metres} m` };
+}
+
+export type LaneType = 'drive' | 'kerb' | 'footpath' | 'median' | 'parking' | 'planter' | 'gore' | string;
+/**
+ * The painted line between two neighbouring lanes of the lanes layer (laneout.ts, lanes [type, direction] left to
+ * right): 'centre' between drive lanes of opposite directions, 'lane' between drive lanes of one direction, none else.
+ */
+export function laneBorder(left: readonly [LaneType, number] | undefined, right: readonly [LaneType, number] | undefined): 'centre' | 'lane' | null {
+  if (!left || !right || left[0] !== 'drive' || right[0] !== 'drive') return null;
+  return left[1] !== right[1] && left[1] !== 0 && right[1] !== 0 ? 'centre' : 'lane';
+}
