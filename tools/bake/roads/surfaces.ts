@@ -4,8 +4,9 @@
 // street whose inferred lane count is above its graph width. Where two strips of the model lie on each other there,
 // this step names the two graph edges, where, and how far apart their centre lines must be (the distance they keep
 // now plus the depth of the overlap); rule R-LANE-06 moves them apart and the model is built again (main.ts repair
-// step). Pairs this step cannot hand back: two strips of one edge, roads that share a node (a junction holds them,
-// junction.ts clearCuts), roads that cross at an angle (a crossing, not a road alongside). Pure.
+// step). Pairs this step cannot hand back: two strips of one edge, roads on each other within 30 m of a node they
+// share (a junction holds them, junction.ts clearCuts; further out they are two roads drawn too close, P1-042), roads
+// that cross at an angle (a crossing, not a road alongside). Pure.
 import { pointSegment } from '../geom.ts';
 import type { P2 } from '../geom.ts';
 import type { GraphEdge } from '../graph/build.ts';
@@ -35,6 +36,9 @@ export const CONFLICT_COS = Math.cos((35 * Math.PI) / 180);
 /** Extra separation on top of the measured overlap depth (m). */
 export const CONFLICT_MARGIN_M = 0.15;
 
+/** Two roads that share a node are handed back only for surfaces on each other this far from it (m): where a side shift is whole (rules/beside.ts blendLength). */
+export const SHARED_NODE_REACH_M = 30;
+
 /** Nearest point of a polyline. */
 function projectOn(p: P2, pts: readonly P2[]): { d: number; x: number; z: number } {
   let best = { d: Infinity, x: p.x, z: p.z };
@@ -50,6 +54,11 @@ const lateral = (st: Station, p: readonly [number, number]): number => (p[0] - s
 export function laneConflicts(build: LaneBuild, overlaps: readonly StripOverlap[]): { conflicts: LaneConflict[]; skipped: Record<string, number> } {
   const source = build.road.source;
   const byId = new Map(source.map((e) => [e.id, e]));
+  const nodeAt = new Map<string, P2>();
+  for (const e of source) {
+    nodeAt.set(e.a, e.pts[0] as P2);
+    nodeAt.set(e.b, e.pts[e.pts.length - 1] as P2);
+  }
   // the graph edge a strip stands for: its own, or for a zone the branch whose centre line is nearest to the point
   const zoneOf = new Map<number, number>();
   build.zoneStrips.forEach((s, k) => zoneOf.set(s, k));
@@ -123,7 +132,10 @@ export function laneConflicts(build: LaneBuild, overlaps: readonly StripOverlap[
       skip('one edge');
       continue;
     }
-    if (ea.a === eb.a || ea.a === eb.b || ea.b === eb.a || ea.b === eb.b) {
+    // roads that share a node: the junction there holds them as far as its cuts reach (clearCuts, 45 percent of a long
+    // edge at most). Surfaces on each other further out than a shift fades at an end are two roads drawn too close
+    const shared = [ea.a, ea.b].filter((n) => n === eb.a || n === eb.b).map((n) => nodeAt.get(n) as P2);
+    if (shared.some((n) => Math.hypot(n.x - at.x, n.z - at.z) < SHARED_NODE_REACH_M)) {
       skip('shared node');
       continue;
     }

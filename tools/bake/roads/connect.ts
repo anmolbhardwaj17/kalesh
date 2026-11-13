@@ -57,7 +57,8 @@ export interface PathGeom {
   /** Smallest radius along the path (Infinity for a straight line). */
   radius: number;
   length: number;
-  how: 'straight' | 'fillet' | 'biarc';
+  /** route and direct: paths of routes.ts (along the edges inside a junction of several nodes; a short path where the arcs wander). */
+  how: 'straight' | 'fillet' | 'biarc' | 'route' | 'direct';
   /** fillet: the distances from the two ends to the point where the lane lines cross, and the turning angle. */
   a?: number;
   b?: number;
@@ -335,19 +336,30 @@ export function planTurns(arms: readonly ArmView[], restrictions: readonly TurnR
     }
     return best;
   };
+  // an arm whose only movement is the U-turn of its own street has lanes the U-turn does not use: they take the
+  // least sharp other movement the rules leave open (P1-042: a road that starts at a junction of two trunk halves)
+  const beyondU = (arm: number, leaves: boolean): { from: number; to: number; kind: TurnKind } | null => {
+    const has = (k: number): boolean => out.pairs.some((q) => (leaves ? q.from === arm && q.to === k : q.from === k && q.to === arm));
+    const degOf = (k: number): number => (leaves ? turnKindOf(arms[arm] as ArmView, arms[k] as ArmView) : turnKindOf(arms[k] as ArmView, arms[arm] as ArmView)).deg;
+    const k = least(all.filter((x) => (leaves ? open(arm, x) : open(x, arm)) && !has(x)), degOf);
+    if (k === null) return null;
+    const p = { from: leaves ? arm : k, to: leaves ? k : arm, kind: (degOf(k) >= 0 ? 'left' : 'right') as TurnKind };
+    out.pairs.push(p);
+    return p;
+  };
   const nearest = (list: readonly ArmLane[], share: number): ArmLane => list[Math.min(list.length - 1, Math.max(0, Math.round(share * (list.length - 1))))] as ArmLane;
   for (let i = 0; i < arms.length; i++) {
     const ai = ins[i] as ArmLane[];
     ai.forEach((l, idx) => {
       if (out.turns.some((t) => t.from === i && t.fromLane === l.k)) return;
-      const p = straightest(out.pairs.filter((q) => q.from === i));
+      const p = straightest(out.pairs.filter((q) => q.from === i)) ?? beyondU(i, true);
       if (!p) return;
       add(i, p.to, l, nearest(outs[p.to] as ArmLane[], ai.length > 1 ? idx / (ai.length - 1) : 0), p.kind);
     });
     const bo = outs[i] as ArmLane[];
     bo.forEach((l, idx) => {
       if (out.turns.some((t) => t.to === i && t.toLane === l.k)) return;
-      const p = straightest(out.pairs.filter((q) => q.to === i));
+      const p = straightest(out.pairs.filter((q) => q.to === i)) ?? beyondU(i, false);
       if (!p) return;
       add(p.from, i, nearest(ins[p.from] as ArmLane[], bo.length > 1 ? idx / (bo.length - 1) : 0), l, p.kind);
     });

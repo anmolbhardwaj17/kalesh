@@ -3,7 +3,8 @@
 import type { P2 } from '../geom.ts';
 import type { GraphEdge } from '../graph/build.ts';
 import { turnPath } from './connect.ts';
-import type { GEnd, GNode } from './graph.ts';
+import type { GEdge, GEnd, GNode } from './graph.ts';
+import { edgePoint } from './junction.ts';
 import type { ArmPlan, JunctionPlan } from './junction.ts';
 import { buildEdgeStrips } from './lanes.ts';
 import { MIN_TURN_RADIUS_M, classDefaults } from './model.ts';
@@ -12,6 +13,8 @@ import type { ClusterPhase } from './netclusters.ts';
 import { endOf } from './netctx.ts';
 import type { EndKind, ExplainedEnd, LaneBuild, LaneJunction, LanePath, NetCtx, Planned } from './netctx.ts';
 import type { ZonePhase } from './netzones.ts';
+import { ROUTE_DEV_M, ROUTE_MIN_M, deviation, directPath, pathAlong, routeBetween, viaLine, wanders } from './routes.ts';
+import type { RouteEdge } from './routes.ts';
 import { driveCount } from './street.ts';
 
 export interface StripPhase {
@@ -144,7 +147,28 @@ export function buildPaths(c: NetCtx, cl: ClusterPhase, sp: StripPhase): PathPha
     }
     const near = (list: readonly P2[], r: number): boolean => list.some((p) => jp.nodes.some((n) => Math.hypot((graph.nodes.get(n) as GNode).x - p.x, (graph.nodes.get(n) as GNode).z - p.z) <= r));
     const control = near(signals, 25) ? 'signals' : 'priority';
-    const lanePoint = (arm: number, k: number): { strip: number; lane: number; x: number; z: number; ox: number; oz: number } => {
+    // the edges inside the junction, for the paths between arms at different nodes (routes.ts)
+    const inside: RouteEdge[] = [];
+    if (jp.nodes.length > 1) {
+      const set = new Set(jp.nodes);
+      for (const i of absorbed.keys()) {
+        const e = graph.edges[i] as GEdge;
+        if (set.has(e.a) && set.has(e.b) && e.a !== e.b) inside.push({ a: e.a, b: e.b, len: e.len, oneway: e.oneway, pts: e.curve.pts });
+      }
+    }
+    const nodeOf = (arm: number): number => {
+      const end = (jp.arms[arm] as ArmPlan).end;
+      const e = graph.edges[end.edge] as GEdge;
+      return end.atStart ? e.a : e.b;
+    };
+    /** A lane's line along its arm from the node out to the cut line (`lat` to the left of the outward direction). */
+    const armLine = (arm: number, lat: number): P2[] => {
+      const ap = jp.arms[arm] as ArmPlan;
+      const out: P2[] = [];
+      for (let d = 0; d < ap.cut - 1; d += 4) out.push(edgePoint(ap, lat, d));
+      return out;
+    };
+    const lanePoint = (arm: number, k: number): { strip: number; lane: number; x: number; z: number; ox: number; oz: number; lat: number } => {
       const a = arms[arm] as At;
       const ap = jp.arms[arm] as ArmPlan;
       const n = ap.cs.lanes.length;
@@ -153,21 +177,44 @@ export function buildPaths(c: NetCtx, cl: ClusterPhase, sp: StripPhase): PathPha
       const lat = ((st.b[sl] as number) + (st.b[sl + 1] as number)) / 2;
       // the tangent of the station order is (-nz, nx); away from the junction it points along a strip that starts here
       const sign = a.end === 'start' ? 1 : -1;
-      return { strip: a.strip, lane: sl, x: st.x + st.nx * lat, z: st.z + st.nz * lat, ox: -st.nz * sign, oz: st.nx * sign };
+      // lat is to the left of the station order; `sign` turns it to the left of the outward direction
+      return { strip: a.strip, lane: sl, x: st.x + st.nx * lat, z: st.z + st.nz * lat, ox: -st.nz * sign, oz: st.nx * sign, lat: lat * sign };
     };
     const paths: LanePath[] = [];
+    /** Paths that run along the junction's own roads (routes.ts), by index. */
+    const alongRoads = new Set<number>();
     for (const t of pl.turns) {
       const f = lanePoint(t.from, t.fromLane);
       const g = lanePoint(t.to, t.toLane);
-      const geo = turnPath({ x: f.x, z: f.z, hx: -f.ox, hz: -f.oz }, { x: g.x, z: g.z, hx: g.ox, hz: g.oz });
+      const p0 = { x: f.x, z: f.z, hx: -f.ox, hz: -f.oz };
+      const p1 = { x: g.x, z: g.z, hx: g.ox, hz: g.oz };
+      let geo = turnPath(p0, p1);
+      // a path far from the line through the junction (in along its arm, between the nodes along the edges inside,
+      // out along the arm it enters) runs along that line; arcs that loop give way to a short path
+      const found = inside.length ? routeBetween(nodeOf(t.from), nodeOf(t.to), inside) : null;
+      const route = found && Math.hypot((found[found.length - 1] as P2).x - (found[0] as P2).x, (found[found.length - 1] as P2).z - (found[0] as P2).z) >= ROUTE_MIN_M ? found : null;
+      // travel runs against the outward direction on the arm it leaves: the lane's place to the left of travel flips
+      const via = viaLine(armLine(t.from, f.lat).reverse(), route, -f.lat, g.lat, armLine(t.to, g.lat));
+      if (wanders(geo) || deviation(geo.pts, [p0, ...via, p1]) > ROUTE_DEV_M) {
+        // a line with corners too tight to drive never takes the place of a plain path that turns on the radius
+        // (measured without this guard: 6.8 km of path off the road faces instead of 10.5, but 304 pairs under the radius)
+        const r = pathAlong(p0, via, p1);
+        if (r.radius >= MIN_TURN_RADIUS_M || wanders(geo) || geo.radius < MIN_TURN_RADIUS_M) geo = r;
+      }
+      if (wanders(geo)) geo = directPath(p0, p1);
       paths.push({
         from: [f.strip, f.lane], to: [g.strip, g.lane], fromArm: t.from, toArm: t.to, turn: t.kind, radius: Number.isFinite(geo.radius) ? Math.round(geo.radius * 100) / 100 : null,
         length: Math.round(geo.length * 100) / 100, pts: geo.pts.map((p) => ({ x: Math.round(p.x * 1000) / 1000 + 0, z: Math.round(p.z * 1000) / 1000 + 0 })),
       });
+      if (geo.how === 'route' || geo.how === 'direct') alongRoads.add(paths.length - 1);
     }
-    for (const p of paths) {
-      if (p.radius !== null && p.radius < MIN_TURN_RADIUS_M) tightPaths.push({ junction: jp.id, fromArm: p.fromArm, toArm: p.toArm, radius: p.radius, why: 'the only way on for this lane: the two roads meet side by side at a sharp angle and the junction has no room for a wider turn' });
-    }
+    paths.forEach((p, k) => {
+      if (p.radius === null || p.radius >= MIN_TURN_RADIUS_M) return;
+      const why = alongRoads.has(k)
+        ? 'the path keeps to the roads of a junction of several nodes, or is the short way between two lanes whose arcs would loop far outside it: a corner of those roads is tighter than the radius'
+        : 'the only way on for this lane: the two roads meet side by side at a sharp angle and the junction has no room for a wider turn';
+      tightPaths.push({ junction: jp.id, fromArm: p.fromArm, toArm: p.toArm, radius: p.radius, why });
+    });
     turns.uTurnsTooTight += pl.uTurnsTooTight;
     turns.restricted += pl.restricted;
     turns.droppedForRadius += pl.dropped;

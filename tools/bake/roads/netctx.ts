@@ -125,6 +125,17 @@ export const MIN_STRIP_M = 1.5;
 export const PLAN_RADIUS_M = MIN_TURN_RADIUS_M + 0.35;
 /** Only an edge shorter than this may become part of a junction to make room for a turn. */
 export const ABSORB_MAX_M = 45;
+/**
+ * The longest cut a turn may ask an arm for (m): the minimum radius needs 10.5 m at 135 degrees. With no limit, turns
+ * across a long cluster asked for cuts of 90 percent of an arm, edges of 290 m became part of the junction and the
+ * cluster grew to 11 arms over 300 m (Kashmere Gate, P1-042).
+ */
+export const TURN_ASK_MAX_M = 30;
+/**
+ * The longest cut that keeps an arm clear of the other arms (m, junction.ts clearCuts): a slow fork. Arms on each
+ * other further out are roads drawn too close: the lane feedback hands them to the repair (surfaces.ts).
+ */
+export const CLEAR_MAX_M = 60;
 export const CUT_ESTIMATE_M = 9;
 export const MAX_ROUNDS = 4;
 export const PASSES = 7;

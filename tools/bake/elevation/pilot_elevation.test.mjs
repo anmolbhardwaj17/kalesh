@@ -262,25 +262,28 @@ describe.skipIf(missing.length > 0)(`pilot centre elevation${reason ? ` (skipped
     expect(heights.viaducts.filter((v) => v.crossings.some((c) => c.kind === 'water' && /Yamuna/.test(c.name)))).toHaveLength(2);
     // what a viaduct cannot clear is listed, never hidden: two tracks over the Bangla Sahib Road junction 190 m from where they leave the ground
     expect(o.viaductShortM).toBeLessThan(0.5);
-    for (const x of o.short) expect(x.under).toBe('Bangla Sahib Road');
+    // and one foot bridge at Kashmere Gate (way/80429832): the Ring Road carriageways under it are strips since the
+    // cluster was split (P1-042), and the highest edge of one stands 5.37 m under the deck where the solver holds
+    // 5.5 m on the centre lines (0.13 m short, listed in gate_explanations.json findings)
+    expect(o.short.map((x) => x.under).sort()).toEqual(['Bangla Sahib Road', 'Bangla Sahib Road', 'Mahatma Gandhi Marg']);
+    expect(o.footShortM).toBeLessThan(0.15);
     expect(heights.footBridges).toHaveLength(graph.features.footBridges.length);
     for (const f of heights.footBridges) {
       expect(Number.isFinite(f.deckH)).toBe(true);
-      expect(f.shortM).toBe(0);
+      expect(f.shortM).toBeLessThan(0.15);
       if (!f.solved) expect(f.stairs.length).toBeGreaterThan(0);
     }
+    expect(heights.footBridges.filter((f) => f.shortM > 0)).toHaveLength(1);
     expect(o.footCrossings).toBeGreaterThan(100);
-    expect(o.footMinClearanceM).toBeGreaterThanOrEqual(HEADROOM - 0.02);
+    expect(o.footMinClearanceM).toBeGreaterThanOrEqual(HEADROOM - 0.15);
   }, T);
 
-  it('roads under flyovers are lowered 1 m or less but at Kashmere Gate (listed with its reason); no raised end hangs in the air (P1-035)', async () => {
+  it('roads under flyovers are lowered 1 m or less; no raised end hangs in the air (P1-035, Kashmere Gate since P1-042)', async () => {
     const { el } = await baked();
     const sunk = el.structures.filter((s) => (s.kind === 'deck' || s.kind === 'fill') && s.sunk > 1);
     console.log(`[elevation] raised structures over a lowered road: ${el.structures.filter((s) => (s.kind === 'deck' || s.kind === 'fill') && s.sunk > 0.05).map((s) => `${s.name || s.id} ${s.sunk} m`).join(', ')}`);
-    // the Kashmere Gate cluster's centre, held down by its tunnel arm 157 m out (harness/data/gate_explanations.json, P1-036)
-    expect(sunk.map((s) => s.name)).toEqual([expect.stringMatching(/Hanuman Mandir/)]);
-    const explained = JSON.parse(fs.readFileSync(path.join(ROOT, 'harness/data/gate_explanations.json'), 'utf8')).findings.find((f) => /sunk/.test(f.what));
-    expect(explained.measured).toMatch(/Hanuman Mandir 1\.72 m/);
+    // the Kashmere Gate cluster's centre was 1.72 m down, held by its tunnel arm cut 157 m out, until the cluster was split (P1-042)
+    expect(sunk.map((s) => s.name)).toEqual([]);
     const geeta = el.structures.find((s) => /Geeta Colony/.test(s.name));
     expect(geeta.sunk).toBeLessThanOrEqual(1);
     // its slip goes on past the stage edge raised, and says why

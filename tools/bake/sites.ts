@@ -43,10 +43,19 @@ export const MESH_SITES: readonly { id: string; name: string; lat: number; lon: 
  * unjoined arms, the raised pedestrian end).
  */
 export const REPAIR_SITES: readonly { id: string; name: string; lat: number; lon: number; halfM: number }[] = [
-  { id: 'kashmere_gate', name: 'Kashmere Gate: Ring Road and the Hanuman Mandir flyover', lat: 28.65765, lon: 77.24684, halfM: 200 },
+  // (until P1-042 this site stood 780 m off: its place was read from the report's world metres as block metres)
+  { id: 'kashmere_gate', name: 'Kashmere Gate: Ring Road and the Hanuman Mandir flyover', lat: 28.66187, lon: 77.24048, halfM: 200 },
   { id: 'jaswant_singh_rotary', name: 'Ashoka Road and Jaswant Singh Road rotary', lat: 28.61721, lon: 77.22477, halfM: 180 },
   { id: 'jantar_mantar', name: 'Jantar Mantar: Sansad Marg, Tolstoy Marg and Jai Singh Road', lat: 28.62698, lon: 77.21528, halfM: 180 },
   { id: 'firoz_shah_road', name: 'Firoz Shah Road and Hailey Road', lat: 28.62507, lon: 77.22791, halfM: 180 },
+];
+/**
+ * Top views of the junction surfaces the mesh step draws on every whole bake (P1-042), for before and after pictures:
+ * the Kashmere Gate clusters (Ring Road, the Hanuman Mandir flyover and its ramps) and the Vikas Marg fork east of ITO.
+ */
+export const JUNCTION_VIEWS: readonly { id: string; name: string; lat: number; lon: number; halfM: number }[] = [
+  { id: 'kashmere_gate', name: 'Kashmere Gate junctions', lat: 28.662189, lon: 77.239971, halfM: 330 },
+  { id: 'ito_deck_split', name: 'Vikas Marg fork east of ITO', lat: 28.628191, lon: 77.250201, halfM: 90 },
 ];
 /** Sites the terrain step cuts: the mesh sites again on the production ground, and the river bank. */
 export const GROUND_SITES: typeof MESH_SITES = [...MESH_SITES, { id: 'yamuna', name: 'Yamuna west bank at ITO', lat: 28.626, lon: 77.2533, halfM: 260, eye: /^(Vikas Marg|Mahatma Gandhi Marg|Ring Road)/ }];
