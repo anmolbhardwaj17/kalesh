@@ -2,7 +2,9 @@
 
 Status: draft from reference research, P0-035 (2026-11-11). Id `red_fort_surroundings`. Internal reference only, never shipped. Board: `harness/design/areas/red_fort_surroundings_board.jpg`.
 
-**Evidence note.** 24 Commons photos. most tiles are the Lahori Gate and its wall (good for wall and gate); the last three show Netaji Subhash Marg and a police building (good for the road). Jama Masjid road and Meena Bazaar are covered on the galis sheet.
+**Evidence note (P2-002 top-up, 2026-11-13).** 22 new street-level photos (tiles 25 to 46), all Wikimedia Commons, each with link and licence: the Lahori Gate approach from the plaza and the road, the Netaji Subhash Marg and Chandni Chowk Road junction, the moat, the Lal Quila metro entrance, the parking lot, and the temples and roads on the Chandni Chowk side. Mapillary and Flickr need a login or token, so they were not used. **Confidence: medium** for the plaza, moat, rampart and metro entrance; **low to medium** for lane layout on Netaji Subhash Marg, which photos show only as a very wide open junction.
+
+**Earlier note (P0-035).** 24 Commons photos. most tiles are the Lahori Gate and its wall (good for wall and gate); the last three show Netaji Subhash Marg and a police building (good for the road). Jama Masjid road and Meena Bazaar are covered on the galis sheet.
 
 Where a line says 'about', the number was read from the photos by scale cues (a car is about 1.7 m wide, a person about 1.7 m tall) and is not surveyed. Lines are read from the board photos except where the evidence note says the area is thin; those lines also use general knowledge and must be rechecked with street imagery. Confidence per area is in DELHI_WORLD.md section 2a.
 
@@ -36,8 +38,30 @@ Board tile number, file, page URL, licence, author and date. All are Wikimedia C
 | 22 | Delhi Police Gazetted Officers Transit Mess - Netaji Subhash Marg - Darya Ganj - New Delhi 2014-05-13 3117.JPG | https://commons.wikimedia.org/wiki/File:Delhi_Police_Gazetted_Officers_Transit_Mess_-_Netaji_Subhash_Marg_-_Darya_Ganj_-_New_Delhi_2014-05-13_3117.JPG | CC BY 3.0 | Biswarup Ganguly 2014-05-13 |
 | 23 | Netaji Subhash Marg - Delhi 2014-05-13 3115.JPG | https://commons.wikimedia.org/wiki/File:Netaji_Subhash_Marg_-_Delhi_2014-05-13_3115.JPG | CC BY 3.0 | Biswarup Ganguly 2014-05-13 |
 | 24 | Netaji Subhash Marg - Delhi 2014-05-13 3116.JPG | https://commons.wikimedia.org/wiki/File:Netaji_Subhash_Marg_-_Delhi_2014-05-13_3116.JPG | CC BY 3.0 | Biswarup Ganguly 2014-05-13 |
+| 25 | Lahore Gate - The Entry to the Red Fort.JPG | https://commons.wikimedia.org/wiki/File:Lahore_Gate_-_The_Entry_to_the_Red_Fort.JPG | CC BY-SA 3.0 | Jasmeet Singh 2013-02-10 |
+| 26 | Lahori Gate 2.JPG | https://commons.wikimedia.org/wiki/File:Lahori_Gate_2.JPG | CC BY-SA 3.0 | Nishant88dp Taken on 5 |
+| 27 | Lahori Gate Red Fort New Delhi India 2.jpg | https://commons.wikimedia.org/wiki/File:Lahori_Gate_Red_Fort_New_Delhi_India_2.jpg | CC BY-SA 4.0 | Ranjeet Chauhan 2021-10-08 |
+| 28 | Nataji Sibhash Marg and Chandni Chowk Road Junction - Red Fort Area - Delhi 2014-05-13 3528-3530 Compress.JPG | https://commons.wikimedia.org/wiki/File:Nataji_Sibhash_Marg_and_Chandni_Chowk_Road_Junction_-_Red_Fort_Area_-_Delhi_2014-05-13_3528-3530_Compress.JPG | CC BY 3.0 | Biswarup Ganguly 2014-05-13 |
+| 29 | Nataji Sibhash Marg and Chandni Chowk Road Junction - Red Fort Area - Delhi 2014-05-13 3531-3534 Compress.JPG | https://commons.wikimedia.org/wiki/File:Nataji_Sibhash_Marg_and_Chandni_Chowk_Road_Junction_-_Red_Fort_Area_-_Delhi_2014-05-13_3531-3534_Compress.JPG | CC BY 3.0 | Biswarup Ganguly 2014-05-13 |
+| 30 | Red Fort - Lahori Gate 02.JPG | https://commons.wikimedia.org/wiki/File:Red_Fort_-_Lahori_Gate_02.JPG | CC BY-SA 3.0 | Vssun 2012-12-08 |
+| 31 | Red Fort - Lahori Gate Tower.jpg | https://commons.wikimedia.org/wiki/File:Red_Fort_-_Lahori_Gate_Tower.jpg | CC BY-SA 4.0 | Srividya 2015-09-06 |
+| 32 | Red Fort DSC 0468.jpg | https://commons.wikimedia.org/wiki/File:Red_Fort_DSC_0468.jpg | CC BY-SA 4.0 | Shankey007 2017-08-20 |
+| 33 | Rd for delhi india.jpg | https://commons.wikimedia.org/wiki/File:Rd_for_delhi_india.jpg | CC BY-SA 4.0 | Yash parmar123 2017-05-13 |
+| 34 | Red Fort Moat.jpg | https://commons.wikimedia.org/wiki/File:Red_Fort_Moat.jpg | CC BY-SA 4.0 | Pallav.journo 2011-01-15 |
+| 35 | A lemonade seller, outside Red Fort, Delhi.jpg | https://commons.wikimedia.org/wiki/File:A_lemonade_seller,_outside_Red_Fort,_Delhi.jpg | CC BY-SA 2.0 | Dennis G. Jarvis 2007-10-23 |
+| 36 | Lal Quila metro station (Delhi).jpg | https://commons.wikimedia.org/wiki/File:Lal_Quila_metro_station_(Delhi).jpg | CC BY-SA 4.0 | Santosh4118 2022-11-23 |
+| 37 | Red fort from parking lot.JPG | https://commons.wikimedia.org/wiki/File:Red_fort_from_parking_lot.JPG | CC BY-SA 3.0 | Arjuncm3 2013-03-26 |
+| 38 | Red fort from parking lot 1.JPG | https://commons.wikimedia.org/wiki/File:Red_fort_from_parking_lot_1.JPG | CC BY-SA 3.0 | Arjuncm3 2013-03-26 |
+| 39 | Bird hospital, Chandni Chowk.jpg | https://commons.wikimedia.org/wiki/File:Bird_hospital,_Chandni_Chowk.jpg | CC BY-SA 3.0 | Shyamal 29 Septemb |
+| 40 | Entering Old Delhi (5105057229).jpg | https://commons.wikimedia.org/wiki/File:Entering_Old_Delhi_(5105057229).jpg | CC BY 2.0 | krebsmaus07 2010-10-07 |
+| 41 | Chandni Chowk Road, Delhi (43802533965).jpg | https://commons.wikimedia.org/wiki/File:Chandni_Chowk_Road,_Delhi_(43802533965).jpg | CC BY 2.0 | juggadery 2007-11-10 |
+| 42 | Fatehpuri Masjid 2.0.jpg | https://commons.wikimedia.org/wiki/File:Fatehpuri_Masjid_2.0.jpg | CC BY-SA 4.0 | VasudhaBhati2013 2019-08-18 |
+| 43 | Gauri shankar mandir, chandni chowk by ashish.jpg | https://commons.wikimedia.org/wiki/File:Gauri_shankar_mandir,_chandni_chowk_by_ashish.jpg | Public domain | User:आशीष भटनागर 2009-05-31 |
+| 44 | New Delhi - 15 (5336250963).jpg | https://commons.wikimedia.org/wiki/File:New_Delhi_-_15_(5336250963).jpg | CC BY-SA 2.0 | Mike from Vancouver, Canada 2010-12-22 |
+| 45 | New Delhi - 16 (5336866032).jpg | https://commons.wikimedia.org/wiki/File:New_Delhi_-_16_(5336866032).jpg | CC BY-SA 2.0 | Mike from Vancouver, Canada 2010-12-22 |
+| 46 | Digambar Jain Lal Mandir, Chandni Chowk, Delhi.jpg | https://commons.wikimedia.org/wiki/File:Digambar_Jain_Lal_Mandir,_Chandni_Chowk,_Delhi.jpg | CC BY 2.0 | Art Poskanzer from Berkeley, USA 2008-02-11 |
 
-Total cited sources: 24.
+Total cited sources: 46 (24 from P0-035, 22 new in P2-002).
 
 ## Footpaths
 
@@ -82,3 +106,37 @@ Monumental red wall as the backdrop to a street: a continuous 20 to 30 m red san
 ## Edge blending (what changes first)
 
 Edges: Lahori Gate plaza opens west to Chandni Chowk (the bazaar starts after about 80 m, wires and shop signs first); north to Netaji Subhash Marg and Subhash Park; the ring road to the east. First change: boards and wires appear, the white blocks give way to red-brown shops.
+
+## Street-level top-up (P2-002, 2026-11-13)
+
+Where this section differs from an older line above, this section wins. Tile numbers are board tiles.
+
+**Footpaths.** The area in front of the Lahori Gate is a plaza, not a road with walks: black asphalt and stone, about 40 to 60 m across, with orange traffic cones marking the visitor queue (32, 33). Along the moat a kerb with painted orange and white. The Lal Quila metro entrance is a stepped plaza of polished stone with a glass canopy (36). On the Chandni Chowk Road side footpaths are narrow, about 1.5 to 2.5 m, shared with hawkers (35, 41, 44).
+
+**Road surface and markings.** Netaji Subhash Marg at the Lahori Gate opens to a very wide asphalt space with few markings (28, 29, 33). Worn black asphalt with dust and some painted bars at the junction. Chandni Chowk Road has wider lanes with lane lines and a median (41).
+
+**Street lamps.** Tall twin-arm poles about 10 to 12 m at the junction and the plaza (28, 29, 32). Ground floodlights along the wall (see sheet above). Single curved-arm poles on the Chandni Chowk side (41).
+
+**Boundaries.** The dry moat about 15 to 20 m wide with grass banks and a 1 m red stone parapet (34). The rampart batter wall in red Agra sandstone rises from the moat (33, 34, 37, 38). Yellow barricades across vendor and visitor lines (35). Iron railing around the temple compounds (43).
+
+**Buildings.** The Lahori Gate bastions and the Chatta Chowk covered arcade in red sandstone (25 to 31). Across the road: temples in red and white (the Jain temple cluster, 40, 46), the Gauri Shankar temple (43), Fatehpuri mosque courtyard (42), old shops with painted signs (41, 44). A fast-food frontage and heritage block at the Chandni Chowk crossing, only as a type note: do not use real brands.
+
+**Trees and planting.** Bare babul and neem trees in the parking lot and along the moat (37, 38); a large tree on the central island of the junction (28, 29).
+
+**Vendors and street life.** Lemonade and snack sellers at the barricades (35), visitors with cameras in loose groups and queues (32), rickshaw pullers waiting at the road (45), shopkeepers on the Chandni Chowk side (44). People of all ages and dress.
+
+**Parking and vehicles.** Rows of cars, tourist buses and autos in the lot (37, 38), cycle rickshaws, e-rickshaws and autos on the road (41, 45).
+
+**Typical clutter and wear.** Wear about 0.35. Orange cones, queue barriers, signs, overhead wires on the temple side, dust on the stone.
+
+**What sets it apart (added).** A very large open plaza in front of a red sandstone wall, with the junction opening onto it, and a dry moat on one side.
+
+## Map notes (P2-002)
+
+- The Lahori Gate approach is an open plaza about 40 to 60 m across (28, 29, 32, 33). Check OSM: it likely shows roads and parking where the photos show open paving. Model as a plaza polygon with a few service lanes.
+- A small central island with a traffic police booth, a big tree and a tall lamp at the Netaji Subhash Marg and Chandni Chowk Road junction (28, 29).
+- Dry moat about 15 to 20 m wide on the fort side with a 1 m parapet (34). Check it is not modelled as road.
+- The Lal Quila metro entrance is a stepped plaza (36), see `metro.md`.
+- Parking lot east of the Chandni Chowk end (37, 38) with trees and barriers. It is a parking polygon, not a street.
+- Chandni Chowk Road lanes: wide, with a median and lane lines (41). Footpaths 1.5 to 2.5 m, shared with hawkers (35, 41, 44).
+- Barricade lines across vendor zones (35); the gate queue uses cones (32, 33).
