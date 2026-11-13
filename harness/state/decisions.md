@@ -413,3 +413,6 @@ By: builder, P2-005.
 
 ## 2026-11-14 Character models later, maybe from Meshy (Anmol)
 Anmol likes the Meshy result for Bittu and may download the lead models later on a paid plan. Decision: the three lead model cards stay open at priority 3 with no deadline; the stand-in leads stay in the game; nothing depends on them. When files arrive they go through the art reviewer and the Mixamo rig step.
+
+## 2026-11-14 Map lane off after the two running tasks (Anmol)
+Anmol, worried about the usage limit, chose "Finish both, then one lane": P1-032 (map lane) and P2-006 (main lane) finish, then back to one builder at a time (CLAUDE.md Modes). Map tasks run in the main checkout again.
