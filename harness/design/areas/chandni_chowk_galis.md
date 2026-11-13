@@ -2,7 +2,9 @@
 
 Status: draft from reference research, P0-035 (2026-11-11). Id `chandni_chowk_galis`. Internal reference only, never shipped. Board: `harness/design/areas/chandni_chowk_galis_board.jpg`.
 
-**Evidence note.** 24 Commons photos; real gali structure photos are only the first 8 tiles (the rest are food or small objects, cited as low value for the life of the lanes). A later task should add Mapillary street views. The Kinari Bazar and Meena Bazar photos are the best layout evidence.
+**Evidence note (P2-002 top-up, 2026-11-13).** 24 new street-level photos (tiles 25 to 48), all Wikimedia Commons, each with link and licence. They replace the food and object shots as the main evidence: lanes in Ballimaran, Katra Bariyan, Gali Qasim Jan, Khari Baoli, Chawri Bazar, Naughara and the lanes near Jama Masjid, plus a haveli courtyard and carved doorways. Mapillary and Flickr need a login or token, so they were not used. **Confidence: medium** for lane widths, shopfronts, wires and street life (many views at lane level, several lanes, day and night); **medium to low** for the exact plan (which lane joins which), which must come from OSM and satellite.
+
+**Earlier note (P0-035).** 24 Commons photos; real gali structure photos are only the first 8 tiles (the rest are food or small objects, cited as low value for the life of the lanes). A later task should add Mapillary street views. The Kinari Bazar and Meena Bazar photos are the best layout evidence.
 
 Where a line says 'about', the number was read from the photos by scale cues (a car is about 1.7 m wide, a person about 1.7 m tall) and is not surveyed. Lines are read from the board photos except where the evidence note says the area is thin; those lines also use general knowledge and must be rechecked with street imagery. Confidence per area is in DELHI_WORLD.md section 2a.
 
@@ -36,8 +38,32 @@ Board tile number, file, page URL, licence, author and date. All are Wikimedia C
 | 22 | Dal Parantha from Paranthe Wali Gali, Chandni Chowk, India.jpg (low value, shown for street life or context) | https://commons.wikimedia.org/wiki/File:Dal_Parantha_from_Paranthe_Wali_Gali,_Chandni_Chowk,_India.jpg | CC BY-SA 4.0 | Ravi Dwivedi 2022-04-13 |
 | 23 | Dal Parantha in paranthe Wali Gali, Delhi, India.jpg (low value, shown for street life or context) | https://commons.wikimedia.org/wiki/File:Dal_Parantha_in_paranthe_Wali_Gali,_Delhi,_India.jpg | CC BY-SA 4.0 | Ravi Dwivedi 2022-04-13 |
 | 24 | Khoya paratha.jpg (low value, shown for street life or context) | https://commons.wikimedia.org/wiki/File:Khoya_paratha.jpg | CC BY-SA 4.0 | Ravi Dwivedi 2022-04-13 |
+| 25 | 27 - Old Delhi.jpg | https://commons.wikimedia.org/wiki/File:27_-_Old_Delhi.jpg | CC BY-SA 4.0 | Misa.stefanovic.07 2026-02-07 |
+| 26 | Chandni Chowk, 2008 (09).JPG | https://commons.wikimedia.org/wiki/File:Chandni_Chowk,_2008_(09).JPG | CC BY-SA 3.0 | Bahnfrend 2008-12-27 |
+| 27 | Chandni Chowk, 2008 (12).JPG | https://commons.wikimedia.org/wiki/File:Chandni_Chowk,_2008_(12).JPG | CC BY-SA 3.0 | Bahnfrend 2008-12-27 |
+| 28 | Chandni Chowk, 2008 (14).JPG | https://commons.wikimedia.org/wiki/File:Chandni_Chowk,_2008_(14).JPG | CC BY-SA 3.0 | Bahnfrend 2008-12-27 |
+| 29 | Chandni Chowk, 2008 (16).JPG | https://commons.wikimedia.org/wiki/File:Chandni_Chowk,_2008_(16).JPG | CC BY-SA 3.0 | Bahnfrend 2008-12-27 |
+| 30 | Chandni Chowk, 2008 (20).JPG | https://commons.wikimedia.org/wiki/File:Chandni_Chowk,_2008_(20).JPG | CC BY-SA 3.0 | Bahnfrend 2008-12-27 |
+| 31 | Evening Street Life near Jama Masjid, Delhi.jpg | https://commons.wikimedia.org/wiki/File:Evening_Street_Life_near_Jama_Masjid,_Delhi.jpg | CC BY-SA 4.0 | SkandalicznyOrzeszek 2023-08-26 |
+| 32 | Gali Qasim Jan in Ballimaran, Old Delhi.jpg | https://commons.wikimedia.org/wiki/File:Gali_Qasim_Jan_in_Ballimaran,_Old_Delhi.jpg | CC BY 2.0 | Two Circles 2005-06-22 |
+| 33 | India - Delhi - 040 - Narrow streets of Old Delhi (2146050765).jpg | https://commons.wikimedia.org/wiki/File:India_-_Delhi_-_040_-_Narrow_streets_of_Old_Delhi_(2146050765).jpg | CC BY 2.0 | McKay Savage from London, UK 2007-11-18 |
+| 34 | India - Delhi - 041 - Narrow streets of Old Delhi (2146052695).jpg | https://commons.wikimedia.org/wiki/File:India_-_Delhi_-_041_-_Narrow_streets_of_Old_Delhi_(2146052695).jpg | CC BY 2.0 | McKay Savage from London, UK 2007-11-18 |
+| 35 | 20191205 Haveli Khazanchi, Gali Khazanchi, Old Delhi 0635 6745.jpg | https://commons.wikimedia.org/wiki/File:20191205_Haveli_Khazanchi,_Gali_Khazanchi,_Old_Delhi_0635_6745.jpg | CC BY-SA 4.0 | Jakub Hałun 2019-12-05 |
+| 36 | Old Delhi street.jpg | https://commons.wikimedia.org/wiki/File:Old_Delhi_street.jpg | CC BY-SA 4.0 | Jan Kranendonk (https://www.jankranendonk.nl) 1988 |
+| 37 | Old Delhi street 1.jpg | https://commons.wikimedia.org/wiki/File:Old_Delhi_street_1.jpg | CC BY 3.0 pl | Radosław Botev 2015-08-06 |
+| 38 | Old Delhi street 2.jpg | https://commons.wikimedia.org/wiki/File:Old_Delhi_street_2.jpg | CC BY 3.0 pl | Radosław Botev 2015-08-06 |
+| 39 | Stree of Chandni Chawak, Old Delhi.jpg | https://commons.wikimedia.org/wiki/File:Stree_of_Chandni_Chawak,_Old_Delhi.jpg | CC BY-SA 4.0 | Pinakpani 2017-09-06 |
+| 40 | Street at Old Delhi.jpg | https://commons.wikimedia.org/wiki/File:Street_at_Old_Delhi.jpg | CC BY-SA 4.0 | Pinakpani 2017-08-18 |
+| 41 | Streets near Jama Masjid, Delhi.jpg | https://commons.wikimedia.org/wiki/File:Streets_near_Jama_Masjid,_Delhi.jpg | CC BY-SA 2.0 | Edmund Gall 2013-03-04 |
+| 42 | View of Chandni Chowk, Old Delhi, India - September 2014.jpg | https://commons.wikimedia.org/wiki/File:View_of_Chandni_Chowk,_Old_Delhi,_India_-_September_2014.jpg | CC BY-SA 4.0 | Rickard Törnblad 2014-10-09 |
+| 43 | Chawri Bazaar Rickshaw.jpg | https://commons.wikimedia.org/wiki/File:Chawri_Bazaar_Rickshaw.jpg | CC BY-SA 4.0 | Unstable.atom 2019-04-20 |
+| 44 | Chawri Bazar Road - panoramio.jpg | https://commons.wikimedia.org/wiki/File:Chawri_Bazar_Road_-_panoramio.jpg | CC BY 3.0 | Finck Roderick Taken on 1 |
+| 45 | Khari Baoli area, Old Delhi.jpg | https://commons.wikimedia.org/wiki/File:Khari_Baoli_area,_Old_Delhi.jpg | CC BY 2.0 | Varun Shiv Kapur 2009-07-10 |
+| 46 | Carts parked on the Spice Market, Khari Baoli Road, Old Delhi.jpg | https://commons.wikimedia.org/wiki/File:Carts_parked_on_the_Spice_Market,_Khari_Baoli_Road,_Old_Delhi.jpg | CC BY 2.0 | Varun Shiv Kapur 2009-07-15 |
+| 47 | Naughara mansions in Kinari Bazaar.jpg | https://commons.wikimedia.org/wiki/File:Naughara_mansions_in_Kinari_Bazaar.jpg | CC BY 2.0 | Ramesh Lalwani 2013-03-13 |
+| 48 | View from a cycle rickshaw in old Delhi.jpg | https://commons.wikimedia.org/wiki/File:View_from_a_cycle_rickshaw_in_old_Delhi.jpg | CC BY-SA 4.0 | Prayag10 2017-06-28 |
 
-Total cited sources: 24.
+Total cited sources: 48 (24 from P0-035, 24 new in P2-002).
 
 ## Footpaths
 
@@ -82,3 +108,37 @@ Width. 2 to 4 m between 4 to 5 storey faces, with tangled wires and hanging sign
 ## Edge blending (what changes first)
 
 Edges: lanes begin at the Chandni Chowk frontage as an arch gap in the shop row; the first 15 m are wider and brighter, then walls close in. They continue north into the Kinari Bazar and Dariba Kalan market and west toward Jama Masjid road.
+
+## Street-level top-up (P2-002, 2026-11-13)
+
+Where this section differs from an older line above, this section wins. Tile numbers are board tiles.
+
+**Footpaths.** There is none. One worn surface of stone, brick or concrete from shutter to shutter, with an open drain along one edge (31, 32). Shops spill 0.5 to 1.5 m into the lane with stools, steps, stalls and hanging stock (27, 28, 30, 34). Raised thresholds at doors, no kerbs.
+
+**Road surface and markings.** No markings. Patched concrete, stone setts or asphalt, wet patches and spilled water (31, 32, 38). Widths read by scale: Ballimaran and Katra Bariyan about 5 to 6 m (27 to 29, 32, 33), the bazaar lanes about 4 m (34), small galis 2.5 to 3.5 m (31, 35), Khari Baoli and Chawri Bazar about 8 to 10 m with carts parked on both sides (30, 44 to 46).
+
+**Street lamps.** No poles in the lanes. Bare bulbs, tube lights and string lights on the shopfronts and awnings (34, 41). Lit signboards. At the wider crossings a single pole with a curved arm (36, 38).
+
+**Boundaries.** Rolled steel shutters in many colours (28, 31, 33, 39), haveli iron gates and arched doorways with carved plaster (35, 47), arches across lane mouths (31, 40), tarpaulins and awnings in blue, green and orange (26, 32, 34).
+
+**Buildings.** 3 to 5 storeys, shop below and home or godown above. Cantilevered balconies and jharokhas, painted haveli faces in blue, ochre, pink and cream, lime plaster, exposed brick, rooftop tanks, hoardings and signboards in Hindi, Urdu and English (28, 29, 33, 42). A courtyard haveli has blue lime plaster, arched niches and exposed conduit (35). A carved doorway in a teal door with floral plaster surround (47).
+
+**Trees and planting.** Almost none inside the lanes. A neem or peepal at a crossing or a temple (37, 38). Potted plants at a doorstep. Rooftop pigeons.
+
+**Vendors and street life.** Handcarts, porters, hawkers with a tray or a cart, cycle rickshaws, tea and chaat stalls, shoppers in all kinds of clothing, schoolchildren, older men sitting on steps, shopkeepers on stools (26 to 34, 41, 44). In the evening the lanes fill with warm light and a dense crowd (41). Some lanes are quiet with the shutters down in the early morning (31, 39).
+
+**Parking and vehicles.** Cycle rickshaws, handcarts, motorbikes parked in rows, e-rickshaws, autos at the wider lanes, a car at the lane mouth (28, 29, 36, 37, 43, 48). Little in the narrowest galis.
+
+**Typical clutter and wear.** Heavy: tangled overhead wires and cable bundles above the lanes (28, 29, 33, 39), meters and conduits on walls (35), stacked cartons and sacks, awnings, hanging signs, spilled water, litter. Wear 1.0 is confirmed, with 0.9 in the wider market lanes.
+
+**What sets it apart (added).** The canopy of wires and awnings, a lane width that changes every few metres, and constant movement of people. At lane level you almost never see the sky.
+
+## Map notes (P2-002)
+
+- Side-lane mouths open about every 30 to 60 m along the market streets (28, 33, 42). Many of these are likely missing from OSM; check against satellite and add the ones wider than 2.5 m.
+- Archways over lane mouths (31, 40): gateway objects about 3 to 4 m wide and 4 to 5 m tall.
+- Widths: Ballimaran and Katra Bariyan about 5 to 6 m, bazaar lanes about 4 m, small galis 2.5 to 3.5 m, Khari Baoli and Chawri Bazar about 8 to 10 m before parking.
+- No footpath, no kerb, no median, no painted divider. Shopfront spill takes 0.5 to 1.5 m on each side, so the usable width is 1 to 3 m less than the building-to-building width.
+- Open drain channel along one edge of the narrow lanes (31, 32).
+- Crossings with cycle rickshaw queues at the wider junctions (36, 38, 43).
+- Dead ends and courtyards (35) exist behind the lanes; do not connect them to the road graph.
