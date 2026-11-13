@@ -439,3 +439,5 @@ One line per event, written by task.mjs (start, done, fail, phase changes, inbox
 - 2026-11-13 15:00 [P1-026] start (attempt 1): City perf paths and look poses in the real pilot
 - 2026-11-13 15:19 mentor message mmwesp2e3 handled: Done. Godot now only hands focus back to the terminal if you typed or moved the mouse in the last 5 seconds. If you are just watching, the Godot window stays in front.
 - 2026-11-13 15:20 mentor message mmwesq2kl handled: Agreed. Known places like CP get an authored blueprint that overrides OSM (CP: the uniform white colonnade ring). Elsewhere odd OSM shapes are flagged, checked against photos, and fixed if not real.
+- 2026-11-13 15:21 mentor message mmwesqt61 handled: Got it. OSM is the starting point for roads too: divider widths, lanes and footpaths come from photos where OSM is wrong, hero roads get authored cross sections, and wrong OSM bits are deleted (each with a reason, so it sticks).
+- 2026-11-13 15:22 [P1-045] added: Map patches that add: side roads, dividers, separators, footpaths, crossings

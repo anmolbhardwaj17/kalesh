@@ -325,3 +325,6 @@ Anmol: OSM is good for reference, but for places like CP we know the look and sh
 
 ## 2026-11-13 OSM is the starting point for roads too (Anmol)
 Anmol: OSM is reference only; divider widths and the like may be wrong; work on top of it and delete what is wrong. Decision: road cross sections (widths, lanes, medians, footpaths) come from photos and satellite where they differ, through patches and authored road blueprints for hero roads; removing OSM features is allowed as a patch with a reason. Written into MAP_REPAIR.md; notes on P1-032, P2-015, P2-016. Why: real layout from OSM, real look from what the place actually is.
+
+## 2026-11-13 Map patches can add features (Anmol)
+Anmol: we must also add what OSM lacks (side roads, proper dividers, separation), using real-life references from the internet. Decision: new patch actions add_way, add_median, add_footpath, add_crossing, add_barrier with a reference field, plus an inspector draw tool, in new task P1-045 (priority 2, before the P2 hero roads). Why: deleting alone cannot make a road match the real place.
