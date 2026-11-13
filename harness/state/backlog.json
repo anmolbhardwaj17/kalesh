@@ -1,6 +1,6 @@
 {
   "_doc": "Written only by node harness/bin/task.mjs. Phases run in order; P0 (ADOPT + STYLE DISCOVERY) waits for the owner by design and needs task.mjs signoff and task.mjs archsignoff before its gate passes. Later phases are added by the planner at the end of P0 (task.mjs phase-add) from the game's real state.",
-  "updated": "2026-11-13T12:23:30.142Z",
+  "updated": "2026-11-13T12:23:37.903Z",
   "phases": [
     {
       "id": "P0",
@@ -3846,11 +3846,14 @@
       "agent": "builder",
       "priority": 1,
       "kind": "bug",
-      "status": "doing",
+      "status": "done",
       "attempts": 1,
       "notes": [],
       "created": "2026-11-13T11:18:15.293Z",
-      "started": "2026-11-13T11:18:46.644Z"
+      "started": "2026-11-13T11:18:46.644Z",
+      "done": "2026-11-13T12:23:37.882Z",
+      "summary": "Cause: macOS stops drawing a fully covered Godot window (occlusion), so frames, snapshots and perf hang while the sim runs (not App Nap; -NSAppSleepDisabled and --disable-vsync changed nothing). Fix: with --debug only, the debug server forces a draw after 3 process frames without one (RenderingServer.force_draw), reset on every real draw; perf reports forcedDraws. Verified minimised (HARNESS_GODOT_ARGS=--minimized, nothing over the owner's screen): perf_baseline, city_cp_circle_lap, city_chandni_walk 3/3; verify --quick OK twice (14/14); perf_baseline p95 1.8 to 2.2 ms; typecheck and npm test ok. The cover window helper is deleted. godotsmoke 40/42 pre-existing, filed P1-048.",
+      "commit": "68722c0"
     },
     {
       "id": "P2-032",
