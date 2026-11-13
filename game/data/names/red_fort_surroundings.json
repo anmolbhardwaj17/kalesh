@@ -1,0 +1,489 @@
+{
+ "area": "red_fort_surroundings",
+ "scripts": {
+  "latn": "Latin (always present, fallback font)",
+  "deva": "Devanagari (optional)",
+  "arab": "Urdu Nastaliq (optional)"
+ },
+ "names": [
+  {
+   "kind": "govt_board",
+   "text": {
+    "latn": "Red Fort Visitors: Tickets This Way",
+    "deva": "लाल क़िला पर्यटक: टिकट इस ओर"
+   },
+   "weight": 2
+  },
+  {
+   "kind": "govt_board",
+   "text": {
+    "latn": "No Entry for Vehicles",
+    "deva": "वाहनों का प्रवेश निषेध"
+   },
+   "weight": 2
+  },
+  {
+   "kind": "govt_board",
+   "text": {
+    "latn": "Security Check Ahead",
+    "deva": "आगे सुरक्षा जाँच"
+   },
+   "weight": 2
+  },
+  {
+   "kind": "govt_board",
+   "text": {
+    "latn": "Keep Distance From the Wall",
+    "deva": "दीवार से दूरी बनाए रखें"
+   },
+   "weight": 2
+  },
+  {
+   "kind": "govt_board",
+   "text": {
+    "latn": "Parking Area Number Two",
+    "deva": "पार्किंग क्षेत्र संख्या दो"
+   },
+   "weight": 2
+  },
+  {
+   "kind": "govt_board",
+   "text": {
+    "latn": "Public Toilet",
+    "deva": "सार्वजनिक शौचालय"
+   },
+   "weight": 2
+  },
+  {
+   "kind": "govt_board",
+   "text": {
+    "latn": "Barricade: Police Control",
+    "deva": "बैरिकेड: पुलिस नियंत्रण"
+   },
+   "weight": 2
+  },
+  {
+   "kind": "govt_board",
+   "text": {
+    "latn": "Lost and Found Counter",
+    "deva": "खोया पाया काउंटर"
+   },
+   "weight": 2
+  },
+  {
+   "kind": "govt_board",
+   "text": {
+    "latn": "Visitors Must Keep Left",
+    "deva": "आगंतुक बाएँ चलें"
+   },
+   "weight": 2
+  },
+  {
+   "kind": "govt_board",
+   "text": {
+    "latn": "Drinking Water",
+    "deva": "पीने का पानी"
+   },
+   "weight": 2
+  },
+  {
+   "kind": "office",
+   "text": {
+    "latn": "Heritage Guide Association Booth",
+    "deva": "हेरिटेज गाइड एसोसिएशन बूथ"
+   },
+   "weight": 2
+  },
+  {
+   "kind": "office",
+   "text": {
+    "latn": "Rajdhani Police Post Lahori Gate",
+    "deva": "राजधानी पुलिस चौकी लाहौरी गेट"
+   },
+   "weight": 2
+  },
+  {
+   "kind": "office",
+   "text": {
+    "latn": "Municipal Office Ward Eleven",
+    "deva": "नगर निगम कार्यालय वार्ड ग्यारह"
+   },
+   "weight": 2
+  },
+  {
+   "kind": "office",
+   "text": {
+    "latn": "Tourist Help Centre",
+    "deva": "पर्यटक सहायता केंद्र"
+   },
+   "weight": 2
+  },
+  {
+   "kind": "transport",
+   "text": {
+    "latn": "Cycle Rickshaw Fort Tour",
+    "deva": "साइकिल रिक्शा क़िला दर्शन"
+   },
+   "weight": 2
+  },
+  {
+   "kind": "transport",
+   "text": {
+    "latn": "E-Rickshaw Stand Lahori Gate",
+    "deva": "ई-रिक्शा स्टैंड लाहौरी गेट"
+   },
+   "weight": 2
+  },
+  {
+   "kind": "transport",
+   "text": {
+    "latn": "Tonga Stand"
+   },
+   "weight": 2
+  },
+  {
+   "kind": "transport",
+   "text": {
+    "latn": "Metro Gate Two",
+    "deva": "मेट्रो गेट दो"
+   },
+   "weight": 2
+  },
+  {
+   "kind": "transport",
+   "text": {
+    "latn": "Auto Pre-paid Counter",
+    "deva": "ऑटो प्रीपेड काउंटर"
+   },
+   "weight": 2
+  },
+  {
+   "kind": "transport",
+   "text": {
+    "latn": "Tourist Bus Halt",
+    "deva": "टूरिस्ट बस ठहराव"
+   },
+   "weight": 2
+  },
+  {
+   "kind": "handicraft",
+   "text": {
+    "latn": "Chatta Chowk Gift House",
+    "deva": "छत्ता चौक गिफ़्ट हाउस"
+   },
+   "weight": 3
+  },
+  {
+   "kind": "handicraft",
+   "text": {
+    "latn": "Fort Souvenir Corner",
+    "deva": "फ़ोर्ट सूवेनिर कॉर्नर"
+   },
+   "weight": 3
+  },
+  {
+   "kind": "handicraft",
+   "text": {
+    "latn": "Marble Inlay Works",
+    "deva": "मार्बल इनले वर्क्स"
+   },
+   "weight": 3
+  },
+  {
+   "kind": "handicraft",
+   "text": {
+    "latn": "Miniature Painting Studio",
+    "deva": "लघु चित्रकला स्टूडियो"
+   },
+   "weight": 3
+  },
+  {
+   "kind": "handicraft",
+   "text": {
+    "latn": "Brass Ware Bhandar",
+    "deva": "पीतल बर्तन भंडार"
+   },
+   "weight": 3
+  },
+  {
+   "kind": "cart",
+   "text": {
+    "latn": "Chai Samosa Cart",
+    "deva": "चाय समोसा ठेला"
+   },
+   "weight": 2
+  },
+  {
+   "kind": "cart",
+   "text": {
+    "latn": "Kulfi Wala",
+    "deva": "कुल्फ़ी वाला"
+   },
+   "weight": 2
+  },
+  {
+   "kind": "cart",
+   "text": {
+    "latn": "Bhel Puri Cart",
+    "deva": "भेल पूरी ठेला"
+   },
+   "weight": 2
+  },
+  {
+   "kind": "cart",
+   "text": {
+    "latn": "Nimbu Pani Soda",
+    "deva": "नींबू पानी सोडा"
+   },
+   "weight": 2
+  },
+  {
+   "kind": "cart",
+   "text": {
+    "latn": "Balloon Wala"
+   },
+   "weight": 2
+  },
+  {
+   "kind": "cart",
+   "text": {
+    "latn": "Cold Water Bottle Stall",
+    "deva": "ठंडा पानी बोतल स्टॉल"
+   },
+   "weight": 2
+  },
+  {
+   "kind": "eatery",
+   "text": {
+    "latn": "Fort View Dhaba",
+    "deva": "फ़ोर्ट व्यू ढाबा"
+   },
+   "weight": 3
+  },
+  {
+   "kind": "eatery",
+   "text": {
+    "latn": "Lahori Gate Tikka Corner",
+    "deva": "लाहौरी गेट टिक्का कॉर्नर"
+   },
+   "weight": 3
+  },
+  {
+   "kind": "eatery",
+   "text": {
+    "latn": "Jama Masjid Side Kebab",
+    "arab": "جامع مسجد سائیڈ کباب"
+   },
+   "weight": 3
+  },
+  {
+   "kind": "eatery",
+   "text": {
+    "latn": "Nihari Wale Chacha",
+    "deva": "नहारी वाले चाचा",
+    "arab": "نہاری والے چاچا"
+   },
+   "weight": 3
+  },
+  {
+   "kind": "tea",
+   "text": {
+    "latn": "Subah Ki Chai Tapri",
+    "deva": "सुबह की चाय टपरी"
+   },
+   "weight": 2
+  },
+  {
+   "kind": "sweets",
+   "text": {
+    "latn": "Ram Dayal Mithai",
+    "deva": "राम दयाल मिठाई"
+   },
+   "weight": 1
+  },
+  {
+   "kind": "hotel",
+   "text": {
+    "latn": "Hotel Qila View",
+    "deva": "होटल क़िला व्यू"
+   },
+   "weight": 2
+  },
+  {
+   "kind": "hotel",
+   "text": {
+    "latn": "Hotel Raj Nivas",
+    "deva": "होटल राज निवास"
+   },
+   "weight": 2
+  },
+  {
+   "kind": "lodge",
+   "text": {
+    "latn": "Daryaganj Lodge",
+    "deva": "दरियागंज लॉज"
+   },
+   "weight": 2
+  },
+  {
+   "kind": "cloth",
+   "text": {
+    "latn": "Fort Road Readymade Garments",
+    "deva": "फ़ोर्ट रोड रेडीमेड गारमेंट्स"
+   },
+   "weight": 3
+  },
+  {
+   "kind": "cloth",
+   "text": {
+    "latn": "Subhash Margin Cloth House",
+    "deva": "सुभाष मार्ग क्लॉथ हाउस"
+   },
+   "weight": 3
+  },
+  {
+   "kind": "books",
+   "text": {
+    "latn": "Subhash Park Book Stall",
+    "deva": "सुभाष पार्क बुक स्टॉल"
+   },
+   "weight": 1
+  },
+  {
+   "kind": "pharmacy",
+   "text": {
+    "latn": "Fort Medical Store",
+    "deva": "फ़ोर्ट मेडिकल स्टोर"
+   },
+   "weight": 1
+  },
+  {
+   "kind": "clinic",
+   "text": {
+    "latn": "First Aid Post",
+    "deva": "प्राथमिक उपचार केंद्र"
+   },
+   "weight": 1
+  },
+  {
+   "kind": "repair",
+   "text": {
+    "latn": "Cycle Puncture Repair",
+    "deva": "साइकिल पंचर मरम्मत"
+   },
+   "weight": 1
+  },
+  {
+   "kind": "repair",
+   "text": {
+    "latn": "Photo Frame Wale",
+    "deva": "फ़ोटो फ़्रेम वाले"
+   },
+   "weight": 1
+  },
+  {
+   "kind": "photo",
+   "text": {
+    "latn": "Fort Photo Studio",
+    "deva": "फ़ोर्ट फ़ोटो स्टूडियो"
+   },
+   "weight": 1
+  },
+  {
+   "kind": "coaching",
+   "text": {
+    "latn": "Guide Training Institute",
+    "deva": "गाइड ट्रेनिंग इंस्टीट्यूट"
+   },
+   "weight": 1
+  },
+  {
+   "kind": "wall_writing",
+   "text": {
+    "latn": "Yahan Thookna Mana Hai",
+    "deva": "यहाँ थूकना मना है"
+   },
+   "weight": 1
+  },
+  {
+   "kind": "wall_writing",
+   "text": {
+    "latn": "Hamara Qila Hamari Shaan",
+    "deva": "हमारा क़िला हमारी शान"
+   },
+   "weight": 1
+  },
+  {
+   "kind": "wall_writing",
+   "text": {
+    "latn": "Gaadi Yahan Na Khadi Karein",
+    "deva": "गाड़ी यहाँ न खड़ी करें"
+   },
+   "weight": 1
+  },
+  {
+   "kind": "poster_line",
+   "text": {
+    "latn": "Dilli 2040: Heritage Redevelopment",
+    "deva": "दिल्ली 2040: विरासत पुनर्विकास"
+   },
+   "weight": 1
+  },
+  {
+   "kind": "poster_line",
+   "text": {
+    "latn": "Nav Dilli Dal Rally This Sunday",
+    "deva": "नव दिल्ली दल रैली इस रविवार"
+   },
+   "weight": 1
+  },
+  {
+   "kind": "poster_line",
+   "text": {
+    "latn": "Sethi Seva Trust: Heritage Walk",
+    "deva": "सेठी सेवा ट्रस्ट: विरासत यात्रा"
+   },
+   "weight": 1
+  },
+  {
+   "kind": "poster_line",
+   "text": {
+    "latn": "NewsTez 24: Dilli Abhi",
+    "deva": "न्यूज़तेज़ 24: दिल्ली अभी"
+   },
+   "weight": 1
+  },
+  {
+   "kind": "poster_line",
+   "text": {
+    "latn": "Raat Wali 106.1: Qisse Dilli Ke",
+    "deva": "रात वाली 106.1: क़िस्से दिल्ली के"
+   },
+   "weight": 1
+  },
+  {
+   "kind": "eatery",
+   "text": {
+    "latn": "Jalebi Wala Fort Gate",
+    "deva": "जलेबी वाला फ़ोर्ट गेट"
+   },
+   "weight": 3
+  },
+  {
+   "kind": "sweets",
+   "text": {
+    "latn": "Shahi Tukda Corner",
+    "deva": "शाही टुकड़ा कॉर्नर"
+   },
+   "weight": 1
+  },
+  {
+   "kind": "govt_board",
+   "text": {
+    "latn": "Shoes Counter Deposit Here",
+    "deva": "जूते जमा काउंटर"
+   },
+   "weight": 2
+  }
+ ]
+}

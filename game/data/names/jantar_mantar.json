@@ -1,0 +1,488 @@
+{
+ "area": "jantar_mantar",
+ "scripts": {
+  "latn": "Latin (always present, fallback font)",
+  "deva": "Devanagari (optional)",
+  "arab": "Urdu Nastaliq (optional)"
+ },
+ "names": [
+  {
+   "kind": "govt_board",
+   "text": {
+    "latn": "Jantar Mantar Monument Entry",
+    "deva": "जंतर मंतर स्मारक प्रवेश"
+   },
+   "weight": 2
+  },
+  {
+   "kind": "govt_board",
+   "text": {
+    "latn": "Sansad Marg",
+    "deva": "संसद मार्ग"
+   },
+   "weight": 2
+  },
+  {
+   "kind": "govt_board",
+   "text": {
+    "latn": "Parliament Street",
+    "deva": "पार्लियामेंट स्ट्रीट"
+   },
+   "weight": 2
+  },
+  {
+   "kind": "govt_board",
+   "text": {
+    "latn": "Protest Area: Permission Needed",
+    "deva": "प्रदर्शन क्षेत्र: अनुमति आवश्यक"
+   },
+   "weight": 2
+  },
+  {
+   "kind": "govt_board",
+   "text": {
+    "latn": "No Vehicles Beyond This Point",
+    "deva": "इसके आगे वाहन निषेध"
+   },
+   "weight": 2
+  },
+  {
+   "kind": "govt_board",
+   "text": {
+    "latn": "Security Zone: Photography Restricted",
+    "deva": "सुरक्षा क्षेत्र: फ़ोटोग्राफ़ी सीमित"
+   },
+   "weight": 2
+  },
+  {
+   "kind": "govt_board",
+   "text": {
+    "latn": "Guard Box Number Four",
+    "deva": "गार्ड बॉक्स संख्या चार"
+   },
+   "weight": 2
+  },
+  {
+   "kind": "govt_board",
+   "text": {
+    "latn": "Barricade Police Control Room",
+    "deva": "बैरिकेड पुलिस नियंत्रण कक्ष"
+   },
+   "weight": 2
+  },
+  {
+   "kind": "govt_board",
+   "text": {
+    "latn": "Monument Open Sunrise to Sunset",
+    "deva": "स्मारक सूर्योदय से सूर्यास्त"
+   },
+   "weight": 2
+  },
+  {
+   "kind": "govt_board",
+   "text": {
+    "latn": "Patel Chowk Metro Entry",
+    "deva": "पटेल चौक मेट्रो प्रवेश"
+   },
+   "weight": 2
+  },
+  {
+   "kind": "govt_board",
+   "text": {
+    "latn": "Visitors Keep Off the Instruments",
+    "deva": "यंत्रों पर न चढ़ें"
+   },
+   "weight": 2
+  },
+  {
+   "kind": "office",
+   "text": {
+    "latn": "Parliament Street Police Post",
+    "deva": "पार्लियामेंट स्ट्रीट पुलिस चौकी"
+   },
+   "weight": 2
+  },
+  {
+   "kind": "office",
+   "text": {
+    "latn": "Government Guest House",
+    "deva": "सरकारी अतिथि गृह"
+   },
+   "weight": 2
+  },
+  {
+   "kind": "office",
+   "text": {
+    "latn": "Telegraph Office Annexe"
+   },
+   "weight": 2
+  },
+  {
+   "kind": "office",
+   "text": {
+    "latn": "Assembly Secretariat Block",
+    "deva": "विधानसभा सचिवालय ब्लॉक"
+   },
+   "weight": 2
+  },
+  {
+   "kind": "office",
+   "text": {
+    "latn": "Public Grievance Counter",
+    "deva": "जन शिकायत काउंटर"
+   },
+   "weight": 2
+  },
+  {
+   "kind": "office",
+   "text": {
+    "latn": "Dharna Registration Desk",
+    "deva": "धरना पंजीकरण डेस्क"
+   },
+   "weight": 2
+  },
+  {
+   "kind": "office",
+   "text": {
+    "latn": "Ex-Servicemen Welfare Cell",
+    "deva": "पूर्व सैनिक कल्याण प्रकोष्ठ"
+   },
+   "weight": 2
+  },
+  {
+   "kind": "protest",
+   "text": {
+    "latn": "Teachers Demand Fair Pay",
+    "deva": "शिक्षक माँगें उचित वेतन"
+   },
+   "weight": 2
+  },
+  {
+   "kind": "protest",
+   "text": {
+    "latn": "Farmers Want Fair Price",
+    "deva": "किसान माँगें उचित दाम"
+   },
+   "weight": 2
+  },
+  {
+   "kind": "protest",
+   "text": {
+    "latn": "Basti Families Need Homes",
+    "deva": "बस्ती परिवारों को घर चाहिए"
+   },
+   "weight": 2
+  },
+  {
+   "kind": "protest",
+   "text": {
+    "latn": "Students Demand Clean Exams",
+    "deva": "छात्र माँगें स्वच्छ परीक्षा"
+   },
+   "weight": 2
+  },
+  {
+   "kind": "protest",
+   "text": {
+    "latn": "Workers Union Sit-in",
+    "deva": "मज़दूर यूनियन धरना"
+   },
+   "weight": 2
+  },
+  {
+   "kind": "protest",
+   "text": {
+    "latn": "We Are Still Waiting",
+    "deva": "हम अब भी इंतज़ार में हैं"
+   },
+   "weight": 2
+  },
+  {
+   "kind": "protest",
+   "text": {
+    "latn": "Hear Us Please",
+    "deva": "कृपया हमारी सुनिए"
+   },
+   "weight": 2
+  },
+  {
+   "kind": "protest",
+   "text": {
+    "latn": "Water Is Our Right",
+    "deva": "पानी हमारा हक़ है"
+   },
+   "weight": 2
+  },
+  {
+   "kind": "protest",
+   "text": {
+    "latn": "Pensions Delayed Years",
+    "deva": "पेंशन वर्षों से रुकी"
+   },
+   "weight": 2
+  },
+  {
+   "kind": "protest",
+   "text": {
+    "latn": "Clean River Clean City",
+    "deva": "साफ़ नदी साफ़ शहर"
+   },
+   "weight": 2
+  },
+  {
+   "kind": "protest",
+   "text": {
+    "latn": "Justice for the Fire Families",
+    "deva": "आग पीड़ित परिवारों को न्याय"
+   },
+   "weight": 2
+  },
+  {
+   "kind": "protest",
+   "text": {
+    "latn": "Nurses Need Safe Hours",
+    "deva": "नर्सें माँगें सुरक्षित घंटे"
+   },
+   "weight": 2
+  },
+  {
+   "kind": "protest",
+   "text": {
+    "latn": "Rickshaw Pullers Need Licences",
+    "deva": "रिक्शा चालक माँगें लाइसेंस"
+   },
+   "weight": 2
+  },
+  {
+   "kind": "cart",
+   "text": {
+    "latn": "Chai Wala Dharna Side",
+    "deva": "चाय वाला धरना किनारे"
+   },
+   "weight": 2
+  },
+  {
+   "kind": "cart",
+   "text": {
+    "latn": "Water Pouch Seller",
+    "deva": "पानी पाउच विक्रेता"
+   },
+   "weight": 2
+  },
+  {
+   "kind": "cart",
+   "text": {
+    "latn": "Samosa Thela",
+    "deva": "समोसा ठेला"
+   },
+   "weight": 2
+  },
+  {
+   "kind": "cart",
+   "text": {
+    "latn": "Chana Chaat Cart",
+    "deva": "चना चाट ठेला"
+   },
+   "weight": 2
+  },
+  {
+   "kind": "cart",
+   "text": {
+    "latn": "Banner Printing While You Wait",
+    "deva": "बैनर छपाई तुरंत"
+   },
+   "weight": 2
+  },
+  {
+   "kind": "cart",
+   "text": {
+    "latn": "Flag and Cap Stall",
+    "deva": "झंडा टोपी स्टॉल"
+   },
+   "weight": 2
+  },
+  {
+   "kind": "tea",
+   "text": {
+    "latn": "Sansad Marg Chai Tapri",
+    "deva": "संसद मार्ग चाय टपरी"
+   },
+   "weight": 2
+  },
+  {
+   "kind": "eatery",
+   "text": {
+    "latn": "Langar Seva Stall",
+    "deva": "लंगर सेवा स्टॉल"
+   },
+   "weight": 3
+  },
+  {
+   "kind": "eatery",
+   "text": {
+    "latn": "Sunrise Tiffin Wale",
+    "deva": "सनराइज़ टिफ़िन वाले"
+   },
+   "weight": 3
+  },
+  {
+   "kind": "eatery",
+   "text": {
+    "latn": "Free Meal Tent",
+    "deva": "मुफ़्त भोजन तंबू"
+   },
+   "weight": 3
+  },
+  {
+   "kind": "transport",
+   "text": {
+    "latn": "Parked Cabs Association",
+    "deva": "पार्क्ड कैब्स एसोसिएशन"
+   },
+   "weight": 2
+  },
+  {
+   "kind": "transport",
+   "text": {
+    "latn": "Auto Stand Jantar Mantar",
+    "deva": "ऑटो स्टैंड जंतर मंतर"
+   },
+   "weight": 2
+  },
+  {
+   "kind": "transport",
+   "text": {
+    "latn": "Prepaid Taxi Booth",
+    "deva": "प्रीपेड टैक्सी बूथ"
+   },
+   "weight": 2
+  },
+  {
+   "kind": "transport",
+   "text": {
+    "latn": "Bus Stop Parliament Street",
+    "deva": "बस स्टॉप पार्लियामेंट स्ट्रीट"
+   },
+   "weight": 2
+  },
+  {
+   "kind": "tourist",
+   "text": {
+    "latn": "Guide for Monument Tour",
+    "deva": "स्मारक भ्रमण गाइड"
+   },
+   "weight": 1
+  },
+  {
+   "kind": "tourist",
+   "text": {
+    "latn": "Audio Guide Rental",
+    "deva": "ऑडियो गाइड किराया"
+   },
+   "weight": 1
+  },
+  {
+   "kind": "tourist",
+   "text": {
+    "latn": "Sundial Info Board",
+    "deva": "धूपघड़ी सूचना पटल"
+   },
+   "weight": 1
+  },
+  {
+   "kind": "clinic",
+   "text": {
+    "latn": "First Aid Tent",
+    "deva": "प्राथमिक उपचार तंबू"
+   },
+   "weight": 1
+  },
+  {
+   "kind": "wall_writing",
+   "text": {
+    "latn": "Free Speech Corner"
+   },
+   "weight": 1
+  },
+  {
+   "kind": "wall_writing",
+   "text": {
+    "latn": "Aaj Bhi Intezaar",
+    "deva": "आज भी इंतज़ार"
+   },
+   "weight": 1
+  },
+  {
+   "kind": "wall_writing",
+   "text": {
+    "latn": "Sunwai Kab Hogi",
+    "deva": "सुनवाई कब होगी"
+   },
+   "weight": 1
+  },
+  {
+   "kind": "wall_writing",
+   "text": {
+    "latn": "Please Keep the Path Clear",
+    "deva": "कृपया रास्ता खाली रखें"
+   },
+   "weight": 1
+  },
+  {
+   "kind": "poster_line",
+   "text": {
+    "latn": "Nav Dilli Dal Listens",
+    "deva": "नव दिल्ली दल सुनता है"
+   },
+   "weight": 1
+  },
+  {
+   "kind": "poster_line",
+   "text": {
+    "latn": "Dilli Ka Dil, Sabke Liye",
+    "deva": "दिल्ली का दिल, सबके लिए"
+   },
+   "weight": 1
+  },
+  {
+   "kind": "poster_line",
+   "text": {
+    "latn": "NewsTez 24 Live From Parliament Street",
+    "deva": "न्यूज़तेज़ 24 लाइव पार्लियामेंट स्ट्रीट से"
+   },
+   "weight": 1
+  },
+  {
+   "kind": "poster_line",
+   "text": {
+    "latn": "Footpath News: Dharna Day Nine",
+    "deva": "फ़ुटपाथ न्यूज़: धरना दिन नौ"
+   },
+   "weight": 1
+  },
+  {
+   "kind": "cart",
+   "text": {
+    "latn": "Peanut and Chana Seller",
+    "deva": "मूँगफली चना वाला"
+   },
+   "weight": 2
+  },
+  {
+   "kind": "tea",
+   "text": {
+    "latn": "Tea Stall Beside the Wall",
+    "deva": "दीवार के पास चाय स्टॉल"
+   },
+   "weight": 2
+  },
+  {
+   "kind": "govt_board",
+   "text": {
+    "latn": "Please Queue Here",
+    "deva": "कृपया यहाँ कतार में लगें"
+   },
+   "weight": 2
+  }
+ ]
+}

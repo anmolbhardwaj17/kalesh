@@ -1,0 +1,523 @@
+{
+ "area": "chandni_chowk_galis",
+ "scripts": {
+  "latn": "Latin (always present, fallback font)",
+  "deva": "Devanagari (optional)",
+  "arab": "Urdu Nastaliq (optional)"
+ },
+ "names": [
+  {
+   "kind": "eatery",
+   "text": {
+    "latn": "Shudh Ghee Parantha House",
+    "deva": "शुद्ध घी परांठा हाउस"
+   },
+   "weight": 3
+  },
+  {
+   "kind": "eatery",
+   "text": {
+    "latn": "Aloo Gobhi Parantha Corner",
+    "deva": "आलू गोभी परांठा कॉर्नर"
+   },
+   "weight": 3
+  },
+  {
+   "kind": "eatery",
+   "text": {
+    "latn": "Khurchan Paratha Wale",
+    "deva": "खुरचन परांठा वाले"
+   },
+   "weight": 3
+  },
+  {
+   "kind": "eatery",
+   "text": {
+    "latn": "Gali Ka Kulcha Chole",
+    "deva": "गली का कुलचा छोले"
+   },
+   "weight": 3
+  },
+  {
+   "kind": "eatery",
+   "text": {
+    "latn": "Daulat Ki Chaat Corner",
+    "deva": "दौलत की चाट कॉर्नर"
+   },
+   "weight": 3
+  },
+  {
+   "kind": "eatery",
+   "text": {
+    "latn": "Naan Khatai Bakers",
+    "deva": "नान खटाई बेकर्स"
+   },
+   "weight": 3
+  },
+  {
+   "kind": "eatery",
+   "text": {
+    "latn": "Sheermal Tandoor",
+    "arab": "شیرمال تندور"
+   },
+   "weight": 3
+  },
+  {
+   "kind": "eatery",
+   "text": {
+    "latn": "Qorma Roti Hotel",
+    "arab": "قورمہ روٹی ہوٹل"
+   },
+   "weight": 3
+  },
+  {
+   "kind": "eatery",
+   "text": {
+    "latn": "Mutton Burra Tikka Point",
+    "deva": "मटन बर्रा टिक्का पॉइंट",
+    "arab": "مٹن برہ ٹکہ پوائنٹ"
+   },
+   "weight": 3
+  },
+  {
+   "kind": "sweets",
+   "text": {
+    "latn": "Panditji Ki Mithai",
+    "deva": "पंडितजी की मिठाई"
+   },
+   "weight": 1
+  },
+  {
+   "kind": "sweets",
+   "text": {
+    "latn": "Imarti Jalebi Bhandar",
+    "deva": "इमरती जलेबी भंडार"
+   },
+   "weight": 1
+  },
+  {
+   "kind": "sweets",
+   "text": {
+    "latn": "Sohan Halwa Ghar",
+    "deva": "सोहन हलवा घर"
+   },
+   "weight": 1
+  },
+  {
+   "kind": "sweets",
+   "text": {
+    "latn": "Katra Dahi Wale",
+    "deva": "कटरा दही वाले"
+   },
+   "weight": 1
+  },
+  {
+   "kind": "tea",
+   "text": {
+    "latn": "Chaiwala Ballimaran",
+    "deva": "चायवाला बल्लीमारान"
+   },
+   "weight": 2
+  },
+  {
+   "kind": "tea",
+   "text": {
+    "latn": "Kullad Doodh Patti",
+    "deva": "कुल्हड़ दूध पत्ती"
+   },
+   "weight": 2
+  },
+  {
+   "kind": "cloth",
+   "text": {
+    "latn": "Katra Neel Cloth Market",
+    "deva": "कटरा नील कपड़ा बाज़ार"
+   },
+   "weight": 3
+  },
+  {
+   "kind": "cloth",
+   "text": {
+    "latn": "Zari Zardozi Kaarigar",
+    "arab": "زری زردوزی کاریگر"
+   },
+   "weight": 3
+  },
+  {
+   "kind": "cloth",
+   "text": {
+    "latn": "Gota Kinari Bhandar",
+    "deva": "गोटा किनारी भंडार"
+   },
+   "weight": 3
+  },
+  {
+   "kind": "cloth",
+   "text": {
+    "latn": "Dupatta Rangai Wale",
+    "deva": "दुपट्टा रँगाई वाले"
+   },
+   "weight": 3
+  },
+  {
+   "kind": "cloth",
+   "text": {
+    "latn": "Lace Aur Fita Ghar",
+    "deva": "लेस और फीता घर"
+   },
+   "weight": 3
+  },
+  {
+   "kind": "bangles",
+   "text": {
+    "latn": "Chudi Wali Gali Kangan",
+    "deva": "चूड़ी वाली गली कंगन"
+   },
+   "weight": 1
+  },
+  {
+   "kind": "bangles",
+   "text": {
+    "latn": "Lakh Ki Chudiyan",
+    "deva": "लाख की चूड़ियाँ"
+   },
+   "weight": 1
+  },
+  {
+   "kind": "jeweller",
+   "text": {
+    "latn": "Ballimaran Sone Chandi",
+    "deva": "बल्लीमारान सोना चाँदी"
+   },
+   "weight": 1
+  },
+  {
+   "kind": "jeweller",
+   "text": {
+    "latn": "Dariba Silver Works",
+    "deva": "दरीबा सिल्वर वर्क्स"
+   },
+   "weight": 1
+  },
+  {
+   "kind": "attar",
+   "text": {
+    "latn": "Gali Attar Wale",
+    "arab": "گلی عطر والے"
+   },
+   "weight": 1
+  },
+  {
+   "kind": "books",
+   "text": {
+    "latn": "Hakeem Ki Kitabein",
+    "arab": "حکیم کی کتابیں"
+   },
+   "weight": 1
+  },
+  {
+   "kind": "books",
+   "text": {
+    "latn": "Qasim Jan Shayari Corner",
+    "arab": "قاسم جان شاعری کارنر"
+   },
+   "weight": 1
+  },
+  {
+   "kind": "hakim",
+   "text": {
+    "latn": "Hakim Dawakhana",
+    "arab": "حکیم دواخانہ"
+   },
+   "weight": 1
+  },
+  {
+   "kind": "hakim",
+   "text": {
+    "latn": "Unani Shifakhana",
+    "arab": "یونانی شفاخانہ"
+   },
+   "weight": 1
+  },
+  {
+   "kind": "clinic",
+   "text": {
+    "latn": "Dr Rizvi Clinic",
+    "deva": "डॉ रिज़वी क्लिनिक",
+    "arab": "ڈاکٹر رضوی کلینک"
+   },
+   "weight": 1
+  },
+  {
+   "kind": "pharmacy",
+   "text": {
+    "latn": "Gali Medical Hall",
+    "deva": "गली मेडिकल हॉल"
+   },
+   "weight": 1
+  },
+  {
+   "kind": "hardware",
+   "text": {
+    "latn": "Nut Bolt Tala Chabi Wale",
+    "deva": "नट बोल्ट ताला चाबी वाले"
+   },
+   "weight": 3
+  },
+  {
+   "kind": "repair",
+   "text": {
+    "latn": "Chabi Banane Wale",
+    "deva": "चाबी बनाने वाले"
+   },
+   "weight": 1
+  },
+  {
+   "kind": "repair",
+   "text": {
+    "latn": "Silai Machine Repair",
+    "deva": "सिलाई मशीन रिपेयर"
+   },
+   "weight": 1
+  },
+  {
+   "kind": "repair",
+   "text": {
+    "latn": "Jooti Mochi Corner",
+    "deva": "जूती मोची कॉर्नर"
+   },
+   "weight": 1
+  },
+  {
+   "kind": "tailor",
+   "text": {
+    "latn": "Sherwani Specialist Tailors",
+    "deva": "शेरवानी स्पेशलिस्ट टेलर्स"
+   },
+   "weight": 1
+  },
+  {
+   "kind": "tailor",
+   "text": {
+    "latn": "Khan Tailors",
+    "arab": "خان ٹیلرز"
+   },
+   "weight": 1
+  },
+  {
+   "kind": "printing",
+   "text": {
+    "latn": "Card Chhapai Wale",
+    "deva": "कार्ड छपाई वाले"
+   },
+   "weight": 1
+  },
+  {
+   "kind": "office",
+   "text": {
+    "latn": "Haveli Heritage Guest House",
+    "deva": "हवेली हेरिटेज गेस्ट हाउस"
+   },
+   "weight": 2
+  },
+  {
+   "kind": "office",
+   "text": {
+    "latn": "Gali Residents Welfare Committee",
+    "deva": "गली निवासी कल्याण समिति"
+   },
+   "weight": 2
+  },
+  {
+   "kind": "office",
+   "text": {
+    "latn": "Hand Embroidery Co-operative",
+    "deva": "हैंड एम्ब्रॉयडरी को-ऑपरेटिव"
+   },
+   "weight": 2
+  },
+  {
+   "kind": "lodge",
+   "text": {
+    "latn": "Haveli Lodge",
+    "deva": "हवेली लॉज"
+   },
+   "weight": 2
+  },
+  {
+   "kind": "dharamshala",
+   "text": {
+    "latn": "Gali Dharamshala",
+    "deva": "गली धर्मशाला"
+   },
+   "weight": 1
+  },
+  {
+   "kind": "coaching",
+   "text": {
+    "latn": "Urdu Tuition Centre",
+    "arab": "اردو ٹیوشن سینٹر"
+   },
+   "weight": 1
+  },
+  {
+   "kind": "coaching",
+   "text": {
+    "latn": "Tailoring Course Centre",
+    "deva": "टेलरिंग कोर्स सेंटर"
+   },
+   "weight": 1
+  },
+  {
+   "kind": "transport",
+   "text": {
+    "latn": "Rickshaw Parking Only",
+    "deva": "रिक्शा पार्किंग केवल"
+   },
+   "weight": 2
+  },
+  {
+   "kind": "transport",
+   "text": {
+    "latn": "Thela Loading Point",
+    "deva": "ठेला लोडिंग पॉइंट"
+   },
+   "weight": 2
+  },
+  {
+   "kind": "cart",
+   "text": {
+    "latn": "Chana Jor Garam",
+    "deva": "चना जोर गरम"
+   },
+   "weight": 2
+  },
+  {
+   "kind": "cart",
+   "text": {
+    "latn": "Kulfi Falooda Cart",
+    "deva": "कुल्फी फालूदा"
+   },
+   "weight": 2
+  },
+  {
+   "kind": "cart",
+   "text": {
+    "latn": "Cut Fruit Chaat Thela",
+    "deva": "कटे फल चाट ठेला"
+   },
+   "weight": 2
+  },
+  {
+   "kind": "spice",
+   "text": {
+    "latn": "Pickle Achar Wale",
+    "deva": "अचार वाले"
+   },
+   "weight": 1
+  },
+  {
+   "kind": "spice",
+   "text": {
+    "latn": "Papad Warian Bhandar",
+    "deva": "पापड़ वड़ियाँ भंडार"
+   },
+   "weight": 1
+  },
+  {
+   "kind": "spice",
+   "text": {
+    "latn": "Dry Fruit Katra",
+    "deva": "ड्राई फ्रूट कटरा"
+   },
+   "weight": 1
+  },
+  {
+   "kind": "govt_board",
+   "text": {
+    "latn": "Gali Number Board",
+    "deva": "गली नंबर बोर्ड"
+   },
+   "weight": 2
+  },
+  {
+   "kind": "govt_board",
+   "text": {
+    "latn": "Danger: Loose Wires",
+    "deva": "ख़तरा: ढीले तार"
+   },
+   "weight": 2
+  },
+  {
+   "kind": "govt_board",
+   "text": {
+    "latn": "Drain Cleaning in Progress",
+    "deva": "नाली सफ़ाई जारी है"
+   },
+   "weight": 2
+  },
+  {
+   "kind": "wall_writing",
+   "text": {
+    "latn": "Gali Mein Cycle Chalana Mana Hai",
+    "deva": "गली में साइकिल चलाना मना है"
+   },
+   "weight": 1
+  },
+  {
+   "kind": "wall_writing",
+   "text": {
+    "latn": "Kooda Na Phenkein",
+    "deva": "कूड़ा न फेंकें"
+   },
+   "weight": 1
+  },
+  {
+   "kind": "wall_writing",
+   "text": {
+    "latn": "Dhyan Se Chalein",
+    "deva": "ध्यान से चलें"
+   },
+   "weight": 1
+  },
+  {
+   "kind": "wall_writing",
+   "text": {
+    "latn": "Tinki Ki Dukaan Yahan Hai"
+   },
+   "weight": 1
+  },
+  {
+   "kind": "poster_line",
+   "text": {
+    "latn": "Gali Gali Mein Nav Dilli Dal",
+    "deva": "गली गली में नव दिल्ली दल"
+   },
+   "weight": 1
+  },
+  {
+   "kind": "poster_line",
+   "text": {
+    "latn": "Dilli Ka Dil Aapke Saath",
+    "deva": "दिल्ली का दिल आपके साथ"
+   },
+   "weight": 1
+  },
+  {
+   "kind": "poster_line",
+   "text": {
+    "latn": "Footpath News: Gali Ki Khabar",
+    "deva": "फ़ुटपाथ न्यूज़: गली की ख़बर"
+   },
+   "weight": 1
+  },
+  {
+   "kind": "poster_line",
+   "text": {
+    "latn": "Jhatpat Rider Wanted",
+    "deva": "झटपट राइडर चाहिए"
+   },
+   "weight": 1
+  }
+ ]
+}
