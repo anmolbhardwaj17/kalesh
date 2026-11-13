@@ -418,3 +418,5 @@ One line per event, written by task.mjs (start, done, fail, phase changes, inbox
 - 2026-11-13 08:38 [P1-043] start (attempt 1): Lane model: paths in multi-node old city junctions, ITO three-branch split zone, foot bridge headroom
 - 2026-11-13 09:33 [P1-043] done: Lane paths off road faces 10.5 km to 0.2 km of 396 km (ring-based path choice, clusters that leave the ring become J2); ITO jn838495928 a three-way split zone (split3.ts), branches fed 1/2/1 lanes; foot bridge clearance sampled at the lower road's edges, least 5.5 m, pilot_elevation strict again. Leftovers noted on P1-037. Verified: typecheck, 799 vitest, whole bake green with gates explained, quick 6/6 OK, ITO before and after read and kept.
 - 2026-11-13 09:34 [P1-020] start (attempt 1): Vehicle model V2 and the car at 140 km/h
+- 2026-11-13 10:16 [P1-044] added: Move the look stand-in scenes to the V2 car and chase camera
+- 2026-11-13 10:16 [P14-004] added: Polish: driving camera framing

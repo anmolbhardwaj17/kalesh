@@ -1,0 +1,20 @@
+[gd_resource type="Resource" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://vehicles/vehicle_tune.gd" id="1_tune"]
+
+; The ordinary car (and later the patrol car), P1-020: the KEEP tune of the old game (decisions.md) retuned to GAME.md
+; "Movement and camera feel": top speed about 140 km/h, 0 to 100 km/h in 10 to 12 s, 100 to 0 in 38 to 45 m. Strong
+; low gears (it holds 38 km/h at full lock and climbs a 6 percent ramp at 100), a short fade at the top of each gear so
+; the last gear pins the top speed.
+[resource]
+script = ExtResource("1_tune")
+id = "car"
+linear_damp = 0.02
+compression = 1.8
+relaxation = 2.6
+engine = 4200.0
+gear_force = [1.0, 1.0, 0.5, 0.42, 0.36, 0.28]
+gears = [37.0, 62.0, 88.0, 112.0, 132.0, 145.0]
+fade_share = 0.06
+shift_at = 0.93
+brake = 64.0

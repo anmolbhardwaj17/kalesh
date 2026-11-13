@@ -34,6 +34,7 @@ const SCENES := {
 	"street": "res://scenes/standin/street.tscn",
 	"landmarks": "res://scenes/standin/landmarks.tscn",
 	"areas": "res://scenes/standin/areas.tscn",
+	"course": "res://scenes/course/course.tscn",
 }
 
 ## Architecture bench scenes (game/bench/<name>/, ARCH_OPTIONS.md "Bench tasks"), started with --arch=<name>[:setup].

@@ -1,6 +1,6 @@
 {
   "_doc": "Written only by node harness/bin/task.mjs. Phases run in order; P0 (ADOPT + STYLE DISCOVERY) waits for the owner by design and needs task.mjs signoff and task.mjs archsignoff before its gate passes. Later phases are added by the planner at the end of P0 (task.mjs phase-add) from the game's real state.",
-  "updated": "2026-11-13T04:04:11.652Z",
+  "updated": "2026-11-13T04:46:42.902Z",
   "phases": [
     {
       "id": "P0",
@@ -3631,6 +3631,36 @@
       "done": "2026-11-13T04:03:33.206Z",
       "summary": "Lane paths off road faces 10.5 km to 0.2 km of 396 km (ring-based path choice, clusters that leave the ring become J2); ITO jn838495928 a three-way split zone (split3.ts), branches fed 1/2/1 lanes; foot bridge clearance sampled at the lower road's edges, least 5.5 m, pilot_elevation strict again. Leftovers noted on P1-037. Verified: typecheck, 799 vitest, whole bake green with gates explained, quick 6/6 OK, ITO before and after read and kept.",
       "commit": "14538f7"
+    },
+    {
+      "id": "P1-044",
+      "phase": "P1",
+      "title": "Move the look stand-in scenes to the V2 car and chase camera",
+      "desc": "From P1-020: scenes/standin/builder.gd still uses the old kinematic car.gd and old camera because the approved look shots depend on them. Move them to game/vehicles/vehicle.gd and game/camera/chase_camera.gd, retake and re-approve the affected look shots, then remove the old car.gd if nothing else uses it. Also give the physics course ramp top a real vertical curve (now a 6% kink: the car flies 18 ticks at 100 km/h).",
+      "accept": [],
+      "deps": [],
+      "agent": "builder",
+      "priority": 3,
+      "kind": "followup",
+      "status": "todo",
+      "attempts": 0,
+      "notes": [],
+      "created": "2026-11-13T04:46:36.115Z"
+    },
+    {
+      "id": "P14-004",
+      "phase": "P14",
+      "title": "Polish: driving camera framing",
+      "desc": "From P1-020 (cam_wall.png): with the car pressed against a wall the camera rises over the roof and looks ahead, so the rear of the car is cut off at the bottom of the frame. Keep the car framed when the swept sphere pushes the camera up.",
+      "accept": [],
+      "deps": [],
+      "agent": "builder",
+      "priority": 4,
+      "kind": "polish",
+      "status": "todo",
+      "attempts": 0,
+      "notes": [],
+      "created": "2026-11-13T04:46:42.902Z"
     }
   ]
 }

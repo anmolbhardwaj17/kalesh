@@ -1,13 +1,13 @@
 ## The core runtime (P1-006): Jolt by name, the C1 sim clock in the running engine, and who may step.
 ## - The physics engine setting reads "Jolt Physics" and the running server is Jolt (named by its space state class,
 ##   the way the physics bench did; DEFAULT resolves to GodotPhysics3D on 4.7.2).
-## - Replay: one input script (the car's actions plus a force on a falling rigid body) ends at the same place at time
+## - Replay: one input script (the V2 car's actions plus a force on a falling rigid body) ends at the same place at time
 ##   scale 0.25, 1 and 4, and a run held and resumed (from inside a tick and between frames) equals a run never held.
 ##   These runs use the autoload SimClock and real engine physics frames, so they take about 10 s of wall time.
 ## - Only the clock and the camera files have a _physics_process (every other system steps on SimClock.sim_tick).
 extends RefCounted
 
-const Car := preload("res://scripts/car.gd")
+const Car := preload("res://vehicles/vehicle.gd")
 
 ## Ticks of the input script and the tick the held runs stop at.
 const N := 96
@@ -25,7 +25,7 @@ var tree: SceneTree
 
 var _clock: Node
 var _world: Node3D
-var _car: Node3D
+var _car: RigidBody3D
 var _box: RigidBody3D
 var _start := 0
 
@@ -65,7 +65,7 @@ func test_replay_same_end_at_any_time_scale_and_after_a_hold() -> void:
 	var held_between: Dictionary = await _run(4.0, "between")
 	_clock.set_scale(1.0)
 	t.ok(ref.ok and slow.ok and fast.ok and held_tick.ok and held_between.ok, "every run reached tick %d (%s %s %s %s %s)" % [N, ref.ok, slow.ok, fast.ok, held_tick.ok, held_between.ok])
-	t.ok((ref.car as Vector3).length() > 2.0, "the car drove (%s)" % ref.car)
+	t.ok(Vector2((ref.car as Vector3).x, (ref.car as Vector3).z).length() > 1.0, "the car drove (%s)" % ref.car)
 	t.ok(absf((ref.box as Vector3).y - 2.5) > 1.0 and absf((ref.box as Vector3).z) > 0.5, "the box fell and was pushed (%s)" % ref.box)
 	for pair in [["scale 0.25", slow], ["scale 4", fast], ["held inside a tick at scale 1", held_tick], ["held between frames at scale 4", held_between]]:
 		var r: Dictionary = pair[1]

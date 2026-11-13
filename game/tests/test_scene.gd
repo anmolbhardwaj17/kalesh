@@ -1,5 +1,5 @@
-## The main scene: no node under the world root has a negative scale or a mirrored basis; the car node faces
-## forward(heading); the north post is 50 m along -Z and ahead of the chase camera when the car faces north.
+## The main scene: no node under the world root has a negative scale or a mirrored basis; the V2 car node faces
+## forward(heading) with rotation.y = -heading; the north post is 50 m along -Z and ahead of the chase camera when the car faces north.
 extends RefCounted
 
 const CarModel := preload("res://scripts/car_model.gd")
@@ -43,11 +43,13 @@ func test_car_node_faces_forward_heading() -> void:
 	_with_main(func(main: Node3D) -> void:
 		var car = main.get_node("World/Car")
 		for h in [0.0, PI / 2.0, PI, -PI / 4.0]:
-			car.model.heading = h
-			car.apply_model()
+			car.place(0.0, 0.0, h)
 			var fwd: Vector3 = -car.global_transform.basis.z
 			var want := CarModel.forward(h)
-			t.ok(fwd.distance_to(want) < 1e-5, "car -basis.z %s matches forward(%.3f) %s" % [fwd, h, want]))
+			t.ok(fwd.distance_to(want) < 1e-5, "car -basis.z %s matches forward(%.3f) %s" % [fwd, h, want])
+			var d: float = car.rotation.y + h
+			t.ok(absf(sin(d)) < 1e-5 and cos(d) > 0.0, "rotation.y %.5f is -heading for heading %.3f" % [car.rotation.y, h])
+			t.ok(absf(sin(float(car.heading) - h)) < 1e-5 and cos(float(car.heading) - h) > 0.0, "the car reads back heading %.3f (%.5f)" % [h, car.heading]))
 
 
 func test_north_post_ahead_of_camera_facing_north() -> void:
@@ -57,11 +59,36 @@ func test_north_post_ahead_of_camera_facing_north() -> void:
 		var car = main.get_node("World/Car")
 		t.near(post.global_position.x, 0.0, 1e-6, "north post x")
 		t.near(post.global_position.z, -50.0, 1e-6, "north post z is -50 (50 m north)")
-		car.model.heading = 0.0
-		car.apply_model()
-		cam.follow()
+		car.place(0.0, 0.0, 0.0)
+		cam.snap()
+		cam.follow(1.0 / 60.0)
 		var look: Vector3 = -cam.global_transform.basis.z
 		t.ok(look.z < -0.9, "camera looks along -Z when the car faces north (look %s)" % look)
 		t.ok(cam.global_position.z > car.global_position.z, "camera sits south of (behind) the car")
 		t.ok(not cam.is_position_behind(post.global_position), "north post is in front of the camera")
 		t.ok(cam.is_position_in_frustum(post.global_position), "north post is inside the camera frustum"))
+
+
+## The chase camera rig (P1-020): wide 6.6 m behind and 2.5 m up at rest with FOV 70; V's close view 4.5 m and 2.05 m;
+## C looks back from in front of the car; never under 0.5 m above the car.
+func test_chase_camera_views() -> void:
+	_with_main(func(main: Node3D) -> void:
+		var cam = main.get_node("ChaseCamera")
+		var car = main.get_node("World/Car")
+		car.place(0.0, 0.0, 0.0)
+		var p: Vector3 = car.global_position
+		cam.snap()
+		cam.follow(1.0 / 60.0)
+		t.near(cam.global_position.z - p.z, 6.6, 1e-3, "wide view: 6.6 m behind (south of) the car facing north")
+		t.near(cam.global_position.y - p.y, 2.5, 1e-3, "wide view: 2.5 m up")
+		t.near(cam.fov, 70.0, 1e-3, "FOV 70 at rest")
+		cam.set_view("close")
+		for i in 120:
+			cam.follow(1.0 / 60.0)
+		t.near(cam.global_position.z - p.z, 4.5, 0.01, "close view: 4.5 m behind after the blend")
+		t.near(cam.global_position.y - p.y, 2.05, 0.01, "close view: 2.05 m up after the blend")
+		cam.looking_back = true
+		cam.follow(1.0 / 60.0)
+		t.ok(cam.global_position.z < p.z - 3.0, "look back: the camera sits in front of (north of) the car (z %.2f)" % cam.global_position.z)
+		t.ok((-cam.global_transform.basis.z).z > 0.5, "look back: it looks south, behind the car")
+		t.ok(cam.global_position.y >= p.y + 0.5, "never under 0.5 m above the car"))

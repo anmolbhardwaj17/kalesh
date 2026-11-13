@@ -2,8 +2,8 @@
 ## debug server, made on its first call, so a game without --debug (or a run that never asks) does not load it.
 ##   info                         the city's state (state().world) plus the path, the systems and the queue's worst steps
 ##   path {points, speedKmh, loop}  moves the player along a polyline of world points [x, y, z] at a constant speed on
-##                                the sim tick (a scripted drive for perf and memory scenarios: the stand-in car tops out
-##                                at 108 km/h and has no physics until vehicle V2). {stop: true} ends it
+##                                the sim tick (a scripted drive for perf and memory scenarios: the V2 vehicle is frozen
+##                                and carried along it, vehicle.gd carry()). {stop: true} ends it and stands it there
 ##   record {on, skipS}           starts a recording of every drawn frame (frame time, the core's work, attach steps);
 ##                                {on: false} stops it and answers the numbers; {} answers them so far
 ##   probe {x, z, y}              the collider under a point (a ray down) against the drawn surface there (the tile
@@ -103,7 +103,10 @@ func hook(a: Array) -> Dictionary:
 
 func _path(o: Dictionary) -> Dictionary:
 	if o.get("stop", false):
+		var was := _running
 		_running = false
+		if was:
+			_place()
 		return {"ok": true, "result": _path_state()}
 	var list: Variant = o.get("points")
 	var kmh: Variant = o.get("speedKmh")
@@ -174,7 +177,16 @@ func _place() -> void:
 		ahead = _at(to - _length)
 		_seg = keep
 	var d := ahead - pos
-	if car.has_method("place"):
+	if car.has_method("carry"):
+		# the V2 vehicle: frozen and moved along the path (a scripted drive, not physics)
+		var h: float = atan2(d.x, -d.z) if d.length() > 0.01 else float(car.heading)
+		if _running:
+			car.carry(pos, h, _speed)
+		else:
+			# the path ended or was stopped: the vehicle stands there and is a physics body again
+			car.ground_y = pos.y
+			car.place(pos.x, pos.z, h)
+	elif car.has_method("place"):
 		car.ground_y = pos.y
 		if d.length() > 0.01:
 			car.place(pos.x, pos.z, atan2(d.x, -d.z))

@@ -12,7 +12,7 @@ import vm from 'node:vm';
 import { performance } from 'node:perf_hooks';
 
 /** The hooks a script may call on window.__game.debug (GAME_HOOKS.md "Required" plus quality and timeOfDay). */
-export const SHIM_HOOKS = ['state', 'clock', 'frames', 'input', 'perf', 'load', 'teleport', 'setCamera', 'timeScale', 'hold', 'events', 'hud', 'quality', 'timeOfDay', 'stream'];
+export const SHIM_HOOKS = ['state', 'clock', 'frames', 'input', 'perf', 'load', 'teleport', 'setCamera', 'timeScale', 'hold', 'events', 'hud', 'quality', 'timeOfDay', 'stream', 'vehicle'];
 
 /**
  * window.__game for a connected GodotDebugClient (or any object with hello, snapshot, events and call(method, ...args)).
@@ -38,6 +38,8 @@ export function makeGame(client, { onAsyncError = () => {} } = {}) {
     timeOfDay: (opts) => client.call('timeOfDay', ...(opts === undefined ? [] : [opts])),
     /** The streamed city's probes (GAME_HOOKS.md "stream"): info, path, record, probe, mem. */
     stream: (cmd = 'info', opts) => client.call('stream', cmd, ...(opts === undefined ? [] : [opts])),
+    /** The V2 vehicle's probes (GAME_HOOKS.md "vehicle"): info, run, cost, camrec. */
+    vehicle: (cmd = 'info', opts) => client.call('vehicle', cmd, ...(opts === undefined ? [] : [opts])),
     input: (action, value = 1) => { fire('input', action, value); },
     setCamera: (pose) => { fire('setCamera', pose ?? null); },
     timeScale: (n) => { fire('timeScale', n); },

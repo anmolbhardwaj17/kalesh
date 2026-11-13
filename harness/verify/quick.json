@@ -153,6 +153,51 @@
       "scenarios": [
         "stream_teleport"
       ]
+    },
+    {
+      "path": "game/vehicles/",
+      "scenarios": [
+        "drive_north",
+        "drive_turn_right",
+        "car_accel",
+        "car_kerb",
+        "car_lock",
+        "tiles_test_block_drive"
+      ]
+    },
+    {
+      "path": "game/data/vehicles/",
+      "scenarios": [
+        "car_accel",
+        "car_top",
+        "car_brake",
+        "car_lock",
+        "car_kerb",
+        "car_flyover"
+      ]
+    },
+    {
+      "path": "game/camera/",
+      "scenarios": [
+        "chase_cam_floor",
+        "drive_north",
+        "coords_north_marker"
+      ]
+    },
+    {
+      "path": "game/scenes/course/",
+      "scenarios": [
+        "car_flyover",
+        "chase_cam_floor"
+      ]
+    },
+    {
+      "path": "game/debug/vehicle_probe.gd",
+      "scenarios": [
+        "car_accel",
+        "car_cost",
+        "chase_cam_floor"
+      ]
     }
   ]
 }
