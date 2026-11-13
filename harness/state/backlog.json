@@ -1,6 +1,6 @@
 {
   "_doc": "Written only by node harness/bin/task.mjs. Phases run in order; P0 (ADOPT + STYLE DISCOVERY) waits for the owner by design and needs task.mjs signoff and task.mjs archsignoff before its gate passes. Later phases are added by the planner at the end of P0 (task.mjs phase-add) from the game's real state.",
-  "updated": "2026-11-13T15:00:01.289Z",
+  "updated": "2026-11-13T15:00:01.566Z",
   "phases": [
     {
       "id": "P0",
@@ -3911,11 +3911,14 @@
       "agent": "builder",
       "priority": 1,
       "kind": "mentor",
-      "status": "doing",
+      "status": "done",
       "attempts": 1,
       "notes": [],
       "created": "2026-11-13T11:53:07.454Z",
-      "started": "2026-11-13T14:35:05.061Z"
+      "started": "2026-11-13T14:35:05.061Z",
+      "done": "2026-11-13T15:00:01.545Z",
+      "summary": "harness/design/reference/infrastructure/: 7 kind files (tunnels, underpasses and subways, flyovers, bridges, metro, rail, foot over bridges), 31 variants with place, shapes, dimensions, colours, materials, signage, lighting, wear and dated sources; 15 CC photos with CREDITS.json (all under 600 KB); variant_map.md and .json map the pilot's 27 road bridge and tunnel groups, 9 metro groups, 10 rail groups, 30 stations, 24 foot bridges, 28 subway clusters and 7 level crossings to variants. Estimates are tagged [E] with a verify list. Linked from STYLE_BIBLE.md. JSON parses.",
+      "commit": "62655f8"
     },
     {
       "id": "P2-034",
