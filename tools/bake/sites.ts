@@ -48,6 +48,8 @@ export const REPAIR_SITES: readonly { id: string; name: string; lat: number; lon
   { id: 'jaswant_singh_rotary', name: 'Ashoka Road and Jaswant Singh Road rotary', lat: 28.61721, lon: 77.22477, halfM: 180 },
   { id: 'jantar_mantar', name: 'Jantar Mantar: Sansad Marg, Tolstoy Marg and Jai Singh Road', lat: 28.62698, lon: 77.21528, halfM: 180 },
   { id: 'firoz_shah_road', name: 'Firoz Shah Road and Hailey Road', lat: 28.62507, lon: 77.22791, halfM: 180 },
+  // P1-045: features OSM lacks, added from a satellite reference (the divider and a bungalow drive)
+  { id: 'bhagwan_das_road', name: 'Bhagwan Das Road: the divider OSM lacks and a bungalow drive', lat: 28.62323, lon: 77.23446, halfM: 240 },
 ];
 /**
  * Top views of the junction surfaces the mesh step draws on every whole bake (P1-042), for before and after pictures:

@@ -12,6 +12,7 @@ import type { P2 } from '../geom.ts';
 import type { BlockGraph } from '../graph/build.ts';
 import { projectOn } from '../rules/context.ts';
 import type { Issue, Params, Patch } from '../rules/types.ts';
+import { ADD_ACTIONS, addProblems, isAddAction, nearestEdge, parsePairs, projectAddParams } from './adds.ts';
 
 export type Resolution = 'by_id' | 'by_anchor' | 'stale' | 'underground';
 
@@ -54,7 +55,7 @@ export interface OverrideRecord {
   issues: string[];
 }
 
-const ACTIONS = new Set(['connect', 'terminate', 'remove', 'set_tag', 'move_node', 'set_lanes', 'set_height', 'replace_geometry', 'disable_repair']);
+const ACTIONS = new Set<string>(['connect', 'terminate', 'remove', 'set_tag', 'move_node', 'set_lanes', 'set_height', 'replace_geometry', 'disable_repair', ...ADD_ACTIONS]);
 
 /** Checks one patch from a file and returns what is wrong with it (empty when it is fine). */
 export function patchProblems(p: unknown): string[] {
@@ -69,6 +70,7 @@ export function patchProblems(p: unknown): string[] {
   if (!t || !t.anchor || !Number.isFinite(t.anchor.lat) || !Number.isFinite(t.anchor.lon)) out.push('target.anchor needs a lat and a lon');
   if (!t || !Number.isFinite(t.tolerance_m) || t.tolerance_m < 0) out.push('target.tolerance_m must be a number of metres');
   if (!o.params || typeof o.params !== 'object') out.push('no params');
+  else if (typeof o.action === 'string' && isAddAction(o.action)) out.push(...addProblems(o as Patch));
   return out;
 }
 
@@ -155,6 +157,7 @@ function remapParams(params: Params, map: ReadonlyMap<string, string>): Params {
  * makes the patch stale.
  */
 export function resolveOverride(g: BlockGraph, entry: OverrideEntry, project: (lat: number, lon: number) => P2, ix: Index = indexOf(g)): ResolvedOverride {
+  if (isAddAction(entry.patch.action)) return resolveAdd(g, entry, project, ix);
   const patch = entry.patch;
   const ids = patch.target.ids;
   const base = { entry, applied: false, issues: [] as string[] };
@@ -188,6 +191,47 @@ export function resolveOverride(g: BlockGraph, entry: OverrideEntry, project: (l
   if (!map.size) return { ...base, resolution, targets, patch, note: 'every target id is in this extract' };
   const remapped: Patch = { ...patch, target: { ...patch.target, ids: targets }, params: remapParams(patch.params, map) };
   return { ...base, resolution, targets, patch: remapped, note: notes.length ? notes.join('; ') : `${[...map].map(([a, b]) => `${a} is ${b} here`).join('; ')}` };
+}
+
+/**
+ * An add patch (P1-045) in this extract. Its drawn geometry goes from latitude and longitude into block metres. The
+ * roads it names (target ids and the join ids of an added road) are found by id; one that is gone is found again
+ * under the drawn points within the tolerance (by anchor), and its join id becomes "snap"; with nothing there the
+ * patch is stale. A patch with no ids at all is by_id: its drawn points are its only target.
+ */
+function resolveAdd(g: BlockGraph, entry: OverrideEntry, project: (lat: number, lon: number) => P2, ix: Index): ResolvedOverride {
+  const patch = entry.patch;
+  const base = { entry, applied: false, issues: [] as string[] };
+  const params = projectAddParams(patch.params, project);
+  const drawn: P2[] = [];
+  for (const [x, z] of parsePairs(params['pts']) ?? []) drawn.push({ x, z });
+  if (typeof params['x'] === 'number' && typeof params['z'] === 'number') drawn.push({ x: params['x'], z: params['z'] });
+  if (!drawn.length) return { ...base, resolution: 'stale', targets: [], patch, note: 'the patch has no drawn geometry' };
+  const tol = patch.target.tolerance_m;
+  const nodes = new Set(g.nodes.map((n) => n.id));
+  const has = (id: string): string | null => (nodes.has(id) ? id : known(ix, id));
+  const notes: string[] = [];
+  const targets: string[] = [];
+  for (const id of patch.target.ids) {
+    const here = has(id);
+    if (here !== null) {
+      targets.push(here);
+      continue;
+    }
+    const hit = drawn.map((p) => nearestEdge(g, p, tol)).find((h) => h !== null);
+    if (!hit) return { ...base, resolution: 'stale', targets: [], patch, note: `${id} is not in this extract and no road lies within ${tol} m of the drawn points` };
+    targets.push(hit.e.id);
+    notes.push(`${id} is gone; ${hit.e.id} lies ${Math.round(hit.d * 10) / 10} m from the drawn points`);
+  }
+  for (const key of ['join_a', 'join_b']) {
+    const v = params[key];
+    if (typeof v !== 'string' || v === 'snap' || v === 'none' || has(v) !== null) continue;
+    params[key] = 'snap';
+    notes.push(`${key} ${v} is gone: the end snaps to the nearest road`);
+  }
+  const resolution: Resolution = notes.length ? 'by_anchor' : 'by_id';
+  const out: Patch = { ...patch, target: { ...patch.target, ids: targets }, params };
+  return { ...base, resolution, targets, patch: out, note: notes.length ? notes.join('; ') : patch.target.ids.length ? 'every target id is in this extract' : 'drawn geometry, found by its points' };
 }
 
 export function resolveOverrides(g: BlockGraph, entries: readonly OverrideEntry[], project: (lat: number, lon: number) => P2): ResolvedOverride[] {

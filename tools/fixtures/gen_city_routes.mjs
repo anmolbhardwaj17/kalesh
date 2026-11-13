@@ -117,8 +117,32 @@ const routes = {
   // Kartavya Path east toward the India Gate hexagon
   rajpath: drive('rajpath_india_gate', [[400, 445.7]]),
 };
+/**
+ * The lane pieces a walk takes, found by place (P1-045): strip ids are numbered across the whole bake, so a map change
+ * elsewhere renumbers them. The walk starts on a gali lane (at grade, 3.5 m wide or less) within 4 m of `from` and
+ * ends on one within 4 m of `to`, following `next` links (one direction of the gali, the way its pieces join).
+ */
+function piecesAlong(from, to) {
+  const gali = (p) => p.layer === 0 && p.kind === 'lane' && p.widthM <= 3.5 && p.pts.length > 1;
+  const within = ([x, z]) => [...pieces.values()].filter((p) => gali(p) && p.pts.some((q, i) => {
+    const b = p.pts[i + 1];
+    if (!b) return false;
+    const abx = b[0] - q[0]; const abz = b[2] - q[2]; const L2 = abx * abx + abz * abz || 1;
+    const t = Math.max(0, Math.min(1, ((x - q[0]) * abx + (z - q[2]) * abz) / L2));
+    return Math.hypot(x - (q[0] + abx * t), z - (q[2] + abz * t)) <= 4;
+  }));
+  let best = null;
+  for (const a of within(from)) for (const b of within(to)) {
+    const ids = a.id === b.id ? [a.id] : route(pieces, a.id, b.id);
+    if (!ids) continue;
+    const len = ids.reduce((m, id) => m + pieces.get(id).len, 0);
+    if (!best || len < best.len) best = { ids, len };
+  }
+  if (!best) throw new Error(`walk: no gali lane route from ${from} to ${to}`);
+  return best.ids;
+}
 // a gali walk south off the main road (3 m residential lanes between dense building shells, about 140 m)
-const walks = { chandni_gali: walk(['s3366.2:0', 's3365.2:0', 's3365.2:1', 'jn560825529.4:0', 's3364.2:0']) };
+const walks = { chandni_gali: walk(piecesAlong([1023.7, -4313], [1009.2, -4168.7])) };
 for (const [id, r] of Object.entries(routes)) if (!(r.lengthM > 50)) throw new Error(`route ${id} is only ${r.lengthM} m`);
 if (routes.ito_flyover.maxLayer < 1) throw new Error('the ITO route does not use the flyover deck');
 

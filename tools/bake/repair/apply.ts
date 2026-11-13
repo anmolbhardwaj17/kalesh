@@ -12,6 +12,7 @@ import type { BlockGraph, GraphEdge, GraphNode } from '../graph/build.ts';
 import { projectOn, r3 } from '../rules/context.ts';
 import type { End } from '../rules/context.ts';
 import { shiftedAway, slipFit, slipRatio } from '../rules/lanes.ts';
+import { applyAdd, isAddAction } from './adds.ts';
 import { shiftBeside, shiftBranch } from './shift.ts';
 import type { ShiftResult } from './shift.ts';
 import type { Marks, Params, Patch } from '../rules/types.ts';
@@ -34,22 +35,22 @@ export interface Applied {
   drops: string[];
 }
 
-const none = (note: string): Applied => ({ applied: false, how: 'none', before: {}, after: {}, note, drops: [] });
+export const none = (note: string): Applied => ({ applied: false, how: 'none', before: {}, after: {}, note, drops: [] });
 const ids = (v: unknown): string[] => String(v ?? '').split(',').map((s) => s.trim()).filter(Boolean);
-const rp = (p: P2): P2 => ({ x: r3(p.x), z: r3(p.z) });
-const unit = (a: P2, b: P2): P2 => {
+export const rp = (p: P2): P2 => ({ x: r3(p.x), z: r3(p.z) });
+export const unit = (a: P2, b: P2): P2 => {
   const l = Math.hypot(b.x - a.x, b.z - a.z) || 1;
   return { x: Math.round(((b.x - a.x) / l) * 1e6) / 1e6 + 0, z: Math.round(((b.z - a.z) / l) * 1e6) / 1e6 + 0 };
 };
 
-function mark(state: RepairState, id: string, values: Params): void {
+export function mark(state: RepairState, id: string, values: Params): void {
   state.marks[id] = { ...(state.marks[id] ?? {}), ...values };
 }
 
 const edgeOf = (g: BlockGraph, id: string): GraphEdge | undefined => g.edges.find((e) => e.id === id);
 
 /** An edge by id, or the part of it (after a split) that passes nearest to a point. */
-function edgeAt(g: BlockGraph, id: string, p: P2, tol = 0.05): GraphEdge | null {
+export function edgeAt(g: BlockGraph, id: string, p: P2, tol = 0.05): GraphEdge | null {
   let best: { e: GraphEdge; d: number } | null = null;
   for (const e of g.edges) {
     if (e.id !== id && !e.id.startsWith(`${id}/`)) continue;
@@ -60,7 +61,7 @@ function edgeAt(g: BlockGraph, id: string, p: P2, tol = 0.05): GraphEdge | null 
 }
 
 /** New points for an edge: its length and the positions of its pieces follow. */
-function setPoints(e: GraphEdge, pts: readonly P2[]): void {
+export function setPoints(e: GraphEdge, pts: readonly P2[]): void {
   const old = e.len || 1;
   e.pts = pts.map(rp);
   e.len = r3(polylineLength(e.pts));
@@ -131,7 +132,7 @@ export function splitEdge(g: BlockGraph, e: GraphEdge, p: P2, nodeId: string): {
   return { second, at: nodeId };
 }
 
-function removeEdge(g: BlockGraph, id: string): boolean {
+export function removeEdge(g: BlockGraph, id: string): boolean {
   const before = g.edges.length;
   g.edges = g.edges.filter((e) => e.id !== id);
   if (g.edges.length === before) return false;
@@ -396,6 +397,8 @@ export function applyPatch(state: RepairState, patch: Patch): Applied {
       if (op === 'clean_ring') return cleanRing(state, String(p['on']));
       return decision(state, patch, 'redraw', op || 'replace_geometry');
     case 'disable_repair': return decision(state, patch, 'keep', String(p['keep'] ?? p['field'] ?? 'as_is'));
-    default: return none(`unknown action ${String(patch.action)}`);
+    default:
+      // features OSM lacks (P1-045): a road, a median, a footpath, a crossing or a barrier drawn from a reference
+      if (isAddAction(patch.action)) return applyAdd(state, patch); return none(`unknown action ${String(patch.action)}`);
   }
 }

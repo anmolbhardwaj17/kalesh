@@ -21,6 +21,7 @@
       <div class="tabs" id="tabs" role="tablist" aria-label="What to look at">
         <button type="button" role="tab" data-tab="issues" class="on">Issues</button>
         <button type="button" role="tab" data-tab="lanes" id="lanesTab" hidden>Lanes</button>
+        <button type="button" role="tab" data-tab="add" id="addTab">Add</button>
       </div>
       <div id="issuesHead">
         <p class="help">Pick an issue. The map flies there and draws each fix. Choose one, or write a note.</p>
@@ -32,8 +33,14 @@
         <p class="lanes-sum" id="lanesSummary"></p>
         <div class="chips" id="laneChips" role="group" aria-label="Show"></div>
       </div>
+      <div id="addHead" hidden>
+        <p class="help">Draw what the map is missing: a side road, a divider, a footpath, a crossing or a barrier. Pick what to add, then click on the map.</p>
+        <div class="chips" id="addKinds" role="group" aria-label="What to add"></div>
+        <p class="help add-help" id="addHelp"></p>
+      </div>
     </header>
     <div class="list" id="list" role="list"></div>
+    <div class="list" id="addList" role="list" hidden></div>
     <div class="list" id="laneList" role="list" hidden></div>
     <footer id="source" class="small"></footer>
   </aside>
@@ -101,6 +108,7 @@
     </div>
     <div id="issue" hidden></div>
     <div id="lane" hidden></div>
+    <div id="add" hidden></div>
   </section>
 </div>
 <script type="module" src="/inspector/web/app.js"></script>

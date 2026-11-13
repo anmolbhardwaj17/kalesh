@@ -381,6 +381,16 @@ export function inferStreets(g: StreetGraph, wayLanes: ReadonlyMap<string, numbe
   return { byEdge, streets: streets.map((c) => c.map((x) => x.e.id)), report };
 }
 
+/** Lane types a drawn median (add_median, P1-045) is built from: a painted divider is flat hatching, a planter is green. */
+const MEDIAN_LANE: Record<string, LaneDef['type']> = { kerb: 'median', barrier: 'median', planter: 'planter', painted: 'gore' };
+
+/** The right side of a paired carriageway: half of a drawn median, or one kerb (half of the two-kerb median). */
+function medianLane(e: GraphEdge): LaneDef {
+  const m = e.road.median;
+  if (!m || !(m.width > 0)) return lane('median', KERB_WIDTH);
+  return lane(MEDIAN_LANE[m.type] ?? 'median', Math.max(KERB_WIDTH, m.width / 2));
+}
+
 /**
  * The cross-section of an edge in its own orientation, with `lanes` drive lanes. Left-hand traffic: on a two-way road
  * the lanes left of the centre run with the edge, those right of it against it; a paired carriageway has its median
@@ -400,7 +410,7 @@ export function streetCrossSection(e: GraphEdge, r: Pick<EdgeLanes, 'laneWidth' 
   const fl = e.road.footpath.left;
   const fr = e.road.footpath.right;
   const left: LaneDef[] = fl > 0 ? [lane('footpath', fl), lane('kerb', KERB_WIDTH)] : [lane('kerb', KERB_WIDTH)];
-  const right: LaneDef[] = e.road.carriageway === 'paired' && fr <= 0 ? [lane('median', KERB_WIDTH)] : fr > 0 ? [lane('kerb', KERB_WIDTH), lane('footpath', fr)] : [lane('kerb', KERB_WIDTH)];
+  const right: LaneDef[] = e.road.carriageway === 'paired' && fr <= 0 ? [medianLane(e)] : fr > 0 ? [lane('kerb', KERB_WIDTH), lane('footpath', fr)] : [lane('kerb', KERB_WIDTH)];
   const driveWidth = drive.reduce((s, l) => s + l.width, 0);
   return { lanes: [...left, ...drive, ...right], offset: driveWidth / 2 + left.reduce((s, l) => s + l.width, 0) };
 }

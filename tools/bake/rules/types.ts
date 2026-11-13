@@ -7,7 +7,9 @@ import type { Tags } from '../osm.ts';
 import type { HeroSpec } from '../roads/hero.ts';
 import type { LaneConflict } from '../roads/surfaces.ts';
 
-export type PatchAction = 'connect' | 'terminate' | 'remove' | 'set_tag' | 'move_node' | 'set_lanes' | 'set_height' | 'replace_geometry' | 'disable_repair';
+export type PatchAction = 'connect' | 'terminate' | 'remove' | 'set_tag' | 'move_node' | 'set_lanes' | 'set_height' | 'replace_geometry' | 'disable_repair'
+  // features OSM lacks, drawn from a photo or satellite reference (P1-045, MAP_REPAIR.md "OSM is the starting point")
+  | 'add_way' | 'add_median' | 'add_footpath' | 'add_crossing' | 'add_barrier';
 
 /**
  * What a proposal changes, in the terms of MAP_REPAIR.md "Auto-repair bounds". tools/bake/repair/bounds.ts turns it
@@ -80,6 +82,8 @@ export interface Patch {
   by: string;
   source: string;
   date: string;
+  /** The real-life reference an add action is drawn from (P1-045): a photo or satellite link and the date it was read. */
+  reference?: { link: string; date: string; note?: string };
 }
 
 /** Decisions written on features by repairs ("this end is a dead end", "take the smoothed profile"): feature id, then key. */

@@ -130,8 +130,10 @@ export function buildPaths(c: NetCtx, cl: ClusterPhase, sp: StripPhase): PathPha
   const ends: ExplainedEnd[] = [];
   const turns = { uTurnsTooTight: 0, restricted: 0, droppedForRadius: 0, tight: 0 };
   const tightPaths: LaneBuild['tightPaths'] = [];
-  const signals = (input.points ?? []).filter((p) => p.kind === 'signals');
-  const crossingsAt = (input.points ?? []).filter((p) => p.kind === 'crossing');
+  // OSM crossing and signal nodes, and the crossings an add_crossing patch drew (marks "crossing:<patch>", P1-045)
+  const drawn = Object.entries(input.marks ?? {}).filter(([id]) => id.startsWith('crossing:')).map(([, m]) => ({ x: Number(m['x']), z: Number(m['z']), kind: m['kind'] === 'signals' ? 'signals' : 'crossing' }));
+  const signals = [...(input.points ?? []), ...drawn].filter((p) => p.kind === 'signals');
+  const crossingsAt = [...(input.points ?? []), ...drawn].filter((p) => p.kind === 'crossing');
   const closure = (node: string): EndKind => {
     const k = input.marks?.[node]?.['closure'];
     return k === 'gate' || k === 'loop' || k === 'barricade' ? k : 'dead_end';

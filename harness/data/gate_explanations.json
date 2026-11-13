@@ -15,7 +15,7 @@
       "gate": "overlappingRoadFaces",
       "items": [
         "w778547435.0_0|w80499271.3_0",
-        "w77617201.0_0|zone_merge_4009"
+        "w77617201.0_0|zone_merge_4001"
       ],
       "owner": "explained (lane model): under what a player sees",
       "why": "hairline overlaps of 0.02 to 0.03 m2 where a one-way link meets the road it joins at a shallow angle (a link onto Sikandra Road near Mandi House, a link into a merge zone in Old Delhi): the kerb rows of the two strips cross over a few centimetres. Over the 0.01 m2 pair limit, far under anything a player sees."
