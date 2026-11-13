@@ -420,3 +420,4 @@ One line per event, written by task.mjs (start, done, fail, phase changes, inbox
 - 2026-11-13 09:34 [P1-020] start (attempt 1): Vehicle model V2 and the car at 140 km/h
 - 2026-11-13 10:16 [P1-044] added: Move the look stand-in scenes to the V2 car and chase camera
 - 2026-11-13 10:16 [P14-004] added: Polish: driving camera framing
+- 2026-11-13 10:20 [P1-020] done: V2 raycast car on Jolt (game/vehicles/), car.tres tune, chase camera (game/camera/chase_camera.gd), course scene, vehicle debug hook. Numbers: 0-100 11.12 s, top 140.0 km/h, 100-0 41.5 m, lock radius 6.91 m at 37.3 km/h, kerb roll 6.1 deg 0.2% loss, deck joints 100% wheels down, input 1 tick, replay 0 m apart at 0.25/1/4, cost 0.0225 ms per car, chase_cam_floor min 2.06 m above over 2430 frames (flakecheck 3/3). Verified: typecheck, 799 vitest, 93 Godot tests, quick 17/17 OK, chase shot read and kept. Follow-ups P1-044, P14-004.
