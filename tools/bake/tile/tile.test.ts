@@ -86,7 +86,8 @@ describe('KTL1 codec', () => {
     // the writer reports the tile and does not write it
     const inputs = sampleInputs();
     const far = new MeshBuilder('road', 'road');
-    far.tri([100, 210, 100], [101, 210, 100], [1100, 210, 101], [0, 1, 0]);
+    // (wide enough not to be a needle the cutter leaves out, P1-046)
+    far.tri([100, 210, 100], [101, 210, 100], [1100, 210, 110], [0, 1, 0]);
     const written: string[] = [];
     const res = bakeTiles({ block: 'sample', offset: SAMPLE_OFFSET, ...inputs, road: [...inputs.road, { ...far.mesh, uv: [], uv2: [] }], pins: [] }, (r) => written.push(r.id));
     const hit = res.skipped.find((x) => x.id === '1_0');

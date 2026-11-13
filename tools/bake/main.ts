@@ -388,6 +388,7 @@ export async function bake(args: BakeArgs, opts: BakeOptions): Promise<HealthRep
       if (report.decisions) report.decisions.overlaps.mergedZones = { merges: c.zones.merges, diverges: c.zones.diverges };
       report.gates['laneContinuityBreaks'] = c.continuity.breaks;
       report.gates['tapersOutOfLimits'] = c.tapers.violations;
+      report.gates['widthSteps'] = c.widthSteps.steps;
       const n = rec.counts;
       opts.log(`[lanes] built in ${(buildMs / 1000).toFixed(2)} s (${build.rounds} rounds): ${n.strips} strips (${n.taperStrips} tapers, ${n.zoneStrips} split zones), ${n.stations} stations, ${n.driveLanes} driving lanes (${n.laneKm} lane km, ${n.galiLanes} gali lanes), ${n.junctions} junctions with ${n.junctionPaths} lane paths for ${n.junctionPairs} arm pairs; hash ${hash}`);
       opts.log(`[lanes] lane counts: ${Object.entries(rec.inference.from).map(([k, v]) => `${k} ${v}`).join(', ')}; ${rec.inference.changed} edges differ from their own tag or class default; ${n.fitted} took a count the model settled, ${n.widenings} widen before a junction`);
@@ -395,6 +396,8 @@ export async function bake(args: BakeArgs, opts: BakeOptions): Promise<HealthRep
       opts.log(`[lanes] zones ${c.zones.zones} (${c.zones.diverges} diverges, ${c.zones.merges} merges), without gore or nose ${c.zones.withoutGoreOrNose}, off a branch centre line ${c.zones.endsOffCentreLine} (largest ${c.zones.maxEndErrorM} m); ${n.forks} one-way forks are junctions (${Object.entries(rec.forks.byReason).map(([k, v]) => `${v}: ${k}`).join('; ')})`);
       opts.log(`[lanes] paths: ${c.paths.pairsWithoutPath} arm pairs without a path, ${c.paths.pairsBelowRadius} under the ${c.paths.minRadiusM === null ? '' : `radius (smallest ${c.paths.minRadiusM} m)`}, ${build.turns.uTurnsTooTight} U-turns left out, ${build.turns.droppedForRadius} turns left out for radius; left-hand side wrong on ${c.trafficSide.wrongSide} of ${c.trafficSide.twoWayStrips} two-way strips; ${c.widths.tooNarrow} lanes too narrow (narrowest ${c.widths.narrowestM} m, gali ${c.widths.narrowestGaliM} m)`);
       opts.log(`[lanes] hero: ${c.hero.map((h) => `${h.spec} ${h.mismatches} mismatches over ${h.fieldsCompared} comparisons`).join(', ') || 'no spec'}; strips on each other in plan: ${c.overlap?.areaM2 ?? 0} m2 in ${c.overlap?.pairs ?? 0} pairs; edges gave way on ${build.edgeTrims.strips} strips (${build.edgeTrims.stations} stations, ${build.edgeTrims.areaM2} m2)`);
+      const ws = rec.widthSteps;
+      opts.log(`[lanes] width continuity: ${ws.steps} width steps over ${ws.corridors} corridors through junctions (${Object.entries(ws.byKind).map(([k, v]) => `${k} ${v}`).join(', ') || 'none'}); the width step settled ${ws.tapers} tapers at junction ends (${ws.shortTapers} shorter than their class asks, explained) and ${ws.whole} roads whole in ${ws.rounds} rounds${ws.left ? `, ${ws.left} left` : ''}`);
       opts.log(`[lanes] wrote ${files.model}, ${files.laneGraph}, ${files.layer} and ${pictures.join(', ')}`);
       const heroBad = c.hero.reduce((sum, h) => sum + h.mismatches, 0);
       check([
@@ -403,6 +406,7 @@ export async function bake(args: BakeArgs, opts: BakeOptions): Promise<HealthRep
         { id: 'LANES-03.same_twice', ok: hash === again, detail: quick ? NOT_TWICE : hash === again ? `the same hash twice (${hash})` : `two builds of one input differ: ${hash} and ${again}` },
         { id: 'LANES-04.left_hand_and_widths', ok: c.trafficSide.wrongSide + c.widths.tooNarrow === 0, detail: `${c.trafficSide.wrongSide} two-way strips on the wrong side, ${c.widths.tooNarrow} lanes under their width limit` },
         { id: 'LANES-05.hero', ok: heroBad === 0, detail: `${heroBad} hero spec mismatches` },
+        { id: 'LANES-06.width_steps', ok: c.widthSteps.steps === 0, detail: c.widthSteps.steps === 0 ? `no width step along ${c.widthSteps.corridors} corridors through junctions: every width change lies in a taper` : `${c.widthSteps.steps} width steps of more than 1 m within 5 m: ${c.widthSteps.list.slice(0, 3).map((w) => `${w.where} ${w.fromM} to ${w.toM} m`).join(', ')}` },
       ]);
     } else if (step === 'elevation') {
       if (!laneBuild || !repaired || !groundModel || !lanesHash) throw new Error('the elevation step needs the ground and the lanes step before it');

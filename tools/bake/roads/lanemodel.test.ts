@@ -174,10 +174,12 @@ describe('split zones on the block graph', () => {
     last.x += 0.05;
     expect(checkLaneModel(b, [], false).zones.endsOffCentreLine).toBeGreaterThan(0);
   });
-  it('a road too short for the taper takes the first section of the zone whole: four lanes, no taper', () => {
+  it('a road too short for the taper takes the first section of the zone whole: four lanes, no taper on it; the road before the junction widens to the four lanes (P1-046)', () => {
     const { b } = model(diverge(45));
     expect(b.zones).toHaveLength(1);
-    expect(b.strips.filter((st) => st.kind === 'taper')).toHaveLength(0);
+    const tapers = b.strips.filter((st) => st.kind === 'taper');
+    expect(tapers.map((t) => t.edge)).toEqual(['w100.0']);
+    expect(b.widthFixes.tapers).toMatchObject([{ edge: 'w100.0', atStart: false, lanes: 4 }]);
     const short = b.strips.find((st) => st.kind === 'road' && Math.abs(st.st[0]!.x) < 45 && st.st[0]!.x < 0 && st.cls === 'trunk')!;
     expect(drive(short)).toBe(4);
     expect(b.fitted.map((f) => f.lanes)).toEqual([4]);

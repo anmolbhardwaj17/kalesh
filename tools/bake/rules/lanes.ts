@@ -433,7 +433,7 @@ export function slipFit(minor: End, main: End, ratio: number): SlipFit {
 }
 
 /** How fast a slip road may leave a main line of this class: metres along per metre sideways. */
-export const slipRatio = (cls: string): number => classDefaults(cls).taper * 0.4;
+export const slipRatio = (cls: string): number => classDefaults(cls).slip * 0.4;
 
 export const slipRoadFit: Rule = {
   id: 'R-LANE-FIT-02',

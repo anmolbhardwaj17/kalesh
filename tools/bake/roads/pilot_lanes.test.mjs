@@ -55,7 +55,7 @@ describe.skipIf(missing.length > 0)(`pilot centre lane model${reason ? ` (skippe
     expect(report.steps.slice(0, 5)).toEqual(['sources', 'ground', 'graph', 'repair', 'lanes']);
     expect(report.stoppedBeforeTiles).toBe(false);
     const inv = Object.fromEntries(health.invariants.filter((i) => i.id.startsWith('LANES-')).map((i) => [i.id, i.ok]));
-    expect(inv).toEqual({ 'LANES-01.continuity': true, 'LANES-02.zones': true, 'LANES-03.same_twice': true, 'LANES-04.left_hand_and_widths': true, 'LANES-05.hero': true });
+    expect(inv).toEqual({ 'LANES-01.continuity': true, 'LANES-02.zones': true, 'LANES-03.same_twice': true, 'LANES-04.left_hand_and_widths': true, 'LANES-05.hero': true, 'LANES-06.width_steps': true });
     expect(lanes.hash).toMatch(/^[0-9a-f]{8,}$/);
     expect(lanes.counts.strips).toBeGreaterThan(5000);
     expect(lanes.counts.driveLanes).toBeGreaterThan(8000);
@@ -85,11 +85,12 @@ describe.skipIf(missing.length > 0)(`pilot centre lane model${reason ? ` (skippe
     const { lanes, health } = await baked();
     expect(health.gates.tapersOutOfLimits).toBe(lanes.tapers.violations);
     expect(lanes.tapers.tapers).toBeGreaterThan(50);
-    expect(lanes.tapers.violations).toBeLessThanOrEqual(6);
+    // P1-046: the width rounds take a short taper where no road on either side of a junction has the class length
+    // (1:20 and more on main roads now); each is listed with its reason
+    expect(lanes.tapers.violations).toBeLessThanOrEqual(45);
     expect(lanes.tapers.unexplained).toBe(0);
     expect(lanes.tapers.findings).toHaveLength(lanes.tapers.violations);
-    // the ones left only shift lane widths (a slip road's wide lane) on a road between two split zones
-    for (const f of lanes.tapers.findings) expect(f.why).toMatch(/^the lane count stays \d+: only lane widths change/);
+    for (const f of lanes.tapers.findings) expect(f.why).toMatch(/^the lane count stays \d+: only lane widths change|^the road meets the width of the road it runs on into|^the street changes its lane count|^the taper to a split zone|^a lane narrowed for the buildings/);
   }, T);
 
   it('every split zone has a gore and a nose and ends on both branches centre lines within 0.01 m; every other fork has its reason', async () => {
@@ -150,11 +151,10 @@ describe.skipIf(missing.length > 0)(`pilot centre lane model${reason ? ` (skippe
         for (const t of list.filter((s) => s.kind === 'taper')) {
           const a = drive(t, t.st[0]);
           const b = drive(t, t.st[t.st.length - 1]);
-          // a taper where the count changes is inside the limit of its class
-          if (a !== b) {
-            expect(out.has(t.id), `${name} ${t.id}: ${a} to ${b} lanes`).toBe(false);
-            expect(t.taper.length).toBeGreaterThanOrEqual(classDefaults(t.cls).taper * t.taper.shift * 0.98 - 0.05);
-          }
+          // a taper where the count changes is inside the limit it was built to (the class taper, or the zone rate for
+          // a taper into a split zone, P1-046), or it is a listed width taper on a road too short for it
+          if (a !== b && !out.has(t.id)) expect(t.taper.length).toBeGreaterThanOrEqual((t.taper.ratio ?? classDefaults(t.cls).taper) * t.taper.shift * 0.98 - 0.05);
+          if (a !== b && out.has(t.id)) expect(lanes.tapers.findings.find((f) => f.strip === t.id).why).toMatch(/^the road meets the width|^the taper to a split zone|^the street changes its lane count/);
         }
       }
       console.log(`[pilot lanes] ${name}: ${byEdge.size} edges, lane counts ${JSON.stringify(Object.fromEntries([...new Set(counts)].sort().map((c) => [c, counts.filter((x) => x === c).length])))}`);

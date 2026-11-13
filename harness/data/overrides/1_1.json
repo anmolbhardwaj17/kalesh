@@ -1,0 +1,89 @@
+[
+  {
+    "issue": "lanes:w23134098.0",
+    "action": "set_lanes",
+    "target": {
+      "ids": [
+        "w23134098.0"
+      ],
+      "anchor": {
+        "lat": 28.6128167,
+        "lon": 77.2276573
+      },
+      "tolerance_m": 15
+    },
+    "params": {
+      "on": "w23134098.0",
+      "lanes": 5,
+      "from": "ahead"
+    },
+    "why": "The India Gate hexagon is one ring of even width on Esri World Imagery (west side about 22 m of asphalt from Kartavya Path to Ashoka Road); OSM tags 5 lanes on most of the ring, this piece had 4 (taken from the road ahead): the ring keeps one cross section (P1-046)",
+    "by": "builder",
+    "source": "satellite",
+    "date": "2026-11-13",
+    "reference": {
+      "link": "https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/export?bbox=77.22627629489122,28.611630763624454,77.22913924700377,28.614157205659016&bboxSR=4326&imageSR=3857&size=1000,1000&format=jpg&f=image",
+      "date": "2026-11-13",
+      "note": "Esri World Imagery of the hexagon west side at Kartavya Path, about 0.28 m per pixel"
+    },
+    "id": "ov_1_1_0001"
+  },
+  {
+    "issue": "lanes:w23134098.1",
+    "action": "set_lanes",
+    "target": {
+      "ids": [
+        "w23134098.1"
+      ],
+      "anchor": {
+        "lat": 28.6132235,
+        "lon": 77.2276812
+      },
+      "tolerance_m": 15
+    },
+    "params": {
+      "on": "w23134098.1",
+      "lanes": 5,
+      "from": "ahead"
+    },
+    "why": "The India Gate hexagon is one ring of even width on Esri World Imagery (west side about 22 m of asphalt from Kartavya Path to Ashoka Road); OSM tags 5 lanes on most of the ring, this piece had 4 (taken from the road ahead): the ring keeps one cross section (P1-046)",
+    "by": "builder",
+    "source": "satellite",
+    "date": "2026-11-13",
+    "reference": {
+      "link": "https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/export?bbox=77.22627629489122,28.611630763624454,77.22913924700377,28.614157205659016&bboxSR=4326&imageSR=3857&size=1000,1000&format=jpg&f=image",
+      "date": "2026-11-13",
+      "note": "Esri World Imagery of the hexagon west side at Kartavya Path, about 0.28 m per pixel"
+    },
+    "id": "ov_1_1_0002"
+  },
+  {
+    "issue": "lanes:w23134098.2",
+    "action": "set_lanes",
+    "target": {
+      "ids": [
+        "w23134098.2"
+      ],
+      "anchor": {
+        "lat": 28.6146225,
+        "lon": 77.2279511
+      },
+      "tolerance_m": 15
+    },
+    "params": {
+      "on": "w23134098.2",
+      "lanes": 5,
+      "from": "ahead"
+    },
+    "why": "The India Gate hexagon is one ring of even width on Esri World Imagery (west side about 22 m of asphalt from Kartavya Path to Ashoka Road); OSM tags 5 lanes on most of the ring, this piece had 4 (taken from the road ahead): the ring keeps one cross section (P1-046)",
+    "by": "builder",
+    "source": "satellite",
+    "date": "2026-11-13",
+    "reference": {
+      "link": "https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/export?bbox=77.22627629489122,28.611630763624454,77.22913924700377,28.614157205659016&bboxSR=4326&imageSR=3857&size=1000,1000&format=jpg&f=image",
+      "date": "2026-11-13",
+      "note": "Esri World Imagery of the hexagon west side at Kartavya Path, about 0.28 m per pixel"
+    },
+    "id": "ov_1_1_0003"
+  }
+]

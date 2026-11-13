@@ -255,7 +255,9 @@ describe.skipIf(missing.length > 0)(`pilot centre elevation${reason ? ` (skipped
       expect(v.name).toBe('Blue Line');
       expect(v.profile.length).toBeGreaterThan(20);
       expect(v.maxAboveM).toBeGreaterThan(7.5);
-      expect(v.crossings.length).toBeGreaterThan(2);
+      // (two at least: since P1-046 the short road under the Blue Line west of Rajiv Chowk took its junction's width
+      // whole and lies inside that junction, so one track crosses two junctions only)
+      expect(v.crossings.length).toBeGreaterThanOrEqual(2);
       expect(v.ends.some((e) => e.kind === 'portal' || e.kind === 'grade')).toBe(true);
       for (const e of v.ends.filter((x) => x.kind !== 'open')) expect(Math.abs(e.h - e.g)).toBeLessThan(0.01);
     }

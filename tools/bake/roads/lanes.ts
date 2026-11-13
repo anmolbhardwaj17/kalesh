@@ -30,6 +30,8 @@ export interface Attach {
   target?: { cs: CrossSection; rows: Row[] };
   /** The frame is the edge's own (a street that widens before a junction): nothing is blended. */
   own?: boolean;
+  /** A taper the width step asked for (P1-046): the road meets the width of the road it runs on into across a junction. */
+  width?: boolean;
 }
 
 export interface EdgePlan {
@@ -471,6 +473,8 @@ interface Span {
   rows: Row[] | null;
   need: number;
   shift: number;
+  /** Metres of length per metre of move this taper is held to. */
+  ratio: number;
 }
 
 const BLEND_M = 12;
@@ -489,13 +493,16 @@ export function buildEdgeStrips(plan: EdgePlan, step = 4): EdgeStrips {
     const cs = plan.cs[i] as CrossSection;
     const prev = spans[spans.length - 1];
     if (prev && csEqual(prev.a, cs)) prev.s1 = s1;
-    else spans.push({ s0, s1, a: cs, b: cs, rows: null, need: 0, shift: 0 });
+    else spans.push({ s0, s1, a: cs, b: cs, rows: null, need: 0, shift: 0, ratio });
   });
   if (spans.length === 0) return { strips: [], joints: [], startLanes: [], endLanes: [] };
   const out: Span[] = [];
-  const taperSpan = (s0: number, s1: number, a: CrossSection, b: CrossSection, rows: Row[]): Span => {
+  // a taper to a split zone keeps the zone rate (ClassDefaults.slip); a lane or width change at a junction or along
+  // the edge takes the class taper (P1-046)
+  const zoneRatio = classDefaults(e.cls).slip;
+  const taperSpan = (s0: number, s1: number, a: CrossSection, b: CrossSection, rows: Row[], r = ratio): Span => {
     const shift = maxShift(rows, a, b);
-    return { s0, s1, a, b, rows, need: Math.max(10, ratio * shift), shift };
+    return { s0, s1, a, b, rows, need: Math.max(10, r * shift), shift, ratio: r };
   };
   // tapers where the cross-section changes along the edge: inside the wider section
   for (let i = 0; i < spans.length; i++) {
@@ -520,18 +527,20 @@ export function buildEdgeStrips(plan: EdgePlan, step = 4): EdgeStrips {
   if (plan.startAttach?.target) {
     const first = spans[0] as Span;
     const t = plan.startAttach.target;
-    const want = Math.max(10, ratio * maxShift(t.rows, t.cs, first.a));
+    const r = plan.startAttach.own ? ratio : zoneRatio;
+    const want = Math.max(10, r * maxShift(t.rows, t.cs, first.a));
     const len = Math.min(want, (first.s1 - first.s0) * (plan.endAttach?.target ? 0.45 : 0.7));
-    spans.unshift(taperSpan(first.s0, first.s0 + len, t.cs, first.a, t.rows));
+    spans.unshift(taperSpan(first.s0, first.s0 + len, t.cs, first.a, t.rows, r));
     first.s0 += len;
   }
   if (plan.endAttach?.target) {
     const lastSpan = spans[spans.length - 1] as Span;
     const t = plan.endAttach.target;
-    const want = Math.max(10, ratio * maxShift(t.rows, lastSpan.b, t.cs));
+    const r = plan.endAttach.own ? ratio : zoneRatio;
+    const want = Math.max(10, r * maxShift(t.rows, lastSpan.b, t.cs));
     const len = Math.min(want, (lastSpan.s1 - lastSpan.s0) * (plan.startAttach?.target ? 0.8 : 0.7));
     lastSpan.s1 -= len;
-    spans.push(taperSpan(lastSpan.s1, lastSpan.s1 + len, lastSpan.b, t.cs, t.rows));
+    spans.push(taperSpan(lastSpan.s1, lastSpan.s1 + len, lastSpan.b, t.cs, t.rows, r));
   }
   spans = spans.filter((s) => s.s1 - s.s0 > 0.05);
 
@@ -584,7 +593,7 @@ export function buildEdgeStrips(plan: EdgePlan, step = 4): EdgeStrips {
       id: `${e.id}_${i}`, edge: e.id, kind: sp.rows ? 'taper' : 'road', cls: e.cls, link: e.link, name: e.name, ways,
       lanes: sp.rows ? rowLanes(sp.rows, sp.a, sp.b) : sp.a.lanes.map((l) => ({ ...l })), st, hero: plan.hero,
     };
-    if (sp.rows) strip.taper = { length: sp.s1 - sp.s0, shift: sp.shift, needed: sp.need };
+    if (sp.rows) strip.taper = { length: sp.s1 - sp.s0, shift: sp.shift, needed: sp.need, ratio: sp.ratio };
     strips.push(strip);
   });
   // lane pairs between consecutive strips: both sides name the lanes of the cross-section they share

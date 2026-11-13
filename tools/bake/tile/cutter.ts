@@ -62,6 +62,9 @@ export interface CutTile {
 }
 
 type V3 = [number, number, number];
+/** A triangle whose least height is under this (m) is a needle and covers nothing (the snap is 1/1024 m). */
+const NEEDLE_M = 0.001;
+
 const cross = (a: V3, b: V3, c: V3): V3 => {
   const ux = b[0] - a[0];
   const uy = b[1] - a[1];
@@ -233,10 +236,20 @@ export class WorldCutter {
     // a triangle the snap turned over or flattened (a needle of under a square millimetre whose corners lie nearly on
     // one line) is left out: its other side would face up, and it covers nothing
     let flipped = 0;
+    // (also a needle whose corners the snap left within a millimetre of one line, P1-046: its side is snap noise, a
+    // footpath sliver on a widened kerb faced sideways against its vertex normals in the game's reader)
     const keeps = (r: readonly V3[], q: readonly V3[]): boolean => {
       const n1 = cross(r[0]!, r[1]!, r[2]!);
       const n2 = cross(q[0]!, q[1]!, q[2]!);
-      if (n1[0] * n2[0] + n1[1] * n2[1] + n1[2] * n2[2] > 0) return true;
+      const twice = Math.hypot(n2[0], n2[1], n2[2]);
+      let longest = 0;
+      for (let i = 0; i < 3; i++) {
+        const u = q[i]!;
+        const v = q[(i + 1) % 3]!;
+        longest = Math.max(longest, Math.hypot(v[0] - u[0], v[1] - u[1], v[2] - u[2]));
+      }
+      const needle = longest > 0 && twice / longest < NEEDLE_M;
+      if (!needle && n1[0] * n2[0] + n1[1] * n2[1] + n1[2] * n2[2] > 0) return true;
       flipped++;
       return false;
     };
