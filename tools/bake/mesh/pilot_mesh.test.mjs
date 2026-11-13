@@ -5,45 +5,29 @@
 // time, and the stand-in tiles of the road bench scene. Counts that are not zero on the pilot are held at what was
 // measured, each with its reason, so a change shows.
 import fs from 'node:fs';
-import os from 'node:os';
 import path from 'node:path';
-import { fileURLToPath } from 'node:url';
 import { describe, expect, it } from 'vitest';
-import { parseArgs } from '../cli.ts';
-import { stagePlan } from '../layout/stages.ts';
-import { bake, offlineNet } from '../main.ts';
+import { logLines, pilotMissing, sharedBake } from '../../testkit/sharedbake.mjs';
 import { decodeT1 } from '../tile/codec.ts';
 
-const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..', '..', '..');
-const districts = JSON.parse(fs.readFileSync(path.join(ROOT, 'harness/data/districts.json'), 'utf8'));
-const plan = stagePlan(districts, 'pilot', fs.readFileSync(path.join(ROOT, 'harness/data/districts/pilot_centre.geojson'), 'utf8'));
-const missing = ['osm.json', 'overture_buildings.json', 'gedtm30_window.json'].filter((f) => !fs.existsSync(path.join(ROOT, plan.def.dataDir, f)));
-const reason = missing.length ? `pilot data missing (${missing.join(', ')} in ${plan.def.dataDir}): run npm run bake -- pilot --stage sources` : '';
+const { missing, reason } = pilotMissing();
 
 describe.skipIf(missing.length > 0)(`pilot centre road mesh${reason ? ` (skipped: ${reason})` : ''}`, () => {
-  let done;
-  const baked = () => (done ??= run());
-  const run = async () => {
-    const dir = fs.mkdtempSync(path.join(os.tmpdir(), 'bake-mesh-'));
-    const healthFile = path.join(dir, 'health.json');
-    const benchDir = path.join(dir, 'gen');
-    const lines = [];
-    const report = await bake(parseArgs(['pilot', '--stage', 'mesh', '--offline']), { root: ROOT, net: offlineNet, today: '2026-11-12', log: (l) => lines.push(l), healthFile, benchDir });
-    const health = JSON.parse(fs.readFileSync(healthFile, 'utf8'));
-    for (const l of lines.filter((x) => x.startsWith('[mesh]'))) console.log(l);
+  const baked = async () => {
+    const { report, health, benchDir, lines } = await sharedBake();
+    logLines(lines, '[mesh]');
     return { report, health, mesh: health.mesh, benchDir };
   };
-  /** The whole bake runs once, inside the first test that asks for it (about two minutes; longer beside the other pilot tests). */
-  const T = 600000;
+  /** The shared bake (tools/testkit/sharedbake.mjs) is built by the first test file that asks, once per run, and kept between runs. */
+  const T = 1800000;
 
-  it('the bake runs through the mesh step: every mesh invariant holds, the meshes build in under 60 s, the same mesh twice', async () => {
+  it('the bake runs through the mesh step: every mesh invariant holds, the same mesh twice; the build time is checked by pilot_timing.test.mjs', async () => {
     const { report, health, mesh } = await baked();
-    expect(report.steps).toEqual(['sources', 'ground', 'graph', 'repair', 'lanes', 'elevation', 'mesh']);
+    expect(report.steps.slice(0, 7)).toEqual(['sources', 'ground', 'graph', 'repair', 'lanes', 'elevation', 'mesh']);
     expect(report.stoppedBeforeTiles).toBe(false);
     const inv = Object.fromEntries(health.invariants.filter((i) => i.id.startsWith('MESH-')).map((i) => [i.id, i.ok]));
     expect(inv).toEqual({ 'MESH-01.no_overlap_at_junctions': true, 'MESH-02.watertight': true, 'MESH-03.structures': true, 'MESH-04.kerbs_uv_stop_lines': true, 'MESH-05.same_twice': true });
     console.log(`[mesh] build time ${mesh.buildMs} ms (${JSON.stringify(mesh.ms)}), checks ${mesh.checksMs} ms`);
-    expect(mesh.buildMs).toBeLessThan(60000);
     expect(mesh.counts.triangles).toBeGreaterThan(1000000);
     expect(mesh.counts.laneQuads).toBeGreaterThan(300000);
     expect(mesh.counts.junctions).toBe(health.lanes.counts.junctions);
@@ -149,7 +133,8 @@ describe.skipIf(missing.length > 0)(`pilot centre road mesh${reason ? ` (skipped
     const { mesh, benchDir } = await baked();
     for (const site of ['ito', 'cp', 'india_gate', 'chandni_chowk']) {
       const meta = JSON.parse(fs.readFileSync(path.join(benchDir, `${site}.json`), 'utf8'));
-      expect(meta.poses.map((p) => p.name)).toEqual(['top', 'eye']);
+      // the terrain step writes the same site files again with more poses (ramp foot, bank): the first two are the mesh's
+      expect(meta.poses.map((p) => p.name).slice(0, 2)).toEqual(['top', 'eye']);
       const t = decodeT1(new Uint8Array(fs.readFileSync(path.join(benchDir, `${site}.ktl`))));
       const names = t.header.meshes.map((m) => m.material);
       for (const m of ['road', 'kerb', 'footpath', 'marking', 'ground']) expect(names).toContain(m);

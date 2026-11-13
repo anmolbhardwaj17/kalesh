@@ -4,37 +4,22 @@
 // budget or with a bad vertex), collider against drawn on 1,000 seeded points in each of five named tiles, rays every
 // 5 cm along the ITO flyover deck, no chunk over 600 triangles, the byte budgets, and every file read back.
 import fs from 'node:fs';
-import os from 'node:os';
 import path from 'node:path';
-import { fileURLToPath } from 'node:url';
 import { describe, expect, it } from 'vitest';
-import { parseArgs } from '../cli.ts';
-import { stagePlan } from '../layout/stages.ts';
-import { bake, offlineNet } from '../main.ts';
+import { logLines, pilotMissing, sharedBake } from '../../testkit/sharedbake.mjs';
 import { decodeT1 } from './codec.ts';
 
-const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..', '..', '..');
-const districts = JSON.parse(fs.readFileSync(path.join(ROOT, 'harness/data/districts.json'), 'utf8'));
-const plan = stagePlan(districts, 'pilot', fs.readFileSync(path.join(ROOT, 'harness/data/districts/pilot_centre.geojson'), 'utf8'));
-const missing = ['osm.json', 'overture_buildings.json', 'gedtm30_window.json'].filter((f) => !fs.existsSync(path.join(ROOT, plan.def.dataDir, f)));
-const reason = missing.length ? `pilot data missing (${missing.join(', ')} in ${plan.def.dataDir}): run npm run bake -- pilot --stage sources` : '';
+const { missing, reason } = pilotMissing();
 
 describe.skipIf(missing.length > 0)(`pilot centre tiles${reason ? ` (skipped: ${reason})` : ''}`, () => {
-  let done;
-  const baked = () => (done ??= run());
-  const run = async () => {
-    const dir = fs.mkdtempSync(path.join(os.tmpdir(), 'bake-tiles-'));
-    const healthFile = path.join(dir, 'health.json');
-    const benchDir = path.join(dir, 'gen');
-    const out = path.join(dir, 'tiles');
-    const lines = [];
-    const report = await bake(parseArgs(['pilot', '--offline', '--out', out]), { root: ROOT, net: offlineNet, today: '2026-11-12', log: (l) => lines.push(l), healthFile, benchDir });
-    const health = JSON.parse(fs.readFileSync(healthFile, 'utf8'));
-    for (const l of lines.filter((x) => x.startsWith('[tiles]'))) console.log(l);
-    return { report, health, rec: health.tiles.record, out, index: JSON.parse(fs.readFileSync(path.join(out, 'index.json'), 'utf8')) };
+  const baked = async () => {
+    const { report, health, tiles, lines } = await sharedBake();
+    logLines(lines, '[tiles]');
+    const rec = health.tiles.record;
+    return { report, health, rec, out: tiles, index: JSON.parse(fs.readFileSync(path.join(tiles, 'index.json'), 'utf8')) };
   };
-  /** The whole bake runs once, inside the first test that asks for it (about three minutes; longer beside the other pilot tests). */
-  const T = 900000;
+  /** The shared bake (tools/testkit/sharedbake.mjs) is built by the first test file that asks, once per run, and kept between runs. */
+  const T = 1800000;
 
   it('the bake runs through the tile step: every tile invariant holds, nothing skipped, index.json names every file', async () => {
     const { report, health, rec, index, out } = await baked();

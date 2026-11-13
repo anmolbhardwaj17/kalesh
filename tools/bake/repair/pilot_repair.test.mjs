@@ -1,30 +1,16 @@
 // The rule catalogue and auto-repair on the pilot centre graph (P1-010 acceptance), from the pinned stage files in
-// data/pilot_centre/ (gitignored; the test skips with the reason when they are missing). It runs the bake driver
-// through the repair step into a temp report folder and checks: counts by rule, proposals on every queued issue, one
-// log line per applied repair, a second run that applies nothing, the time of all rules, and the same output twice.
+// data/pilot_centre/ (gitignored; the test skips with the reason when they are missing). It reads the bake through the
+// repair step with no overrides (tools/testkit/sharedbake.mjs repairBaseline, kept between runs) and checks: counts by
+// rule, proposals on every queued issue, one log line per applied repair, a second run that applies nothing. The rest
+// of the repair acceptance is in pilot_repair_rules.test.mjs (every rule twice, the whole repair on its own) and
+// pilot_repair_pick.test.mjs (an owner pick through the inspector into the next bake).
 import fs from 'node:fs';
-import os from 'node:os';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { describe, expect, it } from 'vitest';
-import { projector } from '../../geo/projection.ts';
-import { parseArgs } from '../cli.ts';
-import { buildBlockGraph } from '../graph/build.ts';
-import { graphHash } from '../graph/checks.ts';
-import { smoothedGround } from '../heights.ts';
-import { outlineRing } from '../layout/outline.ts';
-import { blockFrame } from '../layout/placement.ts';
+import { repairBaseline } from '../../testkit/sharedbake.mjs';
+import { CATALOGUE } from '../rules/catalogue.ts';
 import { stagePlan } from '../layout/stages.ts';
-import { bake, boxMetres, offlineNet } from '../main.ts';
-import { laneInputs } from '../sites.ts';
-import { CATALOGUE, timeRules } from '../rules/catalogue.ts';
-import { RuleContext } from '../rules/context.ts';
-import { readGraphInput } from '../sources/graphinput.ts';
-import { readGedtmFile } from '../sources/ground.ts';
-import { readRepairInput } from '../sources/repairio.ts';
-import { startInspector } from '../../inspector/serve.mjs';
-import { buildRuleEnv } from './env.ts';
-import { repairWithLanes } from './feedback.ts';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..', '..', '..');
 const districts = JSON.parse(fs.readFileSync(path.join(ROOT, 'harness/data/districts.json'), 'utf8'));
@@ -36,25 +22,12 @@ const reason = missing.length ? `pilot data missing (${missing.join(', ')} in ${
 const ASKED_AUTO_SHARE = 0.65;
 
 describe.skipIf(missing.length > 0)(`pilot centre repair${reason ? ` (skipped: ${reason})` : ''}`, () => {
-  let done;
-  const baked = async () => {
-    if (done) return done;
-    const dir = fs.mkdtempSync(path.join(os.tmpdir(), 'bake-repair-'));
-    const healthFile = path.join(dir, 'health.json');
-    const lines = [];
-    const report = await bake(parseArgs(['pilot', '--stage', 'repair', '--offline']), { root: ROOT, net: offlineNet, today: '2026-11-11', log: (l) => lines.push(l), healthFile, overridesDir: path.join(dir, 'no_overrides') });
-    done = {
-      report, lines, dir,
-      issues: JSON.parse(fs.readFileSync(path.join(dir, 'issues.json'), 'utf8')),
-      repairs: fs.readFileSync(path.join(dir, 'repairs.jsonl'), 'utf8').trim().split('\n').map((l) => JSON.parse(l)),
-      health: JSON.parse(fs.readFileSync(healthFile, 'utf8')),
-    };
-    return done;
-  };
+  const baked = () => repairBaseline();
+  const T = 1800000;
 
   it('the report lists counts by rule, and the driver stops on no repair invariant', async () => {
     const { report, health, lines } = await baked();
-    expect(report.steps).toEqual(['sources', 'ground', 'graph', 'repair']);
+    expect(report.steps.slice(0, 4)).toEqual(['sources', 'ground', 'graph', 'repair']);
     expect(report.stoppedBeforeTiles).toBe(false);
     const s = health.repair.summary;
     expect(s.byRule.map((r) => r.rule)).toEqual(CATALOGUE.map((r) => r.id));
@@ -66,7 +39,7 @@ describe.skipIf(missing.length > 0)(`pilot centre repair${reason ? ` (skipped: $
     expect(lines.filter((l) => l.startsWith('[repair] R-')).length).toBe(s.byRule.filter((r) => r.issues > 0).length);
     console.log(`[pilot repair] ${s.total} issues: ${s.auto} repaired on their own (${(s.autoShare * 100).toFixed(1)} percent, ${(s.autoShareOfChanged * 100).toFixed(1)} percent of repaired plus queued, ${(s.withoutTerrainOutliers.autoShare * 100).toFixed(1)} percent without R-TERR-03), ${s.queued} queued (${s.highImpact} high impact), ${s.explained} explained`);
     console.log(`[pilot repair] by rule: ${s.byRule.filter((r) => r.issues).map((r) => `${r.rule} ${r.issues} (${r.auto} auto, ${r.queued} queued, ${r.explained} explained)`).join('; ')}`);
-  }, 240000);
+  }, T);
 
   it(`repairs most issues on its own (the acceptance asks ${ASKED_AUTO_SHARE * 100} percent; the measured share is printed and recorded)`, async () => {
     const { health } = await baked();
@@ -83,7 +56,7 @@ describe.skipIf(missing.length > 0)(`pilot centre repair${reason ? ` (skipped: $
     expect(by['R-ROAD-04']).toMatchObject({ auto: 0, queued: 0 });
     expect(by['R-ROAD-04'].explained).toBeGreaterThan(10);
     for (const id of ['R-HERO-01', 'R-HERO-02', 'R-HERO-03', 'R-HERO-04']) expect(by[id].auto).toBe(0);
-  }, 240000);
+  }, T);
 
   it('every queued issue has a proposal with a confidence, a reasoning line and a preview polyline; no hero issue is repaired', async () => {
     const { issues, health } = await baked();
@@ -112,7 +85,7 @@ describe.skipIf(missing.length > 0)(`pilot centre repair${reason ? ` (skipped: $
     }
     // issues inside a focus district carry its id
     expect(new Set(issues.issues.map((i) => i.district)).size).toBeGreaterThan(2);
-  }, 240000);
+  }, T);
 
   it('repairs.jsonl has one line per applied repair with before and after, and a second run applies 0 new repairs', async () => {
     const { repairs, issues, health } = await baked();
@@ -129,62 +102,5 @@ describe.skipIf(missing.length > 0)(`pilot centre repair${reason ? ` (skipped: $
     expect(health.repair.secondRunRepairs).toBe(0);
     expect(health.repair.summary.unconverged).toBe(0);
     expect(health.invariants.filter((x) => x.id.startsWith('REPAIR-')).map((x) => [x.id, x.ok])).toEqual([['REPAIR-01.fixed_point', true], ['REPAIR-02.proposals', true], ['REPAIR-03.topology', true]]);
-  }, 240000);
-
-  it('all rules run in under 3 s (time per rule printed) and the same graph gives the same output twice', async () => {
-    const { health } = await baked();
-    const input = readGraphInput(ROOT, plan);
-    const g = buildBlockGraph(input);
-    const proj = projector(plan.origin);
-    const grid = readGedtmFile(path.join(ROOT, plan.def.dataDir, 'gedtm30_window.json'));
-    const ground = smoothedGround(grid, proj, boxMetres(plan));
-    const extra = readRepairInput(ROOT);
-    const focusIds = new Set(districts.districts.filter((d) => d.block === plan.def.block).map((d) => d.id));
-    const focus = districts.districts.filter((d) => focusIds.has(d.id) && typeof d.outline === 'string').map((d) => ({ id: d.id, ring: outlineRing(JSON.parse(fs.readFileSync(path.join(ROOT, 'harness/data', d.outline), 'utf8')).features[0].geometry.coordinates[0], plan.origin) }));
-    const env = buildRuleEnv({ proj, offset: blockFrame(districts, plan.def.block).offset, focus, ground: (x, z) => ground.at(x, z), heightSource: grid, heroSpecs: extra.heroSpecs, heroList: extra.heroList, places: extra.places.filter((p) => p.block === plan.def.block), elements: input.elements, graph: g, mapEdge: 'stage' });
-    const a = timeRules(new RuleContext(g, env), () => performance.now());
-    const b = timeRules(new RuleContext(g, env), () => performance.now());
-    console.log(`[pilot repair] all rules: ${a.totalMs} ms and ${b.totalMs} ms (driver: ${health.repair.rulesTotalMs} ms); per rule: ${Object.entries(a.ms).map(([id, ms]) => `${id} ${ms}`).join(', ')}`);
-    expect(Object.keys(a.ms)).toEqual(CATALOGUE.map((r) => r.id));
-    expect(a.totalMs).toBeLessThan(3000);
-    expect(b.totalMs).toBeLessThan(3000);
-    expect(health.repair.rulesTotalMs).toBeLessThan(3000);
-    expect(JSON.stringify(b.issues)).toBe(JSON.stringify(a.issues));
-    // the whole repair with the lane model's feedback (R-LANE-06), run here on its own, gives the graph the driver wrote
-    const lin = laneInputs(input, plan, extra.heroSpecs);
-    const { res } = repairWithLanes(g, env, {}, (rg) => ({ nodes: rg.nodes, edges: rg.edges, marks: rg.marks, ...lin }));
-    expect(graphHash(res.graph)).toBe(health.repair.hash);
-    expect(res.summary.total).toBe(health.repair.summary.total);
-    expect(res.repairs.length).toBe(health.repair.summary.auto);
-  }, 240000);
-  it('end to end in a temp folder: a pick written by the inspector server is read by the next bake and shows as fixed by override in health.json', async () => {
-    const first = await baked();
-    const overrides = path.join(first.dir, 'picked_overrides');
-    // the inspector reads the issues.json of the first bake and writes the owner's pick into the override folder
-    const server = await startInspector({ dataDir: first.dir, overridesDir: overrides, inboxFile: path.join(first.dir, 'inbox.jsonl'), gamePort: 1, date: '2026-11-12' });
-    let issue;
-    try {
-      issue = first.issues.issues.find((i) => i.rule === 'R-ROAD-01' && i.status === 'open' && i.proposals.length >= 2);
-      expect(issue, 'the pilot has an open R-ROAD-01 issue with two proposals').toBeTruthy();
-      const res = await fetch(`${server.url.replace('/inspector/', '')}/api/inspector/pick`, { method: 'POST', body: JSON.stringify({ issue: issue.id, proposal: 1, note: 'a real dead end' }) });
-      expect(res.status).toBe(200);
-    } finally {
-      await server.close();
-    }
-    expect(fs.readdirSync(overrides)).toEqual([`${issue.tile[0]}_${issue.tile[1]}.json`]);
-    const healthFile = path.join(first.dir, 'health_picked.json');
-    const report = await bake(parseArgs(['pilot', '--stage', 'repair', '--offline']), { root: ROOT, net: offlineNet, today: '2026-11-12', log: () => {}, healthFile, overridesDir: overrides });
-    const health = JSON.parse(fs.readFileSync(healthFile, 'utf8'));
-    expect(report.stoppedBeforeTiles).toBe(false);
-    expect(health.overrides).toMatchObject({ patches: 1, byId: 1, byAnchor: 0, stale: 0, applied: 1 });
-    expect(health.overrides.records[0]).toMatchObject({ issue: issue.id, resolution: 'by_id', outcome: 'fixed', action: issue.proposals[1].action });
-    expect(health.counts.fixedByOverrides).toBe(1);
-    expect(health.counts.staleOverrides).toBe(0);
-    expect(health.counts.leftOpen).toBeLessThan(first.health.counts.leftOpen + 1);
-    const again = JSON.parse(fs.readFileSync(path.join(first.dir, 'issues.json'), 'utf8'));
-    expect(again.issues.find((i) => i.id === issue.id).status).toBe('overridden');
-    expect(health.invariants.filter((x) => x.id.startsWith('REPAIR-')).every((x) => x.ok)).toBe(true);
-    // x and z of the issues are world metres: the tile of the record is the tile of its position
-    for (const i of again.issues.slice(0, 200)) expect([Math.floor(i.x / 250), Math.floor(i.z / 250)]).toEqual(i.tile);
-  }, 240000);
+  }, T);
 });
