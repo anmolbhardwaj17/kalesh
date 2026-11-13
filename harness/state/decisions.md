@@ -346,3 +346,6 @@ Decision: five add actions (`add_way`, `add_median`, `add_footpath`, `add_crossi
 
 ## 2026-11-13 Pedestrian subways curated; expectations answered (Anmol)
 Anmol: keep car tunnels, keep some pedestrian underpasses with their own look and life, remove confusing underground paths. Decision: P2-031 lists every underground footway with keep or remove and a reason (keep hero and busy crossing subways, metro and station entrances; remove stubs and broken ones as patches), and builds kept subways with mouths, passages and later life points. He also asked what is missing or not feasible; answered in the reply (see journal).
+
+## 2026-11-13 Route line, phone, money; Lutyens confirmed (Anmol)
+Anmol agreed to the route line, phone and money ideas. Decision: noted on P3-001 so the P3 plan includes them, plus audio, save and settings, before the P4 slice. He asked about the rich areas: already planned as D05 (Lutyens bungalows and Delhi Gymkhana) and D06 (Khan Market, Lodhi Garden and the Delhi Golf Club) in the centre block at true scale, built in P7, with Act 3 and Act 5 missions there (invented politicians only).

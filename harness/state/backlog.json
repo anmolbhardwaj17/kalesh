@@ -1,6 +1,6 @@
 {
   "_doc": "Written only by node harness/bin/task.mjs. Phases run in order; P0 (ADOPT + STYLE DISCOVERY) waits for the owner by design and needs task.mjs signoff and task.mjs archsignoff before its gate passes. Later phases are added by the planner at the end of P0 (task.mjs phase-add) from the game's real state.",
-  "updated": "2026-11-13T10:51:29.141Z",
+  "updated": "2026-11-13T10:54:22.824Z",
   "phases": [
     {
       "id": "P0",
@@ -2952,7 +2952,9 @@
       "kind": "feature",
       "status": "todo",
       "attempts": 0,
-      "notes": [],
+      "notes": [
+        "Anmol 2026-11-13 agreed: plan these into P3 (they must be in before the P4 slice): (1) navigation: minimap plus a route line to the destination along the lane graph (GPS style, recalculates on a wrong turn); (2) a phone: contacts, calls and texts that start missions and side jobs; (3) money that matters: fares pay, spending on food, fuel, repairs and the fixer's contacts (light, not a full economy); also make sure audio (horns, engines, crowd, Hindi chatter, radio placeholders), save and load, settings and controller support are covered in P3 or P4."
+      ],
       "created": "2026-11-11T12:33:40.827Z"
     },
     {
