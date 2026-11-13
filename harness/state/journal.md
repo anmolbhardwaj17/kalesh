@@ -505,3 +505,4 @@ One line per event, written by task.mjs (start, done, fail, phase changes, inbox
 - 2026-11-14 00:18 mentor message mmwfbyq73 handled: Sounds good. The three character cards stay open with no deadline; the stand-ins carry on until you download them.
 - 2026-11-14 00:32 mentor message mmwfcg9rd handled: Both running builders finish their task, then back to one builder at a time (map lane off). The content writer is finished; it only stays in the list.
 - 2026-11-14 01:09 mentor message mmwfdr9vi handled: Switched: one builder keeps building while a verifier checks the last finished task on a frozen copy. Starts once the two running tasks report.
+- 2026-11-14 01:10 mentor message mmwfdsqwh handled: Done: the verifier runs only for tasks that change what you see or play, and at phase gates. Map, tooling, data, research and content are checked by me with tests, at no agent cost.

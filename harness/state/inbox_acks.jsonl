@@ -191,3 +191,4 @@
 {"id":"mmwfbyq73","ts":"2026-11-13T18:48:54.019Z","reply":"Sounds good. The three character cards stay open with no deadline; the stand-ins carry on until you download them.","tasks":[]}
 {"id":"mmwfcg9rd","ts":"2026-11-13T19:02:37.942Z","reply":"Both running builders finish their task, then back to one builder at a time (map lane off). The content writer is finished; it only stays in the list.","tasks":[]}
 {"id":"mmwfdr9vi","ts":"2026-11-13T19:39:05.099Z","reply":"Switched: one builder keeps building while a verifier checks the last finished task on a frozen copy. Starts once the two running tasks report.","tasks":[]}
+{"id":"mmwfdsqwh","ts":"2026-11-13T19:40:13.857Z","reply":"Done: the verifier runs only for tasks that change what you see or play, and at phase gates. Map, tooling, data, research and content are checked by me with tests, at no agent cost.","tasks":[]}
