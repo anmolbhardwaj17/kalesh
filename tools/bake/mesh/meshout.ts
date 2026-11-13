@@ -27,7 +27,7 @@ export interface MeshRecord {
   counts: {
     faces: number; vertices: number; laneQuads: number; triangles: number; trianglesByMaterial: Record<string, number>;
     junctions: number; j1: number; j2: number; junctionFaces: number; setFaces: number; clippedFaces: number; clippedJunctions: number; clippedAreaM2: number;
-    bands: number; crossedBands: number; droppedBands: number; holes: number; fannedJunctions: number; foldedBorders: number; foldedQuads: number; jointPins: number; jointPinMaxM: number; jointsApart: number;
+    bands: number; crossedBands: number; droppedBands: number; holes: number; heightsTaken: number; fannedJunctions: number; foldedBorders: number; foldedQuads: number; jointPins: number; jointPinMaxM: number; jointsApart: number;
     kerbFaces: number; endCaps: number; stopLines: number; crossings: number; undersides: number; roofs: number; abutmentWalls: number;
   };
   /** The gate counts of MAP_REPAIR.md "Verification" this step measures. */
@@ -41,7 +41,8 @@ export interface MeshRecord {
   uv: MeshChecks['uv'];
   stopLines: MeshChecks['stopLines'];
   /** Junction surfaces over 3,000 m2 (world metres): a cluster the lane model cut far too wide. */
-  oversize: { id: string; method: string; arms: number; areaM2: number; x: number; z: number }[];
+  /** Junction surfaces over OVERSIZE_M2, each with why it is that big. */
+  oversize: { id: string; method: string; arms: number; areaM2: number; reachM: number; why: string; x: number; z: number }[];
   /** What the builder did at junctions it could not build as planned (the first 400). */
   notes: { id: string; what: string }[];
   files: Record<string, string | string[]>;
@@ -64,6 +65,9 @@ export function meshHash(mesh: RoadMesh): string {
   return hashText(`${fs.faces}:${fs.vx.length}:${a}:${b}:${JSON.stringify(mesh.sink.triangles())}`);
 }
 
+/** A junction surface over this is listed in `oversize` (m2). */
+export const OVERSIZE_M2 = 3000;
+
 export function meshRecord(input: MeshInput, mesh: RoadMesh, checks: MeshChecks, checksMs: number, offset: { x: number; z: number }, hash: string, files: MeshRecord['files']): MeshRecord {
   const { fs } = mesh;
   const tri = mesh.sink.triangles();
@@ -72,7 +76,19 @@ export function meshRecord(input: MeshInput, mesh: RoadMesh, checks: MeshChecks,
   input.junctions.forEach((j, ji) => {
     let area = 0;
     for (const f of mesh.junctions.faces[ji] as number[]) if (fs.raise[f] === 0) area += fs.area(f);
-    if (area > 3000) oversize.push({ id: j.id, method: j.method, arms: j.arms.length, areaM2: Math.round(area), x: Math.round((j.centre.x + offset.x) * 10) / 10, z: Math.round((j.centre.z + offset.z) * 10) / 10 });
+    if (area <= OVERSIZE_M2) return;
+    // how far out the arms end: what makes the surface big
+    let reach = 0;
+    for (const a of j.arms) {
+      const s = input.strips[a.strip] as Strip;
+      const st = (a.end === 'start' ? s.st[0] : s.st[s.st.length - 1]) as Station;
+      reach = Math.max(reach, Math.hypot(st.x - j.centre.x, st.z - j.centre.z));
+    }
+    const r = Math.round(reach);
+    const why = j.method === 'J2'
+      ? `no usable plan (${j.why ?? 'the planned ring crosses itself on the strips\' own vertices'}): the union of its lane path corridors, kept inside the hull of its ${j.arms.length} arms' cut lines, which end up to ${r} m from the centre`
+      : `a planned ring of ${j.arms.length} arms that end up to ${r} m from the centre (a wide crossing of main roads)`;
+    oversize.push({ id: j.id, method: j.method, arms: j.arms.length, areaM2: Math.round(area), reachM: r, why, x: Math.round((j.centre.x + offset.x) * 10) / 10, z: Math.round((j.centre.z + offset.z) * 10) / 10 });
   });
   oversize.sort((p, q) => q.areaM2 - p.areaM2);
   const world = <T extends { x: number; z: number }>(p: T): T => ({ ...p, x: Math.round((p.x + offset.x) * 10) / 10, z: Math.round((p.z + offset.z) * 10) / 10 });
@@ -83,7 +99,7 @@ export function meshRecord(input: MeshInput, mesh: RoadMesh, checks: MeshChecks,
       faces: fs.faces, vertices: fs.vx.length, laneQuads: mesh.stripFaces.quads, triangles: Object.values(tri).reduce((s, v) => s + v, 0), trianglesByMaterial: tri,
       junctions: input.junctions.length, j1: mesh.junctions.j1, j2: mesh.junctions.j2, junctionFaces: fs.faces - (mesh.stripFaces.first[first] as number), setFaces: mesh.junctions.setFaces.size,
       clippedFaces: mesh.junctions.clippedFaces, clippedJunctions: mesh.junctions.clippedJunctions, clippedAreaM2: mesh.junctions.clippedAreaM2, bands: mesh.junctions.bands, crossedBands: mesh.junctions.crossedBands,
-      droppedBands: mesh.junctions.droppedBands, holes: mesh.junctions.holes, fannedJunctions: mesh.tops.fanned, foldedBorders: mesh.stripFaces.foldedBorders, foldedQuads: mesh.stripFaces.foldedQuads,
+      droppedBands: mesh.junctions.droppedBands, holes: mesh.junctions.holes, heightsTaken: mesh.junctions.heightsTaken, fannedJunctions: mesh.tops.fanned, foldedBorders: mesh.stripFaces.foldedBorders, foldedQuads: mesh.stripFaces.foldedQuads,
       jointPins: mesh.borders.pinned, jointPinMaxM: Math.round(mesh.borders.pinMaxM * 10000) / 10000, jointsApart: mesh.borders.apart,
       kerbFaces: mesh.steps.faces, endCaps: mesh.steps.caps, stopLines: mesh.stops.lines.length, crossings: mesh.stops.crossings, undersides: mesh.structures.undersides, roofs: mesh.structures.roofs, abutmentWalls: mesh.structures.abutmentWalls,
     },
@@ -98,8 +114,8 @@ export function meshRecord(input: MeshInput, mesh: RoadMesh, checks: MeshChecks,
     watertight: checks.watertight,
     ends: { ...checks.ends, unjoinedList: checks.ends.unjoinedList.map(world), floatingList: checks.ends.floatingList.map(world) },
     railings: { ...checks.railings, list: checks.railings.list.map(world) },
-    piers: { ...checks.piers, list: checks.piers.list.map(world) },
-    kerbs: { ...checks.kerbs, list: checks.kerbs.list.map(world) },
+    piers: { ...checks.piers, list: checks.piers.list.map(world), longSpans: checks.piers.longSpans.map(world) },
+    kerbs: { ...checks.kerbs, list: checks.kerbs.list.map(world), beside: { ...checks.kerbs.beside, list: checks.kerbs.beside.list.map(world) } },
     uv: checks.uv, stopLines: checks.stopLines, oversize, notes: mesh.junctions.list, files,
   };
 }

@@ -1,7 +1,7 @@
 // Map inspector lanes layer, the pure parts (P1-025): lane counts and widths of a strip, the plain words for where a
 // count came from, the strip under a point, and the list of split zones and taper findings.
 import { describe, expect, it } from 'vitest';
-import { distAlong, driveLaneCount, laneItems, lanesInboxText, lanesIssueId, lanesSummary, metres, nearestStrip, sourceWords, stripWidths } from './lanes.ts';
+import { distAlong, driveLaneCount, laneItems, lanesInboxText, lanesIssueId, lanesSummary, metres, nearestStrip, sectionParts, sourceWords, stripWidths } from './lanes.ts';
 import type { LaneStrip } from './lanes.ts';
 
 /** A straight strip from (x0, z0) east for 100 m: kerb, two driving lanes, kerb; north is -z, so the left is -z. */
@@ -101,5 +101,20 @@ describe('the inbox line', () => {
     const t = lanesInboxText('Bahadur Shah Zafar Marg', 1793.2, -1229.6, 3, 4, ' three each way ', 'ov_7_-5_0001', '7_-5.json');
     expect(t).toBe('Map inspector: I set the lane count of Bahadur Shah Zafar Marg at x 1793, z -1230 from 3 to 4. Note: three each way. Patch ov_7_-5_0001 is in overrides/7_-5.json.');
     expect(t).not.toMatch(/—/);
+  });
+});
+
+describe('sectionParts (P1-036)', () => {
+  it('leaves out parts with no width and merges what is left side by side, but keeps driving lanes apart', () => {
+    // a split zone before its nose: three painted islands of no width between the two branches
+    const lanes: [string, number][] = [['kerb', 0], ['drive', 1], ['gore', 0], ['gore', 0], ['gore', 0], ['drive', 1], ['drive', 1], ['kerb', 0]];
+    const b = [7.6, 7.3, 4.0, 4.0, 4.0, 4.0, 0.7, -2.6, -2.9];
+    const parts = sectionParts(lanes, b);
+    expect(parts.map((p) => p.type)).toEqual(['kerb', 'drive', 'drive', 'drive', 'kerb']);
+    expect(parts.filter((p) => p.type === 'gore')).toHaveLength(0);
+    // past the nose the island has width and is listed once
+    const open = sectionParts(lanes, [8.6, 8.3, 5.0, 4.6, 4.4, 4.0, 0.7, -2.6, -2.9]);
+    expect(open.filter((p) => p.type === 'gore')).toHaveLength(1);
+    expect(open.find((p) => p.type === 'gore')?.widthM).toBeCloseTo(1.0, 6);
   });
 });

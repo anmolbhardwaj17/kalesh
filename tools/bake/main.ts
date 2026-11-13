@@ -57,7 +57,7 @@ import { readRepairInput, writeRepair } from './sources/repairio.ts';
 import { checkGraph, graphCounts, graphHash, graphInvariants } from './graph/checks.ts';
 import { graphSvg } from './graph/render.ts';
 import type { RepairedGraph } from './repair/engine.ts';
-import { checkLaneModel } from './roads/lanechecks.ts';
+import { checkLaneModel, checkPlanOverlap } from './roads/lanechecks.ts';
 import type { LaneChecks } from './roads/lanechecks.ts';
 import type { LaneConflict } from './roads/surfaces.ts';
 import { explainGates, gateInvariant, gateLog } from './report/gates.ts';
@@ -434,6 +434,11 @@ export async function bake(args: BakeArgs, opts: BakeOptions): Promise<HealthRep
       rec.solver = first.report;
       report.elevation = rec;
       elevated = { junctionHeights: res.junctionHeights, kinds: st.kinds };
+      // the lane model's plan overlap once more on the solved levels: a bridge left on fill lies beside the roads at grade
+      if (report.lanes) {
+        const ov = (report.lanes.overlapSolved = checkPlanOverlap(build.strips, build.joints, undefined, st.kinds));
+        opts.log(`[elevation] strips on each other on the solved levels: ${ov.areaM2} m2 in ${ov.pairs} pairs (${ov.worst.slice(0, 3).map((w) => `${w.a} on ${w.b} ${w.areaM2} m2`).join(', ') || 'none'})`);
+      }
       report.gates['floatingEnds'] = rec.openEnds.floating;
       const s = first.report;
       opts.log(`[elevation] solved in ${(rec.solveMs / 1000).toFixed(2)} s (${s.rounds} rounds, ${s.factorisations} factorisations, ${s.converged ? 'converged' : 'NOT converged'}): ${s.strips} strips and ${s.stations} stations in ${s.chains} chains, ${s.knots} knots, ${s.unknowns} unknowns (${s.branches} branches follow their main line, ${s.ties} map edge ties), matrix ${s.matrix} values, factor ${s.factor}; ms ${Object.entries(s.ms).map(([k, v]) => `${k} ${v}`).join(', ')}`);

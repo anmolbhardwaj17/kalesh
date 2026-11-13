@@ -201,10 +201,11 @@ export interface PlanOverlapCheck {
 
 /**
  * Strips lying on each other in plan (overlap.ts): quads of two strips on one level that share area. The two quads at
- * a joint share its line and are one surface. Junction surfaces are the mesh builder's.
+ * a joint share its line and are one surface. Junction surfaces are the mesh builder's. With the solved station kinds
+ * (`kinds`), on the levels the mesh builds (a bridge the solve leaves on fill lies on the ground level).
  */
-export function checkPlanOverlap(strips: readonly Strip[], joints: readonly Joint[], only?: (s: Strip) => boolean): PlanOverlapCheck {
-  const { overlaps, tested } = stripOverlaps(strips, joints, only);
+export function checkPlanOverlap(strips: readonly Strip[], joints: readonly Joint[], only?: (s: Strip) => boolean, kinds?: readonly ArrayLike<number>[]): PlanOverlapCheck {
+  const { overlaps, tested } = stripOverlaps(strips, joints, only, kinds);
   const pairs = new Map<string, { area: number; x: number; z: number }>();
   let area = 0;
   for (const o of overlaps) {
