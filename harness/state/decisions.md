@@ -431,3 +431,6 @@ Anmol: run 2 builders and 2 verifiers in parallel until Tuesday 2026-11-17 (limi
 
 ## 2026-11-14 On-foot movement must feel like a real game (Anmol)
 Anmol: running feels cartoonish. It is a problem, not the style: the signed style is stylised real proportions with weighty, filmi motion. Cause: CC0 clips sped up 1.86 to 1.95x, no starts, stops, turns, lean or foot IK. Decision: P2-041, priority 1, Fable (animation core): stride-matched clips, blend space, start and stop clips, acceleration curves, lean, foot IK, camera follow; verifier judges a frame strip.
+
+## 2026-11-14 Cinematography is a first-class system (Anmol)
+Anmol: cinematography and cutscenes make or break the story. Decision: STYLE_BIBLE.md "Cinematography and cutscenes" (shot grammar, lenses, moves, light per scene, editing, references); P3-009 cinematic camera toolkit (priority 1, Fable) with a reference test scene at the CP auto stand; P4-002 writes a shot list for every directed scene.

@@ -127,6 +127,16 @@ Anmol: "everything should feel good ... everything should be consistent and shou
 - **Reference folder (P2-033, 2026-11-13).** `harness/design/reference/infrastructure/` holds one file per kind (`tunnels.md`, `underpasses_subways.md`, `flyovers.md`, `bridges.md`, `metro.md`, `rail.md`, `foot_over_bridges.md`), `variant_map.md` and `variant_map.json` (every pilot tunnel, underpass, flyover, bridge, viaduct, rail stretch, station and foot bridge mapped to its variant id) and 15 licensed photos in `img/` (credits in `img/CREDITS.json`). Start at its `README.md`. Each structure task picks its variant from the map and its dimensions, colours and wear from the kind file; facts are tagged source, photo or estimate.
 - **Consistency check.** Every structure task's acceptance includes a side by side of a reference photo and the game view, and a wide shot where the structure sits in the city next to buildings and roads, so nothing looks like it comes from another game.
 
+## Cinematography and cutscenes (Anmol 2026-11-14)
+
+Anmol: "we have to have amazing cinematography and cutscenes ... understand camera angles and aesthetic ambience ... they can make or break the story."
+
+- **A shot grammar, not a free camera.** Every scene is written as shots with a purpose: establishing wide (the city and the light first), medium two-shots for talk, over-the-shoulder shot and reverse with the 180 degree line kept, close-ups for decisions and reveals, inserts (hands, a phone, a note, a gun), and the filmi push-in and slow motion for set pieces. Lenses are chosen per shot (wide 18 to 24 mm for place, 35 to 50 mm for people, 85 mm plus for faces), with depth of field to lead the eye.
+- **Moves with weight.** Dolly, crane, slow orbit, handheld only where the moment is chaotic (chases, fights), locked off where it is calm. Eased starts and stops, no robotic linear moves, no camera inside geometry.
+- **Light and ambience per scene.** Each scene picks its time of day, haze, practical lights (a tube light in a dhaba, a sodium lamp, a phone screen on a face), rim light to separate faces, and a grade nudge within the signed palette. Sound and music cues are part of the shot list: room tone, the city bed, a horn or a train at the cut.
+- **Editing.** Cuts on action and on looks, held beats before a reveal, J and L cuts for dialogue, letterbox 2.39:1 for directed scenes, a clean way back to gameplay (the camera lands on the play camera, no pop).
+- **References.** Delhi crime and city cinema for framing and mood (wide hazy city establishing shots, crowded frames, close faces), and game cutscenes from GTA V, Max Payne 3 and Watch Dogs 2 for pacing in a playable world. Every directed scene has a written shot list before it is built.
+
 ## Characters
 
 - Proportions: real adult human, 7.5 heads, no big heads or hands, no cartoon eyes; a simplified skin and cloth finish (smooth shading, clear folds only at elbows, knees and the shoulder cloth), clean readable clothing colours from the cloth palette. At the on-foot camera (3 m, 1080p) a person is about 330 px tall: face shapes, hands, clothing layers and a held weapon must read.

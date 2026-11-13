@@ -1,6 +1,6 @@
 {
   "_doc": "Written only by node harness/bin/task.mjs. Phases run in order; P0 (ADOPT + STYLE DISCOVERY) waits for the owner by design and needs task.mjs signoff and task.mjs archsignoff before its gate passes. Later phases are added by the planner at the end of P0 (task.mjs phase-add) from the game's real state.",
-  "updated": "2026-11-13T19:44:57.134Z",
+  "updated": "2026-11-13T19:54:27.069Z",
   "phases": [
     {
       "id": "P0",
@@ -3099,7 +3099,9 @@
       "kind": "content",
       "status": "todo",
       "attempts": 0,
-      "notes": [],
+      "notes": [
+        "Anmol 2026-11-14: every directed scene in M01 to M04 gets a written shot list (shot type, lens, move, light, sound cue) following STYLE_BIBLE.md 'Cinematography and cutscenes' and the P3-009 library, before it is built."
+      ],
       "created": "2026-11-11T12:33:40.827Z"
     },
     {
@@ -4238,6 +4240,28 @@
       "attempts": 0,
       "notes": [],
       "created": "2026-11-13T19:44:57.132Z"
+    },
+    {
+      "id": "P3-009",
+      "phase": "P3",
+      "title": "Cinematic camera toolkit and shot grammar for cutscenes",
+      "desc": "Anmol 2026-11-14: amazing cinematography and cutscenes; camera angles and ambience make or break the story. STYLE_BIBLE.md 'Cinematography and cutscenes'. On top of the P3-003 cutscene runtime: (1) a shot library in data: establishing, two-shot, over-the-shoulder and reverse with the 180 degree line checked, close-up, insert, push-in, slow motion; lens per shot (focal length to FOV on a 35 mm equivalent), physical depth of field with focus pulls; (2) moves: dolly, crane, orbit, handheld with tuned noise only where asked, eased curves, a collision-safe camera; (3) per-scene light rigs: key, fill and rim on faces, practical lights, haze and grade nudges inside the signed palette; (4) edit tools: cut on action, holds, J and L cuts with the dialogue player, 2.39:1 letterbox, a smooth hand-back to the play camera; (5) a test scene in the pilot (Bittu at the CP auto stand at golden hour, 45 to 60 s, 8 to 12 shots) built from a written shot list as the reference for all later scenes.",
+      "accept": [
+        "Shot list file for the test scene and the scene built from it, every shot type of the library used once",
+        "180 degree line test: no reverse shot crosses it unless marked",
+        "Camera never inside geometry in any frame; hand-back to gameplay with no pop (test)",
+        "A verifier reads a contact sheet of every shot against the shot list and the style bible section and judges framing, lens and light",
+        "Scene frame time inside budget; typecheck, npm test and verify --quick green"
+      ],
+      "deps": [],
+      "agent": "builder",
+      "priority": 1,
+      "kind": "mentor",
+      "status": "todo",
+      "attempts": 0,
+      "notes": [],
+      "created": "2026-11-13T19:54:15.052Z",
+      "model": "fable"
     }
   ]
 }

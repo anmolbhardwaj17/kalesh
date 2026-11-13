@@ -511,3 +511,5 @@ One line per event, written by task.mjs (start, done, fail, phase changes, inbox
 - 2026-11-14 01:14 mentor message mmwfdy3cl handled: It is a problem, not the style. The clips are played about twice their natural speed and there are no starts, stops, turns or foot placement. New task P2-041 (priority 1) fixes the movement to feel grounded like a real game.
 - 2026-11-14 01:14 [P3-008] added: Climb onto autos, cars, barriers and low roofs (mantle up to 2.2 m)
 - 2026-11-14 01:14 mentor message mmwfdyt5a handled: Not yet (only a 1.2 m vault). Added P3-008: climb onto autos, cars, highway barriers and low roofs up to 2.2 m, stand and walk on top, drop down, in the playable slice.
+- 2026-11-14 01:24 [P3-009] added: Cinematic camera toolkit and shot grammar for cutscenes
+- 2026-11-14 01:24 mentor message mmwfea7mi handled: Agreed. The style bible now has a cinematography section (shot grammar, lenses, moves, light, editing), and P3-009 builds the cinematic camera toolkit with a reference scene at the CP auto stand. Every mission scene gets a written shot list first.
