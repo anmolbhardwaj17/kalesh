@@ -222,3 +222,12 @@ Then the rest of the centre block with Laxmi Nagar, then the far blocks with the
 ## Model tier
 
 Fable tier tasks (project rules, "Fable tier"): the lane-level road model first, then the repair rules and auto-repair, the elevation solver, the junction and lane mesh builder, terrain that fits roads, and the coordinate system and bake pipeline. The map inspector page is a normal builder task.
+
+## OSM is the starting point, not the final word (Anmol 2026-11-13)
+
+Anmol: "OSM is good for reference ... but obviously data is not correct. Like the width of the divider ... once we get the reference, on top of that we work. Maybe if we have to delete something that OSM has provided, it's okay to delete ... We don't have to be stuck with OSM. Entirely."
+
+- OSM gives the street layout and the idea; the game's road is our decision. Widths, lane counts, medians and dividers, kerbs, footpaths, junction shapes and turn lanes are set from photos and satellite where they differ from OSM, through the existing patch actions (`set_lanes`, `set_tag`, `replace_geometry`, `move_node`, `remove`) and, for hero roads, an authored road blueprint (cross sections per stretch: carriageway, median width and type, footpaths, service lanes).
+- Deleting OSM features is allowed when they are wrong or add nothing to the game (duplicate ways, phantom service roads, tracks across lawns, broken footpaths). Every removal is a patch with a reason, so it survives a new extract and can be undone.
+- Hero roads (CP circles and radials, Janpath, Kartavya Path, the India Gate hexagon, Ring Road at ITO) are checked against reference photos for median width, lane count and footpath width; the area passes add a side by side of a photo and the game view.
+- Buildings follow the same rule through the area blueprints (DELHI_WORLD.md, "OSM is reference, not the final word").

@@ -322,3 +322,6 @@ Anmol: the terminal refocus should work only when he is genuinely writing in the
 
 ## 2026-11-13 OSM is reference; area blueprints for places we know (Anmol)
 Anmol: OSM is good for reference, but for places like CP we know the look and should shape the buildings ourselves, and odd OSM buildings should be checked online or not look weird. Decision: authored area blueprints (harness/data/blueprints/) override OSM footprints for known places, CP first; precedence road, landmark zone, blueprint, generator. Outside blueprints a footprint check flags odd shapes, checked against photos, kept if real and regularised if not. Written into DELHI_WORLD.md; notes on P2-002, P2-009, P2-010, P2-020 and following area passes. Why: real data gives the layout, but the look of a famous place must read right at a glance.
+
+## 2026-11-13 OSM is the starting point for roads too (Anmol)
+Anmol: OSM is reference only; divider widths and the like may be wrong; work on top of it and delete what is wrong. Decision: road cross sections (widths, lanes, medians, footpaths) come from photos and satellite where they differ, through patches and authored road blueprints for hero roads; removing OSM features is allowed as a patch with a reason. Written into MAP_REPAIR.md; notes on P1-032, P2-015, P2-016. Why: real layout from OSM, real look from what the place actually is.
