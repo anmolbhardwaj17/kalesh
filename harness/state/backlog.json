@@ -1,6 +1,6 @@
 {
   "_doc": "Written only by node harness/bin/task.mjs. Phases run in order; P0 (ADOPT + STYLE DISCOVERY) waits for the owner by design and needs task.mjs signoff and task.mjs archsignoff before its gate passes. Later phases are added by the planner at the end of P0 (task.mjs phase-add) from the game's real state.",
-  "updated": "2026-11-13T10:09:48.341Z",
+  "updated": "2026-11-13T10:37:20.175Z",
   "phases": [
     {
       "id": "P0",
@@ -3306,23 +3306,25 @@
     {
       "id": "P1-030",
       "phase": "P1",
-      "title": "Raise the auto-repair share: gali rule and footprint alignment",
-      "desc": "From P1-010: 53.4% of pilot issues repair on their own (65% wanted). 2,421 of 4,916 building conflicts are queued: 1,939 reach over 1.5 m into the road, 360 leave under 2 m, 35 have the centre line inside the footprint. Add a gali rule for lanes under 2 m (old city lanes are narrower than road defaults), align Overture footprints (Google source) to the road graph where they overlap by a consistent offset, and review six hero roads without spec files so their roads are not all queued. Keep the signed bounds.",
+      "title": "Auto-repair everything basic: the owner queue only for genuine ambiguity",
+      "desc": "Anmol 2026-11-13: he will not work through about 2,500 inspector fixes; the basic ones are ours. The map does not have to be an exact replica: roads must be good and read as Delhi. Make the repair layer resolve every issue it can decide on its own: (1) a building over a road or footpath: shift it back off the corridor, or trim or reshape the footprint (keep its frontage line), or drop a sliver; (2) two overlapping roads: decide whether they merge (a slip joining, a dual carriageway drawn twice, a duplicate) and merge them, else separate them; (3) a road ending out of nowhere or a gap: connect it to the nearest sensible road when the geometry supports it, else terminate it cleanly (turning head or kerb); (4) the old P1-030 items: the gali rule for lanes under 2 m, Overture footprint alignment by consistent offset, hero roads without spec files. Then a top-view judge pass for what the rules still cannot decide: render each remaining site from above (map render plus satellite reference when online), decide like a person looking at it, and write a patch with the reasoning. Only sites still genuinely unclear after that go to Anmol, each with a plain question and options. The inspector stays as a viewer and for the few real questions.",
       "accept": [
-        "pilot auto share at least 65% without loosening the signed bounds",
-        "high impact queued count reported with reasons",
-        "bake deterministic, repairs.jsonl second run applies 0",
+        "Owner queue (needs Anmol) at most 50 sites over the whole pilot, down from about 2,886, each with a plain question",
+        "Building over road conflicts left unresolved: 0 (each shifted, trimmed, reshaped or dropped, with the action counted)",
+        "Overlapping roads and dead ends: each merged, separated, connected or terminated by a rule or the judge pass, counts reported",
+        "Whole bake green with gates explained; bake deterministic, a second run applies 0 repairs",
+        "Before and after map renders of 4 sites (a building shift, a road merge, a connected dead end, a judge pass fix) under harness/reports/map/",
         "npm test green, verify --quick OK"
       ],
       "deps": [],
       "agent": "builder",
-      "priority": 3,
+      "priority": 1,
       "kind": "feature",
       "status": "todo",
       "attempts": 0,
       "notes": [],
       "created": "2026-11-11T18:24:08.193Z",
-      "model": "opus"
+      "model": "fable"
     },
     {
       "id": "P1-031",
