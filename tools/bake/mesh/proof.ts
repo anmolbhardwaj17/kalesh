@@ -65,7 +65,7 @@ function outline(index: StripIndex, si: number, i0: number, i1: number): { x: nu
   return [...left, ...right.reverse()];
 }
 
-export function proveNoOverlap(fs: FaceSet, strips: readonly Strip[], joints: readonly Joint[], index: StripIndex, junctionFaces: readonly (readonly number[])[], junctionSheets: readonly number[], nameOf: (piece: number) => string): OverlapProof {
+export function proveNoOverlap(fs: FaceSet, strips: readonly Strip[], joints: readonly Joint[], index: StripIndex, junctionFaces: readonly (readonly number[])[], junctionSheets: readonly number[], nameOf: (piece: number) => string, extraFaces: readonly number[] = []): OverlapProof {
   // the union identity, sheet by sheet
   const bySheet = new Map<number, { faces: number; area: number; paths: Paths64 }>();
   const sheetAt = (sheet: number): { faces: number; area: number; paths: Paths64 } => {
@@ -93,6 +93,8 @@ export function proveNoOverlap(fs: FaceSet, strips: readonly Strip[], joints: re
   junctionFaces.forEach((faces, ji) => {
     for (const f of faces) sheetAt(junctionSheets[ji] as number).paths.push(grid(f));
   });
+  // faces that belong to no strip quad and no junction (the medians between paired carriageways, P1-032)
+  for (const f of extraFaces) sheetAt(fs.sheet[f] as number).paths.push(grid(f));
   const sheets: OverlapProof['sheets'] = [];
   let total = 0;
   let ground = 0;

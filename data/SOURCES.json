@@ -242,6 +242,28 @@
       "osmBase": "2026-11-11T16:24:25Z",
       "elements": 216615
     },
+    "pilot_osm_turns": {
+      "file": "data/pilot_centre/osm_turns.json",
+      "bytes": 4198,
+      "sha256": "a2b9c44d3636c91b98be0feb8937d4d19c53ae0853136b736a9fe97e7f833c7f",
+      "date": "2026-11-13",
+      "url": "https://overpass-api.de/api/interpreter",
+      "licence": "ODbL 1.0",
+      "licenceUrl": "https://www.openstreetmap.org/copyright",
+      "credit": "© OpenStreetMap contributors",
+      "note": "one Overpass box query over the stage box: turn restriction relations and highway ways with turn:lanes tags (ids refer to the osm pin of the same stage)",
+      "stage": "pilot",
+      "box": {
+        "south": 28.60439,
+        "west": 77.2037,
+        "north": 28.66741,
+        "east": 77.2599
+      },
+      "query": "[out:json][timeout:300];(rel[\"type\"=\"restriction\"](28.60439,77.2037,28.66741,77.2599);way[\"highway\"][\"turn:lanes\"](28.60439,77.2037,28.66741,77.2599);way[\"highway\"][\"turn:lanes:forward\"](28.60439,77.2037,28.66741,77.2599);way[\"highway\"][\"turn:lanes:backward\"](28.60439,77.2037,28.66741,77.2599);way[\"highway\"][\"turn:lanes:both_ways\"](28.60439,77.2037,28.66741,77.2599););out body;",
+      "osmBase": "2026-11-13T18:10:58Z",
+      "relations": 10,
+      "ways": 0
+    },
     "pilot_overture_buildings": {
       "file": "data/pilot_centre/overture_buildings.json",
       "bytes": 50637620,
@@ -281,17 +303,6 @@
       },
       "rows": 597
     },
-    "wikidata_pilot": {
-      "file": "data/pilot/landmarks/wikidata.json",
-      "bytes": 252811,
-      "sha256": "44a545fe3141cc14ae88420a04215d435a76df87bd728ea800a60bb0f083b1d3",
-      "date": "2026-11-11",
-      "url": "https://query.wikidata.org/sparql",
-      "licence": "CC0 1.0",
-      "licenceUrl": "https://www.wikidata.org/wiki/Wikidata:Copyright",
-      "credit": "none needed (Wikidata, CC0)",
-      "note": "SPARQL: items with P625 inside each pilot box, and 164 rows with an ASI id N-DL-*"
-    },
     "ual1_standard": {
       "file": "data/ual/ual1_standard.zip",
       "bytes": 15904933,
@@ -313,6 +324,17 @@
       "licenceUrl": "https://creativecommons.org/publicdomain/zero/1.0/",
       "credit": "Animations and mannequins: Universal Animation Library 1 and 2 by Quaternius (quaternius.com), CC0",
       "note": "the free Standard pack from the itch.io download page; only the Godot .glb files and License.txt are extracted (P1-023)"
+    },
+    "wikidata_pilot": {
+      "file": "data/pilot/landmarks/wikidata.json",
+      "bytes": 252811,
+      "sha256": "44a545fe3141cc14ae88420a04215d435a76df87bd728ea800a60bb0f083b1d3",
+      "date": "2026-11-11",
+      "url": "https://query.wikidata.org/sparql",
+      "licence": "CC0 1.0",
+      "licenceUrl": "https://www.wikidata.org/wiki/Wikidata:Copyright",
+      "credit": "none needed (Wikidata, CC0)",
+      "note": "SPARQL: items with P625 inside each pilot box, and 164 rows with an ASI id N-DL-*"
     }
   },
   "unreachable": {}

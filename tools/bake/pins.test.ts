@@ -37,7 +37,7 @@ describe('pin list data/SOURCES.json', () => {
 
   it('the pilot stage reads the five sources and never FABDEM; every pin of the stage, once fetched, carries its stage box', () => {
     const plan = stagePlan(JSON.parse(districtsRaw) as DistrictsWithStages, 'pilot', pilotRaw);
-    expect(plan.sources.map((s) => s.kind).sort()).toEqual(['gedtm30', 'glo30', 'osm', 'overture_buildings', 'wikidata']);
+    expect(plan.sources.map((s) => s.kind).sort()).toEqual(['gedtm30', 'glo30', 'osm', 'osm_turns', 'overture_buildings', 'wikidata']);
     expect(plan.sources.some((s) => FORBIDDEN.test(s.id) || FORBIDDEN.test(s.file))).toBe(false);
     for (const s of plan.sources) {
       const pin = sources.files[s.id];

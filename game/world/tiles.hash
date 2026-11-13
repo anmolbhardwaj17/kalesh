@@ -1,7 +1,7 @@
 {
  "_doc": "The bake hash of the full tile set (game/world/tiles/index.json bakeHash) that the repo expects. Written by a whole bake; harness/bin/tileset.mjs gives a snapshot or play copy the tiles only when they carry this hash.",
  "stage": "pilot",
- "bakeHash": "1ef6a21c2faf70",
+ "bakeHash": "09c6df948f9853",
  "tiles": 391,
- "bytes": 383858616
+ "bytes": 387249428
 }

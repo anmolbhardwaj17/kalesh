@@ -44,7 +44,7 @@ const response = (body: string | Uint8Array, status = 200): NetResponse => {
   };
 };
 
-/** A network that answers every request of the five readers with small canned data and counts the requests. */
+/** A network that answers every request of the six readers with small canned data and counts the requests. */
 function fakeNet(opts: { failOsm?: boolean } = {}): Net & { calls: string[] } {
   const calls: string[] = [];
   return {
@@ -100,14 +100,14 @@ describe('bake step "sources" with a fake fetcher', () => {
     const net = fakeNet({ failOsm: true });
     const off: Net = { ...net, request: (url, req) => (url.includes('overpass') ? net.request(url, req) : Promise.reject(new Error('down'))) };
     const r = await run({ ...off, tiffWindow: () => Promise.reject(new Error('down')), duckdb: () => Promise.reject(new Error('down')) }, ['pilot', '--stage', 'sources']);
-    expect(net.calls.filter((u) => u.includes('overpass')).length).toBe(3 * OVERPASS_MIRRORS.length); // three tries per server, then unreachable
+    expect(net.calls.filter((u) => u.includes('overpass')).length).toBe(2 * 3 * OVERPASS_MIRRORS.length); // two Overpass sources (osm, osm_turns): three tries per server, then unreachable
     expect(r.error).toBeInstanceOf(BakeStop);
     const health = JSON.parse(fs.readFileSync(path.join(root, 'harness', 'reports', 'map', 'health.json'), 'utf8')) as HealthReport;
     expect(health.stoppedBeforeTiles).toBe(true);
     expect(health.invariants.filter((i) => !i.ok).map((i) => i.id)).toContain('sources.osm');
     const pins = loadSources(path.join(root, 'data', 'SOURCES.json'));
     expect(Object.keys(pins.files)).toEqual([]);
-    expect(Object.keys(pins.unreachable).sort()).toEqual(['glo30', 'pilot_gedtm30', 'pilot_osm', 'pilot_overture_buildings', 'pilot_wikidata']);
+    expect(Object.keys(pins.unreachable).sort()).toEqual(['glo30', 'pilot_gedtm30', 'pilot_osm', 'pilot_osm_turns', 'pilot_overture_buildings', 'pilot_wikidata']);
   });
 
   it('the first run fetches and pins every file and prints its hash', async () => {
@@ -116,7 +116,7 @@ describe('bake step "sources" with a fake fetcher', () => {
     expect(r.error).toBeNull();
     expect(net.calls.length).toBeGreaterThanOrEqual(5);
     const pins = loadSources(path.join(root, 'data', 'SOURCES.json'));
-    expect(Object.keys(pins.files).sort()).toEqual(['glo30', 'pilot_gedtm30', 'pilot_osm', 'pilot_overture_buildings', 'pilot_wikidata']);
+    expect(Object.keys(pins.files).sort()).toEqual(['glo30', 'pilot_gedtm30', 'pilot_osm', 'pilot_osm_turns', 'pilot_overture_buildings', 'pilot_wikidata']);
     expect(pins.unreachable).toEqual({});
     for (const [id, p] of Object.entries(pins.files)) {
       expect(p.sha256, id).toMatch(/^[0-9a-f]{64}$/);

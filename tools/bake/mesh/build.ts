@@ -12,8 +12,10 @@ import { FaceSet } from './faces.ts';
 import type { MeshInput } from './input.ts';
 import { addJunctionFaces } from './junctionfaces.ts';
 import type { JunctionFaces } from './junctionfaces.ts';
-import { paintStops } from './paint.ts';
-import type { StopLine } from './paint.ts';
+import { paintMidBlock, paintStops } from './paint.ts';
+import type { MidBlockPaint, StopLine } from './paint.ts';
+import { addMedianFaces } from './medianfaces.ts';
+import type { MedianReport } from './medianfaces.ts';
 import { Sink, emitSteps, emitTops } from './solids.ts';
 import type { StepReport, TopReport } from './solids.ts';
 import { Borders, StripIndex, addStripFaces, borderMarks } from './stripfaces.ts';
@@ -36,6 +38,12 @@ export interface RoadMesh {
   steps: StepReport;
   structures: StructureReport;
   stops: { lines: StopLine[]; crossings: number };
+  /** Medians between paired carriageways (P1-032). */
+  medians: MedianReport;
+  /** Face numbers of the medians (for the overlap proof). */
+  medianFaces: number[];
+  /** Mid-block crossings drawn (P1-032): zebras and their stop lines. */
+  midBlock: MidBlockPaint;
   /** Wall time of every part and of the whole build (ms). */
   ms: Record<string, number>;
 }
@@ -56,6 +64,9 @@ export function buildRoadMesh(input: MeshInput): RoadMesh {
   lap('stripFaces');
   const junctions = addJunctionFaces(fs, input, index);
   lap('junctionFaces');
+  const medianFaces: number[] = [];
+  const medians = addMedianFaces(fs, input.strips, input.kinds, borders, new FaceGrid(fs), input.pairs, input.medianRefs, stripFaces.first, medianFaces);
+  lap('medians');
   const report = conform(fs);
   lap('conform');
   const edges = buildEdges(fs);
@@ -79,7 +90,8 @@ export function buildRoadMesh(input: MeshInput): RoadMesh {
   const structures = buildStructures(input, fs, edges, grid, sink, borders, (si, i) => index.sheet(si, Math.min(i, (input.strips[si] as Strip).st.length - 2)));
   lap('structures');
   const stops = paintStops(input, sink);
+  const midBlock = paintMidBlock(input, sink);
   lap('paint');
   ms['total'] = Date.now() - t0;
-  return { fs, index, borders, grid, stripFaces, junctions, conform: report, edges, boundary, sink, tops, steps, structures, stops, ms };
+  return { fs, index, borders, grid, stripFaces, junctions, medians, medianFaces, conform: report, edges, boundary, sink, tops, steps, structures, stops, midBlock, ms };
 }

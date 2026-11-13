@@ -94,6 +94,64 @@ export function paintStops(input: MeshInput, sink: Sink): { lines: StopLine[]; c
   return { lines, crossings };
 }
 
+export interface MidBlockPaint {
+  crossings: number;
+  stopLines: number;
+  /** Crossings not drawn: off the ground level, or the strip had no driving lane there. */
+  skipped: number;
+  /** The drawn crossings with their stop lines, for the pictures and the checks. */
+  list: { id: string; strip: number; x: number; z: number; lines: { a: [number, number]; b: [number, number] }[] }[];
+}
+
+/**
+ * Mid-block crossings (P1-032): a zebra across every driving lane of the strip, `width` metres along the road, and a
+ * stop line before it for each direction (the lanes running with the strip stop on its start side, the others on
+ * its end side), STOP_GAP_M back from the zebra. Off the ground level (a deck, a tunnel) nothing is drawn.
+ */
+export function paintMidBlock(input: MeshInput, sink: Sink): MidBlockPaint {
+  const out: MidBlockPaint = { crossings: 0, stopLines: 0, skipped: 0, list: [] };
+  for (const c of input.crossings) {
+    const s = input.strips[c.strip] as Strip;
+    const kind = input.kinds[c.strip] as ArrayLike<number>;
+    const drive = s.lanes.map((l, k) => (l.type === 'drive' ? k : -1)).filter((k) => k >= 0);
+    // the station kind at the crossing: only at grade (0) or on fill (1)
+    let i = 0;
+    for (let done = 0; i + 1 < s.st.length; i++) {
+      done += Math.hypot((s.st[i + 1] as Station).x - (s.st[i] as Station).x, (s.st[i + 1] as Station).z - (s.st[i] as Station).z);
+      if (done >= c.along) break;
+    }
+    if (!drive.length || (kind[i] as number) > 1 || (kind[Math.min(i + 1, s.st.length - 1)] as number) > 1) {
+      out.skipped++;
+      continue;
+    }
+    const P = (st: Station, l: number): V3 => [st.x + st.nx * l, st.h + PAINT_LIFT_M, st.z + st.nz * l];
+    const half = c.width / 2;
+    const p = sectionAt(s, 'start', c.along - half);
+    const q = sectionAt(s, 'start', c.along + half);
+    const left = p.b[drive[0] as number] as number;
+    const right = p.b[(drive[drive.length - 1] as number) + 1] as number;
+    for (let lat = left - 0.4; lat - 0.5 > right + 0.3; lat -= 1) sink.quad('marking', P(p, lat), P(p, lat - 0.5), P(q, lat - 0.5), P(q, lat), [0, 1, 0]);
+    out.crossings++;
+    const rec: MidBlockPaint['list'][number] = { id: c.id, strip: c.strip, x: c.x, z: c.z, lines: [] };
+    // stop lines: lanes with the station order stop before the zebra on the start side, the others on the end side
+    for (const dir of [1, -1] as const) {
+      const ks = drive.filter((k) => (s.lanes[k] as LaneDef).dir === dir || (s.lanes[k] as LaneDef).dir === 0);
+      if (!ks.length) continue;
+      const k0 = ks[0] as number;
+      const k1 = (ks[ks.length - 1] as number) + 1;
+      const at = dir === 1 ? c.along - half - 2 : c.along + half + 2;
+      const a = sectionAt(s, 'start', at - STOP_LINE_M / 2);
+      const b = sectionAt(s, 'start', at + STOP_LINE_M / 2);
+      sink.quad('marking', P(a, a.b[k0] as number), P(a, a.b[k1] as number), P(b, b.b[k1] as number), P(b, b.b[k0] as number), [0, 1, 0]);
+      const m = sectionAt(s, 'start', at);
+      rec.lines.push({ a: [m.x + m.nx * (m.b[k0] as number), m.z + m.nz * (m.b[k0] as number)], b: [m.x + m.nx * (m.b[k1] as number), m.z + m.nz * (m.b[k1] as number)] });
+      out.stopLines++;
+    }
+    out.list.push(rec);
+  }
+  return out;
+}
+
 /**
  * Lane lines as thin strips, for the stand-in scene only: the codes of borderMarks, a dashed line 3 m on and
  * 4.5 m off measured along v (the station's metres along its road), a solid line elsewhere. `inBox` picks the

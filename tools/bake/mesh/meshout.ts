@@ -41,6 +41,10 @@ export interface MeshRecord {
   paths: MeshChecks['paths'];
   uv: MeshChecks['uv'];
   stopLines: MeshChecks['stopLines'];
+  /** Medians between paired carriageways (P1-032): metres by what lies on the median side, widths by source (metres of median), runs (world metres not needed: strip numbers and names). */
+  medians: Omit<RoadMesh['medians'], 'list'> & { list: RoadMesh['medians']['list'] };
+  /** Mid-block crossings drawn (P1-032): zebras, stop lines, skipped. */
+  midBlock: { crossings: number; stopLines: number; skipped: number; list: { id: string; strip: number; x: number; z: number }[] };
   /** Junction surfaces over 3,000 m2 (world metres): a cluster the lane model cut far too wide. */
   /** Junction surfaces over OVERSIZE_M2, each with why it is that big. */
   oversize: { id: string; method: string; arms: number; areaM2: number; reachM: number; why: string; x: number; z: number }[];
@@ -98,7 +102,7 @@ export function meshRecord(input: MeshInput, mesh: RoadMesh, checks: MeshChecks,
     hash, buildMs: mesh.ms['total'] ?? 0, checksMs, ms: mesh.ms,
     counts: {
       faces: fs.faces, vertices: fs.vx.length, laneQuads: mesh.stripFaces.quads, triangles: Object.values(tri).reduce((s, v) => s + v, 0), trianglesByMaterial: tri,
-      junctions: input.junctions.length, j1: mesh.junctions.j1, j2: mesh.junctions.j2, junctionFaces: fs.faces - (mesh.stripFaces.first[first] as number), setFaces: mesh.junctions.setFaces.size,
+      junctions: input.junctions.length, j1: mesh.junctions.j1, j2: mesh.junctions.j2, junctionFaces: fs.faces - (mesh.stripFaces.first[first] as number) - mesh.medians.faces, setFaces: mesh.junctions.setFaces.size,
       clippedFaces: mesh.junctions.clippedFaces, clippedJunctions: mesh.junctions.clippedJunctions, clippedAreaM2: mesh.junctions.clippedAreaM2, bands: mesh.junctions.bands, crossedBands: mesh.junctions.crossedBands,
       droppedBands: mesh.junctions.droppedBands, holes: mesh.junctions.holes, heightsTaken: mesh.junctions.heightsTaken, fannedJunctions: mesh.tops.fanned, foldedBorders: mesh.stripFaces.foldedBorders, foldedQuads: mesh.stripFaces.foldedQuads,
       jointPins: mesh.borders.pinned, jointPinMaxM: Math.round(mesh.borders.pinMaxM * 10000) / 10000, jointsApart: mesh.borders.apart,
@@ -112,12 +116,14 @@ export function meshRecord(input: MeshInput, mesh: RoadMesh, checks: MeshChecks,
       ...o, worst: o.worst.map(world), stripPairs: { ...o.stripPairs, worst: o.stripPairs.worst.map(world) },
       note: `pairs over ${PAIR_LIMIT_M2} m2: ${o.pairsOver} at junctions (a junction's faces against every strip and junction near it, and against each other), ${o.stripPairs.pairs} strip on strip with no junction involved (the lane model's own: two roads whose surfaces lie on each other at one height; the mesh builds what the lane model gives). totalM2 is the area under more than one face from the union of every face, sheet by sheet.`,
     },
-    watertight: checks.watertight,
+    watertight: { ...checks.watertight, doubledAt: checks.watertight.doubledAt.map(world), unclosedAt: checks.watertight.unclosedAt.map(world), zeroAt: checks.watertight.zeroAt.map(world), tJointsAt: checks.watertight.tJointsAt.map(world) },
     ends: { ...checks.ends, unjoinedList: checks.ends.unjoinedList.map(world), floatingList: checks.ends.floatingList.map(world) },
     railings: { ...checks.railings, list: checks.railings.list.map(world) },
     piers: { ...checks.piers, list: checks.piers.list.map(world), longSpans: checks.piers.longSpans.map(world) },
     kerbs: { ...checks.kerbs, list: checks.kerbs.list.map(world), beside: { ...checks.kerbs.beside, list: checks.kerbs.beside.list.map(world) } },
     uv: checks.uv, stopLines: checks.stopLines, paths: checks.paths, oversize, notes: mesh.junctions.list, files,
+    medians: mesh.medians,
+    midBlock: { crossings: mesh.midBlock.crossings, stopLines: mesh.midBlock.stopLines, skipped: mesh.midBlock.skipped, list: mesh.midBlock.list.map((c) => ({ id: c.id, strip: c.strip, ...world({ x: c.x, z: c.z }) })) },
   };
 }
 

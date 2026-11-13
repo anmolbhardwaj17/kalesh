@@ -74,6 +74,43 @@ export const readOsm: Reader = async (a) => {
   return { url: server, note: 'one Overpass box query over the stage box (outline plus margin); osmBase is the date of the OSM data', extra: { query: q, osmBase: j.osm3s?.timestamp_osm_base ?? null, elements: j.elements.length } };
 };
 
+/**
+ * The turn data of the same OSM box (P1-032): every turn restriction relation that touches the box (its members are
+ * ids of ways and nodes in the main extract) and the highway ways that carry a turn:lanes tag, with their node ids.
+ * A query of its own, so the main extract (osm.json) keeps its pin.
+ */
+export function overpassTurnsQuery(b: GeoBox): string {
+  const bb = `${b.south},${b.west},${b.north},${b.east}`;
+  return `[out:json][timeout:300];(rel["type"="restriction"](${bb});way["highway"]["turn:lanes"](${bb});way["highway"]["turn:lanes:forward"](${bb});way["highway"]["turn:lanes:backward"](${bb});way["highway"]["turn:lanes:both_ways"](${bb}););out body;`;
+}
+
+export const readOsmTurns: Reader = async (a) => {
+  const q = overpassTurnsQuery(needBox(a));
+  let text = '';
+  let server = '';
+  const errors: string[] = [];
+  for (const url of OVERPASS_MIRRORS) {
+    try {
+      text = await withRetry(`overpass turns ${url}`, async () => (await okOrThrow(await a.net.request(url, { method: 'POST', form: { data: q }, timeoutMs: 300_000 }), url)).text(), 3, 20_000, a.net.pause);
+      JSON.parse(text);
+      server = url;
+      break;
+    } catch (e) {
+      errors.push(e instanceof Error ? e.message : String(e));
+      if (isOffline(e)) throw e;
+    }
+  }
+  if (!server) throw new Error(errors.join(' | '));
+  const j = JSON.parse(text) as { elements?: { type: string; tags?: Record<string, string> }[]; osm3s?: { timestamp_osm_base?: string }; remark?: string };
+  if (!Array.isArray(j.elements)) throw new Error(`overpass turns: no elements${j.remark ? `: ${j.remark}` : ''}`);
+  if (j.remark && /error|runtime/i.test(j.remark)) throw new Error(`overpass turns: ${j.remark}`);
+  writeAtomic(a.file, text);
+  const relations = j.elements.filter((e) => e.type === 'relation').length;
+  const ways = j.elements.filter((e) => e.type === 'way').length;
+  a.log(`osm turns: ${relations} restriction relations, ${ways} ways with turn lanes, OSM data of ${j.osm3s?.timestamp_osm_base ?? 'unknown'}`);
+  return { url: server, note: 'one Overpass box query over the stage box: turn restriction relations and highway ways with turn:lanes tags (ids refer to the osm pin of the same stage)', extra: { query: q, osmBase: j.osm3s?.timestamp_osm_base ?? null, relations, ways } };
+};
+
 // ------------------------------------------------------------------ Overture buildings (DuckDB)
 
 const OVERTURE_BUCKET = 'https://overturemaps-us-west-2.s3.amazonaws.com';
@@ -168,6 +205,7 @@ export const readWikidata: Reader = async (a) => {
 /** The main URL of each source, for the `unreachable` record of the pin list. */
 export const SOURCE_URL: Readonly<Record<SourceKind, string>> = {
   osm: OVERPASS,
+  osm_turns: OVERPASS,
   overture_buildings: `${OVERTURE_BUCKET}/release/`,
   gedtm30: GEDTM_URL,
   glo30: 'https://copernicus-dem-30m.s3.amazonaws.com/',
@@ -176,6 +214,7 @@ export const SOURCE_URL: Readonly<Record<SourceKind, string>> = {
 
 export const READERS: Readonly<Record<SourceKind, Reader>> = {
   osm: readOsm,
+  osm_turns: readOsmTurns,
   overture_buildings: readOvertureBuildings,
   gedtm30: readGedtm,
   glo30: readGlo30,

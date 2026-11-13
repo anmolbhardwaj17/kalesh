@@ -1,0 +1,58 @@
+{
+  "_doc": "Reference medians (P1-032, MAP_REPAIR.md 'OSM is the starting point'): the divider between the two carriageways of a divided street, read from photos (the area sheets' reference boards, harness/design/areas/) or satellite imagery (Esri World Imagery export at 0.285 m per pixel, the judge tool's source). Read by the mesh step (tools/bake/mesh/medianfaces.ts, tools/bake/sources/meshstage.ts readMedianRefs). names: the street names (both carriageways' OSM names) it covers; box: optional lat/lon box that limits it to the stretch it was read on; width: the divider from kerb face to kerb face in metres; type: kerb (raised, paved), planter (raised, green), barrier (a low block or jersey line), painted (flat, drawn raised as a low kerb for now). Where OSM's two carriageways leave more room than the divider and its two kerbs, the rest is carriageway asphalt either side of it; where they leave less, the median fills the gap and the entry is listed as a disagreement in health.json mesh.medians.disagree. Streets with no entry take the width OSM's two centre lines leave (source osm).",
+  "medians": [
+    {
+      "names": ["Janpath"],
+      "width": 2.0,
+      "type": "planter",
+      "source": "photo",
+      "ref": "harness/design/areas/janpath.md, 'Road surface and markings': 'a planted median about 2 m wide with a low black railing and painted yellow and black kerb' (reference board janpath_board.jpg)"
+    },
+    {
+      "names": ["Sansad Marg"],
+      "width": 0.4,
+      "type": "barrier",
+      "source": "photo",
+      "ref": "harness/design/areas/jantar_mantar.md, 'Map notes': 'the divider is a continuous low yellow and black block about 0.4 m wide (28, 29)'"
+    },
+    {
+      "names": ["Bhairon Marg"],
+      "width": 2.5,
+      "type": "kerb",
+      "source": "photo",
+      "ref": "harness/design/areas/ito.md, 'Map notes': 'Medians on Jawaharlal Nehru Marg and Bhairon Marg are kerbed and 2 to 3 m wide (42, 43, 46, 47)'"
+    },
+    {
+      "names": ["Mahatma Gandhi Marg"],
+      "box": { "south": 28.6415, "west": 77.2445, "north": 28.6461, "east": 77.2497 },
+      "width": 7.4,
+      "type": "planter",
+      "source": "satellite",
+      "ref": "Esri World Imagery export, 0.285 m per pixel, read 2026-11-13 at 28.64383, 77.24707: a planted median with trees between two three-lane carriageways"
+    },
+    {
+      "names": ["Bahadur Shah Zafar Marg"],
+      "box": { "south": 28.6298, "west": 77.2385, "north": 28.6343, "east": 77.2436 },
+      "width": 3.5,
+      "type": "kerb",
+      "source": "satellite",
+      "ref": "Esri World Imagery export, 0.285 m per pixel, read 2026-11-13 at 28.63203, 77.24105: a paved kerbed median between the two carriageways"
+    },
+    {
+      "names": ["Bahadur Shah Zafar Marg"],
+      "box": { "south": 28.6280, "west": 77.2400, "north": 28.6298, "east": 77.2420 },
+      "width": 1.0,
+      "type": "kerb",
+      "source": "satellite",
+      "ref": "Esri World Imagery export, 0.285 m per pixel, read 2026-11-13 at the ITO junction (28.6279, 77.2412): a narrow kerbed divider on the north arm, the zebra crosses it"
+    },
+    {
+      "names": ["Tilak Marg"],
+      "box": { "south": 28.6219, "west": 77.2370, "north": 28.6263, "east": 77.2422 },
+      "width": 0.8,
+      "type": "kerb",
+      "source": "satellite",
+      "ref": "Esri World Imagery export, 0.285 m per pixel, read 2026-11-13 at 28.62411, 77.23964: a narrow white kerbed divider"
+    }
+  ]
+}

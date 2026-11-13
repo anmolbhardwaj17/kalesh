@@ -1,0 +1,4 @@
+{
+  "_doc": "Reference turn lanes (P1-032): turn:lanes tags read from satellite imagery or street photos for ways where OSM has none, in OSM's own tag names (turn:lanes, turn:lanes:forward, turn:lanes:backward; lanes listed left to right as the driver sees them, so in Delhi the kerb lane first). An entry wins over the OSM tags of its way. Read by tools/bake/sources/graphinput.ts readTurnLaneRefs and the lane model (tools/bake/roads/turns.ts). Entry: { way: 'way/<id>', tags: { 'turn:lanes:forward': 'left|through|through;right' }, source: 'satellite' | 'photo', ref: '<image and date>', note }. Empty on 2026-11-13: the pilot OSM extract has no turn:lanes tag (osm_turns pin: 0 ways), and the road arrows at the ITO junction cannot be read on the Esri imagery at 0.285 m per pixel; entries come from street level photos in the area passes.",
+  "lanes": []
+}

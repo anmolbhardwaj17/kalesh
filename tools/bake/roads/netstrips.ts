@@ -110,6 +110,7 @@ export interface PathPhase {
   junctionPlans: JunctionPlan[];
   ends: ExplainedEnd[];
   turns: LaneBuild['turns'];
+  turnRules: LaneBuild['turnRules'];
   tightPaths: LaneBuild['tightPaths'];
 }
 
@@ -281,5 +282,33 @@ export function buildPaths(c: NetCtx, cl: ClusterPhase, sp: StripPhase): PathPha
     const kind: EndKind = nodeKind[n.id] === 'map_edge' ? 'map_edge' : closure(id);
     ends.push({ strip: s.strip, end: s.end, node: id, kind, why: kind === 'map_edge' ? 'the road goes on outside the stage being baked' : `the road ends here (${kind.replace('_', ' ')})` });
   }
-  return { junctions, junctionPlans, ends, turns, tightPaths };
+  return { junctions, junctionPlans, ends, turns, turnRules: turnRulesOf(c, cl), tightPaths };
+}
+
+/** What the turn rules of the map did (P1-032): restrictions applied at a cluster, turn lanes used on arms. */
+function turnRulesOf(c: NetCtx, cl: ClusterPhase): LaneBuild['turnRules'] {
+  const applied = new Set<string>();
+  const mapped = new Set(c.turnRules.map((r) => r.relation));
+  let movementsRemoved = 0;
+  let laneArms = 0;
+  let laneRemoved = 0;
+  const mismatched: { edge: string; why: string }[] = [];
+  const bySource: Record<string, number> = {};
+  for (const w of c.input.turnInputs?.wayTurns.values() ?? []) bySource[w.source] = (bySource[w.source] ?? 0) + 1;
+  for (const pl of cl.planned.values()) {
+    movementsRemoved += pl.restricted;
+    laneArms += pl.laneArms;
+    laneRemoved += pl.laneRestricted;
+    for (const r of pl.rules) applied.add(r.relation);
+    for (const v of pl.views) {
+      if (!v.turns) continue;
+      const n = v.lanes.filter((l) => l.flow <= 0).length;
+      if (v.turns.length !== n) mismatched.push({ edge: v.edge, why: `turn lanes list ${v.turns.length} lanes, the arm has ${n} arriving` });
+    }
+  }
+  const notApplied = [...mapped].filter((id) => !applied.has(id)).sort().map((id) => ({ id, why: 'its from and to edges do not lead to one arm each of the junction that holds the via (the via spans two junctions, or the edges inside the junction branch)' }));
+  return {
+    restrictions: { ...c.turnReport, applied: applied.size, notApplied, movementsRemoved },
+    turnLanes: { ways: c.input.turnInputs?.wayTurns.size ?? 0, bySource, arms: laneArms + mismatched.length, applied: laneArms, mismatched: mismatched.sort((a, b) => (a.edge < b.edge ? -1 : 1)), movementsRemoved: laneRemoved },
+  };
 }

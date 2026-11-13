@@ -13,6 +13,7 @@
 //   4. Restrictions (from the map or an override): "no" forbids one movement, "only" forbids every other one.
 import type { P2 } from '../geom.ts';
 import { MIN_TURN_RADIUS_M } from './model.ts';
+import { laneAllows } from './turns.ts';
 
 export interface ArmLane {
   /** The caller's name for the lane (an index into the arm's cross-section). */
@@ -34,6 +35,8 @@ export interface ArmView {
   edge: string;
   paired: readonly string[];
   lanes: ArmLane[];
+  /** Turn lane designations of the arriving lanes, kerb lane first (turn:lanes, P1-032); applied when their count matches. */
+  turns?: readonly (readonly string[])[];
 }
 
 export type TurnKind = 'left' | 'straight' | 'right' | 'u';
@@ -216,6 +219,10 @@ export interface TurnPlan {
   uTurnsTooTight: number;
   /** Movements a restriction took out. */
   restricted: number;
+  /** Movements no arriving lane's turn designation allows (turn:lanes, P1-032). */
+  laneRestricted: number;
+  /** Arms whose turn designations were used. */
+  laneArms: number;
 }
 
 /**
@@ -223,7 +230,7 @@ export interface TurnPlan {
  * Every arriving lane gets a turn and every leaving lane is reached by one, where the rules leave any movement.
  */
 export function planTurns(arms: readonly ArmView[], restrictions: readonly TurnRestriction[] = [], radiusOf: (from: number, fromLane: ArmLane, to: number, toLane: ArmLane) => number = () => Infinity, minRadius = MIN_TURN_RADIUS_M): TurnPlan {
-  const out: TurnPlan = { turns: [], pairs: [], uTurnsTooTight: 0, restricted: 0 };
+  const out: TurnPlan = { turns: [], pairs: [], uTurnsTooTight: 0, restricted: 0, laneRestricted: 0, laneArms: 0 };
   const ins = arms.map(arriving);
   const outs = arms.map(leaving);
   const seen = new Set<string>();
@@ -243,10 +250,22 @@ export function planTurns(arms: readonly ArmView[], restrictions: readonly TurnR
       else only.set(r.from, new Set([r.to]));
     }
   }
+  // turn lanes: the arriving lanes that may make each kind of turn (null: no designations, the lane rule below)
+  const designated = arms.map((a, i) => {
+    const ai = ins[i] as ArmLane[];
+    if (!a.turns || a.turns.length !== ai.length || ai.length === 0) return null;
+    out.laneArms++;
+    return (kind: TurnKind): ArmLane[] => ai.filter((_, k) => laneAllows(a.turns?.[k] ?? [], kind));
+  });
+  const laneOk = (i: number, kind: TurnKind): boolean => {
+    const d = designated[i];
+    return !d || kind === 'u' || d(kind).length > 0;
+  };
   for (let i = 0; i < arms.length; i++) {
     const a = arms[i] as ArmView;
     const ai = ins[i] as ArmLane[];
     if (ai.length === 0) continue;
+    const des = designated[i];
     const onlyTo = only.get(a.edge);
     // an "only" restriction counts when its target is an arm of this junction
     const onlyHere = onlyTo && arms.some((b) => onlyTo.has(b.edge)) ? onlyTo : null;
@@ -260,10 +279,15 @@ export function planTurns(arms: readonly ArmView[], restrictions: readonly TurnR
         out.restricted++;
         continue;
       }
+      if (!laneOk(i, kind)) {
+        out.laneRestricted++;
+        continue;
+      }
       if (kind === 'u') {
         if (!a.paired.includes(b.edge)) continue;
-        // from the lane beside the median into the first lane the minimum radius reaches, trying the nearest first
-        const from = ai[ai.length - 1] as ArmLane;
+        // from the lane beside the median (or the lane marked for it) into the first lane the minimum radius reaches, trying the nearest first
+        const marked = des ? des('u') : [];
+        const from = (marked.length ? marked[marked.length - 1] : ai[ai.length - 1]) as ArmLane;
         let done = false;
         for (let k = bo.length - 1; k >= 0 && !done; k--) {
           if (radiusOf(i, from, j, bo[k] as ArmLane) >= minRadius) {
@@ -276,7 +300,15 @@ export function planTurns(arms: readonly ArmView[], restrictions: readonly TurnR
         continue;
       }
       out.pairs.push({ from: i, to: j, kind });
-      if (kind === 'left') add(i, j, ai[0] as ArmLane, bo[0] as ArmLane, kind);
+      if (des) {
+        // the lanes marked for this turn: a left turn pairs them from the kerb, a right turn and straight on from the fast side
+        const L = des(kind);
+        if (kind === 'left') L.forEach((l, t) => add(i, j, l, bo[Math.min(t, bo.length - 1)] as ArmLane, kind));
+        else {
+          const n = kind === 'straight' ? Math.max(L.length, bo.length) : L.length;
+          for (let t = 0; t < n; t++) add(i, j, L[Math.max(0, L.length - 1 - t)] as ArmLane, bo[Math.max(0, bo.length - 1 - t)] as ArmLane, kind);
+        }
+      } else if (kind === 'left') add(i, j, ai[0] as ArmLane, bo[0] as ArmLane, kind);
       else if (kind === 'right') add(i, j, ai[ai.length - 1] as ArmLane, bo[bo.length - 1] as ArmLane, kind);
       else {
         // straight on: lanes pair from the fast side; what is left over on the kerb side shares the kerb lane

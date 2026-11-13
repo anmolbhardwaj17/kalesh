@@ -14,6 +14,8 @@ import type { EdgePlan, Zone } from './lanes.ts';
 import { MIN_TURN_RADIUS_M } from './model.ts';
 import type { Joint, Station, Strip, StripEnd } from './model.ts';
 import type { StreetResult, WidthFixed } from './street.ts';
+import type { MappedRestriction, RestrictionReport, TurnInputs } from './turns.ts';
+import type { MidCrossingReport } from './crossings.ts';
 import type { GEnd } from './graph.ts';
 
 export interface LaneModelInput {
@@ -25,8 +27,10 @@ export interface LaneModelInput {
   wayLanes: ReadonlyMap<string, number>;
   heroes?: readonly HeroSpec[];
   restrictions?: readonly TurnRestriction[];
-  /** Tagged crossings and traffic signals of the map, block metres. */
-  points?: readonly { x: number; z: number; kind: 'crossing' | 'signals' }[];
+  /** OSM turn restriction relations and turn lane tags (the osm_turns pin and harness/data/turn_lanes.json, P1-032). */
+  turnInputs?: TurnInputs;
+  /** Tagged crossings and traffic signals of the map, block metres; `marked` false for a crossing with no markings (P1-032). */
+  points?: readonly { x: number; z: number; kind: 'crossing' | 'signals'; id?: string; marked?: boolean }[];
   filter?: RoadFilter;
   /** Station spacing in metres. */
   step?: number;
@@ -109,6 +113,11 @@ export interface LaneBuild {
   fitted: { edge: string; lanes: number }[];
   /** U-turns and other turns the rules or the radius left out, and turns kept under the radius because a lane has no other way on. */
   turns: { uTurnsTooTight: number; restricted: number; droppedForRadius: number; tight: number };
+  /** Turn rules from the map (P1-032): restrictions read, mapped and applied, turn lanes read and applied, by source. */
+  turnRules: TurnRulesReport;
+  /** Crossings away from every junction (P1-032): drawn across their strip with stop lines on both sides. */
+  crossings: MidCrossing[];
+  crossingReport: MidCrossingReport;
   /** Paths under the minimum radius, each with its reason: the only way on for a lane where the junction has no room. */
   tightPaths: { junction: string; fromArm: number; toArm: number; radius: number; why: string }[];
   /** Where the edge lanes (footpath, kerb, planter) of two strips beside each other give way so the surfaces do not overlap (edges.ts). */
@@ -120,6 +129,33 @@ export interface LaneBuild {
   problems: string[];
   rounds: number;
   ms: Record<string, number>;
+}
+
+export interface TurnRulesReport {
+  restrictions: RestrictionReport & {
+    /** Mapped restrictions whose from and to edges are arms of the cluster that holds the via. */
+    applied: number;
+    /** Relations that were mapped but never applied, with why. */
+    notApplied: { id: string; why: string }[];
+    /** Movements (arm pairs) the restrictions took out. */
+    movementsRemoved: number;
+  };
+  turnLanes: { ways: number; bySource: Record<string, number>; arms: number; applied: number; mismatched: { edge: string; why: string }[]; movementsRemoved: number };
+}
+
+/** A crossing away from the junctions: where it lies along its strip and which way traffic stops before it. */
+export interface MidCrossing {
+  id: string;
+  source: 'osm' | 'patch';
+  strip: number;
+  /** Metres along the strip's reference line from its first station. */
+  along: number;
+  /** The station `s` there (metres along the source edge). */
+  s: number;
+  x: number;
+  z: number;
+  /** Width of the zebra along the road (m). */
+  width: number;
 }
 
 /** Junction nodes joined by an edge up to this long are one junction (the same number as rule R-JUNC-03 reads). */
@@ -185,6 +221,9 @@ export interface NetCtx {
   widthBlocked: Set<string>;
   /** How often the width step settled each edge whole (kept over rounds). */
   widthSettles: Map<string, number>;
+  /** Turn restrictions on graph edges (turns.ts mapRestrictions), the same every round. */
+  turnRules: readonly MappedRestriction[];
+  turnReport: RestrictionReport;
   problems: string[];
   step: number;
 }
@@ -197,6 +236,10 @@ export interface Planned {
   pairs: { from: number; to: number; kind: TurnKind }[];
   uTurnsTooTight: number;
   restricted: number;
+  laneRestricted: number;
+  laneArms: number;
+  /** The map's restrictions this cluster applies, on its arms (P1-032). */
+  rules: MappedRestriction[];
   dropped: number;
   tight: number;
 }
