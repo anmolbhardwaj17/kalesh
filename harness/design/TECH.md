@@ -164,7 +164,7 @@ Built in P1-019 (`game/world/streaming/`, `game/world/systems/`, `game/world/wor
 
 - Navmesh polygons come from the bake (footpaths, crossings, plazas, shared lanes), one region per tile joined at the edges. Ambient pedestrians follow the footpath graph; fighters and police on foot use the navmesh. A Recast bake in the game is only a fallback for odd places.
 - Crowd: skinned with an AnimationTree within about 25 m (cap 40), baked vertex animation in a MultiMesh from 25 to 120 m, nobody beyond. 30 to 60 agents in the slice, 120 at release. Re-measure with the real rig.
-- Animation: Quaternius Universal Animation Library 1 and 2 (CC0), retargeted to one humanoid profile. Missing moves (auto driver seat, lathi) are art requests with stand-ins.
+- Animation: Quaternius Universal Animation Library 1 and 2 (CC0), retargeted to one humanoid profile. Missing moves (auto driver seat, lathi) are art requests with stand-ins. Built in P1-023 (docs/ARCHITECTURE.md "Humanoid (P1-023)"): Godot's SkeletonProfileHumanoid through the import bone map `game/characters/rig/ual_bone_map.tres`, so any later humanoid model imported with the same profile plays the same clips; art requests `model_anim_auto_seat`, `model_anim_scooter_ride`, `model_anim_vault`, `model_lead_bittu`, `model_lead_meera`, `model_lead_danny`.
 
 ### Story runtime (CS2, DG1, LIP2 then LIP1, FC2, SB1, SK1)
 

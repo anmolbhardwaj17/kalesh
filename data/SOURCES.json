@@ -291,6 +291,28 @@
       "licenceUrl": "https://www.wikidata.org/wiki/Wikidata:Copyright",
       "credit": "none needed (Wikidata, CC0)",
       "note": "SPARQL: items with P625 inside each pilot box, and 164 rows with an ASI id N-DL-*"
+    },
+    "ual1_standard": {
+      "file": "data/ual/ual1_standard.zip",
+      "bytes": 15904933,
+      "sha256": "cc73fc4e495b82958207316596317a3f40b9fa38065bde1027937452da537724",
+      "date": "2026-11-13",
+      "url": "https://quaternius.itch.io/universal-animation-library",
+      "licence": "CC0 1.0 Universal (public domain dedication)",
+      "licenceUrl": "https://creativecommons.org/publicdomain/zero/1.0/",
+      "credit": "Animations and mannequins: Universal Animation Library 1 and 2 by Quaternius (quaternius.com), CC0",
+      "note": "the free Standard pack from the itch.io download page; only the Godot .glb files and License.txt are extracted (P1-023)"
+    },
+    "ual2_standard": {
+      "file": "data/ual/ual2_standard.zip",
+      "bytes": 18735003,
+      "sha256": "4008ea208a604773a2b2177d965f0f5d3195498b5bf838c3f5785d68e95f2a68",
+      "date": "2026-11-13",
+      "url": "https://quaternius.itch.io/universal-animation-library-2",
+      "licence": "CC0 1.0 Universal (public domain dedication)",
+      "licenceUrl": "https://creativecommons.org/publicdomain/zero/1.0/",
+      "credit": "Animations and mannequins: Universal Animation Library 1 and 2 by Quaternius (quaternius.com), CC0",
+      "note": "the free Standard pack from the itch.io download page; only the Godot .glb files and License.txt are extracted (P1-023)"
     }
   },
   "unreachable": {}

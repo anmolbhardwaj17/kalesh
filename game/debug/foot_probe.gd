@@ -11,9 +11,13 @@
 ##                           faded), the head out of the frame; {on: false} stops and answers the numbers
 ##   cost {n}                n more characters walk on the pad: cost per character per tick (median physics iteration
 ##                           with them less without, over n; windowed at time scale 4)
+##   anim {gait}             foot slide and animation cost of the humanoid at walk, jog or sprint (foot_anim_probe.gd)
+##   animcost {n}            animation cost per character among n walking characters (foot_anim_probe.gd)
+##   lineup {x, z, h}        the three leads side by side, the camera turned to face them (foot_anim_probe.gd)
 extends Node
 
 const Routes := preload("res://debug/foot_routes.gd")
+const AnimProbe := preload("res://debug/foot_anim_probe.gd")
 const OnFoot := preload("res://characters/on_foot.gd")
 const ACTIONS := ["move_forward", "move_back", "move_left", "move_right", "walk", "sprint", "crouch", "jump", "enter_exit",
 	"look_left", "look_right", "look_up", "look_down"]
@@ -60,7 +64,19 @@ func hook(a: Array) -> Dictionary:
 			return {"ok": true, "result": _rec_out}
 		"cost":
 			return {"ok": true, "result": await _cost(int(o.get("n", 16)))}
-	return {"ok": false, "error": "foot(cmd): unknown cmd %s (info, stage, run, camrec, cost)" % cmd}
+		"anim", "animcost", "lineup":
+			var r: Dictionary
+			if cmd == "anim":
+				r = await AnimProbe.anim(self, str(o.get("gait", "walk")))
+			elif cmd == "animcost":
+				r = await AnimProbe.animcost(self, int(o.get("n", 16)))
+			else:
+				r = await AnimProbe.lineup(self, o)
+			release()
+			if r.has("error"):
+				return {"ok": false, "error": r.error}
+			return {"ok": true, "result": r}
+	return {"ok": false, "error": "foot(cmd): unknown cmd %s (info, stage, run, camrec, cost, anim, animcost, lineup)" % cmd}
 
 
 func mode_node() -> Node:

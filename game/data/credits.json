@@ -1,0 +1,13 @@
+{
+  "_doc": "Credit lines for the game's credits screen (not built yet: the menus task reads this file). One entry per third-party source the shipped game contains: the line as players read it, the licence, where it came from. Map data credits (OpenStreetMap, Overture, GEDTM30, Wikidata) are in data/SOURCES.json and join this list when the city ships.",
+  "lines": [
+    {
+      "id": "ual",
+      "text": "Character animations and mannequins: Universal Animation Library 1 and 2 by Quaternius (quaternius.com)",
+      "licence": "CC0 1.0 Universal (public domain dedication)",
+      "source": "https://quaternius.itch.io/universal-animation-library, https://quaternius.itch.io/universal-animation-library-2",
+      "licenceFile": "res://characters/rig/LICENSE_UAL.txt",
+      "since": "P1-023"
+    }
+  ]
+}
