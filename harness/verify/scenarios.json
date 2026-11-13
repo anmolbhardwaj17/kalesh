@@ -352,6 +352,162 @@
         }
       ],
       "_note": "P1-020. The chase camera over a 20 s drive in the course scene: a reverse into the wall at the south end of the flyover lane, then full throttle up the 6 percent ramp, over its crest (the ramp top) onto the deck. Every drawn frame (debug vehicle('camrec')) the camera is 0.5 m or more above the vehicle, not inside geometry (a 0.1 m sphere) and no wall stands between the vehicle and the camera; six named shots (cam_start, cam_reverse, cam_wall, cam_ramp, cam_crest, cam_deck). Default look. Lockstep: one tick per frame."
+    },
+    {
+      "name": "auto_top",
+      "query": "style=none",
+      "headless": true,
+      "steps": [
+        {
+          "script": "harness/verify/scripts/auto_top.js",
+          "timeout": 120000
+        }
+      ],
+      "_note": "P1-021. The auto (game/data/vehicles/auto.tres): top speed 63 to 67 km/h with full throttle (steady: under 0.1 km/h gained in 3 s). Runs in the course scene (load('course')) after vehicle('use') swaps in the tune, headless, at time scale 4; the probe is the debug hook vehicle('run') (game/debug/vehicle_probe.gd), which presses the InputMap actions and measures in sim ticks."
+    },
+    {
+      "name": "auto_accel",
+      "query": "style=none",
+      "headless": true,
+      "steps": [
+        {
+          "script": "harness/verify/scripts/auto_accel.js",
+          "timeout": 120000
+        }
+      ],
+      "_note": "P1-021. The auto: 0 to 40 km/h with full throttle in 5 to 6 s of sim, input answered in 1 tick. Runs in the course scene (load('course')) after vehicle('use') swaps in the tune, headless, at time scale 4; the probe is the debug hook vehicle('run') (game/debug/vehicle_probe.gd), which presses the InputMap actions and measures in sim ticks."
+    },
+    {
+      "name": "auto_brake",
+      "query": "style=none",
+      "headless": true,
+      "steps": [
+        {
+          "script": "harness/verify/scripts/auto_brake.js",
+          "timeout": 120000
+        }
+      ],
+      "_note": "P1-021. The auto: full brake from 60 km/h stops in 18 to 22 m. Runs in the course scene (load('course')) after vehicle('use') swaps in the tune, headless, at time scale 4; the probe is the debug hook vehicle('run') (game/debug/vehicle_probe.gd), which presses the InputMap actions and measures in sim ticks."
+    },
+    {
+      "name": "auto_lock",
+      "query": "style=none",
+      "headless": true,
+      "steps": [
+        {
+          "script": "harness/verify/scripts/auto_lock.js",
+          "timeout": 120000
+        }
+      ],
+      "_note": "P1-021. The auto: full right lock at a held 15 km/h turns on a radius of 3.5 to 4.5 m. Runs in the course scene (load('course')) after vehicle('use') swaps in the tune, headless, at time scale 4; the probe is the debug hook vehicle('run') (game/debug/vehicle_probe.gd), which presses the InputMap actions and measures in sim ticks."
+    },
+    {
+      "name": "auto_tip",
+      "query": "style=none",
+      "headless": true,
+      "steps": [
+        {
+          "script": "harness/verify/scripts/auto_tip.js",
+          "timeout": 120000
+        }
+      ],
+      "_note": "P1-021. The auto: full right lock at a held 40 km/h, from the moment the lock goes on: under 12 degrees of roll, no tip over, at least 2 wheels down. Runs in the course scene (load('course')) after vehicle('use') swaps in the tune, headless, at time scale 4; the probe is the debug hook vehicle('run') (game/debug/vehicle_probe.gd), which presses the InputMap actions and measures in sim ticks."
+    },
+    {
+      "name": "auto_kerb",
+      "query": "style=none",
+      "headless": true,
+      "steps": [
+        {
+          "script": "harness/verify/scripts/auto_kerb.js",
+          "timeout": 120000
+        }
+      ],
+      "_note": "P1-021. The auto: the one-sided 0.15 m kerb at 40 km/h, judged like car_kerb (under 10 degrees of roll, no flip, under 5 percent speed loss). Runs in the course scene (load('course')) after vehicle('use') swaps in the tune, headless, at time scale 4; the probe is the debug hook vehicle('run') (game/debug/vehicle_probe.gd), which presses the InputMap actions and measures in sim ticks."
+    },
+    {
+      "name": "auto_gali_corner",
+      "query": "style=none",
+      "headless": true,
+      "steps": [
+        {
+          "script": "harness/verify/scripts/auto_gali_corner.js",
+          "timeout": 120000
+        }
+      ],
+      "_note": "P1-021. The auto: the course gali (two lanes 3 m wide at a right angle between 2.5 m walls) with scripted inputs (creep at 8 km/h, full right lock at the turn point, out along the east lane): no wall contact of the collision box with a 2 cm skin on any tick. Runs in the course scene (load('course')) after vehicle('use') swaps in the tune, headless, at time scale 4; the probe is the debug hook vehicle('run') (game/debug/vehicle_probe.gd), which presses the InputMap actions and measures in sim ticks."
+    },
+    {
+      "name": "scooter_top",
+      "query": "style=none",
+      "headless": true,
+      "steps": [
+        {
+          "script": "harness/verify/scripts/scooter_top.js",
+          "timeout": 120000
+        }
+      ],
+      "_note": "P1-021. The scooter (game/data/vehicles/scooter.tres): top speed 88 to 92 km/h with full throttle. Runs in the course scene (load('course')) after vehicle('use') swaps in the tune, headless, at time scale 4; the probe is the debug hook vehicle('run') (game/debug/vehicle_probe.gd), which presses the InputMap actions and measures in sim ticks."
+    },
+    {
+      "name": "scooter_accel",
+      "query": "style=none",
+      "headless": true,
+      "steps": [
+        {
+          "script": "harness/verify/scripts/scooter_accel.js",
+          "timeout": 120000
+        }
+      ],
+      "_note": "P1-021. The scooter: 0 to 60 km/h with full throttle in 5 to 6 s of sim, input answered in 1 tick. Runs in the course scene (load('course')) after vehicle('use') swaps in the tune, headless, at time scale 4; the probe is the debug hook vehicle('run') (game/debug/vehicle_probe.gd), which presses the InputMap actions and measures in sim ticks."
+    },
+    {
+      "name": "scooter_brake",
+      "query": "style=none",
+      "headless": true,
+      "steps": [
+        {
+          "script": "harness/verify/scripts/scooter_brake.js",
+          "timeout": 120000
+        }
+      ],
+      "_note": "P1-021. The scooter: full brake from 80 km/h stops in 25 to 32 m. Runs in the course scene (load('course')) after vehicle('use') swaps in the tune, headless, at time scale 4; the probe is the debug hook vehicle('run') (game/debug/vehicle_probe.gd), which presses the InputMap actions and measures in sim ticks."
+    },
+    {
+      "name": "scooter_stable",
+      "query": "style=none",
+      "headless": true,
+      "steps": [
+        {
+          "script": "harness/verify/scripts/scooter_stable.js",
+          "timeout": 120000
+        }
+      ],
+      "_note": "P1-021. The scooter (two wheels with the hidden stabiliser): 30 s full throttle on the straight, then a 12 s slalom at 40 km/h (2 m either side, 24 m wave): no fall, roll of the physics body under 10 degrees on the straight and 15 in the slalom, the drawn body leans into it. Runs in the course scene (load('course')) after vehicle('use') swaps in the tune, headless, at time scale 4; the probe is the debug hook vehicle('run') (game/debug/vehicle_probe.gd), which presses the InputMap actions and measures in sim ticks."
+    },
+    {
+      "name": "chase_cam_auto",
+      "lockstep": true,
+      "steps": [
+        {
+          "script": "harness/verify/scripts/chase_cam_floor.js",
+          "timeout": 240000,
+          "data": "harness/data/fixtures/vehicle_auto.json"
+        }
+      ],
+      "_note": "P1-021. chase_cam_floor (P1-020) with the auto (vehicle('use')): the reverse into the wall, the 6 percent ramp, the crest and the deck; every drawn frame the camera is 0.5 m or more above the vehicle, not inside geometry and not behind a wall; six named shots auto_cam_start, _reverse, _wall, _ramp, _crest, _deck. Default look. Lockstep."
+    },
+    {
+      "name": "chase_cam_scooter",
+      "lockstep": true,
+      "steps": [
+        {
+          "script": "harness/verify/scripts/chase_cam_floor.js",
+          "timeout": 240000,
+          "data": "harness/data/fixtures/vehicle_scooter.json"
+        }
+      ],
+      "_note": "P1-021. chase_cam_floor (P1-020) with the scooter (vehicle('use')): the reverse into the wall, the 6 percent ramp, the crest and the deck; every drawn frame the camera is 0.5 m or more above the vehicle, not inside geometry and not behind a wall; six named shots scooter_cam_start, _reverse, _wall, _ramp, _crest, _deck. Default look. Lockstep."
     }
   ]
 }

@@ -1,6 +1,6 @@
 {
   "_doc": "Written only by node harness/bin/task.mjs. Phases run in order; P0 (ADOPT + STYLE DISCOVERY) waits for the owner by design and needs task.mjs signoff and task.mjs archsignoff before its gate passes. Later phases are added by the planner at the end of P0 (task.mjs phase-add) from the game's real state.",
-  "updated": "2026-11-13T04:50:07.640Z",
+  "updated": "2026-11-13T05:33:19.202Z",
   "phases": [
     {
       "id": "P0",
@@ -2030,10 +2030,14 @@
       "agent": "builder",
       "priority": 3,
       "kind": "feature",
-      "status": "todo",
-      "attempts": 0,
+      "status": "done",
+      "attempts": 1,
       "notes": [],
-      "created": "2026-11-11T12:29:04.868Z"
+      "created": "2026-11-11T12:29:04.868Z",
+      "started": "2026-11-13T04:50:38.145Z",
+      "done": "2026-11-13T05:33:19.182Z",
+      "summary": "auto.tres, scooter.tres (hidden stabiliser, visual lean), patrol_car.tres. Auto: top 65.4, 0-40 5.35 s, 60-0 19.2 m, lock 4.03 m at 15 km/h, tip 1.1 deg, kerb 8.9 deg 0.4%, gali corner 0 contacts (0.26 m gap). Scooter: top 90.0, 0-60 5.63 s, 80-0 28.4 m, stable 30 s + slalom no fall. Camera floor 6 poses each ok. Verified: typecheck, 799 vitest, 95 Godot tests, quick 17/17 OK, chase shots read.",
+      "commit": "2f1e9a5"
     },
     {
       "id": "P1-022",
@@ -3662,7 +3666,9 @@
       "kind": "polish",
       "status": "todo",
       "attempts": 0,
-      "notes": [],
+      "notes": [
+        "From P1-021: at 90 km/h the scooter trails up to 9.3 m behind and looks small; give each tune its own camera rig. The auto scrubs from 40 to 27.9 km/h at full lock (fine for tip, check feel at playtest)."
+      ],
       "created": "2026-11-13T04:46:42.902Z"
     }
   ]

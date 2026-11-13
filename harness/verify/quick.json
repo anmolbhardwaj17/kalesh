@@ -162,7 +162,9 @@
         "car_accel",
         "car_kerb",
         "car_lock",
-        "tiles_test_block_drive"
+        "tiles_test_block_drive",
+        "auto_accel",
+        "scooter_stable"
       ]
     },
     {
@@ -177,18 +179,50 @@
       ]
     },
     {
+      "path": "game/data/vehicles/auto.tres",
+      "scenarios": [
+        "auto_top",
+        "auto_accel",
+        "auto_brake",
+        "auto_lock",
+        "auto_tip",
+        "auto_kerb",
+        "auto_gali_corner",
+        "chase_cam_auto"
+      ]
+    },
+    {
+      "path": "game/data/vehicles/scooter.tres",
+      "scenarios": [
+        "scooter_top",
+        "scooter_accel",
+        "scooter_brake",
+        "scooter_stable",
+        "chase_cam_scooter"
+      ]
+    },
+    {
+      "path": "game/debug/vehicle_routes.gd",
+      "scenarios": [
+        "auto_gali_corner",
+        "scooter_stable"
+      ]
+    },
+    {
       "path": "game/camera/",
       "scenarios": [
         "chase_cam_floor",
         "drive_north",
-        "coords_north_marker"
+        "coords_north_marker",
+        "chase_cam_auto"
       ]
     },
     {
       "path": "game/scenes/course/",
       "scenarios": [
         "car_flyover",
-        "chase_cam_floor"
+        "chase_cam_floor",
+        "auto_gali_corner"
       ]
     },
     {
@@ -196,7 +230,8 @@
       "scenarios": [
         "car_accel",
         "car_cost",
-        "chase_cam_floor"
+        "chase_cam_floor",
+        "auto_gali_corner"
       ]
     }
   ]

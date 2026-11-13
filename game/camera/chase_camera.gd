@@ -5,6 +5,7 @@
 ## 0.5 m above the vehicle, and a ray from a pivot over the roof pulls it in front of walls (it never sits inside
 ## geometry) and lifts it over the roof when that brings it close. V toggles wide and close (blended over 0.6 s on an arc over the roof), C looks back while held. A sudden
 ## stop above 16 km/h shakes it a little. Follows on _physics_process after the vehicle (process_physics_priority 10).
+## A new target (another vehicle) snaps the camera to it in the view its tune names (`camera_view`: the auto starts close).
 extends Camera3D
 
 @export var target_path: NodePath
@@ -47,6 +48,7 @@ var _shake_t := 0.0
 var _fresh := true
 var _sphere := PhysicsShapeQueryParameters3D.new()
 var _view_was := false
+var _target_id := 0
 
 
 func _ready() -> void:
@@ -93,6 +95,13 @@ func follow(dt: float) -> void:
 	var car := target()
 	if car == null:
 		return
+	if car.get_instance_id() != _target_id:
+		_target_id = car.get_instance_id()
+		_fresh = true
+		_blend = 1.0
+		var t = car.get("tune")
+		if t != null and "camera_view" in t and str(t.camera_view) in ["wide", "close"]:
+			view = str(t.camera_view)
 	var b := car.global_transform.basis
 	var p := car.global_position
 	var flat := -b.z

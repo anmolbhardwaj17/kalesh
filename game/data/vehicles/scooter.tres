@@ -1,0 +1,53 @@
+[gd_resource type="Resource" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://vehicles/vehicle_tune.gd" id="1_tune"]
+
+; The scooter, the fixer's vehicle (P1-021): two wheels on the centre line (front steers, rear drives) with the hidden
+; stabiliser (a roll spring and damper keeps the physics body upright) and a visual lean of the drawn body into turns;
+; the stand-in kit scooter with a rider. GAME.md "Movement and camera feel": top speed about 90 km/h, 0 to 60 km/h in
+; 5 to 6 s, 80 to 0 in 25 to 32 m. Gears stand in for the CVT (a short shift pause). Mass with the rider.
+[resource]
+script = ExtResource("1_tune")
+id = "scooter"
+mass = 180.0
+inertia = Vector3(90, 60, 35)
+box_half = Vector3(0.3, 0.69, 0.9)
+box_y = 0.31
+linear_damp = 0.02
+angular_damp = 1.0
+wheels = [[0.0, -0.1817, -0.6, true, false], [0.0, -0.1817, 0.6, false, true]]
+radius = 0.25
+wheel_width = 0.1
+body = "scooter"
+paint = Color(0.18, 0.36, 0.54, 1)
+camera_view = "close"
+rest = 0.15
+stiffness = 60.0
+compression = 3.6
+relaxation = 4.8
+travel = 0.12
+max_force = 3000.0
+roll_stiffness = 120.0
+roll_damping = 22.0
+lean_max = 0.7
+lean_rate = 6.0
+grip_front = 1.6
+grip_rear = 1.5
+grip_handbrake = 0.8
+side_front = 1.0
+side_rear = 1.0
+max_steer = 0.5
+steer_rate = 1.6
+steer_return = 2.2
+steer_cut_max = 0.7
+steer_cut_kmh = 100.0
+yaw_damp = 300.0
+engine = 650.0
+gear_force = [1.0, 0.75, 0.5]
+gears = [40.0, 65.0, 91.5]
+fade_share = 0.06
+shift_at = 0.93
+shift_pause = 0.05
+reverse_kmh = 8.0
+brake = 12.0
+handbrake = 10.0

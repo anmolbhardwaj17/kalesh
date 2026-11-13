@@ -1,0 +1,47 @@
+[gd_resource type="Resource" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://vehicles/vehicle_tune.gd" id="1_tune"]
+
+; The CNG auto rickshaw, the driver's vehicle (P1-021): three wheels (one steered front, two driven rear), the stand-in
+; kit body with the driver, the close chase camera. GAME.md "Movement and camera feel": top speed about 65 km/h, 0 to
+; 40 km/h in 5 to 6 s, 60 to 0 in 18 to 22 m; a tight turn at low speed for a gali corner (full lock radius 3.5 to
+; 4.5 m at 15 km/h) and no tip over on full lock at speed (the steer lock falls fast with speed). From the physics
+; bench's first guess (game/bench/physics/tune.gd auto()), sized to the kit body. Mass with the driver.
+[resource]
+script = ExtResource("1_tune")
+id = "auto"
+mass = 420.0
+inertia = Vector3(388, 335, 174)
+box_half = Vector3(0.7, 0.775, 1.4)
+box_y = 0.625
+linear_damp = 0.02
+wheels = [[0.0, -0.0626, -1.05, true, false], [-0.64, -0.0626, 0.85, false, true], [0.64, -0.0626, 0.85, false, true]]
+radius = 0.23
+wheel_width = 0.14
+body = "auto"
+camera_view = "close"
+rest = 0.18
+stiffness = 45.0
+compression = 2.4
+relaxation = 3.4
+travel = 0.12
+max_force = 3000.0
+grip_front = 1.8
+grip_rear = 1.7
+grip_handbrake = 0.8
+side_front = 1.0
+side_rear = 1.0
+max_steer = 0.7
+steer_rate = 1.6
+steer_return = 2.2
+steer_cut_max = 0.6
+steer_cut_kmh = 80.0
+yaw_damp = 600.0
+engine = 640.0
+gear_force = [1.0, 0.8, 0.6, 0.45]
+gears = [20.0, 36.0, 52.0, 66.5]
+fade_share = 0.06
+shift_at = 0.93
+reverse_kmh = 15.0
+brake = 16.0
+handbrake = 12.0

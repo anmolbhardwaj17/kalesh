@@ -326,8 +326,9 @@ static func _wheel(s: Geo.Sink, c: Vector3, r: float, w: float) -> void:
 	s.put("metal", Geo.unit_cyl(Geo.SEG_ROUND), Transform3D(b * Basis.from_scale(Vector3(r * 0.58, w + 0.02, r * 0.58)), c), Color("#9da3a6"))
 
 
-## CNG auto-rickshaw facing -Z: green body, yellow canopy, three wheels.
-static func auto_rickshaw(s: Geo.Sink) -> void:
+## CNG auto-rickshaw facing -Z: green body, yellow canopy, three wheels (wheels false: the body only, for a vehicle
+## that draws its own turning wheels).
+static func auto_rickshaw(s: Geo.Sink, wheels := true) -> void:
 	var side := Geo.side()
 	var W := 1.32
 	# lower tub and front fairing (profile in z, y)
@@ -349,9 +350,10 @@ static func auto_rickshaw(s: Geo.Sink) -> void:
 		s.rod("metal", BLACK, Vector3(xs * W * 0.47, 1.1, -1.05), Vector3(xs * W * 0.47, 1.72, -0.98), 0.025, Geo.SEG_SMALL)
 	s.box("satin", Color("#2b2b2b"), Vector3(0, 0.95, 0.75), Vector3(W * 0.92, 0.12, 0.6))
 	s.box("satin", Color("#2b2b2b"), Vector3(0, 1.25, 1.05), Vector3(W * 0.92, 0.55, 0.1))
-	_wheel(s, Vector3(0, 0.23, -1.05), 0.23, 0.14)
-	for xs in [-1.0, 1.0]:
-		_wheel(s, Vector3(xs * (W * 0.5 - 0.02), 0.23, 0.85), 0.23, 0.14)
+	if wheels:
+		_wheel(s, Vector3(0, 0.23, -1.05), 0.23, 0.14)
+		for xs in [-1.0, 1.0]:
+			_wheel(s, Vector3(xs * (W * 0.5 - 0.02), 0.23, 0.85), 0.23, 0.14)
 	s.box("glow", Color("#fff6dc"), Vector3(0, 0.85, -1.42), Vector3(0.22, 0.14, 0.05))
 
 
@@ -379,14 +381,65 @@ static func bus(s: Geo.Sink) -> void:
 	s.box("satin", Color("#2a2a2a"), Vector3(0, 0.45, L * 0.5 + 0.04), Vector3(W - 0.1, 0.22, 0.1))
 
 
-## Scooter facing -Z (parked or ridden).
-static func scooter(s: Geo.Sink, col: Color) -> void:
-	_wheel(s, Vector3(0, 0.25, -0.6), 0.25, 0.1)
-	_wheel(s, Vector3(0, 0.25, 0.6), 0.25, 0.1)
+## Scooter facing -Z (parked or ridden; wheels false: the body only).
+static func scooter(s: Geo.Sink, col: Color, wheels := true) -> void:
+	if wheels:
+		_wheel(s, Vector3(0, 0.25, -0.6), 0.25, 0.1)
+		_wheel(s, Vector3(0, 0.25, 0.6), 0.25, 0.1)
 	s.box("paint", col, Vector3(0, 0.5, 0.25), Vector3(0.36, 0.45, 1.0))
 	s.box("satin", BLACK, Vector3(0, 0.78, 0.3), Vector3(0.3, 0.1, 0.7))
 	s.rod("paint", col, Vector3(0, 0.3, -0.6), Vector3(0, 1.0, -0.5), 0.12, Geo.SEG_SMALL)
 	s.rod("metal", BLACK, Vector3(-0.32, 1.05, -0.5), Vector3(0.32, 1.05, -0.5), 0.02, Geo.SEG_SMALL)
+
+
+## The player's auto body (P1-021): the auto without wheels and the driver at the handlebar (Bittu's stand-in colours).
+static func driven_auto(s: Geo.Sink) -> void:
+	auto_rickshaw(s, false)
+	seated_rider(s, {"hips": Vector3(0, 0.9, -0.38), "lean": 0.06, "hands": Vector3(0.27, 1.17, -0.86),
+		"knee": Vector3(0.15, 0.98, -0.72), "foot": Vector3(0.13, 0.63, -0.86), "top": Color("#8a8d86"),
+		"bottom": Color("#3b3a36"), "skin": Color("#8d5a3b"), "head": Color("#1b1714")})
+
+
+## The player's scooter body (P1-021): the scooter without wheels, a footboard and a seated rider with a helmet (the
+## fixer's stand-in colours: maroon jacket).
+static func ridden_scooter(s: Geo.Sink, col: Color) -> void:
+	scooter(s, col, false)
+	s.box("satin", BLACK, Vector3(0, 0.34, -0.36), Vector3(0.34, 0.06, 0.32))
+	seated_rider(s, {"hips": Vector3(0, 0.88, 0.32), "lean": 0.18, "hands": Vector3(0.3, 1.06, -0.5),
+		"knee": Vector3(0.16, 0.94, -0.1), "foot": Vector3(0.13, 0.4, -0.32), "top": Color("#7a2430"),
+		"bottom": Color("#2c2f36"), "skin": Color("#a86b45"), "head": Color("#202326")})
+
+
+## A seated rider in the local frame of the vehicle (faces -Z): hips at o.hips, the torso leaning forward by o.lean
+## radians, hands, knees and feet given for the right side (mirrored in x by position only, never by scale).
+static func seated_rider(s: Geo.Sink, o: Dictionary) -> void:
+	var hips: Vector3 = o.hips
+	var lean: float = o.get("lean", 0.0)
+	var top: Color = o.top
+	var bottom: Color = o.bottom
+	var skin: Color = o.skin
+	var up := Vector3(0, cos(lean), -sin(lean))
+	var chest := hips + up * 0.5
+	var neck := hips + up * 0.6
+	for xs in [-1.0, 1.0]:
+		var m := Vector3(xs, 1, 1)
+		var knee: Vector3 = o.knee * m
+		var foot: Vector3 = o.foot * m
+		var hip := hips + Vector3(xs * 0.1, 0, 0)
+		s.rod("satin", bottom, hip, knee, 0.075, Geo.SEG_SMALL, 0.9)
+		s.rod("satin", bottom, knee, foot, 0.06, Geo.SEG_SMALL, 0.85)
+		s.box("satin", Color("#2a211c"), foot + Vector3(0, -0.02, -0.06), Vector3(0.1, 0.07, 0.24))
+		var shoulder := chest + Vector3(xs * 0.2, 0.0, 0.0)
+		var hand: Vector3 = o.hands * m
+		var elbow := (shoulder + hand) * 0.5 + Vector3(xs * 0.06, -0.1, 0.04)
+		s.rod("satin", top, shoulder, elbow, 0.05, Geo.SEG_SMALL, 0.9)
+		s.rod("satin", skin, elbow, hand, 0.04, Geo.SEG_SMALL, 0.85)
+	s.rod("satin", top, hips + Vector3(0, 0.02, 0), chest, 0.17, Geo.SEG_MID, 1.2)
+	s.ball("satin", top, chest, Vector3(0.21, 0.08, 0.13), Geo.SEG_MID)
+	s.rod("satin", skin, chest, neck, 0.05, Geo.SEG_SMALL)
+	var head := neck + up * 0.13
+	s.ball("satin", skin, head, Vector3(0.1, 0.125, 0.11), Geo.SEG_MID)
+	s.dome("satin", o.get("head", Color("#1b1714")), head + Vector3(0, 0.03, 0.01), 0.112, 0.11, Geo.SEG_MID)
 
 
 ## Vendor handcart facing -Z with a heap of goods.

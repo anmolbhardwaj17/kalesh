@@ -6,11 +6,16 @@
 ## A node faces -Z at rotation 0: heading h has rotation.y = -h (north is -Z, east +X; no negative scale).
 ## Staging: place() stands the vehicle on the ground under it and stops it; carry() moves it along a scripted path with
 ## the body frozen (perf and stream probes only).
+## Two wheels (the scooter, P1-021): a hidden stabiliser (a roll spring and damper while a wheel touches) keeps the body
+## upright, and the drawn body and wheels lean into a turn on the node `Lean` (the physics body never leans). Every
+## body and wheel mesh hangs under `Lean`, whose origin is the ground point under the centre of mass.
 extends RigidBody3D
 
 const Tune := preload("res://vehicles/vehicle_tune.gd")
 const DriveInput := preload("res://vehicles/drive_input.gd")
 const Tyre := preload("res://vehicles/tyre_model.gd")
+const Kit := preload("res://scenes/standin/kit.gd")
+const KitGeo := preload("res://scenes/standin/geo.gd")
 ## How far below the wheel ray a settle looks for ground after place().
 const SETTLE_REACH := 60.0
 const SETTLE_UP := 2.5
@@ -18,7 +23,8 @@ const SETTLE_UP := 2.5
 @export var tune_path := "res://data/vehicles/car.tres"
 ## The player's vehicle reads the InputMap actions and joins the group "player"; others take controls().
 @export var is_player := true
-@export var body_color := Color(0.95, 0.76, 0.0)
+## Overrides the tune's paint when its alpha is above 0.
+@export var body_color := Color(0, 0, 0, 0)
 
 var tune: Tune
 var input := DriveInput.new()
@@ -40,8 +46,12 @@ var cpu_ticks := 0
 var contacts := 0
 ## Ticks in which a wheel was pushed to the end of its travel.
 var bottomed := 0
+## Wheel rays that missed on a mesh edge and hit 1 cm to the side.
+var edge_retries := 0
 var susp_len := PackedFloat32Array()
 var susp_force := PackedFloat32Array()
+## The visual lean of the drawn body in radians, positive to the right (0 unless the tune has lean_max).
+var lean := 0.0
 
 var _n := 0
 var _hard := PackedVector3Array()
@@ -58,6 +68,7 @@ var _si := PackedFloat32Array()
 var _spin := PackedFloat32Array()
 var _query := PhysicsRayQueryParameters3D.new()
 var _wheel_nodes: Array[Node3D] = []
+var _lean_node: Node3D
 var _built := false
 var _stepped := false
 var _settling := false
@@ -128,6 +139,10 @@ func setup(t: Tune) -> void:
 	cs.shape = box
 	cs.position = Vector3(0, t.box_y, 0)
 	add_child(cs)
+	_lean_node = Node3D.new()
+	_lean_node.name = "Lean"
+	_lean_node.position = Vector3(0, -t.ride_height(), 0)
+	add_child(_lean_node)
 	_build_body(t)
 	_n = t.wheels.size()
 	for arr in [_hard, _r, _nrm, _axle, _fdir]:
@@ -152,7 +167,7 @@ func setup(t: Tune) -> void:
 		susp_len[i] = t.rest
 		var pivot := Node3D.new()
 		pivot.name = "Wheel%d" % i
-		pivot.position = _hard[i] - Vector3(0, t.rest, 0)
+		pivot.position = _hard[i] - Vector3(0, t.rest, 0) - _lean_node.position
 		# the drawn wheel stands just proud of the body side (the physics hardpoint stays where the tune puts it)
 		var outward := signf(_hard[i].x) * maxf(0.0, t.box_half.x - t.wheel_width * 0.5 - absf(_hard[i].x) + 0.025)
 		var wm := MeshInstance3D.new()
@@ -174,15 +189,28 @@ func setup(t: Tune) -> void:
 		hm.mesh = hb
 		hm.position = Vector3(outward + signf(_hard[i].x) * (t.wheel_width * 0.5 + 0.005), 0, 0)
 		pivot.add_child(hm)
-		add_child(pivot)
+		_lean_node.add_child(pivot)
 		_wheel_nodes.append(pivot)
 	_query.collision_mask = 1
 
 
-## A plain stand-in body over the collision box: a lower body and a cabin set back from the bonnet.
+## The stand-in body: the kit's auto or scooter (origin on the ground, so it sits on the Lean node), or a plain body
+## over the collision box with a cabin set back from the bonnet.
 func _build_body(t: Tune) -> void:
+	var col := body_color if body_color.a > 0.0 else t.paint
+	if t.body == "auto" or t.body == "scooter":
+		var sink := KitGeo.Sink.new()
+		if t.body == "auto":
+			Kit.driven_auto(sink)
+		else:
+			Kit.ridden_scooter(sink, col)
+		var km := MeshInstance3D.new()
+		km.name = "Body"
+		km.mesh = sink.to_mesh(Kit.materials())
+		_lean_node.add_child(km)
+		return
 	var paint := StandardMaterial3D.new()
-	paint.albedo_color = body_color
+	paint.albedo_color = col
 	paint.roughness = 0.45
 	var glass := StandardMaterial3D.new()
 	glass.albedo_color = Color(0.13, 0.16, 0.19)
@@ -197,8 +225,8 @@ func _build_body(t: Tune) -> void:
 	bm.size = Vector3(h.x * 2.0, lower_h, h.z * 2.0)
 	bm.material = paint
 	body.mesh = bm
-	body.position = Vector3(0, bottom + lower_h * 0.5, 0)
-	add_child(body)
+	body.position = Vector3(0, bottom + lower_h * 0.5, 0) - _lean_node.position
+	_lean_node.add_child(body)
 	var cabin := MeshInstance3D.new()
 	cabin.name = "Cabin"
 	var cm := BoxMesh.new()
@@ -206,8 +234,8 @@ func _build_body(t: Tune) -> void:
 	cm.size = Vector3(h.x * 2.0 * 0.9, cab_h, h.z * 2.0 * 0.5)
 	cm.material = glass
 	cabin.mesh = cm
-	cabin.position = Vector3(0, bottom + lower_h + cab_h * 0.5, h.z * 0.12)
-	add_child(cabin)
+	cabin.position = Vector3(0, bottom + lower_h + cab_h * 0.5, h.z * 0.12) - _lean_node.position
+	_lean_node.add_child(cabin)
 
 
 ## Staging: stands the vehicle on the ground at x, z (ground_y, or `y` when given), facing a compass heading, at rest.
@@ -223,6 +251,7 @@ func place(x: float, z: float, h: float = NAN, y: float = NAN) -> void:
 	_carried = false
 	_carry_speed = 0.0
 	_settling = true
+	lean = 0.0
 	reset_physics_interpolation()
 
 
@@ -268,6 +297,11 @@ func wheel_count() -> int:
 
 func contact_count() -> int:
 	return contacts
+
+
+## Roll of the physics body in degrees, positive when the right side is down.
+func roll_deg() -> float:
+	return rad_to_deg(asin(clampf(-global_transform.basis.x.y, -1.0, 1.0)))
 
 
 func is_settled() -> bool:
@@ -350,6 +384,16 @@ func _step(dt: float) -> void:
 		_query.to = hard - up * ray_len
 		var hit := space.intersect_ray(_query)
 		if hit.is_empty():
+			# a ray exactly on a shared edge of a triangle mesh can miss both triangles (a wheel on the centre line on a
+			# seam of the ground mesh): look once more 1 cm to the side
+			_query.from = hard + right * 0.01
+			_query.to = _query.from - up * ray_len
+			hit = space.intersect_ray(_query)
+			if not hit.is_empty():
+				edge_retries += 1
+				# the contact stays on the wheel's own line
+				hit.position = (hit.position as Vector3) - right * 0.01
+		if hit.is_empty():
 			_hit[i] = 0
 			susp_len[i] = minf(hi, susp_len[i] + 0.02)
 			susp_force[i] = 0.0
@@ -421,15 +465,27 @@ func _step(dt: float) -> void:
 	# anti-spin: quadratic yaw damping, off on the handbrake so a drift stays free
 	if not hb:
 		sum_t -= up * (w.dot(up) * absf(w.dot(up)) * tune.yaw_damp * dt)
+	# the hidden stabiliser: a roll spring and damper about the forward axis while a wheel touches
+	if tune.roll_stiffness > 0.0 and contacts > 0:
+		var fa := -b.z
+		var tilt := up.cross(Vector3.UP).dot(fa)
+		var i_roll := 1.0 / maxf(1e-6, fa.dot(inv_i * fa))
+		sum_t += fa * (i_roll * (tune.roll_stiffness * tilt - tune.roll_damping * w.dot(fa)) * dt)
 	apply_central_impulse(sum_j)
 	apply_torque_impulse(sum_t)
 
 
 func _update_wheels(dt: float) -> void:
 	var fwd_speed := linear_velocity.dot(-global_transform.basis.z)
+	if tune.lean_max > 0.0 and dt > 0.0:
+		# lean into the turn: toward atan(lateral acceleration / g); a right turn has a negative yaw rate
+		var yaw_rate := angular_velocity.dot(global_transform.basis.y)
+		var want := clampf(atan(fwd_speed * -yaw_rate / 9.8), -tune.lean_max, tune.lean_max)
+		lean = lerpf(lean, want, 1.0 - exp(-tune.lean_rate * dt))
+		_lean_node.basis = Basis(Vector3.FORWARD, lean)
 	for i in _n:
 		var node := _wheel_nodes[i]
-		node.position = _hard[i] - Vector3(0, susp_len[i], 0)
+		node.position = _hard[i] - Vector3(0, susp_len[i], 0) - _lean_node.position
 		_spin[i] = wrapf(_spin[i] - fwd_speed * dt / tune.radius, -PI, PI)
 		var yaw := -input.steer if _steers[i] == 1 else 0.0
 		node.basis = Basis(Vector3.UP, yaw) * Basis(Vector3.RIGHT, _spin[i])
