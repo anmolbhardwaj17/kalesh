@@ -1,6 +1,6 @@
 {
   "_doc": "Written only by node harness/bin/task.mjs. Phases run in order; P0 (ADOPT + STYLE DISCOVERY) waits for the owner by design and needs task.mjs signoff and task.mjs archsignoff before its gate passes. Later phases are added by the planner at the end of P0 (task.mjs phase-add) from the game's real state.",
-  "updated": "2026-11-13T15:40:51.185Z",
+  "updated": "2026-11-13T15:50:31.792Z",
   "phases": [
     {
       "id": "P0",
@@ -2286,11 +2286,14 @@
       "agent": "content-writer",
       "priority": 3,
       "kind": "content",
-      "status": "doing",
+      "status": "done",
       "attempts": 1,
       "notes": [],
       "created": "2026-11-11T12:31:54.058Z",
-      "started": "2026-11-13T15:40:51.184Z"
+      "started": "2026-11-13T15:40:51.184Z",
+      "done": "2026-11-13T15:50:31.720Z",
+      "summary": "11 files in game/data/names/ (60 to 71 names each, 9 to 25 kinds), Latin on every name, Devanagari on most, Urdu where the sheets show it; harness/bin/names.test.mjs checks counts, scripts, length, duplicates, em dashes and a block list of about 190 real brands, chains, parties and people. npm test green. Respect sample of 40 read: no breach.",
+      "commit": "5c89997"
     },
     {
       "id": "P2-004",
