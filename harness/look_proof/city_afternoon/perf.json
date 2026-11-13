@@ -1,0 +1,156 @@
+{
+  "rows": {
+    "cp_street_eye": {
+      "quality": null,
+      "sceneKind": "city",
+      "loadMs": 1185,
+      "hostLoad": {
+        "avg1": 13.89,
+        "cores": 12,
+        "perCore": 1.16
+      },
+      "cpuP95": 0.41900000667572,
+      "gpuP95": null,
+      "gpuP95Capped": null,
+      "frameCostP50": 3.83,
+      "frameCostP95": 3.89,
+      "gpuCostMs": 3.89,
+      "ballastN": 1200,
+      "fps": 119.319651346645,
+      "drawCalls": 166,
+      "triangles": 147206,
+      "frameP95": 3.89,
+      "verdict": "ok",
+      "notes": []
+    },
+    "ito_junction": {
+      "quality": null,
+      "sceneKind": "city",
+      "loadMs": 1072,
+      "hostLoad": {
+        "avg1": 6.01,
+        "cores": 12,
+        "perCore": 0.5
+      },
+      "cpuP95": 0.421000012636185,
+      "gpuP95": null,
+      "gpuP95Capped": null,
+      "frameCostP50": 4.47,
+      "frameCostP95": 4.51,
+      "gpuCostMs": 4.51,
+      "ballastN": 1200,
+      "fps": 119.344119293589,
+      "drawCalls": 273,
+      "triangles": 189787,
+      "frameP95": 4.51,
+      "verdict": "ok",
+      "notes": []
+    },
+    "city_flyover_ramp": {
+      "quality": null,
+      "sceneKind": "city",
+      "loadMs": 1119,
+      "hostLoad": {
+        "avg1": 10.93,
+        "cores": 12,
+        "perCore": 0.91
+      },
+      "cpuP95": 0.415000001907349,
+      "gpuP95": null,
+      "gpuP95Capped": null,
+      "frameCostP50": 3.78,
+      "frameCostP95": 3.92,
+      "gpuCostMs": 3.92,
+      "ballastN": 1200,
+      "fps": 119.298378908313,
+      "drawCalls": 211,
+      "triangles": 174420,
+      "frameP95": 3.92,
+      "verdict": "ok",
+      "notes": []
+    },
+    "gali_foot": {
+      "quality": null,
+      "sceneKind": "city",
+      "loadMs": 1079,
+      "hostLoad": {
+        "avg1": 7.71,
+        "cores": 12,
+        "perCore": 0.64
+      },
+      "cpuP95": 0.518999999046326,
+      "gpuP95": null,
+      "gpuP95Capped": null,
+      "frameCostP50": 4.4,
+      "frameCostP95": 4.39,
+      "gpuCostMs": 4.39,
+      "ballastN": 1200,
+      "fps": 119.323628344895,
+      "drawCalls": 152,
+      "triangles": 365732,
+      "frameP95": 4.39,
+      "verdict": "ok",
+      "notes": []
+    },
+    "india_gate_lawns": {
+      "quality": null,
+      "sceneKind": "city",
+      "loadMs": 1070,
+      "hostLoad": {
+        "avg1": 11.62,
+        "cores": 12,
+        "perCore": 0.97
+      },
+      "cpuP95": 0.360999999403954,
+      "gpuP95": null,
+      "gpuP95Capped": null,
+      "frameCostP50": 3.51,
+      "frameCostP95": 3.54,
+      "gpuCostMs": 3.54,
+      "ballastN": 1200,
+      "fps": 119.690798769845,
+      "drawCalls": 251,
+      "triangles": 139208,
+      "frameP95": 3.54,
+      "verdict": "ok",
+      "notes": []
+    },
+    "city_busiest_40m": {
+      "quality": null,
+      "sceneKind": "city",
+      "loadMs": 1068,
+      "hostLoad": {
+        "avg1": 12.71,
+        "cores": 12,
+        "perCore": 1.06
+      },
+      "cpuP95": 0.427000008583069,
+      "gpuP95": null,
+      "gpuP95Capped": null,
+      "frameCostP50": 4.54,
+      "frameCostP95": 4.59,
+      "gpuCostMs": 4.59,
+      "ballastN": 1200,
+      "fps": 119.488032058739,
+      "drawCalls": 200,
+      "triangles": 337595,
+      "frameP95": 4.59,
+      "verdict": "ok",
+      "notes": []
+    }
+  },
+  "driver": "godot",
+  "machine": "macbook-pro, darwin arm64, Apple M2 Pro, 12 cores, 16 GB",
+  "godotVersion": "4.7.2.stable",
+  "renderer": "Forward+",
+  "renderingDriver": "metal",
+  "gpuAdapter": "Apple M2 Pro (Apple8)",
+  "load": {
+    "avg1": 6.91,
+    "cores": 12,
+    "perCore": 0.58
+  },
+  "gl": "Godot 4.7.2.stable Apple M2 Pro (Apple8) (metal, forward_plus)",
+  "budgets": "harness/verify/perf_budgets.json (signed)",
+  "sceneKind": "city"
+}

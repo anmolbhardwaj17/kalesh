@@ -1,6 +1,6 @@
 {
   "_doc": "Written only by node harness/bin/task.mjs. Phases run in order; P0 (ADOPT + STYLE DISCOVERY) waits for the owner by design and needs task.mjs signoff and task.mjs archsignoff before its gate passes. Later phases are added by the planner at the end of P0 (task.mjs phase-add) from the game's real state.",
-  "updated": "2026-11-13T09:52:25.728Z",
+  "updated": "2026-11-13T10:03:36.402Z",
   "phases": [
     {
       "id": "P0",
@@ -2554,7 +2554,8 @@
       "status": "todo",
       "attempts": 0,
       "notes": [
-        "From P1-006: retire game/bench/render/world.gd (on the module size exception list)."
+        "From P1-006: retire game/bench/render/world.gd (on the module size exception list).",
+        "From P1-026: city_golden cp_street_eye facing the sun is washed out by haze and bloom (buildings and road lose contrast). Tune the golden grade and fog on the streamed city; compare with harness/look_proof/city_golden/."
       ],
       "created": "2026-11-11T12:31:54.059Z",
       "model": "opus"

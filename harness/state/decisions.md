@@ -328,3 +328,6 @@ Anmol: OSM is reference only; divider widths and the like may be wrong; work on 
 
 ## 2026-11-13 Map patches can add features (Anmol)
 Anmol: we must also add what OSM lacks (side roads, proper dividers, separation), using real-life references from the internet. Decision: new patch actions add_way, add_median, add_footpath, add_crossing, add_barrier with a reference field, plus an inspector draw tool, in new task P1-045 (priority 2, before the P2 hero roads). Why: deleting alone cannot make a road match the real place.
+
+## 2026-11-13: City perf base line and its method (P1-026)
+Decision: the city base line is 12 scripted vehicle paths (4 places x 60, 140 and 200 km/h, out and back as a loop so the drive outlasts the ballast window), the 6 look views of the `city` group (afternoon and golden), and an ablation set (`stream layers` hides roads and ground or buildings) for the per system GPU table; the CPU side comes from a real drive over the ITO flyover. Numbers sit in `perf_budgets.json` `measured.city_base` (`harness/bin/citybase.mjs`). Per system GPU ms use the p50 of the ballast frame cost (its p95 jumps about 1 ms between runs at host load 0.65 per core); the look stack is the residual. Why: P2 (dressing) is judged against a measured city, not the bench city. By: builder P1-026.

@@ -5,7 +5,7 @@
 //
 //   node harness/bin/lookproof.mjs --check
 //       validates harness/look_proof/poses.json (exit 1 on a problem)
-//   node harness/bin/lookproof.mjs --set <name> [--views a,b] [--query "style=toon"] [--perf [--scene-kind look|city]] [--no-build]
+//   node harness/bin/lookproof.mjs --set <name> [--views a,b] [--group look|city|city_systems] [--query "style=toon"] [--perf [--scene-kind look|city]] [--no-build]
 //       shoots every view of poses.json into harness/look_proof/<name>/<view>.png (+ shots.json). --query adds game args
 //       on Godot ("style=toon" becomes --style=toon) or page params on the web target (a style test task switches the
 //       look with one). --perf also measures each view (debug.perf, judged against harness/verify/perf_budgets.json)
@@ -16,6 +16,8 @@
 //       only), `frameCostP50` and `frameCostP95` the same cost from frame times (also on Metal), `gpuP95Capped` the plain
 //       reading under this Mac's 120 fps cap. The budgets judge the ballast cost. --scene-kind picks the draw call, triangle and
 //       video memory budgets (perf_budgets.json scenes.<kind>: look, the default, or city) and is written to perf.json.
+//       Views have a `group` in poses.json (none means "look", the stand-in look views). A set takes one group: --group <name>,
+//       else "city" for a set named city_* (the six views in the streamed city, P1-026) and "look" for any other set.
 //   node harness/bin/lookproof.mjs --approve <name>
 //       makes that set the approved reference (harness/look_proof/approved/), recorded in approved.json. Only after the
 //       owner said yes to it (Phase 0 sign-off, or a look task he accepted).
@@ -64,6 +66,14 @@ export function checkPoses(p) {
     if (!Array.isArray(v.steps)) errs.push(`view ${v.name}: steps must be an array`);
   });
   return errs;
+}
+
+/** The group a view belongs to: its `group`, "look" when it has none (the stand-in look views). */
+export const viewGroupOf = (v) => v.group || 'look';
+/** The group a set shoots: --group, else "city" for a set named city_*, else "look". */
+export function viewGroup(setName, a) {
+  if (typeof a.group === 'string') return a.group;
+  return /^city_/.test(setName) ? 'city' : 'look';
 }
 
 const RENDER_METHODS = { forward_plus: 'Forward+', mobile: 'Mobile', gl_compatibility: 'Compatibility' };
@@ -124,7 +134,9 @@ async function shootSet(name) {
   const errs = checkPoses(poses);
   if (errs.length) { console.log(errs.join('\n')); process.exit(1); }
   const want = typeof args.views === 'string' ? new Set(args.views.split(',')) : null;
-  const views = poses.views.filter((v) => !want || want.has(v.name));
+  const group = viewGroup(name, args);
+  const views = poses.views.filter((v) => viewGroupOf(v) === group && (!want || want.has(v.name)));
+  if (!views.length) { console.log(`no view in group "${group}" (poses.json "group" of each view)`); process.exit(1); }
   if (!args['no-build']) { const b = npmRun('build'); if (!b.ok) { console.log(`build failed:\n${b.tail}`); process.exit(1); } }
   const dir = path.join(LP, name);
   fs.mkdirSync(dir, { recursive: true });

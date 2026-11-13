@@ -6,6 +6,9 @@
 ##                                and carried along it, vehicle.gd carry()). {stop: true} ends it and stands it there
 ##   record {on, skipS}           starts a recording of every drawn frame (frame time, the core's work, attach steps);
 ##                                {on: false} stops it and answers the numbers; {} answers them so far
+##   layers {hide: [names], show: [names]}  P1-026: hides or shows the drawn meshes of a streaming system by its name
+##                                (`ground_roads`, `buildings`) on every live tile, for GPU ablation runs; only for a
+##                                player that stands still (a tile that streams in later is drawn). {} lists the counts
 ##   probe {x, z, y}              the collider under a point (a ray down) against the drawn surface there (the tile
 ##                                files' own triangles, paint, water and deck undersides left out)
 ##   mem                          engine object counts, static and process memory, tiles held
@@ -42,6 +45,8 @@ var _calls: Array[float] = []
 ## Per frame: the scripts' process time and the viewport's render CPU time, to say what a long frame was made of.
 var _proc: Array[float] = []
 var _render: Array[float] = []
+## Per frame: Performance TIME_PHYSICS_PROCESS (the monitor refreshes about once a second, so read it as a mean).
+var _phys: Array[float] = []
 var _chunks_max := 0
 var _chunk_frames := 0
 var _mesh_frames := 0
@@ -95,7 +100,23 @@ func hook(a: Array) -> Dictionary:
 			return {"ok": true, "result": _probe(city, float(o.x), float(o.z), float(o.y) if o.get("y") is float or o.get("y") is int else NAN)}
 		"mem":
 			return {"ok": true, "result": _mem(city)}
-	return {"ok": false, "error": "stream(cmd, opts): unknown cmd '%s' (info, path, record, probe, mem)" % cmd}
+		"layers":
+			return {"ok": true, "result": _layers(city, o)}
+	return {"ok": false, "error": "stream(cmd, opts): unknown cmd '%s' (info, path, record, probe, mem, layers)" % cmd}
+
+
+## Hides or shows the drawn meshes of the named streaming systems on every live tile; answers the count per system.
+func _layers(city: Node, o: Dictionary) -> Dictionary:
+	var out := {}
+	for key: String in ["hide", "show"]:
+		for n: Variant in o.get(key, []):
+			var name := str(n)
+			var count := 0
+			for node: Node in city.find_children("%s_*" % name, "MeshInstance3D", true, false):
+				(node as MeshInstance3D).visible = key == "show"
+				count += 1
+			out[name] = {"meshes": count, "visible": key == "show"}
+	return out
 
 
 # ---------------------------------------------------------------- the scripted drive
@@ -202,7 +223,7 @@ func _place() -> void:
 
 func _record_start(city: Node, skip_s: float) -> void:
 	RenderingServer.viewport_set_measure_render_time(get_viewport().get_viewport_rid(), true)
-	for list: Array in [_frame, _sim, _core, _attach, _calls, _proc, _render]:
+	for list: Array in [_frame, _sim, _core, _attach, _calls, _proc, _render, _phys]:
 		list.clear()
 	_chunks_max = 0
 	_chunk_frames = 0
@@ -231,6 +252,7 @@ func _after_draw() -> void:
 		_sim.append(get_node("/root/SimClock").t - _rec_sim0)
 		_core.append(float(city.core.frame_ms))
 		_proc.append(Performance.get_monitor(Performance.TIME_PROCESS) * 1000.0)
+		_phys.append(Performance.get_monitor(Performance.TIME_PHYSICS_PROCESS) * 1000.0)
 		_render.append(RenderingServer.viewport_get_measured_render_time_cpu(get_viewport().get_viewport_rid()) + RenderingServer.get_frame_setup_time_cpu())
 		_attach.append(float(q.ms))
 		_calls.append(RenderingServer.get_rendering_info(RenderingServer.RENDERING_INFO_TOTAL_DRAW_CALLS_IN_FRAME))
@@ -274,7 +296,7 @@ func _record_stats(city: Node) -> Dictionary:
 	return {
 		"recording": _rec, "frames": _frame.size(), "simS": _sim[-1] if not _sim.is_empty() else 0.0, "skipS": _rec_skip,
 		"frameMs": _pct(late), "frameMsAll": _pct(_frame), "over33": count, "over33List": over,
-		"coreMs": _pct(_core), "attachMs": _pct(_attach),
+		"coreMs": _pct(_core), "attachMs": _pct(_attach), "processMs": _pct(_proc), "physicsMs": _pct(_phys), "renderCpuMs": _pct(_render),
 		"chunksMax": _chunks_max, "chunkFrames": _chunk_frames, "meshFrames": _mesh_frames, "mixedFrames": _mixed, "burstFrames": _burst,
 		"drawCalls": {"max": Stats.stats(_calls).max, "avg": Stats.mean(_calls)}, "heldMax": _held_max, "liveMax": _live_max,
 		"capTiles": city.core.plan.cap_tiles,

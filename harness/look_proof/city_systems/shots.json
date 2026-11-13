@@ -1,0 +1,55 @@
+{
+  "views": {
+    "sys_cp_all": {
+      "file": "sys_cp_all.png",
+      "at": "2026-11-13T09:47:16.021Z",
+      "query": "debug=1&verify=1&light=afternoon",
+      "error": null
+    },
+    "sys_cp_no_buildings": {
+      "file": "sys_cp_no_buildings.png",
+      "at": "2026-11-13T09:47:29.707Z",
+      "query": "debug=1&verify=1&light=afternoon",
+      "error": null
+    },
+    "sys_cp_no_roads": {
+      "file": "sys_cp_no_roads.png",
+      "at": "2026-11-13T09:47:43.366Z",
+      "query": "debug=1&verify=1&light=afternoon",
+      "error": null
+    },
+    "sys_cp_sky_only": {
+      "file": "sys_cp_sky_only.png",
+      "at": "2026-11-13T09:47:57.706Z",
+      "query": "debug=1&verify=1&light=afternoon",
+      "error": null
+    },
+    "sys_busy_all": {
+      "file": "sys_busy_all.png",
+      "at": "2026-11-13T09:48:10.793Z",
+      "query": "debug=1&verify=1&light=afternoon",
+      "error": null
+    },
+    "sys_busy_no_buildings": {
+      "file": "sys_busy_no_buildings.png",
+      "at": "2026-11-13T09:48:24.335Z",
+      "query": "debug=1&verify=1&light=afternoon",
+      "error": null
+    },
+    "sys_busy_no_roads": {
+      "file": "sys_busy_no_roads.png",
+      "at": "2026-11-13T09:48:37.962Z",
+      "query": "debug=1&verify=1&light=afternoon",
+      "error": null
+    },
+    "sys_busy_sky_only": {
+      "file": "sys_busy_sky_only.png",
+      "at": "2026-11-13T09:48:51.545Z",
+      "query": "debug=1&verify=1&light=afternoon",
+      "error": null
+    }
+  },
+  "commit": "23ccf48",
+  "gl": "Godot 4.7.2.stable Apple M2 Pro (Apple8) (metal, forward_plus)",
+  "at": "2026-11-13T09:48:51.682Z"
+}
