@@ -57,6 +57,7 @@ const ARCH_SCENES := {
 	"physics": "res://bench/physics/physics_bench.tscn",
 	"tiles": "res://bench/tiles/tiles_bench.tscn",
 	"roads": "res://bench/roads/roads_bench.tscn",
+	"far": "res://bench/far/far_bench.tscn",
 }
 
 var debug := false
