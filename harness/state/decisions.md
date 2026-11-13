@@ -440,3 +440,6 @@ Anmol: the road look must be peak quality, match the real roads (adding and remo
 
 ## 2026-11-14 Road access by mode (Anmol)
 Anmol: some roads are roads but cars cannot go, for example near India Gate. Today every highway class is drivable and footways are dropped. Decision: P2-042 (priority 1, map lane) adds per-edge access modes from OSM tags, barriers and Delhi rules (Chandni Chowk car-free, galis two-wheeler and foot, India Gate promenade), builds pedestrian surfaces, places bollards and gates, and feeds traffic, routes and missions.
+
+## 2026-11-14 Ghazipur landfill as a skyline mark (Anmol asked)
+Anmol asked whether the Ghazipur landfill can be shown in the east without expanding the map. Decision: a far silhouette on the skyline at its real bearing and height (P2-039), never reachable; real ids added to the landmark owner list; a reachable piece only if Act 4 on the east bank needs it, under the respect rule.
