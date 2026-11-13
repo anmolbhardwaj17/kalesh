@@ -1,6 +1,6 @@
 {
   "_doc": "Written only by node harness/bin/task.mjs. Phases run in order; P0 (ADOPT + STYLE DISCOVERY) waits for the owner by design and needs task.mjs signoff and task.mjs archsignoff before its gate passes. Later phases are added by the planner at the end of P0 (task.mjs phase-add) from the game's real state.",
-  "updated": "2026-11-13T10:03:36.402Z",
+  "updated": "2026-11-13T10:09:15.332Z",
   "phases": [
     {
       "id": "P0",
@@ -2180,12 +2180,15 @@
       "agent": "builder",
       "priority": 3,
       "kind": "feature",
-      "status": "doing",
+      "status": "done",
       "attempts": 1,
       "notes": [],
       "created": "2026-11-11T12:29:04.868Z",
       "model": "sonnet",
-      "started": "2026-11-13T09:30:27.885Z"
+      "started": "2026-11-13T09:30:27.885Z",
+      "done": "2026-11-13T10:09:15.311Z",
+      "summary": "12 city_path scenarios (CP radial, ITO flyover, Chandni main road, India Gate hexagon at 60/140/200 km/h): worst frame p95 4.01 ms, worst 374 draw calls, all inside signed budgets. city_afternoon and city_golden look sets (6 views each, perf.json with machine, renderer, load). Per system table in perf_budgets.json measured.city_base (roads and ground 0.70 ms, streaming attach p99 0.34, physics 0.67, vehicles 0.06). Fixed style_runner ignoring --light and --time in the city scene. Verified: typecheck, 799 vitest, 111 Godot tests, quick 15/15 OK, city shots read. Also carries the owner's focus guard change and the OSM-as-reference plan.",
+      "commit": "220e567"
     },
     {
       "id": "P1-027",
