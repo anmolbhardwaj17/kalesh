@@ -319,3 +319,6 @@ By: builder, P1-024.
 
 ## 2026-11-13 Godot windows come forward unless Anmol is typing
 Anmol: the terminal refocus should work only when he is genuinely writing in the terminal. Decision: the focus guard now also needs keyboard or mouse input within the last 5 s (macOS HIDIdleTime, no permissions); if he is idle it leaves the Godot window in front. Why: he wants to watch Godot when he is not typing.
+
+## 2026-11-13 OSM is reference; area blueprints for places we know (Anmol)
+Anmol: OSM is good for reference, but for places like CP we know the look and should shape the buildings ourselves, and odd OSM buildings should be checked online or not look weird. Decision: authored area blueprints (harness/data/blueprints/) override OSM footprints for known places, CP first; precedence road, landmark zone, blueprint, generator. Outside blueprints a footprint check flags odd shapes, checked against photos, kept if real and regularised if not. Written into DELHI_WORLD.md; notes on P2-002, P2-009, P2-010, P2-020 and following area passes. Why: real data gives the layout, but the look of a famous place must read right at a glance.
