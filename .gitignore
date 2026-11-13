@@ -38,3 +38,5 @@ game/bench/tiles/gen/
 game/bench/roads/gen/
 # production tiles of the bake (tools/bake/main.ts, the tile step): hundreds of MB, rebuilt by `npm run bake -- pilot`
 game/world/tiles/
+# the Universal Animation Library .glb files while tools/characters/ual_build.mjs imports them (removed after the build)
+game/characters/ual_src/

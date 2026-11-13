@@ -168,3 +168,4 @@
 {"id":"mmwe1s5ot","ts":"2026-11-13T03:04:07.371Z","reply":"Rajiv Chowk station is now an underground feature (P1-041). It gets no conflicts and no shell, and these picks are retired.","tasks":["P1-041"]}
 {"id":"mmwe1sdek","ts":"2026-11-13T03:04:07.408Z","reply":"Rajiv Chowk station is now an underground feature (P1-041). It gets no conflicts and no shell, and these picks are retired.","tasks":["P1-041"]}
 {"id":"mmwe1soe4","ts":"2026-11-13T03:04:07.445Z","reply":"Rajiv Chowk station is now an underground feature (P1-041). It gets no conflicts and no shell, and these picks are retired.","tasks":["P1-041"]}
+{"id":"mmweo8n9b","ts":"2026-11-13T07:45:02.768Z","reply":"Railings: added to the house kits (balcony grilles, roof parapets, gate and window grilles, stair railings) in P2-010 and P2-013. Jump and stairs already work. Ladders come at release; wall climbing and swimming are planned for later.","tasks":["P2-010","P2-013"]}

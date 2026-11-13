@@ -1,0 +1,23 @@
+Universal Animation Library 1 and 2 (Standard), by Quaternius
+https://quaternius.com/packs/universalanimationlibrary.html
+https://quaternius.com/packs/universalanimationlibrary2.html
+Downloaded 2026-11-13 from https://quaternius.itch.io/universal-animation-library and
+https://quaternius.itch.io/universal-animation-library-2 (pins in data/SOURCES.json, ids ual1_standard, ual2_standard).
+
+Used in this folder: ual_clips.res (clips of both libraries, retargeted to Godot's SkeletonProfileHumanoid),
+mannequin_m.scn (the library's mannequin), mannequin_f.scn (the female mannequin of library 2). Built by
+tools/characters/ual_build.mjs. Credit line: game/data/credits.json, id "ual".
+
+The licence text as shipped in both packs (License.txt):
+
+-------------------------------------------------------
+License:
+CC0 1.0 Universal (CC0 1.0)
+Public Domain Dedication
+https://creativecommons.org/publicdomain/zero/1.0/
+
+------------------------------------------------------
+Models by @Quaternius
+Consider supporting me on Patreon!
+
+https://www.patreon.com/quaternius

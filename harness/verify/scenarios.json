@@ -613,6 +613,29 @@
         }
       ],
       "_note": "P1-022. In the course scene the player starts in the car: F gets out (under 2 s, the on-foot camera, no overlap, beside the door), F gets back in (under 2 s, the chase camera, the car drives), and from 2 m away F walks to the door and gets in under 2 s. state().player.mode reports foot or vehicle. Shots exit_on_foot, enter_driving, walk_to_door, walk_enter_driving. Default look. Lockstep."
+    },
+    {
+      "name": "foot_anim",
+      "query": "style=none",
+      "headless": true,
+      "steps": [
+        {
+          "script": "harness/verify/scripts/foot_anim.js",
+          "timeout": 120000
+        }
+      ],
+      "_note": "P1-023. The humanoid on the course pad at walk, jog and sprint (foot('anim', {gait}), input only): over one clip cycle the stance foot's mean backward speed in the body frame against the ground speed (foot_contact.gd) is under 5 percent off at walk and at jog; the body plays the walk, jog and sprint clips; the animation of one character (AnimationTree advance and bone update) costs under 0.05 ms a tick. Headless."
+    },
+    {
+      "name": "foot_anim_shots",
+      "lockstep": true,
+      "steps": [
+        {
+          "script": "harness/verify/scripts/foot_anim_shots.js",
+          "timeout": 180000
+        }
+      ],
+      "_note": "P1-023. Shots of the humanoid from the on-foot play camera in the course scene, input only: foot_anim_walk (walking on the pad), foot_anim_sprint (sprinting), foot_anim_vault (in the middle of the vault over the 1.2 m wall) and lead_lineup (Bittu, SI Meera Rana and Danny side by side, the camera turned to face them, foot('lineup')). Checks the body states (walk, sprint, vault) when each shot is taken. Read by the verifier against VERIFY.md rubric lines 11 and 22. Default look. Lockstep."
     }
   ]
 }

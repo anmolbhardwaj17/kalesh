@@ -169,7 +169,7 @@ static func vault(p: Node, which: String) -> Dictionary:
 	await p.ticks(20)
 	var end_z: float = c.global_position.z
 	return {"wall": which, "topM": top, "vaulted": c.vaults > vaults0 and end_z < far_z, "vaultS": snappedf(ended * DT, 0.001) if ended > 0 else null,
-		"pressZ": snappedf(press_z, 0.001), "faceZ": face_z, "endZ": snappedf(end_z, 0.001), "pastFarFaceM": snappedf(far_z - end_z, 0.001),
+		"x": x, "pressZ": snappedf(press_z, 0.001), "faceZ": face_z, "endZ": snappedf(end_z, 0.001), "pastFarFaceM": snappedf(far_z - end_z, 0.001),
 		"maxFeetY": snappedf(max_y, 0.001), "overlap": p.overlap(c), "state": c.state}
 
 

@@ -5,12 +5,15 @@
 ## the sim hold reach it.
 ## The player's character reads the InputMap actions (move_*, walk, sprint, crouch, jump) relative to `view_yaw`, the
 ## compass yaw of its camera (on_foot_camera.gd sets it); others take controls(). A seated character (in a vehicle) is
-## hidden, has no collision and does not step. The body is a capsule stand-in until P1-023.
+## hidden, has no collision and does not step. The body drawn is the humanoid of humanoid_anim.gd (P1-023: a library
+## mannequin dressed as one of the leads, `look`); the capsule stays the collision shape, and is drawn only when the
+## rig files are missing.
 ## Coordinates: feet at the node origin, a node faces -Z at rotation 0, heading h has rotation.y = -h.
 extends CharacterBody3D
 
 const Motor := preload("res://characters/foot_motor.gd")
 const Vault := preload("res://characters/vault.gd")
+const Humanoid := preload("res://characters/humanoid_anim.gd")
 
 const RADIUS := 0.3
 const HEIGHT := 1.75
@@ -28,6 +31,8 @@ const LAYER := 4
 
 @export var is_player := true
 @export var body_color := Color(0.36, 0.72, 0.42)
+## Which lead the humanoid is dressed as (leads.gd): bittu, meera or danny.
+@export var look := "bittu"
 
 var motor := Motor.new()
 ## Compass yaw the move keys are relative to (the camera's).
@@ -70,6 +75,8 @@ var _cs: CollisionShape3D
 var _mesh: MeshInstance3D
 var _cap_mesh: CapsuleMesh
 var _visor: MeshInstance3D
+## The drawn body (humanoid_anim.gd), or null when the capsule is drawn.
+var humanoid: Node3D
 var _connected := false
 
 
@@ -117,8 +124,16 @@ func _enter_tree() -> void:
 		_connected = true
 
 
-## The capsule stand-in body with a darker visor at the front, so its facing reads in a shot (P1-023 replaces it).
+## The humanoid (P1-023), or the capsule stand-in with a darker visor at the front when the rig files are missing.
 func _build_body() -> void:
+	if Humanoid.available():
+		humanoid = Humanoid.new()
+		humanoid.name = "Humanoid"
+		add_child(humanoid)
+		if humanoid.setup(look):
+			return
+		humanoid.queue_free()
+		humanoid = null
 	_mesh = MeshInstance3D.new()
 	_mesh.name = "Body"
 	var cm := CapsuleMesh.new()
@@ -249,6 +264,14 @@ func sim_step(dt: float) -> void:
 	rotation.y = -motor.heading
 	cpu_us += Time.get_ticks_usec() - t0
 	cpu_ticks += 1
+	if humanoid != null:
+		humanoid.step(dt, state, motor.speed, motor.crouched)
+
+
+## A one-shot of the body ("sit_enter" at a vehicle door, "sit_exit" after getting out) over `seconds`.
+func pose(shot: String, seconds: float) -> void:
+	if humanoid != null:
+		humanoid.play(shot, seconds)
 
 
 func _move_step(dt: float, jump_edge: bool) -> void:
@@ -352,9 +375,10 @@ func _set_crouch(on: bool) -> void:
 	_shape.height = h
 	_cs.position = Vector3(0, h * 0.5, 0)
 	# a shorter capsule, not a squashed one
-	_cap_mesh.height = h
-	_mesh.position = Vector3(0, h * 0.5, 0)
-	_visor.position.y = h * 0.5 - 0.25
+	if _cap_mesh != null:
+		_cap_mesh.height = h
+		_mesh.position = Vector3(0, h * 0.5, 0)
+		_visor.position.y = h * 0.5 - 0.25
 
 
 ## The bench walker's step-up (P0-017): try the move one step higher (up, forward, down); the landing is judged by a ray
@@ -424,4 +448,5 @@ func info() -> Dictionary:
 		"stamina": motor.stamina, "exhausted": motor.exhausted, "crouched": motor.crouched, "grounded": is_grounded(),
 		"headY": p.y + head_h, "vaults": vaults, "jumps": jumps, "steps": steps_taken,
 		"scriptUsPerTick": snappedf(float(cpu_us) / maxf(1.0, cpu_ticks), 0.01),
+		"anim": humanoid.info() if humanoid != null else {},
 	}

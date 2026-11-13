@@ -16,6 +16,8 @@ const ENTER_REACH := 2.6
 const WALK_MAX_S := 1.0
 const GET_IN_S := 0.35
 const GET_OUT_S := 0.3
+## Out of the seat the body stands up over STAND_S (humanoid_anim.gd "sit_exit"); the player can move at once.
+const STAND_S := 0.45
 ## A vehicle slows to this before the character gets out (km/h), braking for at most BRAKE_MAX_S.
 const EXIT_KMH := 3.0
 const BRAKE_MAX_S := 3.0
@@ -177,6 +179,8 @@ func _enter_step() -> void:
 	if _phase_t <= walk_ticks:
 		_phase_t = walk_ticks + 1
 	character.controls(Vector3.ZERO)
+	if _phase_t == walk_ticks + 1:
+		character.pose("sit_enter", GET_IN_S)
 	if _phase_t < walk_ticks + 1 + roundi(GET_IN_S * 60.0):
 		return
 	if not is_instance_valid(vehicle):
@@ -234,6 +238,7 @@ func _exit_step() -> void:
 	character.place(spot[1].x, spot[1].z, float(vehicle.heading), spot[1].y)
 	character.is_player = true
 	character.add_to_group("player")
+	character.pose("sit_exit", STAND_S)
 	_hand_camera_to_foot(float(vehicle.heading))
 	mode = "foot"
 	_done("vehicle", "foot", true)

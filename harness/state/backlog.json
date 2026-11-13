@@ -1,6 +1,6 @@
 {
   "_doc": "Written only by node harness/bin/task.mjs. Phases run in order; P0 (ADOPT + STYLE DISCOVERY) waits for the owner by design and needs task.mjs signoff and task.mjs archsignoff before its gate passes. Later phases are added by the planner at the end of P0 (task.mjs phase-add) from the game's real state.",
-  "updated": "2026-11-13T06:42:47.980Z",
+  "updated": "2026-11-13T07:55:23.390Z",
   "phases": [
     {
       "id": "P0",
@@ -2086,11 +2086,15 @@
       "agent": "builder",
       "priority": 3,
       "kind": "feature",
-      "status": "todo",
-      "attempts": 0,
+      "status": "done",
+      "attempts": 1,
       "notes": [],
       "created": "2026-11-11T12:29:04.868Z",
-      "model": "opus"
+      "model": "opus",
+      "started": "2026-11-13T06:43:18.024Z",
+      "done": "2026-11-13T07:55:23.358Z",
+      "summary": "Quaternius UAL 1 and 2 (CC0) retargeted to one humanoid profile; humanoid_anim.gd AnimationTree (14 clips: idle, walk, jog, sprint, crouch, jump, vault, sit enter and exit); three leads as colour looks (Bittu, Meera, Danny); licence and credit in repo; 6 art requests. Foot slide walk 0.48%, jog 3.07%; animation cost 0.026 to 0.038 ms per character. Verifier PASS on a snapshot (shots read, respect rule ok); polish in P14.",
+      "commit": "54b77cd"
     },
     {
       "id": "P1-024",
@@ -2437,7 +2441,9 @@
       "kind": "feature",
       "status": "todo",
       "attempts": 0,
-      "notes": [],
+      "notes": [
+        "Anmol 2026-11-13: houses need the railings Delhi houses have. The area kits must include balcony grilles and railings, roof parapets with railings, front gate and window grilles, and stair railings (outside stairs to the roof), placed by the area profiles. Acceptance: a close shot of a residential block shows them on most houses."
+      ],
       "created": "2026-11-11T12:31:54.059Z",
       "model": "opus"
     },
@@ -2508,7 +2514,9 @@
       "kind": "feature",
       "status": "todo",
       "attempts": 0,
-      "notes": [],
+      "notes": [
+        "Anmol 2026-11-13: street-side railings too (boundary walls with grille tops, gate railings), consistent with the P2-010 house kit."
+      ],
       "created": "2026-11-11T12:31:54.059Z",
       "model": "opus"
     },
@@ -3677,6 +3685,21 @@
         "From P1-022: backed into a corner the on-foot camera rises almost straight over the head (top-down); right after exiting a car its dark cabin fills a third of the view."
       ],
       "created": "2026-11-13T04:46:42.902Z"
+    },
+    {
+      "id": "P14-005",
+      "phase": "P14",
+      "title": "Polish: stand-in lead bodies",
+      "desc": "From the P1-023 verifier: the shirt-coloured pelvis bulges over the hips when running (foot_anim_sprint, foot_anim_vault); Meera's trouser seam and belt read as a one-piece with a buckle at crotch height; Bittu's gamchha is a flat vertical stripe, not draped cloth; Danny's stock shoulders are very bulky and Meera and Bittu share one torso. Also: crouch and land have no shot, sprint foot slide 7%, free clips play at 1.86x walk and 1.95x sprint; show the seated driver inside vehicles.",
+      "accept": [],
+      "deps": [],
+      "agent": "builder",
+      "priority": 4,
+      "kind": "polish",
+      "status": "todo",
+      "attempts": 0,
+      "notes": [],
+      "created": "2026-11-13T07:55:23.133Z"
     }
   ]
 }
