@@ -2,6 +2,7 @@
 
 [ext_resource type="Script" path="res://vehicles/vehicle.gd" id="1_car"]
 [ext_resource type="Script" path="res://camera/chase_camera.gd" id="2_cam"]
+[ext_resource type="Script" path="res://scenes/play_scene.gd" id="3_play"]
 
 [sub_resource type="Environment" id="Env"]
 background_mode = 1
@@ -40,6 +41,7 @@ material = SubResource("MatNorth")
 size = Vector3(1, 6, 1)
 
 [node name="Main" type="Node3D"]
+script = ExtResource("3_play")
 
 [node name="World" type="Node3D" parent="."]
 

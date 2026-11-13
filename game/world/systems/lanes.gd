@@ -79,5 +79,35 @@ func spawn(tile: Variant = null) -> Dictionary:
 	return {"pos": pts[0], "heading": atan2(d.x, -d.z), "lane": str(best.id), "length_m": float(best.length)}
 
 
+## Where a vehicle can start near a point (a spawn pin, P1-024): the nearest point on a lane piece at grade (layer 0,
+## a lane, not a junction path) within `reach` metres whose direction there is within `max_turn` radians of `heading`
+## (compass radians; NAN takes any direction). {pos, heading (along the lane there), lane, off_m}, or {} when none.
+func snap(x: float, z: float, heading := NAN, reach := 60.0, max_turn := PI / 3.0) -> Dictionary:
+	var best := {}
+	var best_d := reach
+	var at := Vector2(x, z)
+	for key: String in pieces:
+		var p: Dictionary = pieces[key]
+		var pts: PackedVector3Array = p.pts
+		if p.layer != 0 or p.kind != "lane" or pts.size() < 2:
+			continue
+		for i in pts.size() - 1:
+			var a := Vector2(pts[i].x, pts[i].z)
+			var b := Vector2(pts[i + 1].x, pts[i + 1].z)
+			var ab := b - a
+			if ab.length_squared() < 1e-6:
+				continue
+			var t := clampf((at - a).dot(ab) / ab.length_squared(), 0.0, 1.0)
+			var d := at.distance_to(a + ab * t)
+			if d >= best_d:
+				continue
+			var h := atan2(ab.x, -ab.y)
+			if not is_nan(heading) and absf(wrapf(h - heading, -PI, PI)) > max_turn:
+				continue
+			best_d = d
+			best = {"pos": pts[i].lerp(pts[i + 1], t), "heading": h, "lane": str(p.id), "off_m": d}
+	return best
+
+
 func info() -> Dictionary:
 	return {"pieces": pieces.size()}

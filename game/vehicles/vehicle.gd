@@ -17,6 +17,8 @@ const Tyre := preload("res://vehicles/tyre_model.gd")
 const Kit := preload("res://scenes/standin/kit.gd")
 const KitGeo := preload("res://scenes/standin/geo.gd")
 ## How far below the wheel ray a settle looks for ground after place().
+## What the body collides with: the world (1), vehicles (2) and characters on foot (4).
+const MASK := 7
 const SETTLE_REACH := 60.0
 const SETTLE_UP := 2.5
 
@@ -50,6 +52,8 @@ var bottomed := 0
 var edge_retries := 0
 var susp_len := PackedFloat32Array()
 var susp_force := PackedFloat32Array()
+## Where each wheel ray met the ground in the last step (world metres; unused for a wheel in the air: see wheel_contacts).
+var wheel_hits := PackedVector3Array()
 ## The visual lean of the drawn body in radians, positive to the right (0 unless the tune has lean_max).
 var lean := 0.0
 
@@ -133,7 +137,8 @@ func setup(t: Tune) -> void:
 	pm.bounce = t.bounce
 	physics_material_override = pm
 	collision_layer = 2
-	collision_mask = 3
+	# the world (1), other vehicles (2) and people on foot (4, on_foot.gd LAYER): a car stops against a person (P1-024)
+	collision_mask = MASK
 	var cs := CollisionShape3D.new()
 	cs.name = "Box"
 	var box := BoxShape3D.new()
@@ -147,7 +152,7 @@ func setup(t: Tune) -> void:
 	add_child(_lean_node)
 	_build_body(t)
 	_n = t.wheels.size()
-	for arr in [_hard, _r, _nrm, _axle, _fdir]:
+	for arr in [_hard, _r, _nrm, _axle, _fdir, wheel_hits]:
 		arr.resize(_n)
 	for arr in [_steers, _drives, _front, _hit]:
 		arr.resize(_n)
@@ -297,6 +302,15 @@ func wheel_count() -> int:
 	return _n
 
 
+## The ground points of the wheels that touched in the last step (world metres).
+func wheel_contacts() -> PackedVector3Array:
+	var out := PackedVector3Array()
+	for i in _n:
+		if _hit[i] == 1:
+			out.append(wheel_hits[i])
+	return out
+
+
 func contact_count() -> int:
 	return contacts
 
@@ -401,6 +415,7 @@ func _step(dt: float) -> void:
 			susp_force[i] = 0.0
 			continue
 		var cp: Vector3 = hit.position
+		wheel_hits[i] = cp
 		var nrm: Vector3 = hit.normal
 		var dist := (hard - cp).dot(up)
 		var length := clampf(dist - radius, lo, hi)

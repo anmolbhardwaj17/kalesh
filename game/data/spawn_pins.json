@@ -1,0 +1,11 @@
+{
+  "_doc": "Where the city scene (game/scenes/city.tscn) starts the player (P1-024). The game arg --spawn=<id> picks one, no arg takes `default`. A pin is a WGS84 point and a compass heading in degrees (0 north, 90 east); the game projects it with the world frame of the tile index, loads the ring there and stands the vehicle on the nearest lane at grade within 60 m whose direction is within 60 degrees of the heading, facing along that lane (game/world/world_stream.gd boot, lanes.gd snap). `vehicle` is the tune the player starts in. A pin whose tile is not in the loaded tile folder (the 9-tile test block has no Janpath) is skipped: the old start on the longest lane of the tile nearest India Gate applies. Points were read from the lane graph of the pilot bake (tools/fixtures/gen_city_routes.mjs starts its routes from the same pins).",
+  "default": "cp_auto_stand",
+  "pins": {
+    "cp_auto_stand": { "name": "the auto stand on Janpath, south of Connaught Place", "lat": 28.628839, "lon": 77.219428, "headingDeg": 0, "vehicle": "auto" },
+    "cp_inner_circle": { "name": "the south side of the Connaught Place inner circle (clockwise)", "lat": 28.631834, "lon": 77.220021, "headingDeg": 285, "vehicle": "auto" },
+    "ito_flyover_south": { "name": "the Ring Road south of the ITO flyover, northbound", "lat": 28.62559, "lon": 77.246876, "headingDeg": 0, "vehicle": "auto" },
+    "chandni_chowk_east": { "name": "Chandni Chowk main road at its east end, westbound", "lat": 28.656007, "lon": 77.235311, "headingDeg": 270, "vehicle": "auto" },
+    "rajpath_india_gate": { "name": "Kartavya Path west of the India Gate hexagon, eastbound", "lat": 28.613139, "lon": 77.226158, "headingDeg": 90, "vehicle": "auto" }
+  }
+}

@@ -12,3 +12,4 @@ Characters, AI and combat: one line per gotcha, added by builders as they hit th
 - Godot's import strips a `_Loop` / `-loop` name suffix and sets the loop mode: the UAL clip `Walk_Loop` is `Walk` in the game. Track paths after the humanoid retarget are `%GeneralSkeleton:<ProfileBone>`; the AnimationTree's root_node must be the node that owns that unique-named skeleton.
 - Clothes on the stand-in mannequin are painted in `rig/lead_look.gdshader` from the rest pose (CUSTOM0), never separate meshes: nothing can poke through the body. Hem and belt tests must cover the leg region too (the hips' sides follow the thigh bones), or the shirt reads as briefs.
 - Unzipping a name with [ or ] (the UAL zips): unzip reads them as a wildcard set; escape them (`\[`).
+- The on-foot camera never turns on its own: a scripted walk must press `look_x` toward the walk (`lib/sim.js walk` does, turnCamera) or the player runs across the frame and the shot shows a side view.

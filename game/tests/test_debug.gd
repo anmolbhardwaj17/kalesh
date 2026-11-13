@@ -39,6 +39,19 @@ func test_parse_user_args() -> void:
 	t.ok(d.unknown.size() == 3, "bad port, unknown flag and stray word are reported (%s)" % [d.unknown])
 
 
+## P1-024: the game starts in the streamed city; --spawn picks its start pin.
+func test_city_scene_and_spawn_arg() -> void:
+	t.ok(ProjectSettings.get_setting("application/run/main_scene") == GameArgs.SCENES[GameArgs.CITY_SCENE], "the main scene is the city")
+	for id in GameArgs.SCENES:
+		t.ok(ResourceLoader.exists(GameArgs.SCENES[id]), "scene %s exists" % id)
+	t.ok(GameArgs.parse(PackedStringArray()).spawn == "", "no --spawn by default")
+	t.ok(GameArgs.parse(PackedStringArray(["--spawn=ito_flyover_south"])).spawn == "ito_flyover_south", "--spawn=<pin>")
+	var live := tree.root.get_node("GameArgs")
+	if live.tiles == "":
+		t.ok(live.tiles_for("scaffold") == "" and live.tiles_for("course") == "", "only the city streams without --tiles")
+		t.ok(live.tiles_for("city") in [GameArgs.CITY_TILES, GameArgs.CITY_TILES_FALLBACK], "the city streams the full set or the test block (%s)" % live.tiles_for("city"))
+
+
 func test_arch_name_and_setup() -> void:
 	t.ok(GameArgs.split_arch("render:city+i3+lod") == PackedStringArray(["render", "city+i3+lod"]), "name and setup split at the first colon")
 	t.ok(GameArgs.split_arch("render") == PackedStringArray(["render", ""]), "no setup")

@@ -3,10 +3,11 @@
   "milestones": [
     {
       "id": "FD0",
-      "title": "Free drive (scaffold)",
+      "title": "Free drive (the real city)",
       "required": false,
-      "budgetMs": 60000,
-      "summary": "Scaffold free drive: boot, drive the box car north along the road strip for 100 m with real inputs, turn right toward east, stop. Proves the input, sim clock and coordinate rule end to end. Replaced by the real free drive once the world exists; optional so it never blocks a gate."
+      "budgetMs": 180000,
+      "summary": "The first real streets you can drive (P1-024): the game boots into the streamed pilot centre with the player in an auto at the auto stand on Janpath, south of Connaught Place; the play script drives about 320 m north along Janpath (a CP radial) into the inner circle, rounds a quarter of it clockwise to its west side and stops, with real inputs only. Proves the city scene, the spawn pin, streaming while driving and the coordinate rule end to end. Optional so it never blocks a gate.",
+      "data": "harness/data/fixtures/city_routes.json"
     },
     {
       "id": "M01",

@@ -6,7 +6,14 @@
     "hooks_contract",
     "perf_baseline",
     "drive_north",
-    "tiles_test_block_drive"
+    "tiles_test_block_drive",
+    "enter_exit_vehicle",
+    "city_landmark_pins",
+    "city_collide_probe",
+    "city_north_up",
+    "city_mirror",
+    "city_ito_flyover_drive",
+    "city_chandni_walk"
   ],
   "areas": [
     {
@@ -68,7 +75,9 @@
       "scenarios": [
         "boot_title",
         "coords_north_marker",
-        "drive_north"
+        "drive_north",
+        "city_north_up",
+        "city_mirror"
       ]
     },
     {
@@ -130,7 +139,10 @@
       "scenarios": [
         "tiles_test_block_drive",
         "stream_teleport",
-        "hooks_contract"
+        "hooks_contract",
+        "city_landmark_pins",
+        "city_collide_probe",
+        "city_cp_circle_lap"
       ]
     },
     {
@@ -164,7 +176,8 @@
         "car_lock",
         "tiles_test_block_drive",
         "auto_accel",
-        "scooter_stable"
+        "scooter_stable",
+        "city_ito_flyover_drive"
       ]
     },
     {
@@ -252,7 +265,8 @@
       "scenarios": [
         "enter_exit_vehicle",
         "chase_cam_floor",
-        "car_accel"
+        "car_accel",
+        "city_chandni_walk"
       ]
     },
     {
@@ -286,6 +300,66 @@
         "foot_vault",
         "foot_turn",
         "foot_kerb_stairs"
+      ]
+    },
+    {
+      "path": "game/debug/city_probe.gd",
+      "scenarios": [
+        "city_landmark_pins",
+        "city_collide_probe",
+        "city_mirror",
+        "city_ito_flyover_drive"
+      ]
+    },
+    {
+      "path": "game/debug/drawn_surface.gd",
+      "scenarios": [
+        "city_collide_probe",
+        "city_ito_flyover_drive",
+        "city_cp_circle_lap"
+      ]
+    },
+    {
+      "path": "game/world/spawn_pins.gd",
+      "scenarios": [
+        "city_north_up",
+        "city_ito_flyover_drive",
+        "city_india_gate"
+      ]
+    },
+    {
+      "path": "game/data/spawn_pins.json",
+      "scenarios": [
+        "city_north_up",
+        "city_ito_flyover_drive",
+        "city_india_gate",
+        "city_cp_circle_lap"
+      ]
+    },
+    {
+      "path": "harness/data/fixtures/city_routes.json",
+      "scenarios": [
+        "city_ito_flyover_drive",
+        "city_cp_circle_lap",
+        "city_chandni_walk",
+        "city_india_gate",
+        "city_north_up"
+      ]
+    },
+    {
+      "path": "harness/verify/scripts/lib/",
+      "scenarios": [
+        "drive_north",
+        "city_north_up",
+        "city_chandni_walk"
+      ]
+    },
+    {
+      "path": "game/scenes/play_scene.gd",
+      "scenarios": [
+        "city_north_up",
+        "enter_exit_vehicle",
+        "drive_north"
       ]
     }
   ]

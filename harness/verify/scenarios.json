@@ -636,6 +636,107 @@
         }
       ],
       "_note": "P1-023. Shots of the humanoid from the on-foot play camera in the course scene, input only: foot_anim_walk (walking on the pad), foot_anim_sprint (sprinting), foot_anim_vault (in the middle of the vault over the 1.2 m wall) and lead_lineup (Bittu, SI Meera Rana and Danny side by side, the camera turned to face them, foot('lineup')). Checks the body states (walk, sprint, vault) when each shot is taken. Read by the verifier against VERIFY.md rubric lines 11 and 22. Default look. Lockstep."
+    },
+    {
+      "name": "city_landmark_pins",
+      "query": "style=none",
+      "steps": [
+        {
+          "script": "harness/verify/scripts/city_landmark_pins.js",
+          "timeout": 120000,
+          "data": "harness/data/districts/places.json"
+        }
+      ],
+      "_note": "P1-024 base test 1, in the streamed city (the main scene). India Gate, the Connaught Place central park, the Red Fort, Jama Masjid, the ITO crossing and the New Delhi station forecourt: each landmark pin of the live tiles lies within 5 m of the point the game projects from its latitude and longitude (city geo, pins; staged by teleport), the Red Fort is north-east of India Gate and Connaught Place north-west. Does not judge the look: style=none."
+    },
+    {
+      "name": "city_collide_probe",
+      "query": "style=none",
+      "steps": [
+        {
+          "script": "harness/verify/scripts/city_collide_probe.js",
+          "timeout": 180000,
+          "data": "harness/data/fixtures/city_routes.json"
+        }
+      ],
+      "_note": "P1-024 base test 2a: 200 seeded ray probes over 10 pilot tiles (city_routes.json probeTiles): every collider hit lies within 0.05 m of the highest drawn surface of the tile files at that point (city surface). Does not judge the look: style=none."
+    },
+    {
+      "name": "city_ito_flyover_drive",
+      "query": "spawn=ito_flyover_south",
+      "lockstep": true,
+      "steps": [
+        {
+          "script": "harness/verify/scripts/city_ito_flyover_drive.js",
+          "timeout": 180000,
+          "data": "harness/data/fixtures/city_routes.json"
+        }
+      ],
+      "_note": "P1-024 base test 2b: the auto drives over the Ring Road flyover near ITO (route ito_flyover, real inputs): every wheel contact within 0.05 m of the drawn surface (city watch), never under it, never stuck. Shot city_ito_flyover_eye on the deck at the play camera (default look)."
+    },
+    {
+      "name": "city_cp_circle_lap",
+      "query": "style=none&spawn=cp_inner_circle",
+      "lockstep": true,
+      "steps": [
+        {
+          "script": "harness/verify/scripts/city_cp_circle_lap.js",
+          "timeout": 240000,
+          "data": "harness/data/fixtures/city_routes.json"
+        }
+      ],
+      "_note": "P1-024 base test 2c: one clockwise lap of the Connaught Place inner circle in the auto (route cp_lap, real inputs): the lap closes, every wheel contact within 0.05 m of the drawn surface, never under it, never stuck. Does not judge the look: style=none."
+    },
+    {
+      "name": "city_chandni_walk",
+      "query": "spawn=chandni_chowk_east",
+      "lockstep": true,
+      "steps": [
+        {
+          "script": "harness/verify/scripts/city_chandni_walk.js",
+          "timeout": 240000,
+          "data": "harness/data/fixtures/city_routes.json"
+        }
+      ],
+      "_note": "P1-024 base test 2d: the auto drives Chandni Chowk main road (route chandni_main), F gets the player out and the player walks a gali (walk chandni_gali), real inputs: wheels and feet within 0.05 m of the drawn surface, never under it, never stuck; the streaming focus follows the walker. Shot city_chandni_gali_foot at the on-foot camera (default look)."
+    },
+    {
+      "name": "city_north_up",
+      "lockstep": true,
+      "steps": [
+        {
+          "script": "harness/verify/scripts/city_north_up.js",
+          "timeout": 180000,
+          "data": {
+            "routes": "harness/data/fixtures/city_routes.json",
+            "places": "harness/data/districts/places.json"
+          }
+        }
+      ],
+      "_note": "P1-024 base test 3: from the default start the auto drives 230 m up Janpath (real inputs; shot city_cp_radial_eye at the play camera); the port of coords_north_marker (looking along -Z the Connaught Place centre is in the centre third, the station right of it, Karol Bagh in the left half) and a debug top view over Connaught Place with north up (city screen; shots city_north_marker, city_north_up). Default look."
+    },
+    {
+      "name": "city_mirror",
+      "steps": [
+        {
+          "script": "harness/verify/scripts/city_mirror.js",
+          "timeout": 120000
+        }
+      ],
+      "_note": "P1-024 base test 4: on the live tree after streaming (the start, then the ITO crossing and Chandni Chowk rings) no node under World has a negative scale or a mirrored basis, and no MultiMesh instance is mirrored (city mirror). Default look, so the stylised B dressing is in the tree."
+    },
+    {
+      "name": "city_india_gate",
+      "query": "spawn=rajpath_india_gate",
+      "lockstep": true,
+      "steps": [
+        {
+          "script": "harness/verify/scripts/city_india_gate.js",
+          "timeout": 120000,
+          "data": "harness/data/fixtures/city_routes.json"
+        }
+      ],
+      "_note": "P1-024 shot: the auto drives Kartavya Path east toward the India Gate hexagon (route rajpath, real inputs) and stops; India Gate is in the middle half of the play camera. Shot city_india_gate_hexagon (default look)."
     }
   ]
 }
