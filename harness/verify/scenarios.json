@@ -258,6 +258,100 @@
         }
       ],
       "_note": "P1-019. Five minutes of sim (two laps India Gate, Connaught Place and back at 200 km/h, time scale 4) on the full pilot tiles: tiles held never pass the cap, process memory grows under 50 MB after the first lap, and back at the start the engine object count is within 2 percent of the first time. Not in quick (about 2 minutes)."
+    },
+    {
+      "name": "car_accel",
+      "query": "style=none",
+      "headless": true,
+      "steps": [
+        {
+          "script": "harness/verify/scripts/car_accel.js",
+          "timeout": 120000
+        }
+      ],
+      "_note": "P1-020. 0 to 100 km/h with full throttle in 10 to 12 s of sim, input answered in 1 tick. Runs in the course scene (load('course'): the physics bench course plus a wall), headless, at time scale 4; the probe is the debug hook vehicle('run') (game/debug/vehicle_probe.gd), which presses the InputMap actions and measures in sim ticks."
+    },
+    {
+      "name": "car_top",
+      "query": "style=none",
+      "headless": true,
+      "steps": [
+        {
+          "script": "harness/verify/scripts/car_top.js",
+          "timeout": 120000
+        }
+      ],
+      "_note": "P1-020. Top speed 138 to 143 km/h with full throttle (steady: under 0.1 km/h gained in 3 s). Runs in the course scene (load('course'): the physics bench course plus a wall), headless, at time scale 4; the probe is the debug hook vehicle('run') (game/debug/vehicle_probe.gd), which presses the InputMap actions and measures in sim ticks."
+    },
+    {
+      "name": "car_brake",
+      "query": "style=none",
+      "headless": true,
+      "steps": [
+        {
+          "script": "harness/verify/scripts/car_brake.js",
+          "timeout": 120000
+        }
+      ],
+      "_note": "P1-020. Full brake from 100 km/h stops in 38 to 45 m. Runs in the course scene (load('course'): the physics bench course plus a wall), headless, at time scale 4; the probe is the debug hook vehicle('run') (game/debug/vehicle_probe.gd), which presses the InputMap actions and measures in sim ticks."
+    },
+    {
+      "name": "car_lock",
+      "query": "style=none",
+      "headless": true,
+      "steps": [
+        {
+          "script": "harness/verify/scripts/car_lock.js",
+          "timeout": 120000
+        }
+      ],
+      "_note": "P1-020. Full right lock at a held 38 km/h turns on a radius of 6 to 8 m. Runs in the course scene (load('course'): the physics bench course plus a wall), headless, at time scale 4; the probe is the debug hook vehicle('run') (game/debug/vehicle_probe.gd), which presses the InputMap actions and measures in sim ticks."
+    },
+    {
+      "name": "car_kerb",
+      "query": "style=none",
+      "headless": true,
+      "steps": [
+        {
+          "script": "harness/verify/scripts/car_kerb.js",
+          "timeout": 120000
+        }
+      ],
+      "_note": "P1-020. A one-sided 0.15 m kerb at 40 km/h: under 10 degrees of roll, no flip, under 5 percent speed loss. Runs in the course scene (load('course'): the physics bench course plus a wall), headless, at time scale 4; the probe is the debug hook vehicle('run') (game/debug/vehicle_probe.gd), which presses the InputMap actions and measures in sim ticks."
+    },
+    {
+      "name": "car_flyover",
+      "query": "style=none",
+      "headless": true,
+      "steps": [
+        {
+          "script": "harness/verify/scripts/car_flyover.js",
+          "timeout": 120000
+        }
+      ],
+      "_note": "P1-020. Over the flyover deck joints at 100 km/h all wheels are in contact for at least 95 percent of the ticks. Runs in the course scene (load('course'): the physics bench course plus a wall), headless, at time scale 4; the probe is the debug hook vehicle('run') (game/debug/vehicle_probe.gd), which presses the InputMap actions and measures in sim ticks."
+    },
+    {
+      "name": "car_cost",
+      "query": "style=none",
+      "steps": [
+        {
+          "script": "harness/verify/scripts/car_cost.js",
+          "timeout": 120000
+        }
+      ],
+      "_note": "P1-020. Cost per V2 car per tick with 16 more cars driving on the course straight: the median physics iteration (scripts on the tick, the server step, the state sync; the gap between two physics frame starts in one drawn frame, so it runs windowed at time scale 4) with them less without, over 16. Acceptance 0.05 ms or less, printed with the script share. Debug hook vehicle('cost') (game/debug/vehicle_probe.gd)."
+    },
+    {
+      "name": "chase_cam_floor",
+      "lockstep": true,
+      "steps": [
+        {
+          "script": "harness/verify/scripts/chase_cam_floor.js",
+          "timeout": 180000
+        }
+      ],
+      "_note": "P1-020. The chase camera over a 20 s drive in the course scene: a reverse into the wall at the south end of the flyover lane, then full throttle up the 6 percent ramp, over its crest (the ramp top) onto the deck. Every drawn frame (debug vehicle('camrec')) the camera is 0.5 m or more above the vehicle, not inside geometry (a 0.1 m sphere) and no wall stands between the vehicle and the camera; six named shots (cam_start, cam_reverse, cam_wall, cam_ramp, cam_crest, cam_deck). Default look. Lockstep: one tick per frame."
     }
   ]
 }

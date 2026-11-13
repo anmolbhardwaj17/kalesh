@@ -1,0 +1,39 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scenes/course/course_scene.gd" id="1_course"]
+[ext_resource type="Script" path="res://vehicles/vehicle.gd" id="2_car"]
+[ext_resource type="Script" path="res://camera/chase_camera.gd" id="3_cam"]
+
+[sub_resource type="Environment" id="Env"]
+background_mode = 1
+background_color = Color(0.623529, 0.776471, 0.878431, 1)
+ambient_light_source = 2
+ambient_light_color = Color(0.85, 0.9, 1, 1)
+ambient_light_energy = 0.6
+fog_enabled = true
+fog_light_color = Color(0.623529, 0.776471, 0.878431, 1)
+fog_density = 0.002
+
+[node name="Course" type="Node3D"]
+script = ExtResource("1_course")
+
+[node name="World" type="Node3D" parent="."]
+
+[node name="Environment" type="WorldEnvironment" parent="World"]
+environment = SubResource("Env")
+
+[node name="Sun" type="DirectionalLight3D" parent="World"]
+rotation = Vector3(-1.0297, 0.98279, 0)
+light_color = Color(1, 0.94902, 0.866667, 1)
+light_energy = 1.4
+shadow_enabled = true
+
+[node name="Car" type="RigidBody3D" parent="World"]
+script = ExtResource("2_car")
+
+[node name="ChaseCamera" type="Camera3D" parent="."]
+fov = 70.0
+near = 0.1
+far = 3000.0
+script = ExtResource("3_cam")
+target_path = NodePath("../World/Car")

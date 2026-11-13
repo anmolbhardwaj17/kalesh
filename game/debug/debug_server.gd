@@ -8,7 +8,7 @@
 ##   game -> client  {"type": "hello", ...} once on connect, then {"type": "snapshot", ...} after every drawn frame
 ##                   (state, clock, hold and the events since the last snapshot).
 ## Writes never block a frame: each client has an out queue (debug_peer.gd); a snapshot is skipped for a client that is
-## behind. The perf hooks live in debug_perf.gd, setCamera and shot in debug_camera.gd, stream in stream_probe.gd.
+## behind. The perf hooks live in debug_perf.gd, setCamera and shot in debug_camera.gd, stream in stream_probe.gd, vehicle in vehicle_probe.gd.
 ## Expected problems (unknown method, bad args, unknown scene) are error responses, never push_error.
 extends Node
 
@@ -20,7 +20,7 @@ const DebugInput := preload("res://debug/debug_input.gd")
 const PROTOCOL := 1
 const METHODS := [
 	"ping", "state", "clock", "frames", "input", "perf", "load", "teleport", "setCamera", "timeScale", "hold",
-	"events", "hud", "shot", "quality", "timeOfDay", "bench", "stream", "quit",
+	"events", "hud", "shot", "quality", "timeOfDay", "bench", "stream", "vehicle", "quit",
 ]
 const QUALITY_PRESETS := ["low", "medium", "high"]
 
@@ -196,6 +196,8 @@ func _call(method: String, a: Array) -> Dictionary:
 			return _ok(await _teleport(a[0] if a.size() > 0 else null))
 		"stream":
 			return await _stream_probe().hook(a)
+		"vehicle":
+			return await _vehicle_probe().hook(a)
 		"setCamera":
 			return _cam.set_camera(a[0] if a.size() > 0 else null)
 		"hud":
@@ -286,10 +288,18 @@ func state() -> Dictionary:
 	var p := get_tree().get_first_node_in_group("player") as Node3D
 	if p != null:
 		var pos := p.global_position
-		player = {"pos": [pos.x, pos.y, pos.z], "grounded": true}
+		var grounded := true
+		if p.has_method("foot_position"):
+			# the V2 vehicle: where it meets the ground at rest, its heading and its speed along it
+			pos = p.foot_position()
+			grounded = p.contact_count() > 0 or p.freeze
+		player = {"pos": [pos.x, pos.y, pos.z], "grounded": grounded}
 		if "model" in p:
 			player["heading"] = p.model.heading
 			player["speed"] = p.model.speed
+		elif "heading" in p:
+			player["heading"] = p.heading
+			player["speed"] = p.speed
 	var cam := get_viewport().get_camera_3d()
 	var camera = null
 	if cam != null:
@@ -416,6 +426,16 @@ func _stream_probe() -> Node:
 	if probe == null:
 		probe = load("res://debug/stream_probe.gd").new()
 		probe.name = "StreamProbe"
+		add_child(probe)
+	return probe
+
+
+## The V2 vehicle's probes (vehicle_probe.gd: info, run, cost, camrec), made on first use.
+func _vehicle_probe() -> Node:
+	var probe := get_node_or_null("VehicleProbe")
+	if probe == null:
+		probe = load("res://debug/vehicle_probe.gd").new()
+		probe.name = "VehicleProbe"
 		add_child(probe)
 	return probe
 

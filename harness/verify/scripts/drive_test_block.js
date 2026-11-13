@@ -1,7 +1,7 @@
 // P1-018, streamed since P1-019: the game starts on the committed test block (--tiles=test: 9 baked tiles of the ITO flyover
 // and Connaught Place). The streamer loads the ring round the start (the ITO tiles, the ones nearest to India Gate), the
 // game says ready only once that ring is attached with its colliders, the car stands on a lane of it with a collider
-// under it, and a throttle drive moves it along its heading (input only). Then staging teleports in a row and a scene reload
+// under it, and a throttle drive moves it along its heading and leaves it on the road (input only). Then staging teleports in a row and a scene reload
 // with tiles attached (a crash check).
 const S = window.__sim;
 const D = S.D;
@@ -35,7 +35,9 @@ S.log('drove', { from: p0.pos, to: p1.pos, d, heading: p1.heading, speed: p1.spe
 if (!(d > 10)) problems.push(`the car moved only ${d.toFixed(2)} m in 3 s of throttle`);
 const along = (p1.pos[0] - p0.pos[0]) * Math.sin(p0.heading) - (p1.pos[2] - p0.pos[2]) * Math.cos(p0.heading);
 if (!(along > 0.95 * d)) problems.push(`the car left its heading: ${along.toFixed(2)} m along of ${d.toFixed(2)} m`);
-if (Math.abs(p1.pos[1] - p0.pos[1]) > 0.01) problems.push(`the car changed height: ${p0.pos[1]} to ${p1.pos[1]}`);
+// the V2 car (P1-020) follows the road's grade: after the drive it still stands on the collider under it
+const probe1 = await D.stream('probe', { x: p1.pos[0], z: p1.pos[2] });
+if (!probe1.hit || Math.abs(probe1.colliderY - p1.pos[1]) > 0.1) problems.push(`after the drive the car stands ${probe1.hit ? (p1.pos[1] - probe1.colliderY).toFixed(3) : '?'} m off the collider`);
 // Teleports in a row between the two ends of the block (ITO and Connaught Place, 3 km apart: every one unloads a ring and
 // loads another), then three fired at once, then the scene is loaded again with tiles attached. None may raise an engine
 // error, and the game must quit cleanly after (the driver fails a run that dies while quitting). Regression for the abort

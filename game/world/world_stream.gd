@@ -18,7 +18,7 @@ const Buildings := preload("res://world/systems/buildings.gd")
 const Colliders := preload("res://world/systems/colliders.gd")
 const Lanes := preload("res://world/systems/lanes.gd")
 ## Stand-in nodes of the scaffold scene that the tiles replace.
-const STAND_INS := ["Ground", "Road", "NorthPost"]
+const STAND_INS := ["Ground", "Road", "NorthPost", "GroundCollider"]
 ## A ring that is not attached after this much wall time is reported and the game goes on.
 const RING_WAIT_S := 30.0
 ## A ground ray starts this far above the highest thing a tile can hold and ends this far below its lowest ground.
@@ -80,6 +80,9 @@ static func attach(scene: Node, dir: String) -> Node3D:
 		var stand_in := world.get_node_or_null(n) as Node3D
 		if stand_in != null:
 			stand_in.visible = false
+			if stand_in is CollisionObject3D:
+				# the stand-in ground's collider leaves the physics space: the tiles bring their own
+				stand_in.process_mode = Node.PROCESS_MODE_DISABLED
 	world.add_child(city)
 	city.boot(world.get_node_or_null("Car") as Node3D)
 	return city
@@ -143,7 +146,8 @@ func ground_at(x: float, z: float, from_y := NAN) -> Dictionary:
 	var key: Vector2i = WorldFrame.tile_of(x, z)
 	var base: float = index.tiles[key].origin.y if index.has(key) else 0.0
 	var top := base + RAY_UP if is_nan(from_y) else from_y
-	var query := PhysicsRayQueryParameters3D.create(Vector3(x, top, z), Vector3(x, base - RAY_DOWN, z))
+	# layer 1 only: the world's colliders, never a vehicle body (layer 2) standing there
+	var query := PhysicsRayQueryParameters3D.create(Vector3(x, top, z), Vector3(x, base - RAY_DOWN, z), 1)
 	var res := get_world_3d().direct_space_state.intersect_ray(query)
 	if res.is_empty():
 		return {"hit": false, "y": 0.0, "tile": WorldFrame.tile_id(key)}

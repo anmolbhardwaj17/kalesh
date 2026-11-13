@@ -150,6 +150,7 @@ Built in P1-019 (`game/world/streaming/`, `game/world/systems/`, `game/world/wor
 
 - Our own raycast vehicle on a Jolt `RigidBody3D`: suspension rays, a tyre grip model with grip per axle, steer lock by speed, yaw damping, handbrake. One model for the auto (3 wheels), scooter (2 wheels with a hidden stabiliser), car and bus. One tuning file per vehicle (`game/data/vehicles/<id>.tres`).
 - Speeds (GAME.md): auto 65 km/h, car 140, fast car 180 to 200. The kept tune from the old game tops out at 106 km/h; the first driving phase retunes the gears to 140 (owner answer) and Anmol judges the feel at the playtest.
+- Built in P1-020: `game/vehicles/` and `game/data/vehicles/car.tres` (0 to 100 km/h 11.1 s, top 140 km/h, 100 to 0 in 41.5 m, full lock radius 6.9 m at 37 km/h); probes `vehicle(cmd, opts)` in docs/GAME_HOOKS.md, scenarios `car_*` and `chase_cam_floor` in the course scene (`load('course')`).
 - Colliders bridge deck joints (an open 4 cm joint drops a wheel ray, measured).
 - Traffic follows lane centre lines (TR1). A traffic car becomes a physics vehicle only near the player or when hit, at most 16 at once.
 

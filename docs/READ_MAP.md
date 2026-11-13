@@ -44,7 +44,7 @@ Notes: `harness/state/knowledge/driving-and-camera.md`
 - ARCH: "Systems" (Driving), "Target module map" (rows `core/`, `vehicles/`, `camera/`).
 - TECH: "Main loop and time (C1)", "Coordinates (binding, owner 2026-11-10)", "Vehicles (V2)", "Performance budgets" (CPU rows physics and vehicles).
 - GAME: "Movement and camera feel".
-- Source: `game/scripts/car_model.gd`, `car.gd`, `chase_camera.gd`, `game/tests/test_car.gd`; planned `game/vehicles/`, `game/camera/`, tunes in `game/data/vehicles/`. Bench versions of the clock, both vehicle options, the walker with its step-up and the colliders: `game/bench/physics/` (P0-017, `--arch=physics`; results in decisions_archive.md "Physics bench results (P0-017)").
+- Source: the V2 vehicle `game/vehicles/` (`vehicle.gd`, `drive_input.gd`, `tyre_model.gd`, `vehicle_tune.gd`), tunes `game/data/vehicles/` (`car.tres`), the chase camera `game/camera/chase_camera.gd`, the test course `game/scenes/course/` (scene id `course`), the probes `game/debug/vehicle_probe.gd` (hook `vehicle`), tests `game/tests/test_vehicle.gd`, scenario scripts `harness/verify/scripts/car_*.js` and `chase_cam_floor.js` (P1-020). The kinematic `game/scripts/car_model.gd`, `car.gd` and `chase_camera.gd` (with `test_car.gd`) remain only for the look stand-in scenes. Bench versions of the clock, both vehicle options, the walker with its step-up and the colliders: `game/bench/physics/` (P0-017, `--arch=physics`; results in decisions_archive.md "Physics bench results (P0-017)").
 
 ## World, map data and bake
 Notes: `harness/state/knowledge/world-and-map.md`
