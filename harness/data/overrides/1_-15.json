@@ -1,0 +1,36 @@
+[
+  {
+    "issue": "R-ROAD-01:w1360314041.0:w1360335928.0:n12592707158",
+    "action": "connect",
+    "target": {
+      "ids": [
+        "w1360314041.0",
+        "w1360335928.0"
+      ],
+      "anchor": {
+        "lat": 28.650581,
+        "lon": 77.2260769
+      },
+      "tolerance_m": 15
+    },
+    "params": {
+      "op": "join_end",
+      "edge": "w1360314041.0",
+      "node": "n12592707158",
+      "to": "w1360335928.0",
+      "x": -338.005,
+      "z": -4185.209,
+      "gap_m": 12
+    },
+    "why": "Two old city lanes on one line with a narrow gap between the houses in the picture: joined",
+    "by": "judge",
+    "source": "top-view",
+    "date": "2026-11-13",
+    "reference": {
+      "link": "https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/export?bbox=77.2256164,28.6501746,77.2265370,28.6509866&bboxSR=4326&imageSR=3857&size=315,315&format=jpg&f=image",
+      "date": "2026-11-13",
+      "note": "Esri World Imagery beside the map render of the site (tools/inspector/judge.mjs sheets)"
+    },
+    "id": "ov_1_-15_0001"
+  }
+]

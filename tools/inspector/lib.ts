@@ -38,6 +38,11 @@ export interface IssueRecord {
   status: IssueStatus;
   note?: string;
   proposals: Proposal[];
+  /** Settled beyond the signed bounds (P1-030): by the bake's policy table or by a patch of the top-view judge pass, with the reason. */
+  decided?: 'policy' | 'judge';
+  decision?: string;
+  /** An open issue the judge pass could not decide: why. */
+  judgeNote?: string;
 }
 
 export interface IssuesFile {

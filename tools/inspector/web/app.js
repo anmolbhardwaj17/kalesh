@@ -519,7 +519,7 @@ function renderDetail() {
   const d = describe(i);
   const pick = state.picks[i.id];
   const cls = statusClass(i);
-  const kicker = pick ? 'You picked a fix' : i.status === 'overridden' ? 'Your fix is in the map' : isHigh(i) ? 'High impact, needs you' : i.status === 'auto_repaired' ? 'Fixed by itself' : i.status === 'explained' ? 'Looks like the real road' : 'Needs you';
+  const kicker = pick ? 'You picked a fix' : i.decided === 'judge' ? 'Decided from the top view' : i.status === 'overridden' ? 'Your fix is in the map' : isHigh(i) ? 'High impact, needs you' : i.decided === 'policy' ? 'Decided by a rule' : i.status === 'auto_repaired' ? 'Fixed by itself' : i.status === 'explained' ? 'Looks like the real road' : 'Needs you';
   let bestK = -1;
   i.proposals.forEach((p, k) => { if (bestK < 0 || p.confidence > i.proposals[bestK].confidence) bestK = k; });
   const props = i.proposals.map((p, k) => `<button type="button" class="prop${state.proposal === k ? ' sel' : ''}" data-prop="${k}"><span class="sw" style="background:${PROP_COLOURS[k % PROP_COLOURS.length]}"></span><span><span class="h"><span>${esc(actionWords(p.action))}${k === bestK && i.proposals.length > 1 ? '<span class="best">Most likely</span>' : ''}</span><span class="c">${pct(p.confidence)} sure</span></span><span class="r">${esc(humanise(p.reasoning, state.names))}</span><span class="meter" style="--sev:${PROP_COLOURS[k % PROP_COLOURS.length]}"><i style="width:${pct(p.confidence)}"></i></span></span></button>`).join('');
@@ -535,7 +535,9 @@ function renderDetail() {
       <div class="stat"><span class="l">Tile</span><span class="v">${i.tile[0]}_${i.tile[1]}</span></div>
     </div>
     <div class="block"><h4>What is wrong</h4><p>${esc(d.problem)}</p>${d.detail ? `<p class="measured">Measured: ${esc(d.detail)}</p>` : ''}</div>
-    ${d.fix ? `<div class="block fix"><h4>Suggested fix</h4><p>${esc(d.fix)}</p></div>` : ''}
+    ${d.question ? `<div class="block ask"><h4>The question for you</h4><p>${esc(d.question)}</p></div>` : ''}
+    ${d.settled ? `<div class="block fix"><h4>How it was settled</h4><p>${esc(d.settled)}</p></div>` : ''}
+    ${d.fix ? `<div class="block fix"><h4>${d.question ? 'Most likely answer' : 'Suggested fix'}</h4><p>${esc(d.fix)}</p></div>` : ''}
     ${pick ? `<div class="msg msg-saved">Saved: "${esc(actionWords(pick.action))}" in overrides/${esc(pick.file)}. You can pick again to change it.</div>` : ''}
     ${hasProps ? `<h3>Pick a fix. Each one is drawn on the map in its colour.</h3>${props}` : '<p class="where">No fix was proposed. Write what you want below.</p>'}
     <h3>Your note (optional)</h3>

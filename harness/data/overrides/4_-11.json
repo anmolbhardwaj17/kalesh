@@ -1,0 +1,65 @@
+[
+  {
+    "issue": "R-BLDG-03:way/351619540:way/351619640",
+    "action": "remove",
+    "target": {
+      "ids": [
+        "way/351619540",
+        "way/351619640"
+      ],
+      "anchor": {
+        "lat": 28.6416812,
+        "lon": 77.2341817
+      },
+      "tolerance_m": 15
+    },
+    "params": {
+      "drop": "way/351619640",
+      "keep": "way/351619540"
+    },
+    "why": "The picture shows a courtyard house: the inner outline is its court, covered by the outer outline in the stand-in world",
+    "by": "judge",
+    "source": "top-view",
+    "date": "2026-11-13",
+    "reference": {
+      "link": "https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/export?bbox=77.2337212,28.6412753,77.2346417,28.6420874&bboxSR=4326&imageSR=3857&size=315,315&format=jpg&f=image",
+      "date": "2026-11-13",
+      "note": "Esri World Imagery beside the map render of the site (tools/inspector/judge.mjs sheets)"
+    },
+    "id": "ov_4_-11_0001"
+  },
+  {
+    "issue": "R-ROAD-01:w696557035.1:w80418124.1:n12429207293",
+    "action": "connect",
+    "target": {
+      "ids": [
+        "w696557035.1",
+        "w80418124.1"
+      ],
+      "anchor": {
+        "lat": 28.640853,
+        "lon": 77.2356165
+      },
+      "tolerance_m": 15
+    },
+    "params": {
+      "op": "join_end",
+      "edge": "w696557035.1",
+      "node": "n12429207293",
+      "to": "w80418124.1",
+      "x": 604.455,
+      "z": -3111.808,
+      "gap_m": 13.2
+    },
+    "why": "The lane reaches the wide road ahead in the picture: joined",
+    "by": "judge",
+    "source": "top-view",
+    "date": "2026-11-13",
+    "reference": {
+      "link": "https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/export?bbox=77.2351561,28.6404470,77.2360766,28.6412590&bboxSR=4326&imageSR=3857&size=315,315&format=jpg&f=image",
+      "date": "2026-11-13",
+      "note": "Esri World Imagery beside the map render of the site (tools/inspector/judge.mjs sheets)"
+    },
+    "id": "ov_4_-11_0002"
+  }
+]

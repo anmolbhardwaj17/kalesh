@@ -70,7 +70,9 @@ describe.skipIf(missing.length > 0)(`pilot centre road mesh${reason ? ` (skipped
     const { mesh, health } = await baked();
     const e = mesh.ends;
     expect(e.joined + Object.values(e.explained).reduce((s, v) => s + v, 0) + e.unjoined).toBe(e.stripEnds);
-    expect(e.explained.map_edge).toBe(169);
+    // 169 until P1-030: a dead end joined to the lane at the stage edge made a junction that takes in one more map edge
+    // node (m1076769488.0, an open port explained by the stage edge rule)
+    expect(e.explained.map_edge).toBe(168);
     console.log(`[mesh] unjoined ${e.unjoined}: ${e.unjoinedList.map((u) => `${u.strip} ${u.end}`).join(', ')}; floating ${e.floating}: ${e.floatingList.map((u) => `${u.strip} ${u.end} ${u.kind}`).join(', ')}`);
     // the last one was the Vikas Marg deck arm east of ITO, whose junction reached 110 m from the ramp foot to the
     // deck over a road at grade; its fork is 42 m long on the ramp's fill since P1-042

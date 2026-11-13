@@ -478,8 +478,13 @@ export function clearCuts(arms: readonly ArmPlan[], roomOf: (a: ArmPlan) => numb
         const pairs: [BandQuad, BandQuad][] = [];
         for (const qa of inRoom[i] as BandQuad[]) for (const qb of quads[j] as BandQuad[]) if (hits(qb, boxes[i] ?? null)) pairs.push([qa, qb]);
         for (const qb of inRoom[j] as BandQuad[]) for (const qa of quads[i] as BandQuad[]) if (qa.t1 > (room[i] as number) + 1e-6 && hits(qa, boxes[j] ?? null)) pairs.push([qa, qb]);
+        // the two ends of one loop road (a drive that leaves a node and comes back to it): out along the loop the two
+        // arms are the same stretch of road, not two roads on each other (P1-030: a bungalow loop was cut back 58 m from
+        // both ends, the whole loop became junction and the street beside it lost its footpath)
+        const loop = (arms[i] as ArmPlan).end.edge === (arms[j] as ArmPlan).end.edge ? ((arms[i] as ArmPlan).curve.cum[(arms[i] as ArmPlan).curve.cum.length - 1] as number) : Infinity;
         for (const [qa, qb] of pairs) {
           if (qa.t1 <= (want[i] as number) + 1e-6 || qb.t1 <= (want[j] as number) + 1e-6) continue;
+          if (qa.t1 + qb.t1 >= loop - 2 * CLEAR_STEP_M) continue;
           // a road over a tunnel, or under a bridge, is not on it (the levels the overlap check reads before the solve)
           if (qa.level !== qb.level) continue;
           if (qa.minX >= qb.maxX || qb.minX >= qa.maxX || qa.minZ >= qb.maxZ || qb.minZ >= qa.maxZ) continue;

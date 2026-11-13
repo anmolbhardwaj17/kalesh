@@ -1,0 +1,36 @@
+[
+  {
+    "issue": "R-ROAD-01:w1121175080.0:w423539775.2:n10255208959",
+    "action": "connect",
+    "target": {
+      "ids": [
+        "w1121175080.0",
+        "w423539775.2"
+      ],
+      "anchor": {
+        "lat": 28.6189785,
+        "lon": 77.2272243
+      },
+      "tolerance_m": 15
+    },
+    "params": {
+      "op": "join_end",
+      "edge": "w1121175080.0",
+      "node": "n10255208959",
+      "to": "w423539775.2",
+      "x": -208.442,
+      "z": -671.048,
+      "gap_m": 9.4
+    },
+    "why": "A paved forecourt runs from the end to the road ahead in the picture: the drive joins the road",
+    "by": "judge",
+    "source": "top-view",
+    "date": "2026-11-13",
+    "reference": {
+      "link": "https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/export?bbox=77.2267638,28.6185721,77.2276841,28.6193841&bboxSR=4326&imageSR=3857&size=315,315&format=jpg&f=image",
+      "date": "2026-11-13",
+      "note": "Esri World Imagery beside the map render of the site (tools/inspector/judge.mjs sheets)"
+    },
+    "id": "ov_1_-1_0001"
+  }
+]

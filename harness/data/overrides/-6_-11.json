@@ -1,0 +1,70 @@
+[
+  {
+    "issue": "R-ROAD-01:w294288717.1:w1067100260.5:n928490290",
+    "action": "connect",
+    "target": {
+      "ids": [
+        "w294288717.1",
+        "w1067100260.5"
+      ],
+      "anchor": {
+        "lat": 28.6417877,
+        "lon": 77.2086471
+      },
+      "tolerance_m": 15
+    },
+    "params": {
+      "op": "join_end",
+      "edge": "w294288717.1",
+      "node": "n928490290",
+      "to": "w1067100260.5",
+      "x": -2025.446,
+      "z": -3197.309,
+      "gap_m": 9.6
+    },
+    "why": "Bare ground leads from the lane end to the main road in the picture: joined",
+    "by": "judge",
+    "source": "top-view",
+    "date": "2026-11-13",
+    "reference": {
+      "link": "https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/export?bbox=77.2081866,28.6413820,77.2091070,28.6421942&bboxSR=4326&imageSR=3857&size=315,315&format=jpg&f=image",
+      "date": "2026-11-13",
+      "note": "Esri World Imagery beside the map render of the site (tools/inspector/judge.mjs sheets)"
+    },
+    "id": "ov_-6_-11_0001"
+  },
+  {
+    "issue": "R-ROAD-01:w79561648.0:w1067100260.5:n928488603",
+    "action": "connect",
+    "target": {
+      "ids": [
+        "w79561648.0",
+        "w1067100260.5"
+      ],
+      "anchor": {
+        "lat": 28.6410574,
+        "lon": 77.2084735
+      },
+      "tolerance_m": 15
+    },
+    "params": {
+      "op": "join_end",
+      "edge": "w79561648.0",
+      "node": "n928488603",
+      "to": "w1067100260.5",
+      "x": -2042.357,
+      "z": -3116.447,
+      "gap_m": 9.6
+    },
+    "why": "The earth lane reaches the road ahead in the picture: joined",
+    "by": "judge",
+    "source": "top-view",
+    "date": "2026-11-13",
+    "reference": {
+      "link": "https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/export?bbox=77.2080129,28.6406511,77.2089332,28.6414633&bboxSR=4326&imageSR=3857&size=315,315&format=jpg&f=image",
+      "date": "2026-11-13",
+      "note": "Esri World Imagery beside the map render of the site (tools/inspector/judge.mjs sheets)"
+    },
+    "id": "ov_-6_-11_0002"
+  }
+]

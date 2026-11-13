@@ -1,0 +1,29 @@
+[
+  {
+    "issue": "R-BLDG-04:way/1071090185",
+    "action": "disable_repair",
+    "target": {
+      "ids": [
+        "way/1071090185"
+      ],
+      "anchor": {
+        "lat": 28.6186647,
+        "lon": 77.2438199
+      },
+      "tolerance_m": 15
+    },
+    "params": {
+      "keep": "height"
+    },
+    "why": "The picture shows a very large ribbed roof, an exhibition hall of Pragati Maidan: 29.1 m is right for a hall of this span, the 2 levels are its floors",
+    "by": "judge",
+    "source": "top-view",
+    "date": "2026-11-13",
+    "reference": {
+      "link": "https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/export?bbox=77.2433598,28.6182583,77.2442802,28.6190703&bboxSR=4326&imageSR=3857&size=315,315&format=jpg&f=image",
+      "date": "2026-11-13",
+      "note": "Esri World Imagery beside the map render of the site (tools/inspector/judge.mjs sheets)"
+    },
+    "id": "ov_8_-1_0001"
+  }
+]

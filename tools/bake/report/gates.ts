@@ -59,6 +59,18 @@ export interface GateReport {
   findings: GateFinding[];
 }
 
+/**
+ * Does an entry's item name this gate item? The id itself, or a pattern with `*` for a number: zone and strip numbers
+ * are counted across the whole bake and change with any map change (P1-045, P1-030), so an entry names a zone by its
+ * other face ("w77617201.0_0|zone_merge_*").
+ */
+export function itemMatches(pattern: string, id: string): boolean {
+  if (pattern === id) return true;
+  if (!pattern.includes('*')) return false;
+  const re = pattern.split('*').map((part) => part.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')).join('\\d+');
+  return new RegExp(`^${re}$`).test(id);
+}
+
 export function explainGates(items: Record<GateKey, GateItem[]>, file: GateFile): GateReport {
   const gates: Record<string, GateLine> = {};
   const used = new Set<GateExplanation>();
@@ -69,12 +81,12 @@ export function explainGates(items: Record<GateKey, GateItem[]>, file: GateFile)
     for (const it of list) {
       let by: string | null = it.why ? `the model: ${it.why}` : null;
       if (!by) {
-        const e = file.explanations.find((x) => x.gate === key && ((x.items ?? []).includes(it.id) || (x.kinds ?? []).includes(it.kind)));
+        const e = file.explanations.find((x) => x.gate === key && ((x.items ?? []).some((p) => itemMatches(p, it.id)) || (x.kinds ?? []).includes(it.kind)));
         if (e) {
           by = `${e.owner}: ${e.why}`;
           used.add(e);
           if (!usedIds.has(e)) usedIds.set(e, new Set());
-          usedIds.get(e)!.add(it.id);
+          usedIds.get(e)!.add((e.items ?? []).find((p) => itemMatches(p, it.id)) ?? it.id);
         }
       }
       out.push({ ...it, explainedBy: by });

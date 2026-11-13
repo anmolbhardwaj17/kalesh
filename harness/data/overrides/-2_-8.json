@@ -1,0 +1,36 @@
+[
+  {
+    "issue": "R-ROAD-01:w1154173903.0:w24577487.0:n10734111728",
+    "action": "connect",
+    "target": {
+      "ids": [
+        "w1154173903.0",
+        "w24577487.0"
+      ],
+      "anchor": {
+        "lat": 28.633435,
+        "lon": 77.2183755
+      },
+      "tolerance_m": 15
+    },
+    "params": {
+      "op": "join_end",
+      "edge": "w1154173903.0",
+      "node": "n10734111728",
+      "to": "w24577487.0",
+      "x": -1077.739,
+      "z": -2285.548,
+      "gap_m": 10.1
+    },
+    "why": "The parking lane runs out onto the radial road over the same paved ground: joined",
+    "by": "judge",
+    "source": "top-view",
+    "date": "2026-11-13",
+    "reference": {
+      "link": "https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/export?bbox=77.2179151,28.6330289,77.2188355,28.6338411&bboxSR=4326&imageSR=3857&size=315,315&format=jpg&f=image",
+      "date": "2026-11-13",
+      "note": "Esri World Imagery beside the map render of the site (tools/inspector/judge.mjs sheets)"
+    },
+    "id": "ov_-2_-8_0001"
+  }
+]

@@ -1,0 +1,36 @@
+[
+  {
+    "issue": "R-ROAD-01:w289766564.0:w1294946815.3:n11676043748",
+    "action": "connect",
+    "target": {
+      "ids": [
+        "w289766564.0",
+        "w1294946815.3"
+      ],
+      "anchor": {
+        "lat": 28.6364438,
+        "lon": 77.2272063
+      },
+      "tolerance_m": 15
+    },
+    "params": {
+      "op": "join_end",
+      "edge": "w289766564.0",
+      "node": "n11676043748",
+      "to": "w1294946815.3",
+      "x": -208.671,
+      "z": -2603.278,
+      "gap_m": 12.3
+    },
+    "why": "Two ends in line under the trees: one drive drawn with a gap",
+    "by": "judge",
+    "source": "top-view",
+    "date": "2026-11-13",
+    "reference": {
+      "link": "https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/export?bbox=77.2267460,28.6360376,77.2276664,28.6368497&bboxSR=4326&imageSR=3857&size=315,315&format=jpg&f=image",
+      "date": "2026-11-13",
+      "note": "Esri World Imagery beside the map render of the site (tools/inspector/judge.mjs sheets)"
+    },
+    "id": "ov_1_-9_0001"
+  }
+]

@@ -89,7 +89,8 @@ describe('map inspector page', () => {
     expect(st.listCount).toBe(issuesFile.issues.length);
     expect(await page.locator('#list .row').count()).toBe(issuesFile.issues.length);
     const high = issuesFile.issues.filter((i) => i.status === 'open' && i.impact >= 0.7);
-    expect(high.length).toBeGreaterThan(10);
+    // P1-030: only sites the rules and the top-view judge pass could not decide wait for the owner
+    expect(issuesFile.issues.filter((i) => i.status === "open").length).toBeLessThanOrEqual(50);
     const ids = await hook(() => window.__inspector.listIds());
     const byId = new Map(issuesFile.issues.map((i) => [i.id, i]));
     for (const id of ids.slice(0, high.length)) { const i = byId.get(id); expect(i.status).toBe('open'); expect(i.impact).toBeGreaterThanOrEqual(0.7); }
@@ -188,7 +189,8 @@ describe('map inspector page', () => {
 
   run('screenshots', async () => {
     fs.mkdirSync(SHOTS, { recursive: true });
-    const first = (await hook(() => window.__inspector.highIds()))[0];
+    // the owner queue may be empty since P1-030: then the first issue of the list is shown
+    const first = (await hook(() => window.__inspector.highIds()))[0] ?? (await hook(() => window.__inspector.listIds()))[0];
     await page.click('#fit');
     await flown();
     await hook((x) => window.__inspector.select(x, { fly: false }), first);

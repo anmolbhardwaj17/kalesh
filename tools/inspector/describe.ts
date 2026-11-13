@@ -6,7 +6,7 @@
 export interface CtxRoad { id?: string; k: string; w: number; p: number[]; n?: string; r?: string }
 export interface CtxNamed { id: string; n: string; x: number; z: number; k: string }
 export interface Place { id?: string; name: string; x: number; z: number }
-export interface DescribeIssue { rule: string; x: number; z: number; features: string[]; note?: string; proposals: { action: string; confidence: number; reasoning: string }[] }
+export interface DescribeIssue { rule: string; x: number; z: number; features: string[]; note?: string; proposals: { action: string; confidence: number; reasoning: string }[]; status?: string; decided?: string; decision?: string; judgeNote?: string }
 
 export interface RoadInfo { id: string; name: string; ref: string; cls: string; pts: [number, number][] }
 export interface NameIndex {
@@ -205,7 +205,7 @@ export const PROBLEM_WORDS: Record<string, string> = {
   'R-JUNC-04': 'A road arm at the junction is shorter than the curve of its corner.',
   'R-FOOT-01': 'The footpath is missing on a short piece of this street.',
   'R-FOOT-02': 'The footpath would lie in the middle of another road.',
-  'R-BLDG-01': 'A building outline sits on the road, so the road would run into a wall.',
+  'R-BLDG-01': 'A building outline sat on the road or its footpath, so the road would run into a wall.',
   'R-BLDG-02': 'The building outline is broken (it crosses itself, or it is tiny or a thin sliver).',
   'R-BLDG-03': 'The same building is drawn twice.',
   'R-BLDG-04': 'The building height cannot be right for its number of floors.',
@@ -213,13 +213,27 @@ export const PROBLEM_WORDS: Record<string, string> = {
   'R-RAIL-02': 'The station has no street close to it, so nobody could walk in.',
   'R-FOB-01': 'A foot over bridge comes down where there is no footpath.',
   'R-STITCH-07': 'The road runs off the edge of the map with nothing to close it.',
-  'R-HERO-01': 'This is a main road we check by hand, and it has no hand made plan yet.',
+  'R-HERO-01': 'This is a main road we check by hand. Its hand made plan is written when that road is built in detail.',
   'R-HERO-02': 'This main road does not match its hand made plan.',
   'R-HERO-03': 'An automatic fix changed a main road that we check by hand.',
   'R-HERO-04': 'A field in a main road plan has no source.',
   'R-TERR-01': 'The ground rises above the road surface beside it.',
   'R-TERR-02': 'A road at ground level runs through water with no bridge.',
   'R-TERR-03': 'The height data along this road jumps, so the road would have a step in it.',
+};
+
+/**
+ * The plain question an open issue asks the owner (P1-030: only sites the rules and the top-view judge pass could
+ * not decide reach him, each as a question with options).
+ */
+export const QUESTION_WORDS: Record<string, string> = {
+  'R-ROAD-01': 'Does this road really join the road ahead, or does it end here at a gate, a wall or a kerb?',
+  'R-ROAD-02': 'Do these two roads meet here at a crossing, or does one pass over the other?',
+  'R-ROAD-03': 'Is this one road drawn twice, or are these two separate roads side by side?',
+  'R-JUNC-04': 'Is this short stub a real side road, or a drawing slip that should go?',
+  'R-BLDG-03': 'Are these two separate buildings, one inside the other, or one building drawn twice?',
+  'R-BLDG-04': 'Is this building really that tall, or is the height a typing mistake?',
+  'R-LANE-01': 'How many lanes does this road really have where it splits or merges?',
 };
 
 const FIX_WORDS: Record<string, string> = {
@@ -252,6 +266,11 @@ export interface Description {
   detail: string;
   /** What the most likely fix does, or null when there is no proposal. */
   fix: string | null;
+  /** An issue that waits for the owner: the plain question and one line per option, the likeliest first. Null for a settled issue. */
+  question: string | null;
+  options: string[];
+  /** How a settled issue was settled, in plain words ("Fixed by a rule", "Decided from the top view"), with the reason; null for an open one. */
+  settled: string | null;
 }
 
 /** Everything a card and the detail panel say about an issue. */
@@ -263,7 +282,13 @@ export function describeIssue(i: DescribeIssue, idx: NameIndex, ruleTitle = ''):
   let best: DescribeIssue['proposals'][number] | null = null;
   for (const p of i.proposals) if (!best || p.confidence > best.confidence) best = p;
   const fix = best ? `${fixWords(best.action)}: ${lowerFirst(humanise(best.reasoning, idx))}` : null;
-  return { title: where ? `${what}, ${where}` : what, what, where, problem, detail: humanise(i.note ?? '', idx), fix };
+  const open = i.status === undefined || i.status === 'open';
+  const options = open ? i.proposals.slice().sort((a, b) => b.confidence - a.confidence).map((p) => `${fixWords(p.action)}: ${lowerFirst(humanise(p.reasoning, idx))}`) : [];
+  const asked = QUESTION_WORDS[i.rule] ?? 'Which of these is right here?';
+  const question = open ? (i.judgeNote ? `${asked} From above it was not clear: ${lowerFirst(humanise(i.judgeNote, idx))}` : asked) : null;
+  const how = i.decided === 'judge' ? 'Decided from the top view' : i.decided === 'policy' ? 'Decided by a rule' : i.status === 'auto_repaired' ? 'Fixed by a rule' : i.status === 'overridden' ? 'Fixed by a patch' : i.status === 'explained' ? 'Left as it is' : null;
+  const settled = open || !how ? null : i.decision ? `${how}: ${lowerFirst(humanise(i.decision, idx))}` : how;
+  return { title: where ? `${what}, ${where}` : what, what, where, problem, detail: humanise(i.note ?? '', idx), fix, question, options, settled };
 }
 
 const lowerFirst = (s: string): string => (/^[A-Z][a-z]/.test(s) && !/^[A-Z][a-z]+ [A-Z]/.test(s) ? s[0]!.toLowerCase() + s.slice(1) : s);

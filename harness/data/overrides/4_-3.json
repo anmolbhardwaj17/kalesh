@@ -31,5 +31,39 @@
       "date": "2026-11-13",
       "note": "Esri World Imagery, zoom 19 tile 374626 x 218608: the drive leg is plain where it leaves the canopy; its first 30 m from the road gate are under trees."
     }
+  },
+  {
+    "issue": "R-ROAD-01:w1121192006.0:w370672197.0:n10255351919",
+    "action": "connect",
+    "target": {
+      "ids": [
+        "w1121192006.0",
+        "w370672197.0"
+      ],
+      "anchor": {
+        "lat": 28.6232584,
+        "lon": 77.2340867
+      },
+      "tolerance_m": 15
+    },
+    "params": {
+      "op": "join_end",
+      "edge": "w1121192006.0",
+      "node": "n10255351919",
+      "to": "w370672197.0",
+      "x": 445.604,
+      "z": -1157.245,
+      "gap_m": 11.9
+    },
+    "why": "The service road beside the building runs on to the corner of the main road: joined",
+    "by": "judge",
+    "source": "top-view",
+    "date": "2026-11-13",
+    "reference": {
+      "link": "https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/export?bbox=77.2336264,28.6228525,77.2345467,28.6236645&bboxSR=4326&imageSR=3857&size=315,315&format=jpg&f=image",
+      "date": "2026-11-13",
+      "note": "Esri World Imagery beside the map render of the site (tools/inspector/judge.mjs sheets)"
+    },
+    "id": "ov_4_-3_0001"
   }
 ]

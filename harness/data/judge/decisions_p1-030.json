@@ -1,0 +1,267 @@
+[
+ {
+  "issue": "R-BLDG-03:way/351374293:way/722443698",
+  "pick": "B",
+  "why": "The picture shows one walled compound with roofs over the whole outline; the inner outline is a part of it. One shell is enough: the inner one would only hide inside the outer one"
+ },
+ {
+  "issue": "R-BLDG-03:way/351385923:way/351385987",
+  "pick": "B",
+  "why": "The picture shows a ring building with an open court; the inner outline is that court. Shells have no holes yet, so the outer outline stands alone and the inner one goes"
+ },
+ {
+  "issue": "R-BLDG-03:way/351418875:way/351418928",
+  "pick": "B",
+  "why": "The inner outline is a small core inside one building in a wooded plot: the outer outline already covers it"
+ },
+ {
+  "issue": "R-BLDG-03:way/351619537:way/351619548",
+  "pick": "B",
+  "why": "The inner outline is the link block between two long wings that the outer outline already covers"
+ },
+ {
+  "issue": "R-BLDG-03:way/351619540:way/351619640",
+  "pick": "B",
+  "why": "The picture shows a courtyard house: the inner outline is its court, covered by the outer outline in the stand-in world"
+ },
+ {
+  "issue": "R-BLDG-04:way/1071090185",
+  "pick": "B",
+  "why": "The picture shows a very large ribbed roof, an exhibition hall of Pragati Maidan: 29.1 m is right for a hall of this span, the 2 levels are its floors"
+ },
+ {
+  "issue": "R-BLDG-04:way/1248027236",
+  "pick": "B",
+  "why": "The same exhibition hall complex at Pragati Maidan (a wide ribbed roof with a road passing under it): the tall height is right"
+ },
+ {
+  "issue": "R-BLDG-04:way/1248096991",
+  "pick": "B",
+  "why": "The oval ribbed roof of the Pragati Maidan hall: a hall of this size is about 29 m high, the height tag stays"
+ },
+ {
+  "issue": "R-JUNC-04:w1121175095.3:n10255211916",
+  "pick": "A",
+  "why": "The stub is the corner of a small drive loop beside the building and points into its wall: nothing to drive to, it goes"
+ },
+ {
+  "issue": "R-JUNC-04:w726783139.0:xn3648521258",
+  "pick": "A",
+  "why": "The stub hangs off a bend of the service road under trees with no drive or gate beyond it in the picture: a drawing slip, it goes"
+ },
+ {
+  "issue": "R-ROAD-01:w1090457137.0:w1341216984.0:n9988056578",
+  "pick": "A",
+  "why": "The end stops on paved ground at the corner of the lane ahead with nothing between them in the picture: one junction"
+ },
+ {
+  "issue": "R-ROAD-01:w1121142406.2:w1074993013.0:n10254836288",
+  "pick": "A",
+  "why": "The service road runs up to the road ahead through open ground; no wall or gate shows between them"
+ },
+ {
+  "issue": "R-ROAD-01:w1121145405.1:w164675827.2:n10254868974",
+  "pick": "A",
+  "why": "The lane runs along the building straight to the junction of lanes ahead: it joins there"
+ },
+ {
+  "issue": "R-ROAD-01:w1121148869.0:w1184573421.0:n10254950466",
+  "pick": "A",
+  "why": "Two drives of one compound under the trees, the end in line with the bend ahead: one drive drawn with a gap"
+ },
+ {
+  "issue": "R-ROAD-01:w1121152264.0:w695557274.1:n10255001386",
+  "pick": "A",
+  "why": "The drive runs along the top of the lawn to the lane at its west edge: it meets the lane"
+ },
+ {
+  "issue": "R-ROAD-01:w1121166616.1:w1121166615.0:n10255123740",
+  "pick": "A",
+  "why": "Two ends face each other across 12 m of tree cover on one line: one lane drawn with a gap"
+ },
+ {
+  "issue": "R-ROAD-01:w1121166626.0:w1121166631.0:n10255123775",
+  "pick": "A",
+  "why": "The service road beside the building heads for the road ahead across open ground: it joins"
+ },
+ {
+  "issue": "R-ROAD-01:w1121168146.1:w686644352.2:n10255100639",
+  "pick": "A",
+  "why": "The lane ends in line with the bend of the road ahead, no building between them: it joins"
+ },
+ {
+  "issue": "R-ROAD-01:w1121175080.0:w423539775.2:n10255208959",
+  "pick": "A",
+  "why": "A paved forecourt runs from the end to the road ahead in the picture: the drive joins the road"
+ },
+ {
+  "issue": "R-ROAD-01:w1121175089.0:w1121175084.2:n10255208996",
+  "pick": "A",
+  "why": "One of five parallel garden paths that end on one line at the edge of the lane; its two neighbours end 7.6 m from the lane and are joined by rule. All five are treated alike: joined"
+ },
+ {
+  "issue": "R-ROAD-01:w1121175090.0:w1121175084.2:n10255209000",
+  "pick": "A",
+  "why": "A garden path of the same row as its neighbours, which the rule joins to the lane: joined like them"
+ },
+ {
+  "issue": "R-ROAD-01:w1121175091.0:w1121175084.2:n10255209002",
+  "pick": "A",
+  "why": "A garden path of the same row as its neighbours, which the rule joins to the lane: joined like them"
+ },
+ {
+  "issue": "R-ROAD-01:w1121189623.1:w142216383.0:n10255292067",
+  "pick": "A",
+  "why": "The drive runs to the lane ahead under the trees at a right angle, the way compound drives meet their lane: joined"
+ },
+ {
+  "issue": "R-ROAD-01:w1121189653.0:w24583597.0:n10255332480",
+  "pick": "B",
+  "why": "The path ends at the terrace of a swimming pool; a small building stands by the road ahead. A dead end inside the garden"
+ },
+ {
+  "issue": "R-ROAD-01:w1121191989.0:w706854222.0:n10255351845",
+  "pick": "A",
+  "why": "The lane from the west meets the north to south lane at a T under the trees: joined"
+ },
+ {
+  "issue": "R-ROAD-01:w1121192006.0:w370672197.0:n10255351919",
+  "pick": "A",
+  "why": "The service road beside the building runs on to the corner of the main road: joined"
+ },
+ {
+  "issue": "R-ROAD-01:w1121193186.3:w370672197.3:n10255363428",
+  "pick": "A",
+  "why": "The lane continues on the far side of the lane ahead: a crossroads drawn with a gap"
+ },
+ {
+  "issue": "R-ROAD-01:w1148508504.0:w24577482.0:n10685759184",
+  "pick": "A",
+  "why": "A service lane of Connaught Place curving to the radial road, parking bays on both in the picture: joined"
+ },
+ {
+  "issue": "R-ROAD-01:w1150383463.0:w44141357.4:n10701403932",
+  "pick": "A",
+  "why": "A lane between the buildings opens onto the wide road ahead in the picture: joined"
+ },
+ {
+  "issue": "R-ROAD-01:w1154173903.0:w24577487.0:n10734111728",
+  "pick": "A",
+  "why": "The parking lane runs out onto the radial road over the same paved ground: joined"
+ },
+ {
+  "issue": "R-ROAD-01:w1175380916.0:w24577482.0:n12977822698",
+  "pick": "A",
+  "why": "The service lane ends at the corner of the radial road with open paved ground between: joined"
+ },
+ {
+  "issue": "R-ROAD-01:w1175380916.2:w23133486.5:n10922054272",
+  "pick": "B",
+  "why": "The parking drive runs up to the Inner Circle in the picture, but the Inner Circle is a hero road with a spec file: its junctions and parking openings are drawn in the hero road pass, not added here. The drive is closed at the kerb for now"
+ },
+ {
+  "issue": "R-ROAD-01:w1183624644.0:w253307767.1:n10254979365",
+  "pick": "A",
+  "why": "The lane beside the building runs north to the cross lane: joined"
+ },
+ {
+  "issue": "R-ROAD-01:w1185492984.0:w1070582985.0:n11012143036",
+  "pick": "A",
+  "why": "Two lanes meet at the corner of the building: one corner drawn with a gap"
+ },
+ {
+  "issue": "R-ROAD-01:w1187180413.0:w1076782193.0:n11024569728",
+  "pick": "A",
+  "why": "A lane of the colony grid; it runs on to the lane at its east end: joined"
+ },
+ {
+  "issue": "R-ROAD-01:w123406189.0:w319329101.1:n1376300404",
+  "pick": "A",
+  "why": "The lane crosses open market ground to the bigger road in the picture: joined"
+ },
+ {
+  "issue": "R-ROAD-01:w1253202247.0:w1253202246.0:n11648679962",
+  "pick": "A",
+  "why": "The loop road round the building carries on east as the road ahead: joined"
+ },
+ {
+  "issue": "R-ROAD-01:w1282119230.0:w23134098.0:n11898263785",
+  "pick": "B",
+  "why": "A garden path of the India Gate lawns that reaches the kerb of the avenue: people cross here, cars do not turn. Closed at the kerb, the avenue stays whole"
+ },
+ {
+  "issue": "R-ROAD-01:w1326469000.0:w1120542273.0:n12273092550",
+  "pick": "A",
+  "why": "The lane beside the shrine carries on north east as the lane ahead: joined"
+ },
+ {
+  "issue": "R-ROAD-01:w1360314041.0:w1360335928.0:n12592707158",
+  "pick": "A",
+  "why": "Two old city lanes on one line with a narrow gap between the houses in the picture: joined"
+ },
+ {
+  "issue": "R-ROAD-01:w1364873693.0:w1079742367.1:n12639638654",
+  "pick": "A",
+  "why": "The lane runs out to the road ahead between the houses: joined"
+ },
+ {
+  "issue": "R-ROAD-01:w1460009382.0:w1312526361.1:n13390410103",
+  "pick": "B",
+  "why": "A lane between the long sheds; it stops at their end and a planted strip lies before the road along the railway. A dead end"
+ },
+ {
+  "issue": "R-ROAD-01:w1544621566.0:w24583592.4:n10255332474",
+  "pick": "A",
+  "why": "The lane runs along the compound wall to the diagonal road ahead: joined"
+ },
+ {
+  "issue": "R-ROAD-01:w289766564.0:w1294946815.3:n11676043748",
+  "pick": "A",
+  "why": "Two ends in line under the trees: one drive drawn with a gap"
+ },
+ {
+  "issue": "R-ROAD-01:w294288717.1:w1067100260.5:n928490290",
+  "pick": "A",
+  "why": "Bare ground leads from the lane end to the main road in the picture: joined"
+ },
+ {
+  "issue": "R-ROAD-01:w463710727.0:w463710726.0:n4589539895",
+  "pick": "A",
+  "why": "Both roads lie on the same paved yard: joined"
+ },
+ {
+  "issue": "R-ROAD-01:w696557035.1:w80418124.1:n12429207293",
+  "pick": "A",
+  "why": "The lane reaches the wide road ahead in the picture: joined"
+ },
+ {
+  "issue": "R-ROAD-01:w706854224.2:w1138292933.5:n12593033097",
+  "pick": "A",
+  "why": "The lane ends in line with the road ahead, no wall between them: joined"
+ },
+ {
+  "issue": "R-ROAD-01:w710877107.0:w993539954.0:n6683376541",
+  "pick": "A",
+  "why": "Two lanes meet at a corner: one corner drawn with a gap"
+ },
+ {
+  "issue": "R-ROAD-01:w717528806.2:w707566696.0:n11027125477",
+  "pick": "A",
+  "why": "An old city lane that runs out between the buildings to the lane ahead: joined"
+ },
+ {
+  "issue": "R-ROAD-01:w720735033.0:w24577483.1:n6761961059",
+  "pick": "A",
+  "why": "A service lane of Connaught Place that runs out to the radial road: joined"
+ },
+ {
+  "issue": "R-ROAD-01:w79561648.0:w1067100260.5:n928488603",
+  "pick": "A",
+  "why": "The earth lane reaches the road ahead in the picture: joined"
+ },
+ {
+  "issue": "R-ROAD-02:w1184381349.0:w360264010.0",
+  "pick": "A",
+  "why": "Both ways are at ground level beside the market in the picture, no bridge: they meet at a junction"
+ }
+]

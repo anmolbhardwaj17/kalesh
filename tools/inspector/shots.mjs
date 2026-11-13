@@ -28,8 +28,9 @@ const index = JSON.parse(fs.readFileSync(path.join(MAPDIR, 'tiles', 'index.json'
 const names = buildNameIndex(JSON.parse(fs.readFileSync(path.join(MAPDIR, 'context.json'), 'utf8')), index.places);
 const issuesFile = JSON.parse(fs.readFileSync(path.join(MAPDIR, 'issues.json'), 'utf8'));
 const cp = index.places.find((q) => q.id === 'connaught_place');
-const unnamed = issuesFile.issues
-  .filter((i) => i.status === 'open' && i.impact >= 0.7 && describeIssue(i, names).what.startsWith('Unnamed'))
+// (an open one when the owner queue has any; since P1-030 it may be empty, then any issue of that kind)
+const unnamedOf = (open) => issuesFile.issues.filter((i) => (!open || i.status === 'open') && i.impact >= 0.7 && describeIssue(i, names).what.startsWith('Unnamed'));
+const unnamed = (unnamedOf(true).length ? unnamedOf(true) : unnamedOf(false))
   .sort((a, b) => Math.hypot(a.x - cp.x, a.z - cp.z) - Math.hypot(b.x - cp.x, b.z - cp.z))[0];
 try {
   for (const [w, h] of [[1280, 800], [1920, 1080]]) {
@@ -45,7 +46,7 @@ try {
       const p = index.places.find((q) => q.id === place);
       const pickId = await page.evaluate(([px, pz]) => {
         let best = null; let bd = Infinity;
-        for (const i of window.__inspector.highIds()) { const r = window.__inspector.issue(i); const d = Math.hypot(r.x - px, r.z - pz); if (d < bd) { bd = d; best = i; } }
+        for (const i of (window.__inspector.highIds().length ? window.__inspector.highIds() : window.__inspector.listIds())) { const r = window.__inspector.issue(i); const d = Math.hypot(r.x - px, r.z - pz); if (d < bd) { bd = d; best = i; } }
         return best;
       }, [p.x, p.z]);
       await page.evaluate((x) => window.__inspector.select(x), pickId);

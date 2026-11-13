@@ -294,7 +294,8 @@ function setTag(state: RepairState, p: Params, issue: string): Applied {
     const side = key === 'footpath:left' ? 'left' : 'right';
     const before = { id: e.id, [side]: e.road.footpath[side] };
     e.road.footpath[side] = Number(p['value']);
-    mark(state, e.id, { footpath_from: 'repair', by: issue });
+    // from: 'buildings' is a footpath fitted to the walls beside it (P1-030): the footpath gap rule leaves it alone
+    mark(state, e.id, p['from'] === 'buildings' ? { footpath_from: 'repair', [`footpath_fit_${side}`]: Number(p['value']), by: issue } : { footpath_from: 'repair', by: issue });
     return { applied: true, how: 'graph', before, after: { id: e.id, [side]: e.road.footpath[side] }, note: '', drops: [] };
   }
   const target = on[0] ?? issue;
@@ -395,6 +396,18 @@ export function applyPatch(state: RepairState, patch: Patch): Applied {
     case 'replace_geometry':
       if (op === 'slip_redraw') return slipRedraw(state, p, patch.issue);
       if (op === 'clean_ring') return cleanRing(state, String(p['on']));
+      // a building on a road gives way (P1-030): the cut itself is made on the road mesh's faces (repair/clear.ts)
+      if (op === 'give_way') {
+        const on = String(p['on']);
+        if (!state.graph.footprints.some((f) => f.id === on)) return none('the footprint is no longer there');
+        const before = { id: on, gives_way: state.marks[on]?.['gives_way'] ?? null };
+        mark(state, on, { gives_way: String(p['road'] ?? 'road'), by: patch.issue });
+        // the road takes the width, or the footpath, the other walls along it leave (the gali rule)
+        const road = edgeOf(state.graph, String(p['road'] ?? ''));
+        if (road && typeof p['road_width'] === 'number') setTag(state, { key: 'width', value: p['road_width'], on: road.id }, patch.issue);
+        if (road && typeof p['foot_width'] === 'number' && (p['foot_side'] === 'left' || p['foot_side'] === 'right')) setTag(state, { key: `footpath:${p['foot_side']}`, value: p['foot_width'], on: road.id, from: 'buildings' }, patch.issue);
+        return { applied: true, how: 'mark', before, after: { id: on, gives_way: String(p['road'] ?? 'road') }, note: '', drops: [] };
+      }
       return decision(state, patch, 'redraw', op || 'replace_geometry');
     case 'disable_repair': return decision(state, patch, 'keep', String(p['keep'] ?? p['field'] ?? 'as_is'));
     default:

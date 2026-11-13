@@ -152,5 +152,34 @@
     "source": "inspector",
     "date": "2026-11-12",
     "id": "ov_-2_-7_0006"
+  },
+  {
+    "issue": "R-ROAD-01:w1175380916.2:w23133486.5:n10922054272",
+    "action": "terminate",
+    "target": {
+      "ids": [
+        "w1175380916.2",
+        "w23133486.5"
+      ],
+      "anchor": {
+        "lat": 28.6315113,
+        "lon": 77.2197601
+      },
+      "tolerance_m": 15
+    },
+    "params": {
+      "node": "n10922054272",
+      "with": "dead_end"
+    },
+    "why": "The parking drive runs up to the Inner Circle in the picture, but the Inner Circle is a hero road with a spec file: its junctions and parking openings are drawn in the hero road pass, not added here. The drive is closed at the kerb for now",
+    "by": "judge",
+    "source": "top-view",
+    "date": "2026-11-13",
+    "reference": {
+      "link": "https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/export?bbox=77.2193000,28.6311054,77.2202204,28.6319175&bboxSR=4326&imageSR=3857&size=315,315&format=jpg&f=image",
+      "date": "2026-11-13",
+      "note": "Esri World Imagery beside the map render of the site (tools/inspector/judge.mjs sheets)"
+    },
+    "id": "ov_-2_-7_0007"
   }
 ]

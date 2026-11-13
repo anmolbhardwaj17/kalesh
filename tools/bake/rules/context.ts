@@ -259,6 +259,11 @@ export class RuleContext {
     return (e.name && this.heroNames.get(e.name)) || null;
   }
 
+  /** Does a hero road have a spec file? Only then is its cross-section frozen (P1-030); without one it is repaired like any road. */
+  heroHasSpec(id: string): boolean {
+    return (this.env.heroSpecs ?? []).some((s) => s.id === id);
+  }
+
   mark(id: string, key: string): string | number | boolean | undefined {
     return this.marks[id]?.[key];
   }
@@ -289,9 +294,10 @@ export class RuleContext {
     const g = this.env.toGeo(at.x, at.z);
     let hero: string | null = null;
     for (const e of edges) hero = hero ?? this.heroOf(e);
+    const heroSpec = hero !== null && this.heroHasSpec(hero);
     return {
       id: `${rule.id}:${features.join(':')}`, rule: rule.id, block: this.graph.block, district: this.env.district ? this.env.district(at.x, at.z) : null, tile: this.env.tile(at.x, at.z),
-      lat: r7(g.lat), lon: r7(g.lon), x: r1(at.x), z: r1(at.z), features: [...features], impact: impact ?? this.impact(edges, at), confidence: r2(confidence), status: 'open', note, hero, proposals,
+      lat: r7(g.lat), lon: r7(g.lon), x: r1(at.x), z: r1(at.z), features: [...features], impact: impact ?? this.impact(edges, at), confidence: r2(confidence), status: 'open', note, hero, proposals, ...(hero !== null ? { heroSpec } : {}),
     };
   }
 }

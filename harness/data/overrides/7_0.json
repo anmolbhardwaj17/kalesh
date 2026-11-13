@@ -1,0 +1,29 @@
+[
+  {
+    "issue": "R-BLDG-04:way/1248096991",
+    "action": "disable_repair",
+    "target": {
+      "ids": [
+        "way/1248096991"
+      ],
+      "anchor": {
+        "lat": 28.6156142,
+        "lon": 77.2415406
+      },
+      "tolerance_m": 15
+    },
+    "params": {
+      "keep": "height"
+    },
+    "why": "The oval ribbed roof of the Pragati Maidan hall: a hall of this size is about 29 m high, the height tag stays",
+    "by": "judge",
+    "source": "top-view",
+    "date": "2026-11-13",
+    "reference": {
+      "link": "https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/export?bbox=77.2410802,28.6152079,77.2420006,28.6160198&bboxSR=4326&imageSR=3857&size=315,315&format=jpg&f=image",
+      "date": "2026-11-13",
+      "note": "Esri World Imagery beside the map render of the site (tools/inspector/judge.mjs sheets)"
+    },
+    "id": "ov_7_0_0001"
+  }
+]

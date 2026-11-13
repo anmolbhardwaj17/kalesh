@@ -1,0 +1,36 @@
+[
+  {
+    "issue": "R-ROAD-01:w1364873693.0:w1079742367.1:n12639638654",
+    "action": "connect",
+    "target": {
+      "ids": [
+        "w1364873693.0",
+        "w1079742367.1"
+      ],
+      "anchor": {
+        "lat": 28.6518596,
+        "lon": 77.2278293
+      },
+      "tolerance_m": 15
+    },
+    "params": {
+      "op": "join_end",
+      "edge": "w1364873693.0",
+      "node": "n12639638654",
+      "to": "w1079742367.1",
+      "x": -146.134,
+      "z": -4324.497,
+      "gap_m": 13.3
+    },
+    "why": "The lane runs out to the road ahead between the houses: joined",
+    "by": "judge",
+    "source": "top-view",
+    "date": "2026-11-13",
+    "reference": {
+      "link": "https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/export?bbox=77.2273685,28.6514531,77.2282891,28.6522652&bboxSR=4326&imageSR=3857&size=315,315&format=jpg&f=image",
+      "date": "2026-11-13",
+      "note": "Esri World Imagery beside the map render of the site (tools/inspector/judge.mjs sheets)"
+    },
+    "id": "ov_1_-16_0001"
+  }
+]

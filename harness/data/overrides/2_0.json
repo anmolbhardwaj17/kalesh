@@ -1,0 +1,104 @@
+[
+  {
+    "issue": "R-ROAD-01:w1121175089.0:w1121175084.2:n10255208996",
+    "action": "connect",
+    "target": {
+      "ids": [
+        "w1121175089.0",
+        "w1121175084.2"
+      ],
+      "anchor": {
+        "lat": 28.6162066,
+        "lon": 77.2288262
+      },
+      "tolerance_m": 15
+    },
+    "params": {
+      "op": "join_end",
+      "edge": "w1121175089.0",
+      "node": "n10255208996",
+      "to": "w1121175084.2",
+      "x": -51.264,
+      "z": -371.889,
+      "gap_m": 10.5
+    },
+    "why": "One of five parallel garden paths that end on one line at the edge of the lane; its two neighbours end 7.6 m from the lane and are joined by rule. All five are treated alike: joined",
+    "by": "judge",
+    "source": "top-view",
+    "date": "2026-11-13",
+    "reference": {
+      "link": "https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/export?bbox=77.2283662,28.6158003,77.2292865,28.6166123&bboxSR=4326&imageSR=3857&size=315,315&format=jpg&f=image",
+      "date": "2026-11-13",
+      "note": "Esri World Imagery beside the map render of the site (tools/inspector/judge.mjs sheets)"
+    },
+    "id": "ov_2_0_0001"
+  },
+  {
+    "issue": "R-ROAD-01:w1121175090.0:w1121175084.2:n10255209000",
+    "action": "connect",
+    "target": {
+      "ids": [
+        "w1121175090.0",
+        "w1121175084.2"
+      ],
+      "anchor": {
+        "lat": 28.6161538,
+        "lon": 77.2288534
+      },
+      "tolerance_m": 15
+    },
+    "params": {
+      "op": "join_end",
+      "edge": "w1121175090.0",
+      "node": "n10255209000",
+      "to": "w1121175084.2",
+      "x": -48.226,
+      "z": -366.149,
+      "gap_m": 10.9
+    },
+    "why": "A garden path of the same row as its neighbours, which the rule joins to the lane: joined like them",
+    "by": "judge",
+    "source": "top-view",
+    "date": "2026-11-13",
+    "reference": {
+      "link": "https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/export?bbox=77.2283928,28.6157479,77.2293131,28.6165600&bboxSR=4326&imageSR=3857&size=315,315&format=jpg&f=image",
+      "date": "2026-11-13",
+      "note": "Esri World Imagery beside the map render of the site (tools/inspector/judge.mjs sheets)"
+    },
+    "id": "ov_2_0_0002"
+  },
+  {
+    "issue": "R-ROAD-01:w1121175091.0:w1121175084.2:n10255209002",
+    "action": "connect",
+    "target": {
+      "ids": [
+        "w1121175091.0",
+        "w1121175084.2"
+      ],
+      "anchor": {
+        "lat": 28.6161186,
+        "lon": 77.228897
+      },
+      "tolerance_m": 15
+    },
+    "params": {
+      "op": "join_end",
+      "edge": "w1121175091.0",
+      "node": "n10255209002",
+      "to": "w1121175084.2",
+      "x": -45.709,
+      "z": -361.395,
+      "gap_m": 8.9
+    },
+    "why": "A garden path of the same row as its neighbours, which the rule joins to the lane: joined like them",
+    "by": "judge",
+    "source": "top-view",
+    "date": "2026-11-13",
+    "reference": {
+      "link": "https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/export?bbox=77.2284368,28.6157127,77.2293570,28.6165248&bboxSR=4326&imageSR=3857&size=315,315&format=jpg&f=image",
+      "date": "2026-11-13",
+      "note": "Esri World Imagery beside the map render of the site (tools/inspector/judge.mjs sheets)"
+    },
+    "id": "ov_2_0_0003"
+  }
+]

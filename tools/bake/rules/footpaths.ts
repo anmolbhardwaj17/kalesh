@@ -39,6 +39,8 @@ export const footpathGap: Rule = {
       if (!before || !after || before.edge.road.cls !== e.road.cls || after.edge.road.cls !== e.road.cls) continue;
       for (const side of SIDES) {
         if (e.road.footpath[side] > 0) continue;
+        // a footpath the walls beside the road left no room for (the building rule fitted it): not a gap to fill
+        if (ctx.mark(e.id, `footpath_fit_${side}`) !== undefined) continue;
         // the right side of a paired carriageway is the median (Delhi keeps left)
         if (side === 'right' && e.road.carriageway === 'paired') continue;
         const wb = widthBeside(before, a, side);

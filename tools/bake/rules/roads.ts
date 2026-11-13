@@ -1,14 +1,14 @@
 // Road rules (R-ROAD) on the block graph: dangling ends near another road, crossings without a shared node on one
 // level, ways drawn on top of each other, one-way streets with no pair (explained, never changed), widths that do not
 // fit their lanes, lane count changes with no room for a taper, and pairs whose halves carry two names. Pure.
-import { boxOf, segmentCrossing } from '../geom.ts';
+import { boxOf, segmentCrossing, segmentRing } from '../geom.ts';
 import type { P2 } from '../geom.ts';
 import { classImpact } from '../osm.ts';
 import type { GraphEdge } from '../graph/build.ts';
 import { PAIR_CLASSES, normName } from '../graph/pairs.ts';
 import { classDefaults } from '../roads/model.ts';
 import { byId, r2, r3, sameLevel } from './context.ts';
-import type { End, Rule, RuleContext } from './context.ts';
+import type { End, Level, Rule, RuleContext } from './context.ts';
 import { patchOf } from './types.ts';
 import type { Issue, Proposal } from './types.ts';
 
@@ -17,6 +17,27 @@ export const DANGLING_RADIUS = 12;
 const mm = (v: number): number => Math.round(v * 1000);
 const mid = (e: GraphEdge): P2 => e.pts[Math.floor(e.pts.length / 2)] as P2;
 
+/** A join the geometry supports is looked for this far straight ahead of the end (m). */
+export const AHEAD_M = 15;
+/** OSM barrier values at a road's end that are a gate, and those that are a barricade. */
+const GATES: ReadonlySet<string> = new Set(['gate', 'lift_gate', 'swing_gate', 'sliding_gate', 'entrance', 'toll_booth', 'border_control', 'chain']);
+
+/** Does the straight line from a to b pass through a building? */
+function blocked(ctx: RuleContext, a: P2, b: P2): string | null {
+  for (const f of ctx.fps.query(boxOf([a, b]), 0.5)) {
+    if (f.f.tags['building'] === 'roof') continue;
+    if (segmentRing(a, b, f.f.ring) < 0.05) return f.f.id;
+  }
+  return null;
+}
+
+/**
+ * Dead ends near another road (P1-030: "why is this road just ending out of nowhere, or there's a gap here"). The
+ * rule decides by the geometry. The end lies on the other road's surface, or it points at the road, the road is
+ * within reach straight ahead and nothing is built between them: the two are joined. A barrier on the end node, a
+ * building in the gap, or an end that runs past the road without pointing at it: a real dead end, closed there. A
+ * clear line to a road 8 to 15 m ahead is the one case left for the top view (it may be a gate or an unmapped link).
+ */
 export const danglingEnd: Rule = {
   id: 'R-ROAD-01',
   area: 'roads',
@@ -32,28 +53,75 @@ export const danglingEnd: Rule = {
       if (ctx.env.nodeTags?.get(n.id)?.['noexit'] === 'yes') continue;
       // either side of a barrier an add_barrier patch put across the road (P1-045): a dead end on purpose
       if (ctx.marks[n.id]?.['barrier'] !== undefined) continue;
+      // closed by an earlier decision (this rule, the judge pass or the owner)
+      if (ctx.marks[n.id]?.['closure'] !== undefined) continue;
       const e = end.edge;
       const lv = ctx.endLevel(end);
       const far = end.atStart ? e.b : e.a;
-      const hit = ctx.near(n, DANGLING_RADIUS).find((c) => {
-        const t = c.seg.edge;
-        if (t === e || !sameLevel(c.seg.lv, lv)) return false;
+      // the other carriageway of the same divided street is never a road to join: the two end side by side
+      const usable = (t: GraphEdge, d: number, level: Level): boolean => t !== e && sameLevel(level, lv) && !e.pairedWith.includes(t.id)
         // a short stub that leaves the other road close by is a driveway, not a near miss
-        return !((t.a === far || t.b === far) && e.len <= Math.max(25, 3 * c.d));
-      });
-      if (!hit) continue;
-      const t = hit.seg.edge;
-      const d = r3(hit.d);
+        && !((t.a === far || t.b === far) && e.len <= Math.max(25, 3 * d));
+      const hit = ctx.near(n, DANGLING_RADIUS).find((c) => usable(c.seg.edge, c.d, c.seg.lv));
+      // the road straight ahead of the end, within AHEAD_M
       const away = ctx.dirFrom(end);
-      const gap = d || 1e-6;
-      const toward = (-away.x * (hit.x - n.x) - away.z * (hit.z - n.z)) / gap;
-      let confidence = mm(d) <= 2000 ? 0.9 : mm(d) <= 5000 ? 0.8 : mm(d) <= 8000 ? 0.65 : 0.5;
-      if (toward < 0.5 && d > 1) confidence = r2(confidence - 0.25);
+      const tip = { x: n.x - away.x * AHEAD_M, z: n.z - away.z * AHEAD_M };
+      let ahead: { edge: GraphEdge; x: number; z: number; d: number } | null = null;
+      for (const seg of ctx.segs.query(boxOf([n, tip]))) {
+        const c = segmentCrossing(n, tip, seg.a, seg.b, 1e-6);
+        if (!c) continue;
+        const d = Math.hypot(c.x - n.x, c.z - n.z);
+        if (d < 0.05 || !usable(seg.edge, d, seg.lv)) continue;
+        if (!ahead || d < ahead.d) ahead = { edge: seg.edge, x: c.x, z: c.z, d };
+      }
+      if (!hit && !ahead) continue;
+      const barrier = ctx.env.nodeTags?.get(n.id)?.['barrier'];
+      // where a join would go: straight ahead when the road is there, else the nearest point
+      const onSurface = hit !== undefined && hit.d <= hit.seg.edge.road.width / 2 + 1;
+      const join = onSurface && hit ? { edge: hit.seg.edge, x: hit.x, z: hit.z, d: hit.d } : ahead ?? (hit ? { edge: hit.seg.edge, x: hit.x, z: hit.z, d: hit.d } : null);
+      if (!join) continue;
+      const t = join.edge;
+      const d = r3(join.d);
       const gapM = Math.round(d * 10) / 10;
+      const wall = blocked(ctx, n, join);
+      const points = ahead !== null && ahead.edge === t;
+      const bigRoad = classImpact(t.road.cls) >= 0.9 && classImpact(e.road.cls) < 0.5;
+      let joinC: number;
+      let why: string;
+      let supported = false;
+      const hero = ctx.heroOf(t);
+      if (barrier !== undefined) {
+        joinC = 0.1;
+        why = `the end node is tagged barrier=${barrier}`;
+      } else if (hero && ctx.heroHasSpec(hero)) {
+        // a hero road with a spec file has its junctions and openings drawn in its spec: none is added by a rule
+        // or the judge pass (P1-030: a drive joined to the Connaught Place inner circle put a junction on the lap route)
+        joinC = 0.2;
+        why = `${t.id} is the hero road ${hero}, whose junctions come from its spec file`;
+      } else if (wall) {
+        joinC = 0.15;
+        why = `a building (${wall}) stands between the end and ${t.id}`;
+      } else if (onSurface) {
+        joinC = 0.9;
+        supported = true;
+        why = `the end lies on the surface of ${t.id} (${gapM} m from its centre line)`;
+      } else if (points && mm(d) <= 8000 && !(bigRoad && mm(d) > 5000)) {
+        joinC = 0.85;
+        supported = true;
+        why = `the end points at ${t.id}, ${gapM} m straight ahead, with nothing built between them`;
+      } else if (points) {
+        // a clear line to a road further ahead: a gate, a kerb or an unmapped link. The top view decides
+        joinC = 0.5;
+        why = `the end points at ${t.id} ${gapM} m ahead with nothing built between them: too far to join on the geometry alone`;
+      } else {
+        joinC = 0.2;
+        why = `the end runs past ${t.id} (${gapM} m away) without pointing at it`;
+      }
+      const closure = barrier !== undefined ? (GATES.has(barrier) ? 'gate' : 'barricade') : 'dead_end';
       const proposals: Proposal[] = [
-        ctx.proposal('connect', { op: 'join_end', edge: e.id, node: n.id, to: t.id, x: r3(hit.x), z: r3(hit.z), gap_m: gapM }, confidence, { kind: 'join', m: d },
-          `The end of ${e.id} stops ${gapM} m from ${t.id} on the same level${toward >= 0.5 ? ' and points at it' : ' but does not point at it'}: join them`, [n, { x: hit.x, z: hit.z }]),
-        ctx.proposal('terminate', { node: n.id, with: 'dead_end' }, 1 - confidence, { kind: 'other' }, 'A real dead end (a gate, a wall or a kerb between them)', [n]),
+        ctx.proposal('connect', { op: 'join_end', edge: e.id, node: n.id, to: t.id, x: r3(join.x), z: r3(join.z), gap_m: gapM }, joinC, { kind: 'join', m: d, supported },
+          `The end of ${e.id} stops ${gapM} m from ${t.id} on the same level: ${why}. Join them`, [n, { x: join.x, z: join.z }]),
+        ctx.proposal('terminate', { node: n.id, with: closure }, r2(1 - joinC), { kind: joinC === 0.5 ? 'other' : 'dead_end' }, `A real dead end: ${why}. The road is closed here (${closure.replace('_', ' ')})`, [n]),
       ];
       out.push(ctx.issue(danglingEnd, n, [e.id, t.id, n.id], [e, t], 0.7, `gap ${gapM} m`, proposals));
     }
@@ -126,9 +194,14 @@ export const overlappingWays: Rule = {
         const metres = v.n * step;
         if (metres < OVERLAP_MIN_M) continue;
         const lesser = classImpact(e.road.cls) !== classImpact(t.road.cls) ? (classImpact(e.road.cls) < classImpact(t.road.cls) ? e : t) : e.len <= t.len ? e : t;
-        out.push(ctx.issue(overlappingWays, v.at, [e.id, t.id], [e, t], 0.7, `about ${metres} m within ${OVERLAP_GAP} m of each other`, [
-          ctx.proposal('remove', { drop: lesser.id }, 0.6, { kind: 'other' }, `${e.id} and ${t.id} run on top of each other: one road drawn twice, keep the bigger one`, lesser.pts),
-          ctx.proposal('disable_repair', { keep: 'both' }, 0.3, { kind: 'other' }, 'Two real lanes drawn very close (a service lane beside the road)', [v.at]),
+        // most of the lesser way lies on the other: one road drawn twice, the copy goes. A shorter stretch is two real
+        // roads that run into each other (a slip road joining): the lane model merges them at their shared node, and the
+        // stretch drawn on top is moved apart by the side by side rule
+        const share = Math.min(1, Math.round((metres / Math.max(1, lesser.len)) * 100) / 100);
+        const twice = share >= 0.6;
+        out.push(ctx.issue(overlappingWays, v.at, [e.id, t.id], [e, t], 0.7, `about ${metres} m within ${OVERLAP_GAP} m of each other (${Math.round(share * 100)} percent of ${lesser.id})`, [
+          ctx.proposal('remove', { drop: lesser.id }, twice ? 0.85 : 0.4, { kind: 'duplicate_way', share }, `${e.id} and ${t.id} run on top of each other over ${Math.round(share * 100)} percent of ${lesser.id}: one road drawn twice, keep the bigger one`, lesser.pts),
+          ctx.proposal('disable_repair', { keep: 'both' }, twice ? 0.15 : 0.6, { kind: 'other' }, 'Two real roads drawn very close for a stretch (a slip road joining, a service lane): both stay, the lane model merges or separates them', [v.at]),
         ]));
       }
     }

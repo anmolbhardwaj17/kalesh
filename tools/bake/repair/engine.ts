@@ -16,7 +16,7 @@ import type { Issue, Marks, Patch, RuleEnv } from '../rules/types.ts';
 import type { P2 } from '../geom.ts';
 import { applyPatch } from './apply.ts';
 import type { RepairState } from './apply.ts';
-import { decide } from './bounds.ts';
+import { decide, policyOf } from './bounds.ts';
 import { isDisable, overrideCounts, overrideFor, overrideRecords, resolveOverrides, unresolved } from './overrides.ts';
 import type { OverrideCounts, OverrideEntry, OverrideRecord, ResolvedOverride } from './overrides.ts';
 
@@ -46,6 +46,10 @@ export interface ProvisionalLine {
   how: 'graph' | 'mark' | 'none';
   note: string;
   patch: Patch | null;
+  /** Settled by the policy table (bounds.ts POLICY): the reason. The patch is then a final one, logged like a repair. */
+  decided?: string;
+  before?: Record<string, unknown>;
+  after?: Record<string, unknown>;
 }
 
 export interface DropLine {
@@ -62,6 +66,10 @@ export interface RepairSummary {
   explained: number;
   /** Issues a patch of harness/data/overrides/ took the place of (a fix, or a repair switched off). */
   overridden: number;
+  /** Of `auto`: settled by the policy table beyond the signed low impact bounds (P1-030). */
+  decidedPolicy: number;
+  /** Of `overridden`: settled by a patch of the top-view judge pass (P1-030). */
+  decidedJudge: number;
   /** auto / total, and auto / (auto + queued): the share of the issues that needed a change. */
   autoShare: number;
   autoShareOfChanged: number;
@@ -109,7 +117,7 @@ export interface RepairOptions {
 const share = (a: number, b: number): number => (b === 0 ? 1 : Math.round((a / b) * 1000) / 1000);
 
 /** Rounds of provisional proposals: a provisional change can open new queued issues (P1-033). */
-const PROVISIONAL_ROUNDS = 3;
+const PROVISIONAL_ROUNDS = 5;
 
 export function repairGraph(raw: BlockGraph, env: RuleEnv, opts: RepairOptions = {}): RepairResult {
   const rules = opts.rules ?? CATALOGUE;
@@ -126,6 +134,10 @@ export function repairGraph(raw: BlockGraph, env: RuleEnv, opts: RepairOptions =
   const settled = new Map<string, Issue>();
   const claim = (issue: Issue, o: ResolvedOverride): void => {
     issue.status = 'overridden';
+    if (o.entry.patch.by === 'judge') {
+      issue.decided = 'judge';
+      issue.decision = o.entry.patch.why;
+    }
     settled.set(issue.id, issue);
     if (!o.issues.includes(issue.id)) o.issues.push(issue.id);
   };
@@ -210,6 +222,11 @@ export function repairGraph(raw: BlockGraph, env: RuleEnv, opts: RepairOptions =
           continue;
         }
         issue.status = d.mode === 'explained' ? 'explained' : 'open';
+        const policy = d.mode === 'queued' ? policyOf(issue) : null;
+        if (policy) {
+          issue.decided = 'policy';
+          issue.decision = policy;
+        }
         leftIds.add(issue.id);
         left.push(issue);
         found.push(issue);
@@ -227,16 +244,19 @@ export function repairGraph(raw: BlockGraph, env: RuleEnv, opts: RepairOptions =
       if (issue.status !== 'open') continue;
       const rule = byRule.get(issue.rule) as Rule;
       const top = topProposal(issue);
-      const heroBlocked = issue.hero !== null && issue.rule !== 'R-HERO-02';
+      const heroBlocked = issue.hero !== null && issue.heroSpec !== false && issue.rule !== 'R-HERO-02';
+      const decided = issue.decided === 'policy' ? issue.decision ?? '' : undefined;
       if (!top || !rule.repair || heroBlocked) {
-        provisional.push({ rule: issue.rule, issue: issue.id, action: top?.action ?? '', applied: false, how: 'none', note: heroBlocked ? `on the hero road ${issue.hero}: left as it is until a person picks` : 'detect only: nothing to apply', patch: null });
+        provisional.push({ rule: issue.rule, issue: issue.id, action: top?.action ?? '', applied: false, how: 'none', note: heroBlocked ? `on the hero road ${issue.hero}: left as it is until a person picks` : 'detect only: nothing to apply', patch: null, ...(decided !== undefined ? { decided } : {}) });
+        if (decided !== undefined) issue.status = 'auto_repaired';
         continue;
       }
-      const patch = patchOf(issue, top, 'bake-provisional');
+      const patch = patchOf(issue, top, decided !== undefined ? 'bake-policy' : 'bake-provisional');
       const r = applyPatch(state, patch);
-      issue.provisional = r.applied;
       any = any || r.applied;
-      provisional.push({ rule: issue.rule, issue: issue.id, action: top.action, applied: r.applied, how: r.how, note: r.note, patch });
+      if (decided !== undefined) issue.status = 'auto_repaired';
+      else issue.provisional = r.applied;
+      provisional.push({ rule: issue.rule, issue: issue.id, action: top.action, applied: r.applied, how: r.how, note: r.note, patch, ...(decided !== undefined ? { decided, before: r.before, after: r.after } : {}) });
       for (const id of r.drops) drops.push({ id, rule: issue.rule, issue: issue.id, provisional: true });
     }
     return any;
@@ -293,7 +313,7 @@ export function repairGraph(raw: BlockGraph, env: RuleEnv, opts: RepairOptions =
   return {
     graph: out, issues, repairs, provisional, drops, overrides: records, overrideCounts: overrideCounts(records, overridden),
     summary: {
-      total: issues.length, auto, queued, explained, overridden, autoShare: share(auto, issues.length), autoShareOfChanged: share(auto, auto + queued),
+      total: issues.length, auto, queued, explained, overridden, decidedPolicy: issues.filter((i) => i.status === 'auto_repaired' && i.decided === 'policy').length, decidedJudge: issues.filter((i) => i.status === 'overridden' && i.decided === 'judge').length, autoShare: share(auto, issues.length), autoShareOfChanged: share(auto, auto + queued),
       highImpact: issues.filter((i) => i.status === 'open' && i.impact >= 0.7).length, byRule: countByRule(issues, rules),
       withoutTerrainOutliers: { total: rest.length, auto: restAuto, autoShare: share(restAuto, rest.length) },
       provisionalApplied: provisional.filter((p) => p.applied).length, provisionalNotApplied: provisional.filter((p) => !p.applied).length,
@@ -309,15 +329,20 @@ const r1 = (v: number): number => Math.round(v * 10) / 10 + 0;
  * `offset` is the block's world offset: with it x, z and every preview point are world metres (the inspector, the
  * overrides files and the tiles all use the one world grid); without it they stay block metres.
  */
-export function issueRecords(issues: readonly Issue[], offset: P2 = { x: 0, z: 0 }): Record<string, unknown>[] {
+export function issueRecords(issues: readonly Issue[], offset: P2 = { x: 0, z: 0 }, judgeNotes: Readonly<Record<string, { note: string }>> = {}): Record<string, unknown>[] {
   const shift = offset.x !== 0 || offset.z !== 0;
   const pt = (p: P2): P2 => (shift ? { x: r1(p.x + offset.x), z: r1(p.z + offset.z) } : p);
   return issues.map((i) => ({
     id: i.id, rule: i.rule, block: i.block, district: i.district, tile: i.tile, lat: i.lat, lon: i.lon, x: shift ? r1(i.x + offset.x) : i.x, z: shift ? r1(i.z + offset.z) : i.z, features: i.features, impact: i.impact, confidence: i.confidence, status: i.status, note: i.note,
-    ...(i.hero ? { hero: i.hero } : {}), ...(i.provisional !== undefined ? { provisional: i.provisional } : {}),
+    ...(i.hero ? { hero: i.hero } : {}), ...(i.provisional !== undefined ? { provisional: i.provisional } : {}), ...(i.decided ? { decided: i.decided, decision: i.decision ?? '' } : {}), ...(i.status === 'open' && judgeNotes[i.id] ? { judgeNote: (judgeNotes[i.id] as { note: string }).note } : {}),
     proposals: i.proposals.map((p) => ({ action: p.action, params: p.params, confidence: p.confidence, reasoning: p.reasoning, preview: p.preview.map(pt) })),
   }));
 }
 
 /** repairs.jsonl: one JSON object per line. */
 export const repairLog = (lines: readonly RepairLine[]): string => lines.map((l) => JSON.stringify(l)).join('\n') + (lines.length ? '\n' : '');
+
+/** The repair log lines of the issues the policy table settled (their patch went in after the last pass). */
+export function policyLines(res: Pick<RepairResult, 'provisional' | 'summary'>): (RepairLine & { decided: string })[] {
+  return res.provisional.filter((p) => p.decided !== undefined && p.patch !== null && p.applied).map((p) => ({ rule: p.rule, issue: p.issue, before: p.before ?? {}, after: p.after ?? {}, confidence: 1, patch: p.patch as Patch, pass: res.summary.passes, decided: p.decided as string, ...(p.note ? { note: p.note } : {}) }));
+}

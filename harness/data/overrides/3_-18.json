@@ -1,0 +1,63 @@
+[
+  {
+    "issue": "R-JUNC-04:w726783139.0:xn3648521258",
+    "action": "remove",
+    "target": {
+      "ids": [
+        "w726783139.0"
+      ],
+      "anchor": {
+        "lat": 28.6569889,
+        "lon": 77.231694
+      },
+      "tolerance_m": 15
+    },
+    "params": {
+      "drop": "w726783139.0"
+    },
+    "why": "The stub hangs off a bend of the service road under trees with no drive or gate beyond it in the picture: a drawing slip, it goes",
+    "by": "judge",
+    "source": "top-view",
+    "date": "2026-11-13",
+    "reference": {
+      "link": "https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/export?bbox=77.2312341,28.6565826,77.2321547,28.6573947&bboxSR=4326&imageSR=3857&size=315,315&format=jpg&f=image",
+      "date": "2026-11-13",
+      "note": "Esri World Imagery beside the map render of the site (tools/inspector/judge.mjs sheets)"
+    },
+    "id": "ov_3_-18_0001"
+  },
+  {
+    "issue": "R-ROAD-01:w1150383463.0:w44141357.4:n10701403932",
+    "action": "connect",
+    "target": {
+      "ids": [
+        "w1150383463.0",
+        "w44141357.4"
+      ],
+      "anchor": {
+        "lat": 28.6560563,
+        "lon": 77.2328479
+      },
+      "tolerance_m": 15
+    },
+    "params": {
+      "op": "join_end",
+      "edge": "w1150383463.0",
+      "node": "n10701403932",
+      "to": "w44141357.4",
+      "x": 333.037,
+      "z": -4792.775,
+      "gap_m": 9.1
+    },
+    "why": "A lane between the buildings opens onto the wide road ahead in the picture: joined",
+    "by": "judge",
+    "source": "top-view",
+    "date": "2026-11-13",
+    "reference": {
+      "link": "https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/export?bbox=77.2323879,28.6556505,77.2333085,28.6564626&bboxSR=4326&imageSR=3857&size=315,315&format=jpg&f=image",
+      "date": "2026-11-13",
+      "note": "Esri World Imagery beside the map render of the site (tools/inspector/judge.mjs sheets)"
+    },
+    "id": "ov_3_-18_0002"
+  }
+]

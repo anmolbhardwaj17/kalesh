@@ -1,0 +1,36 @@
+[
+  {
+    "issue": "R-ROAD-01:w1185492984.0:w1070582985.0:n11012143036",
+    "action": "connect",
+    "target": {
+      "ids": [
+        "w1185492984.0",
+        "w1070582985.0"
+      ],
+      "anchor": {
+        "lat": 28.6625182,
+        "lon": 77.2354118
+      },
+      "tolerance_m": 15
+    },
+    "params": {
+      "op": "join_end",
+      "edge": "w1185492984.0",
+      "node": "n11012143036",
+      "to": "w1070582985.0",
+      "x": 576.38,
+      "z": -5504.724,
+      "gap_m": 8.4
+    },
+    "why": "Two lanes meet at the corner of the building: one corner drawn with a gap",
+    "by": "judge",
+    "source": "top-view",
+    "date": "2026-11-13",
+    "reference": {
+      "link": "https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/export?bbox=77.2349517,28.6621126,77.2358724,28.6629246&bboxSR=4326&imageSR=3857&size=315,315&format=jpg&f=image",
+      "date": "2026-11-13",
+      "note": "Esri World Imagery beside the map render of the site (tools/inspector/judge.mjs sheets)"
+    },
+    "id": "ov_4_-21_0001"
+  }
+]

@@ -8,7 +8,7 @@ import type { StagePlan } from '../layout/stages.ts';
 import type { RepairResult } from '../repair/engine.ts';
 import { inspectorContext, inspectorIndex } from '../report/inspector.ts';
 import type { PlaceIn } from '../report/inspector.ts';
-import { issueRecords, repairLog } from '../repair/engine.ts';
+import { issueRecords, policyLines, repairLog } from '../repair/engine.ts';
 import type { HeroSpec } from '../roads/hero.ts';
 import { CATALOGUE } from '../rules/catalogue.ts';
 import type { HeroListEntry } from '../rules/types.ts';
@@ -58,9 +58,12 @@ export function writeRepair(root: string, plan: StagePlan, reportDir: string, re
   const issuesFile = path.join(reportDir, 'issues.json');
   const rules: Record<string, string> = {};
   for (const r of CATALOGUE) rules[r.id] = r.title;
-  fs.writeFileSync(issuesFile, JSON.stringify({ version: 1, block: res.graph.block, source, rules, issues: issueRecords(res.issues, frame.offset) }));
+  // sites the top-view judge pass left for the owner carry its note (tools/inspector/judge.mjs apply)
+  const notesFile = path.join(root, 'harness', 'data', 'judge_notes.json');
+  const notes = fs.existsSync(notesFile) ? (JSON.parse(fs.readFileSync(notesFile, 'utf8')) as { notes?: Record<string, { note: string }> }).notes ?? {} : {};
+  fs.writeFileSync(issuesFile, JSON.stringify({ version: 1, block: res.graph.block, source, rules, issues: issueRecords(res.issues, frame.offset, notes) }));
   const repairsFile = path.join(reportDir, 'repairs.jsonl');
-  fs.writeFileSync(repairsFile, repairLog(res.repairs));
+  fs.writeFileSync(repairsFile, repairLog([...res.repairs, ...policyLines(res)]));
   const contextFile = path.join(reportDir, 'context.json');
   fs.writeFileSync(contextFile, JSON.stringify(inspectorContext(res.graph, frame.offset, frame.outline)));
   fs.mkdirSync(path.join(reportDir, 'tiles'), { recursive: true });

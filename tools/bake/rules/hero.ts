@@ -40,9 +40,13 @@ export const heroSpecFile: Rule = {
       const ways = new Set(edges.flatMap((e) => e.pieces.map((p) => p.way)));
       if (specs.some((s) => s.id === h.id || s.covers.osmWays.some((w) => ways.has(`way/${w}`)))) continue;
       const e = longest(edges);
-      out.push(ctx.issue(heroSpecFile, e.pts[Math.floor(e.pts.length / 2)] as P2, [`hero/${h.id}`], edges, 0.9, `${h.name}: ${edges.length} edges, no spec file`, [
-        ctx.proposal('set_tag', { key: 'hero_spec', value: h.id, on: e.id }, 0.5, { kind: 'other' }, `${h.name} is on the hero road list and has no spec file (harness/data/hero_roads/${h.id}.json). Until it has one the class defaults apply and nothing on it is repaired automatically`, e.pts),
-      ]));
+      // planned work, not a question (P1-030): the spec is written in the hero road pass (P2-015, P2-016). Until then the
+      // road has no authored cross-section to protect and is repaired like any other road
+      const issue = ctx.issue(heroSpecFile, e.pts[Math.floor(e.pts.length / 2)] as P2, [`hero/${h.id}`], edges, 0.9, `${h.name}: ${edges.length} edges, no spec file yet (written in the hero road pass)`, [
+        ctx.proposal('set_tag', { key: 'hero_spec', value: h.id, on: e.id }, 0.5, { kind: 'other' }, `${h.name} is on the hero road list and has no spec file (harness/data/hero_roads/${h.id}.json). Until the hero road pass writes one the class defaults apply and the road is repaired like any other`, e.pts),
+      ]);
+      issue.status = 'explained';
+      out.push(issue);
     }
     return out;
   },
@@ -76,8 +80,8 @@ export const heroEqualsSpec: Rule = {
       const lanes = drive.reduce((n, l) => n + Math.max(1, l.count ?? 1), 0);
       const width = Math.round(drive.reduce((w, l) => w + Math.max(1, l.count ?? 1) * l.width, 0) * 10) / 10;
       out.push(ctx.issue(heroEqualsSpec, first.pts[Math.floor(first.pts.length / 2)] as P2, [`hero/${spec.id}`, ...bad.map((e) => e.id).slice(0, 3)], bad, 0.9, `${bad.length} of ${edges.length} edges differ: ${specMismatch(spec, first).join('; ')}`, [
-        ctx.proposal('set_lanes', { on: bad.map((e) => e.id).join(','), lanes, from: 'spec', width, footpath_left: spec.footpaths.left.width, footpath_right: spec.footpaths.right.width, spec: spec.id }, 0.9, { kind: 'other' },
-          `${spec.name} has a spec file and the map tags differ from it (${specMismatch(spec, first).join('; ')}): the spec overrides the tags. Applied as provisional until the road is checked against its reference photos`, first.pts),
+        ctx.proposal('set_lanes', { on: bad.map((e) => e.id).join(','), lanes, from: 'spec', width, footpath_left: spec.footpaths.left.width, footpath_right: spec.footpaths.right.width, spec: spec.id }, 0.9, { kind: 'hero_spec' },
+          `${spec.name} has a spec file and the map tags differ from it (${specMismatch(spec, first).join('; ')}): the spec overrides the tags`, first.pts),
       ]));
     }
     return out;
@@ -90,7 +94,8 @@ const SECTION_MARKS: readonly [string, (v: unknown) => boolean][] = [
   ['lanes_from', (v) => v !== 'spec'],
   ['width_from', (v) => v !== 'spec'],
   ['footpath_from', (v) => v !== 'spec'],
-  ['shifted_m', () => true],
+  // a hero road held in place while the other road moved carries shifted_m 0: nothing changed
+  ['shifted_m', (v) => Number(v) > 0.001],
 ];
 
 export const heroUntouched: Rule = {
@@ -101,7 +106,9 @@ export const heroUntouched: Rule = {
   detect(ctx: RuleContext): Issue[] {
     const out: Issue[] = [];
     for (const e of ctx.graph.edges) {
-      if (!ctx.heroOf(e)) continue;
+      const hero = ctx.heroOf(e);
+      // only a road with a spec file has a cross-section to protect
+      if (!hero || !ctx.heroHasSpec(hero)) continue;
       const marks = ctx.marks[e.id];
       if (!marks) continue;
       const changed = SECTION_MARKS.filter(([k, bad]) => marks[k] !== undefined && bad(marks[k])).map(([k]) => `${k}=${String(marks[k])}`);

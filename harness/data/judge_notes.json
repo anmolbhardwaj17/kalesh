@@ -1,0 +1,4 @@
+{
+  "_doc": "Sites the top-view judge pass (tools/inspector/judge.mjs) could not decide: they stay open for the owner, with the reason on the card. The bake copies each note into issues.json.",
+  "notes": {}
+}
