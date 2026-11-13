@@ -207,8 +207,7 @@ func _begin_exit(v: Node3D) -> void:
 	_phase_t = 0
 	_switch_t = 0
 	v.is_player = false
-	if v.has_method("controls"):
-		v.controls(0.0, 1.0, 0.0, true)
+	_stop(v)
 	_event("foot:exit", {})
 
 
@@ -217,6 +216,7 @@ func _exit_step() -> void:
 	if not is_instance_valid(vehicle):
 		_back_on_foot()
 		return
+	_stop(vehicle)
 	var slow := absf(float(vehicle.speed)) * 3.6 <= EXIT_KMH
 	if not slow and _phase_t < roundi(BRAKE_MAX_S * 60.0):
 		_phase_t = mini(_phase_t, 1)
@@ -242,6 +242,17 @@ func _exit_step() -> void:
 	_hand_camera_to_foot(float(vehicle.heading))
 	mode = "foot"
 	_done("vehicle", "foot", true)
+
+
+## Brings a vehicle to rest for getting out, every tick of the exit: the brake pedal while it rolls forward, the
+## throttle while it rolls back, then no pedal at all, so the parking hold keeps it still. Never the brake pedal at a
+## standstill: that is reverse (drive_input.gd), and a car reversing at 3 km/h passed EXIT_KMH and dragged the
+## character it had just put by its door into the body (P1-024, enter_exit_vehicle).
+static func _stop(v: Node3D) -> void:
+	if not v.has_method("controls"):
+		return
+	var kmh := float(v.speed) * 3.6
+	v.controls(0.4 if kmh < -1.0 else 0.0, 1.0 if kmh > 1.0 else 0.0, 0.0, true)
 
 
 ## A free spot by a door (right, left, then behind, in front): the capsule fits there and stands on ground.

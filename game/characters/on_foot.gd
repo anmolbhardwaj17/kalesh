@@ -27,6 +27,8 @@ const STEP_FWD_TRY := [0.06, 0.1]
 const COYOTE_TICKS := 3
 ## World (1) and vehicles (2); the character is on layer 4.
 const MASK := 3
+## Ticks after getting out of a seat with collisions against the world only (seat()).
+const UNSEAT_TICKS := 3
 const LAYER := 4
 
 @export var is_player := true
@@ -78,6 +80,7 @@ var _visor: MeshInstance3D
 ## The drawn body (humanoid_anim.gd), or null when the capsule is drawn.
 var humanoid: Node3D
 var _connected := false
+var _unseat := 0
 
 
 func _init() -> void:
@@ -236,8 +239,12 @@ func seat(on: bool) -> void:
 	else:
 		state = "ground"
 		visible = true
-		collision_layer = LAYER
-		collision_mask = MASK
+		# out of the seat the body meets the world at once but vehicles only after UNSEAT_TICKS: Jolt moves a kinematic
+		# body to the transform place() gives it during the next step, so for a step its body is still inside the
+		# vehicle, and with the vehicle in the pair the recovery pulled it into the car body (P1-024)
+		collision_layer = 0
+		collision_mask = 1
+		_unseat = UNSEAT_TICKS
 		_grounded = true
 		_air = 0
 
@@ -245,6 +252,11 @@ func seat(on: bool) -> void:
 func sim_step(dt: float) -> void:
 	if state == "seated":
 		return
+	if _unseat > 0:
+		_unseat -= 1
+		if _unseat == 0:
+			collision_layer = LAYER
+			collision_mask = MASK
 	var t0 := Time.get_ticks_usec()
 	if is_player:
 		read_input()
