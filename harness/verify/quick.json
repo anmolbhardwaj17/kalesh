@@ -222,7 +222,9 @@
       "scenarios": [
         "car_flyover",
         "chase_cam_floor",
-        "auto_gali_corner"
+        "auto_gali_corner",
+        "enter_exit_vehicle",
+        "foot_kerb_stairs"
       ]
     },
     {
@@ -232,6 +234,58 @@
         "car_cost",
         "chase_cam_floor",
         "auto_gali_corner"
+      ]
+    },
+    {
+      "path": "game/characters/",
+      "scenarios": [
+        "foot_speeds",
+        "foot_jump",
+        "foot_vault",
+        "foot_kerb_stairs",
+        "enter_exit_vehicle",
+        "foot_cam_walls"
+      ]
+    },
+    {
+      "path": "game/characters/player_mode.gd",
+      "scenarios": [
+        "enter_exit_vehicle",
+        "chase_cam_floor",
+        "car_accel"
+      ]
+    },
+    {
+      "path": "game/camera/on_foot_camera.gd",
+      "scenarios": [
+        "foot_cam_walls",
+        "enter_exit_vehicle"
+      ]
+    },
+    {
+      "path": "game/camera/wall_fade.gd",
+      "scenarios": [
+        "foot_cam_walls"
+      ]
+    },
+    {
+      "path": "game/debug/foot_probe.gd",
+      "scenarios": [
+        "foot_speeds",
+        "foot_cost",
+        "foot_cam_walls",
+        "enter_exit_vehicle"
+      ]
+    },
+    {
+      "path": "game/debug/foot_routes.gd",
+      "scenarios": [
+        "foot_speeds",
+        "foot_stamina",
+        "foot_jump",
+        "foot_vault",
+        "foot_turn",
+        "foot_kerb_stairs"
       ]
     }
   ]

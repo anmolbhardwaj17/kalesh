@@ -3,11 +3,16 @@
 ## a wall across the flyover lane at the south end of the pad, for the chase camera's reverse-into-a-wall check, and a
 ## gali (P1-021): a lane 3 m wide running north that turns right (east) into another lane 3 m wide, between walls 2.5 m
 ## high, for the auto's corner. The feel probes (debug hook `vehicle`, game/debug/vehicle_probe.gd) run here.
+## P1-022: the on-foot test area (foot_area.gd: kerbs, stairs, ramp, vault walls, a camera yard with a 2 m lane) and
+## the player: PlayerMode (game/characters/player_mode.gd) starts in the car and makes the character and the on-foot
+## camera; F gets out and back in. The on-foot probes (debug hook `foot`, game/debug/foot_probe.gd) run here.
 ## Coordinates: east +X, north -Z, up +Y, metres.
 extends Node3D
 
 const Course := preload("res://bench/physics/course.gd")
 const Geo := preload("res://bench/physics/geo.gd")
+const FootArea := preload("res://scenes/course/foot_area.gd")
+const PlayerMode := preload("res://characters/player_mode.gd")
 
 ## The wall: its two corners, across the flyover lane at the south end of the pad (the flyover probe starts in front of
 ## it, so its run-up stays clear).
@@ -38,6 +43,11 @@ func _ready() -> void:
 	course.build(geo_node)
 	_wall(world)
 	_gali(world)
+	FootArea.new().build(world)
+	var pm := PlayerMode.new()
+	pm.name = "PlayerMode"
+	add_child(pm)
+	pm.setup(world, world.get_node("Car") as Node3D, get_node("ChaseCamera") as Camera3D, self)
 
 
 func _wall(world: Node3D) -> void:

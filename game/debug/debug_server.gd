@@ -8,7 +8,7 @@
 ##   game -> client  {"type": "hello", ...} once on connect, then {"type": "snapshot", ...} after every drawn frame
 ##                   (state, clock, hold and the events since the last snapshot).
 ## Writes never block a frame: each client has an out queue (debug_peer.gd); a snapshot is skipped for a client that is
-## behind. The perf hooks live in debug_perf.gd, setCamera and shot in debug_camera.gd, stream in stream_probe.gd, vehicle in vehicle_probe.gd.
+## behind. The perf hooks live in debug_perf.gd, setCamera and shot in debug_camera.gd, stream in stream_probe.gd, vehicle in vehicle_probe.gd, foot in foot_probe.gd.
 ## Expected problems (unknown method, bad args, unknown scene) are error responses, never push_error.
 extends Node
 
@@ -20,7 +20,7 @@ const DebugInput := preload("res://debug/debug_input.gd")
 const PROTOCOL := 1
 const METHODS := [
 	"ping", "state", "clock", "frames", "input", "perf", "load", "teleport", "setCamera", "timeScale", "hold",
-	"events", "hud", "shot", "quality", "timeOfDay", "bench", "stream", "vehicle", "quit",
+	"events", "hud", "shot", "quality", "timeOfDay", "bench", "stream", "vehicle", "foot", "quit",
 ]
 const QUALITY_PRESETS := ["low", "medium", "high"]
 
@@ -198,6 +198,8 @@ func _call(method: String, a: Array) -> Dictionary:
 			return await _stream_probe().hook(a)
 		"vehicle":
 			return await _vehicle_probe().hook(a)
+		"foot":
+			return await _foot_probe().hook(a)
 		"setCamera":
 			return _cam.set_camera(a[0] if a.size() > 0 else null)
 		"hud":
@@ -293,7 +295,12 @@ func state() -> Dictionary:
 			# the V2 vehicle: where it meets the ground at rest, its heading and its speed along it
 			pos = p.foot_position()
 			grounded = p.contact_count() > 0 or p.freeze
+		elif p.has_method("is_grounded"):
+			grounded = p.is_grounded()
 		player = {"pos": [pos.x, pos.y, pos.z], "grounded": grounded}
+		# P1-022: on foot or driving (game/characters/player_mode.gd); a scene with no PlayerMode reports its player
+		var pm := get_tree().get_first_node_in_group("player_mode")
+		player["mode"] = pm.get("mode") if pm != null else ("vehicle" if p.has_method("foot_position") or "model" in p else "foot")
 		if "model" in p:
 			player["heading"] = p.model.heading
 			player["speed"] = p.model.speed
@@ -426,6 +433,16 @@ func _stream_probe() -> Node:
 	if probe == null:
 		probe = load("res://debug/stream_probe.gd").new()
 		probe.name = "StreamProbe"
+		add_child(probe)
+	return probe
+
+
+## The on-foot probes (foot_probe.gd: info, stage, run, camrec, cost), made on first use (P1-022).
+func _foot_probe() -> Node:
+	var probe := get_node_or_null("FootProbe")
+	if probe == null:
+		probe = load("res://debug/foot_probe.gd").new()
+		probe.name = "FootProbe"
 		add_child(probe)
 	return probe
 

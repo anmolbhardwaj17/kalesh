@@ -7,6 +7,11 @@ extends RefCounted
 const COMPOSITE := {
 	"throttle": ["brake", "throttle"],
 	"steer": ["steer_left", "steer_right"],
+	# on foot (P1-022): the move keys and the camera look, -1..1
+	"move_y": ["move_back", "move_forward"],
+	"move_x": ["move_left", "move_right"],
+	"look_x": ["look_left", "look_right"],
+	"look_y": ["look_down", "look_up"],
 }
 var pressed := {}
 
