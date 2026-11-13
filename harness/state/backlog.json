@@ -1,6 +1,6 @@
 {
   "_doc": "Written only by node harness/bin/task.mjs. Phases run in order; P0 (ADOPT + STYLE DISCOVERY) waits for the owner by design and needs task.mjs signoff and task.mjs archsignoff before its gate passes. Later phases are added by the planner at the end of P0 (task.mjs phase-add) from the game's real state.",
-  "updated": "2026-11-13T07:55:23.135Z",
+  "updated": "2026-11-13T07:55:23.390Z",
   "phases": [
     {
       "id": "P0",
@@ -2086,12 +2086,15 @@
       "agent": "builder",
       "priority": 3,
       "kind": "feature",
-      "status": "doing",
+      "status": "done",
       "attempts": 1,
       "notes": [],
       "created": "2026-11-11T12:29:04.868Z",
       "model": "opus",
-      "started": "2026-11-13T06:43:18.024Z"
+      "started": "2026-11-13T06:43:18.024Z",
+      "done": "2026-11-13T07:55:23.358Z",
+      "summary": "Quaternius UAL 1 and 2 (CC0) retargeted to one humanoid profile; humanoid_anim.gd AnimationTree (14 clips: idle, walk, jog, sprint, crouch, jump, vault, sit enter and exit); three leads as colour looks (Bittu, Meera, Danny); licence and credit in repo; 6 art requests. Foot slide walk 0.48%, jog 3.07%; animation cost 0.026 to 0.038 ms per character. Verifier PASS on a snapshot (shots read, respect rule ok); polish in P14.",
+      "commit": "54b77cd"
     },
     {
       "id": "P1-024",
