@@ -401,6 +401,44 @@ describe('owner list, far landmarks and edits', () => {
   });
 });
 
+describe('orientation, pad and zone edits (P2-006)', () => {
+  it('the front comes from the footprint axis and a front bearing an edit read; a pad and a zone radius are kept; a marker row keeps its ring', () => {
+    const o = new Osm();
+    // 60 m east to west, 20 m north to south: the long sides face north and south
+    const ids = [o.node(-30, -10), o.node(30, -10), o.node(30, 10), o.node(-30, 10)];
+    const hall = 1000;
+    o.elements.push({ type: 'way', id: hall, nodes: [...ids, ids[0] as number], tags: { historic: 'monument', name: 'Long Hall' } });
+    const gate = o.square(200, 0, 12, { historic: 'city_gate', name: 'Fort Gate' });
+    const plain = o.square(-300, 0, 20, { historic: 'monument', name: 'Plain Tomb' });
+    void plain;
+    const edits: Edit[] = [
+      edit('o1', { osm: `way/${hall}` }, { front: 'north, the steps face the avenue (photo set long_hall_2020)', front_bearing_deg: 350 }),
+      edit('o2', { osm: `way/${hall}` }, { pad: { source: 'osm', ref: `way/${gate}` }, zone_radius_m: 120 }),
+    ];
+    const res = buildRegistry(input(o, [], { overrides: { edits } }));
+    const h = byName(res.entries, 'Long Hall');
+    expect(h.orientation).toMatchObject({ source: 'axis_and_front', front_known: true, front_bearing_deg: 350 });
+    // the long axis runs east to west (90): the front is the side nearest to 350, north
+    expect(h.orientation.axis_deg).toBeCloseTo(90, 0);
+    expect(Math.min(h.orientation_deg!, 360 - h.orientation_deg!)).toBeLessThan(0.5);
+    expect(h.pad).toMatchObject({ source: 'osm', ref: `way/${gate}` });
+    expect(h.pad!.ring).toHaveLength(4);
+    expect(h.zone_radius_m).toBe(120);
+    // no edit: the axis alone, the front side not known; a square has no long side but keeps its sides
+    const t = byName(res.entries, 'Plain Tomb');
+    expect(t.orientation).toMatchObject({ source: 'principal_axis', front_known: false });
+    expect(t.orientation_deg).not.toBeNull();
+    // marker rows carry the footprint ring (the placement lays the pad from it)
+    const markers = JSON.parse(res.files['harness/data/landmarks_markers.json'] as string).markers as Entry[];
+    expect(markers.length).toBeGreaterThan(0);
+    for (const m of markers) if (m.footprint) expect(m.footprint.ring!.length).toBeGreaterThanOrEqual(3);
+    // a pad edit that names an object the extract does not hold is flagged, not guessed
+    const bad = buildRegistry(input(o, [], { overrides: { edits: [edit('o3', { osm: `way/${hall}` }, { pad: { source: 'osm', ref: 'way/999999' } })] } }));
+    expect(byName(bad.entries, 'Long Hall').flags).toContain('edit_pad_not_in_extract');
+    expect(byName(bad.entries, 'Long Hall').pad).toBeUndefined();
+  });
+});
+
 describe('respect rule, underground and stations', () => {
   const o = new Osm();
   const mosque = o.square(0, 0, 40, { amenity: 'place_of_worship', religion: 'muslim', name: 'Friday Mosque' });

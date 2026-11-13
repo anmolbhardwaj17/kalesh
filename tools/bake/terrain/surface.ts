@@ -11,7 +11,7 @@ import { smoothstep } from '../roads/curve.ts';
 import { DECK_DEPTH, HEADROOM } from '../roads/model.ts';
 import type { FaceSet } from '../mesh/faces.ts';
 import { MEET_NONE } from './collect.ts';
-import type { TerrainInput, TerrainOptions } from './collect.ts';
+import type { LandmarkGround, TerrainInput, TerrainOptions } from './collect.ts';
 import { C_GROUND, C_LAWN, C_PLOT, C_WATER } from './triangulate.ts';
 import type { Triangulation } from './triangulate.ts';
 
@@ -41,11 +41,16 @@ export interface Surface {
   /** Upright faces that close height steps: nine numbers per triangle and three for its normal. */
   skirts: number[];
   waters: WaterBody[];
-  /** Per vertex: 1 pinned to a road edge at grade, 2 at a wall, 0 free. */
+  /** Per vertex: 1 pinned to a road edge at grade, 2 at a wall, 3 on a landmark pad (at the pad's level), 0 free. */
   role: Uint8Array;
+  /** Per emitted triangle: the landmark ground piece it lies in (an index into `pieces`), else -1. */
+  over: Int32Array;
+  pieces: readonly LandmarkGround[];
   stats: {
     emitted: number; byClass: Record<string, number>; pinned: number; wallVertices: number; stepVertices: number; stepCorners: number; unresolvedSteps: number; skirts: number;
     underDeck: number; loweredUnderDeck: number; overTunnel: number; raisedOverTunnel: number; maxOffsetM: number; wallClamped: number;
+    /** Landmark ground (P2-006): triangles by class, pad vertices at their level, pad corners a road pin holds off it, moat bed vertices. */
+    landmark: { pad: number; forecourt: number; wallbase: number; moat: number; padVertices: number; padPinnedByRoad: number; moatBed: number };
   };
 }
 
@@ -169,6 +174,71 @@ export function buildSurface(input: TerrainInput, tg: Triangulation, meet: Uint8
     }
   }
 
+  // landmark ground (P2-006): the first piece that holds a triangle's centre gives it its material. A pad, a wall
+  // strip and a moat lie over ground, lawn and plot; a forecourt only over plain ground.
+  const pieces = input.landmarks ?? [];
+  const over = new Int32Array(ne).fill(-1);
+  const lmStats = { pad: 0, forecourt: 0, wallbase: 0, moat: 0, padVertices: 0, padPinnedByRoad: 0, moatBed: 0 };
+  const padLevel = new Float64Array(nv).fill(NaN);
+  if (pieces.length) {
+    const PC = 50;
+    const cells = new Map<number, number[]>();
+    const boxes = pieces.map((g) => {
+      let x0 = Infinity;
+      let x1 = -Infinity;
+      let z0 = Infinity;
+      let z1 = -Infinity;
+      for (const p of g.ring) {
+        x0 = Math.min(x0, p.x);
+        x1 = Math.max(x1, p.x);
+        z0 = Math.min(z0, p.z);
+        z1 = Math.max(z1, p.z);
+      }
+      return { x0, x1, z0, z1 };
+    });
+    boxes.forEach((b, gi) => {
+      for (let i = Math.floor(b.x0 / PC); i <= Math.floor(b.x1 / PC); i++) {
+        for (let j = Math.floor(b.z0 / PC); j <= Math.floor(b.z1 / PC); j++) {
+          const k = (i + 100000) * 262144 + (j + 100000);
+          const list = cells.get(k);
+          if (list) list.push(gi);
+          else cells.set(k, [gi]);
+        }
+      }
+    });
+    const inRing = (ring: readonly { x: number; z: number }[], x: number, z: number): boolean => {
+      let inside = false;
+      for (let k = 0, j = ring.length - 1; k < ring.length; j = k++) {
+        const a = ring[k] as { x: number; z: number };
+        const b = ring[j] as { x: number; z: number };
+        if (a.z > z !== b.z > z && x < ((b.x - a.x) * (z - a.z)) / (b.z - a.z) + a.x) inside = !inside;
+      }
+      return inside;
+    };
+    for (let e = 0; e < ne; e++) {
+      const k = cls[e] as number;
+      if (k === C_WATER) continue;
+      const a = tri[e * 3] as number;
+      const b = tri[e * 3 + 1] as number;
+      const c = tri[e * 3 + 2] as number;
+      const cx = ((vx[a] as number) + (vx[b] as number) + (vx[c] as number)) / 3;
+      const cz = ((vz[a] as number) + (vz[b] as number) + (vz[c] as number)) / 3;
+      const list = cells.get((Math.floor(cx / PC) + 100000) * 262144 + (Math.floor(cz / PC) + 100000));
+      if (!list) continue;
+      // the list is in piece order: the first one that holds the centre wins
+      for (const gi of list) {
+        const g = pieces[gi] as LandmarkGround;
+        if (g.cls === 'forecourt' && k !== C_GROUND) continue;
+        const bx = boxes[gi] as { x0: number; x1: number; z0: number; z1: number };
+        if (cx < bx.x0 || cx > bx.x1 || cz < bx.z0 || cz > bx.z1 || !inRing(g.ring, cx, cz)) continue;
+        over[e] = gi;
+        lmStats[g.cls]++;
+        if (g.cls === 'pad') for (const v of [a, b, c]) padLevel[v] = g.level as number;
+        break;
+      }
+    }
+  }
+
   // pins and walls from the road's edge pieces
   const pinMax = new Float64Array(nv).fill(NaN);
   const pinMin = new Float64Array(nv).fill(NaN);
@@ -186,7 +256,7 @@ export function buildSurface(input: TerrainInput, tg: Triangulation, meet: Uint8
   }
   const role = new Uint8Array(nv);
   const vy = new Float64Array(nv).fill(NaN);
-  const stats: Surface['stats'] = { emitted: ne, byClass, pinned: 0, wallVertices: 0, stepVertices: 0, stepCorners: 0, unresolvedSteps: 0, skirts: 0, underDeck: 0, loweredUnderDeck: 0, overTunnel: 0, raisedOverTunnel: 0, maxOffsetM: 0, wallClamped: 0 };
+  const stats: Surface['stats'] = { emitted: ne, byClass, pinned: 0, wallVertices: 0, stepVertices: 0, stepCorners: 0, unresolvedSteps: 0, skirts: 0, underDeck: 0, loweredUnderDeck: 0, overTunnel: 0, raisedOverTunnel: 0, maxOffsetM: 0, wallClamped: 0, landmark: lmStats };
   const fxs: number[] = [];
   const fzs: number[] = [];
   const fos: number[] = [];
@@ -204,7 +274,16 @@ export function buildSurface(input: TerrainInput, tg: Triangulation, meet: Uint8
     } else if (!Number.isNaN(wallMax[v] as number)) {
       role[v] = 2;
       stats.wallVertices++;
+    } else if (!Number.isNaN(padLevel[v] as number)) {
+      // a pad vertex lies at the pad's level and pulls the ground around it there, as a road edge does
+      role[v] = 3;
+      vy[v] = padLevel[v] as number;
+      lmStats.padVertices++;
+      fxs.push(vx[v] as number);
+      fzs.push(vz[v] as number);
+      fos.push((padLevel[v] as number) - input.ground(vx[v] as number, vz[v] as number));
     }
+    if (role[v] !== 3 && !Number.isNaN(padLevel[v] as number)) lmStats.padPinnedByRoad++;
   }
   const field = new Field(fxs, fzs, fos, opt.fieldRadius);
 
@@ -220,7 +299,7 @@ export function buildSurface(input: TerrainInput, tg: Triangulation, meet: Uint8
     }
   }
   for (let v = 0; v < nv; v++) {
-    if (!flags[v] || role[v] === 1) continue;
+    if (!flags[v] || role[v] === 1 || role[v] === 3) continue;
     const x = vx[v] as number;
     const z = vz[v] as number;
     const g = input.ground(x, z);
@@ -257,6 +336,29 @@ export function buildSurface(input: TerrainInput, tg: Triangulation, meet: Uint8
       }
     }
     vy[v] = y;
+  }
+
+  // a moat: the vertices inside its band (every triangle around them is moat) go down to the bed
+  if (lmStats.moat > 0) {
+    const all = new Int32Array(nv);
+    const moat = new Int32Array(nv);
+    const depth = new Float64Array(nv);
+    for (let e = 0; e < ne; e++) {
+      const g = (over[e] as number) >= 0 ? (pieces[over[e] as number] as LandmarkGround) : null;
+      for (let i = 0; i < 3; i++) {
+        const v = tri[e * 3 + i] as number;
+        all[v] = (all[v] as number) + 1;
+        if (g && g.cls === 'moat') {
+          moat[v] = (moat[v] as number) + 1;
+          depth[v] = g.depth ?? 3;
+        }
+      }
+    }
+    for (let v = 0; v < nv; v++) {
+      if (role[v] !== 0 || (moat[v] as number) === 0 || moat[v] !== all[v]) continue;
+      vy[v] = (vy[v] as number) - (depth[v] as number);
+      lmStats.moatBed++;
+    }
   }
 
   // water: flat, a little under its banks; the bank stays above it and the bed goes down from the bank
@@ -422,5 +524,5 @@ export function buildSurface(input: TerrainInput, tg: Triangulation, meet: Uint8
     } else nrm[v * 3 + 1] = 1;
   }
   stats.maxOffsetM = Math.round(stats.maxOffsetM * 100) / 100;
-  return { tri, cls, cy, body, vy, nrm, skirts, waters, role, stats };
+  return { tri, cls, cy, body, vy, nrm, skirts, waters, role, over, pieces, stats };
 }

@@ -121,6 +121,15 @@ export interface EditSet {
   /** A footprint that replaces OSM's: another OSM object by id, or a ring read from a photo or satellite view. */
   footprint?: { source: 'osm' | 'photo' | 'satellite'; ref?: string; ring?: [number, number][] };
   front?: string;
+  /** The compass bearing the front faces (0 north, 90 east), read from evidence; `front` says what was read. */
+  front_bearing_deg?: number;
+  /**
+   * The flat pad of a landmark whose footprint is its grounds (a fort, a park): another OSM object by id (a gate
+   * building) or a ring read from a photo or satellite view. The placement step lays the pad there (P2-006).
+   */
+  pad?: { source: 'osm' | 'photo' | 'satellite'; ref?: string; ring?: [number, number][] };
+  /** The landmark zone as a circle around the position (m), where the footprint is only its middle (Connaught Place). */
+  zone_radius_m?: number;
   /** Free facts with their own source, kept as written (ring radii of Connaught Place, a wall height range). */
   extent?: Record<string, number | string>;
   references?: { url: string; what: string; licence: string }[];
@@ -196,6 +205,17 @@ export interface Entry {
   infrastructure?: { variant: string; line?: string; from: string };
   parts?: string[];
   front?: string;
+  /** The compass bearing the front faces in the block frame (0 north, 90 east); null without a footprint or a front. */
+  orientation_deg: number | null;
+  /**
+   * Where the orientation comes from: the footprint's main axis with the front side picked by a front bearing from
+   * evidence (axis_and_front), the axis alone (principal_axis: which long side is the front is not known), a front
+   * bearing alone, a round footprint, or nothing.
+   */
+  orientation: { source: 'axis_and_front' | 'principal_axis' | 'front_only' | 'round' | 'none'; axis_deg: number | null; elongation: number | null; front_bearing_deg?: number; front_known: boolean };
+  /** The flat pad an edit names for a landmark whose footprint is its grounds. */
+  pad?: { source: 'osm' | 'photo' | 'satellite'; ref: string; ring: [number, number][]; evidence: string };
+  zone_radius_m?: number;
   extent?: Record<string, number | string>;
   references?: { url: string; what: string; licence: string }[];
   licence_notes: string;

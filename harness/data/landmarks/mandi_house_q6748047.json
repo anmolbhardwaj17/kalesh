@@ -19,9 +19,9 @@
   "lat": 28.6256122,
   "lon": 77.2341966,
   "position": {
-    "source": "osm_node",
+    "source": "hand",
     "ref": "node/6539894856",
-    "evidence": "OSM node/6539894856 (osmBase 2026-11-11T16:24:25Z)"
+    "evidence": "edit lm_0022: an underground station shows nothing on a satellite picture, so it is checked on the map data (osmBase 2026-11-11): the OSM station node/6539894856 lies 2 m from the Blue Line tunnel centre line (way/604707732) and 20 m from the centre of the Mandi House gates (Gate Number 1 to 4); the Wikidata point is 23 m off the tunnel and 75 m from the gates"
   },
   "footprint": null,
   "height_m": null,
@@ -43,10 +43,11 @@
     "archetype": "low_density_compounds"
   },
   "flags": [
+    "position_checked_by_hand",
     "sources_disagree_over_50m"
   ],
   "issue": "R-LM-01:node/6539894856:Q6748047",
-  "place": "held",
+  "place": "ok",
   "agreement": {
     "osm_to_wikidata_m": 56.2,
     "wikidata": [28.625816, 77.234724],
@@ -70,13 +71,23 @@
   "parts": [
     "node/9920295123"
   ],
+  "orientation_deg": null,
+  "orientation": {
+    "source": "none",
+    "axis_deg": null,
+    "elongation": null,
+    "front_known": false
+  },
   "licence_notes": "Geometry ODbL (OpenStreetMap contributors). Facts from Wikidata, CC0. Photos are reference only, never shipped.",
   "art": {
     "status": "stand-in"
   },
   "confidence": {
-    "position": "low",
+    "position": "high",
     "footprint": "none",
     "height": "none"
-  }
+  },
+  "edits": [
+    "lm_0022"
+  ]
 }

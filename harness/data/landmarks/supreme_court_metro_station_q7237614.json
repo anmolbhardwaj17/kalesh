@@ -84,6 +84,13 @@
   "parts": [
     "node/6539894857"
   ],
+  "orientation_deg": 226.1,
+  "orientation": {
+    "source": "principal_axis",
+    "axis_deg": 136.1,
+    "elongation": 5.44,
+    "front_known": false
+  },
   "licence_notes": "Geometry ODbL (OpenStreetMap contributors). Facts from Wikidata, CC0. Photos are reference only, never shipped.",
   "art": {
     "status": "stand-in"

@@ -93,6 +93,31 @@
     "inside_footprint": true,
     "ok": true
   },
+  "front": "west, the Lahori Gate front on Netaji Subhash Marg, facing Chandni Chowk",
+  "orientation_deg": 270.8,
+  "orientation": {
+    "source": "axis_and_front",
+    "axis_deg": 0.8,
+    "elongation": 1.39,
+    "front_bearing_deg": 270,
+    "front_known": true
+  },
+  "pad": {
+    "source": "osm",
+    "ref": "way/80429907",
+    "ring": [
+      [28.6556722, 77.2388234],
+      [28.6556782, 77.2386053],
+      [28.6557146, 77.238607],
+      [28.6559082, 77.2386161],
+      [28.6561199, 77.2386272],
+      [28.6561139, 77.2388452],
+      [28.6560255, 77.2388408],
+      [28.6558996, 77.2388346],
+      [28.6557806, 77.2388288]
+    ],
+    "evidence": "edit lm_0014: read from the OSM extract (osmBase 2026-11-11): the gate building way/80429907 (building=yes, historic=city_gate, name Lahori Gate) lies 221 m from the centre of the fort outline at bearing 279, on the west wall, and Chhatta Chowk (way/80429800) runs from it into the fort at bearing 284; the pad of the hero is the ground under that gate building, the front the player sees from Chandni Chowk"
+  },
   "extent": {
     "wall_height_river_side_m": 18,
     "wall_height_city_side_m": 33,
@@ -108,6 +133,7 @@
     "height": "high"
   },
   "edits": [
-    "lm_0003"
+    "lm_0003",
+    "lm_0014"
   ]
 }

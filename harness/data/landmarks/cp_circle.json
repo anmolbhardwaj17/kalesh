@@ -211,6 +211,14 @@
     "inside_footprint": true,
     "ok": true
   },
+  "orientation_deg": 0,
+  "orientation": {
+    "source": "round",
+    "axis_deg": null,
+    "elongation": 1.01,
+    "front_known": false
+  },
+  "zone_radius_m": 321,
   "extent": {
     "inner_circle_radius_m": 125,
     "middle_circle_radius_m": 235,
@@ -228,6 +236,7 @@
     "height": "high"
   },
   "edits": [
-    "lm_0001"
+    "lm_0001",
+    "lm_0012"
   ]
 }

@@ -35,6 +35,8 @@ export interface WorldPin {
   x: number;
   y: number;
   z: number;
+  /** More fields of the pin as written (a landmark pin: tier, mode, yaw, height; P2-006). */
+  extra?: Readonly<Record<string, string | number | boolean>>;
 }
 
 export interface TileBakeInput {
@@ -150,7 +152,7 @@ export function bakeTiles(input: TileBakeInput, emit: (rec: TileRecord, bytes: U
     const [x0, y0, z0] = cut.origin;
     // lane points and pins take the vertex snap too: exact as float32, the same point in every tile
     const lanes = (lanesBy.get(t.id) ?? []).map(({ tile: _tile, pts, ...l }) => ({ ...l, pts: pts.map((v, i) => snap(v) - (i % 3 === 0 ? x0 : i % 3 === 1 ? y0 : z0)) }));
-    const pins: TilePin[] = (pinsBy.get(t.id) ?? []).map((p) => ({ id: p.id, name: p.name, kind: p.kind, pos: [snap(p.x) - x0, snap(p.y) - y0, snap(p.z) - z0] }));
+    const pins: TilePin[] = (pinsBy.get(t.id) ?? []).map((p) => ({ id: p.id, name: p.name, kind: p.kind, pos: [snap(p.x) - x0, snap(p.y) - y0, snap(p.z) - z0], ...(p.extra ?? {}) }));
     const content: TileContent = { district: input.block, tx: t.tx, tz: t.tz, size: TILE_M, origin: cut.origin, meshes: cut.meshes, colliders: chunks, placements: [], lanes, pins, margin };
     const bad = tileBadVertices(content, margin);
     if (bad.length) {

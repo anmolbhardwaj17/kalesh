@@ -20,9 +20,10 @@
   "lat": 28.6353474,
   "lon": 77.2446032,
   "position": {
-    "source": "osm_footprint_centre",
+    "source": "hand",
     "ref": "way/97230893",
-    "evidence": "area centroid of OSM way/97230893 (osmBase 2026-11-11T16:24:25Z)"
+    "evidence": "edit lm_0029: Esri World Imagery read 2026-11-14 through tools/inspector/judge.mjs site (picture harness/reports/map/landmarks/held/kotla_firoz_shah_ruins_q1187568.png): the centre of the OSM outline way/97230893 lies in the middle of the walled ruins (the lawns between the stepwell, the pyramid with the pillar and the mosque); the Wikidata point is 191 m west at the edge of the site, by the stadium",
+    "footprint_centre_offset_m": 0
   },
   "footprint": {
     "source": "osm",
@@ -69,23 +70,40 @@
     "archetype": "ridge_and_parks"
   },
   "flags": [
+    "position_checked_by_hand",
     "sources_disagree_over_50m"
   ],
   "issue": "R-LM-01:way/97230893:Q1187568",
-  "place": "held",
+  "place": "ok",
   "agreement": {
     "osm_to_wikidata_m": 191.2,
     "wikidata": [28.634963, 77.2426934],
     "inside_footprint": false,
     "ok": false
   },
+  "orientation_deg": 0,
+  "orientation": {
+    "source": "round",
+    "axis_deg": null,
+    "elongation": 1.03,
+    "front_known": false
+  },
+  "extent": {
+    "ashokan_pillar_height_m": 13.1,
+    "source": "en.wikipedia 'Feroz Shah Kotla', read 2026-11-14: 'The 13.1 meters high column, made of polished sandstone and dating from the 3rd century BC'",
+    "note": "the height of the pillar alone; it stands on the three-tier pyramid, whose height the article does not give, so the landmark has no height_m yet"
+  },
   "licence_notes": "Geometry ODbL (OpenStreetMap contributors). Facts from Wikidata, CC0. Photos are reference only, never shipped.",
   "art": {
     "status": "stand-in"
   },
   "confidence": {
-    "position": "medium",
+    "position": "high",
     "footprint": "medium",
     "height": "none"
-  }
+  },
+  "edits": [
+    "lm_0029",
+    "lm_0035"
+  ]
 }

@@ -19,9 +19,10 @@
   "lat": 28.6392036,
   "lon": 77.2407823,
   "position": {
-    "source": "osm_footprint_centre",
+    "source": "hand",
     "ref": "way/351619618",
-    "evidence": "area centroid of OSM way/351619618 (osmBase 2026-11-11T16:24:25Z)"
+    "evidence": "edit lm_0018: an underground station shows nothing on a satellite picture, so it is checked on the map data (osmBase 2026-11-11): the footprint way/351619618 (building=transportation) lies 2 m from the Violet Line tunnel centre line (way/610024711) and 23 m from the centre of its five gates (Gate No. 1 to 5); the Wikidata point is 13 m off the tunnel and 107 m from the gates",
+    "footprint_centre_offset_m": 0
   },
   "footprint": {
     "source": "osm",
@@ -53,10 +54,11 @@
     "archetype": "low_density_compounds"
   },
   "flags": [
+    "position_checked_by_hand",
     "sources_disagree_over_50m"
   ],
   "issue": "R-LM-01:way/351619618:Q19580569",
-  "place": "held",
+  "place": "ok",
   "agreement": {
     "osm_to_wikidata_m": 104.2,
     "wikidata": [28.6400716, 77.2403797],
@@ -80,13 +82,23 @@
   "parts": [
     "node/7282286733"
   ],
+  "orientation_deg": 256.6,
+  "orientation": {
+    "source": "principal_axis",
+    "axis_deg": 166.6,
+    "elongation": 1.86,
+    "front_known": false
+  },
   "licence_notes": "Geometry ODbL (OpenStreetMap contributors). Facts from Wikidata, CC0. Photos are reference only, never shipped.",
   "art": {
     "status": "stand-in"
   },
   "confidence": {
-    "position": "medium",
+    "position": "high",
     "footprint": "medium",
     "height": "none"
-  }
+  },
+  "edits": [
+    "lm_0018"
+  ]
 }

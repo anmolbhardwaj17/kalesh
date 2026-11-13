@@ -88,6 +88,15 @@
     "combat_arena": false,
     "rule": "DELHI_WORLD.md 3 Respect rule: placed only where the sources place it, never a combat arena"
   },
+  "front": "east, the east gate that faces the Red Fort",
+  "orientation_deg": 86.3,
+  "orientation": {
+    "source": "axis_and_front",
+    "axis_deg": 86.3,
+    "elongation": 1.01,
+    "front_bearing_deg": 90,
+    "front_known": true
+  },
   "licence_notes": "Geometry ODbL (OpenStreetMap contributors). Facts from Wikidata, CC0. Photos are reference only, never shipped.",
   "art": {
     "status": "stand-in"
@@ -98,6 +107,7 @@
     "height": "high"
   },
   "edits": [
-    "lm_0004"
+    "lm_0004",
+    "lm_0015"
   ]
 }

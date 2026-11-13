@@ -80,6 +80,13 @@
     "inside_footprint": true,
     "ok": true
   },
+  "orientation_deg": 222.7,
+  "orientation": {
+    "source": "principal_axis",
+    "axis_deg": 132.7,
+    "elongation": 2.3,
+    "front_known": false
+  },
   "licence_notes": "Geometry ODbL (OpenStreetMap contributors). Facts from Wikidata, CC0. Photos are reference only, never shipped.",
   "art": {
     "status": "stand-in"

@@ -152,6 +152,7 @@ export async function readRegistryInput(io: RegistryIo): Promise<RegistryRead> {
   for (const e of overrides.edits) {
     if (e.target.osm) include.add(e.target.osm);
     if (e.set?.footprint?.source === 'osm' && e.set.footprint.ref) include.add(e.set.footprint.ref);
+    if (e.set?.pad?.source === 'osm' && e.set.pad.ref) include.add(e.set.pad.ref);
   }
   const { landmarks, skipped } = osmLandmarks(osm.elements, include);
 

@@ -19,9 +19,9 @@
   "lat": 28.6434826,
   "lon": 77.2227421,
   "position": {
-    "source": "osm_node",
+    "source": "hand",
     "ref": "node/554257841",
-    "evidence": "OSM node/554257841 (osmBase 2026-11-11T16:24:25Z)"
+    "evidence": "edit lm_0023: an underground station shows nothing on a satellite picture, so it is checked on the map data (osmBase 2026-11-11): the OSM station node/554257841 lies 3 m from the Yellow Line tunnel centre line (way/610022426) and 33 m from the centre of the New Delhi Metro Station gates (Gate No. 1 to 4 and the Airport Line gates); the Wikidata point is 72 m off the tunnel and 193 m from the gates"
   },
   "footprint": null,
   "height_m": null,
@@ -43,10 +43,11 @@
     "archetype": "old_city_bazaar"
   },
   "flags": [
+    "position_checked_by_hand",
     "sources_disagree_over_50m"
   ],
   "issue": "R-LM-01:node/554257841:Q3634456",
-  "place": "held",
+  "place": "ok",
   "agreement": {
     "osm_to_wikidata_m": 182.3,
     "wikidata": [28.642229, 77.221538],
@@ -70,13 +71,23 @@
   "parts": [
     "node/938409545"
   ],
+  "orientation_deg": null,
+  "orientation": {
+    "source": "none",
+    "axis_deg": null,
+    "elongation": null,
+    "front_known": false
+  },
   "licence_notes": "Geometry ODbL (OpenStreetMap contributors). Facts from Wikidata, CC0. Photos are reference only, never shipped.",
   "art": {
     "status": "stand-in"
   },
   "confidence": {
-    "position": "low",
+    "position": "high",
     "footprint": "none",
     "height": "none"
-  }
+  },
+  "edits": [
+    "lm_0023"
+  ]
 }

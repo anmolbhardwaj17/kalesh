@@ -70,6 +70,20 @@
     "inside_footprint": true,
     "ok": true
   },
+  "orientation_deg": 90.1,
+  "orientation": {
+    "source": "principal_axis",
+    "axis_deg": 0.1,
+    "elongation": 5.27,
+    "front_known": false
+  },
+  "extent": {
+    "length_m": 60,
+    "width_m": 15,
+    "steps": 108,
+    "source": "en.wikipedia 'Agrasen ki Baoli', read 2026-11-14: 'a 60-meter long and 15-meter wide historical stepwell' and 'This baoli, with 108 steps'",
+    "note": "a stepwell goes down, not up: the article gives no depth and no height, so the landmark has no height_m"
+  },
   "licence_notes": "Geometry ODbL (OpenStreetMap contributors). Facts from Wikidata, CC0. Photos are reference only, never shipped.",
   "art": {
     "status": "stand-in"
@@ -78,5 +92,8 @@
     "position": "high",
     "footprint": "medium",
     "height": "none"
-  }
+  },
+  "edits": [
+    "lm_0036"
+  ]
 }

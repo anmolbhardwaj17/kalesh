@@ -56,6 +56,13 @@
     "combat_arena": false,
     "rule": "DELHI_WORLD.md 3 Respect rule: placed only where the sources place it, never a combat arena"
   },
+  "orientation_deg": null,
+  "orientation": {
+    "source": "none",
+    "axis_deg": null,
+    "elongation": null,
+    "front_known": false
+  },
   "licence_notes": "Geometry ODbL (OpenStreetMap contributors). Facts from Wikidata, CC0. Photos are reference only, never shipped.",
   "art": {
     "status": "stand-in"

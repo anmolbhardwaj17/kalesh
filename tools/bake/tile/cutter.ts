@@ -33,7 +33,7 @@ export interface SourceMesh {
 /** Materials of the road builder that are merged into another one in the tile (one draw call fewer each). */
 export const MERGED: Readonly<Record<string, string>> = { kerbface: 'kerb', parapet: 'wall' };
 /** Draw order of the materials in a tile (others follow by name). */
-export const MATERIAL_ORDER = ['ground', 'lawn', 'plot', 'bed', 'water', 'road', 'parking', 'gore', 'marking', 'joint', 'median', 'planter', 'footpath', 'kerb', 'wall', 'pier', 'underside', 'building'];
+export const MATERIAL_ORDER = ['ground', 'lawn', 'plot', 'bed', 'water', 'forecourt', 'pad', 'wallbase', 'moat', 'road', 'parking', 'gore', 'marking', 'joint', 'median', 'planter', 'footpath', 'kerb', 'wall', 'pier', 'underside', 'building', 'landmark', 'landmark_red'];
 
 interface TileBin {
   tx: number;

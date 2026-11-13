@@ -18,6 +18,7 @@ const SUITES := [
 	"res://tests/test_physics_bench.gd",
 	"res://tests/test_tiles.gd",
 	"res://tests/test_streaming.gd",
+	"res://tests/test_landmarks.gd",
 	"res://tests/test_module_size.gd",
 	"res://tests/test_sim_clock.gd",
 	"res://tests/test_data_packs.gd",
