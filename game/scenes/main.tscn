@@ -17,6 +17,7 @@ fog_density = 0.002
 [sub_resource type="StandardMaterial3D" id="MatGround"]
 albedo_color = Color(0.784314, 0.705882, 0.541176, 1)
 roughness = 1.0
+metadata/flat_stand_in = true
 
 [sub_resource type="PlaneMesh" id="MeshGround"]
 material = SubResource("MatGround")
@@ -25,6 +26,7 @@ size = Vector2(2000, 2000)
 [sub_resource type="StandardMaterial3D" id="MatRoad"]
 albedo_color = Color(0.290196, 0.290196, 0.305882, 1)
 roughness = 1.0
+metadata/flat_stand_in = true
 
 [sub_resource type="PlaneMesh" id="MeshRoad"]
 material = SubResource("MatRoad")
@@ -47,6 +49,7 @@ script = ExtResource("3_play")
 
 [node name="Environment" type="WorldEnvironment" parent="World"]
 environment = SubResource("Env")
+metadata/no_heat_shimmer = true
 
 [node name="Sun" type="DirectionalLight3D" parent="World"]
 rotation = Vector3(-1.0297, 0.98279, 0)

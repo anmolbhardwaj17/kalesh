@@ -215,12 +215,20 @@ func stop_style_runner() -> void:
 	_style_runner = null
 
 
-## The look now: {style, light (the runner's light id), hour (the hour its light was built for)}. With --style=none
+## The look now: {style, light (the runner's light id), hour (the hour its light was built for), live (the live
+## relight numbers, style_runner.gd live_state)}. With --style=none
 ## light is "" and hour null.
 func look() -> Dictionary:
 	if _style_runner == null or _style_runner.style == null:
 		return {"style": style, "light": "", "hour": null}
-	return {"style": _style_runner.style_id, "light": _style_runner.light_id, "hour": _style_runner.hour}
+	return {"style": _style_runner.style_id, "light": _style_runner.light_id, "hour": _style_runner.hour,
+		"live": _style_runner.live_state()}
+
+
+## A grade LUT still building on a worker thread is waited for before the game quits.
+func _exit_tree() -> void:
+	if _style_runner != null:
+		_style_runner.stop()
 
 
 func apply(p: Dictionary) -> void:

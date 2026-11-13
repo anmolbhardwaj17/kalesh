@@ -1,6 +1,6 @@
 {
   "_doc": "Written only by node harness/bin/task.mjs. Phases run in order; P0 (ADOPT + STYLE DISCOVERY) waits for the owner by design and needs task.mjs signoff and task.mjs archsignoff before its gate passes. Later phases are added by the planner at the end of P0 (task.mjs phase-add) from the game's real state.",
-  "updated": "2026-11-13T13:25:55.217Z",
+  "updated": "2026-11-13T13:41:29.859Z",
   "phases": [
     {
       "id": "P0",
@@ -4060,7 +4060,9 @@
       "kind": "mentor",
       "status": "todo",
       "attempts": 0,
-      "notes": [],
+      "notes": [
+        "From P1-028: live relight works (sky, sun, haze, grade, lamps and windows follow the clock); the streamed city has 0 lamps and windows so its night is only sky and grade (mean luma 0.159). Needs: player and traffic headlights and tail lights, city streetlights (P2-036), lit windows on generated buildings (P2-009/P2-010), shops that close at night."
+      ],
       "created": "2026-11-13T11:54:41.171Z"
     },
     {

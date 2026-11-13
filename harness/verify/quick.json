@@ -25,6 +25,15 @@
       ]
     },
     {
+      "path": "game/render/",
+      "scenarios": [
+        "boot_title",
+        "street_boot",
+        "landmarks_boot",
+        "relight_live_street"
+      ]
+    },
+    {
       "path": "game/ui/",
       "scenarios": [
         "street_boot"

@@ -330,12 +330,14 @@ func state() -> Dictionary:
 
 
 ## The time of day: the day clock (game/core/day_clock.gd) {hour, clock, rate, pinned} plus the look's own hour
-## (`lookHour`, the hour the current scene's light was built for; null with --style=none) and its light id.
+## (`lookHour`, the hour the current scene's light was built for or last relit to; null with --style=none), its light
+## id and `live` (P1-028: builds, relights, relightMsMax, night, windowShare, nightLights, nightLightsOn, ...).
 func time_state() -> Dictionary:
 	var out: Dictionary = _day().state()
 	var look: Dictionary = _args().look()
 	out["lookHour"] = look.hour
 	out["light"] = look.light
+	out["live"] = look.get("live")
 	return out
 
 

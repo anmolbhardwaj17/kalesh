@@ -294,3 +294,122 @@ func test_time_of_day_is_in_state() -> void:
 	tree.root.remove_child(server)
 	server.free()
 	GameArgs.debug_port = keep_port
+
+
+# ---------------------------------------------------------------- live relight (P1-028)
+
+
+## Every light-driven Environment setting of a relit look equals a fresh build at that light: a scene that stays loaded
+## from golden to night looks like one loaded at night (sky, ambient and night fill, exposure, haze, dawn contrast).
+func test_relight_in_place_matches_a_fresh_build() -> void:
+	for pair in [["golden", "night"], ["afternoon", "dawn"], ["night", "afternoon"]]:
+		var st := _style("stylised_b", pair[0])
+		var env: Environment = st.environment()
+		st.relight(DayCycle.key(pair[1]).duplicate(), true)
+		var fresh: Environment = _style("stylised_b", pair[1]).environment()
+		t.ok(st.environment() == env, "%s to %s: the same Environment object (no rebuild)" % pair)
+		var sm: ProceduralSkyMaterial = env.sky.sky_material
+		var fm: ProceduralSkyMaterial = fresh.sky.sky_material
+		t.ok(sm.sky_top_color == fm.sky_top_color and sm.sky_horizon_color == fm.sky_horizon_color
+			and sm.sky_energy_multiplier == fm.sky_energy_multiplier, "%s to %s: the sky" % pair)
+		for p in ["ambient_light_energy", "ambient_light_color", "ambient_light_sky_contribution", "tonemap_exposure",
+				"fog_light_color", "fog_density", "fog_sun_scatter", "adjustment_contrast"]:
+			t.ok(env.get(p) == fresh.get(p), "%s to %s: %s %s (fresh %s)" % [pair[0], pair[1], p, env.get(p), fresh.get(p)])
+		t.ok(env.adjustment_color_correction == fresh.adjustment_color_correction, "%s to %s: the exact grade LUT" % pair)
+
+
+## Night lights and lit windows a live look makes at any hour: hidden by day, on at night, energy by the night factor;
+## the daylight bounce lights the other way round. The window pane share follows the light.
+func test_live_night_lights_and_windows_follow_the_light() -> void:
+	var st := _style("stylised_b", "golden")
+	t.ok(st.can_relight() and st._live(), "stylised_b relights live")
+	t.ok(not _style("realistic", "golden").can_relight(), "realistic keeps the rebuild on a scene load")
+	var lamp := SpotLight3D.new()
+	var shop := OmniLight3D.new()
+	var bounce := OmniLight3D.new()
+	st._night_light(lamp, 300.0)
+	st._night_light(shop, 2.2, 0.5)
+	st._night_light(bounce, -1.0)
+	t.ok(not lamp.visible and not shop.visible and bounce.visible, "golden: lamps off, the bounce light on")
+	var win: ShaderMaterial = st.material_for(_named_material("winlit"))
+	t.near(win.get_shader_parameter("share"), 0.08, 1e-6, "golden: 8% of the window panes lit")
+	st.relight(DayCycle.at(19.0), true)
+	t.ok(lamp.visible and shop.visible and bounce.light_energy < 0.2, "dusk: lamps and shop lights on, bounce dimmed")
+	t.near(lamp.light_energy, 300.0 * 0.75, 1e-3, "lamp energy by the night factor")
+	t.near(win.get_shader_parameter("share"), 0.4, 1e-6, "dusk: 40% of the window panes lit")
+	st.relight(DayCycle.key("night").duplicate(), true)
+	t.near(lamp.light_energy, 300.0, 1e-3, "full night: full lamp energy")
+	t.ok(not bounce.visible, "full night: the daylight bounce light is off")
+	var stats: Dictionary = st.live_stats()
+	t.ok(stats.nightLights == 2 and stats.nightLightsOn == 2, "stats count the night lights: %s" % [stats])
+	st.relight(DayCycle.key("afternoon").duplicate(), true)
+	t.ok(not lamp.visible and bounce.visible and win.get_shader_parameter("share") == 0.0, "afternoon: all off again")
+	lamp.free()
+	shop.free()
+	bounce.free()
+
+
+## A running clock gets its grade LUT from a worker thread (quantised); poll() puts it into the same Environment.
+func test_live_grade_lut_comes_from_a_worker_thread() -> void:
+	var st := _style("stylised_b", "golden")
+	var env: Environment = st.environment()
+	var before: Texture3D = env.adjustment_color_correction
+	st.relight(DayCycle.at(18.6), false)
+	t.ok(st.lut_busy(), "a new blend starts a worker-thread LUT")
+	t.ok(env.adjustment_color_correction == before, "the old grade stays until it is ready")
+	st.finish()
+	st.relight(DayCycle.at(18.6), false)
+	var deadline := Time.get_ticks_msec() + 5000
+	while st.lut_busy() and Time.get_ticks_msec() < deadline:
+		OS.delay_msec(5)
+		st.poll()
+	t.ok(not st.lut_busy() and env.adjustment_color_correction != before, "the worker LUT is in the Environment")
+	t.ok(env.adjustment_color_correction.get_depth() == Stylised.LUT_SIZE, "a full size LUT")
+
+
+## The runner relights a loaded scene when the clock moves, without building the style again.
+func test_runner_relights_live_without_a_rebuild() -> void:
+	var clock: Node = tree.root.get_node("DayClock")
+	var keep: Dictionary = clock.state()
+	clock.set_time({"hour": 17.0, "pin": true})
+	var r: RefCounted = load(RUNNER).new(tree, "stylised_b", "", "17", "")
+	var builds: int = r.builds
+	var env: Environment = r.style.environment()
+	clock.set_time({"hour": 17.0 + 0.5 / 60.0})
+	t.ok(not r.relight_to_clock(), "under a game minute: no relight")
+	clock.set_time({"hour": 20.0})
+	t.ok(r.relight_to_clock(), "three game hours later the look relights")
+	t.ok(r.builds == builds and r.style.environment() == env, "no rebuild: the same style and Environment")
+	t.near(r.hour, 20.0, 1e-9, "the look's hour is the clock's")
+	t.ok(r.style.light.night > 0.9, "20:00 is night: %.2f" % r.style.light.night)
+	var live: Dictionary = r.live_state()
+	t.ok(live.relights == 1 and live.live, "live state counts the relight: %s" % [live])
+	r.stop()
+	clock.set_time({"hour": keep.hour, "rate": keep.rate, "pin": keep.pinned})
+
+
+func _named_material(key: String) -> Material:
+	var m := StandardMaterial3D.new()
+	m.resource_name = key
+	return m
+
+
+## Flat stand-in colours (the scaffold ground, the streamed city's tile materials) get a darker twin under the look;
+## dark colours (asphalt) keep their albedo; kit materials and unmarked materials are untouched.
+func test_flat_stand_ins_get_a_darker_twin() -> void:
+	var st := _style("stylised_b", "afternoon")
+	var sand := StandardMaterial3D.new()
+	sand.albedo_color = Color(0.784314, 0.705882, 0.541176)
+	sand.set_meta(Stylised.FLAT_META, true)
+	var road := StandardMaterial3D.new()
+	road.albedo_color = Color(0.22, 0.22, 0.24)
+	road.set_meta(Stylised.FLAT_META, true)
+	var tw: StandardMaterial3D = st.material_for(sand)
+	t.ok(tw != null and tw != sand and tw.albedo_color.get_luminance() < sand.albedo_color.get_luminance() - 0.15,
+		"sand reads darker: %s to %s" % [sand.albedo_color, tw.albedo_color if tw != null else null])
+	t.ok(st.material_for(sand) == tw, "one twin per stand-in material")
+	var rt: StandardMaterial3D = st.material_for(road)
+	t.ok(rt != null and absf(rt.albedo_color.r - 0.22) < 0.02, "asphalt keeps its albedo: %s" % [rt.albedo_color if rt != null else null])
+	t.ok(st.material_for(StandardMaterial3D.new()) == null, "an unmarked material is kept")
+	var TileMesh := load("res://world/systems/tile_mesh.gd")
+	t.ok((TileMesh.stand_ins()["ground"] as Material).has_meta(Stylised.FLAT_META), "the city tile materials are flat stand-ins")
