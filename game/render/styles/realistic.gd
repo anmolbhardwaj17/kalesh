@@ -186,6 +186,12 @@ func _dress(mi: MeshInstance3D) -> void:
 # ---------------------------------------------------------------- P0-034 setup kept for this reference look
 
 
+## The realistic reference sets more from the light in environment() (physical sky by day, volumetric fog, its own
+## grade) than light_environment() covers: it keeps the rebuild on a scene load instead of the live relight (P1-028).
+func can_relight() -> bool:
+	return false
+
+
 ## Realistic keeps the P0-034 batch B setup (stylised B's lean path, P0-037, is for the performance target).
 func _lean() -> bool:
 	return false
