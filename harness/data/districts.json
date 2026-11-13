@@ -66,6 +66,7 @@
       "dataDir": "data/pilot_centre",
       "sources": [
         "osm",
+        "osm_turns",
         "overture_buildings",
         "gedtm30",
         "glo30",

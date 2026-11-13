@@ -215,7 +215,7 @@ data/ sources (pinned) -> blocks and focus outlines (districts.json) -> ingest a
 -> health report, issues for the inspector
 ```
 
-- Sources: OSM roads only (ODbL, credit "© OpenStreetMap contributors"); Overture buildings (ODbL; landmarks join on OSM directly because Overture drops the wikidata tag); GEDTM30 smoothed over 60 m for the ground (CC BY 4.0), filtered Copernicus GLO-30 as the fallback; Wikidata (CC0) for landmarks. FABDEM is a bench yardstick only and never shipped. The repaired map data is published openly, as ODbL asks.
+- Sources: OSM roads only (ODbL, credit "© OpenStreetMap contributors"; turn restrictions and turn:lanes in their own small pin `osm_turns` since P1-032); Overture buildings (ODbL; landmarks join on OSM directly because Overture drops the wikidata tag); GEDTM30 smoothed over 60 m for the ground (CC BY 4.0), filtered Copernicus GLO-30 as the fallback; Wikidata (CC0) for landmarks. FABDEM is a bench yardstick only and never shipped. The repaired map data is published openly, as ODbL asks.
 - Building heights come from OSM tags where present (4 to 19% of buildings) and otherwise from the area profile's floor counts. Landmarks get their real heights by hand (owner answer).
 - Lanes come from class defaults, hero road specs and whole-street inference (the `lanes` tag is on 1 to 8% of ways). Left-hand traffic.
 - The bake is deterministic: the same sources, overrides and seeds give the same tiles. Every random pick is seeded from the world tile and a parcel id.

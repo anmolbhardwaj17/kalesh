@@ -4,6 +4,8 @@
 // edge plan. Pure.
 import type { GraphEdge } from '../graph/build.ts';
 import { lanePose, planTurns, turnPath } from './connect.ts';
+import { arrivingTurns } from './turns.ts';
+import type { MappedRestriction } from './turns.ts';
 import type { ArmLane, ArmView, PathGeom, Turn } from './connect.ts';
 import type { GEdge, GEnd, GNode } from './graph.ts';
 import { edgePoint, planJunction, tangentAt } from './junction.ts';
@@ -73,7 +75,11 @@ export function planClusters(c: NetCtx, z: ZonePhase): ClusterPhase {
     a.cs.lanes.forEach((l, k) => {
       if (l.type === 'drive') lanes.push({ k, lat: ((a.borders[k] as number) + (a.borders[k + 1] as number)) / 2, width: l.width, flow: l.dir });
     });
-    return { x: p.x, z: p.z, ox: t.x, oz: t.z, edge: src.id, paired: src.pairedWith, lanes };
+    // turn lanes of the way piece at the arm's junction end (turn:lanes, P1-032)
+    const piece = a.end.atStart ? src.pieces[0] : src.pieces[src.pieces.length - 1];
+    const wt = piece ? input.turnInputs?.wayTurns.get(piece.way) : undefined;
+    const turns = wt ? arrivingTurns(wt, a.end.atStart ? src.a : src.b, t.x, t.z) : null;
+    return { x: p.x, z: p.z, ox: t.x, oz: t.z, edge: src.id, paired: src.pairedWith, lanes, ...(turns ? { turns } : {}) };
   };
   const members = (): Map<number, number[]> => {
     const groups = new Map<number, number[]>();
@@ -105,8 +111,11 @@ export function planClusters(c: NetCtx, z: ZonePhase): ClusterPhase {
       const jp = planJunction(graph, plans, `j${nodeId[ids[0] as number]}`, ids, ends, 1.5, (e) => ask.get(key(e)) ?? 0, roomOf);
       const views = jp.arms.map(view);
       const pose = (arm: number, lane: ArmLane, into: boolean) => lanePose(views[arm] as ArmView, lane, into);
-      const tp = planTurns(views, input.restrictions ?? [], (f, fl, t, tl) => turnPath(pose(f, fl, true), pose(t, tl, false)).radius, PLAN_RADIUS_M + 0.15);
-      res = { jp, views, turns: tp.turns, pairs: tp.pairs, uTurnsTooTight: tp.uTurnsTooTight, restricted: tp.restricted, dropped: 0, tight: 0 };
+      const here = new Set(ids.map((n) => nodeId[n] as string));
+      const mapped = resolveRules(c.turnRules.filter((r) => here.has(r.via)), views, here, source);
+      const rules = [...(input.restrictions ?? []), ...mapped];
+      const tp = planTurns(views, rules, (f, fl, t, tl) => turnPath(pose(f, fl, true), pose(t, tl, false)).radius, PLAN_RADIUS_M + 0.15);
+      res = { jp, views, turns: tp.turns, pairs: tp.pairs, uTurnsTooTight: tp.uTurnsTooTight, restricted: tp.restricted, laneRestricted: tp.laneRestricted, laneArms: tp.laneArms, rules: mapped, dropped: 0, tight: 0 };
       let changed = false;
       const failing: { t: Turn; g: PathGeom }[] = [];
       for (const t of tp.turns) {
@@ -201,4 +210,51 @@ export function planClusters(c: NetCtx, z: ZonePhase): ClusterPhase {
     }
   }
   return { absorbed, planned, retry };
+}
+
+/**
+ * Restrictions on the arms of one cluster (P1-032). A restriction may name an edge inside the cluster (the short
+ * pieces of a chowk the cluster rule took in): the arm is then the one that edge leads to (a to edge, walking on with
+ * the traffic) or comes from (a from edge, walking back), when that walk through the cluster's inside edges reaches
+ * exactly one arm. Restrictions that still do not name two arms are left out here.
+ */
+export function resolveRules(rules: readonly MappedRestriction[], views: readonly ArmView[], here: ReadonlySet<string>, source: readonly GraphEdge[]): MappedRestriction[] {
+  if (!rules.length) return [];
+  const arms = new Set(views.map((v) => v.edge));
+  const inside = source.filter((e) => here.has(e.a) && here.has(e.b) && !arms.has(e.id));
+  const byId = new Map(source.map((e) => [e.id, e]));
+  // the arms one walk reaches: forward leaves along the traffic, backward arrives against it
+  const walk = (start: GraphEdge, forward: boolean): string[] => {
+    const found = new Set<string>();
+    const seen = new Set<string>([start.id]);
+    let front = start.oneway ? [forward ? start.b : start.a] : [start.a, start.b];
+    for (let step = 0; step < 12 && front.length; step++) {
+      const next: string[] = [];
+      for (const n of front) {
+        for (const v of views) {
+          const e = byId.get(v.edge);
+          if (!e || seen.has(e.id)) continue;
+          const ok = forward ? (e.a === n || (!e.oneway && e.b === n)) : (e.b === n || (!e.oneway && e.a === n));
+          if (ok) found.add(e.id);
+        }
+        for (const e of inside) {
+          if (seen.has(e.id)) continue;
+          const on = forward ? (e.a === n ? e.b : !e.oneway && e.b === n ? e.a : null) : (e.b === n ? e.a : !e.oneway && e.a === n ? e.b : null);
+          if (on === null) continue;
+          seen.add(e.id);
+          next.push(on);
+        }
+      }
+      front = next;
+    }
+    return [...found];
+  };
+  const out: MappedRestriction[] = [];
+  for (const r of rules) {
+    const f = arms.has(r.from) ? [r.from] : byId.get(r.from) ? walk(byId.get(r.from) as GraphEdge, false) : [];
+    const t = arms.has(r.to) ? [r.to] : byId.get(r.to) ? walk(byId.get(r.to) as GraphEdge, true) : [];
+    if (f.length !== 1 || t.length !== 1) continue;
+    out.push({ ...r, from: f[0] as string, to: t[0] as string });
+  }
+  return out;
 }

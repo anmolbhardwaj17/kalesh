@@ -65,6 +65,7 @@ export function glo30Tile(box: GeoBox): string {
 
 const FILE_OF: Record<SourceKind, (dir: string, box: GeoBox) => string> = {
   osm: (dir) => `${dir}/osm.json`,
+  osm_turns: (dir) => `${dir}/osm_turns.json`,
   overture_buildings: (dir) => `${dir}/overture_buildings.json`,
   gedtm30: (dir) => `${dir}/gedtm30_window.json`,
   glo30: (_dir, box) => `data/dem/glo30_${glo30Tile(box)}.tif`,

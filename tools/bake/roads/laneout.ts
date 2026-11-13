@@ -37,6 +37,8 @@ export interface LaneModelFile {
   tightPaths: LaneBuild['tightPaths'];
   /** What the width step settled (P1-046): tapers at junction ends and whole edges. */
   widthFixes: LaneBuild['widthFixes'];
+  /** Crossings away from the junctions (P1-032). */
+  crossings: LaneBuild['crossings'];
 }
 
 /** The lane model as plain data. Strips keep their order: joints, zones and junctions name them by number. */
@@ -47,7 +49,7 @@ export function laneModelFile(b: LaneBuild, block: string, stage: string): LaneM
   };
   return {
     format: LANES_FORMAT,
-    _doc: 'Lane model of one bake stage (tools/bake/roads/network.ts). Block metres: x east, z south (north is -Z). A strip is a run of stations along a reference line; a station is [x, z, nx, nz, s, layer, bridge, borders...]: the reference point, the unit vector to the left of the station order, metres along the source edge, the OSM layer, 1 on a bridge, then the lateral position of every lane border left to right (lanes + 1 numbers, falling). Lanes are listed left to right; dir 1 runs with the station order, -1 against it, 0 both ways or no traffic. Left-hand traffic. joints: two strip ends that meet, with lane pairs. zones: one strip from a split node to the nose with both branches side by side. junctions: arms (strip ends, the cut, the stop line, edges: the raised edge widths [left, right] looking away from the junction at the strip end, after edges gave way) and paths (from [strip, lane] to [strip, lane] with the turn, the radius and the points). ends: strip ends with nothing after them, each explained.',
+    _doc: 'Lane model of one bake stage (tools/bake/roads/network.ts). Block metres: x east, z south (north is -Z). A strip is a run of stations along a reference line; a station is [x, z, nx, nz, s, layer, bridge, borders...]: the reference point, the unit vector to the left of the station order, metres along the source edge, the OSM layer, 1 on a bridge, then the lateral position of every lane border left to right (lanes + 1 numbers, falling). Lanes are listed left to right; dir 1 runs with the station order, -1 against it, 0 both ways or no traffic. Left-hand traffic. joints: two strip ends that meet, with lane pairs. zones: one strip from a split node to the nose with both branches side by side. junctions: arms (strip ends, the cut, the stop line, edges: the raised edge widths [left, right] looking away from the junction at the strip end, after edges gave way) and paths (from [strip, lane] to [strip, lane] with the turn, the radius and the points). ends: strip ends with nothing after them, each explained. crossings: zebras away from the junctions, by strip and metres along its reference line (P1-032).',
     block, stage,
     strips: b.strips.map((s) => ({
       id: s.id, edge: s.edge, kind: s.kind, cls: s.cls, link: s.link, name: s.name, hero: s.hero, lanes: s.lanes,
@@ -56,7 +58,7 @@ export function laneModelFile(b: LaneBuild, block: string, stage: string): LaneM
     })),
     joints: b.joints,
     zones: b.zones.map((z, i) => ({ strip: b.zoneStrips[i] as number, node: b.road.nodeId[z.node] as string, kind: z.kind, paintedNoseM: z.dPainted, noseM: z.dNose, parent: at(z.parent), left: at(z.left), right: at(z.right), ...(z.mid ? { mid: at(z.mid) } : {}) })),
-    junctions: b.junctions, ends: b.ends, internal: b.internal, forks: b.forks, widenings: b.widenings, fitted: b.fitted, tightPaths: b.tightPaths, widthFixes: b.widthFixes,
+    junctions: b.junctions, ends: b.ends, internal: b.internal, forks: b.forks, widenings: b.widenings, fitted: b.fitted, tightPaths: b.tightPaths, widthFixes: b.widthFixes, crossings: b.crossings,
   };
 }
 
@@ -309,6 +311,10 @@ export interface LanesRecord {
   /** Edge lanes narrowed beside another strip (roads/edges.ts). */
   edgeTrims: LaneBuild['edgeTrims'];
   junctionClusters: { most: number; over8Nodes: number };
+  /** Turn rules of the map (P1-032): restriction relations read, mapped and applied; turn lanes read and applied. */
+  turnRules: LaneBuild['turnRules'];
+  /** Crossings away from the junctions (P1-032): placed, added on the other carriageway, skipped by reason. */
+  midBlockCrossings: LaneBuild['crossingReport'] & { bySource: Record<string, number> };
   problems: string[];
   ms: Record<string, number>;
   files: Record<string, string | string[]>;
@@ -356,6 +362,8 @@ export function lanesRecord(b: LaneBuild, c: LaneChecks, hash: string, buildMs: 
     overlap: c.overlap,
     edgeTrims: b.edgeTrims,
     junctionClusters: { most: b.junctions.reduce((m, j) => Math.max(m, j.nodes.length), 0), over8Nodes: b.junctions.filter((j) => j.nodes.length > 8).length },
+    turnRules: b.turnRules,
+    midBlockCrossings: { ...b.crossingReport, bySource: b.crossings.reduce<Record<string, number>>((m, x) => ((m[x.source] = (m[x.source] ?? 0) + 1), m), {}) },
     problems: b.problems, ms: b.ms, files,
   };
 }

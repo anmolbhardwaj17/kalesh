@@ -6,22 +6,47 @@ import { taggedLanes } from './graph/classify.ts';
 import type { GraphInput } from './graph/build.ts';
 import type { StagePlan } from './layout/stages.ts';
 import type { LaneModelInput } from './roads/network.ts';
+import { readTurnElements, wayTurnsOf } from './roads/turns.ts';
+import type { OsmElement } from './osm.ts';
+import type { P2 } from './geom.ts';
 
-/** What the lane model reads besides the graph: the lanes tag of every way, crossings and signals, the hero specs. */
-export function laneInputs(input: GraphInput, plan: StagePlan, heroes: LaneModelInput['heroes']): Pick<LaneModelInput, 'wayLanes' | 'points' | 'heroes'> {
+/** A crossing node with no zebra: crossing=unmarked or no, or crossing:markings=no. */
+export const unmarkedCrossing = (t: Readonly<Record<string, string>>): boolean => t['crossing'] === 'unmarked' || t['crossing'] === 'no' || t['crossing:markings'] === 'no' || (t['crossing'] ?? '').startsWith('uncontrolled;unmarked');
+
+/**
+ * What the lane model reads besides the graph: the lanes tag of every way, crossings and signals, the hero specs, and
+ * the turn rules (P1-032): restriction relations and turn:lanes of the osm_turns pin, with the reference turn lanes of
+ * harness/data/turn_lanes.json on top (a reference entry wins over the OSM tags of its way).
+ */
+export function laneInputs(input: GraphInput, plan: StagePlan, heroes: LaneModelInput['heroes']): Pick<LaneModelInput, 'wayLanes' | 'points' | 'heroes' | 'turnInputs'> {
   const proj = projector(plan.origin);
   const wayLanes = new Map<string, number>();
   const points: NonNullable<LaneModelInput['points']>[number][] = [];
+  const nodes = new Map<number, { lat: number; lon: number }>();
+  const ways = new Map<number, OsmElement>();
   for (const el of input.elements) {
+    if (el.type === 'node' && el.lat !== undefined && el.lon !== undefined) nodes.set(el.id, { lat: el.lat, lon: el.lon });
     if (el.type === 'way' && el.tags?.['highway']) {
+      ways.set(el.id, el);
       const n = taggedLanes(el.tags);
       if (n !== null) wayLanes.set(`way/${el.id}`, n);
     } else if (el.type === 'node' && el.lat !== undefined && el.lon !== undefined && (el.tags?.['highway'] === 'crossing' || el.tags?.['highway'] === 'traffic_signals')) {
       const p = proj.toWorld(el.lat, el.lon);
-      points.push({ x: p.x, z: p.z, kind: el.tags['highway'] === 'crossing' ? 'crossing' : 'signals' });
+      const crossing = el.tags['highway'] === 'crossing';
+      points.push({ x: p.x, z: p.z, kind: crossing ? 'crossing' : 'signals', id: `node/${el.id}`, ...(crossing && unmarkedCrossing(el.tags) ? { marked: false } : {}) });
     }
   }
-  return { wayLanes, points, ...(heroes ? { heroes } : {}) };
+  const project = (lat: number, lon: number): P2 => proj.toWorld(lat, lon);
+  const nodeAt = (id: number): { lat: number; lon: number } | null => nodes.get(id) ?? null;
+  const turnInputs = readTurnElements(input.turnElements ?? [], project, nodeAt);
+  for (const r of input.turnLaneRefs ?? []) {
+    const id = Number(r.way.replace(/^way\//, ''));
+    const w = ways.get(id);
+    if (!w) continue;
+    const t = wayTurnsOf({ id, nodes: w.nodes ?? [], tags: { ...(w.tags ?? {}), ...r.tags } }, project, nodeAt, r.source);
+    if (t) turnInputs.wayTurns.set(t.way, t);
+  }
+  return { wayLanes, points, turnInputs, ...(heroes ? { heroes } : {}) };
 }
 
 /** North-up pictures of the lane model: the two sites of the Phase 0 road bench (drawn when they lie in the stage). */

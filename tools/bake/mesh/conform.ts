@@ -22,23 +22,29 @@ export interface EdgeMap {
   owner: Int32Array;
   /** Edges that two faces have in the same direction: faces on top of each other. */
   doubled: number;
+  /** Where the first doubled edges are (plan point of their first vertex) and the faces' pieces. */
+  doubledAt: { x: number; z: number; pieces: [number, number] }[];
 }
 
 export function buildEdges(fs: FaceSet): EdgeMap {
   const at = new Map<number, number>();
   const owner = new Int32Array(fs.ids.length).fill(-1);
   let doubled = 0;
+  const doubledAt: EdgeMap['doubledAt'] = [];
   for (let f = 0; f < fs.faces; f++) {
     const s = fs.start[f] as number;
     const n = fs.len[f] as number;
     for (let k = 0; k < n; k++) {
       owner[s + k] = f;
       const key = edgeKey(fs.ids[s + k] as number, fs.ids[s + ((k + 1) % n)] as number);
-      if (at.has(key)) doubled++;
-      else at.set(key, s + k);
+      if (at.has(key)) {
+        doubled++;
+        const id = fs.ids[s + k] as number;
+        if (doubledAt.length < 20) doubledAt.push({ x: Math.round((fs.vx[id] as number) * 10) / 10, z: Math.round((fs.vz[id] as number) * 10) / 10, pieces: [fs.piece[owner[at.get(key) as number] as number] as number, fs.piece[f] as number] });
+      } else at.set(key, s + k);
     }
   }
-  return { at, owner, doubled };
+  return { at, owner, doubled, doubledAt };
 }
 
 /** The corner after pool index c in its face. */
@@ -53,6 +59,8 @@ export interface ConformReport {
   inserted: number;
   /** Vertices still within T_JOINT_M of a free edge they are not part of, after the last round. */
   tJointsLeft: number;
+  /** Where the first T joints left are (plan point of the vertex) and the piece of the face whose edge it lies on. */
+  tJointsAt: { x: number; z: number; piece: number }[];
   /** Vertices between T_JOINT_M and NEAR_MISS_M from a free edge they are not part of, and the widest such gap. */
   nearMisses: number;
   nearMissMaxM: number;
@@ -126,7 +134,7 @@ function findJoints(fs: FaceSet, edges: EdgeMap, near: { n: number; max: number;
 
 /** Puts every vertex that lies on a free edge of another face into that edge, until none is left. */
 export function conform(fs: FaceSet): ConformReport {
-  const out: ConformReport = { rounds: 0, inserted: 0, tJointsLeft: 0, nearMisses: 0, nearMissMaxM: 0, nearMissList: [] };
+  const out: ConformReport = { rounds: 0, inserted: 0, tJointsLeft: 0, tJointsAt: [], nearMisses: 0, nearMissMaxM: 0, nearMissList: [] };
   for (let round = 0; round < 6; round++) {
     const hits = findJoints(fs, buildEdges(fs), null);
     if (!hits.length) break;
@@ -150,7 +158,9 @@ export function conform(fs: FaceSet): ConformReport {
     }
   }
   const near = { n: 0, max: 0, list: [] as { x: number; z: number; d: number }[] };
-  out.tJointsLeft = findJoints(fs, buildEdges(fs), near).length;
+  const left = findJoints(fs, buildEdges(fs), near);
+  out.tJointsLeft = left.length;
+  out.tJointsAt = left.slice(0, 20).map((h) => ({ x: Math.round((fs.vx[h.id] as number) * 10) / 10, z: Math.round((fs.vz[h.id] as number) * 10) / 10, piece: fs.piece[h.face] as number }));
   out.nearMisses = near.n;
   out.nearMissMaxM = Math.round(near.max * 10000) / 10000;
   out.nearMissList = near.list;
@@ -168,8 +178,11 @@ export interface Loop {
 export interface BoundaryReport {
   loops: Loop[];
   freeEdges: number;
-  /** Free edges that did not close into a loop. */
+  /** Free edges that did not close into a loop, and where the first such chains start. */
   unclosed: number;
+  unclosedAt: { x: number; z: number; edges: number }[];
+  /** Closed loops with no area (their edges run there and back), where the first ones start. */
+  zeroAt: { x: number; z: number; edges: number }[];
   /** Loops under a centimetre wide on average: a hairline between two pieces that nearly touch. The ground cut may drop them. */
   sliverLoops: number;
   sliverEdges: number;
@@ -200,6 +213,8 @@ export function boundaryLoops(fs: FaceSet, edges: EdgeMap): BoundaryReport {
   const used = new Set<number>();
   const loops: Loop[] = [];
   let unclosed = 0;
+  const unclosedAt: BoundaryReport['unclosedAt'] = [];
+  const zeroAt: BoundaryReport['unclosedAt'] = [];
   let sliverLoops = 0;
   let sliverEdges = 0;
   let sliverM2 = 0;
@@ -241,6 +256,7 @@ export function boundaryLoops(fs: FaceSet, edges: EdgeMap): BoundaryReport {
       }
       if (!closed) {
         unclosed += ids.length;
+        if (unclosedAt.length < 20) unclosedAt.push({ x: Math.round((fs.vx[a0] as number) * 10) / 10, z: Math.round((fs.vz[a0] as number) * 10) / 10, edges: ids.length });
         continue;
       }
       let area = 0;
@@ -257,8 +273,9 @@ export function boundaryLoops(fs: FaceSet, edges: EdgeMap): BoundaryReport {
         sliverEdges += ids.length;
         sliverM2 += Math.abs(area);
       }
+      if (area === 0 && zeroAt.length < 20) zeroAt.push({ x: Math.round((fs.vx[ids[0] as number] as number) * 10) / 10, z: Math.round((fs.vz[ids[0] as number] as number) * 10) / 10, edges: ids.length });
       loops.push({ ids, area, perimeter });
     }
   }
-  return { loops, freeEdges, unclosed, sliverLoops, sliverEdges, sliverM2: Math.round(sliverM2 * 1000) / 1000 };
+  return { loops, freeEdges, unclosed, unclosedAt, zeroAt, sliverLoops, sliverEdges, sliverM2: Math.round(sliverM2 * 1000) / 1000 };
 }

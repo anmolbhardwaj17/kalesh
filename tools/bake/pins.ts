@@ -35,13 +35,14 @@ export interface LicenceRow {
   shipped: boolean;
 }
 
-export type SourceKind = 'osm' | 'overture_buildings' | 'gedtm30' | 'glo30' | 'wikidata';
+export type SourceKind = 'osm' | 'osm_turns' | 'overture_buildings' | 'gedtm30' | 'glo30' | 'wikidata';
 
-export const SOURCE_KINDS: readonly SourceKind[] = ['osm', 'overture_buildings', 'gedtm30', 'glo30', 'wikidata'];
+export const SOURCE_KINDS: readonly SourceKind[] = ['osm', 'osm_turns', 'overture_buildings', 'gedtm30', 'glo30', 'wikidata'];
 
-/** The licence rows of the five bake sources, copied from the checked table (licences.mjs rows of the same id). */
+/** The licence rows of the bake sources (osm_turns, P1-032: the turn restrictions and turn lanes of the same OSM, its own small query), copied from the checked table (licences.mjs rows of the same id). */
 export const LICENCES: Readonly<Record<SourceKind, LicenceRow>> = {
   osm: { licence: 'ODbL 1.0', licenceUrl: 'https://www.openstreetmap.org/copyright', credit: '© OpenStreetMap contributors', shipped: true },
+  osm_turns: { licence: 'ODbL 1.0', licenceUrl: 'https://www.openstreetmap.org/copyright', credit: '© OpenStreetMap contributors', shipped: true },
   overture_buildings: { licence: 'ODbL 1.0', licenceUrl: 'https://docs.overturemaps.org/attribution/', credit: '© OpenStreetMap contributors, Overture Maps Foundation', shipped: true },
   gedtm30: { licence: 'CC BY 4.0', licenceUrl: 'https://zenodo.org/api/records/18887460', credit: 'GEDTM30: Ho, Y.-F. et al., OpenLandMap, CC BY 4.0, doi 10.5281/zenodo.18887460', shipped: true },
   glo30: {

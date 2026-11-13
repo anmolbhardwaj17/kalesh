@@ -38,6 +38,7 @@ import { MEET_NONE, meetOf } from '../terrain/collect.ts';
 import fs from 'node:fs';
 import { writePicture } from './graphinput.ts';
 import { writeSiteTile } from './meshio.ts';
+import type { MedianRef } from '../mesh/medianfaces.ts';
 
 export interface StepContext {
   root: string;
@@ -57,7 +58,7 @@ export const NOT_TWICE = 'not built twice in a partial bake: the whole bake chec
 export async function runMeshStep(ctx: StepContext, laneBuild: LaneBuild, elevated: { junctionHeights: ArrayLike<number>; kinds: readonly ArrayLike<number>[] }, repair?: { raw: BlockGraph; repaired: RepairedGraph; issues: readonly Issue[] }): Promise<{ input: MeshInput; mesh: RoadMesh; rec: MeshRecord; checks: MeshChecks; invariants: InvariantResult[] }> {
   const { plan, log } = ctx;
   const proj = projector(plan.origin);
-  const input = meshInput(laneBuild, elevated.junctionHeights, elevated.kinds);
+  const input = meshInput(laneBuild, elevated.junctionHeights, elevated.kinds, readMedianRefs(ctx.root, (lat, lon) => proj.toWorld(lat, lon)));
   // built twice: the mesh must not depend on anything but the lane model and the heights
   const mesh = buildRoadMesh(input);
   const hash = meshHash(mesh);
@@ -111,6 +112,9 @@ export async function runMeshStep(ctx: StepContext, laneBuild: LaneBuild, elevat
   log(`[mesh] structures: ${c.railings.segments} edge segments (${Object.entries(c.railings.byKind).map(([k, v]) => `${k} ${v}`).join(', ')}), ${c.railings.parapets} with a parapet, ${c.railings.atGrade} of ${c.railings.parapetTriangles} parapet triangles at grade away from a structure; piers ${c.piers.piers} (${c.piers.portals} portals, ${c.piers.moved} places passed over, longest span ${c.piers.maxSpanM} m, ${c.piers.longSpans.length} over 60 m${c.piers.longSpans.length ? `: ${c.piers.longSpans.map((l) => `${l.strip} ${l.spanM} m (${l.why})`).join(', ')}` : ''}), in a lane below: ${c.piers.inLane}; deck joints ${c.piers.joints}`);
   log(`[mesh] lane paths: ${c.paths.totalM} m in ${c.paths.junctions} junctions, ${c.paths.offFaceM} m on no road face (most: ${c.paths.worst.slice(0, 5).map((w) => `${w.junction} ${w.offM} m`).join(', ') || 'none'})`);
   log(`[mesh] kerbs: ${c.kerbs.sampled} kerb faces sampled, ${c.kerbs.minM} to ${c.kerbs.maxM} m, ${c.kerbs.off} off 0.15 m by over 0.01 m (beside a surface the polygon set made: ${c.kerbs.beside.off} of ${c.kerbs.beside.sampled}); lane UV ${c.uv.ok ? 'ok' : 'FAILED'}: ${c.uv.lanes} lane quads, ${c.uv.corners} corners, bad u ${c.uv.badU}, bad v ${c.uv.badV}, border mismatches ${c.uv.borderMismatch}, joint mismatches ${c.uv.jointMismatch} of ${c.uv.jointPairs}; stop lines ${c.stopLines.lines} on ${c.stopLines.armsThatStop} arms that stop, missing ${c.stopLines.missing}, crossings ${c.stopLines.crossings}`);
+  const md = mesh.medians;
+  log(`[mesh] medians: ${md.pairs} carriageway strip pairs, ${md.runs} medians filled over ${md.metres.filled} m (${md.faces} faces, ${md.flattened} median kerb quads laid flat beside a reference divider); widths by source (m): OSM ${md.bySource.osm}, photo ${md.bySource.photo}, satellite ${md.bySource.satellite}, default two kerbs ${md.bySource.default}; not filled: touching ${md.metres.touching} m, gap over 12 m ${md.metres.wide} m, two levels ${md.metres.levels} m, something between ${md.metres.blocked} m, past the other carriageway's end ${md.metres.offEnd} m${md.disagree.length ? `; references wider than the gap: ${md.disagree.slice(0, 4).map((d) => `${d.name} ${d.refWidthM} m in ${d.spanM} m`).join(', ')}` : ''}`);
+  log(`[mesh] mid-block crossings: ${mesh.midBlock.crossings} zebras with ${mesh.midBlock.stopLines} stop lines (${mesh.midBlock.skipped} off the ground level)`);
   if (tiles.length + pictures.length) log(`[mesh] wrote ${[...tiles, ...pictures].join(', ')}`);
   const invariants: InvariantResult[] = [
     { id: 'MESH-01.no_overlap_at_junctions', ok: c.overlap.pairsOver === 0, detail: c.overlap.pairsOver === 0 ? `no junction face shares more than ${PAIR_LIMIT_M2} m2 with a strip or another junction (${c.overlap.pairsTested} pairs, largest ${c.overlap.maxPairM2} m2)` : `${c.overlap.pairsOver} pairs over ${PAIR_LIMIT_M2} m2: ${c.overlap.worst.slice(0, 3).map((w) => `${w.a} on ${w.b} ${w.areaM2} m2`).join(', ')}` },
@@ -200,3 +204,22 @@ export function runClearStep(ctx: StepContext, meshed: { input: MeshInput; mesh:
 }
 
 export const defaultBenchDir = path.join('game', 'bench', 'roads', 'gen');
+
+/** harness/data/medians.json (P1-032): reference medians, boxes turned into block metres. Empty when the file is missing; throws on a bad entry. */
+export function readMedianRefs(root: string, toBlock: (lat: number, lon: number) => P2): MedianRef[] {
+  const file = path.join(root, 'harness', 'data', 'medians.json');
+  if (!fs.existsSync(file)) return [];
+  const raw = JSON.parse(fs.readFileSync(file, 'utf8')) as { medians?: { names: string[]; box?: { south: number; west: number; north: number; east: number }; width: number; type: MedianRef['type']; source: MedianRef['source']; ref: string }[] };
+  return (raw.medians ?? []).map((m) => {
+    if (!Array.isArray(m.names) || !m.names.length || !(m.width >= 0.2 && m.width <= 30) || !['kerb', 'planter', 'barrier', 'painted'].includes(m.type) || !['photo', 'satellite'].includes(m.source) || typeof m.ref !== 'string' || !m.ref) {
+      throw new Error(`harness/data/medians.json: entry ${JSON.stringify(m)} needs names, a width (0.2 to 30 m), a type (kerb, planter, barrier, painted), a source (photo or satellite) and a ref`);
+    }
+    let box: MedianRef['box'];
+    if (m.box) {
+      const a = toBlock(m.box.south, m.box.west);
+      const b = toBlock(m.box.north, m.box.east);
+      box = { minX: Math.min(a.x, b.x), maxX: Math.max(a.x, b.x), minZ: Math.min(a.z, b.z), maxZ: Math.max(a.z, b.z) };
+    }
+    return { names: m.names, width: m.width, type: m.type, source: m.source, ref: m.ref, ...(box ? { box } : {}) };
+  });
+}

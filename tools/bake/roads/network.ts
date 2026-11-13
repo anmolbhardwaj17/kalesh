@@ -26,6 +26,10 @@ import { buildPaths, buildStrips } from './netstrips.ts';
 import { planWidenings, planZones } from './netzones.ts';
 import { driveCount } from './street.ts';
 import type { WidthFixed } from './street.ts';
+import { mapRestrictions } from './turns.ts';
+import { midBlockCrossings } from './crossings.ts';
+import type { CrossingPoint } from './crossings.ts';
+import type { Strip } from './model.ts';
 
 export { CLUSTER_GAP_M } from './netctx.ts';
 export type { EndKind, ExplainedEnd, LaneArm, LaneBuild, LaneJunction, LaneModelInput, LanePath } from './netctx.ts';
@@ -94,7 +98,54 @@ export function buildLaneModel(input: LaneModelInput): LaneBuild {
   roundModel(build);
   // the raised edge widths each junction arm meets, after the edges gave way (for the junction mesh, P1-014)
   armEdges(build.strips, build.junctions);
+  // crossings away from the junctions (P1-032): OSM crossing nodes and add_crossing marks, on their strips
+  const mid = midBlockCrossings(build.strips, crossingPoints(input), junctionNodes(input, build), armZebras(build), pairStrips(build));
+  build.crossings = mid.list;
+  build.crossingReport = mid.report;
   return build;
+}
+
+/** Crossing points of the map: OSM highway=crossing nodes and add_crossing marks ("crossing:<patch>"). */
+function crossingPoints(input: LaneModelInput): CrossingPoint[] {
+  const out: CrossingPoint[] = [];
+  (input.points ?? []).forEach((p, k) => {
+    if (p.kind === 'crossing') out.push({ x: p.x, z: p.z, id: p.id ?? `point${k}`, source: 'osm', ...(p.marked === false ? { marked: false } : {}) });
+  });
+  for (const [id, m] of Object.entries(input.marks ?? {})) {
+    if (id.startsWith('crossing:') && m['kind'] !== 'signals') out.push({ x: Number(m['x']), z: Number(m['z']), id, source: 'patch' });
+  }
+  return out;
+}
+
+function junctionNodes(input: LaneModelInput, build: LaneBuild): { x: number; z: number }[] {
+  const at = new Map(input.nodes.map((n) => [n.id, n]));
+  const out: { x: number; z: number }[] = [];
+  for (const j of build.junctions) for (const id of j.nodes) {
+    const n = at.get(id);
+    if (n) out.push({ x: n.x, z: n.z });
+  }
+  return out;
+}
+
+const armZebras = (build: LaneBuild): Set<string> => new Set(build.junctions.flatMap((j) => j.arms.filter((a) => a.crossing).map((a) => `${a.strip}:${a.end}`)));
+
+/** The strips of the other carriageway of a strip's street (its graph edge's pairedWith). */
+function pairStrips(build: LaneBuild): (s: Strip) => number[] {
+  const index = new Map(build.road.source.map((e, i) => [e.id, i]));
+  return (s: Strip): number[] => {
+    const i = index.get(s.edge);
+    if (i === undefined) return [];
+    const out: number[] = [];
+    for (const pid of (build.road.source[i] as GraphEdge).pairedWith) {
+      const b = build.built.get(index.get(pid) ?? -1);
+      if (b) for (let k = b.first; k <= b.last; k++) out.push(k);
+    }
+    return out;
+  };
+}
+
+function emptyTurnRules(c: NetCtx): LaneBuild['turnRules'] {
+  return { restrictions: { ...c.turnReport, applied: 0, notApplied: [], movementsRemoved: 0 }, turnLanes: { ways: c.input.turnInputs?.wayTurns.size ?? 0, bySource: {}, arms: 0, applied: 0, mismatched: [], movementsRemoved: 0 } };
 }
 
 function context(input: LaneModelInput, road: RoadGraph, fixed: Map<string, number>, noZone: Set<number>, widthFixed: Map<string, WidthFixed>, widthTapers: Map<string, WidthTaper>, widthBlocked: Set<string>, widthSettles: Map<string, number>): NetCtx {
@@ -104,7 +155,9 @@ function context(input: LaneModelInput, road: RoadGraph, fixed: Map<string, numb
     return null;
   };
   const heroBy = road.source.map(heroOf);
+  const turns = mapRestrictions(input.nodes, input.edges, input.turnInputs ?? { restrictions: [], unread: [], wayTurns: new Map() });
   return {
+    turnRules: turns.list, turnReport: turns.report,
     input, road, graph: road.graph, source: road.source, nodeId: road.nodeId, nodeKind: road.nodeKind, heroes, heroBy, isHero: (i) => heroBy[i] !== null,
     indexOf: new Map(road.source.map((e, i) => [e.id, i])), fixed, noZone, widthFixed, widthTapers, widthBlocked, widthSettles, problems: [], step: input.step ?? 4,
   };
@@ -130,7 +183,7 @@ function attempt(input: LaneModelInput, road: RoadGraph, fixed: Map<string, numb
   };
   if (cl.retry) {
     return {
-      build: { ...base, strips: [], joints: [], zoneStrips: [], junctions: [], junctionPlans: [], ends: [], internal: [], tightPaths: [], turns: { uTurnsTooTight: 0, restricted: 0, droppedForRadius: 0, tight: 0 }, built: new Map() },
+      build: { ...base, strips: [], joints: [], zoneStrips: [], junctions: [], junctionPlans: [], ends: [], internal: [], tightPaths: [], turns: { uTurnsTooTight: 0, restricted: 0, droppedForRadius: 0, tight: 0 }, turnRules: emptyTurnRules(c), crossings: [], crossingReport: { points: 0, placed: 0, pairedAdded: 0, skipped: {} }, built: new Map() },
       ctx: c,
       retry: true,
     };
@@ -141,7 +194,7 @@ function attempt(input: LaneModelInput, road: RoadGraph, fixed: Map<string, numb
   lap('paths');
   const internal = [...cl.absorbed].sort((a, b) => a[0] - b[0]).map(([i, why]) => ({ edge: (road.source[i] as GraphEdge).id, why }));
   return {
-    build: { ...base, strips: sp.strips, joints: sp.joints, zoneStrips: sp.zoneStrips, built: sp.built, internal, ...pp },
+    build: { ...base, strips: sp.strips, joints: sp.joints, zoneStrips: sp.zoneStrips, built: sp.built, internal, crossings: [], crossingReport: { points: 0, placed: 0, pairedAdded: 0, skipped: {} }, ...pp },
     ctx: c,
     retry: sp.retry,
   };

@@ -142,6 +142,19 @@ export interface GraphInput {
   project?: (lat: number, lon: number) => P2;
   /** harness/data/underground.json (footprints below ground or on the ground whatever their tags say). */
   underground?: UndergroundList;
+  /** The osm_turns pin (P1-032): turn restriction relations and turn:lanes ways; read by the lane model, not the graph. */
+  turnElements?: readonly OsmElement[];
+  /** harness/data/turn_lanes.json: turn lanes read from satellite or photos where OSM has none (P1-032). */
+  turnLaneRefs?: readonly TurnLaneRef[];
+}
+
+/** A reference turn lane entry: the tags to set on one way, with where they were read. */
+export interface TurnLaneRef {
+  way: string;
+  tags: Record<string, string>;
+  source: 'satellite' | 'photo';
+  ref: string;
+  note?: string;
 }
 
 const r3 = (v: number): number => Math.round(v * 1000) / 1000 + 0;

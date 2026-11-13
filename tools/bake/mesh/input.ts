@@ -8,6 +8,8 @@ import type { JunctionPlan, RingItem } from '../roads/junction.ts';
 import { classDefaults } from '../roads/model.ts';
 import type { Joint, Strip, StripEnd } from '../roads/model.ts';
 import type { ExplainedEnd, LaneBuild } from '../roads/network.ts';
+import type { MidCrossing } from '../roads/netctx.ts';
+import type { MedianRef, StripPair } from './medianfaces.ts';
 
 /** A ring vertex: border `border` of the arm's strip at its end station, or a free point of corner `corner`. */
 export type MeshRingItem = { kind: 'cut'; arm: number; border: number } | { kind: 'pt'; x: number; z: number; corner: number; frac: number };
@@ -58,10 +60,38 @@ export interface MeshInput {
   ends: readonly ExplainedEnd[];
   /** Per strip and station: 0 at grade, 1 fill, 2 deck, 3 cut, 4 tunnel (elevation/structures.ts STATION_KINDS). */
   kinds: readonly ArrayLike<number>[];
+  /** Strips of the two carriageways of one street, side by side (P1-032): the median between them is filled. */
+  pairs: StripPair[];
+  /** Reference medians (harness/data/medians.json, block metres). */
+  medianRefs: readonly MedianRef[];
+  /** Crossings away from the junctions (the lane model's, P1-032). */
+  crossings: readonly MidCrossing[];
 }
 
-/** The mesh builder's view of a lane build after the elevation step. `junctionHeights` and `kinds` follow build.junctions and build.strips. */
-export function meshInput(build: Pick<LaneBuild, 'strips' | 'joints' | 'junctions' | 'junctionPlans' | 'ends' | 'built'>, junctionHeights: ArrayLike<number>, kinds: readonly ArrayLike<number>[]): MeshInput {
+/**
+ * Strip pairs of paired carriageways: every strip of an edge with the strips of an edge it is paired with, in order
+ * along that edge (medianfaces.ts projects onto them as one border). Each pair of edges once, from the lower index.
+ */
+export function stripPairs(build: Pick<LaneBuild, 'road' | 'built'>): StripPair[] {
+  const index = new Map(build.road.source.map((e, i) => [e.id, i]));
+  const out: StripPair[] = [];
+  build.road.source.forEach((e, i) => {
+    const a = build.built.get(i);
+    if (!a) return;
+    for (const pid of e.pairedWith) {
+      const j = index.get(pid);
+      if (j === undefined || j <= i) continue;
+      const b = build.built.get(j);
+      if (!b) continue;
+      const other: number[] = [];
+      for (let y = b.first; y <= b.last; y++) other.push(y);
+      for (let x = a.first; x <= a.last; x++) out.push([x, other]);
+    }
+  });
+  return out.sort((p, q) => p[0] - q[0] || (p[1][0] as number) - (q[1][0] as number));
+}
+
+export function meshInput(build: Pick<LaneBuild, 'strips' | 'joints' | 'junctions' | 'junctionPlans' | 'ends' | 'built' | 'road' | 'crossings'>, junctionHeights: ArrayLike<number>, kinds: readonly ArrayLike<number>[], medianRefs: readonly MedianRef[] = []): MeshInput {
   const junctions: MeshJunction[] = build.junctions.map((j, ji) => {
     const jp = build.junctionPlans[ji] as JunctionPlan;
     let usable = jp !== undefined && jp.arms.length === j.arms.length;
@@ -108,5 +138,5 @@ export function meshInput(build: Pick<LaneBuild, 'strips' | 'joints' | 'junction
       }),
     };
   });
-  return { strips: build.strips, joints: build.joints, junctions, ends: build.ends, kinds };
+  return { strips: build.strips, joints: build.joints, junctions, ends: build.ends, kinds, pairs: stripPairs(build), medianRefs, crossings: build.crossings };
 }

@@ -27,6 +27,11 @@ export interface MeshChecks {
     unclosed: number;
     doubled: number;
     tJointsLeft: number;
+    /** Where the first doubled edges and unclosed chains are (block metres; the health record turns them into world metres). */
+    doubledAt: { x: number; z: number; pieces: [number, number] }[];
+    unclosedAt: { x: number; z: number; edges: number }[];
+    zeroAt: { x: number; z: number; edges: number }[];
+    tJointsAt: { x: number; z: number; piece: number }[];
     freeEdges: number;
     loops: number;
     /** Loops around a road region, and loops around a block the roads enclose. */
@@ -87,7 +92,7 @@ export function checkRoadMesh(input: MeshInput, mesh: RoadMesh): MeshChecks {
   const { fs, edges } = mesh;
   const { strips, kinds } = input;
   const name = (piece: number): string => (piece < strips.length ? (strips[piece] as Strip).id : (input.junctions[piece - strips.length] as { id: string }).id);
-  const overlap = proveNoOverlap(fs, strips, input.joints, mesh.index, mesh.junctions.faces, mesh.junctions.sheets, name);
+  const overlap = proveNoOverlap(fs, strips, input.joints, mesh.index, mesh.junctions.faces, mesh.junctions.sheets, name, mesh.medianFaces);
 
   // ends: from the faces, lane by lane
   const explained = new Map<string, string>();
@@ -335,6 +340,7 @@ export function checkRoadMesh(input: MeshInput, mesh: RoadMesh): MeshChecks {
       openBoundaryEdges: b.unclosed + edges.doubled + mesh.conform.tJointsLeft, unclosed: b.unclosed, doubled: edges.doubled, tJointsLeft: mesh.conform.tJointsLeft, freeEdges: b.freeEdges,
       loops: b.loops.length, outerLoops: b.loops.filter((l) => l.area > 0).length, blockLoops: b.loops.filter((l) => l.area < 0).length, sliverLoops: b.sliverLoops, sliverM2: b.sliverM2,
       tJointsRepaired: mesh.conform.inserted, nearMisses: mesh.conform.nearMisses, nearMissMaxM: mesh.conform.nearMissMaxM,
+      doubledAt: edges.doubledAt, unclosedAt: b.unclosedAt, zeroAt: b.zeroAt, tJointsAt: mesh.conform.tJointsAt,
     },
     ends, railings, piers, kerbs: mesh.steps.kerbs, uv, stopLines, paths,
   };

@@ -2,7 +2,7 @@
 // north-up picture. The graph itself is pure (tools/bake/graph/build.ts).
 import fs from 'node:fs';
 import path from 'node:path';
-import type { GraphInput } from '../graph/build.ts';
+import type { GraphInput, TurnLaneRef } from '../graph/build.ts';
 import type { OvertureRow } from '../graph/footprints.ts';
 import { EMPTY_UNDERGROUND_LIST } from '../graph/underground.ts';
 import type { UndergroundList } from '../graph/underground.ts';
@@ -22,7 +22,22 @@ export function readGraphInput(root: string, plan: StagePlan): GraphInput {
   };
   const osm = JSON.parse(fs.readFileSync(fileOf('osm'), 'utf8')) as { elements: OsmElement[] };
   const overture = JSON.parse(fs.readFileSync(fileOf('overture_buildings'), 'utf8')) as OvertureRow[];
-  return { block: plan.def.block, stage: plan.id, origin: plan.origin, outline: plan.outline.coords, elements: osm.elements, overture, underground: readUndergroundList(root) };
+  const turns = plan.sources.some((x) => x.kind === 'osm_turns') ? (JSON.parse(fs.readFileSync(fileOf('osm_turns'), 'utf8')) as { elements: OsmElement[] }).elements : [];
+  return { block: plan.def.block, stage: plan.id, origin: plan.origin, outline: plan.outline.coords, elements: osm.elements, overture, underground: readUndergroundList(root), turnElements: turns, turnLaneRefs: readTurnLaneRefs(root) };
+}
+
+/** harness/data/turn_lanes.json (P1-032): reference turn lanes. Empty when the file is missing; throws on a bad entry. */
+export function readTurnLaneRefs(root: string): TurnLaneRef[] {
+  const file = path.join(root, 'harness', 'data', 'turn_lanes.json');
+  if (!fs.existsSync(file)) return [];
+  const raw = JSON.parse(fs.readFileSync(file, 'utf8')) as { lanes?: TurnLaneRef[] };
+  const list = raw.lanes ?? [];
+  for (const e of list) {
+    if (typeof e.way !== 'string' || !/^way\/\d+$/.test(e.way) || !e.tags || !Object.keys(e.tags).every((k) => k.startsWith('turn:lanes')) || !['satellite', 'photo'].includes(e.source) || typeof e.ref !== 'string' || !e.ref) {
+      throw new Error(`harness/data/turn_lanes.json: entry ${JSON.stringify(e)} needs a way ("way/<id>"), turn:lanes tags only, a source (satellite or photo) and a ref`);
+    }
+  }
+  return list;
 }
 
 /** harness/data/underground.json: the underground list (P1-041). Empty lists when the file is missing; throws on a bad entry. */
