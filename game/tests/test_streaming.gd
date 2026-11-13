@@ -18,6 +18,8 @@ const GroundRoads := preload("res://world/systems/ground_roads.gd")
 const Buildings := preload("res://world/systems/buildings.gd")
 const Colliders := preload("res://world/systems/colliders.gd")
 const Lanes := preload("res://world/systems/lanes.gd")
+const SpawnPins := preload("res://world/spawn_pins.gd")
+const PlayScene := preload("res://scenes/play_scene.gd")
 const TEST_TILES := "res://world/test_tiles/"
 const FIXTURE := "res://../harness/data/fixtures/tile_t1_sample.json"
 const TMP := "user://stream_test/"
@@ -550,3 +552,35 @@ func test_threaded_reads() -> void:
 	core.unload_all()
 	t.ok(int(colliders.chunks) == 0 and (lanes.pieces as Dictionary).is_empty(), "and everything unloads")
 	holder.free()
+
+
+## P1-024: spawn pins resolve (default, named, unknown falls back), a pin outside the test block leaves the scene's own
+## car, and lanes.gd snap finds the nearest lane in the pin's direction (never one against it, nothing far away).
+func test_spawn_pins_and_lane_snap() -> void:
+	var all := SpawnPins.load_all()
+	t.ok(not all.is_empty() and (all.pins as Dictionary).has(str(all.default)), "spawn_pins.json parses and names its default")
+	var d := SpawnPins.pick("")
+	t.ok(d.id == str(all.default) and d.tune == SpawnPins.VEHICLES.auto, "no --spawn takes the default pin, in the auto")
+	t.ok(SpawnPins.pick("ito_flyover_south").id == "ito_flyover_south", "a named pin")
+	t.ok(SpawnPins.pick("no_such_pin").id == str(all.default), "an unknown pin falls back to the default")
+	t.ok(absf(SpawnPins.pick("chandni_chowk_east").heading - deg_to_rad(270.0)) < 1e-6, "headingDeg turns into compass radians")
+	for id: String in all.pins:
+		var p := SpawnPins.pick(id)
+		t.ok(p.lat > 28.4 and p.lat < 28.8 and p.lon > 76.9 and p.lon < 77.5 and p.tune != "", "pin %s is in Delhi and names a vehicle" % id)
+	t.ok(PlayScene.start_tune({"tiles": "test", "spawn": ""}) == "", "the test block has no Janpath: the city keeps its own car there")
+	var city := _city()
+	if city == null:
+		return
+	var core: Node = city.core
+	core.warp(ITO)
+	_until_ready(core)
+	var sp: Dictionary = city.lanes.spawn(Vector2i(8, -6))
+	var pts: PackedVector3Array = city.lanes.piece(str(sp.lane)).pts
+	var mid := pts[0].lerp(pts[1], 0.5)
+	var near: Dictionary = city.lanes.snap(mid.x + 0.3, mid.z, sp.heading)
+	t.ok(not near.is_empty() and float(near.off_m) < 2.0 and absf(wrapf(float(near.heading) - float(sp.heading), -PI, PI)) < PI / 3.0, "a point by a lane snaps onto a lane going its way (%s)" % [near])
+	var against: Dictionary = city.lanes.snap(mid.x + 0.3, mid.z, sp.heading + PI)
+	t.ok(against.is_empty() or absf(wrapf(float(against.heading) - float(sp.heading) - PI, -PI, PI)) < PI / 3.0, "the opposite heading never takes a lane going the other way")
+	t.ok(city.lanes.snap(mid.x + 5000.0, mid.z, NAN).is_empty(), "nothing within reach far away")
+	core.unload_all()
+	city.free()

@@ -1,79 +1,10 @@
 {
   "requests": [
     {
-      "id": "model_anim_auto_seat",
-      "kind": "model",
-      "intent": "Animation clip on the Universal Animation Library rig (Godot SkeletonProfileHumanoid bone names): the auto-rickshaw driver's seat. Seated upright on the narrow front bench of an auto, hands on the handlebar, right hand twisting the throttle, a loop of small bumps and steering; plus getting in from the right side (one leg over, duck under the roof) and out. Stand-in today: the library's Driving and Sitting clips.",
-      "prompt": "1. Open the Universal Animation Library 1 mannequin (game/characters/rig/mannequin_m.scn exported to .glb, or the UAL1_Standard.glb from data/ual/extract) in Blender or Cascadeur. 2. Pose a seated auto driver: hips on a bench 0.55 m high, knees bent, hands on a motorbike style handlebar 0.35 m ahead of the chest. 3. Make a 2 s loop of small road bumps and steering, a 1.2 s get in and a 1.0 s get out on the right. 4. Export as .glb with the same bone names, no mesh needed, one action per clip named AutoSeat_Loop, AutoSeat_Enter, AutoSeat_Exit. 5. Upload on this card.",
-      "generate": "rigged .glb, humanoid skeleton, up to 25000 triangles and 3 materials",
-      "target": {
-        "out": "models/model_anim_auto_seat.glb",
-        "maxTriangles": 25000,
-        "maxMaterials": 3
-      },
-      "placeholder": {
-        "color": "#1f2533",
-        "pattern": "flat",
-        "scale": 1
-      },
-      "used_by": [
-        "P1-023"
-      ],
-      "priority": 2,
-      "batch": null,
-      "created": "2026-11-13T07:39:41.423Z"
-    },
-    {
-      "id": "model_anim_scooter_ride",
-      "kind": "model",
-      "intent": "Animation clip on the Universal Animation Library rig: riding a scooter (Danny's two wheeler). Seated astride, feet on the floor board, both hands on the handlebar, leaning with the bike; plus getting on and off from the left. Stand-in today: the library's Driving clip.",
-      "prompt": "1. Open the Universal Animation Library 1 mannequin in Blender or Cascadeur. 2. Pose a scooter rider: hips on a seat 0.78 m high, feet together on a flat floor board 0.3 m high, hands on a handlebar 0.5 m ahead. 3. Make a 2 s riding loop with a small lean left and right, a 1.0 s get on and a 0.8 s get off on the left. 4. Export as .glb with the same bone names, clips ScooterRide_Loop, ScooterRide_On, ScooterRide_Off. 5. Upload on this card.",
-      "generate": "rigged .glb, humanoid skeleton, up to 25000 triangles and 3 materials",
-      "target": {
-        "out": "models/model_anim_scooter_ride.glb",
-        "maxTriangles": 25000,
-        "maxMaterials": 3
-      },
-      "placeholder": {
-        "color": "#1f2533",
-        "pattern": "flat",
-        "scale": 1
-      },
-      "used_by": [
-        "P1-023"
-      ],
-      "priority": 2,
-      "batch": null,
-      "created": "2026-11-13T07:39:41.459Z"
-    },
-    {
-      "id": "model_anim_vault",
-      "kind": "model",
-      "intent": "Animation clip on the Universal Animation Library rig: a speed vault over a 1.0 to 1.2 m wall or railing in 0.6 s, one hand on the top, legs swinging over the side, landing running. The free library has no vault; the stand-in is its 1 m climb up.",
-      "prompt": "1. Open the Universal Animation Library 1 mannequin in Blender or Cascadeur. 2. Animate an in-place speed vault (no root motion): approach at a jog, plant the left hand on a 1.2 m top 0.4 m ahead, swing both legs over to the right, land and run on, 0.6 s in all. 3. Export as .glb with the same bone names, clip Vault_Speed. 4. Upload on this card.",
-      "generate": "rigged .glb, humanoid skeleton, up to 25000 triangles and 3 materials",
-      "target": {
-        "out": "models/model_anim_vault.glb",
-        "maxTriangles": 25000,
-        "maxMaterials": 3
-      },
-      "placeholder": {
-        "color": "#1f2533",
-        "pattern": "flat",
-        "scale": 1
-      },
-      "used_by": [
-        "P1-023"
-      ],
-      "priority": 3,
-      "batch": null,
-      "created": "2026-11-13T07:39:41.496Z"
-    },
-    {
       "id": "model_lead_bittu",
       "kind": "model",
       "intent": "Bittu, the auto driver (about 35, 1.72 m, lean, tired but alert): khaki uniform shirt with rolled sleeves worn loose, dark trousers, sandals, a red and white checked cotton gamchha over the left shoulder, short black hair, a thin moustache. No logo or brand. Real adult proportions (7.5 heads), stylised B finish (simplified skin and cloth, clean colours from STYLE_BIBLE.md 'Characters'), respect rule: no caricature. Rigged to the Universal Animation Library skeleton (Unreal mannequin bone names) so the game's clips play on it; the stand-in today is the library mannequin with painted colours (game/characters/leads.gd).",
-      "prompt": "1. Make the character from its portrait or concept (harness/design/reference/mood_three_characters.jpg) with an image-to-3D tool, T pose, about 20000 triangles, at most 3 materials. 2. Rig it on the Universal Animation Library mannequin skeleton (same bone names as data/ual/extract UAL1_Standard.glb, e.g. by Blender's armature transfer or AccuRig with the UE5 preset). 3. Export as .glb with the mesh and skeleton, no animations. 4. Upload on this card.",
+      "prompt": "No Blender needed, about 15 minutes, all free tools. 1. Open meshy.ai (or tripo3d.ai) and pick Text to 3D. 2. Paste this: \"an Indian auto-rickshaw driver, about 35, lean, short black hair, thin moustache, khaki shirt with rolled sleeves worn loose, dark trousers, sandals, a red and white checked cotton towel over the left shoulder, full body, standing in A-pose, arms slightly away from the body, stylised game character, clean simple clothes, realistic adult proportions\". 3. Pick the result you like and download it as .fbx. 4. Open mixamo.com (free Adobe login), click Upload Character, choose that .fbx, place the chin, wrists, elbows, knees and groin markers, and press Next (it rigs it for you). 5. Download it with the default settings (FBX, T-pose, no animation). 6. Upload that file on this card. The game converts it and plays its own animations on it. If anything looks wrong, just upload it anyway: the reviewer will say what to change.",
       "generate": "rigged .glb, humanoid skeleton, up to 25000 triangles and 3 materials",
       "target": {
         "out": "models/model_lead_bittu.glb",
@@ -88,7 +19,7 @@
       "used_by": [
         "P1-023"
       ],
-      "priority": 2,
+      "priority": 3,
       "batch": null,
       "created": "2026-11-13T07:39:51.061Z"
     },
@@ -96,7 +27,7 @@
       "id": "model_lead_meera",
       "kind": "model",
       "intent": "SI Meera Rana, the cop (about 30, 1.64 m, fit, direct stare): Delhi-like khaki police uniform of an invented force (no real badges or unit names), full sleeves tucked in, plain dark belt with a holstered service pistol on the right hip, black shoes, hair in a bun. Real adult proportions (7.5 heads), stylised B finish (simplified skin and cloth, clean colours from STYLE_BIBLE.md 'Characters'), respect rule: no caricature. Rigged to the Universal Animation Library skeleton (Unreal mannequin bone names) so the game's clips play on it; the stand-in today is the library mannequin with painted colours (game/characters/leads.gd).",
-      "prompt": "1. Make the character from its portrait or concept (harness/design/reference/mood_three_characters.jpg) with an image-to-3D tool, T pose, about 20000 triangles, at most 3 materials. 2. Rig it on the Universal Animation Library mannequin skeleton (same bone names as data/ual/extract UAL1_Standard.glb, e.g. by Blender's armature transfer or AccuRig with the UE5 preset). 3. Export as .glb with the mesh and skeleton, no animations. 4. Upload on this card.",
+      "prompt": "No Blender needed, about 15 minutes, all free tools. 1. Open meshy.ai (or tripo3d.ai) and pick Text to 3D. 2. Paste this: \"an Indian woman police sub-inspector, about 30, fit, hair in a bun, plain khaki police uniform with no badges, dark belt with a holster on the right hip, black shoes, full body, standing in A-pose, arms slightly away from the body, stylised game character, clean simple clothes, realistic adult proportions\". 3. Pick the result you like and download it as .fbx. 4. Open mixamo.com (free Adobe login), click Upload Character, choose that .fbx, place the chin, wrists, elbows, knees and groin markers, and press Next (it rigs it for you). 5. Download it with the default settings (FBX, T-pose, no animation). 6. Upload that file on this card. The game converts it and plays its own animations on it. If anything looks wrong, just upload it anyway: the reviewer will say what to change.",
       "generate": "rigged .glb, humanoid skeleton, up to 25000 triangles and 3 materials",
       "target": {
         "out": "models/model_lead_meera.glb",
@@ -111,7 +42,7 @@
       "used_by": [
         "P1-023"
       ],
-      "priority": 2,
+      "priority": 3,
       "batch": null,
       "created": "2026-11-13T07:39:51.097Z"
     },
@@ -119,7 +50,7 @@
       "id": "model_lead_danny",
       "kind": "model",
       "intent": "Danny, the small-time fixer (about 28, 1.78 m): flashy maroon jacket open over a patterned shirt, gold chain, sunglasses pushed up into his hair, black trousers, white trainers. No logo or brand. Real adult proportions (7.5 heads), stylised B finish (simplified skin and cloth, clean colours from STYLE_BIBLE.md 'Characters'), respect rule: no caricature. Rigged to the Universal Animation Library skeleton (Unreal mannequin bone names) so the game's clips play on it; the stand-in today is the library mannequin with painted colours (game/characters/leads.gd).",
-      "prompt": "1. Make the character from its portrait or concept (harness/design/reference/mood_three_characters.jpg) with an image-to-3D tool, T pose, about 20000 triangles, at most 3 materials. 2. Rig it on the Universal Animation Library mannequin skeleton (same bone names as data/ual/extract UAL1_Standard.glb, e.g. by Blender's armature transfer or AccuRig with the UE5 preset). 3. Export as .glb with the mesh and skeleton, no animations. 4. Upload on this card.",
+      "prompt": "No Blender needed, about 15 minutes, all free tools. 1. Open meshy.ai (or tripo3d.ai) and pick Text to 3D. 2. Paste this: \"an Indian man, about 28, flashy maroon jacket open over a patterned shirt, gold chain, sunglasses pushed up into his hair, black trousers, white trainers, full body, standing in A-pose, arms slightly away from the body, stylised game character, clean simple clothes, realistic adult proportions\". 3. Pick the result you like and download it as .fbx. 4. Open mixamo.com (free Adobe login), click Upload Character, choose that .fbx, place the chin, wrists, elbows, knees and groin markers, and press Next (it rigs it for you). 5. Download it with the default settings (FBX, T-pose, no animation). 6. Upload that file on this card. The game converts it and plays its own animations on it. If anything looks wrong, just upload it anyway: the reviewer will say what to change.",
       "generate": "rigged .glb, humanoid skeleton, up to 25000 triangles and 3 materials",
       "target": {
         "out": "models/model_lead_danny.glb",
@@ -134,7 +65,7 @@
       "used_by": [
         "P1-023"
       ],
-      "priority": 2,
+      "priority": 3,
       "batch": null,
       "created": "2026-11-13T07:39:51.133Z"
     }

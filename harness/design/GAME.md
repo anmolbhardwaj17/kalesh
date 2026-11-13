@@ -147,7 +147,7 @@ A tag changes only with a decisions.md entry. Each phase plan checks this list a
 | Crouch | SLICE | Lower profile, quieter; no stealth system yet |
 | Jump | SLICE | Small hop, for kerbs and gaps |
 | Vault low walls and railings up to 1.2 m | SLICE | Auto-detected ledges |
-| Enter and exit vehicles (driver and passenger seats) | SLICE | Auto: climb in from the side |
+| Enter and exit vehicles (driver and passenger seats) | SLICE | Animated: door opens, climb in, sit, door closes, camera blends (Anmol 2026-11-13). Auto: climb in from the side. Scooter: leg over, stand up |
 | Fall and roll, fall damage | RELEASE | Damage above 4 m |
 | Ladders | RELEASE | Placed ladders and stairs to rooftops |
 | Climbing walls and ledges (rooftops, Old Delhi roofs) | LATER | Ledge grab up to 2.2 m, roof to roof jumps |

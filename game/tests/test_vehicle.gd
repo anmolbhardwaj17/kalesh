@@ -7,6 +7,7 @@ const Tune := preload("res://vehicles/vehicle_tune.gd")
 const DriveInput := preload("res://vehicles/drive_input.gd")
 const Tyre := preload("res://vehicles/tyre_model.gd")
 const Vehicle := preload("res://vehicles/vehicle.gd")
+const OnFoot := preload("res://characters/on_foot.gd")
 const CAR := "res://data/vehicles/car.tres"
 const AUTO := "res://data/vehicles/auto.tres"
 const SCOOTER := "res://data/vehicles/scooter.tres"
@@ -205,3 +206,44 @@ func test_vehicle_drives_along_its_heading() -> void:
 		tree.root.remove_child(world)
 		world.free()
 		await tree.physics_frame
+
+
+## P1-024: the vehicle body collides with people on foot (on_foot.gd LAYER is in vehicle.gd MASK): a car driven at a
+## person standing 12 m ahead stops against them and never passes through, and the person stays standing.
+func test_car_stops_against_a_person() -> void:
+	t.ok(Vehicle.MASK & OnFoot.LAYER != 0, "the vehicle mask %d holds the character layer %d" % [Vehicle.MASK, OnFoot.LAYER])
+	t.ok(OnFoot.MASK & 2 != 0, "and the character collides with vehicles (layer 2)")
+	var clock := tree.root.get_node("SimClock")
+	clock.set_scale(1.0)
+	var world := Node3D.new()
+	world.name = "PersonTestWorld"
+	var ground := StaticBody3D.new()
+	var cs := CollisionShape3D.new()
+	var box := BoxShape3D.new()
+	box.size = Vector3(400, 1, 400)
+	cs.shape = box
+	cs.position = Vector3(0, -0.5, 0)
+	ground.add_child(cs)
+	world.add_child(ground)
+	var v: RigidBody3D = Vehicle.new()
+	v.is_player = false
+	world.add_child(v)
+	var person: CharacterBody3D = OnFoot.new()
+	person.is_player = false
+	world.add_child(person)
+	tree.root.add_child(world)
+	person.place(0.0, -12.0, PI)
+	var front_gap := INF
+	for i in 300:
+		v.controls(1.0, 0.0, 0.0)
+		await tree.physics_frame
+		# the bumper's distance to the person's capsule axis (the car faces -Z)
+		front_gap = minf(front_gap, (v.global_position.z - v.tune.box_half.z) - person.global_position.z)
+	var stopped_kmh := absf(float(v.kmh()))
+	t.ok(v.global_position.z > person.global_position.z + v.tune.box_half.z * 0.5, "the car never passed the person (car z %.2f, person z %.2f)" % [v.global_position.z, person.global_position.z])
+	t.ok(front_gap > OnFoot.RADIUS - 0.15, "the bumper stopped at the capsule (closest %.2f m from its axis, radius %.2f)" % [front_gap, OnFoot.RADIUS])
+	t.ok(stopped_kmh < 3.0, "the car is held against the person (%.1f km/h at the end)" % stopped_kmh)
+	t.ok(absf(person.global_position.y) < 0.1, "the person still stands on the ground (y %.3f)" % person.global_position.y)
+	tree.root.remove_child(world)
+	world.free()
+	await tree.physics_frame

@@ -2,9 +2,13 @@
 ## pilot; or a res:// folder), the streaming core and the streamed systems of this stage (ground and roads, building
 ## shells, colliders, lanes). It only puts the pieces together and starts the game on them:
 ## - `attach(scene, dir)` adds it to a scene that has the scaffold's World node and car, and hides the stand-in ground;
-## - the first ring loads in a burst around the tile nearest to India Gate (the pivot of the map), the car is stood on
-##   the longest lane of that tile, and GameArgs.world_ready turns true (the debug `ready`) once the ring around the
-##   car is attached with its colliders;
+## - the first ring loads in a burst around the spawn pin (game/data/spawn_pins.json, the game arg --spawn, P1-024) and
+##   the vehicle stands on the nearest lane there; when the pin's tile is not in the folder (the 9-tile test block) the
+##   ring loads round the tile nearest to India Gate (the pivot of the map) and the car stands on the longest lane of
+##   that tile. GameArgs.world_ready turns true (the debug `ready`) once the ring around the car is attached with its
+##   colliders;
+## - the streaming focus follows whichever node the player controls (the group "player": the vehicle or the
+##   character on foot, game/characters/player_mode.gd);
 ## - `teleport()` moves the player and returns when the ring there is attached and the player stands on the ground.
 ## Loading, timing and building live in game/world/streaming/ and game/world/systems/, one job per file.
 extends Node3D
@@ -17,6 +21,7 @@ const GroundRoads := preload("res://world/systems/ground_roads.gd")
 const Buildings := preload("res://world/systems/buildings.gd")
 const Colliders := preload("res://world/systems/colliders.gd")
 const Lanes := preload("res://world/systems/lanes.gd")
+const SpawnPins := preload("res://world/spawn_pins.gd")
 ## Stand-in nodes of the scaffold scene that the tiles replace.
 const STAND_INS := ["Ground", "Road", "NorthPost", "GroundCollider"]
 ## A ring that is not attached after this much wall time is reported and the game goes on.
@@ -24,6 +29,8 @@ const RING_WAIT_S := 30.0
 ## A ground ray starts this far above the highest thing a tile can hold and ends this far below its lowest ground.
 const RAY_UP := 400.0
 const RAY_DOWN := 100.0
+## A spawn pin stands the vehicle on a lane at most this far from the pin.
+const SPAWN_REACH := 60.0
 
 var index: RefCounted = null
 var frame: RefCounted = null
@@ -34,6 +41,8 @@ var ground_roads: RefCounted = null
 var buildings: RefCounted = null
 var booted := false
 var load_ms := 0
+## The start: {pin, name, lane, pos: [x, y, z], heading, offM} (pin "" when the old start near India Gate was used).
+var spawn := {}
 var _t0 := 0
 ## Counts teleports: one that is overtaken by a later one while it waits for its ring gives up.
 var _teleports := 0
@@ -88,29 +97,85 @@ static func attach(scene: Node, dir: String) -> Node3D:
 	return city
 
 
-## The first load: the ring round the start tile, the car on a lane of it, then the ring round the car.
+## The first load: the ring round the spawn pin (or the start tile near India Gate), the car on a lane there, then
+## the ring round the car.
 func boot(car: Node3D) -> void:
-	var pivot: Dictionary = frame.block_to_world("centre", 0.0, 0.0)
-	var start: Vector2i = index.nearest(pivot.x, pivot.z)
-	var corner: Vector3 = index.tiles[start].origin
-	core.warp(corner + Vector3(index.size * 0.5, 0.0, index.size * 0.5))
-	await _ring()
-	var sp: Dictionary = lanes.spawn(start)
+	var args := get_node_or_null("/root/GameArgs")
+	var sp := await _spawn_on_pin(SpawnPins.pick(str(args.spawn) if args != null and "spawn" in args else ""))
 	if sp.is_empty():
-		sp = lanes.spawn()
+		var pivot: Dictionary = frame.block_to_world("centre", 0.0, 0.0)
+		var start: Vector2i = index.nearest(pivot.x, pivot.z)
+		var corner: Vector3 = index.tiles[start].origin
+		core.warp(corner + Vector3(index.size * 0.5, 0.0, index.size * 0.5))
+		await _ring()
+		sp = lanes.spawn(start)
+		if sp.is_empty():
+			sp = lanes.spawn()
+		if not sp.is_empty():
+			sp["pin"] = ""
 	if car != null and not sp.is_empty() and car.has_method("place"):
 		car.ground_y = sp.pos.y
 		car.place(sp.pos.x, sp.pos.z, sp.heading)
 		core.warp(car.global_position)
 		await _ring()
+		# the play camera jumps behind the vehicle at its start instead of lerping in from where the scene put it
+		var cam := get_viewport().get_camera_3d()
+		if cam != null and cam.has_method("snap"):
+			cam.snap()
+	if not sp.is_empty():
+		spawn = {"pin": sp.pin, "name": sp.get("name", ""), "lane": sp.lane, "pos": [sp.pos.x, sp.pos.y, sp.pos.z], "heading": sp.heading, "offM": sp.get("off_m", 0.0)}
 	core.target = car
 	booted = true
 	load_ms = Time.get_ticks_msec() - _t0
-	var args := get_node_or_null("/root/GameArgs")
 	if args != null:
 		args.world_ready = true
-	print("tiles: %s streaming, %d of %d tiles in the first ring, hash %s, %d ms%s" % [
-		index.folder, core.live_ids().size(), index.count(), index.bake_hash, load_ms, "" if core.errors.is_empty() else " (%d refused)" % core.errors.size()])
+	print("tiles: %s streaming, %d of %d tiles in the first ring, hash %s, %d ms%s, start %s" % [
+		index.folder, core.live_ids().size(), index.count(), index.bake_hash, load_ms, "" if core.errors.is_empty() else " (%d refused)" % core.errors.size(),
+		spawn.get("pin", "") if spawn.get("pin", "") != "" else "near India Gate"])
+
+
+## Loads the ring round a spawn pin and finds its lane: the snap of lanes.gd plus {pin, name}, or {} when the pin is
+## empty, its tile is not in the folder or no lane is near it.
+func _spawn_on_pin(pin: Dictionary) -> Dictionary:
+	if pin.is_empty():
+		return {}
+	var at: Dictionary = frame.geo_to_world(pin.lat, pin.lon)
+	var key: Vector2i = WorldFrame.tile_of(at.x, at.z)
+	if not index.has(key):
+		print("tiles: spawn pin %s lies in tile %s, which %s does not hold" % [pin.id, WorldFrame.tile_id(key), index.folder])
+		return {}
+	core.warp(Vector3(at.x, index.tiles[key].origin.y, at.z))
+	await _ring()
+	var sp: Dictionary = lanes.snap(at.x, at.z, pin.heading, SPAWN_REACH)
+	if sp.is_empty():
+		print("tiles: no lane within %d m of spawn pin %s" % [int(SPAWN_REACH), pin.id])
+		return {}
+	sp["pin"] = pin.id
+	sp["name"] = pin.name
+	return sp
+
+
+## The streaming focus follows the node the player controls (the vehicle or the character on foot).
+func _process(_delta: float) -> void:
+	if not booted:
+		return
+	var p := get_tree().get_first_node_in_group("player") as Node3D
+	if p != null and p != core.target:
+		core.target = p
+
+
+## Landmark pins of the tiles that are live now: [{id, name, kind, x, y, z, tile}] in world metres.
+func live_pins() -> Array:
+	var out := []
+	for key: Vector2i in core.tiles:
+		if not core.is_live(key):
+			continue
+		var e: Dictionary = core.tiles[key]
+		var view: Dictionary = e.get("view", {})
+		for p: Dictionary in view.get("pins", []):
+			var w: Vector3 = (view.origin as Vector3) + (p.pos as Vector3)
+			out.append({"id": p.id, "name": p.name, "kind": p.kind, "x": w.x, "y": w.y, "z": w.z, "tile": WorldFrame.tile_id(key)})
+	return out
 
 
 ## Staging (debug teleport, later a respawn): puts the player at x, z, loads the ring there in a burst and stands the
@@ -176,4 +241,5 @@ func info() -> Dictionary:
 	out["colliderTriangles"] = int(colliders.triangles)
 	out["colliderChunks"] = int(colliders.chunks)
 	out["lanes"] = lanes.pieces.size()
+	out["spawn"] = spawn
 	return out

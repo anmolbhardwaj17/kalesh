@@ -10,12 +10,16 @@
 ##                        --light. Without either the day clock (game/core/day_clock.gd) starts at 15:00 and runs
 ##   --style-off=<a,b>    style test features to switch off for cost measuring (stylised_b: volfog, shimmer, dressing,
 ##                        lights, textures, decals, ssao, ssil, glow, sunshadow; p34 = the P0-034 setup)
-##   --scene=<id>         start in that scene (ids in SCENES)
+##   --scene=<id>         start in that scene (ids in SCENES). Without it the game starts in `city` (P1-024): the streamed
+##                        pilot centre with the player in a vehicle at a spawn pin
+##   --spawn=<pin>        the city scene's start (game/data/spawn_pins.json, game/world/spawn_pins.gd); default: the
+##                        file's default pin, the auto stand on Janpath south of Connaught Place
 ##   --arch=<name>        architecture bench: loads the bench scene from ARCH_SCENES; a setup goes after a colon
 ##                        (--arch=render:city+i3+lod), read by the bench scene with arch_setup()
 ##   --tiles=<name>       stream a baked tile folder into the scaffold scene (game/world/world_stream.gd): `test` is the
 ##                        small committed test block (game/world/test_tiles/), `full` the gitignored pilot set
-##                        (game/world/tiles/), or a res:// folder. The car starts on a lane near India Gate
+##                        (game/world/tiles/), or a res:// folder. The city scene streams `full` without the arg (`test`
+##                        when the full set is not there); the scaffold and the other scenes stream only with the arg
 ##   --lockstep           one sim tick per rendered frame at most (a loaded machine runs slower, never catches up)
 ##   --mute               master bus muted
 ## Resolution is an engine arg (`--resolution WxH`, before `--`), handled by Godot itself.
@@ -30,12 +34,19 @@ const DEFAULT_STYLE := "stylised_b"
 const NO_STYLE := "none"
 ## Scene ids the game can load (debug load(id) and --scene=<id>).
 const SCENES := {
+	"city": "res://scenes/city.tscn",
 	"scaffold": "res://scenes/main.tscn",
 	"street": "res://scenes/standin/street.tscn",
 	"landmarks": "res://scenes/standin/landmarks.tscn",
 	"areas": "res://scenes/standin/areas.tscn",
 	"course": "res://scenes/course/course.tscn",
 }
+
+## The scene that streams the pilot city without a --tiles arg, and the tile set it takes then (CITY_TILES_FALLBACK when
+## the gitignored full set is missing).
+const CITY_SCENE := "city"
+const CITY_TILES := "full"
+const CITY_TILES_FALLBACK := "test"
 
 ## Architecture bench scenes (game/bench/<name>/, ARCH_OPTIONS.md "Bench tasks"), started with --arch=<name>[:setup].
 ## Loaded by path only when --arch is given; the default game never loads them.
@@ -57,6 +68,7 @@ var style_off := ""
 var scene := ""
 var arch := ""
 var tiles := ""
+var spawn := ""
 var lockstep := false
 var mute := false
 ## False from the start of a --tiles load until the ring round the player is attached with its colliders (the debug
@@ -71,10 +83,10 @@ var _style_runner: RefCounted = null
 static func parse(args: PackedStringArray) -> Dictionary:
 	var out := {
 		"debug": false, "debug_port": DEFAULT_DEBUG_PORT, "verify": false, "quality": "medium", "style": "", "light": "", "time": "", "style_off": "",
-		"scene": "", "arch": "", "tiles": "", "lockstep": false, "mute": false, "unknown": [] as Array[String],
+		"scene": "", "arch": "", "tiles": "", "spawn": "", "lockstep": false, "mute": false, "unknown": [] as Array[String],
 	}
 	var flags := ["debug", "verify", "lockstep", "mute"]
-	var values := ["debug-port", "quality", "style", "light", "time", "style-off", "scene", "arch", "tiles"]
+	var values := ["debug-port", "quality", "style", "light", "time", "style-off", "scene", "arch", "tiles", "spawn"]
 	var i := 0
 	while i < args.size():
 		var a: String = args[i]
@@ -130,9 +142,9 @@ func _ready() -> void:
 		get_tree().change_scene_to_file.call_deferred(SCENES[scene])
 	elif scene != "" and not SCENES.has(scene):
 		print("game: unknown --scene=%s, staying on the main scene" % scene)
-	if tiles != "" and arch == "":
+	if arch == "" and (tiles != "" or (scene in ["", CITY_SCENE] and current_scene_id() == CITY_SCENE)):
 		world_ready = false
-		attach_tiles.call_deferred()
+		attach_tiles.call_deferred(true)
 	if debug:
 		# Loaded by path, never preloaded: without --debug the debug code is not loaded at all.
 		var server: Node = load(DEBUG_SERVER_PATH).new()
@@ -143,8 +155,13 @@ func _ready() -> void:
 
 ## Streams the --tiles folder into the current scene (the scaffold: it has the World node and the car). An unknown
 ## name or a missing folder is a log line, never an error: the game stays on the stand-in ground.
-func attach_tiles() -> void:
-	var dir: String = load("res://world/streaming/tile_index.gd").folder_of(tiles)
+func attach_tiles(boot := false) -> void:
+	# a --scene swap at boot happens at the end of the first frame: stream into the new scene, never the one going
+	var t0 := Time.get_ticks_msec()
+	while boot and scene != "" and SCENES.has(scene) and current_scene_id() != scene and Time.get_ticks_msec() - t0 < 10000:
+		await get_tree().process_frame
+	var name := tiles_for(current_scene_id())
+	var dir: String = load("res://world/streaming/tile_index.gd").folder_of(name)
 	var scene := get_tree().current_scene
 	var city: Node = scene.get_node_or_null("World/City") if scene != null else null
 	if city != null:
@@ -152,10 +169,21 @@ func attach_tiles() -> void:
 		return
 	world_ready = false
 	if dir == "":
-		print("game: unknown --tiles=%s (use test, full or a res:// folder), no tiles loaded" % tiles)
+		print("game: unknown --tiles=%s (use test, full or a res:// folder), no tiles loaded" % name)
 	elif scene != null and load("res://world/world_stream.gd").attach(scene, dir) != null:
 		return
 	world_ready = true
+
+
+## The tile set a scene streams: the --tiles arg; without it the city scene takes CITY_TILES, or CITY_TILES_FALLBACK when
+## that folder has no index (a fresh clone has only the committed test block); any other scene none ("").
+func tiles_for(scene_id: String) -> String:
+	if tiles != "":
+		return tiles
+	if scene_id != CITY_SCENE:
+		return ""
+	var folder: String = load("res://world/streaming/tile_index.gd").folder_of(CITY_TILES)
+	return CITY_TILES if FileAccess.file_exists(folder + "index.json") else CITY_TILES_FALLBACK
 
 
 ## The look id for a --style value: "" is DEFAULT_STYLE, anything else stays. Architecture benches (--arch) set up
@@ -202,6 +230,7 @@ func apply(p: Dictionary) -> void:
 	scene = p.scene
 	arch = p.arch
 	tiles = p.tiles
+	spawn = p.spawn
 	lockstep = p.lockstep
 	mute = p.mute
 	unknown = p.unknown
@@ -248,5 +277,5 @@ func current_scene_id() -> String:
 func as_dict() -> Dictionary:
 	return {
 		"debug": debug, "debugPort": debug_port, "verify": verify, "quality": quality, "style": style, "light": light, "time": time, "styleOff": style_off,
-		"scene": scene, "arch": arch, "tiles": tiles, "lockstep": lockstep, "mute": mute, "unknown": unknown,
+		"scene": scene, "arch": arch, "tiles": tiles, "spawn": spawn, "lockstep": lockstep, "mute": mute, "unknown": unknown,
 	}

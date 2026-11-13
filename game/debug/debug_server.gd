@@ -200,6 +200,8 @@ func _call(method: String, a: Array) -> Dictionary:
 			return await _vehicle_probe().hook(a)
 		"foot":
 			return await _foot_probe().hook(a)
+		"city":
+			return await _city_probe().hook(a)
 		"setCamera":
 			return _cam.set_camera(a[0] if a.size() > 0 else null)
 		"hud":
@@ -350,8 +352,8 @@ func _load(id: String) -> Dictionary:
 	await get_tree().process_frame
 	await _frame_signal()
 	await _frame_signal()
-	if _args().tiles != "" and get_tree().current_scene != null and get_tree().current_scene.get_node_or_null("World/Car") != null:
-		_args().attach_tiles() # the scaffold's car streams the --tiles folder again; the answer waits for its first ring
+	if _args().tiles_for(id) != "" and get_tree().current_scene != null and get_tree().current_scene.get_node_or_null("World/Car") != null:
+		_args().attach_tiles() # the city (or the scaffold with --tiles) streams its tiles again; the answer waits for its first ring
 		while not _args().world_ready:
 			await get_tree().process_frame
 	_events().emit_event("scene:load", {"id": id})
@@ -443,6 +445,16 @@ func _foot_probe() -> Node:
 	if probe == null:
 		probe = load("res://debug/foot_probe.gd").new()
 		probe.name = "FootProbe"
+		add_child(probe)
+	return probe
+
+
+## The city checks (city_probe.gd: pins, geo, screen, mirror, surface, watch), made on first use (P1-024).
+func _city_probe() -> Node:
+	var probe := get_node_or_null("CityProbe")
+	if probe == null:
+		probe = load("res://debug/city_probe.gd").new()
+		probe.name = "CityProbe"
 		add_child(probe)
 	return probe
 
