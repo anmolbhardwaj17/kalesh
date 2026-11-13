@@ -1,0 +1,43 @@
+{
+  "views": {
+    "cp_street_eye": {
+      "file": "cp_street_eye.png",
+      "at": "2026-11-13T09:51:59.367Z",
+      "query": "debug=1&verify=1&light=golden",
+      "error": null
+    },
+    "ito_junction": {
+      "file": "ito_junction.png",
+      "at": "2026-11-13T09:52:12.423Z",
+      "query": "debug=1&verify=1&light=golden",
+      "error": null
+    },
+    "city_flyover_ramp": {
+      "file": "city_flyover_ramp.png",
+      "at": "2026-11-13T09:52:25.580Z",
+      "query": "debug=1&verify=1&light=golden",
+      "error": null
+    },
+    "gali_foot": {
+      "file": "gali_foot.png",
+      "at": "2026-11-13T09:53:06.802Z",
+      "query": "debug=1&verify=1&light=golden",
+      "error": null
+    },
+    "india_gate_lawns": {
+      "file": "india_gate_lawns.png",
+      "at": "2026-11-13T09:53:19.849Z",
+      "query": "debug=1&verify=1&light=golden",
+      "error": null
+    },
+    "city_busiest_40m": {
+      "file": "city_busiest_40m.png",
+      "at": "2026-11-13T09:53:32.863Z",
+      "query": "debug=1&verify=1&light=golden",
+      "error": null
+    }
+  },
+  "commit": "9320fcf",
+  "gl": "Godot 4.7.2.stable Apple M2 Pro (Apple8) (metal, forward_plus)",
+  "at": "2026-11-13T09:53:32.969Z"
+}

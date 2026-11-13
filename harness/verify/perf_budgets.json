@@ -8,8 +8,8 @@
   "target": "Apple M2 Pro MacBook Pro (12 CPU cores, 19 core GPU, 16 GB) is the minimum machine: 60 fps steady at play speed, 1920x1080 render scale 1.0 (or about 1080p upscaled to the display), Godot 4.7.2.stable standard build, Forward+ renderer (Vulkan through MoltenVK for GPU times, Metal for play), one game window, calm machine (load per core under 0.6)",
   "windowMs": 3000,
   "frameMs": {
-    "warn": 10.0,
-    "fail": 12.0
+    "warn": 10,
+    "fail": 12
   },
   "fpsFloor": 55,
   "loadMs": {
@@ -74,7 +74,466 @@
       1060,
       1075
     ],
-    "source": "harness/look_proof/style_stylised_b_{dawn,afternoon,golden,night}_ballast/perf.json"
+    "source": "harness/look_proof/style_stylised_b_{dawn,afternoon,golden,night}_ballast/perf.json",
+    "city_base": {
+      "_doc": "City perf base line (P1-026, tools: harness/bin/citybase.mjs). The full pilot tiles under the default look (stylised B), afternoon, shell buildings and no dressing, kit, crowds or traffic: P2 is judged against these numbers. GPU cost is the ballast cost (ballast.mjs).",
+      "at": "2026-11-13T09:53:50.927Z",
+      "commit": "9320fcf",
+      "machine": "macbook-pro, darwin arm64, Apple M2 Pro, 12 cores, 16 GB",
+      "renderer": "Forward+",
+      "renderingDriver": "metal",
+      "gpuAdapter": "Apple M2 Pro (Apple8)",
+      "godotVersion": "4.7.2.stable",
+      "hostLoad": {
+        "paths": [
+          4.01,
+          6.2
+        ],
+        "looks": {
+          "avg1": 6.91,
+          "cores": 12,
+          "perCore": 0.58
+        },
+        "cores": 12
+      },
+      "paths": {
+        "chandni_main_140": {
+          "gpuCostMs": 3.8,
+          "cpuP95Ms": 1.1580000026226,
+          "frameP95Ms": 3.8,
+          "fps": 120,
+          "drawCalls": 252,
+          "trianglesM": 0.46,
+          "gpuMB": 195.73,
+          "hostLoad": 4.01,
+          "gate": "ok",
+          "streamAttachP99Ms": 0.71,
+          "laps": 0
+        },
+        "chandni_main_200": {
+          "gpuCostMs": 3.27,
+          "cpuP95Ms": 1.19300000429153,
+          "frameP95Ms": 3.27,
+          "fps": 119.3,
+          "drawCalls": 317,
+          "trianglesM": 0.55,
+          "gpuMB": 195.48,
+          "hostLoad": 6.2,
+          "gate": "ok",
+          "streamAttachP99Ms": 0.775,
+          "laps": 0
+        },
+        "chandni_main_60": {
+          "gpuCostMs": 3.01,
+          "cpuP95Ms": 1.08700000703335,
+          "frameP95Ms": 3.01,
+          "fps": 119.7,
+          "drawCalls": 224,
+          "trianglesM": 0.43,
+          "gpuMB": 192.77,
+          "hostLoad": 4.5,
+          "gate": "ok",
+          "streamAttachP99Ms": 0.658,
+          "laps": 0
+        },
+        "cp_radial_140": {
+          "gpuCostMs": 3.97,
+          "cpuP95Ms": 1.00099999642372,
+          "frameP95Ms": 3.97,
+          "fps": 120,
+          "drawCalls": 307,
+          "trianglesM": 0.36,
+          "gpuMB": 196.7,
+          "hostLoad": 4.83,
+          "gate": "ok",
+          "streamAttachP99Ms": 0.717,
+          "laps": 0
+        },
+        "cp_radial_200": {
+          "gpuCostMs": 3.94,
+          "cpuP95Ms": 1.25500000429153,
+          "frameP95Ms": 3.94,
+          "fps": 119.3,
+          "drawCalls": 290,
+          "trianglesM": 0.36,
+          "gpuMB": 197.2,
+          "hostLoad": 4.61,
+          "gate": "ok",
+          "streamAttachP99Ms": 0.714,
+          "laps": 0
+        },
+        "cp_radial_60": {
+          "gpuCostMs": 3.88,
+          "cpuP95Ms": 1.03300000238419,
+          "frameP95Ms": 3.88,
+          "fps": 120,
+          "drawCalls": 278,
+          "trianglesM": 0.32,
+          "gpuMB": 193.8,
+          "hostLoad": 4.92,
+          "gate": "ok",
+          "streamAttachP99Ms": 0.689,
+          "laps": 0
+        },
+        "india_gate_140": {
+          "gpuCostMs": 3.35,
+          "cpuP95Ms": 0.972000003814697,
+          "frameP95Ms": 3.35,
+          "fps": 118.8,
+          "drawCalls": 360,
+          "trianglesM": 0.2,
+          "gpuMB": 187.89,
+          "hostLoad": 5.81,
+          "gate": "ok",
+          "streamAttachP99Ms": 0.573,
+          "laps": 0
+        },
+        "india_gate_200": {
+          "gpuCostMs": 3.79,
+          "cpuP95Ms": 0.875000007271767,
+          "frameP95Ms": 3.79,
+          "fps": 120,
+          "drawCalls": 374,
+          "trianglesM": 0.2,
+          "gpuMB": 188.81,
+          "hostLoad": 5.59,
+          "gate": "ok",
+          "streamAttachP99Ms": 0.621,
+          "laps": 0
+        },
+        "india_gate_60": {
+          "gpuCostMs": 3.21,
+          "cpuP95Ms": 0.846000006437302,
+          "frameP95Ms": 3.21,
+          "fps": 120,
+          "drawCalls": 312,
+          "trianglesM": 0.17,
+          "gpuMB": 185.36,
+          "hostLoad": 6.15,
+          "gate": "ok",
+          "streamAttachP99Ms": 0.51,
+          "laps": 0
+        },
+        "ito_flyover_140": {
+          "gpuCostMs": 4.01,
+          "cpuP95Ms": 1.14300000905991,
+          "frameP95Ms": 4.01,
+          "fps": 119.3,
+          "drawCalls": 278,
+          "trianglesM": 0.2,
+          "gpuMB": 188.58,
+          "hostLoad": 4.67,
+          "gate": "ok",
+          "streamAttachP99Ms": 0.687,
+          "laps": 0
+        },
+        "ito_flyover_200": {
+          "gpuCostMs": 3.99,
+          "cpuP95Ms": 1.20900000214577,
+          "frameP95Ms": 3.99,
+          "fps": 120,
+          "drawCalls": 305,
+          "trianglesM": 0.23,
+          "gpuMB": 189.11,
+          "hostLoad": 4.39,
+          "gate": "ok",
+          "streamAttachP99Ms": 0.712,
+          "laps": 0
+        },
+        "ito_flyover_60": {
+          "gpuCostMs": 3.71,
+          "cpuP95Ms": 0.938000007629395,
+          "frameP95Ms": 3.71,
+          "fps": 119.7,
+          "drawCalls": 199,
+          "trianglesM": 0.15,
+          "gpuMB": 186.38,
+          "hostLoad": 4.76,
+          "gate": "ok",
+          "streamAttachP99Ms": 0.673,
+          "laps": 0
+        }
+      },
+      "pathsWorst": {
+        "gpuCostMs": 4.01,
+        "frameP95Ms": 4.01,
+        "drawCalls": 374,
+        "trianglesM": 0.55,
+        "gpuMB": 197.2
+      },
+      "views": {
+        "city_afternoon": {
+          "cp_street_eye": {
+            "gpuCostMs": 3.89,
+            "frameP95": 3.89,
+            "drawCalls": 166,
+            "trianglesM": 0.15,
+            "verdict": "ok",
+            "hostLoad": {
+              "avg1": 13.89,
+              "cores": 12,
+              "perCore": 1.16
+            }
+          },
+          "ito_junction": {
+            "gpuCostMs": 4.51,
+            "frameP95": 4.51,
+            "drawCalls": 273,
+            "trianglesM": 0.19,
+            "verdict": "ok",
+            "hostLoad": {
+              "avg1": 6.01,
+              "cores": 12,
+              "perCore": 0.5
+            }
+          },
+          "city_flyover_ramp": {
+            "gpuCostMs": 3.92,
+            "frameP95": 3.92,
+            "drawCalls": 211,
+            "trianglesM": 0.17,
+            "verdict": "ok",
+            "hostLoad": {
+              "avg1": 10.93,
+              "cores": 12,
+              "perCore": 0.91
+            }
+          },
+          "gali_foot": {
+            "gpuCostMs": 4.39,
+            "frameP95": 4.39,
+            "drawCalls": 152,
+            "trianglesM": 0.37,
+            "verdict": "ok",
+            "hostLoad": {
+              "avg1": 7.71,
+              "cores": 12,
+              "perCore": 0.64
+            }
+          },
+          "india_gate_lawns": {
+            "gpuCostMs": 3.54,
+            "frameP95": 3.54,
+            "drawCalls": 251,
+            "trianglesM": 0.14,
+            "verdict": "ok",
+            "hostLoad": {
+              "avg1": 11.62,
+              "cores": 12,
+              "perCore": 0.97
+            }
+          },
+          "city_busiest_40m": {
+            "gpuCostMs": 4.59,
+            "frameP95": 4.59,
+            "drawCalls": 200,
+            "trianglesM": 0.34,
+            "verdict": "ok",
+            "hostLoad": {
+              "avg1": 12.71,
+              "cores": 12,
+              "perCore": 1.06
+            }
+          }
+        },
+        "city_golden": {
+          "cp_street_eye": {
+            "gpuCostMs": 3.61,
+            "frameP95": 3.61,
+            "drawCalls": 164,
+            "trianglesM": 0.15,
+            "verdict": "ok",
+            "hostLoad": {
+              "avg1": 5.08,
+              "cores": 12,
+              "perCore": 0.42
+            }
+          },
+          "ito_junction": {
+            "gpuCostMs": 4.06,
+            "frameP95": 4.06,
+            "drawCalls": 285,
+            "trianglesM": 0.2,
+            "verdict": "ok",
+            "hostLoad": {
+              "avg1": 5.54,
+              "cores": 12,
+              "perCore": 0.46
+            }
+          },
+          "city_flyover_ramp": {
+            "gpuCostMs": 3.26,
+            "frameP95": 3.26,
+            "drawCalls": 258,
+            "trianglesM": 0.22,
+            "verdict": "ok",
+            "hostLoad": {
+              "avg1": 5.12,
+              "cores": 12,
+              "perCore": 0.43
+            }
+          },
+          "gali_foot": {
+            "gpuCostMs": 3.18,
+            "frameP95": 3.18,
+            "drawCalls": 188,
+            "trianglesM": 0.41,
+            "verdict": "ok",
+            "hostLoad": {
+              "avg1": 4.5,
+              "cores": 12,
+              "perCore": 0.38
+            }
+          },
+          "india_gate_lawns": {
+            "gpuCostMs": 4.05,
+            "frameP95": 4.05,
+            "drawCalls": 313,
+            "trianglesM": 0.17,
+            "verdict": "ok",
+            "hostLoad": {
+              "avg1": 4.21,
+              "cores": 12,
+              "perCore": 0.35
+            }
+          },
+          "city_busiest_40m": {
+            "gpuCostMs": 4.41,
+            "frameP95": 4.41,
+            "drawCalls": 198,
+            "trianglesM": 0.3,
+            "verdict": "ok",
+            "hostLoad": {
+              "avg1": 4,
+              "cores": 12,
+              "perCore": 0.33
+            }
+          }
+        }
+      },
+      "systems": {
+        "gpuMs": {
+          "cp": {
+            "view": "Connaught Place street eye",
+            "total": 3.72,
+            "buildings": -0.05,
+            "roadsGround": 0.7,
+            "look": 3.02,
+            "skyOnlyRaw": 4.18,
+            "drawCalls": 166,
+            "hostLoad": {
+              "avg1": 7.91,
+              "cores": 12,
+              "perCore": 0.66
+            }
+          },
+          "busy": {
+            "view": "Chandni Chowk 40 m",
+            "total": 4.56,
+            "buildings": -0.18,
+            "roadsGround": 0.61,
+            "look": 3.95,
+            "skyOnlyRaw": 2.93,
+            "drawCalls": 200,
+            "hostLoad": {
+              "avg1": 7.85,
+              "cores": 12,
+              "perCore": 0.65
+            }
+          }
+        },
+        "table": [
+          {
+            "system": "look stack",
+            "side": "GPU",
+            "measuredMs": 3.95,
+            "budgetMs": 3.6,
+            "how": "sky, sun shadows, SSAO, glow, grade: the whole frame less the two systems below, worst of 2 views"
+          },
+          {
+            "system": "roads and ground",
+            "side": "GPU",
+            "measuredMs": 0.7,
+            "budgetMs": 1,
+            "how": "ablation (frame cost p50): all minus ground_roads hidden, worst of 2 views"
+          },
+          {
+            "system": "buildings (shells)",
+            "side": "GPU",
+            "measuredMs": -0.05,
+            "budgetMs": 2,
+            "how": "ablation (frame cost p50): all minus buildings hidden, worst of 2 views; shells only, no kit modules yet; reads 0 within noise"
+          },
+          {
+            "system": "city total (3 systems)",
+            "side": "GPU",
+            "measuredMs": 4.56,
+            "budgetMs": 10,
+            "how": "all visible, worst of 2 views; line is the total GPU line"
+          },
+          {
+            "system": "city, worst path",
+            "side": "GPU",
+            "measuredMs": 4.01,
+            "budgetMs": 10,
+            "how": "worst of the 12 city_path scenarios"
+          },
+          {
+            "system": "streaming attach",
+            "side": "CPU",
+            "measuredMs": 0.343,
+            "budgetMs": 1,
+            "how": "attach queue work per frame, p99, real drive 80 km/h"
+          },
+          {
+            "system": "streaming core",
+            "side": "CPU",
+            "measuredMs": 0.388,
+            "budgetMs": 1,
+            "how": "whole streaming step per frame, p99"
+          },
+          {
+            "system": "physics step",
+            "side": "CPU",
+            "measuredMs": 0.667,
+            "budgetMs": 1,
+            "how": "TIME_PHYSICS_PROCESS monitor, p50 (refreshes once a second), real drive"
+          },
+          {
+            "system": "vehicles",
+            "side": "CPU",
+            "measuredMs": 0.06,
+            "budgetMs": 0.6,
+            "how": "player vehicle script per tick, mean over the run (one car, no traffic yet)"
+          },
+          {
+            "system": "render CPU",
+            "side": "CPU",
+            "measuredMs": 0.331000006437302,
+            "budgetMs": 2,
+            "how": "render setup and draw list CPU, p95, real drive"
+          }
+        ],
+        "cpuSource": {
+          "driveM": 653,
+          "simS": 41,
+          "frames": 4959,
+          "frameMs": {
+            "max": 11.048,
+            "p50": 8.338,
+            "p95": 8.77,
+            "p99": 8.874
+          },
+          "hostLoad": {
+            "avg1": 9.9,
+            "cores": 12,
+            "perCore": 0.83,
+            "loaded": false
+          }
+        }
+      },
+      "misses": []
+    }
   },
   "signedArchitecture": {
     "at": "2026-11-11",
@@ -149,13 +608,13 @@
         "measured": "bilinear stretch 0.43 ms Vulkan, 0.51 ms Metal; MetalFX spatial 0.96 ms (render.json)"
       },
       "total": {
-        "ms": 10.0,
+        "ms": 10,
         "measured": "bench city 7.06 ms; stand-in views 3.98 to 8.97 ms"
       }
     },
     "cpuMs": {
       "physics": {
-        "ms": 1.0,
+        "ms": 1,
         "measured": "Jolt step p95 0.74 ms with 200 static and 30 dynamic bodies, 1.15 ms with 150 dynamic (physics.json)"
       },
       "vehicles": {
@@ -163,7 +622,7 @@
         "measured": "up to 16 V2 cars (player, pursuit, woken traffic) at 0.035 ms each; 11 measured at 0.38 ms"
       },
       "agents": {
-        "ms": 1.0,
+        "ms": 1,
         "measured": "traffic and pedestrian thinking: 230 agents 0.80 ms p95 in turns, 1.14 ms all at once"
       },
       "onFoot": {
@@ -175,11 +634,11 @@
         "measured": "rays 0.03 ms, ragdolls 0.06 ms each, at most 8; 10 ragdolls 0.82 ms p95"
       },
       "animation": {
-        "ms": 1.0,
+        "ms": 1,
         "measured": "0.32 ms for 300 people on a light rig, a floor; 40 skinned within 25 m plus the far crowd"
       },
       "streamingAttach": {
-        "ms": 1.0,
+        "ms": 1,
         "measured": "cap per frame: collider chunks 0.33 ms p95 each, mesh step under 0.2 ms (0.9 ms with placements); at most 3 chunks a frame, none in a mesh step frame"
       },
       "gameplay": {
@@ -191,7 +650,7 @@
         "measured": "sum of the rows above"
       },
       "render": {
-        "ms": 2.0,
+        "ms": 2,
         "measured": "culling and draw lists: 1.2 ms CPU p95 at 1,609 draw calls (render.json)"
       },
       "total": {
@@ -222,8 +681,8 @@
   "world": {
     "_doc": "Budgets of the Delhi world layers (DELHI_WORLD.md section 5). The GPU ms split the measured 3.5 ms city line by estimate; the counts are design limits checked by the bake and the ingest.",
     "gpuMs": {
-      "roadsAndGround": 1.0,
-      "generatedBuildings": 2.0,
+      "roadsAndGround": 1,
+      "generatedBuildings": 2,
       "landmarks": 0.5,
       "note": "sum 3.5 ms = systems.gpuMs.city; street dressing is systems.gpuMs.dressing, life is systems.gpuMs.people and vehicles"
     },
@@ -281,16 +740,16 @@
     "rings": "full detail to about 375 m, block shells to about 900 m, one skyline mesh per 1 km cell always loaded",
     "tileFileMB": {
       "average": 1.5,
-      "worst": 4.0,
+      "worst": 4,
       "measured": "0.89 MB dense stand-in, 1.46 MB with placements; ITO road site 3.47 MB uncut"
     },
     "tileReadMsWorst": 10,
     "colliderChunkTriangles": 500,
     "colliderChunkMsWorst": 0.5,
-    "attachMsPerFrame": 1.0,
+    "attachMsPerFrame": 1,
     "framesOver33msAt200kmh": 0,
     "mapDataGB": {
-      "firstRelease": 3.0,
+      "firstRelease": 3,
       "estimate": "1.0 to 1.5 GB for about 1,090 tiles"
     },
     "measured": "P1-019 (2026-11-12, full pilot tiles, stand-in look, Metal, M2 Pro): 60 s at 200 km/h has 0 frames over 33 ms (worst 10.4 ms), streaming work p99 0.65 ms a frame, at most 3 collider chunks a frame, a tile reads and prepares in 2.0 ms on average and 4.7 ms at worst, the worst collider chunk attaches in 0.30 to 0.57 ms, 22 tiles held at most (cap 40), pilot tiles average 0.90 MB and 2.21 MB at worst (scenarios stream_200, stream_140, stream_teleport, stream_memory; TECH.md 'Streaming (ST1, TL1)')"
@@ -303,7 +762,15 @@
     "colliderToDrawnSurfaceM": 0.05,
     "centrePairBearingDeg": 0.5,
     "pilotFullMin": 10,
-    "pilotStepMs": {"graph": 20000, "rules": 3000, "lanes": 30000, "elevation": 60000, "mesh": 60000, "terrain": 120000, "_doc": "Limits of single bake steps on the pilot centre, checked by tools/bake/report/pilot_timing.test.mjs against the timing of the shared test bake (P1-038). They bound the step's own build time on an idle machine; when the machine was busy during the bake (load over half the cores) the test prints the time and does not fail. They moved here from wall clock assertions in the pilot tests, which failed under outside load."},
+    "pilotStepMs": {
+      "graph": 20000,
+      "rules": 3000,
+      "lanes": 30000,
+      "elevation": 60000,
+      "mesh": 60000,
+      "terrain": 120000,
+      "_doc": "Limits of single bake steps on the pilot centre, checked by tools/bake/report/pilot_timing.test.mjs against the timing of the shared test bake (P1-038). They bound the step's own build time on an idle machine; when the machine was busy during the bake (load over half the cores) the test prints the time and does not fail. They moved here from wall clock assertions in the pilot tests, which failed under outside load."
+    },
     "measured": "pilot centre (P1-017, 2026-11-12, M2 Pro, npm run bake -- pilot --offline): whole bake 159.7 s (sources 0.1, ground 1.8, graph 2.8, repair 57.4, lanes 10.0, elevation 28.2, mesh 23.3, terrain 22.0, tiles 14.0 s), 417 tiles, 375,393,264 bytes (358 MB) in game/world/tiles, bake hash 072f410efab820 in two whole bakes; one tile rebake after an override (tile -5_-13, the largest, a building removed by a patch): 52.1 s, the other 416 tiles untouched; with the patch taken out again 52.8 s and the whole bake's hash back. The bake prints both times and writes them to harness/reports/map/timing.json (kept out of health.json, which holds no clock time)."
   }
 }

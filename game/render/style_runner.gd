@@ -69,7 +69,9 @@ func _build(lp: Resource) -> void:
 ## scene's WorldEnvironment enters the tree, before the scene's meshes (stand-in builders and main.tscn add it first).
 func follow_clock() -> bool:
 	var clock: Node = _tree.root.get_node_or_null("DayClock") if _tree != null and _tree.root != null else null
-	if clock == null:
+	# The boot scene is restyled from GameArgs._ready, before DayClock._ready has read --light and --time: its hour is
+	# still the default one then, and following it would throw away the pinned light (P1-026).
+	if clock == null or not clock.is_node_ready():
 		return false
 	var h: float = clock.hour
 	var d := absf(fposmod(h - hour + 12.0, 24.0) - 12.0)

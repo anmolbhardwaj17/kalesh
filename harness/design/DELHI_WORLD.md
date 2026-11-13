@@ -412,3 +412,12 @@ IV1, built in the order of IV3: one page with layers. Issues and lanes first; th
 - P0-018 (`world_sources.json`, `landmarks_pilot_draft.json`): the licence of every landmark and area source, the pilot landmark census with the OSM to Wikidata distances, and which area sources cover the pilot.
 - P0-029 (`stitch.json`): landmark position error in the district frame, and the layout inside a district against reality.
 
+
+## OSM is reference, not the final word (Anmol 2026-11-13)
+
+Anmol: "We don't have to be stuck with what OSM is giving us ... OSM is good for reference ... CP has its own style of buildings and all. We have to follow that as well."
+
+- **Area blueprints.** For places we know (Connaught Place inner and outer circles and radials first, then Janpath, Kartavya Path and India Gate, Chandni Chowk, Paharganj), an authored blueprint in `harness/data/blueprints/<area>.json` sets the blocks: footprint shape, height, floor count, roofline, setbacks, the facade kit and the ground floor (colonnade, arcade, shopfronts). CP's inner and outer circle blocks are the uniform two storey white Georgian colonnade ring, with the tower blocks behind the outer circle, whatever OSM draws. OSM footprints, photos and satellite views are the inputs; the blueprint is the decision.
+- **Precedence on any square metre:** road corridor, then landmark zone, then area blueprint, then the generator working from the repaired OSM footprints.
+- **Odd OSM buildings.** Outside blueprints, a footprint check flags shapes that would look wrong in game (slivers, spikes, zig-zags, self-overlaps, sizes or heights far outside the area profile). Each flag is checked against photos or satellite (the area reference sheets): if the real building is like that, it stays; if not, it is regularised to the area's typical shape. The map inspector shows these as their own issue kind.
+- **Style comes from the area.** Every generated building follows its area profile's style (materials, colours, balconies, railings, roofs), so a block never looks like it belongs to another part of Delhi.

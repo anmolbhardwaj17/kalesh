@@ -326,6 +326,8 @@ async function runScript(ctx, step) {
       const readData = (f) => JSON.parse(fs.readFileSync(path.resolve(ROOT, f), 'utf8'));
       page.win.__scriptData = typeof step.data === 'string' ? readData(step.data) : Object.fromEntries(Object.entries(step.data).map(([k, f]) => [k, readData(f)]));
     }
+    // `params`: a few plain values of the scenario for a script that several scenarios share (window.__scriptParams)
+    page.win.__scriptParams = step.params ? JSON.parse(JSON.stringify(step.params)) : {};
     const lib = fs.readFileSync(path.join(ROOT, 'harness', 'verify', 'scripts', 'lib', 'sim.js'), 'utf8');
     const autoProgress = (step.timeout || 180000) >= AUTO_PROGRESS_MIN_MS;
     page.win.__scriptProgress = null;

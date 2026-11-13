@@ -737,6 +737,261 @@
         }
       ],
       "_note": "P1-024 shot: the auto drives Kartavya Path east toward the India Gate hexagon (route rajpath, real inputs) and stops; India Gate is in the middle half of the play camera. Shot city_india_gate_hexagon (default look)."
+    },
+    {
+      "name": "city_path_cp_radial_60",
+      "query": "light=afternoon",
+      "perf": true,
+      "scene": "city",
+      "allOnly": true,
+      "solo": true,
+      "steps": [
+        {
+          "script": "harness/verify/scripts/city_path.js",
+          "timeout": 180000,
+          "data": "harness/data/fixtures/city_paths.json",
+          "params": {
+            "path": "cp_radial",
+            "kmh": 60
+          }
+        }
+      ],
+      "_note": "P1-026 city perf path: Connaught Place radial into the circle at 60 km/h. A scripted drive (stream path, out and back as a loop) on the full pilot tiles under the default look (stylised B, afternoon); the perf window with the GPU ballast measures it (scene kind city: draw calls warn 2,500 fail 3,500; frame p95 warn 10 ms fail 12 ms). Not in quick."
+    },
+    {
+      "name": "city_path_cp_radial_140",
+      "query": "light=afternoon",
+      "perf": true,
+      "scene": "city",
+      "allOnly": true,
+      "solo": true,
+      "steps": [
+        {
+          "script": "harness/verify/scripts/city_path.js",
+          "timeout": 180000,
+          "data": "harness/data/fixtures/city_paths.json",
+          "params": {
+            "path": "cp_radial",
+            "kmh": 140
+          }
+        }
+      ],
+      "_note": "P1-026 city perf path: Connaught Place radial into the circle at 140 km/h. A scripted drive (stream path, out and back as a loop) on the full pilot tiles under the default look (stylised B, afternoon); the perf window with the GPU ballast measures it (scene kind city: draw calls warn 2,500 fail 3,500; frame p95 warn 10 ms fail 12 ms). Not in quick."
+    },
+    {
+      "name": "city_path_cp_radial_200",
+      "query": "light=afternoon",
+      "perf": true,
+      "scene": "city",
+      "allOnly": true,
+      "solo": true,
+      "steps": [
+        {
+          "script": "harness/verify/scripts/city_path.js",
+          "timeout": 180000,
+          "data": "harness/data/fixtures/city_paths.json",
+          "params": {
+            "path": "cp_radial",
+            "kmh": 200
+          }
+        }
+      ],
+      "_note": "P1-026 city perf path: Connaught Place radial into the circle at 200 km/h. A scripted drive (stream path, out and back as a loop) on the full pilot tiles under the default look (stylised B, afternoon); the perf window with the GPU ballast measures it (scene kind city: draw calls warn 2,500 fail 3,500; frame p95 warn 10 ms fail 12 ms). Not in quick."
+    },
+    {
+      "name": "city_path_ito_flyover_60",
+      "query": "light=afternoon",
+      "perf": true,
+      "scene": "city",
+      "allOnly": true,
+      "solo": true,
+      "steps": [
+        {
+          "script": "harness/verify/scripts/city_path.js",
+          "timeout": 180000,
+          "data": "harness/data/fixtures/city_paths.json",
+          "params": {
+            "path": "ito_flyover",
+            "kmh": 60
+          }
+        }
+      ],
+      "_note": "P1-026 city perf path: the ITO flyover run at 60 km/h. A scripted drive (stream path, out and back as a loop) on the full pilot tiles under the default look (stylised B, afternoon); the perf window with the GPU ballast measures it (scene kind city: draw calls warn 2,500 fail 3,500; frame p95 warn 10 ms fail 12 ms). Not in quick."
+    },
+    {
+      "name": "city_path_ito_flyover_140",
+      "query": "light=afternoon",
+      "perf": true,
+      "scene": "city",
+      "allOnly": true,
+      "solo": true,
+      "steps": [
+        {
+          "script": "harness/verify/scripts/city_path.js",
+          "timeout": 180000,
+          "data": "harness/data/fixtures/city_paths.json",
+          "params": {
+            "path": "ito_flyover",
+            "kmh": 140
+          }
+        }
+      ],
+      "_note": "P1-026 city perf path: the ITO flyover run at 140 km/h. A scripted drive (stream path, out and back as a loop) on the full pilot tiles under the default look (stylised B, afternoon); the perf window with the GPU ballast measures it (scene kind city: draw calls warn 2,500 fail 3,500; frame p95 warn 10 ms fail 12 ms). Not in quick."
+    },
+    {
+      "name": "city_path_ito_flyover_200",
+      "query": "light=afternoon",
+      "perf": true,
+      "scene": "city",
+      "allOnly": true,
+      "solo": true,
+      "steps": [
+        {
+          "script": "harness/verify/scripts/city_path.js",
+          "timeout": 180000,
+          "data": "harness/data/fixtures/city_paths.json",
+          "params": {
+            "path": "ito_flyover",
+            "kmh": 200
+          }
+        }
+      ],
+      "_note": "P1-026 city perf path: the ITO flyover run at 200 km/h. A scripted drive (stream path, out and back as a loop) on the full pilot tiles under the default look (stylised B, afternoon); the perf window with the GPU ballast measures it (scene kind city: draw calls warn 2,500 fail 3,500; frame p95 warn 10 ms fail 12 ms). Not in quick."
+    },
+    {
+      "name": "city_path_chandni_main_60",
+      "query": "light=afternoon",
+      "perf": true,
+      "scene": "city",
+      "allOnly": true,
+      "solo": true,
+      "steps": [
+        {
+          "script": "harness/verify/scripts/city_path.js",
+          "timeout": 180000,
+          "data": "harness/data/fixtures/city_paths.json",
+          "params": {
+            "path": "chandni_main",
+            "kmh": 60
+          }
+        }
+      ],
+      "_note": "P1-026 city perf path: Chandni Chowk main road at 60 km/h. A scripted drive (stream path, out and back as a loop) on the full pilot tiles under the default look (stylised B, afternoon); the perf window with the GPU ballast measures it (scene kind city: draw calls warn 2,500 fail 3,500; frame p95 warn 10 ms fail 12 ms). Not in quick."
+    },
+    {
+      "name": "city_path_chandni_main_140",
+      "query": "light=afternoon",
+      "perf": true,
+      "scene": "city",
+      "allOnly": true,
+      "solo": true,
+      "steps": [
+        {
+          "script": "harness/verify/scripts/city_path.js",
+          "timeout": 180000,
+          "data": "harness/data/fixtures/city_paths.json",
+          "params": {
+            "path": "chandni_main",
+            "kmh": 140
+          }
+        }
+      ],
+      "_note": "P1-026 city perf path: Chandni Chowk main road at 140 km/h. A scripted drive (stream path, out and back as a loop) on the full pilot tiles under the default look (stylised B, afternoon); the perf window with the GPU ballast measures it (scene kind city: draw calls warn 2,500 fail 3,500; frame p95 warn 10 ms fail 12 ms). Not in quick."
+    },
+    {
+      "name": "city_path_chandni_main_200",
+      "query": "light=afternoon",
+      "perf": true,
+      "scene": "city",
+      "allOnly": true,
+      "solo": true,
+      "steps": [
+        {
+          "script": "harness/verify/scripts/city_path.js",
+          "timeout": 180000,
+          "data": "harness/data/fixtures/city_paths.json",
+          "params": {
+            "path": "chandni_main",
+            "kmh": 200
+          }
+        }
+      ],
+      "_note": "P1-026 city perf path: Chandni Chowk main road at 200 km/h. A scripted drive (stream path, out and back as a loop) on the full pilot tiles under the default look (stylised B, afternoon); the perf window with the GPU ballast measures it (scene kind city: draw calls warn 2,500 fail 3,500; frame p95 warn 10 ms fail 12 ms). Not in quick."
+    },
+    {
+      "name": "city_path_india_gate_60",
+      "query": "light=afternoon",
+      "perf": true,
+      "scene": "city",
+      "allOnly": true,
+      "solo": true,
+      "steps": [
+        {
+          "script": "harness/verify/scripts/city_path.js",
+          "timeout": 180000,
+          "data": "harness/data/fixtures/city_paths.json",
+          "params": {
+            "path": "india_gate",
+            "kmh": 60
+          }
+        }
+      ],
+      "_note": "P1-026 city perf path: the India Gate hexagon at 60 km/h. A scripted drive (stream path, out and back as a loop) on the full pilot tiles under the default look (stylised B, afternoon); the perf window with the GPU ballast measures it (scene kind city: draw calls warn 2,500 fail 3,500; frame p95 warn 10 ms fail 12 ms). Not in quick."
+    },
+    {
+      "name": "city_path_india_gate_140",
+      "query": "light=afternoon",
+      "perf": true,
+      "scene": "city",
+      "allOnly": true,
+      "solo": true,
+      "steps": [
+        {
+          "script": "harness/verify/scripts/city_path.js",
+          "timeout": 180000,
+          "data": "harness/data/fixtures/city_paths.json",
+          "params": {
+            "path": "india_gate",
+            "kmh": 140
+          }
+        }
+      ],
+      "_note": "P1-026 city perf path: the India Gate hexagon at 140 km/h. A scripted drive (stream path, out and back as a loop) on the full pilot tiles under the default look (stylised B, afternoon); the perf window with the GPU ballast measures it (scene kind city: draw calls warn 2,500 fail 3,500; frame p95 warn 10 ms fail 12 ms). Not in quick."
+    },
+    {
+      "name": "city_path_india_gate_200",
+      "query": "light=afternoon",
+      "perf": true,
+      "scene": "city",
+      "allOnly": true,
+      "solo": true,
+      "steps": [
+        {
+          "script": "harness/verify/scripts/city_path.js",
+          "timeout": 180000,
+          "data": "harness/data/fixtures/city_paths.json",
+          "params": {
+            "path": "india_gate",
+            "kmh": 200
+          }
+        }
+      ],
+      "_note": "P1-026 city perf path: the India Gate hexagon at 200 km/h. A scripted drive (stream path, out and back as a loop) on the full pilot tiles under the default look (stylised B, afternoon); the perf window with the GPU ballast measures it (scene kind city: draw calls warn 2,500 fail 3,500; frame p95 warn 10 ms fail 12 ms). Not in quick."
+    },
+    {
+      "name": "city_base_systems",
+      "query": "light=afternoon&spawn=ito_flyover_south",
+      "lockstep": true,
+      "allOnly": true,
+      "solo": true,
+      "steps": [
+        {
+          "script": "harness/verify/scripts/city_base_systems.js",
+          "timeout": 240000,
+          "data": "harness/data/fixtures/city_routes.json"
+        }
+      ],
+      "_note": "P1-026: the CPU readings of the per system table (citybase.mjs): a real drive over the ITO flyover at 80 km/h (route ito_flyover) with the frame recording: physics step, vehicle script time per tick, streaming core and attach work, render CPU time. Not in quick."
     }
   ]
 }

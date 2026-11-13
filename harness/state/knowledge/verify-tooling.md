@@ -1,0 +1,1 @@
+- Godot focus guard (harness/bin/godot.mjs): hands focus back to the terminal only if a terminal was frontmost AND there was keyboard or mouse input in the last 5 s (HIDIdleTime, HARNESS_FOCUS_IDLE_S); otherwise Godot stays in front so Anmol can watch (Anmol 2026-11-13).

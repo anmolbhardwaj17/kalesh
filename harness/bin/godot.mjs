@@ -198,6 +198,15 @@ export const TERMINAL_APPS = new Set([
   ...String(process.env.HARNESS_FOCUS_APPS || '').split(',').map((x) => x.trim()).filter(Boolean),
 ]);
 
+// Seconds of no keyboard or mouse input after which the owner counts as watching, not typing (HARNESS_FOCUS_IDLE_S).
+const TYPING_IDLE_S = Number(process.env.HARNESS_FOCUS_IDLE_S || 5);
+/** True when there was keyboard or mouse input in the last TYPING_IDLE_S seconds (HIDIdleTime; no permission needed). */
+export async function recentInput() {
+  const m = (await sh('ioreg', ['-c', 'IOHIDSystem', '-d', '4'])).match(/"HIDIdleTime" = (\d+)/);
+  if (!m) return true; // unknown: keep the old behaviour
+  return Number(m[1]) / 1e9 < TYPING_IDLE_S;
+}
+
 /**
  * Hands keyboard focus back to the terminal when a Godot window grabs it on open (macOS activates the app on launch).
  * Acts only if a terminal app was frontmost at launch, and only during the first windowMs after launch, so a click
@@ -219,7 +228,11 @@ export function startFocusGuard(proc, { headless = false, intervalMs = 25, windo
       const f = await frontApp();
       if (!f || stopped) return;
       if (f.pid === proc.pid) {
-        if (last && TERMINAL_APPS.has(last.bundleId)) { await activateApp(last); handle.restored++; }
+        // Only when the owner is actually using the terminal: keyboard or mouse input in the last few seconds
+        // (owner 2026-11-13: a terminal that is merely frontmost while he watches must let Godot come forward).
+        if (last && TERMINAL_APPS.has(last.bundleId)) {
+          if (await recentInput()) { await activateApp(last); handle.restored++; } else handle.stop();
+        }
       } else if (f.type === 'Foreground') {
         last = f; // helpers (SystemUIServer and the like) flash to the front and are never restored
       }

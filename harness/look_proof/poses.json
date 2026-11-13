@@ -1,5 +1,5 @@
 {
-  "_doc": "Look proof views (harness/bin/lookproof.mjs). Each view is a fresh game run at its size: it loads a stand-in scene (P0-009: street, landmarks, areas), puts the debug camera at a fixed pose (hud_play keeps the chase camera and the HUD), lets 1 s of sim pass, then holds the sim (hold at 0 pauses at once) so every run shoots the same moment. The scenes are seeded and static.",
+  "_doc": "Look proof views (harness/bin/lookproof.mjs). Each view is a fresh game run at its size: it loads a stand-in scene (P0-009: street, landmarks, areas), puts the debug camera at a fixed pose (hud_play keeps the chase camera and the HUD), lets 1 s of sim pass, then holds the sim (hold at 0 pauses at once) so every run shoots the same moment. The scenes are seeded and static. P1-026: views with \"group\": \"city\" are for the streamed city (the game's default scene, full pilot tiles): each teleports the player (the streaming ring follows it), puts the debug camera at a fixed pose and holds the sim. lookproof --set takes the views of one group: --group <name>, else \"city\" for a set whose name starts with city_ and otherwise the views with no group (the stand-in look views). Group \"city_systems\" are ablation views for the per system table (citybase.mjs).",
   "views": [
     {
       "name": "car_closeup",
@@ -464,6 +464,909 @@
         },
         {
           "settle": 1
+        },
+        {
+          "call": "hold",
+          "args": [
+            {
+              "at": 0
+            }
+          ]
+        },
+        {
+          "waitFor": "window.__game.debug.clock().paused === true",
+          "timeout": 10000
+        }
+      ]
+    },
+    {
+      "name": "cp_street_eye",
+      "group": "city",
+      "size": [
+        1920,
+        1080
+      ],
+      "_note": "Street eye at Connaught Place: the inner circle road south side at 1.6 m, looking west along it into the circle (the player's auto parked 40 m behind the camera).",
+      "steps": [
+        {
+          "call": "teleport",
+          "args": [
+            [
+              -351.9,
+              214.5,
+              -1616.7
+            ]
+          ],
+          "timeout": 60000
+        },
+        {
+          "call": "setCamera",
+          "args": [
+            {
+              "pos": [
+                -392.2,
+                215.7,
+                -1634.8
+              ],
+              "target": [
+                -440,
+                217.2,
+                -1670
+              ]
+            }
+          ]
+        },
+        {
+          "call": "hud",
+          "args": [
+            false
+          ]
+        },
+        {
+          "settle": 2
+        },
+        {
+          "call": "hold",
+          "args": [
+            {
+              "at": 0
+            }
+          ]
+        },
+        {
+          "waitFor": "window.__game.debug.clock().paused === true",
+          "timeout": 10000
+        }
+      ]
+    },
+    {
+      "name": "ito_junction",
+      "group": "city",
+      "size": [
+        1920,
+        1080
+      ],
+      "_note": "The ITO crossing from 30 m up and 30 m back: roads, the flyover and the blocks round it.",
+      "steps": [
+        {
+          "call": "teleport",
+          "args": [
+            [
+              1773.4,
+              208.7,
+              -1234.9
+            ]
+          ],
+          "timeout": 60000
+        },
+        {
+          "call": "setCamera",
+          "args": [
+            {
+              "pos": [
+                1803,
+                238,
+                -1195
+              ],
+              "target": [
+                1773,
+                209,
+                -1235
+              ]
+            }
+          ]
+        },
+        {
+          "call": "hud",
+          "args": [
+            false
+          ]
+        },
+        {
+          "settle": 2
+        },
+        {
+          "call": "hold",
+          "args": [
+            {
+              "at": 0
+            }
+          ]
+        },
+        {
+          "waitFor": "window.__game.debug.clock().paused === true",
+          "timeout": 10000
+        }
+      ]
+    },
+    {
+      "name": "city_flyover_ramp",
+      "group": "city",
+      "size": [
+        1920,
+        1080
+      ],
+      "_note": "The Ring Road flyover ramp at ITO at eye height, looking up the ramp toward the deck.",
+      "steps": [
+        {
+          "call": "teleport",
+          "args": [
+            [
+              2326.7,
+              206.4,
+              -940.1
+            ]
+          ],
+          "timeout": 60000
+        },
+        {
+          "call": "setCamera",
+          "args": [
+            {
+              "pos": [
+                2323.2,
+                208.2,
+                -956.6
+              ],
+              "target": [
+                2318,
+                212.5,
+                -1090
+              ]
+            }
+          ]
+        },
+        {
+          "call": "hud",
+          "args": [
+            false
+          ]
+        },
+        {
+          "settle": 2
+        },
+        {
+          "call": "hold",
+          "args": [
+            {
+              "at": 0
+            }
+          ]
+        },
+        {
+          "waitFor": "window.__game.debug.clock().paused === true",
+          "timeout": 10000
+        }
+      ]
+    },
+    {
+      "name": "gali_foot",
+      "group": "city",
+      "size": [
+        1920,
+        1080
+      ],
+      "_note": "A gali off Chandni Chowk on foot: Bittu walked in from the main road (real inputs) and stands in the 3 m lane between the building shells, at the on-foot play camera (his auto is left at the mouth).",
+      "steps": [
+        {
+          "script": "harness/verify/scripts/city_look_gali.js",
+          "timeout": 120000,
+          "data": "harness/data/fixtures/city_routes.json"
+        },
+        {
+          "call": "hud",
+          "args": [
+            false
+          ]
+        },
+        {
+          "settle": 1
+        },
+        {
+          "call": "hold",
+          "args": [
+            {
+              "at": 0
+            }
+          ]
+        },
+        {
+          "waitFor": "window.__game.debug.clock().paused === true",
+          "timeout": 10000
+        }
+      ]
+    },
+    {
+      "name": "india_gate_lawns",
+      "group": "city",
+      "size": [
+        1920,
+        1080
+      ],
+      "_note": "The India Gate lawns: standing on the lawn beside Kartavya Path, looking east at the hexagon and the gate.",
+      "steps": [
+        {
+          "call": "teleport",
+          "args": [
+            [
+              300.0,
+              213.0,
+              440.4
+            ]
+          ],
+          "timeout": 60000
+        },
+        {
+          "call": "setCamera",
+          "args": [
+            {
+              "pos": [
+                440,
+                215.4,
+                400
+              ],
+              "target": [
+                621.6,
+                232,
+                467.2
+              ]
+            }
+          ]
+        },
+        {
+          "call": "hud",
+          "args": [
+            false
+          ]
+        },
+        {
+          "settle": 2
+        },
+        {
+          "call": "hold",
+          "args": [
+            {
+              "at": 0
+            }
+          ]
+        },
+        {
+          "waitFor": "window.__game.debug.clock().paused === true",
+          "timeout": 10000
+        }
+      ]
+    },
+    {
+      "name": "city_busiest_40m",
+      "group": "city",
+      "size": [
+        1920,
+        1080
+      ],
+      "_note": "The busiest block, Chandni Chowk main road from 40 m up.",
+      "steps": [
+        {
+          "call": "teleport",
+          "args": [
+            [
+              1093.5,
+              222.1,
+              -4316.2
+            ]
+          ],
+          "timeout": 60000
+        },
+        {
+          "call": "setCamera",
+          "args": [
+            {
+              "pos": [
+                1120,
+                262,
+                -4280
+              ],
+              "target": [
+                1090,
+                222,
+                -4320
+              ]
+            }
+          ]
+        },
+        {
+          "call": "hud",
+          "args": [
+            false
+          ]
+        },
+        {
+          "settle": 2
+        },
+        {
+          "call": "hold",
+          "args": [
+            {
+              "at": 0
+            }
+          ]
+        },
+        {
+          "waitFor": "window.__game.debug.clock().paused === true",
+          "timeout": 10000
+        }
+      ]
+    },
+    {
+      "name": "sys_cp_all",
+      "group": "city_systems",
+      "size": [
+        1920,
+        1080
+      ],
+      "_note": "Ablation of the cp_street_eye view for the per system GPU table: nothing hidden (stream layers).",
+      "steps": [
+        {
+          "call": "teleport",
+          "args": [
+            [
+              -351.9,
+              214.5,
+              -1616.7
+            ]
+          ],
+          "timeout": 60000
+        },
+        {
+          "call": "setCamera",
+          "args": [
+            {
+              "pos": [
+                -392.2,
+                215.7,
+                -1634.8
+              ],
+              "target": [
+                -440,
+                217.2,
+                -1670
+              ]
+            }
+          ]
+        },
+        {
+          "call": "hud",
+          "args": [
+            false
+          ]
+        },
+        {
+          "settle": 2
+        },
+        {
+          "call": "hold",
+          "args": [
+            {
+              "at": 0
+            }
+          ]
+        },
+        {
+          "waitFor": "window.__game.debug.clock().paused === true",
+          "timeout": 10000
+        }
+      ]
+    },
+    {
+      "name": "sys_cp_no_buildings",
+      "group": "city_systems",
+      "size": [
+        1920,
+        1080
+      ],
+      "_note": "Ablation of the cp_street_eye view for the per system GPU table: hidden: buildings (stream layers).",
+      "steps": [
+        {
+          "call": "teleport",
+          "args": [
+            [
+              -351.9,
+              214.5,
+              -1616.7
+            ]
+          ],
+          "timeout": 60000
+        },
+        {
+          "call": "setCamera",
+          "args": [
+            {
+              "pos": [
+                -392.2,
+                215.7,
+                -1634.8
+              ],
+              "target": [
+                -440,
+                217.2,
+                -1670
+              ]
+            }
+          ]
+        },
+        {
+          "call": "hud",
+          "args": [
+            false
+          ]
+        },
+        {
+          "settle": 2
+        },
+        {
+          "call": "stream",
+          "args": [
+            "layers",
+            {
+              "hide": [
+                "buildings"
+              ]
+            }
+          ]
+        },
+        {
+          "settle": 0.5
+        },
+        {
+          "call": "hold",
+          "args": [
+            {
+              "at": 0
+            }
+          ]
+        },
+        {
+          "waitFor": "window.__game.debug.clock().paused === true",
+          "timeout": 10000
+        }
+      ]
+    },
+    {
+      "name": "sys_cp_no_roads",
+      "group": "city_systems",
+      "size": [
+        1920,
+        1080
+      ],
+      "_note": "Ablation of the cp_street_eye view for the per system GPU table: hidden: ground_roads (stream layers).",
+      "steps": [
+        {
+          "call": "teleport",
+          "args": [
+            [
+              -351.9,
+              214.5,
+              -1616.7
+            ]
+          ],
+          "timeout": 60000
+        },
+        {
+          "call": "setCamera",
+          "args": [
+            {
+              "pos": [
+                -392.2,
+                215.7,
+                -1634.8
+              ],
+              "target": [
+                -440,
+                217.2,
+                -1670
+              ]
+            }
+          ]
+        },
+        {
+          "call": "hud",
+          "args": [
+            false
+          ]
+        },
+        {
+          "settle": 2
+        },
+        {
+          "call": "stream",
+          "args": [
+            "layers",
+            {
+              "hide": [
+                "ground_roads"
+              ]
+            }
+          ]
+        },
+        {
+          "settle": 0.5
+        },
+        {
+          "call": "hold",
+          "args": [
+            {
+              "at": 0
+            }
+          ]
+        },
+        {
+          "waitFor": "window.__game.debug.clock().paused === true",
+          "timeout": 10000
+        }
+      ]
+    },
+    {
+      "name": "sys_cp_sky_only",
+      "group": "city_systems",
+      "size": [
+        1920,
+        1080
+      ],
+      "_note": "Ablation of the cp_street_eye view for the per system GPU table: hidden: buildings, ground_roads (stream layers).",
+      "steps": [
+        {
+          "call": "teleport",
+          "args": [
+            [
+              -351.9,
+              214.5,
+              -1616.7
+            ]
+          ],
+          "timeout": 60000
+        },
+        {
+          "call": "setCamera",
+          "args": [
+            {
+              "pos": [
+                -392.2,
+                215.7,
+                -1634.8
+              ],
+              "target": [
+                -440,
+                217.2,
+                -1670
+              ]
+            }
+          ]
+        },
+        {
+          "call": "hud",
+          "args": [
+            false
+          ]
+        },
+        {
+          "settle": 2
+        },
+        {
+          "call": "stream",
+          "args": [
+            "layers",
+            {
+              "hide": [
+                "buildings",
+                "ground_roads"
+              ]
+            }
+          ]
+        },
+        {
+          "settle": 0.5
+        },
+        {
+          "call": "hold",
+          "args": [
+            {
+              "at": 0
+            }
+          ]
+        },
+        {
+          "waitFor": "window.__game.debug.clock().paused === true",
+          "timeout": 10000
+        }
+      ]
+    },
+    {
+      "name": "sys_busy_all",
+      "group": "city_systems",
+      "size": [
+        1920,
+        1080
+      ],
+      "_note": "Ablation of the busiest_40m view for the per system GPU table: nothing hidden (stream layers).",
+      "steps": [
+        {
+          "call": "teleport",
+          "args": [
+            [
+              1093.5,
+              222.1,
+              -4316.2
+            ]
+          ],
+          "timeout": 60000
+        },
+        {
+          "call": "setCamera",
+          "args": [
+            {
+              "pos": [
+                1120,
+                262,
+                -4280
+              ],
+              "target": [
+                1090,
+                222,
+                -4320
+              ]
+            }
+          ]
+        },
+        {
+          "call": "hud",
+          "args": [
+            false
+          ]
+        },
+        {
+          "settle": 2
+        },
+        {
+          "call": "hold",
+          "args": [
+            {
+              "at": 0
+            }
+          ]
+        },
+        {
+          "waitFor": "window.__game.debug.clock().paused === true",
+          "timeout": 10000
+        }
+      ]
+    },
+    {
+      "name": "sys_busy_no_buildings",
+      "group": "city_systems",
+      "size": [
+        1920,
+        1080
+      ],
+      "_note": "Ablation of the busiest_40m view for the per system GPU table: hidden: buildings (stream layers).",
+      "steps": [
+        {
+          "call": "teleport",
+          "args": [
+            [
+              1093.5,
+              222.1,
+              -4316.2
+            ]
+          ],
+          "timeout": 60000
+        },
+        {
+          "call": "setCamera",
+          "args": [
+            {
+              "pos": [
+                1120,
+                262,
+                -4280
+              ],
+              "target": [
+                1090,
+                222,
+                -4320
+              ]
+            }
+          ]
+        },
+        {
+          "call": "hud",
+          "args": [
+            false
+          ]
+        },
+        {
+          "settle": 2
+        },
+        {
+          "call": "stream",
+          "args": [
+            "layers",
+            {
+              "hide": [
+                "buildings"
+              ]
+            }
+          ]
+        },
+        {
+          "settle": 0.5
+        },
+        {
+          "call": "hold",
+          "args": [
+            {
+              "at": 0
+            }
+          ]
+        },
+        {
+          "waitFor": "window.__game.debug.clock().paused === true",
+          "timeout": 10000
+        }
+      ]
+    },
+    {
+      "name": "sys_busy_no_roads",
+      "group": "city_systems",
+      "size": [
+        1920,
+        1080
+      ],
+      "_note": "Ablation of the busiest_40m view for the per system GPU table: hidden: ground_roads (stream layers).",
+      "steps": [
+        {
+          "call": "teleport",
+          "args": [
+            [
+              1093.5,
+              222.1,
+              -4316.2
+            ]
+          ],
+          "timeout": 60000
+        },
+        {
+          "call": "setCamera",
+          "args": [
+            {
+              "pos": [
+                1120,
+                262,
+                -4280
+              ],
+              "target": [
+                1090,
+                222,
+                -4320
+              ]
+            }
+          ]
+        },
+        {
+          "call": "hud",
+          "args": [
+            false
+          ]
+        },
+        {
+          "settle": 2
+        },
+        {
+          "call": "stream",
+          "args": [
+            "layers",
+            {
+              "hide": [
+                "ground_roads"
+              ]
+            }
+          ]
+        },
+        {
+          "settle": 0.5
+        },
+        {
+          "call": "hold",
+          "args": [
+            {
+              "at": 0
+            }
+          ]
+        },
+        {
+          "waitFor": "window.__game.debug.clock().paused === true",
+          "timeout": 10000
+        }
+      ]
+    },
+    {
+      "name": "sys_busy_sky_only",
+      "group": "city_systems",
+      "size": [
+        1920,
+        1080
+      ],
+      "_note": "Ablation of the busiest_40m view for the per system GPU table: hidden: buildings, ground_roads (stream layers).",
+      "steps": [
+        {
+          "call": "teleport",
+          "args": [
+            [
+              1093.5,
+              222.1,
+              -4316.2
+            ]
+          ],
+          "timeout": 60000
+        },
+        {
+          "call": "setCamera",
+          "args": [
+            {
+              "pos": [
+                1120,
+                262,
+                -4280
+              ],
+              "target": [
+                1090,
+                222,
+                -4320
+              ]
+            }
+          ]
+        },
+        {
+          "call": "hud",
+          "args": [
+            false
+          ]
+        },
+        {
+          "settle": 2
+        },
+        {
+          "call": "stream",
+          "args": [
+            "layers",
+            {
+              "hide": [
+                "buildings",
+                "ground_roads"
+              ]
+            }
+          ]
+        },
+        {
+          "settle": 0.5
         },
         {
           "call": "hold",
