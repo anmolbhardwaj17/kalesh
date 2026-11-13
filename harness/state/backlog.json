@@ -1,6 +1,6 @@
 {
   "_doc": "Written only by node harness/bin/task.mjs. Phases run in order; P0 (ADOPT + STYLE DISCOVERY) waits for the owner by design and needs task.mjs signoff and task.mjs archsignoff before its gate passes. Later phases are added by the planner at the end of P0 (task.mjs phase-add) from the game's real state.",
-  "updated": "2026-11-13T18:12:29.628Z",
+  "updated": "2026-11-13T18:12:29.963Z",
   "phases": [
     {
       "id": "P0",
@@ -2343,12 +2343,15 @@
       "agent": "builder",
       "priority": 3,
       "kind": "feature",
-      "status": "doing",
+      "status": "done",
       "attempts": 1,
       "notes": [],
       "created": "2026-11-11T12:31:54.058Z",
       "model": "fable",
-      "started": "2026-11-13T17:21:35.223Z"
+      "started": "2026-11-13T17:21:35.223Z",
+      "done": "2026-11-13T18:12:29.941Z",
+      "summary": "tools/bake/landmarks/ (registry, OSM and Wikidata joins by id, tier score, schema), npm run landmarks: 332 entries (3 heroes, 41 signatures, 288 markers, 5 far with real bearings), hash stable twice. Heroes CP circle 11.5 m, India Gate 42 m, Red Fort 33 m, Jama Masjid 41 m signature, positions 0 to 0.1 m from the OSM footprint centre, cited. 7 name matches flagged, 20 source disagreements held in the registry issues file. Owner list over score, edits over both (tests). 88 places of worship all combat_arena false. Verified: typecheck, 945 vitest and 120 Godot tests, quick 12/12 OK; registry map read and kept.",
+      "commit": "64d7a71"
     },
     {
       "id": "P2-006",
