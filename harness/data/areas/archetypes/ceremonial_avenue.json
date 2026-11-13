@@ -1,0 +1,31 @@
+{
+ "id": "ceremonial_avenue",
+ "kind": "archetype",
+ "confidence": "medium",
+ "sheet": "harness/design/areas/india_gate_kartavya_path.md",
+ "buildings": {
+  "generated": "none: lawns, canals and avenue trees; India Gate, North Block and South Block come from the landmark registry",
+  "mix": {},
+  "wires": "none",
+  "upkeep": "kept"
+ },
+ "signs": {
+  "density": "none"
+ },
+ "props": {
+  "hoardings": "none",
+  "poles_and_wires": "none"
+ },
+ "greenery": {
+  "lawns": "very_high"
+ },
+ "evidence": {
+  "buildings.generated": "sheet india_gate_kartavya_path 'Buildings': India Gate, North Block and South Block only; no shop frontage",
+  "buildings.mix": "sheet india_gate_kartavya_path 'Buildings': no shop frontage and no other building type inside the vista",
+  "buildings.wires": "sheet india_gate_kartavya_path 'What makes this area unlike the others': no shops, no wires, no hoardings",
+  "buildings.upkeep": "sheet india_gate_kartavya_path 'Typical clutter and wear': very clean",
+  "signs.density": "sheet india_gate_kartavya_path 'Buildings': no signs",
+  "props": "sheet india_gate_kartavya_path 'What makes this area unlike the others': no wires, no hoardings",
+  "greenery.lawns": "sheet india_gate_kartavya_path 'Trees and planting': big open green lawns, a mown lawn in the hexagon"
+ }
+}

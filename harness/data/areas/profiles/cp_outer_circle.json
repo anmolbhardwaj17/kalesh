@@ -1,0 +1,92 @@
+{
+ "id": "cp_outer_circle",
+ "name": "Connaught Place, Outer Circle and radials",
+ "archetype": "colonial_cbd",
+ "sheet": "harness/design/areas/cp_outer_circle.md",
+ "confidence": "medium",
+ "blueprint": null,
+ "names_file": "game/data/names/cp_outer_circle.json",
+ "infrastructure": [
+  "SUB-S1"
+ ],
+ "notes": "Blueprint slot is empty: an authored blueprint (harness/data/blueprints/, DELHI_WORLD.md 'OSM is reference, not the final word') will override OSM footprints here and take its facade kit from this profile.",
+ "buildings": {
+  "mix": {
+   "colonnade_block": 0.5,
+   "arcade_row": 0.2,
+   "commercial_block": 0.1,
+   "office_tower": 0.2
+  },
+  "floors": {
+   "p10": 2,
+   "p50": 2,
+   "p90": 12
+  },
+  "upkeep": "mixed"
+ },
+ "footpath": {
+  "width_m": [
+   2,
+   5
+  ],
+  "kerb": "kerb painted yellow and black on the traffic side",
+  "notes": "4 to 5 m under the arcade, 2 to 3 m of grey paver on the road side, subway stairs open straight onto the footpath"
+ },
+ "lamps": {
+  "colour": "sodium",
+  "notes": "the same two-arm pole plus taller highmast lamps at the major junctions (their height is not in the sheet)"
+ },
+ "boundaries": {
+  "kinds": [
+   "painted metal pedestrian railing at crossings and subway mouths",
+   "concrete jersey barriers where works run",
+   "bus stop shelters"
+  ],
+  "height_m": null
+ },
+ "greenery": {
+  "street_trees": "high"
+ },
+ "props": {
+  "hoardings": "high",
+  "bus_shelters": "medium",
+  "barricades": "medium",
+  "parking_bays": "very_high"
+ },
+ "signs": {
+  "density": "very_high",
+  "boards": "green direction boards with white Hindi and English; heavier shop and roof signage than the inner face"
+ },
+ "life": {
+  "vendors": "low",
+  "autos": "high",
+  "buses": "high",
+  "parked_cars": "high",
+  "parked_two_wheelers": "high",
+  "people": "office commuters, delivery riders, auto and taxi drivers at the stands, hawkers at the subway mouths"
+ },
+ "sound": {
+  "bed": "sfx_amb_cp_outer_traffic",
+  "horn_rate": "high"
+ },
+ "wear": 0.2,
+ "road": {
+  "condition": "grey and black asphalt that wears faster, white lane lines, patches show, zebra crossings and stop lines",
+  "cleanliness": "medium"
+ },
+ "evidence": {
+  "buildings.mix": "sheet cp_outer_circle 'Buildings': the same two storey colonnade with arched passages cut through (Plaza building) and towers beyond the outer ring; DELHI_WORLD.md 2a table (2 storey arcade facing in, 8 to 20 storey towers facing out). Shares are an estimate",
+  "buildings.floors": "sheet cp_outer_circle 'Buildings': two storey ring, 8 to 20 storey glass and concrete towers beyond; the 90th percentile of 12 is an estimate for the towers that stand inside this area's outer edge",
+  "buildings.upkeep": "sheet cp_outer_circle 'Footpaths' (more broken sections) and 'Typical clutter and wear' (works hoardings, dust on signs, patches show)",
+  "footpath": "sheet cp_outer_circle 'Footpaths': 4 to 5 m of cream paving under the arcade, 2 to 3 m grey paver on the traffic side with a yellow and black kerb, subway stairs onto the footpath",
+  "lamps": "sheet cp_outer_circle 'Street lamps': the same steel double-arm poles as the inner ring plus taller highmast lamps at the major junctions, light sodium orange at night",
+  "boundaries": "sheet cp_outer_circle 'Boundaries': painted metal pedestrian railing at crossings and subway mouths, jersey barriers where works run, bus stop shelters",
+  "greenery.street_trees": "sheet cp_outer_circle 'Trees and planting': mature street trees in a continuous line on the outer circle",
+  "props": "sheet cp_outer_circle 'Typical clutter and wear' (billboards on roofs, bus stops with adverts), 'Boundaries' (bus shelters, jersey barriers) and 'Parking and vehicles' (parking is dense on the outer ring)",
+  "signs": "sheet cp_outer_circle 'Buildings': signage is heavier than the inner face; 'Road surface and markings': green boards with white Hindi and English lettering",
+  "life": "sheet cp_outer_circle 'Vendors and street life' (more traffic and less leisure, commuters, delivery riders, taxi stands, hawkers at subway mouths) and 'Parking and vehicles' (taxis, autos, buses, a lot of two-wheelers, rows of roadside parking)",
+  "sound": "sheet cp_outer_circle 'What makes this area unlike the others': arterial scale, bus traffic and gantry signs; 'Vendors and street life': more traffic and less leisure",
+  "wear": "sheet cp_outer_circle 'Typical clutter and wear': wear 0.2",
+  "road": "sheet cp_outer_circle 'Road surface and markings': 3 to 4 lanes per direction in places, grey and black asphalt, the surface wears faster and patches show"
+ }
+}

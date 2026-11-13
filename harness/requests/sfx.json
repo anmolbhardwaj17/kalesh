@@ -1,1 +1,160 @@
-{ "requests": [] }
+{
+  "requests": [
+    {
+      "id": "sfx_amb_city_street",
+      "desc": "neutral city street ambience bed: steady mixed traffic hum, distant horns, footsteps, no music, no clear speech, seamless 30 s loop",
+      "prompt": null,
+      "duration_s": 30,
+      "loop": true,
+      "mood": null,
+      "used_by": [
+        "base"
+      ],
+      "priority": 3,
+      "created": "2026-11-13T17:09:45.830Z"
+    },
+    {
+      "id": "sfx_amb_cp_colonnade",
+      "desc": "Connaught Place inner circle colonnade ambience: slow traffic on a ring road, footsteps on stone under a colonnade, pigeon wings and coos, soft crowd murmur, no music, no clear speech, seamless loop",
+      "prompt": null,
+      "duration_s": 30,
+      "loop": true,
+      "mood": null,
+      "used_by": [
+        "cp_inner_circle"
+      ],
+      "priority": 3,
+      "created": "2026-11-13T17:09:45.869Z"
+    },
+    {
+      "id": "sfx_amb_cp_outer_traffic",
+      "desc": "Connaught Place outer circle ambience: heavy arterial traffic, buses, auto horns, a subway mouth echo, commuters walking, no music, no clear speech, seamless loop",
+      "prompt": null,
+      "duration_s": 30,
+      "loop": true,
+      "mood": null,
+      "used_by": [
+        "cp_outer_circle"
+      ],
+      "priority": 3,
+      "created": "2026-11-13T17:09:45.907Z"
+    },
+    {
+      "id": "sfx_amb_ceremonial_lawns",
+      "desc": "wide ceremonial avenue and lawns ambience: very light traffic far off, wind in tall avenue trees, crows and parakeets, a few walkers and children far away, no music, seamless loop",
+      "prompt": null,
+      "duration_s": 30,
+      "loop": true,
+      "mood": null,
+      "used_by": [
+        "india_gate_kartavya_path"
+      ],
+      "priority": 3,
+      "created": "2026-11-13T17:09:45.946Z"
+    },
+    {
+      "id": "sfx_amb_fort_plaza",
+      "desc": "large fort plaza ambience: open space with queues and groups of visitors murmuring, tour bus engines idling, rickshaw bells, pigeons, a whistle now and then, no music, no clear speech, seamless loop",
+      "prompt": null,
+      "duration_s": 30,
+      "loop": true,
+      "mood": null,
+      "used_by": [
+        "red_fort_surroundings"
+      ],
+      "priority": 3,
+      "created": "2026-11-13T17:09:45.985Z"
+    },
+    {
+      "id": "sfx_amb_old_city_avenue",
+      "desc": "old city market avenue ambience: dense crowd, cycle and e-rickshaw bells, handcarts, shopkeepers calling, auto horns, shutters, no music, no clear speech, seamless loop",
+      "prompt": null,
+      "duration_s": 30,
+      "loop": true,
+      "mood": null,
+      "used_by": [
+        "chandni_chowk_main"
+      ],
+      "priority": 3,
+      "created": "2026-11-13T17:09:46.021Z"
+    },
+    {
+      "id": "sfx_amb_old_city_lane",
+      "desc": "narrow old city lane ambience: close crowd, vendors calling, frying in oil, handcarts on stone, shutters rattling, a scooter squeezing past, echo between tall walls, no music, no clear speech, seamless loop",
+      "prompt": null,
+      "duration_s": 30,
+      "loop": true,
+      "mood": null,
+      "used_by": [
+        "chandni_chowk_galis"
+      ],
+      "priority": 3,
+      "created": "2026-11-13T17:09:46.058Z"
+    },
+    {
+      "id": "sfx_amb_trade_street",
+      "desc": "working trade street ambience: handcarts and tempos loading goods, metal clanks, shop shutters, auto engines idling in rows, tea sellers calling, no music, no clear speech, seamless loop",
+      "prompt": null,
+      "duration_s": 30,
+      "loop": true,
+      "mood": null,
+      "used_by": [
+        "gb_road_ajmeri_gate"
+      ],
+      "priority": 3,
+      "created": "2026-11-13T17:09:46.096Z"
+    },
+    {
+      "id": "sfx_amb_station_bazaar",
+      "desc": "station bazaar ambience: a market that runs day and night, rickshaw bells, scooters, distant train horns and station announcements muffled, shop radios, crowd murmur, no music, seamless loop",
+      "prompt": null,
+      "duration_s": 30,
+      "loop": true,
+      "mood": null,
+      "used_by": [
+        "paharganj_station"
+      ],
+      "priority": 3,
+      "created": "2026-11-13T17:09:46.133Z"
+    },
+    {
+      "id": "sfx_amb_ito_junction",
+      "desc": "big signal junction under flyovers ambience: heavy continuous traffic, bus engines, horns, flyover rumble, a metro train passing on a viaduct, no music, no clear speech, seamless loop",
+      "prompt": null,
+      "duration_s": 30,
+      "loop": true,
+      "mood": null,
+      "used_by": [
+        "ito"
+      ],
+      "priority": 3,
+      "created": "2026-11-13T17:09:46.171Z"
+    },
+    {
+      "id": "sfx_amb_garden_avenue",
+      "desc": "leafy government avenue ambience: light traffic, wind in old rain trees, birds, taxi doors and idling cabs along the kerb, a few walkers, no music, no clear speech, seamless loop",
+      "prompt": null,
+      "duration_s": 30,
+      "loop": true,
+      "mood": null,
+      "used_by": [
+        "jantar_mantar"
+      ],
+      "priority": 3,
+      "created": "2026-11-13T17:09:46.208Z"
+    },
+    {
+      "id": "sfx_amb_market_avenue",
+      "desc": "tree-lined avenue with a craft market ambience: steady traffic on a dual carriageway, wind in big trees, sellers talking, bead and bell sounds from stalls, no music, no clear speech, seamless loop",
+      "prompt": null,
+      "duration_s": 30,
+      "loop": true,
+      "mood": null,
+      "used_by": [
+        "janpath"
+      ],
+      "priority": 3,
+      "created": "2026-11-13T17:09:46.246Z"
+    }
+  ]
+}

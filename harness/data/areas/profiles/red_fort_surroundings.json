@@ -1,0 +1,109 @@
+{
+ "id": "red_fort_surroundings",
+ "name": "Red Fort, moat and Lahori Gate plaza",
+ "archetype": "heritage_fort_precinct",
+ "sheet": "harness/design/areas/red_fort_surroundings.md",
+ "confidence": "medium",
+ "blueprint": null,
+ "names_file": "game/data/names/red_fort_surroundings.json",
+ "infrastructure": [
+  "FLY-R1",
+  "FOB-B4",
+  "FOB-B5",
+  "TUN-T4",
+  "MET-STN-UG"
+ ],
+ "notes": "The fort itself, the Lahori Gate and the temples across the road come from the landmark registry and OSM, not from this profile.",
+ "buildings": {
+  "mix": {
+   "admin_block": 0.4,
+   "shop_house": 0.35,
+   "shed": 0.25
+  },
+  "floors": {
+   "p10": 2,
+   "p50": 3,
+   "p90": 4
+  },
+  "colours": [
+   "white_render",
+   "brown_brick"
+  ],
+  "materials": [
+   "plain plaster",
+   "painted signs"
+  ]
+ },
+ "footpath": {
+  "width_m": [
+   1.5,
+   2.5
+  ],
+  "surface": "broken concrete or grey tile beside a low retaining wall on Netaji Subhash Marg; an open asphalt and stone forecourt 40 to 60 m across in front of the gate; shared with hawkers on the Chandni Chowk side",
+  "kerb": "orange and white painted kerb along the moat"
+ },
+ "lamps": {
+  "kind": "tall twin-arm steel poles at the junction and plaza, single curved-arm poles on the Chandni Chowk side, ground floodlights up the fort wall",
+  "height_m": [
+   10,
+   12
+  ],
+  "colour": "mixed"
+ },
+ "boundaries": {
+  "kinds": [
+   "red sandstone rampart with a dry moat 15 to 20 m wide and a 1 m red stone parapet",
+   "yellow police barricades",
+   "orange cones for the visitor queue",
+   "iron railing round compounds"
+  ],
+  "height_m": null
+ },
+ "greenery": {
+  "street_trees": "medium",
+  "species": [
+   "neem",
+   "gulmohar",
+   "babul"
+  ]
+ },
+ "props": {
+  "parking_bays": "high"
+ },
+ "life": {
+  "vendors": "medium",
+  "pedestrians": "high",
+  "cycle_rickshaws": "medium",
+  "e_rickshaws": "medium",
+  "autos": "high",
+  "buses": "high",
+  "parked_cars": "high",
+  "people": "visitors of all ages in queues and loose groups, ticket sellers and guards, lemonade and snack sellers at the barricades, rickshaw riders waiting for fares, shopkeepers on the Chandni Chowk side; large crowds on 15 August",
+  "animals": {
+   "pigeons": "high"
+  }
+ },
+ "sound": {
+  "bed": "sfx_amb_fort_plaza"
+ },
+ "wear": 0.35,
+ "road": {
+  "condition": "worn black asphalt with dust, an open plaza with few markings; Netaji Subhash Marg has 3 lanes each way and a kerbed divider",
+  "cleanliness": "medium"
+ },
+ "evidence": {
+  "buildings.mix": "sheet red_fort_surroundings 'Buildings': across the road plain white 3 to 4 storey police and administrative blocks and Old Delhi shops; 'Map notes': a parking polygon, not a street. The fort and the temples come from the registry or OSM. Shares are an estimate from the two named types",
+  "buildings.floors": "sheet red_fort_surroundings 'Buildings': plain white 3 to 4 storey blocks and old shop fronts",
+  "buildings.colours": "sheet red_fort_surroundings 'Edge blending' (white blocks give way to red-brown shops) and 'Buildings' (plain white blocks)",
+  "buildings.materials": "sheet red_fort_surroundings 'Buildings' and 'Typical clutter and wear': plain white blocks, painted signage boards in Hindi and English",
+  "footpath": "sheet red_fort_surroundings 'Footpaths' and 'Street-level top-up' (plaza 40 to 60 m across, 1.5 to 2.5 m shared with hawkers, orange and white kerb along the moat)",
+  "lamps": "sheet red_fort_surroundings 'Street lamps' and 'Street-level top-up': tall twin-arm poles 10 to 12 m at the junction and the plaza, single curved-arm poles on the Chandni Chowk side, ground floodlights along the wall",
+  "boundaries": "sheet red_fort_surroundings 'Boundaries' and 'Street-level top-up': red sandstone rampart, dry moat 15 to 20 m wide with a 1 m red stone parapet, yellow barricades, orange cones",
+  "greenery": "sheet red_fort_surroundings 'Trees and planting' and 'Street-level top-up': neem and gulmohar on the road side, bare babul and neem in the parking lot",
+  "props.parking_bays": "sheet red_fort_surroundings 'Parking and vehicles': rows of cars, tourist buses and autos in the lot",
+  "life": "sheet red_fort_surroundings 'Vendors and street life' (tourists in lines, rickshaw pullers, lemonade and snack sellers, guards, Independence Day crowds, pigeons), 'Street-level top-up' (people of all ages and dress) and 'Parking and vehicles'",
+  "sound": "sheet red_fort_surroundings 'What makes this area unlike the others': a security-managed plaza, tour buses and autos in lines, queues",
+  "wear": "sheet red_fort_surroundings 'Typical clutter and wear': wear 0.35; DELHI_WORLD.md 2a table 0.35",
+  "road": "sheet red_fort_surroundings 'Road surface and markings': wide arterial 3 lanes each way with a kerbed central divider, worn asphalt, open plaza with painted zones and no markings"
+ }
+}

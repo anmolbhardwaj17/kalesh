@@ -1,0 +1,4 @@
+{
+ "_doc": "Inspector edits (DELHI_WORLD.md 2 'Map inspector: area view', PS1). Laid over the area's merged profile: areas.<area_id>.set maps a dotted value path to the new value, areas.<area_id>.evidence holds a sourced line per edited path (an inspector edit cites the owner's note). Every edit also goes to the inbox with source inspector. Empty until the owner edits.",
+ "areas": {}
+}

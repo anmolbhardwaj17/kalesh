@@ -1,0 +1,146 @@
+{
+ "_doc": "Neutral defaults under every archetype (P2-004). These make no claim about any place: they are what a value is when no sheet or statistic says otherwise. Only values that differ from them need an evidence line in an archetype or profile file. A rule archetype that cites nothing stays on these.",
+ "kind": "base",
+ "confidence": "none",
+ "buildings": {
+  "mix": {
+   "shop_house": 0.25,
+   "flats_block": 0.25,
+   "office_slab": 0.25,
+   "house": 0.25
+  },
+  "floors": {
+   "p10": 2,
+   "p50": 4,
+   "p90": 8
+  },
+  "setback_m": [
+   0,
+   3
+  ],
+  "frontage_m": [
+   6,
+   20
+  ],
+  "ground_floor": "mixed shops and entrances",
+  "colours": [
+   "cream",
+   "grey_concrete",
+   "white_render"
+  ],
+  "materials": [
+   "plaster",
+   "concrete"
+  ],
+  "balconies": "some balconies",
+  "roof": {
+   "water_tanks": 0.4,
+   "dish": 0.3,
+   "solar": 0.05
+  },
+  "roofline": "flat roofs",
+  "wires": "medium",
+  "upkeep": "mixed"
+ },
+ "house_railings": {
+  "balcony_grilles": {
+   "kind": "plain painted steel grille",
+   "frequency": "medium"
+  },
+  "roof_parapets": {
+   "kind": "plain masonry parapet",
+   "frequency": "medium"
+  },
+  "gate_and_window_grilles": {
+   "kind": "plain painted steel grille",
+   "frequency": "medium"
+  },
+  "outside_stairs": {
+   "kind": "plain painted steel railing",
+   "frequency": "low"
+  }
+ },
+ "footpath": {
+  "width_m": [
+   1.5,
+   3
+  ],
+  "surface": "concrete or paver",
+  "kerb": "plain kerb"
+ },
+ "lamps": {
+  "kind": "steel pole with a single arm",
+  "height_m": [
+   8,
+   10
+  ],
+  "spacing_m": [
+   30,
+   40
+  ],
+  "colour": "sodium"
+ },
+ "boundaries": {
+  "kinds": [
+   "low wall"
+  ],
+  "height_m": [
+   1,
+   2
+  ]
+ },
+ "greenery": {
+  "street_trees": "medium",
+  "species": [
+   "neem"
+  ],
+  "lawns": "low",
+  "planters": "low"
+ },
+ "props": {
+  "bins": "low",
+  "benches": "low",
+  "bus_shelters": "low",
+  "hoardings": "medium",
+  "barricades": "low",
+  "poles_and_wires": "medium",
+  "parking_bays": "medium"
+ },
+ "signs": {
+  "density": "medium",
+  "scripts": [
+   "latn",
+   "deva"
+  ],
+  "boards": "painted and printed boards"
+ },
+ "life": {
+  "vendors": "medium",
+  "pedestrians": "medium",
+  "cycle_rickshaws": "low",
+  "e_rickshaws": "medium",
+  "autos": "medium",
+  "buses": "low",
+  "parked_cars": "medium",
+  "parked_two_wheelers": "medium",
+  "people": "people of all ages going about their day",
+  "animals": {
+   "dogs": "low",
+   "cats": "low",
+   "cows": "none",
+   "pigeons": "medium"
+  }
+ },
+ "sound": {
+  "bed": "sfx_amb_city_street",
+  "horn_rate": "medium"
+ },
+ "wear": 0.4,
+ "road": {
+  "condition": "worn asphalt",
+  "cleanliness": "medium"
+ },
+ "evidence": {
+  "*": "neutral base default, no claim: not read from any sheet or statistic"
+ }
+}

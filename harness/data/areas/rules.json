@@ -1,0 +1,16 @@
+{
+  "_doc": "Archetype by rule for the in-between ground of the pilot centre (P2-004, DELHI_WORLD.md 10 AD2: in-between areas of the seamless centre get an archetype profile by rule first, from land use and the footprint grid). Evaluated per 100 m cell in this order, first match wins. A rule holds when every part it names holds: `osm` (the cell centre lies inside a closed OSM way with one of these tag values) and the footprint bounds (cell figures from the merged footprints of graph.json: coverage = footprint area centred in the cell / cell area; median = median footprint area in m2). Ground inside a drawn polygon of areas.geojson never uses these cells. Run `node tools/bake/areas/derive.mjs --write` to rebuild rule_cells.json after a change; no map or profile value lives here, only which archetype a cell gets.",
+  "cell_m": 100,
+  "rules": [
+    { "archetype": "water_and_wetland", "osm": { "natural": ["water", "wetland"] } },
+    { "archetype": "rail_land", "osm": { "landuse": ["railway"], "railway": ["platform"] } },
+    { "archetype": "ridge_and_parks", "osm": { "leisure": ["park", "garden", "pitch", "stadium", "playground", "track"], "landuse": ["grass", "farmland", "forest", "meadow", "recreation_ground", "cemetery"], "natural": ["wood", "grassland", "scrub"], "historic": ["archaeological_site"] }, "max_coverage": 0.12 },
+    { "archetype": "industrial", "osm": { "landuse": ["industrial"] } },
+    { "archetype": "old_city_dense", "min_coverage": 0.35, "max_median_m2": 120 },
+    { "archetype": "institutional_offices", "osm": { "landuse": ["institutional"], "amenity": ["courthouse", "public_building", "college", "school", "hospital", "police", "conference_centre", "arts_centre", "theatre", "library", "university", "townhall"], "tourism": ["museum"] } },
+    { "archetype": "commercial_midrise", "osm": { "landuse": ["commercial", "retail"], "amenity": ["marketplace"] } },
+    { "archetype": "mixed_midrise", "min_coverage": 0.12 },
+    { "archetype": "low_density_compounds", "min_coverage": 0.03 }
+  ],
+  "fallback": "open_land"
+}

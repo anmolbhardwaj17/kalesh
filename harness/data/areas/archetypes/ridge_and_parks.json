@@ -1,0 +1,25 @@
+{
+ "id": "ridge_and_parks",
+ "kind": "archetype",
+ "confidence": "low",
+ "sheet": "harness/design/areas/india_gate_kartavya_path.md",
+ "buildings": {
+  "generated": "none: parks, gardens and open green ground; the few buildings come from OSM",
+  "mix": {}
+ },
+ "greenery": {
+  "lawns": "very_high",
+  "street_trees": "high"
+ },
+ "signs": {
+  "density": "none"
+ },
+ "wear": 0.1,
+ "evidence": {
+  "buildings.generated": "rule cells with OSM park, garden, grass or wood: mean footprint coverage 0.017 over 198 cells (rule_cells.json summary.ridge_and_parks)",
+  "buildings.mix": "rule cells with OSM park, garden, grass or wood: mean footprint coverage 0.017 over 198 cells (rule_cells.json summary.ridge_and_parks), nothing is generated",
+  "greenery": "sheet india_gate_kartavya_path 'Trees and planting': open lawns and rows of avenue trees; the OSM leisure and landuse tags of these cells",
+  "signs.density": "sheet india_gate_kartavya_path 'Buildings': no shop frontage, no signs",
+  "wear": "sheet india_gate_kartavya_path 'Typical clutter and wear': very clean, 0.0 to 0.03; taken at 0.1 for ground nobody tends in the same way"
+ }
+}
