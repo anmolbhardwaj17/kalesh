@@ -1,6 +1,6 @@
 {
   "_doc": "Written only by node harness/bin/task.mjs. Phases run in order; P0 (ADOPT + STYLE DISCOVERY) waits for the owner by design and needs task.mjs signoff and task.mjs archsignoff before its gate passes. Later phases are added by the planner at the end of P0 (task.mjs phase-add) from the game's real state.",
-  "updated": "2026-11-13T15:00:30.247Z",
+  "updated": "2026-11-13T15:40:23.806Z",
   "phases": [
     {
       "id": "P0",
@@ -2258,7 +2258,7 @@
       "agent": "art-director",
       "priority": 2,
       "kind": "art",
-      "status": "doing",
+      "status": "done",
       "attempts": 1,
       "notes": [
         "Anmol 2026-11-13: the reference sheets also decide the area blueprints (CP circles first) and are where flagged odd OSM buildings are checked against photos and satellite.",
@@ -2266,7 +2266,10 @@
       ],
       "created": "2026-11-11T12:31:54.058Z",
       "model": "sonnet",
-      "started": "2026-11-13T15:00:30.246Z"
+      "started": "2026-11-13T15:00:30.246Z",
+      "done": "2026-11-13T15:40:23.769Z",
+      "summary": "Four thin sheets topped up with Wikimedia Commons street-level sources (ITO 23, galis 24, Jantar Mantar 20, Red Fort roads 22), each with a street-level top-up section, confidence line and Map notes; new gb_road_ajmeri_gate.md with 30 sources and the respect line (hardware street, trade background only, read by the orchestrator); Paharganj forecourt note; 5 boards rebuilt (0.4 to 0.6 MB); DELHI_WORLD.md 2a updated. ITO crossing layout and mid GB Road stay low (no free photo): optional dashboard notice for owner photos.",
+      "commit": "49a281a"
     },
     {
       "id": "P2-003",
