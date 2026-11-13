@@ -14,6 +14,7 @@ import type { GraphEdge } from '../graph/build.ts';
 import { roadGraph, filterEdges } from './blockgraph.ts';
 import { clipEnds } from './clip.ts';
 import { armEdges, giveWay } from './edges.ts';
+import type { EdgeTrims } from './edges.ts';
 import type { RoadGraph } from './blockgraph.ts';
 import type { HeroSpec } from './hero.ts';
 import type { CrossSection } from './model.ts';
@@ -117,6 +118,20 @@ function attempt(input: LaneModelInput, road: RoadGraph, fixed: Map<string, numb
     build: { ...base, strips: sp.strips, joints: sp.joints, zoneStrips: sp.zoneStrips, built: sp.built, internal, ...pp },
     retry: sp.retry,
   };
+}
+
+/**
+ * The edge lanes give way once more on the solved levels (P1-042): strips that lie on each other only once the
+ * heights are known (the low end of a ramp on fill beside a road at grade: kerb on kerb). The repair's side shift
+ * (R-LANE-06) is not used for these: it pushed the ramp across the road. Changes the strips' borders in place.
+ */
+export function giveWaySolved(build: LaneBuild, kinds: readonly ArrayLike<number>[]): EdgeTrims {
+  const trims = giveWay(build.strips, build.joints, kinds);
+  if (trims.stations > 0) {
+    for (const s of build.strips) for (const st of s.st) st.b = st.b.map(r3);
+    armEdges(build.strips, build.junctions);
+  }
+  return trims;
 }
 
 const r3 = (v: number): number => Math.round(v * 1000) / 1000 + 0;

@@ -12,7 +12,10 @@ import { laneGraph, laneModelFile, laneModelHash, lanesLayer } from './laneout';
 import { lanesSvg } from './lanerender';
 import { GALI_MIN_LANE_M, MIN_DRIVE_LANE_M, MIN_TURN_RADIUS_M } from './model';
 import type { Station, Strip } from './model';
+import { CLEAR_MAX_M } from './netctx';
 import { buildLaneModel } from './network';
+import { stripOverlaps } from './overlap';
+import { laneConflicts } from './surfaces';
 import type { LaneBuild, LaneModelInput } from './network';
 import { inferStreets } from './street';
 
@@ -376,14 +379,17 @@ describe('edges give way (P1-031)', () => {
 describe('slow forks and free ends (P1-033)', () => {
   it('a fork built as a junction (a side street at the split node) is cut back to where its branches come apart', () => {
     // a one-way road splits at a node a side street also meets (so it is a junction, not a split zone); the branch
-    // that leaves runs 4 m from the one that goes on for 90 m before it bends away
-    const s = new Sketch();
-    const m = s.node(0, 0);
-    s.way([[-200, 0], m], { highway: 'secondary', oneway: 'yes' });
-    s.way([m, [300, 0]], { highway: 'secondary', oneway: 'yes' });
-    s.way([m, [90, 4], [300, 80]], { highway: 'secondary', oneway: 'yes' });
-    s.way([m, [0, -150]], { highway: 'residential' });
-    const { b } = model(s);
+    // that leaves runs 4 m from the one that goes on for 45 m before it bends away
+    const fork = (besideM: number): LaneBuild => {
+      const s = new Sketch();
+      const m = s.node(0, 0);
+      s.way([[-200, 0], m], { highway: 'secondary', oneway: 'yes' });
+      s.way([m, [300, 0]], { highway: 'secondary', oneway: 'yes' });
+      s.way([m, [besideM, 4], [300, 80]], { highway: 'secondary', oneway: 'yes' });
+      s.way([m, [0, -150]], { highway: 'residential' });
+      return model(s).b;
+    };
+    const b = fork(45);
     expect(b.zones.length).toBe(0);
     expect(checkPlanOverlap(b.strips, b.joints).areaM2).toBe(0);
     const j = b.junctionPlans.find((p) => p.arms.length === 4)!;
@@ -391,7 +397,16 @@ describe('slow forks and free ends (P1-033)', () => {
     const branches = j.arms.filter((a) => Math.abs(a.angle) < 0.5);
     expect(branches.length).toBe(2);
     // one of them is enough: its strip starts where the other one's surface has gone
-    expect(Math.max(...branches.map((a) => a.cut))).toBeGreaterThan(80);
+    expect(Math.max(...branches.map((a) => a.cut))).toBeGreaterThan(40);
+    // beside each other for 90 m: the junction stops 60 m out (CLEAR_MAX_M) and what lies on each other beyond is
+    // handed back to the repair as two roads drawn too close, although they share the node (P1-042)
+    const far = fork(90);
+    const farCuts = far.junctionPlans.find((p) => p.arms.length === 4)!.arms.filter((a) => Math.abs(a.angle) < 0.5).map((a) => a.cut);
+    expect(Math.max(...farCuts)).toBeGreaterThan(55);
+    expect(Math.max(...farCuts)).toBeLessThanOrEqual(CLEAR_MAX_M + 0.5);
+    const back = laneConflicts(far, stripOverlaps(far.strips, far.joints).overlaps);
+    expect(back.conflicts.length).toBe(1);
+    expect(back.skipped['shared node'] ?? 0).toBe(0);
     // every arm names the raised edge widths its strip end has, looking away from the junction
     const lj = b.junctions.find((x) => x.arms.length === 4)!;
     for (const a of lj.arms) {

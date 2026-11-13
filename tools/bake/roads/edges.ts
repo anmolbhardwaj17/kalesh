@@ -9,7 +9,9 @@
 // the polygon when the other strip gives way too, all the way when it cannot (a hero road keeps its spec; a polygon
 // that reaches its carriageway). Rounds repeat until nothing overlaps in the edge bands. Then each edge narrows at
 // most one metre per two metres along the strip (only ever narrower, so no overlap comes back), and both strips at a
-// joint take the narrower edge. Pure.
+// joint take the narrower edge. With the solved station kinds (`kinds`, after the elevation step) the same runs once
+// more on the levels the heights gave: a ramp on fill beside a road at grade has its kerb on that road's kerb, which
+// the tags (a bridge) do not show (P1-042). Pure.
 import { coreRange } from './model.ts';
 import type { Joint, Station, Strip } from './model.ts';
 import { stripOverlaps } from './overlap.ts';
@@ -73,7 +75,7 @@ function bandSide(st: Station, f: Frame, poly: readonly [number, number][]): { s
   return lo < cr - 1e-6 && cr - (st.b[st.b.length - 1] as number) > 1e-6 ? { side: 'R', lo, hi } : null;
 }
 
-export function giveWay(strips: readonly Strip[], joints: readonly Joint[]): EdgeTrims {
+export function giveWay(strips: readonly Strip[], joints: readonly Joint[], kinds?: readonly ArrayLike<number>[]): EdgeTrims {
   const frames: Frame[] = strips.map((s) => {
     const [cf, cl] = coreRange(s.lanes);
     return { cf, cr: cl + 1 };
@@ -82,7 +84,7 @@ export function giveWay(strips: readonly Strip[], joints: readonly Joint[]): Edg
   const can = (t: QuadTri): boolean => (strips[t.strip] as Strip).hero === null;
   let rounds = 0;
   for (; rounds < ROUNDS; rounds++) {
-    const { overlaps } = stripOverlaps(strips, joints);
+    const { overlaps } = stripOverlaps(strips, joints, undefined, kinds);
     /** New outer border per strip station side: the smallest move wins. */
     const want = new Map<string, number>();
     const ask = (strip: number, k: number, side: Side, outer: number): void => {

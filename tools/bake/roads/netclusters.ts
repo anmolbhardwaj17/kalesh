@@ -9,7 +9,7 @@ import type { GEdge, GEnd, GNode } from './graph.ts';
 import { edgePoint, planJunction, tangentAt } from './junction.ts';
 import type { ArmPlan } from './junction.ts';
 import type { EdgePlan } from './lanes.ts';
-import { ABSORB_MAX_M, CLUSTER_GAP_M, MIN_STRIP_M, PASSES, PLAN_RADIUS_M, endKey as key } from './netctx.ts';
+import { ABSORB_MAX_M, CLUSTER_GAP_M, MIN_STRIP_M, PASSES, CLEAR_MAX_M, PLAN_RADIUS_M, TURN_ASK_MAX_M, endKey as key } from './netctx.ts';
 import type { NetCtx, Planned } from './netctx.ts';
 import type { ZonePhase } from './netzones.ts';
 
@@ -56,6 +56,8 @@ export function planClusters(c: NetCtx, z: ZonePhase): ClusterPhase {
     union(e.a, e.b);
   };
   const endsOf = (n: number): number => (graph.nodes.get(n) as GNode).ends.length;
+  /** An edge too long to become part of a junction: it keeps a strip of its own. */
+  const keeps = (i: number): boolean => (graph.edges[i] as GEdge).len >= ABSORB_MAX_M;
   for (const e of graph.edges) {
     if (e.len <= CLUSTER_GAP_M && e.a !== e.b && endsOf(e.a) >= 3 && endsOf(e.b) >= 3 && !zoneNode.has(e.a) && !zoneNode.has(e.b) && !zoneEnds.has(e.index)) {
       absorb(e.index, `${Math.round(e.len * 10) / 10} m between two junction nodes: one junction (cluster rule, ${CLUSTER_GAP_M} m)`);
@@ -97,8 +99,9 @@ export function planClusters(c: NetCtx, z: ZonePhase): ClusterPhase {
         p.t0 = base0[e.edge] as number;
         p.t1 = base1[e.edge] as number;
       }
-      // an arm may be cut back to where it comes clear of the others, up to the room a turn may take on it
-      const roomOf = (e: GEnd, arm: ArmPlan): number => (zoneEnds.has(e.edge) ? arm.avail : ((base1[e.edge] as number) - (base0[e.edge] as number)) * 0.9);
+      // an arm may be cut back to where it comes clear of the others, up to the room a turn may take on it, and no
+      // further than a slow fork needs: arms on each other beyond that are two roads drawn too close (the repair's)
+      const roomOf = (e: GEnd, arm: ArmPlan): number => (zoneEnds.has(e.edge) ? arm.avail : Math.min(CLEAR_MAX_M, ((base1[e.edge] as number) - (base0[e.edge] as number)) * 0.9));
       const jp = planJunction(graph, plans, `j${nodeId[ids[0] as number]}`, ids, ends, 1.5, (e) => ask.get(key(e)) ?? 0, roomOf);
       const views = jp.arms.map(view);
       const pose = (arm: number, lane: ArmLane, into: boolean) => lanePose(views[arm] as ArmView, lane, into);
@@ -119,7 +122,7 @@ export function planClusters(c: NetCtx, z: ZonePhase): ClusterPhase {
           const arm = jp.arms[armIndex] as ArmPlan;
           if ((more[side] as number) <= 0) return;
           const free = (base1[arm.end.edge] as number) - (base0[arm.end.edge] as number);
-          const limit = zoneEnds.has(arm.end.edge) ? arm.avail : free * 0.9;
+          const limit = Math.min(TURN_ASK_MAX_M, zoneEnds.has(arm.end.edge) || keeps(arm.end.edge) ? arm.avail : free * 0.9);
           let want = arm.cut + (more[side] as number);
           if (want > limit) {
             want = limit;

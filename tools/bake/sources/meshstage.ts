@@ -21,7 +21,7 @@ import { meshSvg } from '../mesh/render.ts';
 import type { RepairedGraph } from '../repair/engine.ts';
 import type { InvariantResult } from '../report/health.ts';
 import type { LaneBuild } from '../roads/network.ts';
-import { GROUND_SITES, MESH_SITES, REPAIR_SITES } from '../sites.ts';
+import { GROUND_SITES, JUNCTION_VIEWS, MESH_SITES, REPAIR_SITES } from '../sites.ts';
 import type { BlockGraph } from '../graph/build.ts';
 import type { Issue } from '../rules/types.ts';
 import { repairSiteSvg } from '../report/sitepics.ts';
@@ -88,6 +88,15 @@ export async function runMeshStep(ctx: StepContext, laneBuild: LaneBuild, elevat
     const marks = { setFaces: mesh.junctions.setFaces, lines: mesh.stops.lines.map((l) => ({ a: l.a, b: l.b, stroke: '#ffffff', width: 0.3 })) };
     pictures.push(...(await writePicture(ctx.root, `harness/reports/map/repair_${plan.id}_${v.id}.png`, repairSiteSvg(repair.raw, repair.repaired, repair.issues, mesh.fs, marks, input.strips.length, box, `${v.name} (${plan.id}), north up, ${2 * v.halfM} m across`), 3200)));
   }
+  // top views of the junction surfaces at the sites that had the widest ones
+  for (const v of JUNCTION_VIEWS) {
+    if (ctx.quick) break;
+    const at = proj.toWorld(v.lat, v.lon);
+    if (!pointInRing(at, ring)) continue;
+    const box = { minX: at.x - v.halfM, maxX: at.x + v.halfM, minZ: at.z - v.halfM, maxZ: at.z + v.halfM };
+    const marks = { setFaces: mesh.junctions.setFaces, polys: mesh.structures.piers.map((p) => ({ ring: p.ring, fill: p.portal ? '#ff7a00' : '#f2c14e' })), lines: [] };
+    pictures.push(...(await writePicture(ctx.root, `harness/reports/map/junctions_${plan.id}_${v.id}.png`, meshSvg(mesh.fs, box, `${v.name}: road mesh faces, north up (${plan.id}). Junctions outlined blue (as planned) or red (polygon set); yellow piers, orange portal legs`, marks, input.strips.length), 2400)));
+  }
   const rec = meshRecord(input, mesh, c, checksMs, ctx.offset, hash, { siteTiles: tiles, pictures });
   const n = rec.counts;
   log(`[mesh] built in ${(rec.buildMs / 1000).toFixed(2)} s (${Object.entries(rec.ms).filter(([k]) => k !== 'total').map(([k, v]) => `${k} ${v}`).join(', ')} ms), checks ${(checksMs / 1000).toFixed(2)} s: ${n.faces} faces over ${n.vertices} vertices (${n.laneQuads} lane quads), ${n.triangles} triangles; hash ${hash}`);
@@ -96,6 +105,7 @@ export async function runMeshStep(ctx: StepContext, laneBuild: LaneBuild, elevat
   log(`[mesh] watertight: open boundary edges ${c.watertight.openBoundaryEdges} (unclosed ${c.watertight.unclosed}, used twice ${c.watertight.doubled}, T joints left ${c.watertight.tJointsLeft}; ${c.watertight.tJointsRepaired} repaired), ${c.watertight.freeEdges} free edges in ${c.watertight.loops} loops (${c.watertight.outerLoops} around road, ${c.watertight.blockLoops} around blocks, ${c.watertight.sliverLoops} hairlines of ${c.watertight.sliverM2} m2)`);
   log(`[mesh] ends: ${c.ends.stripEnds} strip ends, ${c.ends.joined} joined, explained ${Object.entries(c.ends.explained).map(([k, v]) => `${k} ${v}`).join(', ')}; unjoined ${c.ends.unjoined}${c.ends.unjoinedList.length ? ` (${c.ends.unjoinedList.slice(0, 6).map((e) => `${e.strip} ${e.end}`).join(', ')})` : ''}; floating ${c.ends.floating}${c.ends.floatingList.length ? ` (${c.ends.floatingList.map((e) => `${e.strip} ${e.end} ${e.kind} ${e.aboveGroundM} m up`).join(', ')})` : ''}`);
   log(`[mesh] structures: ${c.railings.segments} edge segments (${Object.entries(c.railings.byKind).map(([k, v]) => `${k} ${v}`).join(', ')}), ${c.railings.parapets} with a parapet, ${c.railings.atGrade} of ${c.railings.parapetTriangles} parapet triangles at grade away from a structure; piers ${c.piers.piers} (${c.piers.portals} portals, ${c.piers.moved} places passed over, longest span ${c.piers.maxSpanM} m, ${c.piers.longSpans.length} over 60 m${c.piers.longSpans.length ? `: ${c.piers.longSpans.map((l) => `${l.strip} ${l.spanM} m (${l.why})`).join(', ')}` : ''}), in a lane below: ${c.piers.inLane}; deck joints ${c.piers.joints}`);
+  log(`[mesh] lane paths: ${c.paths.totalM} m in ${c.paths.junctions} junctions, ${c.paths.offFaceM} m on no road face (most: ${c.paths.worst.slice(0, 5).map((w) => `${w.junction} ${w.offM} m`).join(', ') || 'none'})`);
   log(`[mesh] kerbs: ${c.kerbs.sampled} kerb faces sampled, ${c.kerbs.minM} to ${c.kerbs.maxM} m, ${c.kerbs.off} off 0.15 m by over 0.01 m (beside a surface the polygon set made: ${c.kerbs.beside.off} of ${c.kerbs.beside.sampled}); lane UV ${c.uv.ok ? 'ok' : 'FAILED'}: ${c.uv.lanes} lane quads, ${c.uv.corners} corners, bad u ${c.uv.badU}, bad v ${c.uv.badV}, border mismatches ${c.uv.borderMismatch}, joint mismatches ${c.uv.jointMismatch} of ${c.uv.jointPairs}; stop lines ${c.stopLines.lines} on ${c.stopLines.armsThatStop} arms that stop, missing ${c.stopLines.missing}, crossings ${c.stopLines.crossings}`);
   if (tiles.length + pictures.length) log(`[mesh] wrote ${[...tiles, ...pictures].join(', ')}`);
   const invariants: InvariantResult[] = [

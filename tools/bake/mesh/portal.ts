@@ -30,7 +30,7 @@ export interface Portal {
   bottom: number;
 }
 
-const inFace = (fs: FaceSet, f: number, x: number, z: number): boolean => {
+export const inFace = (fs: FaceSet, f: number, x: number, z: number): boolean => {
   const s = fs.start[f] as number;
   const n = fs.len[f] as number;
   let inside = false;

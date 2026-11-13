@@ -1,7 +1,8 @@
 // Gate counts of the road mesh (P1-014, MAP_REPAIR.md "Verification"). Every check reads the finished faces and
 // the draw meshes, not the builder's notes: the overlap proof (proof.ts), the watertight check (free edges that do
 // not close, edges used twice, T joints left), strip ends that join nothing, raised ends in the air, parapets away
-// from a structure, piers standing in a lane of another level, kerb heights, the lane UV, the stop lines. Pure.
+// from a structure, piers standing in a lane of another level, kerb heights, the lane UV, the stop lines, the length
+// of connecting lane path that lies on no road face. Pure.
 import type { LaneDef, Station, Strip } from '../roads/model.ts';
 import type { RoadMesh } from './build.ts';
 import { sharedArea } from './clip.ts';
@@ -9,6 +10,7 @@ import { edgeKey } from './conform.ts';
 import { LANE_KINDS } from './faces.ts';
 import type { MeshInput } from './input.ts';
 import { arrivingLanes, sectionAt } from './paint.ts';
+import { inFace } from './portal.ts';
 import { proveNoOverlap } from './proof.ts';
 import type { OverlapProof } from './proof.ts';
 import { K_DECK, K_FILL, K_GRADE } from './stripfaces.ts';
@@ -75,6 +77,8 @@ export interface MeshChecks {
     ok: boolean;
   };
   stopLines: { armsThatStop: number; lines: number; missing: number; crossings: number; list: { junction: string; arm: number; why: string }[] };
+  /** Connecting lane paths of the junctions, sampled every metre: the length that lies on no road face at all (P1-042), and the junctions with the most. */
+  paths: { junctions: number; totalM: number; offFaceM: number; worst: { junction: string; offM: number }[] };
 }
 
 const r1 = (v: number): number => Math.round(v * 10) / 10;
@@ -300,6 +304,30 @@ export function checkRoadMesh(input: MeshInput, mesh: RoadMesh): MeshChecks {
     });
   }
 
+  // lane paths: a point of a path is on the road when any face holds it
+  const paths: MeshChecks['paths'] = { junctions: input.junctions.length, totalM: 0, offFaceM: 0, worst: [] };
+  const onFace = (x: number, z: number): boolean => mesh.grid.near(x - 0.01, z - 0.01, x + 0.01, z + 0.01).some((f) => inFace(fs, f, x, z));
+  for (const j of input.junctions) {
+    let off = 0;
+    for (const p of j.paths) {
+      for (let k = 1; k < p.pts.length; k++) {
+        const [ax, az] = p.pts[k - 1] as [number, number];
+        const [bx, bz] = p.pts[k] as [number, number];
+        const len = Math.hypot(bx - ax, bz - az);
+        const n = Math.max(1, Math.round(len));
+        for (let t = 0; t < n; t++) {
+          paths.totalM += len / n;
+          if (!onFace(ax + ((bx - ax) * (t + 0.5)) / n, az + ((bz - az) * (t + 0.5)) / n)) off += len / n;
+        }
+      }
+    }
+    paths.offFaceM += off;
+    if (off >= 1) paths.worst.push({ junction: j.id, offM: r1(off) });
+  }
+  paths.totalM = Math.round(paths.totalM);
+  paths.offFaceM = r1(paths.offFaceM);
+  paths.worst = paths.worst.sort((p, q) => q.offM - p.offM || (p.junction < q.junction ? -1 : 1)).slice(0, 12);
+
   const b = mesh.boundary;
   return {
     overlap,
@@ -308,6 +336,6 @@ export function checkRoadMesh(input: MeshInput, mesh: RoadMesh): MeshChecks {
       loops: b.loops.length, outerLoops: b.loops.filter((l) => l.area > 0).length, blockLoops: b.loops.filter((l) => l.area < 0).length, sliverLoops: b.sliverLoops, sliverM2: b.sliverM2,
       tJointsRepaired: mesh.conform.inserted, nearMisses: mesh.conform.nearMisses, nearMissMaxM: mesh.conform.nearMissMaxM,
     },
-    ends, railings, piers, kerbs: mesh.steps.kerbs, uv, stopLines,
+    ends, railings, piers, kerbs: mesh.steps.kerbs, uv, stopLines, paths,
   };
 }

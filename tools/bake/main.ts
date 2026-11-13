@@ -67,7 +67,7 @@ import type { MeshChecks } from './mesh/checks.ts';
 import { NOT_TWICE, defaultBenchDir, runMeshStep, runTerrainStep } from './sources/meshstage.ts';
 import { laneGraph, laneModelFile, laneModelHash, lanesLayer, lanesRecord } from './roads/laneout.ts';
 import { lanesSvg } from './roads/lanerender.ts';
-import { buildLaneModel } from './roads/network.ts';
+import { buildLaneModel, giveWaySolved } from './roads/network.ts';
 import type { LaneBuild, LaneModelInput } from './roads/network.ts';
 import { LANE_VIEWS, PROFILE_VIEWS, laneInputs } from './sites.ts';
 import { checkElevation } from './elevation/checks.ts';
@@ -420,6 +420,18 @@ export async function bake(args: BakeArgs, opts: BakeOptions): Promise<HealthRep
         rails: input.rails ?? [], metro: repaired.features.rail.filter((r) => r.kind === 'metro').map((r) => ({ id: r.id, name: r.name, pts: r.pts, layer: r.layer, bridge: r.bridge, tunnel: r.tunnel })),
         footBridges: repaired.features.footBridges, water: input.water ?? [], ground: input.ground, railEmbankment: RAIL_EMBANKMENT_M,
       });
+      // strips on each other only on the solved levels (a ramp on fill beside a road at grade): their edge lanes give
+      // way, and the lane files are written again (P1-042)
+      const solvedBefore = checkPlanOverlap(build.strips, build.joints, undefined, st.kinds);
+      const solvedTrims = giveWaySolved(build, st.kinds);
+      if (solvedTrims.stations > 0) {
+        const model = laneModelFile(build, plan.def.block, plan.id);
+        lanesHash = laneModelHash(model);
+        writeLanes(opts.root, plan, path.dirname(healthFile), model, laneGraph(build, plan.def.block, offset), lanesLayer(build, plan.def.block, offset, plan.origin));
+        if (report.lanes) report.lanes.hash = lanesHash;
+      }
+      if (report.lanes) report.lanes.solvedTrims = { ...solvedTrims, beforeM2: solvedBefore?.areaM2 ?? 0, beforePairs: solvedBefore?.pairs ?? 0 };
+      opts.log(`[elevation] edges gave way on the solved levels: ${solvedTrims.strips} strips, ${solvedTrims.stations} stations, ${solvedTrims.areaM2} m2 (strips on each other before: ${solvedBefore?.areaM2 ?? 0} m2 in ${solvedBefore?.pairs ?? 0} pairs)`);
       const file = elevationFile(build.strips, build.junctions.map((j) => j.id), res, st, input.rails ?? [], plan.def.block, plan.id, lanesHash, over);
       const hash = elevationHash(file);
       const heights = writeElevation(opts.root, plan, file);

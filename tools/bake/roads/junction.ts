@@ -15,6 +15,7 @@ import { endCrossSection } from './lanes.ts';
 import type { EdgePlan } from './lanes.ts';
 import { KERB_WIDTH, classDefaults, coreRange, csBorders, flipCS } from './model.ts';
 import type { CrossSection } from './model.ts';
+import { tagLevel } from './overlap.ts';
 
 export interface ArmPlan {
   end: GEnd;
@@ -30,6 +31,8 @@ export interface ArmPlan {
   radius: number;
   /** The cut that keeps this arm's carriageway clear of the other arms' (P1-033); the J2 fallback keeps it too. */
   clear: number;
+  /** The tagged level of the arm along its length from the node (overlap.ts tagLevel): a tunnel under a road is not on it. */
+  levels: { t0: number; t1: number; level: number }[];
 }
 
 /** One vertex of a planned ring: a lane border on an arm's cut line (exact strip vertex later), or a free point. */
@@ -74,6 +77,8 @@ export const tangentAt = (a: ArmPlan, t: number): { x: number; z: number } => {
 };
 
 const BACK = 25;
+/** Two neighbouring arms whose headings differ by less than this meet in a point (a fork's crotch), not a corner arc. */
+const CROTCH_RAD = (30 * Math.PI) / 180;
 
 /** First meeting of arm i's edge at `li` and arm j's edge at `lj`: the distances along each arm from its node. */
 function meet(ai: ArmPlan, li: number, aj: ArmPlan, lj: number): { ti: number; tj: number; x: number; z: number } | null {
@@ -114,6 +119,7 @@ function armPlan(graph: Graph, plans: EdgePlan[], end: GEnd, centre: P2): ArmPla
   return {
     end, curve, cs, borders: csBorders(cs), coreFirst, coreLast, angle: Math.atan2(-(p.z - centre.z), p.x - centre.x),
     avail: Math.max(1, (plan.t1 - plan.t0) * 0.45), cut: 1.5, radius: classDefaults(e.cls).cornerRadius, clear: 0,
+    levels: e.pieces.map((q) => ({ t0: end.atStart ? q.s0 : e.len - q.s1, t1: end.atStart ? q.s1 : e.len - q.s0, level: tagLevel(q.layer, q.bridge) })),
   };
 }
 
@@ -153,7 +159,9 @@ export function planJunction(graph: Graph, plans: EdgePlan[], id: string, nodeId
       const uj = tangentAt(b, m.tj);
       const phi = Math.acos(Math.max(-1, Math.min(1, ui.x * uj.x + ui.z * uj.z)));
       if (phi < (165 * Math.PI) / 180 && phi > (8 * Math.PI) / 180) {
-        let r = Math.min(a.radius, b.radius);
+        // the crotch of a fork (two arms that leave nearly side by side) is a nose, not an arc: an arc there would
+        // start a hundred metres out (P1-042, the Vikas Marg split east of ITO was 110 m long)
+        let r = phi < CROTCH_RAD ? 0 : Math.min(a.radius, b.radius);
         let tf = r / Math.tan(phi / 2);
         const room = Math.max(0, Math.min(a.avail - m.ti, b.avail - m.tj) - 0.5);
         if (tf > room) {
@@ -373,6 +381,8 @@ const CLEAR_EPS_M = 0.02;
 interface BandQuad {
   t0: number;
   t1: number;
+  /** The tagged level of the arm at the middle of the quad. */
+  level: number;
   p: P2[];
   minX: number;
   maxX: number;
@@ -403,7 +413,9 @@ function bandQuads(a: ArmPlan, range: number): BandQuad[] {
     while (m < n - 1 && (cum[m] as number) - (cum[k] as number) < CLEAR_STEP_M) m++;
     const next = edge(m);
     const p = [prev.l, prev.r, next.r, next.l];
-    out.push({ t0: cum[k] as number, t1: cum[m] as number, p, minX: Math.min(p[0]!.x, p[1]!.x, p[2]!.x, p[3]!.x), maxX: Math.max(p[0]!.x, p[1]!.x, p[2]!.x, p[3]!.x), minZ: Math.min(p[0]!.z, p[1]!.z, p[2]!.z, p[3]!.z), maxZ: Math.max(p[0]!.z, p[1]!.z, p[2]!.z, p[3]!.z) });
+    const mid = ((cum[k] as number) + (cum[m] as number)) / 2;
+    const level = (a.levels.find((q) => mid >= q.t0 && mid <= q.t1) ?? a.levels[0])?.level ?? 0;
+    out.push({ t0: cum[k] as number, t1: cum[m] as number, level, p, minX: Math.min(p[0]!.x, p[1]!.x, p[2]!.x, p[3]!.x), maxX: Math.max(p[0]!.x, p[1]!.x, p[2]!.x, p[3]!.x), minZ: Math.min(p[0]!.z, p[1]!.z, p[2]!.z, p[3]!.z), maxZ: Math.max(p[0]!.z, p[1]!.z, p[2]!.z, p[3]!.z) });
     prev = next;
     k = m;
   }
@@ -444,7 +456,8 @@ export function convexOverlap(p: readonly P2[], q: readonly P2[], eps: number): 
  * Arms whose carriageways lie on each other beyond their cuts (P1-033): a one-way fork the cluster rule builds as a
  * junction, whose branches come apart over tens of metres, or two arms that leave a junction side by side. For every
  * pair of carriageway quads that overlap outside the junction, the arm that needs the shorter step takes it: its cut
- * moves past the quad. A cut never goes past the arm's room. Writes `clear` of every arm.
+ * moves past the quad. A cut never goes past the arm's room. Stretches on different tagged levels (a road over a tunnel
+ * arm of the same cluster) are not on each other (P1-042). Writes `clear` of every arm.
  */
 export function clearCuts(arms: readonly ArmPlan[], roomOf: (a: ArmPlan) => number): void {
   const room = arms.map((a) => Math.max(a.cut, roomOf(a)));
@@ -467,6 +480,8 @@ export function clearCuts(arms: readonly ArmPlan[], roomOf: (a: ArmPlan) => numb
         for (const qb of inRoom[j] as BandQuad[]) for (const qa of quads[i] as BandQuad[]) if (qa.t1 > (room[i] as number) + 1e-6 && hits(qa, boxes[j] ?? null)) pairs.push([qa, qb]);
         for (const [qa, qb] of pairs) {
           if (qa.t1 <= (want[i] as number) + 1e-6 || qb.t1 <= (want[j] as number) + 1e-6) continue;
+          // a road over a tunnel, or under a bridge, is not on it (the levels the overlap check reads before the solve)
+          if (qa.level !== qb.level) continue;
           if (qa.minX >= qb.maxX || qb.minX >= qa.maxX || qa.minZ >= qb.maxZ || qb.minZ >= qa.maxZ) continue;
           if (!convexOverlap(qa.p, qb.p, CLEAR_EPS_M)) continue;
           const fitsA = qa.t1 <= (room[i] as number) + 1e-6;

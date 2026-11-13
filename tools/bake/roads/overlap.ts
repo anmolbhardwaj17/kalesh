@@ -56,10 +56,13 @@ export function overlapLevels(s: Strip, kinds?: ArrayLike<number>): Int32Array {
     if (kinds) {
       const k = kinds[i] as number;
       out[i] = k === K_DECK ? 1000 + (st.layer + 20) * 2 + (st.bridge ? 1 : 0) : k === K_TUNNEL || (k === K_CUT && st.g - st.h > LOWERED_M) ? 2000 + (st.layer + 20) * 2 : 0;
-    } else out[i] = st.bridge ? 1000 + (st.layer + 20) * 2 + 1 : st.layer < 0 ? 2000 + (st.layer + 20) * 2 : 0;
+    } else out[i] = tagLevel(st.layer, st.bridge);
   }
   return out;
 }
+
+/** The level of a stretch of road from its tags alone (before the heights are solved): ground, a deck, or lowered. */
+export const tagLevel = (layer: number, bridge: boolean): number => (bridge ? 1000 + (layer + 20) * 2 + 1 : layer < 0 ? 2000 + (layer + 20) * 2 : 0);
 
 /** Station kinds of the elevation step (elevation/structures.ts STATION_KINDS), as the mesh reads them. */
 const K_CUT = 3;

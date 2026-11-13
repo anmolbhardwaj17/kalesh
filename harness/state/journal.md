@@ -405,3 +405,12 @@ One line per event, written by task.mjs (start, done, fail, phase changes, inbox
 - 2026-11-13 07:27 [P1-040] done: Cause of the stream_200 long frames confirmed and fixed: the debug server's blocking write to a client that stopped reading (now a per client queue with partial writes; snapshots skipped while 256 KB waits). debug_server.gd 598 to 440 lines (perf, camera, input, peer split out). flakecheck --runs now repeats perf scenarios. Verified: smoke stalled client check (old 2054 ms frame, new 8.9 ms max), stream_200 3 of 3 pass, typecheck, 787 vitest and 87 Godot tests, quick 8/8 OK with hooks_contract.
 - 2026-11-13 07:28 [P1-042] model: fable
 - 2026-11-13 07:28 [P1-042] start (attempt 1): Lane model: split the big junction clusters and the ITO deck junction
+- 2026-11-13 08:34 mentor message mmwe1qaz0 handled: Rajiv Chowk station is now an underground feature (P1-041). It gets no conflicts and no shell, and these picks are retired.
+- 2026-11-13 08:34 mentor message mmwe1qzgh handled: Rajiv Chowk station is now an underground feature (P1-041). It gets no conflicts and no shell, and these picks are retired.
+- 2026-11-13 08:34 mentor message mmwe1r98e handled: Rajiv Chowk station is now an underground feature (P1-041). It gets no conflicts and no shell, and these picks are retired.
+- 2026-11-13 08:34 mentor message mmwe1rfqq handled: Rajiv Chowk station is now an underground feature (P1-041). It gets no conflicts and no shell, and these picks are retired.
+- 2026-11-13 08:34 mentor message mmwe1rsoe handled: Rajiv Chowk station is now an underground feature (P1-041). It gets no conflicts and no shell, and these picks are retired.
+- 2026-11-13 08:34 mentor message mmwe1s5ot handled: Rajiv Chowk station is now an underground feature (P1-041). It gets no conflicts and no shell, and these picks are retired.
+- 2026-11-13 08:34 mentor message mmwe1sdek handled: Rajiv Chowk station is now an underground feature (P1-041). It gets no conflicts and no shell, and these picks are retired.
+- 2026-11-13 08:34 mentor message mmwe1soe4 handled: Rajiv Chowk station is now an underground feature (P1-041). It gets no conflicts and no shell, and these picks are retired.
+- 2026-11-13 08:34 [P1-043] added: Lane model: paths in multi-node old city junctions, ITO three-branch split zone, foot bridge headroom

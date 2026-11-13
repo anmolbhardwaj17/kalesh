@@ -12,36 +12,12 @@
       "why": "a junction lies within its own cut length (up to 18 m, the cluster rule) of the pilot stage outline, so the lane model takes the map edge node into the junction (or keeps a stub) instead of ending the road at the outline. The pilot outline is a stage edge inside the centre block, not a block or map edge: the next stage bake carries these roads on. The real map edge gets closures (gate, loop, barricade) when the whole block is baked."
     },
     {
-      "gate": "unjoinedEnds",
-      "items": [
-        "w70255392.0_0 start"
-      ],
-      "owner": "P1-036 follow-up (lane model: the Vikas Marg deck split east of ITO)",
-      "why": "the lane model builds the Vikas Marg flyover east of ITO, where its two deck carriageways leave the ramp beside a slip road, as one junction 110 m long (jn838495928) whose arms reach from the ramp on fill to the deck ends, and a road at grade (w776652307.0_0) runs under its deck end. On the ground level the junction surface lies on that road and is cut back off the deck arm's mouth; on the deck level its other end sits on the ground (P1-036 tried it: the ground then ran into the slab, TERR-02). The fix is in the lane model: the deck arms need their own split zone, not a junction with the slip road."
-    },
-    {
-      "gate": "floatingEnds",
-      "items": [
-        "w70255392.0_0 start"
-      ],
-      "owner": "P1-036 follow-up (lane model: the Vikas Marg deck split east of ITO)",
-      "why": "the same deck arm as the unjoined end: it ends 6.8 m up because the junction surface is cut back off its mouth where a road at grade passes under it."
-    },
-    {
-      "gate": "overlappingRoadFaces",
-      "items": [
-        "w175800219.0_0|w292171521.1_0"
-      ],
-      "owner": "P1-036 follow-up (lane model at Kashmere Gate)",
-      "why": "the Hanuman Mandir flyover ramp lies on fill beside a road at grade at Kashmere Gate (13.4 to 13.8 m2). The lane overlap check now counts it on the solved levels (health.json lanes.overlapSolved, P1-036), but only after the elevation step, so it is not handed back to the repair. Handing it back (tried in P1-036, one extra repair round on the solved levels) pushed the ramp across the road: the solve then failed (headroom 4.9 m over w292171521.1_0, 22 grades over their limit, no convergence). The fix belongs in the lane model of the Kashmere Gate cluster jn1863525196."
-    },
-    {
       "gate": "overlappingRoadFaces",
       "items": [
         "w778547435.0_0|w80499271.3_0",
         "w77617201.0_0|zone_merge_4009"
       ],
-      "owner": "P1-036 follow-up (lane model)",
+      "owner": "explained (lane model): under what a player sees",
       "why": "hairline overlaps of 0.02 to 0.03 m2 where a one-way link meets the road it joins at a shallow angle (a link onto Sikandra Road near Mandi House, a link into a merge zone in Old Delhi): the kerb rows of the two strips cross over a few centimetres. Over the 0.01 m2 pair limit, far under anything a player sees."
     }
   ],
@@ -58,13 +34,13 @@
     },
     {
       "what": "roads under short ramp flyovers sunk",
-      "measured": "Geeta Colony 0.88 m (was 4.0, fixed in P1-035: the slip ramp goes on past the stage edge); Hanuman Mandir 1.72 m is the centre of the Kashmere Gate 11-arm cluster jn1863525196, held 1.72 m down by its tunnel arm w77617193.0_0 cut 157 m out 6.7 m under the ground (5 percent junction slope), not by the flyover, which clears it by over 7 m",
-      "owner": "P1-036 follow-up (lane model at Kashmere Gate)"
+      "measured": "Geeta Colony 0.88 m (was 4.0, fixed in P1-035: the slip ramp goes on past the stage edge). Hanuman Mandir was 1.72 m, the centre of the Kashmere Gate 11-arm cluster held down by its tunnel arm cut 157 m out: under 0.5 m since the cluster was split (P1-042). The most now is 0.97 m (the unnamed deck over Mahatma Gandhi Marg, the Ring Road and the railway)",
+      "owner": "explained: every one is 1 m or less"
     },
     {
-      "what": "junction clusters with no usable ring and oversize junction surfaces",
-      "measured": "63 clusters with no usable ring (J2). P1-036 keeps each polygon set surface inside the hull of its arms' cut lines (6 m margin): the three widest went from 124,188, 60,078 and 34,530 m2 to 18,253, 14,038 and 5,985 m2. 10 surfaces are still over 3,000 m2, each listed with why in health.json mesh.oversize. Their lane paths still wander: about 57 km of the 133 km of J2 lane path runs off every road face, nearly all in jn1863525196 (Kashmere Gate), jn11840636119 and jn10255323278",
-      "owner": "P1-036 follow-up (lane model: split the big clusters, paths that stay on the junction)"
+      "what": "junction clusters with no usable ring, oversize junction surfaces and lane paths off the road",
+      "measured": "80 clusters with no usable ring (J2). Until P1-042 turns across a long cluster asked for cuts of 90 percent of an arm, edges up to 297 m became part of the junction and three clusters grew to 18,253, 14,038 and 5,985 m2 (Kashmere Gate twice, and a knot of streets north of Connaught Place); about 57 km of their lane paths ran off every road face. Now a turn asks for 30 m at most, an arm is cut back 60 m at most to come clear of another, a fork's crotch is a nose and no edge of 45 m or more is taken in for a turn: 5 surfaces are over 3,000 m2 (the largest about 5,800 m2, each listed with why in health.json mesh.oversize). Lane paths keep to the roads inside a cluster where their arcs looped or ran far from them (roads/routes.ts): about 10.5 km of 398 km of path is still on no road face (health.json mesh.paths), nearly all in planned (J1) junctions of several nodes along old city streets, where a path along the roads would turn tighter than 4 m and the arc is kept (without that guard: 6.8 km off and 304 pairs under the radius)",
+      "owner": "follow-up of P1-042 (paths of planned junctions of several nodes)"
     },
     {
       "what": "tunnel ramp faces where an open ramp meets its roofed part",
@@ -82,9 +58,9 @@
       "owner": "P1-037 (d)"
     },
     {
-      "what": "deck spans over 60 m without a pier or a portal",
-      "measured": "1: the Hanuman Mandir flyover (w175800219.0_0) 71.5 m at Kashmere Gate, where it descends between the junction cluster and the ramp beside it: no pier spot clear of the road faces below, and a portal beam would leave 3.8 to 5.2 m over a road (5.5 m needed). Longest span was 95.3 m before P1-036 (8 portals now, health.json mesh.piers.longSpans)",
-      "owner": "P1-036 follow-up (lane model at Kashmere Gate)"
+      "what": "headroom under the foot bridge at Kashmere Gate (way/80429832 over the Ring Road, Mahatma Gandhi Marg)",
+      "measured": "5.37 m where 5.5 m is asked (0.13 m short, health.json elevation.overhead.short). New with P1-042: the carriageways under it were inside the Kashmere Gate junction cluster before and are strips now; the solver holds 5.5 m on the centre lines of the two roads and the edge of the lower road stands higher by its crossfall",
+      "owner": "follow-up of P1-042 (elevation: clearance over the whole width of the road below)"
     }
   ]
 }

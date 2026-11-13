@@ -38,6 +38,7 @@ export interface MeshRecord {
   railings: MeshChecks['railings'];
   piers: MeshChecks['piers'];
   kerbs: MeshChecks['kerbs'];
+  paths: MeshChecks['paths'];
   uv: MeshChecks['uv'];
   stopLines: MeshChecks['stopLines'];
   /** Junction surfaces over 3,000 m2 (world metres): a cluster the lane model cut far too wide. */
@@ -116,7 +117,7 @@ export function meshRecord(input: MeshInput, mesh: RoadMesh, checks: MeshChecks,
     railings: { ...checks.railings, list: checks.railings.list.map(world) },
     piers: { ...checks.piers, list: checks.piers.list.map(world), longSpans: checks.piers.longSpans.map(world) },
     kerbs: { ...checks.kerbs, list: checks.kerbs.list.map(world), beside: { ...checks.kerbs.beside, list: checks.kerbs.beside.list.map(world) } },
-    uv: checks.uv, stopLines: checks.stopLines, oversize, notes: mesh.junctions.list, files,
+    uv: checks.uv, stopLines: checks.stopLines, paths: checks.paths, oversize, notes: mesh.junctions.list, files,
   };
 }
 
