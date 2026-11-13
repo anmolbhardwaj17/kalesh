@@ -1,6 +1,6 @@
 {
   "_doc": "Written only by node harness/bin/task.mjs. Phases run in order; P0 (ADOPT + STYLE DISCOVERY) waits for the owner by design and needs task.mjs signoff and task.mjs archsignoff before its gate passes. Later phases are added by the planner at the end of P0 (task.mjs phase-add) from the game's real state.",
-  "updated": "2026-11-13T16:51:34.393Z",
+  "updated": "2026-11-13T17:21:07.291Z",
   "phases": [
     {
       "id": "P0",
@@ -2315,11 +2315,14 @@
       "agent": "builder",
       "priority": 3,
       "kind": "feature",
-      "status": "doing",
+      "status": "done",
       "attempts": 1,
       "notes": [],
       "created": "2026-11-11T12:31:54.058Z",
-      "started": "2026-11-13T16:51:34.393Z"
+      "started": "2026-11-13T16:51:34.393Z",
+      "done": "2026-11-13T17:21:07.267Z",
+      "summary": "harness/data/areas/: 11 area polygons, 15 archetypes plus a base, 3,024 rule cells for the in-between centre, palette, overrides; profiles per sheet area with floors, building mix, facade colours, footpaths, lamps, boundaries, trees, railings, props, signs, life, sound bed and wear, every non-default value with an evidence line; blueprint slot (null) and links to the names files and infrastructure variants. tools/bake/areas/ loader, schema check, archetype merge, resolveAt, 21 tests (evidence, coverage of every 50 m point, overlap, ids, variety, wear, respect word lists). 12 sound bed requests. Respect read by the orchestrator. Verified: typecheck, npm test, quick 12/12 OK.",
+      "commit": "0eadb2c"
     },
     {
       "id": "P2-005",
