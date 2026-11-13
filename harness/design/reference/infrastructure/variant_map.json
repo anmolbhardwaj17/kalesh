@@ -1,0 +1,2628 @@
+{
+ "_doc": "Variant map for the baked pilot (centre block). Frame: bake-local metres, origin lat 28.612894 lon 77.229446, +x east, -z north (data/pilot_centre/graph.json). Generated 2026-11-13 from graph.json and osm.json (read only). Variant ids are defined in the kind files of this folder.",
+ "road": [
+  {
+   "name": "Sachivalaya Road Flyover",
+   "cls": "trunk",
+   "kind": "bridge",
+   "layer": 1,
+   "variant": "FLY-B1",
+   "lengthM": 1878,
+   "lanes": [
+    4
+   ],
+   "ways": [
+    "way/125736541",
+    "way/125736542",
+    "way/125736543",
+    "way/1313450497",
+    "way/614071992",
+    "way/614071994"
+   ],
+   "centre": [
+    28.63462,
+    77.24989
+   ],
+   "bboxXZ": [
+    1690,
+    -2489,
+    2558,
+    -2145
+   ],
+   "note": "Ring Road / Sachivalaya Marg elevated section, 4 lanes; era unverified, treat as modern precast box girder"
+  },
+  {
+   "name": "ITO Flyover",
+   "cls": "trunk",
+   "kind": "bridge",
+   "layer": 1,
+   "variant": "FLY-T1",
+   "lengthM": 1112,
+   "lanes": [
+    3
+   ],
+   "ways": [
+    "way/1313447924",
+    "way/1313447925",
+    "way/1510242193",
+    "way/70220645",
+    "way/70220647"
+   ],
+   "centre": [
+    28.62718,
+    77.24693
+   ],
+   "bboxXZ": [
+    1695,
+    -2008,
+    1728,
+    -1352
+   ],
+   "note": "ITO junction flyover, 3 lanes; older junction flyover, treat as T beam on twin or portal piers"
+  },
+  {
+   "name": "Vikas Marg",
+   "cls": "primary",
+   "kind": "bridge",
+   "layer": 1,
+   "variant": "BRI-Y1",
+   "lengthM": 770,
+   "lanes": [
+    1,
+    3
+   ],
+   "ways": [
+    "way/691886473",
+    "way/691886475",
+    "way/691886476",
+    "way/70255387",
+    "way/70255388",
+    "way/70255391"
+   ],
+   "centre": [
+    28.62798,
+    77.25202
+   ],
+   "bboxXZ": [
+    1976,
+    -1695,
+    2569,
+    -1665
+   ],
+   "note": "Vikas Marg across the Yamuna at the ITO barrage (road bridge, multi-span girder)"
+  },
+  {
+   "name": "New Delhi Railway Station Flyover",
+   "cls": "secondary",
+   "kind": "bridge",
+   "layer": 1,
+   "variant": "FLY-T1",
+   "lengthM": 704,
+   "lanes": [
+    2
+   ],
+   "ways": [
+    "way/463710731",
+    "way/463710732"
+   ],
+   "centre": [
+    28.64431,
+    77.21815
+   ],
+   "bboxXZ": [
+    -1381,
+    -3582,
+    -600,
+    -3461
+   ],
+   "note": "Ajmeri Gate to Paharganj station flyover, 2 lanes, over the station yard"
+  },
+  {
+   "name": "Sachivalaya Road Flyover Ramp",
+   "cls": "trunk",
+   "kind": "bridge",
+   "layer": 1,
+   "variant": "FLY-R1",
+   "lengthM": 598,
+   "lanes": [
+    1
+   ],
+   "ways": [
+    "way/125736545",
+    "way/125736547"
+   ],
+   "centre": [
+    28.63547,
+    77.24925
+   ],
+   "bboxXZ": [
+    1722,
+    -2581,
+    2329,
+    -2482
+   ],
+   "note": "ramp of the Sachivalaya Road flyover, single lane"
+  },
+  {
+   "name": "(unnamed)",
+   "cls": "tertiary",
+   "kind": "bridge",
+   "layer": 1,
+   "variant": "FLY-T1",
+   "lengthM": 563,
+   "lanes": [
+    2
+   ],
+   "ways": [
+    "way/1305188982",
+    "way/175803995",
+    "way/77595118",
+    "way/77617246"
+   ],
+   "centre": [
+    28.65143,
+    77.23453
+   ],
+   "bboxXZ": [
+    -1327,
+    -5465,
+    2247,
+    -2458
+   ],
+   "note": "unnamed tertiary flyover, four ways (Daryaganj / Netaji Subhash Marg side)"
+  },
+  {
+   "name": "Maharaja Ranjeet Singh Marg",
+   "cls": "secondary",
+   "kind": "bridge",
+   "layer": 1,
+   "variant": "FLY-T1",
+   "lengthM": 542,
+   "lanes": [
+    2
+   ],
+   "ways": [
+    "way/665921719"
+   ],
+   "centre": [
+    28.63313,
+    77.22961
+   ],
+   "bboxXZ": [
+    -248,
+    -2520,
+    154,
+    -1826
+   ],
+   "note": "paired deck of the Shivaji flyover (same alignment, other carriageway)"
+  },
+  {
+   "name": "Shivaji Flyover",
+   "cls": "secondary",
+   "kind": "bridge",
+   "layer": 1,
+   "variant": "FLY-T1",
+   "lengthM": 542,
+   "lanes": [
+    2
+   ],
+   "ways": [
+    "way/74851427"
+   ],
+   "centre": [
+    28.6337,
+    77.22979
+   ],
+   "bboxXZ": [
+    -257,
+    -2623,
+    153,
+    -1832
+   ],
+   "note": "Shivaji Stadium / Minto Road flyover, 2 lanes"
+  },
+  {
+   "name": "ITO Flyover Ramp",
+   "cls": "trunk",
+   "kind": "bridge",
+   "layer": 1,
+   "variant": "FLY-R1",
+   "lengthM": 491,
+   "lanes": [
+    1
+   ],
+   "ways": [
+    "way/1313447928",
+    "way/70237513",
+    "way/70237514"
+   ],
+   "centre": [
+    28.62787,
+    77.24787
+   ],
+   "bboxXZ": [
+    1709,
+    -1828,
+    1858,
+    -1551
+   ],
+   "note": "ITO flyover ramps (cloverleaf style loops), single lane"
+  },
+  {
+   "name": "Vikas Marg",
+   "cls": "secondary",
+   "kind": "bridge",
+   "layer": 1,
+   "variant": "BRI-Y1",
+   "lengthM": 386,
+   "lanes": [
+    2
+   ],
+   "ways": [
+    "way/70255393",
+    "way/70255395",
+    "way/70255399"
+   ],
+   "centre": [
+    28.62814,
+    77.25172
+   ],
+   "bboxXZ": [
+    1979,
+    -1700,
+    2568,
+    -1695
+   ],
+   "note": "Vikas Marg Yamuna bridge, second carriageway or service deck"
+  },
+  {
+   "name": "Hanuman Mandir Flyover",
+   "cls": "trunk",
+   "kind": "bridge",
+   "layer": 1,
+   "variant": "FLY-T1",
+   "lengthM": 351,
+   "lanes": [
+    3
+   ],
+   "ways": [
+    "way/1313200454",
+    "way/1313200455",
+    "way/175800226"
+   ],
+   "centre": [
+    28.66164,
+    77.23935
+   ],
+   "bboxXZ": [
+    778,
+    -5525,
+    1128,
+    -5337
+   ],
+   "note": "Ring Road flyover at Yamuna Bazar by the Loha Pul approach, 3 lanes"
+  },
+  {
+   "name": "Hanuman Mandir Flyover",
+   "cls": "secondary",
+   "kind": "bridge",
+   "layer": 1,
+   "variant": "FLY-R1",
+   "lengthM": 283,
+   "lanes": [
+    2
+   ],
+   "ways": [
+    "way/1313200456",
+    "way/175800227"
+   ],
+   "centre": [
+    28.66149,
+    77.23941
+   ],
+   "bboxXZ": [
+    778,
+    -5525,
+    1200,
+    -5274
+   ],
+   "note": "Hanuman Mandir flyover ramp / link, 2 lanes"
+  },
+  {
+   "name": "(unnamed)",
+   "cls": "pedestrian",
+   "kind": "bridge",
+   "layer": 1,
+   "variant": "FOB-B4",
+   "lengthM": 191,
+   "lanes": [
+    1
+   ],
+   "ways": [
+    "way/264770688",
+    "way/311524765",
+    "way/80429832",
+    "way/80429897"
+   ],
+   "centre": [
+    28.65745,
+    77.24039
+   ],
+   "bboxXZ": [
+    817,
+    -5398,
+    1274,
+    -4315
+   ],
+   "note": "pedestrian bridge / steps by the Red Fort and Loha Pul crossing"
+  },
+  {
+   "name": "Geeta Colony Road Flyover",
+   "cls": "secondary",
+   "kind": "bridge",
+   "layer": 1,
+   "variant": "FLY-B1",
+   "lengthM": 157,
+   "lanes": [
+    2
+   ],
+   "ways": [
+    "way/1313204945",
+    "way/44923699"
+   ],
+   "centre": [
+    28.65104,
+    77.24886
+   ],
+   "bboxXZ": [
+    1823,
+    -4252,
+    1958,
+    -4238
+   ],
+   "note": "Geeta Colony flyover (east bank), only the part inside the baked outline"
+  },
+  {
+   "name": "Mori Gate Road",
+   "cls": "tertiary",
+   "kind": "bridge",
+   "layer": 1,
+   "variant": "BRI-ROB",
+   "lengthM": 137,
+   "lanes": [
+    2
+   ],
+   "ways": [
+    "way/77619341"
+   ],
+   "centre": [
+    28.66199,
+    77.22104
+   ],
+   "bboxXZ": [
+    -840,
+    -5544,
+    -803,
+    -5385
+   ],
+   "note": "road over rail bridge at Mori Gate"
+  },
+  {
+   "name": "(unnamed)",
+   "cls": "trunk",
+   "kind": "bridge",
+   "layer": 1,
+   "variant": "FLY-R1",
+   "lengthM": 26,
+   "lanes": [
+    3
+   ],
+   "ways": [
+    "way/1070588894"
+   ],
+   "centre": [
+    28.6516,
+    77.2488
+   ],
+   "bboxXZ": [
+    1823,
+    -4374,
+    1938,
+    -4250
+   ],
+   "note": "unnamed trunk ramp piece by the Geeta Colony flyover"
+  },
+  {
+   "name": "Ring Road",
+   "cls": "trunk",
+   "kind": "bridge",
+   "layer": 1,
+   "variant": "FLY-T1",
+   "lengthM": 23,
+   "lanes": [
+    4
+   ],
+   "ways": [
+    "way/1070839796"
+   ],
+   "centre": [
+    28.65903,
+    77.24638
+   ],
+   "bboxXZ": [
+    1511,
+    -5165,
+    1834,
+    -5034
+   ],
+   "note": "short Ring Road bridge piece near the Loha Pul"
+  },
+  {
+   "name": "Geeta Colony Road Flyover Ramp",
+   "cls": "trunk",
+   "kind": "bridge",
+   "layer": 1,
+   "variant": "FLY-R1",
+   "lengthM": 22,
+   "lanes": [
+    2
+   ],
+   "ways": [
+    "way/175769907"
+   ],
+   "centre": [
+    28.65169,
+    77.24936
+   ],
+   "bboxXZ": [
+    1945,
+    -4330,
+    1948,
+    -4308
+   ],
+   "note": "Geeta Colony flyover ramp"
+  },
+  {
+   "name": "(unnamed)",
+   "cls": "service",
+   "kind": "bridge",
+   "layer": 1,
+   "variant": "BRI-MIN",
+   "lengthM": 15,
+   "lanes": [
+    1
+   ],
+   "ways": [
+    "way/1423096198"
+   ],
+   "centre": [
+    28.64302,
+    77.22398
+   ],
+   "bboxXZ": [
+    -549,
+    -3423,
+    -527,
+    -3221
+   ],
+   "note": "small service bridge"
+  },
+  {
+   "name": "Pragati Maidan Tunnel",
+   "cls": "secondary",
+   "kind": "tunnel",
+   "layer": -1,
+   "variant": "TUN-T1",
+   "lengthM": 2542,
+   "lanes": [
+    1,
+    2
+   ],
+   "ways": [
+    "way/1248027209",
+    "way/1248027210",
+    "way/1248027213",
+    "way/1248027217",
+    "way/973071366",
+    "way/973071375",
+    "way/973071381",
+    "way/973071383",
+    "way/973071395",
+    "way/973071397"
+   ],
+   "centre": [
+    28.61787,
+    77.24142
+   ],
+   "bboxXZ": [
+    829,
+    -997,
+    1893,
+    -166
+   ],
+   "note": "main tunnel and its cross connections, 6 lanes divided"
+  },
+  {
+   "name": "(unnamed)",
+   "cls": "service",
+   "kind": "tunnel",
+   "layer": -1,
+   "variant": "TUN-T3",
+   "lengthM": 1853,
+   "lanes": [
+    1
+   ],
+   "ways": [
+    "way/1076797993",
+    "way/1187194335",
+    "way/1187194336",
+    "way/973071359",
+    "way/973071364",
+    "way/973071369",
+    "way/973071370",
+    "way/973071372",
+    "way/973071378",
+    "way/973071379"
+   ],
+   "centre": [
+    28.62003,
+    77.23972
+   ],
+   "bboxXZ": [
+    -708,
+    -3313,
+    1674,
+    90
+   ],
+   "note": "Pragati Maidan basement / service tunnels and parking links"
+  },
+  {
+   "name": "Pragati Maidan Tunnel",
+   "cls": "primary",
+   "kind": "tunnel",
+   "layer": -1,
+   "variant": "TUN-T2",
+   "lengthM": 398,
+   "lanes": [
+    1
+   ],
+   "ways": [
+    "way/973071385",
+    "way/973071386",
+    "way/973071387",
+    "way/973071388"
+   ],
+   "centre": [
+    28.61623,
+    77.25021
+   ],
+   "bboxXZ": [
+    1883,
+    -491,
+    2112,
+    -228
+   ],
+   "note": "Pragati Maidan underpass ramps (Mathura Road side)"
+  },
+  {
+   "name": "(unnamed)",
+   "cls": "tertiary",
+   "kind": "tunnel",
+   "layer": -1,
+   "variant": "UND-U1",
+   "lengthM": 254,
+   "lanes": [
+    2
+   ],
+   "ways": [
+    "way/175800331",
+    "way/292171525"
+   ],
+   "centre": [
+    28.66218,
+    77.24098
+   ],
+   "bboxXZ": [
+    976,
+    -5535,
+    1256,
+    -5432
+   ],
+   "note": "Ring Road underpass at Yamuna Bazar / Hanuman Mandir (road passing under the flyover complex)"
+  },
+  {
+   "name": "(unnamed)",
+   "cls": "service",
+   "kind": "tunnel",
+   "layer": 0,
+   "variant": "TUN-T4",
+   "lengthM": 194,
+   "lanes": [
+    1
+   ],
+   "ways": [
+    "way/1074993014",
+    "way/1306476300",
+    "way/1393736864",
+    "way/1466162137",
+    "way/1466377051",
+    "way/437256650",
+    "way/490512504",
+    "way/664976726",
+    "way/993538727"
+   ],
+   "centre": [
+    28.6376,
+    77.22806
+   ],
+   "bboxXZ": [
+    -1255,
+    -5073,
+    1080,
+    -967
+   ],
+   "note": "building passage (OSM tunnel=building_passage), gateway under buildings"
+  },
+  {
+   "name": "(unnamed)",
+   "cls": "pedestrian",
+   "kind": "tunnel",
+   "layer": -1,
+   "variant": "SUB-S4",
+   "lengthM": 105,
+   "lanes": [
+    1
+   ],
+   "ways": [
+    "way/1282119234",
+    "way/1548439842"
+   ],
+   "centre": [
+    28.61297,
+    77.22771
+   ],
+   "bboxXZ": [
+    -237,
+    -73,
+    -103,
+    50
+   ],
+   "note": "Kartavya Path pedestrian underpass at the India Gate end (OSM layer -1, two ways)"
+  },
+  {
+   "name": "(unnamed)",
+   "cls": "pedestrian",
+   "kind": "tunnel",
+   "layer": 0,
+   "variant": "TUN-T4",
+   "lengthM": 40,
+   "lanes": [
+    1
+   ],
+   "ways": [
+    "way/1119548732",
+    "way/803023451",
+    "way/80429864"
+   ],
+   "centre": [
+    28.64801,
+    77.23642
+   ],
+   "bboxXZ": [
+    -718,
+    -4375,
+    1054,
+    -2186
+   ],
+   "note": "pedestrian building passage, old city"
+  },
+  {
+   "name": "(unnamed)",
+   "cls": "residential",
+   "kind": "tunnel",
+   "layer": 0,
+   "variant": "TUN-T4",
+   "lengthM": 29,
+   "lanes": [
+    2
+   ],
+   "ways": [
+    "way/1293039946",
+    "way/1478807198"
+   ],
+   "centre": [
+    28.6523,
+    77.22972
+   ],
+   "bboxXZ": [
+    -363,
+    -5535,
+    1134,
+    -4002
+   ],
+   "note": "residential lane through a building passage"
+  }
+ ],
+ "rail": [
+  {
+   "kind": "rail",
+   "name": "(unnamed)",
+   "layer": 0,
+   "bridge": false,
+   "tunnel": false,
+   "variant": "RAIL-BG",
+   "lengthM": 104921,
+   "ways": [
+    "way/77366952",
+    "way/77366975",
+    "way/77366987",
+    "way/77366989",
+    "way/77366993",
+    "way/77366994",
+    "way/77366998",
+    "way/77367000",
+    "way/77594818",
+    "way/77594819",
+    "way/77594820",
+    "way/77594821"
+   ],
+   "wayCount": 327,
+   "centre": [
+    28.65051,
+    77.22384
+   ],
+   "bboxXZ": [
+    -1327,
+    -5578,
+    1898,
+    31
+   ],
+   "note": "Indian Railways ballast track, the New Delhi and Delhi Junction yards and approaches (327 unnamed ways)"
+  },
+  {
+   "kind": "rail",
+   "name": "Mumbai - Delhi Railway",
+   "layer": 0,
+   "bridge": false,
+   "tunnel": false,
+   "variant": "RAIL-BG",
+   "lengthM": 10172,
+   "ways": [
+    "way/34940854",
+    "way/77011085",
+    "way/77011091",
+    "way/77366965",
+    "way/77366967",
+    "way/77366984",
+    "way/188228340",
+    "way/619497113",
+    "way/654286679",
+    "way/661930362",
+    "way/818915040",
+    "way/1186253185"
+   ],
+   "wayCount": 19,
+   "centre": [
+    28.63055,
+    77.23254
+   ],
+   "bboxXZ": [
+    -1033,
+    -3884,
+    1892,
+    35
+   ],
+   "note": "Mumbai line main tracks"
+  },
+  {
+   "kind": "rail",
+   "name": "Howrah - Delhi Railway",
+   "layer": 0,
+   "bridge": false,
+   "tunnel": false,
+   "variant": "RAIL-BG",
+   "lengthM": 9213,
+   "ways": [
+    "way/77366957",
+    "way/77366963",
+    "way/77366980",
+    "way/205875691",
+    "way/619497105",
+    "way/818377314",
+    "way/818377315",
+    "way/818377316",
+    "way/818377321",
+    "way/818377322",
+    "way/818377323",
+    "way/922460952"
+   ],
+   "wayCount": 21,
+   "centre": [
+    28.6287,
+    77.23456
+   ],
+   "bboxXZ": [
+    -900,
+    -3478,
+    1998,
+    -95
+   ],
+   "note": "Howrah line main tracks"
+  },
+  {
+   "kind": "rail",
+   "name": "(unnamed)",
+   "layer": 1,
+   "bridge": true,
+   "tunnel": false,
+   "variant": "RBR-U1",
+   "lengthM": 1204,
+   "ways": [
+    "way/77011117",
+    "way/77011123",
+    "way/77603079",
+    "way/77603116",
+    "way/77617138",
+    "way/77617154",
+    "way/77617165",
+    "way/77617180",
+    "way/77617184",
+    "way/77617188",
+    "way/77617190",
+    "way/77617194"
+   ],
+   "wayCount": 31,
+   "centre": [
+    28.65249,
+    77.23706
+   ],
+   "bboxXZ": [
+    -719,
+    -5436,
+    1903,
+    59
+   ],
+   "note": "rail bridges over roads and yard roads, all Northern Railway: the Minto Bridge, Tilak Bridge, Kashmere Gate and Mori Gate crossings"
+  },
+  {
+   "kind": "rail",
+   "name": "Delhi Ring Railway",
+   "layer": 0,
+   "bridge": false,
+   "tunnel": false,
+   "variant": "RAIL-RING",
+   "lengthM": 866,
+   "ways": [
+    "way/77011114",
+    "way/818915049"
+   ],
+   "wayCount": 2,
+   "centre": [
+    28.61666,
+    77.24714
+   ],
+   "bboxXZ": [
+    1625,
+    -787,
+    1882,
+    38
+   ],
+   "note": "Delhi Ring Railway at Pragati Maidan"
+  },
+  {
+   "kind": "rail",
+   "name": "(unnamed)",
+   "layer": -1,
+   "bridge": false,
+   "tunnel": true,
+   "variant": "RBR-CUT",
+   "lengthM": 527,
+   "ways": [
+    "way/77603061",
+    "way/77603074",
+    "way/77603088",
+    "way/77603097",
+    "way/77603111",
+    "way/364920060",
+    "way/1317345205",
+    "way/1317345206"
+   ],
+   "wayCount": 8,
+   "centre": [
+    28.65966,
+    77.21717
+   ],
+   "bboxXZ": [
+    -1325,
+    -5533,
+    -1055,
+    -4577
+   ],
+   "note": "rail under road (cut and cover, layer -1) between Kashmere Gate and Mori Gate"
+  },
+  {
+   "kind": "rail",
+   "name": "Mumbai - Delhi Railway",
+   "layer": 1,
+   "bridge": true,
+   "tunnel": false,
+   "variant": "RBR-U1",
+   "lengthM": 233,
+   "ways": [
+    "way/34940855",
+    "way/77011094",
+    "way/77011110",
+    "way/77366955",
+    "way/77366970",
+    "way/77366972"
+   ],
+   "wayCount": 6,
+   "centre": [
+    28.62494,
+    77.23733
+   ],
+   "bboxXZ": [
+    -714,
+    -2637,
+    1900,
+    53
+   ],
+   "note": "Mumbai line over Tilak Marg and Minto Road (Tilak Bridge, Shivaji Bridge stations)"
+  },
+  {
+   "kind": "rail",
+   "name": "Howrah - Delhi Railway",
+   "layer": 1,
+   "bridge": true,
+   "tunnel": false,
+   "variant": "RBR-U1",
+   "lengthM": 187,
+   "ways": [
+    "way/77366962",
+    "way/77366985",
+    "way/77366997",
+    "way/1317674186"
+   ],
+   "wayCount": 4,
+   "centre": [
+    28.6318,
+    77.23062
+   ],
+   "bboxXZ": [
+    -705,
+    -2642,
+    1144,
+    -1441
+   ],
+   "note": "Howrah line over roads at Tilak Bridge and Minto Bridge"
+  },
+  {
+   "kind": "rail",
+   "name": "(unnamed)",
+   "layer": 2,
+   "bridge": true,
+   "tunnel": false,
+   "variant": "RBR-Y1",
+   "lengthM": 38,
+   "ways": [
+    "way/77603072"
+   ],
+   "wayCount": 1,
+   "centre": [
+    28.66186,
+    77.24499
+   ],
+   "bboxXZ": [
+    1501,
+    -5458,
+    1536,
+    -5443
+   ],
+   "note": "Loha Pul approach (Yamuna rail bridge)"
+  },
+  {
+   "kind": "rail",
+   "name": "Old Iron Bridge (Loha Pul)",
+   "layer": 2,
+   "bridge": true,
+   "tunnel": false,
+   "variant": "RBR-Y1",
+   "lengthM": 37,
+   "ways": [
+    "way/77603110"
+   ],
+   "wayCount": 1,
+   "centre": [
+    28.66189,
+    77.24495
+   ],
+   "bboxXZ": [
+    1498,
+    -5462,
+    1532,
+    -5446
+   ],
+   "note": "Old Iron Bridge (Loha Pul), double deck steel truss, 1866"
+  }
+ ],
+ "metro_lines": [
+  {
+   "kind": "metro",
+   "name": "Delhi Metro Violet Line",
+   "layer": -2,
+   "bridge": false,
+   "tunnel": true,
+   "variant": "MET-UG",
+   "lengthM": 14092,
+   "ways": [
+    "way/188245893",
+    "way/610024711",
+    "way/1036191758",
+    "way/1147871208"
+   ],
+   "wayCount": 4,
+   "centre": [
+    28.64137,
+    77.23458
+   ],
+   "bboxXZ": [
+    -1023,
+    -5596,
+    1159,
+    -860
+   ],
+   "note": "Violet Line (standard gauge, 1435 mm), underground: Central Secretariat, Mandi House, ITO, Delhi Gate, Jama Masjid, Lal Quila, Chandni Chowk, Kashmere Gate"
+  },
+  {
+   "kind": "metro",
+   "name": "Delhi Metro Yellow Line",
+   "layer": -1,
+   "bridge": false,
+   "tunnel": true,
+   "variant": "MET-UG",
+   "lengthM": 4764,
+   "ways": [
+    "way/79482957",
+    "way/610022426"
+   ],
+   "wayCount": 2,
+   "centre": [
+    28.65383,
+    77.22803
+   ],
+   "bboxXZ": [
+    -658,
+    -5594,
+    93,
+    -3389
+   ],
+   "note": "Yellow Line north of Chandni Chowk toward Kashmere Gate (broad gauge), underground"
+  },
+  {
+   "kind": "metro",
+   "name": "Delhi Metro Yellow Line",
+   "layer": -4,
+   "bridge": false,
+   "tunnel": true,
+   "variant": "MET-UG",
+   "lengthM": 4583,
+   "ways": [
+    "way/343626950",
+    "way/610022433",
+    "way/660097244",
+    "way/660097245",
+    "way/660097246",
+    "way/660097247"
+   ],
+   "wayCount": 6,
+   "centre": [
+    28.63122,
+    77.21829
+   ],
+   "bboxXZ": [
+    -1428,
+    -3391,
+    -653,
+    -1257
+   ],
+   "note": "Yellow Line deep section: New Delhi, Rajiv Chowk, Patel Chowk, Central Secretariat (Chawri Bazar is 25 m below ground)"
+  },
+  {
+   "kind": "metro",
+   "name": "Blue Line",
+   "layer": -2,
+   "bridge": false,
+   "tunnel": true,
+   "variant": "MET-UG",
+   "lengthM": 4562,
+   "ways": [
+    "way/52082767",
+    "way/604707732"
+   ],
+   "wayCount": 2,
+   "centre": [
+    28.62972,
+    77.2254
+   ],
+   "bboxXZ": [
+    -1324,
+    -2451,
+    655,
+    -1398
+   ],
+   "note": "Blue Line underground: Rajiv Chowk, Barakhamba Road, Mandi House"
+  },
+  {
+   "kind": "metro",
+   "name": "Blue Line",
+   "layer": 2,
+   "bridge": true,
+   "tunnel": false,
+   "variant": "MET-VB",
+   "lengthM": 4535,
+   "ways": [
+    "way/43766190",
+    "way/164931219",
+    "way/604707724",
+    "way/604707736"
+   ],
+   "wayCount": 4,
+   "centre": [
+    28.62396,
+    77.24191
+   ],
+   "bboxXZ": [
+    -2114,
+    -2973,
+    2434,
+    -797
+   ],
+   "note": "Blue Line elevated viaduct east of Mandi House, with the extradosed bridge over the Northern Railway main lines near Pragati Maidan, to the Yamuna"
+  },
+  {
+   "kind": "metro",
+   "name": "Airport Express Line",
+   "layer": -1,
+   "bridge": false,
+   "tunnel": true,
+   "variant": "MET-UG",
+   "lengthM": 3599,
+   "ways": [
+    "way/188216912",
+    "way/604707698"
+   ],
+   "wayCount": 2,
+   "centre": [
+    28.63313,
+    77.21655
+   ],
+   "bboxXZ": [
+    -1643,
+    -3280,
+    -617,
+    -1838
+   ],
+   "note": "Airport Express underground: New Delhi to Shivaji Stadium and Dhaula Kuan (standard gauge)"
+  },
+  {
+   "kind": "metro",
+   "name": "Blue Line",
+   "layer": 1,
+   "bridge": true,
+   "tunnel": false,
+   "variant": "MET-RAMP",
+   "lengthM": 710,
+   "ways": [
+    "way/695925443",
+    "way/695925444"
+   ],
+   "wayCount": 2,
+   "centre": [
+    28.62539,
+    77.23788
+   ],
+   "bboxXZ": [
+    655,
+    -1403,
+    1010,
+    -1376
+   ],
+   "note": "Blue Line ramp and short bridge where the line rises out of the tunnel near Mandi House"
+  },
+  {
+   "kind": "metro",
+   "name": "Blue Line",
+   "layer": 0,
+   "bridge": false,
+   "tunnel": false,
+   "variant": "MET-RAMP",
+   "lengthM": 571,
+   "ways": [
+    "way/914114472",
+    "way/914114473"
+   ],
+   "wayCount": 2,
+   "centre": [
+    28.63561,
+    77.2147
+   ],
+   "bboxXZ": [
+    -1561,
+    -2611,
+    -1322,
+    -2446
+   ],
+   "note": "Blue Line at grade near RK Ashram Marg / Jhandewalan (west edge)"
+  },
+  {
+   "kind": "metro",
+   "name": "(unnamed)",
+   "layer": -1,
+   "bridge": false,
+   "tunnel": true,
+   "variant": "MET-UG",
+   "lengthM": 205,
+   "ways": [
+    "way/1247668343"
+   ],
+   "wayCount": 1,
+   "centre": [
+    28.63246,
+    77.22007
+   ],
+   "bboxXZ": [
+    -1025,
+    -2245,
+    -851,
+    -2138
+   ],
+   "note": "unnamed metro tunnel piece by Rajiv Chowk"
+  }
+ ],
+ "stations": [
+  {
+   "id": "node/1988513583",
+   "name": "Pragati Maidan",
+   "kind": "indian_railways",
+   "variant": "RSTN-HALT",
+   "at": [
+    28.61603,
+    77.24722
+   ],
+   "xz": [
+    1737,
+    -349
+   ]
+  },
+  {
+   "id": "node/1988513598",
+   "name": "Shivaji Bridge",
+   "kind": "indian_railways",
+   "variant": "RSTN-HALT",
+   "at": [
+    28.63336,
+    77.22667
+   ],
+   "xz": [
+    -272,
+    -2278
+   ]
+  },
+  {
+   "id": "node/1988513599",
+   "name": "Tilak Bridge",
+   "kind": "indian_railways",
+   "variant": "RSTN-HALT",
+   "at": [
+    28.62805,
+    77.23741
+   ],
+   "xz": [
+    778,
+    -1687
+   ]
+  },
+  {
+   "id": "node/554257841",
+   "name": "New Delhi",
+   "kind": "metro",
+   "mode": "underground",
+   "line": "Delhi Metro Yellow Line",
+   "variant": "MET-STN-UG",
+   "at": [
+    28.64335,
+    77.22274
+   ],
+   "xz": [
+    -655,
+    -3390
+   ]
+  },
+  {
+   "id": "node/5854161857",
+   "name": "Sadar Bazar",
+   "kind": "indian_railways",
+   "variant": "RSTN-HALT",
+   "at": [
+    28.65789,
+    77.217
+   ],
+   "xz": [
+    -1216,
+    -5009
+   ]
+  },
+  {
+   "id": "node/6131069513",
+   "name": "New Delhi",
+   "kind": "indian_railways",
+   "variant": "RSTN-NDLS",
+   "at": [
+    28.6418,
+    77.22175
+   ],
+   "xz": [
+    -752,
+    -3218
+   ]
+  },
+  {
+   "id": "node/6537193575",
+   "name": "Indraprastha",
+   "kind": "metro",
+   "mode": "elevated",
+   "line": "Blue Line",
+   "variant": "MET-STN-EL",
+   "at": [
+    28.62057,
+    77.24956
+   ],
+   "xz": [
+    1966,
+    -854
+   ]
+  },
+  {
+   "id": "node/6539894850",
+   "name": "Ramakrishna Ashram Marg",
+   "kind": "metro",
+   "mode": "elevated",
+   "line": "Blue Line",
+   "variant": "MET-STN-EL",
+   "at": [
+    28.63913,
+    77.20857
+   ],
+   "xz": [
+    -2040,
+    -2920
+   ]
+  },
+  {
+   "id": "node/6539894851",
+   "name": "Rajiv Chowk",
+   "kind": "metro",
+   "mode": "underground",
+   "line": "Delhi Metro Yellow Line",
+   "variant": "MET-STN-UG",
+   "at": [
+    28.63262,
+    77.21931
+   ],
+   "xz": [
+    -991,
+    -2196
+   ]
+  },
+  {
+   "id": "node/6539894855",
+   "name": "Barakhambha Road",
+   "kind": "metro",
+   "mode": "underground",
+   "line": "Blue Line",
+   "variant": "MET-STN-UG",
+   "at": [
+    28.62969,
+    77.225
+   ],
+   "xz": [
+    -434,
+    -1870
+   ]
+  },
+  {
+   "id": "node/6539894856",
+   "name": "Mandi House",
+   "kind": "metro",
+   "mode": "underground",
+   "line": "Blue Line",
+   "variant": "MET-STN-UG",
+   "at": [
+    28.62556,
+    77.2342
+   ],
+   "xz": [
+    465,
+    -1410
+   ]
+  },
+  {
+   "id": "node/6539894857",
+   "name": "Supreme Court",
+   "kind": "metro",
+   "mode": "elevated",
+   "line": "Blue Line",
+   "variant": "MET-STN-EL",
+   "at": [
+    28.62343,
+    77.24254
+   ],
+   "xz": [
+    1279,
+    -1173
+   ]
+  },
+  {
+   "id": "node/7018886724",
+   "name": "Chandni Chowk",
+   "kind": "metro",
+   "mode": "underground",
+   "line": "Delhi Metro Yellow Line",
+   "variant": "MET-STN-UG",
+   "at": [
+    28.65822,
+    77.23034
+   ],
+   "xz": [
+    87,
+    -5046
+   ]
+  },
+  {
+   "id": "node/7018886725",
+   "name": "Chawri Bazaar",
+   "kind": "metro",
+   "mode": "underground",
+   "line": "Delhi Metro Yellow Line",
+   "variant": "MET-STN-UG",
+   "at": [
+    28.6491,
+    77.22651
+   ],
+   "xz": [
+    -287,
+    -4031
+   ]
+  },
+  {
+   "id": "node/7282286730",
+   "name": "Lal Quila",
+   "kind": "metro",
+   "mode": "underground",
+   "line": "Delhi Metro Violet Line",
+   "variant": "MET-STN-UG",
+   "at": [
+    28.65729,
+    77.23666
+   ],
+   "xz": [
+    705,
+    -4942
+   ]
+  },
+  {
+   "id": "node/7282286733",
+   "name": "Delhi Gate",
+   "kind": "metro",
+   "mode": "underground",
+   "line": "Delhi Metro Violet Line",
+   "variant": "MET-STN-UG",
+   "at": [
+    28.6391,
+    77.24079
+   ],
+   "xz": [
+    1108,
+    -2917
+   ]
+  },
+  {
+   "id": "node/8018558072",
+   "name": "Rajiv Chowk",
+   "kind": "metro",
+   "mode": "underground",
+   "line": "Blue Line",
+   "variant": "MET-STN-UG",
+   "at": [
+    28.63269,
+    77.21969
+   ],
+   "xz": [
+    -953,
+    -2204
+   ]
+  },
+  {
+   "id": "node/913095905",
+   "name": "Delhi Junction",
+   "kind": "indian_railways",
+   "variant": "RSTN-OLD",
+   "at": [
+    28.66072,
+    77.22765
+   ],
+   "xz": [
+    -176,
+    -5324
+   ]
+  },
+  {
+   "id": "node/938409545",
+   "name": "New Delhi Airport Express Terminal",
+   "kind": "metro",
+   "mode": "underground",
+   "line": "Airport Express Line",
+   "variant": "MET-STN-UG",
+   "at": [
+    28.64235,
+    77.22311
+   ],
+   "xz": [
+    -619,
+    -3279
+   ]
+  },
+  {
+   "id": "node/9584236507",
+   "name": "Janpath",
+   "kind": "metro",
+   "mode": "underground",
+   "line": "Delhi Metro Violet Line",
+   "variant": "MET-STN-UG",
+   "at": [
+    28.624,
+    77.21925
+   ],
+   "xz": [
+    -996,
+    -1236
+   ]
+  },
+  {
+   "id": "node/9584236508",
+   "name": "ITO",
+   "kind": "metro",
+   "mode": "underground",
+   "line": "Delhi Metro Violet Line",
+   "variant": "MET-STN-UG",
+   "at": [
+    28.62812,
+    77.24105
+   ],
+   "xz": [
+    1134,
+    -1695
+   ]
+  },
+  {
+   "id": "node/9920295123",
+   "name": "Mandi House",
+   "kind": "metro",
+   "mode": "underground",
+   "line": "Delhi Metro Violet Line",
+   "variant": "MET-STN-UG",
+   "at": [
+    28.62546,
+    77.2342
+   ],
+   "xz": [
+    464,
+    -1399
+   ]
+  },
+  {
+   "id": "way/360264006",
+   "name": "Jama Masjid",
+   "kind": "metro",
+   "mode": "underground",
+   "line": "Delhi Metro Violet Line",
+   "variant": "MET-STN-UG",
+   "at": [
+    28.64999,
+    77.23754
+   ],
+   "xz": [
+    791,
+    -4130
+   ]
+  },
+  {
+   "id": "way/1158884368",
+   "name": "Rajiv Chowk metro station",
+   "kind": "underground feature",
+   "variant": "MET-STN-UG",
+   "note": "list: Anmol 2026-11-12: the big footprint inside the CP inner circle is Rajiv Chowk metro "
+  },
+  {
+   "id": "way/1165151902",
+   "name": "unnamed station",
+   "kind": "underground feature",
+   "variant": "MET-STN-UG",
+   "note": "tag: layer -1"
+  },
+  {
+   "id": "way/1393736849",
+   "name": "Palika Bazaar",
+   "kind": "underground feature",
+   "variant": "SUB-S2",
+   "note": "list: the underground market under Palika Park; OSM maps it as landuse=retail with its sho"
+  },
+  {
+   "id": "way/1393736859",
+   "name": "Palika Parking",
+   "kind": "underground feature",
+   "variant": "TUN-T3",
+   "note": "tag: parking=underground"
+  },
+  {
+   "id": "way/351616847",
+   "name": "unnamed structure",
+   "kind": "underground feature",
+   "variant": "TUN-T3",
+   "note": "tag: layer -1"
+  },
+  {
+   "id": "way/360264006",
+   "name": "Jama Masjid metro station",
+   "kind": "underground feature",
+   "variant": "MET-STN-UG",
+   "note": "list: Violet Line station below ground; OSM tags it layer -1 with location=surface, so the"
+  },
+  {
+   "id": "way/360264008",
+   "name": "Lal Quila metro station",
+   "kind": "underground feature",
+   "variant": "MET-STN-UG",
+   "note": "tag: no floors above ground, 2 below"
+  }
+ ],
+ "foot_bridges": [
+  {
+   "id": "way/1248031156",
+   "lengthM": 35,
+   "variant": "FOB-B4",
+   "at": [
+    28.61614,
+    77.24026
+   ],
+   "xz": [
+    1057,
+    -361
+   ],
+   "note": "road or metro-link foot bridge"
+  },
+  {
+   "id": "way/1248079213",
+   "lengthM": 56,
+   "variant": "FOB-B4",
+   "at": [
+    28.62039,
+    77.24865
+   ],
+   "xz": [
+    1877,
+    -835
+   ],
+   "note": "road or metro-link foot bridge"
+  },
+  {
+   "id": "way/1287299124",
+   "lengthM": 153,
+   "variant": "FOB-B2",
+   "at": [
+    28.66163,
+    77.2271
+   ],
+   "xz": [
+    -230,
+    -5426
+   ],
+   "note": "Delhi Junction side FOB"
+  },
+  {
+   "id": "way/1287299130",
+   "lengthM": 161,
+   "variant": "FOB-B2",
+   "at": [
+    28.66153,
+    77.22863
+   ],
+   "xz": [
+    -80,
+    -5414
+   ],
+   "note": "Delhi Junction side FOB"
+  },
+  {
+   "id": "way/1294941406",
+   "lengthM": 38,
+   "variant": "FOB-B4",
+   "at": [
+    28.63379,
+    77.22975
+   ],
+   "xz": [
+    30,
+    -2326
+   ],
+   "note": "road or metro-link foot bridge"
+  },
+  {
+   "id": "way/1429504126",
+   "lengthM": 65,
+   "variant": "FOB-B4",
+   "at": [
+    28.62764,
+    77.23809
+   ],
+   "xz": [
+    845,
+    -1641
+   ],
+   "note": "road or metro-link foot bridge"
+  },
+  {
+   "id": "way/1448561131",
+   "lengthM": 167,
+   "variant": "FOB-B3",
+   "at": [
+    28.6237,
+    77.24136
+   ],
+   "xz": [
+    1164,
+    -1203
+   ],
+   "note": "ITO area skywalk branch (Hans Bhawan side)"
+  },
+  {
+   "id": "way/200251460",
+   "lengthM": 64,
+   "variant": "FOB-B4",
+   "at": [
+    28.63912,
+    77.20843
+   ],
+   "xz": [
+    -2054,
+    -2920
+   ],
+   "note": "road or metro-link foot bridge"
+  },
+  {
+   "id": "way/264770688",
+   "lengthM": 8,
+   "variant": "FOB-B5",
+   "at": [
+    28.65612,
+    77.23845
+   ],
+   "xz": [
+    880,
+    -4812
+   ],
+   "note": "short old stair or steel FOB"
+  },
+  {
+   "id": "way/311524765",
+   "lengthM": 14,
+   "variant": "FOB-B5",
+   "at": [
+    28.6518,
+    77.2397
+   ],
+   "xz": [
+    1002,
+    -4331
+   ],
+   "note": "short old stair or steel FOB"
+  },
+  {
+   "id": "way/34404746",
+   "lengthM": 1830,
+   "variant": "FOB-B1",
+   "at": [
+    28.64231,
+    77.22153
+   ],
+   "xz": [
+    -773,
+    -3274
+   ],
+   "note": "New Delhi station foot over bridge network (50 ways, 1.8 km of FOB footway) incl. the arched steel Paharganj FOB"
+  },
+  {
+   "id": "way/370765173",
+   "lengthM": 95,
+   "variant": "FOB-B4",
+   "at": [
+    28.63355,
+    77.22609
+   ],
+   "xz": [
+    -328,
+    -2300
+   ],
+   "note": "road FOB by Shivaji Stadium / Minto Road"
+  },
+  {
+   "id": "way/370765177",
+   "lengthM": 76,
+   "variant": "FOB-B4",
+   "at": [
+    28.62839,
+    77.23676
+   ],
+   "xz": [
+    715,
+    -1724
+   ],
+   "note": "road or metro-link foot bridge"
+  },
+  {
+   "id": "way/435426345",
+   "lengthM": 40,
+   "variant": "FOB-B4",
+   "at": [
+    28.6137,
+    77.24019
+   ],
+   "xz": [
+    1050,
+    -90
+   ],
+   "note": "road or metro-link foot bridge"
+  },
+  {
+   "id": "way/464312306",
+   "lengthM": 164,
+   "variant": "FOB-B2",
+   "at": [
+    28.65755,
+    77.21739
+   ],
+   "xz": [
+    -1178,
+    -4971
+   ],
+   "note": "Sadar Bazar station platform FOB"
+  },
+  {
+   "id": "way/77614294",
+   "lengthM": 20,
+   "variant": "FOB-B5",
+   "at": [
+    28.66133,
+    77.22257
+   ],
+   "xz": [
+    -672,
+    -5392
+   ],
+   "note": "short old stair or steel FOB"
+  },
+  {
+   "id": "way/80414535",
+   "lengthM": 576,
+   "variant": "FOB-B1",
+   "at": [
+    28.64342,
+    77.21957
+   ],
+   "xz": [
+    -965,
+    -3399
+   ],
+   "note": "New Delhi station main FOB"
+  },
+  {
+   "id": "way/80429832",
+   "lengthM": 66,
+   "variant": "FOB-B4",
+   "at": [
+    28.66006,
+    77.24209
+   ],
+   "xz": [
+    1236,
+    -5250
+   ],
+   "note": "Ring Road FOB at Red Fort / Loha Pul crossing"
+  },
+  {
+   "id": "way/80429897",
+   "lengthM": 104,
+   "variant": "FOB-B4",
+   "at": [
+    28.66077,
+    77.24218
+   ],
+   "xz": [
+    1244,
+    -5330
+   ],
+   "note": "Ring Road FOB at Red Fort / Loha Pul crossing"
+  },
+  {
+   "id": "way/814940336",
+   "lengthM": 51,
+   "variant": "FOB-B3",
+   "at": [
+    28.62659,
+    77.24132
+   ],
+   "xz": [
+    1160,
+    -1525
+   ],
+   "note": "ITO area skywalk link"
+  },
+  {
+   "id": "way/854903774",
+   "lengthM": 547,
+   "variant": "FOB-B3",
+   "at": [
+    28.62472,
+    77.24112
+   ],
+   "xz": [
+    1141,
+    -1317
+   ],
+   "note": "ITO Skywalk (400 m + loop, steel, tensile fabric roof, glass lifts)"
+  },
+  {
+   "id": "way/993862148",
+   "lengthM": 9,
+   "variant": "FOB-B4",
+   "at": [
+    28.62403,
+    77.23869
+   ],
+   "xz": [
+    904,
+    -1240
+   ],
+   "note": "road or metro-link foot bridge"
+  },
+  {
+   "id": "way/993862151",
+   "lengthM": 9,
+   "variant": "FOB-B4",
+   "at": [
+    28.62395,
+    77.23884
+   ],
+   "xz": [
+    918,
+    -1230
+   ],
+   "note": "road or metro-link foot bridge"
+  },
+  {
+   "id": "way/998790348",
+   "lengthM": 93,
+   "variant": "FOB-B3",
+   "at": [
+    28.62804,
+    77.24401
+   ],
+   "xz": [
+    1423,
+    -1687
+   ],
+   "note": "ITO area skywalk link (Hans Bhawan side)"
+  }
+ ],
+ "ped_subways": [
+  {
+   "cell": [
+    28.632,
+    77.22
+   ],
+   "ways": 82,
+   "totalLengthM": 1395,
+   "names": [],
+   "exampleIds": [
+    164675806,
+    164675821,
+    164683606,
+    164683607
+   ],
+   "variant": "SUB-S1",
+   "note": "Connaught Place outer circle subways and Rajiv Chowk concourse links (layers -1, -2 and -4 mix pedestrian subway and metro concourse)"
+  },
+  {
+   "cell": [
+    28.632,
+    77.223
+   ],
+   "ways": 19,
+   "totalLengthM": 201,
+   "names": [],
+   "exampleIds": [
+    582929434,
+    1119548714,
+    1119548715,
+    1119548716
+   ],
+   "variant": "SUB-S1",
+   "note": "Connaught Place outer circle subways and Rajiv Chowk concourse links (layers -1, -2 and -4 mix pedestrian subway and metro concourse)"
+  },
+  {
+   "cell": [
+    28.635,
+    77.22
+   ],
+   "ways": 18,
+   "totalLengthM": 384,
+   "names": [],
+   "exampleIds": [
+    164675824,
+    164683604,
+    164683605,
+    164683610
+   ],
+   "variant": "SUB-S1",
+   "note": "Connaught Place outer circle subways and Rajiv Chowk concourse links (layers -1, -2 and -4 mix pedestrian subway and metro concourse)"
+  },
+  {
+   "cell": [
+    28.629,
+    77.22
+   ],
+   "ways": 11,
+   "totalLengthM": 246,
+   "names": [],
+   "exampleIds": [
+    583501522,
+    583501528,
+    778204103,
+    778204104
+   ],
+   "variant": "SUB-S1",
+   "note": "Connaught Place outer circle subways and Rajiv Chowk concourse links (layers -1, -2 and -4 mix pedestrian subway and metro concourse)"
+  },
+  {
+   "cell": [
+    28.644,
+    77.223
+   ],
+   "ways": 9,
+   "totalLengthM": 687,
+   "names": [],
+   "exampleIds": [
+    260320115,
+    351475560,
+    351475561,
+    351475562
+   ],
+   "variant": "SUB-S5",
+   "note": "New Delhi station and Airport Express terminal links"
+  },
+  {
+   "cell": [
+    28.632,
+    77.217
+   ],
+   "ways": 8,
+   "totalLengthM": 390,
+   "names": [],
+   "exampleIds": [
+    582349040,
+    582349041,
+    582349042,
+    582355779
+   ],
+   "variant": "SUB-S1",
+   "note": "Connaught Place outer circle subways and Rajiv Chowk concourse links (layers -1, -2 and -4 mix pedestrian subway and metro concourse)"
+  },
+  {
+   "cell": [
+    28.614,
+    77.229
+   ],
+   "ways": 5,
+   "totalLengthM": 188,
+   "names": [],
+   "exampleIds": [
+    1282119234,
+    1548439842,
+    1548439844,
+    1548439847
+   ],
+   "variant": "SUB-S4",
+   "note": "Kartavya Path pedestrian underpasses (Janpath North and South where Janpath crosses the avenue, and the India Gate end hexagon crossings)"
+  },
+  {
+   "cell": [
+    28.614,
+    77.217
+   ],
+   "ways": 5,
+   "totalLengthM": 145,
+   "names": [
+    "Janpath South underpass"
+   ],
+   "exampleIds": [
+    1548439813,
+    1548439814,
+    1548439816,
+    1548439826
+   ],
+   "variant": "SUB-S4",
+   "note": "Kartavya Path pedestrian underpasses (Janpath North and South where Janpath crosses the avenue, and the India Gate end hexagon crossings)"
+  },
+  {
+   "cell": [
+    28.614,
+    77.22
+   ],
+   "ways": 5,
+   "totalLengthM": 145,
+   "names": [
+    "Janpath North underpass"
+   ],
+   "exampleIds": [
+    1548439818,
+    1548439821,
+    1548439829,
+    1548439831
+   ],
+   "variant": "SUB-S4",
+   "note": "Kartavya Path pedestrian underpasses (Janpath North and South where Janpath crosses the avenue, and the India Gate end hexagon crossings)"
+  },
+  {
+   "cell": [
+    28.614,
+    77.226
+   ],
+   "ways": 4,
+   "totalLengthM": 93,
+   "names": [],
+   "exampleIds": [
+    1282119230,
+    1548439839,
+    1548439840,
+    1548439851
+   ],
+   "variant": "SUB-S4",
+   "note": "Kartavya Path pedestrian underpasses (Janpath North and South where Janpath crosses the avenue, and the India Gate end hexagon crossings)"
+  },
+  {
+   "cell": [
+    28.653,
+    77.241
+   ],
+   "ways": 2,
+   "totalLengthM": 30,
+   "names": [],
+   "exampleIds": [
+    80429864,
+    803023451
+   ],
+   "variant": "TUN-T4",
+   "note": "building passages, old city"
+  },
+  {
+   "cell": [
+    28.656,
+    77.238
+   ],
+   "ways": 2,
+   "totalLengthM": 135,
+   "names": [],
+   "exampleIds": [
+    490512500,
+    490512509
+   ],
+   "variant": "TUN-T4",
+   "note": "building passages, old city"
+  },
+  {
+   "cell": [
+    28.629,
+    77.223
+   ],
+   "ways": 2,
+   "totalLengthM": 46,
+   "names": [],
+   "exampleIds": [
+    582929431,
+    582929433
+   ],
+   "variant": "SUB-S1",
+   "note": "Connaught Place outer circle subways and Rajiv Chowk concourse links (layers -1, -2 and -4 mix pedestrian subway and metro concourse)"
+  },
+  {
+   "cell": [
+    28.629,
+    77.217
+   ],
+   "ways": 2,
+   "totalLengthM": 75,
+   "names": [],
+   "exampleIds": [
+    778204102,
+    1297388765
+   ],
+   "variant": "SUB-S1",
+   "note": "Connaught Place outer circle subways and Rajiv Chowk concourse links (layers -1, -2 and -4 mix pedestrian subway and metro concourse)"
+  },
+  {
+   "cell": [
+    28.638,
+    77.208
+   ],
+   "ways": 2,
+   "totalLengthM": 47,
+   "names": [],
+   "exampleIds": [
+    1386106197,
+    1386106210
+   ],
+   "variant": "TUN-T4",
+   "note": "building passages, old city"
+  },
+  {
+   "cell": [
+    28.641,
+    77.25
+   ],
+   "ways": 2,
+   "totalLengthM": 13,
+   "names": [],
+   "exampleIds": [
+    1450938511,
+    1450938513
+   ],
+   "variant": "SUB-S3",
+   "note": "other pedestrian subway or station link"
+  },
+  {
+   "cell": [
+    28.635,
+    77.217
+   ],
+   "ways": 2,
+   "totalLengthM": 27,
+   "names": [],
+   "exampleIds": [
+    1488006963,
+    1494413070
+   ],
+   "variant": "SUB-S1",
+   "note": "Connaught Place outer circle subways and Rajiv Chowk concourse links (layers -1, -2 and -4 mix pedestrian subway and metro concourse)"
+  },
+  {
+   "cell": [
+    28.656,
+    77.241
+   ],
+   "ways": 1,
+   "totalLengthM": 15,
+   "names": [],
+   "exampleIds": [
+    80429801
+   ],
+   "variant": "TUN-T4",
+   "note": "building passages, old city"
+  },
+  {
+   "cell": [
+    28.629,
+    77.241
+   ],
+   "ways": 1,
+   "totalLengthM": 17,
+   "names": [],
+   "exampleIds": [
+    854903777
+   ],
+   "variant": "SUB-S3",
+   "note": "other pedestrian subway or station link"
+  },
+  {
+   "cell": [
+    28.611,
+    77.232
+   ],
+   "ways": 1,
+   "totalLengthM": 111,
+   "names": [],
+   "exampleIds": [
+    1024424766
+   ],
+   "variant": "SUB-S4",
+   "note": "Kartavya Path pedestrian underpasses (Janpath North and South where Janpath crosses the avenue, and the India Gate end hexagon crossings)"
+  },
+  {
+   "cell": [
+    28.614,
+    77.232
+   ],
+   "ways": 1,
+   "totalLengthM": 142,
+   "names": [],
+   "exampleIds": [
+    1025731104
+   ],
+   "variant": "SUB-S4",
+   "note": "Kartavya Path pedestrian underpasses (Janpath North and South where Janpath crosses the avenue, and the India Gate end hexagon crossings)"
+  },
+  {
+   "cell": [
+    28.626,
+    77.208
+   ],
+   "ways": 1,
+   "totalLengthM": 20,
+   "names": [],
+   "exampleIds": [
+    1280140323
+   ],
+   "variant": "SUB-S3",
+   "note": "other pedestrian subway or station link"
+  },
+  {
+   "cell": [
+    28.611,
+    77.229
+   ],
+   "ways": 1,
+   "totalLengthM": 9,
+   "names": [],
+   "exampleIds": [
+    1282119231
+   ],
+   "variant": "SUB-S4",
+   "note": "Kartavya Path pedestrian underpasses (Janpath North and South where Janpath crosses the avenue, and the India Gate end hexagon crossings)"
+  },
+  {
+   "cell": [
+    28.614,
+    77.235
+   ],
+   "ways": 1,
+   "totalLengthM": 12,
+   "names": [],
+   "exampleIds": [
+    1284435345
+   ],
+   "variant": "SUB-S4",
+   "note": "Kartavya Path pedestrian underpasses (Janpath North and South where Janpath crosses the avenue, and the India Gate end hexagon crossings)"
+  },
+  {
+   "cell": [
+    28.659,
+    77.223
+   ],
+   "ways": 1,
+   "totalLengthM": 20,
+   "names": [],
+   "exampleIds": [
+    1377204957
+   ],
+   "variant": "TUN-T4",
+   "note": "building passages, old city"
+  },
+  {
+   "cell": [
+    28.659,
+    77.226
+   ],
+   "ways": 1,
+   "totalLengthM": 16,
+   "names": [],
+   "exampleIds": [
+    1377204959
+   ],
+   "variant": "TUN-T4",
+   "note": "building passages, old city"
+  },
+  {
+   "cell": [
+    28.641,
+    77.208
+   ],
+   "ways": 1,
+   "totalLengthM": 15,
+   "names": [],
+   "exampleIds": [
+    1386106189
+   ],
+   "variant": "TUN-T4",
+   "note": "building passages, old city"
+  },
+  {
+   "cell": [
+    28.668,
+    77.217
+   ],
+   "ways": 1,
+   "totalLengthM": 24,
+   "names": [
+    "Rajiv Agrawal Paidal Par Path"
+   ],
+   "exampleIds": [
+    1498275699
+   ],
+   "variant": "SUB-S3",
+   "note": "Tis Hazari pedestrian subway (Rajiv Agrawal Paidal Par Path)"
+  }
+ ],
+ "level_crossings": [
+  {
+   "at": [
+    28.617,
+    77.25
+   ],
+   "count": 2,
+   "nodes": [
+    2126427164,
+    3171982196
+   ],
+   "variant": "RAIL-LC"
+  },
+  {
+   "at": [
+    28.628,
+    77.208
+   ],
+   "count": 2,
+   "nodes": [
+    12319493498,
+    12319493500
+   ],
+   "variant": "RAIL-LC"
+  },
+  {
+   "at": [
+    28.632,
+    77.236
+   ],
+   "count": 1,
+   "nodes": [
+    11648437774
+   ],
+   "variant": "RAIL-LC"
+  },
+  {
+   "at": [
+    28.632,
+    77.237
+   ],
+   "count": 1,
+   "nodes": [
+    11648437773
+   ],
+   "variant": "RAIL-LC"
+  },
+  {
+   "at": [
+    28.657,
+    77.217
+   ],
+   "count": 9,
+   "nodes": [
+    7629641556,
+    7629641559,
+    7629641561,
+    7629641564,
+    7629641565,
+    7629641570
+   ],
+   "variant": "RAIL-LC"
+  },
+  {
+   "at": [
+    28.661,
+    77.232
+   ],
+   "count": 10,
+   "nodes": [
+    913095842,
+    3648528735,
+    3648528736,
+    3648528737,
+    3648528738,
+    3648528739
+   ],
+   "variant": "RAIL-LC"
+  },
+  {
+   "at": [
+    28.662,
+    77.23
+   ],
+   "count": 2,
+   "nodes": [
+    11939017883,
+    11939017884
+   ],
+   "variant": "RAIL-LC"
+  }
+ ],
+ "outside_outline": [
+  {
+   "name": "Rani Jhansi Flyover (and ramps)",
+   "osm": "way/464265868, way/708804793",
+   "at": [
+    28.6636,
+    77.207
+   ],
+   "variant": "FLY-B1",
+   "note": "inside the OSM box but outside the baked outline, Pul Bangash / Sadar Bazar end"
+  },
+  {
+   "name": "Delhi-Dehradun Expressway bridge pieces",
+   "osm": "way/175769881",
+   "at": [
+    28.66,
+    77.2604
+   ],
+   "variant": "FLY-B1",
+   "note": "east edge of the box (Shastri Park side); elevated carriageway on Y piers"
+  },
+  {
+   "name": "New Yamuna Rail Bridge (under construction)",
+   "osm": "way/80429909",
+   "at": [
+    28.6654,
+    77.2525
+   ],
+   "variant": "RBR-Y1",
+   "note": "built beside the Loha Pul: new steel girder rail bridge, 992 m (Wikipedia)"
+  },
+  {
+   "name": "Delhi Metro Magenta Line extension (construction)",
+   "osm": "way/1571169662",
+   "at": [
+    28.6214,
+    77.2241
+   ],
+   "variant": "MET-UG",
+   "note": "RK Ashram Marg to Indraprastha, layer -5, future deep tunnel"
+  },
+  {
+   "name": "Pragati Maidan \"Underpass\" links (primary_link and secondary_link)",
+   "osm": "way/973071350, way/1322467992",
+   "at": [
+    28.6129,
+    77.2512
+   ],
+   "variant": "TUN-T2",
+   "note": "OSM \"Underpass\" ways of the corridor, 568 m and 452 m, at the south-east edge (second one at 28.6035, 77.2402)"
+  },
+  {
+   "name": "Metro stations in the box but outside the baked outline",
+   "osm": "node/268381463 Pul Bangash, node/561316983 Tis Hazari (Red Line, elevated); node/554257833 Shivaji Stadium (Airport Express, underground); node/5453646586 Central Secretariat, node/7018886726 Patel Chowk, node/7018886727 Seva Teerth (Yellow and Violet, underground)",
+   "at": [
+    28.6289,
+    77.2113
+   ],
+   "variant": "MET-STN-EL / MET-STN-UG",
+   "note": "OSM station nodes inside the pilot box that the baked graph does not include; modes from the line each sits on"
+  },
+  {
+   "name": "Rajghat and Indraprastha power plant feeder lines",
+   "osm": "way/70255390, way/661791150",
+   "at": [
+    28.6276,
+    77.2525
+   ],
+   "variant": "RAIL-DIS",
+   "note": "disused industrial spurs, grass-grown track"
+  }
+ ]
+}
