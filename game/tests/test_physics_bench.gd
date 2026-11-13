@@ -126,8 +126,22 @@ func test_course_has_its_features() -> void:
 	c.build(root)
 	t.ok(c.stats.triangles > 1000 and c.body != null and c.body.get_child_count() == 1, "one collider body from the drawn vertices")
 	t.near(Geo.height_at(c.geo.verts, 40.0, -65.0), Course.KERB, 1e-5, "the square kerb slab")
-	t.near(Geo.height_at(c.geo.verts, Course.FLYOVER_X, -160.0), Course.FLYOVER_H, 0.02, "the flyover deck")
+	var deck_z: float = Course.RAMP_START - Course.RAMP_LEN
+	t.near(Geo.height_at(c.geo.verts, Course.FLYOVER_X, deck_z - 10.0), Course.FLYOVER_H, 0.02, "the flyover deck")
 	t.near(Geo.height_at(c.geo.verts, Course.FLYOVER_X, -100.0), Course.FLYOVER_H * 0.5, 0.01, "half way up the 6 percent ramp")
+	# P1-044: the ramp top is a crest curve, not a kink: the drawn slope changes by under 0.6 percent per 2 m step and
+	# ends level at the deck height
+	var prev := NAN
+	var worst := 0.0
+	var zz := Course.RAMP_START - 70.0
+	while zz > deck_z + 0.5:
+		var g: float = (Geo.height_at(c.geo.verts, Course.FLYOVER_X, zz - 2.0) - Geo.height_at(c.geo.verts, Course.FLYOVER_X, zz)) / 2.0
+		if not is_nan(prev):
+			worst = maxf(worst, absf(g - prev))
+		prev = g
+		zz -= 2.0
+	t.ok(worst < 0.006 and absf(prev) < 0.004, "the crest curve changes the grade by at most %.4f per 2 m and ends level (last %.4f)" % [worst, prev])
+	t.near(Geo.height_at(c.geo.verts, Course.FLYOVER_X, deck_z + 0.2), Course.FLYOVER_H, 0.01, "the ramp meets the deck level")
 	t.near(Geo.height_at(c.geo.verts, -185.0, -(Course.FOOT_STAIRS_S + 0.15)), Course.KERB + Course.RISER, 1e-5, "the first stair")
 	t.near(Geo.height_at(c.geo.verts, -185.0, -(Course.FOOT_STAIRS_S + 3.5)), Course.foot_top_y(), 1e-5, "the landing over ten 0.18 m risers")
 	root.free()

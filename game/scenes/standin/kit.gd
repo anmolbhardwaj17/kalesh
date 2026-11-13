@@ -281,7 +281,8 @@ static func painted_kerb(s: Geo.Sink, z0: float, z1: float, h: float) -> void:
 
 
 ## A car facing -Z, origin on the ground at its centre. Side profile extruded across its width.
-static func car(s: Geo.Sink, col: Color, kind := "hatch") -> void:
+## wheels false leaves the wheels out (the V2 vehicle draws the wheels it steps, vehicle.gd body "hatch" / "sedan").
+static func car(s: Geo.Sink, col: Color, kind := "hatch", wheels := true) -> void:
 	var L := 4.2 if kind != "sedan" else 4.6
 	var W := 1.74
 	var hl := L * 0.5
@@ -310,7 +311,7 @@ static func car(s: Geo.Sink, col: Color, kind := "hatch") -> void:
 	var belt := (top[0] + top[3]) * 0.5
 	for xs in [-1.0, 1.0]:
 		s.rod("paint", col, Vector3(xs * (cw * 0.5 + 0.005), belt.y, belt.x), Vector3(xs * (cw * 0.5 + 0.005), mid.y, mid.x - 0.05), 0.05, Geo.SEG_SMALL)
-	for zf in [-1.0, 1.0]:
+	for zf in ([-1.0, 1.0] if wheels else []):
 		for xs in [-1.0, 1.0]:
 			_wheel(s, Vector3(xs * (W * 0.5 - 0.06), 0.33, zf * (hl - 0.82)), 0.33, 0.22)
 	for xs in [-1.0, 1.0]:

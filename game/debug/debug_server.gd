@@ -306,11 +306,8 @@ func state() -> Dictionary:
 		player = {"pos": [pos.x, pos.y, pos.z], "grounded": grounded}
 		# P1-022: on foot or driving (game/characters/player_mode.gd); a scene with no PlayerMode reports its player
 		var pm := get_tree().get_first_node_in_group("player_mode")
-		player["mode"] = pm.get("mode") if pm != null else ("vehicle" if p.has_method("foot_position") or "model" in p else "foot")
-		if "model" in p:
-			player["heading"] = p.model.heading
-			player["speed"] = p.model.speed
-		elif "heading" in p:
+		player["mode"] = pm.get("mode") if pm != null else ("vehicle" if p.has_method("foot_position") else "foot")
+		if "heading" in p:
 			player["heading"] = p.heading
 			player["speed"] = p.speed
 	var cam := get_viewport().get_camera_3d()

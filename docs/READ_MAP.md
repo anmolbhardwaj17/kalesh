@@ -31,7 +31,7 @@ Notes: `harness/state/knowledge/ui-and-input.md`
 - GAME: "Player verbs", "HUD", "Menus", "Accessibility".
 - HUD: `harness/design/HUD.md` (components, layouts, motion, checkable rules; mockups in `harness/design/hud_mockups/`).
 - STYLE: "UI".
-- Source: the InputMap actions in `game/project.godot`, `game/scripts/car.gd` (input to the car); the HUD under `game/ui/` once added.
+- Source: the InputMap actions in `game/project.godot`, `game/vehicles/drive_input.gd` (input to the vehicle); the HUD under `game/ui/` once added.
 
 ## Assets and ingest
 Notes: `harness/state/knowledge/assets-and-ingest.md`
@@ -44,7 +44,7 @@ Notes: `harness/state/knowledge/driving-and-camera.md`
 - ARCH: "Systems" (Driving), "Target module map" (rows `core/`, `vehicles/`, `camera/`).
 - TECH: "Main loop and time (C1)", "Coordinates (binding, owner 2026-11-10)", "Vehicles (V2)", "Performance budgets" (CPU rows physics and vehicles).
 - GAME: "Movement and camera feel".
-- Source: the V2 vehicle `game/vehicles/` (`vehicle.gd`, `drive_input.gd`, `tyre_model.gd`, `vehicle_tune.gd`), tunes `game/data/vehicles/` (`car.tres`; P1-021 `auto.tres`, `scooter.tres`, `patrol_car.tres`; the auto and scooter bodies are the stand-in kit's `driven_auto` and `ridden_scooter`, `game/scenes/standin/kit.gd`), the chase camera `game/camera/chase_camera.gd` (the on-foot camera `on_foot_camera.gd` and getting in and out, `game/characters/player_mode.gd`: P1-022, area Characters), the test course `game/scenes/course/` (scene id `course`), the probes `game/debug/vehicle_probe.gd` (hook `vehicle`), tests `game/tests/test_vehicle.gd`, scenario scripts `harness/verify/scripts/car_*.js` and `chase_cam_floor.js` (P1-020; its step data `harness/data/fixtures/vehicle_<id>.json` picks the vehicle), `auto_*.js` and `scooter_*.js` (P1-021). The kinematic `game/scripts/car_model.gd`, `car.gd` and `chase_camera.gd` (with `test_car.gd`) remain only for the look stand-in scenes. Bench versions of the clock, both vehicle options, the walker with its step-up and the colliders: `game/bench/physics/` (P0-017, `--arch=physics`; results in decisions_archive.md "Physics bench results (P0-017)").
+- Source: the V2 vehicle `game/vehicles/` (`vehicle.gd`, `drive_input.gd`, `tyre_model.gd`, `vehicle_tune.gd`), tunes `game/data/vehicles/` (`car.tres`; P1-021 `auto.tres`, `scooter.tres`, `patrol_car.tres`; the auto and scooter bodies are the stand-in kit's `driven_auto` and `ridden_scooter`, `game/scenes/standin/kit.gd`), the chase camera `game/camera/chase_camera.gd` (the on-foot camera `on_foot_camera.gd` and getting in and out, `game/characters/player_mode.gd`: P1-022, area Characters), the test course `game/scenes/course/` (scene id `course`), the probes `game/debug/vehicle_probe.gd` (hook `vehicle`), tests `game/tests/test_vehicle.gd`, scenario scripts `harness/verify/scripts/car_*.js` and `chase_cam_floor.js` (P1-020; its step data `harness/data/fixtures/vehicle_<id>.json` picks the vehicle), `auto_*.js` and `scooter_*.js` (P1-021). The look stand-in scenes drive the same V2 car (car tune, kit `hatch` body) and chase camera since P1-044; the old kinematic car is gone. Bench versions of the clock, both vehicle options, the walker with its step-up and the colliders: `game/bench/physics/` (P0-017, `--arch=physics`; results in decisions_archive.md "Physics bench results (P0-017)").
 
 ## World, map data and bake
 Notes: `harness/state/knowledge/world-and-map.md`

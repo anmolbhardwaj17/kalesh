@@ -21,6 +21,8 @@ const KitGeo := preload("res://scenes/standin/geo.gd")
 const MASK := 7
 const SETTLE_REACH := 60.0
 const SETTLE_UP := 2.5
+## Where the kit car bodies (Kit.car, width 1.74 m) put a wheel centre across: the drawn wheel sits there.
+const KIT_WHEEL_X := 0.81
 
 @export var tune_path := "res://data/vehicles/car.tres"
 ## The player's vehicle reads the InputMap actions and joins the group "player"; others take controls().
@@ -175,8 +177,10 @@ func setup(t: Tune) -> void:
 		var pivot := Node3D.new()
 		pivot.name = "Wheel%d" % i
 		pivot.position = _hard[i] - Vector3(0, t.rest, 0) - _lean_node.position
-		# the drawn wheel stands just proud of the body side (the physics hardpoint stays where the tune puts it)
-		var outward := signf(_hard[i].x) * maxf(0.0, t.box_half.x - t.wheel_width * 0.5 - absf(_hard[i].x) + 0.025)
+		# the drawn wheel stands just proud of the body side (the physics hardpoint stays where the tune puts it); under
+		# a kit car body, where the kit draws its own wheels (their centre KIT_WHEEL_X out)
+		var side_x := KIT_WHEEL_X if _kit_car(t) else t.box_half.x - t.wheel_width * 0.5 + 0.025
+		var outward := signf(_hard[i].x) * maxf(0.0, side_x - absf(_hard[i].x))
 		var wm := MeshInstance3D.new()
 		var cyl := CylinderMesh.new()
 		cyl.top_radius = t.radius
@@ -201,16 +205,18 @@ func setup(t: Tune) -> void:
 	_query.collision_mask = 1
 
 
-## The stand-in body: the kit's auto or scooter (origin on the ground, so it sits on the Lean node), or a plain body
-## over the collision box with a cabin set back from the bonnet.
+## The stand-in body: the kit's auto, scooter, hatch or sedan (origin on the ground, so it sits on the Lean node; the
+## cars without their own wheels), or a plain body over the collision box with a cabin set back from the bonnet.
 func _build_body(t: Tune) -> void:
 	var col := body_color if body_color.a > 0.0 else t.paint
-	if t.body == "auto" or t.body == "scooter":
+	if t.body == "auto" or t.body == "scooter" or _kit_car(t):
 		var sink := KitGeo.Sink.new()
 		if t.body == "auto":
 			Kit.driven_auto(sink)
-		else:
+		elif t.body == "scooter":
 			Kit.ridden_scooter(sink, col)
+		else:
+			Kit.car(sink, col, t.body, false)
 		var km := MeshInstance3D.new()
 		km.name = "Body"
 		km.mesh = sink.to_mesh(Kit.materials())
@@ -243,6 +249,10 @@ func _build_body(t: Tune) -> void:
 	cabin.mesh = cm
 	cabin.position = Vector3(0, bottom + lower_h + cab_h * 0.5, h.z * 0.12) - _lean_node.position
 	_lean_node.add_child(cabin)
+
+
+static func _kit_car(t: Tune) -> bool:
+	return t.body == "hatch" or t.body == "sedan"
 
 
 ## Staging: stands the vehicle on the ground at x, z (ground_y, or `y` when given), facing a compass heading, at rest.

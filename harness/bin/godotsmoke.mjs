@@ -80,7 +80,8 @@ async function debugRun() {
   check('snapshots arrive after drawn frames', c.snapshots > 0, `${c.snapshots} so far`);
 
   const st = await call('state()', 'state');
-  check('state shape', typeof st.scene === 'string' && st.scene === 'scaffold' && isVec3(st.player?.pos) && st.milestone === null, `scene ${st.scene}`);
+  // the game boots into the streamed city (P1-024)
+  check('state shape', typeof st.scene === 'string' && st.scene === 'city' && isVec3(st.player?.pos) && st.milestone === null && st.world != null, `scene ${st.scene}`);
   check('--verify hides the debug overlay', st.debugOverlay === false);
 
   const ck = await call('clock()', 'clock');

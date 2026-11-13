@@ -13,8 +13,11 @@ extends RefCounted
 const Geo := preload("res://scenes/standin/geo.gd")
 const Kit := preload("res://scenes/standin/kit.gd")
 const Landmarks := preload("res://scenes/standin/landmarks.gd")
-const CarScript := preload("res://scripts/car.gd")
-const ChaseCamera := preload("res://scripts/chase_camera.gd")
+const Vehicle := preload("res://vehicles/vehicle.gd")
+const ChaseCamera := preload("res://camera/chase_camera.gd")
+## The player's car: the V2 car tune with the kit hatch body in the stand-in yellow (P1-044).
+const CAR_TUNE := "res://data/vehicles/car.tres"
+const CAR_PAINT := Color("#d4a017")
 const Hud := preload("res://ui/standin_hud.gd")
 
 ## Main road cross section (x, metres): lanes of 3.5 m, median 1.2 m.
@@ -199,29 +202,27 @@ func _light(s: Geo.Sink, p: Vector3, yaw: float, h := 9.0, double := false) -> v
 	stats.lights += 1
 
 
-## The player car (car.gd on the sim tick), its smooth stand-in body, the chase camera and the HUD stand-in.
+## The player car (the V2 vehicle, vehicles/vehicle.gd, with the kit hatch body), the chase camera
+## (camera/chase_camera.gd) and the HUD stand-in. p is the ground point under the car.
 func _player(p: Vector3, heading := 0.0) -> void:
-	var car := Node3D.new()
+	var tune: Resource = (load(CAR_TUNE) as Resource).duplicate()
+	tune.set("body", "hatch")
+	tune.set("paint", CAR_PAINT)
+	var car: RigidBody3D = Vehicle.new()
 	car.name = "Car"
-	car.set_script(CarScript)
+	car.setup(tune)
 	car.position = p
 	car.rotation = Vector3(0, -heading, 0)
-	var s := Geo.Sink.new()
-	Kit.car(s, Color("#d4a017"), "hatch")
-	var mi := MeshInstance3D.new()
-	mi.name = "Body"
-	mi.mesh = s.to_mesh(mats)
-	car.add_child(mi)
 	root.add_child(car)
 	var cam := Camera3D.new()
 	cam.name = "ChaseCamera"
 	cam.set_script(ChaseCamera)
-	cam.fov = 65.0
 	cam.near = 0.1
 	cam.far = 1500.0
 	cam.set("target_path", NodePath("../Car"))
-	cam.set("back", 7.5)
-	cam.set("height", 3.0)
+	# the debug camera of the look shots copies the game camera's FOV: keep the old stand-in camera's 65 degrees, so
+	# the fixed-pose look views frame exactly as approved (the game's chase camera starts at 70)
+	cam.set("base_fov", 65.0)
 	root.add_child(cam)
 	var hud := CanvasLayer.new()
 	hud.name = "Hud"
@@ -241,10 +242,21 @@ func _character(p: Vector3, yaw: float) -> void:
 	stats.characters += 1
 
 
+## The ground mesh, and one flat collider (layer 1, top at the road top y = 0) for the V2 car's wheel rays and the chase
+## camera's floor. The kerbs, medians, buildings and props have no colliders (look scenes, not driving tests).
 func _ground(color: Color, size := 4000.0) -> void:
 	var s := Geo.Sink.new()
 	s.box("road", color, Vector3(0, -0.19, 0), Vector3(size, 0.3, size))
 	_commit(s, "Ground")
+	var body := StaticBody3D.new()
+	body.name = "GroundCollider"
+	var cs := CollisionShape3D.new()
+	var box := BoxShape3D.new()
+	box.size = Vector3(size, 1.0, size)
+	cs.shape = box
+	cs.position = Vector3(0, ROAD_TOP - 0.5, 0)
+	body.add_child(cs)
+	root.add_child(body)
 
 
 # ------------------------------------------------------------------ street

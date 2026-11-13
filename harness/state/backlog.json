@@ -1,6 +1,6 @@
 {
   "_doc": "Written only by node harness/bin/task.mjs. Phases run in order; P0 (ADOPT + STYLE DISCOVERY) waits for the owner by design and needs task.mjs signoff and task.mjs archsignoff before its gate passes. Later phases are added by the planner at the end of P0 (task.mjs phase-add) from the game's real state.",
-  "updated": "2026-11-13T13:41:38.049Z",
+  "updated": "2026-11-13T14:12:17.674Z",
   "phases": [
     {
       "id": "P0",
@@ -3712,10 +3712,14 @@
       "agent": "builder",
       "priority": 3,
       "kind": "followup",
-      "status": "todo",
-      "attempts": 0,
+      "status": "done",
+      "attempts": 1,
       "notes": [],
-      "created": "2026-11-13T04:46:36.115Z"
+      "created": "2026-11-13T04:46:36.115Z",
+      "started": "2026-11-13T13:42:17.131Z",
+      "done": "2026-11-13T14:12:17.595Z",
+      "summary": "Stand-in scenes run the V2 car (tune body hatch) and the chase camera on a flat collider; old car.gd, car_model.gd, old chase_camera.gd and test_car.gd removed. Course ramp has a 40 m crest curve: car_flyover 100% wheels down at 99.7 km/h. Look proof: only car_closeup and hud_play changed (re-approved), the other 7 views mean 0.00 to 0.02. Verified: typecheck, 836 vitest, 120 Godot tests, quick 24/24 OK.",
+      "commit": "d16eef8"
     },
     {
       "id": "P14-004",
@@ -4099,10 +4103,14 @@
       "agent": "builder",
       "priority": 3,
       "kind": "bug",
-      "status": "todo",
-      "attempts": 0,
+      "status": "done",
+      "attempts": 1,
       "notes": [],
-      "created": "2026-11-13T12:23:30.141Z"
+      "created": "2026-11-13T12:23:30.141Z",
+      "started": "2026-11-13T13:42:17.181Z",
+      "done": "2026-11-13T14:12:17.655Z",
+      "summary": "Cause: a hold landing after a tick let that tick's physics step move the V2 car 4.8 cm after paused read true. SimClock.held() (paused and physics server stopped) now feeds state(), hold() and snapshots; the state shape check expects the city boot scene. godotsmoke 42/42.",
+      "commit": "d16eef8"
     },
     {
       "id": "P1-049",
