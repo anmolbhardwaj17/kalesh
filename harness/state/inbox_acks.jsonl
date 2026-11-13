@@ -193,3 +193,4 @@
 {"id":"mmwfdr9vi","ts":"2026-11-13T19:39:05.099Z","reply":"Switched: one builder keeps building while a verifier checks the last finished task on a frozen copy. Starts once the two running tasks report.","tasks":[]}
 {"id":"mmwfdsqwh","ts":"2026-11-13T19:40:13.857Z","reply":"Done: the verifier runs only for tasks that change what you see or play, and at phase gates. Map, tooling, data, research and content are checked by me with tests, at no agent cost.","tasks":[]}
 {"id":"mmwfdv3me","ts":"2026-11-13T19:42:03.655Z","reply":"Done: two builders and up to two verifiers in parallel until Tuesday, and the Fable limit is raised from 25 to 40 (21 used).","tasks":[]}
+{"id":"mmwfdy3cl","ts":"2026-11-13T19:44:41.054Z","reply":"It is a problem, not the style. The clips are played about twice their natural speed and there are no starts, stops, turns or foot placement. New task P2-041 (priority 1) fixes the movement to feel grounded like a real game.","tasks":["P2-041"]}

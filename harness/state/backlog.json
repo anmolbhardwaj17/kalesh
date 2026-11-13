@@ -1,6 +1,6 @@
 {
   "_doc": "Written only by node harness/bin/task.mjs. Phases run in order; P0 (ADOPT + STYLE DISCOVERY) waits for the owner by design and needs task.mjs signoff and task.mjs archsignoff before its gate passes. Later phases are added by the planner at the end of P0 (task.mjs phase-add) from the game's real state.",
-  "updated": "2026-11-13T18:13:24.304Z",
+  "updated": "2026-11-13T19:44:33.896Z",
   "phases": [
     {
       "id": "P0",
@@ -4195,6 +4195,29 @@
       "attempts": 0,
       "notes": [],
       "created": "2026-11-13T12:42:19.962Z"
+    },
+    {
+      "id": "P2-041",
+      "phase": "P2",
+      "title": "On-foot movement that feels like a real game, not cartoonish",
+      "desc": "Anmol 2026-11-14: running feels cartoonish, not like a real game. Cause (P1-023): the free CC0 clips are slower than the game's speeds, so walk plays at 1.86x and sprint at 1.95x (quick, bouncy cadence); no starts, stops or turn animations; no lean, no foot placement; the body snaps between states. Target: grounded, weighty, filmi but never cheap (STYLE_BIBLE 'snappy and weighty', reference feel of GTA V and Watch Dogs 2 third person). Build: (1) locomotion clips whose stride matches the game speeds so playback stays within 0.9 to 1.15x (other CC0 sets, retargeted and stride-measured; or adjust walk, jog and sprint speeds within GAME.md ranges to the clips' natural cadence, with a decision line); (2) a speed and direction blend space instead of hard state switches, with start, stop and plant-and-turn clips; (3) acceleration and deceleration curves on the character so speed does not jump; (4) lean into turns and slight forward lean at sprint, head look toward the camera direction; (5) foot IK on kerbs, stairs and slopes; (6) a subtle camera follow lag and sprint shake that never jitters. Never ask Anmol for animation files.",
+      "accept": [
+        "Playback rate of walk, jog and sprint between 0.9 and 1.15 (printed)",
+        "Foot slide under 5 percent at walk, jog and sprint",
+        "Start, stop and 180 degree turn each blend without a pop (frame-to-frame bone change under a set limit, test)",
+        "Feet on kerbs and stairs within 3 cm of the surface (IK test)",
+        "A verifier reads a frame strip of a run, start, stop and turn at the play camera and judges it grounded, not bouncy or cartoonish",
+        "Cost per character still 0.05 ms or less; typecheck, npm test and verify --quick green"
+      ],
+      "deps": [],
+      "agent": "builder",
+      "priority": 1,
+      "kind": "mentor",
+      "status": "todo",
+      "attempts": 0,
+      "notes": [],
+      "created": "2026-11-13T19:44:33.896Z",
+      "model": "fable"
     }
   ]
 }

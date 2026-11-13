@@ -507,3 +507,5 @@ One line per event, written by task.mjs (start, done, fail, phase changes, inbox
 - 2026-11-14 01:09 mentor message mmwfdr9vi handled: Switched: one builder keeps building while a verifier checks the last finished task on a frozen copy. Starts once the two running tasks report.
 - 2026-11-14 01:10 mentor message mmwfdsqwh handled: Done: the verifier runs only for tasks that change what you see or play, and at phase gates. Map, tooling, data, research and content are checked by me with tests, at no agent cost.
 - 2026-11-14 01:12 mentor message mmwfdv3me handled: Done: two builders and up to two verifiers in parallel until Tuesday, and the Fable limit is raised from 25 to 40 (21 used).
+- 2026-11-14 01:14 [P2-041] added: On-foot movement that feels like a real game, not cartoonish
+- 2026-11-14 01:14 mentor message mmwfdy3cl handled: It is a problem, not the style. The clips are played about twice their natural speed and there are no starts, stops, turns or foot placement. New task P2-041 (priority 1) fixes the movement to feel grounded like a real game.

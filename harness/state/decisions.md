@@ -428,3 +428,6 @@ Anmol chose "Yes: builder + verifier side by side". Decision: one builder always
 
 ## 2026-11-14 Two builders and two verifiers until Tuesday; Fable limit 40 (Anmol)
 Anmol: run 2 builders and 2 verifiers in parallel until Tuesday 2026-11-17 (limits reset Friday), and more Fable quota. Decision: CLAUDE.md Modes gets TWO BUILDERS AND TWO VERIFIERS until 2026-11-17 (map lane back on, second lane may take non-overlapping tasks), verifiers still only where they earn their cost; fable_budget.json limit 25 to 40. Low usage mode stays on for check depth. Why: his words; more throughput while the limit allows.
+
+## 2026-11-14 On-foot movement must feel like a real game (Anmol)
+Anmol: running feels cartoonish. It is a problem, not the style: the signed style is stylised real proportions with weighty, filmi motion. Cause: CC0 clips sped up 1.86 to 1.95x, no starts, stops, turns, lean or foot IK. Decision: P2-041, priority 1, Fable (animation core): stride-matched clips, blend space, start and stop clips, acceleration curves, lean, foot IK, camera follow; verifier judges a frame strip.
