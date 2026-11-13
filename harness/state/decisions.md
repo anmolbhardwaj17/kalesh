@@ -358,3 +358,6 @@ New task for car tunnels with real depth, portals, walls and lights (map lane, P
 
 ## 2026-11-13 Infrastructure built from Delhi references, one quality bar (Anmol)
 Anmol: everything must feel good and consistent; take references for tunnels, bridges, flyovers, underpasses, metro and rail, by variety and area. Decision: STYLE_BIBLE.md Infrastructure section; P2-033 references and variant map (priority 1), P2-034 structure kits applied by variant (priority 1); P2-019, P2-031, P2-032 build on them; core knowledge line: no basic structure counts as finished. Why: a city where buildings, tunnels and bridges look like different games breaks the look.
+
+## 2026-11-13 Gap audit: things Anmol did not name (Anmol asked)
+Anmol: find what he is missing and add it. Added: road surfaces and markings (P2-035), street furniture and signage (P2-036), trees and greenery (P2-037), plot edges and lived-in ground (P2-038), world edge and skyline (P2-039), moving metro and railway trains (P3-006), the night city look (P3-007), and a standing pilot look audit before each gate that adds map or look work (P2-040). Why: the city should look finished everywhere, not only where he points.

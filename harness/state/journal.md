@@ -465,3 +465,5 @@ One line per event, written by task.mjs (start, done, fail, phase changes, inbox
 - 2026-11-13 17:23 [P2-033] added: Delhi infrastructure references: tunnels, underpasses, flyovers, bridges, metro and rail by area
 - 2026-11-13 17:23 [P2-034] added: Infrastructure kits in stylised B: flyovers, bridges, viaducts, rail, applied by variant
 - 2026-11-13 17:23 mentor message mmwex3jhw handled: Understood, no more basic. STYLE_BIBLE now has an infrastructure section; P2-033 collects Delhi references for every tunnel, underpass, flyover, bridge, metro and rail variety by area, and P2-034 builds kits from them so everything matches the buildings. Every structure task needs a side by side with a real photo.
+- 2026-11-13 17:24 added 8 tasks: P2-035, P2-036, P2-037, P2-038, P2-039, P3-006, P3-007, P2-040
+- 2026-11-13 17:24 mentor message mmwex4ysd handled: Added 8 things you had not named: road markings and wear, street furniture and signs, trees by area, walls and parking and roadworks, a skyline at the world edge, moving metro and trains, the night look, and a look audit before each gate that hunts for anything still basic.
