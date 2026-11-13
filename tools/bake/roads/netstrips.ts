@@ -56,8 +56,8 @@ export function buildStrips(c: NetCtx, z: ZonePhase): StripPhase {
     built.set(plan.edge.index, { first, last: strips.length - 1, startLanes: es.startLanes, endLanes: es.endLanes });
     // a taper too short for its class: the road takes the lane count it would have tapered to, in the next round
     for (const [att, s, atStart] of [[plan.startAttach, es.strips[0], true], [plan.endAttach, es.strips[es.strips.length - 1], false]] as const) {
-      if (!att?.target || !s || s.kind !== 'taper' || !s.taper || isHero(plan.edge.index)) continue;
-      const need = classDefaults(s.cls).taper * s.taper.shift;
+      if (!att?.target || att.width || !s || s.kind !== 'taper' || !s.taper || isHero(plan.edge.index)) continue;
+      const need = (s.taper.ratio ?? (att.own ? classDefaults(s.cls).taper : classDefaults(s.cls).slip)) * s.taper.shift;
       const r = info(plan.edge.index);
       if (s.taper.length >= need * 0.98 - 0.05 || r.from === 'width' || r.gali) continue;
       const want = driveCount(att.target.cs);

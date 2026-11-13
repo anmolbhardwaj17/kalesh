@@ -20,16 +20,19 @@ import type { HeroSpec } from './hero.ts';
 import type { CrossSection } from './model.ts';
 import { planClusters } from './netclusters.ts';
 import { MAX_ROUNDS } from './netctx.ts';
-import type { LaneBuild, LaneModelInput, NetCtx } from './netctx.ts';
+import type { LaneBuild, LaneModelInput, NetCtx, WidthTaper } from './netctx.ts';
+import { WIDTH_ROUNDS, planWidthFixes } from './netwidths.ts';
 import { buildPaths, buildStrips } from './netstrips.ts';
 import { planWidenings, planZones } from './netzones.ts';
 import { driveCount } from './street.ts';
+import type { WidthFixed } from './street.ts';
 
 export { CLUSTER_GAP_M } from './netctx.ts';
 export type { EndKind, ExplainedEnd, LaneArm, LaneBuild, LaneJunction, LaneModelInput, LanePath } from './netctx.ts';
 
 interface Attempt {
   build: LaneBuild;
+  ctx: NetCtx;
   retry: boolean;
 }
 
@@ -39,15 +42,37 @@ export function buildLaneModel(input: LaneModelInput): LaneBuild {
   const graphMs = Date.now() - t0;
   const fixed = new Map<string, number>();
   const noZone = new Set<number>();
+  const widthFixed = new Map<string, WidthFixed>();
+  const widthTapers = new Map<string, WidthTaper>();
+  const widthBlocked = new Set<string>();
+  const widthSettles = new Map<string, number>();
   let last: Attempt | null = null;
   let rounds = 0;
-  while (rounds < MAX_ROUNDS) {
+  let retries = 0;
+  let widthRounds = 0;
+  let left = 0;
+  for (;;) {
     rounds++;
-    last = attempt(input, road, fixed, noZone);
-    if (!last.retry) break;
+    last = attempt(input, road, fixed, noZone, widthFixed, widthTapers, widthBlocked, widthSettles);
+    // a fit round (a taper too short, a split built as a junction): at most MAX_ROUNDS builds in all for them
+    if (last.retry && retries < MAX_ROUNDS - 1) {
+      retries++;
+      continue;
+    }
+    // width continuity (P1-046): steps across junctions ask for tapers or whole sections, and the model is built again
+    if (widthRounds >= WIDTH_ROUNDS || input.widthContinuity === false) break;
+    const w = planWidthFixes(last.ctx, last.build, widthRounds >= WIDTH_ROUNDS - 4);
+    left = w.left;
+    if (!w.changed) break;
+    widthRounds++;
   }
   const build = (last as Attempt).build;
   build.rounds = rounds;
+  build.widthFixes = {
+    tapers: [...widthTapers.keys()].sort().map((k) => widthTapers.get(k) as WidthTaper),
+    whole: [...widthFixed.keys()].sort().map((k) => ({ edge: k, ...(widthFixed.get(k) as WidthFixed) })),
+    rounds: widthRounds, left,
+  };
   build.ms['graph'] = graphMs;
   build.ms['total'] = Date.now() - t0;
   const fitted = new Map(fixed);
@@ -72,7 +97,7 @@ export function buildLaneModel(input: LaneModelInput): LaneBuild {
   return build;
 }
 
-function context(input: LaneModelInput, road: RoadGraph, fixed: Map<string, number>, noZone: Set<number>): NetCtx {
+function context(input: LaneModelInput, road: RoadGraph, fixed: Map<string, number>, noZone: Set<number>, widthFixed: Map<string, WidthFixed>, widthTapers: Map<string, WidthTaper>, widthBlocked: Set<string>, widthSettles: Map<string, number>): NetCtx {
   const heroes = input.heroes ?? [];
   const heroOf = (e: GraphEdge): HeroSpec | null => {
     for (const h of heroes) if (e.pieces.every((p) => h.covers.osmWays.includes(Number(p.way.replace('way/', ''))))) return h;
@@ -81,11 +106,11 @@ function context(input: LaneModelInput, road: RoadGraph, fixed: Map<string, numb
   const heroBy = road.source.map(heroOf);
   return {
     input, road, graph: road.graph, source: road.source, nodeId: road.nodeId, nodeKind: road.nodeKind, heroes, heroBy, isHero: (i) => heroBy[i] !== null,
-    indexOf: new Map(road.source.map((e, i) => [e.id, i])), fixed, noZone, problems: [], step: input.step ?? 4,
+    indexOf: new Map(road.source.map((e, i) => [e.id, i])), fixed, noZone, widthFixed, widthTapers, widthBlocked, widthSettles, problems: [], step: input.step ?? 4,
   };
 }
 
-function attempt(input: LaneModelInput, road: RoadGraph, fixed: Map<string, number>, noZone: Set<number>): Attempt {
+function attempt(input: LaneModelInput, road: RoadGraph, fixed: Map<string, number>, noZone: Set<number>, widthFixed: Map<string, WidthFixed>, widthTapers: Map<string, WidthTaper>, widthBlocked: Set<string>, widthSettles: Map<string, number>): Attempt {
   const ms: Record<string, number> = {};
   let clock = Date.now();
   const lap = (name: string): void => {
@@ -93,7 +118,7 @@ function attempt(input: LaneModelInput, road: RoadGraph, fixed: Map<string, numb
     ms[name] = (ms[name] ?? 0) + now - clock;
     clock = now;
   };
-  const c = context(input, road, fixed, noZone);
+  const c = context(input, road, fixed, noZone, widthFixed, widthTapers, widthBlocked, widthSettles);
   const z = planZones(c);
   lap('zones');
   const widenings = planWidenings(c, z);
@@ -101,11 +126,12 @@ function attempt(input: LaneModelInput, road: RoadGraph, fixed: Map<string, numb
   lap('junctions');
   const base = {
     road, plans: z.plans, streets: z.streets, zones: z.zones, forks: z.forks, widenings, fitted: [], problems: c.problems, rounds: 0, ms,
-    edgeTrims: { strips: 0, stations: 0, areaM2: 0, rounds: 0 }, endClips: { ends: 0, stations: 0, metres: 0 },
+    edgeTrims: { strips: 0, stations: 0, areaM2: 0, rounds: 0 }, endClips: { ends: 0, stations: 0, metres: 0 }, widthFixes: { tapers: [], whole: [], rounds: 0, left: 0 },
   };
   if (cl.retry) {
     return {
       build: { ...base, strips: [], joints: [], zoneStrips: [], junctions: [], junctionPlans: [], ends: [], internal: [], tightPaths: [], turns: { uTurnsTooTight: 0, restricted: 0, droppedForRadius: 0, tight: 0 }, built: new Map() },
+      ctx: c,
       retry: true,
     };
   }
@@ -116,6 +142,7 @@ function attempt(input: LaneModelInput, road: RoadGraph, fixed: Map<string, numb
   const internal = [...cl.absorbed].sort((a, b) => a[0] - b[0]).map(([i, why]) => ({ edge: (road.source[i] as GraphEdge).id, why }));
   return {
     build: { ...base, strips: sp.strips, joints: sp.joints, zoneStrips: sp.zoneStrips, built: sp.built, internal, ...pp },
+    ctx: c,
     retry: sp.retry,
   };
 }
@@ -148,7 +175,7 @@ function roundModel(b: LaneBuild): void {
       st.nz = r6(st.nz);
       st.b = st.b.map(r3);
     }
-    if (s.taper) s.taper = { length: r3(s.taper.length), shift: r3(s.taper.shift), needed: r3(s.taper.needed) };
+    if (s.taper) s.taper = { length: r3(s.taper.length), shift: r3(s.taper.shift), needed: r3(s.taper.needed), ...(s.taper.ratio !== undefined ? { ratio: s.taper.ratio } : {}) };
   }
   for (const z of b.zones) {
     z.dNose = r3(z.dNose);

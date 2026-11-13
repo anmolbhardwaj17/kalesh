@@ -1,11 +1,11 @@
-// The six gate counts of MAP_REPAIR.md "Verification" with their items, and the entries that explain the ones left
+// The seven gate counts of MAP_REPAIR.md "Verification" with their items, and the entries that explain the ones left
 // (P1-017): open boundary ports, floating ends, unjoined ends, overlapping road faces, broken lane continuity and
-// tapers out of limits must each be 0, or every item must be explained, by the model itself (a taper that only
+// tapers out of limits and road width steps (P1-046) must each be 0, or every item must be explained, by the model itself (a taper that only
 // changes lane widths) or by an entry of harness/data/gate_explanations.json naming the task that owns it. An item no
 // entry explains stops the bake before tiles are written (invariant GATES-01). Pure; the driver reads the file.
 import type { InvariantResult } from './health.ts';
 
-export const GATE_ORDER = ['openPorts', 'floatingEnds', 'unjoinedEnds', 'overlappingRoadFaces', 'laneContinuityBreaks', 'tapersOutOfLimits'] as const;
+export const GATE_ORDER = ['openPorts', 'floatingEnds', 'unjoinedEnds', 'overlappingRoadFaces', 'laneContinuityBreaks', 'tapersOutOfLimits', 'widthSteps'] as const;
 export type GateKey = (typeof GATE_ORDER)[number];
 
 /** One thing a gate counts: a strip end, a map edge node, a pair of faces. `id` is stable across bakes of the same pinned data. */

@@ -258,7 +258,7 @@ export interface RepairRecord {
   laneFeedback?: { rounds: { overlapM2: number; pairs: number; conflicts: number; skipped: Record<string, number> }[]; conflicts: number };
 }
 
-export const GATE_KEYS = ['openPorts', 'floatingEnds', 'unjoinedEnds', 'overlappingRoadFaces', 'laneContinuityBreaks', 'tapersOutOfLimits'] as const;
+export const GATE_KEYS = ['openPorts', 'floatingEnds', 'unjoinedEnds', 'overlappingRoadFaces', 'laneContinuityBreaks', 'tapersOutOfLimits', 'widthSteps'] as const;
 
 export function emptyHealth(stage: string, block: string, outline: HealthReport['outline']): HealthReport {
   const gates: Record<string, number | null> = {};

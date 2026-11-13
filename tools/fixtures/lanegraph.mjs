@@ -107,3 +107,25 @@ export function thin(all, tol = 0.25) {
   keep.push(all[all.length - 1]);
   return keep.map((q) => q.map((v) => Math.round(v * 1000) / 1000));
 }
+
+/**
+ * The lane nearest (x, z) that a route from piece `from` reaches, with that route (P1-046: a lane a taper adds or drops
+ * at a junction lies nearest a target but no lane chain leads into it). Candidates are tried nearest first, within
+ * `slackM` of the nearest one.
+ */
+export function nearestReachable(pieces, from, x, z, { slackM = 12, accept = null, maxM = 400 } = {}) {
+  const cands = [];
+  for (const p of pieces.values()) {
+    if (accept ? !accept(p) : (p.layer !== 0 || p.kind !== 'lane' || p.len < 8 || (SMALL[p.cls] || 1) > 2.5)) continue;
+    let d = Infinity;
+    for (const q of p.pts) d = Math.min(d, Math.hypot(q[0] - x, q[2] - z));
+    if (d < maxM) cands.push({ id: p.id, d });
+  }
+  cands.sort((a, b) => a.d - b.d || (a.id < b.id ? -1 : 1));
+  for (const c of cands) {
+    if (c.d > (cands[0]?.d ?? 0) + slackM) break;
+    const leg = c.id === from ? [from] : route(pieces, from, c.id);
+    if (leg) return { id: c.id, d: c.d, leg };
+  }
+  return null;
+}

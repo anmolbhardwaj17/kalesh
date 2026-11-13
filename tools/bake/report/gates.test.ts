@@ -2,7 +2,7 @@ import { describe, expect, it } from 'vitest';
 import { explainGates, gateInvariant, gateLog, itemMatches } from './gates.ts';
 import type { GateItem, GateKey } from './gates.ts';
 
-const empty = (): Record<GateKey, GateItem[]> => ({ openPorts: [], floatingEnds: [], unjoinedEnds: [], overlappingRoadFaces: [], laneContinuityBreaks: [], tapersOutOfLimits: [] });
+const empty = (): Record<GateKey, GateItem[]> => ({ openPorts: [], floatingEnds: [], unjoinedEnds: [], overlappingRoadFaces: [], laneContinuityBreaks: [], tapersOutOfLimits: [], widthSteps: [] });
 const item = (id: string, kind = 'x', why?: string): GateItem => ({ id, kind, name: id, detail: `item ${id}`, ...(why ? { why } : {}) });
 
 describe('gate explanations (P1-017)', () => {

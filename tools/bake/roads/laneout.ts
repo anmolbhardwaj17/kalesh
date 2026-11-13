@@ -35,6 +35,8 @@ export interface LaneModelFile {
   widenings: LaneBuild['widenings'];
   fitted: LaneBuild['fitted'];
   tightPaths: LaneBuild['tightPaths'];
+  /** What the width step settled (P1-046): tapers at junction ends and whole edges. */
+  widthFixes: LaneBuild['widthFixes'];
 }
 
 /** The lane model as plain data. Strips keep their order: joints, zones and junctions name them by number. */
@@ -54,7 +56,7 @@ export function laneModelFile(b: LaneBuild, block: string, stage: string): LaneM
     })),
     joints: b.joints,
     zones: b.zones.map((z, i) => ({ strip: b.zoneStrips[i] as number, node: b.road.nodeId[z.node] as string, kind: z.kind, paintedNoseM: z.dPainted, noseM: z.dNose, parent: at(z.parent), left: at(z.left), right: at(z.right), ...(z.mid ? { mid: at(z.mid) } : {}) })),
-    junctions: b.junctions, ends: b.ends, internal: b.internal, forks: b.forks, widenings: b.widenings, fitted: b.fitted, tightPaths: b.tightPaths,
+    junctions: b.junctions, ends: b.ends, internal: b.internal, forks: b.forks, widenings: b.widenings, fitted: b.fitted, tightPaths: b.tightPaths, widthFixes: b.widthFixes,
   };
 }
 
@@ -171,6 +173,39 @@ export function laneGraph(b: LaneBuild, block: string, offset: P2): LaneGraphFil
       if (arm) follow(p.from[0], p.from[1], arm.end, id);
     });
   });
+  // a lane that tapers to nothing (a lane drop at a junction or before a zone, P1-046) runs on into the lane beside it:
+  // it takes that lane's successors; a lane that opens from nothing is reached from that lane's predecessors
+  const preds = new Map<string, string[]>();
+  for (const l of lanes) for (const n of l.next) (preds.get(n) ?? preds.set(n, []).get(n) as string[]).push(l.id);
+  b.strips.forEach((s, si) => {
+    const first = s.st[0] as Station;
+    const last = s.st[s.st.length - 1] as Station;
+    const width = (st: Station, k: number): number => (st.b[k] as number) - (st.b[k + 1] as number);
+    s.lanes.forEach((l, k) => {
+      if (l.type !== 'drive' || l.dir === 0) return;
+      const own = lanes[index.get(laneName(si, k)) as number] as GraphLane;
+      const out = l.dir === 1 ? last : first;
+      const into = l.dir === 1 ? first : last;
+      const beside = (st: Station): GraphLane | null => {
+        for (const n of [k - 1, k + 1]) {
+          const m = s.lanes[n];
+          if (m && m.type === 'drive' && m.dir === l.dir && width(st, n) > 0.05) return lanes[index.get(laneName(si, n)) as number] as GraphLane;
+        }
+        return null;
+      };
+      if (width(out, k) < 0.05 && own.next.length === 0) {
+        const nb = beside(out);
+        if (nb) own.next.push(...nb.next.filter((x) => x !== own.id));
+      }
+      if (width(into, k) < 0.05) {
+        const nb = beside(into);
+        for (const pid of nb ? preds.get(nb.id) ?? [] : []) {
+          const pl = index.has(pid) ? (lanes[index.get(pid) as number] as GraphLane) : null;
+          if (pl && !pl.next.includes(own.id)) pl.next.push(own.id);
+        }
+      }
+    });
+  });
   const tiles: LaneGraphFile['tiles'] = {};
   const slot = (t: string): { lanes: number[]; paths: number[] } => (tiles[t] ??= { lanes: [], paths: [] });
   lanes.forEach((l, i) => slot(l.tile).lanes.push(i));
@@ -253,7 +288,9 @@ export interface LanesRecord {
   };
   /** Where the lane count of every edge came from, and how many differ from the graph's own count. */
   inference: { from: Record<string, number>; changed: number; widthKept: number };
-  gates: { laneContinuityBreaks: number; tapersOutOfLimits: number; tapersUnexplained: number };
+  gates: { laneContinuityBreaks: number; tapersOutOfLimits: number; tapersUnexplained: number; widthSteps: number };
+  /** Road width continuity (P1-046): steps left along corridors, and what the lane model settled to close them. */
+  widthSteps: { steps: number; byKind: Record<string, number>; corridors: number; list: LaneChecks['widthSteps']['list']; tapers: number; whole: number; shortTapers: number; rounds: number; left: number };
   continuity: { joints: number; splitJoints: number; lanePairs: number; breaks: number; maxOffsetM: number; list: { strip: string; lane: number; why: string }[] };
   explainedEnds: Record<string, number>;
   tapers: { tapers: number; violations: number; unexplained: number; byClass: Record<string, { tapers: number; violations: number; ratio: number }>; findings: { strip: string; cls: string; lengthM: number; shiftM: number; neededM: number; why: string }[] };
@@ -302,7 +339,11 @@ export function lanesRecord(b: LaneBuild, c: LaneChecks, hash: string, buildMs: 
       signals: c.paths.signals, stopLines: c.paths.stopLines, crossings: c.paths.crossings, internalEdges: b.internal.length, forks: b.forks.length, widenings: b.widenings.length, fitted: b.fitted.length, streets: b.streets.report.streets,
     },
     inference: { from: b.streets.report.from, changed: b.streets.report.changed, widthKept: b.streets.report.widthKept },
-    gates: { laneContinuityBreaks: c.continuity.breaks, tapersOutOfLimits: c.tapers.violations, tapersUnexplained: c.tapers.unexplained },
+    gates: { laneContinuityBreaks: c.continuity.breaks, tapersOutOfLimits: c.tapers.violations, tapersUnexplained: c.tapers.unexplained, widthSteps: c.widthSteps.steps },
+    widthSteps: {
+      steps: c.widthSteps.steps, byKind: c.widthSteps.byKind, corridors: c.widthSteps.corridors, list: c.widthSteps.list.slice(0, 40),
+      tapers: b.widthFixes.tapers.length, whole: b.widthFixes.whole.length, shortTapers: b.widthFixes.tapers.filter((t) => t.short).length, rounds: b.widthFixes.rounds, left: b.widthFixes.left,
+    },
     continuity: { joints: c.continuity.joints, splitJoints: c.continuity.splitJoints, lanePairs: c.continuity.lanePairs, breaks: c.continuity.breaks, maxOffsetM: c.continuity.maxOffsetM, list: c.continuity.list },
     explainedEnds: c.explainedEnds,
     tapers: {
