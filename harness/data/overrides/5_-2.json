@@ -1,0 +1,41 @@
+[
+  {
+    "id": "add_5_-2_0001",
+    "issue": "add:add_5_-2_0001",
+    "action": "add_median",
+    "target": {
+      "ids": [
+        "w712992080.0",
+        "w712992080.1",
+        "w712992080.2",
+        "w712992080.3",
+        "w712992080.4",
+        "w712992080.5",
+        "w712992080.6",
+        "w712992080.7",
+        "w712992080.8",
+        "w712992080.9"
+      ],
+      "anchor": {
+        "lat": 28.6212743,
+        "lon": 77.2364408
+      },
+      "tolerance_m": 15
+    },
+    "params": {
+      "path": "28.6212743,77.2364408;28.6215729,77.2361066;28.6218116,77.2358714;28.6220488,77.2356215;28.6223753,77.2352876;28.6229867,77.2346752;28.6234823,77.2341812;28.6238607,77.2337672;28.6242905,77.2333509;28.6245645,77.2330767;28.6251912,77.2324865",
+      "width": 0.6,
+      "type": "kerb",
+      "openings": "crossings"
+    },
+    "why": "Bhagwan Das Road between the Supreme Court end and the Tilak Marg end: OSM draws this 580 m as one two-way way, but the satellite view shows a continuous raised divider down the middle, and OSM itself already maps the road as two carriageways on both sides of the stretch. The divider opens only at the crossing with Mahatma Jyotirao Phule Marg and Bhagwan Das Lane; the bungalow gates on either side are left in, left out.",
+    "by": "builder",
+    "source": "reference",
+    "date": "2026-11-13",
+    "reference": {
+      "link": "https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/export?bbox=77.2320,28.6208,77.2372,28.6258&bboxSR=4326&imageSR=3857&size=1200,1200&format=jpg&f=image",
+      "date": "2026-11-13",
+      "note": "Esri World Imagery, zoom 19 tiles 374622..374627 x 218604..218610: a thin light line runs down the middle of the whole stretch, about half a metre wide (a raised kerb divider)."
+    }
+  }
+]

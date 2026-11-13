@@ -1,6 +1,6 @@
 {
   "_doc": "Written only by node harness/bin/task.mjs. Phases run in order; P0 (ADOPT + STYLE DISCOVERY) waits for the owner by design and needs task.mjs signoff and task.mjs archsignoff before its gate passes. Later phases are added by the planner at the end of P0 (task.mjs phase-add) from the game's real state.",
-  "updated": "2026-11-13T10:54:22.824Z",
+  "updated": "2026-11-13T11:18:15.294Z",
   "phases": [
     {
       "id": "P0",
@@ -3324,7 +3324,9 @@
       "kind": "feature",
       "status": "todo",
       "attempts": 0,
-      "notes": [],
+      "notes": [
+        "From P1-045: at the bungalow loop on Bhagwan Das Road south-west carriageway (node xadd_5_-2_0001.L8) the junction falls back to the polygon set and about 50 m loses its footpath; mid-block crossings are kept as marks but not drawn; add_median splits one two-way road at a time (a road blueprint pass could chain across class changes)."
+      ],
       "created": "2026-11-11T18:24:08.193Z",
       "model": "fable"
     },
@@ -3826,6 +3828,21 @@
       "attempts": 0,
       "notes": [],
       "created": "2026-11-13T10:51:29.140Z"
+    },
+    {
+      "id": "P1-047",
+      "phase": "P1",
+      "title": "Godot stops drawing frames when its window is covered or behind the terminal",
+      "desc": "Verify runs fail with 'frames timed out after 60000 ms' (perf_baseline settle, city_cp_circle_lap, city_chandni_walk) whenever the Godot test window is covered, for example when the owner is typing and the focus guard (harness/bin/godot.mjs) brings the terminal back in front. Seen in P1-024 (13:43 to 13:52) and again 2026-11-13 16:40 three times in a row on a tree whose quick had passed 15/15. Also once 'load time 46424 ms' and a CP lap 108 m off the route during the stall. Likely macOS App Nap or window occlusion throttling the Metal drawable or the display link. Fix so harness windowed runs keep drawing when covered: try launch args such as -NSAppSleepDisabled YES, an NSProcessInfo activity (beginActivity) or Godot's low processor mode and vsync settings, or a window position and size the owner never covers (a small corner window), whichever works; keep the owner's request that Godot does not steal focus while he types. Acceptance: with the terminal fully covering the Godot window (scripted with osascript), perf_baseline, city_cp_circle_lap and city_chandni_walk pass 3 of 3; verify --quick OK twice in a row while a covering window is up; perf numbers not worse than before within 0.3 ms.",
+      "accept": [],
+      "deps": [],
+      "agent": "builder",
+      "priority": 1,
+      "kind": "bug",
+      "status": "todo",
+      "attempts": 0,
+      "notes": [],
+      "created": "2026-11-13T11:18:15.293Z"
     }
   ]
 }

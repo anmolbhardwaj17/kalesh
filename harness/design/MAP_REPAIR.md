@@ -136,7 +136,19 @@ One JSON object per issue in `issues.json` of the bake output (read by the inspe
 }
 ```
 
-(Values are illustrative.) Actions: `connect`, `terminate`, `remove`, `set_tag`, `move_node`, `set_lanes`, `set_height`, `replace_geometry`, `disable_repair`. A patch is filed under the tile of its anchor. On a new extract the target is found by id first, then by the anchor within the tolerance. A patch whose target is not found is listed as stale in the health report and stays in the file; it is never dropped silently. Claude writes patches after reading shots of the site; Anmol's inspector choices write the same format.
+(Values are illustrative.) Actions: `connect`, `terminate`, `remove`, `set_tag`, `move_node`, `set_lanes`, `set_height`, `replace_geometry`, `disable_repair`, and the add actions of P1-045 (below). A patch is filed under the tile of its anchor. On a new extract the target is found by id first, then by the anchor within the tolerance. A patch whose target is not found is listed as stale in the health report and stays in the file; it is never dropped silently. Claude writes patches after reading shots of the site; Anmol's inspector choices write the same format.
+
+### Add patches (P1-045)
+
+Features OSM lacks are patches too (`tools/bake/repair/adds.ts`). Each carries `reference: { link, date, note }` (a photo or satellite link and the day it was read; the bake refuses an add patch without one) and its geometry as latitude and longitude, so it survives a recentre: `params.path` ("lat,lon;lat,lon", two or more points) for a line, `params.at` ("lat,lon") for a point. The issue id is `add:<patch id>` (no rule raises it, so the engine applies it after the first settle like any unmatched owner patch). Target ids are the roads it touches; on a new extract a gone id is found again under the drawn points within the tolerance (by anchor), else the patch is stale and kept.
+
+- `add_way`: `highway`, `lanes`, optional `oneway`, `name`, `service`, `width`, `footpath_left`/`right`, `layer`; `join_a` and `join_b` at the two ends: a node id, an edge id, `snap` (the nearest road within the tolerance) or `none` (a free end). The road is cut where an end joins it. Classified by the same classifier as an OSM way; edge id `add.<patch id>`, piece way `add/<patch id>`.
+- `add_median`: `width` (0.3 to 30 m), `type` (`kerb`, `planter`, `barrier`, `painted`), `openings` (`crossings` by default, `all`, `none`), optional `lanes_left`/`lanes_right`. The drawn line follows one two-way road; that stretch becomes two paired one-way carriageways (`<edge>~L` with the line's direction on its left, `<edge>~R` the other way, Delhi keeps left) with the median between them (`RoadClass.median`, half on each carriageway's right). Where the road already runs on as two carriageways the new ones carry on from them; elsewhere they taper back to the end node (a split zone). Side roads go to the carriageway on their side; where roads meet from both sides the median opens (a short two-way link across it).
+- `add_footpath`: `width`, optional `side`; the roads the drawn line runs along get that footpath on the side it is drawn (never on a median side).
+- `add_crossing`: optional `on` and `control` (`signals`); a mark `crossing:<patch id>` that the lane model reads like an OSM crossing node (the junction arm within 30 m gets a zebra; a crossing far from a junction is kept but draws nothing yet).
+- `add_barrier`: optional `on` and `kind` (`barricade`, `bollards`, `gate`, `wall`); a one metre gap in the road with two dead ends marked `closure` and `barrier` (rule R-ROAD-01 leaves them alone).
+
+The map inspector's Add tab draws these and writes them through `POST /api/inspector/add` (`tools/inspector/adds.ts`).
 
 ## Elevation solver
 

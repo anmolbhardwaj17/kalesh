@@ -14,6 +14,7 @@ import { readKtl1 } from '../ktl1.ts';
 import { actionWords, filterIssues, isHigh, niceScale, searchIssues, sortIssues, worldTile } from '../lib.ts';
 import { buildNameIndex, classWords, describeIssue, distToLine, fixWords, humanise, whereWords } from '../describe.ts';
 import { LANE_TYPE_WORDS, NEAR_FOCUS_M, borderAt, driveLaneCount, laneItems, lanesIssueId, lanesSummary, metres, nearestStrip, sectionParts, sourceWords, stripWidths, isOwnerLanes } from '../lanes.ts';
+import { ADD_KINDS, BARRIER_KINDS, MEDIAN_TYPES, ROAD_CLASSES, addInputProblems, kindInfo } from '../adds.ts';
 import { contextLayer, groundLayer, laneMarksLayer, lanesLayer } from './layers.js';
 import { Minimap } from './minimap.js';
 import { LANE_FILL, LANE_MARK, MAJOR, MAP, MATERIAL_COLOURS, OFFSET_MATERIALS, PROP_COLOURS, SEV } from './theme.js';
@@ -27,6 +28,11 @@ const state = {
   desc: new Map(), buildings: [], under: [], outline: [], hover: null, layers: { lanes: true, laneMarks: true, buildings: true, grid: true },
   // the lanes tab (P1-025): the lanes layer file, the lanes record of health.json, the listed split zones and taper findings
   tab: 'issues', laneFile: null, health: null, laneItems: [], laneFilter: 'all', laneSel: null, lanePicks: {}, laneFocus: null,
+  // the draw tool (P1-045): what is being drawn, its clicked points (world metres), its settings and reference
+  add: {
+    kind: 'add_way', points: [], note: '', link: '', date: new Date().toISOString().slice(0, 10), saved: [],
+    settings: { highway: 'service', lanes: 1, oneway: false, name: '', medianWidth: 1.2, type: 'kerb', footWidth: 2, barrier: 'barricade' },
+  },
 };
 
 // ------------------------------------------------------------------ three.js scene
@@ -57,7 +63,8 @@ const tileGroup = new THREE.Group();
 const markerGroup = new THREE.Group();
 const highlightGroup = new THREE.Group();
 const lineGroup = new THREE.Group();
-scene.add(flatGroup, tileGroup, highlightGroup, markerGroup, lineGroup);
+const drawGroup = new THREE.Group();
+scene.add(flatGroup, tileGroup, highlightGroup, markerGroup, lineGroup, drawGroup);
 const lineMaterials = new Set();
 const layers = { ground: null, context: null, lanes: null, laneMarks: null };
 
@@ -498,6 +505,12 @@ function markSelectedRow() {
 }
 
 function renderDetail() {
+  $('#add').hidden = state.tab !== 'add';
+  if (state.tab === 'add') {
+    $('#empty').hidden = true; $('#issue').hidden = true; $('#lane').hidden = true;
+    renderAdd();
+    return;
+  }
   const i = state.selected && state.byId.get(state.selected);
   $('#empty').hidden = !!i || !!state.laneSel;
   $('#issue').hidden = !i;
@@ -667,6 +680,12 @@ function setTab(tab) {
   $('#list').hidden = tab !== 'issues';
   $('#lanesHead').hidden = tab !== 'lanes';
   $('#laneList').hidden = tab !== 'lanes';
+  $('#addHead').hidden = tab !== 'add';
+  $('#addList').hidden = tab !== 'add';
+  mapEl.classList.toggle('drawing', tab === 'add');
+  if (tab === 'add') { renderAddKinds(); renderAddList(); }
+  drawSketch();
+  renderDetail();
 }
 
 const nearFocus = (it) => it.fromFocus <= NEAR_FOCUS_M;
@@ -837,6 +856,145 @@ async function openLaneInGame() {
   } catch { laneMessage('Could not reach the inspector server.', true); }
 }
 
+// ------------------------------------------------------------------ the draw tool (P1-045)
+
+/** What the drawing becomes: the input of /api/inspector/add (and of addInputProblems, the same check the server makes). */
+function addInput() {
+  const a = state.add;
+  const s = a.settings;
+  const settings = a.kind === 'add_way' ? { highway: s.highway, lanes: s.lanes, oneway: !!s.oneway, name: s.name }
+    : a.kind === 'add_median' ? { width: s.medianWidth, type: s.type }
+    : a.kind === 'add_footpath' ? { width: s.footWidth }
+    : a.kind === 'add_barrier' ? { kind: s.barrier } : {};
+  return { kind: a.kind, points: a.points.map(([x, z]) => [Math.round(x * 100) / 100, Math.round(z * 100) / 100]), settings, reference: { link: a.link.trim(), date: a.date }, note: a.note };
+}
+
+function renderAddKinds() {
+  $('#addKinds').innerHTML = ADD_KINDS.map((k) => `<button type="button" data-kind="${k.kind}" class="${state.add.kind === k.kind ? 'on' : ''}"><span class="l">${esc(k.label)}</span></button>`).join('');
+  $('#addHelp').textContent = kindInfo(state.add.kind).help;
+}
+
+function setAddKind(kind) {
+  const info = kindInfo(kind);
+  if (!info) return;
+  state.add.kind = kind;
+  // a point kind keeps one click; a line kind keeps them all
+  if (!info.line) state.add.points = state.add.points.slice(-1);
+  renderAddKinds();
+  drawSketch();
+  renderAdd();
+}
+
+function addPoint(x, z) {
+  const info = kindInfo(state.add.kind);
+  if (info.line) state.add.points.push([x, z]); else state.add.points = [[x, z]];
+  drawSketch();
+  renderAdd();
+}
+
+function drawSketch() {
+  clearGroup(drawGroup);
+  const pts = state.tab === 'add' ? state.add.points : [];
+  if (pts.length) {
+    const info = kindInfo(state.add.kind);
+    const colour = new THREE.Color(0xffb224);
+    if (pts.length > 1) {
+      drawGroup.add(polyline(pts, 1.4, { color: new THREE.Color(0x110d0a), linewidth: 7, opacity: 0.9 }, 18));
+      drawGroup.add(polyline(pts, 1.4, { color: colour, linewidth: 3.5, opacity: 1 }, 19));
+    }
+    // each click as a small cross, sized for the view
+    const r = Math.max(1.2, camera.position.distanceTo(controls.target) * 0.012);
+    for (const [x, z] of pts) {
+      for (const seg of [[[x - r, z], [x + r, z]], [[x, z - r], [x, z + r]]]) drawGroup.add(polyline(seg, 1.5, { color: info.line ? new THREE.Color(0xffffff) : colour, linewidth: 3, opacity: 1 }, 20));
+    }
+  }
+  dirty = true;
+}
+
+function updateAddSave() {
+  const btn = $('#addSave');
+  if (!btn) return;
+  const problems = addInputProblems(addInput());
+  btn.disabled = problems.length > 0;
+  const why = $('#addWhy');
+  if (why) why.textContent = problems.join(' ');
+}
+
+function addMessage(text, bad = false) {
+  const m = $('#amsg');
+  if (!m) return;
+  m.hidden = !text; m.textContent = text; m.className = `msg${bad ? ' bad' : ''}`;
+}
+
+const option = (v, now, label = v) => `<option value="${esc(v)}"${v === now ? ' selected' : ''}>${esc(label)}</option>`;
+
+function renderAdd() {
+  const a = state.add;
+  const s = a.settings;
+  const info = kindInfo(a.kind);
+  let fields = '';
+  if (a.kind === 'add_way') {
+    fields = `<label class="field"><span>Road type</span><select data-set="highway">${ROAD_CLASSES.map((c) => option(c, s.highway, classWords(c))).join('')}</select></label>
+      <div class="setrow"><span class="l">Driving lanes</span><span class="stepper"><button type="button" id="lanesStepDown" aria-label="One lane fewer"${s.lanes <= 1 ? ' disabled' : ''}>&minus;</button><output>${s.lanes}</output><button type="button" id="lanesStepUp" aria-label="One lane more"${s.lanes >= 8 ? ' disabled' : ''}>+</button></span></div>
+      <label class="field check"><input type="checkbox" data-set="oneway"${s.oneway ? ' checked' : ''}><span>One way, in the order of the clicks</span></label>
+      <label class="field"><span>Name (optional)</span><input type="text" data-set="name" value="${esc(s.name)}" placeholder="For example: Supreme Court service lane"></label>`;
+  } else if (a.kind === 'add_median') {
+    fields = `<label class="field"><span>Median width (m)</span><input type="number" min="0.3" max="30" step="0.1" data-set="medianWidth" value="${s.medianWidth}"></label>
+      <label class="field"><span>Kind of divider</span><select data-set="type">${MEDIAN_TYPES.map((t) => option(t, s.type, { kerb: 'Raised kerb', planter: 'Planter with plants', barrier: 'Concrete barrier', painted: 'Painted lines only' }[t])).join('')}</select></label>`;
+  } else if (a.kind === 'add_footpath') {
+    fields = `<label class="field"><span>Footpath width (m)</span><input type="number" min="0.6" max="10" step="0.1" data-set="footWidth" value="${s.footWidth}"></label>`;
+  } else if (a.kind === 'add_barrier') {
+    fields = `<label class="field"><span>Kind of barrier</span><select data-set="barrier">${BARRIER_KINDS.map((k) => option(k, s.barrier, { barricade: 'Barricade', bollards: 'Bollards', gate: 'Gate', wall: 'Wall' }[k])).join('')}</select></label>`;
+  }
+  const n = a.points.length;
+  const ptsWords = n ? `${n} point${n === 1 ? '' : 's'} clicked${info.line && n > 1 ? `, ${Math.round(a.points.slice(1).reduce((m, p, k) => m + Math.hypot(p[0] - a.points[k][0], p[1] - a.points[k][1]), 0))} m long` : ''}` : 'No points yet. Click on the map.';
+  $('#add').innerHTML = `
+    <div class="kicker" style="--sev:var(--accent)"><i class="dot" style="background:var(--accent)"></i>Add to the map</div>
+    <h2>${esc(info.label)}</h2>
+    <p class="where">${esc(info.help)}</p>
+    <div class="addform">
+      <p class="pts" id="addPts">${esc(ptsWords)}</p>
+      ${fields}
+      <h3>Reference</h3>
+      <label class="field"><span>Photo or satellite link</span><input type="url" data-set="link" value="${esc(a.link)}" placeholder="https://"></label>
+      <label class="field"><span>Date you looked at it</span><input type="date" data-set="date" value="${esc(a.date)}"></label>
+      <h3>Your note (optional)</h3>
+      <textarea data-set="note" placeholder="For example: the satellite view shows a divider along the whole road.">${esc(a.note)}</textarea>
+    </div>
+    <div class="actions">
+      <button type="button" class="primary" id="addSave" disabled>Save</button>
+      <button type="button" class="secondary" id="addUndo"${n ? '' : ' disabled'}>Undo point</button>
+      <button type="button" class="secondary" id="addClear"${n ? '' : ' disabled'}>Clear</button>
+    </div>
+    <p class="where" id="addWhy"></p>
+    <div id="amsg" class="msg" hidden></div>`;
+  updateAddSave();
+}
+
+function renderAddList() {
+  const list = state.add.saved;
+  $('#addList').innerHTML = list.length
+    ? `<div class="divider">Saved this time (${list.length})</div>${list.map((it) => `<div class="row" role="listitem" data-x="${it.x}" data-z="${it.z}"><div class="t">${esc(it.label)}</div><div class="s">${esc(it.why)}</div><div class="kmeta">${esc(it.patch)} · overrides/${esc(it.file)}</div></div>`).join('')}`
+    : '<div class="none">Nothing drawn yet. Saved drawings show here.</div>';
+}
+
+async function saveAdd() {
+  const input = addInput();
+  if (addInputProblems(input).length) return;
+  const res = await fetch('/api/inspector/add', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(input) });
+  const body = await res.json();
+  if (!res.ok) { addMessage(body.error || 'Could not save.', true); return; }
+  const [x, z] = input.points[0];
+  state.add.saved.unshift({ patch: body.patch.id, file: body.file, label: kindInfo(input.kind).label, why: body.patch.why, x, z });
+  state.add.points = [];
+  state.add.note = '';
+  drawSketch();
+  renderAdd();
+  renderAddList();
+  addMessage(`Saved. Patch ${body.patch.id} is in overrides/${body.file}. The next bake adds it. Claude sees it in the inbox.`);
+  state.add.last = body;
+}
+
 // ------------------------------------------------------------------ events
 
 $('#chips').addEventListener('click', (e) => { const b = e.target.closest('[data-filter]'); if (b) { state.filter = b.dataset.filter; renderList(); } });
@@ -868,6 +1026,23 @@ $('#lane').addEventListener('input', (e) => {
   const save = $('#laneSave');
   if (save) save.disabled = state.laneSel.draft === driveLaneCount(state.laneSel.strip) && !e.target.value.trim();
 });
+$('#addKinds').addEventListener('click', (e) => { const b = e.target.closest('[data-kind]'); if (b) setAddKind(b.dataset.kind); });
+$('#add').addEventListener('click', (e) => {
+  if (e.target.closest('#addUndo')) { state.add.points.pop(); drawSketch(); renderAdd(); }
+  else if (e.target.closest('#addClear')) { state.add.points = []; drawSketch(); renderAdd(); }
+  else if (e.target.closest('#addSave')) saveAdd();
+  else if (e.target.closest('#lanesStepDown')) { state.add.settings.lanes = Math.max(1, state.add.settings.lanes - 1); renderAdd(); }
+  else if (e.target.closest('#lanesStepUp')) { state.add.settings.lanes = Math.min(8, state.add.settings.lanes + 1); renderAdd(); }
+});
+$('#add').addEventListener('input', (e) => {
+  const t = e.target;
+  const a = state.add;
+  if (!t.dataset.set) return;
+  const v = t.type === 'checkbox' ? t.checked : t.type === 'number' ? Number(t.value) : t.value;
+  if (t.dataset.set === 'link') a.link = v; else if (t.dataset.set === 'date') a.date = v; else if (t.dataset.set === 'note') a.note = v; else a.settings[t.dataset.set] = v;
+  updateAddSave();
+});
+$('#addList').addEventListener('click', (e) => { const r = e.target.closest('[data-x]'); if (r) flyTo([Number(r.dataset.x), 0, Number(r.dataset.z)], 160); });
 $('#viewTop').addEventListener('click', () => setView('top'));
 $('#view3d').addEventListener('click', () => setView('3d'));
 $('#fit').addEventListener('click', fitAll);
@@ -916,6 +1091,12 @@ renderer.domElement.addEventListener('pointerdown', (e) => { down = { x: e.clien
 renderer.domElement.addEventListener('pointerup', (e) => {
   if (!down || Math.hypot(e.clientX - down.x, e.clientY - down.y) > 4) { down = null; return; }
   down = null;
+  if (state.tab === 'add') {
+    const r = mapEl.getBoundingClientRect();
+    const g = groundAt(((e.clientX - r.left) / r.width) * 2 - 1, -((e.clientY - r.top) / r.height) * 2 + 1);
+    if (g) addPoint(g.x, g.z);
+    return;
+  }
   const hit = nearestIssue(e.clientX, e.clientY, 14);
   if (hit) { select(hit.id); return; }
   // no issue under the click: the lane section under it, when the lanes layer is on and close enough to read
@@ -1010,7 +1191,7 @@ async function init() {
   state.byId = new Map(file.issues.map((i) => [i.id, i]));
   state.rules = file.rules;
   state.picks = {};
-  for (const [k, v] of Object.entries(picks)) (k.startsWith('lanes:') ? state.lanePicks : state.picks)[k] = v;
+  for (const [k, v] of Object.entries(picks)) if (!k.startsWith('add:')) (k.startsWith('lanes:') ? state.lanePicks : state.picks)[k] = v;
   state.places = index.places ?? [];
   state.source = file.source;
   state.outline = context?.outline ?? [];
@@ -1108,6 +1289,13 @@ window.__inspector = {
     pickAt: (x, z) => (state.laneFile ? pickLaneAt(x, z) : null),
     screen: (x, z) => project(x, 0, z),
     strips: () => state.laneFile?.strips ?? [],
+  },
+  /** The draw tool (P1-045): the tab, what is drawn, and the last saved answer of the server. */
+  add: {
+    tab: () => setTab('add'),
+    kind: (k) => setAddKind(k),
+    state: () => ({ kind: state.add.kind, points: state.add.points.map((p) => [...p]), input: addInput(), problems: addInputProblems(addInput()), saved: state.add.saved.length, last: state.add.last ?? null, saveEnabled: !!$('#addSave') && !$('#addSave').disabled }),
+    screen: (x, z) => project(x, 0, z),
   },
   /** Fly the camera to a world spot (top view keeps north up). */
   view: (x, z, distance) => flyTo([x, 0, z], distance ?? camera.position.distanceTo(controls.target)),

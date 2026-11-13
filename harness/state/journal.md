@@ -455,3 +455,4 @@ One line per event, written by task.mjs (start, done, fail, phase changes, inbox
 - 2026-11-13 16:21 [P2-031] added: Pedestrian subways: a curated set with their own look and life; car tunnels kept
 - 2026-11-13 16:21 mentor message mmweuwg9k handled: Car tunnels stay. P2-031 keeps the pedestrian subways that matter (CP, Palika Bazaar, ITO, India Gate, metro and station entrances) with their own look and life, and removes the confusing ones. Expectations answered in the terminal.
 - 2026-11-13 16:24 mentor message mmwev0b02 handled: Yes. Lutyens, Prithviraj Road, Khan Market, Lodhi Garden and the Delhi Golf Club are already in the plan at true scale (P7, the centre opens), with story missions there. Route line, phone and money are added to the P3 plan.
+- 2026-11-13 16:48 [P1-047] added: Godot stops drawing frames when its window is covered or behind the terminal

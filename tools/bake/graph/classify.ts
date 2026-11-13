@@ -27,6 +27,11 @@ export interface RoadClass {
   /** Footpath width in metres on the left and on the right of the direction of the edge (0 for none). */
   footpath: { left: number; right: number };
   footpathFrom: 'tag' | 'class';
+  /**
+   * The divider between this carriageway and its pair when a patch drew it (add_median, P1-045): full width in metres
+   * (each carriageway carries half on its right) and its kind (kerb, planter, barrier, painted). Absent: two kerbs.
+   */
+  median?: { width: number; type: string };
 }
 
 const num = (v: string | undefined): number | null => {

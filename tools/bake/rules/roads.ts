@@ -30,6 +30,8 @@ export const danglingEnd: Rule = {
       const end = ends[0];
       if (ends.length !== 1 || !end || end.edge.a === end.edge.b) continue;
       if (ctx.env.nodeTags?.get(n.id)?.['noexit'] === 'yes') continue;
+      // either side of a barrier an add_barrier patch put across the road (P1-045): a dead end on purpose
+      if (ctx.marks[n.id]?.['barrier'] !== undefined) continue;
       const e = end.edge;
       const lv = ctx.endLevel(end);
       const far = end.atStart ? e.b : e.a;

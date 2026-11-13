@@ -1,0 +1,35 @@
+[
+  {
+    "id": "add_4_-3_0001",
+    "issue": "add:add_4_-3_0001",
+    "action": "add_way",
+    "target": {
+      "ids": [
+        "w712992080.4"
+      ],
+      "anchor": {
+        "lat": 28.6226904,
+        "lon": 77.2350937
+      },
+      "tolerance_m": 15
+    },
+    "params": {
+      "path": "28.6226904,77.2350937;28.6228316,77.2353351;28.6229023,77.2354424;28.622967,77.2355296;28.6230082,77.2356302;28.6230141,77.2357106",
+      "highway": "service",
+      "service": "driveway",
+      "lanes": 1,
+      "join_a": "w712992080.4",
+      "join_b": "none",
+      "name": ""
+    },
+    "why": "The paved drive from a Bhagwan Das Road gate to the bungalow forecourt north-east of the road: clear on the satellite view (a pale gravel drive that leaves the road side, passes the north-west side of the outhouse and ends in the forecourt with parked cars), missing from OSM. One service lane, free at the forecourt end.",
+    "by": "builder",
+    "source": "reference",
+    "date": "2026-11-13",
+    "reference": {
+      "link": "https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/export?bbox=77.2343,28.6220,77.2365,28.6238&bboxSR=4326&imageSR=3857&size=800,650&format=jpg&f=image",
+      "date": "2026-11-13",
+      "note": "Esri World Imagery, zoom 19 tile 374626 x 218608: the drive leg is plain where it leaves the canopy; its first 30 m from the road gate are under trees."
+    }
+  }
+]

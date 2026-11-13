@@ -219,3 +219,17 @@ textarea::placeholder, input::placeholder { color: var(--dim); }
 @media (max-width: 1360px) {
   .readout .coords { display: none; }
 }
+
+/* the draw tool (P1-045): the Add tab's form */
+.add-help { margin-top: 8px; color: var(--ink); }
+.addform .field { display: flex; flex-direction: column; gap: 4px; margin: 0 0 10px; }
+.addform .field > span { color: var(--mute); font-size: 12.5px; }
+.addform input[type=text], .addform input[type=number], .addform input[type=url], .addform input[type=date], .addform select {
+  width: 100%; background: var(--bg); color: var(--ink); border: 1px solid var(--line-2); border-radius: 9px; padding: 8px 10px; font: inherit; font-size: 13px; outline: none;
+}
+.addform input:focus, .addform select:focus { border-color: var(--accent); }
+.addform .check { flex-direction: row; align-items: center; gap: 8px; }
+.addform .pts { font-family: var(--mono); font-size: 12px; color: var(--mute); margin: 0 0 10px; }
+.map.drawing canvas { cursor: crosshair; }
+#addKinds { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+#addKinds button { align-items: center; padding: 7px 6px; }

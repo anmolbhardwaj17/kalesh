@@ -13,6 +13,8 @@
 //   GET  /api/inspector/picks             what has been picked so far, read from the override files
 //   POST /api/inspector/pick              { issue, proposal: index | null, note } writes the patch and the inbox line
 //   POST /api/inspector/set-lanes         { edge, lanes, x, z, note } writes a set_lanes patch for a road edge of the lanes layer and the inbox line
+//   POST /api/inspector/add               { kind, points: [[x, z], ...], settings, reference: { link, date }, note } writes an add
+//                                         patch (a drawn road, median, footpath, crossing or barrier, P1-045) and the inbox line
 //   POST /api/inspector/open-in-game      { x, z } teleports the running game (--debug) to the spot
 import fs from 'node:fs';
 import path from 'node:path';
@@ -20,8 +22,10 @@ import module from 'node:module';
 import { fileURLToPath } from 'node:url';
 import { GodotDebugClient } from '../../harness/bin/godotclient.mjs';
 import { worldToGeo } from '../geo/projection.ts';
-import { buildPatch, inboxText, mergePatch, overrideFileName, worldTile } from './lib.ts';
+import { buildPatch, inboxText, mergePatch, nextPatchId, overrideFileName, worldTile } from './lib.ts';
 import { driveLaneCount, lanesInboxText, lanesIssueId } from './lanes.ts';
+import { addInboxText, addInputProblems, buildAddPatch, kindInfo, mapRoads } from './adds.ts';
+import { patchProblems } from '../bake/repair/overrides.ts';
 
 const HERE = path.dirname(fileURLToPath(import.meta.url));
 const ROOT = path.resolve(HERE, '..', '..');
@@ -168,6 +172,43 @@ export function inspectorHandler(options = {}) {
     return [200, { ok: true, patch: merged.patch, file: fileName, inbox: entry.id }];
   }
 
+  // the roads of context.json, for the ids a drawing names (parsed once per file version)
+  let roadsCache = { mtime: 0, roads: [] };
+  const loadRoads = () => {
+    const f = path.join(dataDir, 'context.json');
+    const m = fs.existsSync(f) ? fs.statSync(f).mtimeMs : 0;
+    if (m !== roadsCache.mtime) roadsCache = { mtime: m, roads: m ? mapRoads(readJson(f, null)) : [] };
+    return roadsCache.roads;
+  };
+
+  /** A feature the owner drew on the map (P1-045): an add patch in the override file of the first point's tile. */
+  async function addFeature(body) {
+    const input = { kind: String(body.kind ?? ''), points: Array.isArray(body.points) ? body.points.map((p) => [Number(p?.[0]), Number(p?.[1])]) : [], settings: body.settings ?? {}, reference: { link: String(body.reference?.link ?? ''), date: String(body.reference?.date ?? '') }, note: String(body.note ?? '') };
+    const problems = addInputProblems(input);
+    if (problems.length) return [400, { error: problems.join(' ') }];
+    const layer = loadLanes();
+    if (!layer?.origin || !layer?.offset) return [404, { error: 'The map has no frame yet. Run "npm run bake -- pilot --stage lanes --offline" first.' }];
+    const toGeo = (x, z) => worldToGeo(x - layer.offset[0], z - layer.offset[1], layer.origin);
+    const made = buildAddPatch(input, { date: today(), toGeo, roads: loadRoads() });
+    const [x0, z0] = input.points[0];
+    const tile = worldTile(x0, z0);
+    const fileName = overrideFileName(tile);
+    const full = path.join(overridesDir, fileName);
+    const existing = readJson(full, []);
+    const id = nextPatchId(existing, tile);
+    const patch = { id, ...made, issue: `add:${id}` };
+    // the same check the bake makes when it reads the file: a patch it would refuse is never written
+    const bad = patchProblems(patch);
+    if (bad.length) return [400, { error: `The patch would not be valid: ${bad.join('; ')}` }];
+    const merged = mergePatch(existing, tile, patch);
+    fs.mkdirSync(overridesDir, { recursive: true });
+    fs.writeFileSync(full, JSON.stringify(merged.patches, null, 2) + '\n');
+    const entry = { id: `m${Date.now().toString(36)}`, ts: new Date().toISOString(), text: addInboxText(kindInfo(input.kind), x0, z0, input.points.length, merged.patch.id, fileName, input.note), source: 'inspector' };
+    fs.mkdirSync(path.dirname(inboxFile), { recursive: true });
+    fs.appendFileSync(inboxFile, JSON.stringify(entry) + '\n');
+    return [200, { ok: true, patch: merged.patch, file: fileName, inbox: entry.id }];
+  }
+
   async function openInGame(body) {
     const x = Number(body.x);
     const z = Number(body.z);
@@ -208,7 +249,7 @@ export function inspectorHandler(options = {}) {
       }
       if (req.method === 'GET' && p.startsWith('/inspector/')) {
         const rel = p.slice('/inspector/'.length);
-        if (!/^(web\/[\w.-]+|lib\.ts|lanes\.ts|ktl1\.ts|describe\.ts)$/.test(rel) || rel.includes('.test.')) return send(res, 404, 'not found', 'text/plain'), true;
+        if (!/^(web\/[\w.-]+|lib\.ts|lanes\.ts|adds\.ts|ktl1\.ts|describe\.ts)$/.test(rel) || rel.includes('.test.')) return send(res, 404, 'not found', 'text/plain'), true;
         return serveStatic(res, HERE, rel, { stripTs: true }) || send(res, 404, 'not found', 'text/plain'), true;
       }
       if (req.method === 'GET' && p === '/favicon.ico') return send(res, 204, '', 'text/plain'), true;
@@ -224,6 +265,10 @@ export function inspectorHandler(options = {}) {
       }
       if (req.method === 'POST' && p === '/api/inspector/set-lanes') {
         const [code, body] = await setLanes(JSON.parse((await readBody(req)).toString() || '{}'));
+        return send(res, code, body), true;
+      }
+      if (req.method === 'POST' && p === '/api/inspector/add') {
+        const [code, body] = await addFeature(JSON.parse((await readBody(req)).toString() || '{}'));
         return send(res, code, body), true;
       }
       if (req.method === 'POST' && p === '/api/inspector/open-in-game') {

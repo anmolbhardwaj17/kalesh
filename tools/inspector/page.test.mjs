@@ -12,6 +12,7 @@ import { launchGame, freePort } from '../../harness/bin/godotclient.mjs';
 import { parseArgs } from '../bake/cli.ts';
 import { bake, offlineNet, ROOT } from '../bake/main.ts';
 import { worldToGeo } from '../geo/projection.ts';
+import { patchProblems } from '../bake/repair/overrides.ts';
 import { startInspector } from './serve.mjs';
 
 const SHOTS = path.resolve(import.meta.dirname, '..', '..', 'harness', 'reports', 'inspector');
@@ -329,6 +330,80 @@ describe('map inspector page', () => {
     const lines = fs.readFileSync(inbox, 'utf8').trim().split('\n').map((l) => JSON.parse(l));
     expect(lines[lines.length - 1].text).toContain(`from ${before} to ${before + 1}`);
     expect(lines[lines.length - 1].source).toBe('inspector');
+    expect(consoleErrors).toEqual([]);
+  }, 60000);
+
+  run('the draw tool writes a valid add patch through the server: a median along a road and a crossing (P1-045)', async () => {
+    if (!fs.existsSync(path.join(dataDir, 'lanes.json'))) return;
+    const context = JSON.parse(fs.readFileSync(path.join(dataDir, 'context.json'), 'utf8'));
+    // a long straight piece of a named road near the middle of the map
+    const t = (await hook(() => window.__inspector.state())).camera.target;
+    let pick = null;
+    for (const r of context.roads) {
+      if (!r.n || r.p.length < 6) continue;
+      const a = [r.p[0], r.p[2]]; const b = [r.p[3], r.p[5]];
+      const len = Math.hypot(b[0] - a[0], b[1] - a[1]);
+      if (len < 80) continue;
+      const d = Math.hypot((a[0] + b[0]) / 2 - t[0], (a[1] + b[1]) / 2 - t[2]);
+      if (!pick || d < pick.d) pick = { r, a, b, d };
+    }
+    expect(pick).not.toBeNull();
+    await page.click('#addTab');
+    expect((await hook(() => window.__inspector.state())).tab).toBe('add');
+    await page.click('#addKinds [data-kind="add_median"]');
+    const mid = [(pick.a[0] + pick.b[0]) / 2, (pick.a[1] + pick.b[1]) / 2];
+    await hook(([x, z]) => window.__inspector.view(x, z, 220), mid);
+    await flown();
+    // three real clicks along the road
+    const along = [0.2, 0.5, 0.8].map((f) => [pick.a[0] + (pick.b[0] - pick.a[0]) * f, pick.a[1] + (pick.b[1] - pick.a[1]) * f]);
+    for (const q of along) {
+      const p = await hook(([x, z]) => window.__inspector.add.screen(x, z), q);
+      await page.mouse.click(p.x, p.y);
+    }
+    let st = await hook(() => window.__inspector.add.state());
+    expect(st.points).toHaveLength(3);
+    for (let k = 0; k < 3; k++) expect(Math.hypot(st.points[k][0] - along[k][0], st.points[k][1] - along[k][1])).toBeLessThan(2);
+    expect(st.saveEnabled).toBe(false); // no reference yet
+    await page.fill('#add input[data-set="medianWidth"]', '2.5');
+    await page.selectOption('#add select[data-set="type"]', 'planter');
+    await page.fill('#add input[data-set="link"]', 'https://example.org/street-photo');
+    await page.fill('#add textarea[data-set="note"]', 'A planted divider on the street photo');
+    st = await hook(() => window.__inspector.add.state());
+    expect(st.problems).toEqual([]);
+    fs.mkdirSync(SHOTS, { recursive: true });
+    await page.screenshot({ path: path.join(SHOTS, 'add_tool.png') });
+    await page.click('#addSave');
+    await page.waitForFunction(() => /Saved/.test(document.querySelector('#amsg')?.textContent ?? ''));
+    const tile = [Math.floor(st.points[0][0] / 250), Math.floor(st.points[0][1] / 250)];
+    const file = path.join(overrides, `${tile[0]}_${tile[1]}.json`);
+    const list = JSON.parse(fs.readFileSync(file, 'utf8'));
+    const patch = list.find((p) => p.action === 'add_median');
+    expect(patchProblems(patch)).toEqual([]);
+    expect(patch).toMatchObject({ issue: `add:${patch.id}`, source: 'inspector', by: 'owner', why: 'A planted divider on the street photo', params: { width: 2.5, type: 'planter' }, reference: { link: 'https://example.org/street-photo', date: st.input.reference.date } });
+    expect(st.input.reference.date).toMatch(/^\d{4}-\d{2}-\d{2}$/); // the page fills in today
+    expect(patch.target.ids).toContain(pick.r.id);
+    // the drawn points as latitude and longitude of the block frame
+    const layer = JSON.parse(fs.readFileSync(path.join(dataDir, 'lanes.json'), 'utf8'));
+    const geo = patch.params.path.split(';').map((q) => q.split(',').map(Number));
+    expect(geo).toHaveLength(3);
+    geo.forEach(([lat, lon], k) => {
+      const back = worldToGeo(st.points[k][0] - layer.offset[0], st.points[k][1] - layer.offset[1], layer.origin);
+      expect(Math.abs(lat - back.lat)).toBeLessThan(1e-6);
+      expect(Math.abs(lon - back.lon)).toBeLessThan(1e-6);
+    });
+    // a point kind: one click, the road under it named by id
+    await page.click('#addKinds [data-kind="add_crossing"]');
+    const p = await hook(([x, z]) => window.__inspector.add.screen(x, z), mid);
+    await page.mouse.click(p.x, p.y);
+    await page.click('#addSave');
+    await page.waitForFunction(() => window.__inspector.add.state().saved === 2);
+    const all = fs.readdirSync(overrides).flatMap((f) => JSON.parse(fs.readFileSync(path.join(overrides, f), 'utf8')));
+    const crossing = all.find((q) => q.action === 'add_crossing');
+    expect(patchProblems(crossing)).toEqual([]);
+    expect(crossing.params.on).toBe(pick.r.id);
+    const lines = fs.readFileSync(inbox, 'utf8').trim().split('\n').map((l) => JSON.parse(l));
+    expect(lines.slice(-2).map((l) => l.text)).toEqual([expect.stringMatching(/I drew a median .* \(3 points\)/), expect.stringMatching(/I drew a crossing/)]);
+    await page.click('#tabs [data-tab="issues"]');
     expect(consoleErrors).toEqual([]);
   }, 60000);
 
