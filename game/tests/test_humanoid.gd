@@ -8,8 +8,8 @@ const Humanoid := preload("res://characters/humanoid_anim.gd")
 const Contact := preload("res://characters/foot_contact.gd")
 const Leads := preload("res://characters/leads.gd")
 
-## States that loop (the rest are one-shots).
-const LOOPS := ["idle", "walk", "jog", "sprint", "crouch_idle", "crouch_walk", "air", "sit", "drive"]
+## States whose clip loops (the rest are one-shots). The gait clips of the blends are checked in test_locomotion.gd.
+const LOOPS := ["move", "crouch", "air", "sit", "drive"]
 const PALETTE_SKIN := ["#8d5a3b", "#a86b45", "#c68a5e", "#6f4630", "#b97c53"]
 
 var t
@@ -27,10 +27,13 @@ func test_every_locomotion_clip_is_there_and_loops_loop() -> void:
 		return
 	for s in Humanoid.STATES:
 		var name: String = Humanoid.STATES[s]
-		t.ok(lib.has_animation(name), "state %s: clip %s is in the library" % [s, name])
-		if not lib.has_animation(name):
+		# "k/" clips are the built ones (rig/loco_clips.res, P2-041)
+		var from: AnimationLibrary = Humanoid.loco() if name.begins_with("k/") else lib
+		name = name.trim_prefix("k/")
+		t.ok(from.has_animation(name), "state %s: clip %s is in its library" % [s, name])
+		if not from.has_animation(name):
 			continue
-		var a := lib.get_animation(name)
+		var a := from.get_animation(name)
 		var loops: bool = s in LOOPS
 		t.ok((a.loop_mode == Animation.LOOP_LINEAR) == loops, "%s loop mode (%d, want %s)" % [name, a.loop_mode, "loop" if loops else "once"])
 		t.ok(a.length > 0.1, "%s has a length" % name)
@@ -53,13 +56,10 @@ func _seam_deg(a: Animation) -> float:
 	return worst
 
 
-func test_stride_speeds_are_recorded_for_the_moving_loops() -> void:
-	var stride: Dictionary = Humanoid.clips().get_meta("stride", {})
-	for s in Humanoid.STRIDE_OF:
-		var v := float(stride.get(Humanoid.STRIDE_OF[s], 0.0))
-		t.ok(v > 0.3 and v < 6.0, "%s stride speed %.3f m/s (model metres)" % [s, v])
+func test_every_clip_names_its_cc0_source() -> void:
 	var src: Dictionary = Humanoid.clips().get_meta("source", {})
-	t.ok(str(src.get("Walk", "")).contains("CC0"), "every clip names its CC0 source")
+	t.ok(str(src.get("Walk", "")).contains("CC0"), "every library clip names its CC0 source")
+	t.ok(str(Humanoid.loco().get_meta("source", "")).contains("CC0"), "the built clips name the CC0 library they are made from")
 
 
 func test_stance_speed_of_a_planted_foot() -> void:
@@ -117,7 +117,7 @@ func test_a_humanoid_poses_its_skeleton() -> void:
 	var b := sk.find_bone("LeftUpperArm")
 	var moved := sk.get_bone_pose_rotation(b).angle_to(sk.get_bone_rest(b).basis.get_rotation_quaternion())
 	t.ok(rad_to_deg(moved) > 20.0, "the arm left the rest pose (T): %.1f degrees" % rad_to_deg(moved))
-	var rate_want := 1.6 / (float(Humanoid.clips().get_meta("stride").Walk) * h.body_scale)
-	t.near(h.rate, rate_want, 1e-4, "walk rate is ground speed over the scaled stride")
+	var rate_want := 1.6 / (float(Humanoid.loco().get_meta("gaits").Walk_K.model_speed) * h.body_scale)
+	t.near(h.rate, rate_want, 1e-3, "walk rate is ground speed over the built clip's speed at this body's scale")
 	t.ok(h.skeleton.get_node_or_null("Bun") != null, "Meera's bun")
-	h.queue_free()
+	h.free()

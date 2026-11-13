@@ -7,7 +7,8 @@
       "licence": "CC0 1.0 Universal (public domain dedication)",
       "source": "https://quaternius.itch.io/universal-animation-library, https://quaternius.itch.io/universal-animation-library-2",
       "licenceFile": "res://characters/rig/LICENSE_UAL.txt",
-      "since": "P1-023"
+      "since": "P1-023",
+      "note": "P2-041: the locomotion clips in res://characters/rig/loco_clips.res (walk, jog, sprint, crouch walk, start, stop, turn) are built by this project from the library's clips (tools/characters/loco_build.mjs); no other source."
     }
   ]
 }

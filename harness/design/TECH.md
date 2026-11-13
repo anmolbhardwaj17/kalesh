@@ -161,6 +161,7 @@ Built in P1-019 (`game/world/streaming/`, `game/world/systems/`, `game/world/wor
 
 - `CharacterBody3D` capsule with our own step-up for kerbs (0.15 m) and stairs (0.18 m risers). Speeds 1.6, 3.8 and 6.5 m/s (GAME.md).
 - Built in P1-022: `game/characters/` (`on_foot.gd`, `foot_motor.gd`, `vault.gd`, `player_mode.gd`), `game/camera/on_foot_camera.gd`; probes `foot(cmd, opts)` in docs/GAME_HOOKS.md, scenarios `foot_*` and `enter_exit_vehicle` in the course scene. Measured numbers in docs/ARCHITECTURE.md "On foot (P1-022)".
+- Feel (P2-041, docs/ARCHITECTURE.md "On-foot feel (P2-041)"): the speed ramps (rest to a jog in 0.5 s, to a sprint in 0.87 s, a jog stops in 0.43 s over 0.68 m); the body plays locomotion clips built for these speeds (`tools/characters/loco_build.mjs`, play rate 1 at each gait's speed), with start, stop and plant-and-turn clips, a lean from the acceleration, a head look and foot placement by leg IK for the player; the camera trails the head by up to 0.14 m.
 - Hitscan bullets by ray against three hit zones per character (head, torso, limbs). Thrown items are short physics arcs. Ragdolls on `PhysicalBoneSimulator3D`, at most 8 at once; they sleep after about 2 s and settle into a pose.
 
 ### Characters, crowds and navigation (N1, AN2, AL1)

@@ -266,7 +266,8 @@
       "path": "game/camera/on_foot_camera.gd",
       "scenarios": [
         "foot_cam_walls",
-        "enter_exit_vehicle"
+        "enter_exit_vehicle",
+        "foot_feel"
       ]
     },
     {
@@ -282,6 +283,53 @@
         "foot_cost",
         "foot_cam_walls",
         "enter_exit_vehicle"
+      ]
+    },
+    {
+      "path": "game/characters/humanoid_anim.gd",
+      "scenarios": [
+        "foot_anim",
+        "foot_feel"
+      ]
+    },
+    {
+      "path": "game/characters/body_feel.gd",
+      "scenarios": [
+        "foot_feel",
+        "foot_anim"
+      ]
+    },
+    {
+      "path": "game/characters/leg_ik.gd",
+      "scenarios": [
+        "foot_feel"
+      ]
+    },
+    {
+      "path": "game/characters/rig/",
+      "scenarios": [
+        "foot_anim",
+        "foot_feel"
+      ]
+    },
+    {
+      "path": "game/characters/foot_motor.gd",
+      "scenarios": [
+        "foot_turn",
+        "foot_stamina",
+        "foot_feel"
+      ]
+    },
+    {
+      "path": "game/debug/foot_feel_probe.gd",
+      "scenarios": [
+        "foot_feel"
+      ]
+    },
+    {
+      "path": "game/debug/foot_anim_probe.gd",
+      "scenarios": [
+        "foot_anim"
       ]
     },
     {

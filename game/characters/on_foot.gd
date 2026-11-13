@@ -25,6 +25,9 @@ const STEP_MAX := 0.25
 ## Longer forward moves a step-up tries when this tick's move lands back on the tread it stands on (m).
 const STEP_FWD_TRY := [0.06, 0.1]
 const COYOTE_TICKS := 3
+## A fall this short (ticks: a kerb, a stair at a run) keeps the gait's animation and its foot placement, so the legs
+## step down; only a jump or a longer fall shows the air pose.
+const FALL_ANIM_TICKS := 14
 ## World (1) and vehicles (2); the character is on layer 4.
 const MASK := 3
 ## Ticks after getting out of a seat with collisions against the world only (seat()).
@@ -35,6 +38,9 @@ const LAYER := 4
 @export var body_color := Color(0.36, 0.72, 0.42)
 ## Which lead the humanoid is dressed as (leads.gd): bittu, meera or danny.
 @export var look := "bittu"
+## Foot placement on kerbs, stairs and slopes (body_feel.gd): 1 on, 0 off, -1 for the player's character only (four
+## rays and two leg solves a tick; a crowd turns it on only near the camera).
+@export var foot_ik := -1
 
 var motor := Motor.new()
 ## Compass yaw the move keys are relative to (the camera's).
@@ -81,6 +87,7 @@ var _visor: MeshInstance3D
 var humanoid: Node3D
 var _connected := false
 var _unseat := 0
+var _jumped := false
 
 
 func _init() -> void:
@@ -134,6 +141,9 @@ func _build_body() -> void:
 		humanoid.name = "Humanoid"
 		add_child(humanoid)
 		if humanoid.setup(look):
+			humanoid.feel.body = self
+			humanoid.feel.ik_on = foot_ik == 1 or (foot_ik < 0 and is_player)
+			humanoid.feel.look_on = is_player
 			return
 		humanoid.queue_free()
 		humanoid = null
@@ -224,6 +234,9 @@ func place(x: float, z: float, h: float = NAN, y: float = NAN) -> void:
 		state = "ground"
 	_grounded = true
 	_air = 0
+	motor.accel = 0.0
+	if humanoid != null:
+		humanoid.feel.reset()
 	reset_physics_interpolation()
 
 
@@ -277,7 +290,13 @@ func sim_step(dt: float) -> void:
 	cpu_us += Time.get_ticks_usec() - t0
 	cpu_ticks += 1
 	if humanoid != null:
-		humanoid.step(dt, state, motor.speed, motor.crouched)
+		# what the motor is doing, for the stop, start and turn moves (none at a walk or crouched)
+		var intent := "walk"
+		if not motor.crouched and motor.gait != "walk":
+			intent = "stop" if motor.gait == "idle" else ("turn" if motor.turning else "go")
+		humanoid.sense(Motor.forward(motor.heading) * motor.speed, motor.heading, view_yaw)
+		var shown := "ground" if state == "air" and not _jumped and _air <= FALL_ANIM_TICKS else state
+		humanoid.step(dt, shown, motor.speed, motor.crouched, intent)
 
 
 ## A one-shot of the body ("sit_enter" at a vehicle door, "sit_exit" after getting out) over `seconds`.
@@ -298,6 +317,7 @@ func _move_step(dt: float, jump_edge: bool) -> void:
 			vy = Motor.JUMP_V
 			state = "air"
 			_grounded = false
+			_jumped = true
 			jumps += 1
 	var hv: Vector3
 	if state == "air":
@@ -334,6 +354,7 @@ func _move_step(dt: float, jump_edge: bool) -> void:
 			state = "ground"
 		if state == "ground":
 			_grounded = true
+			_jumped = false
 			vy = 0.0
 	else:
 		_grounded = false
