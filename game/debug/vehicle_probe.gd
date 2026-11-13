@@ -3,10 +3,14 @@
 ## (Input.action_press, the way a player's keys do) and measure in sim ticks; they stage the vehicle with place() the
 ## way teleport does. Run in the course scene (scene id `course`, game/scenes/course/).
 ##   info                    the player vehicle: tune, speed, heading, gear, contacts, health, script cost, camera view
-##   run {test}              one feel probe, answers its numbers: straight (latency, 0 to 100, top speed, 100 to 0;
-##                           opts.until "100" stops the throttle at 101 km/h),
+##   use {id}                the player drives another vehicle (game/data/vehicles/<id>.tres: car, auto, scooter,
+##                           patrol_car), made where the old one stands; the chase camera takes it in its tune's view
+##   run {test}              one feel probe, answers its numbers: straight (latency, 0 to opts.mark km/h (100), top
+##                           speed, opts.brakeFrom (100) to 0; opts.until "<kmh>" stops the throttle 1 km/h over it),
 ##                           lock (full right lock radius at a held speed, opts.kmh, default 38), kerb (a one-sided
-##                           0.15 m kerb at 40 km/h), flyover (the deck joints at 100 km/h)
+##                           0.15 m kerb at 40 km/h), flyover (the deck joints at 100 km/h), gali (the course gali's
+##                           right angle corner with scripted inputs: wall clearance), stable (30 s full throttle on
+##                           the straight, then a slalom at 40 km/h: roll, lean, wheels down)
 ##   cost {n}                n more vehicles (not the player) drive on the straight: cost per vehicle per tick (the
 ##                           median physics iteration with them less without, over n; run it windowed at time scale 4)
 ##   camrec {on}             records every drawn frame: camera height over the vehicle, camera inside geometry, a wall
@@ -14,6 +18,7 @@
 extends Node
 
 const Course := preload("res://bench/physics/course.gd")
+const Routes := preload("res://debug/vehicle_routes.gd")
 const Vehicle := preload("res://vehicles/vehicle.gd")
 const ACTIONS := ["throttle", "brake", "steer_left", "steer_right", "handbrake"]
 
@@ -40,6 +45,12 @@ func hook(a: Array) -> Dictionary:
 	match cmd:
 		"info":
 			return {"ok": true, "result": info(v)}
+		"use":
+			var id := str(o.get("id", "car"))
+			var path := "res://data/vehicles/%s.tres" % id
+			if not id.is_valid_filename() or not ResourceLoader.exists(path):
+				return {"ok": false, "error": "vehicle(use): no tune %s" % path}
+			return {"ok": true, "result": await _use(v, path)}
 		"run":
 			if get_tree().current_scene == null or not get_tree().current_scene.has_method("ground_y"):
 				return {"ok": false, "error": "vehicle(run): the feel probes run in the course scene (load('course'))"}
@@ -57,17 +68,45 @@ func hook(a: Array) -> Dictionary:
 				return {"ok": true, "result": {"recording": true}}
 			_rec = false
 			return {"ok": true, "result": _rec_out}
-	return {"ok": false, "error": "vehicle(cmd): unknown cmd %s (info, run, cost, camrec)" % cmd}
+	return {"ok": false, "error": "vehicle(cmd): unknown cmd %s (info, use, run, cost, camrec)" % cmd}
 
 
 func info(v: Node) -> Dictionary:
 	var cam := get_viewport().get_camera_3d()
 	return {
 		"tune": v.tune.to_dict(), "kmh": snappedf(v.kmh(), 0.01), "heading": v.heading, "gear": v.input.gear,
-		"contacts": v.contact_count(), "health": v.health, "settled": v.is_settled(),
+		"contacts": v.contact_count(), "health": v.health, "settled": v.is_settled(), "edgeRetries": v.edge_retries,
 		"scriptUsPerTick": snappedf(float(v.cpu_us) / maxf(1.0, v.cpu_ticks), 0.01),
 		"camera": {"view": cam.view, "lookingBack": cam.looking_back, "fov": cam.fov} if cam != null and "view" in cam else null,
 	}
+
+
+## Swaps the player's vehicle for one with another tune, standing where the old one stood (same node name, so the
+## chase camera's target path finds it; the camera snaps to it in its tune's view).
+func _use(v: Node, path: String) -> Dictionary:
+	if v.tune_path == path:
+		return info(v)
+	_release()
+	var old := v as Node3D
+	var parent := old.get_parent()
+	var nm := old.name
+	var foot: Vector3 = v.foot_position()
+	var h: float = v.heading
+	var idx := old.get_index()
+	parent.remove_child(old)
+	old.queue_free()
+	var nv: RigidBody3D = Vehicle.new()
+	nv.tune_path = path
+	nv.name = nm
+	nv.position = foot
+	nv.rotation.y = -h
+	parent.add_child(nv)
+	parent.move_child(nv, idx)
+	for i in 240:
+		await _tick()
+		if nv.is_settled() and i > 10:
+			break
+	return info(nv)
 
 
 func _vehicle() -> Node:
@@ -147,9 +186,13 @@ func _roll_deg(v: Node3D) -> float:
 func _run(v: Node, test: String, o: Dictionary) -> Dictionary:
 	match test:
 		"straight":
-			return await _straight(v, str(o.get("until", "top")))
+			return await _straight(v, str(o.get("until", "top")), float(o.get("mark", 100.0)), float(o.get("brakeFrom", 100.0)), float(o.get("x", 0.0)))
 		"lock":
 			return await _lock(v, float(o.get("kmh", 38.0)))
+		"gali":
+			return await Routes.gali(self, v, o)
+		"stable":
+			return await Routes.stable(self, v, o)
 		"kerb":
 			var x: float = Course.SLAB_SIDE[0] - v.tune.half_track() + 0.25
 			var r: Dictionary = await _lane(v, "kerb", x, 30.0, -30.0, -105.0, 40.0)
@@ -162,19 +205,24 @@ func _run(v: Node, test: String, o: Dictionary) -> Dictionary:
 			var first: float = deck_z0 - Course.DECK_SEG + 10.0
 			var last: float = deck_z0 - Course.DECK_SEG * (Course.DECK_SEGS - 1) - 10.0
 			return await _lane(v, "flyover", Course.FLYOVER_X, 140.0, first, last, 100.0)
-	return {"error": "unknown test '%s' (straight, lock, kerb, flyover)" % test}
+	return {"error": "unknown test '%s' (straight, lock, kerb, flyover, gali, stable)" % test}
 
 
-## Full throttle from rest on the straight, then full brake. `until`: "top" (until the speed stops growing),
-## "100" (until 100 km/h: 0 to 100 and the brake from 100 only).
-func _straight(v: Node, until: String) -> Dictionary:
-	await _stage(v, 0.0, 100.0)
+## Full throttle from rest on the straight, then full brake. `until`: "top" (until the speed stops growing) or a speed
+## ("100": the throttle stops at 101 km/h). `mark` is the speed of the 0 to mark time, `brake_from` the speed the
+## brake distance counts from (the zeroTo100 and brakeFrom100 keys answer these too). `x` moves the start across the
+## straight (0: on the course mesh's seam at x 0).
+func _straight(v: Node, until: String, mark: float = 100.0, brake_from: float = 100.0, x: float = 0.0) -> Dictionary:
+	await _stage(v, x, 100.0)
 	var n := v as Node3D
 	var p0 := n.global_position
 	var f0: Vector3 = v.fwd()
+	# rest noise (a three wheeler still rocks a little after staging): latency counts from the speed at the press
+	var v_rest: float = v.linear_velocity.dot(f0)
 	_drive(1.0, 0.0, 0.0)
 	var t := 0
 	var lat_v := -1
+	var first := []
 	var t100 := -1
 	var d100 := NAN
 	var last := 0.0
@@ -183,13 +231,15 @@ func _straight(v: Node, until: String) -> Dictionary:
 		await _tick()
 		t += 1
 		var kmh: float = v.kmh()
-		if lat_v < 0 and v.linear_velocity.dot(f0) > 0.02:
+		if lat_v < 0 and v.linear_velocity.dot(f0) - v_rest > 0.02:
 			lat_v = t - 1
-		if t100 < 0 and kmh >= 100.0:
+		if t <= 6:
+			first.append(snappedf(v.linear_velocity.dot(f0), 0.0001))
+		if t100 < 0 and kmh >= mark:
 			t100 = t
 			d100 = (n.global_position - p0).dot(f0)
 		top = maxf(top, kmh)
-		if until == "100" and kmh >= 101.0:
+		if until != "top" and kmh >= float(until) + 1.0:
 			break
 		if t % 180 == 0:
 			if t > 900 and kmh - last < 0.1:
@@ -205,7 +255,7 @@ func _straight(v: Node, until: String) -> Dictionary:
 	while bt < 60 * 30:
 		await _tick()
 		bt += 1
-		if t_from < 0 and v.kmh() <= 100.0:
+		if t_from < 0 and v.kmh() <= brake_from:
 			t_from = bt
 			p_from = n.global_position
 		if v.kmh() < 0.5:
@@ -219,6 +269,9 @@ func _straight(v: Node, until: String) -> Dictionary:
 		"topDistanceM": roundf(top_dist), "brakeFrom100M": snappedf((stop - p_from).length(), 0.01) if t_from > 0 else null,
 		"brakeTimeS": snappedf((bt - t_from) / 60.0, 0.01) if t_from > 0 else null,
 		"lateralDriftM": snappedf(absf(stop.x - p0.x), 0.001), "gear": v.input.gear,
+		"markKmh": mark, "zeroToMarkS": snappedf(t100 / 60.0, 0.01) if t100 > 0 else null,
+		"brakeFromKmh": brake_from, "brakeFromM": snappedf((stop - p_from).length(), 0.01) if t_from > 0 else null,
+		"enteredBrakeKmh": snappedf(top, 0.1), "firstTicksMs": first, "restMs": snappedf(v_rest, 0.0001), "edgeRetries": v.edge_retries,
 	}
 
 
@@ -231,14 +284,19 @@ func _lock(v: Node, target: float) -> Dictionary:
 		_drive(c.x, c.y, 0.0)
 		await _tick()
 		t += 1
+	var max_roll := 0.0
+	var min_up := 1.0
+	var min_contacts: int = v.wheel_count()
 	for i in 360:
 		var c := _hold(v, target)
 		_drive(c.x, c.y, 1.0)
 		await _tick()
+		max_roll = maxf(max_roll, absf(_roll_deg(v)))
+		min_up = minf(min_up, (v as Node3D).global_transform.basis.y.y)
+		min_contacts = mini(min_contacts, v.contact_count())
 	var speed := 0.0
 	var yaw := 0.0
 	var kmh := 0.0
-	var max_roll := 0.0
 	var k := 300
 	for i in k:
 		var c := _hold(v, target)
@@ -249,11 +307,14 @@ func _lock(v: Node, target: float) -> Dictionary:
 		yaw += (v.angular_velocity as Vector3).y
 		kmh += v.kmh()
 		max_roll = maxf(max_roll, absf(_roll_deg(v)))
+		min_up = minf(min_up, (v as Node3D).global_transform.basis.y.y)
+		min_contacts = mini(min_contacts, v.contact_count())
 	_drive(0.0, 0.0, 0.0)
 	speed /= k
 	yaw /= k
 	return {"targetKmh": target, "heldKmh": snappedf(kmh / k, 0.1), "radiusM": snappedf(speed / maxf(0.0001, absf(yaw)), 0.01),
-		"turnsRight": yaw < 0.0, "lateralG": snappedf(speed * absf(yaw) / 9.8, 0.01), "maxRollDeg": snappedf(max_roll, 0.01)}
+		"turnsRight": yaw < 0.0, "lateralG": snappedf(speed * absf(yaw) / 9.8, 0.01), "maxRollDeg": snappedf(max_roll, 0.01),
+		"flipped": min_up < 0.5, "minWheelsInContact": min_contacts}
 
 
 ## Drives north along a lane at a held speed, keeping the lane with a light hand; numbers inside z0..z1 (z0 > z1).

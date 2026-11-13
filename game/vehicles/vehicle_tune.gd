@@ -22,6 +22,12 @@ extends Resource
 ]
 @export var radius := 0.34
 @export var wheel_width := 0.22
+## The stand-in body drawn over the collision box: "box" (a plain body and cabin in `paint`), "auto" or "scooter" (the
+## stand-in kit parts, game/scenes/standin/kit.gd, without their own wheels; the vehicle draws the wheels it steps).
+@export var body := "box"
+@export var paint := Color(0.95, 0.76, 0.0)
+## The chase camera view this vehicle starts in ("wide" or "close", GAME.md: the auto uses the close chase).
+@export var camera_view := "wide"
 
 @export_group("Suspension")
 ## Spring and damper per unit mass (the old controller's numbers): force = mass * (stiffness * compression_m - damper * v).
@@ -33,6 +39,16 @@ extends Resource
 @export var max_force := 6000.0
 ## Share of the side impulse that acts at the contact point height (the rest acts at the centre of mass): less lean.
 @export var roll_influence := 0.1
+
+@export_group("Stability")
+## The hidden stabiliser (the scooter's, TECH.md "Vehicles (V2)"): while a wheel touches, a roll spring and damper about
+## the forward axis keeps the body upright. Angular acceleration per radian of roll and per rad/s of roll rate; 0 is off.
+@export var roll_stiffness := 0.0
+@export var roll_damping := 0.0
+## Visual lean of the drawn body into a turn (the physics body stays upright): at most lean_max radians, toward
+## atan(lateral acceleration / g), followed at lean_rate per second. 0 is off.
+@export var lean_max := 0.0
+@export var lean_rate := 6.0
 
 @export_group("Tyres")
 @export var grip_front := 3.1
@@ -109,4 +125,5 @@ func to_dict() -> Dictionary:
 		"id": id, "massKg": mass, "rideHeightM": snappedf(ride_height(), 0.0001), "wheels": wheels.size(), "radius": radius,
 		"stiffness": stiffness, "compression": compression, "relaxation": relaxation, "gripFront": grip_front, "gripRear": grip_rear,
 		"maxSteer": max_steer, "engineN": engine, "gearForce": gear_force, "gearTopKmh": gears, "brake": brake, "health": health,
+		"body": body, "cameraView": camera_view, "rollStiffness": roll_stiffness, "leanMaxDeg": snappedf(rad_to_deg(lean_max), 0.1),
 	}

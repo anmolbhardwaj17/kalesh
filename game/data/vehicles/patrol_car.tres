@@ -1,0 +1,20 @@
+[gd_resource type="Resource" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://vehicles/vehicle_tune.gd" id="1_tune"]
+
+; The patrol car, the cop's vehicle (P1-021): it starts as the car tune (car.tres, P1-020) with a white stand-in body.
+; GAME.md "Movement and camera feel": about 140 km/h, 0 to 100 km/h in 10 to 12 s, 100 to 0 in 38 to 45 m. Keep the
+; numbers below equal to car.tres until the cop's chapters give the patrol car its own feel.
+[resource]
+script = ExtResource("1_tune")
+id = "patrol_car"
+paint = Color(0.93, 0.93, 0.91, 1)
+linear_damp = 0.02
+compression = 1.8
+relaxation = 2.6
+engine = 4200.0
+gear_force = [1.0, 1.0, 0.5, 0.42, 0.36, 0.28]
+gears = [37.0, 62.0, 88.0, 112.0, 132.0, 145.0]
+fade_share = 0.06
+shift_at = 0.93
+brake = 64.0

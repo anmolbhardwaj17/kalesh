@@ -1,6 +1,6 @@
 {
   "_doc": "Written only by node harness/bin/task.mjs. Phases run in order; P0 (ADOPT + STYLE DISCOVERY) waits for the owner by design and needs task.mjs signoff and task.mjs archsignoff before its gate passes. Later phases are added by the planner at the end of P0 (task.mjs phase-add) from the game's real state.",
-  "updated": "2026-11-13T04:50:38.146Z",
+  "updated": "2026-11-13T05:29:23.490Z",
   "phases": [
     {
       "id": "P0",
@@ -3663,7 +3663,9 @@
       "kind": "polish",
       "status": "todo",
       "attempts": 0,
-      "notes": [],
+      "notes": [
+        "From P1-021: at 90 km/h the scooter trails up to 9.3 m behind and looks small; give each tune its own camera rig. The auto scrubs from 40 to 27.9 km/h at full lock (fine for tip, check feel at playtest)."
+      ],
       "created": "2026-11-13T04:46:42.902Z"
     }
   ]
