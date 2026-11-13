@@ -1,0 +1,14 @@
+{
+ "id": "open_land",
+ "kind": "archetype",
+ "confidence": "low",
+ "sheet": "none: no sheet",
+ "buildings": {
+  "generated": "none: open ground with a few buildings; they come from OSM",
+  "mix": {}
+ },
+ "evidence": {
+  "buildings.generated": "rule cells with no land use tag and footprint coverage under 0.03: mean coverage 0.008 over 296 cells (rule_cells.json summary.open_land)",
+  "buildings.mix": "rule cells with no land use tag and footprint coverage under 0.03: mean coverage 0.008 over 296 cells (rule_cells.json summary.open_land), nothing is generated"
+ }
+}

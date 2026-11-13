@@ -1,0 +1,23 @@
+{
+ "id": "mixed_midrise",
+ "kind": "archetype",
+ "confidence": "low",
+ "sheet": "harness/design/areas/cp_outer_circle.md; harness/design/areas/janpath.md",
+ "buildings": {
+  "mix": {
+   "flats_block": 0.3,
+   "office_slab": 0.25,
+   "shop_house": 0.25,
+   "commercial_block": 0.2
+  },
+  "floors": {
+   "p10": 2,
+   "p50": 4,
+   "p90": 13
+  }
+ },
+ "evidence": {
+  "buildings.mix": "footprint grid of the rule cells: coverage 0.265 and median footprint 95.9 m2 over 611 cells (rule_cells.json summary.mixed_midrise); sheet cp_outer_circle 'Edge blending' (mixed 4 to 8 storey offices); shares are an estimate",
+  "buildings.floors": "OSM levels in the rule cells of this archetype: p10 2, median 4, p90 13, n=102 (rule_cells.json summary.mixed_midrise)"
+ }
+}

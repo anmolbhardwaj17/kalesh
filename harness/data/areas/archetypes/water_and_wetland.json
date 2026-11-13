@@ -1,0 +1,14 @@
+{
+ "id": "water_and_wetland",
+ "kind": "archetype",
+ "confidence": "low",
+ "sheet": "none: no sheet",
+ "buildings": {
+  "generated": "none: water and wetland; the water system draws it (DELHI_WORLD.md water section)",
+  "mix": {}
+ },
+ "evidence": {
+  "buildings.generated": "rule cells with OSM natural=water or wetland: 27 cells, mean coverage 0.002 (rule_cells.json summary.water_and_wetland)",
+  "buildings.mix": "rule cells with OSM natural=water or wetland: 27 cells, mean coverage 0.002 (rule_cells.json summary.water_and_wetland), nothing is generated"
+ }
+}

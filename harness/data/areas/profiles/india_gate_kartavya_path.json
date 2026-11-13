@@ -1,0 +1,80 @@
+{
+ "id": "india_gate_kartavya_path",
+ "name": "India Gate and Kartavya Path",
+ "archetype": "ceremonial_avenue",
+ "sheet": "harness/design/areas/india_gate_kartavya_path.md",
+ "confidence": "medium",
+ "blueprint": null,
+ "names_file": "game/data/names/india_gate_kartavya_path.json",
+ "infrastructure": [
+  "SUB-S4"
+ ],
+ "notes": "Everything inside the hexagon and the vista is lawn, canal and avenue; the monuments come from the landmark registry.",
+ "footpath": {
+  "width_m": [
+   6,
+   8
+  ],
+  "surface": "reddish-pink crushed stone and paved walk, a tiled central path at the vista with a stone edge",
+  "kerb": "plain stone kerb, very low",
+  "notes": "after the evening closure people walk on the road"
+ },
+ "lamps": {
+  "kind": "classical cast lamp: black post with a lantern head",
+  "height_m": [
+   6,
+   8
+  ],
+  "spacing_m": [
+   30,
+   30
+  ],
+  "colour": "warm_white"
+ },
+ "boundaries": {
+  "kinds": [
+   "low green iron railing with white stone posts and chains along the lawn and canal edge",
+   "low chain bollards at the hexagon",
+   "police barricades striped yellow and black"
+  ],
+  "height_m": null
+ },
+ "greenery": {
+  "street_trees": "very_high",
+  "species": [
+   "jamun",
+   "neem",
+   "arjun"
+  ]
+ },
+ "props": {
+  "parking_bays": "rare",
+  "barricades": "low"
+ },
+ "life": {
+  "vendors": "medium",
+  "pedestrians": "high",
+  "buses": "low",
+  "parked_cars": "rare",
+  "people": "families, tourists and school groups in the evening; joggers and cyclists in the early morning; crowds at parade rehearsals and Republic Day events; ice cream and balloon sellers outside the lawns near the gate"
+ },
+ "sound": {
+  "bed": "sfx_amb_ceremonial_lawns"
+ },
+ "wear": 0.03,
+ "road": {
+  "condition": "grey asphalt in very good condition, solid yellow centre line, white dashed lane lines, no kerb paint",
+  "cleanliness": "very_high"
+ },
+ "evidence": {
+  "footpath": "sheet india_gate_kartavya_path 'Footpaths': a 6 to 8 m band of reddish-pink crushed stone and paved walk each side, a paved central line with a stone edge, a very low plain stone kerb, people walk on the road in the evening after closure",
+  "lamps": "sheet india_gate_kartavya_path 'Street lamps': black cast posts 6 to 8 m tall with a lantern head, regular 30 m spacing, warm light",
+  "boundaries": "sheet india_gate_kartavya_path 'Boundaries': low green iron railing with white stone posts and chains, low chain-link bollards at the hexagon, yellow and black barricade stripes, no walls",
+  "greenery": "sheet india_gate_kartavya_path 'Trees and planting': rows of large avenue trees (jamun, neem, arjun) lining both sides and forming a visual wall",
+  "props": "sheet india_gate_kartavya_path 'Parking and vehicles': very few parked cars, police vans at barricades",
+  "life": "sheet india_gate_kartavya_path 'Vendors and street life' (evening crowds, vendors outside the lawns near the gate, early morning joggers, parade rehearsal) and 'Parking and vehicles' (tourist buses at the hexagon edge, very few parked cars)",
+  "sound": "sheet india_gate_kartavya_path 'What makes this area unlike the others': the widest, flattest, most formal space; if it looks busy it is wrong",
+  "wear": "sheet india_gate_kartavya_path 'Typical clutter and wear': wear 0.0 to 0.03; DELHI_WORLD.md 2a table 0.03",
+  "road": "sheet india_gate_kartavya_path 'Road surface and markings': three lanes each side, grey asphalt in very good condition, yellow solid centre line; 'Typical clutter and wear': very clean"
+ }
+}

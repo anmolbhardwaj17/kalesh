@@ -1,0 +1,63 @@
+{
+ "id": "colonial_cbd",
+ "kind": "archetype",
+ "confidence": "medium",
+ "sheet": "harness/design/areas/cp_inner_circle.md; harness/design/areas/cp_outer_circle.md",
+ "buildings": {
+  "ground_floor": "colonnade or arcade shops under the first floor",
+  "colours": [
+   "white_render",
+   "cream"
+  ],
+  "materials": [
+   "lime render",
+   "stucco",
+   "stone paving"
+  ],
+  "roofline": "continuous parapet with arched pavilions at block ends and gaps",
+  "balconies": "none: tall shuttered windows with window ACs above the column line"
+ },
+ "house_railings": {
+  "roof_parapets": {
+   "kind": "continuous masonry parapet",
+   "frequency": "very_high"
+  },
+  "gate_and_window_grilles": {
+   "kind": "none: no walls or gates, shutters and window units only",
+   "frequency": "none"
+  }
+ },
+ "lamps": {
+  "kind": "steel pole with two arms",
+  "height_m": [
+   9,
+   9
+  ],
+  "spacing_m": [
+   28,
+   28
+  ]
+ },
+ "footpath": {
+  "surface": "pale stone slabs, cream and grey"
+ },
+ "greenery": {
+  "planters": "medium",
+  "species": [
+   "hibiscus",
+   "bougainvillea"
+  ]
+ },
+ "evidence": {
+  "buildings.ground_floor": "sheet cp_inner_circle 'Buildings' and cp_outer_circle 'Boundaries': Tuscan columns on the ground floor, deep arched passages in the outer ring",
+  "buildings.colours": "sheet cp_inner_circle 'Buildings': white or cream lime render; hero road cp_inner_circle colonnadeEdge colour #f1eee6",
+  "buildings.materials": "sheet cp_inner_circle 'Buildings' (lime render), cp_outer_circle 'Boundaries' (white stuccoed walls), 'Footpaths' (stone paving)",
+  "buildings.roofline": "sheet cp_inner_circle 'Buildings': a continuous parapet, arched pavilions at block ends and at gaps",
+  "buildings.balconies": "sheet cp_inner_circle 'Buildings': windows above the columns are tall, shuttered, often with window ACs; no balconies named",
+  "house_railings.roof_parapets": "sheet cp_inner_circle 'Buildings': a continuous parapet on every block",
+  "house_railings.gate_and_window_grilles": "sheet cp_inner_circle 'Boundaries': no walls, no gates",
+  "lamps": "sheet cp_inner_circle 'Street lamps' (steel poles, two arms, about 9 m, about 28 m apart) and cp_outer_circle 'Street lamps' (the same double-arm poles)",
+  "footpath.surface": "sheet cp_inner_circle 'Footpaths': pale stone paving, cream and grey slabs",
+  "greenery": "sheet cp_inner_circle 'Trees and planting': hibiscus and bougainvillea in the planters; cp_outer_circle 'Trees and planting': planters at the corners"
+ }
+}

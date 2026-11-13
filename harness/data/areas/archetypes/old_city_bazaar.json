@@ -1,0 +1,38 @@
+{
+ "id": "old_city_bazaar",
+ "kind": "archetype",
+ "confidence": "medium",
+ "sheet": "harness/design/areas/chandni_chowk_main.md; harness/design/areas/paharganj_station.md; harness/design/areas/gb_road_ajmeri_gate.md",
+ "buildings": {
+  "ground_floor": "shops on every street frontage behind roll-down shutters",
+  "materials": [
+   "lime plaster",
+   "brick",
+   "painted plaster"
+  ],
+  "wires": "very_high",
+  "upkeep": "worn"
+ },
+ "house_railings": {
+  "gate_and_window_grilles": {
+   "kind": "roll-down steel shutters in many colours, iron gates",
+   "frequency": "very_high"
+  }
+ },
+ "props": {
+  "hoardings": "high",
+  "poles_and_wires": "very_high"
+ },
+ "signs": {
+  "density": "very_high"
+ },
+ "evidence": {
+  "buildings.ground_floor": "sheet chandni_chowk_main 'Boundaries' (shutters), paharganj_station 'Boundaries' (roll-down shutters), gb_road_ajmeri_gate 'Boundaries' (rolled shutters on every ground floor)",
+  "buildings.materials": "sheet chandni_chowk_main 'Buildings' (lime plaster and brick), paharganj_station 'Buildings' (painted plaster, old haveli fragments), gb_road_ajmeri_gate 'Buildings' (red brick and plaster)",
+  "buildings.wires": "sheet chandni_chowk_main 'Buildings' (wires hang across the street), paharganj_station 'Typical clutter and wear' (wires), gb_road_ajmeri_gate 'Typical clutter and wear' (tangled overhead wires and cable bundles)",
+  "buildings.upkeep": "sheet chandni_chowk_main 'Typical clutter and wear' (stained plaster), paharganj_station (stained plaster), gb_road_ajmeri_gate (wear 0.7 to 0.8)",
+  "house_railings.gate_and_window_grilles": "sheet chandni_chowk_main 'Boundaries', paharganj_station 'Boundaries' (shutters in many colours, iron gates), gb_road_ajmeri_gate 'Boundaries' (rolled shutters on every ground floor)",
+  "props": "sheet chandni_chowk_main 'Buildings' (hoardings), paharganj_station 'Street lamps' (lit roof hoardings) and 'Typical clutter and wear' (wires), gb_road_ajmeri_gate 'Typical clutter and wear' (hoardings, shop boards, cable bundles)",
+  "signs.density": "sheet chandni_chowk_main 'Buildings' (signboard clusters), paharganj_station 'Buildings' (signs stacked on every floor), gb_road_ajmeri_gate 'Buildings' (painted boards on every shopfront)"
+ }
+}

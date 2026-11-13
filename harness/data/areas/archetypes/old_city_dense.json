@@ -1,0 +1,24 @@
+{
+ "id": "old_city_dense",
+ "kind": "archetype",
+ "confidence": "low",
+ "sheet": "harness/design/areas/chandni_chowk_galis.md; harness/design/areas/paharganj_station.md",
+ "buildings": {
+  "mix": {
+   "house": 0.4,
+   "shop_house": 0.4,
+   "flats_block": 0.2
+  },
+  "floors": {
+   "p10": 2,
+   "p50": 4,
+   "p90": 9
+  }
+ },
+ "wear": 0.8,
+ "evidence": {
+  "buildings.mix": "footprint grid of the rule cells: coverage 0.445 and median footprint 43 m2 over 291 cells (rule_cells.json summary.old_city_dense) means small plots of houses and shop houses; shares are an estimate, the type names come from sheet chandni_chowk_galis 'Buildings'",
+  "buildings.floors": "OSM levels in the rule cells of this archetype: p10 2, median 4, p90 9, n=46 (rule_cells.json summary.old_city_dense); sheet chandni_chowk_galis 'Buildings' gives 3 to 5 storeys in the neighbouring lanes",
+  "wear": "the neighbouring areas on the sheets: chandni_chowk_galis 'Typical clutter and wear' 1.0 and paharganj_station 0.8; taken at the lower value because this ground has no sheet"
+ }
+}

@@ -1,0 +1,118 @@
+{
+ "id": "janpath",
+ "name": "Janpath",
+ "archetype": "commercial_midrise",
+ "sheet": "harness/design/areas/janpath.md",
+ "confidence": "medium",
+ "blueprint": null,
+ "names_file": "game/data/names/janpath.json",
+ "infrastructure": [
+  "MET-STN-UG",
+  "SUB-S1"
+ ],
+ "notes": "The craft market is described by what it sells and how it looks, not by who sells it.",
+ "buildings": {
+  "mix": {
+   "low_row_market": 0.3,
+   "office_slab": 0.4,
+   "commercial_block": 0.2,
+   "shop_house": 0.1
+  },
+  "floors": {
+   "p10": 2,
+   "p50": 4,
+   "p90": 6
+  },
+  "colours": [
+   "painted_red",
+   "cream",
+   "grey_concrete"
+  ],
+  "materials": [
+   "painted plaster",
+   "concrete",
+   "roll-down steel shutters"
+  ],
+  "balconies": "none: a flat-roofed market row with a first floor sign band; shuttered windows on the office side",
+  "roofline": "flat roofs; a red and cream painted band at the top of the market row"
+ },
+ "house_railings": {
+  "gate_and_window_grilles": {
+   "kind": "roll-down steel shutters on the market row, no front wall on the office side",
+   "frequency": "very_high"
+  }
+ },
+ "footpath": {
+  "width_m": [
+   2.5,
+   3
+  ],
+  "surface": "a raised paved walk with a red and cream chequer band on the market side; grey paver on the road side",
+  "kerb": "yellow and black painted kerb stripe"
+ },
+ "lamps": {
+  "kind": "tall double-arm steel pole in the median",
+  "height_m": null,
+  "spacing_m": null,
+  "colour": "sodium",
+  "notes": "bulbs and fairy lights over the market and in the trees at night"
+ },
+ "boundaries": {
+  "kinds": [
+   "low black median railing",
+   "roll-down shutters",
+   "green direction boards"
+  ],
+  "height_m": null
+ },
+ "greenery": {
+  "street_trees": "very_high",
+  "species": [
+   "jamun",
+   "neem",
+   "peepal"
+  ]
+ },
+ "signs": {
+  "density": "high",
+  "scripts": [
+   "latn",
+   "deva",
+   "arab"
+  ],
+  "boards": "shop signs on the first floor and brand boards on the office blocks; green direction boards in Hindi, Urdu and English"
+ },
+ "life": {
+  "vendors": "high",
+  "pedestrians": "high",
+  "autos": "medium",
+  "parked_two_wheelers": "medium",
+  "people": "shoppers and visitors, sellers sitting at open shutters or standing in front, a few juice sellers and a small cafe; the market is lit and busiest at night"
+ },
+ "sound": {
+  "bed": "sfx_amb_market_avenue"
+ },
+ "wear": 0.25,
+ "road": {
+  "condition": "good mid-grey asphalt on a dual carriageway with a planted median about 2 m wide; a narrow patched service lane beside the shops",
+  "cleanliness": "medium"
+ },
+ "evidence": {
+  "buildings.mix": "sheet janpath 'Buildings': a long low two storey market row with open fronts, and on the office side 4 to 6 storey concrete blocks with brand boards. Shares are an estimate",
+  "buildings.floors": "sheet janpath 'Buildings': two storey market row, 4 to 6 storey office blocks",
+  "buildings.colours": "sheet janpath 'Buildings': a red and cream painted band at the top of the market row; 4 to 6 storey concrete blocks",
+  "buildings.materials": "sheet janpath 'Buildings' and 'Boundaries': painted market row, concrete office blocks, roll-down shutters",
+  "buildings.balconies": "sheet janpath 'Buildings': flat roofed row, signs on the first floor; office blocks with AC units and shuttered windows",
+  "buildings.roofline": "sheet janpath 'Buildings': flat roofed, a red and cream painted band at the top",
+  "house_railings": "sheet janpath 'Boundaries': shutters and a painted welcome wall at the market entrance; office blocks along the east side have no front wall",
+  "footpath": "sheet janpath 'Footpaths': market frontage a raised paved walk about 3 m wide with a red and cream chequer band, road side grey paver about 2.5 m with a yellow and black kerb stripe",
+  "lamps": "sheet janpath 'Street lamps': tall double-arm steel poles in the median with sodium lights; small shop-side bulbs and fairy lights over the market; the sheet gives no pole height or spacing",
+  "boundaries": "sheet janpath 'Boundaries': low black railing in the median, green direction boards, shutters; no heights in the sheet",
+  "greenery": "sheet janpath 'Trees and planting': large mature roadside trees (jamun, neem, peepal-like) forming a canopy over the road",
+  "signs": "sheet janpath 'Buildings' (shop signs on the first floor, brand boards, many boards in English only) and 'Boundaries' (green direction boards with Hindi, Urdu and English)",
+  "life": "sheet janpath 'Vendors and street life' (a tourist market: bags, bracelets, curios, sellers at open shutters, a small cafe and juice sellers; lit stalls at night) and 'Parking and vehicles' (autos and taxis along the service lane, motorbikes in front of shops)",
+  "sound": "sheet janpath 'What makes this area unlike the others': a tree-lined dual carriageway with a low row of craft shops at its side",
+  "wear": "sheet janpath 'Typical clutter and wear': wear 0.25; DELHI_WORLD.md 2a table 0.25",
+  "road": "sheet janpath 'Road surface and markings': dual carriageway, two lanes each way, a planted median about 2 m wide, good mid-grey asphalt; the service lane is narrow, patched asphalt with leaf litter"
+ }
+}

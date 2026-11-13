@@ -1,0 +1,16 @@
+{
+ "id": "heritage_fort_precinct",
+ "kind": "archetype",
+ "confidence": "medium",
+ "sheet": "harness/design/areas/red_fort_surroundings.md",
+ "greenery": {
+  "lawns": "high"
+ },
+ "props": {
+  "barricades": "very_high"
+ },
+ "evidence": {
+  "greenery.lawns": "sheet red_fort_surroundings 'Trees and planting': the green moat lawn between wall and road, short grass",
+  "props.barricades": "sheet red_fort_surroundings 'Typical clutter and wear': plenty of barricades; 'Boundaries': police barricades, yellow barricades across vendor and visitor lines"
+ }
+}

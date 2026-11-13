@@ -1,0 +1,134 @@
+{
+ "id": "paharganj_station",
+ "name": "Paharganj and the station concourse",
+ "archetype": "old_city_bazaar",
+ "sheet": "harness/design/areas/paharganj_station.md",
+ "confidence": "medium",
+ "blueprint": null,
+ "names_file": "game/data/names/paharganj_station.json",
+ "infrastructure": [
+  "FLY-T1",
+  "RSTN-NDLS"
+ ],
+ "notes": "Cows are listed as rare because the sheet names them twice among the lane's animals; no worship type is generated from this profile. The Ajmeri Gate side forecourt is in gb_road_ajmeri_gate.",
+ "buildings": {
+  "mix": {
+   "hotel_stack": 0.45,
+   "shop_house": 0.25,
+   "commercial_block": 0.15,
+   "station_building": 0.1,
+   "haveli": 0.05
+  },
+  "floors": {
+   "p10": 3,
+   "p50": 5,
+   "p90": 6
+  },
+  "colours": [
+   "painted_pink",
+   "painted_blue",
+   "painted_yellow",
+   "brown_cream"
+  ],
+  "materials": [
+   "painted plaster",
+   "brick",
+   "carved brackets on old haveli fragments",
+   "metal canopy at the station"
+  ],
+  "balconies": "balconies and rooftop terraces; old haveli fragments with carved brackets",
+  "roof": {
+   "dish": 0.7
+  },
+  "roofline": "rooftop terraces with cell masts, dish antennas and lit hoardings"
+ },
+ "house_railings": {
+  "roof_parapets": {
+   "kind": "terrace railing on rooftop terraces",
+   "frequency": "high"
+  },
+  "gate_and_window_grilles": {
+   "kind": "roll-down shutters in many colours (blue is common), iron gates, narrow arch entrances for old lanes",
+   "frequency": "very_high"
+  }
+ },
+ "footpath": {
+  "width_m": [
+   0,
+   2
+  ],
+  "surface": "about 1 m of broken concrete or paver at the shopfronts, a 2 m kerbed uneven walk on Desh Bandhu Gupta Road, a wide grey granite tile forecourt at the station",
+  "kerb": "uneven kerb on Desh Bandhu Gupta Road, none at the shopfronts"
+ },
+ "lamps": {
+  "kind": "bare bulbs and tube lights at shopfronts, a few sodium street poles, neon hotel signs and lit roof hoardings",
+  "height_m": null,
+  "spacing_m": null,
+  "colour": "mixed"
+ },
+ "boundaries": {
+  "kinds": [
+   "roll-down shutters",
+   "iron gates",
+   "metal railings at the station",
+   "walls of old havelis with brackets"
+  ],
+  "height_m": null
+ },
+ "greenery": {
+  "street_trees": "rare",
+  "species": [
+   "peepal",
+   "neem"
+  ],
+  "planters": "low"
+ },
+ "props": {
+  "hoardings": "very_high"
+ },
+ "signs": {
+  "boards": "hotel and guesthouse signs stacked on every floor, lit roof hoardings and neon, most in English"
+ },
+ "life": {
+  "vendors": "high",
+  "pedestrians": "very_high",
+  "cycle_rickshaws": "high",
+  "e_rickshaws": "high",
+  "autos": "medium",
+  "buses": "medium",
+  "parked_cars": "low",
+  "parked_two_wheelers": "high",
+  "people": "residents, shopkeepers, porters, fruit sellers and tailors, travellers and visitors from many countries; the market runs day and night",
+  "animals": {
+   "cows": "rare"
+  }
+ },
+ "sound": {
+  "bed": "sfx_amb_station_bazaar"
+ },
+ "wear": 0.8,
+ "road": {
+  "condition": "Main Bazaar about 7 to 8 m of patched asphalt or concrete with no lane lines; Desh Bandhu Gupta Road four lanes one way with painted dashes; faded lines under the flyover",
+  "cleanliness": "low"
+ },
+ "evidence": {
+  "buildings.mix": "sheet paharganj_station 'Buildings': dense tall 4 to 6 storey buildings jammed edge to edge, hotel and guesthouse signs stacked on every floor, old haveli fragments, the station concourse; DELHI_WORLD.md 2a table. Shares are an estimate",
+  "buildings.floors": "sheet paharganj_station 'Buildings': dense, tall 4 to 6 storey buildings",
+  "buildings.colours": "sheet paharganj_station 'Buildings': painted pink, blue, yellow; the station is a long brown and cream concourse",
+  "buildings.materials": "sheet paharganj_station 'Buildings': old haveli fragments with carved brackets, a metal canopy over the station; 'Boundaries': walls of old havelis",
+  "buildings.balconies": "sheet paharganj_station 'Buildings': balconies, rooftop terraces, old haveli fragments with carved brackets",
+  "buildings.roof": "sheet paharganj_station 'Buildings': rooftop terraces with cell masts, dish antennas (common); the fraction is an estimate",
+  "buildings.roofline": "sheet paharganj_station 'Buildings': rooftop terraces with masts and dishes; 'Street lamps': large lit hoardings on the roof of hotels",
+  "house_railings": "sheet paharganj_station 'Buildings' (rooftop terraces) and 'Boundaries' (roll-down shutters in many colours, iron gates, narrow arch entrances)",
+  "footpath": "sheet paharganj_station 'Footpaths': no real footpath, shops spill onto 1 m of broken concrete or paver; the station forecourt is grey granite tile; DB Gupta Road 2 m footpath with kerbs, uneven",
+  "lamps": "sheet paharganj_station 'Street lamps': bare bulbs and tube lights at shopfronts, a few sodium street poles, neon from hotel signs, large lit hoardings on hotel roofs",
+  "boundaries": "sheet paharganj_station 'Boundaries': roll-down shutters, iron gates, narrow arch entrances for old lanes, metal railings at the station, old haveli walls with brackets",
+  "greenery": "sheet paharganj_station 'Trees and planting': very little, a few peepal or neem at corners and roofs, potted plants on terraces",
+  "props.hoardings": "sheet paharganj_station 'Street lamps': large lit hoardings on the roof of hotels; 'Buildings': large hotel and guesthouse signs",
+  "signs.boards": "sheet paharganj_station 'Buildings': large hotel and guesthouse signs stacked on every floor, English signs; 'Street lamps': neon from hotel signs",
+  "life": "sheet paharganj_station 'Vendors and street life' (shopkeepers, porters, rickshaw pullers, fruit sellers, tailor shops, visitors, cows in the lane, a day and night market), 'Parking and vehicles' (cycle and e-rickshaws, motorbikes, autos, handcarts, cars at the station side, buses at the flyover)",
+  "sound": "sheet paharganj_station 'What makes this area unlike the others': a rail hub next to a bazaar, trains behind the roofs, bright hoardings; 'Vendors and street life': a day and night market",
+  "wear": "sheet paharganj_station 'Typical clutter and wear': wear 0.8",
+  "road": "sheet paharganj_station 'Road surface and markings': Main Bazaar about 7 to 8 m wide, patched asphalt or concrete, no lane lines; DB Gupta Road a four-lane one-way road with painted dashes; faded lines under the flyover"
+ }
+}

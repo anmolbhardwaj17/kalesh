@@ -1,0 +1,116 @@
+{
+ "id": "jantar_mantar",
+ "name": "Jantar Mantar, Sansad Marg and Jantar Mantar Road",
+ "archetype": "institutional_offices",
+ "sheet": "harness/design/areas/jantar_mantar.md",
+ "confidence": "medium",
+ "blueprint": null,
+ "names_file": "game/data/names/jantar_mantar.json",
+ "infrastructure": [],
+ "notes": "Protest days are shown as the civic use of the street (temporary banners and tents), not as an area label. The observatory instruments come from the landmark registry.",
+ "buildings": {
+  "mix": {
+   "govt_slab": 0.35,
+   "admin_block": 0.25,
+   "office_slab": 0.2,
+   "office_tower": 0.2
+  },
+  "floors": {
+   "p10": 2,
+   "p50": 5,
+   "p90": 12
+  },
+  "colours": [
+   "cream",
+   "brown_cream",
+   "red_sandstone"
+  ],
+  "materials": [
+   "red sandstone",
+   "brick",
+   "plaster"
+  ]
+ },
+ "footpath": {
+  "width_m": [
+   2,
+   3
+  ],
+  "surface": "grey paver with a yellow and black kerb stripe; red sandstone paths inside the garden; a wide tarmac edge with a taxi lay-by on Sansad Marg",
+  "kerb": "yellow and black stripe",
+  "notes": "3 m pavement at the garden railing, a 2 m tarmac edge on Sansad Marg"
+ },
+ "lamps": {
+  "kind": "single and double-arm steel poles on the footpath edge; black cast lanterns on stone pillars in the garden",
+  "height_m": [
+   9,
+   9
+  ],
+  "spacing_m": [
+   35,
+   40
+  ],
+  "colour": "mixed"
+ },
+ "boundaries": {
+  "kinds": [
+   "red sandstone and brick wall about 1.5 to 2 m",
+   "green iron railing with spear tops about 2.5 m round the garden and the pavement",
+   "yellow police barricades on wheels about 1.1 m high"
+  ],
+  "height_m": [
+   1.1,
+   2.5
+  ]
+ },
+ "greenery": {
+  "street_trees": "very_high",
+  "species": [
+   "rain tree",
+   "neem",
+   "palm"
+  ],
+  "lawns": "high"
+ },
+ "props": {
+  "barricades": "high",
+  "parking_bays": "very_high"
+ },
+ "signs": {
+  "density": "low",
+  "boards": "green direction boards on posts; a red nameplate at the garden gate"
+ },
+ "life": {
+  "vendors": "low",
+  "autos": "medium",
+  "buses": "low",
+  "parked_cars": "high",
+  "people": "visitors and school groups at the observatory, guards at the gates, cab drivers waiting along the kerb; on protest days people gather at the railing for sit-ins and rallies with banners, tents and chairs"
+ },
+ "sound": {
+  "bed": "sfx_amb_garden_avenue"
+ },
+ "wear": 0.12,
+ "wear_notes": "a little more at the protest pavement (banners, tarps, chairs)",
+ "road": {
+  "condition": "wide dual carriageway about 12 m per direction including a 2 m taxi lay-by, good grey asphalt, clear white lines, a low yellow and black divider about 0.4 m wide",
+  "cleanliness": "high"
+ },
+ "evidence": {
+  "buildings.mix": "sheet jantar_mantar 'Buildings': government blocks (Akashvani Bhawan, post office, Reserve Bank towers) and hotel towers around the observatory, low sandstone and cream blocks of the old government quarter; the observatory comes from the registry. Shares are an estimate",
+  "buildings.floors": "sheet jantar_mantar 'Buildings': 5 to 12 storeys; 'Street-level top-up': low red sandstone and cream blocks",
+  "buildings.colours": "sheet jantar_mantar 'Buildings': cream and brown blocks, red sandstone walls",
+  "buildings.materials": "sheet jantar_mantar 'Boundaries' (red sandstone and brick walls) and 'Buildings' (plaster)",
+  "footpath": "sheet jantar_mantar 'Street-level top-up': Sansad Marg has a wide tarmac edge, taxi parking uses the edge; a paved strip with a yellow and black kerb near the gates; a pavement about 3 m wide outside the garden railing; red stone path inside",
+  "lamps": "sheet jantar_mantar 'Street lamps' and 'Street-level top-up': black cast lanterns on stone pillars in the garden, single and double-arm poles about 9 m, 35 to 40 m apart",
+  "boundaries": "sheet jantar_mantar 'Street-level top-up': red sandstone and brick walls 1.5 to 2 m, green iron railing with spear tops about 2.5 m, yellow police barricades on wheels about 1.1 m high",
+  "greenery": "sheet jantar_mantar 'Trees and planting': old rain trees and neem forming a continuous canopy 15 to 20 m high; a formal garden with neat lawns, palms and flowering shrubs",
+  "props": "sheet jantar_mantar 'Street-level top-up' (yellow police barricades on wheels, rows of white taxis in a lay-by along both kerbs) and 'Parking and vehicles'",
+  "signs": "sheet jantar_mantar 'Edge blending' (shop signs vanish) and 'Street-level top-up' (green direction boards on posts, a red nameplate at the garden gate)",
+  "life": "sheet jantar_mantar 'Vendors and street life' (tourists and school groups inside, guards at the gate, ice cream and tea carts, sit-ins at the roadside) and 'Street-level top-up' (taxi rows, guards, crowds with flags on protest days; the street is quiet outside protest days)",
+  "sound": "sheet jantar_mantar 'What makes this area unlike the others': a green park beside a government road; 'Street-level top-up': quiet outside protest days",
+  "wear": "sheet jantar_mantar 'Typical clutter and wear': wear 0.1; 'Street-level top-up': about 0.1 to 0.15 on the road; DELHI_WORLD.md 2a table 0.1 to 0.15",
+  "wear_notes": "sheet jantar_mantar 'Street-level top-up': more at the protest site (banners, tarps, chairs)",
+  "road": "sheet jantar_mantar 'Street-level top-up': about 12 m per direction (three lanes plus a parking edge), a continuous low yellow and black block about 0.4 m wide as the divider; 'Road surface and markings': good grey asphalt, slightly better kept than a typical arterial"
+ }
+}

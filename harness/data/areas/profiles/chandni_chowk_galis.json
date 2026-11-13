@@ -1,0 +1,138 @@
+{
+ "id": "chandni_chowk_galis",
+ "name": "Chandni Chowk, the galis",
+ "archetype": "old_city_lanes",
+ "sheet": "harness/design/areas/chandni_chowk_galis.md",
+ "confidence": "medium",
+ "blueprint": null,
+ "names_file": "game/data/names/chandni_chowk_galis.json",
+ "infrastructure": [],
+ "notes": "Lane widths change every few metres, so the generator reads width from the repaired road, not from this profile. Dead-end courtyards behind the lanes stay off the road graph (sheet 'Map notes').",
+ "buildings": {
+  "mix": {
+   "haveli": 0.3,
+   "shop_house": 0.5,
+   "bazaar_block": 0.15,
+   "other": 0.05
+  },
+  "floors": {
+   "p10": 3,
+   "p50": 4,
+   "p90": 5
+  },
+  "setback_m": [
+   0,
+   0
+  ],
+  "ground_floor": "shop below, home or store room above; raised thresholds at the doors",
+  "colours": [
+   "painted_blue",
+   "cream",
+   "painted_pink",
+   "ochre"
+  ],
+  "materials": [
+   "lime plaster",
+   "exposed brick",
+   "painted plaster"
+  ],
+  "balconies": "cantilever balconies and jharokhas stepping out so the sky is a thin strip; potted plants on the balconies",
+  "roof": {
+   "water_tanks": 0.7,
+   "dish": 0.5
+  },
+  "roofline": "roofs with water tanks and dishes"
+ },
+ "house_railings": {
+  "balcony_grilles": {
+   "kind": "cantilever and jharokha balcony fronts",
+   "frequency": "high"
+  },
+  "gate_and_window_grilles": {
+   "kind": "rolled steel shutters, wooden doors, haveli iron gates and arched lane-mouth gates",
+   "frequency": "very_high"
+  }
+ },
+ "footpath": {
+  "width_m": null,
+  "surface": "one worn surface of old stone, brick or patched concrete from shutter to shutter, stepped at shop thresholds, an open drain along one edge",
+  "kerb": "none; raised thresholds at doors",
+  "notes": "lane width 2.5 to 3.5 m for small galis, about 4 m for bazaar lanes, 5 to 6 m for Ballimaran and Katra Bariyan, 8 to 10 m for Khari Baoli and Chawri Bazar; shop spill takes 0.5 to 1.5 m each side"
+ },
+ "lamps": {
+  "kind": "bare bulbs, tube lights and string lights on shopfronts and awnings; a sodium bracket pole only at lane mouths",
+  "height_m": null,
+  "spacing_m": null,
+  "colour": "mixed"
+ },
+ "boundaries": {
+  "kinds": [
+   "rolled steel shutters",
+   "haveli iron gates and arched doorways",
+   "arches over lane mouths 3 to 4 m wide",
+   "tarpaulins and cloth awnings in blue, green and orange"
+  ],
+  "height_m": null
+ },
+ "greenery": {
+  "street_trees": "rare",
+  "lawns": "none",
+  "planters": "low"
+ },
+ "props": {
+  "poles_and_wires": "very_high",
+  "hoardings": "high"
+ },
+ "signs": {
+  "boards": "hand-painted shop boards and hanging signs; blue and white street-name boards at the corners"
+ },
+ "life": {
+  "vendors": "very_high",
+  "pedestrians": "very_high",
+  "cycle_rickshaws": "medium",
+  "e_rickshaws": "medium",
+  "autos": "low",
+  "parked_cars": "none",
+  "parked_two_wheelers": "high",
+  "people": "porters with loads, shopkeepers on their thresholds, sweet and snack makers, shoppers of all ages and dress, schoolchildren, older residents sitting on steps; the lanes are busiest in the evening",
+  "animals": {
+   "dogs": "low",
+   "cats": "low",
+   "pigeons": "medium"
+  }
+ },
+ "sound": {
+  "bed": "sfx_amb_old_city_lane",
+  "horn_rate": "low",
+  "calls": "vendor calls, frying and cooking noise, handcarts on stone"
+ },
+ "wear": 1.0,
+ "wear_notes": "0.9 in the wider market lanes (Khari Baoli, Chawri Bazar)",
+ "road": {
+  "condition": "patched concrete, old stone or asphalt with wet patches; no markings",
+  "cleanliness": "low"
+ },
+ "evidence": {
+  "buildings.mix": "sheet chandni_chowk_galis 'Buildings' (old haveli facades with cusped arches and jharokhas) and 'Street-level top-up' (shop below and home or godown above, a courtyard haveli, rolled-shutter shopfronts). Shares are an estimate",
+  "buildings.floors": "sheet chandni_chowk_galis 'Buildings': 3 to 5 storeys",
+  "buildings.setback_m": "sheet chandni_chowk_galis 'Footpaths': one surface from shutter to shutter, no kerb or setback",
+  "buildings.ground_floor": "sheet chandni_chowk_galis 'Street-level top-up': shop below and home or godown above, raised thresholds at doors",
+  "buildings.colours": "sheet chandni_chowk_galis 'Street-level top-up': painted haveli faces in blue, ochre, pink and cream",
+  "buildings.materials": "sheet chandni_chowk_galis 'Street-level top-up': lime plaster, exposed brick, painted haveli faces",
+  "buildings.balconies": "sheet chandni_chowk_galis 'Buildings': cantilever balconies and jharokhas stepping outwards; 'Trees and planting': plants only in pots on balconies",
+  "buildings.roof": "sheet chandni_chowk_galis 'Buildings': roofs with water tanks and dishes (common); the fractions are an estimate",
+  "buildings.roofline": "sheet chandni_chowk_galis 'Buildings': roofs with water tanks and dishes; 'Trees and planting': rooftop pigeons",
+  "house_railings": "sheet chandni_chowk_galis 'Buildings' (cantilever balconies and jharokhas) and 'Boundaries' (rolled shutters in many colours, wooden doors, haveli iron gates, carved arched doorways)",
+  "footpath": "sheet chandni_chowk_galis 'Street-level top-up' (no footpath, one worn surface, open drain along one edge, shops spill 0.5 to 1.5 m) and 'Road surface and markings' (widths read by scale)",
+  "lamps": "sheet chandni_chowk_galis 'Street-level top-up': no poles in the lanes, bare bulbs, tube lights and string lights on shopfronts; a single curved-arm pole only at the wider crossings",
+  "boundaries": "sheet chandni_chowk_galis 'Boundaries': rolled shutters, haveli iron gates, arches across lane mouths 3 to 4 m wide, blue, green and orange tarpaulins and awnings",
+  "greenery": "sheet chandni_chowk_galis 'Trees and planting': almost none inside the lanes, a neem or peepal at a crossing, plants only in pots",
+  "props": "sheet chandni_chowk_galis 'Typical clutter and wear': tangled overhead wires, cable bundles, awnings, hanging signs, stacked cartons and sacks",
+  "signs.boards": "sheet chandni_chowk_galis 'Road surface and markings' (blue and white name boards at corners) and 'Buildings' (hand-painted shop boards)",
+  "life": "sheet chandni_chowk_galis 'Street-level top-up' (handcarts, porters, hawkers, cycle rickshaws, tea and chaat stalls, shoppers in all kinds of clothing, schoolchildren, older men on steps; evening crowd), 'Parking and vehicles' (handcarts, motorbikes parked in rows, e-rickshaws, autos at the wider lanes, no cars) and 'Trees and planting' (rooftop pigeons)",
+  "sound": "sheet chandni_chowk_galis 'Vendors and street life': sound dominates; sweet and snack makers frying in the lane; 'Road surface and markings': motorcycles and handcarts use the lane (horn rate is low because the lanes are too narrow for fast traffic: an estimate)",
+  "wear": "sheet chandni_chowk_galis 'Typical clutter and wear': wear 1.0 confirmed, 0.9 in the wider market lanes",
+  "wear_notes": "sheet chandni_chowk_galis 'Typical clutter and wear': 0.9 in the wider market lanes",
+  "road": "sheet chandni_chowk_galis 'Road surface and markings': patched concrete, stone setts or asphalt, wet patches and spilled water, no markings; 'Typical clutter and wear': spilled water, litter"
+ }
+}

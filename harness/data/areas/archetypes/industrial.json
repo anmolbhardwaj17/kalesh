@@ -1,0 +1,8 @@
+{
+ "id": "industrial",
+ "kind": "archetype",
+ "confidence": "none",
+ "sheet": "none: no sheet",
+ "notes": "No sheet covers this ground and the rule cells give only 43 cells with mean footprint coverage 0.106 (rule_cells.json summary.industrial). Base defaults apply until an area sheet exists.",
+ "evidence": {}
+}

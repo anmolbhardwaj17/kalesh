@@ -1,0 +1,18 @@
+{
+ "id": "rail_land",
+ "kind": "archetype",
+ "confidence": "low",
+ "sheet": "harness/design/areas/paharganj_station.md; harness/design/areas/gb_road_ajmeri_gate.md",
+ "buildings": {
+  "generated": "rail yard, platforms, sheds and station buildings from OSM; nothing else",
+  "mix": {
+   "shed": 0.6,
+   "station_building": 0.2,
+   "other": 0.2
+  }
+ },
+ "evidence": {
+  "buildings.generated": "rule cells with OSM landuse=railway or railway=platform: 51 cells, mean coverage 0.149 (rule_cells.json summary.rail_land); sheet paharganj_station 'Buildings' (long concourse with a metal canopy)",
+  "buildings.mix": "rule cells with OSM landuse=railway or railway=platform: 51 cells, mean coverage 0.149 (rule_cells.json summary.rail_land); shares are an estimate"
+ }
+}
