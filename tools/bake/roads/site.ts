@@ -169,7 +169,7 @@ export function buildSite(input: SiteInput): SiteResult {
     };
     const minorIsP = ep.link !== eq.link ? ep.link : turn(p) < turn(q);
     const [minor, main] = minorIsP ? [p, q] : [q, p];
-    const ratio = classDefaults((graph.edges[cand.parent.edge] as GEdge).cls).taper * 0.4;
+    const ratio = classDefaults((graph.edges[cand.parent.edge] as GEdge).cls).slip * 0.4;
     const moved = limitDivergence(graph.edges[minor.edge] as GEdge, minor.atStart, graph.edges[main.edge] as GEdge, main.atStart, ratio);
     if (moved > 0) {
       redrawn++;

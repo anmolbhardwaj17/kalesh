@@ -35,6 +35,7 @@ export function sourceWords(from: string | undefined, by?: string): { label: str
     case 'tag': return { label: 'Map data', long: 'The map data (OpenStreetMap) gives the number of lanes for this road.' };
     case 'street': return { label: 'Taken along the street', long: 'This stretch has no count of its own. It takes the count of the nearest stretch of the same street that has one.' };
     case 'pair': return { label: 'Other side of the street', long: 'The street has two separate carriageways. This one takes the count of the other.' };
+    case 'corridor': return { label: 'Taken along the road', long: 'This street has no count of its own. It takes the count and lane width of the nearest road it runs on into through a junction (same name or same kind of road, nearly straight on), so the road keeps one width.' };
     case 'spec': return { label: 'Hero road spec', long: 'A hand written road spec (a hero road) sets the lanes here.' };
     case 'fit': return { label: 'Fitted to the street', long: 'The road was too short for a smooth change of lane count, so it takes the count of the street beside it.' };
     case 'width': return { label: 'From the tagged width', long: 'The map data gives the road width, and the lane count follows from it.' };

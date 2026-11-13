@@ -63,7 +63,7 @@ export interface Strip {
   st: Station[];
   hero: string | null;
   /** Width of the lane rows where it tapers: the two ends in metres, for the taper check. */
-  taper?: { length: number; shift: number; needed: number };
+  taper?: { length: number; shift: number; needed: number; ratio?: number };
 }
 
 export type StripEnd = 'start' | 'end';
@@ -123,27 +123,35 @@ export interface ClassDefaults {
   laneWidth: number;
   /** Footpath on each side (0 for none). */
   footpath: number;
-  /** Taper: metres of length per metre of lateral shift. */
+  /**
+   * Taper: metres of length per metre of lateral shift, for a lane added or dropped and a width change (P1-046, the owner:
+   * about 1:20 to 1:30 on main roads).
+   */
   taper: number;
+  /**
+   * The rate of a slip road (the P0-019 rates): its centre line leaves its main road at 0.4 of it (R-LANE-FIT-02), and the
+   * taper of a road to its split zone's first section takes it in metres per metre of move.
+   */
+  slip: number;
   maxGrade: number;
   cornerRadius: number;
 }
 
 /** Delhi defaults per class when OSM has no lanes or width tag (it has them on under 9 percent of ways). */
 export const CLASS_DEFAULTS: Readonly<Record<string, ClassDefaults>> = {
-  motorway: { oneWay: 3, twoWay: 6, laneWidth: 3.5, footpath: 0, taper: 15, maxGrade: 0.05, cornerRadius: 12 },
-  trunk: { oneWay: 3, twoWay: 6, laneWidth: 3.5, footpath: 0, taper: 15, maxGrade: 0.05, cornerRadius: 12 },
-  primary: { oneWay: 3, twoWay: 4, laneWidth: 3.5, footpath: 2, taper: 15, maxGrade: 0.05, cornerRadius: 10 },
-  secondary: { oneWay: 2, twoWay: 4, laneWidth: 3.3, footpath: 2, taper: 10, maxGrade: 0.06, cornerRadius: 9 },
-  tertiary: { oneWay: 2, twoWay: 2, laneWidth: 3.3, footpath: 1.8, taper: 10, maxGrade: 0.07, cornerRadius: 7.5 },
-  unclassified: { oneWay: 1, twoWay: 2, laneWidth: 3, footpath: 0, taper: 6, maxGrade: 0.08, cornerRadius: 5 },
-  residential: { oneWay: 1, twoWay: 2, laneWidth: 3, footpath: 0, taper: 6, maxGrade: 0.08, cornerRadius: 5 },
-  living_street: { oneWay: 1, twoWay: 1, laneWidth: 3.5, footpath: 0, taper: 6, maxGrade: 0.08, cornerRadius: 4 },
-  service: { oneWay: 1, twoWay: 1, laneWidth: 3.5, footpath: 0, taper: 6, maxGrade: 0.08, cornerRadius: 4 },
+  motorway: { oneWay: 3, twoWay: 6, laneWidth: 3.5, footpath: 0, taper: 30, slip: 15, maxGrade: 0.05, cornerRadius: 12 },
+  trunk: { oneWay: 3, twoWay: 6, laneWidth: 3.5, footpath: 0, taper: 30, slip: 15, maxGrade: 0.05, cornerRadius: 12 },
+  primary: { oneWay: 3, twoWay: 4, laneWidth: 3.5, footpath: 2, taper: 25, slip: 15, maxGrade: 0.05, cornerRadius: 10 },
+  secondary: { oneWay: 2, twoWay: 4, laneWidth: 3.3, footpath: 2, taper: 20, slip: 10, maxGrade: 0.06, cornerRadius: 9 },
+  tertiary: { oneWay: 2, twoWay: 2, laneWidth: 3.3, footpath: 1.8, taper: 20, slip: 10, maxGrade: 0.07, cornerRadius: 7.5 },
+  unclassified: { oneWay: 1, twoWay: 2, laneWidth: 3, footpath: 0, taper: 10, slip: 6, maxGrade: 0.08, cornerRadius: 5 },
+  residential: { oneWay: 1, twoWay: 2, laneWidth: 3, footpath: 0, taper: 10, slip: 6, maxGrade: 0.08, cornerRadius: 5 },
+  living_street: { oneWay: 1, twoWay: 1, laneWidth: 3.5, footpath: 0, taper: 6, slip: 6, maxGrade: 0.08, cornerRadius: 4 },
+  service: { oneWay: 1, twoWay: 1, laneWidth: 3.5, footpath: 0, taper: 6, slip: 6, maxGrade: 0.08, cornerRadius: 4 },
   // a foot way has no steps in the lane model: on a foot bridge it climbs at the steepest a person walks without them
   // (1:10; P1-035: at 8 percent the Salimgarh foot bridge, 7.7 m over a railway, ended 1.09 m in the air)
-  pedestrian: { oneWay: 1, twoWay: 1, laneWidth: 4, footpath: 0, taper: 6, maxGrade: 0.1, cornerRadius: 3 },
-  road: { oneWay: 1, twoWay: 2, laneWidth: 3, footpath: 0, taper: 6, maxGrade: 0.08, cornerRadius: 5 },
+  pedestrian: { oneWay: 1, twoWay: 1, laneWidth: 4, footpath: 0, taper: 6, slip: 6, maxGrade: 0.1, cornerRadius: 3 },
+  road: { oneWay: 1, twoWay: 2, laneWidth: 3, footpath: 0, taper: 10, slip: 6, maxGrade: 0.08, cornerRadius: 5 },
 };
 /** A ramp or slip road without a lanes tag: one wide lane. Ramps may be steeper than the main line. */
 export const LINK_LANE_WIDTH = 4.5;

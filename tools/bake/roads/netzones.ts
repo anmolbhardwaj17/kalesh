@@ -6,12 +6,13 @@ import { heroCrossSection } from './hero.ts';
 import type { HeroSpec } from './hero.ts';
 import { mainBranch, matchRows, planSplit, rowBorders, splitCandidate } from './lanes.ts';
 import { planSplit3, threeWaySplit } from './split3.ts';
-import type { EdgePlan, Row, SplitCandidate, Zone } from './lanes.ts';
+import type { Attach, EdgePlan, Row, SplitCandidate, Zone } from './lanes.ts';
 import { classDefaults } from './model.ts';
 import type { CrossSection } from './model.ts';
 import { CLUSTER_GAP_M, CUT_ESTIMATE_M, EXTRA_LANES } from './netctx.ts';
-import type { LaneBuild, NetCtx } from './netctx.ts';
+import type { LaneBuild, NetCtx, WidthTaper } from './netctx.ts';
 import { driveCount, inferStreets, streetCrossSection } from './street.ts';
+import { withDrive } from './netwidths.ts';
 import type { EdgeLanes, StreetResult } from './street.ts';
 
 export interface ZonePhase {
@@ -44,7 +45,7 @@ const shiftOf = (rows: readonly Row[], a: CrossSection, b: CrossSection): number
 export function planZones(c: NetCtx): ZonePhase {
   const { input, graph, source, nodeId, heroes, heroBy, isHero, indexOf, fixed, noZone } = c;
   const marks = input.marks ? { marks: input.marks } : {};
-  let streets = inferStreets({ nodes: input.nodes, edges: source, ...marks }, input.wayLanes, heroes, fixed);
+  let streets = inferStreets({ nodes: input.nodes, edges: source, ...marks }, input.wayLanes, heroes, fixed, c.widthFixed);
   let plans: EdgePlan[] = [];
   let nominal: CrossSection[] = [];
   let zones: Zone[] = [];
@@ -85,7 +86,7 @@ export function planZones(c: NetCtx): ZonePhase {
     return true;
   };
   const settle = (): void => {
-    streets = inferStreets({ nodes: input.nodes, edges: source, ...marks }, input.wayLanes, heroes, fixed);
+    streets = inferStreets({ nodes: input.nodes, edges: source, ...marks }, input.wayLanes, heroes, fixed, c.widthFixed);
   };
   // a split zone carries the lanes of both branches side by side: a branch whose count is only a default carries what
   // the road before the split can feed (or the road after a merge can take), one lane at least
@@ -180,7 +181,7 @@ export function planZones(c: NetCtx): ZonePhase {
       if (!att?.target || isHero(z.parent.edge)) continue;
       const own = (z.parent.atStart ? p.cs[0] : p.cs[p.cs.length - 1]) as CrossSection;
       const shift = z.parent.atStart ? shiftOf(att.target.rows, att.target.cs, own) : shiftOf(att.target.rows, own, att.target.cs);
-      const need = classDefaults(p.edge.cls).taper * shift;
+      const need = classDefaults(p.edge.cls).slip * shift;
       const far = graph.nodes.get(z.parent.atStart ? p.edge.b : p.edge.a) as GNode;
       const both = (z.parent.atStart ? p.endAttach : p.startAttach)?.target !== undefined;
       const room = (p.t1 - p.t0 - (far.ends.length > 1 && !zoneNode.has(far.id) ? CUT_ESTIMATE_M : 0)) * (both ? 0.45 : 0.7);
@@ -249,6 +250,8 @@ export function planWidenings(c: NetCtx, z: ZonePhase): LaneBuild['widenings'] {
         // a hero road keeps its spec, a gali its width, a zone branch its gore side
         if (isHero(e) || r.from === 'width' || r.gali || p.cs[0] !== nominal[e] || fixed.has((source[e] as GraphEdge).id)) return null;
         const atStart = (graph.edges[e] as GEdge).a === node;
+        // an end where such a taper came out too short (the width step, P1-046) takes none
+        if (c.widthBlocked.has(`${(source[e] as GraphEdge).id}|${atStart ? 'start' : 'end'}`)) return null;
         if (atStart ? p.startAttach : p.endAttach) return null;
         const own = nominal[e] as CrossSection;
         const target = streetCrossSection(source[e] as GraphEdge, r, lanes);
@@ -270,6 +273,24 @@ export function planWidenings(c: NetCtx, z: ZonePhase): LaneBuild['widenings'] {
       else p.endAttach = { nx: 0, nz: 0, own: true, target: { cs: t.target, rows: t.rows } };
       widenings.push({ edge: (source[edge] as GraphEdge).id, end: t.atStart ? 'start' : 'end', from: driveCount(nominal[edge] as CrossSection), to: driveCount(t.target) });
     }
+  }
+  // the tapers the width step asked for (P1-046, netwidths.ts): the road meets the width of the road it runs on into
+  // across a junction and tapers to its own after it; an end that already tapers (a zone, a widening) keeps that
+  for (const key of [...c.widthTapers.keys()].sort()) {
+    const w = c.widthTapers.get(key) as WidthTaper;
+    const e = indexOf.get(w.edge);
+    if (e === undefined || isHero(e)) continue;
+    const p = plans[e] as EdgePlan;
+    const att = w.atStart ? p.startAttach : p.endAttach;
+    if (att && !att.own) continue;
+    const own = (w.atStart ? p.cs[0] : p.cs[p.cs.length - 1]) as CrossSection;
+    const target = withDrive(own, w);
+    const rows = w.atStart ? matchRows(target, own) : matchRows(own, target);
+    const next: Attach = { nx: 0, nz: 0, own: true, width: true, target: { cs: target, rows } };
+    if (w.atStart) p.startAttach = next;
+    else p.endAttach = next;
+    // a zone at the other end tapers from the road's own section, as before
+    widenings.push({ edge: w.edge, end: w.atStart ? 'start' : 'end', from: driveCount(own), to: w.lanes });
   }
   return widenings;
 }

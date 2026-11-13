@@ -19,7 +19,13 @@ const { index, pieces } = readLaneGraph(path.join(ROOT, 'game', 'world', 'tiles'
 
 /** The lane at grade nearest to a point whose direction there is within 60 degrees of `heading` (radians, compass: 0 north). */
 function snap(x, z, heading, reach = 60) {
-  let best = null;
+  return snaps(x, z, heading, reach)[0] ?? null;
+}
+
+/** Every lane piece snap would take, nearest first (one per piece). */
+function snaps(x, z, heading, reach = 60) {
+  const byPiece = new Map();
+  const best = null;
   for (const p of pieces.values()) {
     if (p.kind !== 'lane' || p.len < 8) continue;
     for (let i = 0; i < p.pts.length - 1; i++) {
@@ -29,15 +35,16 @@ function snap(x, z, heading, reach = 60) {
       if (L2 < 1e-6) continue;
       const t = Math.max(0, Math.min(1, ((x - a[0]) * abx + (z - a[2]) * abz) / L2));
       const d = Math.hypot(x - (a[0] + abx * t), z - (a[2] + abz * t));
-      if (d >= (best ? best.d : reach)) continue;
+      if (d >= reach) continue;
       let turn = Math.atan2(abx, -abz) - heading;
       while (turn > Math.PI) turn -= 2 * Math.PI;
       while (turn < -Math.PI) turn += 2 * Math.PI;
       if (Math.abs(turn) > Math.PI / 3) continue;
-      best = { id: p.id, d };
+      if (!byPiece.has(p.id) || byPiece.get(p.id).d > d) byPiece.set(p.id, { id: p.id, d });
     }
   }
-  return best;
+  void best;
+  return [...byPiece.values()].sort((a, b) => a.d - b.d || (a.id < b.id ? -1 : 1));
 }
 
 /** One way along the lanes (the way traffic goes) from the lane at `from` through the lane at each of `via`: [x, z, heading]. */
@@ -46,9 +53,15 @@ function oneWay(from, via) {
   if (!a) throw new Error(`no lane at ${from}`);
   let ids = [a.id];
   for (const q of via) {
-    const t = snap(...q);
-    if (!t) throw new Error(`no lane at ${q}`);
-    const leg = route(pieces, ids[ids.length - 1], t.id);
+    // the nearest lane the way reaches (P1-046: a lane a taper adds beside the target may lie nearer and lead nowhere)
+    const cands = snaps(...q);
+    if (!cands.length) throw new Error(`no lane at ${q}`);
+    let leg = null;
+    for (const t of cands) {
+      if (t.d > cands[0].d + 12) break;
+      leg = t.id === ids[ids.length - 1] ? [t.id] : route(pieces, ids[ids.length - 1], t.id);
+      if (leg) break;
+    }
     if (!leg) throw new Error(`no lane route to ${q} from ${ids[ids.length - 1]}`);
     ids = ids.concat(leg.slice(1));
   }

@@ -48,7 +48,8 @@ describe.skipIf(missing.length > 0)(`pilot centre road mesh${reason ? ` (skipped
     console.log(`[mesh] total under more than one face ${o.totalM2} m2 (ground ${o.groundM2}); strip on strip ${o.stripPairs.pairs} pairs, ${o.stripPairs.areaM2} m2: ${o.stripPairs.worst.map((w) => `${w.a} on ${w.b} ${w.areaM2}`).join(', ')}`);
     // strip on strip is the lane model's: a ramp on fill beside a road at grade (13.4 m2, new with the height based
     // levels), two slivers the lanes step lists too. The tunnel mouth pair of the lanes step lies on two levels here.
-    expect(o.stripPairs.pairs).toBeLessThanOrEqual(3);
+    // (P1-046: four hairlines of 0.02 to 0.5 m2, each explained in gate_explanations.json)
+    expect(o.stripPairs.pairs).toBeLessThanOrEqual(4);
     expect(o.stripPairs.areaM2).toBeLessThan(15);
     expect(o.totalM2).toBeLessThan(18);
     expect(health.gates.overlappingRoadFaces).toBe(o.pairsOver + o.stripPairs.pairs);
@@ -71,8 +72,9 @@ describe.skipIf(missing.length > 0)(`pilot centre road mesh${reason ? ` (skipped
     const e = mesh.ends;
     expect(e.joined + Object.values(e.explained).reduce((s, v) => s + v, 0) + e.unjoined).toBe(e.stripEnds);
     // 169 until P1-030: a dead end joined to the lane at the stage edge made a junction that takes in one more map edge
-    // node (m1076769488.0, an open port explained by the stage edge rule)
-    expect(e.explained.map_edge).toBe(168);
+    // node (m1076769488.0, an open port explained by the stage edge rule); 169 again since P1-046 (one junction at the
+    // stage edge has its arm as a strip again, one open port fewer)
+    expect(e.explained.map_edge).toBe(169);
     console.log(`[mesh] unjoined ${e.unjoined}: ${e.unjoinedList.map((u) => `${u.strip} ${u.end}`).join(', ')}; floating ${e.floating}: ${e.floatingList.map((u) => `${u.strip} ${u.end} ${u.kind}`).join(', ')}`);
     // the last one was the Vikas Marg deck arm east of ITO, whose junction reached 110 m from the ramp foot to the
     // deck over a road at grade; its fork is 42 m long on the ramp's fill since P1-042

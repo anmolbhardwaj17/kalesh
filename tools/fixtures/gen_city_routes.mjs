@@ -15,7 +15,7 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { geoToWorld } from '../geo/projection.ts';
-import { readLaneGraph, nearest, route, thin, lengthOf } from './lanegraph.mjs';
+import { readLaneGraph, nearest, nearestReachable, route, thin, lengthOf } from './lanegraph.mjs';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..', '..');
 const TILES = path.join(ROOT, 'game', 'world', 'tiles');
@@ -68,7 +68,8 @@ function drive(pinId, targets, { close = false } = {}) {
   for (const [x, z] of targets) {
     const t = nearest(pieces, x, z);
     if (!t) throw new Error(`${pinId}: no lane near ${x}, ${z}`);
-    const leg = route(pieces, ids[ids.length - 1], t.id);
+    // (P1-046: a lane a taper adds next to the target may lie nearest and lead nowhere: then the nearest one the drive reaches)
+    const leg = route(pieces, ids[ids.length - 1], t.id) ?? nearestReachable(pieces, ids[ids.length - 1], x, z)?.leg;
     if (!leg) throw new Error(`${pinId}: no lane route to ${x}, ${z}`);
     ids = ids.concat(leg.slice(1));
   }

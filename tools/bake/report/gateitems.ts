@@ -58,6 +58,7 @@ export function gateItems(g: Pick<RepairedGraph, 'nodes' | 'edges'>, b: LaneBuil
     const ex = lc.tapers.explained.find((x) => x.strip === t.strip);
     return { id: t.strip, kind: 'taper', name: name(t.strip), detail: `${t.cls}: ${t.lengthM} m for a ${t.shiftM} m shift (needs ${t.neededM} m)`, ...(ex ? { why: ex.why } : {}) };
   });
+  const steps = lc.widthSteps.list.map((w) => ({ id: `${w.where} ${w.a.join('+')}|${w.b.join('+')}`, kind: `width_step_${w.kind}`, name: w.names.filter((n) => n).join(' / ') || w.classes.join(' / '), x: w.x, z: w.z, detail: `${w.fromM} m to ${w.toM} m of carriageway (${w.classes.join(', ')})` }));
   return {
     openPorts: openPortItems(g, b),
     floatingEnds: [...floating, ...rest(mc.ends.floating, floating.length, 'floatingEnds')],
@@ -65,5 +66,6 @@ export function gateItems(g: Pick<RepairedGraph, 'nodes' | 'edges'>, b: LaneBuil
     overlappingRoadFaces: [...pairs, ...rest(o.pairsOver + o.stripPairs.pairs, pairs.length, 'overlappingRoadFaces')],
     laneContinuityBreaks: [...breaks, ...rest(lc.continuity.breaks, breaks.length, 'laneContinuityBreaks')],
     tapersOutOfLimits: [...tapers, ...rest(lc.tapers.violations, tapers.length, 'tapersOutOfLimits')],
+    widthSteps: [...steps, ...rest(lc.widthSteps.steps, steps.length, 'widthSteps')],
   };
 }

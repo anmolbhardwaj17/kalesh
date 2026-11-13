@@ -35,13 +35,13 @@ describe('lane counts and widths of a strip', () => {
 describe('where a lane count came from, in words', () => {
   it('every source the bake records has its own words, and an owner override is told from a repair rule', () => {
     const labels = new Set<string>();
-    for (const f of ['class', 'tag', 'street', 'pair', 'spec', 'fit', 'width', 'room', 'repair', 'zone', undefined]) {
+    for (const f of ['class', 'tag', 'street', 'pair', 'corridor', 'spec', 'fit', 'width', 'room', 'repair', 'zone', undefined]) {
       const w = sourceWords(f, undefined);
       expect(w.label.length).toBeGreaterThan(3);
       expect(w.long).not.toMatch(/—|–/);
       labels.add(w.label);
     }
-    expect(labels.size).toBe(11);
+    expect(labels.size).toBe(12);
     expect(sourceWords('class').label).toBe('Road type default');
     expect(sourceWords('spec').label).toBe('Hero road spec');
     expect(sourceWords('street').long).toMatch(/nearest stretch of the same street/);

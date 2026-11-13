@@ -13,7 +13,7 @@ import type { JunctionPlan } from './junction.ts';
 import type { EdgePlan, Zone } from './lanes.ts';
 import { MIN_TURN_RADIUS_M } from './model.ts';
 import type { Joint, Station, Strip, StripEnd } from './model.ts';
-import type { StreetResult } from './street.ts';
+import type { StreetResult, WidthFixed } from './street.ts';
 import type { GEnd } from './graph.ts';
 
 export interface LaneModelInput {
@@ -30,6 +30,8 @@ export interface LaneModelInput {
   filter?: RoadFilter;
   /** Station spacing in metres. */
   step?: number;
+  /** false: no width step rounds (P1-046), for tests and the before picture of the width report. */
+  widthContinuity?: boolean;
 }
 
 export interface LaneArm {
@@ -101,6 +103,8 @@ export interface LaneBuild {
   forks: { node: string; kind: 'diverge' | 'merge'; why: string }[];
   /** Streets that change their lane count at a junction: the taper lies on this edge, from its own count to the count at the junction. */
   widenings: { edge: string; end: StripEnd; from: number; to: number }[];
+  /** What the width step settled (P1-046): tapers at junction ends and whole edges, with the rounds it took. */
+  widthFixes: { tapers: WidthTaper[]; whole: (WidthFixed & { edge: string })[]; rounds: number; left: number };
   /** Roads that took the lane count they would have tapered to (too short for the taper). */
   fitted: { edge: string; lanes: number }[];
   /** U-turns and other turns the rules or the radius left out, and turns kept under the radius because a lane has no other way on. */
@@ -137,6 +141,18 @@ export const TURN_ASK_MAX_M = 30;
  */
 export const CLEAR_MAX_M = 60;
 export const CUT_ESTIMATE_M = 9;
+
+/** A taper at one end of an edge to the cross-section of the road it runs on into across a junction (P1-046). */
+export interface WidthTaper extends WidthFixed {
+  edge: string;
+  atStart: boolean;
+  /** The junction whose step it closes. */
+  junction: string;
+  /** Length the taper needs (m), for the room check of a taper at the edge's other end. */
+  need?: number;
+  /** No road on either side had room for the class length: the taper takes what the road has (listed, explained). */
+  short?: true;
+}
 export const MAX_ROUNDS = 4;
 export const PASSES = 7;
 /** A road too short for a taper may carry this many lanes more than its street's count (an auxiliary lane between two slip roads). */
@@ -161,6 +177,14 @@ export interface NetCtx {
   fixed: Map<string, number>;
   /** Split nodes built as junctions (kept over rounds). */
   noZone: Set<number>;
+  /** Whole edges the width step settled (kept over rounds, netwidths.ts). */
+  widthFixed: Map<string, WidthFixed>;
+  /** Tapers the width step asked for at an edge end, by "<edge id>|start" or "|end" (kept over rounds, netwidths.ts). */
+  widthTapers: Map<string, WidthTaper>;
+  /** Edge ends ("<edge id>|start") that may not take a width taper: one came out too short (kept over rounds). */
+  widthBlocked: Set<string>;
+  /** How often the width step settled each edge whole (kept over rounds). */
+  widthSettles: Map<string, number>;
   problems: string[];
   step: number;
 }

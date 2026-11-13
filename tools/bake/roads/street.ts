@@ -17,7 +17,7 @@ import type { CrossSection, LaneDef } from './model.ts';
 /** Classes whose narrow stretches are galis: the lane gives way to the buildings. Bigger roads keep their class lane width. */
 export const GALI_CLASSES: ReadonlySet<string> = new Set(['residential', 'living_street', 'service', 'pedestrian', 'unclassified', 'road']);
 
-export type LanesFrom = 'spec' | 'tag' | 'repair' | 'street' | 'pair' | 'class' | 'fit' | 'width' | 'room';
+export type LanesFrom = 'spec' | 'tag' | 'repair' | 'street' | 'pair' | 'corridor' | 'class' | 'fit' | 'width' | 'room';
 
 export interface EdgeLanes {
   /** Drive lanes of the edge (both directions together on a two-way road). */
@@ -31,6 +31,8 @@ export interface EdgeLanes {
   street: number;
   /** The most lanes the edge may carry beside the other carriageway of its street (the repair step fitted the graph's own count). */
   cap: number;
+  /** A section the width step settled on a paired carriageway keeps its right border here (WidthFixed.rightAt). */
+  rightAt?: number;
 }
 
 export interface StreetGraph {
@@ -130,7 +132,19 @@ const CUT_ESTIMATE_M = 9;
  * Lane counts for every edge. `wayLanes` is the lanes tag of every way that has one ("way/<id>"); `fixed` are counts
  * the lane model itself has settled in an earlier round (a road too short for the taper to its split zone).
  */
-export function inferStreets(g: StreetGraph, wayLanes: ReadonlyMap<string, number>, heroes: readonly HeroSpec[] = [], fixed: ReadonlyMap<string, number> = new Map()): StreetResult {
+/** A whole edge that takes the cross-section of the road it runs on into (P1-046, netwidths.ts): too short for a taper either side. */
+export interface WidthFixed {
+  lanes: number;
+  laneWidth: number;
+  gali: boolean;
+  /**
+   * The right border of the section (lateral, m, as CrossSection borders) is kept here: a carriageway paired with the
+   * street's other one widens on its kerb side only, so it never grows into the median and the other carriageway.
+   */
+  rightAt?: number;
+}
+
+export function inferStreets(g: StreetGraph, wayLanes: ReadonlyMap<string, number>, heroes: readonly HeroSpec[] = [], fixed: ReadonlyMap<string, number> = new Map(), widthFixed: ReadonlyMap<string, WidthFixed> = new Map()): StreetResult {
   const edges = g.edges.slice().sort((a, b) => (a.id < b.id ? -1 : a.id > b.id ? 1 : 0));
   const ends = new Map<string, End[]>();
   for (const e of edges) {
@@ -299,6 +313,17 @@ export function inferStreets(g: StreetGraph, wayLanes: ReadonlyMap<string, numbe
     }
   }
 
+  // a street with no count of its own and no other carriageway takes the count of its corridor (P1-046): the nearest
+  // edge that has one along roads that run on into each other through junctions (the same name, or the same class,
+  // within 20 degrees of straight on), not a class default; and that edge's lane width, so the width carries too
+  const carried = corridorCarry(edges, ends, streets, byEdge);
+  for (const [id, c] of carried) {
+    const r = byEdge.get(id) as EdgeLanes;
+    r.lanes = c.lanes;
+    r.from = 'corridor';
+    r.laneWidth = c.laneWidth;
+  }
+
   // widths: a gali's lanes give way to its width; a bigger road keeps its class lane width
   const report: StreetReport = { streets: streets.length, from: {}, changed: 0, widthKept: 0, galis: 0 };
   for (const e of edges) {
@@ -321,6 +346,7 @@ export function inferStreets(g: StreetGraph, wayLanes: ReadonlyMap<string, numbe
     } else {
       if (narrowed) report.widthKept++;
       else if (e.road.widthFrom === 'tag') r.laneWidth = Math.min(4.5, Math.max(2.75, e.road.width / r.lanes));
+      else if (r.from === 'corridor') r.laneWidth = carried.get(e.id)?.laneWidth ?? r.laneWidth;
     }
   }
 
@@ -351,14 +377,14 @@ export function inferStreets(g: StreetGraph, wayLanes: ReadonlyMap<string, numbe
         const e = (chain[i] as { e: GraphEdge }).e;
         const r = byEdge.get(e.id) as EdgeLanes;
         // a spec, a width the buildings set and a count the lane model settled at a split zone stay
-        if (r.from === 'spec' || r.from === 'width' || r.gali || fixed.has(e.id)) continue;
+        if (r.from === 'spec' || r.from === 'width' || r.gali || fixed.has(e.id) || widthFixed.has(e.id)) continue;
         const prev = i > 0 ? (byEdge.get((chain[i - 1] as { e: GraphEdge }).e.id) as EdgeLanes) : null;
         const after = i + 1 < chain.length ? (byEdge.get((chain[i + 1] as { e: GraphEdge }).e.id) as EdgeLanes) : null;
         let need = 0;
         let top = r.lanes;
         for (const [o, oe] of [[prev, i > 0 ? (chain[i - 1] as { e: GraphEdge }).e : null], [after, i + 1 < chain.length ? (chain[i + 1] as { e: GraphEdge }).e : null]] as [EdgeLanes | null, GraphEdge | null][]) {
           // an extra lane the lane model gave a neighbour beside a split zone does not spread along the street
-          if (!o || !oe || o.lanes <= r.lanes || o.from === 'width' || fixed.has(oe.id)) continue;
+          if (!o || !oe || o.lanes <= r.lanes || o.from === 'width' || fixed.has(oe.id) || widthFixed.has(oe.id)) continue;
           need += taperNeedM(e.road.cls, r.laneWidth, o.lanes - r.lanes, e.oneway);
           top = Math.max(top, o.lanes);
         }
@@ -373,12 +399,148 @@ export function inferStreets(g: StreetGraph, wayLanes: ReadonlyMap<string, numbe
       if (!moved) break;
     }
   }
+  // a whole edge the width step settled (too short for a taper on either side of a junction) takes that cross-section
+  for (const e of edges) {
+    const w = widthFixed.get(e.id);
+    const r = byEdge.get(e.id) as EdgeLanes;
+    if (!w || r.from === 'spec') continue;
+    r.lanes = w.lanes;
+    r.laneWidth = w.laneWidth;
+    r.gali = w.gali;
+    r.from = 'fit';
+    if (w.rightAt !== undefined) r.rightAt = w.rightAt;
+  }
   for (const e of edges) {
     const r = byEdge.get(e.id) as EdgeLanes;
     report.from[r.from] = (report.from[r.from] ?? 0) + 1;
     if (r.lanes !== e.road.lanes) report.changed++;
   }
   return { byEdge, streets: streets.map((c) => c.map((x) => x.e.id)), report };
+}
+
+/** Roads run on into each other through a junction: the same name or the same class and link flag, within this many degrees of straight on. */
+export const CORRIDOR_DEG = 20;
+const COS_CORRIDOR = Math.cos((CORRIDOR_DEG * Math.PI) / 180);
+
+/**
+ * The corridor step (P1-046, the owner 2026-11-13: "there won't be a 2-lane road there if it was a 3- or 4-lane road
+ * above without proper merging"). Streets whose every edge has only its class default take the lane count of the
+ * nearest edge with a count of its own (a spec, a tag, a repair, the street or its other carriageway)
+ * along the corridor: chains joined through junctions where two ends of one corridor (the same name, or the same class
+ * and link flag; both one-way or both two-way, in the direction of travel) leave within 20 degrees of straight on, each
+ * end with its straightest partner. Nearest is measured along the corridor (edge lengths, Dijkstra from every edge that
+ * knows its count). A street of a corridor where nothing knows a count keeps its class default.
+ */
+function corridorCarry(edges: readonly GraphEdge[], ends: ReadonlyMap<string, End[]>, streets: readonly { e: GraphEdge }[][], byEdge: ReadonlyMap<string, EdgeLanes>): Map<string, { lanes: number; laneWidth: number }> {
+  const corridorOf = (a: GraphEdge, b: GraphEdge): boolean => (a.name !== '' && a.name === b.name) || (a.road.cls === b.road.cls && a.road.link === b.road.link);
+  // links between edge ends at junction nodes: each end with its straightest partner, both ways
+  const links = new Map<string, { to: string; len: number }[]>();
+  const link = (a: GraphEdge, b: GraphEdge): void => {
+    for (const [p, q] of [[a, b], [b, a]] as const) {
+      const l = links.get(p.id);
+      if (l) l.push({ to: q.id, len: q.len });
+      else links.set(p.id, [{ to: q.id, len: q.len }]);
+    }
+  };
+  const partner = (end: End): End | null => {
+    const id = end.atStart ? end.e.a : end.e.b;
+    const others = (ends.get(id) ?? []).filter((o) => o.e !== end.e);
+    if (others.length < 2 || end.e.a === end.e.b) return null;
+    const d = dirFrom(end);
+    let best: End | null = null;
+    let bestDot = -COS_CORRIDOR;
+    for (const o of others) {
+      // (a roundabout's ring runs on only into its ring)
+      if (o.e.a === o.e.b || !corridorOf(o.e, end.e) || o.e.oneway !== end.e.oneway || !!o.e.roundabout !== !!end.e.roundabout) continue;
+      // one-way roads run on in their direction of travel only
+      if (end.e.oneway && o.atStart === end.atStart) continue;
+      const q = dirFrom(o);
+      const dot = d.x * q.x + d.z * q.z;
+      if (dot < bestDot - 1e-9 || (best && Math.abs(dot - bestDot) <= 1e-9 && o.e.id < best.e.id)) {
+        best = o;
+        bestDot = dot;
+      }
+    }
+    return best;
+  };
+  for (const e of edges) {
+    for (const atStart of [true, false]) {
+      const end = { e, atStart };
+      const p = partner(end);
+      if (!p) continue;
+      const back = partner(p);
+      // each pair once, from the end with the smaller key
+      if (back?.e === e && back.atStart === atStart && `${e.id}:${atStart}` < `${p.e.id}:${p.atStart}`) link(e, p.e);
+    }
+  }
+  // edges along their own street are neighbours too
+  for (const chain of streets) {
+    for (let i = 0; i + 1 < chain.length; i++) link((chain[i] as { e: GraphEdge }).e, (chain[i + 1] as { e: GraphEdge }).e);
+  }
+  const knows = (r: EdgeLanes): boolean => r.from !== 'class';
+  // (a slip road keeps the width of its role, one wide lane by default: it takes no count from its corridor)
+  const free = new Set<string>();
+  for (const chain of streets) if (chain.every((c) => !knows(byEdge.get(c.e.id) as EdgeLanes))) for (const c of chain) if (!c.e.road.link) free.add(c.e.id);
+  // Dijkstra from every edge that knows its count, through free edges only (a known edge is a source, never passed)
+  const dist = new Map<string, number>();
+  const from = new Map<string, string>();
+  const heap: { d: number; id: string; src: string }[] = [];
+  const push = (x: { d: number; id: string; src: string }): void => {
+    heap.push(x);
+    let i = heap.length - 1;
+    while (i > 0) {
+      const p = (i - 1) >> 1;
+      const a = heap[p] as { d: number; id: string; src: string };
+      if (a.d < x.d || (a.d === x.d && (a.id < x.id || (a.id === x.id && a.src <= x.src)))) break;
+      heap[i] = a;
+      i = p;
+    }
+    heap[i] = x;
+  };
+  const pop = (): { d: number; id: string; src: string } => {
+    const top = heap[0] as { d: number; id: string; src: string };
+    const last = heap.pop() as { d: number; id: string; src: string };
+    if (heap.length) {
+      let i = 0;
+      for (;;) {
+        const l = 2 * i + 1;
+        const r = l + 1;
+        let m = i;
+        const lt = (u: { d: number; id: string; src: string }, v: { d: number; id: string; src: string }): boolean => u.d < v.d || (u.d === v.d && (u.id < v.id || (u.id === v.id && u.src < v.src)));
+        const cur = (k: number): { d: number; id: string; src: string } => (k === i ? last : (heap[k] as { d: number; id: string; src: string }));
+        if (l < heap.length && lt(heap[l] as { d: number; id: string; src: string }, cur(m))) m = l;
+        if (r < heap.length && lt(heap[r] as { d: number; id: string; src: string }, cur(m))) m = r;
+        if (m === i) break;
+        heap[i] = heap[m] as { d: number; id: string; src: string };
+        i = m;
+      }
+      heap[i] = last;
+    }
+    return top;
+  };
+  const byId = new Map(edges.map((e) => [e.id, e]));
+  for (const e of edges) {
+    const r = byEdge.get(e.id) as EdgeLanes;
+    if (!knows(r) || !links.has(e.id)) continue;
+    for (const n of links.get(e.id) ?? []) if (free.has(n.to)) push({ d: (e.len + n.len) / 2, id: n.to, src: e.id });
+  }
+  while (heap.length) {
+    const x = pop();
+    if (dist.has(x.id)) continue;
+    dist.set(x.id, x.d);
+    from.set(x.id, x.src);
+    const e = byId.get(x.id) as GraphEdge;
+    for (const n of links.get(x.id) ?? []) if (free.has(n.to) && !dist.has(n.to)) push({ d: x.d + (e.len + n.len) / 2, id: n.to, src: x.src });
+  }
+  const out = new Map<string, { lanes: number; laneWidth: number }>();
+  for (const id of [...from.keys()].sort()) {
+    const src = byEdge.get(from.get(id) as string) as EdgeLanes;
+    const e = byId.get(id) as GraphEdge;
+    // the count carries; the lane width is the road's own class width (a slip road's single wide lane, or a gali's
+    // width, would make the street wider than its class lanes: where the widths still differ the width step tapers)
+    out.set(id, { lanes: src.lanes, laneWidth: e.road.laneWidth });
+  }
+  return out;
 }
 
 /** Lane types a drawn median (add_median, P1-045) is built from: a painted divider is flat hatching, a planter is green. */
@@ -396,7 +558,7 @@ function medianLane(e: GraphEdge): LaneDef {
  * the lanes left of the centre run with the edge, those right of it against it; a paired carriageway has its median
  * on the right. One lane on a two-way road is shared by both directions (dir 0).
  */
-export function streetCrossSection(e: GraphEdge, r: Pick<EdgeLanes, 'laneWidth' | 'gali'>, lanes: number): CrossSection {
+export function streetCrossSection(e: GraphEdge, r: Pick<EdgeLanes, 'laneWidth' | 'gali' | 'rightAt'>, lanes: number): CrossSection {
   const n = Math.max(1, Math.min(8, Math.round(lanes)));
   const drive: LaneDef[] = [];
   if (e.oneway) for (let i = 0; i < n; i++) drive.push(lane('drive', r.laneWidth, 1));
@@ -412,7 +574,10 @@ export function streetCrossSection(e: GraphEdge, r: Pick<EdgeLanes, 'laneWidth' 
   const left: LaneDef[] = fl > 0 ? [lane('footpath', fl), lane('kerb', KERB_WIDTH)] : [lane('kerb', KERB_WIDTH)];
   const right: LaneDef[] = e.road.carriageway === 'paired' && fr <= 0 ? [medianLane(e)] : fr > 0 ? [lane('kerb', KERB_WIDTH), lane('footpath', fr)] : [lane('kerb', KERB_WIDTH)];
   const driveWidth = drive.reduce((s, l) => s + l.width, 0);
-  return { lanes: [...left, ...drive, ...right], offset: driveWidth / 2 + left.reduce((s, l) => s + l.width, 0) };
+  const all = [...left, ...drive, ...right];
+  // a section that keeps its right border (a paired carriageway that widened on its kerb side, P1-046)
+  if (r.rightAt !== undefined) return { lanes: all, offset: r.rightAt + all.reduce((s, l) => s + l.width, 0) };
+  return { lanes: all, offset: driveWidth / 2 + left.reduce((s, l) => s + l.width, 0) };
 }
 
 export const driveCount = (cs: CrossSection): number => cs.lanes.filter((l) => l.type === 'drive').length;

@@ -1,5 +1,5 @@
 {
-  "_doc": "Why each gate item left in the pilot bake is there and which task owns it (P1-017, MAP_REPAIR.md 'Verification': the six gate counts are 0 or each item is explained in the report). tools/bake/report/gates.ts matches an entry to an item by its id (a strip end 'w<way>.<piece>_<n> start|end', a map edge node 'm<way>.<n>', a face pair 'a|b'; '*' stands for a number, since zone numbers change with any map change: 'w1.0_0|zone_merge_*') or by its kind. An item no entry explains stops the bake before tiles are written (invariant GATES-01). Entries that match nothing in a bake are listed in health.json gateReport.idle: delete them once their owner fixed the item. findings lists known defects outside the six gates with their owners, copied into health.json gateReport.findings.",
+  "_doc": "Why each gate item left in the pilot bake is there and which task owns it (P1-017, MAP_REPAIR.md 'Verification': the seven gate counts (width steps since P1-046) are 0 or each item is explained in the report). tools/bake/report/gates.ts matches an entry to an item by its id (a strip end 'w<way>.<piece>_<n> start|end', a map edge node 'm<way>.<n>', a face pair 'a|b'; '*' stands for a number, since zone numbers change with any map change: 'w1.0_0|zone_merge_*') or by its kind. An item no entry explains stops the bake before tiles are written (invariant GATES-01). Entries that match nothing in a bake are listed in health.json gateReport.idle: delete them once their owner fixed the item. findings lists known defects outside the six gates with their owners, copied into health.json gateReport.findings.",
   "explanations": [
     {
       "gate": "openPorts",
@@ -15,10 +15,12 @@
       "gate": "overlappingRoadFaces",
       "items": [
         "w778547435.0_0|w80499271.3_0",
-        "w77617201.0_0|zone_merge_*"
+        "w77617201.0_0|zone_merge_*",
+        "w604050030.1_0|zone_merge_*",
+        "w563974733.1_*|w995793691.0_0"
       ],
       "owner": "explained (lane model): under what a player sees",
-      "why": "hairline overlaps of 0.02 to 0.03 m2 where a one-way link meets the road it joins at a shallow angle (a link onto Sikandra Road near Mandi House, a link into a merge zone in Old Delhi): the kerb rows of the two strips cross over a few centimetres. Over the 0.01 m2 pair limit, far under anything a player sees."
+      "why": "hairline overlaps of 0.02 to 0.03 m2 where a one-way link meets the road it joins at a shallow angle (a link onto Sikandra Road near Mandi House, a link into a merge zone in Old Delhi): the kerb rows of the two strips cross over a few centimetres. Over the 0.01 m2 pair limit, far under anything a player sees. Since P1-046 Kela Ghat Marg can be a third: the slip road w77617230.1 takes the first section of its merge zone whole (three lanes, the zone tapers are 1:20 now) and the carriageway beside it lies about 0.5 m2 on the zone where the two meet at a shallow angle, on the solved levels only. A fourth hairline (0.03 m2) lies where a service road meets Tolstoy Marg south of CP at a shallow angle."
     }
   ],
   "findings": [

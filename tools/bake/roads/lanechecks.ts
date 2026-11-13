@@ -13,6 +13,8 @@ import { GALI_MIN_LANE_M, MIN_DRIVE_LANE_M, MIN_TURN_RADIUS_M, NOSE_GAP } from '
 import type { Joint, Junction, LaneDef, Station, Strip, StripEnd } from './model.ts';
 import type { LaneBuild } from './network.ts';
 import { stripOverlaps } from './overlap.ts';
+import { checkWidthSteps, pairedOf, ringOf } from './widthsteps.ts';
+import type { WidthStepCheck } from './widthsteps.ts';
 
 const r = (v: number, d = 3): number => Math.round(v * 10 ** d) / 10 ** d;
 const endOf = (s: Strip, end: StripEnd): Station => (end === 'start' ? s.st[0] : s.st[s.st.length - 1]) as Station;
@@ -241,6 +243,8 @@ export interface LaneChecks {
   paths: PathCheck;
   hero: HeroCheck[];
   overlap: PlanOverlapCheck | null;
+  /** Width steps along corridors (P1-046, widthsteps.ts): 0, every width change lies in a taper. */
+  widthSteps: WidthStepCheck;
 }
 
 /** All checks of a built lane model. `overlap` is left out when asked (it is the slowest). */
@@ -261,12 +265,20 @@ export function checkLaneModel(b: LaneBuild, heroes: readonly HeroSpec[] = [], o
     const first = s.st[0] as Station;
     const last = s.st[s.st.length - 1] as Station;
     const lanesAt = (st: Station): number => s.lanes.filter((l, k) => l.type === 'drive' && (st.b[k] as number) - (st.b[k + 1] as number) > 0.05).length;
+    const plan = b.plans.find((p) => p.edge.id === s.edge);
+    const built = plan ? b.built.get(plan.edge.index) : undefined;
+    const si = b.strips.indexOf(s);
+    const att = plan && built ? (si === built.first ? plan.startAttach : si === built.last ? plan.endAttach : undefined) : undefined;
     if (info && (info.gali || info.from === 'width')) explained.push({ strip: t.strip, why: 'a lane narrowed for the buildings beside it cannot take the lane count of the street: it widens over the length it has' });
+    else if (att?.width) explained.push({ strip: t.strip, why: `the road meets the width of the road it runs on into across a junction (P1-046) and has ${t.lengthM} m of the ${t.neededM} m its class asks between its junctions; no road on either side has more room` });
+    else if (att?.own) explained.push({ strip: t.strip, why: `the street changes its lane count at a junction and the road has ${t.lengthM} m of the ${t.neededM} m its class asks for the taper` });
+    else if (att?.target) explained.push({ strip: t.strip, why: `the taper to a split zone has ${t.lengthM} m of the ${t.neededM} m its class asks: the road before the zone is no longer` });
     else if (lanesAt(first) === lanesAt(last)) explained.push({ strip: t.strip, why: `the lane count stays ${lanesAt(first)}: only lane widths change (${t.shiftM} m over ${t.lengthM} m)` });
     else unexplained++;
   }
   return {
     continuity, explainedEnds, tapers: { ...tapers, explained, unexplained }, zones: checkZones(b), trafficSide: checkLeftHand(b.strips), widths: checkWidths(b.strips), paths: checkPaths(b),
     hero: heroes.map((h) => checkHero(h, b.strips)), overlap: overlap ? checkPlanOverlap(b.strips, b.joints) : null,
+    widthSteps: checkWidthSteps(b.strips, b.joints, b.junctions, pairedOf(b.road.source), ringOf(b.road.source)),
   };
 }

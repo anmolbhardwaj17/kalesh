@@ -129,9 +129,12 @@ export function checkContinuity(strips: readonly Strip[], joints: readonly Joint
   for (const jn of junctions) {
     for (const arm of jn.arms) {
       const s = strips[arm.strip] as Strip;
+      const st = endStation(s, arm.end);
       s.lanes.forEach((l, k) => {
         if (l.type !== 'drive') return;
         covered.add(`${arm.strip}:${arm.end}:${k}`);
+        // a lane that has tapered to nothing at the junction (the road meets the width across it, P1-046) ends by design
+        if ((st.b[k] as number) - (st.b[k + 1] as number) < 0.05) return;
         const has = jn.connections.some((c) => (c.from[0] === arm.strip && c.from[1] === k) || (c.to[0] === arm.strip && c.to[1] === k));
         if (!has && jn.arms.length > 1) {
           out.junctionLanesWithoutConnection++;
@@ -175,9 +178,10 @@ export function checkTapers(strips: readonly Strip[]): TaperCheck {
     for (let i = 1; i < s.st.length; i++) length += Math.hypot((s.st[i] as Station).x - (s.st[i - 1] as Station).x, (s.st[i] as Station).z - (s.st[i - 1] as Station).z);
     let shift = 0;
     for (let k = 0; k < first.b.length; k++) shift = Math.max(shift, Math.abs((first.b[k] as number) - (last.b[k] as number)));
-    const ratio = classDefaults(s.cls).taper;
+    // (a taper to a split zone is held to the zone rate it was built with)
+    const ratio = s.taper?.ratio ?? classDefaults(s.cls).taper;
     const needed = ratio * shift;
-    const c = (out.byClass[s.cls] ??= { tapers: 0, violations: 0, ratio });
+    const c = (out.byClass[s.cls] ??= { tapers: 0, violations: 0, ratio: classDefaults(s.cls).taper });
     out.tapers++;
     c.tapers++;
     if (length < needed * 0.98 - 0.05) {
