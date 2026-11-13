@@ -207,13 +207,6 @@ func _place() -> void:
 			# the path ended or was stopped: the vehicle stands there and is a physics body again
 			car.ground_y = pos.y
 			car.place(pos.x, pos.z, h)
-	elif car.has_method("place"):
-		car.ground_y = pos.y
-		if d.length() > 0.01:
-			car.place(pos.x, pos.z, atan2(d.x, -d.z))
-		else:
-			car.place(pos.x, pos.z)
-		car.model.speed = _speed if _running else 0.0
 	else:
 		car.global_position = pos
 

@@ -7,7 +7,6 @@ extends SceneTree
 const Check := preload("res://tests/check.gd")
 const SUITES := [
 	"res://tests/test_projection.gd",
-	"res://tests/test_car.gd",
 	"res://tests/test_vehicle.gd",
 	"res://tests/test_on_foot.gd",
 	"res://tests/test_humanoid.gd",

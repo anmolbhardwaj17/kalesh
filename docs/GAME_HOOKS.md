@@ -139,6 +139,7 @@ window.__game = {
     hold(opts?: { at?: number, release?: boolean, cancel?: boolean }): { paused: boolean, t: number, at: number | null },
                                                                // sim hold: {at} pauses the sim exactly at sim time `at`,
                                                                // {release} resumes, {cancel} clears a pending hold, no args reads it
+                                                               // (Godot: paused reads true once the bodies show the held state, P1-048)
     events(): Array<{ t: number, w: number, type: string, data?: unknown }>,  // recent game events, a ring buffer; t sim s, w wall ms
     hud(on: boolean): void,
   }

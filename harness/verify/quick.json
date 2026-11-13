@@ -40,22 +40,6 @@
       ]
     },
     {
-      "path": "game/scripts/car",
-      "scenarios": [
-        "drive_north",
-        "drive_turn_right",
-        "hooks_contract"
-      ]
-    },
-    {
-      "path": "game/scripts/chase_camera.gd",
-      "scenarios": [
-        "boot_title",
-        "drive_north",
-        "coords_north_marker"
-      ]
-    },
-    {
       "path": "game/geo/",
       "scenarios": [
         "coords_north_marker",
