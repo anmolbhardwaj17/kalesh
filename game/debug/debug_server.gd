@@ -78,6 +78,7 @@ func _exit_tree() -> void:
 
 
 func _process(_delta: float) -> void:
+	_keep_drawing()
 	for e in _logger.drain():
 		_events().emit_event("error", e)
 	while listening and _server.is_connection_available():
@@ -187,7 +188,10 @@ func _call(method: String, a: Array) -> Dictionary:
 			if _headless:
 				return _fail("perf: a headless run renders nothing, so it has no frame times (run the scenario windowed)")
 			var ms := float(a[0]) if a.size() > 0 and (a[0] is float or a[0] is int) else 1000.0
-			return _ok(await _perf.perf(clampf(ms, 50.0, 60000.0)))
+			var forced0 := forced_draws
+			var pr: Dictionary = await _perf.perf(clampf(ms, 50.0, 60000.0))
+			pr["forcedDraws"] = forced_draws - forced0 # frames drawn by hand because the window was covered
+			return _ok(pr)
 		"load":
 			if a.is_empty() or not (a[0] is String):
 				return _fail("load(id): id must be a string")
@@ -404,6 +408,31 @@ func _make_overlay(verify: bool) -> void:
 	# --verify hides every debug overlay, so shots never show it.
 	_overlay.visible = not verify
 	add_child(_overlay)
+
+
+## macOS skips the draw of a window that is fully covered by other windows (Godot's can_any_window_draw checks the
+## occlusion state), so frame_post_draw, frames_drawn, shots and perf windows stop while the game logic keeps running
+## (P1-047). A harness run must not depend on whether the owner's terminal is in front: when no frame was drawn for
+## OCCLUDED_AFTER process frames, draw one by hand (RenderingServer.force_draw, no buffer swap) every process frame.
+const OCCLUDED_AFTER := 3
+var _seen_drawn := -1
+var _idle_frames := 0
+var forced_draws := 0
+
+
+func _keep_drawing() -> void:
+	if _headless:
+		return
+	var drawn := Engine.get_frames_drawn()
+	if drawn != _seen_drawn:
+		_seen_drawn = drawn
+		_idle_frames = 0
+		return
+	_idle_frames += 1
+	if _idle_frames >= OCCLUDED_AFTER:
+		forced_draws += 1
+		RenderingServer.force_draw(false)
+		_seen_drawn = Engine.get_frames_drawn()
 
 
 ## The signal that ends a frame: frame_post_draw when the game draws, process_frame when headless.
