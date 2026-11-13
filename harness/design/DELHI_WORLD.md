@@ -421,3 +421,14 @@ Anmol: "We don't have to be stuck with what OSM is giving us ... OSM is good for
 - **Precedence on any square metre:** road corridor, then landmark zone, then area blueprint, then the generator working from the repaired OSM footprints.
 - **Odd OSM buildings.** Outside blueprints, a footprint check flags shapes that would look wrong in game (slivers, spikes, zig-zags, self-overlaps, sizes or heights far outside the area profile). Each flag is checked against photos or satellite (the area reference sheets): if the real building is like that, it stays; if not, it is regularised to the area's typical shape. The map inspector shows these as their own issue kind.
 - **Style comes from the area.** Every generated building follows its area profile's style (materials, colours, balconies, railings, roofs), so a block never looks like it belongs to another part of Delhi.
+
+## Water: the Yamuna, canals, drains and ponds (Anmol 2026-11-13)
+
+Anmol: "Do we have plans to have a river system for it proper flowing? Which is hydrologically correct as well. Elevation wise."
+
+Today the bake gives each water body one flat level over a carved bed. The water system replaces that with a network that is right by height and by flow:
+- **Network.** OSM `waterway=river|canal|drain|stream` lines and water polygons form one directed graph: the Yamuna, the canals and water channels (the Kartavya Path canals, the Western Yamuna Canal and Agra Canal where the map reaches), the big drains (Najafgarh, Barapullah and the nalas), and ponds and park lakes. Direction comes from OSM where tagged and otherwise from the bare-earth DEM.
+- **Heights.** The water surface falls downstream, never rises: the Yamuna falls about 0.2 to 0.3 m per km north to south through Delhi, canals and drains follow their bed slope, and every join is level (a tributary meets the river at the river's surface height). Ponds and the ornamental canals are level pools with an outlet. The bed and banks are cut into the terrain to match, with sloped banks, embankments (bunds) and ghats where the city has them. A check fails the bake on any water surface that rises downstream or steps at a join.
+- **Bridges and roads.** Every bridge deck keeps its clearance over the surface (the lane model's missing "deck over water" rule), and culverts carry drains under roads.
+- **Look and flow.** The water shader moves in the flow direction at a speed from the slope and class (the river slow and wide, drains faster), with foam at weirs and bridge piers, and colour by kind (the Yamuna's grey green, clean ornamental canals, dark drains). Seasonal level (monsoon high water, winter low) comes later.
+- **Play.** Deep water is a stated fail until swimming exists (GAME.md, LATER); boats on the Yamuna are LATER too.

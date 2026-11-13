@@ -337,3 +337,6 @@ Anmol does not want to work through about 2,500 inspector fixes; basic ones (bui
 
 ## 2026-11-13 Road width continuity (Anmol)
 Anmol showed a road near India Gate that is thick on one side of a crossing and thin on the other, and roads round the triangle islands that step from thick to thin. Decision: new task P1-046, priority 1: a road keeps one cross section along a corridor unless real evidence says otherwise, width changes only through tapers, and a bake check fails on any width step. Why: roads must read as real Delhi roads; a lane count cannot jump without a merge.
+
+## 2026-11-13 Water network by height and flow (Anmol)
+Anmol asked for a proper flowing river system, hydrologically correct by elevation (Yamuna, canals). Decision: DELHI_WORLD.md water section and task P2-030 (priority 2): a directed water graph, surfaces that only fall downstream with level joins, banks cut into terrain, deck over water clearance, a flowing shader and a bake check. Why: today water is one flat level per body with no flow.
