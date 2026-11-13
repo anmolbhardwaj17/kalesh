@@ -503,3 +503,5 @@ One line per event, written by task.mjs (start, done, fail, phase changes, inbox
 - 2026-11-14 00:15 mentor message mmwfbuhlq handled: Bittu looks right. Skip the paid rigging, download as FBX, rig free on mixamo.com, then upload the FBX on the model_lead_bittu card. Steps given in the terminal.
 - 2026-11-14 00:16 mentor message mmwfbw26s handled: Sorry, I was wrong: Meshy generates free but the download is paid. Do not pay. Try a free route (Tripo or Hunyuan3D) if you like, or skip it; the stand-in Bittu stays and nothing waits. The cards now say this.
 - 2026-11-14 00:18 mentor message mmwfbyq73 handled: Sounds good. The three character cards stay open with no deadline; the stand-ins carry on until you download them.
+- 2026-11-14 00:32 mentor message mmwfcg9rd handled: Both running builders finish their task, then back to one builder at a time (map lane off). The content writer is finished; it only stays in the list.
+- 2026-11-14 01:09 mentor message mmwfdr9vi handled: Switched: one builder keeps building while a verifier checks the last finished task on a frozen copy. Starts once the two running tasks report.
