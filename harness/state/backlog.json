@@ -1,6 +1,6 @@
 {
   "_doc": "Written only by node harness/bin/task.mjs. Phases run in order; P0 (ADOPT + STYLE DISCOVERY) waits for the owner by design and needs task.mjs signoff and task.mjs archsignoff before its gate passes. Later phases are added by the planner at the end of P0 (task.mjs phase-add) from the game's real state.",
-  "updated": "2026-11-13T23:12:06.479Z",
+  "updated": "2026-11-13T23:12:12.308Z",
   "phases": [
     {
       "id": "P0",
@@ -3477,14 +3477,15 @@
       "agent": "builder",
       "priority": 3,
       "kind": "feature",
-      "status": "todo",
-      "attempts": 0,
+      "status": "doing",
+      "attempts": 1,
       "notes": [
         "From P1-040: a whole bake should regenerate harness/data/fixtures/stream_routes.json (tools/fixtures/gen_stream_routes.mjs), or tileset.mjs should flag a stale route fixture; a stale one fails every stream scenario on the bake hash.",
         "From P1-046: the lanes step now takes 45 to 85 s against its 30 s budget (width rounds rebuild the model up to 8 times); whole bake 330 to 410 s. Speed it up by replanning only the junctions a width round touches, or raise pilotStepMs.lanes with a reason.",
         "From P1-032: carriageways wider than their lane counts (Sansad Marg, BSZ Marg, JN Marg, Tilak Marg) leave flat asphalt beside the divider: apply the reference cross sections; restrictions on edges inside junction clusters; medians stop at junctions on one carriageway only (Janpath side streets)."
       ],
-      "created": "2026-11-11T21:49:42.141Z"
+      "created": "2026-11-11T21:49:42.141Z",
+      "started": "2026-11-13T23:12:12.308Z"
     },
     {
       "id": "P1-035",
