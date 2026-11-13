@@ -5,15 +5,13 @@
 // Marg, the ITO site of the Phase 0 road bench, the Connaught Place inner circle against its hero spec, the junction
 // paths, the build time and the hash.
 import fs from 'node:fs';
-import os from 'node:os';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { describe, expect, it } from 'vitest';
 import { projector } from '../../geo/projection.ts';
-import { parseArgs } from '../cli.ts';
 import { taggedLanes } from '../graph/classify.ts';
 import { stagePlan } from '../layout/stages.ts';
-import { bake, offlineNet } from '../main.ts';
+import { logLines, sharedBake } from '../../testkit/sharedbake.mjs';
 import { checkLaneModel, checkPlanOverlap } from './lanechecks.ts';
 import { classDefaults, GALI_MIN_LANE_M, MIN_DRIVE_LANE_M, MIN_TURN_RADIUS_M } from './model.ts';
 import { buildLaneModel } from './network.ts';
@@ -31,15 +29,12 @@ const PHASE0 = { zones: 10, overlapM2: 0 };
 
 describe.skipIf(missing.length > 0)(`pilot centre lane model${reason ? ` (skipped: ${reason})` : ''}`, () => {
   let done;
-  const baked = () => (done ??= run());
-  const run = async () => {
-    const dir = fs.mkdtempSync(path.join(os.tmpdir(), 'bake-lanes-'));
-    const healthFile = path.join(dir, 'health.json');
-    const lines = [];
-    const report = await bake(parseArgs(['pilot', '--stage', 'lanes', '--offline']), { root: ROOT, net: offlineNet, today: '2026-11-12', log: (l) => lines.push(l), healthFile });
-    const health = JSON.parse(fs.readFileSync(healthFile, 'utf8'));
-    const model = JSON.parse(fs.readFileSync(path.join(ROOT, health.lanes.files.model), 'utf8'));
-    const graph = JSON.parse(fs.readFileSync(path.join(ROOT, plan.def.dataDir, 'graph_repaired.json'), 'utf8'));
+  const baked = () => (done ??= build());
+  const build = async () => {
+    const sb = await sharedBake();
+    const { report, health, lines } = sb;
+    const model = JSON.parse(fs.readFileSync(sb.file(health.lanes.files.model), 'utf8'));
+    const graph = JSON.parse(fs.readFileSync(sb.file('graph_repaired.json'), 'utf8'));
     const osm = JSON.parse(fs.readFileSync(path.join(ROOT, plan.def.dataDir, 'osm.json'), 'utf8'));
     const wayLanes = new Map();
     for (const e of osm.elements) {
@@ -48,20 +43,17 @@ describe.skipIf(missing.length > 0)(`pilot centre lane model${reason ? ` (skippe
       if (n !== null) wayLanes.set(`way/${e.id}`, n);
     }
     const heroes = [JSON.parse(fs.readFileSync(path.join(ROOT, 'harness/data/hero_roads/cp_inner_circle.json'), 'utf8'))];
-    for (const l of lines.filter((x) => x.startsWith('[lanes]'))) console.log(l);
-    return { report, health, lanes: health.lanes, model, graph, wayLanes, heroes, lines, dir };
+    logLines(lines, '[lanes]');
+    return { report, health, lanes: health.lanes, model, graph, wayLanes, heroes, lines, sb };
   };
-  /** The whole bake runs once, inside the first test that asks for it. */
-  const T = 300000;
+  /** The shared bake (tools/testkit/sharedbake.mjs) is built by the first test file that asks, once per run, and kept between runs. */
+  const T = 1800000;
   const drive = (s, st) => s.lanes.filter((l, k) => l.type === 'drive' && st[7 + k] - st[8 + k] > 0.05).length;
 
-  it('the bake runs through the lanes step, in under 30 s for the model, with the same hash twice', async () => {
-    const { report, lanes, health } = await baked();
-    expect(report.steps).toEqual(['sources', 'ground', 'graph', 'repair', 'lanes']);
+  it('the bake runs through the lanes step with the same hash twice; the build time is checked by pilot_timing.test.mjs', async () => {
+    const { report, lanes, health, sb } = await baked();
+    expect(report.steps.slice(0, 5)).toEqual(['sources', 'ground', 'graph', 'repair', 'lanes']);
     expect(report.stoppedBeforeTiles).toBe(false);
-    // 30 s on an idle machine; other tests and bakes running in parallel slow it (38.6 s seen twice under load).
-    const busy = os.loadavg()[0] > os.cpus().length / 2;
-    expect(lanes.buildMs).toBeLessThan(busy ? 90000 : 30000);
     const inv = Object.fromEntries(health.invariants.filter((i) => i.id.startsWith('LANES-')).map((i) => [i.id, i.ok]));
     expect(inv).toEqual({ 'LANES-01.continuity': true, 'LANES-02.zones': true, 'LANES-03.same_twice': true, 'LANES-04.left_hand_and_widths': true, 'LANES-05.hero': true });
     expect(lanes.hash).toMatch(/^[0-9a-f]{8,}$/);
@@ -75,7 +67,7 @@ describe.skipIf(missing.length > 0)(`pilot centre lane model${reason ? ` (skippe
     const fb = health.repair.laneFeedback;
     expect(fb.rounds.length).toBeGreaterThan(0);
     expect(fb.rounds[fb.rounds.length - 1].overlapM2).toBe(lanes.overlap.areaM2);
-    for (const f of [lanes.files.model, lanes.files.laneGraph]) expect(fs.existsSync(path.join(ROOT, f))).toBe(true);
+    for (const f of [lanes.files.model, lanes.files.laneGraph]) expect(fs.existsSync(sb.file(f))).toBe(true);
     expect(lanes.files.pictures.filter((p) => p.endsWith('.png')).map((p) => path.basename(p)).sort()).toEqual(['lanes_pilot_cp.png', 'lanes_pilot_ito.png']);
   }, T);
 

@@ -5,45 +5,29 @@
 // build time and the same hash twice, and the site tiles of the road bench scene on the production ground with the
 // poses the acceptance shots are taken from.
 import fs from 'node:fs';
-import os from 'node:os';
 import path from 'node:path';
-import { fileURLToPath } from 'node:url';
 import { describe, expect, it } from 'vitest';
-import { parseArgs } from '../cli.ts';
-import { stagePlan } from '../layout/stages.ts';
-import { bake, offlineNet } from '../main.ts';
+import { logLines, pilotMissing, sharedBake } from '../../testkit/sharedbake.mjs';
 import { decodeT1 } from '../tile/codec.ts';
 
-const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..', '..', '..');
-const districts = JSON.parse(fs.readFileSync(path.join(ROOT, 'harness/data/districts.json'), 'utf8'));
-const plan = stagePlan(districts, 'pilot', fs.readFileSync(path.join(ROOT, 'harness/data/districts/pilot_centre.geojson'), 'utf8'));
-const missing = ['osm.json', 'overture_buildings.json', 'gedtm30_window.json'].filter((f) => !fs.existsSync(path.join(ROOT, plan.def.dataDir, f)));
-const reason = missing.length ? `pilot data missing (${missing.join(', ')} in ${plan.def.dataDir}): run npm run bake -- pilot --stage sources` : '';
+const { missing, reason } = pilotMissing();
 
 describe.skipIf(missing.length > 0)(`pilot centre ground${reason ? ` (skipped: ${reason})` : ''}`, () => {
-  let done;
-  const baked = () => (done ??= run());
-  const run = async () => {
-    const dir = fs.mkdtempSync(path.join(os.tmpdir(), 'bake-terrain-'));
-    const healthFile = path.join(dir, 'health.json');
-    const benchDir = path.join(dir, 'gen');
-    const lines = [];
-    const report = await bake(parseArgs(['pilot', '--stage', 'terrain', '--offline']), { root: ROOT, net: offlineNet, today: '2026-11-12', log: (l) => lines.push(l), healthFile, benchDir });
-    const health = JSON.parse(fs.readFileSync(healthFile, 'utf8'));
-    for (const l of lines.filter((x) => x.startsWith('[terrain]'))) console.log(l);
+  const baked = async () => {
+    const { report, health, benchDir, lines } = await sharedBake();
+    logLines(lines, '[terrain]');
     return { report, health, terrain: health.terrain, benchDir };
   };
-  /** The whole bake runs once, inside the first test that asks for it (about two and a half minutes; longer beside the other pilot tests). */
-  const T = 600000;
+  /** The shared bake (tools/testkit/sharedbake.mjs) is built by the first test file that asks, once per run, and kept between runs. */
+  const T = 1800000;
 
-  it('the bake runs through the terrain step: every terrain invariant holds, the ground builds in under 120 s, the same ground twice', async () => {
+  it('the bake runs through the terrain step: every terrain invariant holds, the same ground twice; the build time is checked by pilot_timing.test.mjs', async () => {
     const { report, health, terrain } = await baked();
-    expect(report.steps).toEqual(['sources', 'ground', 'graph', 'repair', 'lanes', 'elevation', 'mesh', 'terrain']);
+    expect(report.steps.slice(0, 8)).toEqual(['sources', 'ground', 'graph', 'repair', 'lanes', 'elevation', 'mesh', 'terrain']);
     expect(report.stoppedBeforeTiles).toBe(false);
     const inv = Object.fromEntries(health.invariants.filter((i) => i.id.startsWith('TERR-')).map((i) => [i.id, i.ok]));
     expect(inv).toEqual({ 'TERR-01.gap': true, 'TERR-02.nothing_above_the_road': true, 'TERR-03.needles': true, 'TERR-04.seams': true, 'TERR-05.no_hole': true, 'TERR-06.same_twice_in_time': true });
     console.log(`[terrain] build time ${terrain.buildMs} ms (${JSON.stringify(terrain.ms)}), checks ${terrain.checksMs} ms`);
-    expect(terrain.buildMs).toBeLessThan(120000);
     expect(terrain.counts.emitted).toBeGreaterThan(500000);
     expect(terrain.counts.tiles).toBeGreaterThan(300);
     expect(terrain.triangulation.segments.failed).toBe(0);

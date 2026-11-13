@@ -1,6 +1,6 @@
 {
   "_doc": "Written only by node harness/bin/task.mjs. Phases run in order; P0 (ADOPT + STYLE DISCOVERY) waits for the owner by design and needs task.mjs signoff and task.mjs archsignoff before its gate passes. Later phases are added by the planner at the end of P0 (task.mjs phase-add) from the game's real state.",
-  "updated": "2026-11-13T01:01:41.680Z",
+  "updated": "2026-11-13T01:35:38.040Z",
   "phases": [
     {
       "id": "P0",
@@ -3465,13 +3465,17 @@
       "agent": "builder",
       "priority": 1,
       "kind": "feature",
-      "status": "todo",
-      "attempts": 0,
+      "status": "done",
+      "attempts": 1,
       "notes": [
         "From P1-018: pilot_lanes.test.mjs 'lane model under 30 s' read 38.6 s on a loaded machine (passed alone). Make wall clock limits in tests load aware or move them to the bake perf report.",
         "From P1-039: under outside load (load 13) pilot_repair 'rules under 3000 ms' read 3041 ms and pilot_lanes timed out at 300 s. Same fix: load aware limits or move timing to the bake perf report."
       ],
-      "created": "2026-11-12T03:18:22.790Z"
+      "created": "2026-11-12T03:18:22.790Z",
+      "started": "2026-11-13T01:02:03.361Z",
+      "done": "2026-11-13T01:35:38.022Z",
+      "summary": "One shared cached pilot bake per test run (keyed by tools/bake, tools/geo, tools/testkit, harness/data and the pins; a code change invalidates it, proven by a test); pilot tests read cache copies; wall clock limits moved to one load aware pilot_timing test against perf_budgets bake.pilotStepMs. vitest 351 s to 38 to 42 s warm, cold bounded by one whole bake (253 s under load 13 to 23). verify --quick OK with a 54 s test step. tileset.ts kept (4 tests use it).",
+      "commit": "d17bfa2"
     },
     {
       "id": "P1-039",
