@@ -1,0 +1,36 @@
+[
+  {
+    "issue": "R-ROAD-01:w720735033.0:w24577483.1:n6761961059",
+    "action": "connect",
+    "target": {
+      "ids": [
+        "w720735033.0",
+        "w24577483.1"
+      ],
+      "anchor": {
+        "lat": 28.6335254,
+        "lon": 77.2209547
+      },
+      "tolerance_m": 15
+    },
+    "params": {
+      "op": "join_end",
+      "edge": "w720735033.0",
+      "node": "n6761961059",
+      "to": "w24577483.1",
+      "x": -824.777,
+      "z": -2277.365,
+      "gap_m": 10.8
+    },
+    "why": "A service lane of Connaught Place that runs out to the radial road: joined",
+    "by": "judge",
+    "source": "top-view",
+    "date": "2026-11-13",
+    "reference": {
+      "link": "https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/export?bbox=77.2204944,28.6331194,77.2214147,28.6339315&bboxSR=4326&imageSR=3857&size=315,315&format=jpg&f=image",
+      "date": "2026-11-13",
+      "note": "Esri World Imagery beside the map render of the site (tools/inspector/judge.mjs sheets)"
+    },
+    "id": "ov_-1_-8_0001"
+  }
+]

@@ -1,0 +1,36 @@
+[
+  {
+    "issue": "R-ROAD-01:w1121189623.1:w142216383.0:n10255292067",
+    "action": "connect",
+    "target": {
+      "ids": [
+        "w1121189623.1",
+        "w142216383.0"
+      ],
+      "anchor": {
+        "lat": 28.6251836,
+        "lon": 77.2249631
+      },
+      "tolerance_m": 15
+    },
+    "params": {
+      "op": "join_end",
+      "edge": "w1121189623.1",
+      "node": "n10255292067",
+      "to": "w142216383.0",
+      "x": -431.107,
+      "z": -1365.779,
+      "gap_m": 8.2
+    },
+    "why": "The drive runs to the lane ahead under the trees at a right angle, the way compound drives meet their lane: joined",
+    "by": "judge",
+    "source": "top-view",
+    "date": "2026-11-13",
+    "reference": {
+      "link": "https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/export?bbox=77.2245027,28.6247779,77.2254230,28.6255900&bboxSR=4326&imageSR=3857&size=315,315&format=jpg&f=image",
+      "date": "2026-11-13",
+      "note": "Esri World Imagery beside the map render of the site (tools/inspector/judge.mjs sheets)"
+    },
+    "id": "ov_0_-4_0001"
+  }
+]

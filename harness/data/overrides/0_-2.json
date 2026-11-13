@@ -1,0 +1,36 @@
+[
+  {
+    "issue": "R-ROAD-01:w1121166626.0:w1121166631.0:n10255123775",
+    "action": "connect",
+    "target": {
+      "ids": [
+        "w1121166626.0",
+        "w1121166631.0"
+      ],
+      "anchor": {
+        "lat": 28.62157,
+        "lon": 77.223215
+      },
+      "tolerance_m": 15
+    },
+    "params": {
+      "op": "join_end",
+      "edge": "w1121166626.0",
+      "node": "n10255123775",
+      "to": "w1121166631.0",
+      "x": -596.52,
+      "z": -968.021,
+      "gap_m": 14.4
+    },
+    "why": "The service road beside the building heads for the road ahead across open ground: it joins",
+    "by": "judge",
+    "source": "top-view",
+    "date": "2026-11-13",
+    "reference": {
+      "link": "https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/export?bbox=77.2227553,28.6211642,77.2236755,28.6219763&bboxSR=4326&imageSR=3857&size=315,315&format=jpg&f=image",
+      "date": "2026-11-13",
+      "note": "Esri World Imagery beside the map render of the site (tools/inspector/judge.mjs sheets)"
+    },
+    "id": "ov_0_-2_0001"
+  }
+]

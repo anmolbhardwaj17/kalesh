@@ -1,0 +1,31 @@
+[
+  {
+    "issue": "R-ROAD-01:w1460009382.0:w1312526361.1:n13390410103",
+    "action": "terminate",
+    "target": {
+      "ids": [
+        "w1460009382.0",
+        "w1312526361.1"
+      ],
+      "anchor": {
+        "lat": 28.6091664,
+        "lon": 77.2329153
+      },
+      "tolerance_m": 15
+    },
+    "params": {
+      "node": "n13390410103",
+      "with": "dead_end"
+    },
+    "why": "A lane between the long sheds; it stops at their end and a planted strip lies before the road along the railway. A dead end",
+    "by": "judge",
+    "source": "top-view",
+    "date": "2026-11-13",
+    "reference": {
+      "link": "https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/export?bbox=77.2324551,28.6087606,77.2333753,28.6095726&bboxSR=4326&imageSR=3857&size=315,315&format=jpg&f=image",
+      "date": "2026-11-13",
+      "note": "Esri World Imagery beside the map render of the site (tools/inspector/judge.mjs sheets)"
+    },
+    "id": "ov_3_3_0001"
+  }
+]

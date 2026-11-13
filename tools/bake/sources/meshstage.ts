@@ -32,6 +32,10 @@ import type { TerrainInput } from '../terrain/collect.ts';
 import { groundHash, groundInBox, groundPoses, groundSvg, terrainInvariants, terrainLog, terrainRecord } from '../terrain/terrainout.ts';
 import type { TerrainRecord } from '../terrain/terrainout.ts';
 import type { GroundModel } from '../heights.ts';
+import { CLEAR, clearFootprints, faceIndex, leftOnRoad, roadFace } from '../repair/clear.ts';
+import type { BuildingsRecord, ClearLine, RoadFace } from '../repair/clear.ts';
+import { MEET_NONE, meetOf } from '../terrain/collect.ts';
+import fs from 'node:fs';
 import { writePicture } from './graphinput.ts';
 import { writeSiteTile } from './meshio.ts';
 
@@ -151,6 +155,46 @@ export async function runTerrainStep(ctx: StepContext, meshed: { input: MeshInpu
   for (const l of terrainLog(rec)) log(`[terrain] ${l}`);
   const invariants = terrainInvariants(rec, again).map((r) => (ctx.quick && r.id === 'TERR-06.same_twice_in_time' ? { ...r, detail: `${NOT_TWICE}; one build ${rec.buildMs} ms` } : r));
   return { ground, rec, invariants };
+}
+
+/**
+ * Buildings off the road (P1-030): every footprint that stands on a road face of the mesh gives way (moved back, cut,
+ * cut in two or dropped: tools/bake/repair/clear.ts). Runs after the road mesh and before the ground, so the ground
+ * and the building shells are built on the cleared footprints. Changes `repaired.footprints` in place.
+ */
+export function runClearStep(ctx: StepContext, meshed: { input: MeshInput; mesh: RoadMesh }, repaired: RepairedGraph, reportDir: string): { rec: BuildingsRecord; invariants: InvariantResult[] } {
+  const t0 = clock.now();
+  const { fs: faces } = meshed.mesh;
+  const meet = { fs: faces, strips: meshed.input.strips, kinds: meshed.input.kinds };
+  const list: RoadFace[] = [];
+  for (let f = 0; f < faces.faces; f++) {
+    if (meetOf(meet, f) === MEET_NONE) continue;
+    const ring: P2[] = [];
+    const start = faces.start[f] as number;
+    for (let k = 0; k < (faces.len[f] as number); k++) {
+      const v = faces.ids[start + k] as number;
+      ring.push({ x: faces.vx[v] as number, z: faces.vz[v] as number });
+    }
+    if (ring.length >= 3) list.push(roadFace(ring));
+  }
+  const index = faceIndex(list);
+  const marked = new Set(Object.entries(repaired.marks).filter(([, m]) => m['gives_way'] !== undefined).map(([id]) => id));
+  const res = clearFootprints(repaired.footprints, index);
+  repaired.footprints = res.footprints;
+  const left = leftOnRoad(res.footprints, index);
+  const bySource: Record<string, number> = {};
+  for (const l of res.lines) bySource[l.source] = (bySource[l.source] ?? 0) + 1;
+  const file = path.join(reportDir, 'buildings_cleared.json');
+  fs.mkdirSync(path.dirname(file), { recursive: true });
+  const lines: (ClearLine & { issue: boolean })[] = res.lines.map((l) => ({ ...l, x: round(l.x + ctx.offset.x), z: round(l.z + ctx.offset.z), issue: marked.has(l.id) }));
+  fs.writeFileSync(file, JSON.stringify({ _doc: 'Every building footprint the bake took off a road (P1-030, tools/bake/repair/clear.ts): moved back (shifted), cut to the road edge (trimmed), cut in two by a road through it (split) or dropped as a scrap. x, z are world metres. issue: an R-BLDG-01 issue named it.', stage: ctx.plan.id, counts: res.counts, lines }) + '\n');
+  const rec: BuildingsRecord = {
+    roadFaces: list.length, counts: res.counts, withoutIssue: res.lines.filter((l) => !marked.has(l.id)).length, bySource, left, clearanceM: CLEAR.clearanceM, ms: Math.round(clock.now() - t0),
+    file: path.relative(ctx.root, file),
+  };
+  const c = res.counts;
+  ctx.log(`[buildings] ${c.onRoad} of ${c.footprints} footprints stood on a road face (${c.overlapM2} m2): ${c.shifted} moved back, ${c.trimmed} cut to the road edge, ${c.split} cut in two, ${c.dropped} dropped (${c.removedM2} m2 taken off; ${rec.withoutIssue} had no issue of their own); ${left.count} left on a road (${left.areaM2} m2); ${c.footprintsAfter} footprints now; ${rec.ms} ms`);
+  return { rec, invariants: [{ id: 'BLDG-01.off_the_road', ok: left.count === 0, detail: left.count === 0 ? `no footprint shares more than 0.01 m2 with a road face (${c.onRoad} cleared: ${c.shifted} moved, ${c.trimmed} cut, ${c.split} cut in two, ${c.dropped} dropped)` : `${left.count} footprints still on a road (${left.areaM2} m2): ${left.worst.slice(0, 3).map((w) => `${w.id} ${w.areaM2} m2`).join(', ')}` }] };
 }
 
 export const defaultBenchDir = path.join('game', 'bench', 'roads', 'gen');

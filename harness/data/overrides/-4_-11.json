@@ -1,0 +1,36 @@
+[
+  {
+    "issue": "R-ROAD-01:w123406189.0:w319329101.1:n1376300404",
+    "action": "connect",
+    "target": {
+      "ids": [
+        "w123406189.0",
+        "w319329101.1"
+      ],
+      "anchor": {
+        "lat": 28.6407887,
+        "lon": 77.2132889
+      },
+      "tolerance_m": 15
+    },
+    "params": {
+      "op": "join_end",
+      "edge": "w123406189.0",
+      "node": "n1376300404",
+      "to": "w319329101.1",
+      "x": -1572.023,
+      "z": -3081.129,
+      "gap_m": 13.1
+    },
+    "why": "The lane crosses open market ground to the bigger road in the picture: joined",
+    "by": "judge",
+    "source": "top-view",
+    "date": "2026-11-13",
+    "reference": {
+      "link": "https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/export?bbox=77.2128292,28.6403829,77.2137495,28.6411951&bboxSR=4326&imageSR=3857&size=315,315&format=jpg&f=image",
+      "date": "2026-11-13",
+      "note": "Esri World Imagery beside the map render of the site (tools/inspector/judge.mjs sheets)"
+    },
+    "id": "ov_-4_-11_0001"
+  }
+]

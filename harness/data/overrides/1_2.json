@@ -1,0 +1,31 @@
+[
+  {
+    "issue": "R-ROAD-01:w1282119230.0:w23134098.0:n11898263785",
+    "action": "terminate",
+    "target": {
+      "ids": [
+        "w1282119230.0",
+        "w23134098.0"
+      ],
+      "anchor": {
+        "lat": 28.6124683,
+        "lon": 77.227786
+      },
+      "tolerance_m": 15
+    },
+    "params": {
+      "node": "n11898263785",
+      "with": "dead_end"
+    },
+    "why": "A garden path of the India Gate lawns that reaches the kerb of the avenue: people cross here, cars do not turn. Closed at the kerb, the avenue stays whole",
+    "by": "judge",
+    "source": "top-view",
+    "date": "2026-11-13",
+    "reference": {
+      "link": "https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/export?bbox=77.2273264,28.6120621,77.2282466,28.6128741&bboxSR=4326&imageSR=3857&size=315,315&format=jpg&f=image",
+      "date": "2026-11-13",
+      "note": "Esri World Imagery beside the map render of the site (tools/inspector/judge.mjs sheets)"
+    },
+    "id": "ov_1_2_0001"
+  }
+]

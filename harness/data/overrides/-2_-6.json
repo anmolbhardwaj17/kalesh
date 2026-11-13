@@ -1,0 +1,36 @@
+[
+  {
+    "issue": "R-ROAD-01:w1183624644.0:w253307767.1:n10254979365",
+    "action": "connect",
+    "target": {
+      "ids": [
+        "w1183624644.0",
+        "w253307767.1"
+      ],
+      "anchor": {
+        "lat": 28.6288751,
+        "lon": 77.2196782
+      },
+      "tolerance_m": 15
+    },
+    "params": {
+      "op": "join_end",
+      "edge": "w1183624644.0",
+      "node": "n10254979365",
+      "to": "w253307767.1",
+      "x": -954.584,
+      "z": -1783.088,
+      "gap_m": 11.9
+    },
+    "why": "The lane beside the building runs north to the cross lane: joined",
+    "by": "judge",
+    "source": "top-view",
+    "date": "2026-11-13",
+    "reference": {
+      "link": "https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/export?bbox=77.2192185,28.6284689,77.2201388,28.6292810&bboxSR=4326&imageSR=3857&size=315,315&format=jpg&f=image",
+      "date": "2026-11-13",
+      "note": "Esri World Imagery beside the map render of the site (tools/inspector/judge.mjs sheets)"
+    },
+    "id": "ov_-2_-6_0001"
+  }
+]

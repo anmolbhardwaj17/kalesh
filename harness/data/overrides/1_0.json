@@ -1,0 +1,29 @@
+[
+  {
+    "issue": "R-JUNC-04:w1121175095.3:n10255211916",
+    "action": "remove",
+    "target": {
+      "ids": [
+        "w1121175095.3"
+      ],
+      "anchor": {
+        "lat": 28.6160529,
+        "lon": 77.2273563
+      },
+      "tolerance_m": 15
+    },
+    "params": {
+      "drop": "w1121175095.3"
+    },
+    "why": "The stub is the corner of a small drive loop beside the building and points into its wall: nothing to drive to, it goes",
+    "by": "judge",
+    "source": "top-view",
+    "date": "2026-11-13",
+    "reference": {
+      "link": "https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/export?bbox=77.2268958,28.6156469,77.2278161,28.6164589&bboxSR=4326&imageSR=3857&size=315,315&format=jpg&f=image",
+      "date": "2026-11-13",
+      "note": "Esri World Imagery beside the map render of the site (tools/inspector/judge.mjs sheets)"
+    },
+    "id": "ov_1_0_0001"
+  }
+]

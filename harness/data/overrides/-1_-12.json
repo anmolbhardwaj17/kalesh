@@ -1,0 +1,36 @@
+[
+  {
+    "issue": "R-ROAD-01:w463710727.0:w463710726.0:n4589539895",
+    "action": "connect",
+    "target": {
+      "ids": [
+        "w463710727.0",
+        "w463710726.0"
+      ],
+      "anchor": {
+        "lat": 28.6439204,
+        "lon": 77.2218436
+      },
+      "tolerance_m": 15
+    },
+    "params": {
+      "op": "join_end",
+      "edge": "w463710727.0",
+      "node": "n4589539895",
+      "to": "w463710726.0",
+      "x": -740.006,
+      "z": -3427.097,
+      "gap_m": 12
+    },
+    "why": "Both roads lie on the same paved yard: joined",
+    "by": "judge",
+    "source": "top-view",
+    "date": "2026-11-13",
+    "reference": {
+      "link": "https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/export?bbox=77.2213833,28.6435146,77.2223038,28.6443267&bboxSR=4326&imageSR=3857&size=315,315&format=jpg&f=image",
+      "date": "2026-11-13",
+      "note": "Esri World Imagery beside the map render of the site (tools/inspector/judge.mjs sheets)"
+    },
+    "id": "ov_-1_-12_0001"
+  }
+]

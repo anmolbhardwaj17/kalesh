@@ -1,0 +1,70 @@
+[
+  {
+    "issue": "R-ROAD-01:w1121191989.0:w706854222.0:n10255351845",
+    "action": "connect",
+    "target": {
+      "ids": [
+        "w1121191989.0",
+        "w706854222.0"
+      ],
+      "anchor": {
+        "lat": 28.6264744,
+        "lon": 77.2344693
+      },
+      "tolerance_m": 15
+    },
+    "params": {
+      "op": "join_end",
+      "edge": "w1121191989.0",
+      "node": "n10255351845",
+      "to": "w706854222.0",
+      "x": 504.671,
+      "z": -1504.361,
+      "gap_m": 13.5
+    },
+    "why": "The lane from the west meets the north to south lane at a T under the trees: joined",
+    "by": "judge",
+    "source": "top-view",
+    "date": "2026-11-13",
+    "reference": {
+      "link": "https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/export?bbox=77.2340090,28.6260682,77.2349294,28.6268802&bboxSR=4326&imageSR=3857&size=315,315&format=jpg&f=image",
+      "date": "2026-11-13",
+      "note": "Esri World Imagery beside the map render of the site (tools/inspector/judge.mjs sheets)"
+    },
+    "id": "ov_4_-5_0001"
+  },
+  {
+    "issue": "R-ROAD-01:w706854224.2:w1138292933.5:n12593033097",
+    "action": "connect",
+    "target": {
+      "ids": [
+        "w706854224.2",
+        "w1138292933.5"
+      ],
+      "anchor": {
+        "lat": 28.6267956,
+        "lon": 77.2334235
+      },
+      "tolerance_m": 15
+    },
+    "params": {
+      "op": "join_end",
+      "edge": "w706854224.2",
+      "node": "n12593033097",
+      "to": "w1138292933.5",
+      "x": 383.529,
+      "z": -1546.886,
+      "gap_m": 8.2
+    },
+    "why": "The lane ends in line with the road ahead, no wall between them: joined",
+    "by": "judge",
+    "source": "top-view",
+    "date": "2026-11-13",
+    "reference": {
+      "link": "https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/export?bbox=77.2329628,28.6263895,77.2338832,28.6272015&bboxSR=4326&imageSR=3857&size=315,315&format=jpg&f=image",
+      "date": "2026-11-13",
+      "note": "Esri World Imagery beside the map render of the site (tools/inspector/judge.mjs sheets)"
+    },
+    "id": "ov_4_-5_0002"
+  }
+]

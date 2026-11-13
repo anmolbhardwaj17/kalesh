@@ -206,7 +206,7 @@ const CASES: Record<string, { hit: () => Case; clean: () => Case; also?: (issues
   'R-BLDG-01': {
     hit: () => ({ s: sketch((s) => { s.way([[0, 0], [100, 0]], { highway: 'residential' }); s.building([[10, 2.2], [20, 2.2], [20, 12], [10, 12]]); }) }),
     clean: () => ({ s: sketch((s) => { s.way([[0, 0], [100, 0]], { highway: 'residential' }); s.building([[10, 6], [20, 6], [20, 16], [10, 16]]); }) }),
-    also: (i) => { expect(i[0]!.note).toBe('0.8 m into a 6 m carriageway (class default)'); expect(i[0]!.proposals[0]!.params).toMatchObject({ key: 'width', value: 4 }); },
+    also: (i) => { expect(i[0]!.note).toBe('0.8 m into a 6 m carriageway (class default)'); expect(i[0]!.proposals[0]!.params).toMatchObject({ op: 'give_way', on: 'way/101', road: 'w100.0', by_m: 0.8 }); expect(i[0]!.proposals[0]!.lowImpact).toBe(true); },
   },
   'R-BLDG-02': {
     hit: () => ({ s: sketch((s) => { s.building([[0, 0], [20, 0], [20, 20], [10, -5], [0, 20]]); s.building([[100, 0], [130, 0], [130, 0.4], [100, 0.4]]); }) }),
@@ -253,8 +253,9 @@ const CASES: Record<string, { hit: () => Case; clean: () => Case; also?: (issues
     also: (i) => { expect(i[0]!.note).toContain('3 lanes, the spec says 4'); },
   },
   'R-HERO-03': {
-    hit: () => ({ s: sketch((s) => { s.way([[0, 0], [300, 0]], { highway: 'secondary', name: 'Janpath' }); }), env: { heroList }, marks: (g) => ({ [g.edges[0]!.id]: { lanes_from: 'ahead', by: 'R-LANE-FIT-03:w100.0' } }) }),
-    clean: () => ({ s: sketch((s) => { s.way([[0, 0], [300, 0]], { highway: 'secondary', name: 'Janpath' }); }), env: { heroList }, marks: (g) => ({ [g.edges[0]!.id]: { lanes_from: 'spec', profile: 'smoothed' } }) }),
+    // only a hero road with a spec file has a cross-section to protect (P1-030); a hold that moved nothing (shifted_m 0) is no change
+    hit: () => ({ s: sketch((s) => { s.way([[0, 0], [300, 0]], { highway: 'secondary', name: 'Janpath' }); }), env: { heroList, heroSpecs: [{ ...spec, id: 'janpath' }] }, marks: (g) => ({ [g.edges[0]!.id]: { lanes_from: 'ahead', by: 'R-LANE-FIT-03:w100.0' } }) }),
+    clean: () => ({ s: sketch((s) => { s.way([[0, 0], [300, 0]], { highway: 'secondary', name: 'Janpath' }); }), env: { heroList, heroSpecs: [{ ...spec, id: 'janpath' }] }, marks: (g) => ({ [g.edges[0]!.id]: { lanes_from: 'spec', profile: 'smoothed', shifted_m: 0 } }) }),
   },
   'R-HERO-04': {
     hit: () => ({ s: new Sketch(), env: { heroSpecs: [{ ...spec, kerbs: { ...spec.kerbs, ref: [] } }] } }),

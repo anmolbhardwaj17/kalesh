@@ -1,11 +1,23 @@
 import { describe, expect, it } from 'vitest';
-import { explainGates, gateInvariant, gateLog } from './gates.ts';
+import { explainGates, gateInvariant, gateLog, itemMatches } from './gates.ts';
 import type { GateItem, GateKey } from './gates.ts';
 
 const empty = (): Record<GateKey, GateItem[]> => ({ openPorts: [], floatingEnds: [], unjoinedEnds: [], overlappingRoadFaces: [], laneContinuityBreaks: [], tapersOutOfLimits: [] });
 const item = (id: string, kind = 'x', why?: string): GateItem => ({ id, kind, name: id, detail: `item ${id}`, ...(why ? { why } : {}) });
 
 describe('gate explanations (P1-017)', () => {
+  it('an entry names a zone by its other face: * stands for the zone number, which any map change renumbers (P1-030)', () => {
+    expect(itemMatches('w77617201.0_0|zone_merge_*', 'w77617201.0_0|zone_merge_3996')).toBe(true);
+    expect(itemMatches('w77617201.0_0|zone_merge_*', 'w77617201.0_0|zone_diverge_3996')).toBe(false);
+    expect(itemMatches('w77617201.0_0|zone_merge_*', 'w77617201x0_0|zone_merge_1')).toBe(false);
+    expect(itemMatches('w1.0_0 start', 'w1.0_0 start')).toBe(true);
+    const items = empty();
+    items.overlappingRoadFaces = [item('w1.0_0|zone_merge_12')];
+    const r = explainGates(items, { explanations: [{ gate: 'overlappingRoadFaces', items: ['w1.0_0|zone_merge_*'], owner: 'explained', why: 'a hairline' }], findings: [] });
+    expect(r.ok).toBe(true);
+    expect(r.idle).toEqual([]);
+  });
+
   it('all zero is ok with no entry', () => {
     const r = explainGates(empty(), { explanations: [], findings: [] });
     expect(r.ok).toBe(true);

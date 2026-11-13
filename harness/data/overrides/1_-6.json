@@ -1,0 +1,36 @@
+[
+  {
+    "issue": "R-ROAD-01:w1326469000.0:w1120542273.0:n12273092550",
+    "action": "connect",
+    "target": {
+      "ids": [
+        "w1326469000.0",
+        "w1120542273.0"
+      ],
+      "anchor": {
+        "lat": 28.630297,
+        "lon": 77.227124
+      },
+      "tolerance_m": 15
+    },
+    "params": {
+      "op": "join_end",
+      "edge": "w1326469000.0",
+      "node": "n12273092550",
+      "to": "w1120542273.0",
+      "x": -221.549,
+      "z": -1937.463,
+      "gap_m": 10.3
+    },
+    "why": "The lane beside the shrine carries on north east as the lane ahead: joined",
+    "by": "judge",
+    "source": "top-view",
+    "date": "2026-11-13",
+    "reference": {
+      "link": "https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/export?bbox=77.2266633,28.6298912,77.2275837,28.6307033&bboxSR=4326&imageSR=3857&size=315,315&format=jpg&f=image",
+      "date": "2026-11-13",
+      "note": "Esri World Imagery beside the map render of the site (tools/inspector/judge.mjs sheets)"
+    },
+    "id": "ov_1_-6_0001"
+  }
+]

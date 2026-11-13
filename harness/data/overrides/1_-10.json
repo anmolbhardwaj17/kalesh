@@ -1,0 +1,31 @@
+[
+  {
+    "issue": "R-BLDG-03:way/351385923:way/351385987",
+    "action": "remove",
+    "target": {
+      "ids": [
+        "way/351385923",
+        "way/351385987"
+      ],
+      "anchor": {
+        "lat": 28.638676,
+        "lon": 77.2258564
+      },
+      "tolerance_m": 15
+    },
+    "params": {
+      "drop": "way/351385987",
+      "keep": "way/351385923"
+    },
+    "why": "The picture shows a ring building with an open court; the inner outline is that court. Shells have no holes yet, so the outer outline stands alone and the inner one goes",
+    "by": "judge",
+    "source": "top-view",
+    "date": "2026-11-13",
+    "reference": {
+      "link": "https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/export?bbox=77.2253959,28.6382698,77.2263164,28.6390819&bboxSR=4326&imageSR=3857&size=315,315&format=jpg&f=image",
+      "date": "2026-11-13",
+      "note": "Esri World Imagery beside the map render of the site (tools/inspector/judge.mjs sheets)"
+    },
+    "id": "ov_1_-10_0001"
+  }
+]

@@ -205,7 +205,8 @@ Full design in `MAP_REPAIR.md` (sources, rules, overrides, roads, ground, inspec
 ```
 data/ sources (pinned) -> blocks and focus outlines (districts.json) -> ingest and normalise (one graph per block)
 -> pair and classify -> rules (detect) -> auto-repair (logged) -> overrides -> lane model with the fit repairs
--> corridors (connectors) -> elevation solver -> junctions, kerbs, decks, supports -> ground cut to road edges
+-> corridors (connectors) -> elevation solver -> junctions, kerbs, decks, supports -> buildings off the road faces
+-> ground cut to road edges
 -> landmark registry and placement -> area profiles and the generator -> LOD and colliders -> 250 m KTL1 tiles
 -> health report, issues for the inspector
 ```
@@ -223,6 +224,8 @@ data/ sources (pinned) -> blocks and focus outlines (districts.json) -> ingest a
 ## Map inspector
 
 A small web page served on the dashboard port (`tools/inspector/`, three.js as a harness dev dependency, no outside tiles or services). It reads the baked tiles and `issues.json`, shows a north-up 3D view, the issue queue sorted by impact with proposals as preview lines, and writes the tile's override file and an inbox entry when Anmol picks or types a note. "Open in game" teleports the running game there through the debug server. Built in four steps, each one task: issues; lanes; hero roads and layout; areas and landmarks. It is the first task after Phase 0.
+
+Since P1-030 the page is mainly a viewer: the bake settles every basic issue itself and the top-view judge pass (`node tools/inspector/judge.mjs sheets`, then `apply <decisions.json>`; MAP_REPAIR.md "What the bake settles itself") decides what the rules cannot, so the queue holds only genuine questions (at most about 50 for the pilot). A card of an open issue shows the plain question and its options; a settled one says who settled it (a rule, the policy table, the top view) and why.
 
 ## Render pipeline
 

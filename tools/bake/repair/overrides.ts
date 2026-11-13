@@ -47,6 +47,8 @@ export interface OverrideRecord {
   issue: string;
   file: string;
   action: string;
+  /** Who wrote the patch: owner (an inspector pick), judge (the top-view judge pass, P1-030), builder. */
+  by: string;
   resolution: Resolution;
   outcome: OverrideOutcome;
   targets: string[];
@@ -271,7 +273,7 @@ export function overrideRecords(list: readonly ResolvedOverride[], failed: Reado
     } else if (isDisable(o)) outcome = o.issues.length ? 'kept' : 'idle';
     else outcome = o.applied ? 'fixed' : 'idle';
     const p = o.entry.patch;
-    return { id: p.id, issue: p.issue, file: o.entry.file, action: p.action, resolution: o.resolution, outcome, targets: o.targets, note, issues: o.issues };
+    return { id: p.id, issue: p.issue, file: o.entry.file, action: p.action, by: String(p.by ?? ''), resolution: o.resolution, outcome, targets: o.targets, note, issues: o.issues };
   });
 }
 

@@ -1,0 +1,36 @@
+[
+  {
+    "issue": "R-ROAD-01:w1121193186.3:w370672197.3:n10255363428",
+    "action": "connect",
+    "target": {
+      "ids": [
+        "w1121193186.3",
+        "w370672197.3"
+      ],
+      "anchor": {
+        "lat": 28.620032,
+        "lon": 77.2333849
+      },
+      "tolerance_m": 15
+    },
+    "params": {
+      "op": "join_end",
+      "edge": "w1121193186.3",
+      "node": "n10255363428",
+      "to": "w370672197.3",
+      "x": 394.839,
+      "z": -790.44,
+      "gap_m": 9.7
+    },
+    "why": "The lane continues on the far side of the lane ahead: a crossroads drawn with a gap",
+    "by": "judge",
+    "source": "top-view",
+    "date": "2026-11-13",
+    "reference": {
+      "link": "https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/export?bbox=77.2329248,28.6196259,77.2338451,28.6204380&bboxSR=4326&imageSR=3857&size=315,315&format=jpg&f=image",
+      "date": "2026-11-13",
+      "note": "Esri World Imagery beside the map render of the site (tools/inspector/judge.mjs sheets)"
+    },
+    "id": "ov_4_-2_0001"
+  }
+]

@@ -1,0 +1,31 @@
+[
+  {
+    "issue": "R-BLDG-03:way/351374293:way/722443698",
+    "action": "remove",
+    "target": {
+      "ids": [
+        "way/351374293",
+        "way/722443698"
+      ],
+      "anchor": {
+        "lat": 28.6295167,
+        "lon": 77.2135488
+      },
+      "tolerance_m": 15
+    },
+    "params": {
+      "drop": "way/722443698",
+      "keep": "way/351374293"
+    },
+    "why": "The picture shows one walled compound with roofs over the whole outline; the inner outline is a part of it. One shell is enough: the inner one would only hide inside the outer one",
+    "by": "judge",
+    "source": "top-view",
+    "date": "2026-11-13",
+    "reference": {
+      "link": "https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/export?bbox=77.2130886,28.6291107,77.2140089,28.6299229&bboxSR=4326&imageSR=3857&size=315,315&format=jpg&f=image",
+      "date": "2026-11-13",
+      "note": "Esri World Imagery beside the map render of the site (tools/inspector/judge.mjs sheets)"
+    },
+    "id": "ov_-4_-6_0001"
+  }
+]

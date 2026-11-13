@@ -71,4 +71,18 @@ describe('issue descriptions (P1-039)', () => {
     const plan = buildNameIndex({ named: [{ id: 'way/1', n: '19 Dal Chawal Masale', x: 0, z: 0, k: 'retail' }, { id: 'way/2', n: '2', x: 1, z: 1, k: 'commercial' }, { id: 'way/3', n: 'A-Block', x: 200, z: 0, k: 'commercial' }] }, []);
     expect(whereWords(plan, 0, 0)).toBe('200 m west of A-Block');
   });
+  it('an open issue asks the owner a plain question with its options; a settled one says who settled it and why (P1-030)', () => {
+    const open = describeIssue(issue({ status: 'open', judgeNote: 'Tree cover hides the gap between w2.0 and w1.0' }), idx);
+    expect(open.question).toBe('Does this road really join the road ahead, or does it end here at a gate, a wall or a kerb? From above it was not clear: tree cover hides the gap between the service road and Janpath');
+    expect(open.options).toHaveLength(issue({}).proposals.length);
+    expect(open.options[0]).toMatch(/^Join it up: /);
+    for (const o of open.options) expect(o).not.toMatch(/w\d|n\d/);
+    expect(open.settled).toBeNull();
+    const judged = describeIssue(issue({ status: 'overridden', decided: 'judge', decision: 'The lane w2.0 runs out onto Janpath in the picture: joined' }), idx);
+    expect(judged.question).toBeNull();
+    expect(judged.options).toEqual([]);
+    expect(judged.settled).toBe('Decided from the top view: the lane the service road runs out onto Janpath in the picture: joined');
+    expect(describeIssue(issue({ status: 'auto_repaired', decided: 'policy', decision: 'a lane count carries on along a street' }), idx).settled).toBe('Decided by a rule: a lane count carries on along a street');
+    expect(describeIssue(issue({ status: 'auto_repaired' }), idx).settled).toBe('Fixed by a rule');
+  });
 });

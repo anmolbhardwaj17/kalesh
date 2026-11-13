@@ -35,7 +35,7 @@ describe.skipIf(missing.length > 0)(`pilot centre repair rules${reason ? ` (skip
 
   /** A slow pure computation (every rule timed twice, then the whole repair with the lane feedback on its own): kept in the test cache for this code and data. */
   let recomputing;
-  const recomputed = () => (recomputing ??= memo('repair_recompute', '', async () => {
+  const recomputed = () => (recomputing ??= memo('repair_recompute', 'auto count (P1-030)', async () => {
       const input = readGraphInput(ROOT, plan);
       const g = buildBlockGraph(input);
       const proj = projector(plan.origin);
@@ -50,7 +50,7 @@ describe.skipIf(missing.length > 0)(`pilot centre repair rules${reason ? ` (skip
       // the whole repair with the lane model's feedback (R-LANE-06), run here on its own
       const lin = laneInputs(input, plan, extra.heroSpecs);
       const { res } = repairWithLanes(g, env, {}, (rg) => ({ nodes: rg.nodes, edges: rg.edges, marks: rg.marks, ...lin }));
-      return { rules: Object.keys(a.ms), ms: a.ms, totalA: a.totalMs, totalB: b.totalMs, same: JSON.stringify(b.issues) === JSON.stringify(a.issues), hash: graphHash(res.graph), total: res.summary.total, repairs: res.repairs.length };
+      return { rules: Object.keys(a.ms), ms: a.ms, totalA: a.totalMs, totalB: b.totalMs, same: JSON.stringify(b.issues) === JSON.stringify(a.issues), hash: graphHash(res.graph), total: res.summary.total, repairs: res.summary.auto };
   }));
   const baked = () => repairBaseline();
 

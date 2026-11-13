@@ -1,0 +1,34 @@
+[
+  {
+    "issue": "R-ROAD-02:w1184381349.0:w360264010.0",
+    "action": "connect",
+    "target": {
+      "ids": [
+        "w1184381349.0",
+        "w360264010.0"
+      ],
+      "anchor": {
+        "lat": 28.6519633,
+        "lon": 77.2371974
+      },
+      "tolerance_m": 15
+    },
+    "params": {
+      "op": "add_junction",
+      "a": "w1184381349.0",
+      "b": "w360264010.0",
+      "x": 757.803,
+      "z": -4330.06
+    },
+    "why": "Both ways are at ground level beside the market in the picture, no bridge: they meet at a junction",
+    "by": "judge",
+    "source": "top-view",
+    "date": "2026-11-13",
+    "reference": {
+      "link": "https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/export?bbox=77.2367370,28.6515576,77.2376577,28.6523696&bboxSR=4326&imageSR=3857&size=315,315&format=jpg&f=image",
+      "date": "2026-11-13",
+      "note": "Esri World Imagery beside the map render of the site (tools/inspector/judge.mjs sheets)"
+    },
+    "id": "ov_5_-16_0001"
+  }
+]

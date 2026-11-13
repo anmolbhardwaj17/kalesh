@@ -89,6 +89,9 @@ export interface RuleCount {
   explained: number;
   /** Settled by a patch of harness/data/overrides/. */
   overridden: number;
+  /** Of `auto`: settled by the policy table (P1-030). Of `overridden`: by a patch of the top-view judge pass. */
+  policy: number;
+  judged: number;
 }
 
 /** Counts by rule from issues that carry their final status. */
@@ -98,7 +101,10 @@ export function countByRule(issues: readonly Issue[], rules: readonly Rule[] = C
     const auto = mine.filter((i) => i.status === 'auto_repaired').length;
     const explained = mine.filter((i) => i.status === 'explained').length;
     const overridden = mine.filter((i) => i.status === 'overridden').length;
-    return { rule: rule.id, title: rule.title, issues: mine.length, auto, queued: mine.length - auto - explained - overridden, explained, overridden };
+    return {
+      rule: rule.id, title: rule.title, issues: mine.length, auto, queued: mine.length - auto - explained - overridden, explained, overridden,
+      policy: mine.filter((i) => i.status === 'auto_repaired' && i.decided === 'policy').length, judged: mine.filter((i) => i.status === 'overridden' && i.decided === 'judge').length,
+    };
   });
 }
 

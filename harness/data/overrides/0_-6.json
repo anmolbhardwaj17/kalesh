@@ -1,0 +1,36 @@
+[
+  {
+    "issue": "R-ROAD-01:w717528806.2:w707566696.0:n11027125477",
+    "action": "connect",
+    "target": {
+      "ids": [
+        "w717528806.2",
+        "w707566696.0"
+      ],
+      "anchor": {
+        "lat": 28.6285117,
+        "lon": 77.2252175
+      },
+      "tolerance_m": 15
+    },
+    "params": {
+      "op": "join_end",
+      "edge": "w717528806.2",
+      "node": "n11027125477",
+      "to": "w707566696.0",
+      "x": -420.947,
+      "z": -1720.672,
+      "gap_m": 12.7
+    },
+    "why": "An old city lane that runs out between the buildings to the lane ahead: joined",
+    "by": "judge",
+    "source": "top-view",
+    "date": "2026-11-13",
+    "reference": {
+      "link": "https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/export?bbox=77.2247572,28.6281056,77.2256775,28.6289177&bboxSR=4326&imageSR=3857&size=315,315&format=jpg&f=image",
+      "date": "2026-11-13",
+      "note": "Esri World Imagery beside the map render of the site (tools/inspector/judge.mjs sheets)"
+    },
+    "id": "ov_0_-6_0001"
+  }
+]

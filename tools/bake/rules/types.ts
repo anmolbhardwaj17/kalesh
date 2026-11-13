@@ -16,7 +16,13 @@ export type PatchAction = 'connect' | 'terminate' | 'remove' | 'set_tag' | 'move
  * into "low impact" or not; a rule never decides that on its own.
  */
 export type Measure =
-  | { kind: 'join'; m: number }
+  | { kind: 'join'; m: number; supported?: boolean }
+  // P1-030: decisions the repair layer takes on its own (MAP_REPAIR.md "The owner queue is for genuine questions only")
+  | { kind: 'dead_end' }
+  | { kind: 'gali_width'; m: number }
+  | { kind: 'building_gives_way'; m: number }
+  | { kind: 'duplicate_way'; share: number }
+  | { kind: 'hero_spec' }
   | { kind: 'bridge_layer_tag' }
   | { kind: 'building_into_road'; m: number; classDefault: boolean; fits: boolean }
   | { kind: 'duplicate_footprint'; exact: boolean }
@@ -70,6 +76,15 @@ export interface Issue {
   proposals: Proposal[];
   /** A queued issue whose top proposal is in the baked map until a person picks. */
   provisional?: boolean;
+  /** True when the hero road of this issue has a spec file: only then is its cross-section frozen (P1-030). */
+  heroSpec?: boolean;
+  /**
+   * Who settled an issue the signed low impact bounds would have queued (P1-030): 'policy' the rule table of
+   * tools/bake/repair/bounds.ts (the top proposal is the standard answer, or a later stage decides it), 'judge' a
+   * patch of the top-view judge pass. `decision` is the reason in one line.
+   */
+  decided?: 'policy' | 'judge';
+  decision?: string;
 }
 
 export interface Patch {

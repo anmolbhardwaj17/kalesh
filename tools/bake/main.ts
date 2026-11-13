@@ -35,7 +35,8 @@ import type { GeoBox } from './layout/outline.ts';
 import type { LayoutFile } from './layout/placement.ts';
 import { stageDefs, stagePlan } from './layout/stages.ts';
 import type { DistrictsWithStages, StagePlan } from './layout/stages.ts';
-import { BakeStop, emptyHealth, mapCounts, recordInvariants, undergroundHealth } from './report/health.ts';
+import { inspectorContext } from './report/inspector.ts';
+import { BakeStop, decisionCounts, emptyHealth, mapCounts, recordInvariants, undergroundHealth } from './report/health.ts';
 import { issuesRemovedByUnderground } from './report/underground.ts';
 import type { HealthReport } from './report/health.ts';
 import { buildBlockGraph } from './graph/build.ts';
@@ -64,7 +65,7 @@ import { explainGates, gateInvariant, gateLog } from './report/gates.ts';
 import type { GateFile } from './report/gates.ts';
 import { gateItems } from './report/gateitems.ts';
 import type { MeshChecks } from './mesh/checks.ts';
-import { NOT_TWICE, defaultBenchDir, runMeshStep, runTerrainStep } from './sources/meshstage.ts';
+import { NOT_TWICE, defaultBenchDir, runClearStep, runMeshStep, runTerrainStep } from './sources/meshstage.ts';
 import { laneGraph, laneModelFile, laneModelHash, lanesLayer, lanesRecord } from './roads/laneout.ts';
 import { lanesSvg } from './roads/lanerender.ts';
 import { buildLaneModel, giveWaySolved } from './roads/network.ts';
@@ -339,11 +340,14 @@ export async function bake(args: BakeArgs, opts: BakeOptions): Promise<HealthRep
       report.repairs = { auto: s.auto, byRule: autoByRule };
       report.overrides = { ...res.overrideCounts, outsideStage, records: res.overrides };
       report.counts = mapCounts(res);
+      report.decisions = decisionCounts(res);
+      const dc = report.decisions;
+      opts.log(`[decisions] owner queue ${dc.ownerQueue} (${dc.byPolicy} settled by the policy table, ${dc.byJudge} by the top-view judge pass); buildings on a road or footpath ${dc.buildings.issues}: the road gave way ${dc.buildings.roadGaveWay} (gali rule), the footpath ${dc.buildings.footpathGaveWay}, the building gives way ${dc.buildings.buildingGivesWay}, unresolved ${dc.buildings.unresolved}; roads on each other moved apart ${Object.entries(dc.overlaps.separated).map(([k, v]) => `${k} ${v}`).join(', ') || 'none'}, drawn twice and dropped ${dc.overlaps.duplicatesRemoved}, unresolved ${dc.overlaps.unresolved}; dead ends ${dc.deadEnds.issues}: joined by rule ${dc.deadEnds.connectedByRule}, closed by rule ${Object.entries(dc.deadEnds.closedByRule).map(([k, v]) => `${v} ${k.replace('_', ' ')}`).join(', ') || '0'}, joined by the judge ${dc.deadEnds.connectedByJudge}, closed by the judge ${dc.deadEnds.closedByJudge}, unresolved ${dc.deadEnds.unresolved}`);
       const removed = issuesRemovedByUnderground(graph, env);
       if (report.underground) report.underground = { ...report.underground, issuesRemoved: { total: removed.total, byRule: removed.byRule, byFeature: removed.byFeature }, overridesRetired: res.overrides.filter((o) => o.outcome === 'underground').map((o) => o.id) };
       opts.log(`[underground] the class keeps ${removed.total} issues off the raw graph (${Object.entries(removed.byRule).map(([k, v]) => `${k} ${v}`).join(', ') || 'none'}); ${res.overrideCounts.underground} override patches retired (their footprint is underground)`);
       for (const r of s.byRule) if (r.issues) opts.log(`[repair] ${r.rule.padEnd(14)} ${String(r.issues).padStart(5)} issues: ${r.auto} repaired, ${r.queued} queued, ${r.explained} explained${r.overridden ? `, ${r.overridden} settled by overrides` : ''} (${r.title})`);
-      opts.log(`[repair] ${s.total} issues in ${s.passes} passes (${(repairMs / 1000).toFixed(2)} s): ${s.auto} repaired on their own (${(s.autoShare * 100).toFixed(1)} percent; ${(s.autoShareOfChanged * 100).toFixed(1)} percent of repaired plus queued; ${(s.withoutTerrainOutliers.autoShare * 100).toFixed(1)} percent without the terrain outlier rule), ${s.queued} queued (${s.highImpact} high impact, ${s.provisionalApplied} top proposals applied as provisional), ${s.explained} explained, ${s.overridden} settled by overrides, ${s.drops} drops logged; a second run applies ${again.repairs.length} repairs`);
+      opts.log(`[repair] ${s.total} issues in ${s.passes} passes (${(repairMs / 1000).toFixed(2)} s): ${s.auto} repaired on their own (${(s.autoShare * 100).toFixed(1)} percent; ${(s.autoShareOfChanged * 100).toFixed(1)} percent of repaired plus queued; ${(s.withoutTerrainOutliers.autoShare * 100).toFixed(1)} percent without the terrain outlier rule), ${s.queued} queued for the owner (${s.highImpact} high impact), ${s.decidedPolicy} of the repaired settled by the policy table, ${s.decidedJudge} of the overrides by the judge pass, ${s.provisionalApplied} patches applied after the last pass, ${s.explained} explained, ${s.overridden} settled by overrides, ${s.drops} drops logged; a second run applies ${again.repairs.length} repairs`);
       const ov = res.overrideCounts;
       opts.log(`[overrides] ${ov.patches} patches in ${ov.files} files for this stage (${outsideStage} outside it): ${ov.byId} found by id, ${ov.byAnchor} by anchor, ${ov.stale} stale (kept in their files), ${ov.applied} applied, ${ov.switchedOff} repairs switched off, ${ov.idle} idle, ${ov.underground} retired (underground); ${ov.issuesSettled} issues settled`);
       opts.log(`[repair] wrote ${[files.graph, files.issues, files.repairs, ...pictures].join(', ')}`);
@@ -381,6 +385,7 @@ export async function bake(args: BakeArgs, opts: BakeOptions): Promise<HealthRep
       }
       const rec = lanesRecord(build, c, hash, buildMs, { ...files, pictures });
       report.lanes = rec;
+      if (report.decisions) report.decisions.overlaps.mergedZones = { merges: c.zones.merges, diverges: c.zones.diverges };
       report.gates['laneContinuityBreaks'] = c.continuity.breaks;
       report.gates['tapersOutOfLimits'] = c.tapers.violations;
       const n = rec.counts;
@@ -480,6 +485,14 @@ export async function bake(args: BakeArgs, opts: BakeOptions): Promise<HealthRep
       report.mesh = m.rec;
       for (const k of ['overlappingRoadFaces', 'openBoundaryEdges', 'unjoinedEnds', 'floatingEnds', 'railingsAtGrade', 'piersInLane'] as const) report.gates[k] = m.rec.gates[k];
       check(m.invariants);
+      // buildings off the road faces just built (P1-030): the ground and the shells stand on the cleared footprints
+      if (repaired) {
+        const b = runClearStep(stepCtx, meshed, repaired, path.dirname(healthFile));
+        report.buildings = b.rec;
+        check(b.invariants);
+        // the inspector and the judge sheets draw the footprints as they are now
+        fs.writeFileSync(path.join(path.dirname(healthFile), 'context.json'), JSON.stringify(inspectorContext(repaired, blockFrame(districts, plan.def.block).offset, repaired.outline)));
+      }
     } else if (step === 'terrain') {
       if (!meshed || !repaired || !groundModel) throw new Error('the terrain step needs the ground, the repair and the mesh step before it');
       const t = await runTerrainStep(stepCtx, meshed, repaired, groundModel);

@@ -1,0 +1,36 @@
+[
+  {
+    "issue": "R-ROAD-01:w1253202247.0:w1253202246.0:n11648679962",
+    "action": "connect",
+    "target": {
+      "ids": [
+        "w1253202247.0",
+        "w1253202246.0"
+      ],
+      "anchor": {
+        "lat": 28.6341275,
+        "lon": 77.2354861
+      },
+      "tolerance_m": 15
+    },
+    "params": {
+      "op": "join_end",
+      "edge": "w1253202247.0",
+      "node": "n11648679962",
+      "to": "w1253202246.0",
+      "x": 603.948,
+      "z": -2351.716,
+      "gap_m": 13.4
+    },
+    "why": "The loop road round the building carries on east as the road ahead: joined",
+    "by": "judge",
+    "source": "top-view",
+    "date": "2026-11-13",
+    "reference": {
+      "link": "https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/export?bbox=77.2350258,28.6337214,77.2359463,28.6345334&bboxSR=4326&imageSR=3857&size=315,315&format=jpg&f=image",
+      "date": "2026-11-13",
+      "note": "Esri World Imagery beside the map render of the site (tools/inspector/judge.mjs sheets)"
+    },
+    "id": "ov_4_-8_0001"
+  }
+]

@@ -4,6 +4,7 @@
 // step's build time, `graph.buildMs`, which the acceptance asks for).
 import type { GraphCounts } from '../graph/checks.ts';
 import type { RepairResult, RepairSummary } from '../repair/engine.ts';
+import type { BuildingsRecord } from '../repair/clear.ts';
 import type { OverrideCounts, OverrideRecord } from '../repair/overrides.ts';
 
 import type { ElevationRecord } from '../elevation/elevout.ts';
@@ -104,6 +105,10 @@ export interface HealthReport {
   tiles: { written: number; out: string | null; only: string[] | null; record?: TilesRecord };
   /** The six gate counts item by item, each explained or not, and the known findings with their owners (P1-017); set before the tile step. */
   gateReport?: GateReport;
+  /** What the bake decided on its own and what is left for the owner (P1-030); set by the repair step. */
+  decisions?: DecisionCounts;
+  /** Buildings taken off the road faces after the mesh step (P1-030, repair/clear.ts): counts by action, what is left (0). */
+  buildings?: BuildingsRecord;
   /** Underground structures (P1-041, graph/underground.ts): every one with its reason, and what the class took out; set by the graph and repair steps. */
   underground?: UndergroundHealth;
 }
@@ -168,6 +173,57 @@ export function mapCounts(res: Pick<RepairResult, 'issues' | 'overrides' | 'over
   return {
     found: s.total, byRule, repairedAuto: s.auto, fixedByOverrides: settledBy('fixed'), repairsSwitchedOff: settledBy('kept'),
     staleOverrides: res.overrideCounts.stale, leftOpen: s.queued, highImpactOpen: s.highImpact, explained: s.explained,
+  };
+}
+
+/**
+ * What the bake decided on its own and what is left for the owner (P1-030, health.json `decisions`): the owner queue,
+ * buildings on roads by who gave way, roads on each other by how they were settled, dead ends by how they were closed.
+ * The building counts by action (moved, cut, cut in two, dropped) are in `buildings`, measured on the road mesh.
+ */
+export interface DecisionCounts {
+  /** Issues that wait for the owner, each with a plain question (the inspector's card). */
+  ownerQueue: number;
+  byPolicy: number;
+  byJudge: number;
+  buildings: { issues: number; roadGaveWay: number; footpathGaveWay: number; buildingGivesWay: number; unresolved: number };
+  overlaps: {
+    /** Roads beside or on each other moved apart, by rule. */
+    separated: Record<string, number>;
+    /** One road drawn twice: the copy dropped. */
+    duplicatesRemoved: number;
+    /** Roads that run into each other at a shared node: split and merge zones of the lane model (filled by the lanes step). */
+    mergedZones: { merges: number; diverges: number } | null;
+    unresolved: number;
+  };
+  deadEnds: { issues: number; connectedByRule: number; closedByRule: Record<string, number>; connectedByJudge: number; closedByJudge: number; unresolved: number };
+}
+
+export function decisionCounts(res: Pick<RepairResult, 'issues' | 'repairs' | 'summary'>): DecisionCounts {
+  const of = (rule: string) => res.issues.filter((i) => i.rule === rule);
+  const settled = (rule: string): number => of(rule).filter((i) => i.status === 'auto_repaired' || i.status === 'overridden').length;
+  const b = of('R-BLDG-01');
+  const top = (i: (typeof b)[number]): { key?: unknown; op?: unknown } => (i.proposals[0]?.params ?? {}) as { key?: unknown; op?: unknown };
+  const done = b.filter((i) => i.status === 'auto_repaired' || i.status === 'overridden');
+  const d = of('R-ROAD-01');
+  const ruleLines = res.repairs.filter((l) => l.rule === 'R-ROAD-01' && !l.override);
+  const closedByRule: Record<string, number> = {};
+  for (const l of ruleLines) if (l.patch.action === 'terminate') closedByRule[String(l.patch.params['with'] ?? 'dead_end')] = (closedByRule[String(l.patch.params['with'] ?? 'dead_end')] ?? 0) + 1;
+  const judged = res.repairs.filter((l) => l.rule === 'R-ROAD-01' && l.override && l.patch.by === 'judge');
+  const separated: Record<string, number> = {};
+  for (const rule of ['R-LANE-FIT-01', 'R-LANE-FIT-02', 'R-LANE-04', 'R-LANE-05', 'R-LANE-06']) if (settled(rule)) separated[rule] = settled(rule);
+  const open = (rules: readonly string[]): number => res.issues.filter((i) => rules.includes(i.rule) && i.status === 'open').length;
+  return {
+    ownerQueue: res.summary.queued, byPolicy: res.summary.decidedPolicy, byJudge: res.summary.decidedJudge,
+    buildings: {
+      issues: b.length, roadGaveWay: done.filter((i) => top(i).key === 'width').length, footpathGaveWay: done.filter((i) => String(top(i).key ?? '').startsWith('footpath:')).length,
+      buildingGivesWay: done.filter((i) => top(i).op === 'give_way').length, unresolved: b.length - done.length,
+    },
+    overlaps: { separated, duplicatesRemoved: settled('R-ROAD-03'), mergedZones: null, unresolved: open(['R-ROAD-03', 'R-LANE-FIT-01', 'R-LANE-FIT-02', 'R-LANE-04', 'R-LANE-05', 'R-LANE-06', 'R-ROAD-02']) },
+    deadEnds: {
+      issues: d.length, connectedByRule: ruleLines.filter((l) => l.patch.action === 'connect').length, closedByRule,
+      connectedByJudge: judged.filter((l) => l.patch.action === 'connect').length, closedByJudge: judged.filter((l) => l.patch.action === 'terminate').length, unresolved: d.filter((i) => i.status === 'open').length,
+    },
   };
 }
 

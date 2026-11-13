@@ -1,0 +1,36 @@
+[
+  {
+    "issue": "R-ROAD-01:w1121152264.0:w695557274.1:n10255001386",
+    "action": "connect",
+    "target": {
+      "ids": [
+        "w1121152264.0",
+        "w695557274.1"
+      ],
+      "anchor": {
+        "lat": 28.6233144,
+        "lon": 77.217942
+      },
+      "tolerance_m": 15
+    },
+    "params": {
+      "op": "join_end",
+      "edge": "w1121152264.0",
+      "node": "n10255001386",
+      "to": "w695557274.1",
+      "x": -1133.346,
+      "z": -1155.204,
+      "gap_m": 8.4
+    },
+    "why": "The drive runs along the top of the lawn to the lane at its west edge: it meets the lane",
+    "by": "judge",
+    "source": "top-view",
+    "date": "2026-11-13",
+    "reference": {
+      "link": "https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/export?bbox=77.2174816,28.6229080,77.2184019,28.6237201&bboxSR=4326&imageSR=3857&size=315,315&format=jpg&f=image",
+      "date": "2026-11-13",
+      "note": "Esri World Imagery beside the map render of the site (tools/inspector/judge.mjs sheets)"
+    },
+    "id": "ov_-3_-3_0001"
+  }
+]

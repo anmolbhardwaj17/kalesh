@@ -1,0 +1,36 @@
+[
+  {
+    "issue": "R-ROAD-01:w1187180413.0:w1076782193.0:n11024569728",
+    "action": "connect",
+    "target": {
+      "ids": [
+        "w1187180413.0",
+        "w1076782193.0"
+      ],
+      "anchor": {
+        "lat": 28.6357171,
+        "lon": 77.2316671
+      },
+      "tolerance_m": 15
+    },
+    "params": {
+      "op": "join_end",
+      "edge": "w1187180413.0",
+      "node": "n11024569728",
+      "to": "w1076782193.0",
+      "x": 228.107,
+      "z": -2528.687,
+      "gap_m": 11
+    },
+    "why": "A lane of the colony grid; it runs on to the lane at its east end: joined",
+    "by": "judge",
+    "source": "top-view",
+    "date": "2026-11-13",
+    "reference": {
+      "link": "https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/export?bbox=77.2312071,28.6353113,77.2321276,28.6361233&bboxSR=4326&imageSR=3857&size=315,315&format=jpg&f=image",
+      "date": "2026-11-13",
+      "note": "Esri World Imagery beside the map render of the site (tools/inspector/judge.mjs sheets)"
+    },
+    "id": "ov_3_-9_0001"
+  }
+]

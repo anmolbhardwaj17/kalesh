@@ -1,0 +1,65 @@
+[
+  {
+    "issue": "R-ROAD-01:w1121189653.0:w24583597.0:n10255332480",
+    "action": "terminate",
+    "target": {
+      "ids": [
+        "w1121189653.0",
+        "w24583597.0"
+      ],
+      "anchor": {
+        "lat": 28.6268976,
+        "lon": 77.2269996
+      },
+      "tolerance_m": 15
+    },
+    "params": {
+      "node": "n10255332480",
+      "with": "dead_end"
+    },
+    "why": "The path ends at the terrace of a swimming pool; a small building stands by the road ahead. A dead end inside the garden",
+    "by": "judge",
+    "source": "top-view",
+    "date": "2026-11-13",
+    "reference": {
+      "link": "https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/export?bbox=77.2265397,28.6264914,77.2274600,28.6273035&bboxSR=4326&imageSR=3857&size=315,315&format=jpg&f=image",
+      "date": "2026-11-13",
+      "note": "Esri World Imagery beside the map render of the site (tools/inspector/judge.mjs sheets)"
+    },
+    "id": "ov_1_-5_0001"
+  },
+  {
+    "issue": "R-ROAD-01:w1544621566.0:w24583592.4:n10255332474",
+    "action": "connect",
+    "target": {
+      "ids": [
+        "w1544621566.0",
+        "w24583592.4"
+      ],
+      "anchor": {
+        "lat": 28.6266834,
+        "lon": 77.2279783
+      },
+      "tolerance_m": 15
+    },
+    "params": {
+      "op": "join_end",
+      "edge": "w1544621566.0",
+      "node": "n10255332474",
+      "to": "w24583592.4",
+      "x": -145.898,
+      "z": -1536.166,
+      "gap_m": 8.2
+    },
+    "why": "The lane runs along the compound wall to the diagonal road ahead: joined",
+    "by": "judge",
+    "source": "top-view",
+    "date": "2026-11-13",
+    "reference": {
+      "link": "https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/export?bbox=77.2275183,28.6262776,77.2284387,28.6270897&bboxSR=4326&imageSR=3857&size=315,315&format=jpg&f=image",
+      "date": "2026-11-13",
+      "note": "Esri World Imagery beside the map render of the site (tools/inspector/judge.mjs sheets)"
+    },
+    "id": "ov_1_-5_0002"
+  }
+]
