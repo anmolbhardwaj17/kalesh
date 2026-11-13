@@ -88,6 +88,8 @@ func _ready() -> void:
 		setup(load(tune_path) as Tune)
 	if is_player:
 		add_to_group("player")
+	# every vehicle, driven or not: PlayerMode looks here for a door to get in by (P1-022)
+	add_to_group("vehicles")
 	_query.exclude = [get_rid()]
 	var clock := get_node_or_null("/root/SimClock")
 	if clock != null and not _connected:

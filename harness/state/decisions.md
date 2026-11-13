@@ -72,6 +72,11 @@ Why: measured with every planned block placed, the map box is 13.03 by 13.37 km 
 Open: the map is at the float limit and the centre block's own outline is not drawn; measure FP1 at 9 to 10 km or tighten the layout before the far blocks are baked (P8). Aerocity needs the owner's or planner's call (corridor city, or its own small block).
 By: builder, P1-008.
 
+## 2026-11-13: On foot: our own step-up, a vault without collision, a pose ladder for the camera (P1-022)
+Decision: the character is `game/characters/on_foot.gd` (F1: a CharacterBody3D capsule on layer 4, mask 3, stepped on the sim tick) with the bench walker's step-up, made reliable on stairs at every gait (own safe margin in the tests, several contacts, longer forward tries only when needed). A vault (jump pressed facing a face within 0.6 m whose top is 0.3 to 1.2 m) is checked clear by rays and capsule tests first, then moved along a 0.6 s path without collision. The on-foot camera sweeps a sphere from the head and, when a wall leaves less than 1.2 m, takes the first pose of a fixed ladder (squeeze the shoulder, then rise over the head looking down), so it never sits in geometry and never comes within 0.6 m of the head; walls between it and the body fade. `PlayerMode` owns who the player is; F walks to the nearest door (right first: Delhi cars are right hand drive) and hands the camera over. On-foot actions share keys with the vehicle ones (W, Space, C); the mode decides who reads them.
+Why: GAME.md numbers measured in sim ticks (scenarios `foot_*`, `enter_exit_vehicle`); a vault that solves its path once is predictable and cheap (0.02 ms per character per tick among 16). Only the course scene has the on-foot player so far.
+By: builder, P1-022.
+
 ## Standing rules (short forms; full entries in decisions_archive.md under the bold title)
 
 Owner direction and rules:

@@ -1,6 +1,6 @@
 {
   "_doc": "Written only by node harness/bin/task.mjs. Phases run in order; P0 (ADOPT + STYLE DISCOVERY) waits for the owner by design and needs task.mjs signoff and task.mjs archsignoff before its gate passes. Later phases are added by the planner at the end of P0 (task.mjs phase-add) from the game's real state.",
-  "updated": "2026-11-13T05:33:48.949Z",
+  "updated": "2026-11-13T06:38:35.002Z",
   "phases": [
     {
       "id": "P0",
@@ -2113,7 +2113,9 @@
       "kind": "feature",
       "status": "todo",
       "attempts": 0,
-      "notes": [],
+      "notes": [
+        "From P1-022: put PlayerMode and the on-foot character into main.tscn and the streamed city (stream focus on the character); cars do not collide with characters yet (vehicle mask 3 excludes layer 4)."
+      ],
       "created": "2026-11-11T12:29:04.868Z"
     },
     {
@@ -3668,7 +3670,8 @@
       "status": "todo",
       "attempts": 0,
       "notes": [
-        "From P1-021: at 90 km/h the scooter trails up to 9.3 m behind and looks small; give each tune its own camera rig. The auto scrubs from 40 to 27.9 km/h at full lock (fine for tip, check feel at playtest)."
+        "From P1-021: at 90 km/h the scooter trails up to 9.3 m behind and looks small; give each tune its own camera rig. The auto scrubs from 40 to 27.9 km/h at full lock (fine for tip, check feel at playtest).",
+        "From P1-022: backed into a corner the on-foot camera rises almost straight over the head (top-down); right after exiting a car its dark cabin fills a third of the view."
       ],
       "created": "2026-11-13T04:46:42.902Z"
     }

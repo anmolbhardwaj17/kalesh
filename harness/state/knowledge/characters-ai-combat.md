@@ -1,3 +1,9 @@
 # characters-ai-combat
 
 Characters, AI and combat: one line per gotcha, added by builders as they hit them (area in docs/READ_MAP.md "Characters, AI and combat").
+- Step-up (P1-022 `on_foot.gd`): call `test_move` with the body's own `safe_margin` (0.01), not the default 0.001. On a riser edge `move_and_slide` moves along the tilted floor normal of the edge underfoot and meets the next edge, while a flat 0.001 test just misses it: the step never fires and the body stops dead on the stairs. Test 2 cm past the move too.
+- Jolt `test_move` from a body resting on an edge lists that edge first with an up normal: ask for several collisions (`max_collisions` 4) and treat the move as a step when any contact is steep or more than 3 cm above the feet.
+- A walk move (2.7 cm a tick) that first touches a kerb edge lands back on its own tread after the up-forward-down test (under 2 mm higher), so the body stops at the kerb for good; try longer forward moves (0.06, then 0.1 m) only when the short one fails, or every gait gains 5 percent speed on stairs.
+- Jump arc in ticks: move by the mean of the vertical speeds at the start and end of the tick (`foot_motor.gd` `fall`), and the apex is exactly 0.45 m after 18 ticks; plain `v -= g dt` then `y += v dt` peaks at 0.425 m.
+- Crouch a stand-in capsule by changing the `CapsuleMesh.height`, not the node's Y scale: a scaled capsule has oval caps (reads as a squashed shape in a shot).
+- The on-foot camera sweeps with mask 3 (world and vehicles): with mask 1 only it can sit inside a parked car's roof right after getting out. Fading needs a mesh per wall: the camera fades the MeshInstance3D children of a hit collider (or its `fade_meshes` metadata), so walls merged into one course mesh cannot fade.

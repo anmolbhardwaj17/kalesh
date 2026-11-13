@@ -508,6 +508,111 @@
         }
       ],
       "_note": "P1-021. chase_cam_floor (P1-020) with the scooter (vehicle('use')): the reverse into the wall, the 6 percent ramp, the crest and the deck; every drawn frame the camera is 0.5 m or more above the vehicle, not inside geometry and not behind a wall; six named shots scooter_cam_start, _reverse, _wall, _ramp, _crest, _deck. Default look. Lockstep."
+    },
+    {
+      "name": "foot_speeds",
+      "query": "style=none",
+      "headless": true,
+      "steps": [
+        {
+          "script": "harness/verify/scripts/foot_speeds.js",
+          "timeout": 120000
+        }
+      ],
+      "_note": "P1-022. On foot in the course scene: walk, jog, sprint and crouch from rest on the open pad; the ground speed over 2 s after 1 s to get going is within 3 percent of GAME.md (1.6, 3.8, 6.5, 1.2 m/s). Debug hook foot('run', {test: 'speeds'}) (game/debug/foot_routes.gd) presses the InputMap actions and measures in sim ticks; headless at time scale 4."
+    },
+    {
+      "name": "foot_stamina",
+      "query": "style=none",
+      "headless": true,
+      "steps": [
+        {
+          "script": "harness/verify/scripts/foot_stamina.js",
+          "timeout": 120000
+        }
+      ],
+      "_note": "P1-022. Sprint from a full stamina bar until it runs out: 8 s within 0.3 s; standing, the bar refills in 5 s within 0.3 s. foot('run', {test: 'stamina'}), sim ticks, headless at time scale 4."
+    },
+    {
+      "name": "foot_jump",
+      "query": "style=none",
+      "headless": true,
+      "steps": [
+        {
+          "script": "harness/verify/scripts/foot_jump.js",
+          "timeout": 120000
+        }
+      ],
+      "_note": "P1-022. A jump from standing and one while jogging: apex 0.42 to 0.48 m reached in 0.27 to 0.33 s (GAME.md 0.45 m in 0.30 s). foot('run', {test: 'jump'}), headless."
+    },
+    {
+      "name": "foot_vault",
+      "query": "style=none",
+      "headless": true,
+      "steps": [
+        {
+          "script": "harness/verify/scripts/foot_vault.js",
+          "timeout": 120000
+        }
+      ],
+      "_note": "P1-022. The course vault lane: a 1.2 m wall and a 1.0 m railing are vaulted in 0.5 to 0.7 s (jump pressed 0.75 m before the face while jogging) and the body ends past the far face with no overlap; a 1.3 m wall is not vaulted. foot('run', {test: 'vault'}), headless."
+    },
+    {
+      "name": "foot_turn",
+      "query": "style=none",
+      "headless": true,
+      "steps": [
+        {
+          "script": "harness/verify/scripts/foot_turn.js",
+          "timeout": 120000
+        }
+      ],
+      "_note": "P1-022. Jogging north, let go of W and hold S: the body faces south within 1 degree after 0.20 to 0.30 s (GAME.md 180 degrees in 0.25 s). foot('run', {test: 'turn'}), headless."
+    },
+    {
+      "name": "foot_kerb_stairs",
+      "query": "style=none",
+      "headless": true,
+      "steps": [
+        {
+          "script": "harness/verify/scripts/foot_kerb_stairs.js",
+          "timeout": 300000
+        }
+      ],
+      "_note": "P1-022. The course kerb and stair lane (10 kerb slabs of 0.15 m, a 12 step stair of 0.18 m risers, a landing, a 1 in 8 ramp) at walk, jog and sprint, north and south, from three start offsets each: under 5 percent speed loss, no snag (no 0.2 s under 80 percent of the gait), every run comes through. foot('run', {test: 'kerbs', gait, run}), headless at time scale 8."
+    },
+    {
+      "name": "foot_cost",
+      "query": "style=none",
+      "steps": [
+        {
+          "script": "harness/verify/scripts/foot_cost.js",
+          "timeout": 120000
+        }
+      ],
+      "_note": "P1-022. Cost per on-foot character per tick with 16 more characters walking on the course pad: the median physics iteration with them less without, over 16 (windowed at time scale 4 so a drawn frame holds two or more ticks). Acceptance 0.05 ms or less. foot('cost')."
+    },
+    {
+      "name": "foot_cam_walls",
+      "lockstep": true,
+      "steps": [
+        {
+          "script": "harness/verify/scripts/foot_cam_walls.js",
+          "timeout": 180000
+        }
+      ],
+      "_note": "P1-022. The on-foot camera over a 20 s route in the course camera yard, input only: into a lane 2 m wide between 3 m walls, a hard camera turn while running in it, along the court wall on the shoulder side, backing into the north west corner (S runs toward the camera), a full camera circle there, then crouched behind a 1.0 m wall with the camera looking over it (about 24 s in all). Every drawn frame (foot('camrec')) the camera is 0.6 m or more from the head, a 0.1 m sphere at it touches no geometry, the head is in the frame and some ray to the head, chest or hips is clear or passes only faded walls; the low wall fades. Seven named shots foot_cam_open, _lane_in, _lane_turn, _wall_side, _corner_back, _corner_turn, _low_wall. Default look. Lockstep."
+    },
+    {
+      "name": "enter_exit_vehicle",
+      "lockstep": true,
+      "steps": [
+        {
+          "script": "harness/verify/scripts/enter_exit_vehicle.js",
+          "timeout": 120000
+        }
+      ],
+      "_note": "P1-022. In the course scene the player starts in the car: F gets out (under 2 s, the on-foot camera, no overlap, beside the door), F gets back in (under 2 s, the chase camera, the car drives), and from 2 m away F walks to the door and gets in under 2 s. state().player.mode reports foot or vehicle. Shots exit_on_foot, enter_driving, walk_to_door, walk_enter_driving. Default look. Lockstep."
     }
   ]
 }
