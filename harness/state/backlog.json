@@ -1,6 +1,6 @@
 {
   "_doc": "Written only by node harness/bin/task.mjs. Phases run in order; P0 (ADOPT + STYLE DISCOVERY) waits for the owner by design and needs task.mjs signoff and task.mjs archsignoff before its gate passes. Later phases are added by the planner at the end of P0 (task.mjs phase-add) from the game's real state.",
-  "updated": "2026-11-13T13:41:38.049Z",
+  "updated": "2026-11-13T13:42:17.182Z",
   "phases": [
     {
       "id": "P0",
@@ -3712,10 +3712,11 @@
       "agent": "builder",
       "priority": 3,
       "kind": "followup",
-      "status": "todo",
-      "attempts": 0,
+      "status": "doing",
+      "attempts": 1,
       "notes": [],
-      "created": "2026-11-13T04:46:36.115Z"
+      "created": "2026-11-13T04:46:36.115Z",
+      "started": "2026-11-13T13:42:17.131Z"
     },
     {
       "id": "P14-004",
@@ -4099,10 +4100,11 @@
       "agent": "builder",
       "priority": 3,
       "kind": "bug",
-      "status": "todo",
-      "attempts": 0,
+      "status": "doing",
+      "attempts": 1,
       "notes": [],
-      "created": "2026-11-13T12:23:30.141Z"
+      "created": "2026-11-13T12:23:30.141Z",
+      "started": "2026-11-13T13:42:17.181Z"
     },
     {
       "id": "P1-049",
