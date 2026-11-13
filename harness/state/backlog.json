@@ -1,6 +1,6 @@
 {
   "_doc": "Written only by node harness/bin/task.mjs. Phases run in order; P0 (ADOPT + STYLE DISCOVERY) waits for the owner by design and needs task.mjs signoff and task.mjs archsignoff before its gate passes. Later phases are added by the planner at the end of P0 (task.mjs phase-add) from the game's real state.",
-  "updated": "2026-11-13T11:18:46.645Z",
+  "updated": "2026-11-13T11:46:06.378Z",
   "phases": [
     {
       "id": "P0",
@@ -3322,13 +3322,14 @@
       "agent": "builder",
       "priority": 1,
       "kind": "feature",
-      "status": "todo",
-      "attempts": 0,
+      "status": "doing",
+      "attempts": 1,
       "notes": [
         "From P1-045: at the bungalow loop on Bhagwan Das Road south-west carriageway (node xadd_5_-2_0001.L8) the junction falls back to the polygon set and about 50 m loses its footpath; mid-block crossings are kept as marks but not drawn; add_median splits one two-way road at a time (a road blueprint pass could chain across class changes)."
       ],
       "created": "2026-11-11T18:24:08.193Z",
-      "model": "fable"
+      "model": "fable",
+      "started": "2026-11-13T11:46:06.378Z"
     },
     {
       "id": "P1-031",
