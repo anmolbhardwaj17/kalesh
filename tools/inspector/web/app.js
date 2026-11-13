@@ -13,7 +13,7 @@ import { LineGeometry } from 'three/addons/lines/LineGeometry.js';
 import { readKtl1 } from '../ktl1.ts';
 import { actionWords, filterIssues, isHigh, niceScale, searchIssues, sortIssues, worldTile } from '../lib.ts';
 import { buildNameIndex, classWords, describeIssue, distToLine, fixWords, humanise, whereWords } from '../describe.ts';
-import { LANE_TYPE_WORDS, NEAR_FOCUS_M, borderAt, driveLaneCount, laneItems, lanesIssueId, lanesSummary, metres, nearestStrip, sourceWords, stripWidths, isOwnerLanes } from '../lanes.ts';
+import { LANE_TYPE_WORDS, NEAR_FOCUS_M, borderAt, driveLaneCount, laneItems, lanesIssueId, lanesSummary, metres, nearestStrip, sectionParts, sourceWords, stripWidths, isOwnerLanes } from '../lanes.ts';
 import { contextLayer, groundLayer, laneMarksLayer, lanesLayer } from './layers.js';
 import { Minimap } from './minimap.js';
 import { LANE_FILL, LANE_MARK, MAJOR, MAP, MATERIAL_COLOURS, OFFSET_MATERIALS, PROP_COLOURS, SEV } from './theme.js';
@@ -766,8 +766,7 @@ function renderLane() {
   const src = sourceWords(st.from ?? (st.kind === 'zone' ? 'zone' : undefined), st.by);
   const owner = state.lanePicks[lanesIssueId(st.edge)];
   const b = borderAt(st, sel.at);
-  const lanes = st.lanes.map(([type, dir], k) => {
-    const wd = (b[k] ?? 0) - (b[k + 1] ?? 0);
+  const lanes = sectionParts(st.lanes, b).map(({ type, dir, widthM: wd }) => {
     const colour = `#${(LANE_FILL[type] ?? LANE_FILL.drive).toString(16).padStart(6, '0')}`;
     const way = type === 'drive' && dir === 0 ? '<span class="d">both ways</span>' : '';
     return `<div class="ln"><i style="background:${colour}"></i><span>${esc(LANE_TYPE_WORDS[type] ?? type)}${way}</span><span class="w">${(Math.round(wd * 100) / 100).toFixed(2)} m</span></div>`;

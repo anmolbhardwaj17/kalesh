@@ -5,7 +5,7 @@
 // them where they touch). Deck: a parapet, the fascia under it and the underside. Fill (a walled ramp): a parapet and
 // the retaining wall down to the ground. Cut: a retaining wall up to the ground with a parapet on top (the rule: an
 // open cut is fenced). Tunnel: walls and a roof once the road is deep enough. Piers stand under decks about every
-// 28 m, never on a face of another level. Pure.
+// 28 m, never on a face of another level; where none can stand for a long way, a portal (portal.ts). Pure.
 import { smoothstep } from '../roads/curve.ts';
 import { DECK_DEPTH, HEADROOM, KERB_RAISE, PARAPET_RAISE } from '../roads/model.ts';
 import type { Station, Strip } from '../roads/model.ts';
@@ -17,11 +17,17 @@ import type { MeshInput } from './input.ts';
 import type { Sink, V3 } from './solids.ts';
 import { K_CUT, K_DECK, K_FILL, K_GRADE, K_TUNNEL } from './stripfaces.ts';
 import type { Borders } from './stripfaces.ts';
+import { sharedArea } from './clip.ts';
+import { PORTAL_AFTER_M, emitPortal, findPortal } from './portal.ts';
 
 export const PARAPET_WIDTH_M = 0.25;
 export const PIER_SPACING_M = 28;
 /** A deck lower than this above the ground gets no pier (m): the abutment carries it. */
 export const PIER_MIN_M = 3.5;
+/** A pier may share this much area with a face of another level (m2): the check's limit, less a margin. */
+export const PIER_AREA_EPS_M2 = 0.005;
+/** The longest span the mesh builds without a portal: longer ones are listed (m). */
+export const LONG_SPAN_M = 60;
 /** A tunnel is roofed once the road lies this far under the ground (m): the headroom and the slab. */
 export const ROOF_DEPTH_M = HEADROOM + 0.7;
 
@@ -45,6 +51,8 @@ export interface Pier {
   sheet: number;
   bottom: number;
   top: number;
+  /** A leg of a portal (portal.ts). */
+  portal?: boolean;
 }
 
 export interface StructureReport {
@@ -57,6 +65,10 @@ export interface StructureReport {
   /** Pier places passed over because a face of another level lies under them, and the longest run between two piers (m). */
   piersMoved: number;
   maxSpanM: number;
+  /** Portals: two legs beside the deck and a beam, where no pier can stand under it (portal.ts). */
+  portals: number;
+  /** Spans over LONG_SPAN_M, with why no portal stands in them. */
+  longSpans: { strip: number; station: number; spanM: number; why: string }[];
   joints: number;
   undersides: number;
   roofs: number;
@@ -136,7 +148,7 @@ function pointInFace(fs: FaceSet, f: number, x: number, z: number): boolean {
 const structureOf = (kp: number, kq: number): EdgeKind | null => (kp === K_DECK || kq === K_DECK ? 'deck' : kp === K_FILL || kq === K_FILL ? 'fill' : kp === K_TUNNEL || kq === K_TUNNEL ? 'tunnel' : kp === K_CUT || kq === K_CUT ? 'cut' : null);
 
 export function buildStructures(input: MeshInput, fs: FaceSet, edges: EdgeMap, grid: FaceGrid, sink: Sink, borders: Borders, sheetOfStation: (strip: number, station: number) => number): StructureReport {
-  const out: StructureReport = { segments: [], parapets: 0, byKind: {}, sharedSides: 0, piers: [], piersMoved: 0, maxSpanM: 0, joints: 0, undersides: 0, roofs: 0, abutmentWalls: 0 };
+  const out: StructureReport = { segments: [], parapets: 0, byKind: {}, sharedSides: 0, piers: [], piersMoved: 0, maxSpanM: 0, portals: 0, longSpans: [], joints: 0, undersides: 0, roofs: 0, abutmentWalls: 0 };
   input.strips.forEach((s: Strip, si: number) => {
     const kind = input.kinds[si] as ArrayLike<number>;
     let any = false;
@@ -227,12 +239,27 @@ export function buildStructures(input: MeshInput, fs: FaceSet, edges: EdgeMap, g
       }
     }
     // piers and deck joints
+    // the deck joint over a pier or a portal: a line across the carriageway, flush with it
+    const joint = (st: Station): void => {
+      const J = (k: number, along: number): V3 => [st.x + st.nx * (st.b[k] as number) - st.nz * along, st.h + 0.012, st.z + st.nz * (st.b[k] as number) + st.nx * along];
+      sink.quad('joint', J(0, -0.04), J(L, -0.04), J(L, 0.04), J(0, 0.04), [0, 1, 0]);
+      out.joints++;
+    };
     let since = PIER_SPACING_M / 2;
+    let lastWhy = '';
+    // a span longer than the portal limit is listed with the reason the last portal try gave
+    const span = (at: number): void => {
+      if (since > LONG_SPAN_M && out.longSpans.length < 40) out.longSpans.push({ strip: si, station: at, spanM: Math.round(since * 10) / 10, why: lastWhy || 'no portal tried' });
+      lastWhy = '';
+    };
     for (let i = 1; i < s.st.length; i++) {
       const st = s.st[i] as Station;
       const prev = s.st[i - 1] as Station;
       if (kind[i] !== K_DECK) {
-        if (kind[i - 1] === K_DECK) out.maxSpanM = Math.max(out.maxSpanM, since);
+        if (kind[i - 1] === K_DECK) {
+          out.maxSpanM = Math.max(out.maxSpanM, since);
+          span(i);
+        }
         since = PIER_SPACING_M / 2;
         continue;
       }
@@ -252,11 +279,24 @@ export function buildStructures(input: MeshInput, fs: FaceSet, edges: EdgeMap, g
       // not on a face of another level: a corner, the centre or an edge middle inside one moves the pier on
       const probes: [number, number][] = [...ring, [cx, cz], ...ring.map((r, k) => [(r[0] + (ring[(k + 1) % 4] as [number, number])[0]) / 2, (r[1] + (ring[(k + 1) % 4] as [number, number])[1]) / 2] as [number, number])];
       const under = grid.near(cx - half - 1, cz - half - 1, cx + half + 1, cz + half + 1).filter((f) => blocksPier(fs, f, sheet));
-      if (under.some((f) => probes.some(([x, z]) => pointInFace(fs, f, x, z)) || fs.ring(f).some(([x, z]) => Math.abs((x - cx) * st.nx + (z - cz) * st.nz) < half && Math.abs((x - cx) * tx + (z - cz) * tz) < 0.5))) {
+      // (and, as the check measures it, no shared area: a thin face can pass between the probes)
+      if (under.some((f) => probes.some(([x, z]) => pointInFace(fs, f, x, z)) || fs.ring(f).some(([x, z]) => Math.abs((x - cx) * st.nx + (z - cz) * st.nz) < half && Math.abs((x - cx) * tx + (z - cz) * tz) < 0.5)) || (under.length > 0 && sharedArea([ring], under.map((f) => fs.ring(f)), { x: cx, z: cz }) > PIER_AREA_EPS_M2)) {
         out.piersMoved++;
+        // a long way since the last pier: two legs beside the deck and a beam under it
+        const portal = since >= PORTAL_AFTER_M ? findPortal(fs, grid, st, sheet) : null;
+        if (typeof portal === 'string') lastWhy = portal;
+        if (!portal || typeof portal === 'string') continue;
+        span(i);
+        out.maxSpanM = Math.max(out.maxSpanM, since);
+        since = 0;
+        emitPortal(sink, st, portal);
+        for (const leg of portal.legs) out.piers.push({ strip: si, station: i, ring: leg, sheet, bottom: portal.bottom, top: portal.beamBottom, portal: true });
+        out.portals++;
+        joint(st);
         continue;
       }
       out.maxSpanM = Math.max(out.maxSpanM, since);
+      span(i);
       since = 0;
       const bottom = st.g - 1;
       const top = st.h - DECK_DEPTH;
@@ -275,10 +315,7 @@ export function buildStructures(input: MeshInput, fs: FaceSet, edges: EdgeMap, g
         }
         sink.quad('pier', [a[0], bottom, a[1]], [b[0], bottom, b[1]], [b[0], top, b[1]], [a[0], top, a[1]], [nx, 0, nz]);
       }
-      // the deck joint over the pier: a line across the carriageway, flush with it
-      const J = (k: number, along: number): V3 => [st.x + st.nx * (st.b[k] as number) + tx * along, st.h + 0.012, st.z + st.nz * (st.b[k] as number) + tz * along];
-      sink.quad('joint', J(0, -0.04), J(L, -0.04), J(L, 0.04), J(0, 0.04), [0, 1, 0]);
-      out.joints++;
+      joint(st);
     }
   });
   out.maxSpanM = Math.round(out.maxSpanM * 10) / 10;

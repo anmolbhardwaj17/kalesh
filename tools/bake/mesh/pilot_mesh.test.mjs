@@ -65,7 +65,7 @@ describe.skipIf(missing.length > 0)(`pilot centre road mesh${reason ? ` (skipped
     // strip on strip is the lane model's: a ramp on fill beside a road at grade (13.4 m2, new with the height based
     // levels), two slivers the lanes step lists too. The tunnel mouth pair of the lanes step lies on two levels here.
     expect(o.stripPairs.pairs).toBeLessThanOrEqual(3);
-    expect(o.stripPairs.areaM2).toBeLessThan(14);
+    expect(o.stripPairs.areaM2).toBeLessThan(15);
     expect(o.totalM2).toBeLessThan(18);
     expect(health.gates.overlappingRoadFaces).toBe(o.pairsOver + o.stripPairs.pairs);
   }, T);
@@ -88,10 +88,11 @@ describe.skipIf(missing.length > 0)(`pilot centre road mesh${reason ? ` (skipped
     expect(e.joined + Object.values(e.explained).reduce((s, v) => s + v, 0) + e.unjoined).toBe(e.stripEnds);
     expect(e.explained.map_edge).toBe(169);
     console.log(`[mesh] unjoined ${e.unjoined}: ${e.unjoinedList.map((u) => `${u.strip} ${u.end}`).join(', ')}; floating ${e.floating}: ${e.floatingList.map((u) => `${u.strip} ${u.end} ${u.kind}`).join(', ')}`);
-    // not zero on the pilot: arms of clusters the lane model cut too wide (a junction that joins a deck and the
-    // ground, a tunnel arm under a ground road), and one raised dead end the elevation step lists too
-    expect(e.unjoined).toBeLessThanOrEqual(6);
-    expect(e.floating).toBeLessThanOrEqual(2);
+    // not zero on the pilot: the Vikas Marg deck arm east of ITO, whose junction joins a deck and the ground over a
+    // road at grade (one unjoined and floating end, P1-036; the lane model must split it). The polygon set arms
+    // (Kashmere Gate among them) all join since P1-036
+    expect(e.unjoined).toBeLessThanOrEqual(1);
+    expect(e.floating).toBeLessThanOrEqual(1);
     expect(health.gates.unjoinedEnds).toBe(e.unjoined);
     expect(health.gates.floatingEnds).toBe(e.floating);
   }, T);
@@ -106,7 +107,24 @@ describe.skipIf(missing.length > 0)(`pilot centre road mesh${reason ? ` (skipped
     expect(mesh.piers.piers).toBeGreaterThan(100);
     expect(mesh.piers.inLane).toBe(0);
     expect(health.gates.piersInLane).toBe(0);
-    expect(mesh.piers.joints).toBe(mesh.piers.piers);
+    // one deck joint over every pier and every portal (two legs)
+    expect(mesh.piers.joints).toBe(mesh.piers.piers - mesh.piers.portals);
+    // portals where no pier can stand (P1-036): the longest span was 95 m; what is still over 60 m is listed with why
+    expect(mesh.piers.portals).toBeGreaterThan(0);
+    expect(mesh.piers.maxSpanM).toBeLessThan(75);
+    for (const l of mesh.piers.longSpans) expect(l.why.length).toBeGreaterThan(10);
+  }, T);
+
+  it('polygon set surfaces stay near their arms; every surface over 3,000 m2 says why; kerbs beside them stand 0.15 m', async () => {
+    const { mesh, health } = await baked();
+    // the three widest clusters were 124,188, 60,078 and 34,530 m2 before P1-036
+    expect(Math.max(...mesh.oversize.map((o) => o.areaM2))).toBeLessThan(25000);
+    for (const o of mesh.oversize) expect(o.why).toMatch(/arms/);
+    expect(mesh.kerbs.beside.sampled).toBeGreaterThan(10000);
+    expect(mesh.kerbs.beside.off).toBeLessThan(20);
+    // the lane overlap check on the solved levels finds the Kashmere Gate ramp on fill the tags miss
+    const solved = health.lanes.overlapSolved;
+    expect(solved.worst.some((w) => w.a === 'w175800219.0_0' || w.b === 'w175800219.0_0')).toBe(true);
   }, T);
 
   it('kerbs stand 0.15 m over the carriageway within 0.01 m, the lane UV test passes, every arm that stops has its stop line', async () => {

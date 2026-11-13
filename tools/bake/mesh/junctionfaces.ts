@@ -17,8 +17,8 @@ import type { Origin } from './clip.ts';
 import type { Corner, FaceSet } from './faces.ts';
 import type { MeshArm, MeshInput, MeshRingItem } from './input.ts';
 import { StripIndex, borderX, borderZ, cutOf, sheetOf } from './stripfaces.ts';
-import { EndType, FillRule, JoinType, inflatePaths, union } from 'clipper2-ts';
-import type { Paths64 } from 'clipper2-ts';
+import { EndType, FillRule, JoinType, inflatePaths, intersect, union } from 'clipper2-ts';
+import type { Path64, Paths64 } from 'clipper2-ts';
 
 /** A face may lie on its neighbours by this much before the polygon set cuts it (m2): float noise at shared edges. */
 export const CLIP_EPS_M2 = 0.002;
@@ -27,6 +27,14 @@ export const CLIP_EPS_M2 = 0.002;
 export const CLOSE_M = 2.5;
 /** A corner the polygon set made within this distance of a vertex that is already there is that vertex (m). */
 export const SNAP_M = 0.004;
+/** A polygon set mouth reaches this far out over its arm before the arm's end quad is taken off (m). */
+export const MOUTH_OUT_M = 0.2;
+/** A corner the polygon set made this close to an arm's cut line is put on it (m): the closing works to millimetres. */
+export const CUT_SNAP_M = 0.006;
+/** A polygon set corner this close to the edge of a strip or a junction built before takes its height there (m) ... */
+export const MEET_TOL_M = 0.003;
+/** ... unless the two differ by more than this (m): then the step is a wall (a ramp on fill beside the junction). */
+export const MEET_MAX_M = 1.0;
 /** Each lane corridor is this much wider than its lane on both sides (m). */
 export const CORRIDOR_MARGIN_M = 0.4;
 
@@ -50,7 +58,31 @@ export interface JunctionFaces {
   droppedBands: number;
   /** Holes the polygon set found inside a face (a neighbour wholly inside it): the face was cut in two through each. */
   holes: number;
+  /** Corners of polygon set faces that took the height of the strip edge they lie on. */
+  heightsTaken: number;
   list: { id: string; what: string }[];
+}
+
+/** A polygon set surface reaches at most this far outside the hull of its arms' cut lines (m). */
+export const HULL_MARGIN_M = 6;
+
+/** Convex hull of integer points (monotone chain), counter-clockwise. */
+function convexHull(pts: Path64): Path64 {
+  const p = pts.slice().sort((a, b) => a.x - b.x || a.y - b.y);
+  if (p.length < 3) return p;
+  const cross = (o: Path64[number], a: Path64[number], b: Path64[number]): number => (a.x - o.x) * (b.y - o.y) - (a.y - o.y) * (b.x - o.x);
+  const lower: Path64 = [];
+  for (const q of p) {
+    while (lower.length >= 2 && cross(lower[lower.length - 2]!, lower[lower.length - 1]!, q) <= 0) lower.pop();
+    lower.push(q);
+  }
+  const upper: Path64 = [];
+  for (let i = p.length - 1; i >= 0; i--) {
+    const q = p[i]!;
+    while (upper.length >= 2 && cross(upper[upper.length - 2]!, upper[upper.length - 1]!, q) <= 0) upper.pop();
+    upper.push(q);
+  }
+  return lower.slice(0, -1).concat(upper.slice(0, -1));
 }
 
 const endStation = (strips: readonly Strip[], a: { strip: number; end: 'start' | 'end' }): Station => {
@@ -60,6 +92,8 @@ const endStation = (strips: readonly Strip[], a: { strip: number; end: 'start' |
 
 interface Reg {
   ring: [number, number][];
+  /** Carriageway height at every ring point (the top less the face's raise). */
+  ys: number[];
   sheet: number;
   minX: number;
   maxX: number;
@@ -82,7 +116,7 @@ const boxOf = (rings: readonly (readonly (readonly [number, number])[])[]): { mi
 
 export function addJunctionFaces(fs: FaceSet, input: MeshInput, index: StripIndex): JunctionFaces {
   const { strips, kinds } = input;
-  const out: JunctionFaces = { faces: [], sheets: [], j1: 0, j2: 0, setFaces: new Set(), clippedFaces: 0, clippedJunctions: 0, clippedAreaM2: 0, bands: 0, crossedBands: 0, droppedBands: 0, holes: 0, list: [] };
+  const out: JunctionFaces = { faces: [], sheets: [], j1: 0, j2: 0, setFaces: new Set(), clippedFaces: 0, clippedJunctions: 0, clippedAreaM2: 0, bands: 0, crossedBands: 0, droppedBands: 0, holes: 0, heightsTaken: 0, list: [] };
   const note = (id: string, what: string): void => {
     if (out.list.length < 400) out.list.push({ id, what });
   };
@@ -98,6 +132,22 @@ export function addJunctionFaces(fs: FaceSet, input: MeshInput, index: StripInde
         else reg.set(regKey(x, z), [r]);
       }
     }
+  };
+  /** The carriageway height of a junction face built before, at a point on one of its edges (within `tol`), or null. */
+  const builtHeight = (x: number, z: number, sheet: number, tol: number): number | null => {
+    for (const r of reg.get(regKey(Math.floor(x / REG_CELL), Math.floor(z / REG_CELL))) ?? []) {
+      if (r.sheet !== sheet || x < r.minX - tol || x > r.maxX + tol || z < r.minZ - tol || z > r.maxZ + tol) continue;
+      for (let k = 0; k < r.ring.length; k++) {
+        const p = r.ring[k] as [number, number];
+        const q = r.ring[(k + 1) % r.ring.length] as [number, number];
+        const dx = q[0] - p[0];
+        const dz = q[1] - p[1];
+        const len2 = dx * dx + dz * dz;
+        const t = len2 > 1e-12 ? Math.max(0, Math.min(1, ((x - p[0]) * dx + (z - p[1]) * dz) / len2)) : 0;
+        if (Math.hypot(x - p[0] - dx * t, z - p[1] - dz * t) <= tol) return (r.ys[k] as number) + ((r.ys[(k + 1) % r.ring.length] as number) - (r.ys[k] as number)) * t;
+      }
+    }
+    return null;
   };
   const registered = (b: { minX: number; maxX: number; minZ: number; maxZ: number }, sheet: number): [number, number][][] => {
     const seen = new Set<Reg>();
@@ -200,11 +250,19 @@ export function addJunctionFaces(fs: FaceSet, input: MeshInput, index: StripInde
         // towards the junction: against the station order at a start, with it at an end
         const tx = -s.nz * sign;
         const tz = s.nx * sign;
-        all.push([at(borderX(s, cf), borderZ(s, cf)), at(borderX(s, cl + 1), borderZ(s, cl + 1)), at(borderX(s, cl + 1) + tx * 1.5, borderZ(s, cl + 1) + tz * 1.5), at(borderX(s, cf) + tx * 1.5, borderZ(s, cf) + tz * 1.5)]);
+        // the mouth starts a little out on the arm: the arm's own end quad is taken off again below, so the surface
+        // ends on the cut line exactly whatever level the arm is on
+        all.push([at(borderX(s, cf) - tx * MOUTH_OUT_M, borderZ(s, cf) - tz * MOUTH_OUT_M), at(borderX(s, cl + 1) - tx * MOUTH_OUT_M, borderZ(s, cl + 1) - tz * MOUTH_OUT_M), at(borderX(s, cl + 1) + tx * 1.5, borderZ(s, cl + 1) + tz * 1.5), at(borderX(s, cf) + tx * 1.5, borderZ(s, cf) + tz * 1.5)]);
       });
       all = union(all, FillRule.NonZero);
       const closed = inflatePaths(inflatePaths(all, CLOSE_M * CLIP_SCALE, JoinType.Round, EndType.Polygon, 2, 0.05 * CLIP_SCALE), -CLOSE_M * CLIP_SCALE, JoinType.Round, EndType.Polygon, 2, 0.05 * CLIP_SCALE);
-      return union(all, closed, FillRule.NonZero).map((p) => p.map((q) => [q.x / CLIP_SCALE + o.x, q.y / CLIP_SCALE + o.z] as [number, number]));
+      // never wider than the arms' cut lines: lane paths of a cluster with no usable ring can wander a kilometre out
+      // (a path between two arms that leave side by side runs out along one and back along the other)
+      const hull = inflatePaths([convexHull(j.arms.flatMap((_, i) => {
+        const s = st[i] as Station;
+        return s.b.map((_, k) => at(borderX(s, k), borderZ(s, k)));
+      }))], HULL_MARGIN_M * CLIP_SCALE, JoinType.Miter, EndType.Polygon, 2);
+      return intersect(union(all, closed, FillRule.NonZero), hull, FillRule.NonZero).map((p) => p.map((q) => [q.x / CLIP_SCALE + o.x, q.y / CLIP_SCALE + o.z] as [number, number]));
     };
 
     let ring: Corner[] | null = j.method === 'J1' && j.ring ? dedupe(j.ring.map((it) => corner(it, 0))) : null;
@@ -248,6 +306,40 @@ export function addJunctionFaces(fs: FaceSet, input: MeshInput, index: StripInde
     const neighbours: [number, number][][] = [];
     for (const rings of nearStrips.values()) neighbours.push(...rings);
     neighbours.push(...registered(box, sheet));
+    // the arms' own end quads, on whatever level they are: no surface of the junction lies on its arms
+    const cutLines: [number, number, number, number][] = [];
+    const endLine = (si: number, end: 'start' | 'end'): [number, number][] | null => {
+      const last = (strips[si] as Strip).st.length - 2;
+      if (last < 0) return null;
+      const q = index.quad(si, end === 'start' ? 0 : last);
+      cutLines.push(end === 'start' ? [q[0]![0], q[0]![1], q[1]![0], q[1]![1]] : [q[3]![0], q[3]![1], q[2]![0], q[2]![1]]);
+      return q;
+    };
+    for (const a of j.arms) {
+      const q = endLine(a.strip, a.end);
+      if (q) neighbours.push(q);
+    }
+    // corners made on the end line of any strip near (another junction's arm under a polygon set surface) go on it too
+    for (const si of nearStrips.keys()) {
+      endLine(si, 'start');
+      endLine(si, 'end');
+    }
+    const onCut = (c: Corner): void => {
+      for (const [ax, az, bx, bz] of cutLines) {
+        const dx = bx - ax;
+        const dz = bz - az;
+        const len2 = dx * dx + dz * dz;
+        if (len2 < 1e-12) continue;
+        const t = ((c.x - ax) * dx + (c.z - az) * dz) / len2;
+        if (t < 0 || t > 1) continue;
+        const px = ax + dx * t;
+        const pz = az + dz * t;
+        if (Math.hypot(c.x - px, c.z - pz) > CUT_SNAP_M) continue;
+        c.x = px;
+        c.z = pz;
+        return;
+      }
+    };
 
     const yAt = (x: number, z: number, from: readonly Corner[]): number => {
       // on a vertex or an edge of the planned face: its height there; inside: the nearest corners weighted by distance
@@ -323,6 +415,7 @@ export function addJunctionFaces(fs: FaceSet, input: MeshInput, index: StripInde
         // the polygon set works to a tenth of a millimetre and its results drift by about one: a corner that is a
         // strip's own vertex goes back onto it
         for (const c of b.ring) {
+          onCut(c);
           const id = fs.nearest(c.x, c.z, SNAP_M);
           if (id >= 0) {
             c.x = fs.vx[id] as number;
@@ -331,13 +424,23 @@ export function addJunctionFaces(fs: FaceSet, input: MeshInput, index: StripInde
         }
         b.ring = dedupe(b.ring);
         if (b.ring.length < 3) continue;
+        // where the face meets a strip or a junction built before, it meets it at that one's height (the spread
+        // heights are a guess); a neighbour much higher or lower (a ramp on fill beside it) keeps its wall
+        const raise = b.kind === 'band' ? KERB_RAISE : 0;
+        for (const c of b.ring) {
+          const h = index.edgeHeight(c.x, c.z, MEET_TOL_M) ?? builtHeight(c.x, c.z, sheet, MEET_TOL_M);
+          if (h !== null && Math.abs(h + raise - c.y) <= MEET_MAX_M) {
+            if (Math.abs(h + raise - c.y) > 1e-4) out.heightsTaken++;
+            c.y = h + raise;
+          }
+        }
       }
       const f = fs.add(b.ring, { piece, kind: b.kind, cut, raise: b.kind === 'band' ? KERB_RAISE : 0, sheet });
       if (f < 0) continue;
       faces.push(f);
       if (b.set) out.setFaces.add(f);
       const fr = flat(b.ring);
-      register({ ring: fr, sheet, ...boxOf([fr]) });
+      register({ ring: fr, ys: b.ring.map((c) => c.y - (b.kind === 'band' ? KERB_RAISE : 0)), sheet, ...boxOf([fr]) });
     }
     out.faces.push(faces);
     out.sheets.push(sheet);

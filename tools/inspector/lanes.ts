@@ -80,6 +80,27 @@ export function metres(range: readonly [number, number]): string {
 
 export const LANE_TYPE_WORDS: Record<string, string> = { drive: 'Driving lane', kerb: 'Kerb', footpath: 'Footpath', median: 'Median', parking: 'Parking', planter: 'Planter', gore: 'Painted island' };
 
+/** A cross section part narrower than this is not listed (m): a split zone keeps its painted island at no width before the nose. */
+export const PART_MIN_M = 0.005;
+
+/**
+ * The parts of a cross section at one point, left to right, as the lanes tab lists them: parts with no width left
+ * out, and neighbours of the same type and direction that are left next to each other merged (P1-036: a split zone
+ * listed "Painted island 0.00 m" three times).
+ */
+export function sectionParts(lanes: readonly (readonly [string, number])[], b: readonly number[]): { type: string; dir: number; widthM: number }[] {
+  const out: { type: string; dir: number; widthM: number }[] = [];
+  lanes.forEach(([type, dir], k) => {
+    const w = (b[k] ?? 0) - (b[k + 1] ?? 0);
+    if (w < PART_MIN_M) return;
+    const last = out[out.length - 1];
+    // two driving lanes stay two lanes; other parts of one kind side by side are one part
+    if (last && last.type === type && last.dir === dir && type !== 'drive') last.widthM += w;
+    else out.push({ type, dir, widthM: w });
+  });
+  return out;
+}
+
 /** Distance in metres from a point to a polyline, and the index of the nearest point. */
 export function distAlong(x: number, z: number, pts: readonly (readonly [number, number])[]): { d: number; at: number } {
   let best = Infinity;

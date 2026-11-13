@@ -265,6 +265,8 @@ export interface LanesRecord {
   hero: { spec: string; strips: number; stationsChecked: number; fieldsCompared: number; mismatches: number; list: string[] }[];
   /** Strips lying on each other in plan on one level, after the edges gave way (not a gate of this step). */
   overlap: LaneChecks['overlap'];
+  /** The same on the solved levels, written by the elevation step: what the tags miss (a ramp on fill beside a road at grade). */
+  overlapSolved?: LaneChecks['overlap'];
   /** Edge lanes narrowed beside another strip (roads/edges.ts). */
   edgeTrims: LaneBuild['edgeTrims'];
   junctionClusters: { most: number; over8Nodes: number };

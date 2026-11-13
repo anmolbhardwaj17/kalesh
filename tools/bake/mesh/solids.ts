@@ -218,14 +218,14 @@ export interface StepReport {
    * set made are counted apart (`beside`): that surface's heights are spread from the arms' cut lines, so the step
    * to it is not the kerb's own height.
    */
-  kerbs: { sampled: number; minM: number; maxM: number; off: number; list: { x: number; z: number; heightM: number }[]; beside: { sampled: number; off: number; minM: number; maxM: number } };
+  kerbs: { sampled: number; minM: number; maxM: number; off: number; list: { x: number; z: number; heightM: number }[]; beside: { sampled: number; off: number; minM: number; maxM: number; list: { x: number; z: number; heightM: number }[] } };
 }
 
 const FLUSH = new Set(['drive', 'parking', 'gore', 'junction']);
 
 /** The faces between tops of different height along shared edges, and the end caps of raised strip lanes. */
 export function emitSteps(fs: FaceSet, edges: EdgeMap, sink: Sink, kerbRaise: number, setFaces: ReadonlySet<number>): StepReport {
-  const out: StepReport = { faces: 0, caps: 0, kerbs: { sampled: 0, minM: Infinity, maxM: -Infinity, off: 0, list: [], beside: { sampled: 0, off: 0, minM: Infinity, maxM: -Infinity } } };
+  const out: StepReport = { faces: 0, caps: 0, kerbs: { sampled: 0, minM: Infinity, maxM: -Infinity, off: 0, list: [], beside: { sampled: 0, off: 0, minM: Infinity, maxM: -Infinity, list: [] } } };
   for (let f = 0; f < fs.faces; f++) {
     const s = fs.start[f] as number;
     const n = fs.len[f] as number;
@@ -270,7 +270,10 @@ export function emitSteps(fs: FaceSet, edges: EdgeMap, sink: Sink, kerbRaise: nu
             b.sampled++;
             b.minM = Math.min(b.minM, h);
             b.maxM = Math.max(b.maxM, h);
-            if (Math.abs(h - kerbRaise) > 0.01) b.off++;
+            if (Math.abs(h - kerbRaise) > 0.01) {
+              b.off++;
+              if (b.list.length < 20) b.list.push({ x: Math.round(ax * 10) / 10, z: Math.round(az * 10) / 10, heightM: Math.round(h * 1000) / 1000 });
+            }
             continue;
           }
           out.kerbs.sampled++;

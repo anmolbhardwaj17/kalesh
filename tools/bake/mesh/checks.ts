@@ -49,7 +49,8 @@ export interface MeshChecks {
     floatingList: { strip: string; end: string; kind: string; x: number; z: number; aboveGroundM: number }[];
   };
   railings: { segments: number; parapets: number; byKind: Record<string, number>; parapetTriangles: number; atGrade: number; list: { x: number; z: number }[] };
-  piers: { piers: number; inLane: number; list: { strip: string; x: number; z: number; areaM2: number }[]; moved: number; maxSpanM: number; joints: number };
+  /** Piers (portal legs counted one by one), and the spans longer than LONG_SPAN_M with the reason no portal stands in them. */
+  piers: { piers: number; portals: number; inLane: number; list: { strip: string; x: number; z: number; areaM2: number }[]; moved: number; maxSpanM: number; longSpans: { strip: string; x: number; z: number; spanM: number; why: string }[]; joints: number };
   kerbs: RoadMesh['steps']['kerbs'];
   uv: {
     lanes: number;
@@ -169,7 +170,12 @@ export function checkRoadMesh(input: MeshInput, mesh: RoadMesh): MeshChecks {
   }
 
   // piers: none in a face of another level
-  const piers: MeshChecks['piers'] = { piers: mesh.structures.piers.length, inLane: 0, list: [], moved: mesh.structures.piersMoved, maxSpanM: mesh.structures.maxSpanM, joints: mesh.structures.joints };
+  const longSpans = mesh.structures.longSpans.map((l) => {
+    const s = strips[l.strip] as Strip;
+    const st = s.st[Math.min(l.station, s.st.length - 1)] as Station;
+    return { strip: s.id, x: r1(st.x), z: r1(st.z), spanM: l.spanM, why: l.why };
+  });
+  const piers: MeshChecks['piers'] = { piers: mesh.structures.piers.length, portals: mesh.structures.portals, inLane: 0, list: [], moved: mesh.structures.piersMoved, maxSpanM: mesh.structures.maxSpanM, longSpans, joints: mesh.structures.joints };
   for (const p of mesh.structures.piers) {
     const xs = p.ring.map((q) => q[0]);
     const zs = p.ring.map((q) => q[1]);

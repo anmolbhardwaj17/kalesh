@@ -279,6 +279,41 @@ export class StripIndex {
     return Math.max(sheetOf(s.st[i] as Station, k[i] as number), sheetOf(s.st[i + 1] as Station, k[i + 1] as number));
   }
 
+  /**
+   * The carriageway height a strip face has at a plan point on one of its edges (a lane border between two stations,
+   * or a station row across the strip), within `tol` metres, or null. Faces lie flat across, so it is the height of
+   * the edge's two corners, blended along it.
+   */
+  edgeHeight(x: number, z: number, tol: number): number | null {
+    for (const id of this.around(x, z)) {
+      const si = this.strip[id] as number;
+      const i = this.station[id] as number;
+      const s = this.strips[si] as Strip;
+      const b = this.borders.of(si);
+      const W = (s.st[0] as Station).b.length;
+      const hAt = (row: number, k: number): number => (s.st[b.from[row * W + k] as number] as Station).h;
+      const P = (row: number, k: number): [number, number] => [b.x[row * W + k] as number, b.z[row * W + k] as number];
+      const onSeg = (p: [number, number], q: [number, number], hp: number, hq: number): number | null => {
+        const dx = q[0] - p[0];
+        const dz = q[1] - p[1];
+        const len2 = dx * dx + dz * dz;
+        const t = len2 > 1e-12 ? Math.max(0, Math.min(1, ((x - p[0]) * dx + (z - p[1]) * dz) / len2)) : 0;
+        return Math.hypot(x - p[0] - dx * t, z - p[1] - dz * t) <= tol ? hp + (hq - hp) * t : null;
+      };
+      for (let k = 0; k < W; k++) {
+        const along = onSeg(P(i, k), P(i + 1, k), hAt(i, k), hAt(i + 1, k));
+        if (along !== null) return along;
+      }
+      for (const row of [i, i + 1]) {
+        for (let k = 0; k + 1 < W; k++) {
+          const across = onSeg(P(row, k), P(row, k + 1), hAt(row, k), hAt(row, k + 1));
+          if (across !== null) return across;
+        }
+      }
+    }
+    return null;
+  }
+
   /** Entries (see `strip` and `station`) whose cells hold the point. */
   around(x: number, z: number): readonly number[] {
     return this.cells.get((Math.floor(x / this.cell) + 100000) * 262144 + (Math.floor(z / this.cell) + 100000)) ?? [];

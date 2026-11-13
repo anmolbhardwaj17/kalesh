@@ -235,8 +235,36 @@ describe('a crossroads at grade', () => {
     expect(r.checks.overlap.pairsOver).toBe(0);
     expect(r.checks.watertight.openBoundaryEdges).toBe(0);
     expect(r.checks.ends.unjoined).toBe(0);
-    // the kerbs beside it are counted apart: its heights are spread from the arms
+    // the kerbs beside it are counted apart: its heights are spread from the arms, and where a corner of it lies on a
+    // strip's edge it takes the strip's height (P1-036), so the kerb beside it stands 0.15 m too
     expect(r.checks.kerbs.off).toBe(0);
+    expect(r.checks.kerbs.beside.off).toBe(0);
+  });
+
+  it('a polygon set surface stays inside the hull of its arms\' cut lines, even when a lane path wanders far out (P1-036)', () => {
+    const r = build(s, 500, (i) => {
+      const j = i.junctions[0]!;
+      j.ring = null;
+      j.bands = [];
+      j.method = 'J2';
+      // a lane path that runs 150 m out along one arm and back, as the paths of the widest pilot clusters do
+      const p = j.paths[0]!;
+      j.paths.push({ pts: [p.pts[0]!, [p.pts[0]![0] + 150, p.pts[0]![1] + 40], p.pts[p.pts.length - 1]!], width: p.width });
+    });
+    const xs: number[] = [];
+    const zs: number[] = [];
+    for (const f of r.mesh.junctions.faces[0]!) for (const [x, z] of r.mesh.fs.ring(f)) {
+      xs.push(x);
+      zs.push(z);
+    }
+    const cuts = r.input.junctions[0]!.arms.map((a) => {
+      const st = r.input.strips[a.strip]!.st;
+      return Math.hypot(...(a.end === 'start' ? [st[0]!.x, st[0]!.z] : [st[st.length - 1]!.x, st[st.length - 1]!.z]) as [number, number]);
+    });
+    const reach = Math.max(...xs.map((x, k) => Math.hypot(x, zs[k]!)));
+    expect(reach).toBeLessThan(Math.max(...cuts) + 20);
+    expect(r.checks.ends.unjoined).toBe(0);
+    expect(r.checks.watertight.openBoundaryEdges).toBe(0);
   });
 });
 
