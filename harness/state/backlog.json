@@ -1,6 +1,6 @@
 {
   "_doc": "Written only by node harness/bin/task.mjs. Phases run in order; P0 (ADOPT + STYLE DISCOVERY) waits for the owner by design and needs task.mjs signoff and task.mjs archsignoff before its gate passes. Later phases are added by the planner at the end of P0 (task.mjs phase-add) from the game's real state.",
-  "updated": "2026-11-13T22:00:25.344Z",
+  "updated": "2026-11-13T22:22:18.856Z",
   "phases": [
     {
       "id": "P0",
@@ -2372,14 +2372,17 @@
       "agent": "builder",
       "priority": 3,
       "kind": "feature",
-      "status": "doing",
+      "status": "done",
       "attempts": 1,
       "notes": [
         "From P2-005: fill orientation and front per landmark (nothing read yet); 21 signatures lack a hand height (registry.json heightsMissing, 9 stations); 20 held entries need a position check (13 stations 50 to 180 m apart between OSM node and Wikidata); far landmarks have Wikidata positions only; OSM errors: Diwan-e-Khaas carries the Agra item's id, 3 ASI items on a shared default coordinate in CP."
       ],
       "created": "2026-11-11T12:31:54.058Z",
       "model": "fable",
-      "started": "2026-11-13T18:13:24.304Z"
+      "started": "2026-11-13T18:13:24.304Z",
+      "done": "2026-11-13T22:22:18.788Z",
+      "summary": "PR 57. Placement (tools/bake/landmarks/place.ts, orient.ts, massing.ts): block frame position and orientation, flattened pads cut into the terrain, landmark zones replacing plain buildings (189 replaced, 1,397 taken as parts, logged), surroundings as ground classes, LOD slots and far silhouettes under 2,000 triangles; game landmark_slots.gd. Verifier PASS: 74 high-confidence entries within 1.2 mm, hero fronts within 1 degree, 82 pads flat within 0.5 mm with 0 gap, India Gate to Red Fort and CP exact, 5 far landmarks unreachable, quick 12/12. 19 of 20 held entries settled from satellite. No Red Fort moat yet (no width source); stand-in massing until P2-007.",
+      "commit": "879e263"
     },
     {
       "id": "P2-007",
@@ -2402,7 +2405,9 @@
       "kind": "feature",
       "status": "todo",
       "attempts": 0,
-      "notes": [],
+      "notes": [
+        "From P2-006: Red Fort reads as flat salmon slabs and India Gate as a plain arch; give heroes their silhouettes. Add a moat when a width source is found (extent.moat_width_m). 57 landmark footprints have a road under them (placement.json). Dedupe Jama Masjid and New Delhi (monument vs station) and review station tiers. Add named camera poses per landmark for shots (verifier asked)."
+      ],
       "created": "2026-11-11T12:31:54.058Z",
       "model": "opus"
     },
