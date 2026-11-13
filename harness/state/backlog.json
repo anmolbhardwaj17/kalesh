@@ -1,6 +1,6 @@
 {
   "_doc": "Written only by node harness/bin/task.mjs. Phases run in order; P0 (ADOPT + STYLE DISCOVERY) waits for the owner by design and needs task.mjs signoff and task.mjs archsignoff before its gate passes. Later phases are added by the planner at the end of P0 (task.mjs phase-add) from the game's real state.",
-  "updated": "2026-11-13T22:22:18.856Z",
+  "updated": "2026-11-13T23:09:56.879Z",
   "phases": [
     {
       "id": "P0",
@@ -4281,6 +4281,29 @@
       "notes": [],
       "created": "2026-11-13T19:54:15.052Z",
       "model": "fable"
+    },
+    {
+      "id": "P2-042",
+      "phase": "P2",
+      "title": "Who may use each road: car-free streets, two-wheeler galis, footways, bollards and gates",
+      "desc": "Anmol 2026-11-14: some roads are roads but cars cannot go. Today the road graph treats every highway class as drivable and drops footways and pedestrian streets entirely (tools/bake/graph/features.ts keeps only foot bridges); OSM access tags are not read. Build an access model per edge and lane: allowed modes (car, auto, two-wheeler, cycle and rickshaw, pedestrian, emergency and police) from OSM access, motor_vehicle, motorcar, vehicle and highway tags, barriers (bollards, gates, kerbs, lift gates) and Delhi rules from references: Chandni Chowk main road car-free in the day (only pedestrians, rickshaws and emergency), old city galis for two-wheelers and walkers only, Kartavya Path promenade and lawn paths pedestrian, government and Lutyens gates, metro and station forecourts. Build pedestrian streets, footways and plazas as walkable surfaces in the mesh (not dropped), with bollards and gate props where the access changes. Write the modes into the lane graph and tiles so traffic AI, the route line (GPS) and missions respect them. Player driving into a car-free street: bollards or barriers stop cars where they exist in reality; elsewhere it is allowed but a violation (later: police and wanted level reaction). Real-life references: photos for Chandni Chowk's bollards and the gali entries.",
+      "accept": [
+        "Access modes on every edge and lane, counts per mode in health.json; Chandni Chowk main road car-free, galis two-wheeler and foot only, footways and pedestrian streets present as walkable surfaces",
+        "Bollards and gates placed where access changes, with colliders that stop a car (scenario: a car is stopped at the Chandni Chowk bollards, a scooter passes into a gali)",
+        "Lane graph and route data exclude car edges where cars are not allowed (test)",
+        "Before and after map renders of Chandni Chowk and one gali entry, side by side with reference photos",
+        "Whole bake green with gates explained; typecheck, npm test and verify --quick green"
+      ],
+      "deps": [],
+      "agent": "builder",
+      "priority": 1,
+      "kind": "mentor",
+      "status": "todo",
+      "attempts": 0,
+      "notes": [
+        "Anmol 2026-11-14: 'near India Gate there is a road, but cars can't go there'. Include the India Gate and Kartavya Path car-free stretches: the paved promenade and roads inside the India Gate lawns and around the canopy, closed to cars and open to walkers (barriers at the hexagon); check against current photos and satellite, since closures changed after the Central Vista redevelopment. Also the Kartavya Path east of the hexagon that P1-046 noted as about 14 m of paving: it is a pedestrian promenade, not a car road."
+      ],
+      "created": "2026-11-13T23:09:47.168Z"
     }
   ]
 }

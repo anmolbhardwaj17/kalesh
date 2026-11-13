@@ -437,3 +437,6 @@ Anmol: cinematography and cutscenes make or break the story. Decision: STYLE_BIB
 
 ## 2026-11-14 Streets at peak quality and never empty (Anmol)
 Anmol: the road look must be peak quality, match the real roads (adding and removing where needed), and never feel empty. Decision: acceptance added to P2-013, P2-015, P2-016, P2-035 to P2-038: photo side by sides at 3 or more spots per hero road read by a verifier, and an emptiness check (no 40 m of frontage without something real; props per 100 m within the area profile). P2-040 treats emptiness as a blocker. Core knowledge line added.
+
+## 2026-11-14 Road access by mode (Anmol)
+Anmol: some roads are roads but cars cannot go, for example near India Gate. Today every highway class is drivable and footways are dropped. Decision: P2-042 (priority 1, map lane) adds per-edge access modes from OSM tags, barriers and Delhi rules (Chandni Chowk car-free, galis two-wheeler and foot, India Gate promenade), builds pedestrian surfaces, places bollards and gates, and feeds traffic, routes and missions.
