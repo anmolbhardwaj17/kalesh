@@ -1,0 +1,504 @@
+{
+ "area": "india_gate_kartavya_path",
+ "scripts": {
+  "latn": "Latin (always present, fallback font)",
+  "deva": "Devanagari (optional)",
+  "arab": "Urdu Nastaliq (optional)"
+ },
+ "names": [
+  {
+   "kind": "govt_board",
+   "text": {
+    "latn": "Kartavya Path",
+    "deva": "कर्तव्य पथ"
+   },
+   "weight": 2
+  },
+  {
+   "kind": "govt_board",
+   "text": {
+    "latn": "India Gate Visitors Keep Off the Lawns",
+    "deva": "इंडिया गेट आगंतुक लॉन से दूर रहें"
+   },
+   "weight": 2
+  },
+  {
+   "kind": "govt_board",
+   "text": {
+    "latn": "Rajpath Canal Danger No Swimming",
+    "deva": "नहर में तैरना मना है"
+   },
+   "weight": 2
+  },
+  {
+   "kind": "govt_board",
+   "text": {
+    "latn": "Parking Area Near India Gate",
+    "deva": "इंडिया गेट के पास पार्किंग क्षेत्र"
+   },
+   "weight": 2
+  },
+  {
+   "kind": "govt_board",
+   "text": {
+    "latn": "Pedestrian Walkway",
+    "deva": "पैदल पथ"
+   },
+   "weight": 2
+  },
+  {
+   "kind": "govt_board",
+   "text": {
+    "latn": "Security Check Entry",
+    "deva": "सुरक्षा जाँच प्रवेश"
+   },
+   "weight": 2
+  },
+  {
+   "kind": "govt_board",
+   "text": {
+    "latn": "National War Memorial This Way",
+    "deva": "राष्ट्रीय समर स्मारक इस ओर"
+   },
+   "weight": 2
+  },
+  {
+   "kind": "govt_board",
+   "text": {
+    "latn": "Drinking Water Point",
+    "deva": "पेयजल केंद्र"
+   },
+   "weight": 2
+  },
+  {
+   "kind": "govt_board",
+   "text": {
+    "latn": "No Vehicles After Ten at Night",
+    "deva": "रात दस बजे के बाद वाहन निषेध"
+   },
+   "weight": 2
+  },
+  {
+   "kind": "govt_board",
+   "text": {
+    "latn": "Public Toilets",
+    "deva": "सार्वजनिक शौचालय"
+   },
+   "weight": 2
+  },
+  {
+   "kind": "govt_board",
+   "text": {
+    "latn": "Cycle Track",
+    "deva": "साइकिल ट्रैक"
+   },
+   "weight": 2
+  },
+  {
+   "kind": "govt_board",
+   "text": {
+    "latn": "Information Kiosk",
+    "deva": "सूचना कियोस्क"
+   },
+   "weight": 2
+  },
+  {
+   "kind": "govt_board",
+   "text": {
+    "latn": "Lawn Closed for Maintenance",
+    "deva": "लॉन रखरखाव के लिए बंद"
+   },
+   "weight": 2
+  },
+  {
+   "kind": "govt_board",
+   "text": {
+    "latn": "Please Do Not Litter",
+    "deva": "कृपया कचरा न फैलाएँ"
+   },
+   "weight": 2
+  },
+  {
+   "kind": "govt_board",
+   "text": {
+    "latn": "Walk in Silence at the Memorial",
+    "deva": "स्मारक पर शांति से चलें"
+   },
+   "weight": 2
+  },
+  {
+   "kind": "govt_board",
+   "text": {
+    "latn": "Lost Child Help Desk",
+    "deva": "खोया बच्चा सहायता डेस्क"
+   },
+   "weight": 2
+  },
+  {
+   "kind": "cart",
+   "text": {
+    "latn": "Kulfi Cart India Gate",
+    "deva": "कुल्फ़ी ठेला इंडिया गेट"
+   },
+   "weight": 2
+  },
+  {
+   "kind": "cart",
+   "text": {
+    "latn": "Ice Cream Trolley",
+    "deva": "आइसक्रीम ट्रॉली"
+   },
+   "weight": 2
+  },
+  {
+   "kind": "cart",
+   "text": {
+    "latn": "Gola Wala",
+    "deva": "गोला वाला"
+   },
+   "weight": 2
+  },
+  {
+   "kind": "cart",
+   "text": {
+    "latn": "Roasted Corn Cart",
+    "deva": "भुट्टा ठेला"
+   },
+   "weight": 2
+  },
+  {
+   "kind": "cart",
+   "text": {
+    "latn": "Bhel Puri Wala",
+    "deva": "भेल पूरी वाला"
+   },
+   "weight": 2
+  },
+  {
+   "kind": "cart",
+   "text": {
+    "latn": "Chai Thermos Seller",
+    "deva": "चाय थर्मस विक्रेता"
+   },
+   "weight": 2
+  },
+  {
+   "kind": "cart",
+   "text": {
+    "latn": "Balloon and Bubble Seller",
+    "deva": "गुब्बारे और बुलबुले वाला"
+   },
+   "weight": 2
+  },
+  {
+   "kind": "cart",
+   "text": {
+    "latn": "Cold Drink Cooler",
+    "deva": "ठंडा पेय कूलर"
+   },
+   "weight": 2
+  },
+  {
+   "kind": "cart",
+   "text": {
+    "latn": "Nimbu Pani Cart",
+    "deva": "नींबू पानी ठेला"
+   },
+   "weight": 2
+  },
+  {
+   "kind": "cart",
+   "text": {
+    "latn": "Chana Jor Garam Wala",
+    "deva": "चना जोर गरम वाला"
+   },
+   "weight": 2
+  },
+  {
+   "kind": "cart",
+   "text": {
+    "latn": "Paan Cigarette Kiosk",
+    "deva": "पान सिगरेट कियोस्क"
+   },
+   "weight": 2
+  },
+  {
+   "kind": "cart",
+   "text": {
+    "latn": "Fresh Coconut Water",
+    "deva": "ताज़ा नारियल पानी"
+   },
+   "weight": 2
+  },
+  {
+   "kind": "tourist",
+   "text": {
+    "latn": "Photo Walla India Gate",
+    "deva": "फ़ोटो वाला इंडिया गेट"
+   },
+   "weight": 1
+  },
+  {
+   "kind": "tourist",
+   "text": {
+    "latn": "Boat Ride Counter",
+    "deva": "नाव सवारी काउंटर"
+   },
+   "weight": 1
+  },
+  {
+   "kind": "tourist",
+   "text": {
+    "latn": "Horse Cart Ride",
+    "deva": "घोड़ागाड़ी सवारी"
+   },
+   "weight": 1
+  },
+  {
+   "kind": "tourist",
+   "text": {
+    "latn": "Camera Rental Stall"
+   },
+   "weight": 1
+  },
+  {
+   "kind": "tourist",
+   "text": {
+    "latn": "Souvenir Flag and Cap Stall",
+    "deva": "झंडा टोपी स्मृति चिह्न"
+   },
+   "weight": 1
+  },
+  {
+   "kind": "tourist",
+   "text": {
+    "latn": "Guide for Memorial Tour",
+    "deva": "स्मारक भ्रमण गाइड"
+   },
+   "weight": 1
+  },
+  {
+   "kind": "tourist",
+   "text": {
+    "latn": "Tourist Help Desk",
+    "deva": "पर्यटक सहायता डेस्क"
+   },
+   "weight": 1
+  },
+  {
+   "kind": "transport",
+   "text": {
+    "latn": "Auto Stand India Gate",
+    "deva": "ऑटो स्टैंड इंडिया गेट"
+   },
+   "weight": 2
+  },
+  {
+   "kind": "transport",
+   "text": {
+    "latn": "E-Rickshaw Stand Kartavya Path",
+    "deva": "ई-रिक्शा स्टैंड कर्तव्य पथ"
+   },
+   "weight": 2
+  },
+  {
+   "kind": "transport",
+   "text": {
+    "latn": "Tourist Bus Stop",
+    "deva": "टूरिस्ट बस स्टॉप"
+   },
+   "weight": 2
+  },
+  {
+   "kind": "transport",
+   "text": {
+    "latn": "Cycle Hire Point",
+    "deva": "साइकिल किराया केंद्र"
+   },
+   "weight": 2
+  },
+  {
+   "kind": "transport",
+   "text": {
+    "latn": "Metro Shuttle Stand",
+    "deva": "मेट्रो शटल स्टैंड"
+   },
+   "weight": 2
+  },
+  {
+   "kind": "office",
+   "text": {
+    "latn": "Memorial Management Office",
+    "deva": "स्मारक प्रबंधन कार्यालय"
+   },
+   "weight": 2
+  },
+  {
+   "kind": "office",
+   "text": {
+    "latn": "Rajdhani Police Post India Gate",
+    "deva": "राजधानी पुलिस चौकी इंडिया गेट"
+   },
+   "weight": 2
+  },
+  {
+   "kind": "office",
+   "text": {
+    "latn": "Horticulture Department Depot",
+    "deva": "उद्यान विभाग डिपो"
+   },
+   "weight": 2
+  },
+  {
+   "kind": "office",
+   "text": {
+    "latn": "Ex-Servicemen Association Stall",
+    "deva": "पूर्व सैनिक संघ स्टॉल"
+   },
+   "weight": 2
+  },
+  {
+   "kind": "office",
+   "text": {
+    "latn": "Ministry Block Reception",
+    "deva": "मंत्रालय ब्लॉक स्वागत कक्ष"
+   },
+   "weight": 2
+  },
+  {
+   "kind": "eatery",
+   "text": {
+    "latn": "Lawn Side Snack Bar"
+   },
+   "weight": 3
+  },
+  {
+   "kind": "eatery",
+   "text": {
+    "latn": "Gate Canteen",
+    "deva": "गेट कैंटीन"
+   },
+   "weight": 3
+  },
+  {
+   "kind": "eatery",
+   "text": {
+    "latn": "Sunset Chai Point",
+    "deva": "सनसेट चाय पॉइंट"
+   },
+   "weight": 3
+  },
+  {
+   "kind": "eatery",
+   "text": {
+    "latn": "Family Picnic Meals",
+    "deva": "फ़ैमिली पिकनिक भोजन"
+   },
+   "weight": 3
+  },
+  {
+   "kind": "clinic",
+   "text": {
+    "latn": "First Aid Post",
+    "deva": "प्राथमिक उपचार केंद्र"
+   },
+   "weight": 1
+  },
+  {
+   "kind": "clinic",
+   "text": {
+    "latn": "Ambulance Standby",
+    "deva": "एम्बुलेंस स्टैंडबाय"
+   },
+   "weight": 1
+  },
+  {
+   "kind": "wall_writing",
+   "text": {
+    "latn": "Sainik Ko Salaam",
+    "deva": "सैनिक को सलाम"
+   },
+   "weight": 1
+  },
+  {
+   "kind": "wall_writing",
+   "text": {
+    "latn": "Shaanti Se Chalein",
+    "deva": "शांति से चलें"
+   },
+   "weight": 1
+  },
+  {
+   "kind": "wall_writing",
+   "text": {
+    "latn": "Hamari Dilli Hamari Shaan",
+    "deva": "हमारी दिल्ली हमारी शान"
+   },
+   "weight": 1
+  },
+  {
+   "kind": "poster_line",
+   "text": {
+    "latn": "Nav Dilli Dal: Dilli Ke Liye",
+    "deva": "नव दिल्ली दल: दिल्ली के लिए"
+   },
+   "weight": 1
+  },
+  {
+   "kind": "poster_line",
+   "text": {
+    "latn": "Dilli 2040: A Grand Vista",
+    "deva": "दिल्ली 2040: भव्य दृश्य"
+   },
+   "weight": 1
+  },
+  {
+   "kind": "poster_line",
+   "text": {
+    "latn": "Sethi Seva Trust: Memorial Walk",
+    "deva": "सेठी सेवा ट्रस्ट: स्मारक पदयात्रा"
+   },
+   "weight": 1
+  },
+  {
+   "kind": "poster_line",
+   "text": {
+    "latn": "NewsTez 24 Evening Special",
+    "deva": "न्यूज़तेज़ 24 शाम विशेष"
+   },
+   "weight": 1
+  },
+  {
+   "kind": "poster_line",
+   "text": {
+    "latn": "Raat Wali 106.1: Sunset Songs",
+    "deva": "रात वाली 106.1: सूर्यास्त के गीत"
+   },
+   "weight": 1
+  },
+  {
+   "kind": "govt_board",
+   "text": {
+    "latn": "Wheelchair Access Path",
+    "deva": "व्हीलचेयर पथ"
+   },
+   "weight": 2
+  },
+  {
+   "kind": "cart",
+   "text": {
+    "latn": "Juice and Shikanji Cart",
+    "deva": "जूस और शिकंजी ठेला"
+   },
+   "weight": 2
+  },
+  {
+   "kind": "tourist",
+   "text": {
+    "latn": "Handicraft Souvenir Cart",
+    "deva": "हस्तशिल्प स्मृति ठेला"
+   },
+   "weight": 1
+  }
+ ]
+}

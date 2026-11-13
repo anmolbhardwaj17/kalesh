@@ -1,0 +1,489 @@
+{
+ "area": "cp_outer_circle",
+ "scripts": {
+  "latn": "Latin (always present, fallback font)",
+  "deva": "Devanagari (optional)",
+  "arab": "Urdu Nastaliq (optional)"
+ },
+ "names": [
+  {
+   "kind": "office",
+   "text": {
+    "latn": "Barakhamba Tower Block A"
+   },
+   "weight": 2
+  },
+  {
+   "kind": "office",
+   "text": {
+    "latn": "Kasturba Chambers"
+   },
+   "weight": 2
+  },
+  {
+   "kind": "office",
+   "text": {
+    "latn": "Capital Finance House"
+   },
+   "weight": 2
+  },
+  {
+   "kind": "office",
+   "text": {
+    "latn": "Dilli Insurance Bhawan",
+    "deva": "दिल्ली इंश्योरेंस भवन"
+   },
+   "weight": 2
+  },
+  {
+   "kind": "office",
+   "text": {
+    "latn": "Northern Trade Centre"
+   },
+   "weight": 2
+  },
+  {
+   "kind": "office",
+   "text": {
+    "latn": "Delhi Publishers Association",
+    "deva": "दिल्ली प्रकाशक संघ"
+   },
+   "weight": 2
+  },
+  {
+   "kind": "office",
+   "text": {
+    "latn": "Raisina Rao and Associates"
+   },
+   "weight": 2
+  },
+  {
+   "kind": "office",
+   "text": {
+    "latn": "Federal Mutual Society"
+   },
+   "weight": 2
+  },
+  {
+   "kind": "office",
+   "text": {
+    "latn": "Mandi Sadan Offices",
+    "deva": "मंडी सदन कार्यालय"
+   },
+   "weight": 2
+  },
+  {
+   "kind": "office",
+   "text": {
+    "latn": "Chambers of Commerce Annexe"
+   },
+   "weight": 2
+  },
+  {
+   "kind": "bank",
+   "text": {
+    "latn": "Dilli Nagrik Bank Zonal Office",
+    "deva": "दिल्ली नागरिक बैंक क्षेत्रीय कार्यालय"
+   },
+   "weight": 1
+  },
+  {
+   "kind": "bank",
+   "text": {
+    "latn": "Capital Savings Bank"
+   },
+   "weight": 1
+  },
+  {
+   "kind": "hotel",
+   "text": {
+    "latn": "Hotel Palace View"
+   },
+   "weight": 2
+  },
+  {
+   "kind": "hotel",
+   "text": {
+    "latn": "Hotel Vihar Residency",
+    "deva": "होटल विहार रेज़िडेंसी"
+   },
+   "weight": 2
+  },
+  {
+   "kind": "hotel",
+   "text": {
+    "latn": "Hotel Raj Continental"
+   },
+   "weight": 2
+  },
+  {
+   "kind": "lodge",
+   "text": {
+    "latn": "Outer Circle Guest House",
+    "deva": "आउटर सर्कल गेस्ट हाउस"
+   },
+   "weight": 2
+  },
+  {
+   "kind": "restaurant",
+   "text": {
+    "latn": "Plaza Passage Kitchen"
+   },
+   "weight": 1
+  },
+  {
+   "kind": "restaurant",
+   "text": {
+    "latn": "Delhi Darbar Restaurant",
+    "deva": "दिल्ली दरबार रेस्टोरेंट"
+   },
+   "weight": 1
+  },
+  {
+   "kind": "restaurant",
+   "text": {
+    "latn": "Thali House",
+    "deva": "थाली हाउस"
+   },
+   "weight": 1
+  },
+  {
+   "kind": "restaurant",
+   "text": {
+    "latn": "South Spice Meals"
+   },
+   "weight": 1
+  },
+  {
+   "kind": "restaurant",
+   "text": {
+    "latn": "Chinese Wok Express"
+   },
+   "weight": 1
+  },
+  {
+   "kind": "restaurant",
+   "text": {
+    "latn": "Punjabi Rasoi",
+    "deva": "पंजाबी रसोई"
+   },
+   "weight": 1
+  },
+  {
+   "kind": "cafe",
+   "text": {
+    "latn": "Tower Terrace Cafe"
+   },
+   "weight": 1
+  },
+  {
+   "kind": "cafe",
+   "text": {
+    "latn": "Corner Chai Bar"
+   },
+   "weight": 1
+  },
+  {
+   "kind": "tea",
+   "text": {
+    "latn": "Footpath Chai Tapri",
+    "deva": "फ़ुटपाथ चाय टपरी"
+   },
+   "weight": 2
+  },
+  {
+   "kind": "bakery",
+   "text": {
+    "latn": "Fresh Crumb Bakery"
+   },
+   "weight": 1
+  },
+  {
+   "kind": "books",
+   "text": {
+    "latn": "Kitab Mahal",
+    "deva": "किताब महल"
+   },
+   "weight": 1
+  },
+  {
+   "kind": "books",
+   "text": {
+    "latn": "Standard Book Depot"
+   },
+   "weight": 1
+  },
+  {
+   "kind": "clothing",
+   "text": {
+    "latn": "Gents Readymade Centre"
+   },
+   "weight": 3
+  },
+  {
+   "kind": "clothing",
+   "text": {
+    "latn": "Silk and Cotton House"
+   },
+   "weight": 3
+  },
+  {
+   "kind": "clothing",
+   "text": {
+    "latn": "Style Street Fashions"
+   },
+   "weight": 3
+  },
+  {
+   "kind": "electronics",
+   "text": {
+    "latn": "Digital Zone Mobiles"
+   },
+   "weight": 1
+  },
+  {
+   "kind": "electronics",
+   "text": {
+    "latn": "Computer Point"
+   },
+   "weight": 1
+  },
+  {
+   "kind": "electronics",
+   "text": {
+    "latn": "Sound and Vision House"
+   },
+   "weight": 1
+  },
+  {
+   "kind": "electronics",
+   "text": {
+    "latn": "Laptop Repair Lab"
+   },
+   "weight": 1
+  },
+  {
+   "kind": "travel",
+   "text": {
+    "latn": "Wanderer Travel Agency"
+   },
+   "weight": 1
+  },
+  {
+   "kind": "travel",
+   "text": {
+    "latn": "Capital Cabs Booking"
+   },
+   "weight": 1
+  },
+  {
+   "kind": "travel",
+   "text": {
+    "latn": "Bus Tickets Counter",
+    "deva": "बस टिकट काउंटर"
+   },
+   "weight": 1
+  },
+  {
+   "kind": "coaching",
+   "text": {
+    "latn": "Civil Services Study Circle",
+    "deva": "सिविल सर्विसेज़ स्टडी सर्कल"
+   },
+   "weight": 1
+  },
+  {
+   "kind": "coaching",
+   "text": {
+    "latn": "Bank Clerk Exam Centre",
+    "deva": "बैंक क्लर्क परीक्षा केंद्र"
+   },
+   "weight": 1
+  },
+  {
+   "kind": "coaching",
+   "text": {
+    "latn": "English Speaking Course",
+    "deva": "इंग्लिश स्पीकिंग कोर्स"
+   },
+   "weight": 1
+  },
+  {
+   "kind": "coaching",
+   "text": {
+    "latn": "Excel Computer Institute"
+   },
+   "weight": 1
+  },
+  {
+   "kind": "clinic",
+   "text": {
+    "latn": "City Diagnostic Centre"
+   },
+   "weight": 1
+  },
+  {
+   "kind": "clinic",
+   "text": {
+    "latn": "Dr Bhatia Skin Clinic",
+    "deva": "डॉ भाटिया स्किन क्लिनिक"
+   },
+   "weight": 1
+  },
+  {
+   "kind": "clinic",
+   "text": {
+    "latn": "Smile Dental Studio"
+   },
+   "weight": 1
+  },
+  {
+   "kind": "pharmacy",
+   "text": {
+    "latn": "Day and Night Chemist",
+    "deva": "डे एंड नाइट केमिस्ट"
+   },
+   "weight": 1
+  },
+  {
+   "kind": "transport",
+   "text": {
+    "latn": "Barakhamba Road Bus Stop",
+    "deva": "बाराखंबा रोड बस स्टॉप"
+   },
+   "weight": 2
+  },
+  {
+   "kind": "transport",
+   "text": {
+    "latn": "Metro Station Entry",
+    "deva": "मेट्रो स्टेशन प्रवेश"
+   },
+   "weight": 2
+  },
+  {
+   "kind": "transport",
+   "text": {
+    "latn": "Pre-paid Auto Counter",
+    "deva": "प्रीपेड ऑटो काउंटर"
+   },
+   "weight": 2
+  },
+  {
+   "kind": "hoarding",
+   "text": {
+    "latn": "Weekend Sale Upto Half Price"
+   },
+   "weight": 1
+  },
+  {
+   "kind": "hoarding",
+   "text": {
+    "latn": "Your Next Home Awaits You"
+   },
+   "weight": 1
+  },
+  {
+   "kind": "hoarding",
+   "text": {
+    "latn": "Learn Faster, Earn Sooner"
+   },
+   "weight": 1
+  },
+  {
+   "kind": "hoarding",
+   "text": {
+    "latn": "Dilli Ka Dil, Nav Dilli Dal",
+    "deva": "दिल्ली का दिल, नव दिल्ली दल"
+   },
+   "weight": 1
+  },
+  {
+   "kind": "hoarding",
+   "text": {
+    "latn": "Jhatpat: Delivered Before You Blink",
+    "deva": "झटपट: पलक झपकते पहुँचे"
+   },
+   "weight": 1
+  },
+  {
+   "kind": "govt_board",
+   "text": {
+    "latn": "Works in Progress: Diversion Ahead",
+    "deva": "कार्य प्रगति पर: आगे मार्ग परिवर्तन"
+   },
+   "weight": 2
+  },
+  {
+   "kind": "govt_board",
+   "text": {
+    "latn": "No Parking: Tow Away Zone",
+    "deva": "पार्किंग निषेध: टो ज़ोन"
+   },
+   "weight": 2
+  },
+  {
+   "kind": "govt_board",
+   "text": {
+    "latn": "Kasturba Gandhi Marg",
+    "deva": "कस्तूरबा गांधी मार्ग"
+   },
+   "weight": 2
+  },
+  {
+   "kind": "govt_board",
+   "text": {
+    "latn": "Barakhamba Road",
+    "deva": "बाराखंबा रोड"
+   },
+   "weight": 2
+  },
+  {
+   "kind": "wall_writing",
+   "text": {
+    "latn": "Stick No Bills Here",
+    "deva": "यहाँ पोस्टर चिपकाना मना है"
+   },
+   "weight": 1
+  },
+  {
+   "kind": "wall_writing",
+   "text": {
+    "latn": "Space for Rent"
+   },
+   "weight": 1
+  },
+  {
+   "kind": "poster_line",
+   "text": {
+    "latn": "Dilli 2040: Metro Ring Plan",
+    "deva": "दिल्ली 2040: मेट्रो रिंग योजना"
+   },
+   "weight": 1
+  },
+  {
+   "kind": "poster_line",
+   "text": {
+    "latn": "Raat Wali 106.1: Drive Home Safe",
+    "deva": "रात वाली 106.1: सुरक्षित घर पहुँचें"
+   },
+   "weight": 1
+  },
+  {
+   "kind": "poster_line",
+   "text": {
+    "latn": "NewsTez 24: Breaking Every Minute",
+    "deva": "न्यूज़तेज़ 24: हर मिनट ख़बर"
+   },
+   "weight": 1
+  },
+  {
+   "kind": "poster_line",
+   "text": {
+    "latn": "Sethi Seva Trust Hospital Opening",
+    "deva": "सेठी सेवा ट्रस्ट अस्पताल उद्घाटन"
+   },
+   "weight": 1
+  }
+ ]
+}

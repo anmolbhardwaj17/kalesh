@@ -1,0 +1,544 @@
+{
+ "area": "paharganj_station",
+ "scripts": {
+  "latn": "Latin (always present, fallback font)",
+  "deva": "Devanagari (optional)",
+  "arab": "Urdu Nastaliq (optional)"
+ },
+ "names": [
+  {
+   "kind": "hotel",
+   "text": {
+    "latn": "Hotel Sunrise Paharganj",
+    "deva": "होटल सनराइज़ पहाड़गंज"
+   },
+   "weight": 2
+  },
+  {
+   "kind": "hotel",
+   "text": {
+    "latn": "Hotel Sagar Residency",
+    "deva": "होटल सागर रेज़िडेंसी"
+   },
+   "weight": 2
+  },
+  {
+   "kind": "hotel",
+   "text": {
+    "latn": "Hotel Krishna Palace",
+    "deva": "होटल कृष्णा पैलेस"
+   },
+   "weight": 2
+  },
+  {
+   "kind": "hotel",
+   "text": {
+    "latn": "Hotel Moonlight",
+    "deva": "होटल मूनलाइट"
+   },
+   "weight": 2
+  },
+  {
+   "kind": "hotel",
+   "text": {
+    "latn": "Hotel Raj Mahal Inn",
+    "deva": "होटल राज महल इन"
+   },
+   "weight": 2
+  },
+  {
+   "kind": "hotel",
+   "text": {
+    "latn": "Hotel Satkar",
+    "deva": "होटल सत्कार"
+   },
+   "weight": 2
+  },
+  {
+   "kind": "hotel",
+   "text": {
+    "latn": "Hotel Ganesh Villa",
+    "deva": "होटल गणेश विला"
+   },
+   "weight": 2
+  },
+  {
+   "kind": "lodge",
+   "text": {
+    "latn": "Station Road Lodge",
+    "deva": "स्टेशन रोड लॉज"
+   },
+   "weight": 2
+  },
+  {
+   "kind": "lodge",
+   "text": {
+    "latn": "Bhola Lodge",
+    "deva": "भोला लॉज"
+   },
+   "weight": 2
+  },
+  {
+   "kind": "lodge",
+   "text": {
+    "latn": "Backpackers Rest House"
+   },
+   "weight": 2
+  },
+  {
+   "kind": "lodge",
+   "text": {
+    "latn": "Main Bazaar Guest House",
+    "deva": "मेन बाज़ार गेस्ट हाउस"
+   },
+   "weight": 2
+  },
+  {
+   "kind": "lodge",
+   "text": {
+    "latn": "Rooftop Dormitory"
+   },
+   "weight": 2
+  },
+  {
+   "kind": "dharamshala",
+   "text": {
+    "latn": "Marwari Dharamshala",
+    "deva": "मारवाड़ी धर्मशाला"
+   },
+   "weight": 1
+  },
+  {
+   "kind": "dharamshala",
+   "text": {
+    "latn": "Yatri Niwas",
+    "deva": "यात्री निवास"
+   },
+   "weight": 1
+  },
+  {
+   "kind": "eatery",
+   "text": {
+    "latn": "Main Bazaar Thali House",
+    "deva": "मेन बाज़ार थाली हाउस"
+   },
+   "weight": 3
+  },
+  {
+   "kind": "eatery",
+   "text": {
+    "latn": "Chhole Bhature Station Road",
+    "deva": "छोले भटूरे स्टेशन रोड"
+   },
+   "weight": 3
+  },
+  {
+   "kind": "eatery",
+   "text": {
+    "latn": "Dosa Corner",
+    "deva": "डोसा कॉर्नर"
+   },
+   "weight": 3
+  },
+  {
+   "kind": "eatery",
+   "text": {
+    "latn": "Israeli Breakfast Cafe"
+   },
+   "weight": 3
+  },
+  {
+   "kind": "eatery",
+   "text": {
+    "latn": "Chowmein and Momos",
+    "deva": "चाउमीन और मोमोज़"
+   },
+   "weight": 3
+  },
+  {
+   "kind": "eatery",
+   "text": {
+    "latn": "Lassi Shop Paharganj",
+    "deva": "लस्सी शॉप पहाड़गंज"
+   },
+   "weight": 3
+  },
+  {
+   "kind": "eatery",
+   "text": {
+    "latn": "Rooftop Cafe Paharganj"
+   },
+   "weight": 3
+  },
+  {
+   "kind": "eatery",
+   "text": {
+    "latn": "Veg and Non-Veg Dhaba",
+    "deva": "वेज नॉन-वेज ढाबा"
+   },
+   "weight": 3
+  },
+  {
+   "kind": "tea",
+   "text": {
+    "latn": "Chai Wala Station Gate",
+    "deva": "चाय वाला स्टेशन गेट"
+   },
+   "weight": 2
+  },
+  {
+   "kind": "tea",
+   "text": {
+    "latn": "Masala Chai Tapri",
+    "deva": "मसाला चाय टपरी"
+   },
+   "weight": 2
+  },
+  {
+   "kind": "cart",
+   "text": {
+    "latn": "Fruit Juice Thela",
+    "deva": "फल जूस ठेला"
+   },
+   "weight": 2
+  },
+  {
+   "kind": "cart",
+   "text": {
+    "latn": "Kulcha Chole Cart",
+    "deva": "कुलचा छोले ठेला"
+   },
+   "weight": 2
+  },
+  {
+   "kind": "cart",
+   "text": {
+    "latn": "Peanut Seller",
+    "deva": "मूँगफली वाला"
+   },
+   "weight": 2
+  },
+  {
+   "kind": "cart",
+   "text": {
+    "latn": "Newspaper and Magazine Stall",
+    "deva": "अख़बार और पत्रिका स्टॉल"
+   },
+   "weight": 2
+  },
+  {
+   "kind": "cart",
+   "text": {
+    "latn": "Bhutta and Chana Cart",
+    "deva": "भुट्टा और चना ठेला"
+   },
+   "weight": 2
+  },
+  {
+   "kind": "cart",
+   "text": {
+    "latn": "Water Bottle Cart",
+    "deva": "पानी बोतल ठेला"
+   },
+   "weight": 2
+  },
+  {
+   "kind": "clothing",
+   "text": {
+    "latn": "Hippie Trousers and Tops"
+   },
+   "weight": 3
+  },
+  {
+   "kind": "clothing",
+   "text": {
+    "latn": "Cotton Bags Bazaar"
+   },
+   "weight": 3
+  },
+  {
+   "kind": "clothing",
+   "text": {
+    "latn": "Pashmina and Shawls",
+    "deva": "पश्मीना और शॉल"
+   },
+   "weight": 3
+  },
+  {
+   "kind": "clothing",
+   "text": {
+    "latn": "Paharganj Tailor Master",
+    "deva": "पहाड़गंज टेलर मास्टर"
+   },
+   "weight": 3
+  },
+  {
+   "kind": "clothing",
+   "text": {
+    "latn": "Tibetan Woollens"
+   },
+   "weight": 3
+  },
+  {
+   "kind": "handicraft",
+   "text": {
+    "latn": "Incense and Brass Shop"
+   },
+   "weight": 3
+  },
+  {
+   "kind": "handicraft",
+   "text": {
+    "latn": "Silver Rings and Beads"
+   },
+   "weight": 3
+  },
+  {
+   "kind": "handicraft",
+   "text": {
+    "latn": "Leather Bag House"
+   },
+   "weight": 3
+  },
+  {
+   "kind": "books",
+   "text": {
+    "latn": "Backpacker Book Exchange"
+   },
+   "weight": 1
+  },
+  {
+   "kind": "books",
+   "text": {
+    "latn": "Hindi English Book Stall",
+    "deva": "हिंदी इंग्लिश बुक स्टॉल"
+   },
+   "weight": 1
+  },
+  {
+   "kind": "travel",
+   "text": {
+    "latn": "Himalaya Tours and Travels"
+   },
+   "weight": 1
+  },
+  {
+   "kind": "travel",
+   "text": {
+    "latn": "Train Tickets Agent",
+    "deva": "ट्रेन टिकट एजेंट"
+   },
+   "weight": 1
+  },
+  {
+   "kind": "travel",
+   "text": {
+    "latn": "Taxi and Tour Booking"
+   },
+   "weight": 1
+  },
+  {
+   "kind": "travel",
+   "text": {
+    "latn": "Bus to Hills Counter"
+   },
+   "weight": 1
+  },
+  {
+   "kind": "travel",
+   "text": {
+    "latn": "Cheap Flights Desk"
+   },
+   "weight": 1
+  },
+  {
+   "kind": "transport",
+   "text": {
+    "latn": "Auto Stand New Delhi Station",
+    "deva": "ऑटो स्टैंड नई दिल्ली स्टेशन"
+   },
+   "weight": 2
+  },
+  {
+   "kind": "transport",
+   "text": {
+    "latn": "Prepaid Taxi Booth",
+    "deva": "प्रीपेड टैक्सी बूथ"
+   },
+   "weight": 2
+  },
+  {
+   "kind": "transport",
+   "text": {
+    "latn": "E-Rickshaw Stand Paharganj",
+    "deva": "ई-रिक्शा स्टैंड पहाड़गंज"
+   },
+   "weight": 2
+  },
+  {
+   "kind": "transport",
+   "text": {
+    "latn": "Metro New Delhi Exit",
+    "deva": "मेट्रो नई दिल्ली निकास"
+   },
+   "weight": 2
+  },
+  {
+   "kind": "transport",
+   "text": {
+    "latn": "Luggage Cloak Room",
+    "deva": "सामान घर"
+   },
+   "weight": 2
+  },
+  {
+   "kind": "transport",
+   "text": {
+    "latn": "Coolie Waiting Area",
+    "deva": "कुली प्रतीक्षा क्षेत्र"
+   },
+   "weight": 2
+  },
+  {
+   "kind": "office",
+   "text": {
+    "latn": "Paharganj Traders Association",
+    "deva": "पहाड़गंज ट्रेडर्स एसोसिएशन"
+   },
+   "weight": 2
+  },
+  {
+   "kind": "office",
+   "text": {
+    "latn": "Railway Police Post",
+    "deva": "रेलवे पुलिस चौकी"
+   },
+   "weight": 2
+  },
+  {
+   "kind": "office",
+   "text": {
+    "latn": "Currency Exchange Booth"
+   },
+   "weight": 2
+  },
+  {
+   "kind": "office",
+   "text": {
+    "latn": "Internet and Calling Booth",
+    "deva": "इंटरनेट और कॉलिंग बूथ"
+   },
+   "weight": 2
+  },
+  {
+   "kind": "clinic",
+   "text": {
+    "latn": "Dr Khanna Family Clinic",
+    "deva": "डॉ खन्ना फ़ैमिली क्लिनिक"
+   },
+   "weight": 1
+  },
+  {
+   "kind": "pharmacy",
+   "text": {
+    "latn": "Station Road Medical Hall",
+    "deva": "स्टेशन रोड मेडिकल हॉल"
+   },
+   "weight": 1
+  },
+  {
+   "kind": "coaching",
+   "text": {
+    "latn": "Railway Exam Coaching Point",
+    "deva": "रेलवे परीक्षा कोचिंग पॉइंट"
+   },
+   "weight": 1
+  },
+  {
+   "kind": "govt_board",
+   "text": {
+    "latn": "DB Gupta Road",
+    "deva": "डीबी गुप्ता रोड"
+   },
+   "weight": 2
+  },
+  {
+   "kind": "govt_board",
+   "text": {
+    "latn": "Main Bazaar Paharganj",
+    "deva": "मेन बाज़ार पहाड़गंज"
+   },
+   "weight": 2
+  },
+  {
+   "kind": "govt_board",
+   "text": {
+    "latn": "Platform This Way",
+    "deva": "प्लेटफ़ॉर्म इस ओर"
+   },
+   "weight": 2
+  },
+  {
+   "kind": "govt_board",
+   "text": {
+    "latn": "Beware of Pickpockets",
+    "deva": "जेबकतरों से सावधान"
+   },
+   "weight": 2
+  },
+  {
+   "kind": "wall_writing",
+   "text": {
+    "latn": "Welcome to Paharganj"
+   },
+   "weight": 1
+  },
+  {
+   "kind": "wall_writing",
+   "text": {
+    "latn": "Bargain With a Smile"
+   },
+   "weight": 1
+  },
+  {
+   "kind": "wall_writing",
+   "text": {
+    "latn": "Room Available Hot Water",
+    "deva": "कमरा उपलब्ध गर्म पानी"
+   },
+   "weight": 1
+  },
+  {
+   "kind": "poster_line",
+   "text": {
+    "latn": "Nav Dilli Dal: Naya Station Naya Dilli",
+    "deva": "नव दिल्ली दल: नया स्टेशन नया दिल्ली"
+   },
+   "weight": 1
+  },
+  {
+   "kind": "poster_line",
+   "text": {
+    "latn": "Dilli 2040: Station Redevelopment",
+    "deva": "दिल्ली 2040: स्टेशन पुनर्विकास"
+   },
+   "weight": 1
+  },
+  {
+   "kind": "poster_line",
+   "text": {
+    "latn": "Jhatpat: Deliveries at Your Lodge",
+    "deva": "झटपट: आपके लॉज पर डिलीवरी"
+   },
+   "weight": 1
+  },
+  {
+   "kind": "poster_line",
+   "text": {
+    "latn": "Raat Wali 106.1: Late Night Trains",
+    "deva": "रात वाली 106.1: देर रात की गाड़ियाँ"
+   },
+   "weight": 1
+  }
+ ]
+}

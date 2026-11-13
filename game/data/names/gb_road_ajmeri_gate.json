@@ -1,0 +1,578 @@
+{
+ "area": "gb_road_ajmeri_gate",
+ "scripts": {
+  "latn": "Latin (always present, fallback font)",
+  "deva": "Devanagari (optional)",
+  "arab": "Urdu Nastaliq (optional)"
+ },
+ "names": [
+  {
+   "kind": "hardware",
+   "text": {
+    "latn": "Shri Ram Hardware Store",
+    "deva": "श्री राम हार्डवेयर स्टोर"
+   },
+   "weight": 3
+  },
+  {
+   "kind": "hardware",
+   "text": {
+    "latn": "Jain Hardware and Paints",
+    "deva": "जैन हार्डवेयर एंड पेंट्स"
+   },
+   "weight": 3
+  },
+  {
+   "kind": "hardware",
+   "text": {
+    "latn": "Agrawal Nut Bolt Bhandar",
+    "deva": "अग्रवाल नट बोल्ट भंडार"
+   },
+   "weight": 3
+  },
+  {
+   "kind": "hardware",
+   "text": {
+    "latn": "Mahalaxmi Metals",
+    "deva": "महालक्ष्मी मेटल्स"
+   },
+   "weight": 3
+  },
+  {
+   "kind": "hardware",
+   "text": {
+    "latn": "Ajmeri Gate Hardware Traders",
+    "deva": "अजमेरी गेट हार्डवेयर ट्रेडर्स"
+   },
+   "weight": 3
+  },
+  {
+   "kind": "hardware",
+   "text": {
+    "latn": "Bansal Pipe and Fittings",
+    "deva": "बंसल पाइप एंड फ़िटिंग्स"
+   },
+   "weight": 3
+  },
+  {
+   "kind": "hardware",
+   "text": {
+    "latn": "Delhi Tool Centre",
+    "deva": "दिल्ली टूल सेंटर"
+   },
+   "weight": 3
+  },
+  {
+   "kind": "hardware",
+   "text": {
+    "latn": "Gupta Steel Furniture",
+    "deva": "गुप्ता स्टील फ़र्नीचर"
+   },
+   "weight": 3
+  },
+  {
+   "kind": "hardware",
+   "text": {
+    "latn": "Kumar Cement and Sanitary",
+    "deva": "कुमार सीमेंट एंड सैनिटरी"
+   },
+   "weight": 3
+  },
+  {
+   "kind": "hardware",
+   "text": {
+    "latn": "Rajesh Electricals",
+    "deva": "राजेश इलेक्ट्रिकल्स"
+   },
+   "weight": 3
+  },
+  {
+   "kind": "hardware",
+   "text": {
+    "latn": "Verma Locks and Hinges",
+    "deva": "वर्मा लॉक्स एंड हिंजेस"
+   },
+   "weight": 3
+  },
+  {
+   "kind": "hardware",
+   "text": {
+    "latn": "National Iron Mart",
+    "deva": "नेशनल आयरन मार्ट"
+   },
+   "weight": 3
+  },
+  {
+   "kind": "hardware",
+   "text": {
+    "latn": "Shiv Shakti Machinery",
+    "deva": "शिव शक्ति मशीनरी"
+   },
+   "weight": 3
+  },
+  {
+   "kind": "hardware",
+   "text": {
+    "latn": "Modern Pump House",
+    "deva": "मॉडर्न पंप हाउस"
+   },
+   "weight": 3
+  },
+  {
+   "kind": "hardware",
+   "text": {
+    "latn": "Bharat Wire and Cable",
+    "deva": "भारत वायर एंड केबल"
+   },
+   "weight": 3
+  },
+  {
+   "kind": "hardware",
+   "text": {
+    "latn": "Sai Paint and Brush",
+    "deva": "साई पेंट एंड ब्रश"
+   },
+   "weight": 3
+  },
+  {
+   "kind": "hardware",
+   "text": {
+    "latn": "Choudhary Tiles and Taps",
+    "deva": "चौधरी टाइल्स एंड टैप्स"
+   },
+   "weight": 3
+  },
+  {
+   "kind": "hardware",
+   "text": {
+    "latn": "Delhi Sheet Metal Works",
+    "deva": "दिल्ली शीट मेटल वर्क्स"
+   },
+   "weight": 3
+  },
+  {
+   "kind": "hardware",
+   "text": {
+    "latn": "Hindustani Brass Fittings",
+    "deva": "हिंदुस्तानी ब्रास फ़िटिंग्स"
+   },
+   "weight": 3
+  },
+  {
+   "kind": "hardware",
+   "text": {
+    "latn": "Mittal Auto Parts",
+    "deva": "मित्तल ऑटो पार्ट्स"
+   },
+   "weight": 3
+  },
+  {
+   "kind": "hardware",
+   "text": {
+    "latn": "Standard Gear and Bearing",
+    "deva": "स्टैंडर्ड गियर एंड बेयरिंग"
+   },
+   "weight": 3
+  },
+  {
+   "kind": "hardware",
+   "text": {
+    "latn": "Anand Glass and Plywood",
+    "deva": "आनंद ग्लास एंड प्लाईवुड"
+   },
+   "weight": 3
+  },
+  {
+   "kind": "hardware",
+   "text": {
+    "latn": "Navkar Tools",
+    "deva": "नवकार टूल्स"
+   },
+   "weight": 3
+  },
+  {
+   "kind": "hardware",
+   "text": {
+    "latn": "Pioneer Spare Parts",
+    "deva": "पायनियर स्पेयर पार्ट्स"
+   },
+   "weight": 3
+  },
+  {
+   "kind": "hardware",
+   "text": {
+    "latn": "Ajmeri Pipe Mart",
+    "deva": "अजमेरी पाइप मार्ट"
+   },
+   "weight": 3
+  },
+  {
+   "kind": "transport",
+   "text": {
+    "latn": "GB Road Tempo Stand",
+    "deva": "जीबी रोड टेम्पो स्टैंड"
+   },
+   "weight": 2
+  },
+  {
+   "kind": "transport",
+   "text": {
+    "latn": "Loading Point Number Three",
+    "deva": "लोडिंग पॉइंट नंबर तीन"
+   },
+   "weight": 2
+  },
+  {
+   "kind": "transport",
+   "text": {
+    "latn": "Handcart Thela Stand",
+    "deva": "हैंडकार्ट ठेला स्टैंड"
+   },
+   "weight": 2
+  },
+  {
+   "kind": "transport",
+   "text": {
+    "latn": "Truck Booking Office",
+    "deva": "ट्रक बुकिंग कार्यालय"
+   },
+   "weight": 2
+  },
+  {
+   "kind": "transport",
+   "text": {
+    "latn": "Delhi Gate Bus Stop",
+    "deva": "दिल्ली गेट बस स्टॉप"
+   },
+   "weight": 2
+  },
+  {
+   "kind": "transport",
+   "text": {
+    "latn": "Cycle Rickshaw Parking",
+    "deva": "साइकिल रिक्शा पार्किंग"
+   },
+   "weight": 2
+  },
+  {
+   "kind": "transport",
+   "text": {
+    "latn": "Station Forecourt Taxi Rank",
+    "deva": "स्टेशन फ़ोरकोर्ट टैक्सी रैंक"
+   },
+   "weight": 2
+  },
+  {
+   "kind": "transport",
+   "text": {
+    "latn": "Auto Stand Ajmeri Gate",
+    "deva": "ऑटो स्टैंड अजमेरी गेट"
+   },
+   "weight": 2
+  },
+  {
+   "kind": "office",
+   "text": {
+    "latn": "Ajmeri Gate Traders Association",
+    "deva": "अजमेरी गेट ट्रेडर्स एसोसिएशन"
+   },
+   "weight": 2
+  },
+  {
+   "kind": "office",
+   "text": {
+    "latn": "Commission Agents Office",
+    "deva": "कमीशन एजेंट कार्यालय"
+   },
+   "weight": 2
+  },
+  {
+   "kind": "office",
+   "text": {
+    "latn": "Accounts and Billing Desk",
+    "deva": "लेखा और बिलिंग डेस्क"
+   },
+   "weight": 2
+  },
+  {
+   "kind": "office",
+   "text": {
+    "latn": "Godown Number Nine",
+    "deva": "गोदाम नंबर नौ"
+   },
+   "weight": 2
+  },
+  {
+   "kind": "office",
+   "text": {
+    "latn": "Rajdhani Police Post Ajmeri Gate",
+    "deva": "राजधानी पुलिस चौकी अजमेरी गेट"
+   },
+   "weight": 2
+  },
+  {
+   "kind": "office",
+   "text": {
+    "latn": "Municipal Ward Office",
+    "deva": "नगर निगम वार्ड कार्यालय"
+   },
+   "weight": 2
+  },
+  {
+   "kind": "eatery",
+   "text": {
+    "latn": "Bhola Chhole Bhature",
+    "deva": "भोला छोले भटूरे"
+   },
+   "weight": 3
+  },
+  {
+   "kind": "eatery",
+   "text": {
+    "latn": "Truckers Dhaba",
+    "deva": "ट्रकर्स ढाबा"
+   },
+   "weight": 3
+  },
+  {
+   "kind": "eatery",
+   "text": {
+    "latn": "Dal Roti Counter",
+    "deva": "दाल रोटी काउंटर"
+   },
+   "weight": 3
+  },
+  {
+   "kind": "eatery",
+   "text": {
+    "latn": "Parantha Tiffin Wale",
+    "deva": "परांठा टिफ़िन वाले"
+   },
+   "weight": 3
+  },
+  {
+   "kind": "tea",
+   "text": {
+    "latn": "Gate Wali Chai",
+    "deva": "गेट वाली चाय"
+   },
+   "weight": 2
+  },
+  {
+   "kind": "tea",
+   "text": {
+    "latn": "Bhaiya Chai Tapri",
+    "deva": "भैया चाय टपरी"
+   },
+   "weight": 2
+  },
+  {
+   "kind": "tea",
+   "text": {
+    "latn": "Shutter Wala Chai",
+    "deva": "शटर वाला चाय"
+   },
+   "weight": 2
+  },
+  {
+   "kind": "cart",
+   "text": {
+    "latn": "Thela Samosa Wale",
+    "deva": "ठेला समोसा वाले"
+   },
+   "weight": 2
+  },
+  {
+   "kind": "cart",
+   "text": {
+    "latn": "Cut Fruit Cart",
+    "deva": "कटे फल ठेला"
+   },
+   "weight": 2
+  },
+  {
+   "kind": "cart",
+   "text": {
+    "latn": "Nimbu Soda Cart",
+    "deva": "नींबू सोडा ठेला"
+   },
+   "weight": 2
+  },
+  {
+   "kind": "cart",
+   "text": {
+    "latn": "Biscuit and Namkeen Stall",
+    "deva": "बिस्किट नमकीन स्टॉल"
+   },
+   "weight": 2
+  },
+  {
+   "kind": "repair",
+   "text": {
+    "latn": "Welding and Fabrication",
+    "deva": "वेल्डिंग और फ़ैब्रिकेशन"
+   },
+   "weight": 1
+  },
+  {
+   "kind": "repair",
+   "text": {
+    "latn": "Tyre Retreading Shop",
+    "deva": "टायर रिट्रेडिंग शॉप"
+   },
+   "weight": 1
+  },
+  {
+   "kind": "repair",
+   "text": {
+    "latn": "Gas Cylinder Repair",
+    "deva": "गैस सिलेंडर मरम्मत"
+   },
+   "weight": 1
+  },
+  {
+   "kind": "pharmacy",
+   "text": {
+    "latn": "GB Road Medical Store",
+    "deva": "जीबी रोड मेडिकल स्टोर"
+   },
+   "weight": 1
+  },
+  {
+   "kind": "clinic",
+   "text": {
+    "latn": "Dr Joshi Clinic",
+    "deva": "डॉ जोशी क्लिनिक"
+   },
+   "weight": 1
+  },
+  {
+   "kind": "clinic",
+   "text": {
+    "latn": "Free Health Check Camp",
+    "deva": "मुफ़्त स्वास्थ्य जाँच शिविर"
+   },
+   "weight": 1
+  },
+  {
+   "kind": "coaching",
+   "text": {
+    "latn": "Night School for Workers",
+    "deva": "कामगारों के लिए रात्रि विद्यालय"
+   },
+   "weight": 1
+  },
+  {
+   "kind": "coaching",
+   "text": {
+    "latn": "Computer and Typing Class",
+    "deva": "कंप्यूटर और टाइपिंग क्लास"
+   },
+   "weight": 1
+  },
+  {
+   "kind": "school",
+   "text": {
+    "latn": "Municipal Primary School",
+    "deva": "नगर निगम प्राथमिक विद्यालय"
+   },
+   "weight": 1
+  },
+  {
+   "kind": "govt_board",
+   "text": {
+    "latn": "Garstin Bastion Road",
+    "deva": "गारस्टिन बास्टियन रोड"
+   },
+   "weight": 2
+  },
+  {
+   "kind": "govt_board",
+   "text": {
+    "latn": "Ajmeri Gate",
+    "deva": "अजमेरी गेट"
+   },
+   "weight": 2
+  },
+  {
+   "kind": "govt_board",
+   "text": {
+    "latn": "Heavy Vehicles Loading 9 to 11",
+    "deva": "भारी वाहन लोडिंग नौ से ग्यारह"
+   },
+   "weight": 2
+  },
+  {
+   "kind": "govt_board",
+   "text": {
+    "latn": "Delhi Gate Metro This Way",
+    "deva": "दिल्ली गेट मेट्रो इस ओर"
+   },
+   "weight": 2
+  },
+  {
+   "kind": "wall_writing",
+   "text": {
+    "latn": "Maal Utarna Yahan Mana Hai",
+    "deva": "माल उतारना यहाँ मना है"
+   },
+   "weight": 1
+  },
+  {
+   "kind": "wall_writing",
+   "text": {
+    "latn": "Rate List Counter Par",
+    "deva": "रेट लिस्ट काउंटर पर"
+   },
+   "weight": 1
+  },
+  {
+   "kind": "wall_writing",
+   "text": {
+    "latn": "Udhaar Band Hai",
+    "deva": "उधार बंद है"
+   },
+   "weight": 1
+  },
+  {
+   "kind": "wall_writing",
+   "text": {
+    "latn": "Dhyan Se Kaam Karein",
+    "deva": "ध्यान से काम करें"
+   },
+   "weight": 1
+  },
+  {
+   "kind": "poster_line",
+   "text": {
+    "latn": "Sethi Seva Trust: Free Eye Camp",
+    "deva": "सेठी सेवा ट्रस्ट: मुफ़्त नेत्र शिविर"
+   },
+   "weight": 1
+  },
+  {
+   "kind": "poster_line",
+   "text": {
+    "latn": "Nav Dilli Dal: Vyapari Ke Saath",
+    "deva": "नव दिल्ली दल: व्यापारी के साथ"
+   },
+   "weight": 1
+  },
+  {
+   "kind": "poster_line",
+   "text": {
+    "latn": "Dilli 2040: Naye Godown Naya Bazaar",
+    "deva": "दिल्ली 2040: नए गोदाम नया बाज़ार"
+   },
+   "weight": 1
+  },
+  {
+   "kind": "poster_line",
+   "text": {
+    "latn": "Jhatpat: Hardware at Your Door",
+    "deva": "झटपट: हार्डवेयर आपके द्वार"
+   },
+   "weight": 1
+  }
+ ]
+}

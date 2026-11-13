@@ -1,0 +1,504 @@
+{
+ "area": "janpath",
+ "scripts": {
+  "latn": "Latin (always present, fallback font)",
+  "deva": "Devanagari (optional)",
+  "arab": "Urdu Nastaliq (optional)"
+ },
+ "names": [
+  {
+   "kind": "handicraft",
+   "text": {
+    "latn": "Tibetan Market Curio House",
+    "deva": "तिब्बती मार्केट क्यूरियो हाउस"
+   },
+   "weight": 3
+  },
+  {
+   "kind": "handicraft",
+   "text": {
+    "latn": "Himalayan Handicrafts"
+   },
+   "weight": 3
+  },
+  {
+   "kind": "handicraft",
+   "text": {
+    "latn": "Kashmir Carpet Emporium",
+    "deva": "कश्मीर कारपेट एम्पोरियम"
+   },
+   "weight": 3
+  },
+  {
+   "kind": "handicraft",
+   "text": {
+    "latn": "Silver Charm Jewellery"
+   },
+   "weight": 3
+  },
+  {
+   "kind": "handicraft",
+   "text": {
+    "latn": "Brass and Bell Gallery"
+   },
+   "weight": 3
+  },
+  {
+   "kind": "handicraft",
+   "text": {
+    "latn": "Rajasthani Mirror Work",
+    "deva": "राजस्थानी मिरर वर्क"
+   },
+   "weight": 3
+  },
+  {
+   "kind": "handicraft",
+   "text": {
+    "latn": "Jaipur Block Print House",
+    "deva": "जयपुर ब्लॉक प्रिंट हाउस"
+   },
+   "weight": 3
+  },
+  {
+   "kind": "handicraft",
+   "text": {
+    "latn": "Thangka Art Corner"
+   },
+   "weight": 3
+  },
+  {
+   "kind": "handicraft",
+   "text": {
+    "latn": "Incense and Candle Stall"
+   },
+   "weight": 3
+  },
+  {
+   "kind": "handicraft",
+   "text": {
+    "latn": "Wooden Toy Bazaar",
+    "deva": "लकड़ी खिलौना बाज़ार"
+   },
+   "weight": 3
+  },
+  {
+   "kind": "clothing",
+   "text": {
+    "latn": "Cotton Kurta Corner",
+    "deva": "कॉटन कुर्ता कॉर्नर"
+   },
+   "weight": 3
+  },
+  {
+   "kind": "clothing",
+   "text": {
+    "latn": "Rainbow Scarves and Stoles"
+   },
+   "weight": 3
+  },
+  {
+   "kind": "clothing",
+   "text": {
+    "latn": "Janpath Handloom House",
+    "deva": "जनपथ हैंडलूम हाउस"
+   },
+   "weight": 3
+  },
+  {
+   "kind": "clothing",
+   "text": {
+    "latn": "Gujarati Embroidery Bazaar",
+    "deva": "गुजराती कढ़ाई बाज़ार"
+   },
+   "weight": 3
+  },
+  {
+   "kind": "clothing",
+   "text": {
+    "latn": "Export Surplus Garments"
+   },
+   "weight": 3
+  },
+  {
+   "kind": "clothing",
+   "text": {
+    "latn": "Denim and Tees"
+   },
+   "weight": 3
+  },
+  {
+   "kind": "clothing",
+   "text": {
+    "latn": "Bag Bazaar"
+   },
+   "weight": 3
+  },
+  {
+   "kind": "shoes",
+   "text": {
+    "latn": "Jutti Junction",
+    "deva": "जूती जंक्शन"
+   },
+   "weight": 1
+  },
+  {
+   "kind": "shoes",
+   "text": {
+    "latn": "Kolhapuri Footwear"
+   },
+   "weight": 1
+  },
+  {
+   "kind": "bangles",
+   "text": {
+    "latn": "Glass Bangle Gallery"
+   },
+   "weight": 1
+  },
+  {
+   "kind": "jeweller",
+   "text": {
+    "latn": "Oxidised Silver Studio"
+   },
+   "weight": 1
+  },
+  {
+   "kind": "jeweller",
+   "text": {
+    "latn": "Beads and Stones Counter"
+   },
+   "weight": 1
+  },
+  {
+   "kind": "books",
+   "text": {
+    "latn": "Janpath Old Books"
+   },
+   "weight": 1
+  },
+  {
+   "kind": "books",
+   "text": {
+    "latn": "Second Hand Map Stall"
+   },
+   "weight": 1
+  },
+  {
+   "kind": "books",
+   "text": {
+    "latn": "Travel Guide Store"
+   },
+   "weight": 1
+  },
+  {
+   "kind": "eatery",
+   "text": {
+    "latn": "Momo Point",
+    "deva": "मोमो पॉइंट"
+   },
+   "weight": 3
+  },
+  {
+   "kind": "eatery",
+   "text": {
+    "latn": "Tibetan Thukpa Kitchen"
+   },
+   "weight": 3
+  },
+  {
+   "kind": "eatery",
+   "text": {
+    "latn": "Chowmein Corner",
+    "deva": "चाउमीन कॉर्नर"
+   },
+   "weight": 3
+  },
+  {
+   "kind": "eatery",
+   "text": {
+    "latn": "Chhole Kulche Wala",
+    "deva": "छोले कुल्चे वाला"
+   },
+   "weight": 3
+  },
+  {
+   "kind": "eatery",
+   "text": {
+    "latn": "Rajma Rice Counter",
+    "deva": "राजमा राइस काउंटर"
+   },
+   "weight": 3
+  },
+  {
+   "kind": "eatery",
+   "text": {
+    "latn": "Sandwich Stall"
+   },
+   "weight": 3
+  },
+  {
+   "kind": "tea",
+   "text": {
+    "latn": "Tapri Chai Janpath",
+    "deva": "टपरी चाय जनपथ"
+   },
+   "weight": 2
+  },
+  {
+   "kind": "cart",
+   "text": {
+    "latn": "Fresh Lime Soda Cart",
+    "deva": "ताज़ा नींबू सोडा"
+   },
+   "weight": 2
+  },
+  {
+   "kind": "cart",
+   "text": {
+    "latn": "Jhal Muri Cart"
+   },
+   "weight": 2
+  },
+  {
+   "kind": "cart",
+   "text": {
+    "latn": "Cold Coffee Trolley"
+   },
+   "weight": 2
+  },
+  {
+   "kind": "cart",
+   "text": {
+    "latn": "Peanut Roaster"
+   },
+   "weight": 2
+  },
+  {
+   "kind": "hotel",
+   "text": {
+    "latn": "Hotel Janpath Residency",
+    "deva": "होटल जनपथ रेज़िडेंसी"
+   },
+   "weight": 2
+  },
+  {
+   "kind": "hotel",
+   "text": {
+    "latn": "Hotel Palash View"
+   },
+   "weight": 2
+  },
+  {
+   "kind": "lodge",
+   "text": {
+    "latn": "Janpath Budget Lodge",
+    "deva": "जनपथ बजट लॉज"
+   },
+   "weight": 2
+  },
+  {
+   "kind": "office",
+   "text": {
+    "latn": "Janpath Market Traders Association",
+    "deva": "जनपथ मार्केट ट्रेडर्स एसोसिएशन"
+   },
+   "weight": 2
+  },
+  {
+   "kind": "office",
+   "text": {
+    "latn": "Handicrafts Cooperative Society",
+    "deva": "हस्तशिल्प सहकारी समिति"
+   },
+   "weight": 2
+  },
+  {
+   "kind": "office",
+   "text": {
+    "latn": "Tourist Information Booth",
+    "deva": "पर्यटक सूचना बूथ"
+   },
+   "weight": 2
+  },
+  {
+   "kind": "office",
+   "text": {
+    "latn": "State Crafts Emporium Office"
+   },
+   "weight": 2
+  },
+  {
+   "kind": "travel",
+   "text": {
+    "latn": "Sightseeing Tours Desk"
+   },
+   "weight": 1
+  },
+  {
+   "kind": "travel",
+   "text": {
+    "latn": "Taxi and Tours Janpath"
+   },
+   "weight": 1
+  },
+  {
+   "kind": "travel",
+   "text": {
+    "latn": "Airline Tickets Counter"
+   },
+   "weight": 1
+  },
+  {
+   "kind": "clinic",
+   "text": {
+    "latn": "Ayurveda Wellness Centre",
+    "deva": "आयुर्वेद वेलनेस सेंटर"
+   },
+   "weight": 1
+  },
+  {
+   "kind": "clinic",
+   "text": {
+    "latn": "Foot Massage Parlour"
+   },
+   "weight": 1
+  },
+  {
+   "kind": "pharmacy",
+   "text": {
+    "latn": "Janpath Chemists",
+    "deva": "जनपथ केमिस्ट"
+   },
+   "weight": 1
+  },
+  {
+   "kind": "coaching",
+   "text": {
+    "latn": "Language Learning Studio"
+   },
+   "weight": 1
+  },
+  {
+   "kind": "coaching",
+   "text": {
+    "latn": "Yoga Teacher Course",
+    "deva": "योग शिक्षक कोर्स"
+   },
+   "weight": 1
+  },
+  {
+   "kind": "transport",
+   "text": {
+    "latn": "Auto Stand Janpath",
+    "deva": "ऑटो स्टैंड जनपथ"
+   },
+   "weight": 2
+  },
+  {
+   "kind": "transport",
+   "text": {
+    "latn": "Metro Janpath Entry"
+   },
+   "weight": 2
+  },
+  {
+   "kind": "transport",
+   "text": {
+    "latn": "Cycle Rickshaw Tours"
+   },
+   "weight": 2
+  },
+  {
+   "kind": "govt_board",
+   "text": {
+    "latn": "Janpath Marg",
+    "deva": "जनपथ मार्ग"
+   },
+   "weight": 2
+  },
+  {
+   "kind": "govt_board",
+   "text": {
+    "latn": "Janpath Market Parking",
+    "deva": "जनपथ मार्केट पार्किंग"
+   },
+   "weight": 2
+  },
+  {
+   "kind": "govt_board",
+   "text": {
+    "latn": "Pedestrian Underpass Ahead",
+    "deva": "आगे पैदल सुरंग"
+   },
+   "weight": 2
+  },
+  {
+   "kind": "govt_board",
+   "text": {
+    "latn": "Mind the Step"
+   },
+   "weight": 2
+  },
+  {
+   "kind": "wall_writing",
+   "text": {
+    "latn": "Fixed Price Shop No Bargain"
+   },
+   "weight": 1
+  },
+  {
+   "kind": "wall_writing",
+   "text": {
+    "latn": "Bargain Welcome Here"
+   },
+   "weight": 1
+  },
+  {
+   "kind": "wall_writing",
+   "text": {
+    "latn": "Made in India Handmade Here",
+    "deva": "यहाँ हस्तनिर्मित भारतीय वस्तुएँ"
+   },
+   "weight": 1
+  },
+  {
+   "kind": "wall_writing",
+   "text": {
+    "latn": "Welcom to Janpath"
+   },
+   "weight": 1
+  },
+  {
+   "kind": "poster_line",
+   "text": {
+    "latn": "Dilli Ka Dil, Nav Dilli Dal",
+    "deva": "दिल्ली का दिल, नव दिल्ली दल"
+   },
+   "weight": 1
+  },
+  {
+   "kind": "poster_line",
+   "text": {
+    "latn": "Dilli 2040: A Cleaner Janpath",
+    "deva": "दिल्ली 2040: साफ़ जनपथ"
+   },
+   "weight": 1
+  },
+  {
+   "kind": "poster_line",
+   "text": {
+    "latn": "Jhatpat: Gifts in Ten Minutes",
+    "deva": "झटपट: उपहार दस मिनट में"
+   },
+   "weight": 1
+  },
+  {
+   "kind": "poster_line",
+   "text": {
+    "latn": "NewsTez 24 Tourist Special",
+    "deva": "न्यूज़तेज़ 24 पर्यटक विशेष"
+   },
+   "weight": 1
+  }
+ ]
+}

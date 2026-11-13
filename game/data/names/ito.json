@@ -1,0 +1,522 @@
+{
+ "area": "ito",
+ "scripts": {
+  "latn": "Latin (always present, fallback font)",
+  "deva": "Devanagari (optional)",
+  "arab": "Urdu Nastaliq (optional)"
+ },
+ "names": [
+  {
+   "kind": "govt_board",
+   "text": {
+    "latn": "Mandi House Metro Station",
+    "deva": "मंडी हाउस मेट्रो स्टेशन",
+    "arab": "منڈی ہاؤس میٹرو اسٹیشن"
+   },
+   "weight": 2
+  },
+  {
+   "kind": "govt_board",
+   "text": {
+    "latn": "Bahadur Shah Zafar Marg",
+    "deva": "बहादुर शाह ज़फ़र मार्ग",
+    "arab": "بہادر شاہ ظفر مارگ"
+   },
+   "weight": 2
+  },
+  {
+   "kind": "govt_board",
+   "text": {
+    "latn": "Vikas Marg",
+    "deva": "विकास मार्ग"
+   },
+   "weight": 2
+  },
+  {
+   "kind": "govt_board",
+   "text": {
+    "latn": "Pedestrian Underpass This Way",
+    "deva": "पैदल सुरंग इस ओर"
+   },
+   "weight": 2
+  },
+  {
+   "kind": "govt_board",
+   "text": {
+    "latn": "No Right Turn",
+    "deva": "दाएँ मुड़ना मना है"
+   },
+   "weight": 2
+  },
+  {
+   "kind": "govt_board",
+   "text": {
+    "latn": "Speed Limit Fifty",
+    "deva": "गति सीमा पचास"
+   },
+   "weight": 2
+  },
+  {
+   "kind": "govt_board",
+   "text": {
+    "latn": "Bus Stop Ito",
+    "deva": "बस स्टॉप आईटीओ"
+   },
+   "weight": 2
+  },
+  {
+   "kind": "govt_board",
+   "text": {
+    "latn": "Flyover Ahead Keep Left",
+    "deva": "आगे फ़्लाईओवर बाएँ रहें"
+   },
+   "weight": 2
+  },
+  {
+   "kind": "govt_board",
+   "text": {
+    "latn": "Traffic Police Booth",
+    "deva": "ट्रैफ़िक पुलिस बूथ"
+   },
+   "weight": 2
+  },
+  {
+   "kind": "govt_board",
+   "text": {
+    "latn": "Emergency Number One One Two",
+    "deva": "आपातकालीन नंबर एक एक दो"
+   },
+   "weight": 2
+  },
+  {
+   "kind": "office",
+   "text": {
+    "latn": "Delhi Revenue Bhawan",
+    "deva": "दिल्ली राजस्व भवन"
+   },
+   "weight": 2
+  },
+  {
+   "kind": "office",
+   "text": {
+    "latn": "Municipal Engineers Office",
+    "deva": "नगर अभियंता कार्यालय"
+   },
+   "weight": 2
+  },
+  {
+   "kind": "office",
+   "text": {
+    "latn": "Press Enclave Annexe",
+    "deva": "प्रेस एन्क्लेव एनेक्स"
+   },
+   "weight": 2
+  },
+  {
+   "kind": "office",
+   "text": {
+    "latn": "Metro Rail Office Block"
+   },
+   "weight": 2
+  },
+  {
+   "kind": "office",
+   "text": {
+    "latn": "Pension Disbursement Counter",
+    "deva": "पेंशन वितरण काउंटर"
+   },
+   "weight": 2
+  },
+  {
+   "kind": "office",
+   "text": {
+    "latn": "Water Board Complaint Cell",
+    "deva": "जल बोर्ड शिकायत प्रकोष्ठ"
+   },
+   "weight": 2
+  },
+  {
+   "kind": "office",
+   "text": {
+    "latn": "Land Records Branch",
+    "deva": "भूमि अभिलेख शाखा"
+   },
+   "weight": 2
+  },
+  {
+   "kind": "newsroom",
+   "text": {
+    "latn": "NewsTez 24 Studio Tower",
+    "deva": "न्यूज़तेज़ 24 स्टूडियो टावर"
+   },
+   "weight": 1
+  },
+  {
+   "kind": "newsroom",
+   "text": {
+    "latn": "Footpath News Bureau",
+    "deva": "फ़ुटपाथ न्यूज़ ब्यूरो"
+   },
+   "weight": 1
+  },
+  {
+   "kind": "newsroom",
+   "text": {
+    "latn": "Daily Rajkaaj Newspaper",
+    "deva": "दैनिक राजकाज"
+   },
+   "weight": 1
+  },
+  {
+   "kind": "newsroom",
+   "text": {
+    "latn": "Evening Dilli Times",
+    "deva": "ईवनिंग दिल्ली टाइम्स"
+   },
+   "weight": 1
+  },
+  {
+   "kind": "newsroom",
+   "text": {
+    "latn": "Press Club Canteen",
+    "deva": "प्रेस क्लब कैंटीन"
+   },
+   "weight": 1
+  },
+  {
+   "kind": "theatre",
+   "text": {
+    "latn": "Rang Manch Auditorium",
+    "deva": "रंगमंच सभागार"
+   },
+   "weight": 1
+  },
+  {
+   "kind": "theatre",
+   "text": {
+    "latn": "Kala Bhavan Hall",
+    "deva": "कला भवन हॉल"
+   },
+   "weight": 1
+  },
+  {
+   "kind": "theatre",
+   "text": {
+    "latn": "Natya Kendra",
+    "deva": "नाट्य केंद्र"
+   },
+   "weight": 1
+  },
+  {
+   "kind": "theatre",
+   "text": {
+    "latn": "Sangeet Sabha Hall",
+    "deva": "संगीत सभा हॉल"
+   },
+   "weight": 1
+  },
+  {
+   "kind": "tea",
+   "text": {
+    "latn": "Mandi House Chai Adda",
+    "deva": "मंडी हाउस चाय अड्डा"
+   },
+   "weight": 2
+  },
+  {
+   "kind": "tea",
+   "text": {
+    "latn": "Rangkarmi Tea Stall",
+    "deva": "रंगकर्मी चाय स्टॉल"
+   },
+   "weight": 2
+  },
+  {
+   "kind": "tea",
+   "text": {
+    "latn": "Press Wale Chacha Chai",
+    "deva": "प्रेस वाले चाचा चाय"
+   },
+   "weight": 2
+  },
+  {
+   "kind": "eatery",
+   "text": {
+    "latn": "Office Tiffin Service",
+    "deva": "ऑफ़िस टिफ़िन सर्विस"
+   },
+   "weight": 3
+  },
+  {
+   "kind": "eatery",
+   "text": {
+    "latn": "Rajma Chawal Counter",
+    "deva": "राजमा चावल काउंटर"
+   },
+   "weight": 3
+  },
+  {
+   "kind": "eatery",
+   "text": {
+    "latn": "Chhole Bhature Wala",
+    "deva": "छोले भटूरे वाला"
+   },
+   "weight": 3
+  },
+  {
+   "kind": "eatery",
+   "text": {
+    "latn": "South Indian Canteen",
+    "deva": "साउथ इंडियन कैंटीन"
+   },
+   "weight": 3
+  },
+  {
+   "kind": "eatery",
+   "text": {
+    "latn": "Samosa Junction",
+    "deva": "समोसा जंक्शन"
+   },
+   "weight": 3
+  },
+  {
+   "kind": "eatery",
+   "text": {
+    "latn": "Ito Highway Dhaba",
+    "deva": "आईटीओ हाईवे ढाबा"
+   },
+   "weight": 3
+  },
+  {
+   "kind": "cart",
+   "text": {
+    "latn": "Fresh Juice Cart",
+    "deva": "ताज़ा जूस ठेला"
+   },
+   "weight": 2
+  },
+  {
+   "kind": "cart",
+   "text": {
+    "latn": "Bhutta Wala",
+    "deva": "भुट्टा वाला"
+   },
+   "weight": 2
+  },
+  {
+   "kind": "cart",
+   "text": {
+    "latn": "Cut Fruit Thela",
+    "deva": "कटे फल ठेला"
+   },
+   "weight": 2
+  },
+  {
+   "kind": "cart",
+   "text": {
+    "latn": "Chana Kulcha Cart",
+    "deva": "चना कुलचा ठेला"
+   },
+   "weight": 2
+  },
+  {
+   "kind": "cart",
+   "text": {
+    "latn": "Water Bottle Seller",
+    "deva": "पानी बोतल विक्रेता"
+   },
+   "weight": 2
+  },
+  {
+   "kind": "books",
+   "text": {
+    "latn": "Natak Kitab Ghar",
+    "deva": "नाटक किताब घर"
+   },
+   "weight": 1
+  },
+  {
+   "kind": "books",
+   "text": {
+    "latn": "Press Stationers",
+    "deva": "प्रेस स्टेशनर्स"
+   },
+   "weight": 1
+  },
+  {
+   "kind": "photo",
+   "text": {
+    "latn": "Photostat and Lamination",
+    "deva": "फ़ोटोस्टेट और लैमिनेशन"
+   },
+   "weight": 1
+  },
+  {
+   "kind": "photo",
+   "text": {
+    "latn": "Passport Photo Studio",
+    "deva": "पासपोर्ट फ़ोटो स्टूडियो"
+   },
+   "weight": 1
+  },
+  {
+   "kind": "repair",
+   "text": {
+    "latn": "Tyre Puncture Point",
+    "deva": "टायर पंचर पॉइंट"
+   },
+   "weight": 1
+  },
+  {
+   "kind": "repair",
+   "text": {
+    "latn": "Auto Spare Parts Corner",
+    "deva": "ऑटो स्पेयर पार्ट्स कॉर्नर"
+   },
+   "weight": 1
+  },
+  {
+   "kind": "transport",
+   "text": {
+    "latn": "E-Rickshaw Stand Mandi House",
+    "deva": "ई-रिक्शा स्टैंड मंडी हाउस"
+   },
+   "weight": 2
+  },
+  {
+   "kind": "transport",
+   "text": {
+    "latn": "Auto Stand Ito",
+    "deva": "ऑटो स्टैंड आईटीओ"
+   },
+   "weight": 2
+  },
+  {
+   "kind": "transport",
+   "text": {
+    "latn": "Cluster Bus Terminus",
+    "deva": "क्लस्टर बस टर्मिनस"
+   },
+   "weight": 2
+  },
+  {
+   "kind": "transport",
+   "text": {
+    "latn": "Cab Waiting Bay"
+   },
+   "weight": 2
+  },
+  {
+   "kind": "clinic",
+   "text": {
+    "latn": "Government Dispensary",
+    "deva": "सरकारी औषधालय"
+   },
+   "weight": 1
+  },
+  {
+   "kind": "clinic",
+   "text": {
+    "latn": "Dr Saxena Physiotherapy",
+    "deva": "डॉ सक्सेना फ़िज़ियोथेरेपी"
+   },
+   "weight": 1
+  },
+  {
+   "kind": "pharmacy",
+   "text": {
+    "latn": "Press Chemist",
+    "deva": "प्रेस केमिस्ट"
+   },
+   "weight": 1
+  },
+  {
+   "kind": "coaching",
+   "text": {
+    "latn": "Drama School Admissions",
+    "deva": "ड्रामा स्कूल प्रवेश"
+   },
+   "weight": 1
+  },
+  {
+   "kind": "coaching",
+   "text": {
+    "latn": "Journalism Crash Course",
+    "deva": "पत्रकारिता क्रैश कोर्स"
+   },
+   "weight": 1
+  },
+  {
+   "kind": "hoarding",
+   "text": {
+    "latn": "Dilli 2040: Faster Roads, Cleaner Air",
+    "deva": "दिल्ली 2040: तेज़ सड़कें, साफ़ हवा"
+   },
+   "weight": 1
+  },
+  {
+   "kind": "hoarding",
+   "text": {
+    "latn": "Dilli Ka Dil, Nav Dilli Dal",
+    "deva": "दिल्ली का दिल, नव दिल्ली दल"
+   },
+   "weight": 1
+  },
+  {
+   "kind": "hoarding",
+   "text": {
+    "latn": "Jhatpat: Rider Jobs Open Today",
+    "deva": "झटपट: राइडर की नौकरी आज"
+   },
+   "weight": 1
+  },
+  {
+   "kind": "hoarding",
+   "text": {
+    "latn": "Raat Wali 106.1: Chai Aur Gaane",
+    "deva": "रात वाली 106.1: चाय और गाने"
+   },
+   "weight": 1
+  },
+  {
+   "kind": "wall_writing",
+   "text": {
+    "latn": "Mural: Rangon Mein Dilli",
+    "deva": "भित्तिचित्र: रंगों में दिल्ली"
+   },
+   "weight": 1
+  },
+  {
+   "kind": "wall_writing",
+   "text": {
+    "latn": "Please Use the Underpass",
+    "deva": "कृपया सुरंग का उपयोग करें"
+   },
+   "weight": 1
+  },
+  {
+   "kind": "poster_line",
+   "text": {
+    "latn": "Sethi Seva Trust: Heart Camp",
+    "deva": "सेठी सेवा ट्रस्ट: हृदय शिविर"
+   },
+   "weight": 1
+  },
+  {
+   "kind": "poster_line",
+   "text": {
+    "latn": "Nav Dilli Dal Janta Sabha",
+    "deva": "नव दिल्ली दल जनता सभा"
+   },
+   "weight": 1
+  },
+  {
+   "kind": "poster_line",
+   "text": {
+    "latn": "Shaam Ko Natak, Sabko Aana",
+    "deva": "शाम को नाटक, सबको आना"
+   },
+   "weight": 1
+  }
+ ]
+}

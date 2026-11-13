@@ -393,3 +393,6 @@ What degrades: only slow motion. Position is quantised to the float grid each ti
 
 ## 2026-11-13 Main lane runs ahead on P2 research while the map lane finishes P1
 The only open P1 tasks are map tasks (P1-046 running, P1-032, P1-034, P1-037), which belong to the map lane and all touch tools/bake. Decision: the main lane takes P2-033 (Delhi infrastructure references, research and docs only, no code) now instead of idling, then the P1 gate runs when the map lane is done. Why: no file overlap, and the references are needed by several P2 tasks.
+
+## 2026-11-13 Invented sign names (P2-003)
+Names per pilot area in game/data/names/: Latin always, Devanagari on most, Urdu only where the sheets show it. GB Road names are hardware, transport and services only. Posters use only the invented names of STORY_OUTLINE section 13. Real street names are allowed on official street boards. A test blocks about 190 real brands, chains, parties and people. Respect sample of 40 read by the orchestrator: no breach.
