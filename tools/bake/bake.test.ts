@@ -3,8 +3,6 @@ import { geoToWorld, ORIGIN, projector, worldToGeo } from '../geo/projection';
 import { coveredShare, footprint, footprintStats, mergeFootprints, osmTagLoss } from './buildings';
 import { diffStats, fitGround, profileStats, sampleGrid } from './ground';
 import type { GroundSample } from './ground';
-import { distanceStats, haversine, joinLandmarks, osmLandmarks } from './landmarks';
-import type { WikidataItem } from './landmarks';
 import { tagCoverage } from './osm';
 import { Sketch } from './testmap';
 import { buildTile, tileOf, tileStats } from './tile/standin';
@@ -164,34 +162,5 @@ describe('tiles', () => {
     const json = JSON.parse(String.fromCharCode(...glb.subarray(20, 20 + jsonLen)));
     expect(json.meshes).toHaveLength(tile.meshes.length + tile.colliders.length);
     expect(view.getUint32(20 + jsonLen, true)).toBe(json.buffers[0].byteLength);
-  });
-});
-
-describe('landmark join (LM1)', () => {
-  const wd = (qid: string, label: string, lat: number, lon: number, sitelinks: number, asi: string | null = null): WikidataItem => ({ qid, label, labelHi: null, lat, lon, sitelinks, asi, inception: null, heightM: null, instanceOf: [], heritage: [], commons: null });
-  it('joins on the wikidata tag, flags name matches and far coordinates, and proposes tiers', () => {
-    const s = new Sketch();
-    const ring = (x: number, n: number, tags: Record<string, string>) => {
-      const ids = [s.node(x, n), s.node(x + 0.001, n), s.node(x + 0.001, n + 0.001), s.node(x, n + 0.001)];
-      s.way([...ids, ids[0]!], tags);
-    };
-    ring(77.2295, 28.6129, { historic: 'memorial', name: 'India Gate', wikidata: 'Q1' });
-    ring(77.24, 28.656, { historic: 'fort', name: 'Old Fort Wall' });
-    s.node(77.21, 28.63, { tourism: 'museum', name: 'Small Museum', wikidata: 'Q3' });
-    s.node(77.2, 28.6, { amenity: 'cafe', name: 'Cafe' });
-    const osm = osmLandmarks(s.elements);
-    expect(osm.map((o) => o.name).sort()).toEqual(['India Gate', 'Old Fort Wall', 'Small Museum']);
-    const items = [wd('Q1', 'India Gate', 28.6134, 77.23, 80), wd('Q2', 'Old Fort Wall', 28.6565, 77.2405, 3, 'N-DL-1'), wd('Q3', 'Small Museum', 28.631, 77.21, 1), wd('Q4', 'Lost Tomb', 28.62, 77.22, 2, 'N-DL-2')];
-    const c = joinLandmarks(osm, items, { heroes: ['India Gate'], signatures: [], nameRadius: 150 });
-    expect(c.map((x) => [x.name, x.match, x.tier])).toEqual([
-      ['India Gate', 'wikidata_tag', 'hero'], ['Old Fort Wall', 'name_distance', 'signature'], ['Lost Tomb', 'none', 'marker'], ['Small Museum', 'wikidata_tag', 'marker'],
-    ]);
-    expect(c[1]!.flags).toContain('fallback_name_match');
-    expect(c[3]!.flags).toContain('osm_wikidata_over_50m');
-    expect(c[0]!.hasFootprint).toBe(true);
-    const d = distanceStats(c);
-    expect(d.n).toBe(3);
-    expect(d.over50).toBe(1);
-    expect(haversine(28.6, 77.2, 28.601, 77.2)).toBeCloseTo(111.2, 0);
   });
 });

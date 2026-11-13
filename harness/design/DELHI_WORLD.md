@@ -153,6 +153,13 @@ Signed storage (LS2, section 10): one file per hero and signature landmark in `h
 
 (Values in the example are illustrative and not checked. The registry build fills real ones.)
 
+Built in P2-005 (`npm run landmarks`, code `tools/bake/landmarks/`). What the build added to the storage above:
+- `harness/data/landmark_list.json` is the owner list: one line per landmark Anmol named, claimed by its Wikidata id and its OSM id, never by its name. Its tier wins over the score; an edit in `landmarks.overrides.json` wins over the list.
+- A landmark file is generated. Nobody edits it by hand: a hand fact (a height read from a reference, a checked position, a footprint read from a photo or satellite view in place of the OSM shape) is an edit in `landmarks.overrides.json` with its evidence line, and the build lays it on top.
+- Extra fields on every entry: `match` (how OSM and Wikidata were joined), `evidence` (one line naming the source ids), `position` and `height_evidence` (where the number comes from), `agreement` (metres from the OSM centre to the Wikidata point, and whether the point lies inside the footprint), `flags`, `place` (`ok`, `held` until an edit settles a source disagreement, `unplaced` when there is no OSM object), `area` (the area profile id, or the archetype of the 100 m rule cell), `worship` with `combat_arena: false` on every place of worship (section 3), `underground` with `shell: "none"` on underground structures, `station` with its style, and `infrastructure` with the kit variant id of `harness/design/reference/infrastructure/variant_map.json` for a station or an underground feature (joined by OSM id).
+- `far` is true for an owner list landmark outside the outline of the baked stage. It carries its real `bearing_deg` and `distance_m` from the block pivot and `block_planned`, the block it will stand in once that block is baked. Other candidates outside the outline wait for their stage.
+- The registry writes its issues to `harness/reports/map/landmarks/issues.json` in the issue record format of `MAP_REPAIR.md`: rule `R-LM-01` (the sources disagree by more than 50 m) and `R-LM-02` (joined by name and distance). They are kept apart from the road issues until the inspector has its landmark view (step 4), because a pick there must write `landmarks.overrides.json`, not a road patch.
+
 ### Tiers
 
 | Tier | What the player sees | Built how | Count (estimate) |

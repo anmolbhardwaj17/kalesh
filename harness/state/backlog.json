@@ -1,6 +1,6 @@
 {
   "_doc": "Written only by node harness/bin/task.mjs. Phases run in order; P0 (ADOPT + STYLE DISCOVERY) waits for the owner by design and needs task.mjs signoff and task.mjs archsignoff before its gate passes. Later phases are added by the planner at the end of P0 (task.mjs phase-add) from the game's real state.",
-  "updated": "2026-11-13T17:21:07.291Z",
+  "updated": "2026-11-13T18:12:29.963Z",
   "phases": [
     {
       "id": "P0",
@@ -2343,11 +2343,15 @@
       "agent": "builder",
       "priority": 3,
       "kind": "feature",
-      "status": "todo",
-      "attempts": 0,
+      "status": "done",
+      "attempts": 1,
       "notes": [],
       "created": "2026-11-11T12:31:54.058Z",
-      "model": "fable"
+      "model": "fable",
+      "started": "2026-11-13T17:21:35.223Z",
+      "done": "2026-11-13T18:12:29.941Z",
+      "summary": "tools/bake/landmarks/ (registry, OSM and Wikidata joins by id, tier score, schema), npm run landmarks: 332 entries (3 heroes, 41 signatures, 288 markers, 5 far with real bearings), hash stable twice. Heroes CP circle 11.5 m, India Gate 42 m, Red Fort 33 m, Jama Masjid 41 m signature, positions 0 to 0.1 m from the OSM footprint centre, cited. 7 name matches flagged, 20 source disagreements held in the registry issues file. Owner list over score, edits over both (tests). 88 places of worship all combat_arena false. Verified: typecheck, 945 vitest and 120 Godot tests, quick 12/12 OK; registry map read and kept.",
+      "commit": "64d7a71"
     },
     {
       "id": "P2-006",
@@ -2370,7 +2374,9 @@
       "kind": "feature",
       "status": "todo",
       "attempts": 0,
-      "notes": [],
+      "notes": [
+        "From P2-005: fill orientation and front per landmark (nothing read yet); 21 signatures lack a hand height (registry.json heightsMissing, 9 stations); 20 held entries need a position check (13 stations 50 to 180 m apart between OSM node and Wikidata); far landmarks have Wikidata positions only; OSM errors: Diwan-e-Khaas carries the Agra item's id, 3 ASI items on a shared default coordinate in CP."
+      ],
       "created": "2026-11-11T12:31:54.058Z",
       "model": "fable"
     },
@@ -2626,7 +2632,8 @@
       "status": "todo",
       "attempts": 0,
       "notes": [
-        "Anmol 2026-11-13: write an authored road blueprint (cross section per stretch: carriageway, median width and type, footpaths, service lanes) from reference photos; OSM is only the starting point; delete OSM ways that are wrong as patches with reasons. Acceptance adds a photo and game side by side."
+        "Anmol 2026-11-13: write an authored road blueprint (cross section per stretch: carriageway, median width and type, footpaths, service lanes) from reference photos; OSM is only the starting point; delete OSM ways that are wrong as patches with reasons. Acceptance adds a photo and game side by side.",
+        "From P1-046: Kartavya Path east of the hexagon is a thin pedestrian way in OSM but about 14 m of paving to India Gate on satellite: widen it in the hero road blueprint."
       ],
       "created": "2026-11-11T12:31:54.059Z",
       "model": "opus"
@@ -2675,7 +2682,9 @@
       "kind": "feature",
       "status": "todo",
       "attempts": 0,
-      "notes": [],
+      "notes": [
+        "From P2-005: the landmark view reads harness/reports/map/landmarks/issues.json and writes harness/data/landmarks.overrides.json (kept apart from road patches); bake health.json should carry the registry summary."
+      ],
       "created": "2026-11-11T12:31:54.059Z"
     },
     {
@@ -3404,12 +3413,13 @@
       "agent": "builder",
       "priority": 3,
       "kind": "feature",
-      "status": "todo",
-      "attempts": 0,
+      "status": "doing",
+      "attempts": 1,
       "notes": [
         "Anmol 2026-11-13 (MAP_REPAIR.md 'OSM is the starting point'): median and divider widths come from photos and satellite where OSM is wrong, not from OSM defaults; remove wrong OSM features as patches with a reason."
       ],
-      "created": "2026-11-11T19:46:43.977Z"
+      "created": "2026-11-11T19:46:43.977Z",
+      "started": "2026-11-13T17:54:44.909Z"
     },
     {
       "id": "P1-033",
@@ -3456,7 +3466,8 @@
       "status": "todo",
       "attempts": 0,
       "notes": [
-        "From P1-040: a whole bake should regenerate harness/data/fixtures/stream_routes.json (tools/fixtures/gen_stream_routes.mjs), or tileset.mjs should flag a stale route fixture; a stale one fails every stream scenario on the bake hash."
+        "From P1-040: a whole bake should regenerate harness/data/fixtures/stream_routes.json (tools/fixtures/gen_stream_routes.mjs), or tileset.mjs should flag a stale route fixture; a stale one fails every stream scenario on the bake hash.",
+        "From P1-046: the lanes step now takes 45 to 85 s against its 30 s budget (width rounds rebuild the model up to 8 times); whole bake 330 to 410 s. Speed it up by replanning only the junctions a width round touches, or raise pilotStepMs.lanes with a reason."
       ],
       "created": "2026-11-11T21:49:42.141Z"
     },
@@ -3538,7 +3549,8 @@
       "status": "todo",
       "attempts": 0,
       "notes": [
-        "From P1-043: unnamed deck S25 still sunk 0.96 m; deck S28 Vikas Marg sunk 0.66 to 0.80 m after the ITO three-way split (slip w70220649 leaves 4 m up and comes down over 100 m); jn10255323278 (11 nodes, 5,772 m2) not split; 74 arm pairs under the 4 m radius could drop with a smoother that keeps to the ring."
+        "From P1-043: unnamed deck S25 still sunk 0.96 m; deck S28 Vikas Marg sunk 0.66 to 0.80 m after the ITO three-way split (slip w70220649 leaves 4 m up and comes down over 100 m); jn10255323278 (11 nodes, 5,772 m2) not split; 74 arm pairs under the 4 m radius could drop with a smoother that keeps to the ring.",
+        "From P1-046 and P1-030: add the widthSteps gate to the dashboard map health (harness/bin/maphealth.mjs GATE_NAMES); turning heads or end kerbs for closed dead ends; galis at the 1.8 m floor; the CP inner circle junction collider 0.059 m off the drawn surface."
       ],
       "created": "2026-11-12T02:20:21.635Z"
     },
@@ -3818,13 +3830,16 @@
       "agent": "builder",
       "priority": 1,
       "kind": "mentor",
-      "status": "doing",
+      "status": "done",
       "attempts": 1,
       "notes": [
         "From P1-030: 463 lanes sit at the 1.8 m gali floor and gali widths step at junctions; closed dead ends are square ends (no turning head or end kerb yet); passages through named buildings (Bharat Mandapam, CP blocks, Chhatta Chowk) are cut open, not roofed; a junction on the CP inner circle put the collider 0.059 m off the drawn surface (not investigated)."
       ],
       "created": "2026-11-13T10:38:52.202Z",
-      "started": "2026-11-13T13:25:55.216Z"
+      "started": "2026-11-13T13:25:55.216Z",
+      "done": "2026-11-13T17:54:38.850Z",
+      "summary": "Map lane, PR 54. Corridors keep one cross section; width changes go through class tapers (1:20 to 1:30); a widthSteps gate and invariant LANES-06 fail the bake on any step. Width steps over the pilot 505 to 0 (taper 399, whole road 100, corridor carry-over 4, already matching 2); the owner's India Gate canal road is one even width triangle to triangle; 11 hexagon set_lanes patches from satellite. Gates explained (32 short tapers where neither road has room, 3 hairline overlaps); bake deterministic, fixtures and test block regenerated. Verified from the worktree: typecheck, 849 vitest, 118 Godot tests, quick 15/15. Lanes step now 45 to 85 s (budget 30).",
+      "commit": "3a833d8"
     },
     {
       "id": "P2-030",
