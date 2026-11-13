@@ -262,20 +262,19 @@ describe.skipIf(missing.length > 0)(`pilot centre elevation${reason ? ` (skipped
     expect(heights.viaducts.filter((v) => v.crossings.some((c) => c.kind === 'water' && /Yamuna/.test(c.name)))).toHaveLength(2);
     // what a viaduct cannot clear is listed, never hidden: two tracks over the Bangla Sahib Road junction 190 m from where they leave the ground
     expect(o.viaductShortM).toBeLessThan(0.5);
-    // and one foot bridge at Kashmere Gate (way/80429832): the Ring Road carriageways under it are strips since the
-    // cluster was split (P1-042), and the highest edge of one stands 5.37 m under the deck where the solver holds
-    // 5.5 m on the centre lines (0.13 m short, listed in gate_explanations.json findings)
-    expect(o.short.map((x) => x.under).sort()).toEqual(['Bangla Sahib Road', 'Bangla Sahib Road', 'Mahatma Gandhi Marg']);
-    expect(o.footShortM).toBeLessThan(0.15);
+    // every foot bridge clears what is under it (P1-043: the clearance holds over the whole width of the road below,
+    // and a ramp is read between its stations: the bridge at Kashmere Gate, way/80429832, stood 5.37 m over the edge
+    // of Mahatma Gandhi Marg in P1-042)
+    for (const x of o.short) expect(x.under).toBe('Bangla Sahib Road');
+    expect(o.footShortM).toBe(0);
     expect(heights.footBridges).toHaveLength(graph.features.footBridges.length);
     for (const f of heights.footBridges) {
       expect(Number.isFinite(f.deckH)).toBe(true);
-      expect(f.shortM).toBeLessThan(0.15);
+      expect(f.shortM).toBe(0);
       if (!f.solved) expect(f.stairs.length).toBeGreaterThan(0);
     }
-    expect(heights.footBridges.filter((f) => f.shortM > 0)).toHaveLength(1);
     expect(o.footCrossings).toBeGreaterThan(100);
-    expect(o.footMinClearanceM).toBeGreaterThanOrEqual(HEADROOM - 0.15);
+    expect(o.footMinClearanceM).toBeGreaterThanOrEqual(HEADROOM - 0.02);
   }, T);
 
   it('roads under flyovers are lowered 1 m or less; no raised end hangs in the air (P1-035, Kashmere Gate since P1-042)', async () => {

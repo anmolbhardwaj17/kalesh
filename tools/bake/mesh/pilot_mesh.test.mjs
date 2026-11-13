@@ -111,9 +111,11 @@ describe.skipIf(missing.length > 0)(`pilot centre road mesh${reason ? ` (skipped
     expect(health.lanes.solvedTrims.beforeM2).toBeGreaterThan(5);
     expect(health.lanes.solvedTrims.stations).toBeGreaterThan(10);
     expect(health.lanes.overlapSolved.areaM2).toBeLessThan(1);
-    // connecting lane paths: the length on no road face is measured (57 km of the polygon set paths alone before P1-042)
+    // connecting lane paths: the length on no road face is measured (57 km of the polygon set paths alone before
+    // P1-042, 10.5 km after it). Since P1-043 a path keeps to the planned surface (the arc or a path along the roads,
+    // whichever stays on it), and a cluster whose paths along its roads still leave its ring is built by the polygon set
     expect(mesh.paths.totalM).toBeGreaterThan(300000);
-    expect(mesh.paths.offFaceM).toBeLessThan(12000);
+    expect(mesh.paths.offFaceM).toBeLessThan(1000);
   }, T);
 
   it('kerbs stand 0.15 m over the carriageway within 0.01 m, the lane UV test passes, every arm that stops has its stop line', async () => {

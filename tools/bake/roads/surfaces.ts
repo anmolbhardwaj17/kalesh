@@ -67,7 +67,7 @@ export function laneConflicts(build: LaneBuild, overlaps: readonly StripOverlap[
     if (s.kind !== 'zone') return byId.get(s.edge) ?? null;
     const z = build.zones[zoneOf.get(strip) ?? -1];
     if (!z) return null;
-    const cands = [z.left.edge, z.right.edge].map((i) => source[i] as GraphEdge);
+    const cands = [z.left.edge, ...(z.mid ? [z.mid.edge] : []), z.right.edge].map((i) => source[i] as GraphEdge);
     let best: GraphEdge | null = null;
     let bestD = Infinity;
     for (const e of cands) {

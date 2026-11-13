@@ -27,7 +27,7 @@ export interface LaneModelFile {
     taper?: Strip['taper'];
   }[];
   joints: Joint[];
-  zones: { strip: number; node: string; kind: 'diverge' | 'merge'; paintedNoseM: number; noseM: number; parent: [number, StripEnd] | null; left: [number, StripEnd] | null; right: [number, StripEnd] | null }[];
+  zones: { strip: number; node: string; kind: 'diverge' | 'merge'; paintedNoseM: number; noseM: number; parent: [number, StripEnd] | null; left: [number, StripEnd] | null; right: [number, StripEnd] | null; mid?: [number, StripEnd] | null }[];
   junctions: LaneJunction[];
   ends: ExplainedEnd[];
   internal: LaneBuild['internal'];
@@ -53,7 +53,7 @@ export function laneModelFile(b: LaneBuild, block: string, stage: string): LaneM
       ...(s.taper ? { taper: s.taper } : {}),
     })),
     joints: b.joints,
-    zones: b.zones.map((z, i) => ({ strip: b.zoneStrips[i] as number, node: b.road.nodeId[z.node] as string, kind: z.kind, paintedNoseM: z.dPainted, noseM: z.dNose, parent: at(z.parent), left: at(z.left), right: at(z.right) })),
+    zones: b.zones.map((z, i) => ({ strip: b.zoneStrips[i] as number, node: b.road.nodeId[z.node] as string, kind: z.kind, paintedNoseM: z.dPainted, noseM: z.dNose, parent: at(z.parent), left: at(z.left), right: at(z.right), ...(z.mid ? { mid: at(z.mid) } : {}) })),
     junctions: b.junctions, ends: b.ends, internal: b.internal, forks: b.forks, widenings: b.widenings, fitted: b.fitted, tightPaths: b.tightPaths,
   };
 }

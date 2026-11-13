@@ -65,7 +65,18 @@ export interface Zone {
   leftCount: number;
   rightFirst: number;
   rightCount: number;
+  /** A three-way split (split3.ts): the branch between left and right, its first zone lane and its lane count. */
+  mid?: GEnd;
+  midFirst?: number;
+  midCount?: number;
 }
+
+/** The branches of a zone with their first zone lane and lane count, left to right. */
+export const zoneBranches = (z: Zone): [GEnd, number, number][] => [
+  [z.left, z.leftFirst, z.leftCount],
+  ...(z.mid ? [[z.mid, z.midFirst ?? 0, z.midCount ?? 0] as [GEnd, number, number]] : []),
+  [z.right, z.rightFirst, z.rightCount],
+];
 
 /** The cross-section an edge has at one of its ends, in its own orientation: the target of an attachment, else its end piece. */
 export function endCrossSection(plan: EdgePlan, atStart: boolean): CrossSection {
@@ -163,7 +174,7 @@ export function rowBorders(rows: readonly Row[], a: CrossSection, b: CrossSectio
 const rowLanes = (rows: readonly Row[], a: CrossSection, b: CrossSection): LaneDef[] =>
   rows.map((r) => ({ ...((r.b !== null ? b.lanes[r.b] : a.lanes[r.a as number]) as LaneDef) }));
 
-const flipRows = (rows: readonly Row[], na: number, nb: number): Row[] =>
+export const flipRows = (rows: readonly Row[], na: number, nb: number): Row[] =>
   rows.slice().reverse().map((r) => ({ a: r.a === null ? null : na - 1 - r.a, b: r.b === null ? null : nb - 1 - r.b }));
 
 /** Largest sideways move of any lane border across a taper. */
@@ -178,9 +189,9 @@ function maxShift(rows: readonly Row[], a: CrossSection, b: CrossSection): numbe
 
 const C1_WINDOW = 0.5;
 /** max(0, x) with a smooth corner of half-width C1_WINDOW: exactly 0 below it and exactly x above it. */
-const softPlus = (x: number): number => (x <= -C1_WINDOW ? 0 : x >= C1_WINDOW ? x : ((x + C1_WINDOW) * (x + C1_WINDOW)) / (4 * C1_WINDOW));
+export const softPlus = (x: number): number => (x <= -C1_WINDOW ? 0 : x >= C1_WINDOW ? x : ((x + C1_WINDOW) * (x + C1_WINDOW)) / (4 * C1_WINDOW));
 
-const coreWidth = (cs: CrossSection): number => {
+export const coreWidth = (cs: CrossSection): number => {
   const [f, l] = coreRange(cs.lanes);
   let w = 0;
   for (let i = f; i <= l; i++) w += (cs.lanes[i] as LaneDef).width;
@@ -191,7 +202,8 @@ export interface SplitCandidate {
   node: number;
   kind: 'diverge' | 'merge';
   parent: GEnd;
-  branches: [GEnd, GEnd];
+  /** Two branches; three for a three-way split (split3.ts). */
+  branches: [GEnd, GEnd] | [GEnd, GEnd, GEnd];
 }
 
 /** A node where one one-way road splits into two or two join into one, at a shallow angle. */
@@ -240,11 +252,11 @@ export function mainBranch(graph: Graph, cand: SplitCandidate): { main: GEnd; mi
     const u = unit(p.x - node.x, p.z - node.z);
     return Math.acos(Math.max(-1, Math.min(1, -u.x * tp.tx - u.z * tp.tz)));
   };
-  const [p, q] = cand.branches;
-  const lp = (graph.edges[p.edge] as GEdge).link;
-  const lq = (graph.edges[q.edge] as GEdge).link;
-  const mainIsP = lp !== lq ? !lp : deflect(p) <= deflect(q);
-  return mainIsP ? { main: p, minor: q } : { main: q, minor: p };
+  // a link turns more than any street
+  const score = (e: GEnd): number => deflect(e) + ((graph.edges[e.edge] as GEdge).link ? 10 : 0);
+  const sorted = [...cand.branches].sort((p, q) => score(p) - score(q));
+  // of three, the minor branch is the one that leaves or joins most sharply
+  return { main: sorted[0] as GEnd, minor: sorted[sorted.length - 1] as GEnd };
 }
 
 /**

@@ -3,17 +3,18 @@
 import type { P2 } from '../geom.ts';
 import type { GraphEdge } from '../graph/build.ts';
 import { turnPath } from './connect.ts';
+import type { PathGeom } from './connect.ts';
 import type { GEdge, GEnd, GNode } from './graph.ts';
 import { edgePoint } from './junction.ts';
 import type { ArmPlan, JunctionPlan } from './junction.ts';
-import { buildEdgeStrips } from './lanes.ts';
+import { buildEdgeStrips, zoneBranches } from './lanes.ts';
 import { MIN_TURN_RADIUS_M, classDefaults } from './model.ts';
 import type { CrossSection, Joint, Strip, StripEnd } from './model.ts';
 import type { ClusterPhase } from './netclusters.ts';
 import { endOf } from './netctx.ts';
 import type { EndKind, ExplainedEnd, LaneBuild, LaneJunction, LanePath, NetCtx, Planned } from './netctx.ts';
 import type { ZonePhase } from './netzones.ts';
-import { ROUTE_DEV_M, ROUTE_MIN_M, deviation, directPath, pathAlong, routeBetween, viaLine, wanders } from './routes.ts';
+import { ROUTE_DEV_M, ROUTE_MIN_M, deviation, directPath, outsideRing, pathAlong, routeBetween, viaLine, wanders } from './routes.ts';
 import type { RouteEdge } from './routes.ts';
 import { driveCount } from './street.ts';
 
@@ -89,7 +90,7 @@ export function buildStrips(c: NetCtx, z: ZonePhase): StripPhase {
       }
       joints.push({ a: { strip: zi, end: 'start' }, b: { strip: p.strip, end: p.end }, lanes, kind: 'split' });
     }
-    for (const [branch, first, count] of [[zn.left, zn.leftFirst, zn.leftCount], [zn.right, zn.rightFirst, zn.rightCount]] as [GEnd, number, number][]) {
+    for (const [branch, first, count] of zoneBranches(zn)) {
       const b = stripAt(branch);
       if (!b) continue;
       const lanes: [number, number][] = [];
@@ -111,6 +112,11 @@ export interface PathPhase {
   turns: LaneBuild['turns'];
   tightPaths: LaneBuild['tightPaths'];
 }
+
+/** Tolerances (m) of the corners a path along a junction's roads keeps (routes.ts pathAlong): tried in turn for the path that stays on the surface. */
+const ALONG_TOL_M = [0.4, 1, 2, 3];
+/** A cluster whose lane paths run further than this outside its planned ring is built by the polygon set (m). */
+const OFF_RING_J2_M = 2;
 
 const MAIN = new Set(['motorway', 'trunk', 'primary', 'secondary', 'tertiary']);
 
@@ -180,6 +186,19 @@ export function buildPaths(c: NetCtx, cl: ClusterPhase, sp: StripPhase): PathPha
       // lat is to the left of the station order; `sign` turns it to the left of the outward direction
       return { strip: a.strip, lane: sl, x: st.x + st.nx * lat, z: st.z + st.nz * lat, ox: -st.nz * sign, oz: st.nx * sign, lat: lat * sign };
     };
+    /** A border of an arm's cut line (borders counted as in the plan's cross-section, looking away from the junction). */
+    const cutPoint = (arm: number, border: number): P2 => {
+      const a = arms[arm] as At;
+      const ap = jp.arms[arm] as ArmPlan;
+      const n = ap.cs.lanes.length;
+      const kb = ap.end.atStart ? border : n - border;
+      const sb = kb < n ? (a.lanes[kb] as number) : (a.lanes[n - 1] as number) + 1;
+      const st = endOf(strips[a.strip] as Strip, a.end);
+      const lat = st.b[sb] as number;
+      return { x: st.x + st.nx * lat, z: st.z + st.nz * lat };
+    };
+    // the planned surface of a J1 junction (a J2 surface is built from the paths' own corridors)
+    const ring: P2[] | null = jp.method === 'J1' && jp.ring.length >= 3 ? jp.ring.map((it) => (it.kind === 'pt' ? { x: it.x, z: it.z } : cutPoint(it.arm, it.border))) : null;
     const paths: LanePath[] = [];
     /** Paths that run along the junction's own roads (routes.ts), by index. */
     const alongRoads = new Set<number>();
@@ -202,11 +221,32 @@ export function buildPaths(c: NetCtx, cl: ClusterPhase, sp: StripPhase): PathPha
         if (r.radius >= MIN_TURN_RADIUS_M || wanders(geo) || geo.radius < MIN_TURN_RADIUS_M) geo = r;
       }
       if (wanders(geo)) geo = directPath(p0, p1);
+      if (ring) {
+        // the path that keeps most of its length on the planned surface (P1-043)
+        const score = (g: PathGeom): number => outsideRing(g.pts, ring) + (g.radius < MIN_TURN_RADIUS_M ? 3 : 0);
+        let best = score(geo);
+        if (best > 1) {
+          for (const c of [turnPath(p0, p1), ...ALONG_TOL_M.map((tol) => pathAlong(p0, via, p1, tol)), directPath(p0, p1)]) {
+            if (wanders(c)) continue;
+            const v = score(c);
+            if (v < best - 1) {
+              best = v;
+              geo = c;
+            }
+          }
+        }
+      }
       paths.push({
         from: [f.strip, f.lane], to: [g.strip, g.lane], fromArm: t.from, toArm: t.to, turn: t.kind, radius: Number.isFinite(geo.radius) ? Math.round(geo.radius * 100) / 100 : null,
         length: Math.round(geo.length * 100) / 100, pts: geo.pts.map((p) => ({ x: Math.round(p.x * 1000) / 1000 + 0, z: Math.round(p.z * 1000) / 1000 + 0 })),
       });
       if (geo.how === 'route' || geo.how === 'direct') alongRoads.add(paths.length - 1);
+    }
+    // a planned ring of a cluster leaves out the roads between its nodes (a ring runs from corner to corner round the
+    // arms): when a lane path along those roads still leaves it, the surface is built from the paths' own corridors
+    if (ring && jp.nodes.length > 1 && paths.some((p) => outsideRing(p.pts, ring) > OFF_RING_J2_M)) {
+      jp.method = 'J2';
+      jp.why = 'a lane path along the roads inside the cluster leaves the planned ring';
     }
     paths.forEach((p, k) => {
       if (p.radius === null || p.radius >= MIN_TURN_RADIUS_M) return;

@@ -11,6 +11,7 @@ import { buildLaneModel } from '../roads/network';
 import type { LaneBuild } from '../roads/network';
 import { Sketch } from '../testmap';
 import { checkElevation } from './checks';
+import { findCrossings } from './crossings';
 import type { ElevationChecks } from './checks';
 import { elevationFile, elevationHash, elevationRecord } from './elevout';
 import { elevationInput } from './input';
@@ -170,6 +171,34 @@ describe('clearance', () => {
     for (const a of st.abutments) expect(Math.abs(a.hag)).toBeLessThanOrEqual(0.6 + 4.2 * 0.07);
   });
 
+  it('the clearance holds over the whole width of the road below: where the edges of both roads pass over each other too (P1-043)', () => {
+    // a 20 m wide road along x at grade, a 4 m wide bridge across it with a station every 8 m: no station of the bridge
+    // stands over either edge of the road (z = -10 and 10)
+    const strip = (id: string, pts: [number, number][], half: number, layer: number): Strip => ({
+      id, edge: id, kind: 'road', cls: 'tertiary', link: false, name: id, ways: [`way/${id}`], hero: null,
+      lanes: [{ type: 'drive', dir: 0, width: 2 * half, raise: 0 }],
+      st: pts.map(([x, z], i) => {
+        const [x1, z1] = (pts[Math.min(i + 1, pts.length - 1)] as [number, number]);
+        const [x0, z0] = (pts[Math.max(i - 1, 0)] as [number, number]);
+        const l = Math.hypot(x1 - x0, z1 - z0);
+        return { x, z, nx: (z1 - z0) / l, nz: -(x1 - x0) / l, s: i, h: 0, g: 0, b: [half, -half], layer, bridge: layer > 0, structure: 0, edgeRaise: 0 };
+      }),
+    });
+    const low = strip('low', Array.from({ length: 11 }, (_, i) => [-50 + 10 * i, 0] as [number, number]), 10, 0);
+    const up = strip('up', Array.from({ length: 11 }, (_, i) => [0.5, -36 + 8 * i] as [number, number]), 2, 1);
+    const c = findCrossings({ strips: [low, up], joints: [], junctions: [], ground: () => 0, railEmbankment: RAIL_EMBANKMENT_M });
+    const edges = c.roads.filter((r) => !r.centre && Math.abs(Math.abs(r.z) - 10) < 1e-6);
+    // the bridge's centre line and its two edges over both edges of the road: six samples, each tied to the right stations
+    expect(edges).toHaveLength(6);
+    for (const r of edges) {
+      expect(r.up).toBe(1);
+      expect(r.low).toBe(0);
+      const a = up.st[r.upStation]!;
+      const b = up.st[r.upStation + 1]!;
+      expect(a.z + (b.z - a.z) * r.upT).toBeCloseTo(r.z, 6);
+    }
+    expect(c.roads.filter((r) => r.centre)).toHaveLength(1);
+  });
   it('a ramp too short for its climb never breaks the grade limit: it starts before the tag and the road under it is lowered, and both are reported', () => {
     const { s, low, deck } = crossing(75);
     // the high road ends at a side street 75 m from the crossing on either side
@@ -184,12 +213,14 @@ describe('clearance', () => {
     expect(checks.clearance.violations).toBe(0);
     expect(checks.clearance.minRoadM).toBeGreaterThanOrEqual(HEADROOM - 0.02);
     // 75 m at 7 percent is 5.25 m at most (less with its curves). The ramps start at the side streets, which rise
-    // with them; the rest comes from under the deck
+    // with them; the rest comes from under the deck. Since P1-043 the clearance also holds where the deck passes the
+    // edges of the road under it (between two of its stations, on the ramps): the deck stands about 0.2 m higher
+    // there and the road under is lowered about 0.2 m less than when only the stations were held (over 0.7 m)
     const under = Math.min(...stationsOf(b, low).map(hag));
-    expect(under).toBeLessThan(-0.7);
-    expect(Math.max(...stationsOf(b, deck).map(hag))).toBeLessThan(6.4);
+    expect(under).toBeLessThan(-0.4);
+    expect(Math.max(...stationsOf(b, deck).map(hag))).toBeLessThan(6.6);
     const x = st.structures.find((q) => q.kind === 'deck')!;
-    expect(x.sunk).toBeGreaterThan(0.7);
+    expect(x.sunk).toBeGreaterThan(0.4);
     expect(x.sunk).toBeCloseTo(-under, 1);
     expect(x.untaggedM).toBeGreaterThan(40);
     // lowered by more than 2 m, the road under the deck is a structure of its own: a cut between walls

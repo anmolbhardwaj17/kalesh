@@ -39,8 +39,8 @@
     },
     {
       "what": "junction clusters with no usable ring, oversize junction surfaces and lane paths off the road",
-      "measured": "80 clusters with no usable ring (J2). Until P1-042 turns across a long cluster asked for cuts of 90 percent of an arm, edges up to 297 m became part of the junction and three clusters grew to 18,253, 14,038 and 5,985 m2 (Kashmere Gate twice, and a knot of streets north of Connaught Place); about 57 km of their lane paths ran off every road face. Now a turn asks for 30 m at most, an arm is cut back 60 m at most to come clear of another, a fork's crotch is a nose and no edge of 45 m or more is taken in for a turn: 5 surfaces are over 3,000 m2 (the largest about 5,800 m2, each listed with why in health.json mesh.oversize). Lane paths keep to the roads inside a cluster where their arcs looped or ran far from them (roads/routes.ts): about 10.5 km of 398 km of path is still on no road face (health.json mesh.paths), nearly all in planned (J1) junctions of several nodes along old city streets, where a path along the roads would turn tighter than 4 m and the arc is kept (without that guard: 6.8 km off and 304 pairs under the radius)",
-      "owner": "follow-up of P1-042 (paths of planned junctions of several nodes)"
+      "measured": "80 clusters with no usable ring (J2). Until P1-042 turns across a long cluster asked for cuts of 90 percent of an arm, edges up to 297 m became part of the junction and three clusters grew to 18,253, 14,038 and 5,985 m2 (Kashmere Gate twice, and a knot of streets north of Connaught Place); about 57 km of their lane paths ran off every road face. Now a turn asks for 30 m at most, an arm is cut back 60 m at most to come clear of another, a fork's crotch is a nose and no edge of 45 m or more is taken in for a turn: 5 surfaces are over 3,000 m2 (the largest about 5,800 m2, each listed with why in health.json mesh.oversize). Lane paths keep to the roads inside a cluster where their arcs looped or ran far from them (roads/routes.ts). Since P1-043 each path is the one of the arc, the path along the roads (four corner tolerances) and the direct path that stays most on the junction's planned ring, and a cluster whose paths along its roads still leave the ring by over 2 m is built by the polygon set: 0.2 km of 396 km of path is on no road face (health.json mesh.paths; 10.5 km in P1-042), and 74 arm pairs turn under 4 m (15 in P1-042), each in health.json lanes.paths.tight with its reason (the corners of old city lanes the path follows)",
+      "owner": "explained (P1-043): paths that follow a lane's own corners"
     },
     {
       "what": "tunnel ramp faces where an open ramp meets its roofed part",
@@ -56,11 +56,6 @@
       "what": "road edge with no ground along it (another road face lies there)",
       "measured": "642 m",
       "owner": "P1-037 (d)"
-    },
-    {
-      "what": "headroom under the foot bridge at Kashmere Gate (way/80429832 over the Ring Road, Mahatma Gandhi Marg)",
-      "measured": "5.37 m where 5.5 m is asked (0.13 m short, health.json elevation.overhead.short). New with P1-042: the carriageways under it were inside the Kashmere Gate junction cluster before and are strips now; the solver holds 5.5 m on the centre lines of the two roads and the edge of the lower road stands higher by its crossfall",
-      "owner": "follow-up of P1-042 (elevation: clearance over the whole width of the road below)"
     }
   ]
 }

@@ -204,6 +204,8 @@ export function findCrossings(input: CrossingInput): Crossings {
     });
   });
 
+  roads.push(...edgeCrossings(strips, roads, (a, i, b, j) => lvl(a, i) > lvl(b, j)));
+
   // a strip of another level over or under a junction: above every arm of it, or below every arm
   const junctions: JunctionCrossing[] = [];
   const stationGrid = new Grid<number>(60);
@@ -299,4 +301,54 @@ export function findCrossings(input: CrossingInput): Crossings {
     });
   });
   return { roads, roadPairs: pairs.size, junctions, rails, levelCrossings, water };
+}
+
+/** How far from where two centre lines cross the edges of the two roads are looked for (m). */
+const EDGE_REACH_M = 40;
+
+/**
+ * The clearance over the whole width of the road below (P1-043): the stations of the road above only sample it every
+ * few metres, and a ramp that falls between two of them passes the far edge of the road below lower than either
+ * station says (a foot bridge at Kashmere Gate stood 5.37 m over the edge of Mahatma Gandhi Marg). Where two centre
+ * lines cross, every place the centre line and the two outer edges of the road above pass over an outer edge of the
+ * road below is a sample too.
+ */
+function edgeCrossings(strips: readonly Strip[], roads: readonly RoadOverlap[], above: (up: number, i: number, low: number, j: number) => boolean): RoadOverlap[] {
+  const out: RoadOverlap[] = [];
+  const seen = new Set<string>();
+  const line = (st: Station, k: number | null): P2 => (k === null ? { x: st.x, z: st.z } : { x: st.x + st.nx * (st.b[k] as number), z: st.z + st.nz * (st.b[k] as number) });
+  const near = (s: Strip, p: P2): number[] => {
+    const out: number[] = [];
+    for (let i = 0; i + 1 < s.st.length; i++) if (Math.hypot((s.st[i] as Station).x - p.x, (s.st[i] as Station).z - p.z) <= EDGE_REACH_M) out.push(i);
+    return out;
+  };
+  for (const c of roads) {
+    if (!c.centre) continue;
+    const key = `${c.up}:${c.low}:${Math.round(c.x)}:${Math.round(c.z)}`;
+    if (seen.has(key)) continue;
+    seen.add(key);
+    const up = strips[c.up] as Strip;
+    const low = strips[c.low] as Strip;
+    const ui = near(up, c);
+    const li = near(low, c);
+    for (const ku of [null, 0, -1]) {
+      for (const kl of [0, -1]) {
+        for (const i of ui) {
+          const a = up.st[i] as Station;
+          const b = up.st[i + 1] as Station;
+          const pa = line(a, ku === -1 ? a.b.length - 1 : ku);
+          const pb = line(b, ku === -1 ? b.b.length - 1 : ku);
+          for (const j of li) {
+            if ((c.up === c.low && Math.abs(i - j) <= SELF_GAP) || !above(c.up, i, c.low, j) || !above(c.up, i + 1, c.low, j + 1)) continue;
+            const p = low.st[j] as Station;
+            const q = low.st[j + 1] as Station;
+            const x = segCross(pa, pb, line(p, kl === -1 ? p.b.length - 1 : kl), line(q, kl === -1 ? q.b.length - 1 : kl));
+            if (!x || x.t >= 1 - 1e-9 || x.u >= 1 - 1e-9) continue;
+            out.push({ up: c.up, upStation: i, upT: x.t, low: c.low, lowStation: j, lowT: x.u, x: x.x, z: x.z, centre: false });
+          }
+        }
+      }
+    }
+  }
+  return out;
 }

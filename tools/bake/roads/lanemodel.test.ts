@@ -185,6 +185,56 @@ describe('split zones on the block graph', () => {
     expect(c.continuity.breaks).toBe(0);
     expect(c.tapers.violations).toBe(0);
   });
+  /** One one-way street west to east that splits into three at x = 0: a slip road left, the street, a ramp right (P1-043). */
+  const threeWay = (lanes: number): Sketch => {
+    const s = new Sketch();
+    const x = s.node(0, 0);
+    s.way([[-400, 0], x], { highway: 'secondary', oneway: 'yes', lanes: String(lanes) });
+    s.way([x, [60, -14], [200, -60], [400, -130]], { highway: 'secondary_link', oneway: 'yes' });
+    s.way([x, [100, 0], [400, 0]], { highway: 'secondary', oneway: 'yes', lanes: '2' });
+    s.way([x, [60, 14], [200, 60], [400, 130]], { highway: 'primary', oneway: 'yes', lanes: '1' });
+    return s;
+  };
+  it('a three-way split is one zone with two gores; each branch is fed only by the lanes in front of it (P1-043)', () => {
+    const { b } = model(threeWay(4));
+    expect(b.zones).toHaveLength(1);
+    const z = b.zones[0]!;
+    expect(z.mid).toBeDefined();
+    expect(b.junctions).toHaveLength(0);
+    const c = checkLaneModel(b);
+    expect(c.zones).toMatchObject({ zones: 1, diverges: 1, withoutGoreOrNose: 0, endsOffCentreLine: 0 });
+    expect(c.zones.maxEndErrorM).toBeLessThanOrEqual(0.01);
+    expect(c.continuity.breaks).toBe(0);
+    expect(c.continuity.splitJoints).toBe(4);
+    const zone = b.strips[b.zoneStrips[0]!]!;
+    expect(zone.lanes.filter((l) => l.type === 'gore')).toHaveLength(6);
+    expect(drive(zone)).toBe(4);
+    // the parent's four lanes go one, two and one to the slip road, the street and the ramp: no lane feeds two branches
+    const into = b.joints.filter((j) => j.a.strip === b.zoneStrips[0] && j.a.end === 'start')[0]!;
+    const out = b.joints.filter((j) => j.a.strip === b.zoneStrips[0] && j.a.end === 'end');
+    const fed = out.map((j) => j.lanes.filter(([k]) => zone.lanes[k]!.type === 'drive').length).sort();
+    expect(fed).toEqual([1, 1, 2]);
+    expect(into.lanes.filter(([k]) => zone.lanes[k]!.type === 'drive')).toHaveLength(4);
+    // the check finds a three-way zone whose second gore does not open
+    const last = zone.st[zone.st.length - 1]!;
+    const g = zone.lanes.map((l, k) => (l.type === 'gore' ? k : -1)).filter((k) => k >= 0);
+    last.b[g[4]!] = last.b[g[3]!]!;
+    last.b[g[5]!] = last.b[g[3]!]!;
+    last.b[g[5]! + 1] = last.b[g[3]!]!;
+    expect(checkLaneModel(b, [], false).zones.withoutGoreOrNose).toBe(1);
+  });
+  it('a three-way split with more lanes after it than before: the widest branch starts narrower and widens on its kerb side', () => {
+    const { b } = model(threeWay(3));
+    expect(b.zones).toHaveLength(1);
+    const zone = b.strips[b.zoneStrips[0]!]!;
+    expect(drive(zone)).toBe(3);
+    const c = checkLaneModel(b);
+    expect(c.zones.withoutGoreOrNose + c.zones.endsOffCentreLine + c.continuity.breaks).toBe(0);
+    // the street gets its second lane on a taper after the zone
+    const street = b.strips.filter((st) => st.cls === 'secondary' && !st.link && st.st[0]!.x > 0);
+    expect(street.some((st) => st.kind === 'taper')).toBe(true);
+    expect(Math.max(...street.map(drive))).toBe(2);
+  });
   it('an entry of a roundabout is a give-way junction, with the reason', () => {
     const s = new Sketch();
     const ids: number[] = [];
