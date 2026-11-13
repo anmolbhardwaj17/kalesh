@@ -425,3 +425,6 @@ By: builder, P2-006.
 
 ## 2026-11-14 Builder plus verifier side by side (Anmol)
 Anmol chose "Yes: builder + verifier side by side". Decision: one builder always works; a verifier checks finished eye-judged tasks on a snapshot at the same time; a fail becomes the next builder task. Map lane off after the two running tasks. Why: the builder never idles; total usage about the same, spread over less time.
+
+## 2026-11-14 Two builders and two verifiers until Tuesday; Fable limit 40 (Anmol)
+Anmol: run 2 builders and 2 verifiers in parallel until Tuesday 2026-11-17 (limits reset Friday), and more Fable quota. Decision: CLAUDE.md Modes gets TWO BUILDERS AND TWO VERIFIERS until 2026-11-17 (map lane back on, second lane may take non-overlapping tasks), verifiers still only where they earn their cost; fable_budget.json limit 25 to 40. Low usage mode stays on for check depth. Why: his words; more throughput while the limit allows.
