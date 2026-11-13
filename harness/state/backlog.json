@@ -1,6 +1,6 @@
 {
   "_doc": "Written only by node harness/bin/task.mjs. Phases run in order; P0 (ADOPT + STYLE DISCOVERY) waits for the owner by design and needs task.mjs signoff and task.mjs archsignoff before its gate passes. Later phases are added by the planner at the end of P0 (task.mjs phase-add) from the game's real state.",
-  "updated": "2026-11-13T14:35:05.061Z",
+  "updated": "2026-11-13T15:00:01.289Z",
   "phases": [
     {
       "id": "P0",
@@ -2936,7 +2936,9 @@
       "kind": "feature",
       "status": "todo",
       "attempts": 0,
-      "notes": [],
+      "notes": [
+        "From P2-033: CC BY and BY-SA reference photos in harness/design/reference/infrastructure/img/ (CREDITS.json); they are references, not game assets, but list them if any is used in game."
+      ],
       "created": "2026-11-11T12:31:54.059Z",
       "model": "sonnet"
     },
@@ -3933,7 +3935,9 @@
       "kind": "mentor",
       "status": "todo",
       "attempts": 0,
-      "notes": [],
+      "notes": [
+        "From P2-033: variants and the pilot map are in harness/design/reference/infrastructure/ (31 variants, variant_map.json). Many dimensions are [E] estimates: check them against street-level imagery or drawings before a kit is final (the 6-item list at the end of variant_map.md). No CC photo was found for the ITO skywalk, the ITO/Vikas Marg Yamuna bridge or the Delhi Junction facade."
+      ],
       "created": "2026-11-13T11:53:07.495Z"
     },
     {
