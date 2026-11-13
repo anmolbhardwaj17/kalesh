@@ -5,6 +5,7 @@ import type { GEdge, GEnd, GNode } from './graph.ts';
 import { heroCrossSection } from './hero.ts';
 import type { HeroSpec } from './hero.ts';
 import { mainBranch, matchRows, planSplit, rowBorders, splitCandidate } from './lanes.ts';
+import { planSplit3, threeWaySplit } from './split3.ts';
 import type { EdgePlan, Row, SplitCandidate, Zone } from './lanes.ts';
 import { classDefaults } from './model.ts';
 import type { CrossSection } from './model.ts';
@@ -52,6 +53,11 @@ export function planZones(c: NetCtx): ZonePhase {
   const adopt = new Map<string, number>();
   const zoneNode = new Set<number>();
   const zoneEnds = new Map<number, number[]>();
+  /** A diverge or merge of two branches, or of three (split3.ts). */
+  const candidateAt = (id: number): SplitCandidate | null => splitCandidate(graph, id) ?? threeWaySplit(graph, id);
+  // what the road before a three-way split carries at its other end, when a zone there gives it more lanes (the scratch pass)
+  let feedOf = (_: GEnd): number => 0;
+  const plan = (p: EdgePlan[], cand: SplitCandidate): Zone | null => (cand.branches.length === 3 ? planSplit3(graph, p, cand, farReserve, 3, feedOf(cand.parent)) : planSplit(graph, p, cand, farReserve, 3));
   const info = (i: number): EdgeLanes => streets.byEdge.get((source[i] as GraphEdge).id) as EdgeLanes;
   const farReserve = (e: GEnd): number => {
     const edge = graph.edges[e.edge] as GEdge;
@@ -59,7 +65,7 @@ export function planZones(c: NetCtx): ZonePhase {
     return far && far.ends.length > 1 ? Math.min(18, edge.len * 0.3) : 0;
   };
   /** A split with a junction node within the cluster gap along one of its three roads is part of that junction (a turn island), not a zone. */
-  const insideJunction = (cand: { parent: GEnd; branches: [GEnd, GEnd] }): string | null => {
+  const insideJunction = (cand: { parent: GEnd; branches: readonly GEnd[] }): string | null => {
     // traffic entering a roundabout gives way at a line: an entry or exit is a junction with a splitter island, not lanes side by side
     if ([cand.parent, ...cand.branches].some((e) => (source[e.edge] as GraphEdge).roundabout)) return 'an entry or exit of a roundabout: a give-way junction';
     for (const e of [cand.parent, ...cand.branches]) {
@@ -86,15 +92,19 @@ export function planZones(c: NetCtx): ZonePhase {
   for (let pass = 0; pass < 4; pass++) {
     let lowered = false;
     for (const node of graph.nodes.values()) {
-      const cand = splitCandidate(graph, node.id);
+      const cand = candidateAt(node.id);
       if (!cand || noZone.has(node.id) || [cand.parent, ...cand.branches].some((e) => isHero(e.edge)) || insideJunction(cand)) continue;
       const { main, minor } = mainBranch(graph, cand);
-      const r = info(minor.edge);
-      if (r.from !== 'class' && r.from !== 'street' && r.from !== 'pair') continue;
-      const want = Math.max(1, info(cand.parent.edge).lanes - info(main.edge).lanes);
-      if (want < r.lanes) {
-        fixed.set((source[minor.edge] as GraphEdge).id, want);
-        lowered = true;
+      // of three branches, each one whose count is only a default carries what the other two leave
+      for (const b of cand.branches.length === 3 ? cand.branches.filter((x) => x !== main) : [minor]) {
+        const r = info(b.edge);
+        if (r.from !== 'class' && r.from !== 'street' && r.from !== 'pair') continue;
+        const others = cand.branches.filter((x) => x !== b).reduce((sum, x) => sum + info(x.edge).lanes, 0);
+        const want = Math.max(1, info(cand.parent.edge).lanes - others);
+        if (want < r.lanes) {
+          fixed.set((source[b.edge] as GraphEdge).id, want);
+          lowered = true;
+        }
       }
     }
     if (!lowered) break;
@@ -115,14 +125,18 @@ export function planZones(c: NetCtx): ZonePhase {
     // before another must have its final cross-section before the second zone names its lanes
     const scratch: EdgePlan[] = plans.map((p) => ({ ...p, cs: p.cs.slice() }));
     for (const node of graph.nodes.values()) {
-      const cand = noZone.has(node.id) ? null : splitCandidate(graph, node.id);
-      if (cand && ![cand.parent, ...cand.branches].some((e) => isHero(e.edge)) && !insideJunction(cand)) planSplit(graph, scratch, cand, farReserve, 3);
+      const cand = noZone.has(node.id) ? null : candidateAt(node.id);
+      if (cand && ![cand.parent, ...cand.branches].some((e) => isHero(e.edge)) && !insideJunction(cand)) plan(scratch, cand);
     }
     plans.forEach((p, i) => {
       p.cs = (scratch[i] as EdgePlan).cs;
     });
+    feedOf = (e: GEnd): number => {
+      const other = e.atStart ? (scratch[e.edge] as EdgePlan).endAttach : (scratch[e.edge] as EdgePlan).startAttach;
+      return other?.target ? driveCount(other.target.cs) : 0;
+    };
     for (const node of graph.nodes.values()) {
-      const cand = splitCandidate(graph, node.id);
+      const cand = candidateAt(node.id);
       if (!cand) continue;
       const three = [cand.parent, ...cand.branches];
       if (three.some((e) => isHero(e.edge))) continue;
@@ -135,7 +149,7 @@ export function planZones(c: NetCtx): ZonePhase {
         forks.push({ node: nodeId[node.id] as string, kind: cand.kind, why: inside });
         continue;
       }
-      const zone = planSplit(graph, plans, cand, farReserve, 3);
+      const zone = plan(plans, cand);
       if (!zone) {
         forks.push({ node: nodeId[node.id] as string, kind: cand.kind, why: 'the branches do not come a nose gap apart within their own length' });
         continue;
@@ -154,6 +168,9 @@ export function planZones(c: NetCtx): ZonePhase {
       p.cs = p.cs.map(() => cs);
       nominal[z.parent.edge] = cs;
       delete att.target;
+      // a zone at the other end now tapers from the adopted section (its rows were made for the road's own)
+      const other = z.parent.atStart ? p.endAttach : p.startAttach;
+      if (other?.target) other.target.rows = z.parent.atStart ? matchRows(cs, other.target.cs) : matchRows(other.target.cs, cs);
     }
     // a road too short for the taper to its zone takes the lane count of the zone's first section
     let raised = false;
@@ -181,9 +198,11 @@ export function planZones(c: NetCtx): ZonePhase {
         raised = true;
         continue;
       }
-      if (!(z.parent.atStart ? p.endAttach : p.startAttach)) {
+      const other = z.parent.atStart ? p.endAttach : p.startAttach;
+      if (!other || (other.target && driveCount(other.target.cs) === want && adopt.get(id) === undefined)) {
         // the short road takes the zone's first section whole: the lanes that run on stay where they are, the extra
-        // lane lies on the side of the branch that leaves or joins, and there is no taper
+        // lane lies on the side of the branch that leaves or joins, and there is no taper (between two zones that
+        // want the same lanes, a merge and a three-way split east of ITO: the taper to the other one only moves widths)
         adopt.set(id, z.node);
         raised = true;
         continue;

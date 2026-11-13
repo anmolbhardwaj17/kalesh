@@ -9,7 +9,7 @@
 //   (shortM). The viaduct itself (piers, girders, stations) is built later (P2-019).
 //   Foot bridge: one flat walking level, the highest any crossing needs, with stairs down to the ground at its ends.
 // Pure.
-import { Grid, pointInRing, polylineLength, resample } from '../geom.ts';
+import { Grid, pointInRing, pointSegment, polylineLength, resample } from '../geom.ts';
 import type { Box2, P2 } from '../geom.ts';
 import { segCross } from '../roads/curve.ts';
 import type { Station, Strip } from '../roads/model.ts';
@@ -309,17 +309,22 @@ export function overheadHeights(input: OverheadInput): OverheadResult {
     input.strips.forEach((s, si) => s.ways.some((w) => ways.has(w)) && carrying.add(si));
     const lines = fb.pts.filter((l) => l.length >= 2).map((l) => resample(l, FOOT_SAMPLE_M));
     // the heights the road solve gave the stretches the road graph carries
+    // (between two stations as the surface runs: the nearest station alone read a ramp up to 0.2 m low, P1-043)
     const solvedAt = (p: P2): number | null => {
       let best: number | null = null;
       let bd = 3;
       for (const si of carrying) {
-        for (const st of (input.strips[si] as Strip).st) {
-          const d = Math.hypot(st.x - p.x, st.z - p.z);
-          if (d < bd) {
-            bd = d;
-            best = st.h;
+        const st = (input.strips[si] as Strip).st;
+        for (let i = 0; i + 1 < st.length; i++) {
+          const a = st[i] as Station;
+          const b = st[i + 1] as Station;
+          const ps = pointSegment(p, a, b);
+          if (ps.d < bd) {
+            bd = ps.d;
+            best = a.h + (b.h - a.h) * ps.t;
           }
         }
+        if (st.length === 1 && Math.hypot((st[0] as Station).x - p.x, (st[0] as Station).z - p.z) < bd) best = (st[0] as Station).h;
       }
       return best;
     };

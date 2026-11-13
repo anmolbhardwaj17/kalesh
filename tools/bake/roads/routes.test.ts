@@ -6,7 +6,7 @@ import type { ArmView } from './connect';
 import { checkLaneModel, checkPlanOverlap } from './lanechecks';
 import { buildLaneModel, giveWaySolved } from './network';
 import type { LaneBuild } from './network';
-import { deviation, directPath, pathAlong, routeBetween, viaLine, wanders } from './routes';
+import { deviation, directPath, outsideRing, pathAlong, routeBetween, viaLine, wanders } from './routes';
 import { taggedLanes } from '../graph/classify';
 
 const model = (s: Sketch, h = 500): LaneBuild => {
@@ -46,6 +46,27 @@ describe('paths through a junction of several nodes', () => {
     expect(g.pts[0]).toEqual(p0);
     expect(g.pts[g.pts.length - 1]).toEqual(p1);
     expect(g.length).toBeLessThan(20 + 31.75 + 61.75);
+  });
+  it('the length of a path outside a ring: a path inside is 0, one that bulges out counts the metres out (P1-043)', () => {
+    const ring = [{ x: 0, z: 0 }, { x: 40, z: 0 }, { x: 40, z: 10 }, { x: 0, z: 10 }];
+    expect(outsideRing([{ x: 1, z: 5 }, { x: 39, z: 5 }], ring)).toBe(0);
+    // within 0.3 m of the edge counts as in
+    expect(outsideRing([{ x: 5, z: 10.2 }, { x: 35, z: 10.2 }], ring)).toBe(0);
+    // 10 m of 30 m run 5 m outside
+    expect(outsideRing([{ x: 5, z: 5 }, { x: 15, z: 5 }, { x: 15, z: 15 }, { x: 25, z: 15 }, { x: 25, z: 5 }, { x: 35, z: 5 }], ring)).toBeCloseTo(20, 0);
+  });
+  it('a looser corner tolerance leaves fewer corners with longer sides: wider arcs that stand a little further off the line', () => {
+    // a lane along a road that wiggles by 0.6 m every 3 m, then turns right
+    const via = [];
+    for (let x = 0; x <= 30; x += 3) via.push({ x, z: (x / 3) % 2 ? 0.6 : 0 });
+    via.push({ x: 32, z: 2 }, { x: 33, z: 6 });
+    const p0 = { x: -5, z: 0, hx: 1, hz: 0 };
+    const p1 = { x: 33, z: 20, hx: 0, hz: 1 };
+    const tight = pathAlong(p0, via, p1, 0.4);
+    const loose = pathAlong(p0, via, p1, 3);
+    expect(loose.radius).toBeGreaterThan(tight.radius);
+    expect(loose.radius).toBeGreaterThanOrEqual(4);
+    expect(deviation(loose.pts, [p0, ...via, p1])).toBeLessThan(4);
   });
   it('two lane ends that do not face each other: the biarc loops, the direct path does not', () => {
     // the target lies behind the start and to the side, heading nearly the same way: two arcs of 900 m
@@ -95,7 +116,8 @@ describe('junction clusters stay small (P1-042)', () => {
     s.way([[-200, 0], m], { highway: 'secondary', oneway: 'yes', lanes: '4' });
     s.way([m, [50, -5], [300, -5]], { highway: 'secondary', oneway: 'yes', lanes: '1' });
     s.way([m, [50, 4], [300, 4]], { highway: 'secondary', oneway: 'yes', lanes: '2' });
-    s.way([m, [100, 40], [200, 100]], { highway: 'secondary_link', oneway: 'yes' });
+    // a two-way slip road: with all four one-way the node is a three-way split zone since P1-043 (split3.ts)
+    s.way([m, [100, 40], [200, 100]], { highway: 'secondary_link' });
     const b = model(s);
     const j = b.junctionPlans.find((p) => p.arms.length === 4)!;
     expect(j.method).toBe('J1');

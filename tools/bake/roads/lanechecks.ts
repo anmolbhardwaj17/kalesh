@@ -6,7 +6,7 @@
 import type { GraphEdge } from '../graph/build.ts';
 import { checkContinuity, checkTapers } from './checks.ts';
 import type { ContinuityCheck, TaperCheck } from './checks.ts';
-import type { GEnd } from './graph.ts';
+import { zoneBranches } from './lanes.ts';
 import { checkHero } from './hero.ts';
 import type { HeroCheck, HeroSpec } from './hero.ts';
 import { GALI_MIN_LANE_M, MIN_DRIVE_LANE_M, MIN_TURN_RADIUS_M, NOSE_GAP } from './model.ts';
@@ -44,15 +44,21 @@ export function checkZones(b: LaneBuild): ZoneCheck {
     const gore = s.lanes.map((l, k) => ({ l, k })).filter((x) => x.l.type === 'gore').map((x) => x.k);
     const first = s.st[0] as Station;
     const last = s.st[s.st.length - 1] as Station;
-    const width = (st: Station): number => (gore.length ? (st.b[gore[0] as number] as number) - (st.b[(gore[gore.length - 1] as number) + 1] as number) : -1);
+    // one gore of three lanes between each two branches side by side (two in a three-way split)
+    const gores = z.mid ? 2 : 1;
+    const width = (st: Station, g: number): number => (gore.length === 3 * gores ? (st.b[gore[3 * g] as number] as number) - (st.b[(gore[3 * g + 2] as number) + 1] as number) : -1);
+    const widths = (st: Station): number[] => Array.from({ length: gores }, (_, g) => width(st, g));
     out.noseMinM = Math.min(out.noseMinM, z.dNose);
     out.noseMaxM = Math.max(out.noseMaxM, z.dNose);
-    if (gore.length !== 3 || Math.abs(width(first)) > 1e-3 || Math.abs(width(last) - NOSE_GAP) > 2e-3 || !(z.dNose > 0) || !(z.dPainted <= z.dNose)) {
+    // every gore closed at the node and at least a nose gap wide at the end, the narrowest exactly a nose gap
+    const atNode = widths(first);
+    const atNose = widths(last);
+    if (gore.length !== 3 * gores || atNode.some((v) => Math.abs(v) > 1e-3) || atNose.some((v) => v < NOSE_GAP - 2e-3) || Math.abs(Math.min(...atNose) - NOSE_GAP) > 2e-3 || !(z.dNose > 0) || !(z.dPainted <= z.dNose)) {
       out.withoutGoreOrNose++;
-      note(`${s.id}: gore ${r(width(first))} m at the node and ${r(width(last))} m at the nose (${gore.length} gore lanes)`);
+      note(`${s.id}: gore ${atNode.map((v) => r(v)).join(' and ')} m at the node and ${atNose.map((v) => r(v)).join(' and ')} m at the nose (${gore.length} gore lanes)`);
     }
     // the centre of each branch's drive lanes at the zone's last station against the branch strip's own reference point
-    for (const [branch, from, count] of [[z.left, z.leftFirst, z.leftCount], [z.right, z.rightFirst, z.rightCount]] as [GEnd, number, number][]) {
+    for (const [branch, from, count] of zoneBranches(z)) {
       const built = b.built.get(branch.edge);
       if (!built) {
         out.endsOffCentreLine++;

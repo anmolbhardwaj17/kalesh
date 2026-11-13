@@ -5,7 +5,7 @@
 // the edges inside it, a path that runs in along its own arm, along that route and out along the arm it enters (each
 // lane keeps its place across the road; an arm cut 60 m out bends away from a straight line to its cut), a short
 // direct path for a pair whose arcs wander, and the tests that say when the plain path will not do. Pure.
-import { pointSegment } from '../geom.ts';
+import { pointInRing, pointSegment } from '../geom.ts';
 import type { P2 } from '../geom.ts';
 import type { PathGeom, Pose } from './connect.ts';
 
@@ -154,10 +154,11 @@ export function viaLine(lead0: readonly P2[], route: readonly P2[] | null, lat0:
 }
 
 /** The path along a line through a junction (viaLine): only its real corners stay, each rounded. */
-export function pathAlong(p0: Pose, via: readonly P2[], p1: Pose): PathGeom {
+export function pathAlong(p0: Pose, via: readonly P2[], p1: Pose, tol = 0.4): PathGeom {
   const ctrl = [p0, ...via, p1];
-  // points along a straight piece would leave a corner no room for its arc
-  return roundedPath(corners(ctrl, 0, ctrl.length - 1), 'route');
+  // points along a straight piece would leave a corner no room for its arc; a larger tolerance leaves fewer corners
+  // with longer sides, so wider arcs that stand further off the line
+  return roundedPath(corners(ctrl, 0, ctrl.length - 1, tol), 'route');
 }
 
 /** The points of a line that stand more than `tol` off the straight piece between their neighbours kept (Douglas and Peucker). */
@@ -173,4 +174,24 @@ function corners(pts: readonly P2[], from: number, to: number, tol = 0.4): P2[] 
   }
   if (worst < 0) return [pts[from] as P2, pts[to] as P2];
   return [...corners(pts, from, worst, tol).slice(0, -1), ...corners(pts, worst, to, tol)];
+}
+
+/** The length of a path outside a ring (sampled every metre at most; a point within 0.3 m of the ring counts as in). */
+export function outsideRing(pts: readonly P2[], ring: readonly P2[]): number {
+  let off = 0;
+  const near = (p: P2): boolean => {
+    for (let i = 0, j = ring.length - 1; i < ring.length; j = i++) if (pointSegment(p, ring[j] as P2, ring[i] as P2).d <= 0.3) return true;
+    return false;
+  };
+  for (let k = 1; k < pts.length; k++) {
+    const a = pts[k - 1] as P2;
+    const b = pts[k] as P2;
+    const len = dist(a, b);
+    const n = Math.max(1, Math.round(len));
+    for (let t = 0; t < n; t++) {
+      const p = { x: a.x + ((b.x - a.x) * (t + 0.5)) / n, z: a.z + ((b.z - a.z) * (t + 0.5)) / n };
+      if (!pointInRing(p, ring) && !near(p)) off += len / n;
+    }
+  }
+  return off;
 }
