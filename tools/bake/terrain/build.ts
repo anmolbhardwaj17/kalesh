@@ -31,7 +31,8 @@ export interface Ground {
 }
 
 export const MATERIAL_OF: Readonly<Record<number, string>> = { [C_GROUND]: 'ground', [C_LAWN]: 'lawn', [C_PLOT]: 'plot', [C_WATER]: 'bed' };
-export const GROUND_MATERIALS = ['ground', 'lawn', 'plot', 'bed', 'water'] as const;
+/** Landmark ground (P2-006) follows the plain classes: a forecourt, a flat pad, the footing strip of a wall, a moat. */
+export const GROUND_MATERIALS = ['ground', 'lawn', 'plot', 'bed', 'water', 'forecourt', 'pad', 'wallbase', 'moat'] as const;
 
 class Group {
   readonly meshes = new Map<string, MeshData>();
@@ -80,7 +81,8 @@ export function emitGround(g: Pick<Ground, 'tg' | 'surface'>, pick: (cx: number,
     const c = s.tri[e * 3 + 2] as number;
     const at = groupAt(((vx[a] as number) + (vx[b] as number) + (vx[c] as number)) / 3, ((vz[a] as number) + (vz[b] as number) + (vz[c] as number)) / 3);
     if (!at) continue;
-    const material = MATERIAL_OF[s.cls[e] as number] as string;
+    const piece = s.over && (s.over[e] as number) >= 0 ? s.pieces[s.over[e] as number] : undefined;
+    const material = piece ? piece.material : (MATERIAL_OF[s.cls[e] as number] as string);
     const m = at.grp.mesh(material);
     for (let i = 0; i < 3; i++) {
       const v = s.tri[e * 3 + i] as number;

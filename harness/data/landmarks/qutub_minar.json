@@ -48,6 +48,13 @@
   ],
   "place": "unplaced",
   "agreement": null,
+  "orientation_deg": null,
+  "orientation": {
+    "source": "none",
+    "axis_deg": null,
+    "elongation": null,
+    "front_known": false
+  },
   "licence_notes": "Facts from Wikidata, CC0. Photos are reference only, never shipped.",
   "art": {
     "status": "stand-in"

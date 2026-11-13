@@ -19,9 +19,9 @@
   "lat": 28.6160392,
   "lon": 77.2472109,
   "position": {
-    "source": "osm_node",
+    "source": "hand",
     "ref": "node/1988513583",
-    "evidence": "OSM node/1988513583 (osmBase 2026-11-11T16:24:25Z)"
+    "evidence": "edit lm_0025: Esri World Imagery read 2026-11-14 through tools/inspector/judge.mjs site (picture harness/reports/map/landmarks/held/pragati_maidan_q24949212.png): the OSM station node/1988513583 lies on the Ring Railway tracks at the platform with its blue shelter (5 m from the track centre line way/77011114); the Wikidata point is 86 m south beside the road, off the platform"
   },
   "footprint": null,
   "height_m": null,
@@ -43,10 +43,11 @@
     "archetype": "low_density_compounds"
   },
   "flags": [
+    "position_checked_by_hand",
     "sources_disagree_over_50m"
   ],
   "issue": "R-LM-01:node/1988513583:Q24949212",
-  "place": "held",
+  "place": "ok",
   "agreement": {
     "osm_to_wikidata_m": 86,
     "wikidata": [28.615268, 77.247277],
@@ -62,13 +63,23 @@
     "variant": "RSTN-HALT",
     "from": "harness/design/reference/infrastructure/variant_map.json stations, node/1988513583"
   },
+  "orientation_deg": null,
+  "orientation": {
+    "source": "none",
+    "axis_deg": null,
+    "elongation": null,
+    "front_known": false
+  },
   "licence_notes": "Geometry ODbL (OpenStreetMap contributors). Facts from Wikidata, CC0. Photos are reference only, never shipped.",
   "art": {
     "status": "stand-in"
   },
   "confidence": {
-    "position": "low",
+    "position": "high",
     "footprint": "none",
     "height": "none"
-  }
+  },
+  "edits": [
+    "lm_0025"
+  ]
 }

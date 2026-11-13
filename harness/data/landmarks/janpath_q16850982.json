@@ -19,9 +19,9 @@
   "lat": 28.6240485,
   "lon": 77.2192587,
   "position": {
-    "source": "osm_node",
+    "source": "hand",
     "ref": "node/9584236507",
-    "evidence": "OSM node/9584236507 (osmBase 2026-11-11T16:24:25Z)"
+    "evidence": "edit lm_0020: an underground station shows nothing on a satellite picture, so it is checked on the map data (osmBase 2026-11-11): the OSM station node/9584236507 lies 3 m from the Violet Line tunnel centre line (way/610024711) with the stop positions of both tracks (node/1988668271, node/5777629177) 3 m from it: the middle of the platforms. The Wikidata point is 113 m north along the same tunnel, towards the gates (Gate Number 3, node/6539240965, is 81 m from it): inside the station box, not its middle"
   },
   "footprint": null,
   "height_m": null,
@@ -43,10 +43,11 @@
     "archetype": "commercial_midrise"
   },
   "flags": [
+    "position_checked_by_hand",
     "sources_disagree_over_50m"
   ],
   "issue": "R-LM-01:node/9584236507:Q16850982",
-  "place": "held",
+  "place": "ok",
   "agreement": {
     "osm_to_wikidata_m": 112.7,
     "wikidata": [28.6250595, 77.2191842],
@@ -67,13 +68,23 @@
     "line": "Delhi Metro Violet Line",
     "from": "harness/design/reference/infrastructure/variant_map.json stations, node/9584236507"
   },
+  "orientation_deg": null,
+  "orientation": {
+    "source": "none",
+    "axis_deg": null,
+    "elongation": null,
+    "front_known": false
+  },
   "licence_notes": "Geometry ODbL (OpenStreetMap contributors). Facts from Wikidata, CC0. Photos are reference only, never shipped.",
   "art": {
     "status": "stand-in"
   },
   "confidence": {
-    "position": "low",
+    "position": "high",
     "footprint": "none",
     "height": "none"
-  }
+  },
+  "edits": [
+    "lm_0020"
+  ]
 }

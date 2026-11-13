@@ -20,9 +20,10 @@
   "lat": 28.6611091,
   "lon": 77.2427908,
   "position": {
-    "source": "osm_footprint_centre",
+    "source": "hand",
     "ref": "way/80431096",
-    "evidence": "area centroid of OSM way/80431096 (osmBase 2026-11-11T16:24:25Z)"
+    "evidence": "edit lm_0030: Esri World Imagery read 2026-11-14 through tools/inspector/judge.mjs site (picture harness/reports/map/landmarks/held/salimgarh_fort_q2336156.png): the centre of the OSM outline way/80431096 lies in the wooded fort ground between the Ring Road and the river, where the railway crosses it; the Wikidata point (28.661, 77.24, a rounded coordinate) is 273 m west on the Ring Road",
+    "footprint_centre_offset_m": 0
   },
   "footprint": {
     "source": "osm",
@@ -113,23 +114,34 @@
     "archetype": "low_density_compounds"
   },
   "flags": [
+    "position_checked_by_hand",
     "sources_disagree_over_50m"
   ],
   "issue": "R-LM-01:way/80431096:Q2336156",
-  "place": "held",
+  "place": "ok",
   "agreement": {
     "osm_to_wikidata_m": 272.6,
     "wikidata": [28.661, 77.24],
     "inside_footprint": false,
     "ok": false
   },
+  "orientation_deg": 215.9,
+  "orientation": {
+    "source": "principal_axis",
+    "axis_deg": 125.9,
+    "elongation": 1.6,
+    "front_known": false
+  },
   "licence_notes": "Geometry ODbL (OpenStreetMap contributors). Facts from Wikidata, CC0. Photos are reference only, never shipped.",
   "art": {
     "status": "stand-in"
   },
   "confidence": {
-    "position": "medium",
+    "position": "high",
     "footprint": "medium",
     "height": "none"
-  }
+  },
+  "edits": [
+    "lm_0030"
+  ]
 }

@@ -71,6 +71,15 @@
     "inside_footprint": false,
     "ok": true
   },
+  "front": "west, towards Kartavya Path and Rashtrapati Bhavan",
+  "orientation_deg": 272.3,
+  "orientation": {
+    "source": "axis_and_front",
+    "axis_deg": 2.3,
+    "elongation": 1.55,
+    "front_bearing_deg": 270,
+    "front_known": true
+  },
   "licence_notes": "Geometry ODbL (OpenStreetMap contributors). Facts from Wikidata, CC0. Photos are reference only, never shipped.",
   "art": {
     "status": "stand-in"
@@ -81,6 +90,7 @@
     "height": "high"
   },
   "edits": [
-    "lm_0002"
+    "lm_0002",
+    "lm_0013"
   ]
 }

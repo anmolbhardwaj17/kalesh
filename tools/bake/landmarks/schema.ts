@@ -19,7 +19,7 @@ export const WORSHIP_WORDS = /\b(place_of_worship|mosque|masjid|temple|mandir|ch
 
 const pair = (v: unknown): v is [number, number] => Array.isArray(v) && v.length === 2 && isNum(v[0]) && isNum(v[1]) && Math.abs(v[0]) <= 90 && Math.abs(v[1]) <= 180;
 
-/** Problems of one registry entry. `marker` rows leave out licence_notes, art and the footprint ring. */
+/** Problems of one registry entry. `marker` rows leave out licence_notes and art. */
 export function entryProblems(e: unknown, label: string, marker = false): string[] {
   const out: string[] = [];
   const bad = (m: string): void => {
@@ -46,9 +46,14 @@ export function entryProblems(e: unknown, label: string, marker = false): string
   const fp = e['footprint'];
   if (fp !== null) {
     if (!isObj(fp) || !isStr(fp['source']) || !['osm', 'photo', 'satellite'].includes(fp['source']) || !isStr(fp['ref']) || !isNum(fp['area_m2']) || fp['area_m2'] <= 0) bad('footprint needs source (osm, photo or satellite), ref and a positive area_m2');
-    else if (!marker && !(Array.isArray(fp['ring']) && fp['ring'].length >= 3 && fp['ring'].every(pair))) bad('footprint.ring needs three or more [lat, lon] pairs');
+    else if (!(Array.isArray(fp['ring']) && fp['ring'].length >= 3 && fp['ring'].every(pair))) bad('footprint.ring needs three or more [lat, lon] pairs');
     else if (fp['source'] !== 'osm' && !isStr(fp['evidence'], 25)) bad('a footprint from a photo or satellite view needs its evidence line');
   }
+  const od = e['orientation_deg'];
+  const or = e['orientation'];
+  if (!(od === null || (isNum(od) && od >= 0 && od < 360))) bad(`orientation_deg ${String(od)} is not null or a compass bearing`);
+  if (!isObj(or) || !isStr(or['source']) || !['axis_and_front', 'principal_axis', 'front_only', 'round', 'none'].includes(or['source']) || typeof or['front_known'] !== 'boolean') bad('orientation needs source and front_known');
+  else if ((od === null) !== (or['source'] === 'none')) bad('orientation_deg and orientation.source do not agree (null goes with "none")');
   const h = e['height_m'];
   if (!(h === null || (isNum(h) && h > 0 && h < 400))) bad(`height_m ${String(h)} is not null or a height in metres`);
   if (!isStr(e['height_source']) || !HEIGHT_SOURCES.includes(e['height_source'])) bad(`height_source "${String(e['height_source'])}" is not one of ${HEIGHT_SOURCES.join(', ')}`);
@@ -159,7 +164,7 @@ export function listProblems(file: unknown): string[] {
   return out;
 }
 
-const SET_KEYS = ['tier', 'name', 'type', 'era', 'height_m', 'height_source', 'height_evidence', 'lat', 'lon', 'position_checked', 'position_evidence', 'join_checked', 'footprint', 'front', 'extent', 'references'];
+const SET_KEYS = ['tier', 'name', 'type', 'era', 'height_m', 'height_source', 'height_evidence', 'lat', 'lon', 'position_checked', 'position_evidence', 'join_checked', 'footprint', 'front', 'front_bearing_deg', 'pad', 'zone_radius_m', 'extent', 'references'];
 
 /** Problems of the edits file harness/data/landmarks.overrides.json. */
 export function overridesProblems(file: unknown): string[] {
@@ -192,6 +197,14 @@ export function overridesProblems(file: unknown): string[] {
       if (s['height_source'] !== undefined && !(isStr(s['height_source']) && HEIGHT_SOURCES.includes(s['height_source']) && s['height_source'] !== 'none')) out.push(`${lab}: set.height_source is not a source`);
       if ((s['lat'] === undefined) !== (s['lon'] === undefined)) out.push(`${lab}: set.lat and set.lon go together`);
       if (s['lat'] !== undefined && !(isNum(s['lat']) && isNum(s['lon']))) out.push(`${lab}: set.lat and set.lon must be numbers`);
+      if (s['front_bearing_deg'] !== undefined && !(isNum(s['front_bearing_deg']) && s['front_bearing_deg'] >= 0 && s['front_bearing_deg'] < 360 && isStr(s['front'], 4))) out.push(`${lab}: set.front_bearing_deg is a compass bearing from 0 to 360 and goes with set.front (what was read)`);
+      if (s['zone_radius_m'] !== undefined && !(isNum(s['zone_radius_m']) && s['zone_radius_m'] > 0 && s['zone_radius_m'] < 2000)) out.push(`${lab}: set.zone_radius_m is not a radius in metres`);
+      const pad = s['pad'];
+      if (pad !== undefined) {
+        if (!isObj(pad) || !isStr(pad['source']) || !['osm', 'photo', 'satellite'].includes(pad['source'])) out.push(`${lab}: set.pad.source must be osm, photo or satellite`);
+        else if (pad['source'] === 'osm' && !(isStr(pad['ref']) && OSM_ID.test(pad['ref']))) out.push(`${lab}: an osm pad needs ref (an OSM id)`);
+        else if (pad['source'] !== 'osm' && !(Array.isArray(pad['ring']) && pad['ring'].length >= 3 && pad['ring'].every(pair))) out.push(`${lab}: a photo or satellite pad needs a ring of three or more [lat, lon] pairs`);
+      }
       const f = s['footprint'];
       if (f !== undefined) {
         if (!isObj(f) || !isStr(f['source']) || !['osm', 'photo', 'satellite'].includes(f['source'])) out.push(`${lab}: set.footprint.source must be osm, photo or satellite`);

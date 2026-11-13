@@ -22,6 +22,8 @@ const Buildings := preload("res://world/systems/buildings.gd")
 const Colliders := preload("res://world/systems/colliders.gd")
 const Lanes := preload("res://world/systems/lanes.gd")
 const SpawnPins := preload("res://world/spawn_pins.gd")
+const LandmarkSlots := preload("res://world/landmark_slots.gd")
+const TileReader := preload("res://world/streaming/tile_reader.gd")
 ## Stand-in nodes of the scaffold scene that the tiles replace.
 const STAND_INS := ["Ground", "Road", "NorthPost", "GroundCollider"]
 ## A ring that is not attached after this much wall time is reported and the game goes on.
@@ -164,7 +166,8 @@ func _process(_delta: float) -> void:
 		core.target = p
 
 
-## Landmark pins of the tiles that are live now: [{id, name, kind, x, y, z, tile}] in world metres.
+## Pins of the tiles that are live now: [{id, name, kind, x, y, z, tile}] in world metres. A landmark pin (kind
+## `landmark`, id `lm:<registry id>`) also has tier, mode, yaw (the compass bearing its front faces) and height.
 func live_pins() -> Array:
 	var out := []
 	for key: Vector2i in core.tiles:
@@ -174,7 +177,11 @@ func live_pins() -> Array:
 		var view: Dictionary = e.get("view", {})
 		for p: Dictionary in view.get("pins", []):
 			var w: Vector3 = (view.origin as Vector3) + (p.pos as Vector3)
-			out.append({"id": p.id, "name": p.name, "kind": p.kind, "x": w.x, "y": w.y, "z": w.z, "tile": WorldFrame.tile_id(key)})
+			var pin := {"id": p.id, "name": p.name, "kind": p.kind, "x": w.x, "y": w.y, "z": w.z, "tile": WorldFrame.tile_id(key)}
+			for k: String in TileReader.PIN_EXTRA:
+				if p.has(k):
+					pin[k] = p[k]
+			out.append(pin)
 	return out
 
 
@@ -242,4 +249,5 @@ func info() -> Dictionary:
 	out["colliderChunks"] = int(colliders.chunks)
 	out["lanes"] = lanes.pieces.size()
 	out["spawn"] = spawn
+	out["landmarks"] = {"placed": index.landmarks.size(), "far": index.far_landmarks.size(), "fullDetailCap": LandmarkSlots.cap(index.landmark_limits)}
 	return out

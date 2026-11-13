@@ -19,9 +19,9 @@
   "lat": 28.6584227,
   "lon": 77.2303375,
   "position": {
-    "source": "osm_node",
+    "source": "hand",
     "ref": "node/7018886724",
-    "evidence": "OSM node/7018886724 (osmBase 2026-11-11T16:24:25Z)"
+    "evidence": "edit lm_0017: an underground station shows nothing on a satellite picture, so it is checked on the map data (osmBase 2026-11-11): the OSM station node/7018886724 lies 3 m from the Yellow Line tunnel centre line (way/79482957) and 55 m from the centre of the four named gates (Chandni Chowk Metro Gate No. 1, 2, 3 and Gate 5); the Wikidata point is 10 m off the tunnel and 117 m from the gates"
   },
   "footprint": null,
   "height_m": null,
@@ -43,10 +43,11 @@
     "archetype": "low_density_compounds"
   },
   "flags": [
+    "position_checked_by_hand",
     "sources_disagree_over_50m"
   ],
   "issue": "R-LM-01:node/7018886724:Q5071227",
-  "place": "held",
+  "place": "ok",
   "agreement": {
     "osm_to_wikidata_m": 67.1,
     "wikidata": [28.657838, 77.230169],
@@ -67,13 +68,23 @@
     "line": "Delhi Metro Yellow Line",
     "from": "harness/design/reference/infrastructure/variant_map.json stations, node/7018886724"
   },
+  "orientation_deg": null,
+  "orientation": {
+    "source": "none",
+    "axis_deg": null,
+    "elongation": null,
+    "front_known": false
+  },
   "licence_notes": "Geometry ODbL (OpenStreetMap contributors). Facts from Wikidata, CC0. Photos are reference only, never shipped.",
   "art": {
     "status": "stand-in"
   },
   "confidence": {
-    "position": "low",
+    "position": "high",
     "footprint": "none",
     "height": "none"
-  }
+  },
+  "edits": [
+    "lm_0017"
+  ]
 }

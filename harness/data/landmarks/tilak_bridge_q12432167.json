@@ -19,9 +19,9 @@
   "lat": 28.6281166,
   "lon": 77.2374037,
   "position": {
-    "source": "osm_node",
+    "source": "hand",
     "ref": "node/1988513599",
-    "evidence": "OSM node/1988513599 (osmBase 2026-11-11T16:24:25Z)"
+    "evidence": "edit lm_0028: Esri World Imagery read 2026-11-14 through tools/inspector/judge.mjs site (picture harness/reports/map/landmarks/held/tilak_bridge_q12432167.png): the OSM station node/1988513599 lies on the platform roofs at the middle of the station, 6 m from the track centre line (way/1317674192); the Wikidata point is 79 m south-east on the foot bridge at the end of the platforms"
   },
   "footprint": null,
   "height_m": null,
@@ -43,10 +43,11 @@
     "archetype": "mixed_midrise"
   },
   "flags": [
+    "position_checked_by_hand",
     "sources_disagree_over_50m"
   ],
   "issue": "R-LM-01:node/1988513599:Q12432167",
-  "place": "held",
+  "place": "ok",
   "agreement": {
     "osm_to_wikidata_m": 78.9,
     "wikidata": [28.627633, 77.237995],
@@ -62,13 +63,23 @@
     "variant": "RSTN-HALT",
     "from": "harness/design/reference/infrastructure/variant_map.json stations, node/1988513599"
   },
+  "orientation_deg": null,
+  "orientation": {
+    "source": "none",
+    "axis_deg": null,
+    "elongation": null,
+    "front_known": false
+  },
   "licence_notes": "Geometry ODbL (OpenStreetMap contributors). Facts from Wikidata, CC0. Photos are reference only, never shipped.",
   "art": {
     "status": "stand-in"
   },
   "confidence": {
-    "position": "low",
+    "position": "high",
     "footprint": "none",
     "height": "none"
-  }
+  },
+  "edits": [
+    "lm_0028"
+  ]
 }

@@ -60,6 +60,13 @@
     "line": "Blue Line",
     "from": "harness/design/reference/infrastructure/variant_map.json stations, node/6539894850"
   },
+  "orientation_deg": null,
+  "orientation": {
+    "source": "none",
+    "axis_deg": null,
+    "elongation": null,
+    "front_known": false
+  },
   "licence_notes": "Geometry ODbL (OpenStreetMap contributors). Facts from Wikidata, CC0. Photos are reference only, never shipped.",
   "art": {
     "status": "stand-in"

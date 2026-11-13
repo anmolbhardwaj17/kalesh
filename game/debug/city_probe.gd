@@ -1,6 +1,11 @@
 ## The city checks of the harness (P1-024): the debug hook city(cmd, opts) of docs/GAME_HOOKS.md. A child of the debug
 ## server, made on its first call. It reads the streamed city and the camera; it moves nothing.
-##   pins                     landmark pins of the live tiles [{id, name, kind, x, y, z, tile}] (world metres)
+##   pins                     pins of the live tiles [{id, name, kind, x, y, z, tile}] (world metres); a landmark pin
+##                            (kind landmark, id lm:<registry id>) also has tier, mode, yaw and height
+##   landmarks {at: [x, z], limit}  the landmark file of the tile folder (P2-006): {limits, placed, silhouettes, far:
+##                            [{id, pos, bearing, distance, reachable, nav}], heroesAtFullDetail, plan: [{id, tier,
+##                            level, distance}]}: the LOD slot each landmark shows from `at` (the camera when left
+##                            out), nearest first; level -1 is the far silhouette (game/world/landmark_slots.gd)
 ##   geo {places: [{id, lat, lon}]}  where the game's projection puts each place: [{id, x, z}] (the world frame of the
 ##                            loaded tile index: offset + geo_to_world, game/geo/world_frame.gd)
 ##   screen {points: [[x, y, z]]}  where the current camera draws each world point: {size: [w, h], points: [{x, y,
@@ -16,6 +21,7 @@
 extends Node
 
 const DrawnSurface := preload("res://debug/drawn_surface.gd")
+const LandmarkSlots := preload("res://world/landmark_slots.gd")
 ## A watched point farther than this from every drawn height counts in `over`.
 const LIMIT_M := 0.05
 ## The player is under the drawn surface (fell through) when its feet are this far below the highest drawn surface
@@ -47,6 +53,22 @@ func hook(a: Array) -> Dictionary:
 	match cmd:
 		"pins":
 			return {"ok": true, "result": city.live_pins()}
+		"landmarks":
+			# the landmark file of the tile folder and the LOD plan from a point (the camera when none is given)
+			var eye := Vector3.ZERO
+			var cam := get_viewport().get_camera_3d()
+			if o.get("at") is Array and (o.at as Array).size() >= 2:
+				eye = Vector3(float(o.at[0]), 0.0, float(o.at[1]))
+			elif cam != null:
+				eye = cam.global_position
+			var plan: Array = LandmarkSlots.plan(city.index.landmarks, city.index.landmark_limits, eye)
+			var far := []
+			for f: Dictionary in city.index.far_landmarks:
+				far.append({"id": f.id, "pos": f.pos, "bearing": f.bearing, "distance": f.distance, "reachable": f.reachable, "nav": f.nav})
+			return {"ok": true, "result": {
+				"limits": city.index.landmark_limits, "placed": city.index.landmarks.size(), "silhouettes": city.index.silhouettes.size(), "far": far,
+				"heroesAtFullDetail": LandmarkSlots.heroes_at_full_detail(plan), "plan": plan.slice(0, int(o.get("limit", 24))),
+			}}
 		"geo":
 			var out := []
 			for p: Variant in o.get("places", []):

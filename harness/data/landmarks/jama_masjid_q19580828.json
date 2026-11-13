@@ -74,6 +74,13 @@
     "line": "Delhi Metro Violet Line",
     "from": "harness/design/reference/infrastructure/variant_map.json stations, way/360264006"
   },
+  "orientation_deg": 237.5,
+  "orientation": {
+    "source": "principal_axis",
+    "axis_deg": 147.5,
+    "elongation": 7.7,
+    "front_known": false
+  },
   "licence_notes": "Geometry ODbL (OpenStreetMap contributors). Facts from Wikidata, CC0. Photos are reference only, never shipped.",
   "art": {
     "status": "stand-in"

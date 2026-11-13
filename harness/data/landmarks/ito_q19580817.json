@@ -19,9 +19,9 @@
   "lat": 28.6281909,
   "lon": 77.2410437,
   "position": {
-    "source": "osm_node",
+    "source": "hand",
     "ref": "node/9584236508",
-    "evidence": "OSM node/9584236508 (osmBase 2026-11-11T16:24:25Z)"
+    "evidence": "edit lm_0019: an underground station shows nothing on a satellite picture, so it is checked on the map data (osmBase 2026-11-11): the OSM station node/9584236508 lies 3 m from the Violet Line tunnel centre line (way/610024711) and 29 m from the centre of the six ITO Metro gates; the Wikidata point is 21 m off the tunnel and 110 m from the gates"
   },
   "footprint": null,
   "height_m": null,
@@ -43,10 +43,11 @@
     "archetype": "low_density_compounds"
   },
   "flags": [
+    "position_checked_by_hand",
     "sources_disagree_over_50m"
   ],
   "issue": "R-LM-01:node/9584236508:Q19580817",
-  "place": "held",
+  "place": "ok",
   "agreement": {
     "osm_to_wikidata_m": 134,
     "wikidata": [28.6293714, 77.2413198],
@@ -67,13 +68,23 @@
     "line": "Delhi Metro Violet Line",
     "from": "harness/design/reference/infrastructure/variant_map.json stations, node/9584236508"
   },
+  "orientation_deg": null,
+  "orientation": {
+    "source": "none",
+    "axis_deg": null,
+    "elongation": null,
+    "front_known": false
+  },
   "licence_notes": "Geometry ODbL (OpenStreetMap contributors). Facts from Wikidata, CC0. Photos are reference only, never shipped.",
   "art": {
     "status": "stand-in"
   },
   "confidence": {
-    "position": "low",
+    "position": "high",
     "footprint": "none",
     "height": "none"
-  }
+  },
+  "edits": [
+    "lm_0019"
+  ]
 }

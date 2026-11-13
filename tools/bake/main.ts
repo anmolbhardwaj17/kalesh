@@ -90,6 +90,9 @@ import { OfflineError, realNet } from './sources/net.ts';
 import type { Net } from './sources/net.ts';
 import { loadSources } from './sources/pinfile.ts';
 import { runSourcesStage } from './sources/stage.ts';
+import { runMassingStep, runPlaceStep } from './sources/landmarkstage.ts';
+import type { MassingStep } from './sources/landmarkstage.ts';
+import { GroundHeights } from './tile/shells.ts';
 import { runTileStep } from './sources/tilestage.ts';
 import type { SourceResult } from './sources/stage.ts';
 
@@ -225,6 +228,8 @@ export async function bake(args: BakeArgs, opts: BakeOptions): Promise<HealthRep
   let meshed: { input: MeshInput; mesh: RoadMesh } | null = null;
   /** What the terrain step hands the tile step: the ground with its tiles (kept in memory, no file). */
   let grounded: Ground | null = null;
+  /** What the landmark placement hands the tile step: the stand-in massing, the pins and the landmark file (P2-006). */
+  let landmarked: MassingStep | null = null;
   let laneChecks: LaneChecks | null = null;
   let repairIssues: Issue[] = [];
   let meshChecks: MeshChecks | null = null;
@@ -499,11 +504,23 @@ export async function bake(args: BakeArgs, opts: BakeOptions): Promise<HealthRep
       }
     } else if (step === 'terrain') {
       if (!meshed || !repaired || !groundModel) throw new Error('the terrain step needs the ground, the repair and the mesh step before it');
-      const t = await runTerrainStep(stepCtx, meshed, repaired, groundModel);
+      // landmark placement (P2-006): the zones take their buildings out of the plain footprints and the pads, forecourts
+      // and wall strips go into the ground; after the ground is built the pads are checked on it and the massing stands on it
+      const model = groundModel;
+      const placed = graphInput ? await runPlaceStep(stepCtx, districts, meshed, repaired, (x, z) => model.at(x, z), graphInput.elements, path.dirname(healthFile)) : null;
+      if (placed) {
+        report.landmarks = placed.rec;
+        check(placed.invariants);
+      }
+      const t = await runTerrainStep(stepCtx, meshed, repaired, groundModel, placed?.ground ?? []);
       grounded = t.ground;
       report.terrain = t.rec;
       for (const [k, n] of Object.entries(t.rec.gates)) report.gates[k] = n;
       check(t.invariants);
+      if (placed) {
+        landmarked = runMassingStep(stepCtx, placed, t.ground, new GroundHeights(t.ground), (x, z) => model.at(x, z));
+        check(landmarked.invariants);
+      }
     } else if (step === 'tiles') {
       if (!laneBuild || !meshed || !grounded || !repaired || !laneChecks || !meshChecks) throw new Error('the tiles step needs the lanes, mesh and terrain steps before it');
       // the six gate counts with their items: each 0 or explained (harness/data/gate_explanations.json), or no tile is written
@@ -514,6 +531,7 @@ export async function bake(args: BakeArgs, opts: BakeOptions): Promise<HealthRep
       const res = runTileStep({
         root: opts.root, out: report.tiles.out ?? tileFolder(plan), stage: plan.id, block: plan.def.block, origin: plan.origin, offset: blockFrame(districts, plan.def.block).offset,
         outline: repaired.outline, lanes: laneBuild, meshed, ground: grounded, repaired, places: layout.input.places, only: report.tiles.only, log: opts.log,
+        ...(landmarked ? { landmarks: { meshes: landmarked.meshes, pins: landmarked.pins, file: landmarked.file } } : {}),
         // the committed expected hash follows a whole bake of the game's own tile folder (never a partial bake or an --out folder)
         hashFile: report.tiles.only === null && report.tiles.out === DEFAULT_TILES ? TILES_HASH_FILE : undefined,
       });

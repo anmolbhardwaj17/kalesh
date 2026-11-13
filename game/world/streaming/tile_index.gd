@@ -21,6 +21,13 @@ var raw := {}
 ## tile's lowest ground), chunks, triangles, colliderTriangles, lanes}.
 var tiles := {}
 var total_bytes := 0
+## The landmark file of the folder (landmarks.json, P2-006; empty when the folder has none): where each placed
+## landmark stands with its LOD slots, the far landmarks of the backdrop, the far silhouettes and the limits
+## (game/world/landmark_slots.gd picks the level each one shows).
+var landmarks: Array = []
+var far_landmarks: Array = []
+var silhouettes: Array = []
+var landmark_limits := {}
 
 
 ## The tile folder of a --tiles value ("" for an unknown name).
@@ -43,6 +50,11 @@ static func open(dir: String) -> RefCounted:
 		out.error = "%s is not a tile index" % f
 		return out
 	out.take(parsed)
+	var lf := dir + "landmarks.json"
+	if FileAccess.file_exists(lf):
+		var lm: Variant = JSON.parse_string(FileAccess.get_file_as_string(lf))
+		if typeof(lm) == TYPE_DICTIONARY:
+			out.take_landmarks(lm)
 	return out
 
 
@@ -65,6 +77,14 @@ func take(index: Dictionary) -> void:
 			"colliderTriangles": int(rec.get("colliderTriangles", 0)), "lanes": int(rec.get("lanes", 0)),
 		}
 		total_bytes += int(rec.get("bytes", 0))
+
+
+## Fills the landmark lists from a parsed landmarks.json (tests pass their own).
+func take_landmarks(file: Dictionary) -> void:
+	landmarks = file.get("landmarks", [])
+	far_landmarks = file.get("far", [])
+	silhouettes = file.get("silhouettes", [])
+	landmark_limits = file.get("limits", {})
 
 
 func has(key: Vector2i) -> bool:
