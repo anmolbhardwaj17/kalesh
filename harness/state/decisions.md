@@ -349,3 +349,6 @@ Anmol: keep car tunnels, keep some pedestrian underpasses with their own look an
 
 ## 2026-11-13 Route line, phone, money; Lutyens confirmed (Anmol)
 Anmol agreed to the route line, phone and money ideas. Decision: noted on P3-001 so the P3 plan includes them, plus audio, save and settings, before the P4 slice. He asked about the rich areas: already planned as D05 (Lutyens bungalows and Delhi Gymkhana) and D06 (Khan Market, Lodhi Garden and the Delhi Golf Club) in the centre block at true scale, built in P7, with Act 3 and Act 5 missions there (invented politicians only).
+
+## 2026-11-13 Map lane on (Anmol)
+Anmol asked for a separate agent for the map fixes and answered "Yes, map lane on". Decision: CLAUDE.md Modes gets MAP LANE ON: one extra builder on map pipeline tasks only, in .worktrees/map on its own task branch, PR per task as usual; the main builder takes the rest. Why: map fixes were waiting behind game work; about 2x usage accepted.
