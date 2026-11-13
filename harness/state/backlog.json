@@ -1,6 +1,6 @@
 {
   "_doc": "Written only by node harness/bin/task.mjs. Phases run in order; P0 (ADOPT + STYLE DISCOVERY) waits for the owner by design and needs task.mjs signoff and task.mjs archsignoff before its gate passes. Later phases are added by the planner at the end of P0 (task.mjs phase-add) from the game's real state.",
-  "updated": "2026-11-13T13:00:19.781Z",
+  "updated": "2026-11-13T13:25:48.890Z",
   "phases": [
     {
       "id": "P0",
@@ -3328,14 +3328,17 @@
       "agent": "builder",
       "priority": 1,
       "kind": "feature",
-      "status": "doing",
+      "status": "done",
       "attempts": 1,
       "notes": [
         "From P1-045: at the bungalow loop on Bhagwan Das Road south-west carriageway (node xadd_5_-2_0001.L8) the junction falls back to the polygon set and about 50 m loses its footpath; mid-block crossings are kept as marks but not drawn; add_median splits one two-way road at a time (a road blueprint pass could chain across class changes)."
       ],
       "created": "2026-11-11T18:24:08.193Z",
       "model": "fable",
-      "started": "2026-11-13T11:46:06.378Z"
+      "started": "2026-11-13T11:46:06.378Z",
+      "done": "2026-11-13T13:25:48.818Z",
+      "summary": "Map lane, PR 46. The bake settles everything basic: auto share 54.6% to 97.8%, owner queue 2,868 to 0. Buildings on road faces 0 (1,657 moved back, 1,806 cut to the road edge, 23 split, 259 dropped; gali rule gave way for 1,523). Dead ends 144: 65 joined, 78 closed, 0 left. Overlaps 306 moved apart, 143 split and merge zones. Judge pass with Esri satellite: 53 patches with reasons. Whole bake green, deterministic, second run applies 0; fixtures and test block regenerated. Footprint offset alignment measured and not built (3,818 to 3,100 only). Verified from the worktree: typecheck, npm test, quick 15/15; sheet read and kept.",
+      "commit": "8138053"
     },
     {
       "id": "P1-031",
@@ -3792,7 +3795,9 @@
       "kind": "mentor",
       "status": "todo",
       "attempts": 0,
-      "notes": [],
+      "notes": [
+        "From P1-030: 463 lanes sit at the 1.8 m gali floor and gali widths step at junctions; closed dead ends are square ends (no turning head or end kerb yet); passages through named buildings (Bharat Mandapam, CP blocks, Chhatta Chowk) are cut open, not roofed; a junction on the CP inner circle put the collider 0.059 m off the drawn surface (not investigated)."
+      ],
       "created": "2026-11-13T10:38:52.202Z"
     },
     {
