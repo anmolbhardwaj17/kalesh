@@ -334,3 +334,6 @@ Decision: the city base line is 12 scripted vehicle paths (4 places x 60, 140 an
 
 ## 2026-11-13 Basic map fixes are ours, not Anmol's (Anmol)
 Anmol does not want to work through about 2,500 inspector fixes; basic ones (building over road, overlapping roads, dead ends and gaps) must be decided by us, looking from the top when rules cannot. Decision: P1-030 rewritten and raised to priority 1 (Fable, map repair rules are a Fable tier system): auto-repair everything basic, add a top-view judge pass, and cap the owner queue at about 50 genuine questions. MAP_REPAIR.md updated. Why: his time goes to taste and real unknowns, not mechanical fixes.
+
+## 2026-11-13 Road width continuity (Anmol)
+Anmol showed a road near India Gate that is thick on one side of a crossing and thin on the other, and roads round the triangle islands that step from thick to thin. Decision: new task P1-046, priority 1: a road keeps one cross section along a corridor unless real evidence says otherwise, width changes only through tapers, and a bake check fails on any width step. Why: roads must read as real Delhi roads; a lane count cannot jump without a merge.

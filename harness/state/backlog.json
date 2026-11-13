@@ -1,6 +1,6 @@
 {
   "_doc": "Written only by node harness/bin/task.mjs. Phases run in order; P0 (ADOPT + STYLE DISCOVERY) waits for the owner by design and needs task.mjs signoff and task.mjs archsignoff before its gate passes. Later phases are added by the planner at the end of P0 (task.mjs phase-add) from the game's real state.",
-  "updated": "2026-11-13T10:37:20.175Z",
+  "updated": "2026-11-13T10:38:52.203Z",
   "phases": [
     {
       "id": "P0",
@@ -3765,6 +3765,21 @@
       "notes": [],
       "created": "2026-11-13T09:52:25.683Z",
       "started": "2026-11-13T10:09:48.341Z"
+    },
+    {
+      "id": "P1-046",
+      "phase": "P1",
+      "title": "Road width continuity: no sudden thick to thin, lanes change only with a proper merge",
+      "desc": "Anmol 2026-11-13 with a screenshot of Kartavya Path and the road crossing it near India Gate (harness/reports/map/anmol_2026-11-13_kartavya_width_jumps.png): the north-south road is thick on one side of the crossing and thin on the other, and the roads round the small triangles and the garden go thick then suddenly thin. That is not how such roads are built: a 3 or 4 lane road does not become 2 lanes without a proper merge. Rules for the lane model: (1) a road keeps one cross section along a corridor (same name or same class through a junction, collinear within about 20 degrees) unless there is real evidence for a change (a lane tag that agrees with photos, a junction with turn lanes, a slip road leaving); OSM segments with a missing or odd lanes tag take the corridor's width, not a class default; (2) where the width does change, it changes with a taper of the proper length for the speed (lane drop or add, about 1:20 to 1:30), never a step; (3) slip roads and the roads round triangle islands and garden edges get a width that fits their role (one or two lanes) and join the main road through gores and tapers; (4) a new check counts width steps (a change of more than 1 m within 5 m along a corridor) and fails the bake on any that is not inside a taper. Use real-life references (photos, satellite) for the hero stretches here: Kartavya Path, the road crossing it near the canals, the India Gate hexagon approaches. Acceptance: (a) width steps over the whole pilot 0, each former step listed with what fixed it; (b) before and after map renders of this exact site and of two other sites under harness/reports/map/; (c) whole bake green with gates explained, stream and city route fixtures regenerated, test block rebaked; (d) lane model unit tests for corridor width carry-over and tapers; (e) typecheck, npm test and verify --quick green.",
+      "accept": [],
+      "deps": [],
+      "agent": "builder",
+      "priority": 1,
+      "kind": "mentor",
+      "status": "todo",
+      "attempts": 0,
+      "notes": [],
+      "created": "2026-11-13T10:38:52.202Z"
     }
   ]
 }

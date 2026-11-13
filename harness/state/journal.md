@@ -448,3 +448,5 @@ One line per event, written by task.mjs (start, done, fail, phase changes, inbox
 - 2026-11-13 16:07 [P1-030] moved P1 -> P1, priority 1
 - 2026-11-13 16:07 [P1-030] model: fable
 - 2026-11-13 16:07 mentor message mmweueb5z handled: Agreed, that was too much to ask. P1-030 is now priority 1: we fix the basic ones ourselves (shift or reshape buildings, merge or separate roads, connect or end dead ends, a top-view pass for the rest). Your queue drops to at most about 50 real questions.
+- 2026-11-13 16:08 [P1-046] added: Road width continuity: no sudden thick to thin, lanes change only with a proper merge
+- 2026-11-13 16:08 mentor message mmweug9vp handled: Yes, that is wrong. New task P1-046 (priority 1): a road keeps its width along the corridor, any change goes through a proper merge taper, and a check fails the map build on any sudden thick to thin step. This India Gate site is the test case.
