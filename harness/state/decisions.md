@@ -352,3 +352,6 @@ Anmol agreed to the route line, phone and money ideas. Decision: noted on P3-001
 
 ## 2026-11-13 Map lane on (Anmol)
 Anmol asked for a separate agent for the map fixes and answered "Yes, map lane on". Decision: CLAUDE.md Modes gets MAP LANE ON: one extra builder on map pipeline tasks only, in .worktrees/map on its own task branch, PR per task as usual; the main builder takes the rest. Why: map fixes were waiting behind game work; about 2x usage accepted.
+
+## 2026-11-13 Tunnels built properly; OSM is only a first reference (Anmol, again)
+New task for car tunnels with real depth, portals, walls and lights (map lane, P2). The OSM rule is now a core knowledge line every builder reads.
