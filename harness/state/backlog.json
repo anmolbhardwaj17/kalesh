@@ -1,6 +1,6 @@
 {
   "_doc": "Written only by node harness/bin/task.mjs. Phases run in order; P0 (ADOPT + STYLE DISCOVERY) waits for the owner by design and needs task.mjs signoff and task.mjs archsignoff before its gate passes. Later phases are added by the planner at the end of P0 (task.mjs phase-add) from the game's real state.",
-  "updated": "2026-11-13T17:54:44.913Z",
+  "updated": "2026-11-13T18:12:29.628Z",
   "phases": [
     {
       "id": "P0",
@@ -2371,7 +2371,9 @@
       "kind": "feature",
       "status": "todo",
       "attempts": 0,
-      "notes": [],
+      "notes": [
+        "From P2-005: fill orientation and front per landmark (nothing read yet); 21 signatures lack a hand height (registry.json heightsMissing, 9 stations); 20 held entries need a position check (13 stations 50 to 180 m apart between OSM node and Wikidata); far landmarks have Wikidata positions only; OSM errors: Diwan-e-Khaas carries the Agra item's id, 3 ASI items on a shared default coordinate in CP."
+      ],
       "created": "2026-11-11T12:31:54.058Z",
       "model": "fable"
     },
@@ -2677,7 +2679,9 @@
       "kind": "feature",
       "status": "todo",
       "attempts": 0,
-      "notes": [],
+      "notes": [
+        "From P2-005: the landmark view reads harness/reports/map/landmarks/issues.json and writes harness/data/landmarks.overrides.json (kept apart from road patches); bake health.json should carry the registry summary."
+      ],
       "created": "2026-11-11T12:31:54.059Z"
     },
     {

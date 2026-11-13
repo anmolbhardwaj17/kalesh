@@ -281,16 +281,17 @@
       },
       "rows": 597
     },
-    "wikidata_pilot": {
-      "file": "data/pilot/landmarks/wikidata.json",
-      "bytes": 252811,
-      "sha256": "44a545fe3141cc14ae88420a04215d435a76df87bd728ea800a60bb0f083b1d3",
-      "date": "2026-11-11",
-      "url": "https://query.wikidata.org/sparql",
+    "pilot_wikidata_entities": {
+      "file": "data/pilot_centre/wikidata_entities.json",
+      "bytes": 11724,
+      "sha256": "a7035de4d69a3337bb75e9e294561586a16acb883789a3d460c2f548044bce0a",
+      "date": "2026-11-13",
+      "url": "https://www.wikidata.org/w/api.php",
       "licence": "CC0 1.0",
       "licenceUrl": "https://www.wikidata.org/wiki/Wikidata:Copyright",
       "credit": "none needed (Wikidata, CC0)",
-      "note": "SPARQL: items with P625 inside each pilot box, and 164 rows with an ASI id N-DL-*"
+      "note": "wbgetentities: the 29 items an OSM wikidata tag or the landmark owner list names that the stage box query did not return, reduced to the fields the landmark registry reads",
+      "stage": "pilot"
     },
     "ual1_standard": {
       "file": "data/ual/ual1_standard.zip",
@@ -313,6 +314,17 @@
       "licenceUrl": "https://creativecommons.org/publicdomain/zero/1.0/",
       "credit": "Animations and mannequins: Universal Animation Library 1 and 2 by Quaternius (quaternius.com), CC0",
       "note": "the free Standard pack from the itch.io download page; only the Godot .glb files and License.txt are extracted (P1-023)"
+    },
+    "wikidata_pilot": {
+      "file": "data/pilot/landmarks/wikidata.json",
+      "bytes": 252811,
+      "sha256": "44a545fe3141cc14ae88420a04215d435a76df87bd728ea800a60bb0f083b1d3",
+      "date": "2026-11-11",
+      "url": "https://query.wikidata.org/sparql",
+      "licence": "CC0 1.0",
+      "licenceUrl": "https://www.wikidata.org/wiki/Wikidata:Copyright",
+      "credit": "none needed (Wikidata, CC0)",
+      "note": "SPARQL: items with P625 inside each pilot box, and 164 rows with an ASI id N-DL-*"
     }
   },
   "unreachable": {}

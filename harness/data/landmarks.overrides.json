@@ -1,0 +1,58 @@
+{
+  "_doc": "Edits of the landmark registry (P2-005, DELHI_WORLD.md 1 'Data files', LS2): what a person or a builder read and decided, kept apart from the generated files so a rebuild never loses it. The registry build (node tools/bake/landmarks/build.mjs) lays every edit on top of the joined sources; an edit wins over the owner list and the score. 'target' names the landmark by id: the registry id, the Wikidata id or the OSM id. action 'set' sets the fields in 'set' (tier, name, type, era, height_m with height_source and height_evidence, lat and lon with position_evidence, position_checked to settle a source disagreement, join_checked to settle a name match, footprint to take another OSM object or a ring read from a photo or satellite view in place of the OSM shape, front, extent, references); action 'remove' takes the landmark out (it is listed under 'rejected' in the build report with the reason). 'why' is the evidence line: what was read, where and when. Where OSM and photos disagree on a footprint or a height, the edit takes the photo or satellite evidence and says so (owner rule, 2026-11-13). An edit whose target is not found is listed as stale in the report and stays here.",
+  "edits": [
+    {
+      "id": "lm_0001", "target": { "id": "cp_circle" }, "action": "set",
+      "set": {
+        "name": { "en": "Connaught Place circle" }, "type": "colonnaded commercial circle",
+        "height_m": 11.5, "height_source": "reference",
+        "height_evidence": "hero road spec harness/data/hero_roads/cp_inner_circle.json colonnadeEdge blockHeight 11.5 m (photo refs cp_block_2010, cp_colonnade_2013) and the area sheet cp_inner_circle 'Buildings' (two storey blocks, each about 11.5 m high); en.wikipedia 'Connaught Place, New Delhi' rev 1378186633, read 2026-11-13: 'the present two-storied structure with an open colonnade'",
+        "lat": 28.632806, "lon": 77.21971, "position_checked": true,
+        "position_evidence": "the area centroid of OSM way/164675825 Rajiv Chowk Central Park (28.6328058, 77.2197100, osmBase 2026-11-11), the middle of the rings: the OSM centre lines of Inner Circle, Middle Circle and Outer Circle stay 123 to 131 m, 234 to 236 m and 308 to 328 m from it, so the centre holds to about 4 m; Wikidata Q2341950 P625 is 3.3 m from it",
+        "extent": { "inner_circle_radius_m": 125, "middle_circle_radius_m": 235, "outer_circle_radius_m": 321, "source": "median distance from the centre to the OSM road centre line nodes named Inner Circle (58 nodes), Middle Circle (91) and Outer Circle or Connaught Circus (118), osmBase 2026-11-11", "note": "the hero is the rings of colonnaded blocks around the park out to the Outer Circle; the footprint way is only its middle. Rajiv Chowk metro station lies under the park (underground class, no shell)" }
+      },
+      "why": "hand check of the first hero: position, ring radii and block height read from the OSM extract, the hero road spec and the area sheet", "by": "builder P2-005", "source": "hand check", "date": "2026-11-13"
+    },
+    {
+      "id": "lm_0002", "target": { "id": "india_gate" }, "action": "set",
+      "set": {
+        "type": "triumphal arch, war memorial",
+        "height_m": 42, "height_source": "reference",
+        "height_evidence": "en.wikipedia 'India Gate' rev 1384623318, read 2026-11-13: 'The 42 m tall India Gate stands on a low base of red Bharatpur stone'; Wikidata Q245347 P2048 gives the same 42 m",
+        "lat": 28.612932, "lon": 77.229493, "position_checked": true,
+        "position_evidence": "the area centroid of OSM way/361709652 India Gate (the arch itself, 477 m2; 28.6129323, 77.2294925, osmBase 2026-11-11); Wikidata Q245347 P625 is 19.8 m from it"
+      },
+      "why": "hand check of the hero: position from the OSM footprint of the arch, height from the published figure", "by": "builder P2-005", "source": "hand check", "date": "2026-11-13"
+    },
+    {
+      "id": "lm_0003", "target": { "id": "red_fort" }, "action": "set",
+      "set": {
+        "type": "fort",
+        "height_m": 33, "height_source": "reference",
+        "height_evidence": "en.wikipedia 'Red Fort' rev 1376896713, read 2026-11-13: the walls 'vary in height from 18 meters on the river-facing side to 33 meters on the city-facing side'; Wikidata Q45957 P2048 gives 33 m. 33 m is the city side, the front the player sees from Chandni Chowk",
+        "lat": 28.655547, "lon": 77.240981, "position_checked": true,
+        "position_evidence": "the area centroid of OSM way/264863907 Red Fort (historic=castle, 652,479 m2; 28.6555472, 77.2409805, osmBase 2026-11-11); Wikidata Q45957 P625 lies 75.6 m from it, inside the footprint (the site is large)",
+        "extent": { "wall_height_river_side_m": 18, "wall_height_city_side_m": 33, "source": "en.wikipedia 'Red Fort' rev 1376896713, read 2026-11-13" }
+      },
+      "why": "hand check of the hero: position from the OSM footprint of the fort, wall heights from the published figures", "by": "builder P2-005", "source": "hand check", "date": "2026-11-13"
+    },
+    {
+      "id": "lm_0004", "target": { "id": "jama_masjid" }, "action": "set",
+      "set": {
+        "type": "mosque",
+        "height_m": 41, "height_source": "reference",
+        "height_evidence": "en.wikipedia 'Jama Masjid, Delhi' rev 1383333586, read 2026-11-13: infobox minaret_height 41 m; Wikidata Q233678 P2048 says 40 m. The two minarets are the highest part, so 41 m is the height of the silhouette",
+        "lat": 28.650683, "lon": 77.233459, "position_checked": true,
+        "position_evidence": "the area centroid of way/295323609, the outer ring of OSM relation/3926057 Jama Masjid (building=mosque, 13,639 m2; 28.6506834, 77.2334587, osmBase 2026-11-11); Wikidata Q233678 P625 lies 42.7 m from it, inside the footprint"
+      },
+      "why": "hand check of the pilot signature that becomes a hero: position from the OSM footprint of the mosque, height from the published minaret height", "by": "builder P2-005", "source": "hand check", "date": "2026-11-13"
+    },
+    { "id": "lm_0005", "target": { "id": "qutub_minar" }, "action": "set", "set": { "type": "minaret", "height_m": 72.5, "height_source": "reference" }, "why": "en.wikipedia 'Qutb Minar' rev 1383714819, read 2026-11-13: 'The height of Qutb Minar is 72.5 meters' (infobox height 72.5 m)", "by": "builder P2-005", "source": "hand check", "date": "2026-11-13" },
+    { "id": "lm_0006", "target": { "id": "humayuns_tomb" }, "action": "set", "set": { "type": "garden tomb", "height_m": 47, "height_source": "reference" }, "why": "en.wikipedia 'Humayun's tomb' rev 1383359761, read 2026-11-13: 'the tomb reaches a height of 47 m and the plinth is 91 m wide'", "by": "builder P2-005", "source": "hand check", "date": "2026-11-13" },
+    { "id": "lm_0007", "target": { "id": "rashtrapati_bhavan" }, "action": "set", "set": { "type": "presidential palace", "height_m": 55, "height_source": "reference" }, "why": "en.wikipedia 'Rashtrapati Bhavan' rev 1383778454, read 2026-11-13: infobox height 55 m (the dome)", "by": "builder P2-005", "source": "hand check", "date": "2026-11-13" },
+    { "id": "lm_0008", "target": { "id": "lotus_temple" }, "action": "set", "set": { "type": "house of worship", "height_m": 40.8, "height_source": "reference" }, "why": "en.wikipedia 'Lotus Temple' rev 1384922940, read 2026-11-13: infobox height 40.8 m", "by": "builder P2-005", "source": "hand check", "date": "2026-11-13" },
+    { "id": "lm_0009", "target": { "id": "akshardham" }, "action": "set", "set": { "type": "temple", "height_m": 43, "height_source": "reference" }, "why": "en.wikipedia 'Swaminarayan Akshardham (Delhi)' rev 1376905617, read 2026-11-13: infobox height_max 43 m (141 ft)", "by": "builder P2-005", "source": "hand check", "date": "2026-11-13" },
+    { "id": "lm_0010", "target": { "id": "jantar_mantar" }, "action": "set", "set": { "type": "astronomical observatory", "height_m": 21.3, "height_source": "reference" }, "why": "en.wikipedia 'Jantar Mantar, New Delhi' rev 1380323821, read 2026-11-13: the Samrat Yantra, the tallest instrument, 'is 70 feet high, 114 feet long at the base, and 10 feet thick' (70 ft is 21.3 m)", "by": "builder P2-005", "source": "hand check", "date": "2026-11-13" },
+    { "id": "lm_0011", "target": { "wikidata": "Q213380" }, "action": "set", "set": { "type": "supreme court building", "height_m": 27.6, "height_source": "reference" }, "why": "en.wikipedia 'Supreme Court of India' rev 1384970907, read 2026-11-13: 'It has a 27.6 m high dome and a spacious colonnaded verandah'", "by": "builder P2-005", "source": "hand check", "date": "2026-11-13" }
+  ]
+}
