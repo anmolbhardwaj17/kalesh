@@ -118,6 +118,14 @@ Area kits (each is a sheet plus a reference board of 20 to 40 real photos, decis
 - Institutional (ITO, Delhi Secretariat, ministries): concrete and glass, flat roofs, wide intersections, barricade and police-booth detail.
 - DDA flats and builder floors, urban villages, unauthorised colonies, the Yamuna basti, Gurgaon glass towers, the airport: each its own sheet before it is built; lower-income areas get the same craft as rich ones (wealth shows in upkeep and material, never in mocking people or dirt for its own sake).
 
+## Infrastructure: tunnels, underpasses, flyovers, bridges, metro and rail (Anmol 2026-11-13)
+
+Anmol: "everything should feel good ... everything should be consistent and should look banger. Again, take references from how tunnels look in Delhi. There can be multiple varieties ... which area is which kind ... goes for bridges, flyover, underpasses ... train structure, train track structure, all that."
+
+- **No "basic" structure is finished.** Every structure the player sees (car tunnels and underpasses, pedestrian subways, flyovers and their ramps, road bridges, Yamuna bridges, the metro viaducts and stations, foot over bridges, railway tracks, rail bridges and level crossings) is built from a kit made from real Delhi references and finished to the same stylised B standard as the buildings: same palette, materials, grime, light and level of detail. A plain box, a flat grey wall or a bare beam is a placeholder and fails its task.
+- **Varieties by era and area, from references.** Each kind has its Delhi variants, chosen by where the structure is: for example the new Pragati Maidan tunnel (tiled walls, murals, bright lighting) against the older Ring Road and ITO underpasses (painted concrete, sodium light); new precast box girder flyovers on single piers against older T beam flyovers on twin piers; DMRC viaducts (U girders on single piers with the station box) against the Barapullah elevated road; Loha Pul's steel truss, the ITO and Nizamuddin road bridges, the Signature Bridge's cable stays; Indian Railways ballast track with concrete sleepers, overhead line masts and the New Delhi station yard. The reference sheet (`harness/design/reference/infrastructure/`) lists each variant with photos, where it is used and its key shapes and colours.
+- **Consistency check.** Every structure task's acceptance includes a side by side of a reference photo and the game view, and a wide shot where the structure sits in the city next to buildings and roads, so nothing looks like it comes from another game.
+
 ## Characters
 
 - Proportions: real adult human, 7.5 heads, no big heads or hands, no cartoon eyes; a simplified skin and cloth finish (smooth shading, clear folds only at elbows, knees and the shoulder cloth), clean readable clothing colours from the cloth palette. At the on-foot camera (3 m, 1080p) a person is about 330 px tall: face shapes, hands, clothing layers and a held weapon must read.

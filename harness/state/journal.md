@@ -462,3 +462,6 @@ One line per event, written by task.mjs (start, done, fail, phase changes, inbox
 - 2026-11-13 17:16 mentor message mmwewut4t handled: Map lane is on: a second builder now works only on map fixes (P1-030 first, then P1-046 road widths) in its own copy, while the main one continues. I asked the main builder to stop its finished monitors.
 - 2026-11-13 17:20 [P2-032] added: Car tunnels built properly: depth, portals, walls, lights
 - 2026-11-13 17:20 mentor message mmwex0hnn handled: Agreed on both. New task for car tunnels with real depth, portals, walls, lights and ramps, checked against photos (map lane). And the OSM rule is now a core line every builder reads: OSM is only the first reference; we remove, add and reshape on top of it.
+- 2026-11-13 17:23 [P2-033] added: Delhi infrastructure references: tunnels, underpasses, flyovers, bridges, metro and rail by area
+- 2026-11-13 17:23 [P2-034] added: Infrastructure kits in stylised B: flyovers, bridges, viaducts, rail, applied by variant
+- 2026-11-13 17:23 mentor message mmwex3jhw handled: Understood, no more basic. STYLE_BIBLE now has an infrastructure section; P2-033 collects Delhi references for every tunnel, underpass, flyover, bridge, metro and rail variety by area, and P2-034 builds kits from them so everything matches the buildings. Every structure task needs a side by side with a real photo.

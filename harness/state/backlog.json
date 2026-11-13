@@ -1,6 +1,6 @@
 {
   "_doc": "Written only by node harness/bin/task.mjs. Phases run in order; P0 (ADOPT + STYLE DISCOVERY) waits for the owner by design and needs task.mjs signoff and task.mjs archsignoff before its gate passes. Later phases are added by the planner at the end of P0 (task.mjs phase-add) from the game's real state.",
-  "updated": "2026-11-13T11:50:33.337Z",
+  "updated": "2026-11-13T11:53:15.565Z",
   "phases": [
     {
       "id": "P0",
@@ -2683,7 +2683,8 @@
       "status": "todo",
       "attempts": 0,
       "notes": [
-        "From P1-035: two Blue Line crossings are short over the Bangla Sahib Road junction (5.37 and 5.08 m of 5.5 m), 190 m from where the tracks leave the ground at 4 percent: steeper or longer ramp, or a lower girder there. Also the NDLS foot bridge group (way/34404746) has one flat level up to 11.2 m; per span levels would be better."
+        "From P1-035: two Blue Line crossings are short over the Bangla Sahib Road junction (5.37 and 5.08 m of 5.5 m), 190 m from where the tracks leave the ground at 4 percent: steeper or longer ramp, or a lower girder there. Also the NDLS foot bridge group (way/34404746) has one flat level up to 11.2 m; per span levels would be better.",
+        "Anmol 2026-11-13: build from the P2-033 reference variants and the P2-034 kits; no plain box; side by side with a reference photo and a wide shot in the city for consistency (STYLE_BIBLE.md 'Infrastructure')."
       ],
       "created": "2026-11-11T12:31:54.059Z"
     },
@@ -3830,7 +3831,9 @@
       "kind": "mentor",
       "status": "todo",
       "attempts": 0,
-      "notes": [],
+      "notes": [
+        "Anmol 2026-11-13: build from the P2-033 reference variants and the P2-034 kits; no plain box; side by side with a reference photo and a wide shot in the city for consistency (STYLE_BIBLE.md 'Infrastructure')."
+      ],
       "created": "2026-11-13T10:51:29.140Z"
     },
     {
@@ -3861,8 +3864,51 @@
       "kind": "mentor",
       "status": "todo",
       "attempts": 0,
-      "notes": [],
+      "notes": [
+        "Anmol 2026-11-13: build from the P2-033 reference variants and the P2-034 kits; no plain box; side by side with a reference photo and a wide shot in the city for consistency (STYLE_BIBLE.md 'Infrastructure')."
+      ],
       "created": "2026-11-13T11:50:33.337Z"
+    },
+    {
+      "id": "P2-033",
+      "phase": "P2",
+      "title": "Delhi infrastructure references: tunnels, underpasses, flyovers, bridges, metro and rail by area",
+      "desc": "Anmol 2026-11-13: everything consistent and looking great; take references for how each kind of structure looks in Delhi, its varieties, and which area has which. STYLE_BIBLE.md 'Infrastructure'. Research from the web (photos, satellite, street-level imagery, engineering pages): car tunnels and underpasses (Pragati Maidan tunnel, ITO, Ring Road, AIIMS), pedestrian subways (CP, India Gate), flyovers (new precast box girder on single piers, older T beam on twin piers, ramps, crash barriers, noise screens, lighting poles, drainage spouts), road bridges and the Yamuna bridges (ITO, Nizamuddin, Loha Pul truss, Signature Bridge), the DMRC viaduct and elevated and underground stations, foot over bridges, railway track (ballast, concrete sleepers, overhead line masts, boundary walls, platforms, the New Delhi yard), rail bridges and level crossings. Write harness/design/reference/infrastructure/<kind>.md with photos or links, per variant: where in Delhi it appears (pilot and later areas), key shapes, dimensions, colours, materials, signage and lighting, and which pilot structures use it. Save reference images only where the licence allows; else link them. Output a variant map for the pilot (every structure id to its variant).",
+      "accept": [
+        "One reference file per kind with at least 2 variants each where Delhi has them, each with sources",
+        "A variant map for every tunnel, underpass, flyover, bridge, viaduct and rail stretch in the pilot",
+        "Key dimensions per variant (pier spacing, deck depth, headroom, wall height, barrier type) the kits can use",
+        "Files parse and are linked from STYLE_BIBLE.md"
+      ],
+      "deps": [],
+      "agent": "builder",
+      "priority": 1,
+      "kind": "mentor",
+      "status": "todo",
+      "attempts": 0,
+      "notes": [],
+      "created": "2026-11-13T11:53:07.454Z"
+    },
+    {
+      "id": "P2-034",
+      "phase": "P2",
+      "title": "Infrastructure kits in stylised B: flyovers, bridges, viaducts, rail, applied by variant",
+      "desc": "Build the structure kits from the reference files (the previous task) and apply them by the variant map: flyover decks, piers, pier caps, bearings, crash barriers, lighting poles, drainage, ramps and retaining walls; road and river bridges (girder, truss, cable stay for the Signature Bridge as a skyline piece); the DMRC viaduct pieces; railway track (ballast bed, sleepers, rails, overhead masts and wires, boundary walls, platforms); foot over bridges. Same stylised B palette, materials, grime and light as the buildings (STYLE_BIBLE.md); instanced and within the perf budget. Map lane for the bake side; game/render side by the main lane if needed. Tunnels (P2-032), subways (P2-031) and the Blue Line (P2-019) use these kits.",
+      "accept": [
+        "Every flyover, bridge, viaduct and rail stretch in the pilot built from its variant's kit, no plain box or bare beam left",
+        "Side by side of reference and game for at least one structure per variant, read by the verifier",
+        "A wide shot per kind with the structure in the city, consistent with the buildings and roads",
+        "City perf paths still inside budget (p95 under 10 ms)",
+        "Whole bake green; typecheck, npm test and verify --quick green"
+      ],
+      "deps": [],
+      "agent": "builder",
+      "priority": 1,
+      "kind": "mentor",
+      "status": "todo",
+      "attempts": 0,
+      "notes": [],
+      "created": "2026-11-13T11:53:07.495Z"
     }
   ]
 }

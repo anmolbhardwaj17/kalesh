@@ -355,3 +355,6 @@ Anmol asked for a separate agent for the map fixes and answered "Yes, map lane o
 
 ## 2026-11-13 Tunnels built properly; OSM is only a first reference (Anmol, again)
 New task for car tunnels with real depth, portals, walls and lights (map lane, P2). The OSM rule is now a core knowledge line every builder reads.
+
+## 2026-11-13 Infrastructure built from Delhi references, one quality bar (Anmol)
+Anmol: everything must feel good and consistent; take references for tunnels, bridges, flyovers, underpasses, metro and rail, by variety and area. Decision: STYLE_BIBLE.md Infrastructure section; P2-033 references and variant map (priority 1), P2-034 structure kits applied by variant (priority 1); P2-019, P2-031, P2-032 build on them; core knowledge line: no basic structure counts as finished. Why: a city where buildings, tunnels and bridges look like different games breaks the look.
