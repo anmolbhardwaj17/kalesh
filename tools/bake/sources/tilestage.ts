@@ -21,6 +21,7 @@ import { colliderVsDrawn, deckRays, deckTiles, withNeighbours } from '../tile/ch
 import { lanePieces } from '../tile/lanes.ts';
 import { GroundHeights, shellOf } from '../tile/shells.ts';
 import type { Shell } from '../tile/shells.ts';
+import type { SourceMesh } from '../tile/cutter.ts';
 import { tileIndex, tilesInvariants, tilesLog } from '../tile/tilesout.ts';
 import type { TileIndex, TilesRecord } from '../tile/tilesout.ts';
 import { TILE_AVERAGE_BYTES, TILE_BUDGET_BYTES, TILE_MARGIN_M, bakeTiles } from '../tile/write.ts';
@@ -45,6 +46,8 @@ export interface TileStepInput {
   only: readonly string[] | null;
   /** Repo-relative file that gets the bake hash of the written set (a whole bake of the game's tile folder). */
   hashFile?: string;
+  /** The landmark placement (P2-006): the stand-in massing, the landmark pins and the landmark file of the folder. */
+  landmarks?: { meshes: readonly SourceMesh[]; pins: readonly WorldPin[]; file: unknown };
   log: (line: string) => void;
 }
 
@@ -82,6 +85,7 @@ export function runTileStep(s: TileStepInput): { record: TilesRecord; invariants
     if (!Number.isFinite(y)) y = model(at.x, at.z);
     pins.push({ id: p.id, name: p.name, kind: 'place', x: at.x + s.offset.x, y, z: at.z + s.offset.z });
   }
+  if (s.landmarks) pins.push(...s.landmarks.pins);
   const lanes = lanePieces(laneGraph(s.lanes, s.block, s.offset), s.meshed.input.strips, s.offset);
 
   // the tiles the checks read back: the five named tiles with their neighbours, and the tiles under the ITO deck
@@ -96,7 +100,7 @@ export function runTileStep(s: TileStepInput): { record: TilesRecord; invariants
 
   const old: TileRecord[] = partial && fs.existsSync(path.join(dir, 'index.json')) ? (JSON.parse(fs.readFileSync(path.join(dir, 'index.json'), 'utf8')) as TileIndex).tiles : [];
   const res = bakeTiles(
-    { block: s.block, offset: s.offset, road: s.meshed.mesh.sink.meshes.values(), ground: s.ground.tiles, shells, lanes, pins, only: s.only ? new Set(s.only) : null },
+    { block: s.block, offset: s.offset, road: [...s.meshed.mesh.sink.meshes.values(), ...(s.landmarks?.meshes ?? [])], ground: s.ground.tiles, shells, lanes, pins, only: s.only ? new Set(s.only) : null },
     (rec, bytes) => fs.writeFileSync(path.join(dir, rec.file), bytes),
     (id) => keep.has(id),
   );
@@ -110,6 +114,8 @@ export function runTileStep(s: TileStepInput): { record: TilesRecord; invariants
   const index = tileIndex(s.stage, s.block, s.offset, res, records);
   const indexFile = path.join(dir, 'index.json');
   fs.writeFileSync(indexFile, JSON.stringify(index, null, 1) + '\n');
+  // the landmark file of the folder: LOD slots, far silhouettes, the cap on heroes at full detail (P2-006)
+  if (s.landmarks) fs.writeFileSync(path.join(dir, 'landmarks.json'), JSON.stringify(s.landmarks.file) + '\n');
   if (s.hashFile) fs.writeFileSync(path.join(s.root, s.hashFile), JSON.stringify({ _doc: 'The bake hash of the full tile set (game/world/tiles/index.json bakeHash) that the repo expects. Written by a whole bake; harness/bin/tileset.mjs gives a snapshot or play copy the tiles only when they carry this hash.', stage: index.stage, bakeHash: index.bakeHash, tiles: records.length, bytes: index.bytes.total }, null, 1) + '\n');
   const rel = (f: string): string => (f.startsWith(s.root) ? path.relative(s.root, f) : f);
   const record: TilesRecord = {

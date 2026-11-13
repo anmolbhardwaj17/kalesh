@@ -72,6 +72,13 @@ export interface TilePin {
   name: string;
   kind: string;
   pos: [number, number, number];
+  /** A landmark pin (kind `landmark`, P2-006): its tier, how it is placed, the compass bearing its front faces, its height. */
+  tier?: string;
+  mode?: string;
+  yaw?: number;
+  height?: number;
+  underground?: boolean;
+  worship?: boolean;
 }
 
 export interface TileContent {

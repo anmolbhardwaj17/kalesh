@@ -17,6 +17,8 @@ const ZERO = BIAS | (BIAS << 5) | (BIAS << 10) | (BIAS << 15) | (BIAS << 20);
 /** A label with `w` in one channel (the inside on the left: 1). */
 export const label = (channel: number, w: number): number => ZERO + (w << (channel * 5));
 export const GRID_LABEL = ZERO | GRID_BIT;
+/** A forced edge that is the edge of no class (the ring of a landmark pad or forecourt, P2-006): triangles never cross it. */
+export const PLAIN_LABEL = ZERO;
 
 export const channelOf = (lab: number, channel: number): number => ((lab >> (channel * 5)) & 31) - BIAS;
 

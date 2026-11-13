@@ -15,7 +15,7 @@ import { K_DECK, K_TUNNEL } from '../mesh/stripfaces.ts';
 import { ROOF_DEPTH_M } from '../mesh/structures.ts';
 import type { FaceGrid } from '../mesh/structures.ts';
 import type { Station, Strip } from '../roads/model.ts';
-import { CH_BUILDING, CH_OPEN, CH_OUTLINE, CH_ROAD, CH_WATER, GRID_LABEL, label } from './labels.ts';
+import { CH_BUILDING, CH_OPEN, CH_OUTLINE, CH_ROAD, CH_WATER, GRID_LABEL, PLAIN_LABEL, label } from './labels.ts';
 import { UNITS, toUnits } from './predicates.ts';
 
 export interface WaterInput {
@@ -23,6 +23,22 @@ export interface WaterInput {
   name: string;
   /** Outer rings and holes (holes wind against the outer rings). */
   rings: readonly (readonly P2[])[];
+}
+
+/**
+ * A piece of ground a landmark lays over the plain ground (P2-006, tools/bake/landmarks/place.ts): a flat pad at one
+ * level, a forecourt, the footing strip of a wall or a moat band. Its ring is forced into the triangulation; the
+ * first piece of the list that holds a triangle gives it its material.
+ */
+export interface LandmarkGround {
+  landmark: string;
+  cls: 'pad' | 'forecourt' | 'wallbase' | 'moat';
+  ring: readonly P2[];
+  /** A pad: its level (m). */
+  level?: number;
+  /** A moat: how far its bed lies under the ground (m). */
+  depth?: number;
+  material: string;
 }
 
 export interface TerrainInput {
@@ -41,6 +57,8 @@ export interface TerrainInput {
   ground: (x: number, z: number) => number;
   /** Block metres to world metres: the tile lines are lines of the world grid. */
   offset: P2;
+  /** Landmark ground pieces, in the order they win (pads first). */
+  landmarks?: readonly LandmarkGround[];
 }
 
 export interface TerrainOptions {
@@ -317,7 +335,7 @@ export function collect(input: TerrainInput, opt: TerrainOptions): Collected {
   const rings = (list: readonly (readonly P2[])[], channel: number): void => {
     let area = 0;
     for (const r of list) area += ringArea2(r);
-    const lab = label(channel, 1);
+    const lab = channel < 0 ? PLAIN_LABEL : label(channel, 1);
     for (const r of list) {
       if (r.length < 3) continue;
       const ids = r.map((p) => pts.add(p.x, p.z));
@@ -335,6 +353,31 @@ export function collect(input: TerrainInput, opt: TerrainOptions): Collected {
   for (const r of input.footprints) rings([r], CH_BUILDING);
   for (const w of input.water) rings(w.rings, CH_WATER);
   for (const o of input.open) rings(o, CH_OPEN);
+  // landmark ground: rings of no class of their own (the surface gives their triangles a material), and points on
+  // the bed of a moat so it has a floor to lower
+  for (const g of input.landmarks ?? []) rings([g.ring], -1);
+  for (const g of input.landmarks ?? []) {
+    if (g.cls !== 'moat') continue;
+    let x0 = Infinity;
+    let x1 = -Infinity;
+    let z0 = Infinity;
+    let z1 = -Infinity;
+    for (const p of g.ring) {
+      x0 = Math.min(x0, p.x);
+      x1 = Math.max(x1, p.x);
+      z0 = Math.min(z0, p.z);
+      z1 = Math.max(z1, p.z);
+    }
+    const STEP = 5;
+    for (let j = Math.ceil(z0 / STEP); j * STEP <= z1; j++) {
+      for (let i = Math.ceil(x0 / STEP); i * STEP <= x1; i++) {
+        const x = i * STEP;
+        const z = j * STEP;
+        if (!pointInRing({ x, z }, g.ring as P2[]) || near.within(x, z, 2.5)) continue;
+        pts.add(x, z);
+      }
+    }
+  }
 
   // the stage box, a little wider
   const box = out.box;

@@ -11,6 +11,9 @@
 ## File layout: "KTL1", u32 version, u32 header length, a JSON header, then float32 and uint32 arrays (little endian).
 extends RefCounted
 
+## More fields a landmark pin carries (tools/bake/landmarks/placeout.ts landmarkPins).
+const PIN_EXTRA := ["tier", "mode", "yaw", "height", "underground", "worship"]
+
 const MAGIC := "KTL1"
 const VERSION := 1
 
@@ -69,7 +72,12 @@ static func parse(bytes: PackedByteArray) -> Dictionary:
 	for p: Dictionary in header.get("pins", []):
 		var pos: Array = p.pos
 		var at := Vector3(float(pos[0]), float(pos[1]), float(pos[2]))
-		pins.append({"id": str(p.id), "name": str(p.get("name", "")), "kind": str(p.get("kind", "")), "pos": at})
+		var pin := {"id": str(p.id), "name": str(p.get("name", "")), "kind": str(p.get("kind", "")), "pos": at}
+		# a landmark pin (P2-006) also says its tier, how it is placed, the bearing its front faces and its height
+		for k: String in PIN_EXTRA:
+			if p.has(k):
+				pin[k] = p[k]
+		pins.append(pin)
 		box = box.expand(at) if box_set else AABB(at, Vector3.ZERO)
 		box_set = true
 	tile["pins"] = pins

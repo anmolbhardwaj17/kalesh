@@ -28,7 +28,7 @@ import { repairSiteSvg } from '../report/sitepics.ts';
 import { buildGround } from '../terrain/build.ts';
 import type { Ground } from '../terrain/build.ts';
 import { checkGround } from '../terrain/checks.ts';
-import type { TerrainInput } from '../terrain/collect.ts';
+import type { LandmarkGround, TerrainInput } from '../terrain/collect.ts';
 import { groundHash, groundInBox, groundPoses, groundSvg, terrainInvariants, terrainLog, terrainRecord } from '../terrain/terrainout.ts';
 import type { TerrainRecord } from '../terrain/terrainout.ts';
 import type { GroundModel } from '../heights.ts';
@@ -126,13 +126,15 @@ export async function runMeshStep(ctx: StepContext, laneBuild: LaneBuild, elevat
   return { input, mesh, rec, checks: c, invariants };
 }
 
-export async function runTerrainStep(ctx: StepContext, meshed: { input: MeshInput; mesh: RoadMesh }, repaired: RepairedGraph, model: GroundModel): Promise<{ ground: Ground; rec: TerrainRecord; invariants: InvariantResult[] }> {
+export async function runTerrainStep(ctx: StepContext, meshed: { input: MeshInput; mesh: RoadMesh }, repaired: RepairedGraph, model: GroundModel, landmarks: readonly LandmarkGround[] = []): Promise<{ ground: Ground; rec: TerrainRecord; invariants: InvariantResult[] }> {
   const { plan, log } = ctx;
   const proj = projector(plan.origin);
   const { input: mi, mesh } = meshed;
   const input: TerrainInput = {
     fs: mesh.fs, edges: mesh.edges, grid: mesh.grid, strips: mi.strips, kinds: mi.kinds, outline: repaired.outline, footprints: repaired.footprints.map((f) => f.ring),
     water: repaired.features.water.map((w) => ({ id: w.id, name: w.name, rings: w.rings })), open: repaired.features.open.map((o) => o.rings), ground: (x, z) => model.at(x, z), offset: ctx.offset,
+    // landmark ground pieces of the placement step (P2-006): pads, forecourts, wall strips, a moat
+    ...(landmarks.length ? { landmarks } : {}),
   };
   // built twice: the ground must not depend on anything but the road mesh, the map and the ground model
   const ground = buildGround(input);

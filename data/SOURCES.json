@@ -303,6 +303,18 @@
       },
       "rows": 597
     },
+    "pilot_wikidata_entities": {
+      "file": "data/pilot_centre/wikidata_entities.json",
+      "bytes": 11724,
+      "sha256": "a7035de4d69a3337bb75e9e294561586a16acb883789a3d460c2f548044bce0a",
+      "date": "2026-11-13",
+      "url": "https://www.wikidata.org/w/api.php",
+      "licence": "CC0 1.0",
+      "licenceUrl": "https://www.wikidata.org/wiki/Wikidata:Copyright",
+      "credit": "none needed (Wikidata, CC0)",
+      "note": "wbgetentities: the 29 items an OSM wikidata tag or the landmark owner list names that the stage box query did not return, reduced to the fields the landmark registry reads",
+      "stage": "pilot"
+    },
     "ual1_standard": {
       "file": "data/ual/ual1_standard.zip",
       "bytes": 15904933,

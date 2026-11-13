@@ -11,6 +11,10 @@ const COLORS := {
 	"kerb": Color(0.55, 0.54, 0.52), "wall": Color(0.72, 0.66, 0.56), "pier": Color(0.6, 0.6, 0.58), "underside": Color(0.4, 0.4, 0.4),
 	"building": Color(0.78, 0.7, 0.58), "lawn": Color(0.42, 0.55, 0.32), "bed": Color(0.45, 0.42, 0.36), "water": Color(0.27, 0.43, 0.5),
 	"parking": Color(0.3, 0.3, 0.32), "planter": Color(0.4, 0.5, 0.34),
+	# landmark ground and stand-in massing (P2-006): a forecourt, a flat pad, the footing of a wall, a moat bed, and
+	# the massing in buff and in red sandstone until the parts kit (P2-007) builds the real shapes
+	"forecourt": Color(0.72, 0.62, 0.5), "pad": Color(0.8, 0.73, 0.62), "wallbase": Color(0.5, 0.3, 0.25), "moat": Color(0.42, 0.38, 0.3),
+	"landmark": Color(0.84, 0.74, 0.58), "landmark_red": Color(0.66, 0.33, 0.27),
 }
 ## The material of a name the table does not know.
 const OTHER := "_"
