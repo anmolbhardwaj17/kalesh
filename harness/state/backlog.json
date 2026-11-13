@@ -1,6 +1,6 @@
 {
   "_doc": "Written only by node harness/bin/task.mjs. Phases run in order; P0 (ADOPT + STYLE DISCOVERY) waits for the owner by design and needs task.mjs signoff and task.mjs archsignoff before its gate passes. Later phases are added by the planner at the end of P0 (task.mjs phase-add) from the game's real state.",
-  "updated": "2026-11-13T13:41:29.859Z",
+  "updated": "2026-11-13T13:41:38.049Z",
   "phases": [
     {
       "id": "P0",
@@ -3284,12 +3284,15 @@
       "agent": "builder",
       "priority": 3,
       "kind": "feature",
-      "status": "doing",
+      "status": "done",
       "attempts": 1,
       "notes": [],
       "created": "2026-11-11T14:35:19.606Z",
       "model": "opus",
-      "started": "2026-11-13T13:00:19.781Z"
+      "started": "2026-11-13T13:00:19.781Z",
+      "done": "2026-11-13T13:41:38.026Z",
+      "summary": "Live relight: style_runner relights in place every frame (sky, sun, fog, haze, grade LUT on a worker thread, night lights, lit window shader), no rebuild. relight_live_street 17:00 to 20:00: 1 build, 164 relights, 94 night lights on at 20:00, 0 at 17:45. GPU p95 during the change 5.3 ms street, 2.3 ms city; worst relight frame 2.2 ms. Pinned look unchanged (lookproof diff 0.00 to 0.03). Boot scene restyled (flat_stand_in twin). Verified: typecheck, 822 vitest, 123 Godot tests, quick 21/21 OK, golden and night street shots read and kept. City night has no lamps yet: noted on P3-007.",
+      "commit": "2f76423"
     },
     {
       "id": "P1-029",
