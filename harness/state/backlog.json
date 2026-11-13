@@ -1,6 +1,6 @@
 {
   "_doc": "Written only by node harness/bin/task.mjs. Phases run in order; P0 (ADOPT + STYLE DISCOVERY) waits for the owner by design and needs task.mjs signoff and task.mjs archsignoff before its gate passes. Later phases are added by the planner at the end of P0 (task.mjs phase-add) from the game's real state.",
-  "updated": "2026-11-13T14:12:17.674Z",
+  "updated": "2026-11-13T14:34:31.602Z",
   "phases": [
     {
       "id": "P0",
@@ -3308,11 +3308,15 @@
       "agent": "builder",
       "priority": 3,
       "kind": "feature",
-      "status": "todo",
-      "attempts": 0,
+      "status": "done",
+      "attempts": 1,
       "notes": [],
       "created": "2026-11-11T17:15:43.159Z",
-      "model": "sonnet"
+      "model": "sonnet",
+      "started": "2026-11-13T14:12:49.089Z",
+      "done": "2026-11-13T14:34:31.560Z",
+      "summary": "New far bench (game/bench/far, harness/bench/far.plan.mjs) on the production V2 car and on-foot humanoid at 0, 7, 8.03, 9 and 10 km: wheel contact and body jitter 0 mm; 0-100 11.12 s, brake 41.49 m, lock radius identical at every distance; walk height jitter 0.0014 mm; slow pan change 0.025 to 0.027 of 255, no shimmer. Only effect: position snaps to the float grid (0.49 mm under 8192 m, 0.98 mm above). Verdict KEEP: farthest planned 8.03 km is inside the 0.49 mm band; keep every position under 8192 m per axis. Report harness/reports/arch/far.json; decisions.md entry. Verified: typecheck, npm test, quick 14/14 OK. Also commits the P1-044 approved.json notes and the P1-028 look sets.",
+      "commit": "bc0fecf"
     },
     {
       "id": "P1-030",
