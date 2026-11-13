@@ -1,6 +1,6 @@
 {
   "_doc": "Written only by node harness/bin/task.mjs. Phases run in order; P0 (ADOPT + STYLE DISCOVERY) waits for the owner by design and needs task.mjs signoff and task.mjs archsignoff before its gate passes. Later phases are added by the planner at the end of P0 (task.mjs phase-add) from the game's real state.",
-  "updated": "2026-11-13T11:54:41.171Z",
+  "updated": "2026-11-13T12:23:30.142Z",
   "phases": [
     {
       "id": "P0",
@@ -4066,6 +4066,24 @@
       "attempts": 0,
       "notes": [],
       "created": "2026-11-13T11:54:41.171Z"
+    },
+    {
+      "id": "P1-048",
+      "phase": "P1",
+      "title": "godotsmoke.mjs: two stale checks fail on main",
+      "desc": "From P1-047: harness/bin/godotsmoke.mjs shows 40/42 on main, failing 'state shape: scene city' and 'held sim does not move' (pre-existing, same with P1-047 stashed; likely from the city scene becoming the main scene in P1-024). Update the checks to the city scene or fix the real cause.",
+      "accept": [
+        "godotsmoke.mjs 42/42",
+        "typecheck, npm test and verify --quick green"
+      ],
+      "deps": [],
+      "agent": "builder",
+      "priority": 3,
+      "kind": "bug",
+      "status": "todo",
+      "attempts": 0,
+      "notes": [],
+      "created": "2026-11-13T12:23:30.141Z"
     }
   ]
 }
