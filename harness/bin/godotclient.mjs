@@ -161,9 +161,10 @@ export class GodotDebugClient {
 }
 
 /** The engine and user args for a game run. Engine args go before `--`, game args after it. */
-export function gameArgs({ project, debug = true, verify = true, port, quitAfter = 7200, resolution = '1280x720',
+export function gameArgs({ project, exported = false, debug = true, verify = true, port, quitAfter = 7200, resolution = '1280x720',
   headless = false, extra = [], engineExtra = [] } = {}) {
-  const engine = ['--path', project, '--quit-after', String(quitAfter), ...engineExtra];
+  // An exported app (HARNESS_EXPORTED_APP) carries its own project: no --path.
+  const engine = [...(exported ? [] : ['--path', project]), '--quit-after', String(quitAfter), ...engineExtra];
   if (headless) engine.unshift('--headless');
   else if (resolution) engine.push('--resolution', resolution);
   const user = [];
@@ -182,10 +183,14 @@ export function gameArgs({ project, debug = true, verify = true, port, quitAfter
 export async function launchGame(opts = {}) {
   // opts.binary (a path from an earlier resolveGodot) skips the lookup: resolveGodot runs `godot --version` with
   // spawnSync, which blocks this process while other runs it drives are talking to their games.
-  const g = opts.binary ? { path: opts.binary, cfg: godotConfig() } : await resolveGodot({ allowDownload: true });
+  // HARNESS_EXPORTED_APP=<executable inside the exported app or exe> runs every harness game launch on that build
+  // (harness/bin/export.mjs smoke): the build's own project instead of `--path game`.
+  const exportedBin = process.env.HARNESS_EXPORTED_APP || '';
+  const g = exportedBin ? { path: exportedBin, cfg: godotConfig() }
+    : opts.binary ? { path: opts.binary, cfg: godotConfig() } : await resolveGodot({ allowDownload: true });
   const project = path.join(ROOT, g.cfg.project);
   const port = opts.port || await freePort();
-  const args = gameArgs({ ...opts, project, port });
+  const args = gameArgs({ ...opts, project, port, exported: !!exportedBin });
   const proc = spawn(g.path, args, { cwd: ROOT, stdio: ['ignore', 'pipe', 'pipe'] });
   // A windowed run must not take keyboard focus from the terminal (macOS): see startFocusGuard in godot.mjs.
   if (!opts.headless && !opts.keepFocus) startFocusGuard(proc);

@@ -124,6 +124,8 @@ static func parse(args: PackedStringArray) -> Dictionary:
 
 
 func _ready() -> void:
+	# an exported build mounts its map stage packs first: the scenes look for res://world/tiles/ when they load
+	load("res://core/data_packs.gd").mount_all()
 	apply(parse(OS.get_cmdline_user_args()))
 	# It restyles every scene as its nodes enter the tree (SceneTree.node_added), so it must start before the main
 	# scene loads. Loaded by path: --style=none runs no style code at all.

@@ -361,3 +361,7 @@ Anmol: everything must feel good and consistent; take references for tunnels, br
 
 ## 2026-11-13 Gap audit: things Anmol did not name (Anmol asked)
 Anmol: find what he is missing and add it. Added: road surfaces and markings (P2-035), street furniture and signage (P2-036), trees and greenery (P2-037), plot edges and lived-in ground (P2-038), world edge and skyline (P2-039), moving metro and railway trains (P3-006), the night city look (P3-007), and a standing pilot look audit before each gate that adds map or look work (P2-040). Why: the city should look finished everywhere, not only where he points.
+
+## 2026-11-13: Test builds: tiles as a data pack, not in the main pack (P1-027)
+Decision: the Mac and Windows exports (`harness/bin/export.mjs`, presets in `game/export_presets.cfg`) leave `world/tiles/*` out of the main pack (13 MB) and ship the full tile set as `stage_<stage>.pck` (PCKPacker, `tools/export/pack_stage.gd`, 360 MB) that the game mounts at start (`game/core/data_packs.gd`) from the executable's folder or the app's Resources. Mac: ad hoc signed universal zip (156 MB); Windows: exe plus packs, unsigned (136 MB zip). Developer ID signing stays Anmol's open decision.
+Why: a later district then ships as one more pack with no code change (TECH.md), and a map rebake never forces a full re-export. By: builder P1-027.
