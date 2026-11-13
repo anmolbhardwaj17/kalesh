@@ -516,3 +516,4 @@ One line per event, written by task.mjs (start, done, fail, phase changes, inbox
 - 2026-11-14 01:35 mentor message mmwfelboy handled: README rewritten and merged (PR 56): approach, map pipeline with before and after shots, driving numbers, look, design rules, verification, architecture, roadmap.
 - 2026-11-14 02:32 mentor message mmwfgr2xt handled: Will do: I will open the P1-032 before and after shots for you as soon as it passes its checks.
 - 2026-11-14 03:28 mentor message mmwfir4cy handled: Understood. Every road and street task now has to match real photos side by side and pass an emptiness check (nothing bare for 40 m), and the look audit treats empty streets as a blocker, not polish.
+- 2026-11-14 03:30 [P2-041] start (attempt 1): On-foot movement that feels like a real game, not cartoonish
