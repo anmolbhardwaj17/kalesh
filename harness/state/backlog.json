@@ -1,6 +1,6 @@
 {
   "_doc": "Written only by node harness/bin/task.mjs. Phases run in order; P0 (ADOPT + STYLE DISCOVERY) waits for the owner by design and needs task.mjs signoff and task.mjs archsignoff before its gate passes. Later phases are added by the planner at the end of P0 (task.mjs phase-add) from the game's real state.",
-  "updated": "2026-11-13T08:22:27.387Z",
+  "updated": "2026-11-13T09:01:39.822Z",
   "phases": [
     {
       "id": "P0",
@@ -2118,10 +2118,11 @@
       "agent": "builder",
       "priority": 3,
       "kind": "feature",
-      "status": "doing",
+      "status": "todo",
       "attempts": 1,
       "notes": [
-        "From P1-022: put PlayerMode and the on-foot character into main.tscn and the streamed city (stream focus on the character); cars do not collide with characters yet (vehicle mask 3 excludes layer 4)."
+        "From P1-022: put PlayerMode and the on-foot character into main.tscn and the streamed city (stream focus on the character); cars do not collide with characters yet (vehicle mask 3 excludes layer 4).",
+        "attempt 1 failed: Verifier: all city criteria met, but quick not green: enter_exit_vehicle fails deterministically ('in after the walk to the door: not true after 4 s of sim'), likely from vehicle.gd MASK 7 (car now collides with the foot layer) blocking the staged walk or the door reach. Builder's quick ran on an older tree."
       ],
       "created": "2026-11-11T12:29:04.868Z",
       "started": "2026-11-13T07:56:04.315Z"
