@@ -150,7 +150,7 @@ A tag changes only with a decisions.md entry. Each phase plan checks this list a
 | Enter and exit vehicles (driver and passenger seats) | SLICE | Animated: door opens, climb in, sit, door closes, camera blends (Anmol 2026-11-13). Auto: climb in from the side. Scooter: leg over, stand up |
 | Fall and roll, fall damage | RELEASE | Damage above 4 m |
 | Ladders | RELEASE | Placed ladders and stairs to rooftops |
-| Climbing walls and ledges (rooftops, Old Delhi roofs) | LATER | Ledge grab up to 2.2 m, roof to roof jumps |
+| Climbing walls and ledges (rooftops, Old Delhi roofs) | LATER (mantle up to 2.2 m onto autos, cars, barriers and low roofs is SLICE, Anmol 2026-11-14) | Ledge grab up to 2.2 m, roof to roof jumps |
 | Swimming (Yamuna, park ponds) | LATER | Until then deep water is a fail with a stated reason ("Deep water"), and mission routes keep players away from it |
 | Ragdoll on knockdown | SLICE | Physics bones, short |
 | Push through crowds | SLICE | Bump people aside at walk; sprinting into people knocks them (with weight, see civilians) |
