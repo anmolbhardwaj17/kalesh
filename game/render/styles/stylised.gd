@@ -8,12 +8,23 @@ extends RefCounted
 const SURFACE_SHADER := preload("res://render/shaders/surface.gdshader")
 const GLOW_SHADER := preload("res://render/shaders/glow.gdshader")
 const LUT_SIZE := 33
+## Metadata on a plain StandardMaterial3D that marks it a flat stand-in colour (material_for gives it a darker twin).
+const FLAT_META := "flat_stand_in"
+const FLAT_GAIN := 0.45
 
 var preset: Resource
 var light: Resource
 var _mats := {}
+## flat stand-in material -> its styled twin
+var _flat := {}
 var _env: Environment
 static var _lut_cache := {}
+# live relight (P1-028): the worker-thread LUT task, the key it builds, the key on screen, the next one wanted
+var _lut_task := -1
+var _lut_building := ""
+var _lut_shown := ""
+var _lut_want: Array = []
+var _lut_slices: Array[Image] = []
 
 
 func _init(style_preset: Resource, light_preset: Resource) -> void:
@@ -29,23 +40,13 @@ func environment() -> Environment:
 	if _env != null:
 		return _env
 	var env := Environment.new()
-	var sm := ProceduralSkyMaterial.new()
-	sm.sky_top_color = light.sky_top
-	sm.sky_horizon_color = light.sky_horizon
-	sm.ground_horizon_color = light.ground_horizon
-	sm.ground_bottom_color = light.ground_bottom
-	sm.sky_energy_multiplier = light.sky_energy
-	sm.sun_angle_max = light.sun_disc_deg
-	sm.sun_curve = light.sun_curve
 	var sky := Sky.new()
-	sky.sky_material = sm
+	sky.sky_material = ProceduralSkyMaterial.new()
 	env.background_mode = Environment.BG_SKY
 	env.sky = sky
 	env.ambient_light_source = Environment.AMBIENT_SOURCE_SKY
-	env.ambient_light_energy = light.ambient_energy
 	env.reflected_light_source = Environment.REFLECTION_SOURCE_SKY
 	env.tonemap_mode = preset.tonemap
-	env.tonemap_exposure = light.exposure * preset.exposure_scale
 	env.tonemap_agx_contrast = preset.agx_contrast
 	env.glow_enabled = preset.glow
 	env.glow_intensity = preset.glow_intensity
@@ -63,6 +64,29 @@ func environment() -> Environment:
 	env.ssil_intensity = preset.ssil_intensity
 	env.fog_enabled = true
 	env.fog_mode = Environment.FOG_MODE_EXPONENTIAL
+	env.adjustment_enabled = true
+	env.adjustment_contrast = preset.contrast
+	env.adjustment_saturation = preset.saturation
+	_env = env
+	light_environment(env, true)
+	return env
+
+
+## The settings of an Environment that follow the light (sky, ambient, exposure, haze, grade). environment() calls it
+## once; relight() calls it again on the same Environment when the day clock moves (P1-028), so a loaded scene follows
+## the clock without a rebuild. `sync` false builds a new grade LUT off the main thread (poll() puts it in).
+func light_environment(env: Environment, sync := true) -> void:
+	var sm := env.sky.sky_material as ProceduralSkyMaterial if env.sky != null else null
+	if sm != null:
+		sm.sky_top_color = light.sky_top
+		sm.sky_horizon_color = light.sky_horizon
+		sm.ground_horizon_color = light.ground_horizon
+		sm.ground_bottom_color = light.ground_bottom
+		sm.sky_energy_multiplier = light.sky_energy
+		sm.sun_angle_max = light.sun_disc_deg
+		sm.sun_curve = light.sun_curve
+	env.ambient_light_energy = light.ambient_energy
+	env.tonemap_exposure = light.exposure * preset.exposure_scale
 	env.fog_light_color = light.fog_color
 	env.fog_density = light.fog_density
 	env.fog_sun_scatter = light.fog_sun_scatter
@@ -70,12 +94,98 @@ func environment() -> Environment:
 	env.fog_sky_affect = light.fog_sky_affect
 	env.fog_height = light.fog_height
 	env.fog_height_density = light.fog_height_density
-	env.adjustment_enabled = true
-	env.adjustment_contrast = preset.contrast
-	env.adjustment_saturation = preset.saturation
-	env.adjustment_color_correction = lut(light.shadow_tint, light.highlight_tint, light.grade_saturation)
-	_env = env
-	return env
+	_set_lut(env, light.shadow_tint, light.highlight_tint, light.grade_saturation, sync)
+
+
+# ---------------------------------------------------------------- live relight (P1-028)
+
+
+## True when relight() can follow the day clock inside a loaded scene. A style whose environment() sets more from the
+## light than light_environment() does (realistic.gd) answers false: it keeps the rebuild on a scene load.
+func can_relight() -> bool:
+	return true
+
+
+## Moves the whole look to a new light preset in place: the Environment (sky, ambient, exposure, haze, grade), the
+## light-driven materials and whatever the style tracks (stylised_b: night lights, lit windows, haze boxes, heat
+## shimmer). The runner sets the scene's sun again after it (setup_sun). No node is made or freed here except by a
+## style that owns them; `sync` true builds a missing grade LUT at once (a pinned jump), false on a worker thread.
+func relight(light_preset: Resource, sync := false) -> void:
+	light = light_preset
+	if _env != null:
+		light_environment(_env, sync)
+	_relight_materials()
+
+
+## The light-driven material settings (the glow gain); stylised_b adds its own.
+func _relight_materials() -> void:
+	var g: ShaderMaterial = _mats.get("glow")
+	if g != null:
+		g.set_shader_parameter("gain", light.lamp_gain)
+
+
+## Called every frame by the runner: puts a finished worker-thread LUT into the Environment and starts the next one.
+## Returns true when it did (the runner times it).
+func poll() -> bool:
+	if _lut_task < 0 or not WorkerThreadPool.is_task_completed(_lut_task):
+		return false
+	WorkerThreadPool.wait_for_task_completion(_lut_task)
+	_lut_task = -1
+	var tex := ImageTexture3D.new()
+	tex.create(Image.FORMAT_RGB8, LUT_SIZE, LUT_SIZE, LUT_SIZE, false, _lut_slices)
+	_lut_slices = []
+	_lut_shown = _lut_building
+	if _env != null:
+		_env.adjustment_color_correction = tex
+	if _lut_want.size() > 0 and _lut_want[0] != _lut_shown:
+		_start_lut(_lut_want)
+	return true
+
+
+## Waits for a worker-thread LUT (the runner calls it before it drops this style or stops).
+func finish() -> void:
+	if _lut_task >= 0:
+		WorkerThreadPool.wait_for_task_completion(_lut_task)
+		_lut_task = -1
+		_lut_slices = []
+
+
+## True while a grade LUT is being built off the main thread or waits to be.
+func lut_busy() -> bool:
+	return _lut_task >= 0
+
+
+## The grade for these tints: the exact LUT (cached) when sync, else the nearest quantised one from a worker thread.
+## Live LUTs are quantised (tints 1/512, saturation 1/256: below one display step) so a slow clock builds a few, not one
+## per relight, and are not cached (a cache keyed by a running blend would only grow).
+func _set_lut(env: Environment, shadow_tint: Vector3, highlight_tint: Vector3, sat: float, sync: bool) -> void:
+	var key := "%s|%s|%s" % [shadow_tint, highlight_tint, sat]
+	if sync or _lut_cache.has(key):
+		env.adjustment_color_correction = lut(shadow_tint, highlight_tint, sat)
+		_lut_shown = key
+		_lut_want = []
+		return
+	var qs := (shadow_tint * 512.0).round() / 512.0
+	var qh := (highlight_tint * 512.0).round() / 512.0
+	var qsat := roundf(sat * 256.0) / 256.0
+	var qkey := "q%s|%s|%s" % [qs, qh, qsat]
+	if qkey == _lut_shown or (_lut_task >= 0 and qkey == _lut_building):
+		_lut_want = []
+		return
+	_lut_want = [qkey, qs, qh, qsat]
+	if _lut_task < 0:
+		_start_lut(_lut_want)
+
+
+func _start_lut(want: Array) -> void:
+	_lut_building = want[0]
+	_lut_want = []
+	_lut_task = WorkerThreadPool.add_task(_lut_slices_job.bind(want[1], want[2], want[3]), false, "grade LUT")
+
+
+## Worker thread: the LUT slices as images (no texture: that is made on the main thread in poll()).
+func _lut_slices_job(shadow_tint: Vector3, highlight_tint: Vector3, sat: float) -> void:
+	_lut_slices = lut_slices(shadow_tint, highlight_tint, sat)
 
 
 ## Compass azimuth (0 north, 90 east) and elevation in degrees to the unit vector pointing at the sun, in the game
@@ -111,6 +221,15 @@ func lut(shadow_tint: Vector3, highlight_tint: Vector3, sat: float) -> ImageText
 	if _lut_cache.has(key):
 		return _lut_cache[key]
 	var n := LUT_SIZE
+	var tex := ImageTexture3D.new()
+	tex.create(Image.FORMAT_RGB8, n, n, n, false, lut_slices(shadow_tint, highlight_tint, sat))
+	_lut_cache[key] = tex
+	return tex
+
+
+## The LUT_SIZE slices of the grade LUT (blue is the slice). Pure: safe on a worker thread.
+static func lut_slices(shadow_tint: Vector3, highlight_tint: Vector3, sat: float) -> Array[Image]:
+	var n := LUT_SIZE
 	var slices: Array[Image] = []
 	for bz in n:
 		var img := Image.create_empty(n, n, false, Image.FORMAT_RGB8)
@@ -119,10 +238,7 @@ func lut(shadow_tint: Vector3, highlight_tint: Vector3, sat: float) -> ImageText
 				var c := grade(Vector3(rx, gy, bz) / float(n - 1), shadow_tint, highlight_tint, sat)
 				img.set_pixel(rx, gy, Color(c.x, c.y, c.z))
 		slices.append(img)
-	var tex := ImageTexture3D.new()
-	tex.create(Image.FORMAT_RGB8, n, n, n, false, slices)
-	_lut_cache[key] = tex
-	return tex
+	return slices
 
 
 ## One grade step on a display-space colour (0..1). Pure; tested in game/tests/test_style.gd.
@@ -185,11 +301,35 @@ func _std(rough: float, metal: float) -> StandardMaterial3D:
 	return s
 
 
-## The styled material for a stand-in material (matched by its key in resource_name), or null to keep it.
+## The styled material for a stand-in material (matched by its key in resource_name), or null to keep it. A flat
+## stand-in colour (metadata FLAT_META: the scaffold's ground and road, the streamed city's tile materials until the
+## P2 city look) gets a darker twin (flat_gain): the kit's textured surfaces read at about FLAT_GAIN of their vertex
+## colour, and the plain light colours (sand, dust, footpaths) under the look's exposure read near white (P1-028).
 func material_for(original: Material) -> Material:
 	if original == null:
 		return null
-	return _mats.get(original.resource_name)
+	var m: Material = _mats.get(original.resource_name)
+	if m == null and original is StandardMaterial3D and original.has_meta(FLAT_META):
+		m = _flat_twin(original)
+	return m
+
+
+## The albedo gain of a flat stand-in colour (linear): FLAT_GAIN for light colours, none for dark ones (asphalt stays
+## asphalt, so a road with no lamps at night does not sink into black). Pure.
+static func flat_gain(linear: Color) -> float:
+	var l := linear.r * 0.2126 + linear.g * 0.7152 + linear.b * 0.0722
+	return lerpf(1.0, FLAT_GAIN, smoothstep(0.06, 0.3, l))
+
+
+func _flat_twin(o: StandardMaterial3D) -> StandardMaterial3D:
+	if _flat.has(o):
+		return _flat[o]
+	var tw := o.duplicate() as StandardMaterial3D
+	var c := o.albedo_color.srgb_to_linear()
+	var g := flat_gain(c)
+	tw.albedo_color = Color(c.r * g, c.g * g, c.b * g, c.a).linear_to_srgb()
+	_flat[o] = tw
+	return tw
 
 
 ## Called for every MeshInstance3D that enters the tree, after its materials are swapped. Look B adds nothing.

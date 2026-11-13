@@ -22,8 +22,9 @@ extends Resource
 ]
 @export var radius := 0.34
 @export var wheel_width := 0.22
-## The stand-in body drawn over the collision box: "box" (a plain body and cabin in `paint`), "auto" or "scooter" (the
-## stand-in kit parts, game/scenes/standin/kit.gd, without their own wheels; the vehicle draws the wheels it steps).
+## The stand-in body drawn over the collision box: "box" (a plain body and cabin in `paint`), "auto", "scooter", "hatch"
+## or "sedan" (the stand-in kit parts, game/scenes/standin/kit.gd, without their own wheels; the vehicle draws the
+## wheels it steps). The look stand-in scenes drive the car tune with the "hatch" body (P1-044).
 @export var body := "box"
 @export var paint := Color(0.95, 0.76, 0.0)
 ## The chase camera view this vehicle starts in ("wide" or "close", GAME.md: the auto uses the close chase).

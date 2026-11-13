@@ -1,0 +1,101 @@
+{
+ "id": "cp_inner_circle",
+ "name": "Connaught Place, Inner Circle and colonnades",
+ "archetype": "colonial_cbd",
+ "sheet": "harness/design/areas/cp_inner_circle.md",
+ "confidence": "medium",
+ "blueprint": null,
+ "names_file": "game/data/names/cp_inner_circle.json",
+ "infrastructure": [
+  "MET-STN-UG",
+  "SUB-S1"
+ ],
+ "notes": "Blueprint slot is empty: an authored blueprint (harness/data/blueprints/, DELHI_WORLD.md 'OSM is reference, not the final word') will override OSM footprints here and take its facade kit from this profile.",
+ "buildings": {
+  "mix": {
+   "colonnade_block": 0.7,
+   "arcade_row": 0.2,
+   "commercial_block": 0.1
+  },
+  "floors": {
+   "p10": 2,
+   "p50": 2,
+   "p90": 3
+  },
+  "setback_m": [
+   0,
+   0
+  ],
+  "upkeep": "clean"
+ },
+ "footpath": {
+  "width_m": [
+   3,
+   6
+  ],
+  "kerb": "grey stone kerb about 0.15 m, cast bollards at the kerb",
+  "notes": "6 m under and in front of the colonnade, 3 m with a flower bed on the Central Park side, a tactile strip down the middle"
+ },
+ "lamps": {
+  "colour": "warm_white"
+ },
+ "boundaries": {
+  "kinds": [
+   "green steel railing on a low plinth at the back of the Central Park footpath",
+   "clipped hedge in a kerbed planter",
+   "cast bollards on the colonnade footpath"
+  ],
+  "height_m": [
+   1.2,
+   1.2
+  ]
+ },
+ "greenery": {
+  "street_trees": "medium",
+  "lawns": "high"
+ },
+ "props": {
+  "parking_bays": "high",
+  "barricades": "low"
+ },
+ "signs": {
+  "density": "high",
+  "boards": "brand boards hung on the column heads and across the first floor"
+ },
+ "life": {
+  "vendors": "low",
+  "pedestrians": "high",
+  "autos": "medium",
+  "buses": "low",
+  "parked_cars": "high",
+  "parked_two_wheelers": "high",
+  "people": "office workers, shoppers, tourists and families by day; dense crowds under the colonnade at night; a few hawkers at the footpath edge",
+  "animals": {
+   "pigeons": "high"
+  }
+ },
+ "sound": {
+  "bed": "sfx_amb_cp_colonnade"
+ },
+ "wear": 0.15,
+ "road": {
+  "condition": "smooth dark asphalt, white dashed lane lines, repainted often",
+  "cleanliness": "high"
+ },
+ "evidence": {
+  "buildings.mix": "sheet cp_inner_circle 'Buildings': blocks A to N in one continuous classical order with arched pavilions at the block ends; hero road cp_inner_circle.json colonnadeEdge. The shares are an estimate from those lines, not counted",
+  "buildings.floors": "sheet cp_inner_circle 'Buildings': two storey blocks about 11.5 m high; hero road cp_inner_circle.json colonnadeEdge (blockHeight 11.5, two storeys)",
+  "buildings.setback_m": "hero road cp_inner_circle.json colonnadeEdge: setback 0, the column line stands at the back of the footpath",
+  "buildings.upkeep": "sheet cp_inner_circle 'Typical clutter and wear': clean render, AC drip stains, tarps where scaffolding stands",
+  "footpath": "sheet cp_inner_circle 'Footpaths': about 6 m of stone paving on the colonnade side, about 3 m with a flower bed on the park side, kerb about 15 cm, cast bollards; hero road footpaths",
+  "lamps.colour": "sheet cp_inner_circle 'Street lamps': warm white to sodium; DELHI_WORLD.md 2a table: warm white",
+  "boundaries": "sheet cp_inner_circle 'Boundaries': green steel railing about 1.2 m, clipped hedge and kerbed planter, cast bollards",
+  "greenery": "sheet cp_inner_circle 'Trees and planting': large deciduous street trees in pits, uneven spacing (hero road treeLine spacing 14 m), Central Park open lawn",
+  "props": "sheet cp_inner_circle 'Parking and vehicles': angled car parking between the footpath and the planter; 'Boundaries': police barricades appear on event days",
+  "signs": "sheet cp_inner_circle 'Buildings': shop signage is brand boards hung on the column heads and across the first floor",
+  "life": "sheet cp_inner_circle 'Vendors and street life' (a few hawkers by day, dense crowds at night, calm compared with Janpath), 'Parking and vehicles' (SUVs and sedans, a few autos, two-wheelers tight at the column line, buses on the radials) and 'Typical clutter and wear' (pigeons on parapets)",
+  "sound.bed": "sheet cp_inner_circle 'Vendors and street life' and 'Parking and vehicles': a colonnade of walkers and slow cars, quiet by day, crowded at night",
+  "wear": "sheet cp_inner_circle 'Typical clutter and wear': wear 0.15",
+  "road": "sheet cp_inner_circle 'Road surface and markings': smooth, repainted often; 'Typical clutter and wear': litter is low"
+ }
+}

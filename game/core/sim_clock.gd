@@ -11,7 +11,8 @@
 ##   at the start of an engine physics frame, right after the engine synced the bodies to their nodes. Stopped in the
 ##   middle of a tick, that tick's step is lost (269 mm at speed); stopped between frames, the nodes show the step
 ##   before until the release. So a tick that is running when the hold comes still gets its physics step. Frames keep
-##   drawing while held. A release resumes exactly where the hold stopped.
+##   drawing while held. A release resumes exactly where the hold stopped. Readers see `paused` only once the server
+##   stopped (held()), after that last step reached the nodes.
 ## - hold({at}) pauses on the last tick boundary at or before `at` (within one tick, never past it).
 ## - --lockstep sets Engine.max_physics_steps_per_frame to 1: a loaded machine runs the sim slower instead of
 ##   catching up in bursts.
@@ -109,7 +110,15 @@ func hold(opts: Dictionary = {}) -> Dictionary:
 
 
 func hold_state() -> Dictionary:
-	return {"paused": paused, "t": t, "at": hold_at}
+	return {"paused": held(), "t": t, "at": hold_at}
+
+
+## True once the hold has fully taken: paused and, in the running engine, the physics server stopped. A hold that comes
+## after a tick (or between frames) sets `paused` at once, but that tick's physics step is still synced to the nodes at
+## the next frame start, so the bodies move one more step; readers (state(), hold(), the debug snapshots) see paused
+## only from then on, so a held frame never moves (P1-048).
+func held() -> bool:
+	return paused and (server_stopped or not _owns_engine())
 
 
 func set_scale(n: float) -> void:
@@ -118,7 +127,7 @@ func set_scale(n: float) -> void:
 
 
 func state() -> Dictionary:
-	return {"t": t, "scale": scale, "paused": paused}
+	return {"t": t, "scale": scale, "paused": held()}
 
 
 ## The engine settings of a C1 time scale: whole physics frames per second, and the engine time scale that keeps the

@@ -199,8 +199,8 @@ func _run(v: Node, test: String, o: Dictionary) -> Dictionary:
 			return r
 		"flyover":
 			# the deck joints are every 20 m from 20 m into the deck; the window runs from 10 m before the first to 10 m
-			# after the last. The deck starts with a sharp 6 percent crest (the ramp top), which throws the car at 100
-			# km/h: those ticks are counted apart (lossTicksBefore), they are not a joint.
+			# after the last. Wheels off the ground before the window (the ramp's crest curve, P1-044: near 0 at 100 km/h)
+			# are counted apart (lossTicksBefore), they are not a joint.
 			var deck_z0: float = Course.RAMP_START - Course.RAMP_LEN
 			var first: float = deck_z0 - Course.DECK_SEG + 10.0
 			var last: float = deck_z0 - Course.DECK_SEG * (Course.DECK_SEGS - 1) - 10.0

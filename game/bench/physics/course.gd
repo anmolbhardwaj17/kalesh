@@ -1,5 +1,5 @@
 ## Test course of the physics bench (P0-017): a flat pad with a 2.4 km straight, kerb slabs (0.15 m), a junction
-## with four footpath corners, a flyover (6 percent ramps, a deck with joints, parapets) and an on-foot course (kerb,
+## with four footpath corners, a flyover (6 percent ramps with a crest curve onto the deck, a deck with joints, parapets) and an on-foot course (kerb,
 ## stairs with 0.18 m risers, a landing, a 1 in 6 ramp). Coordinates are local to the course node: east +X, north -Z,
 ## up +Y, vehicles drive north. The collider is one triangle mesh made from the drawn vertices (collider option K3).
 extends RefCounted
@@ -18,7 +18,15 @@ const FLYOVER_X := 100.0
 const FLYOVER_HALF := 5.0
 const FLYOVER_H := 6.0
 const RAMP_START := -50.0
-const RAMP_LEN := 100.0
+## Each ramp: a 6 percent grade from the ground, then a crest vertical curve (a parabola) of RAMP_CURVE metres onto the
+## level deck (P1-044; it was a sharp 6 percent kink that threw a car at 100 km/h for about 18 ticks). Radius
+## RAMP_CURVE / RAMP_GRADE = 667 m: 1.2 m/s2 of lift at 100 km/h, well under g. The deck starts RAMP_LEN north of
+## RAMP_START.
+const RAMP_GRADE := 0.06
+const RAMP_CURVE := 40.0
+const RAMP_LEN := 6.0 / RAMP_GRADE + RAMP_CURVE * 0.5
+## Length of one drawn step of the crest curve.
+const RAMP_CURVE_STEP := 2.0
 const DECK_SEG := 20.0
 const DECK_SEGS := 6
 ## One open gap between two deck segments (the fourth joint), the other joints are 1.5 cm lips.
@@ -103,24 +111,65 @@ func _flyover() -> void:
 	var x0 := FLYOVER_X - FLYOVER_HALF
 	var x1 := FLYOVER_X + FLYOVER_HALF
 	var z_up := RAMP_START - RAMP_LEN
-	geo.ramp(x0, x1, RAMP_START, 0.0, z_up, FLYOVER_H, 0.0, CONCRETE)
+	_vramp(x0, x1, RAMP_START, -1.0)
 	var z := z_up
 	for i in DECK_SEGS:
 		var lip := JOINT_LIP if i % 2 == 1 else 0.0
 		var gap := JOINT_GAP if i == 3 else 0.0
 		geo.box(Vector3(x0, FLYOVER_H - 0.8, z - DECK_SEG), Vector3(x1, FLYOVER_H + lip, z - gap), CONCRETE.lightened(0.06 * (i % 2)), true)
 		z -= DECK_SEG
-	geo.ramp(x0, x1, z, FLYOVER_H, z - RAMP_LEN, 0.0, 0.0, CONCRETE)
+	_vramp(x0, x1, z - RAMP_LEN, 1.0)
 	# parapets along both edges, following the ramps and the deck (railings from the deck edge)
+	var up := ramp_profile()
 	for x in [x0 - 0.3, x1]:
 		var want := Vector3.RIGHT
-		_parapet(x, RAMP_START, 0.0, z_up, FLYOVER_H, want)
+		for i in up.size() - 1:
+			_parapet(x, RAMP_START - up[i].x, up[i].y, RAMP_START - up[i + 1].x, up[i + 1].y, want)
 		_parapet(x, z_up, FLYOVER_H + JOINT_LIP, z, FLYOVER_H + JOINT_LIP, want)
-		_parapet(x, z, FLYOVER_H, z - RAMP_LEN, 0.0, want)
+		for i in up.size() - 1:
+			var zg := z - RAMP_LEN
+			_parapet(x, zg + up[i].x, up[i].y, zg + up[i + 1].x, up[i + 1].y, want)
 	# pillars under the deck
 	for i in DECK_SEGS + 1:
 		var pz := z_up - DECK_SEG * i
 		geo.box(Vector3(FLYOVER_X - 0.8, 0, pz - 0.8), Vector3(FLYOVER_X + 0.8, FLYOVER_H - 0.8, pz + 0.8), CONCRETE.darkened(0.1))
+
+
+## Height of a ramp s metres from its foot: the grade, then the crest curve onto the deck (FLYOVER_H at RAMP_LEN).
+static func ramp_y(s: float) -> float:
+	var straight := RAMP_LEN - RAMP_CURVE
+	if s <= straight:
+		return RAMP_GRADE * maxf(0.0, s)
+	var u := minf(s, RAMP_LEN) - straight
+	return RAMP_GRADE * straight + RAMP_GRADE * u - RAMP_GRADE / (2.0 * RAMP_CURVE) * u * u
+
+
+## The drawn ramp profile as (s, y) points from the foot to the deck: the grade in one piece, the curve in steps.
+static func ramp_profile() -> PackedVector2Array:
+	var out := PackedVector2Array([Vector2(0.0, 0.0)])
+	var straight := RAMP_LEN - RAMP_CURVE
+	var n := ceili(RAMP_CURVE / RAMP_CURVE_STEP)
+	for i in n + 1:
+		var sv := straight + RAMP_CURVE * i / n
+		out.append(Vector2(sv, ramp_y(sv)))
+	return out
+
+
+## A ramp from the ground at z_foot onto the deck, rising along dir (-1 north, +1 south): top, sides and the end cap.
+func _vramp(x0: float, x1: float, z_foot: float, dir: float) -> void:
+	var prof := ramp_profile()
+	var side := CONCRETE.darkened(0.18)
+	for i in prof.size() - 1:
+		var za := z_foot + dir * prof[i].x
+		var zb := z_foot + dir * prof[i + 1].x
+		var ya := prof[i].y
+		var yb := prof[i + 1].y
+		geo.quad(Vector3(x0, ya, za), Vector3(x1, ya, za), Vector3(x1, yb, zb), Vector3(x0, yb, zb), CONCRETE, Vector3.UP)
+		for x in [x0, x1]:
+			var want := Vector3.LEFT if x == x0 else Vector3.RIGHT
+			geo.quad(Vector3(x, 0.0, za), Vector3(x, ya, za), Vector3(x, yb, zb), Vector3(x, 0.0, zb), side, want)
+	var ze := z_foot + dir * RAMP_LEN
+	geo.quad(Vector3(x0, 0.0, ze), Vector3(x1, 0.0, ze), Vector3(x1, FLYOVER_H, ze), Vector3(x0, FLYOVER_H, ze), side, Vector3(0, 0, dir))
 
 
 func _parapet(x: float, z0: float, y0: float, z1: float, y1: float, _want: Vector3) -> void:

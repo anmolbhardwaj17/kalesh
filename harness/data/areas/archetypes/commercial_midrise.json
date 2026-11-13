@@ -1,0 +1,34 @@
+{
+ "id": "commercial_midrise",
+ "kind": "archetype",
+ "confidence": "low",
+ "sheet": "harness/design/areas/janpath.md",
+ "buildings": {
+  "mix": {
+   "commercial_block": 0.4,
+   "office_slab": 0.35,
+   "shop_house": 0.25
+  },
+  "floors": {
+   "p10": 2,
+   "p50": 4,
+   "p90": 13
+  },
+  "colours": [
+   "grey_concrete",
+   "white_render",
+   "glass_tint"
+  ],
+  "materials": [
+   "plaster",
+   "glass",
+   "concrete"
+  ]
+ },
+ "evidence": {
+  "buildings.mix": "sheet cp_outer_circle 'Edge blending' (5 to 8 storey slab offices with plain plaster and glass) and janpath 'Buildings' (4 to 6 storey concrete blocks with brand boards); footprint figures for the rule cells: mean coverage 0.231, median footprint 150.2 m2, 181 cells (rule_cells.json summary.commercial_midrise); shares are an estimate",
+  "buildings.floors": "OSM levels in the rule cells of this archetype: p10 2, median 4, p90 13, n=90 (rule_cells.json summary.commercial_midrise)",
+  "buildings.colours": "sheet cp_outer_circle 'Edge blending' (plain plaster and glass) and janpath 'Buildings' (concrete blocks)",
+  "buildings.materials": "sheet cp_outer_circle 'Edge blending': plain plaster and glass"
+ }
+}

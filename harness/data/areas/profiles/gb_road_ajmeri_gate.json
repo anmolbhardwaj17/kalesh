@@ -1,0 +1,127 @@
+{
+ "id": "gb_road_ajmeri_gate",
+ "name": "GB Road and Ajmeri Gate",
+ "archetype": "old_city_bazaar",
+ "sheet": "harness/design/areas/gb_road_ajmeri_gate.md",
+ "confidence": "medium",
+ "blueprint": null,
+ "names_file": "game/data/names/gb_road_ajmeri_gate.json",
+ "infrastructure": [
+  "FLY-T1",
+  "BRI-MIN",
+  "MET-STN-UG",
+  "RSTN-NDLS",
+  "SUB-S5"
+ ],
+ "notes": "Described only as the hardware and parts street, the old gate and the station forecourt (DELHI_WORLD.md 3 and GAME.md respect rule); nothing about the trade above is shown or modelled here. The gate stands in a fenced traffic island (sheet 'Map notes').",
+ "buildings": {
+  "mix": {
+   "trade_row": 0.55,
+   "shop_house": 0.2,
+   "commercial_block": 0.15,
+   "station_building": 0.1
+  },
+  "floors": {
+   "p10": 3,
+   "p50": 4,
+   "p90": 5
+  },
+  "colours": [
+   "cream_yellow",
+   "green_timber",
+   "brown_brick",
+   "grey_concrete"
+  ],
+  "materials": [
+   "painted plaster",
+   "red brick",
+   "timber balconies"
+  ],
+  "balconies": "green-painted timber balconies and jharokhas on shuttered upper floors, sunshades on the curved corners",
+  "roof": {
+   "water_tanks": 0.7
+  }
+ },
+ "house_railings": {
+  "gate_and_window_grilles": {
+   "kind": "rolled shutters in grey and blue on every ground floor; iron railing round the gate island",
+   "frequency": "very_high"
+  }
+ },
+ "footpath": {
+  "width_m": [
+   0,
+   1.5
+  ],
+  "surface": "broken concrete at the shops with steps, stools and stacked stock; a kerbed asphalt apron 8 to 10 m wide at the station forecourt with painted bays",
+  "kerb": "yellow and black painted kerb at the station forecourt"
+ },
+ "lamps": {
+  "kind": "curved-arm poles at the gate, a high mast with a cluster of heads over the forecourt, shorter curved-arm poles along the station front, shop tubes and bulbs",
+  "height_m": null,
+  "spacing_m": null,
+  "colour": "mixed"
+ },
+ "boundaries": {
+  "kinds": [
+   "iron railing round the gate island",
+   "yellow police barricades with white stripes at the junction mouths",
+   "rolled shutters on every ground floor",
+   "a low kerbed edge at the forecourt, not a wall"
+  ],
+  "height_m": null
+ },
+ "greenery": {
+  "street_trees": "rare",
+  "species": [
+   "neem",
+   "peepal"
+  ]
+ },
+ "props": {
+  "barricades": "medium",
+  "parking_bays": "high"
+ },
+ "signs": {
+  "boards": "hand-painted trade boards (metals, hardware, pipes) in Hindi and English"
+ },
+ "life": {
+  "vendors": "medium",
+  "pedestrians": "high",
+  "cycle_rickshaws": "medium",
+  "e_rickshaws": "high",
+  "autos": "very_high",
+  "parked_cars": "medium",
+  "parked_two_wheelers": "high",
+  "people": "porters and handcart drivers loading goods, shopkeepers at their thresholds, tea sellers, auto and cab drivers waiting for fares, families and travellers heading for the station"
+ },
+ "sound": {
+  "bed": "sfx_amb_trade_street"
+ },
+ "wear": 0.75,
+ "wear_notes": "the station forecourt is cleaner, about 0.4",
+ "road": {
+  "condition": "patched grey asphalt with parked autos and tempos on both edges and few readable markings; two lanes each way plus parking at the gate",
+  "cleanliness": "low"
+ },
+ "evidence": {
+  "buildings.mix": "sheet gb_road_ajmeri_gate 'Buildings': hardware and parts shops at street level with painted boards, three to five storeys above, the station colonnade, long runs of shuttered fronts. Shares are an estimate",
+  "buildings.floors": "sheet gb_road_ajmeri_gate 'Buildings': three to five storeys of shuttered upper floors; 'What makes this area unlike the others': four-storey fronts",
+  "buildings.colours": "sheet gb_road_ajmeri_gate 'Buildings': green-painted timber balconies, red brick and plaster, curved-corner cream and yellow buildings, old colonial frontages",
+  "buildings.materials": "sheet gb_road_ajmeri_gate 'Buildings': red brick and plaster, timber balconies, painted fronts",
+  "buildings.balconies": "sheet gb_road_ajmeri_gate 'Buildings': green-painted timber balconies and jharokhas, curved-corner buildings with sunshades",
+  "buildings.roof": "sheet gb_road_ajmeri_gate 'Buildings': rooftop water tanks, AC units and signage on the roofs (the fraction is an estimate)",
+  "house_railings": "sheet gb_road_ajmeri_gate 'Boundaries': rolled shutters in grey and blue on every ground floor, iron railing round the gate island",
+  "footpath": "sheet gb_road_ajmeri_gate 'Footpaths': mostly none, shops spill 1 to 1.5 m onto broken concrete, a paved apron 8 to 10 m wide bounded by a yellow and black painted kerb at the station forecourt",
+  "lamps": "sheet gb_road_ajmeri_gate 'Street lamps': tall poles with curved arms at the gate, a high mast with a cluster of heads over the forecourt, shorter curved-arm poles along the station front, shop tubes and bulbs",
+  "boundaries": "sheet gb_road_ajmeri_gate 'Boundaries': iron railing round the gate island, yellow police barricades with white stripes, rolled shutters, a low kerbed edge at the forecourt",
+  "greenery": "sheet gb_road_ajmeri_gate 'Trees and planting': few, a neem or peepal above the old buildings, a row of trees along the wall line at Delhi Gate",
+  "props": "sheet gb_road_ajmeri_gate 'Boundaries' (yellow police barricades at the junction mouths) and 'Parking and vehicles' (autos in rows, tempos, cabs)",
+  "signs.boards": "sheet gb_road_ajmeri_gate 'Buildings': hardware and parts shops with painted boards (metals, traders, hardware stores, pipes) in Hindi and English",
+  "life": "sheet gb_road_ajmeri_gate 'Vendors and street life' (porters, handcart and tempo loading, shopkeepers on stools, tea sellers, riders waiting, families and travellers heading for the station) and 'Parking and vehicles' (autos, e-rickshaws, cabs, cycle rickshaws, tempos, handcarts, motorbikes; hundreds of autos at peak)",
+  "sound": "sheet gb_road_ajmeri_gate 'Vendors and street life': a working street about loading and moving goods; autos in rows at the forecourt",
+  "wear": "sheet gb_road_ajmeri_gate 'Typical clutter and wear': wear about 0.7 to 0.8; DELHI_WORLD.md 2a table 0.7 to 0.8 (station 0.4)",
+  "wear_notes": "sheet gb_road_ajmeri_gate 'Typical clutter and wear': the station forecourt is cleaner (0.4)",
+  "road": "sheet gb_road_ajmeri_gate 'Road surface and markings': 10 to 12 m kerb to kerb at the gate, patched grey asphalt, parked autos and tempos on both edges; 'Typical clutter and wear': litter in the gutter, dust"
+ }
+}

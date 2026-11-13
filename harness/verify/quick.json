@@ -25,25 +25,18 @@
       ]
     },
     {
+      "path": "game/render/",
+      "scenarios": [
+        "boot_title",
+        "street_boot",
+        "landmarks_boot",
+        "relight_live_street"
+      ]
+    },
+    {
       "path": "game/ui/",
       "scenarios": [
         "street_boot"
-      ]
-    },
-    {
-      "path": "game/scripts/car",
-      "scenarios": [
-        "drive_north",
-        "drive_turn_right",
-        "hooks_contract"
-      ]
-    },
-    {
-      "path": "game/scripts/chase_camera.gd",
-      "scenarios": [
-        "boot_title",
-        "drive_north",
-        "coords_north_marker"
       ]
     },
     {

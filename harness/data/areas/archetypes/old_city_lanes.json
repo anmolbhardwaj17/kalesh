@@ -1,0 +1,23 @@
+{
+ "id": "old_city_lanes",
+ "kind": "archetype",
+ "confidence": "medium",
+ "sheet": "harness/design/areas/chandni_chowk_galis.md",
+ "buildings": {
+  "wires": "very_high",
+  "upkeep": "worn"
+ },
+ "signs": {
+  "density": "very_high",
+  "scripts": [
+   "latn",
+   "deva",
+   "arab"
+  ]
+ },
+ "evidence": {
+  "buildings.wires": "sheet chandni_chowk_galis 'Typical clutter and wear': tangled overhead wires and cable bundles above the lanes",
+  "buildings.upkeep": "sheet chandni_chowk_galis 'Typical clutter and wear': peeling paint, patched plaster, soot",
+  "signs": "sheet chandni_chowk_galis 'Buildings': hand-painted shop boards in Urdu, Hindi and English; hanging signs"
+ }
+}

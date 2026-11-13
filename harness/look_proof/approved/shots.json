@@ -2,8 +2,8 @@
   "views": {
     "car_closeup": {
       "file": "car_closeup.png",
-      "at": "2026-11-10T21:00:23.137Z",
-      "query": "debug=1&verify=1&style=stylised_b&light=golden",
+      "at": "2026-11-13T13:57:43.081Z",
+      "query": "debug=1&verify=1&time=17.75",
       "error": null
     },
     "street_eye": {
@@ -26,8 +26,8 @@
     },
     "hud_play": {
       "file": "hud_play.png",
-      "at": "2026-11-10T21:00:48.349Z",
-      "query": "debug=1&verify=1&style=stylised_b&light=golden",
+      "at": "2026-11-13T13:57:55.517Z",
+      "query": "debug=1&verify=1&time=17.75",
       "error": null
     },
     "busiest_40m": {
@@ -57,5 +57,6 @@
   },
   "commit": "0efbd27",
   "gl": "Godot 4.7.2.stable Apple M2 Pro (vulkan, forward_plus)",
-  "at": "2026-11-10T21:06:51.066Z"
+  "at": "2026-11-10T21:06:51.066Z",
+  "note": "P1-044: car_closeup and hud_play retaken (V2 car and chase camera); the other views are pixel-equal to P1-044_golden (mean diff 0.00 to 0.02)"
 }

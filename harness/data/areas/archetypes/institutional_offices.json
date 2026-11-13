@@ -1,0 +1,56 @@
+{
+ "id": "institutional_offices",
+ "kind": "archetype",
+ "confidence": "medium",
+ "sheet": "harness/design/areas/ito.md; harness/design/areas/jantar_mantar.md",
+ "buildings": {
+  "mix": {
+   "govt_slab": 0.55,
+   "office_slab": 0.25,
+   "admin_block": 0.15,
+   "other": 0.05
+  },
+  "floors": {
+   "p10": 3,
+   "p50": 5,
+   "p90": 12
+  },
+  "colours": [
+   "grey_concrete",
+   "brown_cream",
+   "glass_tint"
+  ],
+  "materials": [
+   "concrete",
+   "tinted glass",
+   "brick",
+   "sandstone cladding"
+  ]
+ },
+ "boundaries": {
+  "kinds": [
+   "brick or sandstone boundary wall about 2 m with coping and iron gates",
+   "yellow police barricades"
+  ],
+  "height_m": [
+   1.5,
+   2
+  ]
+ },
+ "greenery": {
+  "street_trees": "high",
+  "species": [
+   "neem",
+   "rain tree",
+   "peepal"
+  ]
+ },
+ "evidence": {
+  "buildings.mix": "sheet ito 'Buildings' (government and media slab blocks in leafy compounds) and jantar_mantar 'Buildings' (government blocks, Reserve Bank complex); shares are an estimate from those lines, not counted",
+  "buildings.floors": "sheet ito 'Buildings' (4 to 12 floor slab blocks) and jantar_mantar 'Buildings' (5 to 12 storeys); OSM levels in the rule cells of this archetype: p10 2, median 4, p90 8, n=26 (rule_cells.json summary.institutional_offices); the median sits between the two",
+  "buildings.colours": "sheet ito 'Buildings' (grey and brown concrete, tinted glass) and jantar_mantar 'Buildings' (cream and brown)",
+  "buildings.materials": "sheet ito 'Buildings' (concrete, tinted glass, brick-orange block) and jantar_mantar 'Boundaries' (red sandstone and brick walls)",
+  "boundaries": "sheet ito 'Street-level top-up' (brick wall about 2 m with stone coping and iron gate leaves, yellow police barricades) and jantar_mantar 'Boundaries' (walls 1.5 to 2 m)",
+  "greenery": "sheet ito 'Trees and planting' (neem, rain tree, peepal, 12 to 18 m canopy) and jantar_mantar 'Trees and planting' (old rain trees and neem, continuous canopy)"
+ }
+}

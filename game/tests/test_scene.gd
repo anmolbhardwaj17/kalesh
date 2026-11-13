@@ -2,11 +2,24 @@
 ## forward(heading) with rotation.y = -heading; the north post is 50 m along -Z and ahead of the chase camera when the car faces north.
 extends RefCounted
 
-const CarModel := preload("res://scripts/car_model.gd")
 const MAIN := preload("res://scenes/main.tscn")
 
 var t
 var tree: SceneTree
+
+
+## The forward axis of a compass heading (0 is north, -Z; PI/2 is east, +X): the axis rule every node follows.
+static func forward(h: float) -> Vector3:
+	return Vector3(sin(h), 0.0, -cos(h))
+
+
+func test_forward_axis_rule() -> void:
+	var n := forward(0.0)
+	t.near(n.x, 0.0, 1e-6, "forward(0).x")
+	t.near(n.z, -1.0, 1e-6, "forward(0).z is -1 (north is -Z)")
+	var e := forward(PI / 2.0)
+	t.near(e.x, 1.0, 1e-6, "forward(PI/2).x is +1 (east is +X)")
+	t.near(e.z, 0.0, 1e-6, "forward(PI/2).z")
 
 
 func _with_main(fn: Callable) -> void:
@@ -45,7 +58,7 @@ func test_car_node_faces_forward_heading() -> void:
 		for h in [0.0, PI / 2.0, PI, -PI / 4.0]:
 			car.place(0.0, 0.0, h)
 			var fwd: Vector3 = -car.global_transform.basis.z
-			var want := CarModel.forward(h)
+			var want := forward(h)
 			t.ok(fwd.distance_to(want) < 1e-5, "car -basis.z %s matches forward(%.3f) %s" % [fwd, h, want])
 			var d: float = car.rotation.y + h
 			t.ok(absf(sin(d)) < 1e-5 and cos(d) > 0.0, "rotation.y %.5f is -heading for heading %.3f" % [car.rotation.y, h])

@@ -12,7 +12,7 @@ import vm from 'node:vm';
 import { performance } from 'node:perf_hooks';
 
 /** The hooks a script may call on window.__game.debug (GAME_HOOKS.md "Required" plus quality and timeOfDay). */
-export const SHIM_HOOKS = ['state', 'clock', 'frames', 'input', 'perf', 'load', 'teleport', 'setCamera', 'timeScale', 'hold', 'events', 'hud', 'quality', 'timeOfDay', 'stream', 'vehicle', 'foot', 'city'];
+export const SHIM_HOOKS = ['state', 'clock', 'frames', 'input', 'perf', 'load', 'teleport', 'setCamera', 'timeScale', 'hold', 'events', 'hud', 'quality', 'timeOfDay', 'stream', 'vehicle', 'foot', 'city', 'bench'];
 
 /**
  * window.__game for a connected GodotDebugClient (or any object with hello, snapshot, events and call(method, ...args)).
@@ -42,6 +42,8 @@ export function makeGame(client, { onAsyncError = () => {} } = {}) {
     vehicle: (cmd = 'info', opts) => client.call('vehicle', cmd, ...(opts === undefined ? [] : [opts])),
     /** The on-foot probes (GAME_HOOKS.md "foot"): info, stage, run, camrec, cost. */
     foot: (cmd = 'info', opts) => client.call('foot', cmd, ...(opts === undefined ? [] : [opts])),
+    /** bench('ballast', {n}) and bench('blank', {on}) in any scene (GPU readings under the 120 fps cap, ballast.mjs). */
+    bench: (cmd, opts) => client.call('bench', cmd, ...(opts === undefined ? [] : [opts])),
     /** The city checks (GAME_HOOKS.md "city"): pins, geo, screen, mirror, surface, watch. */
     city: (cmd = 'pins', opts) => client.call('city', cmd, ...(opts === undefined ? [] : [opts])),
     input: (action, value = 1) => { fire('input', action, value); },

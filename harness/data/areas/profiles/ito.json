@@ -1,0 +1,131 @@
+{
+ "id": "ito",
+ "name": "ITO and the Vikas Marg crossing",
+ "archetype": "institutional_offices",
+ "sheet": "harness/design/areas/ito.md",
+ "confidence": "medium",
+ "blueprint": null,
+ "names_file": "game/data/names/ito.json",
+ "infrastructure": [
+  "FLY-T1",
+  "BRI-Y1",
+  "FLY-R1",
+  "FOB-B3",
+  "MET-VB",
+  "MET-STN-UG"
+ ],
+ "notes": "The crossing layout itself has low confidence on the sheet (no street-level photo of the ITO crossing).",
+ "buildings": {
+  "mix": {
+   "govt_slab": 0.5,
+   "office_slab": 0.2,
+   "admin_block": 0.2,
+   "shed": 0.1
+  },
+  "floors": {
+   "p10": 3,
+   "p50": 8,
+   "p90": 15
+  },
+  "colours": [
+   "grey_concrete",
+   "brown_cream",
+   "orange_brick",
+   "blue_band"
+  ],
+  "materials": [
+   "concrete",
+   "tinted glass",
+   "brick"
+  ],
+  "wires": "high",
+  "upkeep": "worn"
+ },
+ "footpath": {
+  "width_m": [
+   1,
+   3
+  ],
+  "surface": "red-brown interlocking paver with a yellow tactile strip and a planted verge on Bhairon Marg; grey paver, half finished, on Safdar Hashmi Marg; broken concrete along a wall on Todarmal Lane",
+  "kerb": "yellow and black painted kerb; black and white at the bus bay",
+  "notes": "2.5 to 3 m on Bhairon Marg, 2 to 2.5 m on Safdar Hashmi Marg, about 1 m on Todarmal Lane; a 535 m skywalk links ITO and Pragati Maidan"
+ },
+ "lamps": {
+  "kind": "tall steel pole with two curved arms in the median; highmast and curved-arm poles on the flyovers; smaller double-arm poles on the side streets",
+  "height_m": [
+   10,
+   12
+  ],
+  "spacing_m": [
+   35,
+   45
+  ],
+  "colour": "sodium"
+ },
+ "boundaries": {
+  "kinds": [
+   "flyover railing and concrete parapets",
+   "jersey barriers",
+   "red-brown brick wall about 2 m with stone coping and iron gate leaves",
+   "yellow police barricades at the crossing mouths"
+  ],
+  "height_m": [
+   1.5,
+   2
+  ]
+ },
+ "props": {
+  "barricades": "high",
+  "bus_shelters": "high",
+  "hoardings": "high",
+  "poles_and_wires": "high"
+ },
+ "signs": {
+  "scripts": [
+   "latn",
+   "deva",
+   "arab"
+  ],
+  "boards": "green street-name boards in three scripts on single posts; bill posters and torn flex banners"
+ },
+ "life": {
+  "vendors": "medium",
+  "pedestrians": "high",
+  "e_rickshaws": "high",
+  "autos": "high",
+  "buses": "high",
+  "parked_cars": "medium",
+  "animals": {
+   "dogs": "low"
+  },
+  "people": "office staff, students and journalists crossing on foot, commuters at the bus stops, tea and juice sellers, drivers waiting at the junction mouths"
+ },
+ "sound": {
+  "bed": "sfx_amb_ito_junction",
+  "horn_rate": "high"
+ },
+ "wear": 0.4,
+ "wear_notes": "about 0.35 on the main roads, about 0.5 on the side streets",
+ "road": {
+  "condition": "asphalt of mixed age, patched and oil-stained, thick white lane lines, faded stop lines and zebra bars; carriageways 10 to 11 m each way with kerbed 2 to 3 m medians",
+  "cleanliness": "low"
+ },
+ "evidence": {
+  "buildings.mix": "sheet ito 'Buildings': government and media slabs (Police Headquarters, Shakti Sadan, PWD, Doordarshan block) in leafy compounds; a few low sheds are an estimate for the service buildings. Shares are an estimate",
+  "buildings.floors": "sheet ito 'Street-level top-up' (Shakti Sadan about 10 storeys, PWD and Police 12 to 15, Doordarshan about 8) and 'Buildings' (mixed 4 to 12 floors)",
+  "buildings.colours": "sheet ito 'Street-level top-up': grey concrete, blue horizontal bands on Shakti Sadan, orange-brown brick block; 'Buildings': grey and brown concrete",
+  "buildings.materials": "sheet ito 'Buildings': concrete, tinted glass, AC boxes; 'Street-level top-up': orange-brown brick",
+  "buildings.wires": "sheet ito 'Street-level top-up': heavy overhead cables along the side streets",
+  "buildings.upkeep": "sheet ito 'Typical clutter and wear': soot on the flyover underside, bill posters, mud; heavy traffic soils walls and kerbs",
+  "footpath": "sheet ito 'Street-level top-up': Bhairon Marg 2.5 to 3 m of red-brown paver with a yellow tactile strip; Safdar Hashmi Marg 2 to 2.5 m, half finished; Todarmal Lane about 1 m; 'Footpaths': a 535 m skywalk",
+  "lamps": "sheet ito 'Street lamps' and 'Street-level top-up': tall poles in the median with two curved arms 10 to 12 m high, 35 to 45 m apart, highmast on the flyovers; DELHI_WORLD.md 2a table",
+  "boundaries": "sheet ito 'Boundaries' and 'Street-level top-up': flyover railing, concrete parapets, jersey barriers, brick wall about 2 m with stone coping, yellow police barricades",
+  "props": "sheet ito 'Street-level top-up' (yellow barricades across the road mouths, bus shelters with large ad panels) and 'Typical clutter and wear' (bill posters, torn flex banners, hoardings, electrical boxes)",
+  "signs": "sheet ito 'Street-level top-up': green street-name boards in three scripts on single posts; 'Typical clutter and wear': bill posters, torn flex banners",
+  "life": "sheet ito 'Vendors and street life' (office workers, journalists, tea stalls, juice carts, bus stops with crowds), 'Street-level top-up' (students and office staff crossing at the Mandi House mouth, e-rickshaws and autos waiting, a dog asleep on the verge) and 'Parking and vehicles'",
+  "sound": "sheet ito 'What makes this area unlike the others': infrastructure scale and noise, closest thing to modern Delhi traffic",
+  "wear": "sheet ito 'Typical clutter and wear': wear 0.4; DELHI_WORLD.md 2a table 0.35 on main roads, 0.5 on side streets",
+  "wear_notes": "sheet ito 'Street-level top-up': wear on the side streets about 0.5; main roads about 0.35",
+  "road": "sheet ito 'Road surface and markings' and 'Street-level top-up': six to eight lanes at the crossing, mixed age asphalt, patched, oil-stained, carriageways 10 to 11 m each way, medians 2 to 3 m"
+ }
+}

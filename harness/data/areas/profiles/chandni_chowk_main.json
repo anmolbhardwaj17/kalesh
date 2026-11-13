@@ -1,0 +1,106 @@
+{
+ "id": "chandni_chowk_main",
+ "name": "Chandni Chowk, the main avenue",
+ "archetype": "old_city_bazaar",
+ "sheet": "harness/design/areas/chandni_chowk_main.md",
+ "confidence": "medium",
+ "blueprint": null,
+ "names_file": "game/data/names/chandni_chowk_main.json",
+ "infrastructure": [
+  "MET-STN-UG",
+  "TUN-T4"
+ ],
+ "notes": "Places of worship along this road are placed from OSM or the landmark registry; the mix above has no worship type on purpose.",
+ "buildings": {
+  "mix": {
+   "bazaar_block": 0.55,
+   "shop_house": 0.25,
+   "commercial_block": 0.15,
+   "haveli": 0.05
+  },
+  "floors": {
+   "p10": 3,
+   "p50": 4,
+   "p90": 5
+  },
+  "colours": [
+   "cream",
+   "faded_pink",
+   "faded_green",
+   "faded_blue",
+   "teal"
+  ],
+  "balconies": "cantilever balconies and arched windows, bougainvillea on the balconies"
+ },
+ "footpath": {
+  "width_m": [
+   1,
+   1.5
+  ],
+  "surface": "narrow broken footpath taken over by stalls (the old state, used as the baseline); red sandstone paving with no kerbs on the redeveloped central section",
+  "kerb": "broken kerb, none on the redeveloped section"
+ },
+ "lamps": {
+  "kind": "tall double-arm sodium pole on the median",
+  "height_m": [
+   9,
+   9
+  ],
+  "spacing_m": null,
+  "colour": "sodium",
+  "notes": "shops light the street at night with bare bulbs and neon"
+ },
+ "boundaries": {
+  "kinds": [
+   "iron median railing",
+   "roll-down shutters",
+   "metal barriers on the pedestrian side"
+  ],
+  "height_m": null
+ },
+ "greenery": {
+  "street_trees": "rare",
+  "planters": "low"
+ },
+ "signs": {
+  "scripts": [
+   "latn",
+   "deva",
+   "arab"
+  ],
+  "boards": "hand-painted and hoarding boards stacked over the shopfronts, a bank board and advertising on the top floors"
+ },
+ "life": {
+  "vendors": "very_high",
+  "pedestrians": "very_high",
+  "cycle_rickshaws": "high",
+  "e_rickshaws": "high",
+  "autos": "medium",
+  "parked_cars": "none",
+  "parked_two_wheelers": "low",
+  "people": "shoppers, porters, hawkers, food and garland sellers and rickshaw riders; in the morning the shutters are still down and porters rest before opening"
+ },
+ "sound": {
+  "bed": "sfx_amb_old_city_avenue"
+ },
+ "wear": 0.9,
+ "road": {
+  "condition": "asphalt worn smooth, oil-stained and patched, no lane lines in places",
+  "cleanliness": "low"
+ },
+ "evidence": {
+  "buildings.mix": "sheet chandni_chowk_main 'Buildings': continuous 3 to 5 storey bazaar blocks of the 19th and early 20th century with lime plaster and brick, shops on every frontage (places of worship on the road come from OSM or the registry, not from this mix). Shares are an estimate",
+  "buildings.floors": "sheet chandni_chowk_main 'Buildings': 3 to 5 storeys",
+  "buildings.colours": "sheet chandni_chowk_main 'Buildings': many facades painted in faded cream, pink, green and blue",
+  "buildings.balconies": "sheet chandni_chowk_main 'Buildings': cantilever balconies, arched windows; 'Trees and planting': bougainvillea on balconies",
+  "footpath": "sheet chandni_chowk_main 'Footpaths': before redevelopment 1 to 1.5 m, broken, fully taken over by stalls; after about 2021 red sandstone paving, no kerbs on the central section; the game uses the old state as the baseline",
+  "lamps": "sheet chandni_chowk_main 'Street lamps': tall double-arm sodium poles along the median at about 9 m; shops light the street with bare bulbs and neon",
+  "boundaries": "sheet chandni_chowk_main 'Boundaries': iron median railing, shutters, metal barriers on the pedestrian side",
+  "greenery": "sheet chandni_chowk_main 'Trees and planting': few trees, a couple of large trees at the ends, planters on the pedestrian section",
+  "signs": "sheet chandni_chowk_main 'Buildings' (hoardings, a bank board and ads on the top floor) and chandni_chowk_galis 'Buildings' (shop boards in Urdu, Hindi and English on the same street fabric)",
+  "life": "sheet chandni_chowk_main 'Vendors and street life' (the densest crowd in the pilot: rickshaws, hawkers, porters, shoppers, food and garland sellers; morning shutters and porters) and 'Parking and vehicles' (cycle rickshaws, e-rickshaws, autos, handcarts, scooters, no parking)",
+  "sound.bed": "sheet chandni_chowk_main 'Vendors and street life': the densest crowd in the pilot with rickshaws, hawkers and porters",
+  "wear": "sheet chandni_chowk_main 'Typical clutter and wear': wear 0.9",
+  "road": "sheet chandni_chowk_main 'Road surface and markings': asphalt worn smooth, no lane lines in places, oil-stained and patched; 'Typical clutter and wear': grime, litter, damp"
+ }
+}

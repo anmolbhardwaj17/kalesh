@@ -1,0 +1,540 @@
+{
+ "area": "chandni_chowk_main",
+ "scripts": {
+  "latn": "Latin (always present, fallback font)",
+  "deva": "Devanagari (optional)",
+  "arab": "Urdu Nastaliq (optional)"
+ },
+ "names": [
+  {
+   "kind": "cloth",
+   "text": {
+    "latn": "Lal Chand Textiles",
+    "deva": "लाल चंद टेक्सटाइल्स"
+   },
+   "weight": 3
+  },
+  {
+   "kind": "cloth",
+   "text": {
+    "latn": "Shree Ganga Saree Bhandar",
+    "deva": "श्री गंगा साड़ी भंडार"
+   },
+   "weight": 3
+  },
+  {
+   "kind": "cloth",
+   "text": {
+    "latn": "Mehra Dupatta House",
+    "deva": "मेहरा दुपट्टा हाउस"
+   },
+   "weight": 3
+  },
+  {
+   "kind": "cloth",
+   "text": {
+    "latn": "Naya Rang Fabrics",
+    "deva": "नया रंग फैब्रिक्स"
+   },
+   "weight": 3
+  },
+  {
+   "kind": "cloth",
+   "text": {
+    "latn": "Banarasi Silk Emporium",
+    "deva": "बनारसी सिल्क एम्पोरियम"
+   },
+   "weight": 3
+  },
+  {
+   "kind": "cloth",
+   "text": {
+    "latn": "Kapda Mandir",
+    "deva": "कपड़ा मंदिर"
+   },
+   "weight": 3
+  },
+  {
+   "kind": "bridal",
+   "text": {
+    "latn": "Dulhan Lehenga Ghar",
+    "deva": "दुल्हन लहंगा घर"
+   },
+   "weight": 1
+  },
+  {
+   "kind": "bridal",
+   "text": {
+    "latn": "Shagun Bridal Wear",
+    "deva": "शगुन ब्राइडल वियर"
+   },
+   "weight": 1
+  },
+  {
+   "kind": "bridal",
+   "text": {
+    "latn": "Rani Rang Lehenga Centre",
+    "deva": "रानी रंग लहंगा सेंटर"
+   },
+   "weight": 1
+  },
+  {
+   "kind": "jeweller",
+   "text": {
+    "latn": "Hira Moti Jewellers",
+    "deva": "हीरा मोती ज्वेलर्स"
+   },
+   "weight": 1
+  },
+  {
+   "kind": "jeweller",
+   "text": {
+    "latn": "Sone Ki Dukaan Jewellers",
+    "deva": "सोने की दुकान ज्वेलर्स"
+   },
+   "weight": 1
+  },
+  {
+   "kind": "jeweller",
+   "text": {
+    "latn": "Pannalal Silver House",
+    "deva": "पन्नालाल सिल्वर हाउस"
+   },
+   "weight": 1
+  },
+  {
+   "kind": "sweets",
+   "text": {
+    "latn": "Chandni Mithai Ghar",
+    "deva": "चाँदनी मिठाई घर"
+   },
+   "weight": 1
+  },
+  {
+   "kind": "sweets",
+   "text": {
+    "latn": "Shudh Desi Ghee Mithai",
+    "deva": "शुद्ध देसी घी मिठाई"
+   },
+   "weight": 1
+  },
+  {
+   "kind": "sweets",
+   "text": {
+    "latn": "Jalebi Wale Ram Prasad",
+    "deva": "जलेबी वाले राम प्रसाद"
+   },
+   "weight": 1
+  },
+  {
+   "kind": "sweets",
+   "text": {
+    "latn": "Rabri Falooda Corner",
+    "deva": "रबड़ी फालूदा कॉर्नर"
+   },
+   "weight": 1
+  },
+  {
+   "kind": "eatery",
+   "text": {
+    "latn": "Old Delhi Chaat Corner",
+    "deva": "ओल्ड दिल्ली चाट कॉर्नर"
+   },
+   "weight": 3
+  },
+  {
+   "kind": "eatery",
+   "text": {
+    "latn": "Dahi Bhalla Bhandar",
+    "deva": "दही भल्ला भंडार"
+   },
+   "weight": 3
+  },
+  {
+   "kind": "eatery",
+   "text": {
+    "latn": "Kachori Sabzi Wale",
+    "deva": "कचौड़ी सब्ज़ी वाले"
+   },
+   "weight": 3
+  },
+  {
+   "kind": "eatery",
+   "text": {
+    "latn": "Nihari Kulcha House",
+    "deva": "नहारी कुलचा हाउस",
+    "arab": "نہاری کلچہ ہاؤس"
+   },
+   "weight": 3
+  },
+  {
+   "kind": "eatery",
+   "text": {
+    "latn": "Bade Miyan Kebab Corner",
+    "arab": "بڑے میاں کباب کارنر"
+   },
+   "weight": 3
+  },
+  {
+   "kind": "eatery",
+   "text": {
+    "latn": "Lassi Wala Gopal",
+    "deva": "लस्सी वाला गोपाल"
+   },
+   "weight": 3
+  },
+  {
+   "kind": "eatery",
+   "text": {
+    "latn": "Shahi Biryani Point",
+    "deva": "शाही बिरयानी पॉइंट",
+    "arab": "شاہی بریانی پوائنٹ"
+   },
+   "weight": 3
+  },
+  {
+   "kind": "tea",
+   "text": {
+    "latn": "Kulhad Chai Stall",
+    "deva": "कुल्हड़ चाय स्टॉल"
+   },
+   "weight": 2
+  },
+  {
+   "kind": "tea",
+   "text": {
+    "latn": "Nukkad Ki Chai",
+    "deva": "नुक्कड़ की चाय"
+   },
+   "weight": 2
+  },
+  {
+   "kind": "hotel",
+   "text": {
+    "latn": "Hotel Shanti Palace",
+    "deva": "होटल शांति पैलेस"
+   },
+   "weight": 2
+  },
+  {
+   "kind": "hotel",
+   "text": {
+    "latn": "Hotel Gulab Bhawan",
+    "deva": "होटल गुलाब भवन"
+   },
+   "weight": 2
+  },
+  {
+   "kind": "lodge",
+   "text": {
+    "latn": "Chandni Guest Lodge",
+    "deva": "चाँदनी गेस्ट लॉज"
+   },
+   "weight": 2
+  },
+  {
+   "kind": "dharamshala",
+   "text": {
+    "latn": "Agrawal Dharamshala",
+    "deva": "अग्रवाल धर्मशाला"
+   },
+   "weight": 1
+  },
+  {
+   "kind": "office",
+   "text": {
+    "latn": "Gupta and Sons Traders",
+    "deva": "गुप्ता एंड सन्स ट्रेडर्स"
+   },
+   "weight": 2
+  },
+  {
+   "kind": "office",
+   "text": {
+    "latn": "Delhi Kapda Vyapar Mandal",
+    "deva": "दिल्ली कपड़ा व्यापार मंडल"
+   },
+   "weight": 2
+  },
+  {
+   "kind": "office",
+   "text": {
+    "latn": "Chandni Chowk Traders Association",
+    "deva": "चाँदनी चौक ट्रेडर्स एसोसिएशन"
+   },
+   "weight": 2
+  },
+  {
+   "kind": "office",
+   "text": {
+    "latn": "Jain Brothers Commission Agents",
+    "deva": "जैन ब्रदर्स कमीशन एजेंट्स"
+   },
+   "weight": 2
+  },
+  {
+   "kind": "clinic",
+   "text": {
+    "latn": "Dr Verma Dental Clinic",
+    "deva": "डॉ वर्मा डेंटल क्लिनिक"
+   },
+   "weight": 1
+  },
+  {
+   "kind": "clinic",
+   "text": {
+    "latn": "Shri Dhanvantri Clinic",
+    "deva": "श्री धन्वंतरी क्लिनिक"
+   },
+   "weight": 1
+  },
+  {
+   "kind": "clinic",
+   "text": {
+    "latn": "Unani Dawakhana",
+    "arab": "یونانی دواخانہ"
+   },
+   "weight": 1
+  },
+  {
+   "kind": "pharmacy",
+   "text": {
+    "latn": "Janta Medical Store",
+    "deva": "जनता मेडिकल स्टोर"
+   },
+   "weight": 1
+  },
+  {
+   "kind": "coaching",
+   "text": {
+    "latn": "Bright Future Typing Institute",
+    "deva": "ब्राइट फ्यूचर टाइपिंग इंस्टीट्यूट"
+   },
+   "weight": 1
+  },
+  {
+   "kind": "transport",
+   "text": {
+    "latn": "Chandni Chowk Cycle Rickshaw Stand",
+    "deva": "चाँदनी चौक साइकिल रिक्शा स्टैंड"
+   },
+   "weight": 2
+  },
+  {
+   "kind": "transport",
+   "text": {
+    "latn": "Metro Gate Number One",
+    "deva": "मेट्रो गेट नंबर एक"
+   },
+   "weight": 2
+  },
+  {
+   "kind": "transport",
+   "text": {
+    "latn": "Ghar Tak Tempo Service",
+    "deva": "घर तक टेम्पो सर्विस"
+   },
+   "weight": 2
+  },
+  {
+   "kind": "spice",
+   "text": {
+    "latn": "Khari Baoli Masala Bhandar",
+    "deva": "खारी बावली मसाला भंडार"
+   },
+   "weight": 1
+  },
+  {
+   "kind": "spice",
+   "text": {
+    "latn": "Kesar Elaichi Traders",
+    "deva": "केसर इलायची ट्रेडर्स"
+   },
+   "weight": 1
+  },
+  {
+   "kind": "spice",
+   "text": {
+    "latn": "Sukha Mewa Ghar",
+    "deva": "सूखा मेवा घर"
+   },
+   "weight": 1
+  },
+  {
+   "kind": "attar",
+   "text": {
+    "latn": "Gulab Itr Wale",
+    "deva": "गुलाब इत्र वाले",
+    "arab": "گلاب عطر والے"
+   },
+   "weight": 1
+  },
+  {
+   "kind": "attar",
+   "text": {
+    "latn": "Mehfil Attar House",
+    "arab": "محفل عطر ہاؤس"
+   },
+   "weight": 1
+  },
+  {
+   "kind": "books",
+   "text": {
+    "latn": "Urdu Kitab Ghar",
+    "arab": "اردو کتاب گھر"
+   },
+   "weight": 1
+  },
+  {
+   "kind": "books",
+   "text": {
+    "latn": "Naya Daur Stationers",
+    "deva": "नया दौर स्टेशनर्स"
+   },
+   "weight": 1
+  },
+  {
+   "kind": "printing",
+   "text": {
+    "latn": "Shabnam Card Printers",
+    "deva": "शबनम कार्ड प्रिंटर्स"
+   },
+   "weight": 1
+  },
+  {
+   "kind": "printing",
+   "text": {
+    "latn": "Wedding Card Gali",
+    "deva": "वेडिंग कार्ड गली"
+   },
+   "weight": 1
+  },
+  {
+   "kind": "repair",
+   "text": {
+    "latn": "Watch Repair Mistri",
+    "deva": "घड़ी मरम्मत मिस्त्री"
+   },
+   "weight": 1
+  },
+  {
+   "kind": "repair",
+   "text": {
+    "latn": "Mobile Repair Centre",
+    "deva": "मोबाइल रिपेयर सेंटर"
+   },
+   "weight": 1
+  },
+  {
+   "kind": "tailor",
+   "text": {
+    "latn": "Ali Tailors",
+    "arab": "علی ٹیلرز"
+   },
+   "weight": 1
+  },
+  {
+   "kind": "cart",
+   "text": {
+    "latn": "Garam Moongfali Cart",
+    "deva": "गरम मूँगफली"
+   },
+   "weight": 2
+  },
+  {
+   "kind": "cart",
+   "text": {
+    "latn": "Bhutta Roasted Here",
+    "deva": "भुट्टा यहाँ भुना जाता है"
+   },
+   "weight": 2
+  },
+  {
+   "kind": "govt_board",
+   "text": {
+    "latn": "Municipal Notice: No Parking",
+    "deva": "नगर निगम सूचना: पार्किंग निषेध"
+   },
+   "weight": 2
+  },
+  {
+   "kind": "govt_board",
+   "text": {
+    "latn": "Police Booth Chandni Chowk",
+    "deva": "पुलिस बूथ चाँदनी चौक"
+   },
+   "weight": 2
+  },
+  {
+   "kind": "govt_board",
+   "text": {
+    "latn": "Slow Down, Crowded Market",
+    "deva": "धीरे चलें, भीड़ भरा बाज़ार"
+   },
+   "weight": 2
+  },
+  {
+   "kind": "wall_writing",
+   "text": {
+    "latn": "Yahan Peshab Karna Mana Hai",
+    "deva": "यहाँ पेशाब करना मना है"
+   },
+   "weight": 1
+  },
+  {
+   "kind": "wall_writing",
+   "text": {
+    "latn": "Dukaan Ke Aage Gaadi Na Lagayein",
+    "deva": "दुकान के आगे गाड़ी न लगाएँ"
+   },
+   "weight": 1
+  },
+  {
+   "kind": "wall_writing",
+   "text": {
+    "latn": "Dhokha Khane Se Bacho"
+   },
+   "weight": 1
+  },
+  {
+   "kind": "poster_line",
+   "text": {
+    "latn": "Dilli Ka Dil, Nav Dilli Dal",
+    "deva": "दिल्ली का दिल, नव दिल्ली दल"
+   },
+   "weight": 1
+  },
+  {
+   "kind": "poster_line",
+   "text": {
+    "latn": "Dilli 2040: Naya Chandni Chowk",
+    "deva": "दिल्ली 2040: नया चाँदनी चौक"
+   },
+   "weight": 1
+  },
+  {
+   "kind": "poster_line",
+   "text": {
+    "latn": "Sethi Seva Trust: Free Check-up Camp",
+    "deva": "सेठी सेवा ट्रस्ट: मुफ़्त जाँच शिविर"
+   },
+   "weight": 1
+  },
+  {
+   "kind": "poster_line",
+   "text": {
+    "latn": "Jhatpat: Order in Ten Minutes",
+    "deva": "झटपट: दस मिनट में ऑर्डर"
+   },
+   "weight": 1
+  },
+  {
+   "kind": "poster_line",
+   "text": {
+    "latn": "Raat Wali 106.1 Sunte Raho",
+    "deva": "रात वाली 106.1 सुनते रहो"
+   },
+   "weight": 1
+  }
+ ]
+}

@@ -148,6 +148,34 @@
       "_note": "P0-009. debug.load('street') builds the stand-in Delhi arterial (median, kerbs, service lane, signal junction, flyover ramp stub, shops, traffic, people); the scene reports its id, the sim runs, a shot is taken, no console errors. Runs the default look (stylised B since P1-002)."
     },
     {
+      "name": "relight_live_street",
+      "solo": true,
+      "steps": [
+        {
+          "script": "harness/verify/scripts/relight_live.js",
+          "timeout": 180000,
+          "params": {
+            "scene": "street"
+          }
+        }
+      ],
+      "_note": "P1-028. The look follows the day clock live: the stand-in street loaded at 17:00 and left running to 20:00 at 0.1 game hours per sim second goes from golden to night without a style rebuild (state().time.live builds unchanged, 20 or more relights), its sodium lamps, shop lights and headlights come on and half its windows light; GPU p95 during the change at most 12 ms by the ballast method (measured inside the script so the window falls in the change); one frame of live relight work at most 4 ms on the main thread. Shots relight_street_golden and relight_street_night. Solo: it measures GPU time."
+    },
+    {
+      "name": "relight_live_city",
+      "solo": true,
+      "steps": [
+        {
+          "script": "harness/verify/scripts/relight_live.js",
+          "timeout": 180000,
+          "params": {
+            "scene": "city"
+          }
+        }
+      ],
+      "_note": "P1-028. The same live change in the streamed city (full pilot tiles): sky, sun, haze, exposure and grade go from golden to night with no rebuild; the city has no lamps or windows yet (street dressing is P2), so only the light is checked. Shots relight_city_golden and relight_city_night. Solo: it measures GPU time."
+    },
+    {
       "name": "landmarks_boot",
       "steps": [
         {

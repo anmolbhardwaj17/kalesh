@@ -1,0 +1,487 @@
+{
+ "area": "cp_inner_circle",
+ "scripts": {
+  "latn": "Latin (always present, fallback font)",
+  "deva": "Devanagari (optional)",
+  "arab": "Urdu Nastaliq (optional)"
+ },
+ "names": [
+  {
+   "kind": "cafe",
+   "text": {
+    "latn": "Blue Door Cafe"
+   },
+   "weight": 1
+  },
+  {
+   "kind": "cafe",
+   "text": {
+    "latn": "The Brass Kettle Cafe"
+   },
+   "weight": 1
+  },
+  {
+   "kind": "cafe",
+   "text": {
+    "latn": "Colonnade Coffee House",
+    "deva": "कोलोनेड कॉफ़ी हाउस"
+   },
+   "weight": 1
+  },
+  {
+   "kind": "cafe",
+   "text": {
+    "latn": "Evening Tiffin Room"
+   },
+   "weight": 1
+  },
+  {
+   "kind": "restaurant",
+   "text": {
+    "latn": "The Peacock Room"
+   },
+   "weight": 1
+  },
+  {
+   "kind": "restaurant",
+   "text": {
+    "latn": "Lotus Garden Restaurant",
+    "deva": "लोटस गार्डन रेस्टोरेंट"
+   },
+   "weight": 1
+  },
+  {
+   "kind": "restaurant",
+   "text": {
+    "latn": "Spice Route Kitchen"
+   },
+   "weight": 1
+  },
+  {
+   "kind": "restaurant",
+   "text": {
+    "latn": "Raj Darbar Dining",
+    "deva": "राज दरबार डाइनिंग"
+   },
+   "weight": 1
+  },
+  {
+   "kind": "restaurant",
+   "text": {
+    "latn": "North Block Grill"
+   },
+   "weight": 1
+  },
+  {
+   "kind": "restaurant",
+   "text": {
+    "latn": "Anand Vegetarian Restaurant",
+    "deva": "आनंद वेजिटेरियन रेस्टोरेंट"
+   },
+   "weight": 1
+  },
+  {
+   "kind": "restaurant",
+   "text": {
+    "latn": "Mehfil Bar and Kitchen"
+   },
+   "weight": 1
+  },
+  {
+   "kind": "bar",
+   "text": {
+    "latn": "The Copper Pot Bar"
+   },
+   "weight": 1
+  },
+  {
+   "kind": "bar",
+   "text": {
+    "latn": "Midnight Verandah"
+   },
+   "weight": 1
+  },
+  {
+   "kind": "bakery",
+   "text": {
+    "latn": "Rosewood Bakery"
+   },
+   "weight": 1
+  },
+  {
+   "kind": "bakery",
+   "text": {
+    "latn": "Golden Crust Patisserie"
+   },
+   "weight": 1
+  },
+  {
+   "kind": "sweets",
+   "text": {
+    "latn": "Shree Krishna Mithai",
+    "deva": "श्री कृष्ण मिठाई"
+   },
+   "weight": 1
+  },
+  {
+   "kind": "sweets",
+   "text": {
+    "latn": "Sugar and Spice Sweet House"
+   },
+   "weight": 1
+  },
+  {
+   "kind": "books",
+   "text": {
+    "latn": "Corner Book Gallery"
+   },
+   "weight": 1
+  },
+  {
+   "kind": "books",
+   "text": {
+    "latn": "Connaught Map and Print House"
+   },
+   "weight": 1
+  },
+  {
+   "kind": "books",
+   "text": {
+    "latn": "Old Page Second Hand Books"
+   },
+   "weight": 1
+  },
+  {
+   "kind": "clothing",
+   "text": {
+    "latn": "Linen and Loom"
+   },
+   "weight": 3
+  },
+  {
+   "kind": "clothing",
+   "text": {
+    "latn": "Heritage Handloom House",
+    "deva": "हेरिटेज हैंडलूम हाउस"
+   },
+   "weight": 3
+  },
+  {
+   "kind": "clothing",
+   "text": {
+    "latn": "Gentleman's Tailors and Outfitters"
+   },
+   "weight": 3
+  },
+  {
+   "kind": "clothing",
+   "text": {
+    "latn": "Madras Cotton House"
+   },
+   "weight": 3
+  },
+  {
+   "kind": "clothing",
+   "text": {
+    "latn": "Tailor Master Cutters",
+    "deva": "टेलर मास्टर कटर्स"
+   },
+   "weight": 3
+  },
+  {
+   "kind": "jeweller",
+   "text": {
+    "latn": "Navratan Jewellers",
+    "deva": "नवरत्न ज्वेलर्स"
+   },
+   "weight": 1
+  },
+  {
+   "kind": "jeweller",
+   "text": {
+    "latn": "Silverline Gems"
+   },
+   "weight": 1
+  },
+  {
+   "kind": "shoes",
+   "text": {
+    "latn": "Footprint Shoe Gallery"
+   },
+   "weight": 1
+  },
+  {
+   "kind": "shoes",
+   "text": {
+    "latn": "Royal Leather Works"
+   },
+   "weight": 1
+  },
+  {
+   "kind": "optician",
+   "text": {
+    "latn": "Clearview Opticians"
+   },
+   "weight": 1
+  },
+  {
+   "kind": "optician",
+   "text": {
+    "latn": "Eye Care Centre"
+   },
+   "weight": 1
+  },
+  {
+   "kind": "chemist",
+   "text": {
+    "latn": "Colonnade Chemists"
+   },
+   "weight": 1
+  },
+  {
+   "kind": "chemist",
+   "text": {
+    "latn": "Health Point Pharmacy",
+    "deva": "हेल्थ पॉइंट फ़ार्मेसी"
+   },
+   "weight": 1
+  },
+  {
+   "kind": "bank",
+   "text": {
+    "latn": "Capital City Co-operative Bank"
+   },
+   "weight": 1
+  },
+  {
+   "kind": "bank",
+   "text": {
+    "latn": "Dilli Nagrik Bank",
+    "deva": "दिल्ली नागरिक बैंक"
+   },
+   "weight": 1
+  },
+  {
+   "kind": "bank",
+   "text": {
+    "latn": "Currency Exchange Counter"
+   },
+   "weight": 1
+  },
+  {
+   "kind": "office",
+   "text": {
+    "latn": "Raisina Associates Chartered Accountants"
+   },
+   "weight": 2
+  },
+  {
+   "kind": "office",
+   "text": {
+    "latn": "Barakhamba Legal Chambers"
+   },
+   "weight": 2
+  },
+  {
+   "kind": "office",
+   "text": {
+    "latn": "Dhar and Mehta Solicitors"
+   },
+   "weight": 2
+  },
+  {
+   "kind": "office",
+   "text": {
+    "latn": "Colonnade Travel Desk"
+   },
+   "weight": 2
+  },
+  {
+   "kind": "office",
+   "text": {
+    "latn": "Capital Insurance Agents"
+   },
+   "weight": 2
+  },
+  {
+   "kind": "office",
+   "text": {
+    "latn": "Delhi Chamber of Commerce",
+    "deva": "दिल्ली चैंबर ऑफ़ कॉमर्स"
+   },
+   "weight": 2
+  },
+  {
+   "kind": "travel",
+   "text": {
+    "latn": "Silver Wings Travels"
+   },
+   "weight": 1
+  },
+  {
+   "kind": "travel",
+   "text": {
+    "latn": "Himalaya Holidays"
+   },
+   "weight": 1
+  },
+  {
+   "kind": "hotel",
+   "text": {
+    "latn": "Hotel Connaught Palace",
+    "deva": "होटल कनॉट पैलेस"
+   },
+   "weight": 2
+  },
+  {
+   "kind": "hotel",
+   "text": {
+    "latn": "Hotel Regent Court"
+   },
+   "weight": 2
+  },
+  {
+   "kind": "hotel",
+   "text": {
+    "latn": "The Colonnade Inn"
+   },
+   "weight": 2
+  },
+  {
+   "kind": "gallery",
+   "text": {
+    "latn": "Gallery Kala Ghar",
+    "deva": "गैलरी कला घर"
+   },
+   "weight": 1
+  },
+  {
+   "kind": "gallery",
+   "text": {
+    "latn": "Print and Frame House"
+   },
+   "weight": 1
+  },
+  {
+   "kind": "handicraft",
+   "text": {
+    "latn": "State Emporium Craft Hall"
+   },
+   "weight": 3
+  },
+  {
+   "kind": "handicraft",
+   "text": {
+    "latn": "Kashida Embroidery House"
+   },
+   "weight": 3
+  },
+  {
+   "kind": "cinema",
+   "text": {
+    "latn": "Sapna Picture Palace"
+   },
+   "weight": 1
+  },
+  {
+   "kind": "coaching",
+   "text": {
+    "latn": "Spoken English Academy"
+   },
+   "weight": 1
+  },
+  {
+   "kind": "coaching",
+   "text": {
+    "latn": "Career Bridge Institute"
+   },
+   "weight": 1
+  },
+  {
+   "kind": "transport",
+   "text": {
+    "latn": "Metro Rajiv Chowk Exit Four",
+    "deva": "मेट्रो राजीव चौक निकास चार"
+   },
+   "weight": 2
+  },
+  {
+   "kind": "transport",
+   "text": {
+    "latn": "Pre-paid Auto Stand",
+    "deva": "प्रीपेड ऑटो स्टैंड"
+   },
+   "weight": 2
+  },
+  {
+   "kind": "govt_board",
+   "text": {
+    "latn": "Inner Circle Block D",
+    "deva": "इनर सर्कल ब्लॉक डी"
+   },
+   "weight": 2
+  },
+  {
+   "kind": "govt_board",
+   "text": {
+    "latn": "Pedestrian Crossing",
+    "deva": "पैदल पार पथ"
+   },
+   "weight": 2
+  },
+  {
+   "kind": "govt_board",
+   "text": {
+    "latn": "Parking Pay and Display"
+   },
+   "weight": 2
+  },
+  {
+   "kind": "poster_line",
+   "text": {
+    "latn": "Dilli Ka Dil, Nav Dilli Dal",
+    "deva": "दिल्ली का दिल, नव दिल्ली दल"
+   },
+   "weight": 1
+  },
+  {
+   "kind": "poster_line",
+   "text": {
+    "latn": "Dilli 2040: A World-Class Delhi",
+    "deva": "दिल्ली 2040: विश्वस्तरीय दिल्ली"
+   },
+   "weight": 1
+  },
+  {
+   "kind": "poster_line",
+   "text": {
+    "latn": "Jhatpat: Anything in Ten Minutes",
+    "deva": "झटपट: कुछ भी दस मिनट में"
+   },
+   "weight": 1
+  },
+  {
+   "kind": "poster_line",
+   "text": {
+    "latn": "NewsTez 24: Every Hour, Every Gali",
+    "deva": "न्यूज़तेज़ 24: हर घंटे, हर गली"
+   },
+   "weight": 1
+  },
+  {
+   "kind": "wall_writing",
+   "text": {
+    "latn": "Hawkers Not Allowed",
+    "deva": "फेरीवालों का प्रवेश वर्जित"
+   },
+   "weight": 1
+  },
+  {
+   "kind": "wall_writing",
+   "text": {
+    "latn": "Please Do Not Lean on the Pillars"
+   },
+   "weight": 1
+  }
+ ]
+}

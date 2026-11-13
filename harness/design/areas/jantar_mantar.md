@@ -2,7 +2,9 @@
 
 Status: draft from reference research, P0-035 (2026-11-11). Id `jantar_mantar`. Internal reference only, never shipped. Board: `harness/design/areas/jantar_mantar_board.jpg`.
 
-**Evidence note.** 24 Commons photos. Observatory shots are good for the monument; street evidence is thin (the Akashvani and post office buildings on Parliament Street). Add street photos later.
+**Evidence note (P2-002 top-up, 2026-11-13).** 20 new street-level photos (tiles 25 to 44), all Wikimedia Commons, each with link and licence: Sansad Marg in seven views, the Reserve Bank gate, Patel Chowk metro, a Delhi Police barricade, the observatory gate, and the railing along the protest site with banners, chairs and crowds. Mapillary and Flickr need a login or token, so they were not used. **Confidence: medium** for the road, kerbs, dividers, barricades and the garden-side boundary (many consistent views); **low to medium** for the plan of Jantar Mantar Road (the short protest road), which only the railing views show. Crowd photos are used for what the street looks like (railing, banners, chairs, umbrellas), not to identify anyone.
+
+**Earlier note (P0-035).** 24 Commons photos. Observatory shots are good for the monument; street evidence is thin (the Akashvani and post office buildings on Parliament Street). Add street photos later.
 
 Where a line says 'about', the number was read from the photos by scale cues (a car is about 1.7 m wide, a person about 1.7 m tall) and is not surveyed. Lines are read from the board photos except where the evidence note says the area is thin; those lines also use general knowledge and must be rechecked with street imagery. Confidence per area is in DELHI_WORLD.md section 2a.
 
@@ -36,8 +38,28 @@ Board tile number, file, page URL, licence, author and date. All are Wikimedia C
 | 22 | Jantar Mantar (Q2045115) - Connaught Place. New Delhi -N-DL-23 1.jpg | https://commons.wikimedia.org/wiki/File:Jantar_Mantar_(Q2045115)_-_Connaught_Place._New_Delhi_-N-DL-23_1.jpg | CC BY-SA 4.0 | Pawan.kamrani 2019-06-11 |
 | 23 | Akashvani Bhawan, Parliament Street.jpg | https://commons.wikimedia.org/wiki/File:Akashvani_Bhawan,_Parliament_Street.jpg | CC BY-SA 4.0 | Aloofmanish 2021-06-22 |
 | 24 | Indian Post, New Delhi.jpg | https://commons.wikimedia.org/wiki/File:Indian_Post,_New_Delhi.jpg | CC BY-SA 4.0 | Sidheeq 2016-12-29 |
+| 25 | Sansad Marg, a street in New Delhi, India 01.jpg | https://commons.wikimedia.org/wiki/File:Sansad_Marg,_a_street_in_New_Delhi,_India_01.jpg | CC BY-SA 4.0 | Pinakpani 2022-08-25 |
+| 26 | Sansad Marg, a street in New Delhi, India 03.jpg | https://commons.wikimedia.org/wiki/File:Sansad_Marg,_a_street_in_New_Delhi,_India_03.jpg | CC BY-SA 4.0 | Pinakpani 2022-08-25 |
+| 27 | Sansad Marg, a street in New Delhi, India 05.jpg | https://commons.wikimedia.org/wiki/File:Sansad_Marg,_a_street_in_New_Delhi,_India_05.jpg | CC BY-SA 4.0 | Pinakpani 2022-08-25 |
+| 28 | Sansad Marg, a street in New Delhi, India 07.jpg | https://commons.wikimedia.org/wiki/File:Sansad_Marg,_a_street_in_New_Delhi,_India_07.jpg | CC BY-SA 4.0 | Pinakpani 2022-08-25 |
+| 29 | Sansad Marg, a street in New Delhi, India 09.jpg | https://commons.wikimedia.org/wiki/File:Sansad_Marg,_a_street_in_New_Delhi,_India_09.jpg | CC BY-SA 4.0 | Pinakpani 2022-08-25 |
+| 30 | Sansad Marg, a street in New Delhi, India 11.jpg | https://commons.wikimedia.org/wiki/File:Sansad_Marg,_a_street_in_New_Delhi,_India_11.jpg | CC BY-SA 4.0 | Pinakpani 2022-08-25 |
+| 31 | Sansad Marg, a street in New Delhi, India 13.jpg | https://commons.wikimedia.org/wiki/File:Sansad_Marg,_a_street_in_New_Delhi,_India_13.jpg | CC BY-SA 4.0 | Pinakpani 2022-08-25 |
+| 32 | Reserve Bank of India, Delhi 01.jpg | https://commons.wikimedia.org/wiki/File:Reserve_Bank_of_India,_Delhi_01.jpg | CC BY-SA 4.0 | Pinakpani 2022-08-25 |
+| 33 | Reserve Bank of India, Delhi 05.jpg | https://commons.wikimedia.org/wiki/File:Reserve_Bank_of_India,_Delhi_05.jpg | CC BY-SA 4.0 | Pinakpani 2022-08-25 |
+| 34 | Patel Chowk entrance, 2008.JPG | https://commons.wikimedia.org/wiki/File:Patel_Chowk_entrance,_2008.JPG | CC BY-SA 3.0 | Bahnfrend 2008-12-27 |
+| 35 | Patel Chowk Metro Station - panoramio.jpg | https://commons.wikimedia.org/wiki/File:Patel_Chowk_Metro_Station_-_panoramio.jpg | CC BY-SA 3.0 | Anil Kaushik Taken on 2 |
+| 36 | Delhi Police's Barricade.jpeg | https://commons.wikimedia.org/wiki/File:Delhi_Police's_Barricade.jpeg | CC BY-SA 3.0 | Sidheeq 2017-09-16 |
+| 37 | Hanuman Road Area, Connaught Place, New Delhi, Delhi 110001, India - panoramio.jpg | https://commons.wikimedia.org/wiki/File:Hanuman_Road_Area,_Connaught_Place,_New_Delhi,_Delhi_110001,_India_-_panoramio.jpg | CC BY-SA 3.0 | Rainer Strehl Taken on 6 |
+| 38 | Jantar Mantar Entrance.jpg | https://commons.wikimedia.org/wiki/File:Jantar_Mantar_Entrance.jpg | CC BY-SA 4.0 | Pallav.journo 2010-09-11 |
+| 39 | Evening at Jantar Mantar Protest 21st July 2026.jpg | https://commons.wikimedia.org/wiki/File:Evening_at_Jantar_Mantar_Protest_21st_July_2026.jpg | CC BY-SA 4.0 | Alnitak-Alnilam-Mintaka 2026-07-21 |
+| 40 | Jantar Mantar Protest.jpg | https://commons.wikimedia.org/wiki/File:Jantar_Mantar_Protest.jpg | CC BY-SA 4.0 | Alnitak-Alnilam-Mintaka 2026-07-21 |
+| 41 | Near Jantar mantar New Delhi banner supporting 2020-2021 Indian farmers' protest IMG 20210210 092042.jpg | https://commons.wikimedia.org/wiki/File:Near_Jantar_mantar_New_Delhi_banner_supporting_2020-2021_Indian_farmers'_protest_IMG_20210210_092042.jpg | CC BY-SA 4.0 | Sumita Roy Dutta 2021-02-10 |
+| 42 | Near Jantar mantar New Delhi people and banner supporting 2020-2021 Indian farmers' protest IMG 20210210 092035.jpg | https://commons.wikimedia.org/wiki/File:Near_Jantar_mantar_New_Delhi_people_and_banner_supporting_2020-2021_Indian_farmers'_protest_IMG_20210210_092035.jpg | CC BY-SA 4.0 | Sumita Roy Dutta 2021-02-10 |
+| 43 | Near Jantar mantar New Delhi people and banner supporting 2020-2021 Indian farmers' protest IMG 20210210 092053.jpg | https://commons.wikimedia.org/wiki/File:Near_Jantar_mantar_New_Delhi_people_and_banner_supporting_2020-2021_Indian_farmers'_protest_IMG_20210210_092053.jpg | CC BY-SA 4.0 | Sumita Roy Dutta 2021-02-10 |
+| 44 | Students from All Over India protesting against 2026 NEET UG paper leak place Jantar Mantar on 20 July 2026 ahead of Parliament March 06.jpg | https://commons.wikimedia.org/wiki/File:Students_from_All_Over_India_protesting_against_2026_NEET_UG_paper_leak_place_Jantar_Mantar_on_20_July_2026_ahead_of_Parliament_March_06.jpg | CC BY-SA 4.0 | Sumita Roy Dutta 2026-07-20 |
 
-Total cited sources: 24.
+Total cited sources: 44 (24 from P0-035, 20 new in P2-002).
 
 ## Footpaths
 
@@ -82,3 +104,37 @@ Giant red and cream astronomical instruments in a green park right beside a gove
 ## Edge blending (what changes first)
 
 Edges: it sits between CP (north) and Parliament / Lutyens (south). North: colonnade and commercial towers. South: low walls, avenue trees and sandstone government blocks. The first change is the vanishing of shop signs and the appearance of gates and guard boxes.
+
+## Street-level top-up (P2-002, 2026-11-13)
+
+Where this section differs from an older line above, this section wins. Tile numbers are board tiles.
+
+**Footpaths.** Sansad Marg has a wide tarmac edge rather than a paved walk in most views (25 to 31). Taxi parking uses the edge. Near the gates a paved strip with a yellow and black kerb (32, 33). At the observatory gate (38) a red stone path runs from the entrance. Outside the garden railing a pavement about 3 m wide hosts the sit-ins (41 to 43).
+
+**Road surface and markings.** Sansad Marg is a wide dual carriageway, about 12 m per direction (three lanes plus a parking edge), grey asphalt in good state, white lane lines and edge lines, zebra bars at a median refuge (25). The central divider in several views is a continuous low yellow and black segmented block about 0.4 m wide with a white line each side (28, 29), and elsewhere a kerbed strip painted yellow and black (30). Green direction boards on posts (26, 31).
+
+**Street lamps.** Single and double-arm poles about 9 m on the footpath edge, 35 to 40 m apart, under heavy canopy (25, 27, 31). Pole-mounted signal heads at the junctions (27). Double curved-arm lamp at the Patel Chowk metro entrance (35).
+
+**Boundaries.** Red sandstone and brick walls about 1.5 to 2 m high along Sansad Marg (26, 31). The Reserve Bank gate: red-painted iron gate between sandstone pillars, a white canopy on tall posts, a guard hut and a yellow and black speed hump on the approach (32, 33). The observatory entrance: green iron railing and gate leaves about 2.5 m high (38). The protest railing is green iron with spear tops, hung with white and red banners about 3 m wide (41 to 43). Yellow Delhi Police steel barricades on wheels, about 2.2 m long and 1.1 m high, stencilled with the road name (36).
+
+**Buildings.** Low red sandstone and cream blocks of the old government quarter behind the walls, the Reserve Bank complex with its canopy (32, 33), metro entrance as a low brick pavilion (35). A white-domed gurdwara across a water tank in the south (37).
+
+**Trees and planting.** Old rain trees and neem forming a continuous canopy about 15 to 20 m high over the road (25 to 31, 40).
+
+**Vendors and street life.** Sit-in protesters under banners with chairs and umbrellas (41 to 44), crowds with flags (39, 40), guards at the gate (32), cab drivers waiting along the kerb (25 to 31). The street is quiet outside protest days.
+
+**Parking and vehicles.** Rows of white taxis and sedans parked along both kerbs of Sansad Marg, in a lay-by about 2 m deep (25 to 31). A yellow school or staff bus in the distance (29). Police vans near barricades.
+
+**Typical clutter and wear.** Wear about 0.1 to 0.15 on the road, more at the protest site (banners, tarps, chairs). Posted signs, barricades, canopy of leaves and some dust.
+
+**What sets it apart (added).** A broad leafy government avenue lined with parked white cabs, a striped low divider, and a green railing along a pavement turned into a protest ground.
+
+## Map notes (P2-002)
+
+- Sansad Marg: the divider is a continuous low yellow and black block about 0.4 m wide (28, 29), not a kerbed median, with pedestrian refuge islands at crossings (25). Check OSM for divider tags and the refuge.
+- Carriageway about 12 m per direction with a 2 m taxi lay-by along both kerbs (25 to 31); the effective lanes are two and a half. Check lane count against the lay-by.
+- Zebra crossing mid-block at the refuge (25).
+- Gate cut in the kerb with a speed hump in front of the Reserve Bank (32, 33) and a forecourt at the observatory gate (38).
+- Jantar Mantar Road (the short road with the protest railing) is a narrow road about 7 m wide with a 3 m pavement and a green railing (41 to 43). It is often barricaded at the Sansad Marg end (36). Check it exists as its own way and add a barrier node.
+- Patel Chowk has its metro entrance on the corner (35).
+- Widths: footpath 3 m at the railing; tarmac edge 2 m; median 0.4 m painted block.

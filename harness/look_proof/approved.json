@@ -1,5 +1,6 @@
 {
-  "from": "style_stylised_b_golden",
-  "at": "2026-11-10T21:24:37.121Z",
-  "commit": "726b186"
+  "from": "P1-044_golden",
+  "at": "2026-11-13T13:59:59.083Z",
+  "commit": "0b5a919",
+  "note": "P1-044: only car_closeup and hud_play taken from this set (the change is the car and the camera); the other views kept from style_stylised_b_golden (726b186)"
 }

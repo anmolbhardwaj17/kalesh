@@ -1,6 +1,6 @@
 {
   "_doc": "Written only by node harness/bin/task.mjs. Phases run in order; P0 (ADOPT + STYLE DISCOVERY) waits for the owner by design and needs task.mjs signoff and task.mjs archsignoff before its gate passes. Later phases are added by the planner at the end of P0 (task.mjs phase-add) from the game's real state.",
-  "updated": "2026-11-13T12:59:54.630Z",
+  "updated": "2026-11-13T17:21:07.291Z",
   "phases": [
     {
       "id": "P0",
@@ -2258,14 +2258,18 @@
       "agent": "art-director",
       "priority": 2,
       "kind": "art",
-      "status": "todo",
-      "attempts": 0,
+      "status": "done",
+      "attempts": 1,
       "notes": [
         "Anmol 2026-11-13: the reference sheets also decide the area blueprints (CP circles first) and are where flagged odd OSM buildings are checked against photos and satellite.",
         "Anmol 2026-11-13: references from the internet (photos, satellite, street-level imagery) are the base for every add, delete or width change; list per area the missing side roads, dividers and separations seen in them."
       ],
       "created": "2026-11-11T12:31:54.058Z",
-      "model": "sonnet"
+      "model": "sonnet",
+      "started": "2026-11-13T15:00:30.246Z",
+      "done": "2026-11-13T15:40:23.769Z",
+      "summary": "Four thin sheets topped up with Wikimedia Commons street-level sources (ITO 23, galis 24, Jantar Mantar 20, Red Fort roads 22), each with a street-level top-up section, confidence line and Map notes; new gb_road_ajmeri_gate.md with 30 sources and the respect line (hardware street, trade background only, read by the orchestrator); Paharganj forecourt note; 5 boards rebuilt (0.4 to 0.6 MB); DELHI_WORLD.md 2a updated. ITO crossing layout and mid GB Road stay low (no free photo): optional dashboard notice for owner photos.",
+      "commit": "49a281a"
     },
     {
       "id": "P2-003",
@@ -2282,10 +2286,14 @@
       "agent": "content-writer",
       "priority": 3,
       "kind": "content",
-      "status": "todo",
-      "attempts": 0,
+      "status": "done",
+      "attempts": 1,
       "notes": [],
-      "created": "2026-11-11T12:31:54.058Z"
+      "created": "2026-11-11T12:31:54.058Z",
+      "started": "2026-11-13T15:40:51.184Z",
+      "done": "2026-11-13T15:50:31.720Z",
+      "summary": "11 files in game/data/names/ (60 to 71 names each, 9 to 25 kinds), Latin on every name, Devanagari on most, Urdu where the sheets show it; harness/bin/names.test.mjs checks counts, scripts, length, duplicates, em dashes and a block list of about 190 real brands, chains, parties and people. npm test green. Respect sample of 40 read: no breach.",
+      "commit": "5c89997"
     },
     {
       "id": "P2-004",
@@ -2307,10 +2315,14 @@
       "agent": "builder",
       "priority": 3,
       "kind": "feature",
-      "status": "todo",
-      "attempts": 0,
+      "status": "done",
+      "attempts": 1,
       "notes": [],
-      "created": "2026-11-11T12:31:54.058Z"
+      "created": "2026-11-11T12:31:54.058Z",
+      "started": "2026-11-13T16:51:34.393Z",
+      "done": "2026-11-13T17:21:07.267Z",
+      "summary": "harness/data/areas/: 11 area polygons, 15 archetypes plus a base, 3,024 rule cells for the in-between centre, palette, overrides; profiles per sheet area with floors, building mix, facade colours, footpaths, lamps, boundaries, trees, railings, props, signs, life, sound bed and wear, every non-default value with an evidence line; blueprint slot (null) and links to the names files and infrastructure variants. tools/bake/areas/ loader, schema check, archetype merge, resolveAt, 21 tests (evidence, coverage of every 50 m point, overlap, ids, variety, wear, respect word lists). 12 sound bed requests. Respect read by the orchestrator. Verified: typecheck, npm test, quick 12/12 OK.",
+      "commit": "0eadb2c"
     },
     {
       "id": "P2-005",
@@ -2936,7 +2948,9 @@
       "kind": "feature",
       "status": "todo",
       "attempts": 0,
-      "notes": [],
+      "notes": [
+        "From P2-033: CC BY and BY-SA reference photos in harness/design/reference/infrastructure/img/ (CREDITS.json); they are references, not game assets, but list them if any is used in game."
+      ],
       "created": "2026-11-11T12:31:54.059Z",
       "model": "sonnet"
     },
@@ -3284,11 +3298,15 @@
       "agent": "builder",
       "priority": 3,
       "kind": "feature",
-      "status": "todo",
-      "attempts": 0,
+      "status": "done",
+      "attempts": 1,
       "notes": [],
       "created": "2026-11-11T14:35:19.606Z",
-      "model": "opus"
+      "model": "opus",
+      "started": "2026-11-13T13:00:19.781Z",
+      "done": "2026-11-13T13:41:38.026Z",
+      "summary": "Live relight: style_runner relights in place every frame (sky, sun, fog, haze, grade LUT on a worker thread, night lights, lit window shader), no rebuild. relight_live_street 17:00 to 20:00: 1 build, 164 relights, 94 night lights on at 20:00, 0 at 17:45. GPU p95 during the change 5.3 ms street, 2.3 ms city; worst relight frame 2.2 ms. Pinned look unchanged (lookproof diff 0.00 to 0.03). Boot scene restyled (flat_stand_in twin). Verified: typecheck, 822 vitest, 123 Godot tests, quick 21/21 OK, golden and night street shots read and kept. City night has no lamps yet: noted on P3-007.",
+      "commit": "2f76423"
     },
     {
       "id": "P1-029",
@@ -3304,11 +3322,15 @@
       "agent": "builder",
       "priority": 3,
       "kind": "feature",
-      "status": "todo",
-      "attempts": 0,
+      "status": "done",
+      "attempts": 1,
       "notes": [],
       "created": "2026-11-11T17:15:43.159Z",
-      "model": "sonnet"
+      "model": "sonnet",
+      "started": "2026-11-13T14:12:49.089Z",
+      "done": "2026-11-13T14:34:31.560Z",
+      "summary": "New far bench (game/bench/far, harness/bench/far.plan.mjs) on the production V2 car and on-foot humanoid at 0, 7, 8.03, 9 and 10 km: wheel contact and body jitter 0 mm; 0-100 11.12 s, brake 41.49 m, lock radius identical at every distance; walk height jitter 0.0014 mm; slow pan change 0.025 to 0.027 of 255, no shimmer. Only effect: position snaps to the float grid (0.49 mm under 8192 m, 0.98 mm above). Verdict KEEP: farthest planned 8.03 km is inside the 0.49 mm band; keep every position under 8192 m per axis. Report harness/reports/arch/far.json; decisions.md entry. Verified: typecheck, npm test, quick 14/14 OK. Also commits the P1-044 approved.json notes and the P1-028 look sets.",
+      "commit": "bc0fecf"
     },
     {
       "id": "P1-030",
@@ -3327,14 +3349,17 @@
       "agent": "builder",
       "priority": 1,
       "kind": "feature",
-      "status": "doing",
+      "status": "done",
       "attempts": 1,
       "notes": [
         "From P1-045: at the bungalow loop on Bhagwan Das Road south-west carriageway (node xadd_5_-2_0001.L8) the junction falls back to the polygon set and about 50 m loses its footpath; mid-block crossings are kept as marks but not drawn; add_median splits one two-way road at a time (a road blueprint pass could chain across class changes)."
       ],
       "created": "2026-11-11T18:24:08.193Z",
       "model": "fable",
-      "started": "2026-11-13T11:46:06.378Z"
+      "started": "2026-11-13T11:46:06.378Z",
+      "done": "2026-11-13T13:25:48.818Z",
+      "summary": "Map lane, PR 46. The bake settles everything basic: auto share 54.6% to 97.8%, owner queue 2,868 to 0. Buildings on road faces 0 (1,657 moved back, 1,806 cut to the road edge, 23 split, 259 dropped; gali rule gave way for 1,523). Dead ends 144: 65 joined, 78 closed, 0 left. Overlaps 306 moved apart, 143 split and merge zones. Judge pass with Esri satellite: 53 patches with reasons. Whole bake green, deterministic, second run applies 0; fixtures and test block regenerated. Footprint offset alignment measured and not built (3,818 to 3,100 only). Verified from the worktree: typecheck, npm test, quick 15/15; sheet read and kept.",
+      "commit": "8138053"
     },
     {
       "id": "P1-031",
@@ -3705,10 +3730,14 @@
       "agent": "builder",
       "priority": 3,
       "kind": "followup",
-      "status": "todo",
-      "attempts": 0,
+      "status": "done",
+      "attempts": 1,
       "notes": [],
-      "created": "2026-11-13T04:46:36.115Z"
+      "created": "2026-11-13T04:46:36.115Z",
+      "started": "2026-11-13T13:42:17.131Z",
+      "done": "2026-11-13T14:12:17.595Z",
+      "summary": "Stand-in scenes run the V2 car (tune body hatch) and the chase camera on a flat collider; old car.gd, car_model.gd, old chase_camera.gd and test_car.gd removed. Course ramp has a 40 m crest curve: car_flyover 100% wheels down at 99.7 km/h. Look proof: only car_closeup and hud_play changed (re-approved), the other 7 views mean 0.00 to 0.02. Verified: typecheck, 836 vitest, 120 Godot tests, quick 24/24 OK.",
+      "commit": "d16eef8"
     },
     {
       "id": "P14-004",
@@ -3789,10 +3818,13 @@
       "agent": "builder",
       "priority": 1,
       "kind": "mentor",
-      "status": "todo",
-      "attempts": 0,
-      "notes": [],
-      "created": "2026-11-13T10:38:52.202Z"
+      "status": "doing",
+      "attempts": 1,
+      "notes": [
+        "From P1-030: 463 lanes sit at the 1.8 m gali floor and gali widths step at junctions; closed dead ends are square ends (no turning head or end kerb yet); passages through named buildings (Bharat Mandapam, CP blocks, Chhatta Chowk) are cut open, not roofed; a junction on the CP inner circle put the collider 0.059 m off the drawn surface (not investigated)."
+      ],
+      "created": "2026-11-13T10:38:52.202Z",
+      "started": "2026-11-13T13:25:55.216Z"
     },
     {
       "id": "P2-030",
@@ -3891,10 +3923,14 @@
       "agent": "builder",
       "priority": 1,
       "kind": "mentor",
-      "status": "todo",
-      "attempts": 0,
+      "status": "done",
+      "attempts": 1,
       "notes": [],
-      "created": "2026-11-13T11:53:07.454Z"
+      "created": "2026-11-13T11:53:07.454Z",
+      "started": "2026-11-13T14:35:05.061Z",
+      "done": "2026-11-13T15:00:01.545Z",
+      "summary": "harness/design/reference/infrastructure/: 7 kind files (tunnels, underpasses and subways, flyovers, bridges, metro, rail, foot over bridges), 31 variants with place, shapes, dimensions, colours, materials, signage, lighting, wear and dated sources; 15 CC photos with CREDITS.json (all under 600 KB); variant_map.md and .json map the pilot's 27 road bridge and tunnel groups, 9 metro groups, 10 rail groups, 30 stations, 24 foot bridges, 28 subway clusters and 7 level crossings to variants. Estimates are tagged [E] with a verify list. Linked from STYLE_BIBLE.md. JSON parses.",
+      "commit": "62655f8"
     },
     {
       "id": "P2-034",
@@ -3914,7 +3950,9 @@
       "kind": "mentor",
       "status": "todo",
       "attempts": 0,
-      "notes": [],
+      "notes": [
+        "From P2-033: variants and the pilot map are in harness/design/reference/infrastructure/ (31 variants, variant_map.json). Many dimensions are [E] estimates: check them against street-level imagery or drawings before a kit is final (the 6-item list at the end of variant_map.md). No CC photo was found for the ITO skywalk, the ITO/Vikas Marg Yamuna bridge or the Delhi Junction facade."
+      ],
       "created": "2026-11-13T11:53:07.495Z"
     },
     {
@@ -4053,7 +4091,9 @@
       "kind": "mentor",
       "status": "todo",
       "attempts": 0,
-      "notes": [],
+      "notes": [
+        "From P1-028: live relight works (sky, sun, haze, grade, lamps and windows follow the clock); the streamed city has 0 lamps and windows so its night is only sky and grade (mean luma 0.159). Needs: player and traffic headlights and tail lights, city streetlights (P2-036), lit windows on generated buildings (P2-009/P2-010), shops that close at night."
+      ],
       "created": "2026-11-13T11:54:41.171Z"
     },
     {
@@ -4087,10 +4127,14 @@
       "agent": "builder",
       "priority": 3,
       "kind": "bug",
-      "status": "todo",
-      "attempts": 0,
+      "status": "done",
+      "attempts": 1,
       "notes": [],
-      "created": "2026-11-13T12:23:30.141Z"
+      "created": "2026-11-13T12:23:30.141Z",
+      "started": "2026-11-13T13:42:17.181Z",
+      "done": "2026-11-13T14:12:17.655Z",
+      "summary": "Cause: a hold landing after a tick let that tick's physics step move the V2 car 4.8 cm after paused read true. SimClock.held() (paused and physics server stopped) now feeds state(), hold() and snapshots; the state shape check expects the city boot scene. godotsmoke 42/42.",
+      "commit": "d16eef8"
     },
     {
       "id": "P1-049",

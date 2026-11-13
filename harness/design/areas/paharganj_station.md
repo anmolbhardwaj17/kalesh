@@ -82,3 +82,8 @@ The backpacker bazaar and rail hub: international signs, hotel stacks, a station
 ## Edge blending (what changes first)
 
 Edges: east side meets the station and Ajmeri Gate; north-east joins the Chandni Chowk / Old Delhi side via Asaf Ali Road; south meets Karol Bagh and Connaught Place. First change: hotel stacks reduce to 3 to 4 floor shops and the bazaar widens, then big hoardings go.
+
+
+## Station forecourt, Ajmeri Gate side (P2-002, 2026-11-13)
+
+Added from the GB Road and Ajmeri Gate sheet (`gb_road_ajmeri_gate.md`, tiles 12 to 22 there). The forecourt is a wide asphalt apron about 8 to 10 m deep in front of a long two-storey colonnade with white columns, a red brick base and painted wrap panels along the upper floor, bounded by a yellow and black kerb (tiles 15, 21, 22 there). Autos in green and yellow, e-rickshaws and white cabs queue in rows four to six wide, and hundreds fill it at peak (16, 17). The entrance has a large arch sign over the road with a parking notice (18). A tall mast carries a cluster of lamp heads (16, 17, 18). The Paharganj entrance on the other side is an orange multi-storey block with coloured panels (20). Treat the forecourt as a parking and apron polygon, not a street. Confidence: medium. Map notes: the apron edge is a kerb, not a wall; auto bays are painted rows; a footbridge runs along the front.

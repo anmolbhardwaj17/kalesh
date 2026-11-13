@@ -29,6 +29,8 @@ static func _flat(color: Color) -> StandardMaterial3D:
 	var m := StandardMaterial3D.new()
 	m.albedo_color = color
 	m.roughness = 1.0
+	# a flat stand-in colour: the style runner gives it a twin that reads right under the look (stylised.gd FLAT_META)
+	m.set_meta("flat_stand_in", true)
 	return m
 
 

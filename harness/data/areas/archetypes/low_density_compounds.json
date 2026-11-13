@@ -1,0 +1,44 @@
+{
+ "id": "low_density_compounds",
+ "kind": "archetype",
+ "confidence": "low",
+ "sheet": "harness/design/areas/india_gate_kartavya_path.md; harness/design/areas/jantar_mantar.md",
+ "buildings": {
+  "mix": {
+   "bungalow": 0.35,
+   "govt_slab": 0.2,
+   "house": 0.2,
+   "admin_block": 0.15,
+   "flats_block": 0.1
+  },
+  "floors": {
+   "p10": 2,
+   "p50": 3,
+   "p90": 6
+  }
+ },
+ "boundaries": {
+  "kinds": [
+   "low wall with gates"
+  ],
+  "height_m": [
+   1,
+   2
+  ]
+ },
+ "greenery": {
+  "street_trees": "high"
+ },
+ "signs": {
+  "density": "low"
+ },
+ "wear": 0.1,
+ "evidence": {
+  "buildings.mix": "footprint grid of the rule cells: coverage 0.074 and median footprint 75.4 m2 over 296 cells (rule_cells.json summary.low_density_compounds); sheet india_gate_kartavya_path 'Edge blending' (low walls and bungalow roofs) and jantar_mantar 'Edge blending' (sandstone government blocks); shares are an estimate",
+  "buildings.floors": "OSM levels in the rule cells of this archetype: p10 2, median 3, p90 6, n=28 (rule_cells.json summary.low_density_compounds)",
+  "boundaries": "sheet india_gate_kartavya_path 'Edge blending': walls and gates replace lawns; jantar_mantar 'Edge blending': low walls, gates and guard boxes",
+  "greenery.street_trees": "sheet jantar_mantar 'Edge blending': avenue trees; india_gate_kartavya_path 'Edge blending': avenue trees",
+  "signs.density": "sheet jantar_mantar 'Edge blending': shop signs vanish and gates and guard boxes appear",
+  "wear": "sheet india_gate_kartavya_path 'Typical clutter and wear' (0.0 to 0.03) and jantar_mantar (0.1) for the neighbouring zone"
+ }
+}

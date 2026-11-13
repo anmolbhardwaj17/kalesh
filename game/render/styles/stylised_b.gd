@@ -13,6 +13,7 @@ extends "res://render/styles/stylised_grime.gd"
 
 const SURFACE_B := preload("res://render/shaders/surface_b.gdshader")
 const SHIMMER_SHADER := preload("res://render/shaders/shimmer.gdshader")
+const GLOW_WINDOW_SHADER := preload("res://render/shaders/glow_window.gdshader")
 const HAZE_SHADER := preload("res://render/shaders/haze_b.gdshader")
 const Geo := preload("res://scenes/standin/geo.gd")
 const Kit := preload("res://scenes/standin/kit.gd")
@@ -51,6 +52,17 @@ var _h: Node3D
 var _r := RandomNumberGenerator.new()
 var _wear := 0.0
 var _avoid: Array = []
+## a second dressing rng for the night lights a live scene makes ahead (P1-028): the main one keeps its order, so the
+## day dressing is the same with or without them
+var _r2 := RandomNumberGenerator.new()
+
+# live relight (P1-028): what follows the day clock inside a loaded scene
+## [light node, energy per unit of night (-1: a daylight bounce light), night from which it shows]
+var _night_lights: Array = []
+## [haze ShaderMaterial, block wear]
+var _hazes: Array = []
+## [shimmer MeshInstance3D, its ShaderMaterial]
+var _shimmers: Array = []
 
 
 ## Switch features off by name (cost measuring); rebuilds the materials.
@@ -75,17 +87,6 @@ func environment() -> Environment:
 		if not off.has("ssq"):
 			RenderingServer.environment_set_ssil_quality(RenderingServer.ENV_SSIL_QUALITY_LOW, true, 0.5, 2, 50.0, 300.0)
 			RenderingServer.environment_set_ssao_quality(RenderingServer.ENV_SSAO_QUALITY_LOW, true, 0.5, 2, 50.0, 300.0)
-		# moonlit sky fill at night: a cool grey-blue ambient so no surface that faces away from every lamp goes black
-		var n: float = light.night
-		if n > 0.0:
-			env.ambient_light_color = Color(0.36, 0.42, 0.58)
-			env.ambient_light_sky_contribution = 1.0 - 0.55 * n
-			env.ambient_light_energy = light.ambient_energy * (1.0 + 0.9 * n)
-		# dawn reads flat through its thick haze: a little more contrast and slightly thinner haze
-		var dawn := _dawn_weight()
-		if dawn > 0.0:
-			env.adjustment_contrast = preset.contrast + 0.08 * dawn
-			env.fog_density = light.fog_density * (1.0 - 0.15 * dawn)
 	# cost measuring only (--style-off): the screen-space passes of the base look
 	if off.has("ssao"):
 		env.ssao_enabled = false
@@ -94,6 +95,28 @@ func environment() -> Environment:
 	if off.has("glow"):
 		env.glow_enabled = false
 	return env
+
+
+## The light-driven settings (stylised.gd) plus the lean path's night fill and dawn contrast, so a live relight sets
+## them too.
+func light_environment(env: Environment, sync := true) -> void:
+	super(env, sync)
+	if not _lean():
+		return
+	# moonlit sky fill at night: a cool grey-blue ambient so no surface that faces away from every lamp goes black
+	var n: float = light.night
+	if n > 0.0:
+		env.ambient_light_color = Color(0.36, 0.42, 0.58)
+		env.ambient_light_sky_contribution = 1.0 - 0.55 * n
+		env.ambient_light_energy = light.ambient_energy * (1.0 + 0.9 * n)
+	else:
+		# the Environment defaults (what a daylight build never touched)
+		env.ambient_light_color = Color(0, 0, 0, 1)
+		env.ambient_light_sky_contribution = 1.0
+	# dawn reads flat through its thick haze: a little more contrast and slightly thinner haze
+	var dawn := _dawn_weight()
+	env.adjustment_contrast = preset.contrast + 0.08 * dawn
+	env.fog_density = light.fog_density * (1.0 - 0.15 * dawn)
 
 
 ## The lean (performance target) path of stylised B; the realistic reference look (realistic.gd) keeps the P0-034 setup.
@@ -154,8 +177,13 @@ func _decal(holder: Node3D, p: Vector3, y: float, n: Vector3, size: Vector2, tex
 
 
 ## Heat shimmer over hot asphalt: a full-screen pass that wobbles the far ground a little (afternoon only).
+## A live look (P1-028) makes it at any hour and shows it only while the light is hot (heat 0.3 or more). A
+## WorldEnvironment with the metadata no_heat_shimmer gets none.
 func decorate_environment(we: WorldEnvironment) -> void:
-	if off.has("shimmer") or light.heat < 0.3 or we.get_parent() == null:
+	if off.has("shimmer") or we.get_parent() == null or (light.heat < 0.3 and not can_relight()):
+		return
+	# a scene can opt out (the flat scaffold test ground: on its long plain edges the wobble read as broken geometry)
+	if we.get_meta("no_heat_shimmer", false):
 		return
 	var q := QuadMesh.new()
 	q.size = Vector2(2, 2)
@@ -169,6 +197,8 @@ func decorate_environment(we: WorldEnvironment) -> void:
 	mi.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
 	mi.custom_aabb = AABB(Vector3(-1e5, -1e5, -1e5), Vector3(2e5, 2e5, 2e5))
 	mi.set_meta("dressing", true)
+	mi.visible = light.heat >= 0.3
+	_shimmers.append([mi, m])
 	we.get_parent().add_child.call_deferred(mi)
 
 
@@ -198,6 +228,12 @@ func _build_materials() -> Dictionary:
 	m["lit"] = _glow(1.0 + 1.6 * light.night)
 	m["tube"] = _glow(1.6 + 1.4 * light.night)
 	m["neon"] = _glow(1.8 + 3.0 * light.night)
+	# window panes of a live look (P1-028): every window has one, lit while its own draw is under the window share
+	var win := ShaderMaterial.new()
+	win.shader = GLOW_WINDOW_SHADER
+	win.set_shader_parameter("gain", 1.0 + 1.6 * light.night)
+	win.set_shader_parameter("share", 0.0 if off.has("lights") else light.window_share)
+	m["winlit"] = win
 	var trim := _std(0.85, 0.0)
 	trim.albedo_texture = _trim_tex()
 	trim.texture_filter = BaseMaterial3D.TEXTURE_FILTER_LINEAR_WITH_MIPMAPS_ANISOTROPIC
@@ -234,6 +270,77 @@ func _glow(gain: float) -> ShaderMaterial:
 	g.shader = GLOW_SHADER
 	g.set_shader_parameter("gain", gain)
 	return g
+
+
+# ---------------------------------------------------------------- live relight (P1-028)
+
+
+## True when this look makes its night lights and lit windows at any hour and moves them with the day clock.
+func _live() -> bool:
+	return can_relight() and not off.has("lights")
+
+
+## The light-driven materials, then every tracked night light, haze box and shimmer pass, at the new light.
+func _relight_materials() -> void:
+	super()
+	var n: float = light.night
+	(_mats["lit"] as ShaderMaterial).set_shader_parameter("gain", 1.0 + 1.6 * n)
+	(_mats["tube"] as ShaderMaterial).set_shader_parameter("gain", 1.6 + 1.4 * n)
+	(_mats["neon"] as ShaderMaterial).set_shader_parameter("gain", 1.8 + 3.0 * n)
+	var win: ShaderMaterial = _mats["winlit"]
+	win.set_shader_parameter("gain", 1.0 + 1.6 * n)
+	win.set_shader_parameter("share", 0.0 if off.has("lights") else light.window_share)
+	var keep: Array = []
+	for e in _night_lights:
+		if is_instance_valid(e[0]):
+			_set_night_light(e[0], e[1], e[2])
+			keep.append(e)
+	_night_lights = keep
+	keep = []
+	for e in _hazes:
+		if (e[0] as ShaderMaterial).get_reference_count() > 1:
+			_set_haze(e[0], e[1])
+			keep.append(e)
+	_hazes = keep
+	keep = []
+	for e in _shimmers:
+		if is_instance_valid(e[0]):
+			(e[0] as MeshInstance3D).visible = light.heat >= 0.3
+			(e[1] as ShaderMaterial).set_shader_parameter("strength", light.heat)
+			keep.append(e)
+	_shimmers = keep
+
+
+## Registers a night light the dressing made and sets it for the light now. energy is the light's energy at full night
+## (it scales with night); a negative energy marks a daylight bounce light (bright by day, off at night).
+func _night_light(l: Light3D, energy: float, from_night := 0.2) -> void:
+	_set_night_light(l, energy, from_night)
+	_night_lights.append([l, energy, from_night])
+
+
+func _set_night_light(l: Light3D, energy: float, from_night: float) -> void:
+	var n: float = light.night
+	if energy < 0.0:
+		var e: float = (1.0 - n) * 0.55
+		l.light_energy = e
+		l.light_color = light.sun_color.lerp(Color.WHITE, 0.4)
+		l.visible = e >= 0.05
+	else:
+		l.light_energy = energy * n
+		l.visible = n >= from_night
+
+
+## Counts for the debug state (state().time.live): the night light nodes this look tracks and how many show now.
+func live_stats() -> Dictionary:
+	var on := 0
+	var night := 0
+	for e in _night_lights:
+		if is_instance_valid(e[0]) and float(e[1]) >= 0.0:
+			night += 1
+			if (e[0] as Node3D).visible:
+				on += 1
+	return {"night": light.night, "windowShare": light.window_share, "nightLights": night, "nightLightsOn": on,
+		"hazes": _hazes.size(), "shimmer": light.heat >= 0.3 and not _shimmers.is_empty()}
 
 
 ## A generated texture as an Image (imported texture first; the raw PNG only before the project was imported).
@@ -335,7 +442,7 @@ func decorate(mi: MeshInstance3D) -> void:
 	if mi.has_meta("dressing"):
 		return
 	super(mi)
-	if String(mi.name).begins_with("Landmark_") and light.night >= 0.2 and not off.has("lights"):
+	if String(mi.name).begins_with("Landmark_") and not off.has("lights") and (light.night >= 0.2 or _live()):
 		_floodlight(mi)
 	if mi.has_meta("anchors"):
 		# dress once the whole scene is in (people and vehicles of other blocks are known then)
@@ -348,6 +455,7 @@ func _dress(mi: MeshInstance3D) -> void:
 	var anchors: Array = mi.get_meta("anchors")
 	_wear = float(mi.get_meta("wear", 0.0))
 	_r.seed = DRESS_SEED + absi(hash(String(mi.name)))
+	_r2.seed = DRESS_SEED + 1 + absi(hash(String(mi.name)))
 	_s = Geo.Sink.new()
 	_n = Geo.Sink.new()
 	_u = {}
@@ -359,7 +467,9 @@ func _dress(mi: MeshInstance3D) -> void:
 			if a[0] == "person" or a[0] == "vehicle":
 				_avoid.append(a[1].origin)
 	var dress := not off.has("dressing")
-	var lights: bool = not off.has("lights") and light.night >= 0.2
+	# night lights: made when the scene loads at night, or at any hour by a live look (hidden until the night comes)
+	var at_night: bool = not off.has("lights") and light.night >= 0.2
+	var lights: bool = at_night or _live()
 	for a in anchors:
 		var kind: String = a[0]
 		var xf: Transform3D = a[1]
@@ -373,7 +483,7 @@ func _dress(mi: MeshInstance3D) -> void:
 				"balcony":
 					_balcony(xf, d)
 				"shop":
-					_shop(xf, d, lights)
+					_shop(xf, d, at_night)
 				"board":
 					_board(xf, d)
 				"board2":
@@ -391,7 +501,7 @@ func _dress(mi: MeshInstance3D) -> void:
 				"pole":
 					_pole_lamp(xf, d, lights)
 		elif kind == "shop" and lights:
-			_shop_light(xf, d)
+			_shop_light(xf, d, _r if at_night else _r2)
 		if lights:
 			match kind:
 				"lamp":
@@ -473,9 +583,14 @@ func _window(xf: Transform3D, d: Dictionary) -> void:
 	var fc: Color = Kit.pick(_r, FRAME_COLS)
 	_n.box("satin", fc, Vector3(0, 0, -0.065), Vector3(0.05, 1.45, 0.02))
 	_n.box("satin", fc, Vector3(0, 0.25, -0.065), Vector3(1.05, 0.045, 0.02))
-	var lit: bool = _r.randf() < light.window_share and not off.has("lights")
+	var draw := _r.randf()
+	var lit: bool = draw < light.window_share and not off.has("lights")
 	var lc: Color = [Color("#ffd9a0"), Color("#ffcf8a"), Color("#e9f1ff"), Color("#bcd6ff")][_r.randi_range(0, 3)]
-	if lit:
+	if _live():
+		# every window gets a pane that lights while its draw is under the window share (glow_window.gdshader), so the
+		# windows come on one by one as the evening goes (P1-028); the same draw as the pinned look's lit panes
+		_n.box("winlit", Color(lc.r, lc.g, lc.b, draw), Vector3(0, 0, -0.058), Vector3(1.0, 1.4, 0.01))
+	elif lit:
 		_n.box("lit", lc, Vector3(0, 0, -0.058), Vector3(1.0, 1.4, 0.01))
 	if _r.randf() < 0.35:
 		var cc: Color = Kit.pick(_r, CLOTH_COLS)
@@ -540,7 +655,9 @@ func _pot(p: Vector3) -> void:
 	_s.ball("leaf", Kit.shade(Kit.LEAF, _r.randf_range(0.9, 1.3)), p + Vector3(0, 0.3 + r * 0.6, 0), Vector3(r, r * 1.1, r), Geo.SEG_SMALL)
 
 
-func _shop(xf: Transform3D, d: Dictionary, lights: bool) -> void:
+## at_night: the scene was dressed at night (night lights from the main rng, as before P1-028); a live look also gives
+## shops a light at any other hour, picked with the second rng and hidden until it is dark.
+func _shop(xf: Transform3D, d: Dictionary, at_night: bool) -> void:
 	var ow: float = d.ow
 	var w: float = d.w
 	var tight: bool = d.tight
@@ -574,8 +691,12 @@ func _shop(xf: Transform3D, d: Dictionary, lights: bool) -> void:
 	_pop()
 	# about half the open shops get a real light (the rest glow through their tube): lights cost 2 ms in the lane.
 	# Lean (P0-037): one open shop in three, and only once it is properly dark (the night sky fill does the rest)
-	if lights and not closed and (light.night >= 0.5 or not _lean()) and _r.randf() < (0.34 if _lean() else 0.5):
-		_shop_light(xf, d)
+	var share := 0.34 if _lean() else 0.5
+	if not closed and at_night and (light.night >= 0.5 or not _lean()):
+		if _r.randf() < share:
+			_shop_light(xf, d, _r)
+	elif not closed and _live() and _r2.randf() < share:
+		_shop_light(xf, d, _r2)
 	# paan stains at the wall base beside the shop and torn poster layers on the pier (worn blocks)
 	if _wear > 0.5:
 		if _r.randf() < 0.7:
@@ -584,15 +705,17 @@ func _shop(xf: Transform3D, d: Dictionary, lights: bool) -> void:
 			_decal_at(xf, Vector3(w * 0.5, _r.randf_range(1.8, 2.3), 0), Vector2(0.55, 0.75), _tex2("torn"), 1.0)
 
 
-func _shop_light(xf: Transform3D, d: Dictionary) -> void:
+func _shop_light(xf: Transform3D, d: Dictionary, rng: RandomNumberGenerator) -> void:
 	var o := OmniLight3D.new()
-	o.light_color = Color("#e8f0ff") if _r.randf() < 0.6 else Color("#ffd49a")
+	o.light_color = Color("#e8f0ff") if rng.randf() < 0.6 else Color("#ffd49a")
 	o.light_energy = (2.2 if _lean() else 1.8) * light.night
 	o.omni_range = 7.0 if _lean() else 6.0
 	o.omni_attenuation = 1.4
 	o.light_specular = 0.3
 	o.position = xf * Vector3(0, 2.3, -1.0)
 	o.light_volumetric_fog_energy = 0.0
+	# lean: only once it is properly dark (the night sky fill does the rest)
+	_night_light(o, 2.2 if _lean() else 1.8, 0.5 if _lean() else 0.2)
 	_h.add_child(o)
 
 
@@ -902,12 +1025,8 @@ func _haze(xf: Transform3D, d: Dictionary) -> void:
 	m.shader = HAZE_SHADER
 	m.set_shader_parameter("box_min", centre - size * 0.5)
 	m.set_shader_parameter("box_max", centre + size * 0.5)
-	var n: float = light.night
-	var day_light: float = 0.3 + 0.3 * light.sun_energy * (1.0 - n)
-	var c: Color = light.area_haze_color.srgb_to_linear() * day_light
-	c = c.lerp(SODIUM.srgb_to_linear() * 0.1, n)
-	m.set_shader_parameter("haze_color", Vector3(c.r, c.g, c.b))
-	m.set_shader_parameter("density", light.area_haze * _wear * 0.32)
+	_set_haze(m, _wear)
+	_hazes.append([m, _wear])
 	m.set_shader_parameter("height_falloff", 0.12)
 	m.set_shader_parameter("max_alpha", 0.5)
 	bm.material = m
@@ -918,6 +1037,16 @@ func _haze(xf: Transform3D, d: Dictionary) -> void:
 	mi.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
 	mi.set_meta("dressing", true)
 	_h.add_child(mi)
+
+
+## The haze colour and density of a block's haze box for the light now (lit by the sun by day, sodium at night).
+func _set_haze(m: ShaderMaterial, wear: float) -> void:
+	var n: float = light.night
+	var day_light: float = 0.3 + 0.3 * light.sun_energy * (1.0 - n)
+	var c: Color = light.area_haze_color.srgb_to_linear() * day_light
+	c = c.lerp(SODIUM.srgb_to_linear() * 0.1, n)
+	m.set_shader_parameter("haze_color", Vector3(c.r, c.g, c.b))
+	m.set_shader_parameter("density", light.area_haze * wear * 0.32)
 
 
 ## Warm floodlights on a landmark at night (India Gate style), from the ground in front of it.
@@ -937,6 +1066,7 @@ func _floodlight(mi: MeshInstance3D) -> void:
 		s.spot_attenuation = 0.6
 		s.light_volumetric_fog_energy = 0.0
 		s.transform = Transform3D(Basis.looking_at(target - p, Vector3.UP), p)
+		_night_light(s, 6.0)
 		holder.add_child(s)
 	mi.add_child.call_deferred(holder)
 
@@ -957,14 +1087,15 @@ func _pole_lamp(xf: Transform3D, d: Dictionary, lights: bool) -> void:
 		s.spot_angle = 65.0
 		s.light_specular = 0.3
 		s.transform = Transform3D(Basis(Vector3.RIGHT, -PI * 0.5), head)
+		_night_light(s, 3.0)
 		_h.add_child(s)
 
 
 ## Daylight bounced off the sunlit upper walls into a narrow lane (the bazaar sits in its own shade at golden):
-## a few soft warm lights high in the lane, off at night.
+## a few soft warm lights high in the lane, off at night (a live look makes them at night too, hidden).
 func _bounce(xf: Transform3D, d: Dictionary) -> void:
 	var e: float = (1.0 - light.night) * 0.55
-	if e < 0.05:
+	if e < 0.05 and not _live():
 		return
 	var z: float = d.z0 + 6.0
 	while z < d.z1:
@@ -976,6 +1107,7 @@ func _bounce(xf: Transform3D, d: Dictionary) -> void:
 		o.light_specular = 0.0
 		o.light_volumetric_fog_energy = 0.0
 		o.position = Vector3(xf.origin.x, 6.0, z)
+		_night_light(o, -1.0)
 		_h.add_child(o)
 		z += 16.0
 
@@ -997,6 +1129,7 @@ func _street_lamp(xf: Transform3D, d := {}) -> void:
 	var arm := (xf.basis * Vector3(0, 0, signf(float(d.get("dz", -1.0))))).normalized()
 	var aim := (Vector3.DOWN * cos(deg_to_rad(15.0)) + arm * sin(deg_to_rad(15.0))).normalized()
 	s.transform = Transform3D(Basis.looking_at(aim, arm), xf.origin)
+	_night_light(s, 300.0)
 	_h.add_child(s)
 
 
@@ -1014,6 +1147,7 @@ func _vehicle_lights(xf: Transform3D, d: Dictionary) -> void:
 	s.shadow_enabled = false
 	s.light_volumetric_fog_energy = 0.0
 	s.transform = xf * Transform3D(Basis(Vector3.RIGHT, deg_to_rad(-7)), Vector3(0, 0.8, front))
+	_night_light(s, 2.2)
 	_h.add_child(s)
 	if kind != "auto":
 		var t := OmniLight3D.new()
@@ -1022,6 +1156,7 @@ func _vehicle_lights(xf: Transform3D, d: Dictionary) -> void:
 		t.omni_range = 2.5
 		t.light_volumetric_fog_energy = 0.0
 		t.position = xf * Vector3(0, 0.8, -front + 0.2)
+		_night_light(t, 0.6)
 		_h.add_child(t)
 
 

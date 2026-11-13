@@ -2,7 +2,7 @@
   "views": {
     "car_closeup": {
       "file": "car_closeup.png",
-      "at": "2026-11-10T21:04:03.467Z",
+      "at": "2026-11-13T13:59:34.784Z",
       "query": "debug=1&verify=1&style=stylised_b&light=night",
       "error": null
     },
@@ -26,7 +26,7 @@
     },
     "hud_play": {
       "file": "hud_play.png",
-      "at": "2026-11-10T21:04:28.924Z",
+      "at": "2026-11-13T13:59:38.237Z",
       "query": "debug=1&verify=1&style=stylised_b&light=night",
       "error": null
     },
@@ -55,7 +55,7 @@
       "error": null
     }
   },
-  "commit": "0efbd27",
-  "gl": "Godot 4.7.2.stable Apple M2 Pro (vulkan, forward_plus)",
-  "at": "2026-11-10T21:04:55.248Z"
+  "commit": "0b5a919",
+  "gl": "Godot 4.7.2.stable Apple M2 Pro (Apple8) (metal, forward_plus)",
+  "at": "2026-11-13T13:59:38.469Z"
 }

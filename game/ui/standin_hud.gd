@@ -85,6 +85,6 @@ func _label(text: String, size: int, col: Color) -> Label:
 
 func _process(_delta: float) -> void:
 	var p := get_tree().get_first_node_in_group("player")
-	if p != null and ("model" in p or "speed" in p):
-		var ms: float = p.model.speed if "model" in p else (p.speed if "speed" in p else 0.0)
+	if p != null and "speed" in p:
+		var ms: float = p.speed
 		_speed.text = "%d" % roundi(absf(ms) * 3.6)
