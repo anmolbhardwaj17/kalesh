@@ -358,3 +358,18 @@ A hero road with a spec gets no new junction from a rule or the judge: a drive j
 Open: a closed dead end is a square end with no turning head or end kerb yet; the judge decided several drives under tree cover from the layout alone (each is a patch the owner can change in the inspector).
 By: builder, P1-030.
 
+## 2026-11-13 Map lane on (Anmol)
+Anmol asked for a separate agent for the map fixes and answered "Yes, map lane on". Decision: CLAUDE.md Modes gets MAP LANE ON: one extra builder on map pipeline tasks only, in .worktrees/map on its own task branch, PR per task as usual; the main builder takes the rest. Why: map fixes were waiting behind game work; about 2x usage accepted.
+
+## 2026-11-13 Tunnels built properly; OSM is only a first reference (Anmol, again)
+New task for car tunnels with real depth, portals, walls and lights (map lane, P2). The OSM rule is now a core knowledge line every builder reads.
+
+## 2026-11-13 Infrastructure built from Delhi references, one quality bar (Anmol)
+Anmol: everything must feel good and consistent; take references for tunnels, bridges, flyovers, underpasses, metro and rail, by variety and area. Decision: STYLE_BIBLE.md Infrastructure section; P2-033 references and variant map (priority 1), P2-034 structure kits applied by variant (priority 1); P2-019, P2-031, P2-032 build on them; core knowledge line: no basic structure counts as finished. Why: a city where buildings, tunnels and bridges look like different games breaks the look.
+
+## 2026-11-13 Gap audit: things Anmol did not name (Anmol asked)
+Anmol: find what he is missing and add it. Added: road surfaces and markings (P2-035), street furniture and signage (P2-036), trees and greenery (P2-037), plot edges and lived-in ground (P2-038), world edge and skyline (P2-039), moving metro and railway trains (P3-006), the night city look (P3-007), and a standing pilot look audit before each gate that adds map or look work (P2-040). Why: the city should look finished everywhere, not only where he points.
+
+## 2026-11-13: Test builds: tiles as a data pack, not in the main pack (P1-027)
+Decision: the Mac and Windows exports (`harness/bin/export.mjs`, presets in `game/export_presets.cfg`) leave `world/tiles/*` out of the main pack (13 MB) and ship the full tile set as `stage_<stage>.pck` (PCKPacker, `tools/export/pack_stage.gd`, 360 MB) that the game mounts at start (`game/core/data_packs.gd`) from the executable's folder or the app's Resources. Mac: ad hoc signed universal zip (156 MB); Windows: exe plus packs, unsigned (136 MB zip). Developer ID signing stays Anmol's open decision.
+Why: a later district then ships as one more pack with no code change (TECH.md), and a map rebake never forces a full re-export. By: builder P1-027.

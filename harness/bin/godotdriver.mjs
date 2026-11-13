@@ -17,7 +17,7 @@ import fs from 'node:fs';
 import os from 'node:os';
 import path from 'node:path';
 import { launchGame, freePort, portOpen } from './godotclient.mjs';
-import { resolveGodot, errorLines } from './godot.mjs';
+import { resolveGodot, godotConfig, errorLines } from './godot.mjs';
 import { makeGame, makeWindow, evaluateIn } from './godotshim.mjs';
 import { waitWithBudget } from './budgetwait.mjs';
 import { waitForPredicate, waitForError } from './waitpredicate.mjs';
@@ -71,7 +71,9 @@ export function engineArgs(env = process.env) {
 
 /** The engine; `gl` is filled from the first game's hello (adapter, driver). */
 export async function launch() {
-  const g = await resolveGodot({ allowDownload: true });
+  // HARNESS_EXPORTED_APP: run the scenarios on an exported build (godotclient.mjs launchGame), no engine lookup.
+  const exportedBin = process.env.HARNESS_EXPORTED_APP || '';
+  const g = exportedBin ? { path: exportedBin, cfg: godotConfig() } : await resolveGodot({ allowDownload: true });
   const gl = { renderer: `Godot ${g.cfg.version}`, vendor: '', software: false, driver: 'godot', binary: g.path };
   return { browser: { kind, gl, binary: g.path, version: g.cfg.version, close: async () => undefined }, gl };
 }
@@ -182,12 +184,15 @@ export async function debugCall(page, name, args = [], timeoutMs = 60000) {
 /** Launches the game WITHOUT --debug (headless) and probes its port and the default port (hooks_no_debug). */
 export async function probeNoDebug({ bootMs = 30000, binary } = {}) {
   const port = await freePort();
-  const run = await launchGame({ binary, debug: false, headless: true, verify: true, port, quitAfter: QUIT_AFTER, extra: [`--debug-port=${port}`] });
+  // An exported build prints to a pipe in blocks (the release engine does not flush stdout per line), so its boot line
+  // only arrives when it exits: it gets a short life of its own (900 frames headless) and is read after it quits.
+  const exported = !!process.env.HARNESS_EXPORTED_APP;
+  const run = await launchGame({ binary, debug: false, headless: true, verify: true, port, quitAfter: exported ? 900 : QUIT_AFTER, extra: [`--debug-port=${port}`] });
   const defaultPort = Number(config().godot?.debugPort) || null;
   try {
     const t0 = Date.now();
-    while (!run.log.some((l) => l.startsWith('game: boot')) && Date.now() - t0 < bootMs && run.proc.exitCode === null) await sleep(100);
-    const bootLine = run.log.find((l) => l.startsWith('game: boot')) || null;
+    const booted = () => run.log.some((l) => l.startsWith('game: boot'));
+    if (!exported) while (!booted() && Date.now() - t0 < bootMs && run.proc.exitCode === null) await sleep(100);
     let open = false;
     let probes = 0;
     for (let i = 0; i < 6 && run.proc.exitCode === null; i++) {
@@ -196,6 +201,8 @@ export async function probeNoDebug({ bootMs = 30000, binary } = {}) {
       if (defaultPort && await portOpen(defaultPort, 300)) open = true;
       await sleep(200);
     }
+    if (exported) await Promise.race([run.exited, sleep(Math.max(1000, bootMs - (Date.now() - t0)))]);
+    const bootLine = run.log.find((l) => l.startsWith('game: boot')) || null;
     return { booted: !!bootLine, bootLine, open, probes, port, defaultPort, debugServerLine: run.log.some((l) => l.startsWith('debug server:')), errors: errorLines(run.log.join('\n')) };
   } finally {
     run.proc.kill();

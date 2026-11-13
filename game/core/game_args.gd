@@ -21,6 +21,8 @@
 ##                        (game/world/tiles/), or a res:// folder. The city scene streams `full` without the arg (`test`
 ##                        when the full set is not there); the scaffold and the other scenes stream only with the arg
 ##   --lockstep           one sim tick per rendered frame at most (a loaded machine runs slower, never catches up)
+##   --fps=<on|off>       the FPS counter (game/ui/fps_counter.gd): `on` shows it even under --verify (harness runs start it off),
+##                        `off` hides it; without the arg it follows the build (on in development play, off in a release)
 ##   --mute               master bus muted
 ## Resolution is an engine arg (`--resolution WxH`, before `--`), handled by Godot itself.
 ## Without --debug no port opens and no debug node exists: the debug script is not even loaded.
@@ -69,6 +71,7 @@ var scene := ""
 var arch := ""
 var tiles := ""
 var spawn := ""
+var fps := ""
 var lockstep := false
 var mute := false
 ## False from the start of a --tiles load until the ring round the player is attached with its colliders (the debug
@@ -83,10 +86,10 @@ var _style_runner: RefCounted = null
 static func parse(args: PackedStringArray) -> Dictionary:
 	var out := {
 		"debug": false, "debug_port": DEFAULT_DEBUG_PORT, "verify": false, "quality": "medium", "style": "", "light": "", "time": "", "style_off": "",
-		"scene": "", "arch": "", "tiles": "", "spawn": "", "lockstep": false, "mute": false, "unknown": [] as Array[String],
+		"scene": "", "arch": "", "tiles": "", "spawn": "", "fps": "", "lockstep": false, "mute": false, "unknown": [] as Array[String],
 	}
 	var flags := ["debug", "verify", "lockstep", "mute"]
-	var values := ["debug-port", "quality", "style", "light", "time", "style-off", "scene", "arch", "tiles", "spawn"]
+	var values := ["debug-port", "quality", "style", "light", "time", "style-off", "scene", "arch", "tiles", "spawn", "fps"]
 	var i := 0
 	while i < args.size():
 		var a: String = args[i]
@@ -124,6 +127,8 @@ static func parse(args: PackedStringArray) -> Dictionary:
 
 
 func _ready() -> void:
+	# an exported build mounts its map stage packs first: the scenes look for res://world/tiles/ when they load
+	load("res://core/data_packs.gd").mount_all()
 	apply(parse(OS.get_cmdline_user_args()))
 	# It restyles every scene as its nodes enter the tree (SceneTree.node_added), so it must start before the main
 	# scene loads. Loaded by path: --style=none runs no style code at all.
@@ -231,6 +236,7 @@ func apply(p: Dictionary) -> void:
 	arch = p.arch
 	tiles = p.tiles
 	spawn = p.spawn
+	fps = p.fps
 	lockstep = p.lockstep
 	mute = p.mute
 	unknown = p.unknown
@@ -277,5 +283,5 @@ func current_scene_id() -> String:
 func as_dict() -> Dictionary:
 	return {
 		"debug": debug, "debugPort": debug_port, "verify": verify, "quality": quality, "style": style, "light": light, "time": time, "styleOff": style_off,
-		"scene": scene, "arch": arch, "tiles": tiles, "spawn": spawn, "lockstep": lockstep, "mute": mute, "unknown": unknown,
+		"scene": scene, "arch": arch, "tiles": tiles, "spawn": spawn, "fps": fps, "lockstep": lockstep, "mute": mute, "unknown": unknown,
 	}

@@ -21,6 +21,8 @@ const SUITES := [
 	"res://tests/test_streaming.gd",
 	"res://tests/test_module_size.gd",
 	"res://tests/test_sim_clock.gd",
+	"res://tests/test_data_packs.gd",
+	"res://tests/test_fps_counter.gd",
 ]
 
 
