@@ -513,3 +513,6 @@ One line per event, written by task.mjs (start, done, fail, phase changes, inbox
 - 2026-11-14 01:14 mentor message mmwfdyt5a handled: Not yet (only a 1.2 m vault). Added P3-008: climb onto autos, cars, highway barriers and low roofs up to 2.2 m, stand and walk on top, drop down, in the playable slice.
 - 2026-11-14 01:24 [P3-009] added: Cinematic camera toolkit and shot grammar for cutscenes
 - 2026-11-14 01:24 mentor message mmwfea7mi handled: Agreed. The style bible now has a cinematography section (shot grammar, lenses, moves, light, editing), and P3-009 builds the cinematic camera toolkit with a reference scene at the CP auto stand. Every mission scene gets a written shot list first.
+- 2026-11-14 01:35 mentor message mmwfelboy handled: README rewritten and merged (PR 56): approach, map pipeline with before and after shots, driving numbers, look, design rules, verification, architecture, roadmap.
+- 2026-11-14 02:32 mentor message mmwfgr2xt handled: Will do: I will open the P1-032 before and after shots for you as soon as it passes its checks.
+- 2026-11-14 03:28 mentor message mmwfir4cy handled: Understood. Every road and street task now has to match real photos side by side and pass an emptiness check (nothing bare for 40 m), and the look audit treats empty streets as a blocker, not polish.

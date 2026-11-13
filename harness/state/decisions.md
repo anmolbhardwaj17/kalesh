@@ -434,3 +434,6 @@ Anmol: running feels cartoonish. It is a problem, not the style: the signed styl
 
 ## 2026-11-14 Cinematography is a first-class system (Anmol)
 Anmol: cinematography and cutscenes make or break the story. Decision: STYLE_BIBLE.md "Cinematography and cutscenes" (shot grammar, lenses, moves, light per scene, editing, references); P3-009 cinematic camera toolkit (priority 1, Fable) with a reference test scene at the CP auto stand; P4-002 writes a shot list for every directed scene.
+
+## 2026-11-14 Streets at peak quality and never empty (Anmol)
+Anmol: the road look must be peak quality, match the real roads (adding and removing where needed), and never feel empty. Decision: acceptance added to P2-013, P2-015, P2-016, P2-035 to P2-038: photo side by sides at 3 or more spots per hero road read by a verifier, and an emptiness check (no 40 m of frontage without something real; props per 100 m within the area profile). P2-040 treats emptiness as a blocker. Core knowledge line added.
