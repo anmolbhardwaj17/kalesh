@@ -527,3 +527,4 @@ One line per event, written by task.mjs (start, done, fail, phase changes, inbox
 - 2026-11-14 04:42 [P1-034] start (attempt 1): Faster lanes bake and the tunnel mouth crossing
 - 2026-11-14 04:42 [P1-050] start (attempt 1): Partial bakes read a stale warm-start lane_conflicts.json left by test variant bakes
 - 2026-11-14 04:42 mentor message mmwfldrzw handled: Yes, without expanding the map: the Ghazipur landfill goes on the eastern skyline as a far silhouette at its real bearing and height, with its haze and birds, never reachable (P2-039). It could become part of Act 4 on the east bank later if you want.
+- 2026-11-14 05:21 [P2-007] start (attempt 1): Landmark stand-in parts kit and the pilot heroes as stand-ins
