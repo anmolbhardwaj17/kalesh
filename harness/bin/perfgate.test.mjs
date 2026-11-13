@@ -181,3 +181,17 @@ describe('runOrder (P2-182)', () => {
     expect(q.pool.map((s) => s.name)).toEqual(['a', 'den_high_dpr2', 'b', 'test_scene']);
   });
 });
+
+describe('repeatList (P1-040)', () => {
+  it('repeats perf and solo scenarios too, and runOrder still runs those alone', async () => {
+    const { repeatList, runOrder } = await import('./perfgate.mjs');
+    const list = [{ name: 'a' }, { name: 'stream_200', perf: true, solo: true }];
+    const r = repeatList(list, 3);
+    expect(r.map((s) => s.name)).toEqual(['a#1', 'a#2', 'a#3', 'stream_200#1', 'stream_200#2', 'stream_200#3']);
+    expect(r.every((s) => s.baseName === s.name.split('#')[0])).toBe(true);
+    const o = runOrder(r, { measures: (s) => !!s.perf, solo: (s) => !!s.perf || !!s.solo });
+    expect(o.perf.map((s) => s.name)).toEqual(['stream_200#1', 'stream_200#2', 'stream_200#3']);
+    expect(o.pool.map((s) => s.name)).toEqual(['a#1', 'a#2', 'a#3']);
+    expect(repeatList(list, 0)).toBe(list);
+  });
+});

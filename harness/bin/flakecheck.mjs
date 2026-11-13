@@ -6,6 +6,7 @@
 // --load-set a,b (scenarios for the load run), --no-build (reuse the build: dist on web, the Godot import on godot; the default builds once first). Every run's shots are
 // measured (P2B-105, shots/r<k>/): a lightcheck FAIL fails that run, --min-mean N also fails a run with a shot under N.
 // A milestone id in the list (M07, TEST; P2-180) runs `verify --milestone <id>` N times, --jobs at a time, beside the scenarios.
+// Perf and solo scenarios run N times too (P1-040), one at a time and before the pool, as in verify.
 // It never runs typecheck or the unit tests (use npm test), never writes harness/reports/latest.json: the report is
 // harness/reports/flakecheck/last.json (the load run is stopped at the end and keeps no report). Exit 1 if any run failed.
 // --out <file> (P4-101) also writes the whole pass table, scenarios and milestones, as JSON (gateretry.mjs reads it).

@@ -7,21 +7,17 @@
 ##                   "ok": false, "error": "..."}
 ##   game -> client  {"type": "hello", ...} once on connect, then {"type": "snapshot", ...} after every drawn frame
 ##                   (state, clock, hold and the events since the last snapshot).
+## Writes never block a frame: each client has an out queue (debug_peer.gd); a snapshot is skipped for a client that is
+## behind. The perf hooks live in debug_perf.gd, setCamera and shot in debug_camera.gd, stream in stream_probe.gd.
 ## Expected problems (unknown method, bad args, unknown scene) are error responses, never push_error.
 extends Node
 
-const Stats := preload("res://debug/perf_stats.gd")
 const DebugLogger := preload("res://debug/debug_logger.gd")
-const FrameProbe := preload("res://debug/frame_probe.gd")
-const GpuBallast := preload("res://debug/gpu_ballast.gd")
+const DebugPeer := preload("res://debug/debug_peer.gd")
+const DebugPerf := preload("res://debug/debug_perf.gd")
+const DebugCamera := preload("res://debug/debug_camera.gd")
+const DebugInput := preload("res://debug/debug_input.gd")
 const PROTOCOL := 1
-const MAX_LINE_BYTES := 1 << 20
-## Composite actions the harness scripts use (the browser scaffold's names) mapped onto InputMap actions:
-## [negative action, positive action]. Any InputMap action name also works directly.
-const COMPOSITE := {
-	"throttle": ["brake", "throttle"],
-	"steer": ["steer_left", "steer_right"],
-}
 const METHODS := [
 	"ping", "state", "clock", "frames", "input", "perf", "load", "teleport", "setCamera", "timeScale", "hold",
 	"events", "hud", "shot", "quality", "timeOfDay", "bench", "stream", "quit",
@@ -31,17 +27,15 @@ const QUALITY_PRESETS := ["low", "medium", "high"]
 var port := 0
 var listening := false
 var _server := TCPServer.new()
-var _clients: Array[Dictionary] = []
-var _pressed := {}
-var _camera: Camera3D = null
-var _prev_camera: Camera3D = null
+var _clients: Array[DebugPeer] = []
 var _hud_on := true
 var _overlay: CanvasLayer = null
 var _overlay_label: Label = null
 var _logger: DebugLogger = null
 var _quitting := false
-var _ballast: Node = null
-var _probe_start: Node = null
+var _perf: DebugPerf = null
+var _cam: DebugCamera = null
+var _input := DebugInput.new()
 ## Headless runs (DisplayServer "headless") draw nothing, so frame_post_draw never fires: frames end on process_frame.
 var _headless := false
 
@@ -61,12 +55,14 @@ func _ready() -> void:
 	_logger = DebugLogger.new()
 	OS.add_logger(_logger)
 	_make_overlay(args != null and args.verify)
-	_probe_start = FrameProbe.new()
-	var probe_end := FrameProbe.new()
-	_probe_start.setup(true, null)
-	probe_end.setup(false, _probe_start)
-	add_child(_probe_start)
-	add_child(probe_end)
+	_perf = DebugPerf.new()
+	_perf.name = "DebugPerf"
+	_perf.headless = _headless
+	add_child(_perf)
+	_cam = DebugCamera.new()
+	_cam.name = "DebugCameraHook"
+	_cam.headless = _headless
+	add_child(_cam)
 	_frame_signal().connect(_after_draw)
 
 
@@ -76,7 +72,8 @@ func _exit_tree() -> void:
 	if _frame_signal().is_connected(_after_draw):
 		_frame_signal().disconnect(_after_draw)
 	for c in _clients:
-		c.peer.disconnect_from_host()
+		c.flush()
+		c.close()
 	_server.stop()
 
 
@@ -86,13 +83,15 @@ func _process(_delta: float) -> void:
 	while listening and _server.is_connection_available():
 		var peer := _server.take_connection()
 		peer.set_no_delay(true)
-		var c := {"peer": peer, "buf": PackedByteArray(), "last_seq": _events().seq}
+		var c := DebugPeer.new(peer, _events().seq)
 		_clients.append(c)
 		_send(c, {"type": "hello", "protocol": PROTOCOL, "version": _version(), "port": port, "methods": METHODS,
 			"args": _args().as_dict(), "ready": _ready_now(), "frame": _frame_no(), "headless": _headless,
 			"renderer": _renderer()})
 	for c in _clients.duplicate():
 		_read(c)
+	for c in _clients:
+		c.flush()
 	if _overlay_label != null and _overlay.visible:
 		_overlay_label.text = "DEBUG 127.0.0.1:%d  %d fps  sim %.2f s%s" % [
 			port, Engine.get_frames_per_second(), _clock().t, "  HELD" if _clock().paused else ""]
@@ -101,39 +100,24 @@ func _process(_delta: float) -> void:
 # ---------------------------------------------------------------- transport
 
 
-func _read(c: Dictionary) -> void:
-	var peer: StreamPeerTCP = c.peer
-	peer.poll()
-	var st := peer.get_status()
-	if st != StreamPeerTCP.STATUS_CONNECTED:
-		if st != StreamPeerTCP.STATUS_CONNECTING:
+func _read(c: DebugPeer) -> void:
+	c.peer.poll()
+	if not c.alive():
+		if not c.connecting():
 			_clients.erase(c)
 		return
-	var n := peer.get_available_bytes()
-	if n > 0:
-		var got: Array = peer.get_data(n)
-		if got[0] == OK:
-			c.buf.append_array(got[1])
-	var i: int = c.buf.find(10)
-	while i >= 0:
-		var line: String = c.buf.slice(0, i).get_string_from_utf8()
-		c.buf = c.buf.slice(i + 1)
-		if line.strip_edges() != "":
-			_dispatch(c, line)
-		i = c.buf.find(10)
-	if c.buf.size() > MAX_LINE_BYTES:
-		c.buf = PackedByteArray()
-		_send(c, {"type": "response", "id": null, "ok": false, "error": "line over %d bytes dropped" % MAX_LINE_BYTES})
+	for line in c.read_lines():
+		_dispatch(c, line)
 
 
-func _send(c: Dictionary, msg: Dictionary) -> void:
-	var peer: StreamPeerTCP = c.peer
-	if peer.get_status() != StreamPeerTCP.STATUS_CONNECTED:
-		return
-	peer.put_data((JSON.stringify(msg) + "\n").to_utf8_buffer())
+## Queues the message and hands what the socket takes now to it; never waits for the client.
+func _send(c: DebugPeer, msg: Dictionary) -> void:
+	if c.alive():
+		c.enqueue(msg)
+		c.flush()
 
 
-func _dispatch(c: Dictionary, line: String) -> void:
+func _dispatch(c: DebugPeer, line: String) -> void:
 	var msg = JSON.parse_string(line)
 	if not (msg is Dictionary):
 		_send(c, {"type": "response", "id": null, "ok": false, "error": "not a JSON object: %s" % line.left(120)})
@@ -142,7 +126,7 @@ func _dispatch(c: Dictionary, line: String) -> void:
 
 
 ## A coroutine per request: async hooks (frames, perf, load, shot) answer when they finish, others at once.
-func _handle(c: Dictionary, msg: Dictionary) -> void:
+func _handle(c: DebugPeer, msg: Dictionary) -> void:
 	var id = msg.get("id")
 	var method := str(msg.get("method", ""))
 	var args: Array = msg.args if msg.get("args") is Array else []
@@ -192,7 +176,7 @@ func _call(method: String, a: Array) -> Dictionary:
 		"input":
 			if a.size() < 2 or not (a[0] is String):
 				return _fail("input(action, value): needs an action name and a value")
-			var why := _drive_input(a[0], a[1])
+			var why := _input.drive(a[0], a[1])
 			return _ok(true) if why == "" else _fail(why)
 		"frames":
 			var n := int(a[0]) if a.size() > 0 and (a[0] is float or a[0] is int) else 1
@@ -203,7 +187,7 @@ func _call(method: String, a: Array) -> Dictionary:
 			if _headless:
 				return _fail("perf: a headless run renders nothing, so it has no frame times (run the scenario windowed)")
 			var ms := float(a[0]) if a.size() > 0 and (a[0] is float or a[0] is int) else 1000.0
-			return _ok(await _perf(clampf(ms, 50.0, 60000.0)))
+			return _ok(await _perf.perf(clampf(ms, 50.0, 60000.0)))
 		"load":
 			if a.is_empty() or not (a[0] is String):
 				return _fail("load(id): id must be a string")
@@ -213,7 +197,7 @@ func _call(method: String, a: Array) -> Dictionary:
 		"stream":
 			return await _stream_probe().hook(a)
 		"setCamera":
-			return _set_camera(a[0] if a.size() > 0 else null)
+			return _cam.set_camera(a[0] if a.size() > 0 else null)
 		"hud":
 			_hud_on = bool(a[0]) if a.size() > 0 else true
 			var count := 0
@@ -225,7 +209,7 @@ func _call(method: String, a: Array) -> Dictionary:
 		"shot":
 			if a.is_empty() or not (a[0] is String) or not String(a[0]).is_absolute_path():
 				return _fail("shot(path): path must be an absolute file path")
-			return await _shot(a[0])
+			return await _cam.shot(a[0])
 		"quality":
 			if a.size() > 0 and a[0] != null:
 				if not (a[0] in QUALITY_PRESETS):
@@ -256,18 +240,7 @@ func _call(method: String, a: Array) -> Dictionary:
 			# bench('ballast', {n}) and bench('blank', {on}) work in any scene (honest GPU readings under this Mac's 120 fps
 			# cap, harness/bin/ballast.mjs). Every other command goes to the bench scene's bench_call(cmd, opts) (--arch=<name>).
 			if a.size() > 0 and (a[0] == "ballast" or a[0] == "blank"):
-				var o = a[1] if a.size() > 1 and a[1] is Dictionary else {}
-				if a[0] == "blank":
-					# on: the root viewport draws no 3D, so a perf window measures the ballast alone
-					get_viewport().disable_3d = bool(o.get("on", false))
-					return _ok({"blank": get_viewport().disable_3d})
-				if _headless:
-					return _fail("bench(ballast): a headless run renders nothing")
-				if _ballast == null:
-					_ballast = GpuBallast.new()
-					_ballast.name = "GpuBallast"
-					add_child(_ballast)
-				return _ok({"n": _ballast.set_load(int(o.get("n", 0)))})
+				return _perf.bench(a[0], a[1] if a.size() > 1 and a[1] is Dictionary else {})
 			var scene := get_tree().current_scene
 			if scene == null or not scene.has_method("bench_call"):
 				return _fail("bench(cmd, opts): the current scene is not a bench scene (start the game with --arch=<name>)")
@@ -294,12 +267,16 @@ func _after_draw() -> void:
 	var hold: Dictionary = _clock().hold_state()
 	var ev := _events()
 	for c in _clients:
+		if not c.alive():
+			continue
 		var snap := {
 			"type": "snapshot", "frame": _frame_no(), "w": Time.get_ticks_msec(), "ready": _ready_now(),
 			"state": st, "clock": clock, "hold": hold, "events": ev.since(c.last_seq),
 		}
-		c.last_seq = ev.seq
-		_send(c, snap)
+		# skipped while the client is behind: last_seq stays, so the next snapshot carries these events
+		if c.enqueue(snap, true):
+			c.last_seq = ev.seq
+		c.flush()
 
 
 func state() -> Dictionary:
@@ -319,7 +296,7 @@ func state() -> Dictionary:
 		var cp := cam.global_position
 		var look := -cam.global_transform.basis.z
 		camera = {"pos": [cp.x, cp.y, cp.z], "dir": [look.x, look.y, look.z], "fov": cam.fov,
-			"override": _camera != null and cam == _camera}
+			"override": _cam.is_override(cam)}
 	var block := get_tree().get_first_node_in_group("world_stream")
 	return {
 		"scene": id, "level": id, "milestone": null, "player": player, "camera": camera, "hud": _hud_on,
@@ -342,89 +319,12 @@ func time_state() -> Dictionary:
 # ---------------------------------------------------------------- hooks
 
 
-## Drives the game's action layer like a player: Input.action_press with a strength, release at 0.
-func _drive_input(action: String, value: Variant) -> String:
-	var v := 0.0
-	if value is bool:
-		v = 1.0 if value else 0.0
-	elif value is float or value is int:
-		v = float(value)
-	else:
-		return "input(%s, value): value must be a number or a boolean" % action
-	if COMPOSITE.has(action):
-		_press(COMPOSITE[action][0], maxf(0.0, -v))
-		_press(COMPOSITE[action][1], maxf(0.0, v))
-		return ""
-	if not InputMap.has_action(action):
-		return "unknown action '%s' (InputMap actions or %s)" % [action, ", ".join(COMPOSITE.keys())]
-	_press(action, absf(v))
-	return ""
-
-
-func _press(action: String, strength: float) -> void:
-	if strength > 0.0:
-		Input.action_press(action, clampf(strength, 0.0, 1.0))
-		_pressed[action] = true
-	else:
-		Input.action_release(action)
-		_pressed.erase(action)
-
-
-func _release_all() -> void:
-	for action in _pressed.keys():
-		Input.action_release(action)
-	_pressed.clear()
-
-
-func _perf(ms: float) -> Dictionary:
-	var vp := get_viewport().get_viewport_rid()
-	RenderingServer.viewport_set_measure_render_time(vp, true)
-	await _frame_signal()
-	var cpu: Array[float] = []
-	var gpu: Array[float] = []
-	var frame: Array[float] = []
-	var calls: Array[float] = []
-	var tris: Array[float] = []
-	var start := Time.get_ticks_usec()
-	var last := start
-	while float(Time.get_ticks_usec() - start) < ms * 1000.0:
-		await _frame_signal()
-		var now := Time.get_ticks_usec()
-		frame.append((now - last) / 1000.0)
-		last = now
-		var render_cpu := RenderingServer.viewport_get_measured_render_time_cpu(vp) + RenderingServer.get_frame_setup_time_cpu()
-		cpu.append(render_cpu + float(_probe_start.logic_ms))
-		gpu.append(RenderingServer.viewport_get_measured_render_time_gpu(vp))
-		calls.append(RenderingServer.get_rendering_info(RenderingServer.RENDERING_INFO_TOTAL_DRAW_CALLS_IN_FRAME))
-		tris.append(RenderingServer.get_rendering_info(RenderingServer.RENDERING_INFO_TOTAL_PRIMITIVES_IN_FRAME))
-	var avg_frame := Stats.mean(frame)
-	var mb := 1024.0 * 1024.0
-	var out := {
-		"windowMs": ms, "frames": frame.size(),
-		"cpuMs": Stats.stats(cpu),
-		"p95FrameMs": Stats.stats(frame).p95,
-		"frameMs": Stats.stats(frame),
-		"avgFps": 1000.0 / avg_frame if avg_frame > 0.0 else 0.0,
-		"drawCalls": Stats.stats(calls).max, "drawCallsAvg": Stats.mean(calls),
-		"triangles": Stats.stats(tris).max, "trianglesAvg": Stats.mean(tris),
-		"gpuMB": RenderingServer.get_rendering_info(RenderingServer.RENDERING_INFO_VIDEO_MEM_USED) / mb,
-		"textureMB": RenderingServer.get_rendering_info(RenderingServer.RENDERING_INFO_TEXTURE_MEM_USED) / mb,
-		"bufferMB": RenderingServer.get_rendering_info(RenderingServer.RENDERING_INFO_BUFFER_MEM_USED) / mb,
-		"renderer": RenderingServer.get_video_adapter_name(),
-	}
-	if Stats.stats(gpu).max > 0.0:
-		out["gpuMs"] = Stats.stats(gpu)
-	else:
-		out["gpuNote"] = "the renderer reported no GPU time: the Metal driver gives no timestamp queries in Godot 4.7 (run with the engine arg --rendering-driver vulkan for gpuMs), or the game runs headless"
-	return out
-
-
 func _load(id: String) -> Dictionary:
 	var path: String = _args().scene_path(id)
 	if path == "":
 		return _fail("load('%s'): unknown scene id (ids: %s)" % [id, ", ".join(_args().scene_ids())])
-	_release_all()
-	_clear_camera()
+	_input.release_all()
+	_cam.clear()
 	var err := get_tree().change_scene_to_file(path)
 	if err != OK:
 		return _fail("load('%s'): change_scene_to_file returned %d" % [id, err])
@@ -466,64 +366,6 @@ func _teleport(where: Variant) -> bool:
 				var ap: Vector3 = a.global_position
 				return await _teleport([ap.x, ap.y, ap.z])
 	return false
-
-
-## {pos, target} puts a debug camera there until null hands back to the game camera.
-func _set_camera(pose: Variant) -> Dictionary:
-	if pose == null:
-		_clear_camera()
-		return _ok(true)
-	if not (pose is Dictionary) or not (pose.get("pos") is Array) or not (pose.get("target") is Array) \
-			or pose.pos.size() != 3 or pose.target.size() != 3:
-		return _fail("setCamera(pose): pose must be {pos: [x, y, z], target: [x, y, z]} or null (named poses: none yet)")
-	var from := Vector3(float(pose.pos[0]), float(pose.pos[1]), float(pose.pos[2]))
-	var to := Vector3(float(pose.target[0]), float(pose.target[1]), float(pose.target[2]))
-	if from.distance_to(to) < 1e-4:
-		return _fail("setCamera(pose): pos and target are the same point")
-	var scene := get_tree().current_scene
-	if scene == null:
-		return _fail("setCamera(pose): no scene is loaded")
-	if _camera == null or not is_instance_valid(_camera):
-		var game_cam := get_viewport().get_camera_3d()
-		_prev_camera = game_cam
-		_camera = Camera3D.new()
-		_camera.name = "DebugCamera"
-		if game_cam != null:
-			_camera.fov = game_cam.fov
-			_camera.near = game_cam.near
-			_camera.far = game_cam.far
-		scene.add_child(_camera)
-	_camera.global_position = from
-	var dir := (to - from).normalized()
-	var up := Vector3.UP if absf(dir.dot(Vector3.UP)) < 0.999 else Vector3.FORWARD
-	_camera.look_at(to, up)
-	_camera.make_current()
-	return _ok(true)
-
-
-func _clear_camera() -> void:
-	if _camera != null and is_instance_valid(_camera):
-		_camera.queue_free()
-	_camera = null
-	if _prev_camera != null and is_instance_valid(_prev_camera):
-		_prev_camera.make_current()
-	_prev_camera = null
-
-
-func _shot(path: String) -> Dictionary:
-	if _headless:
-		return _fail("shot: a headless run renders nothing (run the scenario windowed)")
-	var dir := path.get_base_dir()
-	if not DirAccess.dir_exists_absolute(dir):
-		DirAccess.make_dir_recursive_absolute(dir)
-	await _frame_signal()
-	var img := get_viewport().get_texture().get_image()
-	if img == null or img.is_empty():
-		return _fail("shot: the viewport gave no image (headless?)")
-	var err := img.save_png(path)
-	if err != OK:
-		return _fail("shot: could not save %s (error %d)" % [path, err])
-	return _ok({"path": path, "width": img.get_width(), "height": img.get_height(), "frame": _frame_no()})
 
 
 # ---------------------------------------------------------------- helpers

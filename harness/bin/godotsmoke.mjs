@@ -9,10 +9,13 @@
 // 2. With --debug --verify: launches the pinned Godot windowed, calls every required hook plus shot, quality, timeOfDay and quit,
 //    prints each result, and checks each answers in the documented shape. Also checks the sim hold: hold({at}) pauses
 //    within one physics tick of `at`, and a held sim does not move for 0.2 s of wall time while frames keep drawing.
+//    And (P1-040) that a second client that connects and stops reading never stalls a frame: the game's snapshot
+//    writes do not block (no frame over 50 ms in a 6 s perf window while that client's socket buffers are full).
 // Writes <out>/smoke.json and <out>/smoke_shot.png (default out: harness/reports/godot). Exits 1 on any failure,
 // including any ERROR line in the engine output.
 import fs from 'node:fs';
 import path from 'node:path';
+import { spawn } from 'node:child_process';
 import { fileURLToPath } from 'node:url';
 import { launchGame, freePort, portOpen } from './godotclient.mjs';
 import { errorLines } from './godot.mjs';
@@ -172,6 +175,36 @@ async function debugRun() {
   if (DRIVER === 'vulkan') check('perf gpuMs present on Vulkan', isStats(pf.gpuMs) && pf.gpuMs.p50 > 0, JSON.stringify(pf.gpuMs || pf.gpuNote));
   check('perf shape', isStats(pf.cpuMs) && pf.cpuMs.p50 > 0 && pf.cpuMs.p50 < pf.p95FrameMs * 3 && isNum(pf.p95FrameMs) && isNum(pf.avgFps) && isNum(pf.drawCalls) && isNum(pf.triangles) && isNum(pf.gpuMB)
     && (isStats(pf.gpuMs) || typeof pf.gpuNote === 'string'), `cpu p95 ${pf.cpuMs?.p95?.toFixed(2)} ms, gpu p95 ${pf.gpuMs?.p95?.toFixed(2)} ms, ${pf.avgFps?.toFixed(1)} fps, ${pf.drawCalls} draws, ${pf.triangles} tris, ${pf.gpuMB?.toFixed(1)} MB`);
+
+  // P1-040: a client that stops reading. A python3 client with a 2 KB receive buffer connects and never reads, so the
+  // game's socket buffers for it fill within about two seconds of snapshots; a blocking write would then stall the
+  // game until the client goes away. (Node cannot shrink a socket's receive buffer, and on loopback the default
+  // buffers absorb several seconds of snapshots, so a paused node socket proves nothing.)
+  const STALL_MS = 6000;
+  const py = `import socket, sys, time
+s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+s.setsockopt(socket.SOL_SOCKET, socket.SO_RCVBUF, 2048)
+s.connect(("127.0.0.1", int(sys.argv[1])))
+print("connected", flush=True)
+time.sleep(float(sys.argv[2]))
+s.close()`;
+  const stall = spawn('python3', ['-c', py, String(run.port), String((STALL_MS + 1500) / 1000)], { stdio: ['ignore', 'pipe', 'pipe'] });
+  const connected = await new Promise((resolve) => {
+    stall.stdout.on('data', (d) => { if (String(d).includes('connected')) resolve(true); });
+    stall.once('error', () => resolve(false));
+    stall.once('exit', () => resolve(false));
+  });
+  if (!connected) check('stalled client check (needs python3)', false, 'python3 did not connect');
+  else {
+    await sleep(500);
+    const sp = await c.call('perf', STALL_MS);
+    await new Promise((resolve) => (stall.exitCode !== null ? resolve() : stall.once('exit', resolve)));
+    check('a client that stops reading never stalls a frame (max frame under 50 ms)', sp.frameMs.max < 50,
+      `max ${sp.frameMs.max.toFixed(1)} ms, p95 ${sp.frameMs.p95.toFixed(1)} ms over ${sp.frames} frames`);
+    const f0 = c.snapshot.frame;
+    await c.call('frames', 5);
+    check('snapshots still arrive after the stalled client left', c.snapshot.frame >= f0 + 5, `frame ${f0} -> ${c.snapshot.frame}`);
+  }
 
   // Shot from the chase camera behind the car at the start of the road.
   await c.call('load', 'scaffold');

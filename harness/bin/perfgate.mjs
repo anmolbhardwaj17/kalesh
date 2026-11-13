@@ -154,3 +154,13 @@ export function runOrder(list, { measures, solo }) {
     after: list.filter((s) => !measures(s) && solo(s)),
   };
 }
+
+/**
+ * P1-040: the scenario list of `verify --repeat N` (flakecheck.mjs). Every scenario becomes N copies named `<name>#<k>`
+ * with `baseName`, perf and solo ones too (they used to run once whatever N said): runOrder still runs those copies
+ * one at a time, perf first.
+ */
+export function repeatList(list, n) {
+  if (!(n > 0)) return list;
+  return list.flatMap((s) => Array.from({ length: n }, (_, k) => ({ ...s, name: `${s.name}#${k + 1}`, baseName: s.name })));
+}

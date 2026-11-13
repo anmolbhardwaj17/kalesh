@@ -21,7 +21,7 @@ import { PATHS, ROOT, R, readJSON, writeJSON, nowISO, parseArgs, git, treeHash, 
 import { npmRun } from './browser.mjs';
 import { loadDriver } from './driver.mjs';
 import { pickQuick, describePick, changedScenarioNames, useCommitFiles } from './quickset.mjs';
-import { frameTimeGate, loadText, perfSummary, perfTable, runOrder } from './perfgate.mjs';
+import { frameTimeGate, loadText, perfSummary, perfTable, repeatList, runOrder } from './perfgate.mjs';
 import { checkVerifyArgs, scenarioNames, milestoneIds, VERIFY_BOOLEANS } from './cliguard.mjs';
 import { loadBudgets, judgeBudgets } from './perfbudget.mjs';
 import { ballastPerf } from './ballast.mjs';
@@ -208,7 +208,7 @@ async function runScenario(browser, base, sc, solo) {
 async function runScenarios(browser, base) {
   let list = pickScenarios();
   if (onlyPats && !list.length) fail(`--only matched no scenario: ${onlyPats.join(',')}`);
-  if (REPEAT) list = list.flatMap((s) => (runsAlone(s) ? [s] : Array.from({ length: REPEAT }, (_, k) => ({ ...s, name: `${s.name}#${k + 1}`, baseName: s.name }))));
+  if (REPEAT) list = repeatList(list, REPEAT); // perf and solo scenarios too (P1-040), still one at a time
   const hints = readJSON(TIMINGS_FILE, {});
   const { perf, pool, after } = orderOf(list);
   const done = new Map();

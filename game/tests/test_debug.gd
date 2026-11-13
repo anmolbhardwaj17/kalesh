@@ -7,6 +7,7 @@ const GameArgs := preload("res://core/game_args.gd")
 const SimClockScript := preload("res://core/sim_clock.gd")
 const GameEventsScript := preload("res://core/game_events.gd")
 const Stats := preload("res://debug/perf_stats.gd")
+const DebugPeer := preload("res://debug/debug_peer.gd")
 
 var t
 var tree: SceneTree
@@ -145,3 +146,21 @@ func test_perf_stats() -> void:
 	t.near(s.p95, 96.0, 1e-9, "p95 of 1..100")
 	t.near(s.max, 100.0, 1e-9, "max")
 	t.near(Stats.mean([1.0, 2.0, 3.0]), 2.0, 1e-9, "mean")
+
+
+## P1-040: the out queue of a debug client. Snapshots stop queueing while the client is behind; responses never do.
+func test_debug_peer_skips_snapshots_while_behind() -> void:
+	var c := DebugPeer.new()
+	var big := "x".repeat(4000)
+	var queued := 0
+	while c.backlog() <= DebugPeer.SNAPSHOT_BACKLOG and queued < 1000:
+		t.ok(c.enqueue({"type": "snapshot", "pad": big}, true), "a snapshot queues while the backlog is small")
+		queued += 1
+	var before := c.backlog()
+	t.ok(not c.enqueue({"type": "snapshot", "pad": big}, true), "a snapshot is skipped once over %d bytes" % DebugPeer.SNAPSHOT_BACKLOG)
+	t.ok(c.skipped == 1 and c.backlog() == before, "skipping queues nothing (skipped %d)" % c.skipped)
+	t.ok(c.enqueue({"type": "response", "id": 1, "ok": true}), "a response always queues")
+	t.ok(c.backlog() > before, "the response is in the queue")
+	t.ok(not c.alive(), "a client with no socket is not alive")
+	c.flush() # no socket: does nothing, no error
+	t.ok(c.backlog() > before, "flush without a socket keeps the queue")
