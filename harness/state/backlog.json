@@ -1,6 +1,6 @@
 {
   "_doc": "Written only by node harness/bin/task.mjs. Phases run in order; P0 (ADOPT + STYLE DISCOVERY) waits for the owner by design and needs task.mjs signoff and task.mjs archsignoff before its gate passes. Later phases are added by the planner at the end of P0 (task.mjs phase-add) from the game's real state.",
-  "updated": "2026-11-13T06:38:35.002Z",
+  "updated": "2026-11-13T06:42:47.980Z",
   "phases": [
     {
       "id": "P0",
@@ -2058,11 +2058,14 @@
       "agent": "builder",
       "priority": 3,
       "kind": "feature",
-      "status": "doing",
+      "status": "done",
       "attempts": 1,
       "notes": [],
       "created": "2026-11-11T12:29:04.868Z",
-      "started": "2026-11-13T05:33:48.949Z"
+      "started": "2026-11-13T05:33:48.949Z",
+      "done": "2026-11-13T06:42:47.961Z",
+      "summary": "On-foot CharacterBody3D with own step-up and vault (game/characters/), on-foot camera with wall fade, PlayerMode enter and exit with F, 13 remappable actions, foot debug hook. Walk/jog/sprint/crouch within 0.01%, stamina 8.00/5.00 s, jump 0.459 m at 0.30 s, vault 0.617 s (1.3 m refused), turn 0.25 s, kerbs/stairs worst loss 2.02% no snags, camera min 1.21 m from head 0 inside 0 hidden (flakecheck 3/3), exit 0.33 s enter 0.40 s, cost 0.020 ms. Verified: typecheck, 799 vitest, 101 Godot tests, quick 17/17 OK, lane shot read and kept.",
+      "commit": "30fd373"
     },
     {
       "id": "P1-023",
