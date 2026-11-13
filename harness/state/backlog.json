@@ -1,6 +1,6 @@
 {
   "_doc": "Written only by node harness/bin/task.mjs. Phases run in order; P0 (ADOPT + STYLE DISCOVERY) waits for the owner by design and needs task.mjs signoff and task.mjs archsignoff before its gate passes. Later phases are added by the planner at the end of P0 (task.mjs phase-add) from the game's real state.",
-  "updated": "2026-11-13T06:43:18.025Z",
+  "updated": "2026-11-13T07:45:02.729Z",
   "phases": [
     {
       "id": "P0",
@@ -2438,7 +2438,9 @@
       "kind": "feature",
       "status": "todo",
       "attempts": 0,
-      "notes": [],
+      "notes": [
+        "Anmol 2026-11-13: houses need the railings Delhi houses have. The area kits must include balcony grilles and railings, roof parapets with railings, front gate and window grilles, and stair railings (outside stairs to the roof), placed by the area profiles. Acceptance: a close shot of a residential block shows them on most houses."
+      ],
       "created": "2026-11-11T12:31:54.059Z",
       "model": "opus"
     },
@@ -2509,7 +2511,9 @@
       "kind": "feature",
       "status": "todo",
       "attempts": 0,
-      "notes": [],
+      "notes": [
+        "Anmol 2026-11-13: street-side railings too (boundary walls with grille tops, gate railings), consistent with the P2-010 house kit."
+      ],
       "created": "2026-11-11T12:31:54.059Z",
       "model": "opus"
     },
