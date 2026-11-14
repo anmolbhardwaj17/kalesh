@@ -1,6 +1,6 @@
 # Owner's eye: what Anmol checks, so nobody has to ask him
 
-Every builder brief for a look task, every verifier and every look audit reads this file, and harness/design/WORLD_LOGIC.md (does the scene make physical and urban sense). A verifier fails a task that breaks any line here, the same as a missing feature. The orchestrator adds a line each time Anmol corrects something, so he never has to say it twice.
+Every builder brief for a look task, every verifier and every look audit reads this file, harness/design/WORLD_LOGIC.md (does the scene make physical and urban sense) and harness/design/REALITY_MATCH.md (every object compared with real photos, scored, improved until it passes). A verifier fails a task that breaks any line here, the same as a missing feature. The orchestrator adds a line each time Anmol corrects something, so he never has to say it twice.
 
 ## The bar
 - Watch Dogs 2 is the fidelity bar (STYLE_BIBLE.md). Ask of every shot: would this frame sit next to a Watch Dogs 2 street shot without looking cheap? Density of props, material detail, decals and grime, signage, light and shadow, life on the street.

@@ -547,3 +547,8 @@ By: orchestrator, from the mentor inbox.
 Decision: every character (and later vehicles and hero props) starts as a picture card: a realistic reference sheet (front, side, back) made with an image tool. The art reviewer checks it against the card, OWNER_EYE.md, WORLD_LOGIC.md and the Watch Dogs 2 bar, and Anmol sees it. Only an approved picture leads to the 3D model card, which uses image to 3D on that picture, then Mixamo rigging. The current models stay in the game until the new ones pass.
 Why: Anmol 2026-11-14: "maybe i should make image first, finalize in that the look and feel and then once thats done and verified then only we'll think of 3d model step by step". Text to 3D gave cartoon faces and wrong proportions; a settled picture gives image to 3D a clear target.
 By: orchestrator, from the mentor inbox.
+
+## 2026-11-14: Every visible object is scored against real photos and improved until it passes
+Decision: harness/design/REALITY_MATCH.md. A catalog of every visible object class is built from the code and data (no hand list); each object gets dated reference photos, an off-screen render alone and in context, and a score 0 to 10 on shape, size, material and colour, wear, detail, mounting, light response and game language; pass is an average of 8 with no line under 6. Builders self-score what they add, verifiers rescore and fail below pass, look critics sweep the catalog worst first and failures become tasks automatically.
+Why: Anmol 2026-11-14: "compare, give a score and improve until it looks good or matches our game language ... I don't have to provide a list of each and every prop".
+By: orchestrator, from the mentor inbox.
