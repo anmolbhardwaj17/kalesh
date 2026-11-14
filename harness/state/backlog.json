@@ -1,6 +1,6 @@
 {
   "_doc": "Written only by node harness/bin/task.mjs. Phases run in order; P0 (ADOPT + STYLE DISCOVERY) waits for the owner by design and needs task.mjs signoff and task.mjs archsignoff before its gate passes. Later phases are added by the planner at the end of P0 (task.mjs phase-add) from the game's real state.",
-  "updated": "2026-11-14T19:19:40.729Z",
+  "updated": "2026-11-14T19:22:15.878Z",
   "phases": [
     {
       "id": "P0",
@@ -5287,7 +5287,9 @@
       "kind": "mentor",
       "status": "doing",
       "attempts": 1,
-      "notes": [],
+      "notes": [
+        "Verifier: motion good (Bittu 4/4/4, Meera 5/4/4, Danny 4/3/4, picks clearly better than the stiff candidates); narrow FAIL: foot_feel jog on stairs_north p95 0.0204 m vs 0.02, caused by the new jog blend. Small fix round."
+      ],
       "created": "2026-11-14T17:39:13.193Z",
       "model": "opus",
       "started": "2026-11-14T17:39:14.168Z"
