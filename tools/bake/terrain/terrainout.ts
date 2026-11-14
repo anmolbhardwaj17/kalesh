@@ -31,7 +31,7 @@ export interface TerrainRecord {
     pinned: number; wallVertices: number; stepVertices: number; stepCorners: number; unresolvedSteps: number; skirts: number; waters: number;
   };
   triangulation: Ground['tg']['stats'];
-  heights: { maxOffsetM: number; wallClamped: number; underDeck: number; loweredUnderDeck: number; overTunnel: number; raisedOverTunnel: number };
+  heights: { maxOffsetM: number; wallClamped: number; underDeck: number; loweredUnderDeck: number; overTunnel: number; raisedOverTunnel: number; bedOverTunnel: number; mouthCorners: number };
   /** The gate counts of MAP_REPAIR.md "Verification" this step measures. */
   gates: { groundGapMaxM: number; groundAboveRoad: number; needleShare: number; seamMismatches: number; holeShare: number; portalOpenFaces: number };
   gap: TerrainChecks['gap'];
@@ -83,7 +83,7 @@ export function terrainRecord(g: Ground, checks: TerrainChecks, checksMs: number
       ...c, pinned: s.pinned, wallVertices: s.wallVertices, stepVertices: s.stepVertices, stepCorners: s.stepCorners, unresolvedSteps: s.unresolvedSteps, skirts: s.skirts, waters: g.surface.waters.length,
     },
     triangulation: g.tg.stats,
-    heights: { maxOffsetM: s.maxOffsetM, wallClamped: s.wallClamped, underDeck: s.underDeck, loweredUnderDeck: s.loweredUnderDeck, overTunnel: s.overTunnel, raisedOverTunnel: s.raisedOverTunnel },
+    heights: { maxOffsetM: s.maxOffsetM, wallClamped: s.wallClamped, underDeck: s.underDeck, loweredUnderDeck: s.loweredUnderDeck, overTunnel: s.overTunnel, raisedOverTunnel: s.raisedOverTunnel, bedOverTunnel: s.bedOverTunnel, mouthCorners: s.mouthCorners },
     gates: { groundGapMaxM: checks.gap.maxM, groundAboveRoad: checks.above.aboveRoad + checks.above.throughDeck, needleShare: checks.needles.share, seamMismatches: checks.seams.mismatched, holeShare: checks.area.holeShare, portalOpenFaces: checks.portals.open },
     gap: checks.gap, above: checks.above, needles: checks.needles, seams: checks.seams, area: checks.area, classes: checks.classes, portals: checks.portals,
     waters: g.surface.waters.filter((w) => w.areaM2 >= 500).sort((p, q) => q.areaM2 - p.areaM2).map((w) => ({
@@ -113,7 +113,7 @@ export function terrainLog(r: TerrainRecord): string[] {
     `input: ${n.freeEdges} free road edges (${n.wallEdges} at walls) over ${n.roadVertices} road vertices, ${n.ringEdges} ring edges (footprints, water, open land, outline), ${n.splitPoints} points along long segments, ${n.gridPoints} on tile lines, ${n.latticePoints} lattice points; ${n.welded} points welded`,
     `triangulation: ${t.points} points, ${t.vertices} vertices, ${t.triangles} triangles; ${t.segments.segments} segments (${t.segments.direct} already an edge, ${t.segments.snapped} bent through a near vertex, ${t.segments.crossings} crossings got a vertex, ${t.segments.nudged} a vertex a unit or two off a needle, ${t.segments.forced} forced through a corner (${t.bent.over1cm} bent over 1 cm, at most ${t.bent.maxM} m), ${t.segments.failed} failed), ${t.flips} flips, ${t.exactCircleTests} exact circle tests; counts that disagree ${t.inconsistent}; hairlines dropped ${t.dropped.components} (${t.dropped.areaM2} m2); ${t.cornerPoints} points put into corners between road edges of different heights`,
     `ground: ${n.emitted} triangles in ${n.tiles} tiles (${Object.entries(n.byClass).map(([k, v]) => `${k} ${v}`).join(', ')}); ${n.pinned} vertices pinned to road edges, ${n.wallVertices} at walls, ${n.stepVertices} at a height step (${n.stepCorners} corners, ${n.skirts} upright faces, ${n.unresolvedSteps} not closed); ${n.waters} water bodies`,
-    `heights: road edges up to ${r.heights.maxOffsetM} m off the ground model; ${r.heights.wallClamped} wall vertices held to their wall; under decks ${r.heights.underDeck} (${r.heights.loweredUnderDeck} lowered), over roofed tunnels ${r.heights.overTunnel} (${r.heights.raisedOverTunnel} raised)`,
+    `heights: road edges up to ${r.heights.maxOffsetM} m off the ground model; ${r.heights.wallClamped} wall vertices held to their wall; under decks ${r.heights.underDeck} (${r.heights.loweredUnderDeck} lowered), over roofed tunnels ${r.heights.overTunnel} (${r.heights.raisedOverTunnel} raised, ${r.heights.bedOverTunnel} water bed vertices held over a roof, ${r.heights.mouthCorners} step corners on a mouth line held over the slab)`,
     `gap: ${r.gap.samples} points on ${r.gap.edges} road edges, largest ${r.gap.maxM} m, mean ${r.gap.meanM} m, over ${GAP_LIMIT_M} m: ${r.gap.over2cm}; covered ${r.gap.coveredM} m, no ground along ${r.gap.uncoveredM.outsideStage} m outside the stage, ${r.gap.uncoveredM.otherRoad} m under another road, ${r.gap.uncoveredM.other} m other; walls: ${r.gap.wallSamples} points, ${r.gap.wallWrongSide} on the wrong side, highest ${r.gap.wallMaxHeightM} m`,
     `above the road: ${r.above.aboveRoad} of ${r.above.vertices} free ground vertices (${r.above.insideRoadFace} inside a road face); under decks ${r.above.underDeck} vertices and triangle centres, ${r.above.throughDeck} into the slab`,
     `needles: ${r.needles.under1deg} of ${r.needles.triangles} ground triangles under 1 degree (${pct(r.needles.share)}; under 5 degrees ${r.needles.under5deg}); footprint pads ${r.needles.plotsUnder1deg} of ${r.needles.plots}`,

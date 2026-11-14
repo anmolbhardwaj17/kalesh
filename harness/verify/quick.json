@@ -456,6 +456,21 @@
       ]
     },
     {
+      "path": "game/world/kits/",
+      "scenarios": [
+        "city_kit_shots",
+        "city_sign_shots",
+        "city_sign_night"
+      ]
+    },
+    {
+      "path": "game/world/systems/buildings.gd",
+      "scenarios": [
+        "city_kit_shots",
+        "city_sign_shots"
+      ]
+    },
+    {
       "path": "game/world/systems/landmarks.gd",
       "scenarios": [
         "landmark_heroes",

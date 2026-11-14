@@ -21,7 +21,11 @@
 ##                            drawn surface there: [{x, z, hit, colliderY, drawn, drawnY, material, gapM}]
 ##   watch {on}               starts ({on: true}) or stops ({on: false}) a per-tick record of the player against the drawn
 ##                            surface: each wheel contact (driving) or the feet (on foot, grounded) to the nearest drawn
-##                            height there; {} answers the numbers so far
+##                            height there; {} answers the numbers so far. Driving, it also tests the vehicle's body
+##                            box (2 cm skin) against the world's colliders each tick (P2-032, a wall or a ceiling; touches under 0.35 m over
+##                            the wheels are the road or a kerb and do not count, nor does a touch on an upward face,
+##                            counted in groundTicks):
+##                            bodyTicks, body (the first touch: where, and the contact height over the wheels)
 extends Node
 
 const DrawnSurface := preload("res://debug/drawn_surface.gd")
@@ -32,11 +36,14 @@ const LIMIT_M := 0.05
 ## within FALL_UP of them.
 const FALL_M := 0.5
 const FALL_UP := 3.0
+## A body touch lower than this over the wheel contacts is the road or a kerb (P2-032 watch `bodyTicks`).
+const BODY_LOW_M := 0.35
 
 var _ds: RefCounted = null
 var _ds_index: RefCounted = null
 var _on := false
 var _w := {}
+var _box_q: PhysicsShapeQueryParameters3D = null
 
 
 func _ready() -> void:
@@ -113,7 +120,7 @@ func hook(a: Array) -> Dictionary:
 				if bool(o.on):
 					_on = true
 					_w = {"ticks": 0, "samples": 0, "over": 0, "maxGapM": 0.0, "worst": {}, "undrawn": 0, "airTicks": 0, "fallTicks": 0,
-						"fall": {}, "foot": 0, "vehicle": 0}
+						"fall": {}, "foot": 0, "vehicle": 0, "bodyTicks": 0, "body": {}, "groundTicks": 0}
 					_surface(city)
 					return {"ok": true, "result": {"watching": true}}
 				_on = false
@@ -146,6 +153,7 @@ func _tick(_dt: float) -> void:
 		feet = p.foot_position()
 		if points.is_empty():
 			_w.airTicks += 1
+		_body(p, feet)
 	else:
 		_w.foot += 1
 		feet = p.global_position
@@ -169,6 +177,44 @@ func _tick(_dt: float) -> void:
 		_w.fallTicks += 1
 		if _w.fall.is_empty():
 			_w.fall = {"x": feet.x, "y": feet.y, "z": feet.z, "drawnY": top.y, "tick": _w.ticks}
+
+
+## The vehicle's body box with a 2 cm skin against the world's colliders (layer 1): a touch is a wall, a ceiling or a
+## kerb face the body (not a wheel) meets. Counts the ticks and keeps the first.
+func _body(p: Node3D, feet: Vector3) -> void:
+	if not ("tune" in p) or p.tune == null:
+		return
+	if _box_q == null:
+		_box_q = PhysicsShapeQueryParameters3D.new()
+		var shape := BoxShape3D.new()
+		shape.size = p.tune.box_half * 2.0 + Vector3.ONE * 0.04
+		_box_q.shape = shape
+		_box_q.collision_mask = 1
+	_box_q.exclude = [(p as CollisionObject3D).get_rid()]
+	var xf := p.global_transform
+	_box_q.transform = Transform3D(xf.basis, xf * Vector3(0, p.tune.box_y, 0))
+	var hits := p.get_world_3d().direct_space_state.collide_shape(_box_q, 8)
+	# a touch low down is the road or a kerb under the skin (the wheels' business); a wall or a ceiling is higher
+	var top := -INF
+	var at := Vector3.ZERO
+	for q: Vector3 in hits:
+		if q.y > top:
+			top = q.y
+			at = q
+	if hits.is_empty() or top < feet.y + BODY_LOW_M:
+		return
+	var rest := p.get_world_3d().direct_space_state.get_rest_info(_box_q)
+	if not rest.is_empty() and float(rest.normal.y) > 0.7:
+		# an upward face (the body grounding on a crest or a kerb top): not a wall or a ceiling
+		_w.groundTicks += 1
+		return
+	_w.bodyTicks += 1
+	if (_w.body as Dictionary).is_empty():
+		# where on the body: x to the right, y up, z back from the vehicle's origin (its own frame)
+		var loc := xf.affine_inverse() * at
+		_w.body = {"x": feet.x, "y": feet.y, "z": feet.z, "tick": _w.ticks, "contactY": top, "overWheelsM": top - feet.y,
+			"local": [snappedf(loc.x, 0.01), snappedf(loc.y, 0.01), snappedf(loc.z, 0.01)], "point": [at.x, at.y, at.z],
+			"normal": [snappedf(rest.normal.x, 0.01), snappedf(rest.normal.y, 0.01), snappedf(rest.normal.z, 0.01)] if not rest.is_empty() else []}
 
 
 func _screen(o: Dictionary) -> Dictionary:

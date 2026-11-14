@@ -1,0 +1,19 @@
+{
+  "views": {
+    "cp_street_eye": {
+      "file": "cp_street_eye.png",
+      "at": "2026-11-14T14:47:22.765Z",
+      "query": "debug=1&verify=1&light=night&style-off=skyb,lamps",
+      "error": null
+    },
+    "city_busiest_40m": {
+      "file": "city_busiest_40m.png",
+      "at": "2026-11-14T14:47:44.004Z",
+      "query": "debug=1&verify=1&light=night&style-off=skyb,lamps",
+      "error": null
+    }
+  },
+  "commit": "7b7cfe8",
+  "gl": "Godot 4.7.2.stable Apple M2 Pro (Apple8) (metal, forward_plus)",
+  "at": "2026-11-14T14:47:44.973Z"
+}

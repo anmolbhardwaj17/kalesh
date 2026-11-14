@@ -1,0 +1,70 @@
+{
+  "rows": {
+    "cp_street_eye": {
+      "quality": null,
+      "sceneKind": "city",
+      "loadMs": 5613,
+      "hostLoad": {
+        "avg1": 41.92,
+        "cores": 12,
+        "perCore": 3.49
+      },
+      "cpuP95": 13.5080000128746,
+      "gpuP95": null,
+      "gpuP95Capped": null,
+      "frameCostP50": 10.25,
+      "frameCostP95": 11.97,
+      "gpuCostMs": 11.97,
+      "ballastN": 896,
+      "fps": 98.8186677446885,
+      "drawCalls": 256,
+      "triangles": 479773,
+      "frameP95": 13.5080000128746,
+      "verdict": "FAIL",
+      "notes": [
+        "frame time: cpu p95 13.5 ms is over the 12 ms limit (45 fps): cpu p95 13.5 ms, gpu cost 11.97 ms (stable), gpu p95 n/a (the renderer reported no GPU time: the Metal driver gives no timestamp queries in Godot 4.7 (run with the engine arg --rendering-driver vulkan for gpuMs), or the game runs headless) (raw), rAF p95 13.0 ms, 98.8 fps",
+        "load time 5613 ms is over the warn budget 3000 ms"
+      ]
+    },
+    "city_busiest_40m": {
+      "quality": null,
+      "sceneKind": "city",
+      "loadMs": 6364,
+      "hostLoad": {
+        "avg1": 41.34,
+        "cores": 12,
+        "perCore": 3.45
+      },
+      "cpuP95": 20.5849999418259,
+      "gpuP95": null,
+      "gpuP95Capped": null,
+      "frameCostP50": 18.53,
+      "frameCostP95": 19.26,
+      "gpuCostMs": 19.26,
+      "ballastN": 896,
+      "fps": 60.1144366314128,
+      "drawCalls": 416,
+      "triangles": 670841,
+      "frameP95": 20.5849999418259,
+      "verdict": "FAIL",
+      "notes": [
+        "frame time: cpu p95 20.6 ms is over the 12 ms limit (45 fps): cpu p95 20.6 ms, gpu cost 19.26 ms (stable), gpu p95 n/a (the renderer reported no GPU time: the Metal driver gives no timestamp queries in Godot 4.7 (run with the engine arg --rendering-driver vulkan for gpuMs), or the game runs headless) (raw), rAF p95 19.5 ms, 60.1 fps",
+        "load time 6364 ms is over the warn budget 3000 ms"
+      ]
+    }
+  },
+  "driver": "godot",
+  "machine": "macbook-pro, darwin arm64, Apple M2 Pro, 12 cores, 16 GB",
+  "godotVersion": "4.7.2.stable",
+  "renderer": "Forward+",
+  "renderingDriver": "metal",
+  "gpuAdapter": "Apple M2 Pro (Apple8)",
+  "load": {
+    "avg1": 41.92,
+    "cores": 12,
+    "perCore": 3.49
+  },
+  "gl": "Godot 4.7.2.stable Apple M2 Pro (Apple8) (metal, forward_plus)",
+  "budgets": "harness/verify/perf_budgets.json (signed)",
+  "sceneKind": "city"
+}

@@ -499,6 +499,270 @@
     "deva": "न्यूज़तेज़ 24 पर्यटक विशेष"
    },
    "weight": 1
+  },
+  {
+   "kind": "handicraft",
+   "text": {
+    "latn": "Dhaaga Handloom Haveli",
+    "deva": "धागा हैंडलूम हवेली"
+   },
+   "weight": 2,
+   "parody": true,
+   "board_style": "glow_box",
+   "tagline": "Dhaage ki kahani"
+  },
+  {
+   "kind": "handicraft",
+   "text": {
+    "latn": "Kendra Kutir Emporium",
+    "deva": "केंद्र कुटीर एम्पोरियम"
+   },
+   "weight": 2,
+   "parody": true,
+   "board_style": "glow_box",
+   "tagline": "Rajya rajya ki kala"
+  },
+  {
+   "kind": "handicraft",
+   "text": {
+    "latn": "Tibetan Market Ke Tabeez",
+    "deva": "तिब्बती मार्केट के तावीज़"
+   },
+   "weight": 2,
+   "parody": true,
+   "board_style": "hand_painted",
+   "tagline": "Silver, stones, bargaining"
+  },
+  {
+   "kind": "jeweller",
+   "text": {
+    "latn": "Janpath Jhumka Junction",
+    "deva": "जनपथ झुमका जंक्शन"
+   },
+   "weight": 2,
+   "parody": true,
+   "board_style": "hand_painted",
+   "tagline": "Bargain ke saath bonus"
+  },
+  {
+   "kind": "handicraft",
+   "text": {
+    "latn": "Dilli Haathi Craft Bazaar",
+    "deva": "दिल्ली हाथी क्राफ़्ट बाज़ार"
+   },
+   "weight": 2,
+   "parody": true,
+   "board_style": "flex",
+   "tagline": "Haath ka kaam"
+  },
+  {
+   "kind": "handicraft",
+   "text": {
+    "latn": "Cottage Karigari Corner",
+    "deva": "कॉटेज कारीगरी कॉर्नर"
+   },
+   "weight": 2,
+   "parody": true,
+   "board_style": "glow_box",
+   "tagline": "Kaarigar ka naam"
+  },
+  {
+   "kind": "tea",
+   "text": {
+    "latn": "Kullad Kulhad Cafe",
+    "deva": "कुल्लड़ कुल्हड़ कैफ़े"
+   },
+   "weight": 2,
+   "parody": true,
+   "board_style": "glow_box",
+   "tagline": "Mitti ki khushboo"
+  },
+  {
+   "kind": "tea",
+   "text": {
+    "latn": "Chai Chaurasta",
+    "deva": "चाय चौरस्ता"
+   },
+   "weight": 2,
+   "parody": true,
+   "board_style": "glow_box",
+   "tagline": "Chai ka chauraha"
+  },
+  {
+   "kind": "eatery",
+   "text": {
+    "latn": "Dosa Darbar Express",
+    "deva": "डोसा दरबार एक्सप्रेस"
+   },
+   "weight": 2,
+   "parody": true,
+   "board_style": "glow_box",
+   "tagline": "Ghar jaisa sambhar"
+  },
+  {
+   "kind": "eatery",
+   "text": {
+    "latn": "Bhatura Boulevard",
+    "deva": "भटूरा बुलेवार्ड"
+   },
+   "weight": 2,
+   "parody": true,
+   "board_style": "glow_box",
+   "tagline": "Chole ke saath dosti"
+  },
+  {
+   "kind": "clothing",
+   "text": {
+    "latn": "Raj Rajasthali Cotton Ghar",
+    "deva": "राज राजस्थली कॉटन घर"
+   },
+   "weight": 2,
+   "parody": true,
+   "board_style": "hand_painted",
+   "tagline": "Block print, bhaiya print"
+  },
+  {
+   "kind": "clothing",
+   "text": {
+    "latn": "Kalamkari Kothi",
+    "deva": "कलमकारी कोठी"
+   },
+   "weight": 2,
+   "parody": true,
+   "board_style": "hand_painted",
+   "tagline": "Rang rang ki kahani"
+  },
+  {
+   "kind": "shoes",
+   "text": {
+    "latn": "Jootiyan Jaipur Wali",
+    "deva": "जूतियाँ जयपुर वाली"
+   },
+   "weight": 2,
+   "parody": true,
+   "board_style": "hand_painted",
+   "tagline": "Nagra, kolhapuri, kamaal"
+  },
+  {
+   "kind": "hotel",
+   "text": {
+    "latn": "Hotel Samrat Sansaar",
+    "deva": "होटल सम्राट संसार"
+   },
+   "weight": 2,
+   "parody": true,
+   "board_style": "glow_box",
+   "tagline": "Gate ke paas, dil ke paas"
+  },
+  {
+   "kind": "travel",
+   "text": {
+    "latn": "Raja Rani Travel Kings",
+    "deva": "राजा रानी ट्रैवल किंग्स"
+   },
+   "weight": 2,
+   "parody": true,
+   "board_style": "flex",
+   "tagline": "Duniya ghoomo, dhokha mat khao"
+  },
+  {
+   "kind": "travel",
+   "text": {
+    "latn": "Dilli Cooker Tours",
+    "deva": "दिल्ली कुकर टूर्स"
+   },
+   "weight": 2,
+   "parody": true,
+   "board_style": "flex",
+   "tagline": "Pressure cooker, no pressure"
+  },
+  {
+   "kind": "hotel",
+   "text": {
+    "latn": "Hotel Janpath Janata Palace",
+    "deva": "होटल जनपथ जनता पैलेस"
+   },
+   "weight": 2,
+   "parody": true,
+   "board_style": "glow_box",
+   "tagline": "Gate ke paas, jeb ke andar"
+  },
+  {
+   "kind": "tea",
+   "text": {
+    "latn": "Tibbat Chai Ghar",
+    "deva": "तिब्बत चाय घर"
+   },
+   "weight": 2,
+   "parody": true,
+   "board_style": "hand_painted",
+   "tagline": "Butter wali garam"
+  },
+  {
+   "kind": "eatery",
+   "text": {
+    "latn": "Momo Mohalla Express",
+    "deva": "मोमो मोहल्ला एक्सप्रेस"
+   },
+   "weight": 2,
+   "parody": true,
+   "board_style": "glow_box",
+   "tagline": "Steam, sauce, satisfaction"
+  },
+  {
+   "kind": "books",
+   "text": {
+    "latn": "Kitaab Kothi Janpath",
+    "deva": "किताब कोठी जनपथ"
+   },
+   "weight": 2,
+   "parody": true,
+   "board_style": "hand_painted",
+   "tagline": "Purani kitaab, nayi kahani"
+  },
+  {
+   "kind": "handicraft",
+   "text": {
+    "latn": "Sarkari Sona Emporium",
+    "deva": "सरकारी सोना एम्पोरियम"
+   },
+   "weight": 2,
+   "parody": true,
+   "board_style": "glow_box",
+   "tagline": "Ghar ki shobha"
+  },
+  {
+   "kind": "handicraft",
+   "text": {
+    "latn": "Bhaav Taav Bazaar",
+    "deva": "भाव ताव बाज़ार"
+   },
+   "weight": 2,
+   "parody": true,
+   "board_style": "hand_painted",
+   "tagline": "Aadha daam, poori shaan"
+  },
+  {
+   "kind": "clothing",
+   "text": {
+    "latn": "Janpath Jhola Junction",
+    "deva": "जनपथ झोला जंक्शन"
+   },
+   "weight": 2,
+   "parody": true,
+   "board_style": "hand_painted",
+   "tagline": "Bag bharo, dil bharo"
+  },
+  {
+   "kind": "eatery",
+   "text": {
+    "latn": "Chhole Kulche Chauraha",
+    "deva": "छोले कुलचे चौराहा"
+   },
+   "weight": 2,
+   "parody": true,
+   "board_style": "enamel",
+   "tagline": "Imli, pyaaz, kulcha"
   }
  ]
 }

@@ -517,6 +517,248 @@
     "deva": "शाम को नाटक, सबको आना"
    },
    "weight": 1
+  },
+  {
+   "kind": "newsroom",
+   "text": {
+    "latn": "Times Of Dilli Press",
+    "deva": "टाइम्स ऑफ़ दिल्ली प्रेस"
+   },
+   "weight": 2,
+   "parody": true,
+   "board_style": "hoarding",
+   "tagline": "Subah ki khabar, shaam ki chai"
+  },
+  {
+   "kind": "newsroom",
+   "text": {
+    "latn": "Dilli Hindustani Patrika",
+    "deva": "दिल्ली हिंदुस्तानी पत्रिका"
+   },
+   "weight": 2,
+   "parody": true,
+   "board_style": "hoarding",
+   "tagline": "Roz ka sach, roz ki chai"
+  },
+  {
+   "kind": "newsroom",
+   "text": {
+    "latn": "The Capital Gazette Of Dilli",
+    "deva": "द कैपिटल गज़ट ऑफ़ दिल्ली"
+   },
+   "weight": 2,
+   "parody": true,
+   "board_style": "hoarding",
+   "tagline": "Pehla panna sabse pehle"
+  },
+  {
+   "kind": "newsroom",
+   "text": {
+    "latn": "Bharat Dainik Express",
+    "deva": "भारत दैनिक एक्सप्रेस"
+   },
+   "weight": 2,
+   "parody": true,
+   "board_style": "hoarding",
+   "tagline": "Khabar jo express chale"
+  },
+  {
+   "kind": "newsroom",
+   "text": {
+    "latn": "Dainik Jaagruti",
+    "deva": "दैनिक जागृति"
+   },
+   "weight": 2,
+   "parody": true,
+   "board_style": "hoarding",
+   "tagline": "Hindi ki dhadkan"
+  },
+  {
+   "kind": "tea",
+   "text": {
+    "latn": "Kaun Banega Chai Wala",
+    "deva": "कौन बनेगा चाय वाला"
+   },
+   "weight": 2,
+   "parody": true,
+   "board_style": "hand_painted",
+   "tagline": "Phone-a-friend, bill-a-friend"
+  },
+  {
+   "kind": "eatery",
+   "text": {
+    "latn": "Pragati Maidan Pakora Point",
+    "deva": "प्रगति मैदान पकोड़ा पॉइंट"
+   },
+   "weight": 2,
+   "parody": true,
+   "board_style": "hand_painted",
+   "tagline": "Mela ka maza"
+  },
+  {
+   "kind": "eatery",
+   "text": {
+    "latn": "Haldi Ram Rajdhani Snacks",
+    "deva": "हल्दी राम राजधानी स्नैक्स"
+   },
+   "weight": 2,
+   "parody": true,
+   "board_style": "glow_box",
+   "tagline": "Samosa, chutney, simple"
+  },
+  {
+   "kind": "eatery",
+   "text": {
+    "latn": "Bhujiya Bhaiya Chaat",
+    "deva": "बीकानेर वाले भैया चाट"
+   },
+   "weight": 2,
+   "parody": true,
+   "board_style": "hand_painted",
+   "tagline": "Tikki, tamatar, tashan"
+  },
+  {
+   "kind": "eatery",
+   "text": {
+    "latn": "Press Club Pakwan",
+    "deva": "प्रेस क्लब पकवान"
+   },
+   "weight": 2,
+   "parody": true,
+   "board_style": "enamel",
+   "tagline": "Breaking khana"
+  },
+  {
+   "kind": "office",
+   "text": {
+    "latn": "Samay Samachar Tak",
+    "deva": "समय समाचार तक"
+   },
+   "weight": 2,
+   "parody": true,
+   "board_style": "hoarding",
+   "tagline": "Khabar abhi, sach baad mein"
+  },
+  {
+   "kind": "photo",
+   "text": {
+    "latn": "Phir Bhi Photo Studio",
+    "deva": "फिर भी फ़ोटो स्टूडियो"
+   },
+   "weight": 2,
+   "parody": true,
+   "board_style": "hand_painted",
+   "tagline": "Passport size, dil size"
+  },
+  {
+   "kind": "books",
+   "text": {
+    "latn": "Kitaab Mahal Law Books",
+    "deva": "किताब महल लॉ बुक्स"
+   },
+   "weight": 2,
+   "parody": true,
+   "board_style": "enamel",
+   "tagline": "Section, sub-section, sab milega"
+  },
+  {
+   "kind": "books",
+   "text": {
+    "latn": "Tilak Marg Kitab Ghar",
+    "deva": "तिलक मार्ग किताब घर"
+   },
+   "weight": 2,
+   "parody": true,
+   "board_style": "hand_painted",
+   "tagline": "Court ki kitaabein"
+  },
+  {
+   "kind": "theatre",
+   "text": {
+    "latn": "Mandi House Natak Cafe",
+    "deva": "मंडी हाउस नाटक कैफ़े"
+   },
+   "weight": 2,
+   "parody": true,
+   "board_style": "glow_box",
+   "tagline": "Interval mein chai"
+  },
+  {
+   "kind": "theatre",
+   "text": {
+    "latn": "Kala Kendra Canteen",
+    "deva": "कला केंद्र कैंटीन"
+   },
+   "weight": 2,
+   "parody": true,
+   "board_style": "glow_box",
+   "tagline": "Show ke baad samosa"
+  },
+  {
+   "kind": "office",
+   "text": {
+    "latn": "Dilli Doordarshi Channel",
+    "deva": "दिल्ली दूरदर्शी चैनल"
+   },
+   "weight": 2,
+   "parody": true,
+   "board_style": "hoarding",
+   "tagline": "Aapki screen, hamari kahani"
+  },
+  {
+   "kind": "newsroom",
+   "text": {
+    "latn": "Roz Ka Rozana Akhbaar",
+    "deva": "रोज़ का रोज़ाना अख़बार"
+   },
+   "weight": 2,
+   "parody": true,
+   "board_style": "hoarding",
+   "tagline": "Do rupaye, poori duniya"
+  },
+  {
+   "kind": "newsroom",
+   "text": {
+    "latn": "Subah Savere Sandesh",
+    "deva": "सुबह सवेरे संदेश"
+   },
+   "weight": 2,
+   "parody": true,
+   "board_style": "hoarding",
+   "tagline": "Chai ke saath padho"
+  },
+  {
+   "kind": "tea",
+   "text": {
+    "latn": "Samachar Sabha Cafe",
+    "deva": "समाचार सभा कैफ़े"
+   },
+   "weight": 2,
+   "parody": true,
+   "board_style": "glow_box",
+   "tagline": "Headline ke saath chai"
+  },
+  {
+   "kind": "office",
+   "text": {
+    "latn": "Bharat Bima Nigam Bhavan",
+    "deva": "भारत बीमा निगम भवन"
+   },
+   "weight": 2,
+   "parody": true,
+   "board_style": "glow_box",
+   "tagline": "Zindagi ke saath bhi"
+  },
+  {
+   "kind": "eatery",
+   "text": {
+    "latn": "Tikki Tashan Tilak Marg",
+    "deva": "टिक्की तशन तिलक मार्ग"
+   },
+   "weight": 2,
+   "parody": true,
+   "board_style": "hand_painted",
+   "tagline": "Mirchi, mazaa, matlab"
   }
  ]
 }

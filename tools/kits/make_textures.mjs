@@ -1,26 +1,27 @@
 #!/usr/bin/env node
 // Area kit textures (P2-010, TECH.md "Rendering of the city" TX1): for every kit of game/world/kits/kits.json one tiling
 // texture array (8 layers of 512 px stacked top to bottom: render, brick, stone, concrete, shutter, wood, glass, cloth;
-// imported by Godot as a VRAM compressed Texture2DArray) and one trim and decal atlas (1024 px: 32 sign boards with
-// names from the kit's names file, doors, gates, posters, AC units, shop goods). Procedural stand-ins in the signed
+// imported by Godot as a VRAM compressed Texture2DArray), one trim and decal atlas (1024 px: doors, gates, posters, AC
+// units, three kinds of shop goods in the lower half, make_goods.mjs) and one sign atlas (make_signs.mjs, P2-048). Procedural stand-ins in the signed
 // stylised B look: the AI texture cards replace them file for file (same names, same layout).
-//   node tools/kits/make_textures.mjs            writes game/world/kits/textures/<kit>_tiles.png, <kit>_atlas.png, boards.json
+//   node tools/kits/make_textures.mjs            writes game/world/kits/textures/<kit>_tiles.png, <kit>_atlas.png, <kit>_signs.png, boards.json
+//   node tools/kits/make_textures.mjs --signs-only   only the sign atlases and boards.json
 // Layer colours: render, concrete, shutter, glass and cloth are grey detail around sRGB 186 (linear 0.5) that the shader
 // multiplies with the part colour; brick, stone and wood carry their own colour. Alpha is the joint and crack mask the
-// grime layer darkens. Board names come only from game/data/names/<area>.json (the test in game/tests/test_area_kits.gd
+// grime layer darkens. Sign board names come only from game/data/names/<area>.json (the test in game/tests/test_area_kits.gd
 // checks boards.json against those files).
 import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import sharp from 'sharp';
+import { allSigns, GROUPS, SIGN_ATLAS } from './make_signs.mjs';
+import { goodsSvg } from './make_goods.mjs';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..', '..');
 const KITS = JSON.parse(fs.readFileSync(path.join(ROOT, 'game/world/kits/kits.json'), 'utf8'));
 const OUT = path.join(ROOT, 'game/world/kits/textures');
 const N = 512;
 const ATLAS = 1024;
-/** Kinds of a names file that are not shop boards (painted on walls, carts, posters, hoardings, protests, official notices). */
-const NOT_BOARDS = new Set(['wall_writing', 'poster_line', 'cart', 'hoarding', 'protest', 'govt_board']);
 
 // ------------------------------------------------------------------ noise
 function hash2(x, y, s) {
@@ -211,53 +212,7 @@ function cloth(t, s) {
 }
 
 // ------------------------------------------------------------------ atlas
-const esc = (s) => String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
-const FONTS = {
-  latn: 'Helvetica Neue, Helvetica, Arial',
-  deva: 'Kohinoor Devanagari, Devanagari Sangam MN, Devanagari MT',
-  arab: 'Noto Nastaliq Urdu, Geeza Pro, Damascus',
-};
-function luma(h) {
-  const [r, g, b] = hex(h);
-  return 0.2126 * r + 0.7152 * g + 0.0722 * b;
-}
-
-/** The names a kit's boards show: shop kinds of its names file, by weight, then in file order. Deterministic. */
-export function boardNames(kit, names) {
-  const list = names.names.filter((n) => !NOT_BOARDS.has(n.kind));
-  const order = list.map((n, i) => ({ n, i, w: n.weight ?? 1 })).sort((a, b) => b.w - a.w || a.i - b.i);
-  const out = [];
-  for (let k = 0; out.length < 32 && k < 64; k++) out.push(order[k % order.length].n);
-  return out;
-}
-
-function boardSvg(kit, names, x0, y0) {
-  const b = kit.boards;
-  let out = '';
-  names.forEach((n, i) => {
-    const x = x0 + (i % 4) * 256;
-    const y = y0 + Math.floor(i / 4) * 64;
-    const bg = b.bg[i % b.bg.length];
-    const fg = luma(bg) > 150 ? '#1c1c1e' : '#f4efe4';
-    // first script the kit prefers that this name has; the second line is Latin when the first is not
-    const first = b.scripts.find((sc) => n.text[sc]) || 'latn';
-    const second = first !== 'latn' && n.text.latn ? 'latn' : null;
-    const caps = (s, sc) => (sc === 'latn' && b.case === 'upper' ? s.toUpperCase() : s);
-    const t1 = caps(n.text[first], first);
-    out += `<rect x="${x + 2}" y="${y + 2}" width="252" height="60" fill="${bg}"/>`;
-    if (!b.plain) out += `<rect x="${x + 6}" y="${y + 6}" width="244" height="52" fill="none" stroke="${fg}" stroke-opacity="0.55" stroke-width="2"/>`;
-    const size1 = second ? 26 : 32;
-    const fit = (txt, size) => Math.min(size, Math.floor((236 / Math.max(1, txt.length)) * 1.85));
-    out += `<text x="${x + 128}" y="${y + (second ? 33 : 43)}" font-family="${FONTS[first]}" font-weight="bold" font-size="${fit(t1, size1)}" fill="${fg}" text-anchor="middle">${esc(t1)}</text>`;
-    if (second) {
-      const t2 = caps(n.text.latn, 'latn');
-      out += `<text x="${x + 128}" y="${y + 54}" font-family="${FONTS.latn}" font-weight="bold" font-size="${fit(t2, 14)}" fill="${fg}" text-anchor="middle">${esc(t2)}</text>`;
-    }
-  });
-  return out;
-}
-
-/** The lower half of the atlas: 8 cells of 256 px. Row 512: posters, door, gate, jali. Row 768: AC, goods A, goods B, hotel sign. */
+/** The lower half of the atlas: 8 cells of 256 px. Row 512: posters, door, gate, jali. Row 768: AC, goods A, goods B, goods C. */
 function cellsSvg(id, kit) {
   const acc = kit.accent;
   const wood = kit.tex.wood.c[0];
@@ -292,42 +247,15 @@ function cellsSvg(id, kit) {
   s += `<rect x="0" y="768" width="256" height="256" fill="#d9d6cc"/><rect x="16" y="800" width="224" height="180" fill="#bdb8ac"/>`;
   for (let i = 0; i < 14; i++) s += `<rect x="24" y="${808 + i * 12}" width="208" height="5" fill="#8c877c"/>`;
   s += `<circle cx="128" cy="890" r="70" fill="none" stroke="#7a756b" stroke-width="6"/>`;
-  // 5 and 6 goods on shelves behind the shop front (kit by kit)
-  const goods = {
-    bazaar: ['#c0392b', '#e6b422', '#2c3e70', '#d35400', '#7a4a8c', '#3a7d44', '#c2185b', '#f4efe4'],
-    gali: ['#e6b422', '#d35400', '#8d5a3b', '#f4efe4', '#3a7d44', '#b03a2e'],
-    hotel: ['#2c3e70', '#b03a2e', '#e6b422', '#1f6f8b', '#7a4a8c', '#f4efe4'],
-    office: ['#9a9a96', '#66686a', '#4d6fa3', '#b5b1a8'],
-    colonnade: ['#1c1c1e', '#f2f0ea', '#7a2a22', '#2c3e70', '#c9a77c', '#b5b1a8'],
-    lutyens: ['#5d4037', '#2f4f3a', '#d8cfb8'],
-    market: ['#c0392b', '#e6b422', '#1f6f8b', '#d35400', '#7a4a8c', '#3a7d44', '#c2185b', '#f4efe4'],
-    hardware: ['#7a7d7e', '#3a5f8a', '#b08a3e', '#c0392b', '#2e6b4f', '#9a9a96', '#e6b422'],
-  }[id];
-  for (let cell = 0; cell < 2; cell++) {
-    const x0 = 256 + cell * 256;
-    s += `<rect x="${x0}" y="768" width="256" height="256" fill="#3a2f26"/>`;
-    for (let shelf = 0; shelf < 4; shelf++) {
-      const y = 780 + shelf * 60;
-      s += `<rect x="${x0}" y="${y + 50}" width="256" height="6" fill="#6d4c41"/>`;
-      for (let k = 0; k < 10; k++) {
-        const c = goods[(k * 3 + shelf * 5 + cell * 7) % goods.length];
-        if (id === 'hardware') s += cell ? `<rect x="${x0 + 6 + k * 25}" y="${y + 6}" width="18" height="44" rx="3" fill="${c}"/>` : `<circle cx="${x0 + 16 + k * 25}" cy="${y + 34}" r="12" fill="${c}"/><rect x="${x0 + 4 + k * 25}" y="${y + 6}" width="24" height="6" fill="${c}"/>`;
-        else if (id === 'office' || id === 'lutyens') s += `<rect x="${x0 + 6 + k * 25}" y="${y + 10}" width="20" height="40" fill="${c}" opacity="0.8"/>`;
-        else s += `<rect x="${x0 + 4 + k * 25}" y="${y + 8 + (k % 3) * 4}" width="22" height="${42 - (k % 3) * 4}" fill="${c}"/>`;
-      }
-    }
-  }
-  // 7 vertical sign blank (hotel and lodge signs) and a striped awning edge
-  s += `<rect x="768" y="768" width="256" height="256" fill="#f2c230"/><rect x="776" y="776" width="240" height="240" fill="none" stroke="#c0392b" stroke-width="8"/>`;
+  // 5, 6 and 7: goods on shelves behind the shop front, three kinds per kit (make_goods.mjs; the shader picks one per bay)
+  s += goodsSvg(id);
   return s;
 }
 
 async function atlas(id, kit) {
-  const names = JSON.parse(fs.readFileSync(path.join(ROOT, 'game/data/names', `${kit.area}.json`), 'utf8'));
-  const list = boardNames(kit, names);
-  const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="${ATLAS}" height="${ATLAS}"><rect width="${ATLAS}" height="${ATLAS}" fill="#7a7d7e"/>${boardSvg(kit, list, 0, 0)}${cellsSvg(id, kit)}</svg>`;
+  // (the upper half held the P2-010 sign boards; since P2-048 they are the kit's own sign atlas, make_signs.mjs)
+  const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="${ATLAS}" height="${ATLAS}"><rect width="${ATLAS}" height="${ATLAS}" fill="#7a7d7e"/>${cellsSvg(id, kit)}</svg>`;
   await sharp(Buffer.from(svg)).removeAlpha().png().toFile(path.join(OUT, `${id}_atlas.png`));
-  return list.map((n, i) => ({ cell: i, kind: n.kind, text: n.text }));
 }
 
 async function tiles(id, kit, seed) {
@@ -340,14 +268,24 @@ async function tiles(id, kit, seed) {
 
 async function main() {
   fs.mkdirSync(OUT, { recursive: true });
-  const boards = { _doc: 'Sign board cells of each kit atlas (tools/kits/make_textures.mjs): cell i is at x = (i % 4) * 256, y = floor(i / 4) * 64 of the 1024 px atlas. Every name is copied from game/data/names/<area>.json (respect rule: invented names only).', kits: {} };
+  const only = process.argv.includes('--signs-only');
   let seed = 1;
   for (const [id, kit] of Object.entries(KITS.kits)) {
-    await tiles(id, kit, seed * 1000);
-    boards.kits[id] = { area: kit.area, cells: await atlas(id, kit) };
+    if (!only) {
+      await tiles(id, kit, seed * 1000);
+      await atlas(id, kit);
+      console.log(`kit ${id}: ${id}_tiles.png (${KITS.layers.length} layers), ${id}_atlas.png`);
+    }
     seed++;
-    console.log(`kit ${id}: ${id}_tiles.png (${KITS.layers.length} layers), ${id}_atlas.png (${boards.kits[id].cells.length} boards)`);
   }
+  const signs = await allSigns(ROOT, KITS.kits, OUT);
+  const boards = {
+    _doc: 'Sign atlas of each kit (tools/kits/make_signs.mjs, P2-048): <kit>_signs.png, ' + SIGN_ATLAS + ' px; groups give each kind of board its cells (left to right, then down). Every cell name is copied from game/data/names/<area>.json (respect rule: invented names only); extra holds the generic words on the board (goods, estd, phone numbers one digit short, notices).',
+    atlas: SIGN_ATLAS,
+    groups: GROUPS,
+    kits: signs,
+  };
+  for (const [id, b] of Object.entries(signs)) console.log(`kit ${id}: ${id}_signs.png (${b.cells.length} boards, wear ${b.wear})`);
   fs.writeFileSync(path.join(OUT, 'boards.json'), JSON.stringify(boards, null, 1) + '\n');
 }
 

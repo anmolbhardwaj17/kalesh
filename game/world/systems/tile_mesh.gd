@@ -21,6 +21,7 @@ const COLORS := {
 	# the plain shapes the infrastructure kits stand on (P2-034): drawn only when the folder has no infra.json
 	"barrier": Color(0.72, 0.66, 0.56), "fascia": Color(0.72, 0.66, 0.56), "retaining": Color(0.72, 0.66, 0.56),
 	"abutment": Color(0.72, 0.66, 0.56), "railbed": Color(0.48, 0.45, 0.41), "fob": Color(0.5, 0.52, 0.55), "platform": Color(0.6, 0.58, 0.55),
+	"ceiling": Color(0.5, 0.5, 0.5),
 }
 ## The material of a name the table does not know.
 const OTHER := "_"

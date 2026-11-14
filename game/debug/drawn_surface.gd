@@ -8,7 +8,7 @@ extends RefCounted
 
 const TileReader := preload("res://world/streaming/tile_reader.gd")
 const WorldFrame := preload("res://geo/world_frame.gd")
-const NOT_GROUND := ["marking", "water", "underside"]
+const NOT_GROUND := ["marking", "water", "underside", "ceiling"]
 const CELL := 8.0
 
 var index: RefCounted = null

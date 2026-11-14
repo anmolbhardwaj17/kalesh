@@ -22,6 +22,20 @@ extends Resource
 
 @export var ambient_energy := 0.8
 @export var exposure := 1.0
+## Shade colour (P2-052, stylised_b): the ambient fill is this colour mixed with the sky's light by `ambient_sky_share`
+## (1 = all sky, the old look). A blue sky top made every shadow navy; a neutral warm grey keeps shade on asphalt and
+## walls in the #3e3d3a family (FIDELITY_BAR.md row 8). At night it is the city's own glow off the haze, not moonlight.
+@export var ambient_color := Color(0.5, 0.48, 0.45)
+@export var ambient_sky_share := 1.0
+
+## Sky (P2-052, stylised_b sky_b.gdshader): sun disc radius and brightness, a procedural cloud layer (cover 0 none, 1
+## overcast) lit by the sun, and the warm glow of the city under the clouds at night.
+@export var disc_deg := 0.0
+@export var disc_energy := 0.0
+@export var cloud_cover := 0.0
+@export var cloud_color := Color(1.0, 0.97, 0.92)
+@export var cloud_shade := Color(0.62, 0.62, 0.64)
+@export var city_glow := 0.0
 
 ## Haze: exponential depth fog lit by the sun, a little thicker near the ground.
 @export var fog_color := Color("#e0cfae")

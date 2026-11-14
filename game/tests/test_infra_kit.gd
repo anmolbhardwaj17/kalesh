@@ -14,12 +14,19 @@ static func records() -> Dictionary:
 	var soffit := []
 	var track := []
 	var metro := []
+	var twall := []
+	var topen := []
+	var tceil := []
 	for k in 6:
 		var x := 100.0 + k * 10.0
 		edge.append_array([x, 210.0, 50.0, 210.9, 208.8, 0.0, 1.0])
 		soffit.append_array([x, 208.8, 50.0, x, 208.8, 39.0])
 		track.append_array([x, 200.3, 80.0, 200.0, 0])
 		metro.append_array([x, 212.0, 120.0, 200.0])
+		# a tunnel 7 m under the ground: the left wall (outward +z), its ceiling; an open ramp wall beside it
+		twall.append_array([x, 200.0, 210.0, 205.5, 207.2, 0.0, 1.0])
+		topen.append_array([x, 200.0 + k * 0.3, 230.0, 207.3, 206.4, 0.0, 1.0])
+		tceil.append_array([x, 205.5, 210.0, x, 205.5, 200.0])
 	return {
 		"edges": [{"v": "FLY-T1", "k": "d", "p": edge}, {"v": "FLY-B1", "k": "d", "p": edge}, {"v": "FLY-R1", "k": "f", "p": edge}, {"v": "BRI-Y1", "k": "d", "p": edge}, {"v": "FOB-B4", "k": "d", "p": edge}],
 		"soffits": [{"v": "FLY-T1", "p": soffit}, {"v": "FLY-B1", "p": soffit}],
@@ -38,6 +45,10 @@ static func records() -> Dictionary:
 		"platforms": [{"v": "RAIL-PLAT", "r": [100.0, 90.0, 180.0, 90.0, 180.0, 96.0, 100.0, 96.0], "a": [100.0, 93.0, 180.0, 93.0], "h": 201.1, "g": 199.7, "roof": 1}],
 		"metro": [{"v": "MET-VB1", "twin": 1, "p": metro}],
 		"fobs": [{"v": "FOB-B3", "w": 5.0, "h": 206.5, "p": [100.0, 140.0, 140.0, 140.0], "stairs": [[100.0, 140.0, -1.0, 0.0, 6.5]]}],
+		"twalls": [{"v": "TUN-T1", "r": 1, "pp": 0, "s0": 0.0, "p": twall}, {"v": "TUN-T1", "r": 0, "pp": 1, "s0": 0.0, "p": topen}, {"v": "UND-U1", "r": 1, "pp": 0, "s0": 12.0, "p": twall}],
+		"tceils": [{"v": "TUN-T1", "s0": 0.0, "p": tceil}, {"v": "TUN-T3", "s0": 0.0, "p": tceil}],
+		"theads": [{"v": "TUN-T1", "a": [100.0, 210.0], "b": [100.0, 200.0], "y0": 205.5, "y1": 207.3, "road": 0, "n": [-1.0, 0.0], "name": "Pragati Maidan Tunnel", "floor": 200.0}],
+		"tdrains": [{"v": "TUN-T1", "a": [104.0, 200.01, 210.0], "b": [104.0, 200.01, 200.0]}],
 	}
 
 
@@ -84,6 +95,52 @@ func test_a_piers_sides_face_away_from_it_and_a_soffit_faces_down() -> void:
 		if q.y < 0.0:
 			down += 1
 	t.ok(down * 10 >= n.size() * 6, "the box soffit faces down or out, never into the deck (%d of %d normals down)" % [down, n.size()])
+
+
+## P2-032: a tunnel's ceiling faces down, its walls face the road, its lamps glow, and its mouth carries the name.
+func test_a_tunnel_ceiling_faces_down_its_walls_face_the_road_and_the_mouth_has_its_name() -> void:
+	var out := InfraKit.build(records(), Vector3.ZERO)
+	var base: Dictionary = out.tunnel.base.arrays_of("main")
+	t.ok(base.has("glow"), "the lamps at the mouth are in the glow material")
+	t.ok(base.has("tunnel_glow"), "the strip lines inside are in the tunnel's own glow material")
+	# the inside of a roofed stretch is lit by the strip lines (tunnel_lit.gdshader: the walls, the soffit, the road
+	# and the fittings each on their surface), the open walls satin or matte
+	for key: String in ["tunnel_wall", "tunnel_soffit"]:
+		t.ok(base.has(key), "the inside of the tunnel has its %s surface" % key)
+		if base.has(key):
+			t.ok(base[key][Mesh.ARRAY_TEX_UV] != null and base[key][Mesh.ARRAY_CUSTOM0] != null, "%s carries the shader's UV and the strip vectors" % key)
+	var v := PackedVector3Array()
+	var nrm := PackedVector3Array()
+	for key: String in ["matte", "satin", "tunnel_lit", "tunnel_wall", "tunnel_soffit"]:
+		if not base.has(key):
+			continue
+		var arr: Array = base[key]
+		v.append_array(arr[Mesh.ARRAY_VERTEX])
+		nrm.append_array(arr[Mesh.ARRAY_NORMAL])
+	var ceiling_down := 0
+	var ceiling_up := 0
+	var wall_in := 0
+	var wall_out := 0
+	for i in v.size():
+		var p := v[i]
+		var nn := nrm[i]
+		# the ceiling: flat at 205.5 between z 200 and 210, x 100 to 150
+		if absf(p.y - 205.5) < 0.01 and p.z > 199.9 and p.z < 210.1 and absf(nn.y) > 0.9:
+			if nn.y < 0.0:
+				ceiling_down += 1
+			else:
+				ceiling_up += 1
+		# the roofed left wall at z 210 (outward +z): its face looks into the road (-z)
+		if absf(p.z - 210.0) < 0.001 and p.y > 199.9 and p.y < 205.6 and absf(nn.z) > 0.9:
+			if nn.z < 0.0:
+				wall_in += 1
+			else:
+				wall_out += 1
+	t.ok(ceiling_down > 0 and ceiling_up == 0, "the ceiling faces down (%d down, %d up)" % [ceiling_down, ceiling_up])
+	t.ok(wall_in > 0 and wall_out == 0, "the tunnel wall faces the road (%d in, %d out)" % [wall_in, wall_out])
+	var labels: Array = out.labels
+	t.ok(labels.size() == 1 and str(labels[0].text) == "PRAGATI MAIDAN TUNNEL", "the mouth carries the tunnel's name (%s)" % str(labels))
+	t.ok(int(out.tunnel.near.triangles) > 500, "the mural, trays, fans and fittings are in the near level (%d triangles)" % int(out.tunnel.near.triangles))
 
 
 func test_a_tile_of_the_test_block_builds_inside_its_budget() -> void:

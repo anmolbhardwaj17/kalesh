@@ -46,6 +46,38 @@ export const DECK_OVER_WATER_M = WATER_CLEARANCE_M + DECK_DEPTH;
 export const TUNNEL_ROOF_M = 1.2;
 export const TUNNEL_COVER_M = HEADROOM + TUNNEL_ROOF_M;
 /**
+ * The steepest a public road climbs in or out of a tunnel (P2-032; IRC SP 90 underpass approaches, Anmol: "proper
+ * grade, about 6 percent or less"). Service ways keep their class limit: the Pragati Maidan basement ramps are 1:10
+ * (tunnels.md TUN-T3).
+ */
+export const TUNNEL_MAX_GRADE = 0.06;
+const NO_TUNNEL_CAP = new Set(['service', 'pedestrian', 'footway', 'steps', 'path', 'cycleway']);
+
+/**
+ * Per strip the grade cap a tunnel puts on it (Infinity: none): a strip with a tunnel station (kind 1, not a building
+ * passage), and the strips joined end to end to one, since OSM often starts the tunnel tag at the foot of its ramp.
+ */
+export function tunnelGradeCaps(strips: readonly { cls: string }[], joints: readonly { a: { strip: number }; b: { strip: number } }[], tunnels: readonly (ArrayLike<number> | undefined)[]): Float64Array {
+  const caps = new Float64Array(strips.length).fill(Infinity);
+  const isTunnel = strips.map((_, si) => {
+    const t = tunnels[si];
+    if (!t) return false;
+    for (let i = 0; i < t.length; i++) if (t[i] === 1) return true;
+    return false;
+  });
+  const capped = (si: number): boolean => !NO_TUNNEL_CAP.has((strips[si] as { cls: string }).cls);
+  strips.forEach((_, si) => {
+    if (isTunnel[si] && capped(si)) caps[si] = TUNNEL_MAX_GRADE;
+  });
+  for (const j of joints) {
+    const a = j.a.strip;
+    const b = j.b.strip;
+    if (isTunnel[a] && capped(b)) caps[b] = TUNNEL_MAX_GRADE;
+    if (isTunnel[b] && capped(a)) caps[a] = TUNNEL_MAX_GRADE;
+  }
+  return caps;
+}
+/**
  * Crossfall: the two carriageways of one street, both at grade, never differ by more than this share of the
  * distance between their centre lines (IRC 86: 4 percent superelevation in a city).
  */

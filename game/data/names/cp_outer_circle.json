@@ -484,6 +484,248 @@
     "deva": "सेठी सेवा ट्रस्ट अस्पताल उद्घाटन"
    },
    "weight": 1
+  },
+  {
+   "kind": "sweets",
+   "text": {
+    "latn": "Beekaner Bandhu Mithai Mart",
+    "deva": "बीकानेर बंधु मिठाई मार्ट"
+   },
+   "weight": 2,
+   "parody": true,
+   "board_style": "flex",
+   "tagline": "Shaadi ki mithai"
+  },
+  {
+   "kind": "restaurant",
+   "text": {
+    "latn": "Dilli Darbar Dosa",
+    "deva": "दिल्ली दरबार डोसा"
+   },
+   "weight": 2,
+   "parody": true,
+   "board_style": "flex",
+   "tagline": "Mysore se Dilli tak"
+  },
+  {
+   "kind": "restaurant",
+   "text": {
+    "latn": "Sagar Mahal Sambhar Sabha",
+    "deva": "सागर महल सांभर सभा"
+   },
+   "weight": 2,
+   "parody": true,
+   "board_style": "flex",
+   "tagline": "Filter coffee free"
+  },
+  {
+   "kind": "clothing",
+   "text": {
+    "latn": "Khadi Khoobsurat Ghar",
+    "deva": "खादी खूबसूरत घर"
+   },
+   "weight": 2,
+   "parody": true,
+   "board_style": "flex",
+   "tagline": "Khadi, naye andaaz mein"
+  },
+  {
+   "kind": "clothing",
+   "text": {
+    "latn": "Sharmaji Ka Shopping Stand",
+    "deva": "शर्माजी का शॉपिंग स्टैंड"
+   },
+   "weight": 2,
+   "parody": true,
+   "board_style": "flex",
+   "tagline": "Sab ek chhat ke neeche"
+  },
+  {
+   "kind": "electronics",
+   "text": {
+    "latn": "Vikas Vyapar Electronics",
+    "deva": "विकास व्यापार इलेक्ट्रॉनिक्स"
+   },
+   "weight": 2,
+   "parody": true,
+   "board_style": "flex",
+   "tagline": "Sab kuch EMI par"
+  },
+  {
+   "kind": "electronics",
+   "text": {
+    "latn": "Gadget Gali Gyaan",
+    "deva": "गैजेट गली ज्ञान"
+   },
+   "weight": 2,
+   "parody": true,
+   "board_style": "flex",
+   "tagline": "Phone, charger, jugaad"
+  },
+  {
+   "kind": "electronics",
+   "text": {
+    "latn": "Palak Bazaar Digital",
+    "deva": "पालक बाज़ार डिजिटल"
+   },
+   "weight": 2,
+   "parody": true,
+   "board_style": "flex",
+   "tagline": "Mol-tol ka matlab"
+  },
+  {
+   "kind": "electronics",
+   "text": {
+    "latn": "Ghar Ka Gadget Chowk",
+    "deva": "घर का गैजेट चौक"
+   },
+   "weight": 2,
+   "parody": true,
+   "board_style": "flex",
+   "tagline": "Dekho, chuo, kharido"
+  },
+  {
+   "kind": "office",
+   "text": {
+    "latn": "Jeevan Jyoti Bima Mahal",
+    "deva": "जीवन ज्योति बीमा महल"
+   },
+   "weight": 2,
+   "parody": true,
+   "board_style": "flex",
+   "tagline": "Aaj bachao kal banao"
+  },
+  {
+   "kind": "bank",
+   "text": {
+    "latn": "Bank Of Barakhamba",
+    "deva": "बैंक ऑफ़ बाराखंभा"
+   },
+   "weight": 2,
+   "parody": true,
+   "board_style": "glow_box",
+   "tagline": "Aapka apna paisa"
+  },
+  {
+   "kind": "hotel",
+   "text": {
+    "latn": "Hotel Regency Raj",
+    "deva": "होटल रीजेंसी राज"
+   },
+   "weight": 2,
+   "parody": true,
+   "board_style": "glow_box",
+   "tagline": "Dilli mein dil se"
+  },
+  {
+   "kind": "restaurant",
+   "text": {
+    "latn": "Pizza Palace Pehle Aaiye",
+    "deva": "पिज़्ज़ा पैलेस पहले आप"
+   },
+   "weight": 2,
+   "parody": true,
+   "board_style": "flex",
+   "tagline": "30 minute ya bill free"
+  },
+  {
+   "kind": "restaurant",
+   "text": {
+    "latn": "Barakhamba Burger Bandhu",
+    "deva": "बाराखंभा बर्गर बंधु"
+   },
+   "weight": 2,
+   "parody": true,
+   "board_style": "flex",
+   "tagline": "Aloo tikki ka tashan"
+  },
+  {
+   "kind": "cafe",
+   "text": {
+    "latn": "Chai Sitara Booth",
+    "deva": "चाय सितारा बूथ"
+   },
+   "weight": 2,
+   "parody": true,
+   "board_style": "flex",
+   "tagline": "Cutting chai, grande swaad"
+  },
+  {
+   "kind": "coaching",
+   "text": {
+    "latn": "Career Rocket Institute",
+    "deva": "करियर रॉकेट इंस्टीट्यूट"
+   },
+   "weight": 2,
+   "parody": true,
+   "board_style": "flex",
+   "tagline": "IAS ya bust"
+  },
+  {
+   "kind": "coaching",
+   "text": {
+    "latn": "Top Rankers Tutorial",
+    "deva": "टॉप रैंकर्स ट्यूटोरियल"
+   },
+   "weight": 2,
+   "parody": true,
+   "board_style": "flex",
+   "tagline": "Rank guaranteed (almost)"
+  },
+  {
+   "kind": "clothing",
+   "text": {
+    "latn": "Sapna Soundneend Mattress",
+    "deva": "सपना साउंडनींद मैट्रेस"
+   },
+   "weight": 2,
+   "parody": true,
+   "board_style": "flex",
+   "tagline": "Neend ki guarantee"
+  },
+  {
+   "kind": "clothing",
+   "text": {
+    "latn": "Pashchim Pehnawa",
+    "deva": "पश्चिम पहनावा"
+   },
+   "weight": 2,
+   "parody": true,
+   "board_style": "flex",
+   "tagline": "Naya season, naya rang"
+  },
+  {
+   "kind": "clothing",
+   "text": {
+    "latn": "Style Ka Mall Ghar",
+    "deva": "स्टाइल का मॉल घर"
+   },
+   "weight": 2,
+   "parody": true,
+   "board_style": "flex",
+   "tagline": "Style ka bazaar"
+  },
+  {
+   "kind": "restaurant",
+   "text": {
+    "latn": "Kwik Kitchen Cafe",
+    "deva": "क्विक किचन कैफ़े"
+   },
+   "weight": 2,
+   "parody": true,
+   "board_style": "flex",
+   "tagline": "Order, bill, bye"
+  },
+  {
+   "kind": "travel",
+   "text": {
+    "latn": "Jetwing Travels",
+    "deva": "जेटविंग ट्रैवल्स"
+   },
+   "weight": 2,
+   "parody": true,
+   "board_style": "flex",
+   "tagline": "Visa, ticket, tension free"
   }
  ]
 }
