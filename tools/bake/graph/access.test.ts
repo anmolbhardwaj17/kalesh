@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { barrierStops, classModes, conditional, edgeAccess, graphAccess, tagModes } from './access.ts';
+import { barrierIndex, barrierStops, classModes, conditional, edgeAccess, gateRestricted, graphAccess, tagModes } from './access.ts';
 import type { AccessContext, AccessEdge, AccessRule } from './access.ts';
 import { POST_R, carriagewayRuns, postOffsets, transitionLines, widestGap } from '../mesh/barriers.ts';
 import type { EdgeAccess } from './access.ts';
@@ -80,6 +80,46 @@ describe('access modes of a road (P2-042)', () => {
     expect(record.byMode.car).toEqual({ edges: 1, km: 1 });
     expect(record.byReason.width).toEqual({ edges: 1, km: 0.5, closedToCars: 1 });
     expect(record.carFree).toEqual({ edges: 1, km: 0.5 });
+  });
+});
+
+describe('judge and owner decisions, forecourts and government gates (P2-043)', () => {
+  const gali: AccessRule = { id: 'g', by: 'rule', kind: 'context', why: 'old city gali: two-wheelers and walkers', refs: ['x'], modes: ['two_wheeler', 'cycle', 'foot', 'emergency'], match: { classes: ['residential'] } };
+  const open: AccessRule = { id: 'j1', by: 'judge', kind: 'context', why: 'the picture shows cars in this lane', refs: ['sheet'], modes: ['car', 'auto', 'two_wheeler', 'cycle', 'foot', 'emergency'], match: { ways: ['way/1'], within: { x: 50, z: 0, r: 60 } } };
+  const owner: AccessRule = { id: 'o1', by: 'owner', why: 'owner: walkers only here, I walked it', refs: ['inspector'], modes: ['foot', 'emergency'], match: { ways: ['way/1'] } };
+
+  it('a judge decision wins over the rules, whatever the order of the file; the owner wins over both', () => {
+    const e = edge({ width: 3.6 });
+    expect(edgeAccess(e, ctx({ rules: [gali] })).modes).not.toContain('car');
+    for (const rules of [[gali, open], [open, gali]]) expect(edgeAccess(e, ctx({ rules })), 'judge opens the gali').toMatchObject({ reason: 'judge', rule: 'j1', modes: expect.arrayContaining(['car', 'auto']) });
+    for (const rules of [[gali, open, owner], [owner, open, gali], [open, owner, gali]]) expect(edgeAccess(e, ctx({ rules })), 'owner beats judge').toMatchObject({ reason: 'owner', rule: 'o1', modes: ['foot', 'emergency'] });
+    // a judge may open a way the rules never would (only a rule is held to the width of a car)
+    expect(edgeAccess(edge({ width: 2.4 }), ctx({ rules: [open] })).modes).toContain('car');
+  });
+
+  it('forecourts: a zone of circles needs the whole edge inside one circle; a tagged service way keeps its cars', () => {
+    const zones = new Map([['m', (s: { all: readonly { x: number; z: number }[] }) => [{ x: 50, z: 0, r: 30 }].some((c) => s.all.every((p) => Math.hypot(p.x - c.x, p.z - c.z) <= c.r))]]);
+    const foot: AccessRule = { id: 'f', by: 'rule', kind: 'rule', why: 'metro forecourt: walkers only', refs: ['x'], modes: ['foot', 'emergency'], match: { zones: ['m'], notTagged: ['motor_vehicle=yes', 'access=delivery'] } };
+    const inside = edge({ cls: 'service', pts: [{ x: 40, z: 0 }, { x: 60, z: 0 }] });
+    expect(edgeAccess(inside, ctx({ rules: [foot], zones }))).toMatchObject({ reason: 'rule', rule: 'f', modes: ['foot', 'emergency'] });
+    expect(edgeAccess(edge({ cls: 'service', pts: [{ x: 0, z: 0 }, { x: 100, z: 0 }] }), ctx({ rules: [foot], zones })).rule).toBeUndefined();
+    expect(edgeAccess({ ...inside, tags: { access: 'delivery' } }, ctx({ rules: [foot], zones })).rule).toBeUndefined();
+    expect(edgeAccess({ ...inside, tags: { motor_vehicle: 'yes' } }, ctx({ rules: [foot], zones })).modes).toContain('car');
+  });
+
+  it('a government gate: a closed, private or untagged gate on the way, inside the zone, closes it to public cars', () => {
+    expect(gateRestricted('gate', { access: 'private' })).toBe(true);
+    expect(gateRestricted('gate', {})).toBe(true);
+    expect(gateRestricted('gate', { access: 'yes' })).toBe(false);
+    expect(gateRestricted('gate', { access: 'private', locked: 'no' })).toBe(false);
+    expect(gateRestricted('bollard', {})).toBe(false);
+    const barriers = barrierIndex([{ id: 'n1', kind: 'gate', tags: { access: 'private' }, edge: 'w1.0' }, { id: 'n2', kind: 'gate', tags: { access: 'yes' }, edge: 'w2.0' }]);
+    const gate: AccessRule = { id: 'lg', by: 'rule', kind: 'rule', why: 'a compound gate in the government zone', refs: ['x'], modes: ['cycle', 'foot', 'emergency'], match: { zones: ['l'], gate: 'restricted', classes: ['service'] } };
+    const zones = new Map([['l', () => true]]);
+    expect(edgeAccess(edge({ cls: 'service', width: 3.5 }), ctx({ rules: [gate], zones, barriers }))).toMatchObject({ reason: 'rule', rule: 'lg', modes: ['cycle', 'foot', 'emergency'] });
+    // an open public gate, or no gate, leaves the road as it was
+    expect(edgeAccess(edge({ id: 'w2.0', cls: 'service' }), ctx({ rules: [gate], zones, barriers })).modes).toContain('car');
+    expect(edgeAccess(edge({ id: 'w3.0', cls: 'service' }), ctx({ rules: [gate], zones, barriers })).modes).toContain('car');
   });
 });
 

@@ -15,6 +15,8 @@
 //   POST /api/inspector/set-lanes         { edge, lanes, x, z, note } writes a set_lanes patch for a road edge of the lanes layer and the inbox line
 //   POST /api/inspector/add               { kind, points: [[x, z], ...], settings, reference: { link, date }, note } writes an add
 //                                         patch (a drawn road, median, footpath, crossing or barrier, P1-045) and the inbox line
+//   GET  /api/inspector/access            the owner and judge rules of harness/data/access.json (id, who, why, modes), for the access tab
+//   POST /api/inspector/set-access        { edge, want: { car, two_wheeler, foot }, x, z, note } writes an owner rule into access.json (by owner) and the inbox line
 //   POST /api/inspector/open-in-game      { x, z } teleports the running game (--debug) to the spot
 import fs from 'node:fs';
 import path from 'node:path';
@@ -26,6 +28,9 @@ import { buildPatch, inboxText, mergePatch, nextPatchId, overrideFileName, world
 import { driveLaneCount, lanesInboxText, lanesIssueId } from './lanes.ts';
 import { addInboxText, addInputProblems, buildAddPatch, kindInfo, mapRoads } from './adds.ts';
 import { patchProblems } from '../bake/repair/overrides.ts';
+import { accessFileProblems } from '../bake/sources/accessio.ts';
+import { readAccessFile, writeAccessFile } from '../bake/graph/accessfile.mjs';
+import { HEADLINES, accessInboxText, accessInputProblems, applyHeadlines, buildOwnerRule, stripsOfEdge } from './access.ts';
 
 const HERE = path.dirname(fileURLToPath(import.meta.url));
 const ROOT = path.resolve(HERE, '..', '..');
@@ -74,6 +79,7 @@ export function inspectorHandler(options = {}) {
   const dataDir = options.dataDir ?? path.join(ROOT, 'harness', 'reports', 'map');
   const overridesDir = options.overridesDir ?? path.join(ROOT, 'harness', 'data', 'overrides');
   const inboxFile = options.inboxFile ?? path.join(ROOT, 'harness', 'state', 'inbox.jsonl');
+  const accessFile = options.accessFile ?? path.join(ROOT, 'harness', 'data', 'access.json');
   const gamePort = options.gamePort ?? Number(process.env.HARNESS_GAME_PORT || 47181);
   const today = () => options.date ?? new Date().toISOString().slice(0, 10);
   let issuesCache = { mtime: 0, file: null };
@@ -172,6 +178,44 @@ export function inspectorHandler(options = {}) {
     return [200, { ok: true, patch: merged.patch, file: fileName, inbox: entry.id }];
   }
 
+  /** The decisions of the access file on top of the rules (judge and owner), for the access tab. */
+  const accessDecisions = () => {
+    const f = fs.existsSync(accessFile) ? readJson(accessFile, null) : null;
+    const rules = (f?.rules ?? []).filter((r) => r.by === 'owner' || r.by === 'judge');
+    return { owner: rules.filter((r) => r.by === 'owner').map((r) => ({ id: r.id, why: r.why, modes: r.modes, match: r.match })), judge: rules.filter((r) => r.by === 'judge').length };
+  };
+
+  /** Who may use a road edge, set by the owner: an owner rule of access.json (one per edge, a second save replaces it). */
+  async function setAccess(body) {
+    const bad = accessInputProblems({ edge: body.edge, want: body.want });
+    if (bad.length) return [400, { error: bad.join(' ') }];
+    const layer = loadLanes();
+    if (!layer) return [404, { error: 'There is no lanes layer yet. Run "npm run bake -- pilot --stage lanes --offline" first.' }];
+    if (!layer.origin || !layer.offset) return [400, { error: 'The lanes layer has no frame origin. Bake the lanes step again.' }];
+    const edge = String(body.edge);
+    const strips = stripsOfEdge(layer.strips, edge);
+    const acc = strips.find((st) => st.acc)?.acc;
+    if (!strips.length || !acc) return [404, { error: `no road ${edge} with access data in the lanes layer; bake the lanes step again` }];
+    const modes = applyHeadlines(acc.m, body.want);
+    const toGeo = (x, z) => worldToGeo(x - layer.offset[0], z - layer.offset[1], layer.origin);
+    const note = String(body.note ?? '').trim();
+    const st0 = strips[0];
+    const rule = buildOwnerRule({ edge, name: st0.name, cls: st0.cls, points: strips.flatMap((st) => st.ref), ways: acc.ways, modes, note, date: today(), toGeo });
+    const file = fs.existsSync(accessFile) ? readAccessFile(accessFile) : { rules: [] };
+    file.rules = (file.rules ?? []).filter((r) => r.id !== rule.id);
+    file.rules.push(rule);
+    const problems = accessFileProblems(file);
+    if (problems.length) return [400, { error: `The rule would not be valid: ${problems.join('; ')}` }];
+    fs.mkdirSync(path.dirname(accessFile), { recursive: true });
+    writeAccessFile(accessFile, file);
+    const x = Number(body.x);
+    const z = Number(body.z);
+    const entry = { id: `m${Date.now().toString(36)}`, ts: new Date().toISOString(), text: accessInboxText(st0.name, Number.isFinite(x) ? x : strips[0].ref[0][0], Number.isFinite(z) ? z : strips[0].ref[0][1], acc.m, modes, note, rule.id), source: 'inspector' };
+    fs.mkdirSync(path.dirname(inboxFile), { recursive: true });
+    fs.appendFileSync(inboxFile, JSON.stringify(entry) + '\n');
+    return [200, { ok: true, rule, modes, inbox: entry.id, headlines: HEADLINES }];
+  }
+
   // the roads of context.json, for the ids a drawing names (parsed once per file version)
   let roadsCache = { mtime: 0, roads: [] };
   const loadRoads = () => {
@@ -249,7 +293,7 @@ export function inspectorHandler(options = {}) {
       }
       if (req.method === 'GET' && p.startsWith('/inspector/')) {
         const rel = p.slice('/inspector/'.length);
-        if (!/^(web\/[\w.-]+|lib\.ts|lanes\.ts|adds\.ts|ktl1\.ts|describe\.ts)$/.test(rel) || rel.includes('.test.')) return send(res, 404, 'not found', 'text/plain'), true;
+        if (!/^(web\/[\w.-]+|lib\.ts|lanes\.ts|adds\.ts|access\.ts|ktl1\.ts|describe\.ts)$/.test(rel) || rel.includes('.test.')) return send(res, 404, 'not found', 'text/plain'), true;
         return serveStatic(res, HERE, rel, { stripTs: true }) || send(res, 404, 'not found', 'text/plain'), true;
       }
       if (req.method === 'GET' && p === '/favicon.ico') return send(res, 204, '', 'text/plain'), true;
@@ -265,6 +309,11 @@ export function inspectorHandler(options = {}) {
       }
       if (req.method === 'POST' && p === '/api/inspector/set-lanes') {
         const [code, body] = await setLanes(JSON.parse((await readBody(req)).toString() || '{}'));
+        return send(res, code, body), true;
+      }
+      if (req.method === 'GET' && p === '/api/inspector/access') return send(res, 200, accessDecisions()), true;
+      if (req.method === 'POST' && p === '/api/inspector/set-access') {
+        const [code, body] = await setAccess(JSON.parse((await readBody(req)).toString() || '{}'));
         return send(res, code, body), true;
       }
       if (req.method === 'POST' && p === '/api/inspector/add') {

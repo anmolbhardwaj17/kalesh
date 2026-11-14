@@ -408,6 +408,15 @@ export async function bake(args: BakeArgs, opts: BakeOptions): Promise<HealthRep
         const a = acc.record;
         opts.log(`[access] modes by edges: ${Object.entries(a.byMode).map(([m, v]) => `${m} ${v.edges} (${v.km} km)`).join(', ')}; closed to cars ${a.carFree.edges} edges (${a.carFree.km} km), private ${a.private.edges}`);
         opts.log(`[access] decided by: ${Object.entries(a.byReason).filter(([, v]) => v.edges > 0).map(([r, v]) => `${r} ${v.edges} (${v.closedToCars} closed to cars)`).join(', ')}; rules: ${a.rules.map((r) => `${r.id} ${r.edges}`).join(', ')}; OSM barrier nodes ${a.osmBarriers.total} (${a.osmBarriers.onEdges} on the road graph, ${a.osmBarriers.stopCar} stop a car)`);
+        {
+          // P2-043: the places rules and the decisions on top of them
+          const n = (re: RegExp): { edges: number; km: number; rules: number } => a.rules.filter((r) => re.test(r.id)).reduce((t, r) => ({ edges: t.edges + r.edges, km: Math.round((t.km + r.km) * 100) / 100, rules: t.rules + 1 }), { edges: 0, km: 0, rules: 0 });
+          const fc = n(/^metro_forecourt/);
+          const lg = n(/^lutyens_government/);
+          const judge = a.rules.filter((r) => r.by === 'judge');
+          const idle = judge.filter((r) => r.edges === 0).length;
+          opts.log(`[access] metro forecourts (foot only): ${fc.edges} edges (${fc.km} km); Lutyens government gates (closed to public cars): ${lg.edges} edges (${lg.km} km); judge decisions: ${judge.length} rules, ${a.byReason.judge.edges} edges (${a.byReason.judge.edges - a.byReason.judge.closedToCars} open to cars), ${idle} idle; owner edits: ${a.rules.filter((r) => r.by === 'owner').length} rules, ${a.byReason.owner.edges} edges`);
+        }
       }
       const buildMs = laneBuild ? Math.round(laneBuild.ms['total'] ?? 0) : Math.round(clock.now() - t0);
       const model = laneModelFile(build, plan.def.block, plan.id);

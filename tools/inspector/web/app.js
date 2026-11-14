@@ -15,7 +15,8 @@ import { actionWords, filterIssues, isHigh, niceScale, searchIssues, sortIssues,
 import { buildNameIndex, classWords, describeIssue, distToLine, fixWords, humanise, whereWords } from '../describe.ts';
 import { LANE_TYPE_WORDS, NEAR_FOCUS_M, borderAt, driveLaneCount, laneItems, lanesIssueId, lanesSummary, metres, nearestStrip, sectionParts, sourceWords, stripWidths, isOwnerLanes } from '../lanes.ts';
 import { ADD_KINDS, BARRIER_KINDS, MEDIAN_TYPES, ROAD_CLASSES, addInputProblems, kindInfo } from '../adds.ts';
-import { contextLayer, groundLayer, laneMarksLayer, lanesLayer } from './layers.js';
+import { HEADLINES, accessSummary, applyHeadlines, headlineWords, headlines, nearestAccessStrip, reasonWords, stripsOfEdge } from '../access.ts';
+import { accessLayer, contextLayer, groundLayer, laneMarksLayer, lanesLayer } from './layers.js';
 import { Minimap } from './minimap.js';
 import { LANE_FILL, LANE_MARK, MAJOR, MAP, MATERIAL_COLOURS, OFFSET_MATERIALS, PROP_COLOURS, SEV } from './theme.js';
 
@@ -27,6 +28,7 @@ const state = {
   view: 'top', flying: false, places: [], source: '', markerIndex: [], hidden: new Set(), names: buildNameIndex(null, []),
   desc: new Map(), buildings: [], under: [], outline: [], hover: null, layers: { lanes: true, laneMarks: true, buildings: true, grid: true },
   // the lanes tab (P1-025): the lanes layer file, the lanes record of health.json, the listed split zones and taper findings
+  accSel: null, accRules: { owner: [], judge: 0 },
   tab: 'issues', laneFile: null, health: null, laneItems: [], laneFilter: 'all', laneSel: null, lanePicks: {}, laneFocus: null,
   // the draw tool (P1-045): what is being drawn, its clicked points (world metres), its settings and reference
   add: {
@@ -66,7 +68,7 @@ const lineGroup = new THREE.Group();
 const drawGroup = new THREE.Group();
 scene.add(flatGroup, tileGroup, highlightGroup, markerGroup, lineGroup, drawGroup);
 const lineMaterials = new Set();
-const layers = { ground: null, context: null, lanes: null, laneMarks: null };
+const layers = { ground: null, context: null, lanes: null, laneMarks: null, access: null };
 
 function resize() {
   const w = mapEl.clientWidth || 1;
@@ -506,6 +508,12 @@ function markSelectedRow() {
 
 function renderDetail() {
   $('#add').hidden = state.tab !== 'add';
+  $('#access').hidden = state.tab !== 'access';
+  if (state.tab === 'access') {
+    $('#empty').hidden = true; $('#issue').hidden = true; $('#lane').hidden = true;
+    renderAccess();
+    return;
+  }
   if (state.tab === 'add') {
     $('#empty').hidden = true; $('#issue').hidden = true; $('#lane').hidden = true;
     renderAdd();
@@ -586,6 +594,7 @@ function select(id, { fly = true } = {}) {
 
 function clearSelection() {
   state.selected = null;
+  state.accSel = null;
   state.laneSel = null;
   markLaneRow();
   state.proposal = null;
@@ -668,6 +677,12 @@ function setupLanes(file, health) {
   flatGroup.add(layers.laneMarks.group);
   buildLaneDots();
   $('#lanesTab').hidden = false;
+  if (file.strips.some((st) => st.acc)) {
+    layers.access = accessLayer(file);
+    flatGroup.add(layers.access.group);
+    $('#accessTab').hidden = false;
+    renderAccessHead();
+  }
   $('#laneMarkCount').textContent = state.laneItems.length;
   $('#lanesSummary').textContent = lanesSummary(health, file.strips.length);
   renderLaneList();
@@ -676,6 +691,7 @@ function setupLanes(file, health) {
 
 function setTab(tab) {
   if (tab === 'lanes' && !state.laneFile) return;
+  if (tab === 'access' && !layers.access) return;
   state.tab = tab;
   for (const b of document.querySelectorAll('#tabs [data-tab]')) b.classList.toggle('on', b.dataset.tab === tab);
   $('#issuesHead').hidden = tab !== 'issues';
@@ -684,6 +700,10 @@ function setTab(tab) {
   $('#laneList').hidden = tab !== 'lanes';
   $('#addHead').hidden = tab !== 'add';
   $('#addList').hidden = tab !== 'add';
+  $('#accessHead').hidden = tab !== 'access';
+  $('#accessList').hidden = tab !== 'access';
+  if (layers.access) { layers.access.group.visible = tab === 'access'; dirty = true; }
+  if (tab === 'access') renderAccessList();
   mapEl.classList.toggle('drawing', tab === 'add');
   if (tab === 'add') { renderAddKinds(); renderAddList(); }
   drawSketch();
@@ -845,6 +865,101 @@ async function saveLanes() {
   state.lanePicks[lanesIssueId(sel.strip.edge)] = { patch: body.patch.id, action: body.patch.action, why: body.patch.why, file: body.file, params: body.patch.params };
   renderLane();
   laneMessage(`Saved. Patch ${body.patch.id} is in overrides/${body.file}. The next bake of that tile uses ${sel.draft} lanes here. Claude sees it in the inbox.`);
+}
+
+// ------------------------------------------------------------------ the access tab (P2-043)
+
+function renderAccessHead() {
+  const s = accessSummary(state.laneFile.strips);
+  const r = s.byReason;
+  $('#accessSummary').textContent = `${s.edges.toLocaleString('en')} roads, ${s.carFree.toLocaleString('en')} closed to cars. Decided by: ${['rule', 'context', 'width', 'osm_tag', 'judge', 'owner'].filter((k) => r[k]).map((k) => `${({ rule: 'Delhi rules', context: 'common sense', width: 'too narrow', osm_tag: 'map data tags', judge: 'the judge pass', owner: 'your edits' })[k]} ${r[k]}`).join(', ')}.`;
+}
+
+async function loadAccessRules() {
+  try { state.accRules = await getJson('/api/inspector/access'); } catch { state.accRules = { owner: [], judge: 0 }; }
+}
+
+function renderAccessList() {
+  const el = $('#accessList');
+  const o = state.accRules.owner;
+  el.innerHTML = `<div class="row-note small">${state.accRules.judge} judge decisions and ${o.length} edits of yours are in the access rules file.</div>`
+    + o.map((r) => `<div class="row" role="listitem"><span class="t">${esc(r.id.replace(/^owner_/, '').replace(/_/g, ' '))}</span><span class="s small">${esc(HEADLINES.map((h) => `${h === 'car' ? 'cars' : h === 'two_wheeler' ? 'scooters' : 'walkers'} ${r.modes.includes(h) ? 'yes' : 'no'}`).join(', '))}</span></div>`).join('');
+}
+
+function pickAccessAt(x, z) {
+  const hit = nearestAccessStrip(state.laneFile.strips, x, z, 4);
+  if (!hit) return null;
+  showAccess(hit.strip, [x, z]);
+  return hit.strip.edge;
+}
+
+function showAccess(strip, point) {
+  const strips = stripsOfEdge(state.laneFile.strips, strip.edge);
+  state.accSel = { strip, strips, point, want: headlines(strip.acc.m), noteDraft: '', saved: null };
+  state.selected = null;
+  state.laneSel = null;
+  renderAccess();
+  drawAccessHighlight(state.accSel);
+  const where = whereWords(state.names, point[0], point[1]);
+  $('#selLabel').innerHTML = `${esc(roadLabel(strip))}${where ? `<small>${esc(where)}</small>` : ''}`;
+}
+
+function drawAccessHighlight(sel) {
+  clearGroup(highlightGroup);
+  clearGroup(lineGroup);
+  if (sel) {
+    for (const st of sel.strips) {
+      if (st.ref.length < 2) continue;
+      highlightGroup.add(polyline(st.ref, 1.2, { color: new THREE.Color(SEV.open), linewidth: 13, opacity: 0.22 }, 15));
+      highlightGroup.add(polyline(st.ref, 1.2, { color: new THREE.Color(0x110d0a), linewidth: 6, opacity: 0.9 }, 16));
+      highlightGroup.add(polyline(st.ref, 1.2, { color: new THREE.Color(0xffd27a), linewidth: 3, opacity: 1 }, 17));
+    }
+  }
+  dirty = true;
+}
+
+function renderAccess() {
+  const el = $('#access');
+  const sel = state.accSel;
+  if (!sel) {
+    el.innerHTML = `<div class="empty"><div class="empty-mark" aria-hidden="true"></div><h2>Pick a road</h2><p>Click any road on the map. You see who may use it and why, and you can change it.</p></div>`;
+    return;
+  }
+  const st = sel.strip;
+  const a = st.acc;
+  const why = reasonWords(a.r);
+  const was = headlines(a.m);
+  const changed = HEADLINES.some((h) => sel.want[h] !== was[h]);
+  const own = state.accRules.owner.find((r) => r.id.endsWith(st.edge.toLowerCase().replace(/[^a-z0-9]+/g, '_').replace(/^_+|_+$/g, '')));
+  const rows = HEADLINES.map((h) => `<div class="setrow acc-row"><span class="l">${esc(headlineWords(h))}</span><span class="seg"><button type="button" data-acc="${h}" data-v="1" class="${sel.want[h] ? 'on' : ''}">May use</button><button type="button" data-acc="${h}" data-v="0" class="${sel.want[h] ? '' : 'on'}">Not allowed</button></span></div>`).join('');
+  $('#access').innerHTML = `
+    <div class="kicker" style="--sev:var(--accent)"><i class="dot" style="background:var(--accent)"></i>Road access</div>
+    <h2>${esc(roadLabel(st))}</h2>
+    <p class="rule-id">${esc(st.edge)} · ${esc(classWords(st.cls))}</p>
+    <div class="block"><h4>Decided by: ${esc(why.label)}${a.rule ? ` <span class="tag${a.r === 'owner' ? ' you' : ''}">${esc(a.rule)}</span>` : ''}</h4><p>${esc(a.why)}</p>${a.hours ? `<p class="measured">Only ${esc(a.hours)}</p>` : ''}<p class="small">${esc(why.long)}</p></div>
+    <h3>Who may use it</h3>
+    ${own ? `<div class="msg msg-saved">You already set this road (${esc(own.id)}). Saving again replaces it.</div>` : ''}
+    ${rows}
+    <p class="small">Cycles and emergency vehicles keep what the road has now: ${esc(a.m.filter((m) => m === 'cycle' || m === 'emergency').join(', ') || 'neither')}.</p>
+    <textarea id="accNote" placeholder="Why, for example: I walked this lane, a car cannot pass the shop stalls.">${esc(sel.noteDraft)}</textarea>
+    <div class="actions"><button type="button" class="primary" id="accSave"${changed || sel.noteDraft.trim() ? '' : ' disabled'}>Save access</button></div>
+    <div id="accMsg" class="msg" ${sel.saved ? '' : 'hidden'}>${sel.saved ? esc(sel.saved.text) : ''}</div>
+    <div class="ids">edge ${esc(st.edge)} · x ${Math.round(sel.point[0])}, z ${Math.round(sel.point[1])}</div>`;
+}
+
+async function saveAccess() {
+  const sel = state.accSel;
+  if (!sel) return;
+  const res = await fetch('/api/inspector/set-access', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ edge: sel.strip.edge, want: sel.want, x: sel.point[0], z: sel.point[1], note: sel.noteDraft }) });
+  const body = await res.json();
+  if (!res.ok) { sel.saved = { text: body.error || 'Could not save.', ok: false }; renderAccess(); const m = $('#accMsg'); if (m) m.className = 'msg bad'; return; }
+  // the page shows the new modes at once; the bake makes them real
+  for (const s of sel.strips) s.acc = { ...s.acc, m: body.modes, r: 'owner', rule: body.rule.id, why: body.rule.why };
+  sel.saved = { text: `Saved as rule ${body.rule.id} in the access rules file (by owner). The next bake uses it. Claude sees it in the inbox.`, ok: true };
+  await loadAccessRules();
+  renderAccessHead();
+  renderAccessList();
+  renderAccess();
 }
 
 async function openLaneInGame() {
@@ -1010,6 +1125,12 @@ $('#issue').addEventListener('click', (e) => {
   if (e.target.closest('#openGame')) openInGame();
 });
 $('#issue').addEventListener('input', (e) => { if (e.target.id === 'note') { state.noteDraft = e.target.value; updateSave(); } });
+$('#access').addEventListener('click', (e) => {
+  const b = e.target.closest('[data-acc]');
+  if (b && state.accSel) { state.accSel.want[b.dataset.acc] = b.dataset.v === '1'; state.accSel.saved = null; renderAccess(); return; }
+  if (e.target.closest('#accSave')) saveAccess();
+});
+$('#access').addEventListener('input', (e) => { if (e.target.id === 'accNote' && state.accSel) { state.accSel.noteDraft = e.target.value; const b = $('#accSave'); if (b) b.disabled = !(HEADLINES.some((h) => state.accSel.want[h] !== headlines(state.accSel.strip.acc.m)[h]) || state.accSel.noteDraft.trim()); } });
 $('#tabs').addEventListener('click', (e) => { const b = e.target.closest('[data-tab]'); if (b) setTab(b.dataset.tab); });
 $('#laneChips').addEventListener('click', (e) => { const b = e.target.closest('[data-lfilter]'); if (b) { state.laneFilter = b.dataset.lfilter; renderLaneList(); } });
 $('#laneList').addEventListener('click', (e) => { const r = e.target.closest('.row'); if (r) selectLaneItem(r.dataset.lane); });
@@ -1097,6 +1218,12 @@ renderer.domElement.addEventListener('pointerup', (e) => {
     const r = mapEl.getBoundingClientRect();
     const g = groundAt(((e.clientX - r.left) / r.width) * 2 - 1, -((e.clientY - r.top) / r.height) * 2 + 1);
     if (g) addPoint(g.x, g.z);
+    return;
+  }
+  if (state.tab === 'access' && state.laneFile) {
+    const r = mapEl.getBoundingClientRect();
+    const g = groundAt(((e.clientX - r.left) / r.width) * 2 - 1, -((e.clientY - r.top) / r.height) * 2 + 1);
+    if (g) pickAccessAt(g.x, g.z);
     return;
   }
   const hit = nearestIssue(e.clientX, e.clientY, 14);
@@ -1255,6 +1382,7 @@ async function init() {
       applyLayers();
     } catch (e) { banner(`The lanes layer could not be read: ${e.message}`); }
   }
+  await loadAccessRules();
   state.lanesReady = true;
 }
 
@@ -1291,6 +1419,17 @@ window.__inspector = {
     pickAt: (x, z) => (state.laneFile ? pickLaneAt(x, z) : null),
     screen: (x, z) => project(x, 0, z),
     strips: () => state.laneFile?.strips ?? [],
+  },
+  /** The access tab (P2-043): the tab, the selected road, the switches, the last saved answer. */
+  access: {
+    tab: () => setTab('access'),
+    pickAt: (x, z) => (state.laneFile ? pickAccessAt(x, z) : null),
+    screen: (x, z) => project(x, 0, z),
+    selected: () => (state.accSel ? { edge: state.accSel.strip.edge, modes: state.accSel.strip.acc.m, reason: state.accSel.strip.acc.r, rule: state.accSel.strip.acc.rule ?? null, want: { ...state.accSel.want }, saved: state.accSel.saved?.text ?? null, saveEnabled: !!$('#accSave') && !$('#accSave').disabled } : null),
+    counts: () => ({ overlay: layers.access?.counts ?? null, summary: $('#accessSummary')?.textContent ?? '', owner: state.accRules.owner.length, judge: state.accRules.judge }),
+    set: (h, v) => { if (state.accSel) { state.accSel.want[h] = !!v; renderAccess(); } },
+    note: (t) => { if (state.accSel) { state.accSel.noteDraft = t; renderAccess(); } },
+    save: () => saveAccess(),
   },
   /** The draw tool (P1-045): the tab, what is drawn, and the last saved answer of the server. */
   add: {
