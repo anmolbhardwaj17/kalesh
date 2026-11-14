@@ -547,3 +547,8 @@ By: orchestrator, from the mentor inbox.
 Decision: every character (and later vehicles and hero props) starts as a picture card: a realistic reference sheet (front, side, back) made with an image tool. The art reviewer checks it against the card, OWNER_EYE.md, WORLD_LOGIC.md and the Watch Dogs 2 bar, and Anmol sees it. Only an approved picture leads to the 3D model card, which uses image to 3D on that picture, then Mixamo rigging. The current models stay in the game until the new ones pass.
 Why: Anmol 2026-11-14: "maybe i should make image first, finalize in that the look and feel and then once thats done and verified then only we'll think of 3d model step by step". Text to 3D gave cartoon faces and wrong proportions; a settled picture gives image to 3D a clear target.
 By: orchestrator, from the mentor inbox.
+
+## 2026-11-14: Test windows are hidden by default; perf budgets are judged with a visible window only at phase gates
+Decision: every harness Godot launch parks its window off every display (borderless, moved off-screen, app hidden); HARNESS_SHOW_WINDOW=1 shows it. A parked window counts as occluded on macOS and reads up to about 2x worse on GPU cost, so per-task perf checks are read as relative (A/B in the same session, with load), and the absolute perf budgets are judged at phase gates with HARNESS_SHOW_WINDOW=1, run when the owner is not using the machine where possible.
+Why: Anmol 2026-11-14 kept seeing test windows over his work (P2-065).
+By: orchestrator.

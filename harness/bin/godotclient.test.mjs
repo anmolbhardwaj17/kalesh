@@ -1,5 +1,6 @@
 import { describe, it, expect } from 'vitest';
 import net from 'node:net';
+import { windowEnv, parkWindows } from './godot.mjs';
 import { lineSplitter, gameArgs, freePort, portOpen, GodotDebugClient } from './godotclient.mjs';
 
 describe('godotclient', () => {
@@ -14,13 +15,29 @@ describe('godotclient', () => {
   });
 
   it('puts engine args before -- and game args after it', () => {
-    const a = gameArgs({ project: '/p', port: 5000, quitAfter: 100, extra: ['--style=toon'] });
+    const a = gameArgs({ project: '/p', port: 5000, quitAfter: 100, extra: ['--style=toon'], env: {} });
     const sep = a.indexOf('--');
-    expect(a.slice(0, sep)).toEqual(['--path', '/p', '--quit-after', '100', '--resolution', '1280x720']);
+    expect(a.slice(0, sep)).toEqual(['--path', '/p', '--quit-after', '100', '--resolution', '1280x720', '--position', '30000,30000']);
     expect(a.slice(sep + 1)).toEqual(['--debug', '--debug-port=5000', '--verify', '--style=toon']);
     const h = gameArgs({ project: '/p', debug: false, verify: false, headless: true, quitAfter: 5 });
     expect(h[0]).toBe('--headless');
     expect(h.slice(h.indexOf('--') + 1)).toEqual([]);
+  });
+
+  it('keeps windowed runs off screen unless HARNESS_SHOW_WINDOW=1 or a position is given', () => {
+    const base = { project: '/p', quitAfter: 1, debug: false, verify: false };
+    const head = (a) => a.slice(0, a.indexOf('--'));
+    expect(head(gameArgs({ ...base, env: {} }))).toContain('--position');
+    expect(head(gameArgs({ ...base, env: { HARNESS_SHOW_WINDOW: '1' } }))).not.toContain('--position');
+    const own = head(gameArgs({ ...base, env: {}, engineExtra: ['--position', '10,10'] }));
+    expect(own.filter((x) => x === '--position')).toHaveLength(1);
+    expect(head(gameArgs({ ...base, env: {}, headless: true }))).not.toContain('--position');
+  });
+
+  it('sets HARNESS_PARK_WINDOW for windowed launches unless HARNESS_SHOW_WINDOW=1', () => {
+    expect(windowEnv({}, 'darwin').HARNESS_PARK_WINDOW).toBe('1');
+    expect(windowEnv({ HARNESS_SHOW_WINDOW: '1' }, 'darwin').HARNESS_PARK_WINDOW).toBeUndefined();
+    expect(parkWindows({}, 'linux')).toBe(false);
   });
 
   it('answers requests by id and keeps the latest snapshot (fake game server)', async () => {
