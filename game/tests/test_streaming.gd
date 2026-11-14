@@ -354,8 +354,12 @@ func test_build_and_dispose_on_the_test_block() -> void:
 	t.ok(not city.ground_at(mid.x, mid.z).hit, "and so are their colliders")
 	# everything out: only the core is left under the city, no chunk, no lane, and the engine's objects are back
 	core.unload_all()
-	# the core and the landmarks system (game/world/systems/landmarks.gd, not tile bound) stay
-	t.ok(city.get_child_count() == 2 and city.get_node_or_null("Landmarks") != null and int(city.colliders.chunks) == 0 and (city.lanes.pieces as Dictionary).is_empty() and int(city.ground_roads.live) == 0 and int(city.buildings.live) == 0, "dispose frees every node, body and lane")
+	# the core, the landmarks system (game/world/systems/landmarks.gd, not tile bound) and the P2-045 lane readers
+	# (access watch, traffic, route line) stay
+	var kept := city.get_child_count() == 5 and city.get_node_or_null("Landmarks") != null
+	for n: String in ["Access", "Traffic", "Gps"]:
+		kept = kept and city.get_node_or_null(n) != null
+	t.ok(kept and int(city.colliders.chunks) == 0 and (city.lanes.pieces as Dictionary).is_empty() and (city.lanes._grid as Dictionary).is_empty() and int(city.ground_roads.live) == 0 and int(city.buildings.live) == 0, "dispose frees every node, body, lane and lane grid cell")
 	var objects1 := Performance.get_monitor(Performance.OBJECT_COUNT)
 	t.ok(absf(objects1 - objects0) <= 0.02 * objects0, "the engine object count is back within 2 percent (%d before, %d after)" % [int(objects0), int(objects1)])
 	city.free()
@@ -565,7 +569,7 @@ func test_spawn_pins_and_lane_snap() -> void:
 	t.ok(d.id == str(all.default) and d.tune == SpawnPins.VEHICLES.auto, "no --spawn takes the default pin, in the auto")
 	t.ok(SpawnPins.pick("ito_flyover_south").id == "ito_flyover_south", "a named pin")
 	t.ok(SpawnPins.pick("no_such_pin").id == str(all.default), "an unknown pin falls back to the default")
-	t.ok(absf(SpawnPins.pick("chandni_chowk_east").heading - deg_to_rad(270.0)) < 1e-6, "headingDeg turns into compass radians")
+	t.ok(absf(SpawnPins.pick("rajpath_india_gate").heading - deg_to_rad(63.0)) < 1e-6, "headingDeg turns into compass radians")
 	for id: String in all.pins:
 		var p := SpawnPins.pick(id)
 		t.ok(p.lat > 28.4 and p.lat < 28.8 and p.lon > 76.9 and p.lon < 77.5 and p.tune != "", "pin %s is in Delhi and names a vehicle" % id)

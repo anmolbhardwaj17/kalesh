@@ -6,8 +6,12 @@
 //   routes   drive routes that start at a pin's snapped point and follow `next` links (Dijkstra, gen_stream_routes rules):
 //            fd0 (Janpath north into the Connaught Place inner circle, a quarter of it clockwise), cp_lap (one lap of the
 //            inner circle), ito_flyover (the Ring Road flyover near ITO, northbound over the deck), chandni_main
-//            (Chandni Chowk main road westbound), rajpath (Kartavya Path east toward India Gate); and one walk,
-//            chandni_gali (a 3 m residential lane south off the main road, pieces taken whole; a minus walks one backwards)
+//            (Netaji Subhash Marg north, then west along the lane south of Chandni Chowk to a gali's mouth), rajpath (the
+//            road from the south-west into the India Gate hexagon); P2-042/P2-045 access drives chandni_bollards,
+//            gali_scooter, gali_car; chandni_main_target (the route line's target on the car-free main road and the
+//            nearest point an auto reaches); and one walk, chandni_gali (from the auto's stop up a two-wheeler gali to
+//            Chandni Chowk main road over pieces a walker may use, never through bollards; a minus walks one backwards).
+//            Since P2-045 every drive from a start pin keeps to roads its vehicle may use (the pins left car-free roads)
 //   probeTiles  the tiles of the collider probe (city_collide_probe): the pilot sites a player sees first
 // World metres [x, y, z] (east +X, north -Z). Rerun after a bake that changes game/world/tiles.hash, or after a pin
 // moves:  node tools/fixtures/gen_city_routes.mjs
@@ -15,7 +19,7 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { geoToWorld } from '../geo/projection.ts';
-import { allows, readLaneGraph, nearest, nearestReachable, route, thin, lengthOf } from './lanegraph.mjs';
+import { allows, readLaneGraph, nearest, nearestReachable, route, thin, lengthOf, walkRoute } from './lanegraph.mjs';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..', '..');
 const TILES = path.join(ROOT, 'game', 'world', 'tiles');
@@ -150,6 +154,20 @@ function drive(pinId, targets, { close = false, mode = 'car', violation = null, 
   };
 }
 
+/** The first `m` metres of a polyline (in plan), the last point put on the line there. */
+function cutAt(pts, m) {
+  const out = [pts[0]];
+  let acc = 0;
+  for (let i = 1; i < pts.length; i++) {
+    const a = pts[i - 1]; const b = pts[i];
+    const L = Math.hypot(b[0] - a[0], b[2] - a[2]);
+    if (acc + L >= m) { const f = (m - acc) / L; out.push(a.map((v, j) => Math.round((v + (b[j] - v) * f) * 1000) / 1000)); return out; }
+    out.push(b);
+    acc += L;
+  }
+  return out;
+}
+
 /** A walk along lane pieces taken whole, each forwards or backwards (`-id`), as one thinned polyline. */
 function walk(list) {
   const all = [];
@@ -170,43 +188,93 @@ const routes = {
   cp_lap: drive('cp_inner_circle', [[-331, -1860]], { close: true }),
   // the Ring Road flyover near ITO: up the south ramp, over the deck (layer 1, 7 m up) and down the north ramp
   ito_flyover: drive('ito_flyover_south', [[2311.8, -1560]]),
-  // Chandni Chowk main road, westbound from its east end, past the mouth of the gali at x 1022. The main road is a
-  // non-motorised zone in the day (P2-042): the base test's auto starts inside it, between the bollard lines
-  chandni_main: drive('chandni_chowk_east', [[1006, -4321]], { violation: 'the auto starts on Chandni Chowk main road, car-free in the day (P2-042); no bollard line lies on this stretch' }),
-  // Kartavya Path east toward the India Gate hexagon, on the promenade closed to cars (P2-042), short of its bollards
-  rajpath: drive('rajpath_india_gate', [[400, 445.7]], { violation: 'the auto starts on the Kartavya Path promenade, closed to cars (P2-042); the drive stops short of the bollards at the hexagon' }),
+  // Chandni Chowk (P2-045: the main road is car-free in the day, so the auto keeps off it): Netaji Subhash Marg
+  // northbound, left into the residential lane south of Chandni Chowk, west to the mouth of a two-wheeler gali
+  chandni_main: drive('chandni_chowk_east', [[1158, -4166]], { mode: 'auto' }),
+  // the road from the south-west into the India Gate hexagon, India Gate ahead (P2-045: Kartavya Path is closed to cars)
+  rajpath: drive('rajpath_india_gate', [[424, 633]], { mode: 'auto' }),
   // P2-042: a car turns from Netaji Subhash Marg into the Red Fort end of Chandni Chowk, into its bollards (on purpose)
   chandni_bollards: drive('chandni_bollards_nsm', [[1290, -4308.3]], { violation: 'a car drives into the bollards at the Red Fort end of Chandni Chowk: the access scenario checks that they stop it', trim: false }),
   // P2-042: a scooter rides from a residential lane open to cars into a gali that only two-wheelers and walkers may use
   gali_scooter: drive('gali_scooter_entry', [[660, -4399.8]], { mode: 'two_wheeler' }),
 };
-/**
- * The lane pieces a walk takes, found by place (P1-045): strip ids are numbered across the whole bake, so a map change
- * elsewhere renumbers them. The walk starts on a gali lane (at grade, 3.5 m wide or less) within 4 m of `from` and
- * ends on one within 4 m of `to`, following `next` links (one direction of the gali, the way its pieces join).
- */
-function piecesAlong(from, to) {
-  const gali = (p) => p.layer === 0 && p.kind === 'lane' && p.widthM <= 3.5 && p.pts.length > 1;
-  const within = ([x, z]) => [...pieces.values()].filter((p) => gali(p) && p.pts.some((q, i) => {
-    const b = p.pts[i + 1];
-    if (!b) return false;
-    const abx = b[0] - q[0]; const abz = b[2] - q[2]; const L2 = abx * abx + abz * abz || 1;
-    const t = Math.max(0, Math.min(1, ((x - q[0]) * abx + (z - q[2]) * abz) / L2));
-    return Math.hypot(x - (q[0] + abx * t), z - (q[2] + abz * t)) <= 4;
-  }));
-  let best = null;
-  for (const a of within(from)) for (const b of within(to)) {
-    const ids = a.id === b.id ? [a.id] : route(pieces, a.id, b.id);
-    if (!ids) continue;
-    const len = ids.reduce((m, id) => m + pieces.get(id).len, 0);
-    if (!best || len < best.len) best = { ids, len };
+// P2-045: a car takes the scooter's way into the same gali (a violation: no bollards stand there) and stops 25 m in
+{
+  const sc = routes.gali_scooter;
+  const s = spawns.gali_car_entry._s;
+  const leg = route(pieces, s.id, nearest(pieces, 660, -4399.8, { mode: 'two_wheeler' }).id, { mode: 'two_wheeler' });
+  const entryId = leg.find((id) => !allows(pieces.get(id), 'car'));
+  if (!entryId) throw new Error('gali_car: the scooter way never enters a piece closed to cars');
+  const entry = pieces.get(entryId).pts[0];
+  // the distance along the drive to the entry: the nearest point of the polyline
+  let run = 0;
+  let entryM = 0;
+  let best = Infinity;
+  for (let i = 1; i < sc.points.length; i++) {
+    const a = sc.points[i - 1]; const b = sc.points[i];
+    const L = Math.hypot(b[0] - a[0], b[2] - a[2]) || 1e-9;
+    const t = Math.max(0, Math.min(1, ((entry[0] - a[0]) * (b[0] - a[0]) + (entry[2] - a[2]) * (b[2] - a[2])) / (L * L)));
+    const d = Math.hypot(a[0] + (b[0] - a[0]) * t - entry[0], a[2] + (b[2] - a[2]) * t - entry[2]);
+    if (d < best) { best = d; entryM = run + L * t; }
+    run += L;
   }
-  if (!best) throw new Error(`walk: no gali lane route from ${from} to ${to}`);
-  return best.ids;
+  const pts = cutAt(sc.points, entryM + 25);
+  routes.gali_car = {
+    from: 'gali_car_entry', violation: 'a car drives into a gali closed to cars where no bollards stand: the access scenario checks for one access_violation',
+    lengthM: Math.round(lengthOf(pts)), entryM: Math.round(entryM * 10) / 10, entry: r3(entry), entryPiece: entryId, entryModes: pieces.get(entryId).modes, points: pts,
+  };
 }
-// a gali walk south off the main road (3 m residential lanes between dense building shells, about 140 m)
-const walks = { chandni_gali: walk(piecesAlong([1023.7, -4313], [1009.2, -4168.7])) };
-for (const [id, r] of Object.entries(routes)) if (!(r.lengthM > 50)) throw new Error(`route ${id} is only ${r.lengthM} m`);
+// P2-045: the route line's target on Chandni Chowk main road (car-free in the day) and the nearest point an auto from
+// the chandni_chowk_east pin may reach (what the auto's route must end at)
+{
+  const ccAt = [1100, -4316];
+  let at = null;
+  const onSeg = (p, x, z) => {
+    let b = null;
+    for (let i = 1; i < p.pts.length; i++) {
+      const a = p.pts[i - 1]; const c = p.pts[i];
+      const L2 = (c[0] - a[0]) ** 2 + (c[2] - a[2]) ** 2;
+      if (L2 < 1e-6) continue;
+      const t = Math.max(0, Math.min(1, ((x - a[0]) * (c[0] - a[0]) + (z - a[2]) * (c[2] - a[2])) / L2));
+      const q = [a[0] + (c[0] - a[0]) * t, a[1] + (c[1] - a[1]) * t, a[2] + (c[2] - a[2]) * t];
+      const d = Math.hypot(q[0] - x, q[2] - z);
+      if (!b || d < b.d) b = { d, q };
+    }
+    return b;
+  };
+  for (const p of pieces.values()) {
+    if (p.kind !== 'lane' || p.layer !== 0) continue;
+    const b = onSeg(p, ccAt[0], ccAt[1]);
+    if (b && (!at || b.d < at.d)) at = { ...b, id: p.id, modes: p.modes };
+  }
+  if (!at || at.modes.includes('auto')) throw new Error(`chandni_main_target: the lane nearest ${ccAt} is open to autos (${at && at.modes})`);
+  const start = spawns.chandni_chowk_east._s.id;
+  const cands = [];
+  for (const p of pieces.values()) {
+    if (p.kind !== 'lane' || !allows(p, 'auto')) continue;
+    const b = onSeg(p, at.q[0], at.q[2]);
+    if (b && b.d < 300) cands.push({ id: p.id, d: b.d });
+  }
+  cands.sort((a, b) => a.d - b.d || (a.id < b.id ? -1 : 1));
+  const reach = cands.find((c) => c.id === start || route(pieces, start, c.id, { mode: 'auto' }));
+  if (!reach) throw new Error('chandni_main_target: no auto-reachable lane within 300 m');
+  routes.chandni_main_target = { at: r3(at.q), piece: at.id, modes: at.modes, nearestAutoM: Math.round(reach.d * 100) / 100, nearestAutoPiece: reach.id };
+}
+// the walk (P2-045): from where the auto stops, into the two-wheeler gali north to Chandni Chowk main road and 30 m along
+// it, over pieces a walker may use and never through a line of bollards (a scripted walker does not thread the posts)
+const crossesAny = (p) => BARRIERS.some((b) => p.pts.some((q, i) => i > 0 && crossesBarrier(p.pts[i - 1], q, b) !== null));
+function footWalk(from, to) {
+  const w = walkRoute(pieces, from, to, { skip: crossesAny });
+  if (!w) throw new Error(`walk: no walker route from ${from} to ${to}`);
+  if (w.startOffM > 6 || w.endOffM > 6) throw new Error(`walk: the walk starts ${w.startOffM.toFixed(1)} m and ends ${w.endOffM.toFixed(1)} m off its points`);
+  return walk(w.refs);
+}
+const cm = routes.chandni_main.points;
+const walks = { chandni_gali: footWalk([cm[cm.length - 1][0], cm[cm.length - 1][2]], [1128, -4314]) };
+// the auto stops 12 m short of the gali's mouth, so the walk starts ahead of it
+routes.chandni_main.points = cutAt(cm, lengthOf(cm) - 12);
+routes.chandni_main.lengthM = Math.round(lengthOf(routes.chandni_main.points));
+for (const [id, r] of Object.entries(routes)) if (r.points && !(r.lengthM > 50)) throw new Error(`route ${id} is only ${r.lengthM} m`);
 // the access scenario (P2-042): the bollard line the car route crosses, and the gali the scooter route ends in
 {
   const r = routes.chandni_bollards;
@@ -227,6 +295,9 @@ for (const [id, r] of Object.entries(routes)) if (!(r.lengthM > 50)) throw new E
   if (routes.gali_scooter.carFree < 1) throw new Error('the gali_scooter route never enters a gali closed to cars');
 }
 if (routes.ito_flyover.maxLayer < 1) throw new Error('the ITO route does not use the flyover deck');
+// P2-045: the start pins of the base tests stand on roads an auto may use, and their drives keep to them
+for (const id of ['chandni_main', 'rajpath']) if (routes[id].carFree > 0 || !routes[id].mode) throw new Error(`route ${id} uses ${routes[id].carFree} car-free pieces`);
+if (!walks.chandni_gali.pieces.some((ref) => !allows(pieces.get(ref.replace(/^-/, '')), 'car'))) throw new Error('the chandni_gali walk never enters a car-free street');
 
 const out = {
   _doc: 'Routes of the city scenarios and the FD0 play script (P1-024), written by tools/fixtures/gen_city_routes.mjs from the lane graph of the baked pilot tiles and game/data/spawn_pins.json. World metres [x, y, z] (east +X, north -Z), every point on a drawn lane at its height. spawns: each pin snapped as the game snaps it (lanes.gd snap). routes: drives from a pin along the lanes the way traffic goes (lengthM, maxLayer 1 = on a deck, yRange). walks: lanes walked whole (a minus walks a piece backwards). probeTiles: the tiles of city_collide_probe. Rerun the tool after a bake that changes game/world/tiles.hash or a pin move.',
@@ -239,5 +310,5 @@ const out = {
 for (const id of out.probeTiles) if (!index.tiles.some((t) => t.id === id)) throw new Error(`probe tile ${id} is not in the bake`);
 fs.writeFileSync(OUT, JSON.stringify(out) + '\n');
 for (const [id, s] of Object.entries(out.spawns)) console.log(`spawn ${id}: lane ${s.lane}, ${s.offM} m off, at ${s.at.join(', ')}, heading ${s.heading}`);
-for (const [id, r] of Object.entries(routes)) console.log(`route ${id}: ${r.lengthM} m, ${r.points.length} points, layer up to ${r.maxLayer}, y ${r.yRange.join(' to ')}`);
+for (const [id, r] of Object.entries(routes)) console.log(r.points ? `route ${id}: ${r.lengthM} m, ${r.points.length} points, layer up to ${r.maxLayer}, y ${(r.yRange || []).join(' to ')}` : `${id}: ${JSON.stringify(r)}`);
 for (const [id, w] of Object.entries(walks)) console.log(`walk ${id}: ${w.lengthM} m, ${w.points.length} points, widths ${w.widths.join(', ')}`);
