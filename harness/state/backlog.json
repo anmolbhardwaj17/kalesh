@@ -1,6 +1,6 @@
 {
   "_doc": "Written only by node harness/bin/task.mjs. Phases run in order; P0 (ADOPT + STYLE DISCOVERY) waits for the owner by design and needs task.mjs signoff and task.mjs archsignoff before its gate passes. Later phases are added by the planner at the end of P0 (task.mjs phase-add) from the game's real state.",
-  "updated": "2026-11-14T19:22:15.878Z",
+  "updated": "2026-11-14T19:39:09.283Z",
   "phases": [
     {
       "id": "P0",
@@ -5345,7 +5345,9 @@
       "kind": "mentor",
       "status": "doing",
       "attempts": 1,
-      "notes": [],
+      "notes": [
+        "Owner 2026-11-14: use the Watch Dogs 2 and GTA V night toolbox: light tiers by distance, coronas on every lamp head, asymmetric road-shaped pools (cookies or IES-like), faint cones in haze, specular road reflections and wet sheen, tuned bloom with dark exposure, colour variety with a few dead or flickering lamps."
+      ],
       "created": "2026-11-14T19:19:30.415Z",
       "model": "opus",
       "started": "2026-11-14T19:19:40.725Z"

@@ -687,3 +687,4 @@ One line per event, written by task.mjs (start, done, fail, phase changes, inbox
 - 2026-11-15 00:49 [P2-075] added: Street lights that look real at night
 - 2026-11-15 00:49 mentor message mmwgshy5y handled: Agreed: those are flat orange ellipses painted on the ground, not light. P2-075 (top priority) makes them real lights near you, projected pools far away, glowing heads with haze and LED warm white.
 - 2026-11-15 00:49 [P2-075] start (attempt 1): Street lights that look real at night
+- 2026-11-15 01:09 mentor message mmwgt77sp handled: Sent the WD2 and GTA V night toolbox to the light builder: real lights near, coronas on every far lamp head, road-shaped pools, faint cones in haze, road reflections, tuned bloom, colour variety.
