@@ -210,10 +210,13 @@ func live_pins() -> Array:
 ## player on the ground. `y` picks the level when it is above the ground there (a flyover deck against the road
 ## under it): the ground is the first surface under y + 3 m, or under the sky when y is 0 or under every surface.
 ## False when a later teleport overtook this one before its ring was attached.
-func teleport(player: Node3D, to: Vector3) -> bool:
+func teleport(player: Node3D, to: Vector3, heading := NAN) -> bool:
 	_teleports += 1
 	var mine := _teleports
-	if player.has_method("place"):
+	var turn := not is_nan(heading) and player.has_method("foot_position")
+	if turn:
+		player.place(to.x, to.z, heading)
+	elif player.has_method("place"):
 		player.place(to.x, to.z)
 	else:
 		player.global_position = to
@@ -228,7 +231,10 @@ func teleport(player: Node3D, to: Vector3) -> bool:
 		hit = ground_at(to.x, to.z)
 	if hit.hit and "ground_y" in player:
 		player.ground_y = hit.y
-		player.place(to.x, to.z)
+		if turn:
+			player.place(to.x, to.z, heading)
+		else:
+			player.place(to.x, to.z)
 	elif hit.hit:
 		player.global_position = Vector3(to.x, hit.y, to.z)
 	return true

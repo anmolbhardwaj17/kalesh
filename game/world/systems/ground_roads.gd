@@ -6,8 +6,9 @@ extends RefCounted
 
 const TileMesh := preload("res://world/systems/tile_mesh.gd")
 const SKIP := ["building"]
-## The plain shapes the infrastructure kits stand on (P2-034): colliders only when the folder has infra.json.
-const KIT_ENVELOPES := ["barrier", "fascia", "retaining", "abutment", "pier", "underside", "railbed", "fob", "platform"]
+## The plain shapes the infrastructure kits stand on (P2-034): colliders only when the folder has infra.json. The side
+## walls of cuts and tunnels and a tunnel's ceiling are the tunnel kit's (P2-032, game/world/infra/kit_tunnel.gd).
+const KIT_ENVELOPES := ["barrier", "fascia", "retaining", "abutment", "pier", "underside", "railbed", "fob", "platform", "wall", "ceiling"]
 
 var id := "ground_roads"
 var lane := "mesh"

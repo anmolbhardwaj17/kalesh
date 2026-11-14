@@ -15,7 +15,7 @@
 // inside it, then cut into nearly equal chunks. Pure.
 import type { ColliderChunk, MeshData } from './codec.ts';
 
-export const COLLIDER_MATERIALS: readonly string[] = ['road', 'parking', 'gore', 'joint', 'median', 'planter', 'footpath', 'kerb', 'wall', 'barrier', 'fascia', 'retaining', 'abutment', 'pier', 'railbed', 'fob', 'platform', 'ground', 'lawn', 'plot', 'bed', 'forecourt', 'pad', 'wallbase', 'moat', 'walkway', 'building', 'landmark', 'landmark_red', 'bollard'];
+export const COLLIDER_MATERIALS: readonly string[] = ['road', 'parking', 'gore', 'joint', 'median', 'planter', 'footpath', 'kerb', 'wall', 'barrier', 'fascia', 'retaining', 'abutment', 'pier', 'ceiling', 'railbed', 'fob', 'platform', 'ground', 'lawn', 'plot', 'bed', 'forecourt', 'pad', 'wallbase', 'moat', 'walkway', 'building', 'landmark', 'landmark_red', 'bollard'];
 /** Aim and hard limit of a chunk (triangles). */
 export const CHUNK_TARGET = 500;
 export const CHUNK_LIMIT = 600;

@@ -100,6 +100,7 @@ import type { BarrierFeature } from './graph/features.ts';
 import type { MassingStep } from './sources/landmarkstage.ts';
 import { GroundHeights } from './tile/shells.ts';
 import { buildInfra } from './infra/build.ts';
+import { tunnelInvariant, tunnelVariants } from './infra/tunnels.ts';
 import { RoadProbe } from './infra/probe.ts';
 import { platformSources } from './infra/platforms.ts';
 import type { OverheadResult } from './elevation/overhead.ts';
@@ -623,12 +624,24 @@ export async function bake(args: BakeArgs, opts: BakeOptions): Promise<HealthRep
           const w = blockProj.toWorld(k.lat, k.lon);
           return { ...k, x: w.x, z: w.z };
         }),
+        tunnels: {
+          kinds: meshed.input.kinds, variants: tunnelVariants(meshed.input.strips, meshed.input.joints, meshed.input.kinds),
+          walls: meshed.mesh.structures.kit.walls, ceilings: meshed.mesh.structures.kit.ceilings, headwalls: meshed.mesh.structures.headwalls,
+        },
         platforms: graphInput ? platformSources(graphInput.elements, (lat, lon) => { const w = blockProj.toWorld(lat, lon); return { x: w.x, z: w.z }; }) : [],
         offset: blockFrame(districts, plan.def.block).offset, stage: plan.id, block: plan.def.block,
       });
       report.infra = infra.record;
       const ir = infra.record;
       opts.log(`[infra] kits: ${Object.entries(ir.variants).map(([k, v]) => `${k} ${v}`).join(', ')}; ${Math.round(ir.edgesM)} m of deck and ramp sides, ${ir.piers} road piers; ${ir.tracksKm} km of track (${ir.railBridges} rail bridges, ${ir.embankmentM} m on approach embankments, ${ir.levelCrossingSamples} level crossing samples), ${ir.masts} overhead line masts, ${ir.platforms} platforms (${ir.platformsSkipped} left out: no rail track beside them); ${ir.metroDecks} metro decks on ${ir.metroPiers} piers (${ir.metroPiersMoved} moved off a road, ${ir.metroPiersSkipped} left out); ${ir.footBridges} foot bridges on ${ir.footColumns} columns with ${ir.stairs} stairs; ${ir.tiles} tiles, ${ir.envelopeTriangles} collider triangles`);
+      if (ir.tunnels) {
+        const tr = ir.tunnels;
+        opts.log(`[tunnels] ${Object.entries(tr.variants).map(([k, v]) => `${k} ${v}`).join(', ')} strips; ${tr.roofedM} m roofed, ${tr.openWallM} m of open wall; ${tr.segments} roofed segments: least headroom ${tr.minHeadroomM.toFixed(2)} m, least cover ${tr.minCoverM.toFixed(2)} m; ${tr.portals.length} mouths, ${tr.drains} drains; steepest ramps ${Object.entries(tr.steepestRampPct).map(([k, v]) => `${k} ${v}%`).join(', ')}`);
+        const dir = path.join(opts.root, 'harness', 'reports', 'tunnels');
+        fs.mkdirSync(dir, { recursive: true });
+        fs.writeFileSync(path.join(dir, 'portals.json'), JSON.stringify({ _doc: 'Every tunnel mouth of the last bake (P2-032, tools/bake/infra/tunnels.ts): name, kit variant, strip, the middle of the mouth at the road (world metres), the compass bearing it faces (out to the ramp), its width, and whether a road at grade lies over it.', stage: plan.id, portals: tr.portals }, null, 1));
+        check([tunnelInvariant(tr)]);
+      }
       check([{ id: 'INFRA-01.every_structure_has_a_kit', ok: ir.withoutKit.length === 0, detail: ir.withoutKit.length === 0 ? `every flyover, bridge, viaduct, rail stretch and foot bridge is built from a variant kit (${Object.keys(ir.variants).length} variants)` : `${ir.withoutKit.length} structure strips have no variant: ${ir.withoutKit.slice(0, 5).join(', ')}` }]);
       // the area generator, part two (P2-009): buildings, shells and facade placements on the built ground
       let generated: { shells: Shell[]; placements: Map<string, { module: string; xforms: number[]; data: number[] }[]>; lines: number } | undefined;

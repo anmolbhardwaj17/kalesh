@@ -57,7 +57,7 @@ export interface Surface {
   pieces: readonly LandmarkGround[];
   stats: {
     emitted: number; byClass: Record<string, number>; pinned: number; wallVertices: number; stepVertices: number; stepCorners: number; unresolvedSteps: number; skirts: number;
-    underDeck: number; loweredUnderDeck: number; overTunnel: number; raisedOverTunnel: number; maxOffsetM: number; wallClamped: number;
+    underDeck: number; loweredUnderDeck: number; overTunnel: number; raisedOverTunnel: number; bedOverTunnel: number; mouthCorners: number; maxOffsetM: number; wallClamped: number;
     /** Landmark ground (P2-006): triangles by class, pad vertices at their level, pad corners a road pin holds off it, moat bed vertices. */
     landmark: { pad: number; forecourt: number; wallbase: number; moat: number; walkway: number; padVertices: number; padPinnedByRoad: number; moatBed: number };
   };
@@ -268,7 +268,7 @@ export function buildSurface(input: TerrainInput, tg: Triangulation, meet: Uint8
   }
   const role = new Uint8Array(nv);
   const vy = new Float64Array(nv).fill(NaN);
-  const stats: Surface['stats'] = { emitted: ne, byClass, pinned: 0, wallVertices: 0, stepVertices: 0, stepCorners: 0, unresolvedSteps: 0, skirts: 0, underDeck: 0, loweredUnderDeck: 0, overTunnel: 0, raisedOverTunnel: 0, maxOffsetM: 0, wallClamped: 0, landmark: lmStats };
+  const stats: Surface['stats'] = { emitted: ne, byClass, pinned: 0, wallVertices: 0, stepVertices: 0, stepCorners: 0, unresolvedSteps: 0, skirts: 0, underDeck: 0, loweredUnderDeck: 0, overTunnel: 0, raisedOverTunnel: 0, bedOverTunnel: 0, mouthCorners: 0, maxOffsetM: 0, wallClamped: 0, landmark: lmStats };
   const fxs: number[] = [];
   const fzs: number[] = [];
   const fos: number[] = [];
@@ -302,6 +302,10 @@ export function buildSurface(input: TerrainInput, tg: Triangulation, meet: Uint8
   // decks and roofed tunnels by cell: only vertices near one look further
   const special = new Set<number>();
   const CELL = 12;
+  /** A water bed over a roofed tunnel stays this far over the roof's underside (m): the slab (P2-032). */
+  const BED_OVER_ROOF_M = 0.8;
+  /** ... for a bed vertex this near a roofed tunnel face (m): the lattice spacing, so no bed triangle dips over it. */
+  const BED_ROOF_REACH_M = 13;
   for (let f = 0; f < fs.faces; f++) {
     if (meet[f] !== MEET_NONE) continue;
     const s = fs.start[f] as number;
@@ -310,6 +314,35 @@ export function buildSurface(input: TerrainInput, tg: Triangulation, meet: Uint8
       for (const dx of [-1, 0, 1]) for (const dz of [-1, 0, 1]) special.add((Math.floor((fs.vx[id] as number) / CELL) + dx + 100000) * 262144 + (Math.floor((fs.vz[id] as number) / CELL) + dz + 100000));
     }
   }
+  /**
+   * The highest roof underside of a roofed tunnel within `r` of (x, z) (its road plus the headroom), or -Infinity: a
+   * ground triangle that spans a tunnel from a vertex beside it must not dip under the roof either (P2-032).
+   */
+  const tunnelRoofNear = (x: number, z: number, r: number): number => {
+    const g = input.ground(x, z);
+    let roof = -Infinity;
+    for (const f of input.grid.near(x - r, z - r, x + r, z + r)) {
+      if (meet[f] !== MEET_NONE) continue;
+      const s = fs.start[f] as number;
+      let hi = -Infinity;
+      let x0 = Infinity;
+      let x1 = -Infinity;
+      let z0 = Infinity;
+      let z1 = -Infinity;
+      for (let k = 0; k < (fs.len[f] as number); k++) {
+        const id = fs.ids[s + k] as number;
+        hi = Math.max(hi, fs.ys[s + k] as number);
+        x0 = Math.min(x0, fs.vx[id] as number);
+        x1 = Math.max(x1, fs.vx[id] as number);
+        z0 = Math.min(z0, fs.vz[id] as number);
+        z1 = Math.max(z1, fs.vz[id] as number);
+      }
+      if (hi >= g || x < x0 - r || x > x1 + r || z < z0 - r || z > z1 + r) continue;
+      if (!pointInFace(fs, f, x, z) && Math.hypot(Math.max(x0 - x, 0, x - x1), Math.max(z0 - z, 0, z - z1)) > r) continue;
+      roof = Math.max(roof, hi + HEADROOM);
+    }
+    return roof;
+  };
   for (let v = 0; v < nv; v++) {
     if (!flags[v] || role[v] === 1 || role[v] === 3) continue;
     const x = vx[v] as number;
@@ -444,6 +477,12 @@ export function buildSurface(input: TerrainInput, tg: Triangulation, meet: Uint8
       let d = 8;
       for (const b of bank) d = Math.min(d, Math.hypot((vx[b] as number) - (vx[v] as number), (vz[b] as number) - (vz[v] as number)));
       vy[v] = Math.min(vy[v] as number, lv(v)) - (0.4 + 1.6 * smoothstep(d / 8));
+      // a bed over a roofed tunnel (P2-032, the Pragati Maidan pond): never under the slab over the roof
+      const roof = tunnelRoofNear(vx[v] as number, vz[v] as number, BED_ROOF_REACH_M);
+      if (roof > -Infinity && (vy[v] as number) < roof + BED_OVER_ROOF_M) {
+        vy[v] = roof + BED_OVER_ROOF_M;
+        stats.bedOverTunnel++;
+      }
     }
     // the fall of the surface over the body, and the least room under its land banks (0 or more)
     let lo = Infinity;
@@ -505,6 +544,13 @@ export function buildSurface(input: TerrainInput, tg: Triangulation, meet: Uint8
       else if (b.steps === 0 && a.steps !== 0 && yb > -Infinity) y = yb;
       else if (a.steps === 0 && b.steps === 0 && Math.abs(ya - yb) > 0.002) stats.unresolvedSteps++;
       if (y === -Infinity) y = pinMax[v] as number;
+      // a step on a tunnel mouth's line (P2-032): a corner that took the tunnel floor hung a skirt of ground down into
+      // the mouth (the Pragati Maidan west mouth, 6.8 m); it stays over the slab, behind the headwall, like a wall vertex
+      const hw = headwallAt(input.portals, vx[v] as number, vz[v] as number);
+      if (hw && y < hw.bottom) {
+        y = Math.min(hw.bottom + 0.5, hw.top);
+        stats.mouthCorners++;
+      }
       cy[e * 3 + i] = y;
       stats.stepCorners++;
     }

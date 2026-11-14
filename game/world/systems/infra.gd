@@ -9,6 +9,12 @@ extends RefCounted
 
 const InfraKit := preload("res://world/infra/infra_kit.gd")
 const Kit := preload("res://scenes/standin/kit.gd")
+const MURAL_SHADER := preload("res://world/infra/tunnel_mural.gdshader")
+const MURAL_INSIDE_SHADER := preload("res://world/infra/tunnel_mural_inside.gdshader")
+const TUNNEL_LIT_SHADER := preload("res://world/infra/tunnel_lit.gdshader")
+## Mural materials (P2-032): key -> [shader kind, inside a roofed tunnel]
+const MURALS := {"mural_wave": [0, true], "mural_ramp": [1, false], "mural_pillar": [2, true]}
+
 
 var id := "infra"
 var lane := "mesh"
@@ -28,13 +34,25 @@ func _init(parent: Node3D, tile_records: Dictionary) -> void:
 	root = parent
 	records = tile_records
 	materials = Kit.materials()
+	# the Pragati Maidan tunnel's painted walls (P2-032): drawn by a shader from the quads' UVs (metres along, height)
+	for k: String in MURALS:
+		var m := ShaderMaterial.new()
+		m.shader = MURAL_INSIDE_SHADER if MURALS[k][1] else MURAL_SHADER
+		m.set_shader_parameter("kind", MURALS[k][0])
+		m.resource_name = k
+		materials[k] = m
+	# the inside of a roofed tunnel (P2-032): lit evenly as from its LED strip lines, never by the sun or the sky
+	var lit := ShaderMaterial.new()
+	lit.shader = TUNNEL_LIT_SHADER
+	lit.resource_name = "tunnel_lit"
+	materials["tunnel_lit"] = lit
 
 
 func prepare(tile: Dictionary) -> Variant:
 	var tid := "%d_%d" % [tile.key.x, tile.key.y]
 	var recs: Dictionary = records.get(tid, {})
 	if recs.is_empty():
-		return {"meshes": [], "triangles": 0, "nodes": []}
+		return {"meshes": [], "triangles": 0, "nodes": [], "labels": []}
 	var built := InfraKit.build(recs, tile.origin)
 	var meshes := []
 	for g: String in InfraKit.GROUPS:
@@ -49,7 +67,7 @@ func prepare(tile: Dictionary) -> Variant:
 				mesh.add_surface_from_arrays(Mesh.PRIMITIVE_TRIANGLES, arrays[k])
 				mesh.surface_set_material(mesh.get_surface_count() - 1, materials.get(k, materials["matte"]))
 			meshes.append({"group": g, "level": level, "mesh": mesh})
-	return {"meshes": meshes, "triangles": int(built.triangles), "nodes": []}
+	return {"meshes": meshes, "triangles": int(built.triangles), "nodes": [], "labels": built.get("labels", [])}
 
 
 func attach(tile: Dictionary, part: Variant) -> bool:
@@ -66,6 +84,22 @@ func attach(tile: Dictionary, part: Variant) -> bool:
 			mi.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
 		root.add_child(mi)
 		part.nodes.append(mi)
+	# the tunnel names on the headwalls (P2-032): a label each, made here on the main thread
+	for lab: Dictionary in part.get("labels", []):
+		var l := Label3D.new()
+		l.name = "TunnelName_%d_%d_%d" % [tile.key.x, tile.key.y, part.nodes.size()]
+		l.text = str(lab.text)
+		l.pixel_size = 0.004
+		l.font_size = int(clampf(float(lab.size) / 0.004 * 0.75, 24.0, 160.0))
+		l.outline_size = 0
+		l.modulate = Color("#f4f1e8")
+		l.shaded = true
+		l.double_sided = false
+		l.visibility_range_end = InfraKit.NEAR_M
+		l.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
+		l.transform = lab.xf
+		root.add_child(l)
+		part.nodes.append(l)
 	live += 1
 	triangles += int(part.triangles)
 	nodes += part.nodes.size()

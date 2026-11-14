@@ -363,7 +363,8 @@ func _load(id: String) -> Dictionary:
 	return _ok({"scene": _args().current_scene_id()})
 
 
-## Staging only (never in a milestone play script): puts the player at [x, y, z] and stops it. On the scaffold y is
+## Staging only (never in a milestone play script): puts the player at [x, y, z] (or [x, y, z, heading], a vehicle's
+## compass heading in radians, P2-032) and stops it. On the scaffold y is
 ## ignored (the car is on the flat ground). In the streamed city it answers only when the ring round the target is
 ## attached with its colliders and the player stands on the ground there (game/world/world_stream.gd teleport).
 ## Names are anchors in the group "anchor"; there are none yet, so a name returns false.
@@ -371,10 +372,12 @@ func _teleport(where: Variant) -> bool:
 	var p := get_tree().get_first_node_in_group("player") as Node3D
 	if p == null:
 		return false
-	if where is Array and where.size() == 3:
+	if where is Array and (where.size() == 3 or where.size() == 4):
 		var city := get_tree().get_first_node_in_group("world_stream")
+		# P2-032: a fourth number is the vehicle's compass heading (radians), so a staged drive starts along its lane
+		var h := float(where[3]) if where.size() == 4 else NAN
 		if city != null:
-			if not await city.teleport(p, Vector3(float(where[0]), float(where[1]), float(where[2]))):
+			if not await city.teleport(p, Vector3(float(where[0]), float(where[1]), float(where[2])), h):
 				return false
 		elif p.has_method("place"):
 			p.place(float(where[0]), float(where[2]))

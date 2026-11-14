@@ -16,7 +16,7 @@ export interface VariantDef {
   pier: PierShape;
 }
 
-/** Every variant the kits build. Tunnels, underpasses and subways (TUN, UND, SUB) are P2-031 and P2-032. */
+/** Every variant the kits build. Tunnels and underpasses (TUN, UND) are P2-032; the subways' own kit (SUB) is P2-031. */
 export const VARIANTS: Readonly<Record<string, VariantDef>> = Object.fromEntries(
   ([
     ['FLY-T1', 'flyover', 'Older T beam flyover, twin or portal piers, orange rail', 'twin'],
@@ -40,6 +40,12 @@ export const VARIANTS: Readonly<Record<string, VariantDef>> = Object.fromEntries
     ['FOB-B3', 'fob', 'ITO skywalk and modern PWD skywalk', 'round'],
     ['FOB-B4', 'fob', 'PWD steel road FOB with stairs and lift', 'round'],
     ['FOB-B5', 'fob', 'Older plain stair FOB', 'round'],
+    // P2-032: cuts, tunnels and underpasses (tunnels.md, underpasses_subways.md; infra/tunnels.ts gives them)
+    ['TUN-T1', 'tunnel', 'Pragati Maidan main tunnel (2022, mural walls, white LED)', 'wall'],
+    ['TUN-T2', 'tunnel', 'Pragati Maidan box underpasses', 'wall'],
+    ['TUN-T3', 'tunnel', 'Basement and service tunnels', 'wall'],
+    ['UND-U1', 'underpass', 'Flyover-era road underpass and cut, painted concrete, sodium', 'wall'],
+    ['SUB-S4', 'subway', 'Pedestrian underpass (plain stand-in until P2-031)', 'wall'],
   ] as const).map(([id, family, name, pier]) => [id, { id, family, name, pier }]),
 );
 

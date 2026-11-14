@@ -7,23 +7,28 @@
 ##
 ## Two levels per group: `base` (the shapes that read from far: decks, piers, barriers, rails, masts, roofs) and
 ## `near` (the small parts: sleepers, paint blocks, posts, bearings, wires, stair treads), shown within NEAR_M.
-## Groups: road (flyovers and bridges), rail, metro, fob, each with its own wear (the look's grime mask).
+## Groups: road (flyovers and bridges), rail, metro, fob, tunnel (cuts, tunnels and underpasses, P2-032, kit_tunnel.gd),
+## each with its own wear (the look's grime mask).
 extends RefCounted
 
 const KitMesh := preload("res://world/landmarks/kit_mesh.gd")
 const Road := preload("res://world/infra/kit_road.gd")
 const Rail := preload("res://world/infra/kit_rail.gd")
 const Elevated := preload("res://world/infra/kit_elevated.gd")
+const Tunnel := preload("res://world/infra/kit_tunnel.gd")
+const TunnelPaint := preload("res://world/infra/kit_tunnel_paint.gd")
 
 ## Distance to which the near level shows (m), measured to the middle of a tile's mesh.
 const NEAR_M := 260.0
 ## Wear per group (STYLE_BIBLE.md "Materials": grime is data): older flyovers sooty, the railway dirty, the metro clean.
-const WEAR := {"road": 0.15, "rail": 0.45, "metro": 0.08, "fob": 0.2}
-const GROUPS := ["road", "rail", "metro", "fob"]
+## The tunnels (P2-032) are new and clean (the Pragati Maidan tunnel opened in 2022; tunnels.md wear 0.1 to 0.2).
+const WEAR := {"road": 0.15, "rail": 0.45, "metro": 0.08, "fob": 0.2, "tunnel": 0.12}
+const GROUPS := ["road", "rail", "metro", "fob", "tunnel"]
 
 
 ## Builds a tile's records. `origin` is the tile origin (world metres): every point is drawn relative to it.
-## Returns {group: {"base": KitMesh, "near": KitMesh}} for the groups the tile has, and "triangles".
+## Returns {group: {"base": KitMesh, "near": KitMesh}} for the groups the tile has, "triangles", and "labels" (the
+## tunnel names on the headwalls: [{text, xf, size}] in world metres).
 static func build(recs: Dictionary, origin: Vector3) -> Dictionary:
 	var out := {}
 	var tris := 0
@@ -62,6 +67,24 @@ static func build(recs: Dictionary, origin: Vector3) -> Dictionary:
 		Elevated.metro_deck(out.metro.base, out.metro.near, d)
 	for f: Dictionary in recs.get("fobs", []):
 		Elevated.fob(out.fob.base, out.fob.near, f)
+	var tun: Dictionary = out.tunnel
+	var twalls: Array = recs.get("twalls", [])
+	var med := TunnelPaint.median_flags(twalls)
+	for wi in twalls.size():
+		Tunnel.wall(tun.base, tun.near, twalls[wi], med[wi])
+	for c: Dictionary in recs.get("tceils", []):
+		Tunnel.ceiling(tun.base, tun.near, c)
+	var labels := []
+	for h: Dictionary in recs.get("theads", []):
+		Tunnel.head(tun.base, tun.near, h)
+		var lab := Tunnel.head_label(h)
+		if not lab.is_empty():
+			labels.append(lab)
+	for d: Dictionary in recs.get("tdrains", []):
+		Tunnel.drain(tun.base, d)
+	for l: Dictionary in recs.get("tlines", []):
+		Tunnel.line(tun.base, l)
+	out["labels"] = labels
 	for g: String in GROUPS:
 		tris += int(out[g].base.triangles) + int(out[g].near.triangles)
 	out["triangles"] = tris

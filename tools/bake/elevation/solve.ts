@@ -26,7 +26,7 @@
 import type { Joint, Station, Strip, StripEnd } from '../roads/model.ts';
 import { findCrossings, levelOf } from './crossings.ts';
 import type { Crossings, ElevationJunction, RailLine, WaterArea } from './crossings.ts';
-import { AT_GRADE_M, CROSSFALL_MAX, minCurveRadius, DECK_OVER_WATER_M, JUNCTION_SLOPE_MAX, RAIL_EMBANKMENT_M, RAIL_OVER_ROAD_M, ROAD_OVER_RAIL_M, ROAD_OVER_ROAD_CENTRE_M, ROAD_OVER_ROAD_M, TUNNEL_COVER_M } from './limits.ts';
+import { AT_GRADE_M, CROSSFALL_MAX, minCurveRadius, DECK_OVER_WATER_M, JUNCTION_SLOPE_MAX, RAIL_EMBANKMENT_M, RAIL_OVER_ROAD_M, ROAD_OVER_RAIL_M, ROAD_OVER_ROAD_CENTRE_M, ROAD_OVER_ROAD_M, TUNNEL_COVER_M, tunnelGradeCaps } from './limits.ts';
 import { combine, Profiles } from './profile.ts';
 import type { Chain, Expr } from './profile.ts';
 import { dot, solveWithLimits } from './multipliers.ts';
@@ -195,7 +195,8 @@ export function solveBlockElevation(input: ElevationInput): ElevationResult {
     if (st.bridge) return { ...t, target: st.g + ROAD_OVER_ROAD_CENTRE_M, kind: 'deck' as const, h: 0 };
     return { ...t, target: st.g, kind: 'ground' as const, h: 0 };
   });
-  const P = new Profiles(strips, joints, { spacing: input.knotSpacing ?? 12 });
+  const gradeCaps = tunnelGradeCaps(strips, joints, tunnels);
+  const P = new Profiles(strips, joints, { spacing: input.knotSpacing ?? 12, gradeCaps });
   const n = P.free + junctions.length;
   const centre = (ji: number): Expr => ({ idx: [P.free + ji], c: [1], k: 0 });
   lap('profiles');
