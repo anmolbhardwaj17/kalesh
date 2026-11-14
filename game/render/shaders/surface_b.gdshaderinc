@@ -33,6 +33,7 @@ uniform vec3 kit_accents[8];
 uniform int kit_accent_count = 1;
 uniform bool kit_shell = false;
 uniform vec3 kit_shell_colour = vec3(0.78, 0.7, 0.58);
+global uniform float kit_night;
 // few and flat varyings (P2-010 perf: the module vertex stream is the main cost of the city): the wall colour and
 // wear in one, the part code, colour mode and the two bay hashes in another; the world position and normal are
 // rebuilt in fragment() from VERTEX and NORMAL
@@ -81,6 +82,24 @@ float vnoise(vec2 p) {
 
 float fbm(vec2 p) {
 	return texture(kit_noise, p * (1.0 / 64.0)).r;
+}
+
+// a lit window at night (P2-052, WORLD_LOGIC.md 1: lit windows vary, not all at once): `h` the window's own draw, `b` a
+// draw per building, `uv` the wall plane in metres. The share of lit windows rises with the night (0.15 at dusk's
+// start to 0.6) and differs per building (some dark, some most lit); the light is mostly warm bulbs, some CFL white
+// and a few cool tube lights, behind curtains that vary across the pane.
+vec3 lit_window(float h, float b, vec2 uv) {
+	if (kit_night <= 0.001) {
+		return vec3(0.0);
+	}
+	float share = (0.15 + 0.45 * kit_night) * mix(0.35, 1.6, b);
+	if (h >= share) {
+		return vec3(0.0);
+	}
+	float k = fract(h * 7.31 + b * 3.7);
+	vec3 c = k < 0.55 ? vec3(1.0, 0.64, 0.34) : (k < 0.9 ? vec3(1.0, 0.82, 0.6) : vec3(0.82, 0.86, 0.88));
+	float curtain = 0.45 + 0.6 * vnoise(uv * vec2(2.7, 1.3) + h * 40.0);
+	return c * curtain * (0.6 + 0.6 * fract(h * 13.7)) * 0.9 * kit_night;
 }
 #else
 float vnoise(vec2 p) {
@@ -164,6 +183,7 @@ void fragment() {
 #ifdef KIT
 	int code = int(k_code + 0.5);
 	int mode = int(k_mode + 0.5);
+	vec3 emit = vec3(0.0);
 	float kg = 1.0;
 	vec3 tint = dot(k_tint, vec3(1.0)) > 0.001 ? k_tint : kit_shell_colour;
 	int na = max(kit_accent_count, 1);
@@ -182,6 +202,8 @@ void fragment() {
 				code = 11;
 				srgb = vec3(0.24, 0.23, 0.22);
 				mode = 0;
+				// far windows light up at night: a draw per window (bay and floor) and per building (its wall colour)
+				emit = lit_window(hash12(floor(k_uv) + vec2(3.1, 7.7)), hash12(tint.rg * 97.0 + tint.b * 13.0), k_uv * 1.5);
 			} else if (k_uv.y < 1.0 && fu > 0.12 && fu < 0.88 && fv > 0.04 && fv < 0.78) {
 				// a closed rolling shutter
 				code = 4;
@@ -251,6 +273,8 @@ void fragment() {
 			} else if (L == 6) {
 				sk = 3;
 				kg = 0.25;
+				// glass: lit from inside at night, per window (the bay's draw) and per building (its wall colour)
+				emit = lit_window(k_var2, hash12(tint.rg * 97.0 + tint.b * 13.0), uv);
 			}
 		} else if (code == 8) {
 			// painted iron: grilles, railings, gates
@@ -568,6 +592,7 @@ void fragment() {
 	ROUGHNESS = rough;
 #ifdef KIT
 	METALLIC = metal;
+	EMISSION = emit;
 #else
 	METALLIC = sk == 3 ? 0.35 : 0.0;
 #endif

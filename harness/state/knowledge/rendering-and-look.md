@@ -45,3 +45,6 @@ Since about midnight of 2026-11-11 (IST; the cause is not known, it was not so f
 - Kit wall colours live in kits.json `walls`, made by tools/kits/sample_walls.mjs from board rectangles: change the rectangles, not the hex values (P2-010).
 - The kit noise is an 8-bit texture: grime thresholds narrower than about 0.02 show texel steps; use smoothstep over 0.02 to 0.1 (P2-010).
 - `verify.mjs --only` runs typecheck and the whole test suite (with a bake) first; use `--no-checks` for look iterations (P2-010).
+- Shade colour comes from the ambient fill: a blue sky top with sky contribution 1 made every shadow navy; stylised_b uses the preset ambient_color with ambient_sky_share 0.12 to 0.35, measured by harness/bin/shadecheck.mjs (P2-052).
+- A sky shader with fbm clouds rebuilds the radiance map on every live relight: keep the cubemap pass cheap (AT_CUBEMAP_PASS), radiance 128 px, incremental, or relight_live_street fails on GPU p95 (P2-052).
+- The lean path sets the sun angular distance to 0, so LIGHT0_SIZE is 0 and a procedural sky draws no sun disc: the disc size is its own preset field disc_deg (P2-052).

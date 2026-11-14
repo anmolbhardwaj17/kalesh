@@ -556,3 +556,8 @@ By: orchestrator.
 Decision: harness/design/REALITY_MATCH.md. A catalog of every visible object class is built from the code and data (no hand list); each object gets dated reference photos, an off-screen render alone and in context, and a score 0 to 10 on shape, size, material and colour, wear, detail, mounting, light response and game language; pass is an average of 8 with no line under 6. Builders self-score what they add, verifiers rescore and fail below pass, look critics sweep the catalog worst first and failures become tasks automatically.
 Why: Anmol 2026-11-14: "compare, give a score and improve until it looks good or matches our game language ... I don't have to provide a list of each and every prop".
 By: orchestrator, from the mentor inbox.
+
+## 2026-11-14: Shade fill is a neutral warm grey, not the sky; street lamps from the lane graph until P2-036 (P2-052)
+Decision: the stylised B shade fill takes the light preset's ambient_color with a small sky share (0.12 to 0.35), so shadows read warm grey, never navy; a procedural sky with clouds and a sun disc; lit windows at night varying per window and building; street lamps placed from the lane graph in game/render (poles every 30 m on kerbs and medians, bracket lamps in galis), drawn as warm LED white, until P2-036 bakes real lamps.
+Why: owner screenshots of navy shade and a flat blue dusk with black windows (2026-11-14); FIDELITY_BAR gap 1.
+By: builder, P2-052.
