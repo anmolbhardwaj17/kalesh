@@ -9,6 +9,7 @@ import { spawn } from 'node:child_process';
 import { PATHS, ROOT, R, H, config, readJSON, readJSONL, appendJSONL, nowISO, git, manifest, manifestEntry, statusOf } from './lib.mjs';
 import { perfSummary } from './perfgate.mjs';
 import { readNotices, openNotices } from './notice.mjs';
+import { readAgents } from './agents.mjs';
 import { signoffStates } from './signoffs.mjs';
 import { scriptIds, milestoneCounts, isRequired, loadMilestones } from './milestoneset.mjs';
 import { readCopies, COPY_ROOT, PLAY_COMMAND } from './playcopy.mjs';
@@ -194,6 +195,8 @@ function buildState() {
     requests: { images: req(PATHS.reqAssets, 'requests'), sfx: req(PATHS.reqSfx, 'requests'), music: req(PATHS.reqMusic, 'requests'), voices: voice.voices || [], lines: (voice.lines || []).map((l) => ({ ...l, status: statusOf(l.id, l, man), file: man.audio?.[l.id]?.path || null })) },
     inbox,
     notices: openNotices(readNotices()),
+    // Agents now (P2-050): one line per running builder or verifier, from harness/state/agents.json.
+    agents: readAgents(),
     journal: tail(PATHS.journal, 80),
     commits: git('log --oneline -12').split('\n').filter(Boolean),
     playCommand: PLAY_COMMAND,

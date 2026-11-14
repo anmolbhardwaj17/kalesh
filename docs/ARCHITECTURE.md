@@ -166,6 +166,7 @@ The hook contract is checked on every `verify --quick` by the `hooks_contract` s
 | `tools/fixtures/gen_projection_points.mjs` | Writes `harness/data/fixtures/projection_points.json` from the TS projection, for the GDScript cross-check. |
 | `harness/bin/task.mjs` | The only writer of `harness/state/backlog.json`: status, next, start, done, fail, phases, gates, inbox, milestones, sign-off. |
 | `harness/bin/signoffs.mjs` | The three Phase 0 sign-offs (style, architecture, game design) as one table: state keys, commands, phase flags, status lines, gate reasons; read by `task.mjs` and the dashboard. Tests: `signoffs.test.mjs`. |
+| `harness/bin/agents.mjs` | Agents now (P2-050): `set <name> --lane --role --task --what`, `clear <name>`, `list`; writes the live file `harness/state/agents.json` (gitignored, `since` kept per task); the dashboard overview shows one line per agent under the sign-offs. Tests: `agents.test.mjs`. |
 | `harness/bin/verify.mjs` | Builds (Godot: the headless import), runs scenarios and milestone play scripts through the target's driver (Godot runs, or the served build in Chromium), judges budgets, writes `harness/reports/latest.json` and shots. `--quick`, `--only`, `--milestone`, `--all`, `--repeat`. |
 | `harness/bin/browser.mjs` | The web driver (target `web`, kept for a later web demo): static server, Chromium launch (GPU first, then software GL), page open with console capture, `waitReady`, `debugCall`, the step runner. |
 | `harness/bin/shoot.mjs` | Ad hoc screenshots and play-throughs. |
