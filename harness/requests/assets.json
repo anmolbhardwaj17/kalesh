@@ -24,11 +24,15 @@
       "created": "2026-11-13T07:39:51.061Z",
       "promptAt": "2026-11-14T12:26:55.279Z",
       "review": {
-        "at": "2026-11-14T12:11:20.758Z",
+        "at": "2026-11-14T13:11:41.523Z",
         "verdict": "redo",
-        "note": "Owner 2026-11-14: regenerate for a realistic look: the first model has a cartoon face (big eyes, thick moustache), a head about 8% too big and a ragged shirt hem.",
+        "note": "2026-11-14: upload the new 3D model made from the approved T-pose picture (portrait_lead_bittu), rigged on Mixamo, as the .fbx. The current model stays in the game until the new one passes.",
         "ingestedAt": "2026-11-14T10:13:47.304Z",
         "removed": false
+      },
+      "redo": {
+        "at": "2026-11-14T13:11:41.522Z",
+        "note": "2026-11-14: upload the new 3D model made from the approved T-pose picture (portrait_lead_bittu), rigged on Mixamo, as the .fbx. The current model stays in the game until the new one passes."
       }
     },
     {
@@ -55,11 +59,15 @@
       "created": "2026-11-13T07:39:51.097Z",
       "promptAt": "2026-11-14T12:16:28.286Z",
       "review": {
-        "at": "2026-11-14T12:11:20.827Z",
+        "at": "2026-11-14T13:11:41.687Z",
         "verdict": "redo",
-        "note": "Owner 2026-11-14: regenerate: trousers came fused between the legs with a slab under the shoes, flared hems, stylised face.",
+        "note": "2026-11-14: upload the new 3D model made from the approved T-pose picture (portrait_lead_meera), rigged on Mixamo, as the .fbx. The current model stays in the game until the new one passes.",
         "ingestedAt": "2026-11-14T10:14:04.349Z",
         "removed": false
+      },
+      "redo": {
+        "at": "2026-11-14T13:11:41.681Z",
+        "note": "2026-11-14: upload the new 3D model made from the approved T-pose picture (portrait_lead_meera), rigged on Mixamo, as the .fbx. The current model stays in the game until the new one passes."
       }
     },
     {
@@ -86,11 +94,15 @@
       "created": "2026-11-13T07:39:51.133Z",
       "promptAt": "2026-11-14T12:16:28.353Z",
       "review": {
-        "at": "2026-11-14T12:11:20.907Z",
+        "at": "2026-11-14T13:11:41.843Z",
         "verdict": "redo",
-        "note": "Owner 2026-11-14: regenerate: sunglasses sat on the eyes instead of pushed up into the hair, boxy puffed jacket shoulders, legs of different lengths, stylised face.",
+        "note": "2026-11-14: upload the new 3D model made from the approved T-pose picture (portrait_lead_danny), rigged on Mixamo, as the .fbx. The current model stays in the game until the new one passes.",
         "ingestedAt": "2026-11-14T10:13:59.771Z",
         "removed": false
+      },
+      "redo": {
+        "at": "2026-11-14T13:11:41.840Z",
+        "note": "2026-11-14: upload the new 3D model made from the approved T-pose picture (portrait_lead_danny), rigged on Mixamo, as the .fbx. The current model stays in the game until the new one passes."
       }
     },
     {
