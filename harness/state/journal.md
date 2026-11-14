@@ -677,3 +677,5 @@ One line per event, written by task.mjs (start, done, fail, phase changes, inbox
 - 2026-11-14 22:59 mentor message mmwgoktu5 handled: Noted: look accepted by you; after the builder's final checks a light verifier pass, then merge and rebuild, about 1 to 1.5 hours.
 - 2026-11-14 23:09 [P2-072] added: Mixamo animations on the leads: pick per character, layered blending
 - 2026-11-14 23:09 [P2-072] start (attempt 1): Mixamo animations on the leads: pick per character, layered blending
+- 2026-11-15 01:15 [P2-072] done: 161 Mixamo clips imported for the leads (raw files out of git), picked per lead in game: Bittu relaxed idle and loose walk, Meera composed idle and upright walk, Danny hip-cocked idle and strut; jog and run blends at game speed; start, stop and turns; upper-body layers (pistol aim, phone, texting, carrying, gestures), spine aim, additive flinches. Verifier: motion natural and characterful; jog stairs foot fixed (p95 0.0182 m); Danny walk and sprint wander 6.2 and 8.0 percent left as a known item, not visible at play distance (P2-077).
+- 2026-11-15 01:15 [P2-073] added: Danny's planted feet at walk and sprint; root-motion starts and turns
