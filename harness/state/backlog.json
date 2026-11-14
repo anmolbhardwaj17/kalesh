@@ -1,6 +1,6 @@
 {
   "_doc": "Written only by node harness/bin/task.mjs. Phases run in order; P0 (ADOPT + STYLE DISCOVERY) waits for the owner by design and needs task.mjs signoff and task.mjs archsignoff before its gate passes. Later phases are added by the planner at the end of P0 (task.mjs phase-add) from the game's real state.",
-  "updated": "2026-11-14T07:29:10.270Z",
+  "updated": "2026-11-14T07:57:09.612Z",
   "phases": [
     {
       "id": "P0",
@@ -2507,7 +2507,8 @@
       "attempts": 1,
       "notes": [
         "Anmol 2026-11-13: houses need the railings Delhi houses have. The area kits must include balcony grilles and railings, roof parapets with railings, front gate and window grilles, and stair railings (outside stairs to the roof), placed by the area profiles. Acceptance: a close shot of a residential block shows them on most houses.",
-        "Anmol 2026-11-13 (DELHI_WORLD.md 'OSM is reference, not the final word'): read area blueprints from harness/data/blueprints/ and let them override OSM footprints (precedence road, landmark zone, blueprint, generator); add the odd-footprint check (slivers, spikes, zig-zags, outliers) that flags shapes to verify against photos and regularises the ones that are not real."
+        "Anmol 2026-11-13 (DELHI_WORLD.md 'OSM is reference, not the final word'): read area blueprints from harness/data/blueprints/ and let them override OSM footprints (precedence road, landmark zone, blueprint, generator); add the odd-footprint check (slivers, spikes, zig-zags, outliers) that flags shapes to verify against photos and regularises the ones that are not real.",
+        "Anmol 2026-11-14: are the colourful buildings real? Facade colours of each kit must be sampled from that area's reference photos and stay inside their range; the verifier compares kit shots with the area board for colour, not only shape."
       ],
       "created": "2026-11-11T12:31:54.059Z",
       "model": "opus",
@@ -2853,7 +2854,8 @@
       "status": "todo",
       "attempts": 0,
       "notes": [
-        "Anmol 2026-11-13: write this area's blueprint (harness/data/blueprints/) from photos; the area must read in its own style (for CP: the uniform two storey white colonnade ring, towers behind the outer circle), not as raw OSM shapes. Acceptance: side by side of a reference photo and the same view in game."
+        "Anmol 2026-11-13: write this area's blueprint (harness/data/blueprints/) from photos; the area must read in its own style (for CP: the uniform two storey white colonnade ring, towers behind the outer circle), not as raw OSM shapes. Acceptance: side by side of a reference photo and the same view in game.",
+        "Anmol 2026-11-14: compare with how Chandni Chowk looks today (current photos), not only its map. The main road is the redeveloped sandstone street (see P2-047 and decisions.md). Facade colours from the photos."
       ],
       "created": "2026-11-11T12:31:54.059Z",
       "model": "opus"
@@ -4427,7 +4429,9 @@
       "kind": "feature",
       "status": "todo",
       "attempts": 0,
-      "notes": [],
+      "notes": [
+        "Anmol 2026-11-14: the pedestrian surface must come from photos of each street today (for Chandni Chowk: red sandstone paving). Coordinate with P2-047."
+      ],
       "created": "2026-11-14T03:52:01.388Z"
     },
     {
@@ -4459,6 +4463,24 @@
       "attempts": 0,
       "notes": [],
       "created": "2026-11-14T07:29:10.269Z"
+    },
+    {
+      "id": "P2-047",
+      "phase": "P2",
+      "title": "Chandni Chowk as it looks today: current photo board, sandstone street and its furniture",
+      "desc": "Anmol 2026-11-14 (decisions.md 'Areas are built from how they look today'). Collect current (2021 or later) licensed photos of Chandni Chowk main road from Fatehpuri Masjid to the Red Fort end (Wikimedia Commons and other free licences only, credited) into a new board harness/design/areas/chandni_chowk_today_board.jpg with a short list of what the street is made of today: the red sandstone paving and its pattern, how the carriageway, footpath and shop line meet, bollards, planters, benches, poles and lights, signage, what replaced the median and the overhead wires, colours of the facades. Then build it: the paving material and pattern in stylised B on the main road surface (bake surface class plus the game material), the street furniture from the photos, and the facade colour range for the bazaar kit sampled from the photos. Work with P2-044 (car-free streets) where it overlaps.",
+      "accept": [
+        "npm run typecheck, npm test and node harness/bin/verify.mjs --quick green"
+      ],
+      "deps": [],
+      "agent": "builder",
+      "priority": 1,
+      "kind": "mentor",
+      "status": "todo",
+      "attempts": 0,
+      "notes": [],
+      "created": "2026-11-14T07:57:09.464Z",
+      "model": "opus"
     }
   ]
 }

@@ -41,7 +41,7 @@ Total cited sources: 24.
 
 ## Footpaths
 
-Before redevelopment (2008): narrow, broken footpaths about 1 to 1.5 m, fully taken over by stalls. After the redevelopment (about 2021): a wide pedestrian priority avenue with red sandstone paving and no kerbs on the central section. Both states exist; the game should use the old (grimy) state as the baseline.
+Before redevelopment (2008): narrow, broken footpaths about 1 to 1.5 m, fully taken over by stalls. After the redevelopment (about 2021): a wide pedestrian priority avenue with red sandstone paving and no kerbs on the central section. The game uses the current (post 2021) state, matching the access model (car-free by day): red sandstone paving, no median, bollards at the ends. Old photos are for the facades and the shops only. (Anmol 2026-11-14, decisions.md.)
 
 ## Road surface and markings
 

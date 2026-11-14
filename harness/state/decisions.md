@@ -489,3 +489,8 @@ Decision: (1) The borderline roads are the edges the old city context rules clos
 Why: the rules alone close wide streets, car parks and compounds that sit in old city rule cells; owner edits needed a place beside the judge; forecourts and government gates were named in P2-042 and left out. The judge reads pictures: it cannot measure a lane under roofs, so it goes by visible vehicles, uniform straight streets, lots, compounds and road names, and says so in its reasons.
 By: builder, P2-043.
 
+
+## 2026-11-14: Areas are built from how they look today, checked against current photos; Chandni Chowk is the redeveloped street
+Decision: every area pass and kit compares the game with current photos of the real place, not only its map shape: the street surface (asphalt, sandstone, tiles, paving), the median, kerbs, poles, wires, and the facade colours. Chandni Chowk main road is built in its current state (redeveloped about 2021: red sandstone paving across the street, no central median, bollards, car-free by day, which the access model already does), not the 2008 state the area sheet first chose. Facade colours of each kit are sampled from that area's reference photos, and the verifier compares them; bright colours stay only where the photos show them.
+Why: Anmol 2026-11-14: "Chandni Chowk see some real images and then compare how Chandni Chowk really looks ... Maybe the road color is different, maybe there's the tile road" and asked whether the colourful buildings are really there.
+By: orchestrator, from the mentor inbox.
