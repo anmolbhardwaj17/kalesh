@@ -1,6 +1,6 @@
 {
   "_doc": "Written only by node harness/bin/task.mjs. Phases run in order; P0 (ADOPT + STYLE DISCOVERY) waits for the owner by design and needs task.mjs signoff and task.mjs archsignoff before its gate passes. Later phases are added by the planner at the end of P0 (task.mjs phase-add) from the game's real state.",
-  "updated": "2026-11-14T10:02:32.267Z",
+  "updated": "2026-11-14T10:12:27.820Z",
   "phases": [
     {
       "id": "P0",
@@ -4974,12 +4974,15 @@
       "agent": "builder",
       "priority": 1,
       "kind": "bug",
-      "status": "doing",
+      "status": "done",
       "attempts": 1,
       "notes": [],
       "created": "2026-11-14T09:51:47.815Z",
       "model": "sonnet",
-      "started": "2026-11-14T09:51:48.077Z"
+      "started": "2026-11-14T09:51:48.077Z",
+      "done": "2026-11-14T10:12:27.783Z",
+      "summary": "Model cards accept .fbx or .glb; an FBX is converted to .glb with headless Godot (skeleton, skin weights, materials, embedded textures kept) and checked like a .glb; card text says upload the Mixamo .fbx as it is. Self-checked: 300 harness tests incl. a real FBX to GLB conversion, typecheck ok, live upload on a test port.",
+      "commit": "fc19fd3"
     },
     {
       "id": "P3-011",

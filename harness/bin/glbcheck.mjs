@@ -120,3 +120,23 @@ export function makeGlb(json, bin = Buffer.alloc(0)) {
   head.writeUInt32LE(12 + body.length, 8);
   return Buffer.concat([head, body]);
 }
+
+/**
+ * What a delivered model contains, from its glTF JSON: triangles (every mesh a node uses, once per node), materials,
+ * textures, skins, joints (bones) and whether the meshes carry skin weights. Used by the ingest note and the FBX test.
+ */
+export function modelStats(json) {
+  let triangles = 0;
+  const materials = new Set();
+  let weighted = false;
+  for (const node of json.nodes || []) {
+    if (node.mesh === undefined) continue;
+    const { tris, mats } = meshTriangles(json, node.mesh);
+    triangles += tris;
+    for (const m of mats) materials.add(m);
+    if ((json.meshes?.[node.mesh]?.primitives || []).some((p) => p.attributes?.JOINTS_0 !== undefined && p.attributes?.WEIGHTS_0 !== undefined)) weighted = true;
+  }
+  const joints = new Set();
+  for (const s of json.skins || []) for (const j of s.joints || []) joints.add(j);
+  return { triangles, materials: materials.size, textures: (json.images || []).length, skins: (json.skins || []).length, joints: joints.size, weighted };
+}
