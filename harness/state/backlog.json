@@ -1,6 +1,6 @@
 {
   "_doc": "Written only by node harness/bin/task.mjs. Phases run in order; P0 (ADOPT + STYLE DISCOVERY) waits for the owner by design and needs task.mjs signoff and task.mjs archsignoff before its gate passes. Later phases are added by the planner at the end of P0 (task.mjs phase-add) from the game's real state.",
-  "updated": "2026-11-14T11:42:00.255Z",
+  "updated": "2026-11-14T11:59:07.141Z",
   "phases": [
     {
       "id": "P0",
@@ -3996,7 +3996,7 @@
       "priority": 2,
       "kind": "mentor",
       "status": "doing",
-      "attempts": 1,
+      "attempts": 2,
       "notes": [
         "Anmol 2026-11-13: build from the P2-033 reference variants and the P2-034 kits; no plain box; side by side with a reference photo and a wide shot in the city for consistency (STYLE_BIBLE.md 'Infrastructure').",
         "Anmol 2026-11-14: every reference photo has its date checked (EXIF, the file page, or visible clues) and written next to it; a photo older than the current state of the place is marked old and never used for surfaces, signs or colours. Before building, check the set actually shows what is needed (the street surface, signs, colours, the view from the player's height); if not, keep searching other free sources until it does. If free photos still do not cover it, register a photo request for Anmol on the dashboard (assets.mjs) and keep working with the best dated set.",
@@ -4004,10 +4004,11 @@
         "Anmol 2026-11-14: the Pragati Maidan tunnel is famous and has its own style; build that style, not a generic tunnel: its painted art and mural panels on the walls, its wall finish and colours, lighting pattern, signage, ceiling fans and portals, from dated photos (2022 on). Acceptance adds: a side by side of game and photo for the portal, the inside with the wall art, and the approach, read by the verifier, who fails a generic tunnel.",
         "Owner photos: harness/design/reference/owner/OWNER_PHOTOS.md (Pragati Maidan section, 4 photos): painted retaining walls with tricolour bands, yellow and green wave murals, painted pillars with mandala panels, marigold light strings, LED strip lines, jet fans. Build to these.",
         "Owner 2026-11-14: ceiling lights in the tunnel look off: short angled white bars floating under the ceiling. Must be continuous LED strips along the ceiling edges, mounted, emissive with soft glow, matching the light on walls and road; murals on the Pragati Maidan stretch.",
-        "Owner 2026-11-14: some tunnels still have the old angled light bars; every tunnel and underpass must get the new fittings, proven with a shot inside each. Murals read as blocky rectangles: need real painted motifs."
+        "Owner 2026-11-14: some tunnels still have the old angled light bars; every tunnel and underpass must get the new fittings, proven with a shot inside each. Murals read as blocky rectangles: need real painted motifs.",
+        "attempt 1 failed: Built and bake green (TUN-01: 1,266 roofed segments, headroom 5.35 m min, 24 mouths, 58 drains, LED strips in all 14 stretches) but: tunnel_drive wheel contacts at kerb edges on 2 routes; walls lit unshaded and look flat; murals read as clean vector art, not hand-painted; tunnel road uses dark city asphalt; pillars in the wide section are paint only."
       ],
       "created": "2026-11-13T11:50:33.337Z",
-      "started": "2026-11-14T08:13:07.658Z"
+      "started": "2026-11-14T11:59:07.140Z"
     },
     {
       "id": "P2-033",
