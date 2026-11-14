@@ -1,4 +1,6 @@
-## The three leads' fixed looks as stand-in colours (P1-023, STYLE_BIBLE.md "Characters", GAME.md "The three
+## The three leads' fixed looks. Since P2-063 each lead with an owner model (rig/lead_<id>.scn, built from
+## public/assets/models/model_lead_<id>.glb by tools/characters/lead_build.mjs) is drawn on that model at its height;
+## the rest of this file is the stand-in that remains for a lead without one: stand-in colours (P1-023, STYLE_BIBLE.md "Characters", GAME.md "The three
 ## characters"), until their models arrive (art requests model_lead_bittu, model_lead_meera, model_lead_danny). One
 ## mannequin of the Universal Animation Library serves all three (the female mannequin of the same rig for Meera); the
 ## look is the uniforms of rig/lead_look.gdshader plus the body's height. Respect rule: real proportions, everyday
@@ -35,6 +37,21 @@ const LOOKS := {
 	},
 }
 
+## The built lead model of a look, or "" when there is none (the stand-in mannequin is drawn then).
+const MODEL_PATH := "res://characters/rig/lead_%s.scn"
+
+
+static func model_path(id: String) -> String:
+	var p := MODEL_PATH % id
+	return p if LOOKS.has(id) and ResourceLoader.exists(p) else ""
+
+
+## The uniform scale that gives a built lead model its height: the look's height over the model's rest height (soles
+## to the top of the head, from the model's "lead" metadata).
+static func model_scale(id: String, meta: Dictionary) -> float:
+	return float(look(id)["height"]) / maxf(float(meta.get("rest_height", 1.0)), 1e-3)
+
+
 ## Height of the rig's mannequins in the rest pose (top of the head over the soles, m): mannequin_m and mannequin_f.
 const REST_HEIGHT := {"m": 1.829, "f": 1.806}
 
@@ -43,7 +60,7 @@ static func look(id: String) -> Dictionary:
 	return LOOKS.get(id, LOOKS["bittu"])
 
 
-## The uniform scale that gives the look its height.
+## The uniform scale that gives the stand-in mannequin the look's height.
 static func scale_of(id: String) -> float:
 	var l := look(id)
 	return float(l["height"]) / float(REST_HEIGHT[l["mesh"]])

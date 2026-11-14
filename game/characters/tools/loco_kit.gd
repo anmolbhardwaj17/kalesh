@@ -8,6 +8,11 @@ extends RefCounted
 const LegIK := preload("res://characters/leg_ik.gd")
 ## Keys a second: a sprinting leg turns 8 degrees in 1/60 s, and a straight line between such keys strays 7 mm.
 const FPS := 120.0
+## Keys a second of this build: FPS, or 240 for a lead model (P2-063: Danny's toe-off turns his foot so fast that a
+## straight line between 120 keys a second dips the ball 2.3 cm under the ground)
+var fps := FPS
+## Lead model builds bend a straight or backward knee forwards (leg_ik.gd `forward_knee`).
+var forward_knee := false
 const SIDES := ["Left", "Right"]
 
 var sk: Skeleton3D
@@ -27,6 +32,9 @@ var hips := -1
 var bones := PackedInt32Array()
 ## Height of the ankle over the ground with the foot flat.
 var ankle_flat := 0.0
+## The body scale the built speeds are exact for (game m/s = skeleton m/s x ref_scale): the stand-in Bittu's 0.94, or
+## a lead model's own scale (build_locomotion.gd -- lead <id>).
+var ref_scale := 0.94
 var _clip := ""
 
 
@@ -44,27 +52,37 @@ func setup(root: Node, mannequin: Node3D, library: AnimationLibrary) -> void:
 		var n := sk.get_bone_name(i)
 		if n != "Root" and not n.contains("_leaf"):
 			bones.append(i)
-	# the sole under the heel and the ball, from the mesh in the rest pose (foot region of the look mesh)
-	var mi := sk.get_node("Body") as MeshInstance3D
-	var min_y := 1e9
-	var min_z := 1e9
-	for s in mi.mesh.get_surface_count():
-		var arr := mi.mesh.surface_get_arrays(s)
-		var pos: PackedVector3Array = arr[Mesh.ARRAY_VERTEX]
-		var col: PackedColorArray = arr[Mesh.ARRAY_COLOR]
-		for v in pos.size():
-			if absf(col[v].r * 8.0 - 6.0) < 0.3:
-				min_y = minf(min_y, pos[v].y)
-				min_z = minf(min_z, pos[v].z)
 	for side in SIDES:
-		var l := LegIK.leg(sk, side)
-		legs[side] = l
-		var foot := sk.get_bone_global_rest(l[2])
-		var toes := sk.get_bone_global_rest(l[3]).origin
-		heel[side] = foot.affine_inverse() * Vector3(foot.origin.x, min_y, min_z + 0.03)
-		ball[side] = foot.affine_inverse() * Vector3(toes.x, min_y, toes.z)
-		foot_len = toes.z - (min_z + 0.03)
-		ankle_flat = foot.origin.y - min_y
+		legs[side] = LegIK.leg(sk, side)
+	if mannequin.has_meta("lead"):
+		# a lead model (build_leads.gd) carries its own sole points, found the same way from its mesh
+		var sole: Dictionary = (mannequin.get_meta("lead") as Dictionary).sole
+		for side in SIDES:
+			heel[side] = sole[side + "Heel"]
+			ball[side] = sole[side + "Ball"]
+		foot_len = float(sole.len)
+		ankle_flat = float(sole.ankle)
+	else:
+		# the sole under the heel and the ball, from the mesh in the rest pose (foot region of the look mesh)
+		var mi := sk.get_node("Body") as MeshInstance3D
+		var min_y := 1e9
+		var min_z := 1e9
+		for s in mi.mesh.get_surface_count():
+			var arr := mi.mesh.surface_get_arrays(s)
+			var pos: PackedVector3Array = arr[Mesh.ARRAY_VERTEX]
+			var col: PackedColorArray = arr[Mesh.ARRAY_COLOR]
+			for v in pos.size():
+				if absf(col[v].r * 8.0 - 6.0) < 0.3:
+					min_y = minf(min_y, pos[v].y)
+					min_z = minf(min_z, pos[v].z)
+		for side in SIDES:
+			var l: PackedInt32Array = legs[side]
+			var foot := sk.get_bone_global_rest(l[2])
+			var toes := sk.get_bone_global_rest(l[3]).origin
+			heel[side] = foot.affine_inverse() * Vector3(foot.origin.x, min_y, min_z + 0.03)
+			ball[side] = foot.affine_inverse() * Vector3(toes.x, min_y, toes.z)
+			foot_len = toes.z - (min_z + 0.03)
+			ankle_flat = foot.origin.y - min_y
 	reach = LegIK.reach(sk, legs["Left"])
 	# the ground of the library's clips: the sole under the balls in the idle pose
 	ground = clip_ground("Idle")
@@ -181,7 +199,7 @@ func hip_joint(side: String, pos: Vector3, basis: Basis) -> Vector3:
 func plant(targets: Dictionary, bases: Dictionary) -> float:
 	var miss := 0.0
 	for side in SIDES:
-		miss = maxf(miss, LegIK.solve(sk, legs[side], targets[side], bases[side], false))
+		miss = maxf(miss, LegIK.solve(sk, legs[side], targets[side], bases[side], false, forward_knee))
 	return miss
 
 
@@ -197,7 +215,7 @@ func snap() -> Dictionary:
 func bake(frames: Array, length: float, loop: bool) -> Animation:
 	var a := Animation.new()
 	a.length = length
-	a.step = 1.0 / FPS
+	a.step = 1.0 / fps
 	a.loop_mode = Animation.LOOP_LINEAR if loop else Animation.LOOP_NONE
 	var n := frames.size()
 	var keys := n + 1 if loop else n

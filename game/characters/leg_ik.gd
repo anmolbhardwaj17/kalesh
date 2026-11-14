@@ -23,8 +23,10 @@ static func reach(sk: Skeleton3D, l: PackedInt32Array) -> float:
 
 
 ## Puts the ankle at `target`. The foot keeps the global basis it has (`keep_foot`), or takes `foot_basis`. Answers how
-## far the target was out of reach (0 when reached).
-static func solve(sk: Skeleton3D, l: PackedInt32Array, target: Vector3, foot_basis := Basis.IDENTITY, keep_foot := true) -> float:
+## far the target was out of reach (0 when reached). `forward_knee` (the lead model builds, P2-063): a leg the pose holds
+## straight or bent backwards is bent forwards (about the hips' -X: the model faces +Z), so a nearly straight leg
+## cannot flip its knee from one frame to the next.
+static func solve(sk: Skeleton3D, l: PackedInt32Array, target: Vector3, foot_basis := Basis.IDENTITY, keep_foot := true, forward_knee := false) -> float:
 	var gu := sk.get_bone_global_pose(l[0])
 	var gl := sk.get_bone_global_pose(l[1])
 	var gf := sk.get_bone_global_pose(l[2])
@@ -44,6 +46,13 @@ static func solve(sk: Skeleton3D, l: PackedInt32Array, target: Vector3, foot_bas
 	axis = axis.normalized()
 	var th0 := acos(clampf(ab.dot(cb), -1.0, 1.0))
 	var th1 := acos(clampf((l1 * l1 + l2 * l2 - d * d) / (2.0 * l1 * l2), -1.0, 1.0))
+	if forward_knee:
+		var hint := -(sk.get_bone_global_pose(sk.get_bone_parent(l[0])).basis.x).normalized()
+		var n := ab.cross(cb)
+		if n.dot(hint) < 0.0 or n.length_squared() < 1e-8:
+			# the bend now is about -hint (or none): turn the shin through straight to the forward bend
+			axis = (hint - ab * ab.dot(hint)).normalized()
+			th0 = -acos(clampf(ab.dot(cb), -1.0, 1.0))
 	var rk := Basis(axis, th1 - th0)
 	var c1 := b + rk * (c - b)
 	var from := (c1 - a).normalized()

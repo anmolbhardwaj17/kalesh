@@ -14,6 +14,7 @@
 ##   anim {gait}             foot slide and animation cost of the humanoid at walk, jog or sprint (foot_anim_probe.gd)
 ##   animcost {n}            animation cost per character among n walking characters (foot_anim_probe.gd)
 ##   lineup {x, z, h}        the three leads side by side, the camera turned to face them (foot_anim_probe.gd)
+##   dress {look}            the player's body becomes another lead (bittu, meera, danny), staging only (P2-063)
 ##   feel {test, ...}        how the body moves (foot_feel_probe.gd, P2-041): pops (start, stop, turn), ik (feet on
 ##                           kerbs and stairs), camera (follow lag and sprint sway without jitter)
 extends Node
@@ -67,9 +68,14 @@ func hook(a: Array) -> Dictionary:
 			return {"ok": true, "result": _rec_out}
 		"cost":
 			return {"ok": true, "result": await _cost(int(o.get("n", 16)))}
-		"anim", "animcost", "lineup":
+		"anim", "animcost", "lineup", "dress":
 			var r: Dictionary
-			if cmd == "anim":
+			if o.has("look") and cmd in ["anim", "dress"]:
+				r = AnimProbe.dress(self, str(o.look), str(o.get("pose", "")), bool(o.get("standin", false)))
+				await ticks(2)
+			if cmd == "dress":
+				pass
+			elif cmd == "anim":
 				r = await AnimProbe.anim(self, str(o.get("gait", "walk")))
 			elif cmd == "animcost":
 				r = await AnimProbe.animcost(self, int(o.get("n", 16)))
@@ -85,7 +91,7 @@ func hook(a: Array) -> Dictionary:
 			if fr.has("error"):
 				return {"ok": false, "error": fr.error}
 			return {"ok": true, "result": fr}
-	return {"ok": false, "error": "foot(cmd): unknown cmd %s (info, stage, run, camrec, cost, anim, animcost, lineup, feel)" % cmd}
+	return {"ok": false, "error": "foot(cmd): unknown cmd %s (info, stage, run, camrec, cost, anim, animcost, lineup, dress, feel)" % cmd}
 
 
 func mode_node() -> Node:

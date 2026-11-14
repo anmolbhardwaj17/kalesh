@@ -117,7 +117,67 @@ func test_a_humanoid_poses_its_skeleton() -> void:
 	var b := sk.find_bone("LeftUpperArm")
 	var moved := sk.get_bone_pose_rotation(b).angle_to(sk.get_bone_rest(b).basis.get_rotation_quaternion())
 	t.ok(rad_to_deg(moved) > 20.0, "the arm left the rest pose (T): %.1f degrees" % rad_to_deg(moved))
-	var rate_want := 1.6 / (float(Humanoid.loco().get_meta("gaits").Walk_K.model_speed) * h.body_scale)
+	var rate_want := 1.6 / (float(h.locomotion().get_meta("gaits").Walk_K.model_speed) * h.body_scale)
 	t.near(h.rate, rate_want, 1e-3, "walk rate is ground speed over the built clip's speed at this body's scale")
-	t.ok(h.skeleton.get_node_or_null("Bun") != null, "Meera's bun")
+	if h.lead_model.is_empty():
+		t.ok(h.skeleton.get_node_or_null("Bun") != null, "Meera's bun (stand-in mannequin)")
+	else:
+		t.ok(h.skeleton.get_node_or_null("Body_LOD1") != null, "Meera on her own model (P2-063)")
 	h.free()
+
+
+## P2-063: each lead's own model (rig/lead_<id>.scn from the owner's upload): the profile skeleton with every bone the
+## clips drive, three levels (the play level 25,000 triangles or fewer, a distance level, the full mesh only for
+## close-ups), the model's own texture VRAM compressed, its own locomotion clips, and the body at the lead's height.
+func test_lead_models_are_in_the_game() -> void:
+	var clip_bones := {}
+	for lib in [Humanoid.clips(), Humanoid.loco()]:
+		for name in lib.get_animation_list():
+			var a: Animation = lib.get_animation(name)
+			for k in a.get_track_count():
+				clip_bones[String(a.track_get_path(k).get_concatenated_subnames())] = true
+	for id in ["bittu", "meera", "danny"]:
+		var path := Leads.model_path(id)
+		t.ok(path != "", "%s has a built model (tools/characters/lead_build.mjs)" % id)
+		if path == "":
+			continue
+		var n := (load(path) as PackedScene).instantiate() as Node3D
+		var meta: Dictionary = n.get_meta("lead", {})
+		var sk := n.get_node("GeneralSkeleton") as Skeleton3D
+		var missing := []
+		for b in clip_bones:
+			if sk.find_bone(b) < 0:
+				missing.append(b)
+		t.ok(missing.is_empty(), "%s: every bone the clips drive is in the skeleton (missing %s)" % [id, missing])
+		var tris := []
+		for l in 3:
+			var mi := sk.get_node_or_null("Body_LOD%d" % l) as MeshInstance3D
+			t.ok(mi != null, "%s: level %d" % [id, l])
+			if mi == null:
+				continue
+			var ix: PackedInt32Array = mi.mesh.surface_get_arrays(0)[Mesh.ARRAY_INDEX]
+			tris.append(ix.size() / 3)
+			var mat := mi.mesh.surface_get_material(0) as StandardMaterial3D
+			t.ok(mat != null and mat.albedo_texture is PortableCompressedTexture2D, "%s level %d: the model's own texture, compressed" % [id, l])
+			t.ok(mat != null and mat.normal_enabled == false and mat.rim_enabled, "%s level %d: stylised B finish (no normal map, rim light)" % [id, l])
+		if tris.size() == 3:
+			t.ok(tris[1] <= 25000 and tris[2] < tris[1] and tris[1] < tris[0], "%s triangles per level %s: play level 25,000 or fewer" % [id, tris])
+			var l0 := sk.get_node("Body_LOD0") as MeshInstance3D
+			var l1 := sk.get_node("Body_LOD1") as MeshInstance3D
+			t.ok(l0.visibility_range_end > 1.0 and l0.visibility_range_end < 3.0 and l1.visibility_range_begin == l0.visibility_range_end,
+				"%s: the full mesh only within %.1f m (close-ups), the play level from there" % [id, l0.visibility_range_end])
+		var tex := (sk.get_node("Body_LOD1") as MeshInstance3D).mesh.surface_get_material(0).albedo_texture as PortableCompressedTexture2D
+		t.ok(tex != null and tex.get_compression_mode() == PortableCompressedTexture2D.COMPRESSION_MODE_S3TC and tex.get_width() == 2048,
+			"%s texture is 2048 px S3TC (VRAM compressed)" % id)
+		t.ok(ResourceLoader.exists(Humanoid.LEAD_LOCO_PATH % id), "%s has its own locomotion clips" % id)
+		n.free()
+		var h := Humanoid.new()
+		tree.root.add_child(h)
+		t.ok(h.setup(id), "%s body builds" % id)
+		t.ok(not h.lead_model.is_empty() and h.locomotion() != Humanoid.loco(), "%s is drawn on its model with its own clips" % id)
+		var height := float(meta.rest_height) * h.body_scale
+		t.near(height, float(Leads.look(id).height), 0.005, "%s stands %.3f m tall" % [id, height])
+		for i in 10:
+			h.step(1.0 / 60.0, "ground", 1.6, false)
+		t.ok(h.state == "walk", "%s walks (%s)" % [id, h.state])
+		h.free()

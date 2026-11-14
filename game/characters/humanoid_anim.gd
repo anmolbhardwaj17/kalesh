@@ -24,6 +24,7 @@ const Leads := preload("res://characters/leads.gd")
 const BodyFeel := preload("res://characters/body_feel.gd")
 const CLIPS_PATH := "res://characters/rig/ual_clips.res"
 const LOCO_PATH := "res://characters/rig/loco_clips.res"
+const LEAD_LOCO_PATH := "res://characters/rig/loco_%s.res"
 const SHADER_PATH := "res://characters/rig/lead_look.gdshader"
 const MESH_PATH := {"m": "res://characters/rig/mannequin_m.scn", "f": "res://characters/rig/mannequin_f.scn"}
 ## State -> clip ("k/" is the built library). The first two are the blends; the rest play one clip.
@@ -61,11 +62,18 @@ const P_RATE := &"parameters/rate/scale"
 
 static var _clips: AnimationLibrary
 static var _loco: AnimationLibrary
+static var _lead_loco := {}
 static var _meshes := {}
 static var _shader: Shader
 
 var look_id := "bittu"
 var body_scale := 1.0
+## The built lead model's metadata (rig/lead_<id>.scn "lead"), empty on the stand-in mannequin.
+var lead_model := {}
+var _lib: AnimationLibrary
+## Cross fade into a stop or a turn: 0.09 s on the mannequin; a lead model's own moves meet its jog a little further
+## off (P2-063: the ankles stepped 0.19 m at 0.09 s), so they fade in over 0.14 s.
+var _move_fade := 0.09
 var tree: AnimationTree
 var skeleton: Skeleton3D
 var feel := BodyFeel.new()
@@ -91,6 +99,8 @@ var _was_speed := 0.0
 var _was_intent := ""
 var _lt := -1
 var _rt := -1
+var _lf := -1
+var _rf := -1
 ## Per gait: [game speed, model metres a cycle, cycle seconds], slowest first; the same for the crouch walk.
 var _gaits := []
 var _crouch := []
@@ -111,46 +121,77 @@ static func clips() -> AnimationLibrary:
 	return _clips
 
 
-## The built locomotion clips (tools/characters/loco_build.mjs).
+## The built locomotion clips (tools/characters/loco_build.mjs) of the stand-in mannequin.
 static func loco() -> AnimationLibrary:
 	if _loco == null:
 		_loco = load(LOCO_PATH)
 	return _loco
 
 
-## Builds the body for a look; false when the rig files are missing.
-func setup(id: String) -> bool:
+## A lead model's own locomotion clips (rig/loco_<id>.res, built on its skeleton by tools/characters/lead_build.mjs),
+## or the mannequin's when that file is missing.
+static func lead_loco(id: String) -> AnimationLibrary:
+	if not _lead_loco.has(id):
+		var p := LEAD_LOCO_PATH % id
+		_lead_loco[id] = load(p) if ResourceLoader.exists(p) else loco()
+	return _lead_loco[id]
+
+
+## The locomotion clips this body plays.
+func locomotion() -> AnimationLibrary:
+	return _lib if _lib != null else loco()
+
+
+## Builds the body for a look; false when the rig files are missing. A lead with a built model (P2-063,
+## Leads.model_path) is drawn on its own retargeted skeleton, else on the stand-in mannequin with the painted look.
+func setup(id: String, stand_in := false) -> bool:
 	if not available():
 		return false
 	look_id = id if Leads.LOOKS.has(id) else "bittu"
 	var look := Leads.look(look_id)
-	var kind: String = look["mesh"]
-	if not _meshes.has(kind):
-		_meshes[kind] = load(MESH_PATH[kind])
-	if _shader == null:
-		_shader = load(SHADER_PATH)
-	_model = (_meshes[kind] as PackedScene).instantiate()
+	var mpath := "" if stand_in else Leads.model_path(look_id)
+	if mpath != "":
+		if not _meshes.has(mpath):
+			_meshes[mpath] = load(mpath)
+		_model = (_meshes[mpath] as PackedScene).instantiate()
+		lead_model = _model.get_meta("lead", {})
+		body_scale = Leads.model_scale(look_id, lead_model)
+		_lib = lead_loco(look_id)
+		_move_fade = 0.14
+	else:
+		var kind: String = look["mesh"]
+		if not _meshes.has(kind):
+			_meshes[kind] = load(MESH_PATH[kind])
+		if _shader == null:
+			_shader = load(SHADER_PATH)
+		_model = (_meshes[kind] as PackedScene).instantiate()
+		body_scale = Leads.scale_of(look_id)
+		_lib = loco()
+	var ground := float(_lib.get_meta("ground", 0.0))
+	var sole: Dictionary = _lib.get_meta("sole", {})
 	_model.name = "Model"
-	body_scale = Leads.scale_of(look_id)
 	_model.scale = Vector3.ONE * body_scale
 	_model.rotation.y = PI
-	_model.position.y = -float(loco().get_meta("ground", 0.0)) * body_scale
+	_model.position.y = -ground * body_scale
 	add_child(_model)
 	skeleton = _model.get_node("GeneralSkeleton")
-	var body := skeleton.get_node("Body") as MeshInstance3D
-	body.material_override = Leads.material(look_id, _shader)
-	if float(look.get("bun", 0.0)) > 0.5:
-		_add_bun(look)
+	if lead_model.is_empty():
+		var body := skeleton.get_node("Body") as MeshInstance3D
+		body.material_override = Leads.material(look_id, _shader)
+		if float(look.get("bun", 0.0)) > 0.5:
+			_add_bun(look)
 	_lt = skeleton.find_bone("LeftToes")
 	_rt = skeleton.find_bone("RightToes")
-	var meta: Dictionary = loco().get_meta("gaits", {})
+	_lf = skeleton.find_bone("LeftFoot")
+	_rf = skeleton.find_bone("RightFoot")
+	var meta: Dictionary = _lib.get_meta("gaits", {})
 	for g in GAITS:
 		var m: Dictionary = meta[g.trim_prefix("k/")]
 		_gaits.append([float(m.speed), float(m.model_speed) * float(m.cycle_s), float(m.cycle_s)])
 	var cm: Dictionary = meta[CROUCH_GAIT.trim_prefix("k/")]
 	_crouch = [float(cm.speed), float(cm.model_speed) * float(cm.cycle_s), float(cm.cycle_s)]
-	_moves = loco().get_meta("moves", {})
-	feel.setup(skeleton, body_scale, {"ground": loco().get_meta("ground", 0.0), "sole": loco().get_meta("sole", {})})
+	_moves = _lib.get_meta("moves", {})
+	feel.setup(skeleton, body_scale, {"ground": ground, "sole": sole})
 	feel.jog_speed = _gaits[1][0]
 	feel.sprint_speed = _gaits[2][0]
 	_build_tree()
@@ -247,7 +288,7 @@ func _build_tree() -> void:
 	tree = AnimationTree.new()
 	tree.name = "AnimTree"
 	tree.add_animation_library("", clips())
-	tree.add_animation_library("k", loco())
+	tree.add_animation_library("k", _lib)
 	tree.tree_root = bt
 	tree.callback_mode_process = AnimationMixer.ANIMATION_CALLBACK_MODE_PROCESS_MANUAL
 	add_child(tree)
@@ -378,9 +419,9 @@ func _pick(c_state: String, speed: float, crouched: bool, intent: String) -> voi
 		_blend(speed, true)
 		return
 	if not _moves.is_empty() and c_state == "ground" and _input == "move":
-		if intent == "stop" and _was_intent in ["go", "turn"] and speed >= STOP_MIN and _move_shot("stop_" + _next_foot(), 0.09):
+		if intent == "stop" and _was_intent in ["go", "turn"] and speed >= STOP_MIN and _move_shot("stop_" + _next_foot(), _move_fade):
 			return
-		if intent == "turn" and _was_intent == "go" and speed >= TURN_MIN and _move_shot("turn_" + _next_foot(), 0.09):
+		if intent == "turn" and _was_intent == "go" and speed >= TURN_MIN and _move_shot("turn_" + _next_foot(), _move_fade):
 			return
 		if intent == "go" and _was_intent == "stop" and _was_speed < STILL and _move_shot("start", 0.08):
 			return
@@ -464,9 +505,15 @@ func _set_input(input: String, r: float, fade: float, restart := false, now := f
 	return true
 
 
-## World positions of the balls of the feet (the contact points of foot_contact.gd): [left, right].
+## World positions of the balls of the feet (the contact points of foot_contact.gd): [left, right]. The mannequin's
+## Toes joint sits on its sole; a lead model's toe joint is the Mixamo rig's (higher, at the ankle after the retarget),
+## so its ball is the sole point under the toe joint (the locomotion build's own contact point).
 func balls() -> Array:
 	var g := skeleton.global_transform
+	if not lead_model.is_empty():
+		var sole: Dictionary = _lib.get_meta("sole", {})
+		return [g * (skeleton.get_bone_global_pose(_lf) * (sole["LeftBall"] as Vector3)),
+			g * (skeleton.get_bone_global_pose(_rf) * (sole["RightBall"] as Vector3))]
 	return [g * skeleton.get_bone_global_pose(_lt).origin, g * skeleton.get_bone_global_pose(_rt).origin]
 
 
@@ -499,5 +546,5 @@ func info() -> Dictionary:
 	return {"look": look_id, "state": state, "clip": clip(), "rate": snappedf(rate, 0.001),
 		"cadenceSpm": snappedf(cadence * 120.0, 0.1), "phase": snappedf(phase, 0.001),
 		"lean": [snappedf(feel.lean.x, 0.001), snappedf(feel.lean.y, 0.001)], "headYaw": snappedf(feel.head_yaw, 0.001),
-		"scale": snappedf(body_scale, 0.0001), "msPerTick": snappedf(cost_ms(), 0.0001), "ticks": ticks}
+		"scale": snappedf(body_scale, 0.0001), "model": "lead" if not lead_model.is_empty() else "mannequin", "msPerTick": snappedf(cost_ms(), 0.0001), "ticks": ticks}
 
