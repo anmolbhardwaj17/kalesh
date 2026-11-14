@@ -18,6 +18,7 @@ Every builder brief for a look task, every verifier and every look audit reads t
 - Things wear: rust, faded and peeling paint, bent boards, torn flex, stains, soot, rain streaks. Wear is soft and natural, never blocky patches.
 - Emptiness is a blocker, never polish. A street or junction that feels bare fails.
 - Light fittings are attached to something real, line up with the structure, glow, and match the light they cast. A floating or angled bar of flat white fails (tunnel lights, 2026-11-14).
+- Light on surfaces matches its source: a continuous strip gives even light, never spaced pools; no sky light inside tunnels or rooms (2026-11-14).
 
 ## Systems are finished, not first steps
 - A system is done when it is complete everywhere it applies in the pilot (tunnels with depth, roof, walls, lights and inside, not an open trench). A planned split is named in the title and told to Anmol.

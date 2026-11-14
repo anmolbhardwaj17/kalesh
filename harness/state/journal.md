@@ -603,3 +603,4 @@ One line per event, written by task.mjs (start, done, fail, phase changes, inbox
 - 2026-11-14 15:44 [P2-063] start (attempt 1): Use the owner's three lead models in game: retarget, LODs, stylised B look
 - 2026-11-14 15:55 mentor message mmwg9fjb8 handled: Seen: the lights are short angled bars floating under the ceiling. Sent to the tunnel builder: continuous LED strips along the ceiling edges as in your photos, proper glow, plus the murals, with a shot from the same spot.
 - 2026-11-14 16:19 mentor message mmwgaaiq2 handled: Sent to the tunnel builder: new LED strips in every tunnel and underpass with a shot inside each as proof, real mural motifs instead of blocky patches, and no more visible game windows on your screen.
+- 2026-11-14 16:41 mentor message mmwgb2z56 handled: Right, the walls are lit by spaced lamps while the strip is continuous. Sent: even light from the strips along the whole tunnel, and no blue sky light leaking onto the ceiling.
