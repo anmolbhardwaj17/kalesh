@@ -28,3 +28,11 @@ Every visible object class the game draws is in the catalog: kit modules (walls,
 - Every builder that adds or changes a visible object scores it before reporting (self-score, honest, with the sheet).
 - Verifiers rescore the objects a task touched; a verifier score below pass fails the task, the same as a missing feature.
 - The look critics (P2-051 and later) sweep the whole catalog, worst first, and the orchestrator turns failures into fix tasks without asking Anmol.
+
+## Image textures vs procedural: pick by evidence, never by source
+Anmol 2026-11-14: "even when I send back images, see if this image is better or you making a texture is better ... from a wide view you can see the pattern ... or the size makes it grainy or too detailed".
+- Every owner image texture is tried in game against the procedural one, A/B, on the same surface, at three distances (2 m, 15 m, 60 m) and in day and night. The one with the higher REALITY_MATCH score wins; ties go to the cheaper one. A mix is allowed (image for close detail, procedural for large variation).
+- Fixed texel density: every tiling surface maps at one real scale (walls and roads about 512 px per metre near, the size the card states), so bricks, cracks and aggregate are life size; a texture is never stretched or shrunk to fit.
+- No visible repetition from far: tiling surfaces use anti-tiling (stochastic or rotated tiling, a large-scale macro variation layer, and decals placed by rules: stains under sills, cracks, patches), and a repetition check on the 60 m shot (a pattern repeating more than a few times across the frame fails).
+- Detail at two scales: a near detail layer that fades out with distance and a far macro layer, so it is never grainy close up or a fine noise far away; mipmaps and anisotropic filtering on.
+- The art reviewer and the verifier read the three distance shots before an image texture replaces anything.

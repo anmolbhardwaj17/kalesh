@@ -499,6 +499,226 @@
     "deva": "हस्तशिल्प स्मृति ठेला"
    },
    "weight": 1
+  },
+  {
+   "kind": "cart",
+   "text": {
+    "latn": "Gola Gate",
+    "deva": "गोला गेट"
+   },
+   "weight": 2,
+   "parody": true,
+   "board_style": "vertical",
+   "tagline": "Barf, rang, rangbaaz"
+  },
+  {
+   "kind": "cart",
+   "text": {
+    "latn": "Doodh Dairy Booth",
+    "deva": "दूध डेयरी बूथ"
+   },
+   "weight": 2,
+   "parody": true,
+   "board_style": "vertical",
+   "tagline": "Doodh, dahi, lassi"
+  },
+  {
+   "kind": "cart",
+   "text": {
+    "latn": "Chocobar Chacha Ice Cream Cart",
+    "deva": "चॉकोबार चाचा आइसक्रीम कार्ट"
+   },
+   "weight": 2,
+   "parody": true,
+   "board_style": "vertical",
+   "tagline": "Chocobar ka chaska"
+  },
+  {
+   "kind": "cart",
+   "text": {
+    "latn": "Bhel Bhawan Lawn",
+    "deva": "भेल भवन लॉन"
+   },
+   "weight": 2,
+   "parody": true,
+   "board_style": "hand_painted",
+   "tagline": "Imli, pyaaz, pyaar"
+  },
+  {
+   "kind": "tourist",
+   "text": {
+    "latn": "Ghoomo Phiro Photo Wale",
+    "deva": "घूमो फिरो फ़ोटो वाले"
+   },
+   "weight": 2,
+   "parody": true,
+   "board_style": "flex",
+   "tagline": "Do minute mein print"
+  },
+  {
+   "kind": "eatery",
+   "text": {
+    "latn": "Rajpath Ki Raunak Pav Bhaji",
+    "deva": "राजपथ की रौनक पाव भाजी"
+   },
+   "weight": 2,
+   "parody": true,
+   "board_style": "flex",
+   "tagline": "Butter extra"
+  },
+  {
+   "kind": "cart",
+   "text": {
+    "latn": "Kartavya Kulfi Kothi",
+    "deva": "कर्तव्य कुल्फ़ी कोठी"
+   },
+   "weight": 2,
+   "parody": true,
+   "board_style": "vertical",
+   "tagline": "Boat club ki thandak"
+  },
+  {
+   "kind": "tourist",
+   "text": {
+    "latn": "Boat Club Balloon Wale",
+    "deva": "बोट क्लब बैलून वाले"
+   },
+   "weight": 2,
+   "parody": true,
+   "board_style": "vertical",
+   "tagline": "Hawa mein khushi"
+  },
+  {
+   "kind": "tourist",
+   "text": {
+    "latn": "Dilli Darshan Souvenir Dukaan",
+    "deva": "दिल्ली दर्शन सूवेनिर दुकान"
+   },
+   "weight": 2,
+   "parody": true,
+   "board_style": "flex",
+   "tagline": "Yaadgaar ki yaad"
+  },
+  {
+   "kind": "cart",
+   "text": {
+    "latn": "India Gate Chai Thela",
+    "deva": "इंडिया गेट चाय ठेला"
+   },
+   "weight": 2,
+   "parody": true,
+   "board_style": "hand_painted",
+   "tagline": "Cutting, kadak, kulhad"
+  },
+  {
+   "kind": "cart",
+   "text": {
+    "latn": "Gate Ke Saamne Golgappa",
+    "deva": "गेट के सामने गोलगप्पा"
+   },
+   "weight": 2,
+   "parody": true,
+   "board_style": "hand_painted",
+   "tagline": "Paani pe paani"
+  },
+  {
+   "kind": "cart",
+   "text": {
+    "latn": "Ghudsawar Gola Corner",
+    "deva": "घुड़सवार गोला कॉर्नर"
+   },
+   "weight": 2,
+   "parody": true,
+   "board_style": "vertical",
+   "tagline": "Tez, thanda"
+  },
+  {
+   "kind": "eatery",
+   "text": {
+    "latn": "Nirmal Nashta Van",
+    "deva": "निर्मल नाश्ता वैन"
+   },
+   "weight": 2,
+   "parody": true,
+   "board_style": "flex",
+   "tagline": "Roll, rice, raunak"
+  },
+  {
+   "kind": "cart",
+   "text": {
+    "latn": "Haldi Wala Ram Namkeen",
+    "deva": "हल्दी वाला राम नमकीन"
+   },
+   "weight": 2,
+   "parody": true,
+   "board_style": "hand_painted",
+   "tagline": "Mungfali, chana, masala"
+  },
+  {
+   "kind": "eatery",
+   "text": {
+    "latn": "Cafe Cool Day",
+    "deva": "कैफ़े कूल डे"
+   },
+   "weight": 2,
+   "parody": true,
+   "board_style": "flex",
+   "tagline": "Garmi mein coffee"
+  },
+  {
+   "kind": "transport",
+   "text": {
+    "latn": "Raj Rickshaw Tours",
+    "deva": "राज रिक्शा टूर्स"
+   },
+   "weight": 2,
+   "parody": true,
+   "board_style": "flex",
+   "tagline": "Pura Lutyens, sirf sau rupaye"
+  },
+  {
+   "kind": "transport",
+   "text": {
+    "latn": "Dilli Dekho Bus Seva",
+    "deva": "दिल्ली देखो बस सेवा"
+   },
+   "weight": 2,
+   "parody": true,
+   "board_style": "flex",
+   "tagline": "Chadho, utro, chalo"
+  },
+  {
+   "kind": "cart",
+   "text": {
+    "latn": "Pita Pani Bottle Wale",
+    "deva": "पीता पानी बोतल वाले"
+   },
+   "weight": 2,
+   "parody": true,
+   "board_style": "hand_painted",
+   "tagline": "Thanda paani, sasta"
+  },
+  {
+   "kind": "cart",
+   "text": {
+    "latn": "Boond Bottle Water",
+    "deva": "बूँद बोतल वाटर"
+   },
+   "weight": 2,
+   "parody": true,
+   "board_style": "hand_painted",
+   "tagline": "Saaf paani, safe safar"
+  },
+  {
+   "kind": "tourist",
+   "text": {
+    "latn": "Dil Se Camera Rental",
+    "deva": "दिल से कैमरा रेंटल"
+   },
+   "weight": 2,
+   "parody": true,
+   "board_style": "flex",
+   "tagline": "Photo sab ki"
   }
  ]
 }

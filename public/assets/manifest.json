@@ -1,24 +1,175 @@
 {
-  "images": {},
+  "images": {
+    "portrait_lead_bittu": {
+      "path": "assets/portraits/portrait_lead_bittu.webp",
+      "w": 512,
+      "h": 768,
+      "ingestedAt": "2026-11-14T13:09:30.579Z"
+    },
+    "portrait_lead_danny": {
+      "path": "assets/portraits/portrait_lead_danny.webp",
+      "w": 512,
+      "h": 768,
+      "ingestedAt": "2026-11-14T12:59:12.611Z"
+    },
+    "portrait_lead_meera": {
+      "path": "assets/portraits/portrait_lead_meera.webp",
+      "w": 512,
+      "h": 768,
+      "ingestedAt": "2026-11-14T12:59:18.307Z"
+    },
+    "tex_pragati_mural_madhubani": {
+      "path": "assets/textures/tex_pragati_mural_madhubani.webp",
+      "w": 2048,
+      "h": 512,
+      "ingestedAt": "2026-11-14T16:24:43.999Z"
+    },
+    "tex_pragati_mural_warli": {
+      "path": "assets/textures/tex_pragati_mural_warli.webp",
+      "w": 2048,
+      "h": 512,
+      "ingestedAt": "2026-11-14T16:25:07.140Z"
+    },
+    "tex_pragati_mural_wave": {
+      "path": "assets/textures/tex_pragati_mural_wave.webp",
+      "w": 2048,
+      "h": 512,
+      "ingestedAt": "2026-11-14T16:25:33.198Z"
+    },
+    "tex_pragati_ramp_wall": {
+      "path": "assets/textures/tex_pragati_ramp_wall.webp",
+      "w": 2048,
+      "h": 1024,
+      "ingestedAt": "2026-11-14T16:25:59.322Z"
+    },
+    "tex_road_asphalt_delhi": {
+      "path": "assets/textures/tex_road_asphalt_delhi.webp",
+      "w": 2048,
+      "h": 2048,
+      "ingestedAt": "2026-11-14T16:26:33.371Z"
+    },
+    "decal_road_marks_sheet": {
+      "path": "assets/decals/decal_road_marks_sheet.webp",
+      "w": 2048,
+      "h": 2048,
+      "ingestedAt": "2026-11-14T16:26:42.067Z"
+    },
+    "tex_tunnel_concrete_panel": {
+      "path": "assets/textures/tex_tunnel_concrete_panel.webp",
+      "w": 2048,
+      "h": 2048,
+      "ingestedAt": "2026-11-14T16:27:08.650Z"
+    },
+    "decal_road_wet_sheet": {
+      "path": "assets/decals/decal_road_wet_sheet.webp",
+      "w": 2048,
+      "h": 2048,
+      "ingestedAt": "2026-11-14T16:28:44.518Z"
+    },
+    "tex_interior_bookshop": {
+      "path": "assets/textures/tex_interior_bookshop.webp",
+      "w": 2048,
+      "h": 2048,
+      "ingestedAt": "2026-11-14T16:29:03.314Z"
+    },
+    "tex_interior_chemist": {
+      "path": "assets/textures/tex_interior_chemist.webp",
+      "w": 2048,
+      "h": 2048,
+      "ingestedAt": "2026-11-14T16:29:23.591Z"
+    },
+    "tex_interior_cloth": {
+      "path": "assets/textures/tex_interior_cloth.webp",
+      "w": 2048,
+      "h": 2048,
+      "ingestedAt": "2026-11-14T16:33:31.937Z"
+    },
+    "tex_interior_dryfruit": {
+      "path": "assets/textures/tex_interior_dryfruit.webp",
+      "w": 2048,
+      "h": 2048,
+      "ingestedAt": "2026-11-14T16:33:47.176Z"
+    },
+    "tex_interior_hardware": {
+      "path": "assets/textures/tex_interior_hardware.webp",
+      "w": 2048,
+      "h": 2048,
+      "ingestedAt": "2026-11-14T16:37:51.843Z"
+    },
+    "tex_interior_hotel_reception": {
+      "path": "assets/textures/tex_interior_hotel_reception.webp",
+      "w": 2048,
+      "h": 2048,
+      "ingestedAt": "2026-11-14T16:38:34.788Z"
+    },
+    "tex_interior_jeweller": {
+      "path": "assets/textures/tex_interior_jeweller.webp",
+      "w": 2048,
+      "h": 2048,
+      "ingestedAt": "2026-11-14T16:38:49.049Z"
+    },
+    "tex_interior_office": {
+      "path": "assets/textures/tex_interior_office.webp",
+      "w": 2048,
+      "h": 2048,
+      "ingestedAt": "2026-11-14T16:38:55.198Z"
+    },
+    "tex_interior_home": {
+      "path": "assets/textures/tex_interior_home.webp",
+      "w": 2048,
+      "h": 2048,
+      "ingestedAt": "2026-11-14T16:39:29.423Z"
+    },
+    "tex_interior_phones": {
+      "path": "assets/textures/tex_interior_phones.webp",
+      "w": 2048,
+      "h": 2048,
+      "ingestedAt": "2026-11-14T16:40:52.015Z"
+    },
+    "tex_interior_sweet": {
+      "path": "assets/textures/tex_interior_sweet.webp",
+      "w": 2048,
+      "h": 2048,
+      "ingestedAt": "2026-11-14T16:40:57.338Z"
+    },
+    "tex_interior_tailor": {
+      "path": "assets/textures/tex_interior_tailor.webp",
+      "w": 2048,
+      "h": 2048,
+      "ingestedAt": "2026-11-14T16:41:19.500Z"
+    },
+    "tex_interior_tea_stall": {
+      "path": "assets/textures/tex_interior_tea_stall.webp",
+      "w": 2048,
+      "h": 2048,
+      "ingestedAt": "2026-11-14T16:41:37.232Z"
+    },
+    "tex_interior_utensils": {
+      "path": "assets/textures/tex_interior_utensils.webp",
+      "w": 2048,
+      "h": 2048,
+      "ingestedAt": "2026-11-14T16:41:41.215Z"
+    }
+  },
   "audio": {},
   "models": {
     "model_lead_bittu": {
       "path": "assets/models/model_lead_bittu.glb",
-      "bytes": 15631308,
+      "bytes": 18412688,
       "kind": "model",
-      "ingestedAt": "2026-11-14T10:13:47.304Z"
+      "ingestedAt": "2026-11-14T13:31:23.427Z"
     },
     "model_lead_danny": {
       "path": "assets/models/model_lead_danny.glb",
-      "bytes": 13732928,
+      "bytes": 17062280,
       "kind": "model",
-      "ingestedAt": "2026-11-14T10:13:59.771Z"
+      "ingestedAt": "2026-11-14T13:16:43.237Z"
     },
     "model_lead_meera": {
       "path": "assets/models/model_lead_meera.glb",
-      "bytes": 13821928,
+      "bytes": 13582220,
       "kind": "model",
-      "ingestedAt": "2026-11-14T10:14:04.349Z"
+      "ingestedAt": "2026-11-14T13:24:11.203Z"
     }
   }
 }

@@ -4,6 +4,10 @@
 //   node harness/bin/leadsheet.mjs --draw     draw from the shots already in harness/reports/shots/
 //   node harness/bin/leadsheet.mjs --compare [--draw]   scenario lead_compare: stand-in and model side by side,
 //                                             harness/reports/leads/compare_<id>.png
+//   node harness/bin/leadsheet.mjs --rest [--draw]      the rest pose proof (game/characters/tools/lead_rest_shots.gd, a
+//                                             window parked off screen): per lead the approved picture, the model as
+//                                             delivered and the built model at rest, front and back,
+//                                             harness/reports/leads/rest.png
 // Writes harness/reports/leads/<id>.png (about 1600 px wide: the standing views, the close-ups, walk and jog from the
 // play and the side camera, the seated pose) and, when they exist, the street shots lead_<id>_street*.png beside them.
 import { spawnSync } from 'node:child_process';
@@ -79,7 +83,44 @@ async function compare(id) {
   return file;
 }
 
+// --rest: rows bittu, meera, danny; columns approved picture, delivered front, built front, delivered back, built back
+async function rest() {
+  const T = [300, 420];
+  const cols = [['pic', 'approved picture'], ['src_front', 'as delivered, front'], ['built_front', 'built, at rest, front'], ['src_back', 'as delivered, back'], ['built_back', 'built, at rest, back']];
+  const w = cols.length * T[0];
+  const h = LABEL + LEADS.length * (T[1] + LABEL);
+  const comp = [{ input: text(w, LABEL, 'Rest pose: the model as delivered (its bind pose) and the built lead with its skeleton at rest must match', 16), left: 0, top: 0 }];
+  for (let r = 0; r < LEADS.length; r++) {
+    const id = LEADS[r];
+    const top = LABEL + r * (T[1] + LABEL);
+    for (let c = 0; c < cols.length; c++) {
+      const f = cols[c][0] === 'pic' ? path.join(ROOT, `public/assets/portraits/portrait_lead_${id}.webp`) : path.join(OUT, `rest_${id}_${cols[c][0]}.png`);
+      if (!fs.existsSync(f)) continue;
+      let img = sharp(f);
+      if (cols[c][0] !== 'pic') {
+        const m = await img.metadata();
+        img = sharp(await img.extract({ left: Math.round(m.width * 0.3), top: Math.round(m.height * 0.04), width: Math.round(m.width * 0.4), height: Math.round(m.height * 0.94) }).toBuffer());
+      }
+      comp.push({ input: await img.resize(T[0], T[1], { fit: 'contain', background: '#16181c' }).png().toBuffer(), left: c * T[0], top });
+      comp.push({ input: text(T[0], LABEL, `${id}: ${cols[c][1]}`, 14), left: c * T[0], top: top + T[1] });
+    }
+  }
+  const file = path.join(OUT, 'rest.png');
+  await sharp({ create: { width: w, height: h, channels: 3, background: '#16181c' } }).composite(comp).png().toFile(file);
+  return file;
+}
+
 async function main() {
+  if (process.argv.includes('--rest')) {
+    fs.mkdirSync(OUT, { recursive: true });
+    if (!process.argv.includes('--draw')) {
+      const bin = spawnSync('node', ['harness/bin/godot.mjs', 'path'], { cwd: ROOT, encoding: 'utf8' }).stdout.trim();
+      const r = spawnSync(bin, ['--path', 'game', '--position', '30000,30000', '-s', 'res://characters/tools/lead_rest_shots.gd', '--', OUT, ...LEADS], { cwd: ROOT, encoding: 'utf8', timeout: 300000 });
+      if (r.status !== 0) console.log(`leadsheet: rest shots failed (exit ${r.status})\n${r.stderr}`);
+    }
+    console.log(path.relative(ROOT, await rest()));
+    return;
+  }
   if (process.argv.includes('--compare')) {
     if (!process.argv.includes('--draw')) {
       const r = spawnSync('node', ['harness/bin/verify.mjs', '--only', 'lead_compare', '--no-build', '--no-checks'], { cwd: ROOT, stdio: 'inherit' });

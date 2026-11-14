@@ -14,7 +14,8 @@ Every builder brief for a look task, every verifier and every look audit reads t
 
 ## Detail and wear
 - Delhi houses have balcony grilles and railings, roof parapets with railings, gate and window grilles, and outside stairs.
-- Sign boards look like real Indian shop signs: flex banners, painted tin, glow boxes, stacked boards, Hindi, English and Urdu, phone numbers. Never clean generated graphics.
+- Scripts per board follow the place and trade: Hindi only, English only, Urdu only, or two together where real boards do (old city Hindi, near Jama Masjid Urdu, GB Road and Paharganj mostly English, CP English); never all three by default (2026-11-14).
+- Sign boards look like real Indian shop signs: flex banners, painted tin, glow boxes, stacked boards, Hindi, English and Urdu, phone numbers. Never clean generated graphics. Each board carries real layout richness: several lines (name, goods, phone, address), mixed fonts, outlines and shadows, icons or printed photos, borders; hotel verticals with neon or LED lettering, star ratings, amenities, bulb or LED borders that flicker or chase at night. A single colour rectangle with one line of plain text fails (2026-11-14).
 - Things wear: rust, faded and peeling paint, bent boards, torn flex, stains, soot, rain streaks. Wear is soft and natural, never blocky patches.
 - Emptiness is a blocker, never polish. A street or junction that feels bare fails.
 - Light fittings are attached to something real, line up with the structure, glow, and match the light they cast. A floating or angled bar of flat white fails (tunnel lights, 2026-11-14).

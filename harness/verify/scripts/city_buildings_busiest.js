@@ -9,6 +9,11 @@ const D = S.D;
 const params = window.__scriptParams || {};
 const BUDGET = params.budgetMs ?? 2.0;
 const CALLS = params.drawCalls ?? 2500;
+// the stream layers the A/B hides (P2-048: ['buildings_*_p*'] measures the small pieces alone, the sign boards among them)
+const LAYERS = params.layers || ['buildings'];
+// or an A/B of one shader parameter on those layers' materials instead of hiding them (P2-048 round 3: {name, on, off}:
+// `shell_signs` 1 against 0 is the cost of the signs the kit shader draws on shell walls, at the densest setting)
+const PARAM = params.param || null;
 const poses = params.poses || [
   { id: 'busiest_40m', tp: [1093.5, 222.1, -4316.2], pos: [1120, 262, -4280], target: [1090, 222, -4320] },
   { id: 'chandni_street', tp: [982.0, 222.9, -4321.0], pos: [992.2, 224.6, -4323.3], target: [939.9, 226.0, -4322.1] },
@@ -55,7 +60,8 @@ for (const p of poses) {
   try {
     for (let r = 0; r < 4; r++) {
       for (const shown of r % 2 ? [false, true] : [true, false]) {
-        await D.stream('layers', shown ? { show: ['buildings'] } : { hide: ['buildings'] });
+        if (PARAM) await D.stream('layers', { param: { [PARAM.name]: shown ? PARAM.on : PARAM.off }, of: LAYERS });
+        else await D.stream('layers', shown ? { show: LAYERS } : { hide: LAYERS });
         await D.perf(300);
         const w = await D.perf(1500);
         (shown ? on : off).push(w.frameMs?.p50);
@@ -64,14 +70,14 @@ for (const p of poses) {
     }
   } finally {
     await D.bench('ballast', { n: 0 });
-    await D.stream('layers', { show: ['buildings'] });
+    if (!PARAM) await D.stream('layers', { show: LAYERS });
   }
   const pairs = on.map((v, i) => v - off[i]);
   const cost = median(pairs);
   const gpuCost = gpuOn.length === on.length ? median(gpuOn.map((v, i) => v - gpuOff[i])) : null;
   const ms = gpuCost ?? cost;
   const calls = plain.drawCalls ?? plain.draws ?? null;
-  out.poses[p.id] = { costMs: Math.round(cost * 1000) / 1000, gpuCostMs: gpuCost === null ? null : Math.round(gpuCost * 1000) / 1000, pairs: pairs.map((v) => Math.round(v * 1000) / 1000), drawCalls: calls, triangles: plain.triangles ?? null, frameOnP50: median(on), frameOffP50: median(off), buildings: b };
+  out.poses[p.id] = { layers: LAYERS, costMs: Math.round(cost * 1000) / 1000, gpuCostMs: gpuCost === null ? null : Math.round(gpuCost * 1000) / 1000, pairs: pairs.map((v) => Math.round(v * 1000) / 1000), drawCalls: calls, triangles: plain.triangles ?? null, frameOnP50: median(on), frameOffP50: median(off), buildings: b };
   S.log(p.id, out.poses[p.id]);
   await S.shot(`city_buildings_busiest_${p.id}`);
   if (!(ms <= BUDGET)) problems.push(`${p.id}: buildings GPU cost ${ms.toFixed(3)} ms, budget ${BUDGET} ms`);

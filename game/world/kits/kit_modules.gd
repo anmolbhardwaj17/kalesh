@@ -8,6 +8,7 @@ extends RefCounted
 
 const M := preload("res://world/kits/module_mesh.gd")
 const P := preload("res://world/kits/kit_pieces.gd")
+const Goods := preload("res://world/kits/kit_goods.gd")
 
 ## atlas cells (tools/kits/make_textures.mjs): lower half, 256 px each
 const A_POSTERS := Rect2(0.0, 0.5, 0.25, 0.25)
@@ -73,7 +74,7 @@ const RECIPES := {
 		"up_window": ["window", {"chhajja": true}], "up_blank": ["blank", {"pipe": true}], "roof_parapet": ["parapet", {}],
 	},
 	"hardware": {
-		"gf_shop": ["shop", {"awning": true, "shutter": 0.12, "goods": 0, "spill": true}], "gf_door": ["door", {"studs": true}],
+		"gf_shop": ["shop", {"awning": true, "shutter": 0.12, "goods": 0}], "gf_door": ["door", {"studs": true}],
 		"gf_gate": ["gate", {}], "gf_plain": ["plain", {"plinth": true}], "up_window": ["window", {"grille": true, "chhajja": true}],
 		"up_balcony": ["balcony", {"railing": true}], "up_blank": ["blank", {"pipe": true, "wires": true}], "roof_parapet": ["parapet", {}],
 	},
@@ -81,12 +82,38 @@ const RECIPES := {
 ## Pieces a kit adds to some bays (`<kit>.<piece>` ids), from which part, and the kits.json share that decides how
 ## often. A stair and a roof tank are decided per wall column (every floor of a blank column carries the stair, so it
 ## climbs from the street to the top floor); the rest per bay.
+## Sign boards (P2-048): a shop bay takes at most one front board; the pieces with "slot" "front" share one bay hash
+## and their shares add up (buildings.gd). Under an upper window the board band, a flex sheet and the AC unit take the
+## same place ("sill"), so at most one of them. The rest are decided one by one: an upper window bay can carry its
+## pier and over-window boards, a vertical board and one sill piece at once (the stacked fronts of the photos).
 const PIECES := {
-	"board": {"from": ["gf_shop", "gf_colonnade", "gf_arcade"], "share": "board", "column": false},
+	"board": {"from": ["gf_shop", "gf_colonnade", "gf_arcade"], "share": "board", "column": false, "slot": "front"},
+	"board_tilt": {"from": ["gf_shop", "gf_colonnade", "gf_arcade"], "share": "board_tilt", "column": false, "slot": "front"},
+	"board_lamp": {"from": ["gf_shop", "gf_colonnade", "gf_arcade"], "share": "board_lamp", "column": false, "slot": "front"},
+	"flex": {"from": ["gf_shop", "gf_colonnade", "gf_arcade"], "share": "flex", "column": false, "slot": "front"},
+	"glow": {"from": ["gf_shop", "gf_colonnade", "gf_arcade"], "share": "glow", "column": false, "slot": "front"},
+	"vboard": {"from": ["up_window", "up_blank"], "share": "vboard", "column": false},
+	"band": {"from": ["up_window"], "share": "band", "column": false, "slot": "sill"},
+	"upflex": {"from": ["up_window"], "share": "upflex", "column": false, "slot": "sill"},
+	"upboards": {"from": ["up_window"], "share": "upboards", "column": false},
+	"blade": {"from": ["gf_shop", "gf_door"], "share": "blade", "column": false},
+	"shutpaint": {"from": ["gf_shop"], "share": "shutpaint", "column": false},
+	"cables": {"from": ["gf_shop", "gf_door", "gf_plain", "gf_gate"], "share": "cables", "column": false},
+	"stack": {"from": ["up_blank"], "share": "stack", "column": false},
+	"enamel": {"from": ["gf_door"], "share": "enamel", "column": false},
+	"small": {"from": ["gf_door"], "share": "small", "column": false},
+	"notice": {"from": ["gf_door", "gf_plain"], "share": "notice", "column": false},
+	"wallsign": {"from": ["gf_plain"], "share": "wallsign", "column": false},
+	"wallboards": {"from": ["gf_plain"], "share": "wallboards", "column": false},
+	"overboard": {"from": ["gf_door", "gf_gate"], "share": "overboard", "column": false},
+	"goods_drums": {"from": ["gf_shop"], "share": "goods_drums", "column": false, "slot": "spill"},
+	"goods_pipes": {"from": ["gf_shop"], "share": "goods_pipes", "column": false, "slot": "spill"},
+	"goods_cartons": {"from": ["gf_shop"], "share": "goods_cartons", "column": false, "slot": "spill"},
+	"goods_sacks": {"from": ["gf_shop"], "share": "goods_sacks", "column": false, "slot": "spill"},
 	"stair": {"from": ["up_blank"], "share": "stair", "column": true},
 	"tank": {"from": ["roof_parapet"], "share": "tank", "column": true},
 	"rail": {"from": ["roof_parapet"], "share": "roof_rail", "column": true},
-	"ac": {"from": ["up_window", "up_strip"], "share": "ac", "column": false},
+	"ac": {"from": ["up_window", "up_strip"], "share": "ac", "column": false, "slot": "sill"},
 	"awning": {"from": ["gf_shop"], "share": "awning", "column": false},
 	"vsign": {"from": ["gf_door"], "share": "vsign", "column": false},
 }
@@ -114,6 +141,29 @@ static func build(design: String, o: Dictionary, kit: String) -> ArrayMesh:
 		"glass": _glass(m, o)
 		"parapet": _parapet(m, o)
 		"board": P._board(m, kit)
+		"board_tilt": P._board(m, kit, {"tilt": -3.4, "bend": 0.1})
+		"board_lamp": P._board(m, kit, {"lamp": true, "tilt": 0.7})
+		"flex": P._flex(m, kit)
+		"glow": P._glow(m, kit)
+		"vboard": P._vboard(m, 0.25, 2.45, 1.42, 0.15, 0.75)
+		"band": P._band(m)
+		"upflex": P._upflex(m)
+		"upboards": P._upboards(m, kit)
+		"blade": P._blade(m)
+		"cables": P._cables(m, kit)
+		"shutpaint":
+			var sr: Array = RECIPES.get(kit, {}).get("gf_shop", DEFAULT["gf_shop"])
+			var so: Dictionary = sr[1]
+			if not so.get("glass", false) and float(so.get("shutter", 0.2)) > 0.0:
+				P.shutpaint(m, 1.15 if so.get("narrow", false) else 1.3, float(so.get("shutter", 0.2)))
+		"stack": P._stack(m)
+		"enamel": P._enamel(m)
+		"small": P._small(m)
+		"notice": P._notice(m)
+		"wallsign": P._wallsign(m)
+		"wallboards": P._wallboards(m, kit)
+		"overboard": P._overboard(m, kit)
+		"goods_drums", "goods_pipes", "goods_cartons", "goods_sacks": Goods.goods(m, design.trim_prefix("goods_"))
 		"stair": P._stair(m, o)
 		"tank": P._tank(m, o)
 		"rail": P._rail(m, o)
@@ -214,9 +264,8 @@ static func _shop(m: M, o: Dictionary) -> void:
 		m.reveal(r, 0.18)
 		m.paint(M.ATLAS, M.OWN, WHITE)
 		m.front(-w, 0.0, w, top, M.SKIN + 0.004, A_GOODS[int(o.get("goods", 0))])
-		m.paint(M.GLASS, M.OWN, Color(0.55, 0.62, 0.66))
-		m.front(-w, 0.0, w, top, 0.12)
 		m.paint(M.IRON, M.OWN, BLACK)
+		m.front(-w, 0.0, w, 0.08, 0.13)
 		for x in [-w, -0.4, 0.4, w]:
 			m.front(x - 0.03, 0.0, x + 0.03, top, 0.13)
 		m.front(-w, top - 0.35, w, top - 0.3, 0.13)
@@ -234,12 +283,10 @@ static func _shop(m: M, o: Dictionary) -> void:
 	# a step and the counter at the front (shop spill)
 	m.paint(M.STONE, M.OWN, Color(0.62, 0.6, 0.56))
 	m.box(Vector3(-1.5, 0.0, 0.0), Vector3(1.5, 0.18, 0.55), false, false)
-	if o.get("spill", false):
-		# goods stacked out front: sacks and bundles under a cloth
-		m.paint(M.CLOTH, M.ACCENT2, Color(0.8, 0.8, 0.8))
-		m.box(Vector3(-w + 0.1, 0.18, 0.4), Vector3(-w + 0.9, 0.95, 0.9), false, false)
-		m.paint(M.SHUTTER, M.ACCENT, Color(0.9, 0.9, 0.9))
-		m.box(Vector3(w - 0.8, 0.18, 0.45), Vector3(w - 0.15, 0.7, 0.95), false, false)
+	# the shop's tube lights, upright on the jambs under the shutter (goods out front are pieces: kit_goods.gd)
+	var ty1 := minf(1.95, top - 0.22 - top * down - 0.08)
+	P.tube(m, -w, 0.8, ty1, 0.17, 1.0)
+	P.tube(m, w, 0.8, ty1, 0.17, -1.0)
 	if o.get("chhajja", false):
 		_chhajja(m, top + 0.05, 0.6)
 	if o.get("awning", false):
@@ -260,6 +307,8 @@ static func _door(m: M, o: Dictionary) -> void:
 		m.front(-0.02, r.position.y, 0.02, r.end.y, M.SKIN + 0.02)
 	else:
 		_opening(m, r, 0.22, M.ATLAS, M.ACCENT, WHITE, A_DOOR)
+		# a bulkhead lamp over the door (fix round 3: a door was a black void at night)
+		P.bulkhead(m, r.end.y)
 	if o.get("arch", false):
 		# a pointed head over the haveli door, in lime against the wall colour
 		m.paint(M.STONE, M.OWN, Color(0.85, 0.8, 0.7))
@@ -331,12 +380,14 @@ static func _colonnade(m: M, o: Dictionary) -> void:
 	m.paint(M.RENDER, M.WALL, WHITE)
 	m.skin(0.0, M.MODULE_H, [r] if o.get("shop", true) else [Rect2(-0.65, 0.3, 1.3, 2.2)])
 	if o.get("shop", true):
+		# the showroom seen through its glass (P2-048: the glass is clear, its frame and door bars carry it)
 		m.paint(M.ATLAS, M.OWN, WHITE)
 		m.front(-1.25, 0.0, 1.25, 2.7, M.SKIN + 0.004, A_GOODS[0])
-		m.paint(M.GLASS, M.OWN, Color(0.55, 0.62, 0.66))
-		m.front(-1.25, 0.0, 1.25, 2.4, 0.1)
 		m.paint(M.IRON, M.OWN, BLACK)
 		m.front(-1.25, 2.4, 1.25, 2.45, 0.11)
+		for x in [-1.22, -0.42, 0.42, 1.22]:
+			m.front(x - 0.03, 0.0, x + 0.03, 2.4, 0.11)
+		m.front(-1.25, 0.0, 1.25, 0.08, 0.11)
 	else:
 		_opening(m, Rect2(-0.65, 0.3, 1.3, 2.2), 0.12, M.GLASS, M.OWN, DARK_GLASS)
 		m.paint(M.WOOD, M.ACCENT, WHITE)

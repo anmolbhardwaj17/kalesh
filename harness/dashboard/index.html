@@ -248,7 +248,8 @@ $('#filePick').addEventListener('change', async (e) => {
   if (want && f.type.startsWith('image/')) {
     try {
       const bmp = await createImageBitmap(f); const got = bmp.width / bmp.height; const need = Number(want[1]) / Number(want[2]);
-      if (Math.abs(got - need) / need > 0.12 && !confirm(`This file is ${bmp.width}x${bmp.height}, but ${id} asks for ${req.generate}. It may belong to another card. Upload it here anyway?`)) { toast('Upload cancelled.'); return; }
+      const shape = (r) => r > 1.15 ? 'wide' : r < 0.87 ? 'tall' : 'square';
+      if (shape(got) !== shape(need) && Math.abs(got - need) / need > 0.5 && !confirm(`This file is ${bmp.width}x${bmp.height}, but ${id} asks for ${req.generate}. It may belong to another card. Upload it here anyway?`)) { toast('Upload cancelled.'); return; }
     } catch { /* unreadable image: let the server decide */ }
   }
   uploading++; toast(`Uploading ${f.name}...`);

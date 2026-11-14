@@ -207,6 +207,2355 @@
         "fitNote": "Use for image to 3D."
       },
       "promptAt": "2026-11-14T12:53:50.845Z"
+    },
+    {
+      "id": "tex_pragati_mural_wave",
+      "kind": "texture",
+      "intent": "Pragati Maidan tunnel inside wall mural: yellow and green wave band with birds and leaves",
+      "prompt": "stylised realistic game art, real proportions, clean simplified shapes, rich warm colour, soft hazy sunlight, hand-tuned colour, no outlines. A painted tunnel wall mural strip, as in the Pragati Maidan tunnel in Delhi. Big flowing wave bands in warm marigold yellow and leaf green, rolling across the whole strip, with simple stylised birds in flight (parrots, peacocks, sparrows) and large curling leaves painted in the waves, in a bold folk-art flat paint style, slightly chalky matte paint on concrete, a few scuffs at the lower edge from traffic dust and small chips. Covers a wall section 8 m wide by 2 m tall. Photographic quality material, shot flat and straight on, evenly lit, no perspective, no shadows cast across it, no people, no real brand names or logos. Seamless tileable horizontally (left edge continues into right edge), 2048 x 512, flat front view, even lighting, no baked shadows, no perspective. Lighting must be uniform across the whole image: no vignette, no gradient, no brighter or darker corner. This is a deliberate unique mural, not a surface tile, so it is allowed one composition; keep its edges seamless where the card says tileable and state the real size shown (see \"Covers\" above) so paint details such as a bird or a flower keep their real size.",
+      "generate": "2048x512",
+      "target": {
+        "w": 2048,
+        "h": 512,
+        "tileable": true,
+        "normalMap": true,
+        "alpha": false,
+        "out": "textures/tex_pragati_mural_wave.webp"
+      },
+      "placeholder": {
+        "color": "#1f2533",
+        "pattern": "noise",
+        "scale": 1
+      },
+      "used_by": [
+        "P2-032"
+      ],
+      "priority": 1,
+      "batch": "B1-tunnel-road",
+      "created": "2026-11-14T15:51:14.440Z",
+      "promptAt": "2026-11-14T16:04:36.018Z",
+      "review": {
+        "at": "2026-11-14T16:44:14.591Z",
+        "verdict": "ok",
+        "note": "Seamless in 2x1 tile, dense folk motifs, even light",
+        "ingestedAt": "2026-11-14T16:25:33.198Z",
+        "fit": "pending",
+        "fitNote": "scene check when wired (P2-032/P2-056)"
+      }
+    },
+    {
+      "id": "tex_pragati_mural_madhubani",
+      "kind": "texture",
+      "intent": "Pragati tunnel wall mural: Madhubani fish band",
+      "prompt": "stylised realistic game art, real proportions, clean simplified shapes, rich warm colour, soft hazy sunlight, hand-tuned colour, no outlines. A painted tunnel wall mural strip in Madhubani folk-art style: a continuous band of stylised fish with big round eyes and patterned scales, fine line hatching, floral borders, in red, ochre, indigo, green and cream on a cream ground, with a thin double border line at top and bottom. Matte paint on concrete, light dust and a few chips at the bottom. Covers a wall section 8 m wide by 2 m tall. Invented original motifs only. Photographic quality material, shot flat and straight on, evenly lit, no perspective, no shadows cast across it, no people, no real brand names or logos. Seamless tileable horizontally (left edge continues into right edge), 2048 x 512, flat front view, even lighting, no baked shadows, no perspective. Lighting must be uniform across the whole image: no vignette, no gradient, no brighter or darker corner. This is a deliberate unique mural, not a surface tile, so it is allowed one composition; keep its edges seamless where the card says tileable and state the real size shown (see \"Covers\" above) so paint details such as a bird or a flower keep their real size.",
+      "generate": "2048x512",
+      "target": {
+        "w": 2048,
+        "h": 512,
+        "tileable": true,
+        "normalMap": true,
+        "alpha": false,
+        "out": "textures/tex_pragati_mural_madhubani.webp"
+      },
+      "placeholder": {
+        "color": "#1f2533",
+        "pattern": "noise",
+        "scale": 1
+      },
+      "used_by": [
+        "P2-032"
+      ],
+      "priority": 1,
+      "batch": "B1-tunnel-road",
+      "created": "2026-11-14T15:51:14.899Z",
+      "promptAt": "2026-11-14T16:04:36.737Z",
+      "review": {
+        "at": "2026-11-14T16:44:14.639Z",
+        "verdict": "ok",
+        "note": "Seamless, dense Madhubani fish band, even light",
+        "ingestedAt": "2026-11-14T16:24:43.999Z",
+        "fit": "pending",
+        "fitNote": "scene check when wired (P2-032/P2-056)"
+      }
+    },
+    {
+      "id": "tex_pragati_mural_warli",
+      "kind": "texture",
+      "intent": "Pragati tunnel wall mural: Warli figures band",
+      "prompt": "stylised realistic game art, real proportions, clean simplified shapes, rich warm colour, soft hazy sunlight, hand-tuned colour, no outlines. A painted tunnel wall mural strip in Warli folk-art style: simple white stick-figure people made of triangles and circles, dancing in a ring, farming, carrying pots, with trees, birds and huts, painted in white on a deep terracotta red-brown ground, with a thin white border line at top and bottom. Matte paint on concrete, light dust and a few chips at the bottom. Covers a wall section 8 m wide by 2 m tall. Figures are dignified folk art, nothing mocking. Photographic quality material, shot flat and straight on, evenly lit, no perspective, no shadows cast across it, no people, no real brand names or logos. Seamless tileable horizontally (left edge continues into right edge), 2048 x 512, flat front view, even lighting, no baked shadows, no perspective. Lighting must be uniform across the whole image: no vignette, no gradient, no brighter or darker corner. This is a deliberate unique mural, not a surface tile, so it is allowed one composition; keep its edges seamless where the card says tileable and state the real size shown (see \"Covers\" above) so paint details such as a bird or a flower keep their real size.",
+      "generate": "2048x512",
+      "target": {
+        "w": 2048,
+        "h": 512,
+        "tileable": true,
+        "normalMap": true,
+        "alpha": false,
+        "out": "textures/tex_pragati_mural_warli.webp"
+      },
+      "placeholder": {
+        "color": "#1f2533",
+        "pattern": "noise",
+        "scale": 1
+      },
+      "used_by": [
+        "P2-032"
+      ],
+      "priority": 1,
+      "batch": "B1-tunnel-road",
+      "created": "2026-11-14T15:51:15.316Z",
+      "promptAt": "2026-11-14T16:04:37.115Z",
+      "review": {
+        "at": "2026-11-14T16:44:14.681Z",
+        "verdict": "ok",
+        "note": "Seamless, Warli figures on red, even light",
+        "ingestedAt": "2026-11-14T16:25:07.140Z",
+        "fit": "pending",
+        "fitNote": "scene check when wired (P2-032/P2-056)"
+      }
+    },
+    {
+      "id": "tex_pragati_ramp_wall",
+      "kind": "texture",
+      "intent": "Pragati tunnel approach ramp retaining wall: lotus, swans, trees, tricolour bands",
+      "prompt": "stylised realistic game art, real proportions, clean simplified shapes, rich warm colour, soft hazy sunlight, hand-tuned colour, no outlines. A painted retaining wall mural strip, as on the open approach ramp of the Pragati Maidan tunnel. Cream base with pale grey flower discs, a blue and white river band across the middle, painted lotus flowers, white swans and dark green trees; a thick saffron band along the top edge and a deep green band along the bottom edge. Matte paint on concrete, light road dust splash at the bottom, a few chips. Covers a wall section 8 m wide by 4 m tall. Photographic quality material, shot flat and straight on, evenly lit, no perspective, no shadows cast across it, no people, no real brand names or logos. Seamless tileable horizontally, 2048 x 1024, flat front view, even lighting, no baked shadows, no perspective. Lighting must be uniform across the whole image: no vignette, no gradient, no brighter or darker corner. This is a deliberate unique mural, not a surface tile, so it is allowed one composition; keep its edges seamless where the card says tileable and state the real size shown (see \"Covers\" above) so paint details such as a bird or a flower keep their real size.",
+      "generate": "2048x1024",
+      "target": {
+        "w": 2048,
+        "h": 1024,
+        "tileable": true,
+        "normalMap": true,
+        "alpha": false,
+        "out": "textures/tex_pragati_ramp_wall.webp"
+      },
+      "placeholder": {
+        "color": "#1f2533",
+        "pattern": "noise",
+        "scale": 1
+      },
+      "used_by": [
+        "P2-032"
+      ],
+      "priority": 1,
+      "batch": "B1-tunnel-road",
+      "created": "2026-11-14T15:51:15.707Z",
+      "promptAt": "2026-11-14T16:04:37.374Z",
+      "review": {
+        "at": "2026-11-14T16:44:14.729Z",
+        "verdict": "ok",
+        "note": "Seamless, lotus swans trees tricolour; tricolour bands will repeat with height so wire as a strip not a tile",
+        "ingestedAt": "2026-11-14T16:25:59.322Z",
+        "fit": "pending",
+        "fitNote": "scene check when wired (P2-032/P2-056)"
+      }
+    },
+    {
+      "id": "tex_road_asphalt_delhi",
+      "kind": "texture",
+      "intent": "Delhi road asphalt, worn, with darker tyre lanes",
+      "prompt": "stylised realistic game art, real proportions, clean simplified shapes, rich warm colour, soft hazy sunlight, hand-tuned colour, no outlines. Worn dark grey Delhi asphalt seen from straight above, MATTE DRY surface with no sheen, no wet look, no reflections and no puddles (wetness is added later in the game shader). Even coarse aggregate: angular stones 5 to 14 mm across, bitumen binder showing between them, tiny sand grain, a faint dusty brown tint. No tyre tracks, no cracks, no patches, no lane markings, no kerbs, no vehicles. TILEABLE MATERIAL RULES: this is a repeating surface, not a picture. Seamless on all four edges (left continues into right, top into bottom). Even, low-contrast variation across the whole image with no single standout feature: no one big crack, stain, patch, chip or mark that would be noticed repeating from far away. Uniform flat lighting, no vignette, no gradient, no baked shadows, no brighter or darker corner. Standout marks (cracks, stains, patches, posters) are made on the separate decal sheets, so leave them out. REAL SCALE: the image shows exactly 4 m x 4 m of road of real surface at 2048 x 2048 px, about 512 px per metre. Aggregate stones are 5 to 14 mm, so each stone is about 3 to 7 px wide. Shot flat and straight on, no perspective, no people, no real brand names or logos, no text, no letters.",
+      "generate": "square 2048x2048",
+      "target": {
+        "w": 2048,
+        "h": 2048,
+        "tileable": true,
+        "normalMap": true,
+        "alpha": false,
+        "out": "textures/tex_road_asphalt_delhi.webp"
+      },
+      "placeholder": {
+        "color": "#1f2533",
+        "pattern": "noise",
+        "scale": 1
+      },
+      "used_by": [
+        "P2-035"
+      ],
+      "priority": 1,
+      "batch": "B1-tunnel-road",
+      "created": "2026-11-14T15:51:16.131Z",
+      "promptAt": "2026-11-14T16:05:08.877Z",
+      "review": {
+        "at": "2026-11-14T16:44:14.772Z",
+        "verdict": "ok",
+        "note": "Seamless even asphalt, no standout feature; tyre lanes should be done by decals or shader",
+        "ingestedAt": "2026-11-14T16:26:33.371Z",
+        "fit": "pending",
+        "fitNote": "scene check when wired (P2-032/P2-056)"
+      }
+    },
+    {
+      "id": "tex_tunnel_concrete_panel",
+      "kind": "texture",
+      "intent": "Concrete tunnel wall panel with joints and soot",
+      "prompt": "stylised realistic game art, real proportions, clean simplified shapes, rich warm colour, soft hazy sunlight, hand-tuned colour, no outlines. Pale grey cast concrete tunnel wall seen straight on, dry: faint horizontal formwork board marks, boards 15 cm tall and 2.4 m long, with fine wood grain imprint, a tie-hole grid with holes 2.5 cm wide every 60 cm in both directions, tiny air bubbles (blowholes 2 to 6 mm), very slight even colour mottling. No panel joint, no soot, no stains, no pipes, no signs (joints and soot come from geometry and the shader). TILEABLE MATERIAL RULES: this is a repeating surface, not a picture. Seamless on all four edges (left continues into right, top into bottom). Even, low-contrast variation across the whole image with no single standout feature: no one big crack, stain, patch, chip or mark that would be noticed repeating from far away. Uniform flat lighting, no vignette, no gradient, no baked shadows, no brighter or darker corner. Standout marks (cracks, stains, patches, posters) are made on the separate decal sheets, so leave them out. REAL SCALE: the image shows exactly 2 m x 2 m of wall of real surface at 2048 x 2048 px, about 1024 px per metre. Formwork boards 15 cm tall, tie holes every 60 cm. Shot flat and straight on, no perspective, no people, no real brand names or logos, no text, no letters.",
+      "generate": "square 2048x2048",
+      "target": {
+        "w": 2048,
+        "h": 2048,
+        "tileable": true,
+        "normalMap": true,
+        "alpha": false,
+        "out": "textures/tex_tunnel_concrete_panel.webp"
+      },
+      "placeholder": {
+        "color": "#1f2533",
+        "pattern": "noise",
+        "scale": 1
+      },
+      "used_by": [
+        "P2-032"
+      ],
+      "priority": 1,
+      "batch": "B1-tunnel-road",
+      "created": "2026-11-14T15:51:16.321Z",
+      "promptAt": "2026-11-14T16:05:09.169Z",
+      "review": {
+        "at": "2026-11-14T16:44:14.817Z",
+        "verdict": "ok",
+        "note": "Seamless board-formed concrete with tie holes; hole grid is real but visible at distance, check scale",
+        "ingestedAt": "2026-11-14T16:27:08.650Z",
+        "fit": "pending",
+        "fitNote": "scene check when wired (P2-032/P2-056)"
+      }
+    },
+    {
+      "id": "decal_road_marks_sheet",
+      "kind": "decal",
+      "intent": "Road decal sheet: cracks, patches, oil stains, manhole covers, tyre marks",
+      "prompt": "stylised realistic game art, real proportions, clean simplified shapes, rich warm colour, soft hazy sunlight, hand-tuned colour, no outlines, lived-in surfaces: soot, water stains, faded paint, patched plaster, dust; honest, not exaggerated. A sheet of 12 separate road surface details to paste onto asphalt, seen straight from above: two long cracks, two rectangular dark tar patches, two oil stains, one round cast iron manhole cover and one square drain grating (no lettering), a braking tyre skid mark, a set of two worn tyre tracks, a puddle stain ring, a patch of loose gravel. Colours drawn from dark grey asphalt, black and rust. Draw every item at real size relative to a 4 m x 4 m sheet (cracks 1 to 3 m long, patches 0.6 to 1.2 m, oil stains 0.3 to 0.8 m, manhole cover 0.6 m round, drain grating 0.5 m square, tyre tracks 3 m long, about 500 px per metre). Standout marks like these live on decal sheets because the tiling textures stay plain. Transparent background (PNG with alpha), 2048 x 2048, each item separate with clear space between, no ground, no shadow, no text, no letters, no logos.",
+      "generate": "square 2048x2048, transparent background",
+      "target": {
+        "w": 2048,
+        "h": 2048,
+        "tileable": false,
+        "normalMap": false,
+        "alpha": true,
+        "out": "decals/decal_road_marks_sheet.webp"
+      },
+      "placeholder": {
+        "color": "#1f2533",
+        "pattern": "flat",
+        "scale": 1
+      },
+      "used_by": [
+        "P2-053"
+      ],
+      "priority": 1,
+      "batch": "B1-tunnel-road",
+      "created": "2026-11-14T15:51:16.743Z",
+      "promptAt": "2026-11-14T16:05:11.838Z",
+      "review": {
+        "at": "2026-11-14T16:44:14.862Z",
+        "verdict": "ok",
+        "note": "Clean alpha sheet: cracks, patches, oil, manhole, grate, tyre marks, gravel; slice into atlas",
+        "ingestedAt": "2026-11-14T16:26:42.067Z",
+        "fit": "pending",
+        "fitNote": "scene check when wired (P2-032/P2-056)"
+      }
+    },
+    {
+      "id": "tex_wall_oldcity_plaster",
+      "kind": "texture",
+      "intent": "Old Delhi lime plaster wall, peeling paint and damp",
+      "prompt": "stylised realistic game art, real proportions, clean simplified shapes, rich warm colour, soft hazy sunlight, hand-tuned colour, no outlines, lived-in surfaces: soot, water stains, faded paint, patched plaster, dust; honest, not exaggerated. BASE LAYER (clean) for an Old Delhi wall: smooth lime plaster painted in one faded dusty mint green, fine trowel marks, sand grain 0.5 to 1 mm, very faint even colour mottling, tiny pores. No peeling, no bricks, no damp, no soot, no cracks, no windows, no posters. This is one of three blendable layers at identical scale and identical colour family (base, peel, brick). TILEABLE MATERIAL RULES: this is a repeating surface, not a picture. Seamless on all four edges (left continues into right, top into bottom). Even, low-contrast variation across the whole image with no single standout feature: no one big crack, stain, patch, chip or mark that would be noticed repeating from far away. Uniform flat lighting, no vignette, no gradient, no baked shadows, no brighter or darker corner. Standout marks (cracks, stains, patches, posters) are made on the separate decal sheets, so leave them out. REAL SCALE: the image shows exactly 2 m x 2 m of wall of real surface at 2048 x 2048 px, about 1024 px per metre. Trowel marks 10 to 30 cm long, sand grain 0.5 to 1 mm. Shot flat and straight on, no perspective, no people, no real brand names or logos, no text, no letters.",
+      "generate": "square 2048x2048",
+      "target": {
+        "w": 2048,
+        "h": 2048,
+        "tileable": true,
+        "normalMap": true,
+        "alpha": false,
+        "out": "textures/tex_wall_oldcity_plaster.webp"
+      },
+      "placeholder": {
+        "color": "#1f2533",
+        "pattern": "noise",
+        "scale": 1
+      },
+      "used_by": [
+        "P2-053"
+      ],
+      "priority": 1,
+      "batch": "B2-walls",
+      "created": "2026-11-14T15:51:16.982Z",
+      "promptAt": "2026-11-14T16:05:09.533Z"
+    },
+    {
+      "id": "tex_wall_old_brick",
+      "kind": "texture",
+      "intent": "Exposed old brick wall, lime mortar, soot",
+      "prompt": "stylised realistic game art, real proportions, clean simplified shapes, rich warm colour, soft hazy sunlight, hand-tuned colour, no outlines, lived-in surfaces: soot, water stains, faded paint, patched plaster, dust; honest, not exaggerated. Plain exposed old thin red-brown bricks of Old Delhi (lakhori style) in running bond, lime mortar joints 1.5 cm wide, slightly uneven, small random variation in brick colour from brick to brick, a few eroded brick faces spread evenly, very faint soot haze, no whitewash band, no big stain. Brick face 23 cm x 7.5 cm. TILEABLE MATERIAL RULES: this is a repeating surface, not a picture. Seamless on all four edges (left continues into right, top into bottom). Even, low-contrast variation across the whole image with no single standout feature: no one big crack, stain, patch, chip or mark that would be noticed repeating from far away. Uniform flat lighting, no vignette, no gradient, no baked shadows, no brighter or darker corner. Standout marks (cracks, stains, patches, posters) are made on the separate decal sheets, so leave them out. REAL SCALE: the image shows exactly 2 m x 2 m of wall of real surface at 2048 x 2048 px, about 1024 px per metre. Each brick face is 23 cm x 7.5 cm (about 235 x 77 px), about 9 courses per 80 cm. Shot flat and straight on, no perspective, no people, no real brand names or logos, no text, no letters.",
+      "generate": "square 2048x2048",
+      "target": {
+        "w": 2048,
+        "h": 2048,
+        "tileable": true,
+        "normalMap": true,
+        "alpha": false,
+        "out": "textures/tex_wall_old_brick.webp"
+      },
+      "placeholder": {
+        "color": "#1f2533",
+        "pattern": "noise",
+        "scale": 1
+      },
+      "used_by": [
+        "P2-053"
+      ],
+      "priority": 1,
+      "batch": "B2-walls",
+      "created": "2026-11-14T15:51:17.234Z",
+      "promptAt": "2026-11-14T16:05:10.032Z"
+    },
+    {
+      "id": "tex_wall_lutyens_whitewash",
+      "kind": "texture",
+      "intent": "Lutyens Delhi whitewash with cream sandstone course",
+      "prompt": "stylised realistic game art, real proportions, clean simplified shapes, rich warm colour, soft hazy sunlight, hand-tuned colour, no outlines. Lutyens Delhi bungalow wall, well kept: clean off-white lime wash with soft brush variation, very fine sand grain, faint warm cream undertone. No sandstone course, no algae, no rain streaks, no cracks (the stone courses live on the Lutyens trim sheet, streaks on the grime decals). TILEABLE MATERIAL RULES: this is a repeating surface, not a picture. Seamless on all four edges (left continues into right, top into bottom). Even, low-contrast variation across the whole image with no single standout feature: no one big crack, stain, patch, chip or mark that would be noticed repeating from far away. Uniform flat lighting, no vignette, no gradient, no baked shadows, no brighter or darker corner. Standout marks (cracks, stains, patches, posters) are made on the separate decal sheets, so leave them out. REAL SCALE: the image shows exactly 2 m x 2 m of wall of real surface at 2048 x 2048 px, about 1024 px per metre. Brush strokes 15 to 30 cm wide, grain 0.5 mm. Shot flat and straight on, no perspective, no people, no real brand names or logos, no text, no letters.",
+      "generate": "square 2048x2048",
+      "target": {
+        "w": 2048,
+        "h": 2048,
+        "tileable": true,
+        "normalMap": true,
+        "alpha": false,
+        "out": "textures/tex_wall_lutyens_whitewash.webp"
+      },
+      "placeholder": {
+        "color": "#1f2533",
+        "pattern": "noise",
+        "scale": 1
+      },
+      "used_by": [
+        "P2-053"
+      ],
+      "priority": 2,
+      "batch": "B2-walls",
+      "created": "2026-11-14T15:51:17.426Z",
+      "promptAt": "2026-11-14T16:05:10.226Z"
+    },
+    {
+      "id": "tex_wall_cp_colonnade_plaster",
+      "kind": "texture",
+      "intent": "Connaught Place colonnade whitewash plaster",
+      "prompt": "stylised realistic game art, real proportions, clean simplified shapes, rich warm colour, soft hazy sunlight, hand-tuned colour, no outlines. Connaught Place colonnade plaster, cream white painted stucco with horizontal rustication grooves 1 cm wide and 1 cm deep every 30 cm, with a very faint yellowed tone and even fine grain, evenly repainted. No cracks, no stains, no dust streaks. TILEABLE MATERIAL RULES: this is a repeating surface, not a picture. Seamless on all four edges (left continues into right, top into bottom). Even, low-contrast variation across the whole image with no single standout feature: no one big crack, stain, patch, chip or mark that would be noticed repeating from far away. Uniform flat lighting, no vignette, no gradient, no baked shadows, no brighter or darker corner. Standout marks (cracks, stains, patches, posters) are made on the separate decal sheets, so leave them out. REAL SCALE: the image shows exactly 2 m x 2 m of wall of real surface at 2048 x 2048 px, about 1024 px per metre. Rustication courses are 30 cm tall, so about 6.7 grooves per 2 m. Shot flat and straight on, no perspective, no people, no real brand names or logos, no text, no letters.",
+      "generate": "square 2048x2048",
+      "target": {
+        "w": 2048,
+        "h": 2048,
+        "tileable": true,
+        "normalMap": true,
+        "alpha": false,
+        "out": "textures/tex_wall_cp_colonnade_plaster.webp"
+      },
+      "placeholder": {
+        "color": "#1f2533",
+        "pattern": "noise",
+        "scale": 1
+      },
+      "used_by": [
+        "P2-053"
+      ],
+      "priority": 2,
+      "batch": "B2-walls",
+      "created": "2026-11-14T15:51:17.671Z",
+      "promptAt": "2026-11-14T16:05:10.407Z"
+    },
+    {
+      "id": "tex_wall_modern_office",
+      "kind": "texture",
+      "intent": "Modern Delhi office facade: concrete and tinted glass with grime",
+      "prompt": "stylised realistic game art, real proportions, clean simplified shapes, rich warm colour, soft hazy sunlight, hand-tuned colour, no outlines. Modern Delhi office block facade seen straight on, clean: pale grey precast concrete panels with even fine pores, and a regular grid of tinted blue-green glass windows with aluminium frames, one window 1.2 m wide x 1.5 m tall every 2.0 m across and every 2.0 m up (four windows in the image). Uniform dust on the glass, no streaks, no drip stains, no logos. TILEABLE MATERIAL RULES: this is a repeating surface, not a picture. Seamless on all four edges (left continues into right, top into bottom). Even, low-contrast variation across the whole image with no single standout feature: no one big crack, stain, patch, chip or mark that would be noticed repeating from far away. Uniform flat lighting, no vignette, no gradient, no baked shadows, no brighter or darker corner. Standout marks (cracks, stains, patches, posters) are made on the separate decal sheets, so leave them out. REAL SCALE: the image shows exactly 4 m x 4 m of facade of real surface at 2048 x 2048 px, about 512 px per metre. Window 1.2 m x 1.5 m, aluminium frame 6 cm wide, concrete panel seams every 2 m. Shot flat and straight on, no perspective, no people, no real brand names or logos, no text, no letters.",
+      "generate": "square 2048x2048",
+      "target": {
+        "w": 2048,
+        "h": 2048,
+        "tileable": true,
+        "normalMap": true,
+        "alpha": false,
+        "out": "textures/tex_wall_modern_office.webp"
+      },
+      "placeholder": {
+        "color": "#1f2533",
+        "pattern": "noise",
+        "scale": 1
+      },
+      "used_by": [
+        "P2-053"
+      ],
+      "priority": 2,
+      "batch": "B2-walls",
+      "created": "2026-11-14T15:51:17.983Z",
+      "promptAt": "2026-11-14T16:05:10.558Z"
+    },
+    {
+      "id": "decal_wall_grime_sheet",
+      "kind": "decal",
+      "intent": "Wall grime sheet: rain streaks, soot, damp at foot, rust runs",
+      "prompt": "stylised realistic game art, real proportions, clean simplified shapes, rich warm colour, soft hazy sunlight, hand-tuned colour, no outlines, lived-in surfaces: soot, water stains, faded paint, patched plaster, dust; honest, not exaggerated. A sheet of 12 separate wall weathering marks, seen straight on, semi-soft edges: three vertical rain streaks running down from a window sill, two black soot clouds, two rising damp bands for the wall foot (wavy upper edge), two rust runs from a bracket, one AC water drip stain, two peeling plaster patches showing brick. Colours: grey-brown, black soot, rust orange, pale damp. Draw every item at real size relative to a 4 m x 4 m sheet of wall (rain streaks 1 to 2 m long and 10 to 30 cm wide, soot clouds 0.8 m, damp bands 1.5 m long, about 500 px per metre). Standout marks like these live on decal sheets because the tiling textures stay plain. Transparent background (PNG with alpha), 2048 x 2048, each item separate with clear space between, no ground, no shadow, no text, no letters, no logos.",
+      "generate": "square 2048x2048, transparent background",
+      "target": {
+        "w": 2048,
+        "h": 2048,
+        "tileable": false,
+        "normalMap": false,
+        "alpha": true,
+        "out": "decals/decal_wall_grime_sheet.webp"
+      },
+      "placeholder": {
+        "color": "#1f2533",
+        "pattern": "flat",
+        "scale": 1
+      },
+      "used_by": [
+        "P2-053"
+      ],
+      "priority": 1,
+      "batch": "B2-walls",
+      "created": "2026-11-14T15:51:18.338Z",
+      "promptAt": "2026-11-14T16:05:12.043Z"
+    },
+    {
+      "id": "decal_wall_peeling_plaster",
+      "kind": "decal",
+      "intent": "Peeling plaster and exposed brick patches",
+      "prompt": "stylised realistic game art, real proportions, clean simplified shapes, rich warm colour, soft hazy sunlight, hand-tuned colour, no outlines, lived-in surfaces: soot, water stains, faded paint, patched plaster, dust; honest, not exaggerated. A sheet of 6 separate irregular patches where plaster has fallen off a wall exposing old red brick and lime mortar, jagged paint edges in faded mint and ochre. Draw every patch at real size, 0.4 to 1.2 m across, about 250 px per metre on this 1024 px sheet; show brick 23 cm x 7.5 cm with 1.5 cm lime joints inside the patches. Standout marks like these live on decal sheets because the tiling textures stay plain. Transparent background (PNG with alpha), 1024 x 1024, each item separate with clear space between, no ground, no shadow, no text, no letters, no logos.",
+      "generate": "square 1024x1024, transparent background",
+      "target": {
+        "w": 1024,
+        "h": 1024,
+        "tileable": false,
+        "normalMap": false,
+        "alpha": true,
+        "out": "decals/decal_wall_peeling_plaster.webp"
+      },
+      "placeholder": {
+        "color": "#1f2533",
+        "pattern": "flat",
+        "scale": 1
+      },
+      "used_by": [
+        "P2-053"
+      ],
+      "priority": 2,
+      "batch": "B2-walls",
+      "created": "2026-11-14T15:51:18.626Z",
+      "promptAt": "2026-11-14T16:05:12.243Z"
+    },
+    {
+      "id": "tex_shutter_rolling_steel",
+      "kind": "texture",
+      "intent": "Rolling steel shutter, dented, painted green",
+      "prompt": "stylised realistic game art, real proportions, clean simplified shapes, rich warm colour, soft hazy sunlight, hand-tuned colour, no outlines, lived-in surfaces: soot, water stains, faded paint, patched plaster, dust; honest, not exaggerated. Rolling steel shutter seen straight on: horizontal corrugated slats with a pitch of 8 cm (rounded ridges about 1 cm deep), faded green paint evenly worn at the ridges to bare metal, light even dust. No dents, no rust patch, no padlock, no hasp, no lettering (those are decals). TILEABLE MATERIAL RULES: this is a repeating surface, not a picture. Seamless on all four edges (left continues into right, top into bottom). Even, low-contrast variation across the whole image with no single standout feature: no one big crack, stain, patch, chip or mark that would be noticed repeating from far away. Uniform flat lighting, no vignette, no gradient, no baked shadows, no brighter or darker corner. Standout marks (cracks, stains, patches, posters) are made on the separate decal sheets, so leave them out. REAL SCALE: the image shows exactly 2 m x 2 m of shutter of real surface at 2048 x 2048 px, about 1024 px per metre. Slat pitch 8 cm, about 25 slats in the image. Shot flat and straight on, no perspective, no people, no real brand names or logos, no text, no letters.",
+      "generate": "square 2048x2048",
+      "target": {
+        "w": 2048,
+        "h": 2048,
+        "tileable": true,
+        "normalMap": true,
+        "alpha": false,
+        "out": "textures/tex_shutter_rolling_steel.webp"
+      },
+      "placeholder": {
+        "color": "#1f2533",
+        "pattern": "noise",
+        "scale": 1
+      },
+      "used_by": [
+        "P2-056"
+      ],
+      "priority": 2,
+      "batch": "B3-signs",
+      "created": "2026-11-14T15:51:20.788Z",
+      "promptAt": "2026-11-14T16:05:10.655Z"
+    },
+    {
+      "id": "decal_goods_sweets_sheet",
+      "kind": "decal",
+      "intent": "Shop goods sheet: sweet trays and snack stacks",
+      "prompt": "stylised realistic game art, real proportions, clean simplified shapes, rich warm colour, soft hazy sunlight, hand-tuned colour, no outlines. A sheet of 8 separate straight-on views of Delhi sweet shop goods: steel trays of jalebi, gulab jamun in syrup, barfi pieces, motichoor laddoo pyramid, kaju katli, samosas, paper-lined baskets of namkeen, a glass counter tray; warm colours, honest and appetising. Transparent background (PNG with alpha), 2048 x 2048, each item separate with clear space between, no ground, no shadow, no text, no letters, no logos.",
+      "generate": "square 2048x2048, transparent background",
+      "target": {
+        "w": 2048,
+        "h": 2048,
+        "tileable": false,
+        "normalMap": false,
+        "alpha": true,
+        "out": "decals/decal_goods_sweets_sheet.webp"
+      },
+      "placeholder": {
+        "color": "#1f2533",
+        "pattern": "flat",
+        "scale": 1
+      },
+      "used_by": [
+        "P2-056"
+      ],
+      "priority": 2,
+      "batch": "B3-goods",
+      "created": "2026-11-14T15:51:21.084Z"
+    },
+    {
+      "id": "decal_goods_cloth_sheet",
+      "kind": "decal",
+      "intent": "Shop goods sheet: cloth rolls and saree stacks",
+      "prompt": "stylised realistic game art, real proportions, clean simplified shapes, rich warm colour, soft hazy sunlight, hand-tuned colour, no outlines. A sheet of 8 separate straight-on views of Old Delhi cloth shop goods: rolls of fabric stacked on edge in many colours, folded saree stacks with gold borders, dupatta bundles, a hanging row of bridal lehenga, plain bolts of white cotton. Rich colour. Transparent background (PNG with alpha), 2048 x 2048, each item separate with clear space between, no ground, no shadow, no text, no letters, no logos.",
+      "generate": "square 2048x2048, transparent background",
+      "target": {
+        "w": 2048,
+        "h": 2048,
+        "tileable": false,
+        "normalMap": false,
+        "alpha": true,
+        "out": "decals/decal_goods_cloth_sheet.webp"
+      },
+      "placeholder": {
+        "color": "#1f2533",
+        "pattern": "flat",
+        "scale": 1
+      },
+      "used_by": [
+        "P2-056"
+      ],
+      "priority": 2,
+      "batch": "B3-goods",
+      "created": "2026-11-14T15:51:21.373Z"
+    },
+    {
+      "id": "decal_goods_utensils_sheet",
+      "kind": "decal",
+      "intent": "Shop goods sheet: steel and brass utensils",
+      "prompt": "stylised realistic game art, real proportions, clean simplified shapes, rich warm colour, soft hazy sunlight, hand-tuned colour, no outlines. A sheet of 8 separate straight-on views of utensil shop goods: stacked steel thalis and katoris, brass handi pots, pressure cookers, copper kettles, steel dabbas of graded sizes, ladles hanging on a rail. Honest metal wear. Transparent background (PNG with alpha), 2048 x 2048, each item separate with clear space between, no ground, no shadow, no text, no letters, no logos.",
+      "generate": "square 2048x2048, transparent background",
+      "target": {
+        "w": 2048,
+        "h": 2048,
+        "tileable": false,
+        "normalMap": false,
+        "alpha": true,
+        "out": "decals/decal_goods_utensils_sheet.webp"
+      },
+      "placeholder": {
+        "color": "#1f2533",
+        "pattern": "flat",
+        "scale": 1
+      },
+      "used_by": [
+        "P2-056"
+      ],
+      "priority": 3,
+      "batch": "B3-goods",
+      "created": "2026-11-14T15:51:21.574Z"
+    },
+    {
+      "id": "decal_goods_dryfruit_sheet",
+      "kind": "decal",
+      "intent": "Shop goods sheet: dry fruit and spice sacks (Khari Baoli)",
+      "prompt": "stylised realistic game art, real proportions, clean simplified shapes, rich warm colour, soft hazy sunlight, hand-tuned colour, no outlines. A sheet of 8 separate straight-on views of Khari Baoli style goods: open jute sacks rolled down at the top showing almonds, cashews, raisins, dried dates, red chillies, turmeric, cardamom and whole spices, each with a small steel scoop, plus a stacked sack wall. Transparent background (PNG with alpha), 2048 x 2048, each item separate with clear space between, no ground, no shadow, no text, no letters, no logos.",
+      "generate": "square 2048x2048, transparent background",
+      "target": {
+        "w": 2048,
+        "h": 2048,
+        "tileable": false,
+        "normalMap": false,
+        "alpha": true,
+        "out": "decals/decal_goods_dryfruit_sheet.webp"
+      },
+      "placeholder": {
+        "color": "#1f2533",
+        "pattern": "flat",
+        "scale": 1
+      },
+      "used_by": [
+        "P2-056"
+      ],
+      "priority": 3,
+      "batch": "B3-goods",
+      "created": "2026-11-14T15:51:21.740Z"
+    },
+    {
+      "id": "decal_goods_hardware_sheet",
+      "kind": "decal",
+      "intent": "Shop goods sheet: hardware, pipes, bolts, tools",
+      "prompt": "stylised realistic game art, real proportions, clean simplified shapes, rich warm colour, soft hazy sunlight, hand-tuned colour, no outlines. A sheet of 8 separate straight-on views of GB Road hardware shop goods: bundles of steel pipes, buckets of nuts and bolts, hanging spanners and hammers, coils of rope and wire, paint tins stacked, taps and fittings in cardboard trays, ball bearings in open boxes. Oily, dusty. Transparent background (PNG with alpha), 2048 x 2048, each item separate with clear space between, no ground, no shadow, no text, no letters, no logos.",
+      "generate": "square 2048x2048, transparent background",
+      "target": {
+        "w": 2048,
+        "h": 2048,
+        "tileable": false,
+        "normalMap": false,
+        "alpha": true,
+        "out": "decals/decal_goods_hardware_sheet.webp"
+      },
+      "placeholder": {
+        "color": "#1f2533",
+        "pattern": "flat",
+        "scale": 1
+      },
+      "used_by": [
+        "P2-056"
+      ],
+      "priority": 3,
+      "batch": "B3-goods",
+      "created": "2026-11-14T15:51:21.859Z"
+    },
+    {
+      "id": "decal_goods_phones_bags_sheet",
+      "kind": "decal",
+      "intent": "Shop goods sheet: phones and covers, bags",
+      "prompt": "stylised realistic game art, real proportions, clean simplified shapes, rich warm colour, soft hazy sunlight, hand-tuned colour, no outlines. A sheet of 8 separate straight-on views of street shop goods: a pegboard of plain phone covers in many colours with no brand marks, a glass case of generic phones and chargers, hanging backpacks and duffel bags, school bags, a rack of belts, sunglasses on a spinner. No logos, no brand names. Transparent background (PNG with alpha), 2048 x 2048, each item separate with clear space between, no ground, no shadow, no text, no letters, no logos.",
+      "generate": "square 2048x2048, transparent background",
+      "target": {
+        "w": 2048,
+        "h": 2048,
+        "tileable": false,
+        "normalMap": false,
+        "alpha": true,
+        "out": "decals/decal_goods_phones_bags_sheet.webp"
+      },
+      "placeholder": {
+        "color": "#1f2533",
+        "pattern": "flat",
+        "scale": 1
+      },
+      "used_by": [
+        "P2-056"
+      ],
+      "priority": 3,
+      "batch": "B3-goods",
+      "created": "2026-11-14T15:51:21.999Z"
+    },
+    {
+      "id": "tex_interior_sweet",
+      "kind": "texture",
+      "intent": "Interior-mapping room image: Sweet shop (mithai), day",
+      "prompt": "stylised realistic game art, real proportions, clean simplified shapes, rich warm colour, soft hazy sunlight, hand-tuned colour, no outlines, lived-in surfaces: soot, water stains, faded paint, patched plaster, dust; honest, not exaggerated. A Delhi sweet shop interior: a long glass-fronted counter along the left with steel trays of jalebi, barfi and laddoo, a back wall of glass shelves of boxed sweets and a cash desk with a steel stool, mint green tiled lower walls, cream upper walls with soot, a ceiling fan, a small framed deity picture shelf. Back wall sign says \"Chandni Mithai Ghar\" and \"चाँदनी मिठाई घर\" on a small painted board. A photographic one-point perspective view straight into the room from the shutter line, camera centred at 1.5 m height and exactly centred left to right, the back wall centred and square to the camera, left and right side walls and the ceiling and the floor all visible and mirror-symmetric so a game shader can map it as a box room of about 3 m wide, 2.6 m tall and 4 m deep. Nothing in the extreme foreground, no shutter or door frame in the picture. No people, no real brand names or logos, no readable text except where given. Evenly lit by overhead white tube lights, no hard shadows. Sharp and in focus from the front to the back wall: no motion blur, no depth of field, no fisheye, no wide-angle stretching. 2048 x 2048, square, no vignette, no lens distortion.",
+      "generate": "square 2048x2048",
+      "target": {
+        "w": 2048,
+        "h": 2048,
+        "tileable": true,
+        "normalMap": true,
+        "alpha": false,
+        "out": "textures/tex_interior_sweet.webp"
+      },
+      "placeholder": {
+        "color": "#1f2533",
+        "pattern": "noise",
+        "scale": 1
+      },
+      "used_by": [
+        "P2-056"
+      ],
+      "priority": 1,
+      "batch": "B1b-interiors",
+      "created": "2026-11-14T15:52:18.472Z",
+      "promptAt": "2026-11-14T16:05:12.388Z",
+      "review": {
+        "at": "2026-11-14T16:44:14.952Z",
+        "verdict": "ok",
+        "note": "Good one-point room, symmetric, text is on the card",
+        "ingestedAt": "2026-11-14T16:40:57.338Z",
+        "fit": "pending",
+        "fitNote": "scene check when wired (P2-032/P2-056)"
+      }
+    },
+    {
+      "id": "tex_interior_sweet_night",
+      "kind": "texture",
+      "intent": "Interior-mapping room image: Sweet shop (mithai), night variant",
+      "prompt": "stylised realistic game art, real proportions, clean simplified shapes, rich warm colour, soft hazy sunlight, hand-tuned colour, no outlines, lived-in surfaces: soot, water stains, faded paint, patched plaster, dust; honest, not exaggerated. A Delhi sweet shop interior: a long glass-fronted counter along the left with steel trays of jalebi, barfi and laddoo, a back wall of glass shelves of boxed sweets and a cash desk with a steel stool, mint green tiled lower walls, cream upper walls with soot, a ceiling fan, a small framed deity picture shelf. Back wall sign says \"Chandni Mithai Ghar\" and \"चाँदनी मिठाई घर\" on a small painted board. A photographic one-point perspective view straight into the room from the shutter line, camera centred at 1.5 m height and exactly centred left to right, the back wall centred and square to the camera, left and right side walls and the ceiling and the floor all visible and mirror-symmetric so a game shader can map it as a box room of about 3 m wide, 2.6 m tall and 4 m deep. Nothing in the extreme foreground, no shutter or door frame in the picture. No people, no real brand names or logos, no readable text except where given. Same room at night: warm yellow tube light and a couple of warm bulbs, deeper shadows in the corners, the warm glow strong, no daylight. Sharp and in focus from the front to the back wall: no motion blur, no depth of field, no fisheye, no wide-angle stretching. 2048 x 2048, square, no vignette, no lens distortion.",
+      "generate": "square 2048x2048",
+      "target": {
+        "w": 2048,
+        "h": 2048,
+        "tileable": true,
+        "normalMap": true,
+        "alpha": false,
+        "out": "textures/tex_interior_sweet_night.webp"
+      },
+      "placeholder": {
+        "color": "#1f2533",
+        "pattern": "noise",
+        "scale": 1
+      },
+      "used_by": [
+        "P2-056"
+      ],
+      "priority": 2,
+      "batch": "B1b-interiors-night",
+      "created": "2026-11-14T15:52:18.624Z",
+      "promptAt": "2026-11-14T16:05:12.514Z"
+    },
+    {
+      "id": "tex_interior_cloth",
+      "kind": "texture",
+      "intent": "Interior-mapping room image: Cloth and saree shop, day",
+      "prompt": "stylised realistic game art, real proportions, clean simplified shapes, rich warm colour, soft hazy sunlight, hand-tuned colour, no outlines, lived-in surfaces: soot, water stains, faded paint, patched plaster, dust; honest, not exaggerated. An Old Delhi cloth shop interior: a white cotton mattress covered floor seating area (gaddi) in the middle, walls of floor to ceiling shelves packed with stacked fabric rolls and folded sarees in many colours, a low wooden desk, bolsters, a ceiling fan and tube lights. Small board on the back wall: \"Shree Ganga Saree Bhandar\" and \"श्री गंगा साड़ी भंडार\". A photographic one-point perspective view straight into the room from the shutter line, camera centred at 1.5 m height and exactly centred left to right, the back wall centred and square to the camera, left and right side walls and the ceiling and the floor all visible and mirror-symmetric so a game shader can map it as a box room of about 3 m wide, 2.6 m tall and 4 m deep. Nothing in the extreme foreground, no shutter or door frame in the picture. No people, no real brand names or logos, no readable text except where given. Evenly lit by overhead white tube lights, no hard shadows. Sharp and in focus from the front to the back wall: no motion blur, no depth of field, no fisheye, no wide-angle stretching. 2048 x 2048, square, no vignette, no lens distortion.",
+      "generate": "square 2048x2048",
+      "target": {
+        "w": 2048,
+        "h": 2048,
+        "tileable": true,
+        "normalMap": true,
+        "alpha": false,
+        "out": "textures/tex_interior_cloth.webp"
+      },
+      "placeholder": {
+        "color": "#1f2533",
+        "pattern": "noise",
+        "scale": 1
+      },
+      "used_by": [
+        "P2-056"
+      ],
+      "priority": 1,
+      "batch": "B1b-interiors",
+      "created": "2026-11-14T15:52:18.789Z",
+      "promptAt": "2026-11-14T16:05:12.786Z",
+      "review": {
+        "at": "2026-11-14T16:44:14.996Z",
+        "verdict": "ok",
+        "note": "Good, saree shelves, centred",
+        "ingestedAt": "2026-11-14T16:33:31.937Z",
+        "fit": "pending",
+        "fitNote": "scene check when wired (P2-032/P2-056)"
+      }
+    },
+    {
+      "id": "tex_interior_cloth_night",
+      "kind": "texture",
+      "intent": "Interior-mapping room image: Cloth and saree shop, night variant",
+      "prompt": "stylised realistic game art, real proportions, clean simplified shapes, rich warm colour, soft hazy sunlight, hand-tuned colour, no outlines, lived-in surfaces: soot, water stains, faded paint, patched plaster, dust; honest, not exaggerated. An Old Delhi cloth shop interior: a white cotton mattress covered floor seating area (gaddi) in the middle, walls of floor to ceiling shelves packed with stacked fabric rolls and folded sarees in many colours, a low wooden desk, bolsters, a ceiling fan and tube lights. Small board on the back wall: \"Shree Ganga Saree Bhandar\" and \"श्री गंगा साड़ी भंडार\". A photographic one-point perspective view straight into the room from the shutter line, camera centred at 1.5 m height and exactly centred left to right, the back wall centred and square to the camera, left and right side walls and the ceiling and the floor all visible and mirror-symmetric so a game shader can map it as a box room of about 3 m wide, 2.6 m tall and 4 m deep. Nothing in the extreme foreground, no shutter or door frame in the picture. No people, no real brand names or logos, no readable text except where given. Same room at night: warm yellow tube light and a couple of warm bulbs, deeper shadows in the corners, the warm glow strong, no daylight. Sharp and in focus from the front to the back wall: no motion blur, no depth of field, no fisheye, no wide-angle stretching. 2048 x 2048, square, no vignette, no lens distortion.",
+      "generate": "square 2048x2048",
+      "target": {
+        "w": 2048,
+        "h": 2048,
+        "tileable": true,
+        "normalMap": true,
+        "alpha": false,
+        "out": "textures/tex_interior_cloth_night.webp"
+      },
+      "placeholder": {
+        "color": "#1f2533",
+        "pattern": "noise",
+        "scale": 1
+      },
+      "used_by": [
+        "P2-056"
+      ],
+      "priority": 2,
+      "batch": "B1b-interiors-night",
+      "created": "2026-11-14T15:52:19.047Z",
+      "promptAt": "2026-11-14T16:05:12.978Z"
+    },
+    {
+      "id": "tex_interior_dryfruit",
+      "kind": "texture",
+      "intent": "Interior-mapping room image: Dry fruit and spice shop, day",
+      "prompt": "stylised realistic game art, real proportions, clean simplified shapes, rich warm colour, soft hazy sunlight, hand-tuned colour, no outlines, lived-in surfaces: soot, water stains, faded paint, patched plaster, dust; honest, not exaggerated. A Khari Baoli style shop interior: open jute sacks of almonds, cashews, raisins, red chillies and spices lined along both side walls and across the floor front, wooden shelves of jars and packets on the back wall, a hanging brass weighing scale, dusty beams, bare tube lights, a stained and spice-yellowed wall. A photographic one-point perspective view straight into the room from the shutter line, camera centred at 1.5 m height and exactly centred left to right, the back wall centred and square to the camera, left and right side walls and the ceiling and the floor all visible and mirror-symmetric so a game shader can map it as a box room of about 3 m wide, 2.6 m tall and 4 m deep. Nothing in the extreme foreground, no shutter or door frame in the picture. No people, no real brand names or logos, no readable text except where given. Evenly lit by overhead white tube lights, no hard shadows. Sharp and in focus from the front to the back wall: no motion blur, no depth of field, no fisheye, no wide-angle stretching. 2048 x 2048, square, no vignette, no lens distortion.",
+      "generate": "square 2048x2048",
+      "target": {
+        "w": 2048,
+        "h": 2048,
+        "tileable": true,
+        "normalMap": true,
+        "alpha": false,
+        "out": "textures/tex_interior_dryfruit.webp"
+      },
+      "placeholder": {
+        "color": "#1f2533",
+        "pattern": "noise",
+        "scale": 1
+      },
+      "used_by": [
+        "P2-056"
+      ],
+      "priority": 1,
+      "batch": "B1b-interiors",
+      "created": "2026-11-14T15:52:19.188Z",
+      "promptAt": "2026-11-14T16:05:13.115Z",
+      "review": {
+        "at": "2026-11-14T16:44:15.037Z",
+        "verdict": "ok",
+        "note": "Good, sacks and spice jars; slightly left-right asymmetric, fine",
+        "ingestedAt": "2026-11-14T16:33:47.176Z",
+        "fit": "pending",
+        "fitNote": "scene check when wired (P2-032/P2-056)"
+      }
+    },
+    {
+      "id": "tex_interior_dryfruit_night",
+      "kind": "texture",
+      "intent": "Interior-mapping room image: Dry fruit and spice shop, night variant",
+      "prompt": "stylised realistic game art, real proportions, clean simplified shapes, rich warm colour, soft hazy sunlight, hand-tuned colour, no outlines, lived-in surfaces: soot, water stains, faded paint, patched plaster, dust; honest, not exaggerated. A Khari Baoli style shop interior: open jute sacks of almonds, cashews, raisins, red chillies and spices lined along both side walls and across the floor front, wooden shelves of jars and packets on the back wall, a hanging brass weighing scale, dusty beams, bare tube lights, a stained and spice-yellowed wall. A photographic one-point perspective view straight into the room from the shutter line, camera centred at 1.5 m height and exactly centred left to right, the back wall centred and square to the camera, left and right side walls and the ceiling and the floor all visible and mirror-symmetric so a game shader can map it as a box room of about 3 m wide, 2.6 m tall and 4 m deep. Nothing in the extreme foreground, no shutter or door frame in the picture. No people, no real brand names or logos, no readable text except where given. Same room at night: warm yellow tube light and a couple of warm bulbs, deeper shadows in the corners, the warm glow strong, no daylight. Sharp and in focus from the front to the back wall: no motion blur, no depth of field, no fisheye, no wide-angle stretching. 2048 x 2048, square, no vignette, no lens distortion.",
+      "generate": "square 2048x2048",
+      "target": {
+        "w": 2048,
+        "h": 2048,
+        "tileable": true,
+        "normalMap": true,
+        "alpha": false,
+        "out": "textures/tex_interior_dryfruit_night.webp"
+      },
+      "placeholder": {
+        "color": "#1f2533",
+        "pattern": "noise",
+        "scale": 1
+      },
+      "used_by": [
+        "P2-056"
+      ],
+      "priority": 2,
+      "batch": "B1b-interiors-night",
+      "created": "2026-11-14T15:52:19.295Z",
+      "promptAt": "2026-11-14T16:05:13.396Z"
+    },
+    {
+      "id": "tex_interior_utensils",
+      "kind": "texture",
+      "intent": "Interior-mapping room image: Steel utensils shop, day",
+      "prompt": "stylised realistic game art, real proportions, clean simplified shapes, rich warm colour, soft hazy sunlight, hand-tuned colour, no outlines, lived-in surfaces: soot, water stains, faded paint, patched plaster, dust; honest, not exaggerated. A utensil shop interior: floor to ceiling shelves of stacked steel thalis, katoris, dabbas, brass pots and pressure cookers on all three walls, hanging ladles from the ceiling rail, a steel counter on the left with a scale, bare tube lights reflecting on metal. A photographic one-point perspective view straight into the room from the shutter line, camera centred at 1.5 m height and exactly centred left to right, the back wall centred and square to the camera, left and right side walls and the ceiling and the floor all visible and mirror-symmetric so a game shader can map it as a box room of about 3 m wide, 2.6 m tall and 4 m deep. Nothing in the extreme foreground, no shutter or door frame in the picture. No people, no real brand names or logos, no readable text except where given. Evenly lit by overhead white tube lights, no hard shadows. Sharp and in focus from the front to the back wall: no motion blur, no depth of field, no fisheye, no wide-angle stretching. 2048 x 2048, square, no vignette, no lens distortion.",
+      "generate": "square 2048x2048",
+      "target": {
+        "w": 2048,
+        "h": 2048,
+        "tileable": true,
+        "normalMap": true,
+        "alpha": false,
+        "out": "textures/tex_interior_utensils.webp"
+      },
+      "placeholder": {
+        "color": "#1f2533",
+        "pattern": "noise",
+        "scale": 1
+      },
+      "used_by": [
+        "P2-056"
+      ],
+      "priority": 1,
+      "batch": "B1b-interiors",
+      "created": "2026-11-14T15:52:19.430Z",
+      "promptAt": "2026-11-14T16:05:13.786Z",
+      "review": {
+        "at": "2026-11-14T16:44:15.080Z",
+        "verdict": "ok",
+        "note": "Good, steel shelves symmetric",
+        "ingestedAt": "2026-11-14T16:41:41.215Z",
+        "fit": "pending",
+        "fitNote": "scene check when wired (P2-032/P2-056)"
+      }
+    },
+    {
+      "id": "tex_interior_utensils_night",
+      "kind": "texture",
+      "intent": "Interior-mapping room image: Steel utensils shop, night variant",
+      "prompt": "stylised realistic game art, real proportions, clean simplified shapes, rich warm colour, soft hazy sunlight, hand-tuned colour, no outlines, lived-in surfaces: soot, water stains, faded paint, patched plaster, dust; honest, not exaggerated. A utensil shop interior: floor to ceiling shelves of stacked steel thalis, katoris, dabbas, brass pots and pressure cookers on all three walls, hanging ladles from the ceiling rail, a steel counter on the left with a scale, bare tube lights reflecting on metal. A photographic one-point perspective view straight into the room from the shutter line, camera centred at 1.5 m height and exactly centred left to right, the back wall centred and square to the camera, left and right side walls and the ceiling and the floor all visible and mirror-symmetric so a game shader can map it as a box room of about 3 m wide, 2.6 m tall and 4 m deep. Nothing in the extreme foreground, no shutter or door frame in the picture. No people, no real brand names or logos, no readable text except where given. Same room at night: warm yellow tube light and a couple of warm bulbs, deeper shadows in the corners, the warm glow strong, no daylight. Sharp and in focus from the front to the back wall: no motion blur, no depth of field, no fisheye, no wide-angle stretching. 2048 x 2048, square, no vignette, no lens distortion.",
+      "generate": "square 2048x2048",
+      "target": {
+        "w": 2048,
+        "h": 2048,
+        "tileable": true,
+        "normalMap": true,
+        "alpha": false,
+        "out": "textures/tex_interior_utensils_night.webp"
+      },
+      "placeholder": {
+        "color": "#1f2533",
+        "pattern": "noise",
+        "scale": 1
+      },
+      "used_by": [
+        "P2-056"
+      ],
+      "priority": 2,
+      "batch": "B1b-interiors-night",
+      "created": "2026-11-14T15:52:19.798Z",
+      "promptAt": "2026-11-14T16:05:13.938Z"
+    },
+    {
+      "id": "tex_interior_hardware",
+      "kind": "texture",
+      "intent": "Interior-mapping room image: Hardware and machine parts shop (GB Road), day",
+      "prompt": "stylised realistic game art, real proportions, clean simplified shapes, rich warm colour, soft hazy sunlight, hand-tuned colour, no outlines, lived-in surfaces: soot, water stains, faded paint, patched plaster, dust; honest, not exaggerated. A GB Road hardware shop interior: dark steel shelving on all three walls full of cardboard boxes, bearings, pipes and fittings, hanging chains and coils of wire, a worn wooden counter with a heavy scale and an old ledger, oil-stained floor, peeling green lower wall paint, bare tube lights, one calendar on the back wall with no readable text. A photographic one-point perspective view straight into the room from the shutter line, camera centred at 1.5 m height and exactly centred left to right, the back wall centred and square to the camera, left and right side walls and the ceiling and the floor all visible and mirror-symmetric so a game shader can map it as a box room of about 3 m wide, 2.6 m tall and 4 m deep. Nothing in the extreme foreground, no shutter or door frame in the picture. No people, no real brand names or logos, no readable text except where given. Evenly lit by overhead white tube lights, no hard shadows. Sharp and in focus from the front to the back wall: no motion blur, no depth of field, no fisheye, no wide-angle stretching. 2048 x 2048, square, no vignette, no lens distortion.",
+      "generate": "square 2048x2048",
+      "target": {
+        "w": 2048,
+        "h": 2048,
+        "tileable": true,
+        "normalMap": true,
+        "alpha": false,
+        "out": "textures/tex_interior_hardware.webp"
+      },
+      "placeholder": {
+        "color": "#1f2533",
+        "pattern": "noise",
+        "scale": 1
+      },
+      "used_by": [
+        "P2-056"
+      ],
+      "priority": 1,
+      "batch": "B1b-interiors",
+      "created": "2026-11-14T15:52:19.956Z",
+      "promptAt": "2026-11-14T16:05:14.048Z",
+      "review": {
+        "at": "2026-11-14T16:44:15.118Z",
+        "verdict": "ok",
+        "note": "Good, GB Road parts look",
+        "ingestedAt": "2026-11-14T16:37:51.843Z",
+        "fit": "pending",
+        "fitNote": "scene check when wired (P2-032/P2-056)"
+      }
+    },
+    {
+      "id": "tex_interior_hardware_night",
+      "kind": "texture",
+      "intent": "Interior-mapping room image: Hardware and machine parts shop (GB Road), night variant",
+      "prompt": "stylised realistic game art, real proportions, clean simplified shapes, rich warm colour, soft hazy sunlight, hand-tuned colour, no outlines, lived-in surfaces: soot, water stains, faded paint, patched plaster, dust; honest, not exaggerated. A GB Road hardware shop interior: dark steel shelving on all three walls full of cardboard boxes, bearings, pipes and fittings, hanging chains and coils of wire, a worn wooden counter with a heavy scale and an old ledger, oil-stained floor, peeling green lower wall paint, bare tube lights, one calendar on the back wall with no readable text. A photographic one-point perspective view straight into the room from the shutter line, camera centred at 1.5 m height and exactly centred left to right, the back wall centred and square to the camera, left and right side walls and the ceiling and the floor all visible and mirror-symmetric so a game shader can map it as a box room of about 3 m wide, 2.6 m tall and 4 m deep. Nothing in the extreme foreground, no shutter or door frame in the picture. No people, no real brand names or logos, no readable text except where given. Same room at night: warm yellow tube light and a couple of warm bulbs, deeper shadows in the corners, the warm glow strong, no daylight. Sharp and in focus from the front to the back wall: no motion blur, no depth of field, no fisheye, no wide-angle stretching. 2048 x 2048, square, no vignette, no lens distortion.",
+      "generate": "square 2048x2048",
+      "target": {
+        "w": 2048,
+        "h": 2048,
+        "tileable": true,
+        "normalMap": true,
+        "alpha": false,
+        "out": "textures/tex_interior_hardware_night.webp"
+      },
+      "placeholder": {
+        "color": "#1f2533",
+        "pattern": "noise",
+        "scale": 1
+      },
+      "used_by": [
+        "P2-056"
+      ],
+      "priority": 2,
+      "batch": "B1b-interiors-night",
+      "created": "2026-11-14T15:52:20.080Z",
+      "promptAt": "2026-11-14T16:05:14.243Z"
+    },
+    {
+      "id": "tex_interior_phones",
+      "kind": "texture",
+      "intent": "Interior-mapping room image: Phone and electronics shop, day",
+      "prompt": "stylised realistic game art, real proportions, clean simplified shapes, rich warm colour, soft hazy sunlight, hand-tuned colour, no outlines, lived-in surfaces: soot, water stains, faded paint, patched plaster, dust; honest, not exaggerated. A small phone and electronics shop interior: glass counters on the left and right with generic phones, chargers and earphones, a pegboard back wall of plain phone covers, a few wired shelves of speakers and cables, a white laminate ceiling with LED panels and a split AC unit on the side wall. No brand names. A photographic one-point perspective view straight into the room from the shutter line, camera centred at 1.5 m height and exactly centred left to right, the back wall centred and square to the camera, left and right side walls and the ceiling and the floor all visible and mirror-symmetric so a game shader can map it as a box room of about 3 m wide, 2.6 m tall and 4 m deep. Nothing in the extreme foreground, no shutter or door frame in the picture. No people, no real brand names or logos, no readable text except where given. Evenly lit by overhead white tube lights, no hard shadows. Sharp and in focus from the front to the back wall: no motion blur, no depth of field, no fisheye, no wide-angle stretching. 2048 x 2048, square, no vignette, no lens distortion.",
+      "generate": "square 2048x2048",
+      "target": {
+        "w": 2048,
+        "h": 2048,
+        "tileable": true,
+        "normalMap": true,
+        "alpha": false,
+        "out": "textures/tex_interior_phones.webp"
+      },
+      "placeholder": {
+        "color": "#1f2533",
+        "pattern": "noise",
+        "scale": 1
+      },
+      "used_by": [
+        "P2-056"
+      ],
+      "priority": 1,
+      "batch": "B1b-interiors",
+      "created": "2026-11-14T15:52:20.171Z",
+      "promptAt": "2026-11-14T16:05:14.334Z",
+      "review": {
+        "at": "2026-11-14T16:44:15.161Z",
+        "verdict": "ok",
+        "note": "Good, clean glass counters",
+        "ingestedAt": "2026-11-14T16:40:52.015Z",
+        "fit": "pending",
+        "fitNote": "scene check when wired (P2-032/P2-056)"
+      }
+    },
+    {
+      "id": "tex_interior_phones_night",
+      "kind": "texture",
+      "intent": "Interior-mapping room image: Phone and electronics shop, night variant",
+      "prompt": "stylised realistic game art, real proportions, clean simplified shapes, rich warm colour, soft hazy sunlight, hand-tuned colour, no outlines, lived-in surfaces: soot, water stains, faded paint, patched plaster, dust; honest, not exaggerated. A small phone and electronics shop interior: glass counters on the left and right with generic phones, chargers and earphones, a pegboard back wall of plain phone covers, a few wired shelves of speakers and cables, a white laminate ceiling with LED panels and a split AC unit on the side wall. No brand names. A photographic one-point perspective view straight into the room from the shutter line, camera centred at 1.5 m height and exactly centred left to right, the back wall centred and square to the camera, left and right side walls and the ceiling and the floor all visible and mirror-symmetric so a game shader can map it as a box room of about 3 m wide, 2.6 m tall and 4 m deep. Nothing in the extreme foreground, no shutter or door frame in the picture. No people, no real brand names or logos, no readable text except where given. Same room at night: warm yellow tube light and a couple of warm bulbs, deeper shadows in the corners, the warm glow strong, no daylight. Sharp and in focus from the front to the back wall: no motion blur, no depth of field, no fisheye, no wide-angle stretching. 2048 x 2048, square, no vignette, no lens distortion.",
+      "generate": "square 2048x2048",
+      "target": {
+        "w": 2048,
+        "h": 2048,
+        "tileable": true,
+        "normalMap": true,
+        "alpha": false,
+        "out": "textures/tex_interior_phones_night.webp"
+      },
+      "placeholder": {
+        "color": "#1f2533",
+        "pattern": "noise",
+        "scale": 1
+      },
+      "used_by": [
+        "P2-056"
+      ],
+      "priority": 2,
+      "batch": "B1b-interiors-night",
+      "created": "2026-11-14T15:52:20.293Z",
+      "promptAt": "2026-11-14T16:05:14.405Z"
+    },
+    {
+      "id": "tex_interior_chemist",
+      "kind": "texture",
+      "intent": "Interior-mapping room image: Chemist shop, day",
+      "prompt": "stylised realistic game art, real proportions, clean simplified shapes, rich warm colour, soft hazy sunlight, hand-tuned colour, no outlines, lived-in surfaces: soot, water stains, faded paint, patched plaster, dust; honest, not exaggerated. A Delhi chemist shop interior: white wall shelves of generic medicine boxes in neat rows, a glass counter with a small cash desk, a green cross sign painted on the back wall with no text, a small fridge, tube lights and a ceiling fan, a stool. A photographic one-point perspective view straight into the room from the shutter line, camera centred at 1.5 m height and exactly centred left to right, the back wall centred and square to the camera, left and right side walls and the ceiling and the floor all visible and mirror-symmetric so a game shader can map it as a box room of about 3 m wide, 2.6 m tall and 4 m deep. Nothing in the extreme foreground, no shutter or door frame in the picture. No people, no real brand names or logos, no readable text except where given. Evenly lit by overhead white tube lights, no hard shadows. Sharp and in focus from the front to the back wall: no motion blur, no depth of field, no fisheye, no wide-angle stretching. 2048 x 2048, square, no vignette, no lens distortion.",
+      "generate": "square 2048x2048",
+      "target": {
+        "w": 2048,
+        "h": 2048,
+        "tileable": true,
+        "normalMap": true,
+        "alpha": false,
+        "out": "textures/tex_interior_chemist.webp"
+      },
+      "placeholder": {
+        "color": "#1f2533",
+        "pattern": "noise",
+        "scale": 1
+      },
+      "used_by": [
+        "P2-056"
+      ],
+      "priority": 1,
+      "batch": "B1b-interiors",
+      "created": "2026-11-14T15:52:20.402Z",
+      "promptAt": "2026-11-14T16:05:14.470Z",
+      "review": {
+        "at": "2026-11-14T16:44:15.202Z",
+        "verdict": "ok",
+        "note": "Good, green cross, symmetric",
+        "ingestedAt": "2026-11-14T16:29:23.591Z",
+        "fit": "pending",
+        "fitNote": "scene check when wired (P2-032/P2-056)"
+      }
+    },
+    {
+      "id": "tex_interior_chemist_night",
+      "kind": "texture",
+      "intent": "Interior-mapping room image: Chemist shop, night variant",
+      "prompt": "stylised realistic game art, real proportions, clean simplified shapes, rich warm colour, soft hazy sunlight, hand-tuned colour, no outlines, lived-in surfaces: soot, water stains, faded paint, patched plaster, dust; honest, not exaggerated. A Delhi chemist shop interior: white wall shelves of generic medicine boxes in neat rows, a glass counter with a small cash desk, a green cross sign painted on the back wall with no text, a small fridge, tube lights and a ceiling fan, a stool. A photographic one-point perspective view straight into the room from the shutter line, camera centred at 1.5 m height and exactly centred left to right, the back wall centred and square to the camera, left and right side walls and the ceiling and the floor all visible and mirror-symmetric so a game shader can map it as a box room of about 3 m wide, 2.6 m tall and 4 m deep. Nothing in the extreme foreground, no shutter or door frame in the picture. No people, no real brand names or logos, no readable text except where given. Same room at night: warm yellow tube light and a couple of warm bulbs, deeper shadows in the corners, the warm glow strong, no daylight. Sharp and in focus from the front to the back wall: no motion blur, no depth of field, no fisheye, no wide-angle stretching. 2048 x 2048, square, no vignette, no lens distortion.",
+      "generate": "square 2048x2048",
+      "target": {
+        "w": 2048,
+        "h": 2048,
+        "tileable": true,
+        "normalMap": true,
+        "alpha": false,
+        "out": "textures/tex_interior_chemist_night.webp"
+      },
+      "placeholder": {
+        "color": "#1f2533",
+        "pattern": "noise",
+        "scale": 1
+      },
+      "used_by": [
+        "P2-056"
+      ],
+      "priority": 2,
+      "batch": "B1b-interiors-night",
+      "created": "2026-11-14T15:52:20.524Z",
+      "promptAt": "2026-11-14T16:05:14.563Z"
+    },
+    {
+      "id": "tex_interior_tea_stall",
+      "kind": "texture",
+      "intent": "Interior-mapping room image: Tea and snack stall, day",
+      "prompt": "stylised realistic game art, real proportions, clean simplified shapes, rich warm colour, soft hazy sunlight, hand-tuned colour, no outlines, lived-in surfaces: soot, water stains, faded paint, patched plaster, dust; honest, not exaggerated. A tiny Delhi tea and snack stall interior: a steel counter in front with a gas stove and kettle, glass jars of biscuits and rusk, plastic stools, soot-black wall behind the stove, a shelf of glass tumblers, a hanging bunch of bananas, a bare bulb and a tube light. A photographic one-point perspective view straight into the room from the shutter line, camera centred at 1.5 m height and exactly centred left to right, the back wall centred and square to the camera, left and right side walls and the ceiling and the floor all visible and mirror-symmetric so a game shader can map it as a box room of about 3 m wide, 2.6 m tall and 4 m deep. Nothing in the extreme foreground, no shutter or door frame in the picture. No people, no real brand names or logos, no readable text except where given. Evenly lit by overhead white tube lights, no hard shadows. Sharp and in focus from the front to the back wall: no motion blur, no depth of field, no fisheye, no wide-angle stretching. 2048 x 2048, square, no vignette, no lens distortion.",
+      "generate": "square 2048x2048",
+      "target": {
+        "w": 2048,
+        "h": 2048,
+        "tileable": true,
+        "normalMap": true,
+        "alpha": false,
+        "out": "textures/tex_interior_tea_stall.webp"
+      },
+      "placeholder": {
+        "color": "#1f2533",
+        "pattern": "noise",
+        "scale": 1
+      },
+      "used_by": [
+        "P2-056"
+      ],
+      "priority": 1,
+      "batch": "B1b-interiors",
+      "created": "2026-11-14T15:52:20.672Z",
+      "promptAt": "2026-11-14T16:05:14.690Z",
+      "review": {
+        "at": "2026-11-14T16:44:15.246Z",
+        "verdict": "ok",
+        "note": "Good, soot wall, stools; side stools near camera ok",
+        "ingestedAt": "2026-11-14T16:41:37.232Z",
+        "fit": "pending",
+        "fitNote": "scene check when wired (P2-032/P2-056)"
+      }
+    },
+    {
+      "id": "tex_interior_tea_stall_night",
+      "kind": "texture",
+      "intent": "Interior-mapping room image: Tea and snack stall, night variant",
+      "prompt": "stylised realistic game art, real proportions, clean simplified shapes, rich warm colour, soft hazy sunlight, hand-tuned colour, no outlines, lived-in surfaces: soot, water stains, faded paint, patched plaster, dust; honest, not exaggerated. A tiny Delhi tea and snack stall interior: a steel counter in front with a gas stove and kettle, glass jars of biscuits and rusk, plastic stools, soot-black wall behind the stove, a shelf of glass tumblers, a hanging bunch of bananas, a bare bulb and a tube light. A photographic one-point perspective view straight into the room from the shutter line, camera centred at 1.5 m height and exactly centred left to right, the back wall centred and square to the camera, left and right side walls and the ceiling and the floor all visible and mirror-symmetric so a game shader can map it as a box room of about 3 m wide, 2.6 m tall and 4 m deep. Nothing in the extreme foreground, no shutter or door frame in the picture. No people, no real brand names or logos, no readable text except where given. Same room at night: warm yellow tube light and a couple of warm bulbs, deeper shadows in the corners, the warm glow strong, no daylight. Sharp and in focus from the front to the back wall: no motion blur, no depth of field, no fisheye, no wide-angle stretching. 2048 x 2048, square, no vignette, no lens distortion.",
+      "generate": "square 2048x2048",
+      "target": {
+        "w": 2048,
+        "h": 2048,
+        "tileable": true,
+        "normalMap": true,
+        "alpha": false,
+        "out": "textures/tex_interior_tea_stall_night.webp"
+      },
+      "placeholder": {
+        "color": "#1f2533",
+        "pattern": "noise",
+        "scale": 1
+      },
+      "used_by": [
+        "P2-056"
+      ],
+      "priority": 2,
+      "batch": "B1b-interiors-night",
+      "created": "2026-11-14T15:52:20.844Z",
+      "promptAt": "2026-11-14T16:05:14.866Z"
+    },
+    {
+      "id": "tex_interior_tailor",
+      "kind": "texture",
+      "intent": "Interior-mapping room image: Tailor shop, day",
+      "prompt": "stylised realistic game art, real proportions, clean simplified shapes, rich warm colour, soft hazy sunlight, hand-tuned colour, no outlines, lived-in surfaces: soot, water stains, faded paint, patched plaster, dust; honest, not exaggerated. A tailor shop interior: two sewing machines on tables on the left, a long cutting table on the right with fabric and scissors, shelves of folded cloth, paper patterns hanging on a wire, a mannequin torso with a half-made shirt in the centre back, a measuring tape, a ceiling fan. A photographic one-point perspective view straight into the room from the shutter line, camera centred at 1.5 m height and exactly centred left to right, the back wall centred and square to the camera, left and right side walls and the ceiling and the floor all visible and mirror-symmetric so a game shader can map it as a box room of about 3 m wide, 2.6 m tall and 4 m deep. Nothing in the extreme foreground, no shutter or door frame in the picture. No people, no real brand names or logos, no readable text except where given. Evenly lit by overhead white tube lights, no hard shadows. Sharp and in focus from the front to the back wall: no motion blur, no depth of field, no fisheye, no wide-angle stretching. 2048 x 2048, square, no vignette, no lens distortion.",
+      "generate": "square 2048x2048",
+      "target": {
+        "w": 2048,
+        "h": 2048,
+        "tileable": true,
+        "normalMap": true,
+        "alpha": false,
+        "out": "textures/tex_interior_tailor.webp"
+      },
+      "placeholder": {
+        "color": "#1f2533",
+        "pattern": "noise",
+        "scale": 1
+      },
+      "used_by": [
+        "P2-056"
+      ],
+      "priority": 1,
+      "batch": "B1b-interiors",
+      "created": "2026-11-14T15:52:21.002Z",
+      "promptAt": "2026-11-14T16:05:14.942Z",
+      "review": {
+        "at": "2026-11-14T16:44:15.287Z",
+        "verdict": "ok",
+        "note": "Good, machines and mannequin",
+        "ingestedAt": "2026-11-14T16:41:19.500Z",
+        "fit": "pending",
+        "fitNote": "scene check when wired (P2-032/P2-056)"
+      }
+    },
+    {
+      "id": "tex_interior_tailor_night",
+      "kind": "texture",
+      "intent": "Interior-mapping room image: Tailor shop, night variant",
+      "prompt": "stylised realistic game art, real proportions, clean simplified shapes, rich warm colour, soft hazy sunlight, hand-tuned colour, no outlines, lived-in surfaces: soot, water stains, faded paint, patched plaster, dust; honest, not exaggerated. A tailor shop interior: two sewing machines on tables on the left, a long cutting table on the right with fabric and scissors, shelves of folded cloth, paper patterns hanging on a wire, a mannequin torso with a half-made shirt in the centre back, a measuring tape, a ceiling fan. A photographic one-point perspective view straight into the room from the shutter line, camera centred at 1.5 m height and exactly centred left to right, the back wall centred and square to the camera, left and right side walls and the ceiling and the floor all visible and mirror-symmetric so a game shader can map it as a box room of about 3 m wide, 2.6 m tall and 4 m deep. Nothing in the extreme foreground, no shutter or door frame in the picture. No people, no real brand names or logos, no readable text except where given. Same room at night: warm yellow tube light and a couple of warm bulbs, deeper shadows in the corners, the warm glow strong, no daylight. Sharp and in focus from the front to the back wall: no motion blur, no depth of field, no fisheye, no wide-angle stretching. 2048 x 2048, square, no vignette, no lens distortion.",
+      "generate": "square 2048x2048",
+      "target": {
+        "w": 2048,
+        "h": 2048,
+        "tileable": true,
+        "normalMap": true,
+        "alpha": false,
+        "out": "textures/tex_interior_tailor_night.webp"
+      },
+      "placeholder": {
+        "color": "#1f2533",
+        "pattern": "noise",
+        "scale": 1
+      },
+      "used_by": [
+        "P2-056"
+      ],
+      "priority": 2,
+      "batch": "B1b-interiors-night",
+      "created": "2026-11-14T15:52:21.496Z",
+      "promptAt": "2026-11-14T16:05:15.043Z"
+    },
+    {
+      "id": "tex_interior_hotel_reception",
+      "kind": "texture",
+      "intent": "Interior-mapping room image: Small hotel reception (Paharganj), day",
+      "prompt": "stylised realistic game art, real proportions, clean simplified shapes, rich warm colour, soft hazy sunlight, hand-tuned colour, no outlines, lived-in surfaces: soot, water stains, faded paint, patched plaster, dust; honest, not exaggerated. A small budget hotel reception interior: a plain laminate reception desk on the back wall with a key rack of numbered keys and a brass bell, two worn sofas against the side walls, a stair going up on the right, marble effect floor tiles, a faded mural of mountains, a fan and one LED panel. No readable text. A photographic one-point perspective view straight into the room from the shutter line, camera centred at 1.5 m height and exactly centred left to right, the back wall centred and square to the camera, left and right side walls and the ceiling and the floor all visible and mirror-symmetric so a game shader can map it as a box room of about 3 m wide, 2.6 m tall and 4 m deep. Nothing in the extreme foreground, no shutter or door frame in the picture. No people, no real brand names or logos, no readable text except where given. Evenly lit by overhead white tube lights, no hard shadows. Sharp and in focus from the front to the back wall: no motion blur, no depth of field, no fisheye, no wide-angle stretching. 2048 x 2048, square, no vignette, no lens distortion.",
+      "generate": "square 2048x2048",
+      "target": {
+        "w": 2048,
+        "h": 2048,
+        "tileable": true,
+        "normalMap": true,
+        "alpha": false,
+        "out": "textures/tex_interior_hotel_reception.webp"
+      },
+      "placeholder": {
+        "color": "#1f2533",
+        "pattern": "noise",
+        "scale": 1
+      },
+      "used_by": [
+        "P2-056"
+      ],
+      "priority": 1,
+      "batch": "B1b-interiors",
+      "created": "2026-11-14T15:52:22.827Z",
+      "promptAt": "2026-11-14T16:05:15.288Z",
+      "review": {
+        "at": "2026-11-14T16:44:15.330Z",
+        "verdict": "ok",
+        "note": "Good, Himalaya mural, stairs",
+        "ingestedAt": "2026-11-14T16:38:34.788Z",
+        "fit": "pending",
+        "fitNote": "scene check when wired (P2-032/P2-056)"
+      }
+    },
+    {
+      "id": "tex_interior_hotel_reception_night",
+      "kind": "texture",
+      "intent": "Interior-mapping room image: Small hotel reception (Paharganj), night variant",
+      "prompt": "stylised realistic game art, real proportions, clean simplified shapes, rich warm colour, soft hazy sunlight, hand-tuned colour, no outlines, lived-in surfaces: soot, water stains, faded paint, patched plaster, dust; honest, not exaggerated. A small budget hotel reception interior: a plain laminate reception desk on the back wall with a key rack of numbered keys and a brass bell, two worn sofas against the side walls, a stair going up on the right, marble effect floor tiles, a faded mural of mountains, a fan and one LED panel. No readable text. A photographic one-point perspective view straight into the room from the shutter line, camera centred at 1.5 m height and exactly centred left to right, the back wall centred and square to the camera, left and right side walls and the ceiling and the floor all visible and mirror-symmetric so a game shader can map it as a box room of about 3 m wide, 2.6 m tall and 4 m deep. Nothing in the extreme foreground, no shutter or door frame in the picture. No people, no real brand names or logos, no readable text except where given. Same room at night: warm yellow tube light and a couple of warm bulbs, deeper shadows in the corners, the warm glow strong, no daylight. Sharp and in focus from the front to the back wall: no motion blur, no depth of field, no fisheye, no wide-angle stretching. 2048 x 2048, square, no vignette, no lens distortion.",
+      "generate": "square 2048x2048",
+      "target": {
+        "w": 2048,
+        "h": 2048,
+        "tileable": true,
+        "normalMap": true,
+        "alpha": false,
+        "out": "textures/tex_interior_hotel_reception_night.webp"
+      },
+      "placeholder": {
+        "color": "#1f2533",
+        "pattern": "noise",
+        "scale": 1
+      },
+      "used_by": [
+        "P2-056"
+      ],
+      "priority": 2,
+      "batch": "B1b-interiors-night",
+      "created": "2026-11-14T15:52:25.318Z",
+      "promptAt": "2026-11-14T16:05:15.597Z"
+    },
+    {
+      "id": "tex_interior_bookshop",
+      "kind": "texture",
+      "intent": "Interior-mapping room image: Bookshop (Connaught Place), day",
+      "prompt": "stylised realistic game art, real proportions, clean simplified shapes, rich warm colour, soft hazy sunlight, hand-tuned colour, no outlines, lived-in surfaces: soot, water stains, faded paint, patched plaster, dust; honest, not exaggerated. A CP bookshop interior: dark wooden shelves on all walls full of paperback books with plain unreadable spines, a central table with stacked books, a ladder on the back wall, a small counter with an old cash register, a ceiling fan and warm tube lights. A photographic one-point perspective view straight into the room from the shutter line, camera centred at 1.5 m height and exactly centred left to right, the back wall centred and square to the camera, left and right side walls and the ceiling and the floor all visible and mirror-symmetric so a game shader can map it as a box room of about 3 m wide, 2.6 m tall and 4 m deep. Nothing in the extreme foreground, no shutter or door frame in the picture. No people, no real brand names or logos, no readable text except where given. Evenly lit by overhead white tube lights, no hard shadows. Sharp and in focus from the front to the back wall: no motion blur, no depth of field, no fisheye, no wide-angle stretching. 2048 x 2048, square, no vignette, no lens distortion.",
+      "generate": "square 2048x2048",
+      "target": {
+        "w": 2048,
+        "h": 2048,
+        "tileable": true,
+        "normalMap": true,
+        "alpha": false,
+        "out": "textures/tex_interior_bookshop.webp"
+      },
+      "placeholder": {
+        "color": "#1f2533",
+        "pattern": "noise",
+        "scale": 1
+      },
+      "used_by": [
+        "P2-056"
+      ],
+      "priority": 1,
+      "batch": "B1b-interiors",
+      "created": "2026-11-14T15:52:27.658Z",
+      "promptAt": "2026-11-14T16:05:15.678Z",
+      "review": {
+        "at": "2026-11-14T16:44:15.370Z",
+        "verdict": "ok",
+        "note": "Good, ladder and shelves",
+        "ingestedAt": "2026-11-14T16:29:03.314Z",
+        "fit": "pending",
+        "fitNote": "scene check when wired (P2-032/P2-056)"
+      }
+    },
+    {
+      "id": "tex_interior_bookshop_night",
+      "kind": "texture",
+      "intent": "Interior-mapping room image: Bookshop (Connaught Place), night variant",
+      "prompt": "stylised realistic game art, real proportions, clean simplified shapes, rich warm colour, soft hazy sunlight, hand-tuned colour, no outlines, lived-in surfaces: soot, water stains, faded paint, patched plaster, dust; honest, not exaggerated. A CP bookshop interior: dark wooden shelves on all walls full of paperback books with plain unreadable spines, a central table with stacked books, a ladder on the back wall, a small counter with an old cash register, a ceiling fan and warm tube lights. A photographic one-point perspective view straight into the room from the shutter line, camera centred at 1.5 m height and exactly centred left to right, the back wall centred and square to the camera, left and right side walls and the ceiling and the floor all visible and mirror-symmetric so a game shader can map it as a box room of about 3 m wide, 2.6 m tall and 4 m deep. Nothing in the extreme foreground, no shutter or door frame in the picture. No people, no real brand names or logos, no readable text except where given. Same room at night: warm yellow tube light and a couple of warm bulbs, deeper shadows in the corners, the warm glow strong, no daylight. Sharp and in focus from the front to the back wall: no motion blur, no depth of field, no fisheye, no wide-angle stretching. 2048 x 2048, square, no vignette, no lens distortion.",
+      "generate": "square 2048x2048",
+      "target": {
+        "w": 2048,
+        "h": 2048,
+        "tileable": true,
+        "normalMap": true,
+        "alpha": false,
+        "out": "textures/tex_interior_bookshop_night.webp"
+      },
+      "placeholder": {
+        "color": "#1f2533",
+        "pattern": "noise",
+        "scale": 1
+      },
+      "used_by": [
+        "P2-056"
+      ],
+      "priority": 2,
+      "batch": "B1b-interiors-night",
+      "created": "2026-11-14T15:52:30.975Z",
+      "promptAt": "2026-11-14T16:05:15.797Z"
+    },
+    {
+      "id": "tex_interior_jeweller",
+      "kind": "texture",
+      "intent": "Interior-mapping room image: Jewellery shop (Chandni Chowk), day",
+      "prompt": "stylised realistic game art, real proportions, clean simplified shapes, rich warm colour, soft hazy sunlight, hand-tuned colour, no outlines, lived-in surfaces: soot, water stains, faded paint, patched plaster, dust; honest, not exaggerated. A Chandni Chowk jeweller interior: a white gaddi floor seating area with bolsters, glass counters with gold and silver jewellery on velvet in front, a steel safe on the back wall, mirror panels on the side walls, a carved wooden ceiling band, bright tube lights, a framed deity picture. Back wall small board \"Hira Moti Jewellers\" and \"हीरा मोती ज्वेलर्स\". A photographic one-point perspective view straight into the room from the shutter line, camera centred at 1.5 m height and exactly centred left to right, the back wall centred and square to the camera, left and right side walls and the ceiling and the floor all visible and mirror-symmetric so a game shader can map it as a box room of about 3 m wide, 2.6 m tall and 4 m deep. Nothing in the extreme foreground, no shutter or door frame in the picture. No people, no real brand names or logos, no readable text except where given. Evenly lit by overhead white tube lights, no hard shadows. Sharp and in focus from the front to the back wall: no motion blur, no depth of field, no fisheye, no wide-angle stretching. 2048 x 2048, square, no vignette, no lens distortion.",
+      "generate": "square 2048x2048",
+      "target": {
+        "w": 2048,
+        "h": 2048,
+        "tileable": true,
+        "normalMap": true,
+        "alpha": false,
+        "out": "textures/tex_interior_jeweller.webp"
+      },
+      "placeholder": {
+        "color": "#1f2533",
+        "pattern": "noise",
+        "scale": 1
+      },
+      "used_by": [
+        "P2-056"
+      ],
+      "priority": 1,
+      "batch": "B1b-interiors",
+      "created": "2026-11-14T15:52:33.555Z",
+      "promptAt": "2026-11-14T16:05:15.876Z",
+      "review": {
+        "at": "2026-11-14T16:44:15.412Z",
+        "verdict": "ok",
+        "note": "Good, vault and counters",
+        "ingestedAt": "2026-11-14T16:38:49.049Z",
+        "fit": "pending",
+        "fitNote": "scene check when wired (P2-032/P2-056)"
+      }
+    },
+    {
+      "id": "tex_interior_jeweller_night",
+      "kind": "texture",
+      "intent": "Interior-mapping room image: Jewellery shop (Chandni Chowk), night variant",
+      "prompt": "stylised realistic game art, real proportions, clean simplified shapes, rich warm colour, soft hazy sunlight, hand-tuned colour, no outlines, lived-in surfaces: soot, water stains, faded paint, patched plaster, dust; honest, not exaggerated. A Chandni Chowk jeweller interior: a white gaddi floor seating area with bolsters, glass counters with gold and silver jewellery on velvet in front, a steel safe on the back wall, mirror panels on the side walls, a carved wooden ceiling band, bright tube lights, a framed deity picture. Back wall small board \"Hira Moti Jewellers\" and \"हीरा मोती ज्वेलर्स\". A photographic one-point perspective view straight into the room from the shutter line, camera centred at 1.5 m height and exactly centred left to right, the back wall centred and square to the camera, left and right side walls and the ceiling and the floor all visible and mirror-symmetric so a game shader can map it as a box room of about 3 m wide, 2.6 m tall and 4 m deep. Nothing in the extreme foreground, no shutter or door frame in the picture. No people, no real brand names or logos, no readable text except where given. Same room at night: warm yellow tube light and a couple of warm bulbs, deeper shadows in the corners, the warm glow strong, no daylight. Sharp and in focus from the front to the back wall: no motion blur, no depth of field, no fisheye, no wide-angle stretching. 2048 x 2048, square, no vignette, no lens distortion.",
+      "generate": "square 2048x2048",
+      "target": {
+        "w": 2048,
+        "h": 2048,
+        "tileable": true,
+        "normalMap": true,
+        "alpha": false,
+        "out": "textures/tex_interior_jeweller_night.webp"
+      },
+      "placeholder": {
+        "color": "#1f2533",
+        "pattern": "noise",
+        "scale": 1
+      },
+      "used_by": [
+        "P2-056"
+      ],
+      "priority": 2,
+      "batch": "B1b-interiors-night",
+      "created": "2026-11-14T15:52:35.039Z",
+      "promptAt": "2026-11-14T16:05:15.972Z"
+    },
+    {
+      "id": "tex_interior_home",
+      "kind": "texture",
+      "intent": "Interior-mapping room image: Upper floor home interior (window view), day",
+      "prompt": "stylised realistic game art, real proportions, clean simplified shapes, rich warm colour, soft hazy sunlight, hand-tuned colour, no outlines, lived-in surfaces: soot, water stains, faded paint, patched plaster, dust; honest, not exaggerated. A lived-in Delhi upper floor room seen from the window: a half-drawn patterned curtain on the left edge of the room, a ceiling fan, a wall calendar with no readable text on the back wall, a wooden shelf with steel utensils and a small TV, a plastic chair, a bed with a printed sheet along the right wall, pale blue painted walls, a tube light. A photographic one-point perspective view straight into the room from the shutter line, camera centred at 1.5 m height and exactly centred left to right, the back wall centred and square to the camera, left and right side walls and the ceiling and the floor all visible and mirror-symmetric so a game shader can map it as a box room of about 3 m wide, 2.6 m tall and 4 m deep. Nothing in the extreme foreground, no shutter or door frame in the picture. No people, no real brand names or logos, no readable text except where given. Evenly lit by overhead white tube lights, no hard shadows. Sharp and in focus from the front to the back wall: no motion blur, no depth of field, no fisheye, no wide-angle stretching. 2048 x 2048, square, no vignette, no lens distortion.",
+      "generate": "square 2048x2048",
+      "target": {
+        "w": 2048,
+        "h": 2048,
+        "tileable": true,
+        "normalMap": true,
+        "alpha": false,
+        "out": "textures/tex_interior_home.webp"
+      },
+      "placeholder": {
+        "color": "#1f2533",
+        "pattern": "noise",
+        "scale": 1
+      },
+      "used_by": [
+        "P2-056"
+      ],
+      "priority": 1,
+      "batch": "B1b-interiors",
+      "created": "2026-11-14T15:52:37.144Z",
+      "promptAt": "2026-11-14T16:05:16.056Z",
+      "review": {
+        "at": "2026-11-14T16:44:15.455Z",
+        "verdict": "ok",
+        "note": "Good, bed, window curtain, plant",
+        "ingestedAt": "2026-11-14T16:39:29.423Z",
+        "fit": "pending",
+        "fitNote": "scene check when wired (P2-032/P2-056)"
+      }
+    },
+    {
+      "id": "tex_interior_home_night",
+      "kind": "texture",
+      "intent": "Interior-mapping room image: Upper floor home interior (window view), night variant",
+      "prompt": "stylised realistic game art, real proportions, clean simplified shapes, rich warm colour, soft hazy sunlight, hand-tuned colour, no outlines, lived-in surfaces: soot, water stains, faded paint, patched plaster, dust; honest, not exaggerated. A lived-in Delhi upper floor room seen from the window: a half-drawn patterned curtain on the left edge of the room, a ceiling fan, a wall calendar with no readable text on the back wall, a wooden shelf with steel utensils and a small TV, a plastic chair, a bed with a printed sheet along the right wall, pale blue painted walls, a tube light. A photographic one-point perspective view straight into the room from the shutter line, camera centred at 1.5 m height and exactly centred left to right, the back wall centred and square to the camera, left and right side walls and the ceiling and the floor all visible and mirror-symmetric so a game shader can map it as a box room of about 3 m wide, 2.6 m tall and 4 m deep. Nothing in the extreme foreground, no shutter or door frame in the picture. No people, no real brand names or logos, no readable text except where given. Same room at night: warm yellow tube light and a couple of warm bulbs, deeper shadows in the corners, the warm glow strong, no daylight. Sharp and in focus from the front to the back wall: no motion blur, no depth of field, no fisheye, no wide-angle stretching. 2048 x 2048, square, no vignette, no lens distortion.",
+      "generate": "square 2048x2048",
+      "target": {
+        "w": 2048,
+        "h": 2048,
+        "tileable": true,
+        "normalMap": true,
+        "alpha": false,
+        "out": "textures/tex_interior_home_night.webp"
+      },
+      "placeholder": {
+        "color": "#1f2533",
+        "pattern": "noise",
+        "scale": 1
+      },
+      "used_by": [
+        "P2-056"
+      ],
+      "priority": 2,
+      "batch": "B1b-interiors-night",
+      "created": "2026-11-14T15:52:38.327Z",
+      "promptAt": "2026-11-14T16:05:16.133Z"
+    },
+    {
+      "id": "tex_interior_office",
+      "kind": "texture",
+      "intent": "Interior-mapping room image: Office interior (ITO), day",
+      "prompt": "stylised realistic game art, real proportions, clean simplified shapes, rich warm colour, soft hazy sunlight, hand-tuned colour, no outlines, lived-in surfaces: soot, water stains, faded paint, patched plaster, dust; honest, not exaggerated. A government-style office room for ITO, seen from the window: grey metal filing cabinets along the right wall, rows of laminate desks with old monitors and stacks of paper files, a wall clock and a noticeboard with no readable text on the back wall, a ceiling fan, white tube lights, pale green walls, a green water dispenser. A photographic one-point perspective view straight into the room from the shutter line, camera centred at 1.5 m height and exactly centred left to right, the back wall centred and square to the camera, left and right side walls and the ceiling and the floor all visible and mirror-symmetric so a game shader can map it as a box room of about 3 m wide, 2.6 m tall and 4 m deep. Nothing in the extreme foreground, no shutter or door frame in the picture. No people, no real brand names or logos, no readable text except where given. Evenly lit by overhead white tube lights, no hard shadows. Sharp and in focus from the front to the back wall: no motion blur, no depth of field, no fisheye, no wide-angle stretching. 2048 x 2048, square, no vignette, no lens distortion.",
+      "generate": "square 2048x2048",
+      "target": {
+        "w": 2048,
+        "h": 2048,
+        "tileable": true,
+        "normalMap": true,
+        "alpha": false,
+        "out": "textures/tex_interior_office.webp"
+      },
+      "placeholder": {
+        "color": "#1f2533",
+        "pattern": "noise",
+        "scale": 1
+      },
+      "used_by": [
+        "P2-056"
+      ],
+      "priority": 1,
+      "batch": "B1b-interiors",
+      "created": "2026-11-14T15:52:39.525Z",
+      "promptAt": "2026-11-14T16:05:16.221Z",
+      "review": {
+        "at": "2026-11-14T16:44:15.498Z",
+        "verdict": "ok",
+        "note": "Good, desks, lockers, cooler",
+        "ingestedAt": "2026-11-14T16:38:55.198Z",
+        "fit": "pending",
+        "fitNote": "scene check when wired (P2-032/P2-056)"
+      }
+    },
+    {
+      "id": "tex_interior_office_night",
+      "kind": "texture",
+      "intent": "Interior-mapping room image: Office interior (ITO), night variant",
+      "prompt": "stylised realistic game art, real proportions, clean simplified shapes, rich warm colour, soft hazy sunlight, hand-tuned colour, no outlines, lived-in surfaces: soot, water stains, faded paint, patched plaster, dust; honest, not exaggerated. A government-style office room for ITO, seen from the window: grey metal filing cabinets along the right wall, rows of laminate desks with old monitors and stacks of paper files, a wall clock and a noticeboard with no readable text on the back wall, a ceiling fan, white tube lights, pale green walls, a green water dispenser. A photographic one-point perspective view straight into the room from the shutter line, camera centred at 1.5 m height and exactly centred left to right, the back wall centred and square to the camera, left and right side walls and the ceiling and the floor all visible and mirror-symmetric so a game shader can map it as a box room of about 3 m wide, 2.6 m tall and 4 m deep. Nothing in the extreme foreground, no shutter or door frame in the picture. No people, no real brand names or logos, no readable text except where given. Same room at night: warm yellow tube light and a couple of warm bulbs, deeper shadows in the corners, the warm glow strong, no daylight. Sharp and in focus from the front to the back wall: no motion blur, no depth of field, no fisheye, no wide-angle stretching. 2048 x 2048, square, no vignette, no lens distortion.",
+      "generate": "square 2048x2048",
+      "target": {
+        "w": 2048,
+        "h": 2048,
+        "tileable": true,
+        "normalMap": true,
+        "alpha": false,
+        "out": "textures/tex_interior_office_night.webp"
+      },
+      "placeholder": {
+        "color": "#1f2533",
+        "pattern": "noise",
+        "scale": 1
+      },
+      "used_by": [
+        "P2-056"
+      ],
+      "priority": 2,
+      "batch": "B1b-interiors-night",
+      "created": "2026-11-14T15:52:40.870Z",
+      "promptAt": "2026-11-14T16:05:16.319Z"
+    },
+    {
+      "id": "tex_wall_oldcity_layer_peel",
+      "kind": "texture",
+      "intent": "Old Delhi wall peeling-paint layer for blending",
+      "prompt": "stylised realistic game art, real proportions, clean simplified shapes, rich warm colour, soft hazy sunlight, hand-tuned colour, no outlines, lived-in surfaces: soot, water stains, faded paint, patched plaster, dust; honest, not exaggerated. PEEL LAYER for blending on an Old Delhi wall: the same faded mint green lime-plaster wall, with paint flaking evenly all over: about half the surface still has paint, the other half is bare pale lime plaster, in many small flakes 3 to 12 cm across with thin curled edges, spread evenly with no big patch. No bricks showing, no damp band, no soot, no cracks. Same scale and colour family as the clean base layer so a shader can blend between them. TILEABLE MATERIAL RULES: this is a repeating surface, not a picture. Seamless on all four edges (left continues into right, top into bottom). Even, low-contrast variation across the whole image with no single standout feature: no one big crack, stain, patch, chip or mark that would be noticed repeating from far away. Uniform flat lighting, no vignette, no gradient, no baked shadows, no brighter or darker corner. Standout marks (cracks, stains, patches, posters) are made on the separate decal sheets, so leave them out. REAL SCALE: the image shows exactly 2 m x 2 m of wall of real surface at 2048 x 2048 px, about 1024 px per metre. Paint flakes 3 to 12 cm across, paint coat about 0.3 mm thick. Shot flat and straight on, no perspective, no people, no real brand names or logos, no text, no letters.",
+      "generate": "square 2048x2048",
+      "target": {
+        "w": 2048,
+        "h": 2048,
+        "tileable": true,
+        "normalMap": true,
+        "alpha": false,
+        "out": "textures/tex_wall_oldcity_layer_peel.webp"
+      },
+      "placeholder": {
+        "color": "#1f2533",
+        "pattern": "noise",
+        "scale": 1
+      },
+      "used_by": [
+        "oldcity"
+      ],
+      "priority": 1,
+      "batch": "B2-walls",
+      "created": "2026-11-14T16:05:09.871Z"
+    },
+    {
+      "id": "tex_wall_oldcity_layer_brick",
+      "kind": "texture",
+      "intent": "Old Delhi wall exposed-brick layer for blending under peeling paint",
+      "prompt": "stylised realistic game art, real proportions, clean simplified shapes, rich warm colour, soft hazy sunlight, hand-tuned colour, no outlines, lived-in surfaces: soot, water stains, faded paint, patched plaster, dust; honest, not exaggerated. BRICK LAYER for blending on an Old Delhi wall: bare old thin red-brown lakhori bricks in running bond, lime mortar joints 1.5 cm wide, a thin film of left-over pale lime wash only in the joints, slight soot haze, bricks vary a little in colour, no big stain or crack. Brick face 23 cm x 7.5 cm. Same scale as the clean base layer and the peel layer. TILEABLE MATERIAL RULES: this is a repeating surface, not a picture. Seamless on all four edges (left continues into right, top into bottom). Even, low-contrast variation across the whole image with no single standout feature: no one big crack, stain, patch, chip or mark that would be noticed repeating from far away. Uniform flat lighting, no vignette, no gradient, no baked shadows, no brighter or darker corner. Standout marks (cracks, stains, patches, posters) are made on the separate decal sheets, so leave them out. REAL SCALE: the image shows exactly 2 m x 2 m of wall of real surface at 2048 x 2048 px, about 1024 px per metre. Each brick face is 23 cm x 7.5 cm (about 235 x 77 px). Shot flat and straight on, no perspective, no people, no real brand names or logos, no text, no letters.",
+      "generate": "square 2048x2048",
+      "target": {
+        "w": 2048,
+        "h": 2048,
+        "tileable": true,
+        "normalMap": true,
+        "alpha": false,
+        "out": "textures/tex_wall_oldcity_layer_brick.webp"
+      },
+      "placeholder": {
+        "color": "#1f2533",
+        "pattern": "noise",
+        "scale": 1
+      },
+      "used_by": [
+        "oldcity"
+      ],
+      "priority": 1,
+      "batch": "B2-walls",
+      "created": "2026-11-14T16:05:10.756Z"
+    },
+    {
+      "id": "tex_trim_oldcity",
+      "kind": "texture",
+      "intent": "Old Delhi building kit trim sheet: cornices, chhajja, frames, jali, pipes, railings",
+      "prompt": "stylised realistic game art, real proportions, clean simplified shapes, rich warm colour, soft hazy sunlight, hand-tuned colour, no outlines, lived-in surfaces: soot, water stains, faded paint, patched plaster, dust; honest, not exaggerated. Old Delhi shop-house trim in lime plaster, sandstone, wood and iron, honestly aged. TRIM SHEET for a modular building kit: a flat front view of horizontal strips stacked from top to bottom, each strip full width, touching the next with no gap and no border, each strip seamless left to right so it tiles along a wall. The sheet shows 2 m wide x 2 m tall at 2048 x 2048 px (about 1024 px per metre). Strips from top to bottom: 1) cornice with dentil row, 30 cm tall; 2) chhajja projecting stone ledge on brackets, seen from the front, 25 cm; 3) plain painted band in faded ochre, 10 cm; 4) wooden window frame head and sill run with chipped green paint, 20 cm; 5) jali strip of pierced sandstone lattice, 30 cm; 6) pipe strip with a rusty water pipe 12 cm and an electrical conduit 8 cm held by clamps, 20 cm; 7) wrought iron balcony railing with vertical bars, black paint, on a flat mid grey background, 35 cm; 8) stone plinth base course with damp, 30 cm. Gentle ambient occlusion in recesses only, no cast shadows, no vignette, even flat light, no lens distortion. No text, no letters, no people, no real brand names or logos.",
+      "generate": "square 2048x2048",
+      "target": {
+        "w": 2048,
+        "h": 2048,
+        "tileable": true,
+        "normalMap": true,
+        "alpha": false,
+        "out": "textures/tex_trim_oldcity.webp"
+      },
+      "placeholder": {
+        "color": "#1f2533",
+        "pattern": "noise",
+        "scale": 1
+      },
+      "used_by": [
+        "kits"
+      ],
+      "priority": 2,
+      "batch": "B2-trims",
+      "created": "2026-11-14T16:05:11.064Z"
+    },
+    {
+      "id": "tex_trim_lutyens",
+      "kind": "texture",
+      "intent": "Lutyens Delhi kit trim sheet: sandstone cornice, bands, chhajja, architrave, jali, stone courses",
+      "prompt": "stylised realistic game art, real proportions, clean simplified shapes, rich warm colour, soft hazy sunlight, hand-tuned colour, no outlines, lived-in surfaces: soot, water stains, faded paint, patched plaster, dust; honest, not exaggerated. Lutyens era bungalow trim in cream and buff sandstone and red sandstone, clean and well kept, fine joints. TRIM SHEET for a modular building kit: a flat front view of horizontal strips stacked from top to bottom, each strip full width, touching the next with no gap and no border, each strip seamless left to right so it tiles along a wall. The sheet shows 2 m wide x 2 m tall at 2048 x 2048 px (about 1024 px per metre). Strips from top to bottom: 1) plain cream sandstone cornice with a simple moulding, 30 cm tall; 2) red sandstone band, 15 cm; 3) plain white lime wash band, 20 cm; 4) buff stone chhajja ledge seen from the front, 25 cm; 5) window architrave strip in cream stone, 20 cm; 6) sandstone jali strip with a geometric lattice, 30 cm; 7) dressed block course of alternating red and buff stone, 30 cm; 8) plinth course with fine joints, 30 cm. Gentle ambient occlusion in recesses only, no cast shadows, no vignette, even flat light, no lens distortion. No text, no letters, no people, no real brand names or logos.",
+      "generate": "square 2048x2048",
+      "target": {
+        "w": 2048,
+        "h": 2048,
+        "tileable": true,
+        "normalMap": true,
+        "alpha": false,
+        "out": "textures/tex_trim_lutyens.webp"
+      },
+      "placeholder": {
+        "color": "#1f2533",
+        "pattern": "noise",
+        "scale": 1
+      },
+      "used_by": [
+        "kits"
+      ],
+      "priority": 2,
+      "batch": "B2-trims",
+      "created": "2026-11-14T16:05:11.194Z"
+    },
+    {
+      "id": "tex_trim_cp_colonnade",
+      "kind": "texture",
+      "intent": "Connaught Place colonnade kit trim sheet: balustrade, frieze, fluted columns, base, rustication",
+      "prompt": "stylised realistic game art, real proportions, clean simplified shapes, rich warm colour, soft hazy sunlight, hand-tuned colour, no outlines, lived-in surfaces: soot, water stains, faded paint, patched plaster, dust; honest, not exaggerated. Connaught Place colonial colonnade trim in cream painted stucco, lightly yellowed, regular and neat. TRIM SHEET for a modular building kit: a flat front view of horizontal strips stacked from top to bottom, each strip full width, touching the next with no gap and no border, each strip seamless left to right so it tiles along a wall. The sheet shows 2 m wide x 2 m tall at 2048 x 2048 px (about 1024 px per metre). Strips from top to bottom: 1) cornice with parapet balustrade of small turned balusters, 40 cm tall; 2) plain frieze band, 20 cm; 3) architrave with fine mouldings, 20 cm; 4) fluted column shaft section, flutes 6 cm wide, 40 cm; 5) column base and plinth moulding, 25 cm; 6) rusticated arch soffit strip with grooves every 12 cm, 25 cm; 7) stone dado stall riser in pale grey stone, 30 cm. Gentle ambient occlusion in recesses only, no cast shadows, no vignette, even flat light, no lens distortion. No text, no letters, no people, no real brand names or logos.",
+      "generate": "square 2048x2048",
+      "target": {
+        "w": 2048,
+        "h": 2048,
+        "tileable": true,
+        "normalMap": true,
+        "alpha": false,
+        "out": "textures/tex_trim_cp_colonnade.webp"
+      },
+      "placeholder": {
+        "color": "#1f2533",
+        "pattern": "noise",
+        "scale": 1
+      },
+      "used_by": [
+        "kits"
+      ],
+      "priority": 2,
+      "batch": "B2-trims",
+      "created": "2026-11-14T16:05:11.426Z"
+    },
+    {
+      "id": "decal_road_wet_sheet",
+      "kind": "decal",
+      "intent": "Wet asphalt patches and puddle decals for rain and wet roads",
+      "prompt": "stylised realistic game art, real proportions, clean simplified shapes, rich warm colour, soft hazy sunlight, hand-tuned colour, no outlines. A sheet of 8 separate wet road details seen straight from above, to paste onto matte dry asphalt: three soft-edged darker wet asphalt patches (the asphalt looks darker and slightly richer, 1.5 to 3 m across), three irregular puddles (0.5 m, 1 m and 2 m across) filled with flat neutral grey-blue tone with a thin darker rim and a few floating leaves or dust (the game shader adds the real reflection), and two wet tyre track pairs fading out at the ends (3 m long). Edges feather to transparent. The sheet covers about 4 m x 4 m of real road at 2048 x 2048 px. Transparent background (PNG with alpha), each item separate with clear space between, no ground, no shadow, no text, no letters, no logos.",
+      "generate": "square 2048x2048, transparent background",
+      "target": {
+        "w": 2048,
+        "h": 2048,
+        "tileable": false,
+        "normalMap": false,
+        "alpha": true,
+        "out": "decals/decal_road_wet_sheet.webp"
+      },
+      "placeholder": {
+        "color": "#1f2533",
+        "pattern": "flat",
+        "scale": 1
+      },
+      "used_by": [],
+      "priority": 2,
+      "batch": "B1-tunnel-road",
+      "created": "2026-11-14T16:05:11.612Z",
+      "review": {
+        "at": "2026-11-14T16:44:14.910Z",
+        "verdict": "ok",
+        "note": "Clean alpha sheet: wet patches, puddles, tyre streaks; soft edges fine",
+        "ingestedAt": "2026-11-14T16:28:44.518Z",
+        "fit": "pending",
+        "fitNote": "scene check when wired (P2-032/P2-056)"
+      }
+    },
+    {
+      "id": "decal_sign_tin_01",
+      "kind": "decal",
+      "intent": "Chandni Chowk sweet shop painted tin board, Hindi only (Chandni Mithai Ghar)",
+      "prompt": "A straight-on documentary photograph of a hand-painted shop board over a sweet shop on Chandni Chowk, Old Delhi, taken on an ordinary hazy afternoon with a phone camera held level and square to it, soft natural daylight, no flash, true colours, slight grain. The board is a flat galvanised tin sheet about 3 m by 0.7 m on an angle iron frame, bolted to a lime plaster wall with six bolts. Chrome yellow enamel ground with a thin red painted border line. Text in Hindi only, three lines: across the middle, large red Devanagari \"चाँदनी मिठाई घर\" with a black drop shadow; under it, smaller, in maroon \"शुद्ध देसी घी\"; in the bottom right corner, small, \"स्था. 1958\". Lettering hand-painted by a local signwriter with a brush in enamel paint: thick strokes of slightly uneven weight, a dark drop shadow painted down and to the right, spacing and baseline a little uneven, faint brush ridges and one or two small drips, the shaded block letters of an old Delhi bazaar board. The Devanagari has a continuous headline bar (shirorekha) painted by hand, with correct matras. Wear: the yellow sun-faded and chalky at the left end, brown rust bleeding down in streaks from every bolt hole, paint chipped to grey tin along the bottom edge, a dented top right corner, dust and black soot on the top lip, a pale ghost of older lettering showing where the paint has worn thin. Frame: the board fills the whole width of the picture edge to edge, square to the camera with no perspective tilt, a thin strip of the wall it is fixed to visible above and below so the fixings show. Landscape 1536 x 1024. Spell every word exactly as written here, letter for letter, and add no other words; if a word cannot be written correctly, leave it out rather than invent letters. Photographic and true to life: not an illustration, not graphic design, not a render, not digital art, no vector look, no perfect symmetry, no logos, no real brand names, no people, no watermark.",
+      "generate": "1536x1024, transparent background",
+      "target": {
+        "w": 1536,
+        "h": 1024,
+        "tileable": false,
+        "normalMap": false,
+        "alpha": true,
+        "out": "decals/decal_sign_tin_01.webp"
+      },
+      "placeholder": {
+        "color": "#1f2533",
+        "pattern": "flat",
+        "scale": 1
+      },
+      "used_by": [
+        "P2-048"
+      ],
+      "priority": 1,
+      "batch": "B3-signs-painted",
+      "created": "2026-11-14T17:19:46.962Z",
+      "promptAt": "2026-11-14T17:19:47.009Z"
+    },
+    {
+      "id": "decal_sign_tin_02",
+      "kind": "decal",
+      "intent": "Chandni Chowk saree shop painted tin board, Hindi over English (Shree Ganga Saree Bhandar)",
+      "prompt": "A straight-on documentary photograph of a hand-painted shop board over a saree shop on Chandni Chowk, Old Delhi, taken on an ordinary hazy afternoon with a phone camera held level and square to it, soft natural daylight, no flash, true colours, slight grain. A flat tin board about 3 m by 0.8 m on a wooden batten frame, hung from the lintel on two flat iron straps. Faded signal red enamel ground, cream lettering with a black drop shadow, a cream double border line. Top line, large, Devanagari \"श्री गंगा साड़ी भंडार\"; under it, smaller, English in shaded serif capitals \"SHREE GANGA SAREE BHANDAR\"; bottom right, small, \"Ph. 98XXXXXX47\". Lettering hand-painted by a local signwriter with a brush in enamel paint: thick strokes of slightly uneven weight, a dark drop shadow painted down and to the right, spacing and baseline a little uneven, faint brush ridges and one or two small drips, the shaded block letters of an old Delhi bazaar board. The Devanagari has a continuous headline bar (shirorekha) painted by hand, with correct matras. Wear: the red faded to dusty pink on the right half where the sun hits, paint lifting in flakes to bare rusty tin round the edges, rust running down from the two straps, the lower left corner bent outwards, dust settled along the top edge. Frame: the board fills the whole width of the picture edge to edge, square to the camera with no perspective tilt, a thin strip of the wall it is fixed to visible above and below so the fixings show. Landscape 1536 x 1024. Spell every word exactly as written here, letter for letter, and add no other words; if a word cannot be written correctly, leave it out rather than invent letters. Photographic and true to life: not an illustration, not graphic design, not a render, not digital art, no vector look, no perfect symmetry, no logos, no real brand names, no people, no watermark.",
+      "generate": "1536x1024, transparent background",
+      "target": {
+        "w": 1536,
+        "h": 1024,
+        "tileable": false,
+        "normalMap": false,
+        "alpha": true,
+        "out": "decals/decal_sign_tin_02.webp"
+      },
+      "placeholder": {
+        "color": "#1f2533",
+        "pattern": "flat",
+        "scale": 1
+      },
+      "used_by": [
+        "P2-048"
+      ],
+      "priority": 1,
+      "batch": "B3-signs-painted",
+      "created": "2026-11-14T17:19:47.054Z",
+      "promptAt": "2026-11-14T17:19:47.101Z"
+    },
+    {
+      "id": "decal_sign_tin_03",
+      "kind": "decal",
+      "intent": "Jama Masjid side eatery painted wooden board, Urdu over Hindi (Nihari Wale Chacha)",
+      "prompt": "A straight-on documentary photograph of a hand-painted board over a small eatery in the lanes near Jama Masjid, Old Delhi, taken on an ordinary hazy afternoon with a phone camera held level and square to it, soft natural daylight, no flash, true colours, slight grain. A painted wooden plank board about 2.5 m by 0.7 m, screwed to an old brick and plaster wall. Dark bottle green enamel ground, a thin yellow painted border. Top line, large, cream lettering in Urdu: \"نہاری والے چاچا\". Under it, smaller, white Hindi Devanagari: \"नहारी वाले चाचा\". The Urdu is in Nastaliq, written right to left with flowing calligraphic brush strokes, letters joined correctly. Lettering hand-painted by a local signwriter with a brush in enamel paint: thick strokes of slightly uneven weight, a dark drop shadow painted down and to the right, spacing and baseline a little uneven, faint brush ridges and one or two small drips, the shaded block letters of an old Delhi bazaar board. Wear: the plank joints and wood grain showing through the paint, paint cracked along the joints, a greasy dark smoke stain over the right end from the cooking below, the green faded and chalky, rusted nail heads. Frame: the board fills the whole width of the picture edge to edge, square to the camera with no perspective tilt, a thin strip of the wall it is fixed to visible above and below so the fixings show. Landscape 1536 x 1024. Spell every word exactly as written here, letter for letter, and add no other words; if a word cannot be written correctly, leave it out rather than invent letters. Photographic and true to life: not an illustration, not graphic design, not a render, not digital art, no vector look, no perfect symmetry, no logos, no real brand names, no people, no watermark.",
+      "generate": "1536x1024, transparent background",
+      "target": {
+        "w": 1536,
+        "h": 1024,
+        "tileable": false,
+        "normalMap": false,
+        "alpha": true,
+        "out": "decals/decal_sign_tin_03.webp"
+      },
+      "placeholder": {
+        "color": "#1f2533",
+        "pattern": "flat",
+        "scale": 1
+      },
+      "used_by": [
+        "P2-048"
+      ],
+      "priority": 1,
+      "batch": "B3-signs-painted",
+      "created": "2026-11-14T17:19:47.148Z",
+      "promptAt": "2026-11-14T17:19:47.191Z"
+    },
+    {
+      "id": "decal_sign_tin_04",
+      "kind": "decal",
+      "intent": "Urdu Bazaar book shop painted tin board, Urdu only (Urdu Kitab Ghar)",
+      "prompt": "A straight-on documentary photograph of a hand-painted board over a book shop on the Urdu Bazaar side near Jama Masjid, Old Delhi, taken on an ordinary hazy afternoon with a phone camera held level and square to it, soft natural daylight, no flash, true colours, slight grain. A painted tin board about 2.5 m by 0.6 m, screwed flat to the wall at four corners. Deep blue enamel ground, white lettering with a thin black shadow. One line only, in Urdu, large: \"اردو کتاب گھر\". The Urdu is in Nastaliq, written right to left with flowing calligraphic brush strokes, letters joined correctly. A small open book painted by hand in white and yellow at the left end. Wear: the blue sun-faded to grey-blue, rust blooming round the four screws and running down, a long scratch across the ground, dust caught in the bottom corners. Frame: the board fills the whole width of the picture edge to edge, square to the camera with no perspective tilt, a thin strip of the wall it is fixed to visible above and below so the fixings show. Landscape 1536 x 1024. Spell every word exactly as written here, letter for letter, and add no other words; if a word cannot be written correctly, leave it out rather than invent letters. Photographic and true to life: not an illustration, not graphic design, not a render, not digital art, no vector look, no perfect symmetry, no logos, no real brand names, no people, no watermark.",
+      "generate": "1536x1024, transparent background",
+      "target": {
+        "w": 1536,
+        "h": 1024,
+        "tileable": false,
+        "normalMap": false,
+        "alpha": true,
+        "out": "decals/decal_sign_tin_04.webp"
+      },
+      "placeholder": {
+        "color": "#1f2533",
+        "pattern": "flat",
+        "scale": 1
+      },
+      "used_by": [
+        "P2-048"
+      ],
+      "priority": 2,
+      "batch": "B3-signs-painted",
+      "created": "2026-11-14T17:19:47.235Z",
+      "promptAt": "2026-11-14T17:19:47.281Z"
+    },
+    {
+      "id": "decal_sign_tin_05",
+      "kind": "decal",
+      "intent": "Old Delhi gali small painted board with arrow, Hindi only (Chabi Banane Wale)",
+      "prompt": "A straight-on documentary photograph of a small hand-painted tin board beside a doorway in a narrow Old Delhi gali, taken on an ordinary hazy afternoon with a phone camera held level and square to it, soft natural daylight, no flash, true colours, slight grain. The board is about 60 cm by 35 cm, held by two rusty nails to a crumbling lime-washed wall. Off-white enamel ground, black Devanagari with a red shadow, Hindi only: \"चाबी बनाने वाले\". Below it a black painted arrow pointing right and, small in red, \"गली में\". A simple key painted by hand at the left end. Lettering hand-painted by a local signwriter with a brush in enamel paint: thick strokes of slightly uneven weight, a dark drop shadow painted down and to the right, spacing and baseline a little uneven, faint brush ridges and one or two small drips, the shaded block letters of an old Delhi bazaar board. The Devanagari has a continuous headline bar (shirorekha) painted by hand, with correct matras. Wear heavy: rust spots coming through the white, a bent and curled corner, paint flaking off in patches, dirty finger marks, a scrap of an old torn paper notice still stuck at the bottom edge. Frame: the small board fills the picture with a narrow margin of the wall all round, square to the camera. Landscape 1536 x 1024. Spell every word exactly as written here, letter for letter, and add no other words; if a word cannot be written correctly, leave it out rather than invent letters. Photographic and true to life: not an illustration, not graphic design, not a render, not digital art, no vector look, no perfect symmetry, no logos, no real brand names, no people, no watermark.",
+      "generate": "1536x1024, transparent background",
+      "target": {
+        "w": 1536,
+        "h": 1024,
+        "tileable": false,
+        "normalMap": false,
+        "alpha": true,
+        "out": "decals/decal_sign_tin_05.webp"
+      },
+      "placeholder": {
+        "color": "#1f2533",
+        "pattern": "flat",
+        "scale": 1
+      },
+      "used_by": [
+        "P2-048"
+      ],
+      "priority": 2,
+      "batch": "B3-signs-painted",
+      "created": "2026-11-14T17:19:47.325Z",
+      "promptAt": "2026-11-14T17:19:47.370Z"
+    },
+    {
+      "id": "decal_sign_tin_06",
+      "kind": "decal",
+      "intent": "Daryaganj and ITO book shop painted board, Hindi and English side by side (Natak Kitab Ghar)",
+      "prompt": "A straight-on documentary photograph of a neat hand-painted shop board over a book shop on the Daryaganj side near ITO, Delhi, taken on an ordinary hazy afternoon with a phone camera held level and square to it, soft natural daylight, no flash, true colours, slight grain. A painted tin board about 2.8 m by 0.6 m, screwed to a plain concrete fascia. Black enamel ground with a thin white border, lettering in white with a soft grey shadow, tidy like an old painted office nameplate. Left half, large, Devanagari \"नाटक किताब घर\"; a short painted vertical rule; right half English shaded serif capitals \"NATAK KITAB GHAR\". Along the bottom, small: \"Plays, Scripts, Drama Books\". Lettering hand-painted by a local signwriter with a brush in enamel paint: thick strokes of slightly uneven weight, a dark drop shadow painted down and to the right, spacing and baseline a little uneven, faint brush ridges and one or two small drips, the shaded block letters of an old Delhi bazaar board. The Devanagari has a continuous headline bar (shirorekha) painted by hand, with correct matras. Wear medium: the black faded to charcoal, a fine film of dust, light rust at the screws, one chipped corner. Frame: the board fills the whole width of the picture edge to edge, square to the camera with no perspective tilt, a thin strip of the wall it is fixed to visible above and below so the fixings show. Landscape 1536 x 1024. Spell every word exactly as written here, letter for letter, and add no other words; if a word cannot be written correctly, leave it out rather than invent letters. Photographic and true to life: not an illustration, not graphic design, not a render, not digital art, no vector look, no perfect symmetry, no logos, no real brand names, no people, no watermark.",
+      "generate": "1536x1024, transparent background",
+      "target": {
+        "w": 1536,
+        "h": 1024,
+        "tileable": false,
+        "normalMap": false,
+        "alpha": true,
+        "out": "decals/decal_sign_tin_06.webp"
+      },
+      "placeholder": {
+        "color": "#1f2533",
+        "pattern": "flat",
+        "scale": 1
+      },
+      "used_by": [
+        "P2-048"
+      ],
+      "priority": 2,
+      "batch": "B3-signs-painted",
+      "created": "2026-11-14T17:19:47.415Z",
+      "promptAt": "2026-11-14T17:19:47.458Z"
+    },
+    {
+      "id": "decal_sign_enamel_01",
+      "kind": "decal",
+      "intent": "Round enamel board at a jeweller, Hindi only (old gold and silver bought here)",
+      "prompt": "A straight-on documentary photograph of a round vitreous enamel sign screwed to a shop pier in Chandni Chowk, Old Delhi, taken on an ordinary hazy afternoon with a phone camera held level and square to it, soft natural daylight, no flash, true colours, slight grain. A steel disc about 55 cm across: white centre, thick red outer ring, lettering fired into the enamel in red and dark blue, the old hand-drawn Devanagari of enamel signs, Hindi only, three lines: \"पुराना\" / \"सोना चाँदी\" / \"ख़रीदा जाता है\". One screw at the top and one at the bottom. Wear: enamel chipped at the rim and round both screws showing black steel and orange rust, a rust run down from the bottom screw, a faint film of dust, the white slightly yellowed. Square 1024 x 1024, the disc centred and filling most of the frame, background removed to transparent (PNG with alpha), cut along its real worn outline, no wall, no shadow. Spell every word exactly as written here, letter for letter, and add no other words; if a word cannot be written correctly, leave it out rather than invent letters. Photographic and true to life: not an illustration, not graphic design, not a render, not digital art, no vector look, no perfect symmetry, no logos, no real brand names, no people, no watermark.",
+      "generate": "square 1024x1024, transparent background",
+      "target": {
+        "w": 1024,
+        "h": 1024,
+        "tileable": false,
+        "normalMap": false,
+        "alpha": true,
+        "out": "decals/decal_sign_enamel_01.webp"
+      },
+      "placeholder": {
+        "color": "#1f2533",
+        "pattern": "flat",
+        "scale": 1
+      },
+      "used_by": [
+        "P2-048"
+      ],
+      "priority": 2,
+      "batch": "B3-signs-painted",
+      "created": "2026-11-14T17:19:47.503Z",
+      "promptAt": "2026-11-14T17:19:47.549Z"
+    },
+    {
+      "id": "decal_sign_enamel_02",
+      "kind": "decal",
+      "intent": "Round enamel board of a Unani clinic, Urdu only (Unani Dawakhana)",
+      "prompt": "A straight-on documentary photograph of a round vitreous enamel sign screwed beside a doorway in an Old Delhi gali near Jama Masjid, taken on an ordinary hazy afternoon with a phone camera held level and square to it, soft natural daylight, no flash, true colours, slight grain. A steel disc about 50 cm across: cream white centre, deep green outer ring, black lettering fired into the enamel, Urdu only, one line in the middle: \"یونانی دواخانہ\". The Urdu is in Nastaliq, written right to left with flowing calligraphic brush strokes, letters joined correctly. One screw at the top and one at the bottom. Wear: chips at the rim showing black steel and rust, rust tears down from the screws, the green faded at the top, dust. Square 1024 x 1024, the disc centred and filling most of the frame, background removed to transparent (PNG with alpha), cut along its real worn outline, no wall, no shadow. Spell every word exactly as written here, letter for letter, and add no other words; if a word cannot be written correctly, leave it out rather than invent letters. Photographic and true to life: not an illustration, not graphic design, not a render, not digital art, no vector look, no perfect symmetry, no logos, no real brand names, no people, no watermark.",
+      "generate": "square 1024x1024, transparent background",
+      "target": {
+        "w": 1024,
+        "h": 1024,
+        "tileable": false,
+        "normalMap": false,
+        "alpha": true,
+        "out": "decals/decal_sign_enamel_02.webp"
+      },
+      "placeholder": {
+        "color": "#1f2533",
+        "pattern": "flat",
+        "scale": 1
+      },
+      "used_by": [
+        "P2-048"
+      ],
+      "priority": 3,
+      "batch": "B3-signs-painted",
+      "created": "2026-11-14T17:19:47.597Z",
+      "promptAt": "2026-11-14T17:19:47.643Z"
+    },
+    {
+      "id": "decal_shutter_text_01",
+      "kind": "decal",
+      "intent": "Shop name painted on a GB Road shutter, Hindi with a phone number (Shri Ram Hardware Store)",
+      "prompt": "A straight-on documentary photograph of lettering painted by hand straight onto a closed corrugated steel rolling shutter of a hardware shop on GB Road, Delhi, taken on an ordinary hazy afternoon with a phone camera held level and square to it, soft natural daylight, no flash, true colours, slight grain. White enamel paint with a red shadow, Hindi: large \"श्री राम हार्डवेयर स्टोर\", and under it smaller \"Ph. 98XXXXXX76\". The Devanagari has a continuous headline bar (shirorekha) painted by hand, with correct matras. The paint follows the horizontal ribs of the shutter, so every letter is broken into bands with darker gaps at the grooves; rough brush strokes where the brush skipped over the ridges, thin drips under some letters, paint flaked off in small chips and rubbed away in a band where the shutter rolls up. Keep only the paint: the shutter itself removed. Landscape 1536 x 1024, the lettering filling the width, background removed to transparent (PNG with alpha), cut along the real ragged edges, flat and straight on, no wall, no shadow. Spell every word exactly as written here, letter for letter, and add no other words; if a word cannot be written correctly, leave it out rather than invent letters. Photographic and true to life: not an illustration, not graphic design, not a render, not digital art, no vector look, no perfect symmetry, no logos, no real brand names, no people, no watermark.",
+      "generate": "1536x1024, transparent background",
+      "target": {
+        "w": 1536,
+        "h": 1024,
+        "tileable": false,
+        "normalMap": false,
+        "alpha": true,
+        "out": "decals/decal_shutter_text_01.webp"
+      },
+      "placeholder": {
+        "color": "#1f2533",
+        "pattern": "flat",
+        "scale": 1
+      },
+      "used_by": [
+        "P2-056"
+      ],
+      "priority": 2,
+      "batch": "B3-signs-painted",
+      "created": "2026-11-14T17:19:47.693Z",
+      "promptAt": "2026-11-14T17:19:47.742Z"
+    },
+    {
+      "id": "decal_shutter_text_02",
+      "kind": "decal",
+      "intent": "Notice painted on a shutter, Hindi only (no unloading here)",
+      "prompt": "A straight-on documentary photograph of a rough notice painted by hand straight onto a closed corrugated steel rolling shutter in Ajmeri Gate, Delhi, taken on an ordinary hazy afternoon with a phone camera held level and square to it, soft natural daylight, no flash, true colours, slight grain. Red paint, quick uneven brush hand, Hindi only: \"माल उतारना यहाँ मना है\". The Devanagari has a continuous headline bar (shirorekha) painted by hand, with correct matras. The paint follows the horizontal ribs of the shutter, so every letter is broken into bands with darker gaps at the grooves; dry-brush streaks, drips under the letters, the paint faded and scuffed by years of the shutter rolling. Keep only the paint: the shutter itself removed. Landscape 1536 x 1024, the lettering filling the width, background removed to transparent (PNG with alpha), cut along the real ragged edges, flat and straight on, no wall, no shadow. Spell every word exactly as written here, letter for letter, and add no other words; if a word cannot be written correctly, leave it out rather than invent letters. Photographic and true to life: not an illustration, not graphic design, not a render, not digital art, no vector look, no perfect symmetry, no logos, no real brand names, no people, no watermark.",
+      "generate": "1536x1024, transparent background",
+      "target": {
+        "w": 1536,
+        "h": 1024,
+        "tileable": false,
+        "normalMap": false,
+        "alpha": true,
+        "out": "decals/decal_shutter_text_02.webp"
+      },
+      "placeholder": {
+        "color": "#1f2533",
+        "pattern": "flat",
+        "scale": 1
+      },
+      "used_by": [
+        "P2-056"
+      ],
+      "priority": 3,
+      "batch": "B3-signs-painted",
+      "created": "2026-11-14T17:19:47.790Z",
+      "promptAt": "2026-11-14T17:19:47.838Z"
+    },
+    {
+      "id": "decal_shutter_text_03",
+      "kind": "decal",
+      "intent": "Gali tailor name painted on a shutter, Urdu only (Khan Tailors)",
+      "prompt": "A straight-on documentary photograph of a shop name painted by hand straight onto a closed corrugated steel rolling shutter in an Old Delhi gali near Jama Masjid, taken on an ordinary hazy afternoon with a phone camera held level and square to it, soft natural daylight, no flash, true colours, slight grain. Yellow enamel paint with a thin black outline, Urdu only, large: \"خان ٹیلرز\". The Urdu is in Nastaliq, written right to left with flowing calligraphic brush strokes, letters joined correctly. A small pair of scissors painted beside it. The paint follows the horizontal ribs of the shutter, so every letter is broken into bands with darker gaps at the grooves; chips, scuffs, faded edges. Keep only the paint: the shutter itself removed. Landscape 1536 x 1024, the lettering filling the width, background removed to transparent (PNG with alpha), cut along the real ragged edges, flat and straight on, no wall, no shadow. Spell every word exactly as written here, letter for letter, and add no other words; if a word cannot be written correctly, leave it out rather than invent letters. Photographic and true to life: not an illustration, not graphic design, not a render, not digital art, no vector look, no perfect symmetry, no logos, no real brand names, no people, no watermark.",
+      "generate": "1536x1024, transparent background",
+      "target": {
+        "w": 1536,
+        "h": 1024,
+        "tileable": false,
+        "normalMap": false,
+        "alpha": true,
+        "out": "decals/decal_shutter_text_03.webp"
+      },
+      "placeholder": {
+        "color": "#1f2533",
+        "pattern": "flat",
+        "scale": 1
+      },
+      "used_by": [
+        "P2-056"
+      ],
+      "priority": 3,
+      "batch": "B3-signs-painted",
+      "created": "2026-11-14T17:19:47.891Z",
+      "promptAt": "2026-11-14T17:19:47.939Z"
+    },
+    {
+      "id": "decal_sign_flex_gb_01",
+      "kind": "decal",
+      "intent": "GB Road bearings shop pale blue flex, English only (Standard Gear and Bearing)",
+      "prompt": "A straight-on documentary photograph of a printed flex banner over a machinery shop on GB Road (Swami Shraddhanand Marg), Delhi, taken on an ordinary hazy afternoon with a phone camera held level and square to it, soft natural daylight, no flash, true colours, slight grain. One sheet of printed PVC flex about 3 m by 1.1 m stretched on a welded square-pipe frame, tied at the corners with wire through brass grommets. Printed in the cheap local print-shop look: bold condensed sans-serif English like a flex printer uses, coloured outlines and drop shadows, flat solid colour bands, slightly oversaturated inkjet colours. Pale sky blue ground; the shop name in big white condensed bold capitals with a thin dark blue outline: \"STANDARD GEAR AND BEARING\". Under it a white strip with blue text: \"IMPORTERS & STOCKISTS\". Then smaller dark blue text: \"ALL TYPES OF BALL BEARINGS, TAPER ROLLER BEARINGS & PLUMMER BLOCKS\". Bottom line: \"M. 98XXXXXX21, 98XXXXXX64\". English only, no pictures. Wear: the blue bleached pale on the left side, faint horizontal print banding, a soft sag in the middle, fold creases, black grime streaks running down from the top edge, one corner tie loose so the flex curls a little. Frame: the board fills the whole width of the picture edge to edge, square to the camera with no perspective tilt, a thin strip of the wall it is fixed to visible above and below so the fixings show. Landscape 1536 x 1024. Spell every word exactly as written here, letter for letter, and add no other words; if a word cannot be written correctly, leave it out rather than invent letters. Photographic and true to life: not an illustration, not graphic design, not a render, not digital art, no vector look, no perfect symmetry, no logos, no real brand names, no people, no watermark.",
+      "generate": "1536x1024, transparent background",
+      "target": {
+        "w": 1536,
+        "h": 1024,
+        "tileable": false,
+        "normalMap": false,
+        "alpha": true,
+        "out": "decals/decal_sign_flex_gb_01.webp"
+      },
+      "placeholder": {
+        "color": "#1f2533",
+        "pattern": "flat",
+        "scale": 1
+      },
+      "used_by": [
+        "P2-048"
+      ],
+      "priority": 1,
+      "batch": "B3-signs-printed",
+      "created": "2026-11-14T17:19:47.987Z",
+      "promptAt": "2026-11-14T17:19:48.034Z"
+    },
+    {
+      "id": "decal_sign_flex_gb_02",
+      "kind": "decal",
+      "intent": "GB Road pump shop yellow flex with product photos, English with a Hindi line (Modern Pump House)",
+      "prompt": "A straight-on documentary photograph of a printed flex banner over a pump and motor shop on GB Road, Delhi, taken on an ordinary hazy afternoon with a phone camera held level and square to it, soft natural daylight, no flash, true colours, slight grain. One sheet of printed PVC flex about 3 m by 1.1 m on a welded pipe frame, tied through grommets. Printed in the cheap local print-shop look: bold condensed sans-serif English like a flex printer uses, coloured outlines and drop shadows, flat solid colour bands, slightly oversaturated inkjet colours. Bright chrome yellow ground with a red band across the top. In the red band, white bold printed Hindi in a heavy Devanagari typeface: \"मॉडर्न पंप हाउस\". Below on the yellow, the English name in huge red condensed bold capitals with a white outline and black drop shadow: \"MODERN PUMP HOUSE\". Along the bottom a row of four small product photographs: a blue monoblock water pump, a grey electric motor, a long submersible pump, a pressure gauge, none with any brand name. Beside them: \"Deals in: Pumps, Motors, Starters & Spares\" and \"Mob. 99XXXXXX08\". Wear: the yellow faded to cream at one end, the reds gone slightly pink, a small tear at the lower right showing the frame pipe behind, wrinkles at the ties, dust. Frame: the board fills the whole width of the picture edge to edge, square to the camera with no perspective tilt, a thin strip of the wall it is fixed to visible above and below so the fixings show. Landscape 1536 x 1024. Spell every word exactly as written here, letter for letter, and add no other words; if a word cannot be written correctly, leave it out rather than invent letters. Photographic and true to life: not an illustration, not graphic design, not a render, not digital art, no vector look, no perfect symmetry, no logos, no real brand names, no people, no watermark.",
+      "generate": "1536x1024, transparent background",
+      "target": {
+        "w": 1536,
+        "h": 1024,
+        "tileable": false,
+        "normalMap": false,
+        "alpha": true,
+        "out": "decals/decal_sign_flex_gb_02.webp"
+      },
+      "placeholder": {
+        "color": "#1f2533",
+        "pattern": "flat",
+        "scale": 1
+      },
+      "used_by": [
+        "P2-048"
+      ],
+      "priority": 1,
+      "batch": "B3-signs-printed",
+      "created": "2026-11-14T17:19:48.083Z",
+      "promptAt": "2026-11-14T17:19:48.130Z"
+    },
+    {
+      "id": "decal_sign_flex_gb_03",
+      "kind": "decal",
+      "intent": "GB Road machinery shop red flex, very faded, English with a small Hindi line (Shiv Shakti Machinery)",
+      "prompt": "A straight-on documentary photograph of an old printed flex banner over a machinery shop on GB Road, Delhi, taken on an ordinary hazy afternoon with a phone camera held level and square to it, soft natural daylight, no flash, true colours, slight grain. One sheet of printed PVC flex about 2.8 m by 1 m on a pipe frame. Printed in the cheap local print-shop look: bold condensed sans-serif English like a flex printer uses, coloured outlines and drop shadows, flat solid colour bands, slightly oversaturated inkjet colours. Deep red ground. At the top, small white printed Devanagari: \"शिव शक्ति मशीनरी\". Below, the English name in big white condensed bold capitals with a yellow outline: \"SHIV SHAKTI MACHINERY\". A yellow strip with black text: \"LATHE MACHINES, DRILL MACHINES, ALL SPARE PARTS\". Small photographs of a lathe and a pillar drill at the left end, no brand names. Bottom right: \"Ph. 97XXXXXX53\". Wear: years old, the red sun-faded to a brownish pink, the yellow almost white, a vertical tear mended with brown tape, grey dust and dirt streaks, the flex wavy where it has stretched. Frame: the board fills the whole width of the picture edge to edge, square to the camera with no perspective tilt, a thin strip of the wall it is fixed to visible above and below so the fixings show. Landscape 1536 x 1024. Spell every word exactly as written here, letter for letter, and add no other words; if a word cannot be written correctly, leave it out rather than invent letters. Photographic and true to life: not an illustration, not graphic design, not a render, not digital art, no vector look, no perfect symmetry, no logos, no real brand names, no people, no watermark.",
+      "generate": "1536x1024, transparent background",
+      "target": {
+        "w": 1536,
+        "h": 1024,
+        "tileable": false,
+        "normalMap": false,
+        "alpha": true,
+        "out": "decals/decal_sign_flex_gb_03.webp"
+      },
+      "placeholder": {
+        "color": "#1f2533",
+        "pattern": "flat",
+        "scale": 1
+      },
+      "used_by": [
+        "P2-048"
+      ],
+      "priority": 2,
+      "batch": "B3-signs-printed",
+      "created": "2026-11-14T17:19:48.178Z",
+      "promptAt": "2026-11-14T17:19:48.226Z"
+    },
+    {
+      "id": "decal_sign_flex_gb_04",
+      "kind": "decal",
+      "intent": "GB Road pipe shop white flex over an older painted board, English only (Bansal Pipe and Fittings)",
+      "prompt": "A straight-on documentary photograph of a white printed flex banner over a pipe fittings shop on GB Road, Delhi, fixed over an older painted board, taken on an ordinary hazy afternoon with a phone camera held level and square to it, soft natural daylight, no flash, true colours, slight grain. The flex is about 3 m by 1 m on a pipe frame; the rusty edge of the older painted tin board shows just below it. Printed in the cheap local print-shop look: bold condensed sans-serif English like a flex printer uses, coloured outlines and drop shadows, flat solid colour bands, slightly oversaturated inkjet colours. White ground; the name in dark royal blue condensed bold capitals: \"BANSAL PIPE AND FITTINGS\". A red strip below with white text: \"G.I. PIPES, C.P. FITTINGS, VALVES, SANITARY\". A photograph of stacked galvanised pipes and brass fittings at the right end, no brand names. Bottom left: \"Mob. 98XXXXXX90\". English only. Wear: the white yellowed and grey with city dust, heavy black rain streaks from the top edge, one corner torn and hanging down, one grommet ripped out. Frame: the board fills the whole width of the picture edge to edge, square to the camera with no perspective tilt, a thin strip of the wall it is fixed to visible above and below so the fixings show. Landscape 1536 x 1024. Spell every word exactly as written here, letter for letter, and add no other words; if a word cannot be written correctly, leave it out rather than invent letters. Photographic and true to life: not an illustration, not graphic design, not a render, not digital art, no vector look, no perfect symmetry, no logos, no real brand names, no people, no watermark.",
+      "generate": "1536x1024, transparent background",
+      "target": {
+        "w": 1536,
+        "h": 1024,
+        "tileable": false,
+        "normalMap": false,
+        "alpha": true,
+        "out": "decals/decal_sign_flex_gb_04.webp"
+      },
+      "placeholder": {
+        "color": "#1f2533",
+        "pattern": "flat",
+        "scale": 1
+      },
+      "used_by": [
+        "P2-048"
+      ],
+      "priority": 2,
+      "batch": "B3-signs-printed",
+      "created": "2026-11-14T17:19:48.276Z",
+      "promptAt": "2026-11-14T17:19:48.323Z"
+    },
+    {
+      "id": "decal_poster_01",
+      "kind": "decal",
+      "intent": "Hand-written room to let notices with tear-off phone strips, Hindi and English",
+      "prompt": "A straight-on documentary photograph of two small paper notices pasted on a wall in Old Delhi, taken on an ordinary hazy afternoon with a phone camera held level and square to it, soft natural daylight, no flash, true colours, slight grain. 1) An A5 sheet of thin white paper written by hand in blue ballpoint and thick black marker, Hindi: \"किराये के लिए कमरा खाली है\", with a row of eight tear-off strips cut along the bottom, each with \"98XXXXXX31\" written sideways in pen, three strips already torn away. 2) Overlapping its corner, a smaller yellow paper slip written in red marker, English: \"TO LET\" and \"1 ROOM SET\" and \"99XXXXXX12\". Real everyday handwriting, not a font. Brown glue stains soaking through, wrinkles from pasting, lifting corners, water tidemarks, dust. Square 1024 x 1024, the two notices centred and filling most of the frame, background removed to transparent (PNG with alpha), cut along its real worn outline, no wall, no shadow. Spell every word exactly as written here, letter for letter, and add no other words; if a word cannot be written correctly, leave it out rather than invent letters. Photographic and true to life: not an illustration, not graphic design, not a render, not digital art, no vector look, no perfect symmetry, no logos, no real brand names, no people, no watermark.",
+      "generate": "square 1024x1024, transparent background",
+      "target": {
+        "w": 1024,
+        "h": 1024,
+        "tileable": false,
+        "normalMap": false,
+        "alpha": true,
+        "out": "decals/decal_poster_01.webp"
+      },
+      "placeholder": {
+        "color": "#1f2533",
+        "pattern": "flat",
+        "scale": 1
+      },
+      "used_by": [
+        "P2-053"
+      ],
+      "priority": 2,
+      "batch": "B3-signs-printed",
+      "created": "2026-11-14T17:19:48.370Z",
+      "promptAt": "2026-11-14T17:19:48.418Z"
+    },
+    {
+      "id": "decal_poster_02",
+      "kind": "decal",
+      "intent": "Two photocopied tuition handbills, one Urdu, one Hindi",
+      "prompt": "A straight-on documentary photograph of two photocopied A4 handbills pasted overlapping on a wall in an Old Delhi gali, taken on an ordinary hazy afternoon with a phone camera held level and square to it, soft natural daylight, no flash, true colours, slight grain. 1) Pink paper photocopied in black, Urdu, a bold heading \"اردو ٹیوشن سینٹر\" and below it a few short lines of small Urdu text too small to read. The Urdu is in Nastaliq, written right to left with flowing calligraphic brush strokes, letters joined correctly. 2) Overlapping it, white paper printed in blue, Hindi, a bold heading \"टेलरिंग कोर्स सेंटर\" and a few short lines of small text too small to read. The grey speckle and streaks of a cheap photocopier, the text slightly blurred. Wear: glue stains, the edges torn and peeling, one corner ripped off, sun-faded ink, a dusty smudge. Square 1024 x 1024, the two handbills centred and filling most of the frame, background removed to transparent (PNG with alpha), cut along its real worn outline, no wall, no shadow. Spell every word exactly as written here, letter for letter, and add no other words; if a word cannot be written correctly, leave it out rather than invent letters. Photographic and true to life: not an illustration, not graphic design, not a render, not digital art, no vector look, no perfect symmetry, no logos, no real brand names, no people, no watermark.",
+      "generate": "square 1024x1024, transparent background",
+      "target": {
+        "w": 1024,
+        "h": 1024,
+        "tileable": false,
+        "normalMap": false,
+        "alpha": true,
+        "out": "decals/decal_poster_02.webp"
+      },
+      "placeholder": {
+        "color": "#1f2533",
+        "pattern": "flat",
+        "scale": 1
+      },
+      "used_by": [
+        "P2-053"
+      ],
+      "priority": 2,
+      "batch": "B3-signs-printed",
+      "created": "2026-11-14T17:19:48.465Z",
+      "promptAt": "2026-11-14T17:19:48.514Z"
+    },
+    {
+      "id": "decal_poster_03",
+      "kind": "decal",
+      "intent": "Printed free eye camp poster over torn older posters, Hindi (Sethi Seva Trust)",
+      "prompt": "A straight-on documentary photograph of a printed charity poster pasted over layers of older torn posters on an Old Delhi wall, taken on an ordinary hazy afternoon with a phone camera held level and square to it, soft natural daylight, no flash, true colours, slight grain. The top poster is about 50 cm by 70 cm, offset printed on thin paper in yellow and red, Hindi only: big red heading \"सेठी सेवा ट्रस्ट\" and under it on a red band in white \"मुफ़्त नेत्र शिविर\", then a few short lines of small text too small to read. A bold printed Devanagari poster typeface with a white outline. Under it, scraps of older posters torn away in strips, showing only patches of colour and no readable words. Wear: wrinkles and bubbles from paste, glue stains, a long tear across the bottom half, the red faded to pink at the top. Square 1024 x 1024, the poster and its scraps centred and filling most of the frame, background removed to transparent (PNG with alpha), cut along its real worn outline, no wall, no shadow. Spell every word exactly as written here, letter for letter, and add no other words; if a word cannot be written correctly, leave it out rather than invent letters. Photographic and true to life: not an illustration, not graphic design, not a render, not digital art, no vector look, no perfect symmetry, no logos, no real brand names, no people, no watermark.",
+      "generate": "square 1024x1024, transparent background",
+      "target": {
+        "w": 1024,
+        "h": 1024,
+        "tileable": false,
+        "normalMap": false,
+        "alpha": true,
+        "out": "decals/decal_poster_03.webp"
+      },
+      "placeholder": {
+        "color": "#1f2533",
+        "pattern": "flat",
+        "scale": 1
+      },
+      "used_by": [
+        "P2-053"
+      ],
+      "priority": 2,
+      "batch": "B3-signs-printed",
+      "created": "2026-11-14T17:19:48.562Z",
+      "promptAt": "2026-11-14T17:19:48.609Z"
+    },
+    {
+      "id": "decal_poster_04",
+      "kind": "decal",
+      "intent": "Small printed job poster and a radio sticker, English and Hindi (Jhatpat, Raat Wali 106.1)",
+      "prompt": "A straight-on documentary photograph of two small printed posters pasted on an electricity pole box in Paharganj, Delhi, taken on an ordinary hazy afternoon with a phone camera held level and square to it, soft natural daylight, no flash, true colours, slight grain. 1) An A4 poster on glossy paper, orange ground, English heading in bold white condensed capitals \"JHATPAT RIDER WANTED\", under it in white bold Devanagari \"झटपट राइडर चाहिए\", a simple photo of a scooter with a plain delivery box on the back (no brand), and \"98XXXXXX05\". 2) A smaller dark purple paper sticker, Hindi in yellow: \"रात वाली 106.1\" and \"सुनते रहो\". Wear: creased, glue marks, one torn corner, the gloss scuffed, a dusty bottom edge. Square 1024 x 1024, the two posters centred and filling most of the frame, background removed to transparent (PNG with alpha), cut along its real worn outline, no wall, no shadow. Spell every word exactly as written here, letter for letter, and add no other words; if a word cannot be written correctly, leave it out rather than invent letters. Photographic and true to life: not an illustration, not graphic design, not a render, not digital art, no vector look, no perfect symmetry, no logos, no real brand names, no people, no watermark.",
+      "generate": "square 1024x1024, transparent background",
+      "target": {
+        "w": 1024,
+        "h": 1024,
+        "tileable": false,
+        "normalMap": false,
+        "alpha": true,
+        "out": "decals/decal_poster_04.webp"
+      },
+      "placeholder": {
+        "color": "#1f2533",
+        "pattern": "flat",
+        "scale": 1
+      },
+      "used_by": [
+        "P2-053"
+      ],
+      "priority": 3,
+      "batch": "B3-signs-printed",
+      "created": "2026-11-14T17:19:48.657Z",
+      "promptAt": "2026-11-14T17:19:48.714Z"
+    },
+    {
+      "id": "decal_sign_hotel_led_01",
+      "kind": "decal",
+      "intent": "Paharganj tall vertical hotel box sign, English with a Hindi line (Hotel Krishna Palace)",
+      "prompt": "A straight-on documentary photograph of a tall vertical hotel sign on a building front in Paharganj Main Bazaar, Delhi, taken on an ordinary hazy afternoon with a phone camera held level and square to it, soft natural daylight, no flash, true colours, slight grain. An aluminium box sign about 0.6 m wide and 3 m tall, standing out from the wall on iron brackets, seen face on. Backlit acrylic face: white ground; at the top, small red capitals \"HOTEL\"; below, the name stacked one letter under another in tall red acrylic capitals \"KRISHNA\" then \"PALACE\". At the bottom a red band with white Devanagari \"होटल कृष्णा पैलेस\" and small \"A/C ROOMS\". A row of small LED bulbs in a dark channel round the edge. Photographed in daylight with the lights off. Wear: the acrylic slightly yellowed, dust and dead insects collected inside along the bottom, rust on the bracket bolts, a dirty streak from the top. Frame: the board fills the whole height of the picture top to bottom, square to the camera with no perspective tilt, a strip of the building wall visible on both sides so the brackets show. Portrait 1024 x 1536. Spell every word exactly as written here, letter for letter, and add no other words; if a word cannot be written correctly, leave it out rather than invent letters. Photographic and true to life: not an illustration, not graphic design, not a render, not digital art, no vector look, no perfect symmetry, no logos, no real brand names, no people, no watermark.",
+      "generate": "1024x1536, transparent background",
+      "target": {
+        "w": 1024,
+        "h": 1536,
+        "tileable": false,
+        "normalMap": false,
+        "alpha": true,
+        "out": "decals/decal_sign_hotel_led_01.webp"
+      },
+      "placeholder": {
+        "color": "#1f2533",
+        "pattern": "flat",
+        "scale": 1
+      },
+      "used_by": [
+        "P2-048"
+      ],
+      "priority": 1,
+      "batch": "B3-signs-lit",
+      "created": "2026-11-14T17:19:48.764Z",
+      "promptAt": "2026-11-14T17:19:48.816Z"
+    },
+    {
+      "id": "decal_sign_hotel_led_02",
+      "kind": "decal",
+      "intent": "Paharganj vertical hotel box sign, English only (Hotel Moonlight)",
+      "prompt": "A straight-on documentary photograph of a tall vertical hotel sign on a building front in Paharganj Main Bazaar, Delhi, taken on an ordinary hazy afternoon with a phone camera held level and square to it, soft natural daylight, no flash, true colours, slight grain. An aluminium box sign about 0.6 m wide and 2.8 m tall on iron brackets, seen face on. Printed acrylic face: deep royal blue ground, white lettering stacked letter by letter: \"HOTEL\" small at the top, then \"MOONLIGHT\" in tall capitals, and at the bottom two small lines \"24 HRS CHECK OUT\" and \"HOT WATER\". English only. Photographed in daylight with the lights off. Wear: the blue sun-faded at the top, dust inside the face, a cracked corner of the acrylic, rust stains on the frame. Frame: the board fills the whole height of the picture top to bottom, square to the camera with no perspective tilt, a strip of the building wall visible on both sides so the brackets show. Portrait 1024 x 1536. Spell every word exactly as written here, letter for letter, and add no other words; if a word cannot be written correctly, leave it out rather than invent letters. Photographic and true to life: not an illustration, not graphic design, not a render, not digital art, no vector look, no perfect symmetry, no logos, no real brand names, no people, no watermark.",
+      "generate": "1024x1536, transparent background",
+      "target": {
+        "w": 1024,
+        "h": 1536,
+        "tileable": false,
+        "normalMap": false,
+        "alpha": true,
+        "out": "decals/decal_sign_hotel_led_02.webp"
+      },
+      "placeholder": {
+        "color": "#1f2533",
+        "pattern": "flat",
+        "scale": 1
+      },
+      "used_by": [
+        "P2-048"
+      ],
+      "priority": 1,
+      "batch": "B3-signs-lit",
+      "created": "2026-11-14T17:19:48.867Z",
+      "promptAt": "2026-11-14T17:19:48.922Z"
+    },
+    {
+      "id": "decal_sign_hotel_led_03",
+      "kind": "decal",
+      "intent": "Paharganj vertical lodge sign with bulb border, English with a Hindi line (Bhola Lodge)",
+      "prompt": "A straight-on documentary photograph of an old tall vertical lodge sign on a building front in Paharganj, Delhi, taken on an ordinary hazy afternoon with a phone camera held level and square to it, soft natural daylight, no flash, true colours, slight grain. A sheet metal box about 0.6 m wide and 2.5 m tall on brackets, with a border of round clear bulbs in sockets all round its edge. Green painted face, yellow letters: at the top in Devanagari \"भोला लॉज\", then the English name stacked one letter under another in tall yellow capitals \"BHOLA\" then \"LODGE\". Lettering hand-painted by a local signwriter with a brush in enamel paint: thick strokes of slightly uneven weight, a dark drop shadow painted down and to the right, spacing and baseline a little uneven, faint brush ridges and one or two small drips, the shaded block letters of an old Delhi bazaar board. Photographed in daylight with the bulbs off, two bulbs missing. Wear: the green faded and patchy, rust along the bottom and at every socket, dust on the top. Frame: the board fills the whole height of the picture top to bottom, square to the camera with no perspective tilt, a strip of the building wall visible on both sides so the brackets show. Portrait 1024 x 1536. Spell every word exactly as written here, letter for letter, and add no other words; if a word cannot be written correctly, leave it out rather than invent letters. Photographic and true to life: not an illustration, not graphic design, not a render, not digital art, no vector look, no perfect symmetry, no logos, no real brand names, no people, no watermark.",
+      "generate": "1024x1536, transparent background",
+      "target": {
+        "w": 1024,
+        "h": 1536,
+        "tileable": false,
+        "normalMap": false,
+        "alpha": true,
+        "out": "decals/decal_sign_hotel_led_03.webp"
+      },
+      "placeholder": {
+        "color": "#1f2533",
+        "pattern": "flat",
+        "scale": 1
+      },
+      "used_by": [
+        "P2-048"
+      ],
+      "priority": 2,
+      "batch": "B3-signs-lit",
+      "created": "2026-11-14T17:19:48.976Z",
+      "promptAt": "2026-11-14T17:19:49.027Z"
+    },
+    {
+      "id": "decal_sign_hotel_led_04",
+      "kind": "decal",
+      "intent": "Paharganj vertical hotel sign at dusk, switched on, English only (Hotel Sunrise Paharganj): the night look",
+      "prompt": "A straight-on documentary photograph of a tall vertical hotel sign on a building front in Paharganj Main Bazaar, Delhi, taken just after dusk with the sign switched on, phone camera held level, true colours, slight grain. An aluminium box about 0.6 m wide and 3 m tall on brackets. Red acrylic face lit from inside, white lettering stacked letter by letter: \"HOTEL\" small at the top, \"SUNRISE\" in tall capitals, \"PAHARGANJ\" small at the bottom. English only. A strip of warm white LEDs runs round the edge, a few dots dead. The glow is uneven: brighter in the middle, darker at the ends, one tube behind the face dimmer. Dust inside the face shows as soft shadows. Frame: the board fills the whole height of the picture top to bottom, square to the camera with no perspective tilt, a strip of the building wall visible on both sides so the brackets show. Portrait 1024 x 1536. Spell every word exactly as written here, letter for letter, and add no other words; if a word cannot be written correctly, leave it out rather than invent letters. Photographic and true to life: not an illustration, not graphic design, not a render, not digital art, no vector look, no perfect symmetry, no logos, no real brand names, no people, no watermark.",
+      "generate": "1024x1536, transparent background",
+      "target": {
+        "w": 1024,
+        "h": 1536,
+        "tileable": false,
+        "normalMap": false,
+        "alpha": true,
+        "out": "decals/decal_sign_hotel_led_04.webp"
+      },
+      "placeholder": {
+        "color": "#1f2533",
+        "pattern": "flat",
+        "scale": 1
+      },
+      "used_by": [
+        "P2-048"
+      ],
+      "priority": 2,
+      "batch": "B3-signs-lit",
+      "created": "2026-11-14T17:19:49.081Z",
+      "promptAt": "2026-11-14T17:19:49.132Z"
+    },
+    {
+      "id": "decal_sign_glowbox_01",
+      "kind": "decal",
+      "intent": "Connaught Place colonnade chemist acrylic glow box, English only (Colonnade Chemists)",
+      "prompt": "A straight-on documentary photograph of a backlit acrylic fascia sign under the colonnade of Connaught Place, New Delhi, taken on an ordinary hazy afternoon with a phone camera held level and square to it, soft natural daylight, no flash, true colours, slight grain. An aluminium box about 2.6 m by 0.6 m and 15 cm deep, its edges and corner screws visible, set into a white-painted arch bay. Printed acrylic face: white ground, a green stripe along the bottom, the name in clean dark green bold sans-serif capitals \"COLONNADE CHEMISTS\", a small grey line under it \"Medicines, Surgicals, Baby Care\". English only. Photographed in daylight with the lights off. Wear light: a faint line of dust along the bottom inside, the white slightly yellowed, a thin seam where two acrylic sheets meet. Frame: the board fills the whole width of the picture edge to edge, square to the camera with no perspective tilt, a thin strip of the wall it is fixed to visible above and below so the fixings show. Landscape 1536 x 1024. Spell every word exactly as written here, letter for letter, and add no other words; if a word cannot be written correctly, leave it out rather than invent letters. Photographic and true to life: not an illustration, not graphic design, not a render, not digital art, no vector look, no perfect symmetry, no logos, no real brand names, no people, no watermark.",
+      "generate": "1536x1024, transparent background",
+      "target": {
+        "w": 1536,
+        "h": 1024,
+        "tileable": false,
+        "normalMap": false,
+        "alpha": true,
+        "out": "decals/decal_sign_glowbox_01.webp"
+      },
+      "placeholder": {
+        "color": "#1f2533",
+        "pattern": "flat",
+        "scale": 1
+      },
+      "used_by": [
+        "P2-048"
+      ],
+      "priority": 2,
+      "batch": "B3-signs-lit",
+      "created": "2026-11-14T17:19:49.184Z",
+      "promptAt": "2026-11-14T17:19:49.232Z"
+    },
+    {
+      "id": "decal_sign_glowbox_02",
+      "kind": "decal",
+      "intent": "Paharganj travel agent printed acrylic glow box, English only (Himalaya Tours and Travels)",
+      "prompt": "A straight-on documentary photograph of a backlit printed acrylic shop sign over a travel agent in Paharganj Main Bazaar, Delhi, taken on an ordinary hazy afternoon with a phone camera held level and square to it, soft natural daylight, no flash, true colours, slight grain. An aluminium box about 2.5 m by 0.7 m. Printed in the cheap local print-shop look: bold condensed sans-serif English like a flex printer uses, coloured outlines and drop shadows, flat solid colour bands, slightly oversaturated inkjet colours. Blue to white gradient ground, a small printed photograph of snowy mountains at the left end, the name in big white bold capitals with a dark blue outline \"HIMALAYA TOURS AND TRAVELS\", a yellow strip with red text \"TRAIN & AIR TICKETS, TAXI TO HILLS, AC BUS\". English only. Photographed in daylight with the lights off. Wear medium: dusty, the print faded at the top, dirt along the bottom lip, rust at the screws. Frame: the board fills the whole width of the picture edge to edge, square to the camera with no perspective tilt, a thin strip of the wall it is fixed to visible above and below so the fixings show. Landscape 1536 x 1024. Spell every word exactly as written here, letter for letter, and add no other words; if a word cannot be written correctly, leave it out rather than invent letters. Photographic and true to life: not an illustration, not graphic design, not a render, not digital art, no vector look, no perfect symmetry, no logos, no real brand names, no people, no watermark.",
+      "generate": "1536x1024, transparent background",
+      "target": {
+        "w": 1536,
+        "h": 1024,
+        "tileable": false,
+        "normalMap": false,
+        "alpha": true,
+        "out": "decals/decal_sign_glowbox_02.webp"
+      },
+      "placeholder": {
+        "color": "#1f2533",
+        "pattern": "flat",
+        "scale": 1
+      },
+      "used_by": [
+        "P2-048"
+      ],
+      "priority": 2,
+      "batch": "B3-signs-lit",
+      "created": "2026-11-14T17:19:49.282Z",
+      "promptAt": "2026-11-14T17:19:49.329Z"
+    },
+    {
+      "id": "decal_sign_glowbox_03",
+      "kind": "decal",
+      "intent": "Chandni Chowk jeweller acrylic glow box, Hindi over English (Hira Moti Jewellers)",
+      "prompt": "A straight-on documentary photograph of a backlit acrylic sign over a jewellery shop on Chandni Chowk, Old Delhi, taken on an ordinary hazy afternoon with a phone camera held level and square to it, soft natural daylight, no flash, true colours, slight grain. An aluminium box about 2.5 m by 0.7 m fixed to an old plaster facade. Deep maroon acrylic face, lettering in golden yellow: large Devanagari in a bold printed Hindi typeface \"हीरा मोती ज्वेलर्स\", under it smaller English capitals \"HIRA MOTI JEWELLERS\", and small in the corner \"स्था. 1972\". Photographed in daylight with the lights off. Wear: dust inside the face, the maroon faded at the top, a grey grime line along the bottom lip, a tangle of black wire running down beside the box. Frame: the board fills the whole width of the picture edge to edge, square to the camera with no perspective tilt, a thin strip of the wall it is fixed to visible above and below so the fixings show. Landscape 1536 x 1024. Spell every word exactly as written here, letter for letter, and add no other words; if a word cannot be written correctly, leave it out rather than invent letters. Photographic and true to life: not an illustration, not graphic design, not a render, not digital art, no vector look, no perfect symmetry, no logos, no real brand names, no people, no watermark.",
+      "generate": "1536x1024, transparent background",
+      "target": {
+        "w": 1536,
+        "h": 1024,
+        "tileable": false,
+        "normalMap": false,
+        "alpha": true,
+        "out": "decals/decal_sign_glowbox_03.webp"
+      },
+      "placeholder": {
+        "color": "#1f2533",
+        "pattern": "flat",
+        "scale": 1
+      },
+      "used_by": [
+        "P2-048"
+      ],
+      "priority": 2,
+      "batch": "B3-signs-lit",
+      "created": "2026-11-14T17:19:49.379Z",
+      "promptAt": "2026-11-14T17:19:49.431Z"
     }
   ]
 }

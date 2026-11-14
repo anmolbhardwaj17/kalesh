@@ -518,6 +518,237 @@
     "deva": "झटपट राइडर चाहिए"
    },
    "weight": 1
+  },
+  {
+   "kind": "eatery",
+   "text": {
+    "latn": "Parantha Palace Gali No. 3",
+    "deva": "परांठा पैलेस गली नं. 3"
+   },
+   "weight": 2,
+   "parody": true,
+   "board_style": "enamel",
+   "tagline": "Bharwa, bharpoor"
+  },
+  {
+   "kind": "eatery",
+   "text": {
+    "latn": "Rani Paratha Point",
+    "deva": "रानी परांठे वाली"
+   },
+   "weight": 2,
+   "parody": true,
+   "board_style": "hand_painted",
+   "tagline": "Ghee mein tairte"
+  },
+  {
+   "kind": "eatery",
+   "text": {
+    "latn": "Kanji Vada Karnama",
+    "deva": "कांजी वड़ा करनामा"
+   },
+   "weight": 2,
+   "parody": true,
+   "board_style": "hand_painted",
+   "tagline": "Teekha, khatta, chatpata"
+  },
+  {
+   "kind": "cart",
+   "text": {
+    "latn": "Gali Ka Gola Guru",
+    "deva": "गली का गोला गुरु"
+   },
+   "weight": 2,
+   "parody": true,
+   "board_style": "vertical",
+   "tagline": "Barf ka mela"
+  },
+  {
+   "kind": "sweets",
+   "text": {
+    "latn": "Kulfi Kothi Falooda Wali",
+    "deva": "कुल्फ़ी कोठी फ़ालूदा वाली"
+   },
+   "weight": 2,
+   "parody": true,
+   "board_style": "hand_painted",
+   "tagline": "Rabri ke saath"
+  },
+  {
+   "kind": "sweets",
+   "text": {
+    "latn": "Bhujia Bhandar Desert Style",
+    "deva": "भुजिया भंडार बीकानेरी स्टाइल"
+   },
+   "weight": 2,
+   "parody": true,
+   "board_style": "glow_box",
+   "tagline": "Teekha tez"
+  },
+  {
+   "kind": "sweets",
+   "text": {
+    "latn": "Beekaner Bandhu Namkeen",
+    "deva": "बीकानेर बंधु नमकीन"
+   },
+   "weight": 2,
+   "parody": true,
+   "board_style": "flex",
+   "tagline": "Pehle khao phir socho"
+  },
+  {
+   "kind": "sweets",
+   "text": {
+    "latn": "Sukoon Ram Mithai",
+    "deva": "सुकून राम मिठाई"
+   },
+   "weight": 2,
+   "parody": true,
+   "board_style": "enamel",
+   "tagline": "Pista barfi, bas"
+  },
+  {
+   "kind": "sweets",
+   "text": {
+    "latn": "Gali Ghanti Peda",
+    "deva": "गली घंटी पेड़ा"
+   },
+   "weight": 2,
+   "parody": true,
+   "board_style": "hand_painted",
+   "tagline": "Ghanti bajao, peda khao"
+  },
+  {
+   "kind": "attar",
+   "text": {
+    "latn": "Khushboo Wala Attar Ghar",
+    "deva": "खुशबू वाला अत्तर घर"
+   },
+   "weight": 2,
+   "parody": true,
+   "board_style": "hand_painted",
+   "tagline": "Khushboo khud bolti hai"
+  },
+  {
+   "kind": "attar",
+   "text": {
+    "latn": "Gulabi Itr Johri",
+    "deva": "गुलाबी इत्र जौहरी"
+   },
+   "weight": 2,
+   "parody": true,
+   "board_style": "hand_painted",
+   "tagline": "Sau saal purani khushboo"
+  },
+  {
+   "kind": "bangles",
+   "text": {
+    "latn": "Jaipuri Churi Ghar",
+    "deva": "जयपुरी चूड़ी घर"
+   },
+   "weight": 2,
+   "parody": true,
+   "board_style": "glow_box",
+   "tagline": "Lac ki chamak"
+  },
+  {
+   "kind": "cloth",
+   "text": {
+    "latn": "Dastkari Dosti Cloth",
+    "deva": "दस्तकारी दोस्ती क्लॉथ"
+   },
+   "weight": 2,
+   "parody": true,
+   "board_style": "enamel",
+   "tagline": "Meter ke hisaab se pyaar"
+  },
+  {
+   "kind": "cloth",
+   "text": {
+    "latn": "Meena Mela Bazaar",
+    "deva": "मीना मेला बाज़ार"
+   },
+   "weight": 2,
+   "parody": true,
+   "board_style": "hand_painted",
+   "tagline": "Chhoti gali, bada sauda"
+  },
+  {
+   "kind": "eatery",
+   "text": {
+    "latn": "Jalebi Junction Gali",
+    "deva": "जलेबी जंक्शन गली"
+   },
+   "weight": 2,
+   "parody": true,
+   "board_style": "hand_painted",
+   "tagline": "Garam, gol, gazab"
+  },
+  {
+   "kind": "eatery",
+   "text": {
+    "latn": "Kachori Kothi Kalan",
+    "deva": "कचौड़ी कोठी कलां"
+   },
+   "weight": 2,
+   "parody": true,
+   "board_style": "hand_painted",
+   "tagline": "Subah ka nashta"
+  },
+  {
+   "kind": "eatery",
+   "text": {
+    "latn": "Chaat Ghar Chirag",
+    "deva": "चाट घर चिराग"
+   },
+   "weight": 2,
+   "parody": true,
+   "board_style": "enamel",
+   "tagline": "Imli ki dhaar"
+  },
+  {
+   "kind": "books",
+   "text": {
+    "latn": "Nai Sadak Kitab Ghar",
+    "deva": "नई सड़क किताब घर"
+   },
+   "weight": 2,
+   "parody": true,
+   "board_style": "hand_painted",
+   "tagline": "Course ki kitaabein"
+  },
+  {
+   "kind": "tea",
+   "text": {
+    "latn": "Lassi Lok Gali",
+    "deva": "लस्सी लोक गली"
+   },
+   "weight": 2,
+   "parody": true,
+   "board_style": "hand_painted",
+   "tagline": "Malai maar ke"
+  },
+  {
+   "kind": "eatery",
+   "text": {
+    "latn": "Daulat Dahi Bhalla Dhaba",
+    "deva": "दौलत दही भल्ला ढाबा"
+   },
+   "weight": 2,
+   "parody": true,
+   "board_style": "enamel",
+   "tagline": "Thanda, meetha"
+  },
+  {
+   "kind": "eatery",
+   "text": {
+    "latn": "Purani Dilli Pakwan",
+    "deva": "पुरानी दिल्ली पकवान"
+   },
+   "weight": 2,
+   "parody": true,
+   "board_style": "glow_box",
+   "tagline": "Rasoi ka raaz"
   }
  ]
 }

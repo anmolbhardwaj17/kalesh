@@ -25,6 +25,9 @@ const SRC := "res://characters/rig/ual_clips.res"
 const MESH := "res://characters/rig/mannequin_m.scn"
 const OUT := "res://characters/rig/loco_clips.res"
 const OUT_LEAD := "res://characters/rig/loco_%s.res"
+## A lead's library clips retargeted onto its own rest (P2-068, lead_retarget.gd), played by humanoid_anim.gd.
+const OUT_CLIPS := "res://characters/rig/clips_%s.res"
+const Retarget := preload("res://characters/tools/lead_retarget.gd")
 ## The body scale the clips' speeds are exact for (the stand-in Bittu 0.940; Danny 0.973 and Meera 0.908 play 3.5
 ## percent off). A lead model's build (`-- lead <id>`, P2-063) uses that model's own scale and writes rig/loco_<id>.res.
 const REF_SCALE := 0.94
@@ -77,19 +80,40 @@ func _build() -> String:
 	if src == null or ps == null:
 		return "missing %s or %s (run tools/characters/ual_build.mjs or lead_build.mjs first)" % [SRC, mesh]
 	var body := ps.instantiate() as Node3D
+	var lib := src
 	if lead_id != "":
 		ref = Leads.model_scale(lead_id, body.get_meta("lead", {}))
+		# the library clips on this model's own rest, the limbs aimed at the mannequin's (lead_retarget.gd)
+		var mpath := "res://characters/rig/mannequin_%s.scn" % str(Leads.look(lead_id)["mesh"])
+		var man := (load(mpath) as PackedScene).instantiate() as Node3D
+		var aims := Retarget.aims(body.get_node("GeneralSkeleton"), man.get_node("GeneralSkeleton"))
+		man.free()
+		print("aimed limbs (degrees): ", aims.deg)
+		lib = Retarget.retarget(src, body.get_node("GeneralSkeleton"), aims.q)
+		lib.set_meta("aimed", aims.deg)
+		var ce := ResourceSaver.save(lib, OUT_CLIPS % lead_id, ResourceSaver.FLAG_COMPRESS)
+		if ce != OK:
+			return "save %s: %d" % [OUT_CLIPS % lead_id, ce]
+		lib = load(OUT_CLIPS % lead_id) as AnimationLibrary
 	var k := Kit.new()
 	k.ref_scale = ref
 	if lead_id != "":
 		k.fps = 240.0
 		k.forward_knee = true
-	k.setup(root, body, src)
+	k.setup(root, body, lib)
+	# when each foot of a clip is down is the clip's own property: read on the library mannequin the clips were made
+	# on. A lead model keeps its own rest (P2-068), and an auto rig's slightly uneven legs leave one foot a centimetre
+	# or two off the ground in the same frame, which cut that foot's stance short.
+	var kref := k
+	if lead_id != "":
+		kref = Kit.new()
+		kref.ref_scale = REF_SCALE
+		kref.setup(root, (load(MESH) as PackedScene).instantiate() as Node3D, src)
 	var out := AnimationLibrary.new()
 	k.ap.add_animation_library("k", out)
 	var meta := {}
 	for name in GAITS:
-		var g := gait(k, name, GAITS[name])
+		var g := gait(k, name, GAITS[name], kref)
 		out.add_animation(name, g.anim)
 		var m: Dictionary = g.meta
 		m.merge(measure(k, "k/" + name, float(m.model_speed)))
@@ -148,8 +172,9 @@ static func leg_time(f: float, s0: float, s1: float, d: float) -> float:
 	return cyc + (2.0 * u3 - 3.0 * u2 + 1.0) * s1 + (u3 - 2.0 * u2 + u) * m + (-2.0 * u3 + 3.0 * u2) * (1.0 + s0) + (u3 - u2) * m
 
 
-## One gait clip. Answers {anim, meta}.
-static func gait(k: Kit, name: String, c: Dictionary) -> Dictionary:
+## One gait clip. Answers {anim, meta}. `kref`: the body whose feet tell when each foot of the source is down (the
+## library mannequin for a lead model; `k` itself when null).
+static func gait(k: Kit, name: String, c: Dictionary, kref: Kit = null) -> Dictionary:
 	var src: String = c.src
 	var ts := k.lib.get_animation(src).length
 	# some library clips stand at another height than the idle (the crouch set 3.7 cm lower): `raise` lifts them
@@ -158,13 +183,18 @@ static func gait(k: Kit, name: String, c: Dictionary) -> Dictionary:
 		src_ground = k.clip_ground(str(c.ground_of))
 	var raise := k.ground - src_ground
 	# the source: when each foot is on the ground
+	if kref == null:
+		kref = k
+	var ref_ground := kref.ground
+	if c.has("ground_of"):
+		ref_ground = kref.clip_ground(str(c.ground_of))
 	var flags := {"Left": [], "Right": []}
 	var ns := 240
 	for i in ns:
-		k.pose(src, ts * i / ns)
+		kref.pose(src, ts * i / ns)
 		for side in Kit.SIDES:
-			var pts := k.sole_points(side, k.sk.get_bone_global_pose(k.legs[side][2]))
-			flags[side].append(minf(pts[0].y, pts[1].y) <= src_ground + TOL)
+			var pts := kref.sole_points(side, kref.sk.get_bone_global_pose(kref.legs[side][2]))
+			flags[side].append(minf(pts[0].y, pts[1].y) <= ref_ground + TOL)
 	var st := {"Left": longest_run(flags["Left"]), "Right": longest_run(flags["Right"])}
 	# the right foot's stance as the one half a cycle after the left's
 	while st["Right"][0] < st["Left"][0]:
