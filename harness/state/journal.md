@@ -695,3 +695,4 @@ One line per event, written by task.mjs (start, done, fail, phase changes, inbox
 - 2026-11-15 01:16 [P2-077] added: Danny's planted feet at walk and sprint; root-motion starts and turns
 - 2026-11-15 01:17 [P2-078] added: Area layout study for every pilot area: satellite plus street level, before any area pass
 - 2026-11-15 01:17 mentor message mmwgthwus handled: You're right: CP is not built to its real layout yet (generic shops on every floor, no parking). P2-078 (top priority) studies every area from satellite and street level first: block use, floor use, parking, parks, entrances; the area passes can't start without it.
+- 2026-11-15 01:17 [P2-078] start (attempt 1): Area layout study for every pilot area: satellite plus street level, before any area pass
