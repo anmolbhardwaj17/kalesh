@@ -11,6 +11,7 @@ import { projector } from '../../geo/projection.ts';
 import type { P2 } from '../geom.ts';
 import { pointInRing, pointSegment } from '../geom.ts';
 import type { Entry } from '../landmarks/types.ts';
+import { buildKitInputs } from '../landmarks/kit.ts';
 import { buildMassing, farSilhouette, heroSilhouette } from '../landmarks/massing.ts';
 import type { Silhouette } from '../landmarks/massing.ts';
 import { FAR_CLEAR_M, placeLandmarks } from '../landmarks/place.ts';
@@ -251,7 +252,10 @@ export function runMassingStep(ctx: StepContext, step: PlaceStep, ground: Ground
     const y = at(p.x, p.z);
     return r1x(Number.isFinite(y) ? y : model(p.x, p.z));
   };
-  const massing = buildMassing(result.placements, step.takenFootprints, at, model);
+  // the parts kit (P2-007) builds the landmarks with a recipe in the game: they leave the tile massing
+  const kit = buildKitInputs(result.placements, step.takenFootprints, at, model, yOf);
+  for (const p of result.placements) if (kit.inputs.has(p.id) || kit.builtBy.has(p.id)) for (const s of p.lod.slots) s.source = 'kit';
+  const massing = buildMassing(result.placements, step.takenFootprints, at, model, { ids: new Set([...kit.inputs.keys(), ...kit.builtBy.keys()]), parts: kit.takenParts });
   const budget = result.limits.farSilhouetteTriangles;
   const silhouettes: Silhouette[] = [];
   for (const p of result.placements) if (p.lod.far) silhouettes.push(heroSilhouette(p, step.takenFootprints, yOf(p), budget));
@@ -270,7 +274,7 @@ export function runMassingStep(ctx: StepContext, step: PlaceStep, ground: Ground
   rec.silhouettes = { count: silhouettes.length, maxTriangles: silhouettes.reduce((m, s) => Math.max(m, s.triangles), 0), budget };
   const pins = landmarkPins(result.placements, yOf);
   rec.pins = pins.length;
-  const file = landmarkFile(ctx.plan.id, ctx.plan.def.block, result, result.placements.find((p) => p.tier === 'hero')?.lod.slots.length ?? 3, yOf, farY, massing.records, silhouettes);
+  const file = landmarkFile(ctx.plan.id, ctx.plan.def.block, result, result.placements.find((p) => p.tier === 'hero')?.lod.slots.length ?? 3, yOf, farY, massing.records, silhouettes, kit.inputs, kit.builtBy);
   fs.writeFileSync(path.join(step.reportDir, 'massing.json'), JSON.stringify({ _doc: 'The stand-in massing of the placed landmarks and the pad check on the built ground (P2-006).', stage: ctx.plan.id, pads, massing: massing.records, silhouettes: silhouettes.map((s) => ({ id: s.id, triangles: s.triangles, heightM: s.heightM, from: s.from })) }) + '\n');
   rec.ms += Math.round(clock.now() - t0);
   for (const l of massingLog(rec)) ctx.log(`[landmarks] ${l}`);

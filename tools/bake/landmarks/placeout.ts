@@ -7,6 +7,7 @@ import { tileIdAt } from '../layout/grid.ts';
 import type { InvariantResult } from '../report/health.ts';
 import type { Ground } from '../terrain/build.ts';
 import type { WorldPin } from '../tile/write.ts';
+import type { KitInput } from './kit.ts';
 import type { MassingRecord, Silhouette } from './massing.ts';
 import type { FarPlacement, PlaceResult, Placement } from './place.ts';
 
@@ -124,22 +125,28 @@ export interface LandmarkFile {
   landmarks: {
     id: string; name: string; tier: string; mode: string; pos: [number, number, number]; yaw: number | null; height: number | null; tile: string; underground: boolean; worship: boolean;
     lod: Placement['lod']; massing: { triangles: number; heightM: number } | null; silhouette: number | null;
+    /** The parts kit's inputs (P2-007, kit.ts): metres from pos; null when the tile massing is its build. */
+    kit: KitInput | null;
+    /** The landmark whose kit builds this one too (a fort's gate placed on its own), else null. */
+    builtBy: string | null;
   }[];
   far: { id: string; name: string; tier: string; pos: [number, number, number]; bearing: number; distance: number; realDistance: number; height: number | null; reachable: false; nav: false; silhouette: number }[];
   silhouettes: Silhouette[];
 }
 
-export function landmarkFile(stage: string, block: string, res: PlaceResult, heroLods: number, yOf: (p: Placement) => number, farY: number, massing: readonly MassingRecord[], silhouettes: readonly Silhouette[]): LandmarkFile {
+export function landmarkFile(stage: string, block: string, res: PlaceResult, heroLods: number, yOf: (p: Placement) => number, farY: number, massing: readonly MassingRecord[], silhouettes: readonly Silhouette[], kit: ReadonlyMap<string, KitInput> = new Map(), builtBy: ReadonlyMap<string, string> = new Map()): LandmarkFile {
   const mass = new Map(massing.map((m) => [m.id, m]));
   const sil = new Map(silhouettes.map((s, i) => [s.id, i]));
   return {
-    _doc: 'Landmarks of the tile folder (P2-006, tools/bake/landmarks/): where each one stands (world metres, yaw is the compass bearing its front faces), its LOD slots and, for a hero and a far landmark, the index of its far silhouette. limits.heroesAtFullDetailInView is the cap the streaming system keeps (game/world/landmark_slots.gd). A far landmark stands on the backdrop on its real bearing: never reachable, never a map destination. Stand-in massing fills LOD 0 in the tiles (material `landmark`) until the parts kit and the hero models arrive (P2-007).',
+    _doc: 'Landmarks of the tile folder (P2-006, tools/bake/landmarks/): where each one stands (world metres, yaw is the compass bearing its front faces), its LOD slots and, for a hero and a far landmark, the index of its far silhouette. limits.heroesAtFullDetailInView is the cap the streaming system keeps (game/world/landmark_slots.gd). A far landmark stands on the backdrop on its real bearing: never reachable, never a map destination. Stand-in massing fills LOD 0 in the tiles (material `landmark`) for every landmark without a kit recipe; one with `kit` is built by the parts kit in the game (game/world/landmarks/, P2-007) from those inputs (metres from pos), and a delivered hero model replaces it by id.',
     version: 1, stage, block, limits: { ...res.limits, heroLods },
     landmarks: res.placements.map((p) => {
       const m = mass.get(p.id);
       return {
         id: p.id, name: p.name, tier: p.tier, mode: p.mode, pos: [p.wx, yOf(p), p.wz], yaw: p.yawDeg, height: p.heightM, tile: tileIdAt(p.wx, p.wz), underground: p.underground, worship: p.worship,
         lod: p.lod, massing: m ? { triangles: m.triangles, heightM: m.heightM } : null, silhouette: sil.get(p.id) ?? null,
+        kit: kit.get(p.id) ?? null,
+        builtBy: builtBy.get(p.id) ?? null,
       };
     }),
     far: res.far.map((f: FarPlacement) => ({ id: f.id, name: f.name, tier: f.tier, pos: [f.wx, farY, f.wz], bearing: f.worldBearingDeg, distance: f.worldDistanceM, realDistance: f.distanceM, height: f.heightM, reachable: false as const, nav: false as const, silhouette: sil.get(f.id) as number })),

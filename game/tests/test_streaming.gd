@@ -73,7 +73,8 @@ func _all(_key: Vector2i) -> bool:
 ## The city on the test block, in the tree, stepped by hand (no thread, no _process).
 func _city(dir := TEST_TILES) -> Node3D:
 	var city: Node3D = WorldStream.new()
-	if not city.setup(dir):
+	# the parts kit landmarks are not built here: their worker threads would move the engine's object count
+	if not city.setup(dir, false):
 		city.free()
 		return null
 	city.core.threaded = false
@@ -353,7 +354,8 @@ func test_build_and_dispose_on_the_test_block() -> void:
 	t.ok(not city.ground_at(mid.x, mid.z).hit, "and so are their colliders")
 	# everything out: only the core is left under the city, no chunk, no lane, and the engine's objects are back
 	core.unload_all()
-	t.ok(city.get_child_count() == 1 and int(city.colliders.chunks) == 0 and (city.lanes.pieces as Dictionary).is_empty() and int(city.ground_roads.live) == 0 and int(city.buildings.live) == 0, "dispose frees every node, body and lane")
+	# the core and the landmarks system (game/world/systems/landmarks.gd, not tile bound) stay
+	t.ok(city.get_child_count() == 2 and city.get_node_or_null("Landmarks") != null and int(city.colliders.chunks) == 0 and (city.lanes.pieces as Dictionary).is_empty() and int(city.ground_roads.live) == 0 and int(city.buildings.live) == 0, "dispose frees every node, body and lane")
 	var objects1 := Performance.get_monitor(Performance.OBJECT_COUNT)
 	t.ok(absf(objects1 - objects0) <= 0.02 * objects0, "the engine object count is back within 2 percent (%d before, %d after)" % [int(objects0), int(objects1)])
 	city.free()

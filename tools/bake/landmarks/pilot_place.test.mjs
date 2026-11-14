@@ -286,14 +286,28 @@ describe.skipIf(missing.length > 0)(`pilot centre landmark placement${reason ? `
     expect(heroes.map((h) => h.id).sort()).toEqual(['cp_circle', 'india_gate', 'red_fort']);
     for (const h of heroes) {
       expect(h.lod.slots.map((s) => s.level)).toEqual([0, 1, 2]);
-      expect(h.lod.slots[0].source).toBe('tile_massing');
+      // the pilot heroes are built by the parts kit in the game (P2-007): their slots say so and the file gives the inputs
+      expect(h.lod.slots.map((s) => s.source)).toEqual(['kit', 'kit', 'kit']);
+      expect(h.kit?.recipe, `${h.id} has a kit recipe`).toBe(h.id);
       expect(h.lod.far.trianglesMax).toBe(budgets.farSilhouetteTriangles);
       const s = file.silhouettes[h.silhouette];
       expect(s.triangles).toBeGreaterThan(8);
       expect(s.triangles).toBeLessThanOrEqual(budgets.farSilhouetteTriangles);
-      expect(h.massing.triangles).toBeGreaterThan(0);
-      console.log(`[landmarks] hero ${h.id}: massing ${h.massing.triangles} triangles, ${h.massing.heightM} m high; far silhouette ${s.triangles} triangles`);
+      console.log(`[landmarks] hero ${h.id}: kit ${h.kit.recipe} (${h.kit.walls.length} wall runs, ${h.kit.gates.length} gates, ${h.kit.sectors.length} sectors), tile massing ${h.massing?.triangles ?? 0} triangles; far silhouette ${s.triangles} triangles`);
     }
+    // the kit inputs: India Gate's body and axis, the Red Fort's wall line open at the roads with the Lahori Gate, the CP ring blocks
+    const by = new Map(file.landmarks.map((l) => [l.id, l]));
+    expect(by.get('india_gate').kit.body.length).toBeGreaterThan(0);
+    expect(by.get('india_gate').kit.axis.lengthM).toBeGreaterThan(15);
+    const fort = by.get('red_fort').kit;
+    expect(fort.walls.length).toBeGreaterThan(0);
+    expect(fort.walls.reduce((n, w) => n + w.pts.length, 0)).toBeGreaterThan(20);
+    expect(fort.gates.map((g) => g.name)).toContain('Lahori Gate');
+    const cp = by.get('cp_circle').kit;
+    expect(cp.sectors.filter((s) => s.band === 'inner').length).toBeGreaterThanOrEqual(5);
+    expect(cp.sectors.filter((s) => s.band === 'outer').length).toBeGreaterThanOrEqual(5);
+    for (const s of cp.sectors) expect(s.r1 - s.r0, `CP block ${s.a0} deg depth`).toBeGreaterThan(8);
+    expect(by.get('jama_masjid').kit.recipe).toBe('jama_masjid');
     // a placed landmark is in a tile of the set; a far one is not in the placements
     for (const l of file.landmarks) expect(tilesIn.has(l.tile), `${l.id} in tile ${l.tile}`).toBe(true);
     for (const f of file.far) expect(placement.placements.some((p) => p.id === f.id)).toBe(false);
