@@ -9,6 +9,7 @@ import type { MappedRestriction } from './turns.ts';
 import type { ArmLane, ArmView, PathGeom, Turn } from './connect.ts';
 import type { GEdge, GEnd, GNode } from './graph.ts';
 import { edgePoint, planJunction, tangentAt } from './junction.ts';
+import { endCrossSection } from './lanes.ts';
 import type { ArmPlan } from './junction.ts';
 import type { EdgePlan } from './lanes.ts';
 import { ABSORB_MAX_M, CLUSTER_GAP_M, MIN_STRIP_M, PASSES, CLEAR_MAX_M, PLAN_RADIUS_M, TURN_ASK_MAX_M, endKey as key } from './netctx.ts';
@@ -92,11 +93,38 @@ export function planClusters(c: NetCtx, z: ZonePhase): ClusterPhase {
     return groups;
   };
   const wantAbsorb = new Set<number>();
+  const memo = c.clusterMemo;
+  /** Everything planCluster reads that can change between rounds: the nodes, the arms, their sections, parts and asks. */
+  const memoKey = (root: number, ids: number[], ends: GEnd[]): string => {
+    const parts: string[] = [`${root}`, ids.join(',')];
+    for (const e of ends) {
+      const p = plans[e.edge] as EdgePlan;
+      parts.push(`${e.edge}${e.atStart ? 's' : 'e'}|${base0[e.edge]}|${base1[e.edge]}|${zoneEnds.has(e.edge) ? 1 : 0}|${ask.get(key(e)) ?? ''}|${JSON.stringify(endCrossSection(p, e.atStart))}`);
+    }
+    return parts.join(';');
+  };
+  const csSig = (res: Planned): string => res.jp.arms.map((a) => JSON.stringify(a.cs)).join('|');
+  let absorbLog: number[] | null = null;
   const planCluster = (root: number, ids: number[]): void => {
     const ends: GEnd[] = [];
     for (const id of ids) for (const end of (graph.nodes.get(id) as GNode).ends) if (!absorbed.has(end.edge)) ends.push(end);
     planned.delete(root);
     if (ends.length === 0) return;
+    const mk = memo ? memoKey(root, ids, ends) : '';
+    const hit = memo?.get(mk);
+    if (hit && csSig(hit.res) === hit.csSig) {
+      for (const [e, t0, t1] of hit.parts) {
+        const p = plans[e] as EdgePlan;
+        p.t0 = t0;
+        p.t1 = t1;
+      }
+      for (const [k, v] of hit.asked) ask.set(k, v);
+      for (const e of hit.absorb) wantAbsorb.add(e);
+      for (const a of hit.res.jp.arms) cutAt.set(key(a.end), a.cut);
+      planned.set(root, hit.res);
+      return;
+    }
+    absorbLog = [];
     let res: Planned | null = null;
     const blocked = new Set<number>();
     for (let pass = 0; pass < PASSES; pass++) {
@@ -148,7 +176,11 @@ export function planClusters(c: NetCtx, z: ZonePhase): ClusterPhase {
         // no room left: the shortest blocked arm becomes part of the junction, or the turn is not allowed here
         for (const f of failing) {
           const cand = [f.t.from, f.t.to].map((a) => (jp.arms[a] as ArmPlan).end.edge).filter((e) => blocked.has(e) && !zoneEnds.has(e) && (graph.edges[e] as GEdge).len < ABSORB_MAX_M);
-          if (cand.length) wantAbsorb.add(cand.sort((x, y) => (graph.edges[x] as GEdge).len - (graph.edges[y] as GEdge).len)[0] as number);
+          if (cand.length) {
+            const e = cand.sort((x, y) => (graph.edges[x] as GEdge).len - (graph.edges[y] as GEdge).len)[0] as number;
+            wantAbsorb.add(e);
+            absorbLog?.push(e);
+          }
           else {
             // a lane with no other way on, or no other way in, keeps its turn on the radius there is room for
             const others = res.turns.filter((t) => t !== f.t);
@@ -167,6 +199,16 @@ export function planClusters(c: NetCtx, z: ZonePhase): ClusterPhase {
     if (!res) return;
     for (const a of res.jp.arms) cutAt.set(key(a.end), a.cut);
     planned.set(root, res);
+    if (memo) {
+      const edges = [...new Set(ends.map((e) => e.edge))];
+      const asked: [number, number][] = [];
+      for (const e of ends) {
+        const v = ask.get(key(e));
+        if (v !== undefined) asked.push([key(e), v]);
+      }
+      memo.set(mk, { res, parts: edges.map((e) => [e, (plans[e] as EdgePlan).t0, (plans[e] as EdgePlan).t1]), asked, absorb: absorbLog ?? [], csSig: csSig(res) });
+    }
+    absorbLog = null;
   };
   let retry = false;
   for (const n of graph.nodes.values()) if (n.ends.length >= 2 && !zoneNode.has(n.id)) dirty.add(find(n.id));

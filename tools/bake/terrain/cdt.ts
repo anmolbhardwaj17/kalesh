@@ -27,6 +27,8 @@ export class Cdt {
   joinLabels: (a: number, b: number) => number = (a, b) => a | b;
   /** Called when a constrained edge a to b gets the new vertex v on it. */
   onSplit: ((a: number, b: number, v: number) => void) | null = null;
+  /** A crossing of two constrained edges that got no vertex: the segment s to e went through v instead of (px, pz). */
+  onForced: ((px: number, pz: number, v: number, s: number, e: number) => void) | null = null;
   readonly stats = { flips: 0, edgeSplits: 0, walkSteps: 0 };
   private last = 0;
   private readonly stack: number[] = [];

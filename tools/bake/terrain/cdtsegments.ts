@@ -15,14 +15,16 @@ export interface SegmentStats {
   snapped: number;
   /** Crossings of two constrained edges that got a vertex. */
   crossings: number;
-  /** Crossings where no vertex could be placed: the segment went through the nearer end of the crossed edge. */
+  /** Crossings whose rounded point fell outside a needle beside the crossed edge and got a vertex a unit or two from it. */
+  nudged: number;
+  /** Crossings where no vertex could be placed: the segment went through the nearest corner beside the crossed edge. */
   forced: number;
   flips: number;
   /** Segments given up (the flips did not end). 0 in a sound triangulation. */
   failed: number;
 }
 
-export const newSegmentStats = (): SegmentStats => ({ segments: 0, direct: 0, snapped: 0, crossings: 0, forced: 0, flips: 0, failed: 0 });
+export const newSegmentStats = (): SegmentStats => ({ segments: 0, direct: 0, snapped: 0, crossings: 0, nudged: 0, forced: 0, flips: 0, failed: 0 });
 
 /** Forces the segment from vertex a to vertex b in, with a label as seen going from a to b. `eps` in units. */
 export function insertSegment(cdt: Cdt, a: number, b: number, label: number, eps: number, stats: SegmentStats): void {
@@ -112,8 +114,27 @@ function step(cdt: Cdt, s: number, e: number, label: number, eps: number, stats:
         v = cdt.splitEdge(t, slot, px, pz);
         if (v >= 0) stats.crossings++;
         else {
-          stats.forced++;
-          v = Math.hypot(px - rx, pz - rz) <= Math.hypot(px - lx, pz - lz) ? r : l;
+          // the rounded crossing falls outside a needle beside the crossed edge: a whole unit point next to it that
+          // keeps all four triangles turning the positive way (both edges bend by under half a millimetre)
+          const fx = sx + dx * f;
+          const fz = sz + dz * f;
+          const near3: [number, number][] = [];
+          for (let i = -2; i <= 2; i++) for (let j = -2; j <= 2; j++) if (i || j) near3.push([px + i, pz + j]);
+          near3.sort((p, q) => Math.hypot(p[0] - fx, p[1] - fz) - Math.hypot(q[0] - fx, q[1] - fz) || p[0] - q[0] || p[1] - q[1]);
+          for (const [qx, qz] of near3) {
+            if (Math.abs(qx - rx) + Math.abs(qz - rz) === 0 || Math.abs(qx - lx) + Math.abs(qz - lz) === 0) continue;
+            v = cdt.splitEdge(t, slot, qx, qz);
+            if (v >= 0) break;
+          }
+          if (v >= 0) stats.nudged++;
+          else {
+            // no point fits: through the nearest corner of the two triangles beside the crossed edge
+            stats.forced++;
+            const o2 = cdt.tn[o + slot] as number;
+            const cands = [r, l, cdt.tv[o + slot] as number, o2 >= 0 ? (cdt.tv[o2 * 3 + cdt.slotOf(o2, t)] as number) : r].filter((c) => c !== s && c !== e);
+            v = cands.reduce((b, c) => (Math.hypot(px - (x[c] as number), pz - (z[c] as number)) < Math.hypot(px - (x[b] as number), pz - (z[b] as number)) ? c : b), cands[0] ?? r);
+            cdt.onForced?.(px, pz, v, s, e);
+          }
         }
       } else stats.snapped++;
       if (v === s || v === e) {

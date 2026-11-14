@@ -29,6 +29,8 @@ export type Measure =
   | { kind: 'height_outlier'; m: number }
   | { kind: 'carriageway_shift'; m: number }
   | { kind: 'slip_redraw'; m: number }
+  // P1-034: a tunnel portal moved past a road that crosses its mouth at grade (m: how far the tag moves)
+  | { kind: 'portal'; m: number }
   | { kind: 'lane_count'; cls: string }
   | { kind: 'one_way_no_pair' }
   | { kind: 'other' };

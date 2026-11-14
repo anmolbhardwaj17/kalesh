@@ -18,7 +18,7 @@ export const unmarkedCrossing = (t: Readonly<Record<string, string>>): boolean =
  * the turn rules (P1-032): restriction relations and turn:lanes of the osm_turns pin, with the reference turn lanes of
  * harness/data/turn_lanes.json on top (a reference entry wins over the OSM tags of its way).
  */
-export function laneInputs(input: GraphInput, plan: StagePlan, heroes: LaneModelInput['heroes']): Pick<LaneModelInput, 'wayLanes' | 'points' | 'heroes' | 'turnInputs'> {
+export function laneInputs(input: GraphInput, plan: StagePlan, heroes: LaneModelInput['heroes'], medianRefs: LaneModelInput['medianRefs'] = []): Pick<LaneModelInput, 'wayLanes' | 'points' | 'heroes' | 'turnInputs' | 'medianRefs'> {
   const proj = projector(plan.origin);
   const wayLanes = new Map<string, number>();
   const points: NonNullable<LaneModelInput['points']>[number][] = [];
@@ -46,7 +46,7 @@ export function laneInputs(input: GraphInput, plan: StagePlan, heroes: LaneModel
     const t = wayTurnsOf({ id, nodes: w.nodes ?? [], tags: { ...(w.tags ?? {}), ...r.tags } }, project, nodeAt, r.source);
     if (t) turnInputs.wayTurns.set(t.way, t);
   }
-  return { wayLanes, points, turnInputs, ...(heroes ? { heroes } : {}) };
+  return { wayLanes, points, turnInputs, ...(heroes ? { heroes } : {}), ...(medianRefs?.length ? { medianRefs } : {}) };
 }
 
 /** North-up pictures of the lane model: the two sites of the Phase 0 road bench (drawn when they lie in the stage). */

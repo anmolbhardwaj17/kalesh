@@ -2,7 +2,8 @@
 // lane model gives each carriageway a 0.3 m kerb on its median side and leaves the space between the two to the
 // ground. This fills it. Where a reference (harness/data/medians.json: a photo or a satellite reading) gives the
 // divider's width and type, the divider is that wide, in the middle, and the rest is carriageway asphalt (the two
-// median kerb lanes go flat with it: the road is wider than its lane count says, which is what the references show);
+// median kerb lanes go flat with it; since P1-034 the lane model gives most of that room to the lanes first,
+// roads/dividers.ts, so only what they cannot take is left here);
 // with no reference the median fills the whole gap OSM's two centre lines leave (width source "osm").
 //
 // Faces are built on the carriageways' own border vertices: the side along carriageway A takes A's border points,
@@ -11,6 +12,8 @@
 // is under 15 cm (the kerbs as good as touch: the default median of two kerbs stays), over MAX_GAP_M (a park or a block between
 // two roads, not a median), off the ground level, or where another face lies in it. Pure.
 import { KERB_RAISE } from '../roads/model.ts';
+import { refFor } from '../roads/medianrefs.ts';
+import type { MedianRef, MedianType } from '../roads/medianrefs.ts';
 import type { LaneDef, Station, Strip } from '../roads/model.ts';
 import { sharedArea } from './clip.ts';
 import type { Ring } from './clip.ts';
@@ -37,18 +40,8 @@ export const REF_TOL_M = 0.5;
 /** A flat band beside a reference divider narrower than this is not drawn: the median takes the whole gap there (m). */
 const MIN_BAND_M = 0.1;
 
-export type MedianType = 'kerb' | 'planter' | 'barrier' | 'painted';
-
-/** A reference median: the street names it covers (and an optional box in block metres), width and type, and where it was read. */
-export interface MedianRef {
-  names: readonly string[];
-  box?: { minX: number; maxX: number; minZ: number; maxZ: number };
-  /** Full width of the divider, kerb face to kerb face (m). */
-  width: number;
-  type: MedianType;
-  source: 'photo' | 'satellite';
-  ref: string;
-}
+export type { MedianRef, MedianType } from '../roads/medianrefs.ts';
+export { refFor } from '../roads/medianrefs.ts';
 
 /** A strip of one carriageway and the strips of the other carriageway of the street, in order along their edge. */
 export type StripPair = readonly [number, readonly number[]];
@@ -195,16 +188,6 @@ const medianSide = (s: Strip): boolean => {
   const l = s.lanes[s.lanes.length - 1] as LaneDef | undefined;
   return !!l && (l.type === 'median' || l.type === 'planter' || l.type === 'gore');
 };
-
-/** The reference that covers a pair, or null. */
-export function refFor(refs: readonly MedianRef[], a: Strip, bName: string, x: number, z: number): MedianRef | null {
-  for (const r of refs) {
-    if (!r.names.includes(a.name) && !r.names.includes(bName)) continue;
-    if (r.box && (x < r.box.minX || x > r.box.maxX || z < r.box.minZ || z > r.box.maxZ)) continue;
-    return r;
-  }
-  return null;
-}
 
 export function addMedianFaces(fs: FaceSet, strips: readonly Strip[], kinds: readonly ArrayLike<number>[], borders: Borders, grid: FaceGrid, pairs: readonly StripPair[], refs: readonly MedianRef[], firstStripFace: readonly number[], faceIds: number[] = []): MedianReport {
   const out: MedianReport = { pairs: 0, runs: 0, faces: 0, metres: { filled: 0, touching: 0, wide: 0, levels: 0, blocked: 0, offEnd: 0 }, bySource: { osm: 0, photo: 0, satellite: 0, default: 0 }, disagree: [], flattened: 0, list: [] };

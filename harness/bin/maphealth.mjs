@@ -15,7 +15,22 @@ export const GATE_NAMES = {
   overlappingRoadFaces: 'Road surfaces lying on top of each other',
   laneContinuityBreaks: 'Lanes that stop or start with no taper',
   tapersOutOfLimits: 'Lane tapers that are too short',
+  widthSteps: 'Roads that change width with a jump instead of a taper',
 };
+
+/**
+ * The ground checks of the terrain step (P1-015, tools/bake/terrain/terrainout.ts terrainInvariants), in plain
+ * words, with the health.json gate number each one reads (P1-037). TERR-07 is the tunnel portals.
+ */
+export const GROUND_CHECKS = [
+  { id: 'TERR-01', name: 'Gap between a road edge and the ground', gate: 'groundGapMaxM', unit: 'm', limit: '0.02 m' },
+  { id: 'TERR-02', name: 'Ground poking up through a road or a deck', gate: 'groundAboveRoad', unit: '', limit: '0' },
+  { id: 'TERR-03', name: 'Needle thin ground triangles', gate: 'needleShare', unit: '%', limit: '2 %' },
+  { id: 'TERR-04', name: 'Ground edges that differ across a tile line', gate: 'seamMismatches', unit: '', limit: '0' },
+  { id: 'TERR-05', name: 'Holes in the ground', gate: 'holeShare', unit: '%', limit: '0.1 %' },
+  { id: 'TERR-06', name: 'The same ground twice, in time', gate: null, unit: '', limit: 'same hash' },
+  { id: 'TERR-07', name: 'Open faces where a tunnel ramp meets its roof', gate: 'portalOpenFaces', unit: '', limit: '0' },
+];
 
 /**
  * What the dashboard shows. null when there is no report yet. `stale` is true when the file is older than the
@@ -44,6 +59,13 @@ export function mapHealth(file = HEALTH_FILE) {
     const g = h.gateReport?.gates?.[key];
     return { key, name, count: h.gates?.[key] ?? null, explained: g ? g.explained : null, owners: g ? [...new Set(g.items.filter((i) => i.explainedBy).map((i) => i.explainedBy.split(':')[0]))] : [] };
   });
+  // the ground checks (P1-037): pass or fail from the invariants, the number from the gates block
+  const ground = GROUND_CHECKS.map((g) => {
+    const inv = (h.invariants ?? []).find((i) => typeof i.id === 'string' && i.id.startsWith(`${g.id}.`));
+    const raw = g.gate ? h.gates?.[g.gate] : null;
+    const value = typeof raw === 'number' ? (g.unit === '%' ? Math.round(raw * 10000) / 100 : raw) : null;
+    return { id: g.id, name: g.name, unit: g.unit, limit: g.limit, value, ok: inv ? inv.ok : null, detail: inv ? inv.detail : null };
+  });
   const dir = path.dirname(file);
   let pictures = [];
   try {
@@ -68,6 +90,7 @@ export function mapHealth(file = HEALTH_FILE) {
     byRule,
     overrides: { patches: ov.patches ?? 0, files: ov.files ?? 0, byId: ov.byId ?? 0, byAnchor: ov.byAnchor ?? 0, outsideStage: ov.outsideStage ?? 0, stale: (ov.records ?? []).filter((r) => r.outcome === 'stale').map((r) => ({ id: r.id, file: r.file, note: r.note })) },
     gates,
+    ground,
     pairs: { count: Array.isArray(h.pairs) ? h.pairs.length : 0, failed: Array.isArray(h.pairs) ? h.pairs.filter((p) => !p.ok).length : 0, worst },
     invariantsFailed: (h.invariants ?? []).filter((i) => !i.ok).map((i) => ({ id: i.id, detail: i.detail })),
     findings: h.gateReport?.findings ?? [],

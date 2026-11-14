@@ -114,6 +114,26 @@ export interface PathPhase {
   tightPaths: LaneBuild['tightPaths'];
 }
 
+/**
+ * The junctions of a round with their arms only (no lane paths): what a width round reads (netwidths.ts
+ * builtPairings). The same junctions in the same order as buildPaths lists them; the paths are built for the last
+ * round alone (P1-034).
+ */
+export function junctionArms(cl: ClusterPhase, sp: StripPhase): LaneJunction[] {
+  const stripAt = stripAtOf(sp.built);
+  const out: LaneJunction[] = [];
+  for (const root of [...cl.planned.keys()].sort((a, b) => a - b)) {
+    const jp = (cl.planned.get(root) as Planned).jp;
+    const arms = jp.arms.map((a) => stripAt(a.end));
+    if (arms.some((a) => a === null) || jp.arms.length === 1) continue;
+    out.push({
+      id: jp.id, nodes: [], centre: jp.centre, control: 'priority', pairs: [], paths: [],
+      arms: (arms as At[]).map((a) => ({ strip: a.strip, end: a.end, edge: '', cut: 0, stopBack: 0, crossing: false, edges: [0, 0] as [number, number] })),
+    });
+  }
+  return out;
+}
+
 /** Tolerances (m) of the corners a path along a junction's roads keeps (routes.ts pathAlong): tried in turn for the path that stays on the surface. */
 const ALONG_TOL_M = [0.4, 1, 2, 3];
 /** A cluster whose lane paths run further than this outside its planned ring is built by the polygon set (m). */

@@ -26,7 +26,7 @@ describe.skipIf(missing.length > 0)(`pilot centre ground${reason ? ` (skipped: $
     expect(report.steps.slice(0, 8)).toEqual(['sources', 'ground', 'graph', 'repair', 'lanes', 'elevation', 'mesh', 'terrain']);
     expect(report.stoppedBeforeTiles).toBe(false);
     const inv = Object.fromEntries(health.invariants.filter((i) => i.id.startsWith('TERR-')).map((i) => [i.id, i.ok]));
-    expect(inv).toEqual({ 'TERR-01.gap': true, 'TERR-02.nothing_above_the_road': true, 'TERR-03.needles': true, 'TERR-04.seams': true, 'TERR-05.no_hole': true, 'TERR-06.same_twice_in_time': true });
+    expect(inv).toEqual({ 'TERR-01.gap': true, 'TERR-02.nothing_above_the_road': true, 'TERR-03.needles': true, 'TERR-04.seams': true, 'TERR-05.no_hole': true, 'TERR-06.same_twice_in_time': true, 'TERR-07.tunnel_mouths': true });
     console.log(`[terrain] build time ${terrain.buildMs} ms (${JSON.stringify(terrain.ms)}), checks ${terrain.checksMs} ms`);
     expect(terrain.counts.emitted).toBeGreaterThan(500000);
     expect(terrain.counts.tiles).toBeGreaterThan(300);

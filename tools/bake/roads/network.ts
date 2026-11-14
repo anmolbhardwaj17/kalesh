@@ -20,13 +20,20 @@ import type { HeroSpec } from './hero.ts';
 import type { CrossSection } from './model.ts';
 import { planClusters } from './netclusters.ts';
 import { MAX_ROUNDS } from './netctx.ts';
-import type { LaneBuild, LaneModelInput, NetCtx, WidthTaper } from './netctx.ts';
+import type { ClusterMemo, LaneBuild, LaneModelInput, NetCtx, WidthTaper } from './netctx.ts';
 import { WIDTH_ROUNDS, planWidthFixes } from './netwidths.ts';
-import { buildPaths, buildStrips } from './netstrips.ts';
+import { buildPaths, buildStrips, junctionArms } from './netstrips.ts';
 import { planWidenings, planZones } from './netzones.ts';
 import { driveCount } from './street.ts';
 import type { WidthFixed } from './street.ts';
 import { mapRestrictions } from './turns.ts';
+import { dividerLanes, fitToDividers } from './dividers.ts';
+import type { DividerFit } from './dividers.ts';
+import type { MedianRef } from './medianrefs.ts';
+import { checkWidthSteps, pairedOf, ringOf } from './widthsteps.ts';
+
+/** Fit rounds of the dividers at most (a round holds the arms of every width step it made). */
+const DIVIDER_ROUNDS = 4;
 import { midBlockCrossings } from './crossings.ts';
 import type { CrossingPoint } from './crossings.ts';
 import type { Strip } from './model.ts';
@@ -38,6 +45,8 @@ interface Attempt {
   build: LaneBuild;
   ctx: NetCtx;
   retry: boolean;
+  /** The lane paths of this round (buildPaths): built for the round the model keeps, not for every round (P1-034). */
+  paths: (() => void) | null;
 }
 
 export function buildLaneModel(input: LaneModelInput): LaneBuild {
@@ -50,14 +59,27 @@ export function buildLaneModel(input: LaneModelInput): LaneBuild {
   const widthTapers = new Map<string, WidthTaper>();
   const widthBlocked = new Set<string>();
   const widthSettles = new Map<string, number>();
+  const clusterMemo = new Map<string, ClusterMemo>();
   let last: Attempt | null = null;
   let rounds = 0;
   let retries = 0;
   let widthRounds = 0;
   let left = 0;
+  // carriageways whose space up to their reference divider holds more lanes take that count (P1-034): read on a first
+  // build, settled as fit counts before the rounds below
+  let dividerCounts = 0;
+  if (input.medianRefs?.length && input.widthContinuity !== false) {
+    const probe = attempt(input, road, fixed, noZone, widthFixed, widthTapers, widthBlocked, widthSettles, clusterMemo).build;
+    rounds++;
+    const pairsOf = pairStrips(probe);
+    for (const [edge, n] of dividerLanes(probe.strips, (si) => pairsOf(probe.strips[si] as Strip), input.medianRefs, new Map(probe.road.source.map((e) => [e.id, e])))) {
+      fixed.set(edge, n);
+      dividerCounts++;
+    }
+  }
   for (;;) {
     rounds++;
-    last = attempt(input, road, fixed, noZone, widthFixed, widthTapers, widthBlocked, widthSettles);
+    last = attempt(input, road, fixed, noZone, widthFixed, widthTapers, widthBlocked, widthSettles, clusterMemo);
     // a fit round (a taper too short, a split built as a junction): at most MAX_ROUNDS builds in all for them
     if (last.retry && retries < MAX_ROUNDS - 1) {
       retries++;
@@ -71,6 +93,7 @@ export function buildLaneModel(input: LaneModelInput): LaneBuild {
     widthRounds++;
   }
   const build = (last as Attempt).build;
+  (last as Attempt).paths?.();
   build.rounds = rounds;
   build.widthFixes = {
     tapers: [...widthTapers.keys()].sort().map((k) => widthTapers.get(k) as WidthTaper),
@@ -86,6 +109,10 @@ export function buildLaneModel(input: LaneModelInput): LaneBuild {
     if (build.streets.byEdge.get(id)?.lanes !== n && !p.hero) fitted.set(id, n);
   });
   build.fitted = [...fitted].map(([edge, lanes]) => ({ edge, lanes })).sort((a, b) => (a.edge < b.edge ? -1 : 1));
+  // carriageways wider than their lanes take the space up to their reference divider (P1-034)
+  const td = Date.now();
+  if (input.medianRefs?.length) build.dividers = { ...fitDividers(build, input.medianRefs), lanesSet: dividerCounts };
+  build.ms['dividers'] = Date.now() - td;
   // the edge lanes of strips side by side give way, so no two surfaces share area outside the carriageways
   const te = Date.now();
   build.edgeTrims = giveWay(build.strips, build.joints);
@@ -103,6 +130,44 @@ export function buildLaneModel(input: LaneModelInput): LaneBuild {
   build.crossings = mid.list;
   build.crossingReport = mid.report;
   return build;
+}
+
+/**
+ * The carriageways fitted to their reference dividers (dividers.ts). A widening that would make a width step across a
+ * junction (one side of the corridor widened more than the other, widthsteps.ts) is held at the nominal width at the
+ * arms of that step and the fit runs again, at most DIVIDER_ROUNDS times.
+ */
+function fitDividers(build: LaneBuild, refs: readonly MedianRef[]): DividerFit {
+  const edgeById = new Map(build.road.source.map((e) => [e.id, e]));
+  const pairsOf = pairStrips(build);
+  const index = new Map(build.strips.map((s, i) => [s.id, i]));
+  const before = build.strips.map((s) => s.st.map((st) => st.b));
+  const paired = pairedOf(build.road.source);
+  const ring = ringOf(build.road.source);
+  const held = new Map<number, { start?: boolean; end?: boolean }>();
+  let fit: DividerFit | null = null;
+  for (let round = 0; round < DIVIDER_ROUNDS; round++) {
+    build.strips.forEach((s, si) => s.st.forEach((st, i) => (st.b = (before[si] as number[][])[i] as number[])));
+    fit = fitToDividers(build.strips, build.joints, (si) => pairsOf(build.strips[si] as Strip), refs, edgeById, held);
+    let more = false;
+    for (const w of checkWidthSteps(build.strips, build.joints, build.junctions, paired, ring).list) {
+      if (w.kind !== 'junction') continue;
+      const jn = build.junctions.find((j) => j.id === w.where);
+      for (const id of [...w.a, ...w.b]) {
+        const si = index.get(id);
+        if (si === undefined || !fit.widened[si]) continue;
+        const arm = jn?.arms.find((a) => a.strip === si);
+        if (!arm) continue;
+        const h = held.get(si) ?? {};
+        if (h[arm.end]) continue;
+        h[arm.end] = true;
+        held.set(si, h);
+        more = true;
+      }
+    }
+    if (!more) break;
+  }
+  return fit as DividerFit;
 }
 
 /** Crossing points of the map: OSM highway=crossing nodes and add_crossing marks ("crossing:<patch>"). */
@@ -163,7 +228,7 @@ function context(input: LaneModelInput, road: RoadGraph, fixed: Map<string, numb
   };
 }
 
-function attempt(input: LaneModelInput, road: RoadGraph, fixed: Map<string, number>, noZone: Set<number>, widthFixed: Map<string, WidthFixed>, widthTapers: Map<string, WidthTaper>, widthBlocked: Set<string>, widthSettles: Map<string, number>): Attempt {
+function attempt(input: LaneModelInput, road: RoadGraph, fixed: Map<string, number>, noZone: Set<number>, widthFixed: Map<string, WidthFixed>, widthTapers: Map<string, WidthTaper>, widthBlocked: Set<string>, widthSettles: Map<string, number>, clusterMemo?: Map<string, ClusterMemo>): Attempt {
   const ms: Record<string, number> = {};
   let clock = Date.now();
   const lap = (name: string): void => {
@@ -172,6 +237,7 @@ function attempt(input: LaneModelInput, road: RoadGraph, fixed: Map<string, numb
     clock = now;
   };
   const c = context(input, road, fixed, noZone, widthFixed, widthTapers, widthBlocked, widthSettles);
+  if (clusterMemo) c.clusterMemo = clusterMemo;
   const z = planZones(c);
   lap('zones');
   const widenings = planWidenings(c, z);
@@ -186,18 +252,23 @@ function attempt(input: LaneModelInput, road: RoadGraph, fixed: Map<string, numb
       build: { ...base, strips: [], joints: [], zoneStrips: [], junctions: [], junctionPlans: [], ends: [], internal: [], tightPaths: [], turns: { uTurnsTooTight: 0, restricted: 0, droppedForRadius: 0, tight: 0 }, turnRules: emptyTurnRules(c), crossings: [], crossingReport: { points: 0, placed: 0, pairedAdded: 0, skipped: {} }, built: new Map() },
       ctx: c,
       retry: true,
+      paths: null,
     };
   }
   const sp = buildStrips(c, z);
   lap('strips');
-  const pp = buildPaths(c, cl, sp);
-  lap('paths');
   const internal = [...cl.absorbed].sort((a, b) => a[0] - b[0]).map(([i, why]) => ({ edge: (road.source[i] as GraphEdge).id, why }));
-  return {
-    build: { ...base, strips: sp.strips, joints: sp.joints, zoneStrips: sp.zoneStrips, built: sp.built, internal, crossings: [], crossingReport: { points: 0, placed: 0, pairedAdded: 0, skipped: {} }, ...pp },
-    ctx: c,
-    retry: sp.retry,
+  // a width round reads only the junctions' arms; the lane paths are built once the model keeps this round
+  const build: LaneBuild = {
+    ...base, strips: sp.strips, joints: sp.joints, zoneStrips: sp.zoneStrips, built: sp.built, internal, crossings: [], crossingReport: { points: 0, placed: 0, pairedAdded: 0, skipped: {} },
+    junctions: junctionArms(cl, sp), junctionPlans: [], ends: [], tightPaths: [], turns: { uTurnsTooTight: 0, restricted: 0, droppedForRadius: 0, tight: 0 }, turnRules: emptyTurnRules(c),
   };
+  const paths = (): void => {
+    clock = Date.now();
+    Object.assign(build, buildPaths(c, cl, sp));
+    lap('paths');
+  };
+  return { build, ctx: c, retry: sp.retry, paths };
 }
 
 /**

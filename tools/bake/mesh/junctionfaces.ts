@@ -27,6 +27,22 @@ export const CLIP_EPS_M2 = 0.002;
 export const CLOSE_M = 2.5;
 /** A corner the polygon set made within this distance of a vertex that is already there is that vertex (m). */
 export const SNAP_M = 0.004;
+/**
+ * A band piece the polygon set left narrower than this on average (twice its area over its longest edge, m) is left
+ * out (P1-037): a 0.3 m wide strip 40 m long along a junction's edge, with a hairline crack the kerb faces cannot close.
+ */
+export const SLIVER_BAND_M = 0.6;
+
+/** Twice the area of a ring over its longest edge (m): the mean width of a sliver. */
+export function meanWidthM(ring: readonly [number, number][]): number {
+  let longest = 0;
+  for (let k = 0; k < ring.length; k++) {
+    const p = ring[k] as [number, number];
+    const q = ring[(k + 1) % ring.length] as [number, number];
+    longest = Math.max(longest, Math.hypot(q[0] - p[0], q[1] - p[1]));
+  }
+  return longest > 0 ? (2 * ringAreaM2(ring)) / longest : 0;
+}
 /** A polygon set mouth reaches this far out over its arm before the arm's end quad is taken off (m). */
 export const MOUTH_OUT_M = 0.2;
 /** A corner the polygon set made this close to an arm's cut line is put on it (m): the closing works to millimetres. */
@@ -56,6 +72,8 @@ export interface JunctionFaces {
   crossedBands: number;
   /** Bands left out: no area left, or turned inside out (the outer edges of two arms cross). */
   droppedBands: number;
+  /** Pieces of bands the polygon set cut back to a sliver (narrower than SLIVER_BAND_M on average): left out, the ground meets the junction there (P1-037). */
+  sliverBands: number;
   /** Holes the polygon set found inside a face (a neighbour wholly inside it): the face was cut in two through each. */
   holes: number;
   /** Corners of polygon set faces that took the height of the strip edge they lie on. */
@@ -116,7 +134,7 @@ const boxOf = (rings: readonly (readonly (readonly [number, number])[])[]): { mi
 
 export function addJunctionFaces(fs: FaceSet, input: MeshInput, index: StripIndex): JunctionFaces {
   const { strips, kinds } = input;
-  const out: JunctionFaces = { faces: [], sheets: [], j1: 0, j2: 0, setFaces: new Set(), clippedFaces: 0, clippedJunctions: 0, clippedAreaM2: 0, bands: 0, crossedBands: 0, droppedBands: 0, holes: 0, heightsTaken: 0, list: [] };
+  const out: JunctionFaces = { faces: [], sheets: [], j1: 0, j2: 0, setFaces: new Set(), clippedFaces: 0, clippedJunctions: 0, clippedAreaM2: 0, bands: 0, crossedBands: 0, droppedBands: 0, sliverBands: 0, holes: 0, heightsTaken: 0, list: [] };
   const note = (id: string, what: string): void => {
     if (out.list.length < 400) out.list.push({ id, what });
   };
@@ -400,7 +418,12 @@ export function addJunctionFaces(fs: FaceSet, input: MeshInput, index: StripInde
       const res = settle(b.ring, [...neighbours, ...mine], b.crossed);
       for (const r of res) {
         if (ringAreaM2(flat(r)) < 0.01) continue;
-        built.push({ ring: r, kind: 'band', set: res.length !== 1 || r !== b.ring });
+        const set = res.length !== 1 || r !== b.ring;
+        if (set && meanWidthM(flat(r)) < SLIVER_BAND_M) {
+          out.sliverBands++;
+          continue;
+        }
+        built.push({ ring: r, kind: 'band', set });
         mine.push(flat(r));
       }
     }

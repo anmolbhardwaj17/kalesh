@@ -12,6 +12,8 @@ import { buildSurface } from './surface.ts';
 import type { Surface } from './surface.ts';
 import { C_GROUND, C_LAWN, C_PLOT, C_WATER, triangulate } from './triangulate.ts';
 import type { Triangulation } from './triangulate.ts';
+import { levelAt } from './water.ts';
+import type { WaterPlane } from './water.ts';
 
 export interface GroundTile {
   tx: number;
@@ -91,11 +93,11 @@ export function emitGround(g: Pick<Ground, 'tg' | 'surface'>, pick: (cx: number,
       m.idx.push(at.grp.vertex(material, y === s.vy[v] ? v : -1, (vx[v] as number) - at.o.x, y, (vz[v] as number) - at.o.z, s.nrm[v * 3] as number, s.nrm[v * 3 + 1] as number, s.nrm[v * 3 + 2] as number));
     }
     if (s.cls[e] === C_WATER) {
-      const level = (s.waters[s.body[e] as number] as { level: number }).level;
+      const body = s.waters[s.body[e] as number] as WaterPlane;
       const w = at.grp.mesh('water');
       for (let i = 0; i < 3; i++) {
         const v = s.tri[e * 3 + i] as number;
-        w.idx.push(at.grp.vertex('water', v, (vx[v] as number) - at.o.x, level, (vz[v] as number) - at.o.z, 0, 1, 0));
+        w.idx.push(at.grp.vertex('water', v, (vx[v] as number) - at.o.x, levelAt(body, vx[v] as number, vz[v] as number), (vz[v] as number) - at.o.z, 0, 1, 0));
       }
     }
   }

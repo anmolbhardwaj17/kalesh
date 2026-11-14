@@ -13,6 +13,8 @@ import { edgeKey } from '../mesh/conform.ts';
 import { DECK_DEPTH } from '../roads/model.ts';
 import type { Ground } from './build.ts';
 import { MEET_EDGE, MEET_NONE, offGround } from './collect.ts';
+import { checkPortals } from './portals.ts';
+import type { PortalChecks } from './portals.ts';
 import { toUnits } from './predicates.ts';
 import { C_DROPPED, C_GROUND, C_LAWN, C_OUT, C_PLOT, C_ROAD, C_WATER } from './triangulate.ts';
 
@@ -27,6 +29,8 @@ export interface TerrainChecks {
     coveredM: number;
     /** Road edge at grade with no ground triangle along it, by what lies beside it there. */
     uncoveredM: { outsideStage: number; otherRoad: number; other: number };
+    /** Where road edge lies under another road face (the largest 25 m cells, world metres; pieces: this face's / the other face's piece). */
+    underRoad: { x: number; z: number; m: number; pieces: string[] }[];
     worst: { x: number; z: number; gapM: number } | null;
     /** Where the ground ends at a wall: ground above the ramp it stands beside, or under the road of a cut. */
     wallSamples: number;
@@ -58,6 +62,8 @@ export interface TerrainChecks {
     holeShare: number;
   };
   classes: { samples: number; mismatches: number; holes: number; list: { x: number; z: number; expected: string; got: string }[] };
+  /** Tunnel mouths (P1-037, portals.ts). */
+  portals: PortalChecks;
 }
 
 /** A wall point may be this far on the wrong side (m): a kerb height, at the vertex where a wall starts beside a kerb. */
@@ -119,11 +125,14 @@ export function checkGround(g: Ground): TerrainChecks {
     vertexAt.set(pk(road.a[k] as number), road.a[k] as number);
     vertexAt.set(pk(road.b[k] as number), road.b[k] as number);
   }
-  const gap: TerrainChecks['gap'] = { samples: 0, maxM: 0, meanM: 0, over2cm: 0, edges: 0, coveredM: 0, uncoveredM: { outsideStage: 0, otherRoad: 0, other: 0 }, worst: null, wallSamples: 0, wallWrongSide: 0, wallMaxHeightM: 0, list: [] };
+  const gap: TerrainChecks['gap'] = { samples: 0, maxM: 0, meanM: 0, over2cm: 0, edges: 0, coveredM: 0, uncoveredM: { outsideStage: 0, otherRoad: 0, other: 0 }, underRoad: [], worst: null, wallSamples: 0, wallWrongSide: 0, wallMaxHeightM: 0, list: [] };
   const find = (x: number, z: number, what: string): void => {
     if (gap.list.length < 30) gap.list.push({ x: r1(x + input.offset.x), z: r1(z + input.offset.z), what });
   };
   let sum = 0;
+  let other = -1;
+  /** Road edge under another road face, by 25 m cell: where the lane model's faces lie on each other. */
+  const underRoad = new Map<string, { x: number; z: number; m: number; pieces: Set<string> }>();
   const outline = input.outline as P2[];
   for (const [key, c] of edges.at) {
     const f = edges.owner[c] as number;
@@ -197,7 +206,15 @@ export function checkGround(g: Ground): TerrainChecks {
         const mx = ((vx[cur] as number) + (vx[best] as number)) / 2 + ((bz - az) / len) * 0.01;
         const mz = ((vz[cur] as number) + (vz[best] as number)) / 2 - ((bx - ax) / len) * 0.01;
         if (!pointInRing({ x: mx, z: mz }, outline)) gap.uncoveredM.outsideStage += piece;
-        else if (input.grid.near(mx, mz, mx, mz).some((o) => meet[o] !== MEET_NONE && inFace(g, o, mx, mz, 0))) gap.uncoveredM.otherRoad += piece;
+        else if ((other = input.grid.near(mx, mz, mx, mz).find((o) => meet[o] !== MEET_NONE && inFace(g, o, mx, mz, 0)) ?? -1) >= 0) {
+          gap.uncoveredM.otherRoad += piece;
+          const key = `${Math.floor(mx / 25)}_${Math.floor(mz / 25)}`;
+          const at = underRoad.get(key);
+          if (at) {
+            at.m += piece;
+            at.pieces.add(`${fs.piece[f]}/${fs.piece[other]}`);
+          } else underRoad.set(key, { x: mx, z: mz, m: piece, pieces: new Set([`${fs.piece[f]}/${fs.piece[other]}`]) });
+        }
         else {
           gap.uncoveredM.other += piece;
           find(mx, mz, `${r4(piece)} m of road edge with no ground along it (face ${f})`);
@@ -216,6 +233,7 @@ export function checkGround(g: Ground): TerrainChecks {
   gap.coveredM = Math.round(gap.coveredM);
   gap.wallMaxHeightM = Math.round(gap.wallMaxHeightM * 100) / 100;
   for (const k of ['outsideStage', 'otherRoad', 'other'] as const) gap.uncoveredM[k] = r1(gap.uncoveredM[k]);
+  gap.underRoad = [...underRoad.values()].sort((p, q) => q.m - p.m || p.x - q.x).slice(0, 20).map((u) => ({ x: r1(u.x + input.offset.x), z: r1(u.z + input.offset.z), m: r1(u.m), pieces: [...u.pieces].sort().slice(0, 4) }));
 
   // free ground vertices inside a road face or under a deck; triangle centres under a deck
   const above: TerrainChecks['above'] = { vertices: 0, insideRoadFace: 0, aboveRoad: 0, underDeck: 0, throughDeck: 0, list: [] };
@@ -314,7 +332,7 @@ export function checkGround(g: Ground): TerrainChecks {
   for (const k of ['outlineM2', 'groundM2', 'lawnM2', 'waterM2', 'plotM2', 'roadFacesM2', 'roadTrianglesM2', 'holeM2'] as const) area[k] = r1(area[k]);
   area.droppedM2 = Math.round(area.droppedM2 * 1000) / 1000;
 
-  return { gap, above, needles, seams: checkSeams(g), area, classes: checkClasses(g) };
+  return { gap, above, needles, seams: checkSeams(g), area, classes: checkClasses(g), portals: checkPortals(g) };
 }
 
 /** Tile seams read back from the tile meshes: every ground edge on a tile line against the edges of the tile across it. */

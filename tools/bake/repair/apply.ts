@@ -282,6 +282,23 @@ function setTag(state: RepairState, p: Params, issue: string): Applied {
     return { applied: true, how: 'graph', before: { layers: before }, after: { layers: after }, note: '', drops: [] };
   }
   const e = edges[0];
+  if (key === 'portal' && e) {
+    // R-TERR-04 (P1-034): the boundary between the tunnel piece and the open ramp piece moves out past the crossing road
+    const from = Number(p['from']);
+    const to = Number(p['to']);
+    const k = e.pieces.findIndex((x, i) => i + 1 < e.pieces.length && Math.abs(x.s1 - from) < 0.01);
+    const a = e.pieces[k];
+    const b = e.pieces[k + 1];
+    if (!a || !b) return none('the tunnel mouth is no longer there');
+    if (!(to > a.s0 + 1 && to < b.s1 - 1)) return none('the new portal would leave no ramp');
+    const before = { id: e.id, portal: a.s1 };
+    a.s1 = r3(to);
+    b.s0 = r3(to);
+    mark(state, e.id, { portal_moved_m: r3(Math.abs(to - from)), by: issue });
+    // levels are part of the segment index
+    state.geometryChanged = true;
+    return { applied: true, how: 'graph', before, after: { id: e.id, portal: a.s1 }, note: '', drops: [] };
+  }
   if (key === 'width' && e) {
     const before = { id: e.id, width: e.road.width };
     const value = Number(p['value']);

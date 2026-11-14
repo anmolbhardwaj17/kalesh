@@ -43,6 +43,9 @@ export interface MeshRecord {
   stopLines: MeshChecks['stopLines'];
   /** Medians between paired carriageways (P1-032): metres by what lies on the median side, widths by source (metres of median), runs (world metres not needed: strip numbers and names). */
   medians: Omit<RoadMesh['medians'], 'list'> & { list: RoadMesh['medians']['list'] };
+  /** Kerbs across dead ends at grade (P1-037), the first 20 places in world metres; and band pieces left out as slivers. */
+  endKerbs: { deadEnds: number; kerbs: number; notAtGrade: number; blocked: number; at: { strip: number; end: string; x: number; z: number }[] };
+  sliverBands: number;
   /** Mid-block crossings drawn (P1-032): zebras, stop lines, skipped. */
   midBlock: { crossings: number; stopLines: number; skipped: number; list: { id: string; strip: number; x: number; z: number }[] };
   /** Junction surfaces over 3,000 m2 (world metres): a cluster the lane model cut far too wide. */
@@ -102,7 +105,7 @@ export function meshRecord(input: MeshInput, mesh: RoadMesh, checks: MeshChecks,
     hash, buildMs: mesh.ms['total'] ?? 0, checksMs, ms: mesh.ms,
     counts: {
       faces: fs.faces, vertices: fs.vx.length, laneQuads: mesh.stripFaces.quads, triangles: Object.values(tri).reduce((s, v) => s + v, 0), trianglesByMaterial: tri,
-      junctions: input.junctions.length, j1: mesh.junctions.j1, j2: mesh.junctions.j2, junctionFaces: fs.faces - (mesh.stripFaces.first[first] as number) - mesh.medians.faces, setFaces: mesh.junctions.setFaces.size,
+      junctions: input.junctions.length, j1: mesh.junctions.j1, j2: mesh.junctions.j2, junctionFaces: fs.faces - (mesh.stripFaces.first[first] as number) - mesh.medians.faces - mesh.endKerbs.kerbs, setFaces: mesh.junctions.setFaces.size,
       clippedFaces: mesh.junctions.clippedFaces, clippedJunctions: mesh.junctions.clippedJunctions, clippedAreaM2: mesh.junctions.clippedAreaM2, bands: mesh.junctions.bands, crossedBands: mesh.junctions.crossedBands,
       droppedBands: mesh.junctions.droppedBands, holes: mesh.junctions.holes, heightsTaken: mesh.junctions.heightsTaken, fannedJunctions: mesh.tops.fanned, foldedBorders: mesh.stripFaces.foldedBorders, foldedQuads: mesh.stripFaces.foldedQuads,
       jointPins: mesh.borders.pinned, jointPinMaxM: Math.round(mesh.borders.pinMaxM * 10000) / 10000, jointsApart: mesh.borders.apart,
@@ -123,6 +126,8 @@ export function meshRecord(input: MeshInput, mesh: RoadMesh, checks: MeshChecks,
     kerbs: { ...checks.kerbs, list: checks.kerbs.list.map(world), beside: { ...checks.kerbs.beside, list: checks.kerbs.beside.list.map(world) } },
     uv: checks.uv, stopLines: checks.stopLines, paths: checks.paths, oversize, notes: mesh.junctions.list, files,
     medians: mesh.medians,
+    endKerbs: { deadEnds: mesh.endKerbs.deadEnds, kerbs: mesh.endKerbs.kerbs, notAtGrade: mesh.endKerbs.notAtGrade, blocked: mesh.endKerbs.blocked, at: mesh.endKerbs.at.slice(0, 20).map((a) => ({ strip: a.strip, end: a.end, ...world({ x: a.x, z: a.z }) })) },
+    sliverBands: mesh.junctions.sliverBands,
     midBlock: { crossings: mesh.midBlock.crossings, stopLines: mesh.midBlock.stopLines, skipped: mesh.midBlock.skipped, list: mesh.midBlock.list.map((c) => ({ id: c.id, strip: c.strip, ...world({ x: c.x, z: c.z }) })) },
   };
 }

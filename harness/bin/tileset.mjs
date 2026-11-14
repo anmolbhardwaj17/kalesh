@@ -6,6 +6,8 @@
 // The copy is a clone on APFS (cp -c: instant, no extra space, a later rebake in the main checkout cannot change it).
 //   node harness/bin/tileset.mjs check [<checkout>]      does that checkout's game/world/tiles/ carry its tiles.hash?
 //   node harness/bin/tileset.mjs write [<checkout>]      write tiles.hash from the tiles that are there (after a bake without it)
+// `check` also names the route fixtures read from the tiles (harness/data/fixtures/stream_routes.json, city_routes.json,
+// city_paths.json) whose bakeHash is not the commit's tiles.hash: rerun their generator (P1-034).
 import fs from 'node:fs';
 import path from 'node:path';
 import { spawnSync } from 'node:child_process';
@@ -81,6 +83,26 @@ export function provideTiles(dest, source = ROOT) {
   return { ok: true, status: 'copied', reason: c.reason };
 }
 
+/** Route fixtures read from the baked tiles, each with its generator: a bake that changes tiles.hash makes them stale. */
+export const TILE_FIXTURES = [
+  { file: 'harness/data/fixtures/stream_routes.json', gen: 'node tools/fixtures/gen_stream_routes.mjs' },
+  { file: 'harness/data/fixtures/city_routes.json', gen: 'node tools/fixtures/gen_city_routes.mjs' },
+  { file: 'harness/data/fixtures/city_paths.json', gen: 'node tools/fixtures/gen_city_paths.mjs' },
+];
+
+/** The tile fixtures of a checkout made from other tiles than its tiles.hash names: [{file, bakeHash, gen}] (none without tiles.hash). */
+export function staleFixtures(checkout) {
+  const want = expectedTiles(checkout);
+  if (!want) return [];
+  const out = [];
+  for (const f of TILE_FIXTURES) {
+    const j = readJson(path.join(checkout, f.file));
+    if (!j) continue;
+    if (j.bakeHash !== want.bakeHash) out.push({ file: f.file, bakeHash: j.bakeHash ?? null, gen: f.gen });
+  }
+  return out;
+}
+
 /** Writes tiles.hash from the tiles in a checkout (the bake does it itself; this is for a folder baked before it did). */
 export function writeExpected(checkout) {
   const idx = readJson(path.join(checkout, TILES_DIR, 'index.json'));
@@ -103,6 +125,7 @@ if (process.argv[1] && path.resolve(process.argv[1]) === fileURLToPath(import.me
     else {
       const r = checkSet(root, want);
       console.log(`${r.ok ? 'TILES ok' : 'TILES MISMATCH'}: ${r.reason}`);
+      for (const f of staleFixtures(root)) console.log(`FIXTURE STALE: ${f.file} was made from bake ${f.bakeHash}, tiles.hash is ${want.bakeHash}; run ${f.gen}`);
       process.exitCode = r.ok ? 0 : 1;
     }
   } else { console.log('usage: tileset.mjs check|write [<checkout>]'); process.exitCode = 2; }

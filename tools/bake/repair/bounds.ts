@@ -20,6 +20,8 @@ export const BOUNDS = {
   carriagewayShiftM: 2.5,
   /** A join the geometry supports (the end points at the road, nothing stands between them) up to this long (m), P1-030. */
   joinSupportedM: 8,
+  /** A tunnel portal moved past a road crossing its mouth at grade, up to this far (m), P1-034. */
+  portalM: 15,
 } as const;
 
 /** Classes on which a lane count never changes without a person. */
@@ -46,6 +48,7 @@ export function isLowImpact(m: Measure): boolean {
     case 'height_outlier': return within(m.m, BOUNDS.heightOutlierM);
     case 'carriageway_shift': return within(m.m, BOUNDS.carriagewayShiftM);
     case 'slip_redraw': return within(m.m, BOUNDS.carriagewayShiftM);
+    case 'portal': return within(m.m, BOUNDS.portalM);
     case 'lane_count': return !LANE_COUNT_NEVER.has(m.cls);
     default: return false;
   }

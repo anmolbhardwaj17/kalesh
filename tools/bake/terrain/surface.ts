@@ -13,11 +13,20 @@ import type { FaceSet } from '../mesh/faces.ts';
 import { MEET_NONE } from './collect.ts';
 import type { LandmarkGround, TerrainInput, TerrainOptions } from './collect.ts';
 import { C_GROUND, C_LAWN, C_PLOT, C_WATER } from './triangulate.ts';
+import type { Headwall } from '../mesh/structures.ts';
+import { RingSet, bankSlope, levelAt, slopedRings } from './water.ts';
+import type { WaterPlane } from './water.ts';
 import type { Triangulation } from './triangulate.ts';
 
-export interface WaterBody {
-  /** Level of the flat surface (m). */
+export interface WaterBody extends WaterPlane {
+  /** Level of the surface at (cx, cz) (m); a flat body has gx = gz = 0. */
   level: number;
+  /** Running water (a drain, a canal, P1-037): the surface follows the slope of its banks. */
+  sloped: boolean;
+  /** How far the surface falls across the body (m), its slope (m per km), and the least height of a land bank over it (m). */
+  fallM: number;
+  slopePerKm: number;
+  bankRoomM: number | null;
   areaM2: number;
   triangles: number;
   /** Lowest and highest ground on its bank before the bank was lifted over the water. */
@@ -309,6 +318,9 @@ export function buildSurface(input: TerrainInput, tg: Triangulation, meet: Uint8
       const fill = (wallMin[v] as number) >= g;
       const was = y;
       y = fill ? Math.max(Math.min(y, wallMin[v] as number), Math.min(g - 0.4, wallMin[v] as number)) : Math.max(y, wallMax[v] as number);
+      // across a tunnel mouth (P1-037): over the slab on the roof and never over the headwall's parapet top
+      const hw = headwallAt(input.portals, x, z);
+      if (hw) y = Math.min(Math.max(y, hw.bottom + 0.5), hw.top);
       if (y !== was) stats.wallClamped++;
     } else if (special.has((Math.floor(x / CELL) + 100000) * 262144 + (Math.floor(z / CELL) + 100000))) {
       for (const f of input.grid.near(x, z, x, z)) {
@@ -361,7 +373,9 @@ export function buildSurface(input: TerrainInput, tg: Triangulation, meet: Uint8
     }
   }
 
-  // water: flat, a little under its banks; the bank stays above it and the bed goes down from the bank
+  // water: a little under its banks (flat, or for running water along the slope of its banks); the bank stays above
+  // it and the bed goes down from the bank
+  const slopedSet = new RingSet(slopedRings(input.water, input.waterLines ?? []));
   const body = new Int32Array(ne).fill(-1);
   const waters: WaterBody[] = [];
   const stamp = new Int32Array(nv).fill(-1);
@@ -393,25 +407,57 @@ export function buildSurface(input: TerrainInput, tg: Triangulation, meet: Uint8
         }
       }
     }
-    const land = verts.filter((v) => role[v] !== 1 && ((flags[v] as number) & 1) === 1).map((v) => vy[v] as number).sort((p, q) => p - q);
-    const fixed = verts.filter((v) => role[v] !== 0).map((v) => vy[v] as number);
-    const all = verts.map((v) => vy[v] as number).sort((p, q) => p - q);
+    const landV = verts.filter((v) => role[v] !== 1 && ((flags[v] as number) & 1) === 1);
+    // running water (a drain, P1-037) follows the slope of its banks; a pool or the river lies flat
+    // (by area: a drain that runs into a pond or the river leaves the pond and the river flat)
+    let runArea = 0;
+    if (slopedSet.size) {
+      for (const e of members) {
+        const a = tri[e * 3] as number;
+        const b = tri[e * 3 + 1] as number;
+        const c = tri[e * 3 + 2] as number;
+        if (!slopedSet.has(((vx[a] as number) + (vx[b] as number) + (vx[c] as number)) / 3, ((vz[a] as number) + (vz[b] as number) + (vz[c] as number)) / 3)) continue;
+        runArea += Math.abs(((vx[b] as number) - (vx[a] as number)) * ((vz[c] as number) - (vz[a] as number)) - ((vz[b] as number) - (vz[a] as number)) * ((vx[c] as number) - (vx[a] as number))) / 2;
+      }
+    }
+    const sloped = runArea > area / 2;
+    const fit = sloped ? bankSlope(landV.map((v) => ({ x: vx[v] as number, z: vz[v] as number, y: vy[v] as number }))) : { cx: 0, cz: 0, gx: 0, gz: 0 };
+    const tilt = (v: number): number => fit.gx * ((vx[v] as number) - fit.cx) + fit.gz * ((vz[v] as number) - fit.cz);
+    const land = landV.map((v) => (vy[v] as number) - tilt(v)).sort((p, q) => p - q);
+    const fixed = verts.filter((v) => role[v] !== 0).map((v) => (vy[v] as number) - tilt(v));
+    const all = verts.map((v) => (vy[v] as number) - tilt(v)).sort((p, q) => p - q);
     const low = (list: number[]): number => list[Math.floor((list.length - 1) * 0.1)] as number;
     let level = (land.length ? low(land) : low(all)) - 0.4;
     for (const y of fixed) level = Math.min(level, y - 0.3);
+    const plane: WaterPlane = { cx: fit.cx, cz: fit.cz, level: Math.round(level * 1000) / 1000, gx: fit.gx, gz: fit.gz };
+    const lv = (v: number): number => levelAt(plane, vx[v] as number, vz[v] as number);
     const bank: number[] = [];
     for (const v of verts) {
       if (role[v] !== 0 || ((flags[v] as number) & 1) === 1) bank.push(v);
-      if (role[v] === 0 && ((flags[v] as number) & 1) === 1 && (vy[v] as number) < level + 0.15) vy[v] = level + 0.15;
+      if (role[v] === 0 && ((flags[v] as number) & 1) === 1 && (vy[v] as number) < lv(v) + 0.15) vy[v] = lv(v) + 0.15;
     }
     for (const v of verts) {
       if (role[v] !== 0 || ((flags[v] as number) & 1) === 1) continue;
       let d = 8;
       for (const b of bank) d = Math.min(d, Math.hypot((vx[b] as number) - (vx[v] as number), (vz[b] as number) - (vz[v] as number)));
-      vy[v] = Math.min(vy[v] as number, level) - (0.4 + 1.6 * smoothstep(d / 8));
+      vy[v] = Math.min(vy[v] as number, lv(v)) - (0.4 + 1.6 * smoothstep(d / 8));
     }
+    // the fall of the surface over the body, and the least room under its land banks (0 or more)
+    let lo = Infinity;
+    let hi = -Infinity;
+    let room = Infinity;
+    for (const v of verts) {
+      lo = Math.min(lo, lv(v));
+      hi = Math.max(hi, lv(v));
+      if (role[v] !== 1 && ((flags[v] as number) & 1) === 1) room = Math.min(room, (vy[v] as number) - lv(v));
+    }
+    const bankY = landV.map((v) => vy[v] as number).sort((p, q) => p - q);
+    const allY = verts.map((v) => vy[v] as number).sort((p, q) => p - q);
     const p = tri[e0 * 3] as number;
-    waters.push({ level: Math.round(level * 1000) / 1000, areaM2: Math.round(area), triangles: members.length, bankMinM: Math.round((land[0] ?? all[0] ?? level) * 100) / 100, bankMaxM: Math.round((land[land.length - 1] ?? all[all.length - 1] ?? level) * 100) / 100, x: Math.round((vx[p] as number) * 10) / 10, z: Math.round((vz[p] as number) * 10) / 10 });
+    waters.push({
+      ...plane, sloped, fallM: Math.round((hi - lo) * 1000) / 1000, slopePerKm: Math.round(Math.hypot(plane.gx, plane.gz) * 1000 * 1000) / 1000, bankRoomM: Number.isFinite(room) ? Math.round(room * 1000) / 1000 : null,
+      areaM2: Math.round(area), triangles: members.length, bankMinM: Math.round((bankY[0] ?? allY[0] ?? level) * 100) / 100, bankMaxM: Math.round((bankY[bankY.length - 1] ?? allY[allY.length - 1] ?? level) * 100) / 100, x: Math.round((vx[p] as number) * 10) / 10, z: Math.round((vz[p] as number) * 10) / 10,
+    });
   }
 
   // corner heights: the vertex height, except at a vertex where road faces of different heights end
@@ -525,4 +571,20 @@ export function buildSurface(input: TerrainInput, tg: Triangulation, meet: Uint8
   }
   stats.maxOffsetM = Math.round(stats.maxOffsetM * 100) / 100;
   return { tri, cls, cy, body, vy, nrm, skirts, waters, role, over, pieces, stats };
+}
+
+/** The tunnel headwall whose line a point lies on (within 5 cm, between its ends), if any (P1-037). */
+export function headwallAt(list: readonly Headwall[] | undefined, x: number, z: number, tol = 0.05): Headwall | null {
+  if (!list) return null;
+  for (const h of list) {
+    const ex = h.bx - h.ax;
+    const ez = h.bz - h.az;
+    const len2 = ex * ex + ez * ez;
+    if (len2 <= 0) continue;
+    const t = ((x - h.ax) * ex + (z - h.az) * ez) / len2;
+    const len = Math.sqrt(len2);
+    if (t < -tol / len || t > 1 + tol / len) continue;
+    if (Math.abs((x - h.ax) * ez - (z - h.az) * ex) / len <= tol) return h;
+  }
+  return null;
 }

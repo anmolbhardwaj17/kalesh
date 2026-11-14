@@ -25,19 +25,14 @@
   ],
   "findings": [
     {
-      "what": "tunnel mouth crossing at Pragati Maidan (w1248027222.0 over w973071388.0 just outside the OSM tunnel end)",
-      "measured": "0.78 m2 overlap, on two levels so not in overlappingRoadFaces",
-      "owner": "P1-034"
-    },
-    {
       "what": "ITO ramps against the Phase 0 profile",
       "measured": "0.31 to 1.46 m mid ramp on four ramps, decks within 0.13 m; explained (P1-035): with the Phase 0 merge zone starts imposed (the block lane model starts the two merges 30 m and 56 m later) and the slip road under the loop ramp lowered 0.43 m as Phase 0 did (the solver holds it, 0.15 m), every one of 463 points is within 0.29 m",
       "owner": "explained, decisions.md 2026-11-13 (no fix: both are rules of the block lane model and the solver)"
     },
     {
       "what": "roads under short ramp flyovers sunk",
-      "measured": "Geeta Colony 0.88 m (was 4.0, fixed in P1-035: the slip ramp goes on past the stage edge). Hanuman Mandir was 1.72 m, the centre of the Kashmere Gate 11-arm cluster held down by its tunnel arm cut 157 m out: under 0.5 m since the cluster was split (P1-042). The most now is 0.97 m (the unnamed deck over Mahatma Gandhi Marg, the Ring Road and the railway)",
-      "owner": "explained: every one is 1 m or less"
+      "measured": "Geeta Colony 0.88 m (was 4.0, fixed in P1-035: the slip ramp goes on past the stage edge). Hanuman Mandir was 1.72 m, the centre of the Kashmere Gate 11-arm cluster held down by its tunnel arm cut 157 m out: under 0.5 m since the cluster was split (P1-042). The most now is 0.97 m (the unnamed deck over Mahatma Gandhi Marg, the Ring Road and the railway). P1-037: S25 (the service deck over Barron Road, 0.97 m) and S28 (Vikas Marg after the ITO three-way split, 0.76 m) have every ramp at its class grade limit (service 8, primary 5, its slip 6 percent): the clearance is a hard limit, so the solve lowers the road under them",
+      "owner": "explained: every one is 1 m or less; under 0.5 m needs longer ramps than OSM draws (a hero road spec)"
     },
     {
       "what": "junction clusters with no usable ring, oversize junction surfaces and lane paths off the road",
@@ -45,19 +40,24 @@
       "owner": "explained (P1-043): paths that follow a lane's own corners"
     },
     {
-      "what": "tunnel ramp faces where an open ramp meets its roofed part",
-      "measured": "not built or checked yet",
-      "owner": "P1-037 (a)"
+      "what": "tunnel mouths: the face between the ground over the roof and the roof where an open ramp meets its roofed part",
+      "measured": "a headwall at each of 24 mouths (one at a joint of a cut strip and a tunnel strip, two under a road at grade over the roof): 0 open faces at 88 road edges across them (health.json terrain.portals, TERR-07)",
+      "owner": "fixed (P1-037)"
     },
     {
-      "what": "drains on a slope have one flat water level",
-      "measured": "every water body has one level",
-      "owner": "P1-037 (b)"
+      "what": "drains on a slope",
+      "measured": "the pilot has no drain areas: drain, ditch, stream and canal lines are channels now, and 7 running water bodies (12,200 m2) follow the slope of their banks (0.5 to 5 m per km, up to 1.4 m of fall; health.json terrain.drains). Ponds, the Kartavya Path canals and the Yamuna stay flat",
+      "owner": "fixed (P1-037); the water network with flow, joins and culverts is P2-030"
     },
     {
       "what": "road edge with no ground along it (another road face lies there)",
-      "measured": "642 m",
-      "owner": "P1-037 (d)"
+      "measured": "125 m (642 m in P1-015, 399 m before P1-037): road faces of one level within a centimetre of each other, a raised corner band beside its junction surface or two kerbs side by side, with a hairline gap or overlap of 2 to 10 mm the conform step does not weld; the road covers both sides, so no ground is missing. The 0.3 m wide band slivers that made most of it are left out since P1-037 (health.json terrain.gap.underRoad lists the places)",
+      "owner": "explained (P1-037)"
+    },
+    {
+      "what": "closed dead ends",
+      "measured": "a raised kerb 0.45 m deep across every dead end at grade (717 of 737 on the pilot; 10 raised or lowered ends and 10 with another face in the way keep a square end; health.json mesh.endKerbs). 90 raised corner pieces the polygon set cut to slivers under 0.6 m are left out",
+      "owner": "fixed (P1-037)"
     }
   ]
 }
