@@ -548,3 +548,5 @@ One line per event, written by task.mjs (start, done, fail, phase changes, inbox
 - 2026-11-14 12:00 [P2-034] done: PR 65. Every flyover, bridge, metro viaduct, rail stretch, platform and foot bridge built from its variant kit (19 variants, INFRA-01 ok). Verifier PASS (side by sides, wide shots, city paths, quick). Merged main (P2-009) and rebaked: 1b5c45554efb21, 66 invariants ok, 1083 tests, Godot 139, city paths 12/12, quick 17/17. Polish and one load flake in notes.
 - 2026-11-14 12:01 [P2-010] start (attempt 1): Area kits: procedural modules, atlases and instanced buildings
 - 2026-11-14 12:01 [P2-043] start (attempt 1): Access judge pass and owner edits
+- 2026-11-14 13:01 [P2-010] failed attempt 1: city_buildings_busiest over budget when run alone: busiest_40m 3.19 ms, chandni_street 2.73 ms vs 2.0 ms (draw calls ok). Everything else in the acceptance met.
+- 2026-11-14 13:02 [P2-010] start (attempt 2): Area kits: procedural modules, atlases and instanced buildings
