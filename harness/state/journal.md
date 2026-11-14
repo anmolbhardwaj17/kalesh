@@ -644,3 +644,4 @@ One line per event, written by task.mjs (start, done, fail, phase changes, inbox
 - 2026-11-14 18:58 [P2-068] added: Rebuild the leads from the new models made from the approved pictures
 - 2026-11-14 18:58 [P2-068] start (attempt 1): Rebuild the leads from the new models made from the approved pictures
 - 2026-11-14 18:58 mentor message mmwgfyjfj handled: Danny and Meera converted fine and P2-068 is putting them in now; Bittu's new FBX did not arrive, please upload it again.
+- 2026-11-14 19:03 mentor message mmwgg4hgm handled: Our fault, not the models: our retarget bends the model's own rest pose and that crushes the shoulders. The builder now keeps the Mixamo skeleton exactly as you made it and converts our animations onto it, and must prove it matches the Mixamo preview first.
