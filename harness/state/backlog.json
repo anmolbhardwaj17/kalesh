@@ -1,6 +1,6 @@
 {
   "_doc": "Written only by node harness/bin/task.mjs. Phases run in order; P0 (ADOPT + STYLE DISCOVERY) waits for the owner by design and needs task.mjs signoff and task.mjs archsignoff before its gate passes. Later phases are added by the planner at the end of P0 (task.mjs phase-add) from the game's real state.",
-  "updated": "2026-11-14T16:00:21.797Z",
+  "updated": "2026-11-14T16:03:16.307Z",
   "phases": [
     {
       "id": "P0",
@@ -4677,13 +4677,14 @@
       "priority": 1,
       "kind": "feature",
       "status": "doing",
-      "attempts": 1,
+      "attempts": 2,
       "notes": [
         "Owner 2026-11-14 dusk and night shot (city_buildings_busiest): the whole city goes flat blue-grey, windows are black holes, no lit windows, no street lamps on, sky ambient dominates. Dusk and night must read: warm lit windows varying per building, street lamps on with pools (emissive plus near real lights), shop fronts glowing, sky ambient lowered so night is lit by the city, not tinted blue.",
-        "Owner 2026-11-14 asked to start it now, ahead of P2-001 (the fold of old style switches stays separate); work only in stylised_b's environment, sky, grade and light .tres, not the surface shader board branch the sign builder (P2-048) is editing."
+        "Owner 2026-11-14 asked to start it now, ahead of P2-001 (the fold of old style switches stays separate); work only in stylised_b's environment, sky, grade and light .tres, not the surface shader board branch the sign builder (P2-048) is editing.",
+        "attempt 1 failed: Verifier narrow FAIL (look a large real improvement, blue shade gone by day, warm dusk, lit night): night cp_street_eye luma 0.144 under the 0.15 floor with a black foreground road; gali road still B-R +10 and gali_foot not shootable (walk stops at 53 m); relight_live_street failed twice under load 95+; a few blown white windows at night."
       ],
       "created": "2026-11-14T08:58:18.634Z",
-      "started": "2026-11-14T14:03:34.060Z"
+      "started": "2026-11-14T16:03:16.305Z"
     },
     {
       "id": "P2-053",
