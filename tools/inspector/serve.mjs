@@ -23,6 +23,6 @@ export function startInspector(options = {}) {
 
 if (process.argv[1] && path.resolve(process.argv[1]) === fileURLToPath(import.meta.url)) {
   const arg = (n) => { const i = process.argv.indexOf(n); return i > 0 ? process.argv[i + 1] : undefined; };
-  const s = await startInspector({ port: Number(arg('--port') ?? 4490), dataDir: arg('--data'), overridesDir: arg('--overrides'), inboxFile: arg('--inbox'), gamePort: arg('--game-port') ? Number(arg('--game-port')) : undefined });
+  const s = await startInspector({ port: Number(arg('--port') ?? 4490), dataDir: arg('--data'), overridesDir: arg('--overrides'), accessFile: arg('--access'), inboxFile: arg('--inbox'), gamePort: arg('--game-port') ? Number(arg('--game-port')) : undefined });
   console.log(`map inspector: ${s.url}`);
 }

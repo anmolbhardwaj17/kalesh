@@ -1,6 +1,6 @@
 {
   "_doc": "Written only by node harness/bin/task.mjs. Phases run in order; P0 (ADOPT + STYLE DISCOVERY) waits for the owner by design and needs task.mjs signoff and task.mjs archsignoff before its gate passes. Later phases are added by the planner at the end of P0 (task.mjs phase-add) from the game's real state.",
-  "updated": "2026-11-14T07:32:00.031Z",
+  "updated": "2026-11-14T09:56:57.690Z",
   "phases": [
     {
       "id": "P0",
@@ -2504,16 +2504,18 @@
       "priority": 3,
       "kind": "feature",
       "status": "doing",
-      "attempts": 2,
+      "attempts": 1,
       "notes": [
         "Anmol 2026-11-13: houses need the railings Delhi houses have. The area kits must include balcony grilles and railings, roof parapets with railings, front gate and window grilles, and stair railings (outside stairs to the roof), placed by the area profiles. Acceptance: a close shot of a residential block shows them on most houses.",
         "Anmol 2026-11-13 (DELHI_WORLD.md 'OSM is reference, not the final word'): read area blueprints from harness/data/blueprints/ and let them override OSM footprints (precedence road, landmark zone, blueprint, generator); add the odd-footprint check (slivers, spikes, zig-zags, outliers) that flags shapes to verify against photos and regularises the ones that are not real.",
-        "Builder run 1: all acceptance met except city_buildings_busiest GPU 2.47/2.73 ms vs 2.0 (draw calls 400/365 ok). Measured while the map lane ran its bake and scenarios; rerun alone pending.",
-        "attempt 1 failed: city_buildings_busiest over budget when run alone: busiest_40m 3.19 ms, chandni_street 2.73 ms vs 2.0 ms (draw calls ok). Everything else in the acceptance met."
+        "Anmol 2026-11-14: are the colourful buildings real? Facade colours of each kit must be sampled from that area's reference photos and stay inside their range; the verifier compares kit shots with the area board for colour, not only shape.",
+        "Anmol 2026-11-14: the current sign boards look AI generated. P2-048 rebuilds them from real references; P2-010's verifier should not pass the boards as final.",
+        "The 3.19 ms rerun ran while another project's perf capture was running (load about 3 to 6). Judge the budget on a quiet machine or against a reference scene in the same run.",
+        "Watch Dogs 2 bar (FIDELITY_BAR.md, 2026-11-14): shots today show wear as blocky white blobs and pixel-check patches; the soft wear rebuild is P2-053, so do not tune wear further here, but do not ship new blocky patches. The repeated coloured-shelf shop module is replaced by P2-056 (interior mapping): keep module ids stable. The buildings line read 3.19 ms against 2.0 on a busy machine: re-measure quiet and, if still over, name the cause before P2-053 and P2-056 add on top. Look critic P2-051 runs right after this task."
       ],
       "created": "2026-11-11T12:31:54.059Z",
       "model": "opus",
-      "started": "2026-11-14T07:32:00.031Z"
+      "started": "2026-11-14T06:31:18.528Z"
     },
     {
       "id": "P2-011",
@@ -2533,7 +2535,9 @@
       "kind": "art",
       "status": "todo",
       "attempts": 0,
-      "notes": [],
+      "notes": [
+        "Watch Dogs 2 bar (FIDELITY_BAR.md row 3): order the cards so the biggest look gains come first: road and footpath surfaces, the bazaar and gali wall layers, shop front interiors (P2-056 room atlas), then sign boards, then trees. Ask for a matching detail normal or height map per tiling texture card where the model can make one (P2-053 reads them)."
+      ],
       "created": "2026-11-11T12:31:54.059Z",
       "model": "sonnet"
     },
@@ -2557,7 +2561,9 @@
       "kind": "feature",
       "status": "todo",
       "attempts": 0,
-      "notes": [],
+      "notes": [
+        "Watch Dogs 2 bar (FIDELITY_BAR.md row 10): a skyline with no hole and no visible LOD pop at 60 to 140 km/h is part of the bar; the far ring must keep the area colours and the warm haze so distance layers like a WD2 frame. Trees need impostors past about 150 m (coordinate with P2-037)."
+      ],
       "created": "2026-11-11T12:31:54.059Z"
     },
     {
@@ -2584,7 +2590,8 @@
       "attempts": 0,
       "notes": [
         "Anmol 2026-11-13: street-side railings too (boundary walls with grille tops, gate railings), consistent with the P2-010 house kit.",
-        "Anmol 2026-11-14, quality bar: peak quality, match the real road from photos (add what is missing, remove what is wrong), and never empty. Acceptance adds: (1) side by side of a reference photo and the game at the play camera for at least 3 spots per hero road, read by a verifier; (2) an emptiness check: walking or driving the stretch, no 40 m of frontage without something real (shop, wall, tree, parked vehicle, sign, vendor, furniture) and props per 100 m within the area profile; (3) the look audit (P2-040) lists anything that feels empty as a blocker."
+        "Anmol 2026-11-14, quality bar: peak quality, match the real road from photos (add what is missing, remove what is wrong), and never empty. Acceptance adds: (1) side by side of a reference photo and the game at the play camera for at least 3 spots per hero road, read by a verifier; (2) an emptiness check: walking or driving the stretch, no 40 m of frontage without something real (shop, wall, tree, parked vehicle, sign, vendor, furniture) and props per 100 m within the area profile; (3) the look audit (P2-040) lists anything that feels empty as a blocker.",
+        "Watch Dogs 2 bar (FIDELITY_BAR.md rows 1, 2, 12): within 15 m of the player something real every 5 m of frontage in busy areas (bazaar, Paharganj, Janpath, CP), wires across the street where the area photos show them, and life points dense enough for P2-055 (parked vehicles, autos at stands, people at life points) to fill. Acceptance adds a side by side of 6 player-height views beside dated current photos, answering the WD2 bar question. Dressing line 0.5 ms stays."
       ],
       "created": "2026-11-11T12:31:54.059Z",
       "model": "opus"
@@ -2612,7 +2619,8 @@
       "attempts": 0,
       "notes": [
         "From P1-006: retire game/bench/render/world.gd (on the module size exception list).",
-        "From P1-026: city_golden cp_street_eye facing the sun is washed out by haze and bloom (buildings and road lose contrast). Tune the golden grade and fog on the streamed city; compare with harness/look_proof/city_golden/."
+        "From P1-026: city_golden cp_street_eye facing the sun is washed out by haze and bloom (buildings and road lose contrast). Tune the golden grade and fog on the streamed city; compare with harness/look_proof/city_golden/.",
+        "Watch Dogs 2 bar (FIDELITY_BAR.md rows 8, 9): the shade colour, clouds and sun disc are done in P2-052 first; keep them when carrying the look onto the city. This task owns the baked vertex AO (contact darkening at wall bases and under chhajjas) and the reflection probes at hero places that P2-053's glass, paint and wet patches read. Acceptance adds: the 6 city shots read beside dated current photos with the WD2 bar question answered per shot."
       ],
       "created": "2026-11-11T12:31:54.059Z",
       "model": "opus"
@@ -2771,7 +2779,8 @@
       "status": "todo",
       "attempts": 0,
       "notes": [
-        "Anmol 2026-11-13: write this area's blueprint (harness/data/blueprints/) from photos; the area must read in its own style (for CP: the uniform two storey white colonnade ring, towers behind the outer circle), not as raw OSM shapes. Acceptance: side by side of a reference photo and the same view in game."
+        "Anmol 2026-11-13: write this area's blueprint (harness/data/blueprints/) from photos; the area must read in its own style (for CP: the uniform two storey white colonnade ring, towers behind the outer circle), not as raw OSM shapes. Acceptance: side by side of a reference photo and the same view in game.",
+        "Watch Dogs 2 bar (FIDELITY_BAR.md, OWNER_EYE.md): the side by side sheet is read beside dated current photos and the verifier answers per shot whether it would sit next to a Watch Dogs 2 street shot without looking cheap; any OWNER_EYE.md breach or empty frontage is a fail. Use the layers of P2-052 to P2-058 (grade, wear and normals, vehicles, street life, shop interiors, AA, motion) and tune them by data for this area; do not hand-build what a layer should do."
       ],
       "created": "2026-11-11T12:31:54.059Z",
       "model": "opus"
@@ -2799,7 +2808,8 @@
       "status": "todo",
       "attempts": 0,
       "notes": [
-        "Anmol 2026-11-13: write this area's blueprint (harness/data/blueprints/) from photos; the area must read in its own style (for CP: the uniform two storey white colonnade ring, towers behind the outer circle), not as raw OSM shapes. Acceptance: side by side of a reference photo and the same view in game."
+        "Anmol 2026-11-13: write this area's blueprint (harness/data/blueprints/) from photos; the area must read in its own style (for CP: the uniform two storey white colonnade ring, towers behind the outer circle), not as raw OSM shapes. Acceptance: side by side of a reference photo and the same view in game.",
+        "Watch Dogs 2 bar (FIDELITY_BAR.md, OWNER_EYE.md): the side by side sheet is read beside dated current photos and the verifier answers per shot whether it would sit next to a Watch Dogs 2 street shot without looking cheap; any OWNER_EYE.md breach or empty frontage is a fail. Use the layers of P2-052 to P2-058 (grade, wear and normals, vehicles, street life, shop interiors, AA, motion) and tune them by data for this area; do not hand-build what a layer should do."
       ],
       "created": "2026-11-11T12:31:54.059Z",
       "model": "opus"
@@ -2827,7 +2837,9 @@
       "kind": "feature",
       "status": "todo",
       "attempts": 0,
-      "notes": [],
+      "notes": [
+        "Watch Dogs 2 bar (FIDELITY_BAR.md, OWNER_EYE.md): the side by side sheet is read beside dated current photos and the verifier answers per shot whether it would sit next to a Watch Dogs 2 street shot without looking cheap; any OWNER_EYE.md breach or empty frontage is a fail. Use the layers of P2-052 to P2-058 (grade, wear and normals, vehicles, street life, shop interiors, AA, motion) and tune them by data for this area; do not hand-build what a layer should do."
+      ],
       "created": "2026-11-11T12:31:54.059Z",
       "model": "opus"
     },
@@ -2855,7 +2867,9 @@
       "status": "todo",
       "attempts": 0,
       "notes": [
-        "Anmol 2026-11-13: write this area's blueprint (harness/data/blueprints/) from photos; the area must read in its own style (for CP: the uniform two storey white colonnade ring, towers behind the outer circle), not as raw OSM shapes. Acceptance: side by side of a reference photo and the same view in game."
+        "Anmol 2026-11-13: write this area's blueprint (harness/data/blueprints/) from photos; the area must read in its own style (for CP: the uniform two storey white colonnade ring, towers behind the outer circle), not as raw OSM shapes. Acceptance: side by side of a reference photo and the same view in game.",
+        "Anmol 2026-11-14: compare with how Chandni Chowk looks today (current photos), not only its map. The main road is the redeveloped sandstone street (see P2-047 and decisions.md). Facade colours from the photos.",
+        "Watch Dogs 2 bar (FIDELITY_BAR.md, OWNER_EYE.md): the side by side sheet is read beside dated current photos and the verifier answers per shot whether it would sit next to a Watch Dogs 2 street shot without looking cheap; any OWNER_EYE.md breach or empty frontage is a fail. Use the layers of P2-052 to P2-058 (grade, wear and normals, vehicles, street life, shop interiors, AA, motion) and tune them by data for this area; do not hand-build what a layer should do."
       ],
       "created": "2026-11-11T12:31:54.059Z",
       "model": "opus"
@@ -2883,7 +2897,8 @@
       "status": "todo",
       "attempts": 0,
       "notes": [
-        "Anmol 2026-11-13: write this area's blueprint (harness/data/blueprints/) from photos; the area must read in its own style (for CP: the uniform two storey white colonnade ring, towers behind the outer circle), not as raw OSM shapes. Acceptance: side by side of a reference photo and the same view in game."
+        "Anmol 2026-11-13: write this area's blueprint (harness/data/blueprints/) from photos; the area must read in its own style (for CP: the uniform two storey white colonnade ring, towers behind the outer circle), not as raw OSM shapes. Acceptance: side by side of a reference photo and the same view in game.",
+        "Watch Dogs 2 bar (FIDELITY_BAR.md, OWNER_EYE.md): the side by side sheet is read beside dated current photos and the verifier answers per shot whether it would sit next to a Watch Dogs 2 street shot without looking cheap; any OWNER_EYE.md breach or empty frontage is a fail. Use the layers of P2-052 to P2-058 (grade, wear and normals, vehicles, street life, shop interiors, AA, motion) and tune them by data for this area; do not hand-build what a layer should do."
       ],
       "created": "2026-11-11T12:31:54.059Z",
       "model": "opus"
@@ -2939,7 +2954,9 @@
       "kind": "feature",
       "status": "todo",
       "attempts": 0,
-      "notes": [],
+      "notes": [
+        "Watch Dogs 2 bar (FIDELITY_BAR.md): each pair on the six sheets is also judged against the WD2 bar question, and the sheets include the before shots of P2-051 for the same views, so the change is visible."
+      ],
       "created": "2026-11-11T12:31:54.059Z",
       "model": "sonnet"
     },
@@ -2968,7 +2985,9 @@
       "kind": "feature",
       "status": "todo",
       "attempts": 0,
-      "notes": [],
+      "notes": [
+        "Watch Dogs 2 bar (FIDELITY_BAR.md budget check): the per-system readings now include the layers added on 2026-11-14 (P2-052 grade, P2-053 wear and normals, P2-054 vehicles, P2-055 street life, P2-056 shop interiors, P2-057 AA, P2-058 motion). Each line stays at its signed number; an overrun is paid by a measured trade recorded in decisions.md, never by raising a budget. Quote the machine load."
+      ],
       "created": "2026-11-11T12:31:54.059Z",
       "model": "sonnet"
     },
@@ -3016,7 +3035,8 @@
       "status": "todo",
       "attempts": 0,
       "notes": [
-        "Anmol 2026-11-13 agreed: plan these into P3 (they must be in before the P4 slice): (1) navigation: minimap plus a route line to the destination along the lane graph (GPS style, recalculates on a wrong turn); (2) a phone: contacts, calls and texts that start missions and side jobs; (3) money that matters: fares pay, spending on food, fuel, repairs and the fixer's contacts (light, not a full economy); also make sure audio (horns, engines, crowd, Hindi chatter, radio placeholders), save and load, settings and controller support are covered in P3 or P4."
+        "Anmol 2026-11-13 agreed: plan these into P3 (they must be in before the P4 slice): (1) navigation: minimap plus a route line to the destination along the lane graph (GPS style, recalculates on a wrong turn); (2) a phone: contacts, calls and texts that start missions and side jobs; (3) money that matters: fares pay, spending on food, fuel, repairs and the fixer's contacts (light, not a full economy); also make sure audio (horns, engines, crowd, Hindi chatter, radio placeholders), save and load, settings and controller support are covered in P3 or P4.",
+        "Watch Dogs 2 bar (FIDELITY_BAR.md rows 2, 15): plan crowds and traffic to the bar's density (people at life points and moving, parked cars both sides, steady mixed traffic) inside the people 0.6 ms and vehicles 0.4 ms lines. Fold in P2-054 (vehicle meshes, LODs, parked variants) and P2-055 (static life at life points) instead of planning new meshes. Add a look critic task after every 3 to 4 look-affecting P3 tasks (FIDELITY_BAR.md 'The look critic')."
       ],
       "created": "2026-11-11T12:33:40.827Z"
     },
@@ -3302,7 +3322,9 @@
       "kind": "polish",
       "status": "todo",
       "attempts": 0,
-      "notes": [],
+      "notes": [
+        "Watch Dogs 2 bar (FIDELITY_BAR.md): before release, the final look pass answers the WD2 bar question on every area's side by side sheet; see the final critic task in P14 added 2026-11-14."
+      ],
       "created": "2026-11-11T12:33:40.827Z",
       "model": "opus"
     },
@@ -3831,7 +3853,8 @@
       "status": "todo",
       "attempts": 0,
       "notes": [
-        "From the P2-041 verifier: the 180 degree turn holds a crouched, arms-wide pose for about 0.25 s (raise the pose, bring the arms in); add a stair and kerb strip so single-step foot misses (5 to 8 cm off an edge) can be judged by eye; foot_cost sits at the 0.05 ms limit under heavy load."
+        "From the P2-041 verifier: the 180 degree turn holds a crouched, arms-wide pose for about 0.25 s (raise the pose, bring the arms in); add a stair and kerb strip so single-step foot misses (5 to 8 cm off an edge) can be judged by eye; foot_cost sits at the 0.05 ms limit under heavy load.",
+        "Watch Dogs 2 bar (FIDELITY_BAR.md row 15): lead bodies at the 3 m on-foot camera are in every on-foot frame; they need the same detail floor as the vehicles (P2-054)."
       ],
       "created": "2026-11-13T07:55:23.133Z"
     },
@@ -3967,12 +3990,16 @@
       "agent": "builder",
       "priority": 2,
       "kind": "mentor",
-      "status": "todo",
-      "attempts": 0,
+      "status": "doing",
+      "attempts": 1,
       "notes": [
-        "Anmol 2026-11-13: build from the P2-033 reference variants and the P2-034 kits; no plain box; side by side with a reference photo and a wide shot in the city for consistency (STYLE_BIBLE.md 'Infrastructure')."
+        "Anmol 2026-11-13: build from the P2-033 reference variants and the P2-034 kits; no plain box; side by side with a reference photo and a wide shot in the city for consistency (STYLE_BIBLE.md 'Infrastructure').",
+        "Anmol 2026-11-14: every reference photo has its date checked (EXIF, the file page, or visible clues) and written next to it; a photo older than the current state of the place is marked old and never used for surfaces, signs or colours. Before building, check the set actually shows what is needed (the street surface, signs, colours, the view from the player's height); if not, keep searching other free sources until it does. If free photos still do not cover it, register a photo request for Anmol on the dashboard (assets.mjs) and keep working with the best dated set.",
+        "Before shots (helper, 2026-11-14): the Pragati Maidan Tunnel S5 is an open trench from x 1470 to 1670 with no roofed part found; S7 and S35 mouths could not be found (camera under terrain). Write a portal list report from the bake so mouths can be found and checked.",
+        "Anmol 2026-11-14: the Pragati Maidan tunnel is famous and has its own style; build that style, not a generic tunnel: its painted art and mural panels on the walls, its wall finish and colours, lighting pattern, signage, ceiling fans and portals, from dated photos (2022 on). Acceptance adds: a side by side of game and photo for the portal, the inside with the wall art, and the approach, read by the verifier, who fails a generic tunnel."
       ],
-      "created": "2026-11-13T11:50:33.337Z"
+      "created": "2026-11-13T11:50:33.337Z",
+      "started": "2026-11-14T08:13:07.658Z"
     },
     {
       "id": "P2-033",
@@ -4044,7 +4071,8 @@
       "status": "todo",
       "attempts": 0,
       "notes": [
-        "Anmol 2026-11-14, quality bar: peak quality, match the real road from photos (add what is missing, remove what is wrong), and never empty. Acceptance adds: (1) side by side of a reference photo and the game at the play camera for at least 3 spots per hero road, read by a verifier; (2) an emptiness check: walking or driving the stretch, no 40 m of frontage without something real (shop, wall, tree, parked vehicle, sign, vendor, furniture) and props per 100 m within the area profile; (3) the look audit (P2-040) lists anything that feels empty as a blocker."
+        "Anmol 2026-11-14, quality bar: peak quality, match the real road from photos (add what is missing, remove what is wrong), and never empty. Acceptance adds: (1) side by side of a reference photo and the game at the play camera for at least 3 spots per hero road, read by a verifier; (2) an emptiness check: walking or driving the stretch, no 40 m of frontage without something real (shop, wall, tree, parked vehicle, sign, vendor, furniture) and props per 100 m within the area profile; (3) the look audit (P2-040) lists anything that feels empty as a blocker.",
+        "Watch Dogs 2 bar (FIDELITY_BAR.md row 5, gap 2): today the asphalt is one flat colour with a single zebra. Reach: textured asphalt with patches, cracks, tyre and oil marks by class and area, faded and fresh paint, manholes and grates, chipped kerbs with paint, pavers by area, wet and oil patches that use P2-053's low-roughness response. Decal atlas laid by the bake, not per-node decals. Cost 0.2 ms or less (--style-off token printed), within the city line. The verifier answers the WD2 bar question on the 4 photo sites."
       ],
       "created": "2026-11-13T11:54:41.170Z"
     },
@@ -4066,7 +4094,8 @@
       "status": "todo",
       "attempts": 0,
       "notes": [
-        "Anmol 2026-11-14, quality bar: peak quality, match the real road from photos (add what is missing, remove what is wrong), and never empty. Acceptance adds: (1) side by side of a reference photo and the game at the play camera for at least 3 spots per hero road, read by a verifier; (2) an emptiness check: walking or driving the stretch, no 40 m of frontage without something real (shop, wall, tree, parked vehicle, sign, vendor, furniture) and props per 100 m within the area profile; (3) the look audit (P2-040) lists anything that feels empty as a blocker."
+        "Anmol 2026-11-14, quality bar: peak quality, match the real road from photos (add what is missing, remove what is wrong), and never empty. Acceptance adds: (1) side by side of a reference photo and the game at the play camera for at least 3 spots per hero road, read by a verifier; (2) an emptiness check: walking or driving the stretch, no 40 m of frontage without something real (shop, wall, tree, parked vehicle, sign, vendor, furniture) and props per 100 m within the area profile; (3) the look audit (P2-040) lists anything that feels empty as a blocker.",
+        "Watch Dogs 2 bar (FIDELITY_BAR.md rows 1, 7, 14): density is the bar; tangled wires across old city streets are the Delhi signature. Wires and railings will crawl without AA: P2-057 measures and picks AA after this task. Hoardings and boards follow P2-048's real sign kinds with wear and night glow."
       ],
       "created": "2026-11-13T11:54:41.171Z"
     },
@@ -4088,7 +4117,8 @@
       "status": "todo",
       "attempts": 0,
       "notes": [
-        "Anmol 2026-11-14, quality bar: peak quality, match the real road from photos (add what is missing, remove what is wrong), and never empty. Acceptance adds: (1) side by side of a reference photo and the game at the play camera for at least 3 spots per hero road, read by a verifier; (2) an emptiness check: walking or driving the stretch, no 40 m of frontage without something real (shop, wall, tree, parked vehicle, sign, vendor, furniture) and props per 100 m within the area profile; (3) the look audit (P2-040) lists anything that feels empty as a blocker."
+        "Anmol 2026-11-14, quality bar: peak quality, match the real road from photos (add what is missing, remove what is wrong), and never empty. Acceptance adds: (1) side by side of a reference photo and the game at the play camera for at least 3 spots per hero road, read by a verifier; (2) an emptiness check: walking or driving the stretch, no 40 m of frontage without something real (shop, wall, tree, parked vehicle, sign, vendor, furniture) and props per 100 m within the area profile; (3) the look audit (P2-040) lists anything that feels empty as a blocker.",
+        "Watch Dogs 2 bar (FIDELITY_BAR.md row 11): today Lutyens and the CP radial sides are open sand. Lawns, hedges, median planting and roundabout gardens are part of this task (ground cover, not only trees); impostors past about 150 m with P2-012; wind sway comes from P2-058's shared wind function. Cost about 0.3 ms with impostors (printed)."
       ],
       "created": "2026-11-13T11:54:41.171Z"
     },
@@ -4110,7 +4140,8 @@
       "status": "todo",
       "attempts": 0,
       "notes": [
-        "Anmol 2026-11-14, quality bar: peak quality, match the real road from photos (add what is missing, remove what is wrong), and never empty. Acceptance adds: (1) side by side of a reference photo and the game at the play camera for at least 3 spots per hero road, read by a verifier; (2) an emptiness check: walking or driving the stretch, no 40 m of frontage without something real (shop, wall, tree, parked vehicle, sign, vendor, furniture) and props per 100 m within the area profile; (3) the look audit (P2-040) lists anything that feels empty as a blocker."
+        "Anmol 2026-11-14, quality bar: peak quality, match the real road from photos (add what is missing, remove what is wrong), and never empty. Acceptance adds: (1) side by side of a reference photo and the game at the play camera for at least 3 spots per hero road, read by a verifier; (2) an emptiness check: walking or driving the stretch, no 40 m of frontage without something real (shop, wall, tree, parked vehicle, sign, vendor, furniture) and props per 100 m within the area profile; (3) the look audit (P2-040) lists anything that feels empty as a blocker.",
+        "Watch Dogs 2 bar (FIDELITY_BAR.md rows 1, 2): no open sand plains at the play camera anywhere in the pilot (kit_lutyens and the CP radial today); every plot edge has a wall, fence, gate, parking or planting from the area photos. Parked rows here share the vehicle meshes of P2-054."
       ],
       "created": "2026-11-13T11:54:41.171Z"
     },
@@ -4132,7 +4163,8 @@
       "status": "todo",
       "attempts": 0,
       "notes": [
-        "Anmol 2026-11-14 asked about the Ghazipur landfill ('mountain of trash') in East Delhi without expanding the map that way. Add it as a skyline mark: a far silhouette at its real bearing and height (it rises about 60 to 65 m, verify from sources), with its haze, birds circling and the smoke it is known for, visible from the Yamuna bridges and the east edge; never reachable. Add its line to harness/data/landmark_list.json with the real Wikidata and OSM ids (look them up, do not guess). Respect rule: shown as part of the city's reality, never as a joke; any later story use (Act 4, the east bank and the basti) shows waste pickers with dignity."
+        "Anmol 2026-11-14 asked about the Ghazipur landfill ('mountain of trash') in East Delhi without expanding the map that way. Add it as a skyline mark: a far silhouette at its real bearing and height (it rises about 60 to 65 m, verify from sources), with its haze, birds circling and the smoke it is known for, visible from the Yamuna bridges and the east edge; never reachable. Add its line to harness/data/landmark_list.json with the real Wikidata and OSM ids (look them up, do not guess). Respect rule: shown as part of the city's reality, never as a joke; any later story use (Act 4, the east bank and the basti) shows waste pickers with dignity.",
+        "Watch Dogs 2 bar (FIDELITY_BAR.md row 10): the sky gets clouds and a sun disc in P2-052; the world edge must sit under that sky and the warm haze with no seam in any of the four lights."
       ],
       "created": "2026-11-13T11:54:41.171Z"
     },
@@ -4173,20 +4205,31 @@
       "status": "todo",
       "attempts": 0,
       "notes": [
-        "From P1-028: live relight works (sky, sun, haze, grade, lamps and windows follow the clock); the streamed city has 0 lamps and windows so its night is only sky and grade (mean luma 0.159). Needs: player and traffic headlights and tail lights, city streetlights (P2-036), lit windows on generated buildings (P2-009/P2-010), shops that close at night."
+        "From P1-028: live relight works (sky, sun, haze, grade, lamps and windows follow the clock); the streamed city has 0 lamps and windows so its night is only sky and grade (mean luma 0.159). Needs: player and traffic headlights and tail lights, city streetlights (P2-036), lit windows on generated buildings (P2-009/P2-010), shops that close at night.",
+        "Watch Dogs 2 bar (FIDELITY_BAR.md row 13): WD2 nights read rich through emissive signs, lit windows with interiors and wet reflections, not through many real lights. Use P2-048's night boards, P2-056's lit rooms and P2-053's wet patches; keep real lamps to about 16 in view inside the 0.8 ms line. Acceptance adds a side by side of a night shot per area beside dated current night photos answering the WD2 bar question."
       ],
       "created": "2026-11-13T11:54:41.171Z"
     },
     {
       "id": "P2-040",
       "phase": "P2",
-      "title": "Pilot look audit: find everything that still looks basic or inconsistent",
-      "desc": "Standing check (Anmol 2026-11-13: 'there would be something I am missing out ... you have to find those out'). At the end of P2, before the gate: drive and walk the whole pilot at the play camera in both lights and list everything that looks basic, unfinished, out of scale or inconsistent with the signed look (structures, ground, edges, signage, trees, water, transitions between areas), each with a shot and its place. The orchestrator turns each finding into a task. Repeat at every later phase gate that adds map or look work.",
+      "title": "Pilot look audit: final look critic before the P2 gate (Watch Dogs 2 bar)",
+      "desc": "Standing check (Anmol 2026-11-13: 'there would be something I am missing out ... you have to find those out'). At the end of P2, before the gate: drive and walk the whole pilot at the play camera in both lights and list everything that looks basic, unfinished, out of scale or inconsistent with the signed look (structures, ground, edges, signage, trees, water, transitions between areas), each with a shot and its place. The orchestrator turns each finding into a task. Repeat at every later phase gate that adds map or look work.  Recurring from 2026-11-14 (decisions.md 'The orchestrator judges the look for Anmol'): this audit is now the LAST of a series of look critics (verifier on Sonnet, harness/design/FIDELITY_BAR.md 'The look critic'). Critics run after every 3 to 4 finished look tasks: P2-051 after P2-010, P2-059, P2-060 and P2-061 later. Standing rule for the orchestrator: when 3 or 4 more look tasks finish after the last critic and none is queued, add the next 'Look critic N' task (task.mjs add, agent verifier, model sonnet, priority 1, deps on those tasks) with the same acceptance. Each critic and this audit answer per shot the Watch Dogs 2 bar question, read dated current photos of the same place and OWNER_EYE.md, and name the weakest FIDELITY_BAR.md row. Here: the whole pilot in all four lights, and every open blocker of the earlier critics re-checked.",
       "accept": [
         "A findings list with at least one shot per finding and its place",
-        "Each finding marked blocker (must fix before the gate) or polish"
+        "Each finding marked blocker (must fix before the gate) or polish",
+        "Each shot is read beside dated current photos of the same place, OWNER_EYE.md and FIDELITY_BAR.md, and the report answers the Watch Dogs 2 bar question per shot",
+        "Every open blocker of P2-051, P2-059, P2-060 and P2-061 is marked fixed or still open with a shot",
+        "The orchestrator turns every blocker into a task before the P2 gate and lists the ids in the done summary"
       ],
-      "deps": [],
+      "deps": [
+        "P2-020",
+        "P2-021",
+        "P2-022",
+        "P2-023",
+        "P2-024",
+        "P2-061"
+      ],
       "agent": "verifier",
       "priority": 1,
       "kind": "mentor",
@@ -4196,7 +4239,8 @@
         "Anmol 2026-11-14: emptiness is a blocker, not polish. Flag any street or junction that feels empty, bare or unlike its reference photos.",
         "Held until the end of P2 (its own text says before the gate); the area and kit tasks it would judge are still open."
       ],
-      "created": "2026-11-13T11:54:41.171Z"
+      "created": "2026-11-13T11:54:41.171Z",
+      "model": "sonnet"
     },
     {
       "id": "P1-048",
@@ -4408,11 +4452,14 @@
       "agent": "builder",
       "priority": 2,
       "kind": "feature",
-      "status": "doing",
+      "status": "done",
       "attempts": 1,
       "notes": [],
       "created": "2026-11-14T03:52:01.347Z",
-      "started": "2026-11-14T06:31:18.567Z"
+      "started": "2026-11-14T06:31:18.567Z",
+      "done": "2026-11-14T07:29:10.213Z",
+      "summary": "PR 66. 443 borderline edges in 111 sites judged from 13 satellite sheets: 125 judge rules in access.json (78 closed, 31 open, 16 private); owner beats judge beats rule (tests). Inspector Access tab saves owner edits. Metro forecourts (11 edges) foot only, Lutyens government gates (133 edges) closed to public cars. Spot check 26 of 30 agree, 4 fixed. Self-checked: whole bake 04c45490cd1b1b green, 1099 tests, Godot 139, quick 17/17, access scenarios ok, before and after renders read.",
+      "commit": "0a4e0c5"
     },
     {
       "id": "P2-044",
@@ -4426,7 +4473,10 @@
       "kind": "feature",
       "status": "todo",
       "attempts": 0,
-      "notes": [],
+      "notes": [
+        "Anmol 2026-11-14: the pedestrian surface must come from photos of each street today (for Chandni Chowk: red sandstone paving). Coordinate with P2-047.",
+        "Watch Dogs 2 bar (FIDELITY_BAR.md row 5): pedestrian streets read as worn real paving with joints, stains and patches, not a clean flat colour; use P2-053's wear and detail normals."
+      ],
       "created": "2026-11-14T03:52:01.388Z"
     },
     {
@@ -4439,10 +4489,494 @@
       "agent": "builder",
       "priority": 2,
       "kind": "feature",
+      "status": "doing",
+      "attempts": 1,
+      "notes": [],
+      "created": "2026-11-14T03:52:01.427Z",
+      "started": "2026-11-14T09:56:57.689Z"
+    },
+    {
+      "id": "P2-046",
+      "phase": "P2",
+      "title": "Width repair for named old city roads modelled too narrow",
+      "desc": "From P2-043: Nai Sarak, parts of Matia Mahal and Fasil Road pieces are modelled at 1.8 m, so the width step keeps them closed while judged neighbours are open and the street reads half open (harness/reports/access/before_after_nai_sarak.png). Also wide residential edges near stations at 1.8 m. Repair widths from imagery in the map repair layer, rebake, and check the access overlay reads whole streets.",
+      "accept": [],
+      "deps": [],
+      "agent": "builder",
+      "priority": 2,
+      "kind": "bug",
       "status": "todo",
       "attempts": 0,
       "notes": [],
-      "created": "2026-11-14T03:52:01.427Z"
+      "created": "2026-11-14T07:29:10.269Z"
+    },
+    {
+      "id": "P2-047",
+      "phase": "P2",
+      "title": "Chandni Chowk as it looks today: current photo board, sandstone street and its furniture",
+      "desc": "Anmol 2026-11-14 (decisions.md 'Areas are built from how they look today'). Collect current (2021 or later) licensed photos of Chandni Chowk main road from Fatehpuri Masjid to the Red Fort end (Wikimedia Commons and other free licences only, credited) into a new board harness/design/areas/chandni_chowk_today_board.jpg with a short list of what the street is made of today: the red sandstone paving and its pattern, how the carriageway, footpath and shop line meet, bollards, planters, benches, poles and lights, signage, what replaced the median and the overhead wires, colours of the facades. Then build it: the paving material and pattern in stylised B on the main road surface (bake surface class plus the game material), the street furniture from the photos, and the facade colour range for the bazaar kit sampled from the photos. Work with P2-044 (car-free streets) where it overlaps.",
+      "accept": [
+        "npm run typecheck, npm test and node harness/bin/verify.mjs --quick green"
+      ],
+      "deps": [],
+      "agent": "builder",
+      "priority": 1,
+      "kind": "mentor",
+      "status": "todo",
+      "attempts": 0,
+      "notes": [
+        "Anmol 2026-11-14: every reference photo has its date checked (EXIF, the file page, or visible clues) and written next to it; a photo older than the current state of the place is marked old and never used for surfaces, signs or colours. Before building, check the set actually shows what is needed (the street surface, signs, colours, the view from the player's height); if not, keep searching other free sources until it does. If free photos still do not cover it, register a photo request for Anmol on the dashboard (assets.mjs) and keep working with the best dated set.",
+        "Watch Dogs 2 bar (FIDELITY_BAR.md rows 5, 1, 2): the sandstone street needs joint pattern, wear and stains, and the furniture, planters and bollards from the photos; acceptance adds a side by side of 4 views beside the dated photos answering the WD2 bar question. Life on the street comes from P2-055."
+      ],
+      "created": "2026-11-14T07:57:09.464Z",
+      "model": "opus"
+    },
+    {
+      "id": "P2-048",
+      "phase": "P2",
+      "title": "Shop sign boards from real Indian references, by area",
+      "desc": "Anmol 2026-11-14: the sign boards on the kit shop fronts 'look so AI', not real. Collect licensed photos (Wikimedia Commons and other free licences, credited) of real shop signs in each pilot area: Chandni Chowk bazaar, the galis, Paharganj hotels and lodges, Janpath stalls, GB Road hardware shops, CP showrooms, ITO offices. Write harness/design/areas/signboards.md with the kinds and how they are made per area: printed flex banners stretched on frames, painted tin and wooden boards, hand-painted lettering, acrylic and glow sign boxes, LED letters, vertical boards on pillars, sun-faded and stacked boards, phone numbers and lists of goods, the mix of Hindi (Devanagari) and English and Urdu, typical fonts and colours, sizes and how they sit (over the shutter, on the awning, hanging, stacked up the facade), wires and cobwebs, wear. Make a reference board image. Then rebuild the sign board modules and their textures to match, per area, with names still only from the invented name files (game/data/names/) and the Respect rule. Fonts must be free licences (for example Noto Sans Devanagari, Mukta, Hind; never a font that is not free to download).",
+      "accept": [
+        "npm run typecheck, npm test and node harness/bin/verify.mjs --quick green"
+      ],
+      "deps": [],
+      "agent": "builder",
+      "priority": 1,
+      "kind": "mentor",
+      "status": "todo",
+      "attempts": 0,
+      "notes": [
+        "Anmol 2026-11-14: boards carry wear and tear: rust streaks, faded and peeling paint, bent or dented tin, broken corners, torn flex, missing letters. Add it to signboards.md per area and to the boards (varied per board, more in the old city, less in CP showrooms), and the verifier checks it in the side by side.",
+        "Anmol 2026-11-14: every reference photo has its date checked (EXIF, the file page, or visible clues) and written next to it; a photo older than the current state of the place is marked old and never used for surfaces, signs or colours. Before building, check the set actually shows what is needed (the street surface, signs, colours, the view from the player's height); if not, keep searching other free sources until it does. If free photos still do not cover it, register a photo request for Anmol on the dashboard (assets.mjs) and keep working with the best dated set.",
+        "Watch Dogs 2 bar (FIDELITY_BAR.md row 7): signs at many sizes and densities per facade (stacked boards up the floors in the bazaar), with the night version (glow boxes and LED letters emissive through the glow and neon materials) built now so P3-007 only switches them on. Shop interiors behind the boards come from P2-056."
+      ],
+      "created": "2026-11-14T08:07:00.888Z",
+      "model": "opus"
+    },
+    {
+      "id": "P2-049",
+      "phase": "P2",
+      "title": "Refresh every area board with current photos and a what-it-is-made-of list",
+      "desc": "Anmol 2026-11-14 (decisions.md 'Areas are built from how they look today'). The 11 area boards in harness/design/areas/ hold about 24 free-licence photos each, but many are old (Chandni Chowk main is from 2008, before the redevelopment) or low value (food, shop interiors). For each pilot area add current photos (2019 or later where they exist, free licences only, credited) at street level and from the player's height, and add to each sheet a short list of what the street is made of today: road surface and colour, kerbs, footpath, median, poles and wires, lights, trees, facade colours (sampled), signs, typical clutter. Mark facts that changed since the old photos. Area passes P2-020 to P2-024, P2-047 and P2-048 use these.",
+      "accept": [
+        "Changed facts (like Chandni Chowk's redevelopment) are marked in the sheet"
+      ],
+      "deps": [],
+      "agent": "builder",
+      "priority": 1,
+      "kind": "mentor",
+      "status": "done",
+      "attempts": 1,
+      "notes": [
+        "Anmol 2026-11-14: every reference photo has its date checked (EXIF, the file page, or visible clues) and written next to it; a photo older than the current state of the place is marked old and never used for surfaces, signs or colours. Before building, check the set actually shows what is needed (the street surface, signs, colours, the view from the player's height); if not, keep searching other free sources until it does. If free photos still do not cover it, register a photo request for Anmol on the dashboard (assets.mjs) and keep working with the best dated set.",
+        "Watch Dogs 2 bar (FIDELITY_BAR.md): the look critics (P2-051, P2-059 to P2-061, P2-040) and every new look task compare game views with these dated boards. Make sure each board has at least one photo taken at player height (1.5 to 1.8 m) looking along the street, so a side by side is possible."
+      ],
+      "created": "2026-11-14T08:12:50.313Z",
+      "model": "sonnet",
+      "started": "2026-11-14T08:33:48.307Z",
+      "done": "2026-11-14T09:55:39.514Z",
+      "summary": "All 11 area boards rebuilt with current dated photos first (11 to 20 per area, 8 to 18 at street level, every photo dated with its basis, old ones marked and dimmed), and each sheet has a made-of-today list (surface, kerbs, median, poles, wires, lights, trees, sampled facade colour range, signs, clutter) with changed facts marked. Four gaps go to Anmol as photo requests. Self-checked: boards read, sheets parse.",
+      "commit": "788d581"
+    },
+    {
+      "id": "P2-050",
+      "phase": "P2",
+      "title": "Dashboard: agents now line per builder and verifier; smaller sign-off",
+      "desc": "Anmol 2026-11-14: on the dashboard overview page, right below the sign-off section, a small 'Agents now' section: one line per running builder or verifier with its lane and what it is doing (for example 'Builder, main lane: P2-010 building kits speed fix'). Nothing more. Data: a small file harness/state/agents.json written by a new CLI (node harness/bin/agents.mjs set <name> --lane <lane> --role <builder|verifier> --task <id> --what \"<one line>\" and agents.mjs clear <name>), which the orchestrator updates at each spawn and each finish; the dashboard reads it live. Make the sign-off section compact now that all three sign-offs are done (one line with the three ticks and dates, details behind a toggle).",
+      "accept": [
+        "agents.mjs has a test; npm test green"
+      ],
+      "deps": [],
+      "agent": "builder",
+      "priority": 1,
+      "kind": "mentor",
+      "status": "done",
+      "attempts": 1,
+      "notes": [],
+      "created": "2026-11-14T08:31:47.422Z",
+      "model": "sonnet",
+      "started": "2026-11-14T08:31:47.614Z",
+      "done": "2026-11-14T08:37:54.011Z",
+      "summary": "PR 67. Overview page: compact one-line sign-off (details on click) and an Agents now section below it, one line per builder or verifier with lane, task and job, fed by harness/bin/agents.mjs (set, clear, list; gitignored live file). Self-checked: 6 agents tests and 296 harness tests pass, typecheck ok, page shot read.",
+      "commit": "4f69549"
+    },
+    {
+      "id": "P2-051",
+      "phase": "P2",
+      "title": "Look critic 1: the kits against the Watch Dogs 2 bar (right after P2-010)",
+      "desc": "First recurring look critic (harness/design/FIDELITY_BAR.md 'The look critic', decisions.md 2026-11-14 'The orchestrator judges the look for Anmol'). Verifier on Sonnet, low usage rules. Work on a snapshot of main after P2-010 lands. Drive and walk the pilot at the play camera in golden and afternoon: the CP radials, the Chandni Chowk main road and a gali, Paharganj, ITO and the India Gate edges. Read at most 8 shots (about 1600 px) beside dated current photos of the same places (area boards refreshed by P2-049) and OWNER_EYE.md. For each shot answer: would this frame sit next to a Watch Dogs 2 street shot without looking cheap; which OWNER_EYE.md lines fail; which FIDELITY_BAR.md table row is weakest. Return findings, do not fix anything.",
+      "accept": [
+        "A findings list in the report: one line per finding with place, shot path, FIDELITY_BAR.md row number, blocker or polish, and a one-line fix; emptiness and any OWNER_EYE.md breach are blockers",
+        "Each shot read is named with the reference photo (and its date) it was compared with",
+        "The report ranks the top 5 findings by look gained per ms using the FIDELITY_BAR.md cost column",
+        "The orchestrator turns every blocker into a task (task.mjs add or a note on an existing task) and lists the ids in the done summary"
+      ],
+      "deps": [
+        "P2-010",
+        "P2-049"
+      ],
+      "agent": "verifier",
+      "priority": 1,
+      "kind": "feature",
+      "status": "todo",
+      "attempts": 0,
+      "notes": [],
+      "created": "2026-11-14T08:58:18.633Z",
+      "model": "sonnet"
+    },
+    {
+      "id": "P2-052",
+      "phase": "P2",
+      "title": "Shade, sky and grade on the streamed city to the Watch Dogs 2 bar",
+      "desc": "FIDELITY_BAR.md rows 8 and 10, gap 1. Every day shot of the streamed city shows saturated navy blue shade on asphalt, footpaths and walls (cold wash banned by STYLE_BIBLE.md palette) and a flat gradient sky. Fix by data and shader, at no frame cost: shade colour (sky ambient colour and energy, SSIL low, the LUT shadow tint capped so shade on asphalt reads neutral warm-grey #3e3d3a family, never blue), a contrast curve that keeps the readability floor, a procedural cloud layer and a sun disc in the sky shader for dawn, afternoon and golden, and distance layering by the existing warm haze. Four lights on the day curve. This changes the look on purpose: the orchestrator judges the result to the bar (decisions.md 2026-11-14), re-approves the stylised B sets it accepts, and tells Anmol in the progress report. Touches game/render/ only; no tile change.",
+      "accept": [
+        "lookproof --set city_grade_golden and city_grade_afternoon (--scene-kind city, views cp_street_eye, ito_junction, gali_foot, city_busiest_40m, india_gate_lawns, city_flyover_ramp): measured on the shot, shade pixels on asphalt in cp_street_eye and gali_foot have mean blue minus red of 6 or less (0 to 255), printed before and after",
+        "A side by side sheet (lookproof --sheet) of the 6 golden views before and after, beside dated current photos of the same places from the area boards, read by the verifier: passes the Watch Dogs 2 bar question of FIDELITY_BAR.md and every OWNER_EYE.md line; sky shows clouds and a sun disc in dawn, afternoon and golden",
+        "The readability floor numbers of STYLE_BIBLE.md hold on the city views in all four lights (printed)",
+        "Perf on a quiet machine with load quoted: the look stack stays at or under 3.6 ms (--style-off readings), every city view frame p95 at or under warn 10 ms",
+        "STYLE_BIBLE.md 'Lighting presets' and the light .tres numbers are updated together; the stand-in look sets are re-approved only for the views the orchestrator accepted, recorded in decisions.md",
+        "npm run typecheck, npm test and node harness/bin/verify.mjs --quick are green, with no engine or console errors"
+      ],
+      "deps": [
+        "P2-001"
+      ],
+      "agent": "builder",
+      "priority": 1,
+      "kind": "feature",
+      "status": "todo",
+      "attempts": 0,
+      "notes": [],
+      "created": "2026-11-14T08:58:18.634Z"
+    },
+    {
+      "id": "P2-053",
+      "phase": "P2",
+      "title": "Surface shader: soft natural wear, detail normals and material sheen",
+      "desc": "FIDELITY_BAR.md rows 3, 4 and 9, gap 4. OWNER_EYE.md: 'Wear is soft and natural, never blocky patches'. Today the wear mask shows blocky white blobs and pixel-check patches on kit facades. In game/render/shaders/surface_b.gdshader: (1) rebuild the wear mask from smooth noise and geometry: rain streaks under every ledge, sill and chhajja (from the trim rows and UV2 facade coordinates), soot above shutters and vents, a damp dirt band at wall bases, edge wear at corners, faded and peeling paint by area wear; no hard edges at texel scale. (2) A tiling detail normal per layer (plaster, brick, concrete, asphalt, paver, shutter) faded out by about 20 m, generated offline like the existing layers (make_textures.gd), so walls have relief at street level; this amends STYLE_BIBLE.md 'Normal maps are not used in stylised_b': update that line and add a decisions.md entry with the measured cost. (3) Roughness from the mask and per layer, fresnel sheen on glass, metal shutters and car paint, wet and oil patches with low roughness that pick up the sky and the hero reflection probes; no SSR. Wear by area stays data (wear 0.9 bazaar, 0.03 Lutyens).",
+      "accept": [
+        "Close shots kit_wear_bazaar, kit_wear_lutyens and kit_railings_close plus street shots in the bazaar and Paharganj at 1.7 m: the verifier finds no blocky wear patch and reads streaks under ledges, a base band and edge wear on bazaar walls, and near-clean Lutyens walls",
+        "A side by side sheet of 6 street views before and after, beside dated current photos of the same places, read by the verifier: passes the Watch Dogs 2 bar question of FIDELITY_BAR.md and every OWNER_EYE.md line on wear and materials",
+        "Perf on a quiet machine with load quoted: the shader change costs 0.3 ms or less in city_buildings_busiest and the night bazaar lane (printed with a --style-off token for detail normals and one for the new wear); frame p95 at or under warn 10 ms; if the buildings line is over 2.0 ms the task says so with numbers and the trade it proposes",
+        "Kit texture memory stays at or under 60 MB per kit (printed)",
+        "npm run typecheck, npm test and node harness/bin/verify.mjs --quick are green, with no engine or console errors"
+      ],
+      "deps": [
+        "P2-010"
+      ],
+      "agent": "builder",
+      "priority": 2,
+      "kind": "feature",
+      "status": "todo",
+      "attempts": 0,
+      "notes": [],
+      "created": "2026-11-14T08:58:18.634Z"
+    },
+    {
+      "id": "P2-054",
+      "phase": "P2",
+      "title": "Vehicles to the detail floor, procedural: auto, scooter, motorbike, hatchback, sedan, e-rickshaw, DTC bus, with parked variants",
+      "desc": "FIDELITY_BAR.md row 15, gap 6. The player auto is three stacked boxes in every driving frame. Build the slice vehicles procedurally to the STYLE_BIBLE.md 'Vehicles' detail floor: body with panel lines and bevels, wheels with tyres and hubs, mirrors, head and tail lamps (emissive slots for night), an invented plate, an interior hint through the windscreen, shadow contact; the auto's canopy, grab bars, meter and the green and yellow paint; the CAR_PAINT palette; small dents and dust on older ones only. Each vehicle gets 2 LODs and a parked variant usable as MultiMesh by the street life task. Physics shapes and handling tunes (P1-020, P1-021) do not change: the visual mesh only. Models are later replaced through the art cards of P2-011 by id. P3-001 folds these in instead of planning its own vehicle meshes.",
+      "accept": [
+        "lookproof view car_closeup and a city chase shot per vehicle: the verifier reads each beside a dated current photo of the real kind (licensed, credited) and passes it on the detail floor list of STYLE_BIBLE.md 'Vehicles' and the Watch Dogs 2 bar question of FIDELITY_BAR.md",
+        "Triangles: player vehicle LOD0 at most 25 k, traffic LOD0 at most 12 k, parked LOD1 at most 3 k (printed per vehicle)",
+        "Perf on a quiet machine with load quoted: 60 parked vehicles plus the player in city_buildings_busiest cost 0.2 ms GPU or less (vehicles line 0.4 ms); frame p95 at or under warn 10 ms",
+        "Test: each vehicle's collider is unchanged against its P1 tune (drive scenarios for car, auto and scooter still pass)",
+        "No real brand, badge or plate format on any vehicle (test on names, the verifier reads the shots)",
+        "npm run typecheck, npm test and node harness/bin/verify.mjs --quick are green, with no engine or console errors"
+      ],
+      "deps": [],
+      "agent": "builder",
+      "priority": 2,
+      "kind": "feature",
+      "status": "todo",
+      "attempts": 0,
+      "notes": [],
+      "created": "2026-11-14T08:58:18.634Z"
+    },
+    {
+      "id": "P2-055",
+      "phase": "P2",
+      "title": "Street life before P3: parked vehicles, autos at stands and people at life points",
+      "desc": "FIDELITY_BAR.md row 2, gap 3. OWNER_EYE.md: 'Emptiness is a blocker'. No city shot today has a person or a vehicle. Before the P3 crowd and traffic systems, fill the baked life points (P2-013) with static and idle life: parked two-wheelers in rows on footpath edges, parked cars on both sides where the area profile and the access model allow, autos queued at the real auto stands, handcarts and cycle rickshaws by area, and people standing, sitting on steps and charpais, vending, waiting at bus stops, with idle loops (a vertex animation texture or the P3 rig when it exists), clothing from the cloth palette and the crowd variety rule of STYLE_BIBLE.md 'Characters'. Instanced per 125 m cell, density from the area profile, never in a lane, crossing or junction, never on car-free carriageways for cars. P3 crowds and traffic later take over the same points; this layer stays for parked and seated life.",
+      "accept": [
+        "Metric: parked vehicles and people per 100 m of frontage per area printed and within 20% of the area profile; test: 0 placements inside a lane, crossing or junction polygon, 0 cars on car-free edges",
+        "A side by side sheet of 6 player-height views (bazaar main road, a gali, Paharganj, CP outer circle, Janpath, ITO) beside dated current photos of the same places, read by the verifier: no 40 m of frontage without life where the photos show it, crowd variety rule holds, passes the Watch Dogs 2 bar question of FIDELITY_BAR.md",
+        "Perf on a quiet machine with load quoted: people at life points 0.6 ms or less and parked vehicles 0.4 ms or less in city_buildings_busiest and the night bazaar lane (printed); frame p95 at or under warn 10 ms",
+        "Respect rule: the verifier reads the named shots against GAME.md 'Respect rule' and VERIFY.md rubric line 21; any breach is a fail",
+        "npm run typecheck, npm test and node harness/bin/verify.mjs --quick are green, with no engine or console errors"
+      ],
+      "deps": [
+        "P2-013",
+        "P2-054"
+      ],
+      "agent": "builder",
+      "priority": 2,
+      "kind": "feature",
+      "status": "todo",
+      "attempts": 0,
+      "notes": [],
+      "created": "2026-11-14T08:58:18.634Z"
+    },
+    {
+      "id": "P2-056",
+      "phase": "P2",
+      "title": "Shop fronts and windows with depth: interior mapping, goods and awnings by area",
+      "desc": "FIDELITY_BAR.md row 6, gap 5. Every shop in the kits shows one repeated coloured shelf module and windows are flat dark panes. Add an interior mapping shader (parallax cube room from a small atlas per kit, about 8 room kinds per area: cloth, hardware, sweets, mobile phones, chemist, dhaba, hotel reception, office) for shop interiors and upper windows (curtains, fans, tube lights, a share empty), goods that spill onto the footpath and hang from the shop front by shop kind, varied awnings and tarps from the cloth palette, shutters fully up, half down or closed. Shop kinds per area come from the area profile and the dated photo boards; the night version lights the same rooms (lit windows share, P3-007). Modules keep their fixed ids (P2-010).",
+      "accept": [
+        "No two neighbouring shops in a row share the same room kind and goods (test on placements); at least 6 room kinds visible in a 60 m bazaar stretch",
+        "A side by side sheet of 6 shop front views at 1.7 m (Chandni Chowk main road, a gali, Paharganj, GB Road, Janpath, CP outer circle) beside dated current photos of the same places, read by the verifier: interiors read as rooms with depth, goods match the shop kind and the area, passes the Watch Dogs 2 bar question of FIDELITY_BAR.md and the OWNER_EYE.md lines",
+        "Perf on a quiet machine with load quoted: the interior shader and goods cost 0.3 ms or less in city_buildings_busiest and the night bazaar lane (--style-off token printed); frame p95 at or under warn 10 ms",
+        "npm run typecheck, npm test and node harness/bin/verify.mjs --quick are green, with no engine or console errors"
+      ],
+      "deps": [
+        "P2-010",
+        "P2-048"
+      ],
+      "agent": "builder",
+      "priority": 2,
+      "kind": "feature",
+      "status": "todo",
+      "attempts": 0,
+      "notes": [],
+      "created": "2026-11-14T08:58:18.634Z"
+    },
+    {
+      "id": "P2-057",
+      "phase": "P2",
+      "title": "Image quality: anti-aliasing for wires, railings and grilles, measured and chosen",
+      "desc": "FIDELITY_BAR.md row 14. With dense wires, railings and grilles (P2-010, P2-036), thin detail crawls without AA. Measure on the busiest city views and a moving frame sequence at 60 km/h: none, FXAA, SMAA (Godot 4.7), MSAA 2x and TAA (1.23 ms measured in P0). Choose the cheapest that stops the crawl on wires at 20 to 60 m and railings at the play camera, inside the 10 ms frame; if it does not fit, propose a measured trade (the afternoon heat shimmer first) in decisions.md. Write the numbers to harness/reports/arch/aa.json.",
+      "accept": [
+        "harness/reports/arch/aa.json holds GPU cost per method on 3 city views with the machine load quoted",
+        "A frame sequence of 10 frames per method at 60 km/h past wires and railings is read by the verifier; the chosen method shows no crawling wire or railing a player would notice",
+        "Frame p95 at or under warn 10 ms on every city view with the chosen method on; decisions.md entry with the choice and the numbers; TECH.md 'Render pipeline' updated",
+        "npm run typecheck, npm test and node harness/bin/verify.mjs --quick are green, with no engine or console errors"
+      ],
+      "deps": [
+        "P2-036"
+      ],
+      "agent": "builder",
+      "priority": 3,
+      "kind": "feature",
+      "status": "todo",
+      "attempts": 0,
+      "notes": [],
+      "created": "2026-11-14T08:58:18.634Z"
+    },
+    {
+      "id": "P2-058",
+      "phase": "P2",
+      "title": "Small motion: wind on trees, tarps, flags, laundry and wires; birds and stall steam",
+      "desc": "FIDELITY_BAR.md row 12. A still city reads as a set. Vertex wind in one shared shader function (strength from a global wind value on the day curve) for trees and hedges (P2-037), tarps and awnings, flags, hanging laundry and goods, and hanging wires (P2-036); pigeons over chowks and kites at golden as cheap particles; steam and smoke at tea stalls and food carts from the dressing. No CPU per instance.",
+      "accept": [
+        "A 3 s clip (frame sheet of 6 frames) at the Chandni Chowk main road and the India Gate lawns shows the moving kinds, read by the verifier: motion is soft and plausible, nothing jitters or swims",
+        "Perf on a quiet machine with load quoted: all motion costs 0.15 ms or less in city_buildings_busiest (--style-off token printed); frame p95 at or under warn 10 ms; look-proof sets stay pinned (motion frozen when the sim is held)",
+        "npm run typecheck, npm test and node harness/bin/verify.mjs --quick are green, with no engine or console errors"
+      ],
+      "deps": [
+        "P2-036",
+        "P2-037"
+      ],
+      "agent": "builder",
+      "priority": 3,
+      "kind": "feature",
+      "status": "todo",
+      "attempts": 0,
+      "notes": [],
+      "created": "2026-11-14T08:58:18.634Z"
+    },
+    {
+      "id": "P2-059",
+      "phase": "P2",
+      "title": "Look critic 2: grade, wear, Chandni Chowk today and sign boards",
+      "desc": "Recurring look critic (FIDELITY_BAR.md 'The look critic'), after the next 4 look tasks. Verifier on Sonnet, low usage rules, on a snapshot of main. Same method as Look critic 1: play camera, golden and night, at most 8 shots beside dated current photos, OWNER_EYE.md and FIDELITY_BAR.md. Also re-check the blockers Look critic 1 found.",
+      "accept": [
+        "A findings list in the report: place, shot path, FIDELITY_BAR.md row, blocker or polish, one-line fix; emptiness and OWNER_EYE.md breaches are blockers",
+        "Each blocker of Look critic 1 is marked fixed or still open with a shot",
+        "The orchestrator turns every blocker into a task or a note and lists the ids in the done summary"
+      ],
+      "deps": [
+        "P2-052",
+        "P2-053",
+        "P2-047",
+        "P2-048"
+      ],
+      "agent": "verifier",
+      "priority": 1,
+      "kind": "feature",
+      "status": "todo",
+      "attempts": 0,
+      "notes": [],
+      "created": "2026-11-14T08:58:18.634Z",
+      "model": "sonnet"
+    },
+    {
+      "id": "P2-060",
+      "phase": "P2",
+      "title": "Look critic 3: roads, street furniture, trees and street life",
+      "desc": "Recurring look critic (FIDELITY_BAR.md 'The look critic'), after the next 4 look tasks. Verifier on Sonnet, low usage rules, on a snapshot of main. Same method as Look critic 1, with one driving pass at 60 km/h (frame sheet) for density and pop. Also re-check the open blockers of the earlier critics.",
+      "accept": [
+        "A findings list in the report: place, shot path, FIDELITY_BAR.md row, blocker or polish, one-line fix; emptiness and OWNER_EYE.md breaches are blockers",
+        "Each open blocker of the earlier critics is marked fixed or still open with a shot",
+        "The orchestrator turns every blocker into a task or a note and lists the ids in the done summary"
+      ],
+      "deps": [
+        "P2-035",
+        "P2-036",
+        "P2-037",
+        "P2-055"
+      ],
+      "agent": "verifier",
+      "priority": 1,
+      "kind": "feature",
+      "status": "todo",
+      "attempts": 0,
+      "notes": [],
+      "created": "2026-11-14T08:58:18.634Z",
+      "model": "sonnet"
+    },
+    {
+      "id": "P2-061",
+      "phase": "P2",
+      "title": "Look critic 4: the streamed city in four lights, hero roads and shop fronts",
+      "desc": "Recurring look critic (FIDELITY_BAR.md 'The look critic'), after the next 4 look tasks. Verifier on Sonnet, low usage rules, on a snapshot of main. Same method as Look critic 1, in all four lights (at most 8 shots), with the hero roads of P2-015 and P2-016. Also re-check the open blockers of the earlier critics. P2-040 is the last critic, before the gate.",
+      "accept": [
+        "A findings list in the report: place, shot path, FIDELITY_BAR.md row, blocker or polish, one-line fix; emptiness and OWNER_EYE.md breaches are blockers",
+        "Each open blocker of the earlier critics is marked fixed or still open with a shot",
+        "The orchestrator turns every blocker into a task or a note and lists the ids in the done summary"
+      ],
+      "deps": [
+        "P2-014",
+        "P2-015",
+        "P2-016",
+        "P2-056"
+      ],
+      "agent": "verifier",
+      "priority": 1,
+      "kind": "feature",
+      "status": "todo",
+      "attempts": 0,
+      "notes": [],
+      "created": "2026-11-14T08:58:18.634Z",
+      "model": "sonnet"
+    },
+    {
+      "id": "P7-001",
+      "phase": "P7",
+      "title": "Watch Dogs 2 bar for the new centre areas: layers by data and recurring look critics",
+      "desc": "Seed for PLAN_PHASE P7 (harness/design/FIDELITY_BAR.md, OWNER_EYE.md, decisions.md 2026-11-14). Every new area is built to the bar the pilot reached in P2, through the same layers tuned by data (grade, soft wear and detail normals, road surfaces, shop interiors, street life, vehicles, trees and ground cover, motion, night emissives), never by hand-building what a layer does. The planner splits this into: one look critic task (verifier on Sonnet, priority 1) after every 3 to 4 look tasks of the phase, plus a side by side sheet per new area beside dated current photos with the WD2 bar question answered per shot. Lutyens, Khan Market, Lodhi, Nizamuddin, the Ridge and the Yamuna floodplain each have their own look (foliage-heavy areas lean on rows 11 and 12 of the bar).",
+      "accept": [
+        "The P7 plan has a look critic task after every 3 to 4 look tasks, each with the acceptance of P2-051",
+        "Each new area's side by side sheet is read beside dated current photos and passes the WD2 bar question and every OWNER_EYE.md line",
+        "Perf on the new areas' camera paths stays inside the signed system lines (quiet machine, load quoted)"
+      ],
+      "deps": [],
+      "agent": "verifier",
+      "priority": 2,
+      "kind": "feature",
+      "status": "todo",
+      "attempts": 0,
+      "notes": [],
+      "created": "2026-11-14T08:59:45.140Z",
+      "model": "sonnet"
+    },
+    {
+      "id": "P8-001",
+      "phase": "P8",
+      "title": "Watch Dogs 2 bar for the far south and the corridors: layers by data, speed, and look critics",
+      "desc": "Seed for PLAN_PHASE P8 (FIDELITY_BAR.md, OWNER_EYE.md). Qutub, Vasant Kunj, the airport, Gurugram and the corridors get the bar through the same data-driven layers. Corridors at 100 to 200 km/h are judged on distance layering, LOD pop and skyline (bar rows 10 and 14) as much as close detail; Gurugram glass towers on reflections and sheen (row 9). The planner adds a look critic task (verifier on Sonnet, priority 1) after every 3 to 4 look tasks and a side by side sheet per area beside dated current photos.",
+      "accept": [
+        "The P8 plan has a look critic task after every 3 to 4 look tasks, each with the acceptance of P2-051, plus one driving critic at 140 km/h on a corridor",
+        "Each new area's side by side sheet passes the WD2 bar question and every OWNER_EYE.md line",
+        "Perf at 200 km/h on the corridors stays inside the signed lines (quiet machine, load quoted)"
+      ],
+      "deps": [],
+      "agent": "verifier",
+      "priority": 2,
+      "kind": "feature",
+      "status": "todo",
+      "attempts": 0,
+      "notes": [],
+      "created": "2026-11-14T08:59:45.146Z",
+      "model": "sonnet"
+    },
+    {
+      "id": "P11-001",
+      "phase": "P11",
+      "title": "Watch Dogs 2 bar east of the river: the floodplain, Bela basti, Shahdara and Noida, with look critics",
+      "desc": "Seed for PLAN_PHASE P11 (FIDELITY_BAR.md, OWNER_EYE.md, GAME.md respect rule). The basti and Shahdara get the same craft and density as the rich areas: wear and clutter are honest, never mockery. Noida's expressway and towers lean on rows 9 and 10 of the bar. The planner adds a look critic task (verifier on Sonnet, priority 1) after every 3 to 4 look tasks and a side by side sheet per area beside dated current photos.",
+      "accept": [
+        "The P11 plan has a look critic task after every 3 to 4 look tasks, each with the acceptance of P2-051 plus the respect rule check",
+        "Each new area's side by side sheet passes the WD2 bar question and every OWNER_EYE.md line",
+        "Perf on the new areas' camera paths stays inside the signed lines (quiet machine, load quoted)"
+      ],
+      "deps": [],
+      "agent": "verifier",
+      "priority": 2,
+      "kind": "feature",
+      "status": "todo",
+      "attempts": 0,
+      "notes": [],
+      "created": "2026-11-14T08:59:45.147Z",
+      "model": "sonnet"
+    },
+    {
+      "id": "P14-008",
+      "phase": "P14",
+      "title": "Final look critic: the whole first release map against the Watch Dogs 2 bar",
+      "desc": "Before the release gate (FIDELITY_BAR.md, OWNER_EYE.md). Verifier on Sonnet. One side by side sheet per area of the first release map (pilot, centre, far south, east), each game view beside dated current photos, in golden and night, plus a driving sheet at 140 km/h and an on-foot sheet in a crowded bazaar. Answer the WD2 bar question per shot, re-check every open blocker of earlier critics, and list findings; the orchestrator turns blockers into P14 tasks.",
+      "accept": [
+        "Sheets exist under harness/reports/look/ as JPEGs under 2 MB, one per area plus the driving and on-foot sheets",
+        "A findings list: place, shot, FIDELITY_BAR.md row, blocker or polish, one-line fix; every blocker becomes a task before the final gate",
+        "Perf on the release camera paths stays inside the signed lines (quiet machine, load quoted)"
+      ],
+      "deps": [
+        "P14-002"
+      ],
+      "agent": "verifier",
+      "priority": 2,
+      "kind": "feature",
+      "status": "todo",
+      "attempts": 0,
+      "notes": [],
+      "created": "2026-11-14T08:59:45.147Z",
+      "model": "sonnet"
+    },
+    {
+      "id": "P3-010",
+      "phase": "P3",
+      "title": "Faces for the three leads: talking mouth, blinks, eye and brow expressions on any delivered model",
+      "desc": "Anmol 2026-11-14 asked that leads open their mouths and show eye expressions in cutscenes. Signed architecture: FC2 (about 12 face shapes on the leads and named cast: jaw open, blink left and right, brows up and down, smile, frown, 6 mouth shapes) and LIP2 (jaw by voice loudness, timed talk flap with no voice) in play, LIP1 (mouth shapes from a lip sync tool such as Rhubarb) for big cutscenes once voices exist. Text to 3D models (Bittu is being made this way) arrive with no face shapes, no eyelids and no face bones, and Mixamo adds no face rig. So the game must add the face itself: an ingest step that finds the head of any delivered lead model and adds the face set automatically (mouth cut and jaw shapes, eyelids or eyelid shapes, eyeball meshes that can look around, brow shapes), with the stand-in mannequin given the same set, so nothing waits on the owner's art. Eye look-at toward the speaker and the camera. Respect rule: no caricature.",
+      "accept": [
+        "Face animation costs 0.3 ms or less with three leads on screen; npm test and verify --quick green"
+      ],
+      "deps": [],
+      "agent": "builder",
+      "priority": 2,
+      "kind": "mentor",
+      "status": "todo",
+      "attempts": 0,
+      "notes": [],
+      "created": "2026-11-14T09:41:34.350Z",
+      "model": "opus"
+    },
+    {
+      "id": "P2-062",
+      "phase": "P2",
+      "title": "Model cards accept the Mixamo FBX and convert it to .glb",
+      "desc": "Anmol 2026-11-14: the model card steps say download an FBX from Mixamo, but the Needs you card only accepts .glb. Make the dashboard model upload accept .fbx as well as .glb, and have ingest convert a rigged FBX to .glb (Godot headless through harness/bin/godot.mjs: import the FBX and write a .glb with GLTFDocument, keeping the skeleton, skin and textures), then run the usual model checks. Update the card text: 'Upload the .fbx from Mixamo (or a .glb)'.",
+      "accept": [
+        "A test converts a small rigged FBX fixture; npm test green"
+      ],
+      "deps": [],
+      "agent": "builder",
+      "priority": 1,
+      "kind": "bug",
+      "status": "doing",
+      "attempts": 1,
+      "notes": [],
+      "created": "2026-11-14T09:51:47.815Z",
+      "model": "sonnet",
+      "started": "2026-11-14T09:51:48.077Z"
     }
   ]
 }

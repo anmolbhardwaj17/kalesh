@@ -17,6 +17,8 @@ assets_inbox/*
 !assets_inbox/.gitkeep
 harness/state/.requests.lock
 harness/state/.dash_token
+# live agents line of the dashboard (harness/bin/agents.mjs)
+harness/state/agents.json
 # verify snapshot, sweep and lane worktrees
 .worktrees/
 # local Claude Code overrides only (the rest of .claude/ is versioned)

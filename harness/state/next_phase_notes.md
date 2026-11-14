@@ -107,3 +107,11 @@ Every system re-measures its line of perf_budgets.json `systems` in the pilot.
 - **Order of acts and map.** The plan follows Anmol's area order (the rest of the centre, then the far south) before Act 2. If the wait for new missions feels long at the P6 gate, P7 and P8 can be cut to what Act 2 needs (Kashmere Gate, Gymkhana, Daryaganj, Laxmi Nagar and Gurugram) and the rest moved before Act 3.
 - **HUD answer.** If Anmol has not answered P1-003 when everything else in P3 is done, P3 waits on the HUD by his own rule (no HUD build before he sees the mockups).
 - **Names.** The wanted level name "Lal Batti" and the three working names are still proposals in GAME.md "Open questions".
+
+## Watch Dogs 2 fidelity bar (REPLAN, 2026-11-14)
+
+Anmol set Watch Dogs 2 as the look level (decisions.md 2026-11-14). harness/design/FIDELITY_BAR.md maps each WD2 trait to a stylised B route on the M2 and ranks the gaps by look per ms. Rules for every later PLAN_PHASE that adds look or map work:
+- Every look task's acceptance has a side by side beside dated current photos of the same places, the WD2 bar question answered by the verifier, the OWNER_EYE.md lines, and its cost against the signed system line (quiet machine, load quoted).
+- A look critic task (verifier on Sonnet, priority 1, acceptance of P2-051) after every 3 to 4 look tasks. Seeds: P7-001, P8-001, P11-001 (split them at planning), P14-008 (final critic before release).
+- New areas reach the bar through the P2 layers tuned by data (P2-052 to P2-058 and the P2 dressing, road and tree tasks), not hand work.
+- P3: plan crowds and traffic to the bar's density; reuse P2-054 vehicles and P2-055 static life (note on P3-001).

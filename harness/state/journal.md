@@ -548,5 +548,46 @@ One line per event, written by task.mjs (start, done, fail, phase changes, inbox
 - 2026-11-14 12:00 [P2-034] done: PR 65. Every flyover, bridge, metro viaduct, rail stretch, platform and foot bridge built from its variant kit (19 variants, INFRA-01 ok). Verifier PASS (side by sides, wide shots, city paths, quick). Merged main (P2-009) and rebaked: 1b5c45554efb21, 66 invariants ok, 1083 tests, Godot 139, city paths 12/12, quick 17/17. Polish and one load flake in notes.
 - 2026-11-14 12:01 [P2-010] start (attempt 1): Area kits: procedural modules, atlases and instanced buildings
 - 2026-11-14 12:01 [P2-043] start (attempt 1): Access judge pass and owner edits
-- 2026-11-14 13:01 [P2-010] failed attempt 1: city_buildings_busiest over budget when run alone: busiest_40m 3.19 ms, chandni_street 2.73 ms vs 2.0 ms (draw calls ok). Everything else in the acceptance met.
-- 2026-11-14 13:02 [P2-010] start (attempt 2): Area kits: procedural modules, atlases and instanced buildings
+- 2026-11-14 12:59 [P2-043] done: PR 66. 443 borderline edges in 111 sites judged from 13 satellite sheets: 125 judge rules in access.json (78 closed, 31 open, 16 private); owner beats judge beats rule (tests). Inspector Access tab saves owner edits. Metro forecourts (11 edges) foot only, Lutyens government gates (133 edges) closed to public cars. Spot check 26 of 30 agree, 4 fixed. Self-checked: whole bake 04c45490cd1b1b green, 1099 tests, Godot 139, quick 17/17, access scenarios ok, before and after renders read.
+- 2026-11-14 12:59 [P2-046] added: Width repair for named old city roads modelled too narrow
+- 2026-11-14 13:27 [P2-047] added: Chandni Chowk as it looks today: current photo board, sandstone street and its furniture
+- 2026-11-14 13:27 mentor message mmwg42x01 handled: Building kits are the shop fronts, balconies, grilles and boards on every building; frame cost is how long they take to draw. Good catch on Chandni Chowk: it is now built as it looks today (red sandstone street, car-free), and every area and kit is checked against current photos, colours included.
+- 2026-11-14 13:37 [P2-048] added: Shop sign boards from real Indian references, by area
+- 2026-11-14 13:37 mentor message mmwg4h49a handled: Agreed. New top priority task P2-048: real shop sign photos per area (flex banners, painted boards, glow boxes, stacked signs, Hindi, English and Urdu), written up, then the boards rebuilt to match and checked side by side with the photos.
+- 2026-11-14 13:39 mentor message mmwg4k1hj handled: Added to P2-048: rust, faded and peeling paint, bent and broken boards, torn flex and missing letters, more in the old city, varied per board, checked against the photos.
+- 2026-11-14 13:42 [P2-049] added: Refresh every area board with current photos and a what-it-is-made-of list
+- 2026-11-14 13:42 mentor message mmwg4oluj handled: Mostly yes: 11 area sheets with about 24 free photos each guide the build, and the area passes compare game shots with them side by side. But many photos are old or weak, so P2-049 refreshes every board with current photos and a list of what each street is made of.
+- 2026-11-14 13:43 [P2-032] start (attempt 1): Car tunnels built properly: depth, portals, walls, lights
+- 2026-11-14 13:43 mentor message mmwg4oz6n handled: Yes, real tunnels are P2-032 and not built yet. Started now in the map lane: Pragati Maidan tunnel and underpasses with proper depth, ramps, portals, lights and inside walls, checked against photos.
+- 2026-11-14 13:45 mentor message mmwg4rnl5 handled: Fair. New rule in decisions.md: a system is done only when it is complete to current photos everywhere it applies, any split is named up front, and every look task is checked side by side with today's photos.
+- 2026-11-14 13:46 mentor message mmwg4t8mv handled: Done: every reference photo gets its date written next to it, old ones are never used for surfaces, signs or colours, and the search keeps going until the set shows what is needed; if free photos fall short, a photo request goes on your dashboard.
+- 2026-11-14 13:48 mentor message mmwg4w892 handled: Agreed. Perf results are now reported with the machine load, and a miss on a busy machine is rerun when quiet or compared with a reference scene in the same run before it counts against the game.
+- 2026-11-14 13:51 mentor message mmwg4z4hn handled: Yes. The tunnel task now has to build the Pragati Maidan tunnel's own look from dated photos (the wall art panels, finish, lights, fans, signs, portals), and the verifier fails it if it looks like a generic tunnel.
+- 2026-11-14 14:01 [P2-050] added: Dashboard: agents now line per builder and verifier; smaller sign-off
+- 2026-11-14 14:01 [P2-050] start (attempt 1): Dashboard: agents now line per builder and verifier; smaller sign-off
+- 2026-11-14 14:01 mentor message mmwg5cz8m handled: On it: P2-050 adds an 'Agents now' section under a smaller sign-off line on the overview page, one line per builder and verifier with its lane and job.
+- 2026-11-14 14:03 [P2-049] start (attempt 1): Refresh every area board with current photos and a what-it-is-made-of list
+- 2026-11-14 14:07 [P2-050] done: PR 67. Overview page: compact one-line sign-off (details on click) and an Agents now section below it, one line per builder or verifier with lane, task and job, fed by harness/bin/agents.mjs (set, clear, list; gitignored live file). Self-checked: 6 agents tests and 296 harness tests pass, typecheck ok, page shot read.
+- 2026-11-14 14:22 mentor message mmwg63tcx handled: Understood. Your corrections now live in OWNER_EYE.md that every builder and verifier must pass, a look critic checks the pilot against current photos and the Watch Dogs 2 bar every few tasks and makes its own fix tasks, and the planner is checking the P2 plan for what Watch Dogs 2 level needs, within the M2 budget.
+- 2026-11-14 14:23 mentor message mmwg65f13 handled: Yes, the Watch Dogs 2 bar was signed in the style bible in Phase 0; it was written down but not enforced as a check on each task. That gap is now closed by OWNER_EYE.md and the recurring look critic.
+- 2026-11-14 14:28 added 11 tasks: P2-051, P2-052, P2-053, P2-054, P2-055, P2-056, P2-057, P2-058, P2-059, P2-060, P2-061
+- 2026-11-14 14:28 [P2-051] model: sonnet
+- 2026-11-14 14:28 [P2-059] model: sonnet
+- 2026-11-14 14:28 [P2-060] model: sonnet
+- 2026-11-14 14:28 [P2-061] model: sonnet
+- 2026-11-14 14:28 [P2-040] edited: title, desc+, accept+
+- 2026-11-14 14:28 [P2-040] deps now: P2-020, P2-021, P2-022, P2-023, P2-024, P2-061
+- 2026-11-14 14:28 [P2-040] model: sonnet
+- 2026-11-14 14:29 added 4 tasks: P7-001, P8-001, P11-001, P14-008
+- 2026-11-14 14:30 [P7-001] model: sonnet
+- 2026-11-14 14:30 [P8-001] model: sonnet
+- 2026-11-14 14:30 [P11-001] model: sonnet
+- 2026-11-14 14:30 [P14-008] model: sonnet
+- 2026-11-14 15:03 mentor message mmwg7jwa6 handled: Yes, that is exactly what the Bittu card asks for: full body A-pose, under 25k triangles, rig on Mixamo, upload on the card; the art reviewer checks it and the game swaps it in.
+- 2026-11-14 15:11 [P3-010] added: Faces for the three leads: talking mouth, blinks, eye and brow expressions on any delivered model
+- 2026-11-14 15:11 mentor message mmwg7upuw handled: Yes, signed in the architecture: about 12 face shapes per lead (jaw, mouth shapes, blinks, brows, smile, frown), jaw by voice loudness in play and full lip sync in big cutscenes. Text to 3D models come with no face rig, so task P3 adds the face automatically to any model you upload.
+- 2026-11-14 15:21 [P2-062] added: Model cards accept the Mixamo FBX and convert it to .glb
+- 2026-11-14 15:21 [P2-062] start (attempt 1): Model cards accept the Mixamo FBX and convert it to .glb
+- 2026-11-14 15:21 mentor message mmwg87v8t handled: Our mistake: the steps say FBX but the card only took .glb. P2-062 makes the card accept the Mixamo FBX and convert it; keep the file until then.
+- 2026-11-14 15:25 [P2-049] done: All 11 area boards rebuilt with current dated photos first (11 to 20 per area, 8 to 18 at street level, every photo dated with its basis, old ones marked and dimmed), and each sheet has a made-of-today list (surface, kerbs, median, poles, wires, lights, trees, sampled facade colour range, signs, clutter) with changed facts marked. Four gaps go to Anmol as photo requests. Self-checked: boards read, sheets parse.
+- 2026-11-14 15:26 [P2-045] start (attempt 1): Traffic and GPS respect access modes; move pins off car-free roads

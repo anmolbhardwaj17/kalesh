@@ -288,3 +288,45 @@ export function laneMarksLayer(file, marks) {
   };
   return api;
 }
+
+/**
+ * The access overlay (P2-043): a ribbon along every road strip the bake closed to cars (red), closed by the judge pass
+ * (violet), opened by the judge or the owner (green) or closed by the owner (amber). Strips open to cars by the class
+ * default or the rules draw nothing. `file.strips[].acc` is the lanes layer's access record.
+ */
+export const ACCESS_COLOURS = { closed: 0xe5484d, judgeClosed: 0xa970ff, opened: 0x3ccf7e, ownerClosed: 0xffb224 };
+export function accessLayer(file) {
+  const pos = []; const col = []; const idx = [];
+  const c = new THREE.Color();
+  let v = 0;
+  const counts = { closed: 0, judgeClosed: 0, opened: 0, ownerClosed: 0 };
+  for (const s of file.strips) {
+    const a = s.acc;
+    if (!a || s.kind === 'zone') continue;
+    const car = a.m.includes('car');
+    const kind = a.r === 'owner' ? (car ? 'opened' : 'ownerClosed') : a.r === 'judge' ? (car ? 'opened' : 'judgeClosed') : car ? null : 'closed';
+    if (!kind) continue;
+    counts[kind]++;
+    c.setHex(ACCESS_COLOURS[kind]);
+    const half = 1.4;
+    const n = s.ref.length;
+    const base = v;
+    for (let pt = 0; pt < n; pt++) {
+      const [x, z] = s.ref[pt];
+      const [nx, nz] = s.n[pt];
+      pos.push(x + nx * half, 0, z + nz * half, x - nx * half, 0, z - nz * half);
+      col.push(c.r * 255, c.g * 255, c.b * 255, c.r * 255, c.g * 255, c.b * 255);
+      v += 2;
+    }
+    for (let pt = 0; pt + 1 < n; pt++) { const k = base + pt * 2; idx.push(k, k + 1, k + 2, k + 2, k + 1, k + 3); }
+  }
+  const g = new THREE.BufferGeometry();
+  g.setAttribute('position', new THREE.Float32BufferAttribute(pos, 3));
+  g.setAttribute('color', new THREE.BufferAttribute(new Uint8Array(col), 3, true));
+  g.setIndex(idx);
+  const mesh = flat(new THREE.Mesh(g, new THREE.MeshBasicMaterial({ vertexColors: true, side: THREE.DoubleSide, transparent: true, opacity: 0.78 })), ORDER.laneMarks);
+  const group = new THREE.Group();
+  group.add(mesh);
+  group.visible = false;
+  return { group, counts };
+}
