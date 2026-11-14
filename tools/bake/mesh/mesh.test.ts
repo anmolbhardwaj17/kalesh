@@ -183,14 +183,22 @@ describe('a crossroads at grade', () => {
     expect(checks.overlap.stripPairs.pairs).toBe(0);
   });
 
-  it('the surface is watertight and every arm joins the junction; the four far ends are dead ends', () => {
+  it('the surface is watertight and every arm joins the junction; the four far ends are dead ends, each closed by a kerb (P1-037)', () => {
     expect(checks.watertight.openBoundaryEdges).toBe(0);
     expect(checks.watertight.loops).toBe(1);
     expect(checks.watertight.sliverLoops).toBe(0);
     expect(checks.ends.unjoined).toBe(0);
     expect(checks.ends.floating).toBe(0);
-    expect(checks.ends.explained).toEqual({ dead_end: 4 });
-    expect(checks.ends.joined).toBe(checks.ends.stripEnds - 4);
+    // a kerb across each dead end joins its lanes' end edges
+    expect(mesh.endKerbs).toMatchObject({ deadEnds: 4, kerbs: 4, notAtGrade: 0, blocked: 0 });
+    expect(checks.ends.explained).toEqual({});
+    expect(checks.ends.joined).toBe(checks.ends.stripEnds);
+    // the kerb stands 0.15 m over the carriageway and a kerb face rises to it
+    for (const f of mesh.endKerbs.faces) {
+      expect(mesh.fs.raise[f]).toBe(0.15);
+      const r = mesh.fs.ring(f);
+      expect(r.length).toBeGreaterThanOrEqual(4);
+    }
   });
 
   it('kerbs stand 0.15 m over the carriageway, lanes carry their UV, the arms that stop have a stop line, nothing is fenced', () => {

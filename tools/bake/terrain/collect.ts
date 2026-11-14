@@ -13,14 +13,18 @@ import { CUT_EDGE, CUT_NONE, CUT_WALL } from '../mesh/faces.ts';
 import type { FaceSet } from '../mesh/faces.ts';
 import { K_DECK, K_TUNNEL } from '../mesh/stripfaces.ts';
 import { ROOF_DEPTH_M } from '../mesh/structures.ts';
-import type { FaceGrid } from '../mesh/structures.ts';
+import type { FaceGrid, Headwall } from '../mesh/structures.ts';
 import type { Station, Strip } from '../roads/model.ts';
 import { CH_BUILDING, CH_OPEN, CH_OUTLINE, CH_ROAD, CH_WATER, GRID_LABEL, PLAIN_LABEL, label } from './labels.ts';
 import { UNITS, toUnits } from './predicates.ts';
+import { lineRings } from './water.ts';
+import type { WaterLineInput } from './water.ts';
 
 export interface WaterInput {
   id: string;
   name: string;
+  /** The graph's kind (water=pond, water=drain, ...): a running kind gets a sloped surface (water.ts, P1-037). */
+  kind?: string;
   /** Outer rings and holes (holes wind against the outer rings). */
   rings: readonly (readonly P2[])[];
 }
@@ -59,6 +63,10 @@ export interface TerrainInput {
   offset: P2;
   /** Landmark ground pieces, in the order they win (pads first). */
   landmarks?: readonly LandmarkGround[];
+  /** Water lines (OSM waterway): drains, ditches, streams and canals become channels of their class width (water.ts, P1-037). */
+  waterLines?: readonly WaterLineInput[];
+  /** Tunnel mouths of the road mesh (P1-037): the ground across a mouth stays between the slab over the roof and the headwall top. */
+  portals?: readonly Headwall[];
 }
 
 export interface TerrainOptions {
@@ -352,6 +360,8 @@ export function collect(input: TerrainInput, opt: TerrainOptions): Collected {
   rings([input.outline], CH_OUTLINE);
   for (const r of input.footprints) rings([r], CH_BUILDING);
   for (const w of input.water) rings(w.rings, CH_WATER);
+  // drain channels: one ring per piece, each oriented on its own (they overlap; the water count is "not zero")
+  for (const l of input.waterLines ?? []) for (const r of lineRings(l)) rings([r], CH_WATER);
   for (const o of input.open) rings(o, CH_OPEN);
   // landmark ground: rings of no class of their own (the surface gives their triangles a material), and points on
   // the bed of a moat so it has a floor to lower
@@ -374,6 +384,23 @@ export function collect(input: TerrainInput, opt: TerrainOptions): Collected {
         const x = i * STEP;
         const z = j * STEP;
         if (!pointInRing({ x, z }, g.ring as P2[]) || near.within(x, z, 2.5)) continue;
+        pts.add(x, z);
+      }
+    }
+  }
+
+  // points along the middle of every drain channel: the bed needs a floor under the water between its two banks
+  // (the lattice keeps 3 m off every segment, so a channel 5 m wide would get none)
+  for (const l of input.waterLines ?? []) {
+    if (!lineRings(l).length) continue;
+    for (let k = 0; k + 1 < l.pts.length; k++) {
+      const a = l.pts[k] as P2;
+      const b = l.pts[k + 1] as P2;
+      const n = Math.max(1, Math.ceil(Math.hypot(b.x - a.x, b.z - a.z) / (opt.maxSeg / 2)));
+      for (let i = k === 0 ? 1 : 0; i < n; i++) {
+        const x = a.x + ((b.x - a.x) * i) / n;
+        const z = a.z + ((b.z - a.z) * i) / n;
+        if (near.within(x, z, 0.4) || !pointInRing({ x, z }, input.outline as P2[])) continue;
         pts.add(x, z);
       }
     }

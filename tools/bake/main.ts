@@ -80,6 +80,7 @@ import { overheadHeights } from './elevation/overhead.ts';
 import { RAIL_EMBANKMENT_M } from './elevation/limits.ts';
 import type { RoadMesh } from './mesh/build.ts';
 import type { MeshInput } from './mesh/input.ts';
+import type { LandmarkGround } from './terrain/collect.ts';
 import type { Ground } from './terrain/build.ts';
 import { writeElevation } from './sources/elevationio.ts';
 import { writeLanes } from './sources/lanesio.ts';
@@ -163,6 +164,8 @@ export interface BakeOptions {
   districts?: DistrictsWithStages & LayoutFile;
   /** Faults a test puts in on purpose, to show the invariants stop the bake (a broken lane). */
   faults?: { lanes?: (b: LaneBuild) => void };
+  /** Called after the terrain step with the inputs of the mesh and the ground (a dev script keeps them to rebuild those two steps alone). */
+  tap?: (step: string, state: { meshed: { input: MeshInput; mesh: RoadMesh } | null; repaired: RepairedGraph | null; groundModel: GroundModel | null; landmarks: readonly LandmarkGround[] }) => void;
 }
 
 /** Runs a bake for parsed arguments; returns the report (also written to disk). Throws BakeStop after writing it. */
@@ -531,6 +534,7 @@ export async function bake(args: BakeArgs, opts: BakeOptions): Promise<HealthRep
         landmarked = runMassingStep(stepCtx, placed, t.ground, new GroundHeights(t.ground), (x, z) => model.at(x, z));
         check(landmarked.invariants);
       }
+      opts.tap?.(step, { meshed, repaired, groundModel, landmarks: placed?.ground ?? [] });
     } else if (step === 'tiles') {
       if (!laneBuild || !meshed || !grounded || !repaired || !laneChecks || !meshChecks) throw new Error('the tiles step needs the lanes, mesh and terrain steps before it');
       // the six gate counts with their items: each 0 or explained (harness/data/gate_explanations.json), or no tile is written

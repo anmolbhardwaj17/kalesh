@@ -3,7 +3,7 @@ import fs from 'node:fs';
 import os from 'node:os';
 import path from 'node:path';
 import { execFileSync } from 'node:child_process';
-import { checkSet, expectedTiles, provideTiles, writeExpected, TILES_DIR, HASH_FILE } from './tileset.mjs';
+import { checkSet, expectedTiles, provideTiles, staleFixtures, writeExpected, TILES_DIR, HASH_FILE } from './tileset.mjs';
 import { treeHash } from './lib.mjs';
 
 // P1-018: a snapshot worktree or play copy gets the gitignored full tile set from the main checkout only when its bake
@@ -82,6 +82,16 @@ describe('provideTiles (snapshot.mjs, playcopy.mjs)', () => {
     bake(main, 'abc123');
     expect(writeExpected(main)).toMatchObject({ bakeHash: 'abc123', tiles: 2, bytes: 20 });
     expect(expectedTiles(main).bakeHash).toBe('abc123');
+  });
+});
+
+describe('route fixtures read from the tiles (P1-034)', () => {
+  it('names the fixtures made from other tiles than tiles.hash, with their generator', () => {
+    expect(staleFixtures(main)).toEqual([]);
+    put(main, HASH_FILE, JSON.stringify({ bakeHash: 'new' }));
+    put(main, 'harness/data/fixtures/stream_routes.json', JSON.stringify({ bakeHash: 'new' }));
+    put(main, 'harness/data/fixtures/city_routes.json', JSON.stringify({ bakeHash: 'old' }));
+    expect(staleFixtures(main)).toEqual([{ file: 'harness/data/fixtures/city_routes.json', bakeHash: 'old', gen: 'node tools/fixtures/gen_city_routes.mjs' }]);
   });
 });
 

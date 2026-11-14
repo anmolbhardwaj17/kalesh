@@ -92,7 +92,7 @@ export function checkRoadMesh(input: MeshInput, mesh: RoadMesh): MeshChecks {
   const { fs, edges } = mesh;
   const { strips, kinds } = input;
   const name = (piece: number): string => (piece < strips.length ? (strips[piece] as Strip).id : (input.junctions[piece - strips.length] as { id: string }).id);
-  const overlap = proveNoOverlap(fs, strips, input.joints, mesh.index, mesh.junctions.faces, mesh.junctions.sheets, name, mesh.medianFaces);
+  const overlap = proveNoOverlap(fs, strips, input.joints, mesh.index, mesh.junctions.faces, mesh.junctions.sheets, name, [...mesh.medianFaces, ...mesh.endKerbs.faces]);
 
   // ends: from the faces, lane by lane
   const explained = new Map<string, string>();

@@ -4,6 +4,8 @@
 // faces meet along is named by both; the boundary loops the ground is cut to; then the draw meshes: tops with the
 // lane UV, kerb faces wherever two tops differ in height, edge treatments and supports on structures only, stop
 // lines. It reads the lane model and the heights and builds neither again. Pure.
+import { addEndKerbs } from './endkerbs.ts';
+import type { EndKerbReport } from './endkerbs.ts';
 import { KERB_RAISE } from '../roads/model.ts';
 import type { Strip } from '../roads/model.ts';
 import { boundaryLoops, buildEdges, conform } from './conform.ts';
@@ -42,6 +44,8 @@ export interface RoadMesh {
   medians: MedianReport;
   /** Face numbers of the medians (for the overlap proof). */
   medianFaces: number[];
+  /** Kerbs across dead ends (P1-037). */
+  endKerbs: EndKerbReport;
   /** Mid-block crossings drawn (P1-032): zebras and their stop lines. */
   midBlock: MidBlockPaint;
   /** Wall time of every part and of the whole build (ms). */
@@ -67,6 +71,9 @@ export function buildRoadMesh(input: MeshInput): RoadMesh {
   const medianFaces: number[] = [];
   const medians = addMedianFaces(fs, input.strips, input.kinds, borders, new FaceGrid(fs), input.pairs, input.medianRefs, stripFaces.first, medianFaces);
   lap('medians');
+  // a kerb across every dead end at grade (P1-037), before the T joints are taken out so its edges join the lanes'
+  const endKerbs = addEndKerbs(fs, input, borders, new FaceGrid(fs));
+  lap('endKerbs');
   const report = conform(fs);
   lap('conform');
   const edges = buildEdges(fs);
@@ -93,5 +100,5 @@ export function buildRoadMesh(input: MeshInput): RoadMesh {
   const midBlock = paintMidBlock(input, sink);
   lap('paint');
   ms['total'] = Date.now() - t0;
-  return { fs, index, borders, grid, stripFaces, junctions, medians, medianFaces, conform: report, edges, boundary, sink, tops, steps, structures, stops, midBlock, ms };
+  return { fs, index, borders, grid, stripFaces, junctions, medians, medianFaces, endKerbs, conform: report, edges, boundary, sink, tops, steps, structures, stops, midBlock, ms };
 }

@@ -15,10 +15,10 @@ const health = {
   counts: { found: 6319, byRule: { 'R-BLDG-01': 4916, 'R-ROAD-01': 127, 'R-LANE-FIT-01': 72 }, repairedAuto: 3374, fixedByOverrides: 2, repairsSwitchedOff: 1, staleOverrides: 1, leftOpen: 2841, highImpactOpen: 240, explained: 100 },
   repairs: { auto: 3374, byRule: { 'R-BLDG-01': 2495, 'R-ROAD-01': 7 } },
   overrides: { patches: 4, files: 3, byId: 2, byAnchor: 1, stale: 1, outsideStage: 2, records: [{ id: 'ov_x', file: '1_2.json', outcome: 'stale', note: 'way/9 is not in this extract' }, { id: 'ov_y', file: '1_2.json', outcome: 'fixed', note: '' }] },
-  gates: { openPorts: null, floatingEnds: 3, unjoinedEnds: null, overlappingRoadFaces: null, laneContinuityBreaks: null, tapersOutOfLimits: null },
+  gates: { openPorts: null, floatingEnds: 3, unjoinedEnds: null, overlappingRoadFaces: null, laneContinuityBreaks: null, tapersOutOfLimits: null, widthSteps: 0, groundGapMaxM: 0.0014, needleShare: 0.025 },
   pairs: [{ ok: true }, { ok: true }, { ok: false }],
   layout: { worstPairBearingDeg: 0.023, worstPairDistancePct: 0.00002 },
-  invariants: [{ id: 'A', ok: true, detail: '' }],
+  invariants: [{ id: 'A', ok: true, detail: '' }, { id: 'TERR-01.gap', ok: true, detail: 'largest gap 0.0014 m' }, { id: 'TERR-03.needles', ok: false, detail: '2.5 percent' }],
 };
 
 let tmp = '';
@@ -40,6 +40,14 @@ describe('map health summary', () => {
     expect(m.gates.find((g) => g.key === 'floatingEnds').count).toBe(3);
     expect(m.gates.find((g) => g.key === 'openPorts').count).toBeNull();
     expect(m.pairs).toMatchObject({ count: 3, failed: 1 });
+    expect(m.gates.find((g) => g.key === 'widthSteps').count).toBe(0);
+  });
+  it('carries the ground checks TERR-01 to 07 with their numbers (P1-037)', () => {
+    const m = mapHealth(file);
+    expect(m.ground.map((g) => g.id)).toEqual(['TERR-01', 'TERR-02', 'TERR-03', 'TERR-04', 'TERR-05', 'TERR-06', 'TERR-07']);
+    expect(m.ground[0]).toMatchObject({ value: 0.0014, unit: 'm', ok: true });
+    expect(m.ground[2]).toMatchObject({ value: 2.5, unit: '%', ok: false });
+    expect(m.ground[3]).toMatchObject({ value: null, ok: null });
   });
   it('carries the explained gate items, the findings, the bake time and the report link (P1-017)', () => {
     const f = path.join(tmp, 'health_gates.json');
@@ -117,6 +125,9 @@ describe('dashboard Map health tab', () => {
     expect(text).toContain('way/9 is not in this extract');
     expect(text).toContain('not measured yet');
     expect(text).not.toContain('—');
+    expect(text).toContain('Roads that change width with a jump');
+    expect(await page.locator('#mapGround [data-ground]').count()).toBe(7);
+    expect(await page.locator('#mapGround [data-ground="TERR-03"]').innerText()).toContain('fails');
     const link = page.locator('#p-map a[href="/inspector/"]');
     expect(await link.count()).toBe(1);
     expect((await fetch(`${url}/inspector/`)).status).toBe(200);
