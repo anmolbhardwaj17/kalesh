@@ -1,6 +1,6 @@
 {
   "_doc": "Written only by node harness/bin/task.mjs. Phases run in order; P0 (ADOPT + STYLE DISCOVERY) waits for the owner by design and needs task.mjs signoff and task.mjs archsignoff before its gate passes. Later phases are added by the planner at the end of P0 (task.mjs phase-add) from the game's real state.",
-  "updated": "2026-11-14T04:12:59.115Z",
+  "updated": "2026-11-14T04:13:30.700Z",
   "phases": [
     {
       "id": "P0",
@@ -2471,13 +2471,14 @@
       "agent": "builder",
       "priority": 3,
       "kind": "feature",
-      "status": "todo",
-      "attempts": 0,
+      "status": "doing",
+      "attempts": 1,
       "notes": [
         "Anmol 2026-11-13 (DELHI_WORLD.md 'OSM is reference, not the final word'): read area blueprints from harness/data/blueprints/ and let them override OSM footprints (precedence road, landmark zone, blueprint, generator); add the odd-footprint check (slivers, spikes, zig-zags, outliers) that flags shapes to verify against photos and regularises the ones that are not real."
       ],
       "created": "2026-11-11T12:31:54.059Z",
-      "model": "fable"
+      "model": "fable",
+      "started": "2026-11-14T04:13:30.700Z"
     },
     {
       "id": "P2-010",
@@ -4007,12 +4008,13 @@
       "agent": "builder",
       "priority": 1,
       "kind": "mentor",
-      "status": "todo",
-      "attempts": 0,
+      "status": "doing",
+      "attempts": 1,
       "notes": [
         "From P2-033: variants and the pilot map are in harness/design/reference/infrastructure/ (31 variants, variant_map.json). Many dimensions are [E] estimates: check them against street-level imagery or drawings before a kit is final (the 6-item list at the end of variant_map.md). No CC photo was found for the ITO skywalk, the ITO/Vikas Marg Yamuna bridge or the Delhi Junction facade."
       ],
-      "created": "2026-11-13T11:53:07.495Z"
+      "created": "2026-11-13T11:53:07.495Z",
+      "started": "2026-11-14T04:13:30.659Z"
     },
     {
       "id": "P2-035",

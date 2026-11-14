@@ -542,3 +542,5 @@ One line per event, written by task.mjs (start, done, fail, phase changes, inbox
 - 2026-11-14 09:22 [P2-044] added: Car-free streets look like pedestrian streets; striped bollards
 - 2026-11-14 09:22 [P2-045] added: Traffic and GPS respect access modes; move pins off car-free roads
 - 2026-11-14 09:42 [P2-042] done: Map lane, PR 63. Access modes per edge and lane from OSM tags plus common-sense rules: 1,272 of 6,677 edges closed to cars (88 km; context 810, width 295, rule 41, OSM barrier 29, tag 24, surface 21). Chandni Chowk car-free, galis two-wheeler and foot, India Gate lawns and Kartavya Path pedestrian. Walkways as paving (208,556 m2). 269 bollard and gate lines with colliders. Lane graph, tiles and routes keep to modes. Verified: whole bake 14bee18009c705, 1045 tests, quick 17/17, city_access_bollards and city_access_scooter_gali pass, sheets read. Follow-ups P2-043 to P2-045.
+- 2026-11-14 09:43 [P2-034] start (attempt 1): Infrastructure kits in stylised B: flyovers, bridges, viaducts, rail, applied by variant
+- 2026-11-14 09:43 [P2-009] start (attempt 1): Area profile generator: parcels, building shells, facade placements and edge blending
