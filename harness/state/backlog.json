@@ -1,6 +1,6 @@
 {
   "_doc": "Written only by node harness/bin/task.mjs. Phases run in order; P0 (ADOPT + STYLE DISCOVERY) waits for the owner by design and needs task.mjs signoff and task.mjs archsignoff before its gate passes. Later phases are added by the planner at the end of P0 (task.mjs phase-add) from the game's real state.",
-  "updated": "2026-11-14T08:31:47.615Z",
+  "updated": "2026-11-14T08:37:36.254Z",
   "phases": [
     {
       "id": "P0",
@@ -4543,12 +4543,15 @@
       "agent": "builder",
       "priority": 1,
       "kind": "mentor",
-      "status": "doing",
+      "status": "done",
       "attempts": 1,
       "notes": [],
       "created": "2026-11-14T08:31:47.422Z",
       "model": "sonnet",
-      "started": "2026-11-14T08:31:47.614Z"
+      "started": "2026-11-14T08:31:47.614Z",
+      "done": "2026-11-14T08:37:36.232Z",
+      "summary": "Overview page: compact one-line sign-off (details on click) and an Agents now section below it, one line per builder or verifier with lane, task and job, fed by harness/bin/agents.mjs (set, clear, list; gitignored live file). Self-checked: 6 agents tests and 296 harness tests pass, typecheck ok, page shot read.",
+      "commit": "44287f0"
     }
   ]
 }
