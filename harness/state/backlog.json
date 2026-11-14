@@ -1,6 +1,6 @@
 {
   "_doc": "Written only by node harness/bin/task.mjs. Phases run in order; P0 (ADOPT + STYLE DISCOVERY) waits for the owner by design and needs task.mjs signoff and task.mjs archsignoff before its gate passes. Later phases are added by the planner at the end of P0 (task.mjs phase-add) from the game's real state.",
-  "updated": "2026-11-14T18:22:13.871Z",
+  "updated": "2026-11-14T18:28:38.390Z",
   "phases": [
     {
       "id": "P0",
@@ -4566,7 +4566,7 @@
       "agent": "builder",
       "priority": 1,
       "kind": "mentor",
-      "status": "doing",
+      "status": "done",
       "attempts": 3,
       "notes": [
         "Anmol 2026-11-14: boards carry wear and tear: rust streaks, faded and peeling paint, bent or dented tin, broken corners, torn flex, missing letters. Add it to signboards.md per area and to the boards (varied per board, more in the old city, less in CP showrooms), and the verifier checks it in the side by side.",
@@ -4582,7 +4582,10 @@
       ],
       "created": "2026-11-14T08:07:00.888Z",
       "model": "opus",
-      "started": "2026-11-14T15:09:45.502Z"
+      "started": "2026-11-14T15:09:45.502Z",
+      "done": "2026-11-14T18:28:38.174Z",
+      "summary": "Real Indian shop boards by area: 8 board kinds plus wall, shutter and notice lettering, multi-line layouts, script by place and trade, signwriter and print-shop lettering, per-board wear and age, lit boards with spill on the pavement only, live chasing and flickering LED borders, goods by shop kind, names only from the name files (no official words, real-brand test). Verifier PASS on attempt 3 (scores 7 to 7.5, pass with photo boards pending in P2-071). Found the harness forced-draw TIME freeze (P2-073).",
+      "commit": "e49f293"
     },
     {
       "id": "P2-049",
@@ -5157,13 +5160,16 @@
       "agent": "content-writer",
       "priority": 1,
       "kind": "mentor",
-      "status": "todo",
+      "status": "done",
       "attempts": 0,
       "notes": [
         "Written by the content writer into the P2-048 working tree (232 parody names in 11 files, harness/design/areas/parody_names.md); one off-tone tagline replaced by the orchestrator. Ships and is marked done with the P2-048 PR."
       ],
       "created": "2026-11-14T12:08:13.584Z",
-      "model": "sonnet"
+      "model": "sonnet",
+      "done": "2026-11-14T18:28:38.341Z",
+      "summary": "232 GTA-style parody names in the 11 area name files (about 1 in 4), with board style, tagline and Devanagari; parody_names.md lists what each echoes; brand and duplicate tests pass. Shipped with P2-048.",
+      "commit": "e49f293"
     },
     {
       "id": "P3-012",
