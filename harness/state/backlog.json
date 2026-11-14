@@ -1,6 +1,6 @@
 {
   "_doc": "Written only by node harness/bin/task.mjs. Phases run in order; P0 (ADOPT + STYLE DISCOVERY) waits for the owner by design and needs task.mjs signoff and task.mjs archsignoff before its gate passes. Later phases are added by the planner at the end of P0 (task.mjs phase-add) from the game's real state.",
-  "updated": "2026-11-14T11:42:00.255Z",
+  "updated": "2026-11-14T18:22:13.871Z",
   "phases": [
     {
       "id": "P0",
@@ -2842,7 +2842,8 @@
       "attempts": 0,
       "notes": [
         "Watch Dogs 2 bar (FIDELITY_BAR.md, OWNER_EYE.md): the side by side sheet is read beside dated current photos and the verifier answers per shot whether it would sit next to a Watch Dogs 2 street shot without looking cheap; any OWNER_EYE.md breach or empty frontage is a fail. Use the layers of P2-052 to P2-058 (grade, wear and normals, vehicles, street life, shop interiors, AA, motion) and tune them by data for this area; do not hand-build what a layer should do.",
-        "Owner photos of the ITO crossing and the ITO skywalk (white tube arch skywalk with fabric roof, round piers with black and yellow bases): OWNER_PHOTOS.md ito section."
+        "Owner photos of the ITO crossing and the ITO skywalk (white tube arch skywalk with fabric roof, round piers with black and yellow bases): OWNER_PHOTOS.md ito section.",
+        "Owner photos (2026-11-14, OWNER_PHOTOS.md ITO second set): satellite plan of the W-Point skywalk (canopy chain along Bahadur Shah Zafar Marg, Tilak Marg branch, two star-shaped plazas either side of Mathura Road), design renders and the entry diagram. Build the skywalk to the satellite footprint."
       ],
       "created": "2026-11-11T12:31:54.059Z",
       "model": "opus"
@@ -2903,7 +2904,8 @@
       "notes": [
         "Anmol 2026-11-13: write this area's blueprint (harness/data/blueprints/) from photos; the area must read in its own style (for CP: the uniform two storey white colonnade ring, towers behind the outer circle), not as raw OSM shapes. Acceptance: side by side of a reference photo and the same view in game.",
         "Watch Dogs 2 bar (FIDELITY_BAR.md, OWNER_EYE.md): the side by side sheet is read beside dated current photos and the verifier answers per shot whether it would sit next to a Watch Dogs 2 street shot without looking cheap; any OWNER_EYE.md breach or empty frontage is a fail. Use the layers of P2-052 to P2-058 (grade, wear and normals, vehicles, street life, shop interiors, AA, motion) and tune them by data for this area; do not hand-build what a layer should do.",
-        "Owner photos of GB Road (day and night: decayed upper floors with jali balconies, dense faded hardware shop flex boards, wires): OWNER_PHOTOS.md. Three of the five look like Mumbai or Kolkata: mood only. Respect rule."
+        "Owner photos of GB Road (day and night: decayed upper floors with jali balconies, dense faded hardware shop flex boards, wires): OWNER_PHOTOS.md. Three of the five look like Mumbai or Kolkata: mood only. Respect rule.",
+        "Owner photos (2026-11-14): GB Road street view Oct 2025 (dense blue printed flex of bearing and machinery shops on two levels, cable band, white pillar colonnade, jali screens, AC units, rooftop plants), GB Road at night from above, and the Ajmeri Gate in three views (red sandstone arch in grey rubble, octagonal bastion, crenellations, iron grille, small plaza with a tree)."
       ],
       "created": "2026-11-11T12:31:54.059Z",
       "model": "opus"
@@ -3996,7 +3998,7 @@
       "priority": 2,
       "kind": "mentor",
       "status": "doing",
-      "attempts": 1,
+      "attempts": 3,
       "notes": [
         "Anmol 2026-11-13: build from the P2-033 reference variants and the P2-034 kits; no plain box; side by side with a reference photo and a wide shot in the city for consistency (STYLE_BIBLE.md 'Infrastructure').",
         "Anmol 2026-11-14: every reference photo has its date checked (EXIF, the file page, or visible clues) and written next to it; a photo older than the current state of the place is marked old and never used for surfaces, signs or colours. Before building, check the set actually shows what is needed (the street surface, signs, colours, the view from the player's height); if not, keep searching other free sources until it does. If free photos still do not cover it, register a photo request for Anmol on the dashboard (assets.mjs) and keep working with the best dated set.",
@@ -4004,10 +4006,14 @@
         "Anmol 2026-11-14: the Pragati Maidan tunnel is famous and has its own style; build that style, not a generic tunnel: its painted art and mural panels on the walls, its wall finish and colours, lighting pattern, signage, ceiling fans and portals, from dated photos (2022 on). Acceptance adds: a side by side of game and photo for the portal, the inside with the wall art, and the approach, read by the verifier, who fails a generic tunnel.",
         "Owner photos: harness/design/reference/owner/OWNER_PHOTOS.md (Pragati Maidan section, 4 photos): painted retaining walls with tricolour bands, yellow and green wave murals, painted pillars with mandala panels, marigold light strings, LED strip lines, jet fans. Build to these.",
         "Owner 2026-11-14: ceiling lights in the tunnel look off: short angled white bars floating under the ceiling. Must be continuous LED strips along the ceiling edges, mounted, emissive with soft glow, matching the light on walls and road; murals on the Pragati Maidan stretch.",
-        "Owner 2026-11-14: some tunnels still have the old angled light bars; every tunnel and underpass must get the new fittings, proven with a shot inside each. Murals read as blocky rectangles: need real painted motifs."
+        "Owner 2026-11-14: some tunnels still have the old angled light bars; every tunnel and underpass must get the new fittings, proven with a shot inside each. Murals read as blocky rectangles: need real painted motifs.",
+        "attempt 1 failed: Built and bake green (TUN-01: 1,266 roofed segments, headroom 5.35 m min, 24 mouths, 58 drains, LED strips in all 14 stretches) but: tunnel_drive wheel contacts at kerb edges on 2 routes; walls lit unshaded and look flat; murals read as clean vector art, not hand-painted; tunnel road uses dark city asphalt; pillars in the wide section are paint only.",
+        "Owner 2026-11-14 screenshot (attempt 2 in progress): flat unshaded look, jet fans huge and hanging into view, fire boxes oversized red cubes, flat pale road; window visible again.",
+        "attempt 2 failed: Verifier FAIL on the owner's eye bar (engineering passes: TUN-01, tunnel_drive). Interior scores 4.5: light flat and overexposed (no bloom, falloff, dark feet, road sheen), clean flat materials (no grime, stains, petals, tyre marks), bare ceiling (no trays, conduits, ducts), no atmosphere or depth, sparse graphic murals.",
+        "Owner 2026-11-14: the current tunnel look is ok to him (attempt 3 live shots). Verifier confirms nothing broke and scores it; merge after."
       ],
       "created": "2026-11-13T11:50:33.337Z",
-      "started": "2026-11-14T08:13:07.658Z"
+      "started": "2026-11-14T14:58:09.096Z"
     },
     {
       "id": "P2-033",
@@ -4080,7 +4086,9 @@
       "attempts": 0,
       "notes": [
         "Anmol 2026-11-14, quality bar: peak quality, match the real road from photos (add what is missing, remove what is wrong), and never empty. Acceptance adds: (1) side by side of a reference photo and the game at the play camera for at least 3 spots per hero road, read by a verifier; (2) an emptiness check: walking or driving the stretch, no 40 m of frontage without something real (shop, wall, tree, parked vehicle, sign, vendor, furniture) and props per 100 m within the area profile; (3) the look audit (P2-040) lists anything that feels empty as a blocker.",
-        "Watch Dogs 2 bar (FIDELITY_BAR.md row 5, gap 2): today the asphalt is one flat colour with a single zebra. Reach: textured asphalt with patches, cracks, tyre and oil marks by class and area, faded and fresh paint, manholes and grates, chipped kerbs with paint, pavers by area, wet and oil patches that use P2-053's low-roughness response. Decal atlas laid by the bake, not per-node decals. Cost 0.2 ms or less (--style-off token printed), within the city line. The verifier answers the WD2 bar question on the 4 photo sites."
+        "Watch Dogs 2 bar (FIDELITY_BAR.md row 5, gap 2): today the asphalt is one flat colour with a single zebra. Reach: textured asphalt with patches, cracks, tyre and oil marks by class and area, faded and fresh paint, manholes and grates, chipped kerbs with paint, pavers by area, wet and oil patches that use P2-053's low-roughness response. Decal atlas laid by the bake, not per-node decals. Cost 0.2 ms or less (--style-off token printed), within the city line. The verifier answers the WD2 bar question on the 4 photo sites.",
+        "Owner 2026-11-14: at night the lane lines are pure white, glow and look razor sharp (they read as unlit or emissive). Road paint must be a lit material (worn off-white, albedo about 0.6 to 0.7, darker and dirtier with wear), soft edges with mipmaps and anti-aliasing, and brighter only where a light or the vehicle headlights hit it (retroreflective boost in the headlight cone). WORLD_LOGIC: nothing glows that has no power.",
+        "Owner 2026-11-14: roads look weird (tunnel shot: golden glitter road, uniform speckles). Road surfaces everywhere to the Watch Dogs 2 standard: dark grounded asphalt, barely visible aggregate, tyre lanes, decals for cracks, patches, manholes and tyre marks, controlled rough specular, wet only in patches."
       ],
       "created": "2026-11-13T11:54:41.170Z"
     },
@@ -4246,7 +4254,8 @@
       "notes": [
         "Anmol 2026-11-14: emptiness is a blocker, not polish. Flag any street or junction that feels empty, bare or unlike its reference photos.",
         "Held until the end of P2 (its own text says before the gate); the area and kit tasks it would judge are still open.",
-        "Also answer every heading of harness/design/WORLD_LOGIC.md."
+        "Also answer every heading of harness/design/WORLD_LOGIC.md.",
+        "Also sweep harness/design/REALITY_MATCH.md: rescore catalog objects worst first, failures become fix tasks."
       ],
       "created": "2026-11-13T11:54:41.171Z",
       "model": "sonnet"
@@ -4558,17 +4567,22 @@
       "priority": 1,
       "kind": "mentor",
       "status": "doing",
-      "attempts": 1,
+      "attempts": 3,
       "notes": [
         "Anmol 2026-11-14: boards carry wear and tear: rust streaks, faded and peeling paint, bent or dented tin, broken corners, torn flex, missing letters. Add it to signboards.md per area and to the boards (varied per board, more in the old city, less in CP showrooms), and the verifier checks it in the side by side.",
         "Anmol 2026-11-14: every reference photo has its date checked (EXIF, the file page, or visible clues) and written next to it; a photo older than the current state of the place is marked old and never used for surfaces, signs or colours. Before building, check the set actually shows what is needed (the street surface, signs, colours, the view from the player's height); if not, keep searching other free sources until it does. If free photos still do not cover it, register a photo request for Anmol on the dashboard (assets.mjs) and keep working with the best dated set.",
         "Watch Dogs 2 bar (FIDELITY_BAR.md row 7): signs at many sizes and densities per facade (stacked boards up the floors in the bazaar), with the night version (glow boxes and LED letters emissive through the glow and neon materials) built now so P3-007 only switches them on. Shop interiors behind the boards come from P2-056.",
         "Owner photos with real boards: GB Road night (big yellow and blue printed flex of machine part shops with phone numbers), Chandni Chowk stacked boards: OWNER_PHOTOS.md.",
-        "Owner reference set: harness/design/reference/owner/signboards/ and OWNER_PHOTOS.md 'Sign boards for old places': hand-painted tin and wood boards, Hindi over English, painted arrows and figures, enamel round boards, lettering on shutters, tall vertical boards, stacked flex walls, estd years and phone numbers, bracket lamps lighting boards, tilted mounting, chipped edges and rust. Two are from a game: quality bar only, never copy their art or text."
+        "Owner reference set: harness/design/reference/owner/signboards/ and OWNER_PHOTOS.md 'Sign boards for old places': hand-painted tin and wood boards, Hindi over English, painted arrows and figures, enamel round boards, lettering on shutters, tall vertical boards, stacked flex walls, estd years and phone numbers, bracket lamps lighting boards, tilted mounting, chipped edges and rust. Two are from a game: quality bar only, never copy their art or text.",
+        "Owner 2026-11-14: some board names should be GTA-style parodies of famous Delhi names (decisions.md). P2-067 adds them to the name files; the board system must read parody entries and their board style.",
+        "attempt 1 failed: no reason given",
+        "attempt 1 failed: Verifier FAIL: boards read as real (Hindi over English, painted tin, flex, verticals, wear, attached) but density far below the photos (CP, Paharganj, Janpath, old streets: 1 to 2 boards per facade vs 3 to 5 stacked plus notices and cables); boards.json out of sync with the names file (npm test fails); a 'Police Post Ajmeri Gate' shop-style board; flat colour-block product shelves; weak night glow.",
+        "Owner GB Road street view Oct 2025 (OWNER_PHOTOS.md): the density target for GB Road boards: blue and white printed flex stacked on two levels on every facade.",
+        "attempt 2 failed: Verifier FAIL attempt 2: big step up (GB Road close to the street view, readable night glow, names clean) but wear invisible at play distance (every board kind scores under 6 on wear), gali and Paharganj street level still bare, LED verticals static (no chase or flicker found), bazaar shop a black void at night, perf unproven."
       ],
       "created": "2026-11-14T08:07:00.888Z",
       "model": "opus",
-      "started": "2026-11-14T11:42:00.253Z"
+      "started": "2026-11-14T15:09:45.502Z"
     },
     {
       "id": "P2-049",
@@ -4638,7 +4652,8 @@
       "status": "todo",
       "attempts": 0,
       "notes": [
-        "Look critics also answer every heading of harness/design/WORLD_LOGIC.md with a shot per finding."
+        "Look critics also answer every heading of harness/design/WORLD_LOGIC.md with a shot per finding.",
+        "Also sweep harness/design/REALITY_MATCH.md: rescore catalog objects worst first, failures become fix tasks."
       ],
       "created": "2026-11-14T08:58:18.633Z",
       "model": "sonnet"
@@ -4662,10 +4677,15 @@
       "agent": "builder",
       "priority": 1,
       "kind": "feature",
-      "status": "todo",
-      "attempts": 0,
-      "notes": [],
-      "created": "2026-11-14T08:58:18.634Z"
+      "status": "doing",
+      "attempts": 2,
+      "notes": [
+        "Owner 2026-11-14 dusk and night shot (city_buildings_busiest): the whole city goes flat blue-grey, windows are black holes, no lit windows, no street lamps on, sky ambient dominates. Dusk and night must read: warm lit windows varying per building, street lamps on with pools (emissive plus near real lights), shop fronts glowing, sky ambient lowered so night is lit by the city, not tinted blue.",
+        "Owner 2026-11-14 asked to start it now, ahead of P2-001 (the fold of old style switches stays separate); work only in stylised_b's environment, sky, grade and light .tres, not the surface shader board branch the sign builder (P2-048) is editing.",
+        "attempt 1 failed: Verifier narrow FAIL (look a large real improvement, blue shade gone by day, warm dusk, lit night): night cp_street_eye luma 0.144 under the 0.15 floor with a black foreground road; gali road still B-R +10 and gali_foot not shootable (walk stops at 53 m); relight_live_street failed twice under load 95+; a few blown white windows at night."
+      ],
+      "created": "2026-11-14T08:58:18.634Z",
+      "started": "2026-11-14T16:03:16.305Z"
     },
     {
       "id": "P2-053",
@@ -4687,7 +4707,10 @@
       "kind": "feature",
       "status": "todo",
       "attempts": 0,
-      "notes": [],
+      "notes": [
+        "Owner 2026-11-14 (REALITY_MATCH.md 'Image textures vs procedural'): build the anti-tiling texture path every surface uses: fixed texel density, stochastic or rotated tiling, a macro variation layer, near detail fading with distance, rule-placed decals, a repetition check on 60 m shots, and an A/B harness that shows a surface with the procedural and the image texture at 2, 15 and 60 m, day and night.",
+        "Owner 2026-11-14 asked how Watch Dogs 2 does it. Use the same toolbox: trim sheets for the modular building kits (cornices, frames, ledges, pipes, railings on one strip), blended material layers per surface painted by area (clean, peeling, exposed brick, damp) so walls change along their length, parallax or bump depth on brick, cobbles and pavers, and a wetness layer (darker wet surfaces, puddles in dips, reflections) ready for weather."
+      ],
       "created": "2026-11-14T08:58:18.634Z"
     },
     {
@@ -4756,7 +4779,10 @@
       "kind": "feature",
       "status": "todo",
       "attempts": 0,
-      "notes": [],
+      "notes": [
+        "Owner 2026-11-14: shop fronts are bright boxes today; from the street you must see a little way inside each shop: open shutters showing a counter, shelves and goods by shop kind (sweets, cloth, hardware, phone), a shopkeeper or stool, a tube light or bulb lighting the inside, depth through windows. Near shops get a real shallow interior (1 to 2 m modelled), far ones a parallax interior map; night: lit interiors spill light onto the pavement.",
+        "Owner 2026-11-14: shop insides look fake. Approach decided: near shops get a real shallow interior (counter, shelves, goods, tube light, 1 to 2 m modelled); everything behind uses interior mapping (parallax fake room) fed by the owner's AI shop interior images per shop kind (one-point perspective cards, day and night); never a flat image in the opening and no blur used to hide detail (glass gets a light reflection and slight dimming only)."
+      ],
       "created": "2026-11-14T08:58:18.634Z"
     },
     {
@@ -4825,7 +4851,8 @@
       "status": "todo",
       "attempts": 0,
       "notes": [
-        "Also answer every heading of harness/design/WORLD_LOGIC.md."
+        "Also answer every heading of harness/design/WORLD_LOGIC.md.",
+        "Also sweep harness/design/REALITY_MATCH.md: rescore catalog objects worst first, failures become fix tasks."
       ],
       "created": "2026-11-14T08:58:18.634Z",
       "model": "sonnet"
@@ -4852,7 +4879,8 @@
       "status": "todo",
       "attempts": 0,
       "notes": [
-        "Also answer every heading of harness/design/WORLD_LOGIC.md."
+        "Also answer every heading of harness/design/WORLD_LOGIC.md.",
+        "Also sweep harness/design/REALITY_MATCH.md: rescore catalog objects worst first, failures become fix tasks."
       ],
       "created": "2026-11-14T08:58:18.634Z",
       "model": "sonnet"
@@ -4879,7 +4907,8 @@
       "status": "todo",
       "attempts": 0,
       "notes": [
-        "Also answer every heading of harness/design/WORLD_LOGIC.md."
+        "Also answer every heading of harness/design/WORLD_LOGIC.md.",
+        "Also sweep harness/design/REALITY_MATCH.md: rescore catalog objects worst first, failures become fix tasks."
       ],
       "created": "2026-11-14T08:58:18.634Z",
       "model": "sonnet"
@@ -4980,7 +5009,9 @@
       "kind": "mentor",
       "status": "todo",
       "attempts": 0,
-      "notes": [],
+      "notes": [
+        "Bittu's model will come from the grinning sheet (owner's choice 2026-11-14): the face rig must close the mouth from the open grin as its rest shape (jaw and lip shapes built from the open pose)."
+      ],
       "created": "2026-11-14T09:41:34.350Z",
       "model": "opus"
     },
@@ -5020,7 +5051,9 @@
       "kind": "mentor",
       "status": "todo",
       "attempts": 0,
-      "notes": [],
+      "notes": [
+        "Mostly done ahead of time on 2026-11-14: 161 clips downloaded and sorted in assets_inbox/mixamo; wiring in P2-072."
+      ],
       "created": "2026-11-14T10:02:32.266Z",
       "model": "opus"
     },
@@ -5036,14 +5069,17 @@
       "agent": "builder",
       "priority": 1,
       "kind": "mentor",
-      "status": "doing",
+      "status": "done",
       "attempts": 1,
       "notes": [
         "Owner 2026-11-14: shoulders and body structure look weird (hunched, narrow, stiff straight arms, large heads): fix the retarget rest pose (T-pose to the library rest), natural arm hang and swing, head ratio about 7 to 7.5."
       ],
       "created": "2026-11-14T10:14:45.098Z",
       "model": "opus",
-      "started": "2026-11-14T10:14:45.352Z"
+      "started": "2026-11-14T10:14:45.352Z",
+      "done": "2026-11-14T12:36:55.489Z",
+      "summary": "Owner's three lead models play in game: rest pose matched to the stand-in (fixes the hunched shoulders), heads scaled, per-lead walk, jog, sprint, start, stop and turn, LODs 50k close-up, about 25k in play, 6.2k far, stylised B material, real heights. Verifier PASS (sheets, street, compare; 148 Godot tests). Open tuning: Bittu stop hip step 0.066 vs 0.045 (not visible in play). New models from the approved reference sheets will replace these.",
+      "commit": "1315efb"
     },
     {
       "id": "P2-064",
@@ -5059,7 +5095,9 @@
       "kind": "mentor",
       "status": "todo",
       "attempts": 0,
-      "notes": [],
+      "notes": [
+        "Add a world logic check: no road marking, kerb or decal is emissive or unshaded (owner 2026-11-14, glowing lane lines at night)."
+      ],
       "created": "2026-11-14T11:13:12.256Z",
       "model": "opus"
     },
@@ -5075,10 +5113,189 @@
       "agent": "builder",
       "priority": 1,
       "kind": "bug",
+      "status": "done",
+      "attempts": 1,
+      "notes": [],
+      "created": "2026-11-14T11:40:16.568Z",
+      "model": "sonnet",
+      "started": "2026-11-14T13:23:12.035Z",
+      "done": "2026-11-14T13:51:01.270Z",
+      "summary": "Every harness Godot launch parks its window off all displays (position, borderless park in debug_server, app hider), HARNESS_SHOW_WINDOW=1 shows it; checked with a window list probe through a whole launch. Off-screen perf reads pessimistic (occluded window), so absolute budgets are judged with a visible window at phase gates (decisions.md). Self-checked: 309 harness tests, typecheck.",
+      "commit": "64c564f"
+    },
+    {
+      "id": "P2-066",
+      "phase": "P2",
+      "title": "Dashboard live view of every lane's work in progress",
+      "desc": "Anmol 2026-11-14 wants to watch work as it is made (sign boards, tunnels, characters) and give feedback live. The overview 'Live now: builder' strip reads only the main checkout's harness/reports/shots and a few map folders. Show the newest images from every lane: the main checkout and each worktree in .worktrees/ (map, lane2, verify2; the verify snapshot under the verifier strip), from harness/reports/shots and any task folder under harness/reports/ (signboards, tunnels, leads, kits, access, infra, areas and so on), each card labelled with its lane and the task from harness/state/agents.json, newest first, grouped per lane, click to open full size. One directory listing per folder per poll, no image reads. Plain English labels.",
+      "accept": [
+        "A test for the folder scan; harness tests green"
+      ],
+      "deps": [],
+      "agent": "builder",
+      "priority": 1,
+      "kind": "mentor",
+      "status": "done",
+      "attempts": 1,
+      "notes": [],
+      "created": "2026-11-14T12:05:51.673Z",
+      "model": "sonnet",
+      "started": "2026-11-14T12:05:52.701Z",
+      "done": "2026-11-14T12:10:40.855Z",
+      "summary": "Overview Live now shows one block per running lane (main, map, lane2, verify2) and the verifier strip, newest pictures from each lane's harness/reports labelled with lane, task and job, click to open; path guard tested. Self-checked: 307 harness tests, live test on a spare port with real lanes, scan 12.5 ms median.",
+      "commit": "9cd19d3"
+    },
+    {
+      "id": "P2-067",
+      "phase": "P2",
+      "title": "Parody shop and brand names per area, GTA style",
+      "desc": "decisions.md 2026-11-14 'Shop and brand names: parodies'. For each pilot area's name file (game/data/names/<area>.json), add a parody set next to the invented names: names that echo famous Delhi shops, sweet shops, eateries, jewellers, cinemas, hotels, travel agents, pharmacies, mobile brands, cola and snack brands, paan shops and coaching centres, the way GTA does it (recognisable joke, clearly different core word and spelling, never one letter off, no real slogans), plus taglines and the board style each suits (hand-painted, flex, glow box). Mark each entry parody:true and the kind of shop. Mix about 1 parody to 3 plain invented names so streets do not read as a joke. Respect rule: no religious places, communities, real people or anything mocking a group. Keep the existing file format working (the board system reads it).",
+      "accept": [
+        "The name file test still passes"
+      ],
+      "deps": [],
+      "agent": "content-writer",
+      "priority": 1,
+      "kind": "mentor",
+      "status": "todo",
+      "attempts": 0,
+      "notes": [
+        "Written by the content writer into the P2-048 working tree (232 parody names in 11 files, harness/design/areas/parody_names.md); one off-tone tagline replaced by the orchestrator. Ships and is marked done with the P2-048 PR."
+      ],
+      "created": "2026-11-14T12:08:13.584Z",
+      "model": "sonnet"
+    },
+    {
+      "id": "P3-012",
+      "phase": "P3",
+      "title": "Signature presence for the three leads: walk, idles, gestures, props, barks",
+      "desc": "Anmol 2026-11-14 asked whether the leads have their own personality and aura so they are memorable. The story (STORY_OUTLINE.md section 3) gives each a strong inner life; the game must show it in how they move and what they carry. Bittu: loose easy walk, chatty, jokes ('Chhodo yaar'), his father's steel watch stopped at 6:10 always on his wrist, the gamchha he wipes his face with, an old radio in the auto playing Raat Wali 106.1, idles: checks the stopped watch, wipes sweat, leans on the auto chatting. Meera: upright, precise walk, ties her hair the same way at shift start, scans her surroundings, notebook idle, procedure barks ('Suspect, male, thirty'). Danny: easy swagger, charming half smile, sunglasses pushed up and dropped down for effect, counts notes, prices things under his breath ('Two lakh. High risk. Fine.'), the dented steel tiffin kept and never opened. Build per-lead walk style and 3 idles each (Mixamo clips via P3-011 where they fit), signature props as small models, short barks as text and voice cards (content-writer), and a first-sight intro shot per lead for M01 to M04. The verifier judges with the question: would a player describe each of them in three words after one minute?",
+      "accept": [
+        "A side by side video strip or shot sheet of the three walking and idling, read by the verifier: each reads as a different person at a glance"
+      ],
+      "deps": [],
+      "agent": "builder",
+      "priority": 1,
+      "kind": "mentor",
       "status": "todo",
       "attempts": 0,
       "notes": [],
-      "created": "2026-11-14T11:40:16.568Z",
+      "created": "2026-11-14T12:19:51.889Z",
+      "model": "opus"
+    },
+    {
+      "id": "P2-068",
+      "phase": "P2",
+      "title": "Rebuild the leads from the new models made from the approved pictures",
+      "desc": "Anmol 2026-11-14 uploaded new Mixamo-rigged models made by image to 3D from the approved T-pose pictures (portrait_lead_*): Danny and Meera are in public/assets/models (about 50k triangles, 65 Mixamo bones); Bittu follows. Rerun the P2-063 lead pipeline (tools/characters/lead_build.mjs, game/characters/tools/build_leads.gd: rest pose matched to the mannequin, head scale only if needed, per-lead locomotion, LODs 50k close, about 25k play, about 6k far, stylised B material, heights 1.72, 1.64, 1.78 m) on each new model; check the T-pose source works with the silhouette match. Compare with the approved pictures (assets_inbox/_processed/portrait_lead_*.png): face, clothes, colours, proportions. Bittu is built the same way the moment his FBX lands.",
+      "accept": [
+        "Triangles in play 25,000 or fewer per lead; npm test and verify --quick green (judged with load)"
+      ],
+      "deps": [],
+      "agent": "builder",
+      "priority": 1,
+      "kind": "mentor",
+      "status": "done",
+      "attempts": 1,
+      "notes": [
+        "Owner 2026-11-14: new Danny's shoulders bulge and arms pin, while the models look right in Mixamo's preview. Keep the delivered bind pose and retarget the clips onto the Mixamo skeleton instead of re-baking the rest pose."
+      ],
+      "created": "2026-11-14T13:28:29.643Z",
+      "model": "opus",
+      "started": "2026-11-14T13:28:30.831Z",
+      "done": "2026-11-14T14:51:32.143Z",
+      "summary": "All three leads rebuilt from the owner's new image-to-3D models: Mixamo bind and rest kept as delivered, clips retargeted onto it (limbs aimed only in clips), legs split, LODs 50k, about 25k, about 6k, real heights. Verifier PASS: rest matches Mixamo, level shoulders, slide under 0.4 percent, reality scores Bittu 8.4, Meera 8.5, Danny 8.3. Owner still finds the library idle stiff: Mixamo clips are being downloaded for the leads (next task).",
+      "commit": "39c03af"
+    },
+    {
+      "id": "P2-069",
+      "phase": "P2",
+      "title": "Reality match tooling: object catalog, reference vs game sheets, scores, dashboard",
+      "desc": "harness/design/REALITY_MATCH.md (Anmol 2026-11-14). Build: (1) a catalog tool that lists every visible object class from the code and data (kit module ids and pieces, infra variants and fittings, street props, landmark parts, vehicles, characters) into harness/data/reality_catalog.json, with the area or kind each belongs to; (2) a render step (off-screen, through the harness) that shoots each object alone (front, three quarter, close) and in context at player height, day and night; (3) a sheet maker that puts 2 to 4 dated reference photos beside the renders with the 8 score lines and writes harness/reports/reality/<id>.jpg; (4) harness/data/reality_scores.json and a CLI to record scores (node harness/bin/reality.mjs score <id> --shape 7 ... --note), list worst first, and show coverage; (5) a dashboard tab 'Reality match' with pass, fail and not-yet-scored and the sheets; (6) a first sweep: score the 30 most visible objects in the pilot (the critic does it with the sheets), and add one fix task per failing group.",
+      "accept": [
+        "npm test green"
+      ],
+      "deps": [],
+      "agent": "builder",
+      "priority": 1,
+      "kind": "mentor",
+      "status": "todo",
+      "attempts": 0,
+      "notes": [],
+      "created": "2026-11-14T13:38:38.609Z",
+      "model": "opus"
+    },
+    {
+      "id": "P2-070",
+      "phase": "P2",
+      "title": "Quality presets: M2 minimum to gaming PC, one look",
+      "desc": "Anmol 2026-11-14: never lose quality, but run well from a Mac M2 (minimum) up to a good gaming PC or laptop. Build Low, Medium, High and Ultra presets on top of the one signed stylised B look: render scale and upscaling (FSR on PC, MetalFX if available), shadow resolution and cascades, SSAO and SSIL quality, decal and dressing draw distance, kit module ranges, texture size, crowd and traffic density, reflection quality, haze and glow. M2 runs Medium at 1080p within the signed budgets; High and Ultra add on a PC GPU without changing the art. Auto-pick by a short benchmark on first boot, a settings menu to change it. A shot sheet of the same 4 views per preset, read for the look staying the same (only crisper and denser upward).",
+      "accept": [
+        "npm test and verify --quick green"
+      ],
+      "deps": [],
+      "agent": "builder",
+      "priority": 2,
+      "kind": "mentor",
+      "status": "todo",
+      "attempts": 0,
+      "notes": [],
+      "created": "2026-11-14T16:00:21.796Z",
+      "model": "opus"
+    },
+    {
+      "id": "P2-071",
+      "phase": "P2",
+      "title": "Wire the owner's sign board photos into the kit sign atlases",
+      "desc": "26 single-board sign cards (decal_sign_tin_*, decal_sign_flex_gb_*, decal_sign_hotel_led_*, decal_sign_glowbox_*, decal_sign_enamel_*, decal_shutter_text_*, decal_poster_*) arrive from the owner as photos. Add them to the kit sign atlases next to the procedural boards: crop the strip of wall above and below each board, keep the aspect, map to the matching board kind and area (Chandni Chowk tin to bazaar, GB Road flex to hardware, Paharganj hotel LED to hotel, CP glow box to colonnade), cut-out cards as alpha decals, and A/B each in game against the procedural board at 2, 15 and 60 m (REALITY_MATCH.md); keep the better per kind. Night: the dusk lit reference guides the glow of the lit boards.",
+      "accept": [
+        "npm test and verify --quick green"
+      ],
+      "deps": [],
+      "agent": "builder",
+      "priority": 2,
+      "kind": "feature",
+      "status": "todo",
+      "attempts": 0,
+      "notes": [],
+      "created": "2026-11-14T17:20:37.299Z",
+      "model": "sonnet"
+    },
+    {
+      "id": "P2-072",
+      "phase": "P2",
+      "title": "Mixamo animations on the leads: pick per character, layered blending",
+      "desc": "161 Mixamo clips (FBX, without skin, 30 fps, in place where offered) downloaded with the owner's account, sorted in assets_inbox/mixamo/<category>/ (gitignored: Mixamo licence allows use in the game but not sharing raw files; commit only converted game resources). The leads (Bittu, Meera, Danny) share the Mixamo skeleton they were rigged with, so clips play without retargeting. 1) Import the clips into the game's animation library for the leads (convert to Godot animation resources, root motion removed or used consistently, loop flags right). 2) Pick per lead by comparing candidates in game on each lead (shot strips from behind and the side, read them): idle (Breathing, Standing, Short, Weight Shift, Neutral, Happy; Meera: Female Idle, Female Standing Idle), walk (Male Standard Walk, Walk Forward 01/02/03, Happy, Hurried, Careful, Strut, Walking With A Swagger; Meera: Female Normal Walk), jog (Jogging), run (Running Forward, Running Fast, Slow Run Forward, Standard Sprint), start and stop walking, turns (mirror the left walking turn for the right); personality: loose for Bittu, upright and precise for Meera, swagger for Danny (P3-012). 3) Layered blending: lower body locomotion blend space by speed with crossfades; upper body layer by bone mask for pistol aim and shoot, phone talk, texting, gestures, carrying; aim IK for the spine; additive flinches. 4) Wire the rest by category (combat, climbing, swimming, driving, injured and drunk, actions) as named clips for later systems, with a test that lists them. Stand-ins and crowds keep the library clips.",
+      "accept": [
+        "All 161 clips import and are listed by name; raw FBX stay out of git; npm test and verify --quick green"
+      ],
+      "deps": [],
+      "agent": "builder",
+      "priority": 1,
+      "kind": "mentor",
+      "status": "doing",
+      "attempts": 1,
+      "notes": [],
+      "created": "2026-11-14T17:39:13.193Z",
+      "model": "opus",
+      "started": "2026-11-14T17:39:14.168Z"
+    },
+    {
+      "id": "P2-073",
+      "phase": "P2",
+      "title": "Forced draw freezes shader TIME in harness shots; relight_live_street regression check",
+      "desc": "From P2-048 attempt 3: game/debug/debug_server.gd force_draw for covered or parked (hidden) windows passed no frame step, so shader TIME froze in every harness shot (LED and any animated shader looked static). Fix on main: force_draw(false, delta). Also relight_live_street fails on trees that carry the parked-window files from P2-065 (main-thread relight 9.3 ms vs 4, GPU p95 15 vs 12) and passes on older trees: find whether the hidden window or the forced draw path causes it and fix, quiet machine numbers quoted.",
+      "accept": [
+        "npm test green"
+      ],
+      "deps": [],
+      "agent": "builder",
+      "priority": 1,
+      "kind": "bug",
+      "status": "todo",
+      "attempts": 0,
+      "notes": [],
+      "created": "2026-11-14T18:22:13.870Z",
       "model": "sonnet"
     }
   ]

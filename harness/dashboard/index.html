@@ -94,6 +94,8 @@
   .shots figure:hover { border-color: #444; }
   .shots img { width: 100%; aspect-ratio: 16/9; object-fit: cover; display: block; background: #000; }
   .shots figcaption { font-size: 12px; color: var(--mute); padding: 6px 10px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .lanehead { font-size: 13px; color: var(--bone); margin: 14px 0 6px; } .lanehead b { color: var(--white); font-weight: 600; }
+  .shots figcaption .who { color: var(--dim); font-size: 11px; margin-top: 2px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
   .journal { list-style: none; padding: 0; margin: 0; font-size: 13px; }
   .journal li { padding: 7px 0; border-bottom: 1px solid var(--line); color: var(--bone); }
   .cols { display: grid; grid-template-columns: 1fr 1fr; gap: 32px; margin-top: 12px; }
@@ -246,7 +248,8 @@ $('#filePick').addEventListener('change', async (e) => {
   if (want && f.type.startsWith('image/')) {
     try {
       const bmp = await createImageBitmap(f); const got = bmp.width / bmp.height; const need = Number(want[1]) / Number(want[2]);
-      if (Math.abs(got - need) / need > 0.12 && !confirm(`This file is ${bmp.width}x${bmp.height}, but ${id} asks for ${req.generate}. It may belong to another card. Upload it here anyway?`)) { toast('Upload cancelled.'); return; }
+      const shape = (r) => r > 1.15 ? 'wide' : r < 0.87 ? 'tall' : 'square';
+      if (shape(got) !== shape(need) && Math.abs(got - need) / need > 0.5 && !confirm(`This file is ${bmp.width}x${bmp.height}, but ${id} asks for ${req.generate}. It may belong to another card. Upload it here anyway?`)) { toast('Upload cancelled.'); return; }
     } catch { /* unreadable image: let the server decide */ }
   }
   uploading++; toast(`Uploading ${f.name}...`);
@@ -313,13 +316,22 @@ async function sendPlaytest(pid) {
 }
 
 function chip(s) { return `<span class="chip ${esc(s)}">${esc(String(s).replace(/_/g, ' '))}</span>`; }
+// Live now (P2-066): the newest pictures per lane, each card labelled with the lane, the task and the agent's one-line job.
 function liveStrip() {
-  const L = S.live || {}; const enc = (n) => n.split('/').map(encodeURIComponent).join('/'); const fig = (base, x) => `<figure data-src="${base}${enc(x.name)}?t=${x.t}" data-name="${esc(x.name)}"><img loading="lazy" src="${base}${enc(x.name)}?t=${x.t}" alt="${esc(x.name)}"><figcaption>${esc(x.name.replace(/^(look_proof|reports\/look)\//, '').replace(/\.(png|jpg)$/, ''))} <span class="muted">${ago(x.t)}</span></figcaption></figure>`;
-  const part = (title, base, list, note) => list && list.length ? `<h2>${title}</h2><div class="muted small" style="margin:-4px 0 8px">${note}</div><div class="shots">${list.map((x) => fig(x.base || base, x)).join('')}</div>` : '';
-  // One builder strip: test shots and look shots (style views, sheets) together, newest first.
-  const builder = [...(L.builder || []).map((x) => ({ ...x, base: '/shots/' })), ...(L.look || []).map((x) => ({ ...x, base: '/lshots/' }))].sort((a, b) => b.t - a.t).slice(0, 12);
-  return part('Live now: builder', '/shots/', builder, 'Every shot the builder took most recently (tests, style views, sheets), newest first.')
-    + ((L.verifier && L.verifier.length) ? part('Live now: verifier', '/vshots/', L.verifier, 'The shots the verifier took on its snapshot copy, newest first.') : '<h2>Live now: verifier</h2><div class="empty">No verifier shots yet. They appear here when the next verifier checks a task.</div>');
+  const L = S.live || {};
+  const encp = (n) => n.split('/').map(encodeURIComponent).join('/');
+  const card = (lane, x) => {
+    const tag = [LANE_WORD[lane.lane] || lane.lane, lane.task, lane.what].filter(Boolean).join(', ');
+    return `<figure data-src="${esc(x.url)}?t=${x.t}" data-name="${esc(tag + ': ' + x.name)}" title="${esc(tag)}"><img loading="lazy" src="${esc(x.url)}?t=${x.t}" alt="${esc(x.name)}"><figcaption>${esc(x.name.replace(/^(look_proof|look)\//, '').replace(/\.(png|jpe?g)$/i, ''))}<div class="who"><span class="muted">${ago(x.t)}</span> \u00b7 ${esc([LANE_WORD[lane.lane] || lane.lane, lane.task].filter(Boolean).join(' \u00b7 '))}${lane.what ? ' \u00b7 ' + esc(lane.what) : ''}</div></figcaption></figure>`;
+  };
+  const part = (title, lanes, none) => {
+    const rows = (lanes || []).map((lane) => {
+      const head = `<div class="lanehead"><b>${esc(LANE_WORD[lane.lane] || lane.lane)}</b>${lane.task ? ' &middot; ' + esc(lane.task) : ''}${lane.what ? ' &middot; ' + esc(lane.what) : ''}${lane.since ? ` &middot; <span class="muted">${esc(spent(lane.since))}</span>` : ''}</div>`;
+      return head + (lane.items.length ? `<div class="shots">${lane.items.map((x) => card(lane, x)).join('')}</div>` : '<div class="empty">No pictures from this lane yet.</div>');
+    }).join('');
+    return `<h2>${title}</h2>` + (rows || `<div class="empty">${none}</div>`);
+  };
+  return part('Live now: builders', L.builders, 'No builder lanes found.') + part('Live now: verifier', L.verifiers, 'No verifier shots yet. They appear here when the next verifier checks a task.');
 }
 function shotUrl(name) { return `/shots/${encodeURIComponent(name)}?t=${(S.shots.find((x) => x.name === name) || {}).t || 0}`; }
 function hasShot(name) { return S.shots.some((x) => x.name === name); }

@@ -15,7 +15,6 @@ extends RefCounted
 
 const Kit := preload("res://characters/tools/loco_kit.gd")
 const Motor := preload("res://characters/foot_motor.gd")
-const REF_SCALE := 0.94
 const TICK := 1.0 / 60.0
 const JOG := "k/Jog_K"
 
@@ -36,9 +35,9 @@ static func build(k: Kit, out: AnimationLibrary, gaits: Dictionary) -> Dictionar
 		flat[side] = f.basis.orthonormalized()
 		g_idle[side] = k.sole_points(side, f)[1].z
 		x_idle[side] = f.origin.x
-	var stop := _travel(_sim("stop"))
-	var start := _travel(_sim("start"))
-	var turn := _travel(_sim("turn"))
+	var stop := _travel(_sim("stop"), k.ref_scale)
+	var start := _travel(_sim("start"), k.ref_scale)
+	var turn := _travel(_sim("turn"), k.ref_scale)
 	var total: float = stop[stop.size() - 1]
 	var jog_body := func(ph: float) -> Dictionary:
 		k.pose(JOG, ph * cyc)
@@ -123,11 +122,11 @@ static func _sim(kind: String) -> PackedFloat32Array:
 
 
 ## Skeleton metres covered by the end of each tick (index 0 is time 0).
-static func _travel(speeds: PackedFloat32Array) -> PackedFloat32Array:
+static func _travel(speeds: PackedFloat32Array, ref_scale: float) -> PackedFloat32Array:
 	var out := PackedFloat32Array([0.0])
 	var s := 0.0
 	for v in speeds:
-		s += v * TICK / REF_SCALE
+		s += v * TICK / ref_scale
 		out.append(s)
 	return out
 
@@ -169,6 +168,11 @@ static func _foot(k: Kit, spec: Dictionary, side: String, t: float) -> Array:
 			before = seg
 		elif after.is_empty():
 			after = seg
+	# a time just outside every plant and swing (finer keys, P2-063): the foot holds the nearest plant's end
+	if before.is_empty() and after.has("plant"):
+		return _planted(k, spec, side, after, float(after.plant[0]))
+	if after.is_empty() and before.has("plant"):
+		return _planted(k, spec, side, before, float(before.plant[1]))
 	# a swing from the pose that ends `before` to the pose that starts `after`
 	var ta: float = before.plant[1] if before.has("plant") else 0.0
 	var tb: float = after.plant[0] if after.has("plant") else float(spec.len)
@@ -206,13 +210,13 @@ static func _planted(k: Kit, spec: Dictionary, side: String, seg: Dictionary, t:
 
 ## Bakes a move: the body of `spec.body` at each frame with the hips dipped, both feet solved onto their sequence.
 static func _move(k: Kit, spec: Dictionary) -> Animation:
-	var n := roundi(float(spec.len) * Kit.FPS) + 1
+	var n := roundi(float(spec.len) * k.fps) + 1
 	var bodies := []
 	var targets := []
 	var need := PackedFloat32Array()
 	var max_r := k.reach * 0.992
 	for i in n:
-		var t := float(i) / Kit.FPS
+		var t := float(i) / k.fps
 		var b: Dictionary = spec.body.call(t)
 		b.pos = (b.pos as Vector3) + Vector3(0.0, float(spec.dip.call(t)), 0.0)
 		var tg := {}
@@ -227,15 +231,17 @@ static func _move(k: Kit, spec: Dictionary) -> Animation:
 		targets.append(tg)
 		need.append(maxf(0.0, over))
 	# the hips drop where a leg could not reach, smoothly (three passes of a 5 frame mean, never under the need)
+	# (the window is in time: 5 frames at 120 keys a second, wider at a lead build's 240)
+	var r := 2 * maxi(1, roundi(k.fps / Kit.FPS))
 	var drop := need
 	for pass_i in 3:
 		var next := PackedFloat32Array()
 		next.resize(n)
 		for i in n:
 			var sum := 0.0
-			for d in range(-2, 3):
+			for d in range(-r, r + 1):
 				sum += drop[clampi(i + d, 0, n - 1)]
-			next[i] = maxf(sum / 5.0, need[i])
+			next[i] = maxf(sum / float(2 * r + 1), need[i])
 		drop = next
 	var frames := []
 	for i in n:
