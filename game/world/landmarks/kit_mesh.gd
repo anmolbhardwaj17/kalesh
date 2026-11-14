@@ -7,6 +7,10 @@
 extends RefCounted
 
 
+## The format flags of the custom channels (both RGBA float), for add_surface_from_arrays.
+const CUSTOM_FLAGS := (Mesh.ARRAY_CUSTOM_RGBA_FLOAT << Mesh.ARRAY_FORMAT_CUSTOM0_SHIFT) | (Mesh.ARRAY_CUSTOM_RGBA_FLOAT << Mesh.ARRAY_FORMAT_CUSTOM1_SHIFT)
+
+
 class Surf:
 	var v := PackedVector3Array()
 	var n := PackedVector3Array()
@@ -14,6 +18,10 @@ class Surf:
 	var i := PackedInt32Array()
 	## UVs, only on a surface that got a quad_uv (P2-032, the tunnel murals); kept as long as v once started.
 	var uv := PackedVector2Array()
+	## Two custom channels (4 floats a vertex), only on a surface a post pass filled whole (P2-032: the tunnel's strip
+	## light vectors, game/world/infra/kit_tunnel_light.gd); written as ARRAY_CUSTOM0 and 1 in RGBA float.
+	var cu0 := PackedFloat32Array()
+	var cu1 := PackedFloat32Array()
 
 
 ## part name -> material key -> Surf
@@ -385,7 +393,8 @@ static func _area(poly: PackedVector2Array) -> float:
 	return a * 0.5
 
 
-## The arrays of one part: material key -> mesh arrays.
+## The arrays of one part: material key -> mesh arrays. A surface with the custom channels needs CUSTOM_FLAGS when it
+## is added to a mesh.
 func arrays_of(part_name: String) -> Dictionary:
 	var out := {}
 	if not parts.has(part_name):
@@ -401,6 +410,9 @@ func arrays_of(part_name: String) -> Dictionary:
 		a[Mesh.ARRAY_COLOR] = s.c
 		if not s.uv.is_empty() and s.uv.size() == s.v.size():
 			a[Mesh.ARRAY_TEX_UV] = s.uv
+		if s.cu0.size() == s.v.size() * 4 and s.cu1.size() == s.v.size() * 4:
+			a[Mesh.ARRAY_CUSTOM0] = s.cu0
+			a[Mesh.ARRAY_CUSTOM1] = s.cu1
 		a[Mesh.ARRAY_INDEX] = s.i
 		out[k] = a
 	return out

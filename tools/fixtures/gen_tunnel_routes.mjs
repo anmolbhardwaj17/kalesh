@@ -3,7 +3,7 @@
 // (P2-032), read from the tunnel mouths of the folder's infra.json (records `theads`, tools/bake/infra/tunnels.ts) and
 // the lane graph of the tiles (tools/fixtures/lanegraph.mjs). For each mouth a lane enters (its direction against the
 // mouth's outward normal), the route starts 70 m back on the approach, follows the straightest `next` link (a full
-// lane before a taper lane opening beside it) through the tunnel and ends 60 m past the last mouth it passes (at most 1,600 m). A mouth a route already passes is not
+// lane before a taper lane opening beside it; from a lane that drops it merges into the full lane beside it) through the tunnel and ends 60 m past the last mouth it passes (at most 1,600 m). A mouth a route already passes is not
 // started again; a mouth no route passes is an exit only and gets a drive from 400 m back inside it. Pedestrian
 // subways (SUB-S4) are P2-031. The scenario tunnel_drive (harness/verify/scripts/
 // tunnel_drive.js) stages the car at each start and drives the route with real inputs.
@@ -127,14 +127,47 @@ function forwardFrom(id, i) {
       if (dot > bestDot) { bestDot = dot; pick = q; }
     }
     if (!pick) break;
-    p = pick;
+    // a lane that drops (a taper under 2.5 m) runs into the kerb where it ends: change to the full lane beside it, as a
+    // driver merges, over the first MERGE_M of that lane (P2-032: route tun-t1_1690_42 drove a dropping lane to its
+    // end on the kerb line and a wheel rode the kerb)
+    const merge = pick.widthM < 2.5 ? fullSibling(pick, seen) : null;
+    p = merge ?? pick;
     seen.add(p.id);
-    for (const q of p.pts.slice(1)) {
+    const pts = merge ? mergeInto(out[out.length - 1], p.pts) : p.pts.slice(1);
+    for (const q of pts) {
       out.push(q);
       passMouths();
     }
   }
   return out;
+}
+
+/** Metres of the full lane a dropping lane's route merges over. */
+const MERGE_M = 15;
+
+/** The full car lane (2.5 m or more) beside a lane piece of a strip (same strip and piece, lane one either side) that starts within 5 m of it, or null. */
+function fullSibling(p, seen) {
+  const m = /^(s\d+)\.(\d+):(\d+)$/.exec(p.id);
+  if (!m) return null;
+  let best = null;
+  for (const k of [Number(m[2]) - 1, Number(m[2]) + 1]) {
+    const q = pieces.get(`${m[1]}.${k}:${m[3]}`);
+    if (!q || seen.has(q.id) || q.kind !== 'lane' || !allows(q, 'car') || q.widthM < 2.5 || q.pts.length < 2) continue;
+    const d = Math.hypot(q.pts[0][0] - p.pts[0][0], q.pts[0][2] - p.pts[0][2]);
+    if (d < 5 && (!best || d < best.d)) best = { q, d };
+  }
+  return best ? best.q : null;
+}
+
+/** A lane's points from `last` (the route so far) as a straight merge: the points within MERGE_M of its start dropped. */
+function mergeInto(last, pts) {
+  let s = 0;
+  const out = [];
+  for (let i = 1; i < pts.length; i++) {
+    s += Math.hypot(pts[i][0] - pts[i - 1][0], pts[i][2] - pts[i - 1][2]);
+    if (s >= MERGE_M || i === pts.length - 1) out.push(pts[i]);
+  }
+  return last ? out : pts;
 }
 
 const routes = {};

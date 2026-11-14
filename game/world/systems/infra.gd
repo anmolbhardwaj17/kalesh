@@ -9,6 +9,7 @@ extends RefCounted
 
 const InfraKit := preload("res://world/infra/infra_kit.gd")
 const Kit := preload("res://scenes/standin/kit.gd")
+const KitMesh := preload("res://world/landmarks/kit_mesh.gd")
 const MURAL_SHADER := preload("res://world/infra/tunnel_mural.gdshader")
 const MURAL_INSIDE_SHADER := preload("res://world/infra/tunnel_mural_inside.gdshader")
 const TUNNEL_LIT_SHADER := preload("res://world/infra/tunnel_lit.gdshader")
@@ -46,6 +47,12 @@ func _init(parent: Node3D, tile_records: Dictionary) -> void:
 	lit.shader = TUNNEL_LIT_SHADER
 	lit.resource_name = "tunnel_lit"
 	materials["tunnel_lit"] = lit
+	# the concrete road under a ceiling: the same light, a worn concrete surface
+	var road := ShaderMaterial.new()
+	road.shader = TUNNEL_LIT_SHADER
+	road.set_shader_parameter("surface", 1)
+	road.resource_name = "tunnel_road"
+	materials["tunnel_road"] = road
 
 
 func prepare(tile: Dictionary) -> Variant:
@@ -64,7 +71,8 @@ func prepare(tile: Dictionary) -> Variant:
 			var keys := arrays.keys()
 			keys.sort()
 			for k: String in keys:
-				mesh.add_surface_from_arrays(Mesh.PRIMITIVE_TRIANGLES, arrays[k])
+				var arr: Array = arrays[k]
+				mesh.add_surface_from_arrays(Mesh.PRIMITIVE_TRIANGLES, arr, [], {}, KitMesh.CUSTOM_FLAGS if arr[Mesh.ARRAY_CUSTOM0] != null else 0)
 				mesh.surface_set_material(mesh.get_surface_count() - 1, materials.get(k, materials["matte"]))
 			meshes.append({"group": g, "level": level, "mesh": mesh})
 	return {"meshes": meshes, "triangles": int(built.triangles), "nodes": [], "labels": built.get("labels", [])}
@@ -132,7 +140,6 @@ func info() -> Dictionary:
 ## with the landmarks' haze material so they read as pale silhouettes past the fog, like the far landmarks.
 static func skyline(parent: Node3D, list: Array, haze: Material) -> Array:
 	const Elevated := preload("res://world/infra/kit_elevated.gd")
-	const KitMesh := preload("res://world/landmarks/kit_mesh.gd")
 	var out := []
 	for k: Dictionary in list:
 		if str(k.get("v", "")) != "BRI-Y2":

@@ -6,8 +6,8 @@
 ##   TUN-T1  Pragati Maidan main tunnel (2022), from the owner's photos (harness/design/reference/owner/
 ##           pragati_maidan_tunnel/): inside, a green base, a yellow wall and a wave band of yellow, ochre and green
 ##           with white and red birds, a cream soffit with two continuous white LED strip lines near the wall tops (real
-##           even light from them over walls, soffit and road side) and orange marigold strings across, cable trays, jet fan pairs, hanging message signs,
-##           red fire point boxes, CCTV domes, a black and white kerb; where two carriageways run side by side the wall
+##           even light from them over walls, soffit and road side) and orange marigold strings across, cable trays, jet fan pairs, message signs flush under
+##           the soffit, fire point cabinets set into the wall, CCTV domes, a black and white kerb; where two carriageways run side by side the wall
 ##           between them is the wide section's line of painted pillars (saffron, purple, teal, yellow, mandala discs,
 ##           striped plinths, uplights); the ramp
 ##           walls painted end to end: a green base, a blue river band, cream with flower discs, pink lotus and green
@@ -24,6 +24,7 @@ extends RefCounted
 const KitMesh := preload("res://world/landmarks/kit_mesh.gd")
 const K := preload("res://world/infra/infra_kit.gd")
 const Paint := preload("res://world/infra/kit_tunnel_paint.gd")
+const Fit := preload("res://world/infra/kit_tunnel_fit.gd")
 
 const BLACK := Color("#1d1d20")
 const WHITE := Color("#f1efe9")
@@ -65,8 +66,14 @@ const MARIGOLD := Color("#f39a1e")
 ## Heights over the lane top (m): the dado, the top of the mural band (TUN-T1, read from the 2025 photo).
 const DADO_M := 1.2
 const MURAL_TOP_M := 4.0
-## Where the two LED strip lines run across the soffit (share of its width from each wall).
+## Where the two LED strip lines run across the soffit (share of its width from each wall), and at least this far
+## past the curve between the wall and the soffit.
 const STRIP_SIDE := 0.1
+const STRIP_PAST_CURVE_M := 0.25
+## The curve between the wall and the soffit of the Pragati Maidan tunnel and its box underpasses (owner photo 02),
+## radius in metres, and its facets.
+const CURVE_M := 0.6
+const CURVE_FACETS := 4
 const FAN_EVERY_M := 96.0
 const VMS_EVERY_M := 90.0
 const HYDRANT_EVERY_M := 60.0
@@ -88,6 +95,40 @@ static func finish(v: String) -> Dictionary:
 		"SUB-S4":
 			return {"wall": TILE, "dado": GREY_DARK, "mural": false, "lamp": LED, "fans": false, "vms": false, "kerb": GREY, "rail": GALV, "soffit": PALE, "strips": true}
 	return {"wall": CREAM, "dado": GREY_DARK, "mural": false, "lamp": WARM_LED, "fans": false, "vms": false, "kerb": YELLOW, "rail": GALV, "soffit": SOFFIT, "strips": true}
+
+
+## The radius of the curve between wall and soffit of a variant (0: a square corner).
+static func curve_of(v: String) -> float:
+	return CURVE_M if v == "TUN-T1" or v == "TUN-T2" else 0.0
+
+
+## Metres from each wall to a strip line on a soffit `width` wide (kit_tunnel_light.gd uses the same).
+static func strip_offset(width: float, v: String) -> float:
+	var c := curve_of(v)
+	return minf(maxf(STRIP_SIDE * width, c + STRIP_PAST_CURVE_M if c > 0.0 else 0.0), width * 0.3)
+
+
+## Heights up a wall from y0 to top where it is cut into bands, so the strip light (per vertex) falls off down it:
+## at 1.0 and 2.2 m from the foot, 1.6 and 0.7 m under the top.
+static func heights(y0: float, top: float) -> PackedFloat32Array:
+	var out := PackedFloat32Array([y0])
+	for y in [y0 + 1.0, y0 + 2.2, top - 1.6, top - 0.7]:
+		if y > out[out.size() - 1] + 0.05 and y < top - 0.05:
+			out.append(y)
+	out.append(maxf(top, y0))
+	return out
+
+
+## The same bands for both ends of a wall segment (equal counts): shares of the mean height, laid on each end.
+static func heights_pair(a0: float, at: float, b0: float, bt: float) -> Array:
+	var h := maxf(((at - a0) + (bt - b0)) * 0.5, 0.01)
+	var rel := heights(0.0, h)
+	var ya := PackedFloat32Array()
+	var yb := PackedFloat32Array()
+	for y in rel:
+		ya.append(a0 + (at - a0) * y / h)
+		yb.append(b0 + (bt - b0) * y / h)
+	return [ya, yb]
 
 
 ## A side wall run (twalls): the face from the road edge to its top, the variant's bands and fittings.
@@ -125,7 +166,18 @@ static func wall(base: KitMesh, near: KitMesh, w: Dictionary, med: Array = []) -
 		# the plain face from the road edge to the top, in the wall colour (a TUN-T1 ramp: its cream)
 		# (painted concrete: satin, except the old underpass's weathered matte)
 		base.use("main", "tunnel_lit" if roofed else ("matte" if str(w.v) == "UND-U1" else "satin"))
-		K.oquad(base, a, b, Vector3(b.x, tb, b.z), Vector3(a.x, ta, a.z), inw, T1_CREAM if mural and not roofed else f.wall)
+		if roofed:
+			var hp := heights_pair(a.y, ta, b.y, tb)
+			var ya: PackedFloat32Array = hp[0]
+			var yb: PackedFloat32Array = hp[1]
+			for k in ya.size() - 1:
+				K.oquad(base, Vector3(a.x, ya[k], a.z), Vector3(b.x, yb[k], b.z), Vector3(b.x, yb[k + 1], b.z), Vector3(a.x, ya[k + 1], a.z), inw, f.wall)
+			var cr := curve_of(str(w.v))
+			# no curve behind the wide section's pillars: they run up to the soffit (owner photo 03)
+			if cr > 0.0 and not (mural and med.size() == n and med[i] and med[i + 1]):
+				_curve(base, a, b, ta, tb, inw, cr, f.soffit)
+		else:
+			K.oquad(base, a, b, Vector3(b.x, tb, b.z), Vector3(a.x, ta, a.z), inw, T1_CREAM if mural else f.wall)
 		base.use("main", "matte")
 		# the dado (with a striped kerb band at its foot), offset a little into the road
 		if roofed:
@@ -137,7 +189,7 @@ static func wall(base: KitMesh, near: KitMesh, w: Dictionary, med: Array = []) -
 		base.use("main", "matte")
 		_stripes(near, a + off * 2.0, b + off * 2.0, S[i], S[i + 1], 0.3, f.kerb, BLACK, inw, "tunnel_lit" if roofed else "paint")
 		if mural and roofed and med.size() == n and med[i] and med[i + 1]:
-			Paint.pillars(near, a + off * 2.0, b + off * 2.0, ta, tb, S[i], S[i + 1], inw)
+			Paint.gap(near, a + off * 2.0, b + off * 2.0, ta, tb, inw)
 		elif mural:
 			Paint.band(near, a + off * 2.0, b + off * 2.0, ta, tb, S[i], S[i + 1], inw, roofed)
 		elif str(w.v) == "TUN-T3":
@@ -166,29 +218,63 @@ static func wall(base: KitMesh, near: KitMesh, w: Dictionary, med: Array = []) -
 				near.use("main", "matte")
 	if not roofed:
 		return
+	# the wide section's line of pillars on the kerb in front of a median wall (owner photo 03), each turned to its segment
+	if mural and med.size() == n:
+		_along(P, S, Paint.PILLAR_EVERY_M, Paint.PILLAR_EVERY_M * 0.5, func(p: Vector3, i: int, t: float) -> void:
+			if med[i] and med[mini(i + 1, n - 1)]:
+				Paint.pillar(near, p, lerpf(T[i], T[mini(i + 1, n - 1)], t), -O[i], _d2(P, i), roundi((S[i] + t * (S[mini(i + 1, n - 1)] - S[i])) / Paint.PILLAR_EVERY_M)))
 	# fittings along a roofed wall, each turned to its own segment: fire point boxes, CCTV domes (T1), and the cable tray
 	# along the top of the wall, just under the soffit (T1, T2), with the conduit under it (T1)
 	if mural:
 		_along(P, S, HYDRANT_EVERY_M, 30.0, func(p: Vector3, i: int, _t: float) -> void:
-			var inw2: Vector3 = -O[i]
-			near.use("main", "paint")
-			K.post(near, p + Vector3(0, 1.3, 0) + inw2 * 0.12, Vector3(0.22, 1.1, 0.8), _d2(P, i), RED)
-			near.use("main", "matte"))
+			var d2 := _d2(P, i)
+			Fit.fire_point(near, p, -O[i], Vector3(d2.x, 0, d2.y)))
 		_along(P, S, CCTV_EVERY_M, 12.0, func(p: Vector3, i: int, _t: float) -> void:
 			var top := lerpf(T[i], T[mini(i + 1, n - 1)], _t)
 			var inw2: Vector3 = -O[i]
-			near.use("main", "satin")
+			near.use("main", "tunnel_lit")
 			K.post(near, Vector3(p.x, top - 0.9, p.z) + inw2 * 0.25, Vector3(0.28, 0.3, 0.28), _d2(P, i), BLACK)
 			near.use("main", "matte"))
 	if f.get("strips", false):
 		for i in n - 1:
+			# no tray or conduit along the wide section's line of pillars (owner photo 03)
+			if mural and med.size() == n and med[i] and med[i + 1]:
+				continue
 			var inw3: Vector3 = -(O[i] + O[i + 1]).normalized()
-			near.use("main", "metal")
+			near.use("main", "tunnel_lit")
 			K.beam_box(near, Vector3(P[i].x, T[i] - 0.32, P[i].z) + inw3 * 0.32, Vector3(P[i + 1].x, T[i + 1] - 0.32, P[i + 1].z) + inw3 * 0.32, 0.5, 0.1, GALV, true)
 			if mural:
-				near.use("main", "paint")
 				K.beam_box(near, Vector3(P[i].x, T[i] - 0.6, P[i].z) + inw3 * 0.08, Vector3(P[i + 1].x, T[i + 1] - 0.6, P[i + 1].z) + inw3 * 0.08, 0.12, 0.12, CONDUIT, true)
 		near.use("main", "matte")
+
+
+## The curve between a roofed wall and its soffit (owner photo 02): a quarter round of radius r in front of the
+## corner, from r under the wall top on the wall to r out on the soffit, facing the road and down.
+static func _curve(m: KitMesh, a: Vector3, b: Vector3, ta: float, tb: float, inw: Vector3, r: float, col: Color) -> void:
+	if ta - a.y < r + 1.0 or tb - b.y < r + 1.0:
+		return
+	for k in CURVE_FACETS:
+		var t0 := float(k) / CURVE_FACETS * PI * 0.5
+		var t1 := float(k + 1) / CURVE_FACETS * PI * 0.5
+		var o0 := inw * (r - r * cos(t0)) + Vector3(0, -r + r * sin(t0), 0)
+		var o1 := inw * (r - r * cos(t1)) + Vector3(0, -r + r * sin(t1), 0)
+		var mid := (t0 + t1) * 0.5
+		var want := inw * cos(mid) - Vector3(0, sin(mid), 0)
+		K.oquad(m, Vector3(a.x, ta, a.z) + o0, Vector3(b.x, tb, b.z) + o0, Vector3(b.x, tb, b.z) + o1, Vector3(a.x, ta, a.z) + o1, want, col)
+
+
+## Shares of a soffit's width where it is cut across: the curves, round each strip line, and the middle.
+static func _soffit_cuts(width: float, v: String) -> PackedFloat32Array:
+	var off := strip_offset(width, v)
+	var raw := [0.0, curve_of(v), off - 0.6, off - 0.2, off, off + 0.2, off + 0.6, width * 0.5]
+	var out := PackedFloat32Array()
+	for m: float in raw:
+		var u := clampf(m / maxf(width, 0.01), 0.0, 0.5)
+		if out.is_empty() or u > out[out.size() - 1] + 0.005:
+			out.append(u)
+	for k in range(out.size() - 2, -1, -1):
+		out.append(1.0 - out[k])
+	return out
 
 
 ## The direction in plan of segment i of a run (unit), for fittings that line up with the wall or the road.
@@ -231,7 +317,7 @@ static func _stripes(m: KitMesh, a: Vector3, b: Vector3, sa: float, sb: float, h
 
 
 ## A ceiling run (tceils): the soffit, a light row down the middle, and the variant's jet fans and message signs.
-static func ceiling(base: KitMesh, near: KitMesh, c: Dictionary) -> void:
+static func ceiling(base: KitMesh, near: KitMesh, c: Dictionary, lines: Array = []) -> void:
 	var pts := K.points(c.p, 6)
 	var n := pts.size()
 	if n < 2:
@@ -250,19 +336,27 @@ static func ceiling(base: KitMesh, near: KitMesh, c: Dictionary) -> void:
 		if i > 0:
 			s += Vector2(M[i].x - M[i - 1].x, M[i].z - M[i - 1].z).length()
 		S.append(s)
-	# the soffit: painted concrete lit evenly from the strip lines (tunnel_lit: no sky, no sun, no pools)
+	var width := (L[0] - R[0]).length()
+	var v := str(c.v)
+	# the soffit: painted concrete lit by the strip lines (tunnel_lit), cut across at the strips so the glow round each
+	# strip and the shade between them fall on vertices
 	base.use("main", "tunnel_lit")
 	for i in n - 1:
-		K.oquad(base, L[i], L[i + 1], R[i + 1], R[i], Vector3.DOWN, f.soffit)
+		var u := _soffit_cuts(((L[i] - R[i]).length() + (L[i + 1] - R[i + 1]).length()) * 0.5, v)
+		for k in u.size() - 1:
+			K.oquad(base, L[i].lerp(R[i], u[k]), L[i + 1].lerp(R[i + 1], u[k]), L[i + 1].lerp(R[i + 1], u[k + 1]), L[i].lerp(R[i], u[k + 1]), Vector3.DOWN, f.soffit)
 	base.use("main", "matte")
-	var width := (L[0] - R[0]).length()
-	# two continuous LED strip lines along the soffit near each upper wall edge (every tunnel and underpass), mounted on it (owner photos 02 and
-	# 03): 25 cm wide, 4 cm deep, in the glow material
+	# the light grey concrete road under it (owner photos 02 and 03)
+	Paint.road(base, c, lines)
+	# two continuous LED strip lines along the soffit near each upper wall edge (every tunnel and underpass), mounted on
+	# it just past the curve (owner photos 02 and 03): 25 cm wide, 4 cm deep, in the glow material
 	base.use("main", "glow")
-	for side in [STRIP_SIDE, 1.0 - STRIP_SIDE]:
+	for side in 2:
 		for i in n - 1:
-			var a: Vector3 = L[i].lerp(R[i], side) + Vector3(0, -0.04, 0)
-			var b: Vector3 = L[i + 1].lerp(R[i + 1], side) + Vector3(0, -0.04, 0)
+			var s0 := strip_offset((L[i] - R[i]).length(), v) / maxf((L[i] - R[i]).length(), 0.01)
+			var s1 := strip_offset((L[i + 1] - R[i + 1]).length(), v) / maxf((L[i + 1] - R[i + 1]).length(), 0.01)
+			var a: Vector3 = L[i].lerp(R[i], s0 if side == 0 else 1.0 - s0) + Vector3(0, -0.04, 0)
+			var b: Vector3 = L[i + 1].lerp(R[i + 1], s1 if side == 0 else 1.0 - s1) + Vector3(0, -0.04, 0)
 			K.beam_box(base, a, b, 0.25, 0.04, f.lamp, true)
 	base.use("main", "matte")
 	if f.get("marigold", false):
@@ -270,48 +364,30 @@ static func ceiling(base: KitMesh, near: KitMesh, c: Dictionary) -> void:
 		_along(M, S, MARIGOLD_EVERY_M, 1.5, func(_p: Vector3, i: int, t: float) -> void:
 			var l: Vector3 = L[i].lerp(L[i + 1], t)
 			var r: Vector3 = R[i].lerp(R[i + 1], t)
-			var k := int(maxf(6.0, (r - l).length() / 0.45))
-			near.use("main", "paint")
+			var k := int(maxf(10.0, (r - l).length() / 0.3))
+			near.use("main", "tunnel_lit")
 			var last := Vector3.ZERO
 			for j in k + 1:
 				var u := float(j) / k
 				var sag := 0.55 * 4.0 * u * (1.0 - u)
 				var q: Vector3 = l.lerp(r, u) + Vector3(0, -0.12 - sag, 0)
-				near.box(q, Vector3(0.16, 0.16, 0.16), MARIGOLD if j % 3 != 1 else T1_SAFFRON, 0.0, true, false)
+				near.box(q, Vector3(0.11, 0.11, 0.11), MARIGOLD if j % 3 != 1 else T1_SAFFRON, float(j) * 0.7, true, false)
 				# the string between the flowers
 				if j > 0:
-					K.beam_box(near, last, q, 0.05, 0.05, MARIGOLD, true)
+					K.beam_box(near, last, q, 0.035, 0.035, MARIGOLD, true)
 				last = q
 			near.use("main", "matte"))
 	if f.fans and width > 6.0:
-		# jet fan pairs hang 0.7 m under the soffit (their underside 4.1 m over the road), every FAN_EVERY_M
+		# jet fan pairs flush under the soffit every FAN_EVERY_M (kit_tunnel_fit.gd: 1 m across, 1.9 m long)
 		_along(M, S, FAN_EVERY_M, 40.0, func(p: Vector3, i: int, t: float) -> void:
 			var across := (R[i].lerp(R[i + 1], t) - L[i].lerp(L[i + 1], t))
 			var dir0 := _d2(M, i)
-			var d3 := Vector3(dir0.x, 0, dir0.y)
-			for side in [-0.25, 0.25]:
-				var c0: Vector3 = p + across * side + Vector3(0, -0.75, 0)
-				near.use("main", "metal")
-				near.rod(c0 - d3 * 2.0, c0 + d3 * 2.0, 0.55, 10, GALV)
-				near.use("main", "satin")
-				near.rod(c0 - d3 * 2.05, c0 - d3 * 1.95, 0.5, 10, BLACK)
-				near.rod(c0 + d3 * 1.95, c0 + d3 * 2.05, 0.5, 10, BLACK)
-				near.use("main", "metal")
-				K.post(near, c0 + Vector3(0, 0.45, 0), Vector3(0.08, 0.35, 1.2), dir0, GALV)
-			near.use("main", "matte"))
+			for side in [-0.22, 0.22]:
+				Fit.jet_fan(near, p + across * side, Vector3(dir0.x, 0, dir0.y)))
 	if f.vms and width > 6.0:
 		_along(M, S, VMS_EVERY_M, 45.0, func(p: Vector3, i: int, _t: float) -> void:
 			var dir0 := _d2(M, i)
-			var w := minf(3.2, width * 0.5)
-			near.use("main", "satin")
-			K.post(near, p + Vector3(0, -1.25, 0), Vector3(w, 0.9, 0.35), Vector2(-dir0.y, dir0.x), BLACK)
-			near.use("main", "glow")
-			var d3 := Vector3(dir0.x, 0, dir0.y)
-			for sg in [-1.0, 1.0]:
-				K.post(near, p + Vector3(0, -1.05, 0) + d3 * (0.18 * sg), Vector3(w - 0.4, 0.22, 0.02), Vector2(-dir0.y, dir0.x), AMBER)
-			near.use("main", "metal")
-			K.post(near, p + Vector3(0, -0.35, 0), Vector3(0.1, 0.35, 0.1), dir0, GALV)
-			near.use("main", "matte"))
+			Fit.message_sign(near, p, Vector3(dir0.x, 0, dir0.y), minf(2.6, width * 0.4)))
 
 
 ## A headwall (theads): the face across the mouth from the ceiling up, a protruding lip, the name band, lights at the
@@ -404,10 +480,11 @@ static func line(base: KitMesh, l: Dictionary) -> void:
 		return
 	var dashed := int(l.get("m", 3)) == 1
 	var s := float(l.get("s0", 0.0))
-	base.use("main", "paint")
+	# 2 cm over the road: over the tunnel's concrete finish (8 mm), under the strip light like the road
+	base.use("main", "tunnel_lit")
 	for i in n - 1:
-		var a := Vector3(float(pts[i][0]), float(pts[i][1]) + 0.015, float(pts[i][2]))
-		var b := Vector3(float(pts[i + 1][0]), float(pts[i + 1][1]) + 0.015, float(pts[i + 1][2]))
+		var a := Vector3(float(pts[i][0]), float(pts[i][1]) + 0.02, float(pts[i][2]))
+		var b := Vector3(float(pts[i + 1][0]), float(pts[i + 1][1]) + 0.02, float(pts[i + 1][2]))
 		var d := Vector3(b.x - a.x, 0, b.z - a.z)
 		var len := d.length()
 		if len < 1e-3:

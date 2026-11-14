@@ -17,6 +17,7 @@ const Rail := preload("res://world/infra/kit_rail.gd")
 const Elevated := preload("res://world/infra/kit_elevated.gd")
 const Tunnel := preload("res://world/infra/kit_tunnel.gd")
 const TunnelPaint := preload("res://world/infra/kit_tunnel_paint.gd")
+const TunnelLight := preload("res://world/infra/kit_tunnel_light.gd")
 
 ## Distance to which the near level shows (m), measured to the middle of a tile's mesh.
 const NEAR_M := 260.0
@@ -72,8 +73,9 @@ static func build(recs: Dictionary, origin: Vector3) -> Dictionary:
 	var med := TunnelPaint.median_flags(twalls)
 	for wi in twalls.size():
 		Tunnel.wall(tun.base, tun.near, twalls[wi], med[wi])
+	var tlines: Array = recs.get("tlines", [])
 	for c: Dictionary in recs.get("tceils", []):
-		Tunnel.ceiling(tun.base, tun.near, c)
+		Tunnel.ceiling(tun.base, tun.near, c, tlines)
 	var labels := []
 	for h: Dictionary in recs.get("theads", []):
 		Tunnel.head(tun.base, tun.near, h)
@@ -84,6 +86,12 @@ static func build(recs: Dictionary, origin: Vector3) -> Dictionary:
 		Tunnel.drain(tun.base, d)
 	for l: Dictionary in recs.get("tlines", []):
 		Tunnel.line(tun.base, l)
+	# the light of the two LED strip lines inside every roofed stretch, per vertex (kit_tunnel_light.gd)
+	var tceils: Array = recs.get("tceils", [])
+	if not tceils.is_empty():
+		var segs := TunnelLight.strips(tceils, to_local)
+		TunnelLight.apply(tun.base, segs)
+		TunnelLight.apply(tun.near, segs)
 	out["labels"] = labels
 	for g: String in GROUPS:
 		tris += int(out[g].base.triangles) + int(out[g].near.triangles)
