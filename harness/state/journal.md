@@ -641,3 +641,6 @@ One line per event, written by task.mjs (start, done, fail, phase changes, inbox
 - 2026-11-14 18:50 mentor message mmwgfo44t handled: Yes, it is planned as P2-056 (now top priority, after the sign boards): open shops show a shallow real interior up close and a fake-depth interior further away, with goods by shop kind and lit insides at night.
 - 2026-11-14 18:52 mentor message mmwgfqfa2 handled: Not ok: real road paint is only bright where light hits it. The road surfaces task P2-035 (now top priority) makes markings a lit, worn, soft-edged paint that shines only in headlights; the world logic checks get a rule for it.
 - 2026-11-14 18:53 [P2-065] start (attempt 1): Game test runs never open windows on the owner's screen
+- 2026-11-14 18:58 [P2-068] added: Rebuild the leads from the new models made from the approved pictures
+- 2026-11-14 18:58 [P2-068] start (attempt 1): Rebuild the leads from the new models made from the approved pictures
+- 2026-11-14 18:58 mentor message mmwgfyjfj handled: Danny and Meera converted fine and P2-068 is putting them in now; Bittu's new FBX did not arrive, please upload it again.

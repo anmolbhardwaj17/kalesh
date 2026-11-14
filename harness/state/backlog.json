@@ -1,6 +1,6 @@
 {
   "_doc": "Written only by node harness/bin/task.mjs. Phases run in order; P0 (ADOPT + STYLE DISCOVERY) waits for the owner by design and needs task.mjs signoff and task.mjs archsignoff before its gate passes. Later phases are added by the planner at the end of P0 (task.mjs phase-add) from the game's real state.",
-  "updated": "2026-11-14T13:23:12.041Z",
+  "updated": "2026-11-14T13:28:30.833Z",
   "phases": [
     {
       "id": "P0",
@@ -5156,6 +5156,25 @@
       "notes": [],
       "created": "2026-11-14T12:19:51.889Z",
       "model": "opus"
+    },
+    {
+      "id": "P2-068",
+      "phase": "P2",
+      "title": "Rebuild the leads from the new models made from the approved pictures",
+      "desc": "Anmol 2026-11-14 uploaded new Mixamo-rigged models made by image to 3D from the approved T-pose pictures (portrait_lead_*): Danny and Meera are in public/assets/models (about 50k triangles, 65 Mixamo bones); Bittu follows. Rerun the P2-063 lead pipeline (tools/characters/lead_build.mjs, game/characters/tools/build_leads.gd: rest pose matched to the mannequin, head scale only if needed, per-lead locomotion, LODs 50k close, about 25k play, about 6k far, stylised B material, heights 1.72, 1.64, 1.78 m) on each new model; check the T-pose source works with the silhouette match. Compare with the approved pictures (assets_inbox/_processed/portrait_lead_*.png): face, clothes, colours, proportions. Bittu is built the same way the moment his FBX lands.",
+      "accept": [
+        "Triangles in play 25,000 or fewer per lead; npm test and verify --quick green (judged with load)"
+      ],
+      "deps": [],
+      "agent": "builder",
+      "priority": 1,
+      "kind": "mentor",
+      "status": "doing",
+      "attempts": 1,
+      "notes": [],
+      "created": "2026-11-14T13:28:29.643Z",
+      "model": "opus",
+      "started": "2026-11-14T13:28:30.831Z"
     }
   ]
 }
