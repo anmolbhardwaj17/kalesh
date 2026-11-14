@@ -653,3 +653,5 @@ One line per event, written by task.mjs (start, done, fail, phase changes, inbox
 - 2026-11-14 19:09 [P2-048] start (attempt 2): Shop sign boards from real Indian references, by area
 - 2026-11-14 19:21 [P2-065] done: Every harness Godot launch parks its window off all displays (position, borderless park in debug_server, app hider), HARNESS_SHOW_WINDOW=1 shows it; checked with a window list probe through a whole launch. Off-screen perf reads pessimistic (occluded window), so absolute budgets are judged with a visible window at phase gates (decisions.md). Self-checked: 309 harness tests, typecheck.
 - 2026-11-14 19:29 mentor message mmwgh2641 handled: Saved and described all ten (ITO skywalk plan and renders, GB Road street view and night, Ajmeri Gate three views), linked to the ITO, GB Road and sign board tasks. That closes every photo request; nothing more needed now.
+- 2026-11-14 19:33 [P2-052] start (attempt 1): Shade, sky and grade on the streamed city to the Watch Dogs 2 bar
+- 2026-11-14 19:33 mentor message mmwgh7myk handled: Started P2-052 in a free lane.
