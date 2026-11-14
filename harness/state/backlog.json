@@ -1,6 +1,6 @@
 {
   "_doc": "Written only by node harness/bin/task.mjs. Phases run in order; P0 (ADOPT + STYLE DISCOVERY) waits for the owner by design and needs task.mjs signoff and task.mjs archsignoff before its gate passes. Later phases are added by the planner at the end of P0 (task.mjs phase-add) from the game's real state.",
-  "updated": "2026-11-14T12:14:04.652Z",
+  "updated": "2026-11-14T12:19:51.890Z",
   "phases": [
     {
       "id": "P0",
@@ -5124,6 +5124,24 @@
       ],
       "created": "2026-11-14T12:08:13.584Z",
       "model": "sonnet"
+    },
+    {
+      "id": "P3-012",
+      "phase": "P3",
+      "title": "Signature presence for the three leads: walk, idles, gestures, props, barks",
+      "desc": "Anmol 2026-11-14 asked whether the leads have their own personality and aura so they are memorable. The story (STORY_OUTLINE.md section 3) gives each a strong inner life; the game must show it in how they move and what they carry. Bittu: loose easy walk, chatty, jokes ('Chhodo yaar'), his father's steel watch stopped at 6:10 always on his wrist, the gamchha he wipes his face with, an old radio in the auto playing Raat Wali 106.1, idles: checks the stopped watch, wipes sweat, leans on the auto chatting. Meera: upright, precise walk, ties her hair the same way at shift start, scans her surroundings, notebook idle, procedure barks ('Suspect, male, thirty'). Danny: easy swagger, charming half smile, sunglasses pushed up and dropped down for effect, counts notes, prices things under his breath ('Two lakh. High risk. Fine.'), the dented steel tiffin kept and never opened. Build per-lead walk style and 3 idles each (Mixamo clips via P3-011 where they fit), signature props as small models, short barks as text and voice cards (content-writer), and a first-sight intro shot per lead for M01 to M04. The verifier judges with the question: would a player describe each of them in three words after one minute?",
+      "accept": [
+        "A side by side video strip or shot sheet of the three walking and idling, read by the verifier: each reads as a different person at a glance"
+      ],
+      "deps": [],
+      "agent": "builder",
+      "priority": 1,
+      "kind": "mentor",
+      "status": "todo",
+      "attempts": 0,
+      "notes": [],
+      "created": "2026-11-14T12:19:51.889Z",
+      "model": "opus"
     }
   ]
 }

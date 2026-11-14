@@ -624,3 +624,5 @@ One line per event, written by task.mjs (start, done, fail, phase changes, inbox
 - 2026-11-14 17:41 mentor message mmwgd7kus handled: Done: all three cards are back in Needs you as redo with sharper prompts (realistic proportions, small head, real faces, plus each model's specific fixes). The current models stay in the game meanwhile.
 - 2026-11-14 17:42 mentor message mmwgd8etq handled: Yes, better. Three picture cards are in Needs you (realistic reference sheet, front, side, back, per lead). The art reviewer checks each; once approved, the model card switches to image to 3D from that picture.
 - 2026-11-14 17:46 mentor message mmwgde4l8 handled: All three approved: realistic, right ages and builds, every detail from the cards, consistent front, side and back. The model cards now say to use these sheets in image to 3D.
+- 2026-11-14 17:49 [P3-012] added: Signature presence for the three leads: walk, idles, gestures, props, barks
+- 2026-11-14 17:49 mentor message mmwgdia86 handled: They do in the story (each has a want, a wound, a flaw and a voice); P3-012 puts it on screen: own walk, idles, signature props and barks for each.
