@@ -569,3 +569,17 @@ One line per event, written by task.mjs (start, done, fail, phase changes, inbox
 - 2026-11-14 14:03 [P2-049] start (attempt 1): Refresh every area board with current photos and a what-it-is-made-of list
 - 2026-11-14 14:07 [P2-050] done: PR 67. Overview page: compact one-line sign-off (details on click) and an Agents now section below it, one line per builder or verifier with lane, task and job, fed by harness/bin/agents.mjs (set, clear, list; gitignored live file). Self-checked: 6 agents tests and 296 harness tests pass, typecheck ok, page shot read.
 - 2026-11-14 14:22 mentor message mmwg63tcx handled: Understood. Your corrections now live in OWNER_EYE.md that every builder and verifier must pass, a look critic checks the pilot against current photos and the Watch Dogs 2 bar every few tasks and makes its own fix tasks, and the planner is checking the P2 plan for what Watch Dogs 2 level needs, within the M2 budget.
+- 2026-11-14 14:23 mentor message mmwg65f13 handled: Yes, the Watch Dogs 2 bar was signed in the style bible in Phase 0; it was written down but not enforced as a check on each task. That gap is now closed by OWNER_EYE.md and the recurring look critic.
+- 2026-11-14 14:28 added 11 tasks: P2-051, P2-052, P2-053, P2-054, P2-055, P2-056, P2-057, P2-058, P2-059, P2-060, P2-061
+- 2026-11-14 14:28 [P2-051] model: sonnet
+- 2026-11-14 14:28 [P2-059] model: sonnet
+- 2026-11-14 14:28 [P2-060] model: sonnet
+- 2026-11-14 14:28 [P2-061] model: sonnet
+- 2026-11-14 14:28 [P2-040] edited: title, desc+, accept+
+- 2026-11-14 14:28 [P2-040] deps now: P2-020, P2-021, P2-022, P2-023, P2-024, P2-061
+- 2026-11-14 14:28 [P2-040] model: sonnet
+- 2026-11-14 14:29 added 4 tasks: P7-001, P8-001, P11-001, P14-008
+- 2026-11-14 14:30 [P7-001] model: sonnet
+- 2026-11-14 14:30 [P8-001] model: sonnet
+- 2026-11-14 14:30 [P11-001] model: sonnet
+- 2026-11-14 14:30 [P14-008] model: sonnet

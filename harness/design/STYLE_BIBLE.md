@@ -9,6 +9,7 @@ Anmol's words that this look must honour (interview, rounds 1 to 5):
 - "small things that looks like attention to detial for delhi should be there and not missed".
 - "Each ADA should have its own style" built from many real photos (decisions.md "Every area is built from real references").
 - Fidelity bar: Watch Dogs 2. Performance: "The game should be able to run on Mac M2 smoothly. No struggles."
+- How the bar is reached and checked: `harness/design/FIDELITY_BAR.md` (traits, routes on the M2, ranked gaps, the recurring look critic) and `harness/design/OWNER_EYE.md` (Anmol's corrections).
 
 ## One-line look
 
