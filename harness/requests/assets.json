@@ -643,136 +643,6 @@
       "promptAt": "2026-11-14T16:05:12.243Z"
     },
     {
-      "id": "decal_sign_tin_boards",
-      "kind": "decal",
-      "intent": "Old painted tin sign boards sheet (Hindi and English, invented names)",
-      "prompt": "stylised realistic game art, real proportions, clean simplified shapes, rich warm colour, soft hazy sunlight, hand-tuned colour, no outlines, lived-in surfaces: soot, water stains, faded paint, patched plaster, dust; honest, not exaggerated. A sheet of 6 separate hand-painted old tin shop boards, each a flat rectangle straight on, uneven brush lettering, faded and rusted at the edges, dirt in the corners, with Hindi on the top line and English below: board 1 blue ground, yellow letters, text \"Shri Ram Hardware Store\" and \"श्री राम हार्डवेयर स्टोर\"; board 2 cream ground, red letters \"Hira Moti Jewellers\" and \"हीरा मोती ज्वेलर्स\"; board 3 green ground, white letters \"Kapda Mandir\" and \"कपड़ा मंदिर\"; board 4 yellow ground, black letters \"Chandni Mithai Ghar\" and \"चाँदनी मिठाई घर\"; board 5 red ground, white letters \"Delhi Tool Centre\" and \"दिल्ली टूल सेंटर\"; board 6 white ground, blue letters \"Shudh Ghee Parantha House\" and \"शुद्ध घी परांठा हाउस\". Use exactly this text, correct Devanagari, no other text. Transparent background (PNG with alpha), 2048 x 2048, each item separate with clear space between, no ground, no shadow, no text, no letters, no logos.",
-      "generate": "square 2048x2048, transparent background",
-      "target": {
-        "w": 2048,
-        "h": 2048,
-        "tileable": false,
-        "normalMap": false,
-        "alpha": true,
-        "out": "decals/decal_sign_tin_boards.webp"
-      },
-      "placeholder": {
-        "color": "#1f2533",
-        "pattern": "flat",
-        "scale": 1
-      },
-      "used_by": [
-        "P2-048"
-      ],
-      "priority": 1,
-      "batch": "B3-signs",
-      "created": "2026-11-14T15:51:18.872Z"
-    },
-    {
-      "id": "decal_sign_hotel_led",
-      "kind": "decal",
-      "intent": "Paharganj hotel vertical LED boards sheet",
-      "prompt": "stylised realistic game art, real proportions, clean simplified shapes, rich warm colour, soft hazy sunlight, hand-tuned colour, no outlines. A sheet of 4 separate tall vertical hotel sign boxes seen straight on, backlit acrylic and LED look, in strong red, orange, green and blue, each with a small painted arrow and a simple star-rating icon, faded and dusty, with text: \"Hotel Sunrise Paharganj\" and \"होटल सनराइज़ पहाड़गंज\", \"Hotel Krishna Palace\" and \"होटल कृष्णा पैलेस\", \"Hotel Moonlight\" and \"होटल मूनलाइट\", \"Bhola Lodge\" and \"भोला लॉज\". Use exactly this text, correct Devanagari, no other text. Transparent background (PNG with alpha), 1024 x 2048, each board separate, no wall, no shadow, no logos.",
-      "generate": "1024x2048, transparent background",
-      "target": {
-        "w": 1024,
-        "h": 2048,
-        "tileable": false,
-        "normalMap": false,
-        "alpha": true,
-        "out": "decals/decal_sign_hotel_led.webp"
-      },
-      "placeholder": {
-        "color": "#1f2533",
-        "pattern": "flat",
-        "scale": 1
-      },
-      "used_by": [
-        "P2-048"
-      ],
-      "priority": 2,
-      "batch": "B3-signs",
-      "created": "2026-11-14T15:51:19.075Z"
-    },
-    {
-      "id": "decal_sign_gb_flex",
-      "kind": "decal",
-      "intent": "GB Road blue and white printed flex hardware boards sheet",
-      "prompt": "stylised realistic game art, real proportions, clean simplified shapes, rich warm colour, soft hazy sunlight, hand-tuned colour, no outlines, sun-faded vinyl. A sheet of 4 separate wide printed flex boards of Old Delhi machinery and hardware shops, straight on, blue and white with yellow accents, crowded layout of invented company name, a list of goods, tiny pictures of pumps, bearings, motors and pipes, and an invented phone number \"98XXXXXXXX\", creased, with grommet holes and sagging corners: \"Ajmeri Gate Hardware Traders\" and \"अजमेरी गेट हार्डवेयर ट्रेडर्स\", \"Bansal Pipe and Fittings\" and \"बंसल पाइप एंड फ़िटिंग्स\", \"Modern Pump House\" and \"मॉडर्न पंप हाउस\", \"Shiv Shakti Machinery\" and \"शिव शक्ति मशीनरी\". Use exactly this text, correct Devanagari, other lines may be unreadable small print. Transparent background (PNG with alpha), 2048 x 2048, each item separate with clear space between, no ground, no shadow, no text, no letters, no logos.",
-      "generate": "square 2048x2048, transparent background",
-      "target": {
-        "w": 2048,
-        "h": 2048,
-        "tileable": false,
-        "normalMap": false,
-        "alpha": true,
-        "out": "decals/decal_sign_gb_flex.webp"
-      },
-      "placeholder": {
-        "color": "#1f2533",
-        "pattern": "flat",
-        "scale": 1
-      },
-      "used_by": [
-        "P2-048"
-      ],
-      "priority": 2,
-      "batch": "B3-signs",
-      "created": "2026-11-14T15:51:19.295Z"
-    },
-    {
-      "id": "decal_poster_paper_notices",
-      "kind": "decal",
-      "intent": "Torn layered paper posters and notices sheet",
-      "prompt": "stylised realistic game art, real proportions, clean simplified shapes, rich warm colour, soft hazy sunlight, hand-tuned colour, no outlines, lived-in surfaces: soot, water stains, faded paint, patched plaster, dust; honest, not exaggerated. A sheet of 10 separate pasted paper posters and notices straight on, torn and peeling at edges, glue stains, layered scraps: coaching class flyer, lost-and-found notice, mela fair poster, room for rent notice, plain handbills in red, yellow, blue and white, with Hindi and English headlines. Invented content only: no real people, parties, politicians, brands or phone numbers (use \"XXXXXXXXXX\"). Use only simple short invented words such as \"मेला\" and \"Room for Rent\", rest as unreadable small print. Transparent background (PNG with alpha), 2048 x 2048, each item separate with clear space between, no ground, no shadow, no text, no letters, no logos.",
-      "generate": "square 2048x2048, transparent background",
-      "target": {
-        "w": 2048,
-        "h": 2048,
-        "tileable": false,
-        "normalMap": false,
-        "alpha": true,
-        "out": "decals/decal_poster_paper_notices.webp"
-      },
-      "placeholder": {
-        "color": "#1f2533",
-        "pattern": "flat",
-        "scale": 1
-      },
-      "used_by": [
-        "P2-053"
-      ],
-      "priority": 2,
-      "batch": "B3-signs",
-      "created": "2026-11-14T15:51:19.717Z"
-    },
-    {
-      "id": "decal_shutter_lettering",
-      "kind": "decal",
-      "intent": "Painted shutter lettering sheet",
-      "prompt": "stylised realistic game art, real proportions, clean simplified shapes, rich warm colour, soft hazy sunlight, hand-tuned colour, no outlines, lived-in surfaces: soot, water stains, faded paint, patched plaster, dust; honest, not exaggerated. A sheet of 4 separate strips of hand-painted lettering as found on rolling steel shutters, white and red paint on transparent background, slightly dripping and flaking: \"Shri Ram Hardware\" with \"श्री राम हार्डवेयर\"; \"Delhi Tool Centre\" with \"दिल्ली टूल सेंटर\"; \"No Parking\" with \"यहाँ पार्किंग मना है\"; \"Mahalaxmi Metals\" with \"महालक्ष्मी मेटल्स\". Use exactly this text, correct Devanagari. Transparent background (PNG with alpha), 2048 x 1024, each item separate with clear space between, no ground, no shadow, no text, no letters, no logos.",
-      "generate": "2048x1024, transparent background",
-      "target": {
-        "w": 2048,
-        "h": 1024,
-        "tileable": false,
-        "normalMap": false,
-        "alpha": true,
-        "out": "decals/decal_shutter_lettering.webp"
-      },
-      "placeholder": {
-        "color": "#1f2533",
-        "pattern": "flat",
-        "scale": 1
-      },
-      "used_by": [
-        "P2-056"
-      ],
-      "priority": 3,
-      "batch": "B3-signs",
-      "created": "2026-11-14T15:51:20.367Z"
-    },
-    {
       "id": "tex_shutter_rolling_steel",
       "kind": "texture",
       "intent": "Rolling steel shutter, dented, painted green",
@@ -1984,6 +1854,708 @@
         "fit": "pending",
         "fitNote": "scene check when wired (P2-032/P2-056)"
       }
+    },
+    {
+      "id": "decal_sign_tin_01",
+      "kind": "decal",
+      "intent": "Chandni Chowk sweet shop painted tin board, Hindi only (Chandni Mithai Ghar)",
+      "prompt": "A straight-on documentary photograph of a hand-painted shop board over a sweet shop on Chandni Chowk, Old Delhi, taken on an ordinary hazy afternoon with a phone camera held level and square to it, soft natural daylight, no flash, true colours, slight grain. The board is a flat galvanised tin sheet about 3 m by 0.7 m on an angle iron frame, bolted to a lime plaster wall with six bolts. Chrome yellow enamel ground with a thin red painted border line. Text in Hindi only, three lines: across the middle, large red Devanagari \"चाँदनी मिठाई घर\" with a black drop shadow; under it, smaller, in maroon \"शुद्ध देसी घी\"; in the bottom right corner, small, \"स्था. 1958\". Lettering hand-painted by a local signwriter with a brush in enamel paint: thick strokes of slightly uneven weight, a dark drop shadow painted down and to the right, spacing and baseline a little uneven, faint brush ridges and one or two small drips, the shaded block letters of an old Delhi bazaar board. The Devanagari has a continuous headline bar (shirorekha) painted by hand, with correct matras. Wear: the yellow sun-faded and chalky at the left end, brown rust bleeding down in streaks from every bolt hole, paint chipped to grey tin along the bottom edge, a dented top right corner, dust and black soot on the top lip, a pale ghost of older lettering showing where the paint has worn thin. Frame: the board fills the whole width of the picture edge to edge, square to the camera with no perspective tilt, a thin strip of the wall it is fixed to visible above and below so the fixings show. Landscape 1536 x 1024. Spell every word exactly as written here, letter for letter, and add no other words; if a word cannot be written correctly, leave it out rather than invent letters. Photographic and true to life: not an illustration, not graphic design, not a render, not digital art, no vector look, no perfect symmetry, no logos, no real brand names, no people, no watermark.",
+      "generate": "1536x1024, transparent background",
+      "target": {
+        "w": 1536,
+        "h": 1024,
+        "tileable": false,
+        "normalMap": false,
+        "alpha": true,
+        "out": "decals/decal_sign_tin_01.webp"
+      },
+      "placeholder": {
+        "color": "#1f2533",
+        "pattern": "flat",
+        "scale": 1
+      },
+      "used_by": [
+        "P2-048"
+      ],
+      "priority": 1,
+      "batch": "B3-signs-painted",
+      "created": "2026-11-14T17:19:46.962Z",
+      "promptAt": "2026-11-14T17:19:47.009Z"
+    },
+    {
+      "id": "decal_sign_tin_02",
+      "kind": "decal",
+      "intent": "Chandni Chowk saree shop painted tin board, Hindi over English (Shree Ganga Saree Bhandar)",
+      "prompt": "A straight-on documentary photograph of a hand-painted shop board over a saree shop on Chandni Chowk, Old Delhi, taken on an ordinary hazy afternoon with a phone camera held level and square to it, soft natural daylight, no flash, true colours, slight grain. A flat tin board about 3 m by 0.8 m on a wooden batten frame, hung from the lintel on two flat iron straps. Faded signal red enamel ground, cream lettering with a black drop shadow, a cream double border line. Top line, large, Devanagari \"श्री गंगा साड़ी भंडार\"; under it, smaller, English in shaded serif capitals \"SHREE GANGA SAREE BHANDAR\"; bottom right, small, \"Ph. 98XXXXXX47\". Lettering hand-painted by a local signwriter with a brush in enamel paint: thick strokes of slightly uneven weight, a dark drop shadow painted down and to the right, spacing and baseline a little uneven, faint brush ridges and one or two small drips, the shaded block letters of an old Delhi bazaar board. The Devanagari has a continuous headline bar (shirorekha) painted by hand, with correct matras. Wear: the red faded to dusty pink on the right half where the sun hits, paint lifting in flakes to bare rusty tin round the edges, rust running down from the two straps, the lower left corner bent outwards, dust settled along the top edge. Frame: the board fills the whole width of the picture edge to edge, square to the camera with no perspective tilt, a thin strip of the wall it is fixed to visible above and below so the fixings show. Landscape 1536 x 1024. Spell every word exactly as written here, letter for letter, and add no other words; if a word cannot be written correctly, leave it out rather than invent letters. Photographic and true to life: not an illustration, not graphic design, not a render, not digital art, no vector look, no perfect symmetry, no logos, no real brand names, no people, no watermark.",
+      "generate": "1536x1024, transparent background",
+      "target": {
+        "w": 1536,
+        "h": 1024,
+        "tileable": false,
+        "normalMap": false,
+        "alpha": true,
+        "out": "decals/decal_sign_tin_02.webp"
+      },
+      "placeholder": {
+        "color": "#1f2533",
+        "pattern": "flat",
+        "scale": 1
+      },
+      "used_by": [
+        "P2-048"
+      ],
+      "priority": 1,
+      "batch": "B3-signs-painted",
+      "created": "2026-11-14T17:19:47.054Z",
+      "promptAt": "2026-11-14T17:19:47.101Z"
+    },
+    {
+      "id": "decal_sign_tin_03",
+      "kind": "decal",
+      "intent": "Jama Masjid side eatery painted wooden board, Urdu over Hindi (Nihari Wale Chacha)",
+      "prompt": "A straight-on documentary photograph of a hand-painted board over a small eatery in the lanes near Jama Masjid, Old Delhi, taken on an ordinary hazy afternoon with a phone camera held level and square to it, soft natural daylight, no flash, true colours, slight grain. A painted wooden plank board about 2.5 m by 0.7 m, screwed to an old brick and plaster wall. Dark bottle green enamel ground, a thin yellow painted border. Top line, large, cream lettering in Urdu: \"نہاری والے چاچا\". Under it, smaller, white Hindi Devanagari: \"नहारी वाले चाचा\". The Urdu is in Nastaliq, written right to left with flowing calligraphic brush strokes, letters joined correctly. Lettering hand-painted by a local signwriter with a brush in enamel paint: thick strokes of slightly uneven weight, a dark drop shadow painted down and to the right, spacing and baseline a little uneven, faint brush ridges and one or two small drips, the shaded block letters of an old Delhi bazaar board. Wear: the plank joints and wood grain showing through the paint, paint cracked along the joints, a greasy dark smoke stain over the right end from the cooking below, the green faded and chalky, rusted nail heads. Frame: the board fills the whole width of the picture edge to edge, square to the camera with no perspective tilt, a thin strip of the wall it is fixed to visible above and below so the fixings show. Landscape 1536 x 1024. Spell every word exactly as written here, letter for letter, and add no other words; if a word cannot be written correctly, leave it out rather than invent letters. Photographic and true to life: not an illustration, not graphic design, not a render, not digital art, no vector look, no perfect symmetry, no logos, no real brand names, no people, no watermark.",
+      "generate": "1536x1024, transparent background",
+      "target": {
+        "w": 1536,
+        "h": 1024,
+        "tileable": false,
+        "normalMap": false,
+        "alpha": true,
+        "out": "decals/decal_sign_tin_03.webp"
+      },
+      "placeholder": {
+        "color": "#1f2533",
+        "pattern": "flat",
+        "scale": 1
+      },
+      "used_by": [
+        "P2-048"
+      ],
+      "priority": 1,
+      "batch": "B3-signs-painted",
+      "created": "2026-11-14T17:19:47.148Z",
+      "promptAt": "2026-11-14T17:19:47.191Z"
+    },
+    {
+      "id": "decal_sign_tin_04",
+      "kind": "decal",
+      "intent": "Urdu Bazaar book shop painted tin board, Urdu only (Urdu Kitab Ghar)",
+      "prompt": "A straight-on documentary photograph of a hand-painted board over a book shop on the Urdu Bazaar side near Jama Masjid, Old Delhi, taken on an ordinary hazy afternoon with a phone camera held level and square to it, soft natural daylight, no flash, true colours, slight grain. A painted tin board about 2.5 m by 0.6 m, screwed flat to the wall at four corners. Deep blue enamel ground, white lettering with a thin black shadow. One line only, in Urdu, large: \"اردو کتاب گھر\". The Urdu is in Nastaliq, written right to left with flowing calligraphic brush strokes, letters joined correctly. A small open book painted by hand in white and yellow at the left end. Wear: the blue sun-faded to grey-blue, rust blooming round the four screws and running down, a long scratch across the ground, dust caught in the bottom corners. Frame: the board fills the whole width of the picture edge to edge, square to the camera with no perspective tilt, a thin strip of the wall it is fixed to visible above and below so the fixings show. Landscape 1536 x 1024. Spell every word exactly as written here, letter for letter, and add no other words; if a word cannot be written correctly, leave it out rather than invent letters. Photographic and true to life: not an illustration, not graphic design, not a render, not digital art, no vector look, no perfect symmetry, no logos, no real brand names, no people, no watermark.",
+      "generate": "1536x1024, transparent background",
+      "target": {
+        "w": 1536,
+        "h": 1024,
+        "tileable": false,
+        "normalMap": false,
+        "alpha": true,
+        "out": "decals/decal_sign_tin_04.webp"
+      },
+      "placeholder": {
+        "color": "#1f2533",
+        "pattern": "flat",
+        "scale": 1
+      },
+      "used_by": [
+        "P2-048"
+      ],
+      "priority": 2,
+      "batch": "B3-signs-painted",
+      "created": "2026-11-14T17:19:47.235Z",
+      "promptAt": "2026-11-14T17:19:47.281Z"
+    },
+    {
+      "id": "decal_sign_tin_05",
+      "kind": "decal",
+      "intent": "Old Delhi gali small painted board with arrow, Hindi only (Chabi Banane Wale)",
+      "prompt": "A straight-on documentary photograph of a small hand-painted tin board beside a doorway in a narrow Old Delhi gali, taken on an ordinary hazy afternoon with a phone camera held level and square to it, soft natural daylight, no flash, true colours, slight grain. The board is about 60 cm by 35 cm, held by two rusty nails to a crumbling lime-washed wall. Off-white enamel ground, black Devanagari with a red shadow, Hindi only: \"चाबी बनाने वाले\". Below it a black painted arrow pointing right and, small in red, \"गली में\". A simple key painted by hand at the left end. Lettering hand-painted by a local signwriter with a brush in enamel paint: thick strokes of slightly uneven weight, a dark drop shadow painted down and to the right, spacing and baseline a little uneven, faint brush ridges and one or two small drips, the shaded block letters of an old Delhi bazaar board. The Devanagari has a continuous headline bar (shirorekha) painted by hand, with correct matras. Wear heavy: rust spots coming through the white, a bent and curled corner, paint flaking off in patches, dirty finger marks, a scrap of an old torn paper notice still stuck at the bottom edge. Frame: the small board fills the picture with a narrow margin of the wall all round, square to the camera. Landscape 1536 x 1024. Spell every word exactly as written here, letter for letter, and add no other words; if a word cannot be written correctly, leave it out rather than invent letters. Photographic and true to life: not an illustration, not graphic design, not a render, not digital art, no vector look, no perfect symmetry, no logos, no real brand names, no people, no watermark.",
+      "generate": "1536x1024, transparent background",
+      "target": {
+        "w": 1536,
+        "h": 1024,
+        "tileable": false,
+        "normalMap": false,
+        "alpha": true,
+        "out": "decals/decal_sign_tin_05.webp"
+      },
+      "placeholder": {
+        "color": "#1f2533",
+        "pattern": "flat",
+        "scale": 1
+      },
+      "used_by": [
+        "P2-048"
+      ],
+      "priority": 2,
+      "batch": "B3-signs-painted",
+      "created": "2026-11-14T17:19:47.325Z",
+      "promptAt": "2026-11-14T17:19:47.370Z"
+    },
+    {
+      "id": "decal_sign_tin_06",
+      "kind": "decal",
+      "intent": "Daryaganj and ITO book shop painted board, Hindi and English side by side (Natak Kitab Ghar)",
+      "prompt": "A straight-on documentary photograph of a neat hand-painted shop board over a book shop on the Daryaganj side near ITO, Delhi, taken on an ordinary hazy afternoon with a phone camera held level and square to it, soft natural daylight, no flash, true colours, slight grain. A painted tin board about 2.8 m by 0.6 m, screwed to a plain concrete fascia. Black enamel ground with a thin white border, lettering in white with a soft grey shadow, tidy like an old painted office nameplate. Left half, large, Devanagari \"नाटक किताब घर\"; a short painted vertical rule; right half English shaded serif capitals \"NATAK KITAB GHAR\". Along the bottom, small: \"Plays, Scripts, Drama Books\". Lettering hand-painted by a local signwriter with a brush in enamel paint: thick strokes of slightly uneven weight, a dark drop shadow painted down and to the right, spacing and baseline a little uneven, faint brush ridges and one or two small drips, the shaded block letters of an old Delhi bazaar board. The Devanagari has a continuous headline bar (shirorekha) painted by hand, with correct matras. Wear medium: the black faded to charcoal, a fine film of dust, light rust at the screws, one chipped corner. Frame: the board fills the whole width of the picture edge to edge, square to the camera with no perspective tilt, a thin strip of the wall it is fixed to visible above and below so the fixings show. Landscape 1536 x 1024. Spell every word exactly as written here, letter for letter, and add no other words; if a word cannot be written correctly, leave it out rather than invent letters. Photographic and true to life: not an illustration, not graphic design, not a render, not digital art, no vector look, no perfect symmetry, no logos, no real brand names, no people, no watermark.",
+      "generate": "1536x1024, transparent background",
+      "target": {
+        "w": 1536,
+        "h": 1024,
+        "tileable": false,
+        "normalMap": false,
+        "alpha": true,
+        "out": "decals/decal_sign_tin_06.webp"
+      },
+      "placeholder": {
+        "color": "#1f2533",
+        "pattern": "flat",
+        "scale": 1
+      },
+      "used_by": [
+        "P2-048"
+      ],
+      "priority": 2,
+      "batch": "B3-signs-painted",
+      "created": "2026-11-14T17:19:47.415Z",
+      "promptAt": "2026-11-14T17:19:47.458Z"
+    },
+    {
+      "id": "decal_sign_enamel_01",
+      "kind": "decal",
+      "intent": "Round enamel board at a jeweller, Hindi only (old gold and silver bought here)",
+      "prompt": "A straight-on documentary photograph of a round vitreous enamel sign screwed to a shop pier in Chandni Chowk, Old Delhi, taken on an ordinary hazy afternoon with a phone camera held level and square to it, soft natural daylight, no flash, true colours, slight grain. A steel disc about 55 cm across: white centre, thick red outer ring, lettering fired into the enamel in red and dark blue, the old hand-drawn Devanagari of enamel signs, Hindi only, three lines: \"पुराना\" / \"सोना चाँदी\" / \"ख़रीदा जाता है\". One screw at the top and one at the bottom. Wear: enamel chipped at the rim and round both screws showing black steel and orange rust, a rust run down from the bottom screw, a faint film of dust, the white slightly yellowed. Square 1024 x 1024, the disc centred and filling most of the frame, background removed to transparent (PNG with alpha), cut along its real worn outline, no wall, no shadow. Spell every word exactly as written here, letter for letter, and add no other words; if a word cannot be written correctly, leave it out rather than invent letters. Photographic and true to life: not an illustration, not graphic design, not a render, not digital art, no vector look, no perfect symmetry, no logos, no real brand names, no people, no watermark.",
+      "generate": "square 1024x1024, transparent background",
+      "target": {
+        "w": 1024,
+        "h": 1024,
+        "tileable": false,
+        "normalMap": false,
+        "alpha": true,
+        "out": "decals/decal_sign_enamel_01.webp"
+      },
+      "placeholder": {
+        "color": "#1f2533",
+        "pattern": "flat",
+        "scale": 1
+      },
+      "used_by": [
+        "P2-048"
+      ],
+      "priority": 2,
+      "batch": "B3-signs-painted",
+      "created": "2026-11-14T17:19:47.503Z",
+      "promptAt": "2026-11-14T17:19:47.549Z"
+    },
+    {
+      "id": "decal_sign_enamel_02",
+      "kind": "decal",
+      "intent": "Round enamel board of a Unani clinic, Urdu only (Unani Dawakhana)",
+      "prompt": "A straight-on documentary photograph of a round vitreous enamel sign screwed beside a doorway in an Old Delhi gali near Jama Masjid, taken on an ordinary hazy afternoon with a phone camera held level and square to it, soft natural daylight, no flash, true colours, slight grain. A steel disc about 50 cm across: cream white centre, deep green outer ring, black lettering fired into the enamel, Urdu only, one line in the middle: \"یونانی دواخانہ\". The Urdu is in Nastaliq, written right to left with flowing calligraphic brush strokes, letters joined correctly. One screw at the top and one at the bottom. Wear: chips at the rim showing black steel and rust, rust tears down from the screws, the green faded at the top, dust. Square 1024 x 1024, the disc centred and filling most of the frame, background removed to transparent (PNG with alpha), cut along its real worn outline, no wall, no shadow. Spell every word exactly as written here, letter for letter, and add no other words; if a word cannot be written correctly, leave it out rather than invent letters. Photographic and true to life: not an illustration, not graphic design, not a render, not digital art, no vector look, no perfect symmetry, no logos, no real brand names, no people, no watermark.",
+      "generate": "square 1024x1024, transparent background",
+      "target": {
+        "w": 1024,
+        "h": 1024,
+        "tileable": false,
+        "normalMap": false,
+        "alpha": true,
+        "out": "decals/decal_sign_enamel_02.webp"
+      },
+      "placeholder": {
+        "color": "#1f2533",
+        "pattern": "flat",
+        "scale": 1
+      },
+      "used_by": [
+        "P2-048"
+      ],
+      "priority": 3,
+      "batch": "B3-signs-painted",
+      "created": "2026-11-14T17:19:47.597Z",
+      "promptAt": "2026-11-14T17:19:47.643Z"
+    },
+    {
+      "id": "decal_shutter_text_01",
+      "kind": "decal",
+      "intent": "Shop name painted on a GB Road shutter, Hindi with a phone number (Shri Ram Hardware Store)",
+      "prompt": "A straight-on documentary photograph of lettering painted by hand straight onto a closed corrugated steel rolling shutter of a hardware shop on GB Road, Delhi, taken on an ordinary hazy afternoon with a phone camera held level and square to it, soft natural daylight, no flash, true colours, slight grain. White enamel paint with a red shadow, Hindi: large \"श्री राम हार्डवेयर स्टोर\", and under it smaller \"Ph. 98XXXXXX76\". The Devanagari has a continuous headline bar (shirorekha) painted by hand, with correct matras. The paint follows the horizontal ribs of the shutter, so every letter is broken into bands with darker gaps at the grooves; rough brush strokes where the brush skipped over the ridges, thin drips under some letters, paint flaked off in small chips and rubbed away in a band where the shutter rolls up. Keep only the paint: the shutter itself removed. Landscape 1536 x 1024, the lettering filling the width, background removed to transparent (PNG with alpha), cut along the real ragged edges, flat and straight on, no wall, no shadow. Spell every word exactly as written here, letter for letter, and add no other words; if a word cannot be written correctly, leave it out rather than invent letters. Photographic and true to life: not an illustration, not graphic design, not a render, not digital art, no vector look, no perfect symmetry, no logos, no real brand names, no people, no watermark.",
+      "generate": "1536x1024, transparent background",
+      "target": {
+        "w": 1536,
+        "h": 1024,
+        "tileable": false,
+        "normalMap": false,
+        "alpha": true,
+        "out": "decals/decal_shutter_text_01.webp"
+      },
+      "placeholder": {
+        "color": "#1f2533",
+        "pattern": "flat",
+        "scale": 1
+      },
+      "used_by": [
+        "P2-056"
+      ],
+      "priority": 2,
+      "batch": "B3-signs-painted",
+      "created": "2026-11-14T17:19:47.693Z",
+      "promptAt": "2026-11-14T17:19:47.742Z"
+    },
+    {
+      "id": "decal_shutter_text_02",
+      "kind": "decal",
+      "intent": "Notice painted on a shutter, Hindi only (no unloading here)",
+      "prompt": "A straight-on documentary photograph of a rough notice painted by hand straight onto a closed corrugated steel rolling shutter in Ajmeri Gate, Delhi, taken on an ordinary hazy afternoon with a phone camera held level and square to it, soft natural daylight, no flash, true colours, slight grain. Red paint, quick uneven brush hand, Hindi only: \"माल उतारना यहाँ मना है\". The Devanagari has a continuous headline bar (shirorekha) painted by hand, with correct matras. The paint follows the horizontal ribs of the shutter, so every letter is broken into bands with darker gaps at the grooves; dry-brush streaks, drips under the letters, the paint faded and scuffed by years of the shutter rolling. Keep only the paint: the shutter itself removed. Landscape 1536 x 1024, the lettering filling the width, background removed to transparent (PNG with alpha), cut along the real ragged edges, flat and straight on, no wall, no shadow. Spell every word exactly as written here, letter for letter, and add no other words; if a word cannot be written correctly, leave it out rather than invent letters. Photographic and true to life: not an illustration, not graphic design, not a render, not digital art, no vector look, no perfect symmetry, no logos, no real brand names, no people, no watermark.",
+      "generate": "1536x1024, transparent background",
+      "target": {
+        "w": 1536,
+        "h": 1024,
+        "tileable": false,
+        "normalMap": false,
+        "alpha": true,
+        "out": "decals/decal_shutter_text_02.webp"
+      },
+      "placeholder": {
+        "color": "#1f2533",
+        "pattern": "flat",
+        "scale": 1
+      },
+      "used_by": [
+        "P2-056"
+      ],
+      "priority": 3,
+      "batch": "B3-signs-painted",
+      "created": "2026-11-14T17:19:47.790Z",
+      "promptAt": "2026-11-14T17:19:47.838Z"
+    },
+    {
+      "id": "decal_shutter_text_03",
+      "kind": "decal",
+      "intent": "Gali tailor name painted on a shutter, Urdu only (Khan Tailors)",
+      "prompt": "A straight-on documentary photograph of a shop name painted by hand straight onto a closed corrugated steel rolling shutter in an Old Delhi gali near Jama Masjid, taken on an ordinary hazy afternoon with a phone camera held level and square to it, soft natural daylight, no flash, true colours, slight grain. Yellow enamel paint with a thin black outline, Urdu only, large: \"خان ٹیلرز\". The Urdu is in Nastaliq, written right to left with flowing calligraphic brush strokes, letters joined correctly. A small pair of scissors painted beside it. The paint follows the horizontal ribs of the shutter, so every letter is broken into bands with darker gaps at the grooves; chips, scuffs, faded edges. Keep only the paint: the shutter itself removed. Landscape 1536 x 1024, the lettering filling the width, background removed to transparent (PNG with alpha), cut along the real ragged edges, flat and straight on, no wall, no shadow. Spell every word exactly as written here, letter for letter, and add no other words; if a word cannot be written correctly, leave it out rather than invent letters. Photographic and true to life: not an illustration, not graphic design, not a render, not digital art, no vector look, no perfect symmetry, no logos, no real brand names, no people, no watermark.",
+      "generate": "1536x1024, transparent background",
+      "target": {
+        "w": 1536,
+        "h": 1024,
+        "tileable": false,
+        "normalMap": false,
+        "alpha": true,
+        "out": "decals/decal_shutter_text_03.webp"
+      },
+      "placeholder": {
+        "color": "#1f2533",
+        "pattern": "flat",
+        "scale": 1
+      },
+      "used_by": [
+        "P2-056"
+      ],
+      "priority": 3,
+      "batch": "B3-signs-painted",
+      "created": "2026-11-14T17:19:47.891Z",
+      "promptAt": "2026-11-14T17:19:47.939Z"
+    },
+    {
+      "id": "decal_sign_flex_gb_01",
+      "kind": "decal",
+      "intent": "GB Road bearings shop pale blue flex, English only (Standard Gear and Bearing)",
+      "prompt": "A straight-on documentary photograph of a printed flex banner over a machinery shop on GB Road (Swami Shraddhanand Marg), Delhi, taken on an ordinary hazy afternoon with a phone camera held level and square to it, soft natural daylight, no flash, true colours, slight grain. One sheet of printed PVC flex about 3 m by 1.1 m stretched on a welded square-pipe frame, tied at the corners with wire through brass grommets. Printed in the cheap local print-shop look: bold condensed sans-serif English like a flex printer uses, coloured outlines and drop shadows, flat solid colour bands, slightly oversaturated inkjet colours. Pale sky blue ground; the shop name in big white condensed bold capitals with a thin dark blue outline: \"STANDARD GEAR AND BEARING\". Under it a white strip with blue text: \"IMPORTERS & STOCKISTS\". Then smaller dark blue text: \"ALL TYPES OF BALL BEARINGS, TAPER ROLLER BEARINGS & PLUMMER BLOCKS\". Bottom line: \"M. 98XXXXXX21, 98XXXXXX64\". English only, no pictures. Wear: the blue bleached pale on the left side, faint horizontal print banding, a soft sag in the middle, fold creases, black grime streaks running down from the top edge, one corner tie loose so the flex curls a little. Frame: the board fills the whole width of the picture edge to edge, square to the camera with no perspective tilt, a thin strip of the wall it is fixed to visible above and below so the fixings show. Landscape 1536 x 1024. Spell every word exactly as written here, letter for letter, and add no other words; if a word cannot be written correctly, leave it out rather than invent letters. Photographic and true to life: not an illustration, not graphic design, not a render, not digital art, no vector look, no perfect symmetry, no logos, no real brand names, no people, no watermark.",
+      "generate": "1536x1024, transparent background",
+      "target": {
+        "w": 1536,
+        "h": 1024,
+        "tileable": false,
+        "normalMap": false,
+        "alpha": true,
+        "out": "decals/decal_sign_flex_gb_01.webp"
+      },
+      "placeholder": {
+        "color": "#1f2533",
+        "pattern": "flat",
+        "scale": 1
+      },
+      "used_by": [
+        "P2-048"
+      ],
+      "priority": 1,
+      "batch": "B3-signs-printed",
+      "created": "2026-11-14T17:19:47.987Z",
+      "promptAt": "2026-11-14T17:19:48.034Z"
+    },
+    {
+      "id": "decal_sign_flex_gb_02",
+      "kind": "decal",
+      "intent": "GB Road pump shop yellow flex with product photos, English with a Hindi line (Modern Pump House)",
+      "prompt": "A straight-on documentary photograph of a printed flex banner over a pump and motor shop on GB Road, Delhi, taken on an ordinary hazy afternoon with a phone camera held level and square to it, soft natural daylight, no flash, true colours, slight grain. One sheet of printed PVC flex about 3 m by 1.1 m on a welded pipe frame, tied through grommets. Printed in the cheap local print-shop look: bold condensed sans-serif English like a flex printer uses, coloured outlines and drop shadows, flat solid colour bands, slightly oversaturated inkjet colours. Bright chrome yellow ground with a red band across the top. In the red band, white bold printed Hindi in a heavy Devanagari typeface: \"मॉडर्न पंप हाउस\". Below on the yellow, the English name in huge red condensed bold capitals with a white outline and black drop shadow: \"MODERN PUMP HOUSE\". Along the bottom a row of four small product photographs: a blue monoblock water pump, a grey electric motor, a long submersible pump, a pressure gauge, none with any brand name. Beside them: \"Deals in: Pumps, Motors, Starters & Spares\" and \"Mob. 99XXXXXX08\". Wear: the yellow faded to cream at one end, the reds gone slightly pink, a small tear at the lower right showing the frame pipe behind, wrinkles at the ties, dust. Frame: the board fills the whole width of the picture edge to edge, square to the camera with no perspective tilt, a thin strip of the wall it is fixed to visible above and below so the fixings show. Landscape 1536 x 1024. Spell every word exactly as written here, letter for letter, and add no other words; if a word cannot be written correctly, leave it out rather than invent letters. Photographic and true to life: not an illustration, not graphic design, not a render, not digital art, no vector look, no perfect symmetry, no logos, no real brand names, no people, no watermark.",
+      "generate": "1536x1024, transparent background",
+      "target": {
+        "w": 1536,
+        "h": 1024,
+        "tileable": false,
+        "normalMap": false,
+        "alpha": true,
+        "out": "decals/decal_sign_flex_gb_02.webp"
+      },
+      "placeholder": {
+        "color": "#1f2533",
+        "pattern": "flat",
+        "scale": 1
+      },
+      "used_by": [
+        "P2-048"
+      ],
+      "priority": 1,
+      "batch": "B3-signs-printed",
+      "created": "2026-11-14T17:19:48.083Z",
+      "promptAt": "2026-11-14T17:19:48.130Z"
+    },
+    {
+      "id": "decal_sign_flex_gb_03",
+      "kind": "decal",
+      "intent": "GB Road machinery shop red flex, very faded, English with a small Hindi line (Shiv Shakti Machinery)",
+      "prompt": "A straight-on documentary photograph of an old printed flex banner over a machinery shop on GB Road, Delhi, taken on an ordinary hazy afternoon with a phone camera held level and square to it, soft natural daylight, no flash, true colours, slight grain. One sheet of printed PVC flex about 2.8 m by 1 m on a pipe frame. Printed in the cheap local print-shop look: bold condensed sans-serif English like a flex printer uses, coloured outlines and drop shadows, flat solid colour bands, slightly oversaturated inkjet colours. Deep red ground. At the top, small white printed Devanagari: \"शिव शक्ति मशीनरी\". Below, the English name in big white condensed bold capitals with a yellow outline: \"SHIV SHAKTI MACHINERY\". A yellow strip with black text: \"LATHE MACHINES, DRILL MACHINES, ALL SPARE PARTS\". Small photographs of a lathe and a pillar drill at the left end, no brand names. Bottom right: \"Ph. 97XXXXXX53\". Wear: years old, the red sun-faded to a brownish pink, the yellow almost white, a vertical tear mended with brown tape, grey dust and dirt streaks, the flex wavy where it has stretched. Frame: the board fills the whole width of the picture edge to edge, square to the camera with no perspective tilt, a thin strip of the wall it is fixed to visible above and below so the fixings show. Landscape 1536 x 1024. Spell every word exactly as written here, letter for letter, and add no other words; if a word cannot be written correctly, leave it out rather than invent letters. Photographic and true to life: not an illustration, not graphic design, not a render, not digital art, no vector look, no perfect symmetry, no logos, no real brand names, no people, no watermark.",
+      "generate": "1536x1024, transparent background",
+      "target": {
+        "w": 1536,
+        "h": 1024,
+        "tileable": false,
+        "normalMap": false,
+        "alpha": true,
+        "out": "decals/decal_sign_flex_gb_03.webp"
+      },
+      "placeholder": {
+        "color": "#1f2533",
+        "pattern": "flat",
+        "scale": 1
+      },
+      "used_by": [
+        "P2-048"
+      ],
+      "priority": 2,
+      "batch": "B3-signs-printed",
+      "created": "2026-11-14T17:19:48.178Z",
+      "promptAt": "2026-11-14T17:19:48.226Z"
+    },
+    {
+      "id": "decal_sign_flex_gb_04",
+      "kind": "decal",
+      "intent": "GB Road pipe shop white flex over an older painted board, English only (Bansal Pipe and Fittings)",
+      "prompt": "A straight-on documentary photograph of a white printed flex banner over a pipe fittings shop on GB Road, Delhi, fixed over an older painted board, taken on an ordinary hazy afternoon with a phone camera held level and square to it, soft natural daylight, no flash, true colours, slight grain. The flex is about 3 m by 1 m on a pipe frame; the rusty edge of the older painted tin board shows just below it. Printed in the cheap local print-shop look: bold condensed sans-serif English like a flex printer uses, coloured outlines and drop shadows, flat solid colour bands, slightly oversaturated inkjet colours. White ground; the name in dark royal blue condensed bold capitals: \"BANSAL PIPE AND FITTINGS\". A red strip below with white text: \"G.I. PIPES, C.P. FITTINGS, VALVES, SANITARY\". A photograph of stacked galvanised pipes and brass fittings at the right end, no brand names. Bottom left: \"Mob. 98XXXXXX90\". English only. Wear: the white yellowed and grey with city dust, heavy black rain streaks from the top edge, one corner torn and hanging down, one grommet ripped out. Frame: the board fills the whole width of the picture edge to edge, square to the camera with no perspective tilt, a thin strip of the wall it is fixed to visible above and below so the fixings show. Landscape 1536 x 1024. Spell every word exactly as written here, letter for letter, and add no other words; if a word cannot be written correctly, leave it out rather than invent letters. Photographic and true to life: not an illustration, not graphic design, not a render, not digital art, no vector look, no perfect symmetry, no logos, no real brand names, no people, no watermark.",
+      "generate": "1536x1024, transparent background",
+      "target": {
+        "w": 1536,
+        "h": 1024,
+        "tileable": false,
+        "normalMap": false,
+        "alpha": true,
+        "out": "decals/decal_sign_flex_gb_04.webp"
+      },
+      "placeholder": {
+        "color": "#1f2533",
+        "pattern": "flat",
+        "scale": 1
+      },
+      "used_by": [
+        "P2-048"
+      ],
+      "priority": 2,
+      "batch": "B3-signs-printed",
+      "created": "2026-11-14T17:19:48.276Z",
+      "promptAt": "2026-11-14T17:19:48.323Z"
+    },
+    {
+      "id": "decal_poster_01",
+      "kind": "decal",
+      "intent": "Hand-written room to let notices with tear-off phone strips, Hindi and English",
+      "prompt": "A straight-on documentary photograph of two small paper notices pasted on a wall in Old Delhi, taken on an ordinary hazy afternoon with a phone camera held level and square to it, soft natural daylight, no flash, true colours, slight grain. 1) An A5 sheet of thin white paper written by hand in blue ballpoint and thick black marker, Hindi: \"किराये के लिए कमरा खाली है\", with a row of eight tear-off strips cut along the bottom, each with \"98XXXXXX31\" written sideways in pen, three strips already torn away. 2) Overlapping its corner, a smaller yellow paper slip written in red marker, English: \"TO LET\" and \"1 ROOM SET\" and \"99XXXXXX12\". Real everyday handwriting, not a font. Brown glue stains soaking through, wrinkles from pasting, lifting corners, water tidemarks, dust. Square 1024 x 1024, the two notices centred and filling most of the frame, background removed to transparent (PNG with alpha), cut along its real worn outline, no wall, no shadow. Spell every word exactly as written here, letter for letter, and add no other words; if a word cannot be written correctly, leave it out rather than invent letters. Photographic and true to life: not an illustration, not graphic design, not a render, not digital art, no vector look, no perfect symmetry, no logos, no real brand names, no people, no watermark.",
+      "generate": "square 1024x1024, transparent background",
+      "target": {
+        "w": 1024,
+        "h": 1024,
+        "tileable": false,
+        "normalMap": false,
+        "alpha": true,
+        "out": "decals/decal_poster_01.webp"
+      },
+      "placeholder": {
+        "color": "#1f2533",
+        "pattern": "flat",
+        "scale": 1
+      },
+      "used_by": [
+        "P2-053"
+      ],
+      "priority": 2,
+      "batch": "B3-signs-printed",
+      "created": "2026-11-14T17:19:48.370Z",
+      "promptAt": "2026-11-14T17:19:48.418Z"
+    },
+    {
+      "id": "decal_poster_02",
+      "kind": "decal",
+      "intent": "Two photocopied tuition handbills, one Urdu, one Hindi",
+      "prompt": "A straight-on documentary photograph of two photocopied A4 handbills pasted overlapping on a wall in an Old Delhi gali, taken on an ordinary hazy afternoon with a phone camera held level and square to it, soft natural daylight, no flash, true colours, slight grain. 1) Pink paper photocopied in black, Urdu, a bold heading \"اردو ٹیوشن سینٹر\" and below it a few short lines of small Urdu text too small to read. The Urdu is in Nastaliq, written right to left with flowing calligraphic brush strokes, letters joined correctly. 2) Overlapping it, white paper printed in blue, Hindi, a bold heading \"टेलरिंग कोर्स सेंटर\" and a few short lines of small text too small to read. The grey speckle and streaks of a cheap photocopier, the text slightly blurred. Wear: glue stains, the edges torn and peeling, one corner ripped off, sun-faded ink, a dusty smudge. Square 1024 x 1024, the two handbills centred and filling most of the frame, background removed to transparent (PNG with alpha), cut along its real worn outline, no wall, no shadow. Spell every word exactly as written here, letter for letter, and add no other words; if a word cannot be written correctly, leave it out rather than invent letters. Photographic and true to life: not an illustration, not graphic design, not a render, not digital art, no vector look, no perfect symmetry, no logos, no real brand names, no people, no watermark.",
+      "generate": "square 1024x1024, transparent background",
+      "target": {
+        "w": 1024,
+        "h": 1024,
+        "tileable": false,
+        "normalMap": false,
+        "alpha": true,
+        "out": "decals/decal_poster_02.webp"
+      },
+      "placeholder": {
+        "color": "#1f2533",
+        "pattern": "flat",
+        "scale": 1
+      },
+      "used_by": [
+        "P2-053"
+      ],
+      "priority": 2,
+      "batch": "B3-signs-printed",
+      "created": "2026-11-14T17:19:48.465Z",
+      "promptAt": "2026-11-14T17:19:48.514Z"
+    },
+    {
+      "id": "decal_poster_03",
+      "kind": "decal",
+      "intent": "Printed free eye camp poster over torn older posters, Hindi (Sethi Seva Trust)",
+      "prompt": "A straight-on documentary photograph of a printed charity poster pasted over layers of older torn posters on an Old Delhi wall, taken on an ordinary hazy afternoon with a phone camera held level and square to it, soft natural daylight, no flash, true colours, slight grain. The top poster is about 50 cm by 70 cm, offset printed on thin paper in yellow and red, Hindi only: big red heading \"सेठी सेवा ट्रस्ट\" and under it on a red band in white \"मुफ़्त नेत्र शिविर\", then a few short lines of small text too small to read. A bold printed Devanagari poster typeface with a white outline. Under it, scraps of older posters torn away in strips, showing only patches of colour and no readable words. Wear: wrinkles and bubbles from paste, glue stains, a long tear across the bottom half, the red faded to pink at the top. Square 1024 x 1024, the poster and its scraps centred and filling most of the frame, background removed to transparent (PNG with alpha), cut along its real worn outline, no wall, no shadow. Spell every word exactly as written here, letter for letter, and add no other words; if a word cannot be written correctly, leave it out rather than invent letters. Photographic and true to life: not an illustration, not graphic design, not a render, not digital art, no vector look, no perfect symmetry, no logos, no real brand names, no people, no watermark.",
+      "generate": "square 1024x1024, transparent background",
+      "target": {
+        "w": 1024,
+        "h": 1024,
+        "tileable": false,
+        "normalMap": false,
+        "alpha": true,
+        "out": "decals/decal_poster_03.webp"
+      },
+      "placeholder": {
+        "color": "#1f2533",
+        "pattern": "flat",
+        "scale": 1
+      },
+      "used_by": [
+        "P2-053"
+      ],
+      "priority": 2,
+      "batch": "B3-signs-printed",
+      "created": "2026-11-14T17:19:48.562Z",
+      "promptAt": "2026-11-14T17:19:48.609Z"
+    },
+    {
+      "id": "decal_poster_04",
+      "kind": "decal",
+      "intent": "Small printed job poster and a radio sticker, English and Hindi (Jhatpat, Raat Wali 106.1)",
+      "prompt": "A straight-on documentary photograph of two small printed posters pasted on an electricity pole box in Paharganj, Delhi, taken on an ordinary hazy afternoon with a phone camera held level and square to it, soft natural daylight, no flash, true colours, slight grain. 1) An A4 poster on glossy paper, orange ground, English heading in bold white condensed capitals \"JHATPAT RIDER WANTED\", under it in white bold Devanagari \"झटपट राइडर चाहिए\", a simple photo of a scooter with a plain delivery box on the back (no brand), and \"98XXXXXX05\". 2) A smaller dark purple paper sticker, Hindi in yellow: \"रात वाली 106.1\" and \"सुनते रहो\". Wear: creased, glue marks, one torn corner, the gloss scuffed, a dusty bottom edge. Square 1024 x 1024, the two posters centred and filling most of the frame, background removed to transparent (PNG with alpha), cut along its real worn outline, no wall, no shadow. Spell every word exactly as written here, letter for letter, and add no other words; if a word cannot be written correctly, leave it out rather than invent letters. Photographic and true to life: not an illustration, not graphic design, not a render, not digital art, no vector look, no perfect symmetry, no logos, no real brand names, no people, no watermark.",
+      "generate": "square 1024x1024, transparent background",
+      "target": {
+        "w": 1024,
+        "h": 1024,
+        "tileable": false,
+        "normalMap": false,
+        "alpha": true,
+        "out": "decals/decal_poster_04.webp"
+      },
+      "placeholder": {
+        "color": "#1f2533",
+        "pattern": "flat",
+        "scale": 1
+      },
+      "used_by": [
+        "P2-053"
+      ],
+      "priority": 3,
+      "batch": "B3-signs-printed",
+      "created": "2026-11-14T17:19:48.657Z",
+      "promptAt": "2026-11-14T17:19:48.714Z"
+    },
+    {
+      "id": "decal_sign_hotel_led_01",
+      "kind": "decal",
+      "intent": "Paharganj tall vertical hotel box sign, English with a Hindi line (Hotel Krishna Palace)",
+      "prompt": "A straight-on documentary photograph of a tall vertical hotel sign on a building front in Paharganj Main Bazaar, Delhi, taken on an ordinary hazy afternoon with a phone camera held level and square to it, soft natural daylight, no flash, true colours, slight grain. An aluminium box sign about 0.6 m wide and 3 m tall, standing out from the wall on iron brackets, seen face on. Backlit acrylic face: white ground; at the top, small red capitals \"HOTEL\"; below, the name stacked one letter under another in tall red acrylic capitals \"KRISHNA\" then \"PALACE\". At the bottom a red band with white Devanagari \"होटल कृष्णा पैलेस\" and small \"A/C ROOMS\". A row of small LED bulbs in a dark channel round the edge. Photographed in daylight with the lights off. Wear: the acrylic slightly yellowed, dust and dead insects collected inside along the bottom, rust on the bracket bolts, a dirty streak from the top. Frame: the board fills the whole height of the picture top to bottom, square to the camera with no perspective tilt, a strip of the building wall visible on both sides so the brackets show. Portrait 1024 x 1536. Spell every word exactly as written here, letter for letter, and add no other words; if a word cannot be written correctly, leave it out rather than invent letters. Photographic and true to life: not an illustration, not graphic design, not a render, not digital art, no vector look, no perfect symmetry, no logos, no real brand names, no people, no watermark.",
+      "generate": "1024x1536, transparent background",
+      "target": {
+        "w": 1024,
+        "h": 1536,
+        "tileable": false,
+        "normalMap": false,
+        "alpha": true,
+        "out": "decals/decal_sign_hotel_led_01.webp"
+      },
+      "placeholder": {
+        "color": "#1f2533",
+        "pattern": "flat",
+        "scale": 1
+      },
+      "used_by": [
+        "P2-048"
+      ],
+      "priority": 1,
+      "batch": "B3-signs-lit",
+      "created": "2026-11-14T17:19:48.764Z",
+      "promptAt": "2026-11-14T17:19:48.816Z"
+    },
+    {
+      "id": "decal_sign_hotel_led_02",
+      "kind": "decal",
+      "intent": "Paharganj vertical hotel box sign, English only (Hotel Moonlight)",
+      "prompt": "A straight-on documentary photograph of a tall vertical hotel sign on a building front in Paharganj Main Bazaar, Delhi, taken on an ordinary hazy afternoon with a phone camera held level and square to it, soft natural daylight, no flash, true colours, slight grain. An aluminium box sign about 0.6 m wide and 2.8 m tall on iron brackets, seen face on. Printed acrylic face: deep royal blue ground, white lettering stacked letter by letter: \"HOTEL\" small at the top, then \"MOONLIGHT\" in tall capitals, and at the bottom two small lines \"24 HRS CHECK OUT\" and \"HOT WATER\". English only. Photographed in daylight with the lights off. Wear: the blue sun-faded at the top, dust inside the face, a cracked corner of the acrylic, rust stains on the frame. Frame: the board fills the whole height of the picture top to bottom, square to the camera with no perspective tilt, a strip of the building wall visible on both sides so the brackets show. Portrait 1024 x 1536. Spell every word exactly as written here, letter for letter, and add no other words; if a word cannot be written correctly, leave it out rather than invent letters. Photographic and true to life: not an illustration, not graphic design, not a render, not digital art, no vector look, no perfect symmetry, no logos, no real brand names, no people, no watermark.",
+      "generate": "1024x1536, transparent background",
+      "target": {
+        "w": 1024,
+        "h": 1536,
+        "tileable": false,
+        "normalMap": false,
+        "alpha": true,
+        "out": "decals/decal_sign_hotel_led_02.webp"
+      },
+      "placeholder": {
+        "color": "#1f2533",
+        "pattern": "flat",
+        "scale": 1
+      },
+      "used_by": [
+        "P2-048"
+      ],
+      "priority": 1,
+      "batch": "B3-signs-lit",
+      "created": "2026-11-14T17:19:48.867Z",
+      "promptAt": "2026-11-14T17:19:48.922Z"
+    },
+    {
+      "id": "decal_sign_hotel_led_03",
+      "kind": "decal",
+      "intent": "Paharganj vertical lodge sign with bulb border, English with a Hindi line (Bhola Lodge)",
+      "prompt": "A straight-on documentary photograph of an old tall vertical lodge sign on a building front in Paharganj, Delhi, taken on an ordinary hazy afternoon with a phone camera held level and square to it, soft natural daylight, no flash, true colours, slight grain. A sheet metal box about 0.6 m wide and 2.5 m tall on brackets, with a border of round clear bulbs in sockets all round its edge. Green painted face, yellow letters: at the top in Devanagari \"भोला लॉज\", then the English name stacked one letter under another in tall yellow capitals \"BHOLA\" then \"LODGE\". Lettering hand-painted by a local signwriter with a brush in enamel paint: thick strokes of slightly uneven weight, a dark drop shadow painted down and to the right, spacing and baseline a little uneven, faint brush ridges and one or two small drips, the shaded block letters of an old Delhi bazaar board. Photographed in daylight with the bulbs off, two bulbs missing. Wear: the green faded and patchy, rust along the bottom and at every socket, dust on the top. Frame: the board fills the whole height of the picture top to bottom, square to the camera with no perspective tilt, a strip of the building wall visible on both sides so the brackets show. Portrait 1024 x 1536. Spell every word exactly as written here, letter for letter, and add no other words; if a word cannot be written correctly, leave it out rather than invent letters. Photographic and true to life: not an illustration, not graphic design, not a render, not digital art, no vector look, no perfect symmetry, no logos, no real brand names, no people, no watermark.",
+      "generate": "1024x1536, transparent background",
+      "target": {
+        "w": 1024,
+        "h": 1536,
+        "tileable": false,
+        "normalMap": false,
+        "alpha": true,
+        "out": "decals/decal_sign_hotel_led_03.webp"
+      },
+      "placeholder": {
+        "color": "#1f2533",
+        "pattern": "flat",
+        "scale": 1
+      },
+      "used_by": [
+        "P2-048"
+      ],
+      "priority": 2,
+      "batch": "B3-signs-lit",
+      "created": "2026-11-14T17:19:48.976Z",
+      "promptAt": "2026-11-14T17:19:49.027Z"
+    },
+    {
+      "id": "decal_sign_hotel_led_04",
+      "kind": "decal",
+      "intent": "Paharganj vertical hotel sign at dusk, switched on, English only (Hotel Sunrise Paharganj): the night look",
+      "prompt": "A straight-on documentary photograph of a tall vertical hotel sign on a building front in Paharganj Main Bazaar, Delhi, taken just after dusk with the sign switched on, phone camera held level, true colours, slight grain. An aluminium box about 0.6 m wide and 3 m tall on brackets. Red acrylic face lit from inside, white lettering stacked letter by letter: \"HOTEL\" small at the top, \"SUNRISE\" in tall capitals, \"PAHARGANJ\" small at the bottom. English only. A strip of warm white LEDs runs round the edge, a few dots dead. The glow is uneven: brighter in the middle, darker at the ends, one tube behind the face dimmer. Dust inside the face shows as soft shadows. Frame: the board fills the whole height of the picture top to bottom, square to the camera with no perspective tilt, a strip of the building wall visible on both sides so the brackets show. Portrait 1024 x 1536. Spell every word exactly as written here, letter for letter, and add no other words; if a word cannot be written correctly, leave it out rather than invent letters. Photographic and true to life: not an illustration, not graphic design, not a render, not digital art, no vector look, no perfect symmetry, no logos, no real brand names, no people, no watermark.",
+      "generate": "1024x1536, transparent background",
+      "target": {
+        "w": 1024,
+        "h": 1536,
+        "tileable": false,
+        "normalMap": false,
+        "alpha": true,
+        "out": "decals/decal_sign_hotel_led_04.webp"
+      },
+      "placeholder": {
+        "color": "#1f2533",
+        "pattern": "flat",
+        "scale": 1
+      },
+      "used_by": [
+        "P2-048"
+      ],
+      "priority": 2,
+      "batch": "B3-signs-lit",
+      "created": "2026-11-14T17:19:49.081Z",
+      "promptAt": "2026-11-14T17:19:49.132Z"
+    },
+    {
+      "id": "decal_sign_glowbox_01",
+      "kind": "decal",
+      "intent": "Connaught Place colonnade chemist acrylic glow box, English only (Colonnade Chemists)",
+      "prompt": "A straight-on documentary photograph of a backlit acrylic fascia sign under the colonnade of Connaught Place, New Delhi, taken on an ordinary hazy afternoon with a phone camera held level and square to it, soft natural daylight, no flash, true colours, slight grain. An aluminium box about 2.6 m by 0.6 m and 15 cm deep, its edges and corner screws visible, set into a white-painted arch bay. Printed acrylic face: white ground, a green stripe along the bottom, the name in clean dark green bold sans-serif capitals \"COLONNADE CHEMISTS\", a small grey line under it \"Medicines, Surgicals, Baby Care\". English only. Photographed in daylight with the lights off. Wear light: a faint line of dust along the bottom inside, the white slightly yellowed, a thin seam where two acrylic sheets meet. Frame: the board fills the whole width of the picture edge to edge, square to the camera with no perspective tilt, a thin strip of the wall it is fixed to visible above and below so the fixings show. Landscape 1536 x 1024. Spell every word exactly as written here, letter for letter, and add no other words; if a word cannot be written correctly, leave it out rather than invent letters. Photographic and true to life: not an illustration, not graphic design, not a render, not digital art, no vector look, no perfect symmetry, no logos, no real brand names, no people, no watermark.",
+      "generate": "1536x1024, transparent background",
+      "target": {
+        "w": 1536,
+        "h": 1024,
+        "tileable": false,
+        "normalMap": false,
+        "alpha": true,
+        "out": "decals/decal_sign_glowbox_01.webp"
+      },
+      "placeholder": {
+        "color": "#1f2533",
+        "pattern": "flat",
+        "scale": 1
+      },
+      "used_by": [
+        "P2-048"
+      ],
+      "priority": 2,
+      "batch": "B3-signs-lit",
+      "created": "2026-11-14T17:19:49.184Z",
+      "promptAt": "2026-11-14T17:19:49.232Z"
+    },
+    {
+      "id": "decal_sign_glowbox_02",
+      "kind": "decal",
+      "intent": "Paharganj travel agent printed acrylic glow box, English only (Himalaya Tours and Travels)",
+      "prompt": "A straight-on documentary photograph of a backlit printed acrylic shop sign over a travel agent in Paharganj Main Bazaar, Delhi, taken on an ordinary hazy afternoon with a phone camera held level and square to it, soft natural daylight, no flash, true colours, slight grain. An aluminium box about 2.5 m by 0.7 m. Printed in the cheap local print-shop look: bold condensed sans-serif English like a flex printer uses, coloured outlines and drop shadows, flat solid colour bands, slightly oversaturated inkjet colours. Blue to white gradient ground, a small printed photograph of snowy mountains at the left end, the name in big white bold capitals with a dark blue outline \"HIMALAYA TOURS AND TRAVELS\", a yellow strip with red text \"TRAIN & AIR TICKETS, TAXI TO HILLS, AC BUS\". English only. Photographed in daylight with the lights off. Wear medium: dusty, the print faded at the top, dirt along the bottom lip, rust at the screws. Frame: the board fills the whole width of the picture edge to edge, square to the camera with no perspective tilt, a thin strip of the wall it is fixed to visible above and below so the fixings show. Landscape 1536 x 1024. Spell every word exactly as written here, letter for letter, and add no other words; if a word cannot be written correctly, leave it out rather than invent letters. Photographic and true to life: not an illustration, not graphic design, not a render, not digital art, no vector look, no perfect symmetry, no logos, no real brand names, no people, no watermark.",
+      "generate": "1536x1024, transparent background",
+      "target": {
+        "w": 1536,
+        "h": 1024,
+        "tileable": false,
+        "normalMap": false,
+        "alpha": true,
+        "out": "decals/decal_sign_glowbox_02.webp"
+      },
+      "placeholder": {
+        "color": "#1f2533",
+        "pattern": "flat",
+        "scale": 1
+      },
+      "used_by": [
+        "P2-048"
+      ],
+      "priority": 2,
+      "batch": "B3-signs-lit",
+      "created": "2026-11-14T17:19:49.282Z",
+      "promptAt": "2026-11-14T17:19:49.329Z"
+    },
+    {
+      "id": "decal_sign_glowbox_03",
+      "kind": "decal",
+      "intent": "Chandni Chowk jeweller acrylic glow box, Hindi over English (Hira Moti Jewellers)",
+      "prompt": "A straight-on documentary photograph of a backlit acrylic sign over a jewellery shop on Chandni Chowk, Old Delhi, taken on an ordinary hazy afternoon with a phone camera held level and square to it, soft natural daylight, no flash, true colours, slight grain. An aluminium box about 2.5 m by 0.7 m fixed to an old plaster facade. Deep maroon acrylic face, lettering in golden yellow: large Devanagari in a bold printed Hindi typeface \"हीरा मोती ज्वेलर्स\", under it smaller English capitals \"HIRA MOTI JEWELLERS\", and small in the corner \"स्था. 1972\". Photographed in daylight with the lights off. Wear: dust inside the face, the maroon faded at the top, a grey grime line along the bottom lip, a tangle of black wire running down beside the box. Frame: the board fills the whole width of the picture edge to edge, square to the camera with no perspective tilt, a thin strip of the wall it is fixed to visible above and below so the fixings show. Landscape 1536 x 1024. Spell every word exactly as written here, letter for letter, and add no other words; if a word cannot be written correctly, leave it out rather than invent letters. Photographic and true to life: not an illustration, not graphic design, not a render, not digital art, no vector look, no perfect symmetry, no logos, no real brand names, no people, no watermark.",
+      "generate": "1536x1024, transparent background",
+      "target": {
+        "w": 1536,
+        "h": 1024,
+        "tileable": false,
+        "normalMap": false,
+        "alpha": true,
+        "out": "decals/decal_sign_glowbox_03.webp"
+      },
+      "placeholder": {
+        "color": "#1f2533",
+        "pattern": "flat",
+        "scale": 1
+      },
+      "used_by": [
+        "P2-048"
+      ],
+      "priority": 2,
+      "batch": "B3-signs-lit",
+      "created": "2026-11-14T17:19:49.379Z",
+      "promptAt": "2026-11-14T17:19:49.431Z"
     }
   ]
 }
