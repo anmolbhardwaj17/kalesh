@@ -10,6 +10,7 @@ import { PATHS, ROOT, R, H, config, readJSON, readJSONL, appendJSONL, nowISO, gi
 import { perfSummary } from './perfgate.mjs';
 import { readNotices, openNotices } from './notice.mjs';
 import { readAgents } from './agents.mjs';
+import { mainRootOf, liveLanes, resolveLaneFile } from './livelanes.mjs';
 import { signoffStates } from './signoffs.mjs';
 import { scriptIds, milestoneCounts, isRequired, loadMilestones } from './milestoneset.mjs';
 import { readCopies, COPY_ROOT, PLAY_COMMAND } from './playcopy.mjs';
@@ -33,33 +34,22 @@ function shotsList() {
     .sort((a, b) => b.first - a.first).slice(0, 80);
 }
 
-// Live strips (owner, 2026-10-09): the shots most recently WRITTEN (mtime), so a builder that re-saves known names still shows,
-// for the main checkout (builder) and the verify snapshot worktree (verifier). Read only; costs the builders nothing.
-const VERIFY_SHOTS = path.join(PATHS.shots, '..', '..', '..', '.worktrees', 'verify', 'harness', 'reports', 'shots');
-function liveShots(dir, n = 10) {
-  if (!fs.existsSync(dir)) return [];
-  return fs.readdirSync(dir).filter((f) => f.endsWith('.png') && !f.startsWith('art_'))
-    .map((f) => { const st = fs.statSync(path.join(dir, f)); return { name: f, t: st.mtimeMs }; })
-    .sort((a, b) => b.t - a.t).slice(0, n);
-}
+// Live view of every lane (owner 2026-11-14, P2-066): the newest pictures each running agent wrote, from the main checkout and
+// from every worktree under .worktrees/ (see livelanes.mjs). The dashboard runs from the main checkout; when it runs from a
+// worktree (a test), MAIN is the checkout above .worktrees, so the lanes are the same.
+const MAIN = mainRootOf(ROOT);
+const AGENTS_FILE = path.join(MAIN, 'harness', 'state', 'agents.json');
+const VERIFY_SHOTS = path.join(MAIN, '.worktrees', 'verify', 'harness', 'reports', 'shots');
 
-// Look shots (owner 2026-11-10): the newest lookproof views (harness/look_proof/<set>/*.png, approved excluded)
-// and sheets (harness/reports/look/*.jpg), so style tests show up live. Names are relative to LOOK_ROOT.
-const LOOK_ROOT = R('harness');
-function liveLook(n = 12) {
+// Look shots (owner 2026-11-10): the newest lookproof views (harness/look_proof/<set>/*.png, approved excluded), added to the
+// main lane. Names are relative to LOOK_ROOT. The map, inspector, road bench and flakecheck folders are covered by the lane scan.
+const LOOK_ROOT = path.join(MAIN, 'harness');
+function lookItems() {
   const out = [];
   const lp = path.join(LOOK_ROOT, 'look_proof');
   try { for (const set of fs.readdirSync(lp)) { if (set === 'approved') continue; const d = path.join(lp, set); if (!fs.statSync(d).isDirectory()) continue;
-    for (const v of fs.readdirSync(d)) if (v.endsWith('.png')) out.push({ name: 'look_proof/' + set + '/' + v, t: fs.statSync(path.join(d, v)).mtimeMs }); } } catch { /* none yet */ }
-  const sheets = path.join(LOOK_ROOT, 'reports', 'look');
-  try { for (const v of fs.readdirSync(sheets)) if (/\.(jpg|png)$/.test(v)) out.push({ name: 'reports/look/' + v, t: fs.statSync(path.join(sheets, v)).mtimeMs }); } catch { /* none yet */ }
-  // Owner 2026-11-13: map renders, inspector shots, road and ground bench views and flakecheck shots show live too,
-  // so offline map work is visible. One directory listing each per poll; no image is read or resized.
-  for (const sub of ['reports/map', 'reports/inspector', 'reports/arch/roads', 'reports/flakecheck/shots']) {
-    const d = path.join(LOOK_ROOT, sub);
-    try { for (const v of fs.readdirSync(d)) if (/\.(jpg|png)$/.test(v)) out.push({ name: sub + '/' + v, t: fs.statSync(path.join(d, v)).mtimeMs }); } catch { /* none yet */ }
-  }
-  return out.sort((a, b) => b.t - a.t).slice(0, n);
+    for (const v of fs.readdirSync(d)) if (v.endsWith('.png')) { const name = 'look_proof/' + set + '/' + v; out.push({ name, t: fs.statSync(path.join(d, v)).mtimeMs, url: '/lshots/' + name.split('/').map(encodeURIComponent).join('/') }); } } } catch { /* none yet */ }
+  return out;
 }
 
 // Frame time panel (P2-118): the newest run that measured perf, from latest.json, the report history or a sweep summary.
@@ -165,6 +155,7 @@ function buildState() {
   const scripts = scriptIds();
   const mc = milestoneCounts(milestones, mstatus, scripts);
   const cfg = config();
+  const agents = readAgents(AGENTS_FILE);
   return {
     now: nowISO(),
     game: cfg.game, owner: cfg.owner, milestoneWord: cfg.milestoneWord,
@@ -191,12 +182,12 @@ function buildState() {
     // The map health of the last bake (P1-011), the same numbers as harness/reports/map/health.json.
     mapHealth: mapHealth(),
     shots: shotsList(),
-    live: { builder: liveShots(PATHS.shots), verifier: liveShots(VERIFY_SHOTS), look: liveLook() },
+    live: liveLanes(MAIN, agents, lookItems()),
     requests: { images: req(PATHS.reqAssets, 'requests'), sfx: req(PATHS.reqSfx, 'requests'), music: req(PATHS.reqMusic, 'requests'), voices: voice.voices || [], lines: (voice.lines || []).map((l) => ({ ...l, status: statusOf(l.id, l, man), file: man.audio?.[l.id]?.path || null })) },
     inbox,
     notices: openNotices(readNotices()),
     // Agents now (P2-050): one line per running builder or verifier, from harness/state/agents.json.
-    agents: readAgents(),
+    agents,
     journal: tail(PATHS.journal, 80),
     commits: git('log --oneline -12').split('\n').filter(Boolean),
     playCommand: PLAY_COMMAND,
@@ -280,6 +271,15 @@ const server = http.createServer(async (req, res) => {
     if (req.method === 'GET' && p === '/api/ping') return send(res, 200, { ok: true });
     if (req.method === 'GET' && p === '/api/state') return send(res, 200, buildState());
     if (req.method === 'GET' && p.startsWith('/lshots/')) return serveFile(res, [LOOK_ROOT], p.slice(8)) || send(res, 404, 'no shot', 'text/plain');
+    // Pictures from any lane (main checkout or .worktrees/<lane>): /lane/<lane>/<path under harness/reports>, images only (livelanes.mjs).
+    if (req.method === 'GET' && p.startsWith('/lane/')) {
+      const rest = p.slice(6); const i = rest.indexOf('/');
+      let f = null;
+      try { f = i > 0 ? resolveLaneFile(MAIN, rest.slice(0, i), decodeURIComponent(rest.slice(i + 1))) : null; } catch { f = null; }
+      if (!f) return send(res, 404, 'no picture', 'text/plain');
+      res.writeHead(200, { 'Content-Type': MIME[path.extname(f).toLowerCase()] || 'image/png', 'Cache-Control': 'no-store' });
+      fs.createReadStream(f).pipe(res); return;
+    }
     if (req.method === 'GET' && p.startsWith('/vshots/')) return serveFile(res, [VERIFY_SHOTS], p.slice(8)) || send(res, 404, 'no shot', 'text/plain');
     // the map report folder of the last bake (health.json, the repaired site pictures)
     if (req.method === 'GET' && p.startsWith('/map/')) return serveFile(res, [path.dirname(HEALTH_FILE)], p.slice(5)) || send(res, 404, 'no map report', 'text/plain');
