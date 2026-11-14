@@ -586,3 +586,6 @@ One line per event, written by task.mjs (start, done, fail, phase changes, inbox
 - 2026-11-14 15:03 mentor message mmwg7jwa6 handled: Yes, that is exactly what the Bittu card asks for: full body A-pose, under 25k triangles, rig on Mixamo, upload on the card; the art reviewer checks it and the game swaps it in.
 - 2026-11-14 15:11 [P3-010] added: Faces for the three leads: talking mouth, blinks, eye and brow expressions on any delivered model
 - 2026-11-14 15:11 mentor message mmwg7upuw handled: Yes, signed in the architecture: about 12 face shapes per lead (jaw, mouth shapes, blinks, brows, smile, frown), jaw by voice loudness in play and full lip sync in big cutscenes. Text to 3D models come with no face rig, so task P3 adds the face automatically to any model you upload.
+- 2026-11-14 15:21 [P2-062] added: Model cards accept the Mixamo FBX and convert it to .glb
+- 2026-11-14 15:21 [P2-062] start (attempt 1): Model cards accept the Mixamo FBX and convert it to .glb
+- 2026-11-14 15:21 mentor message mmwg87v8t handled: Our mistake: the steps say FBX but the card only took .glb. P2-062 makes the card accept the Mixamo FBX and convert it; keep the file until then.

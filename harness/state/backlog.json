@@ -1,6 +1,6 @@
 {
   "_doc": "Written only by node harness/bin/task.mjs. Phases run in order; P0 (ADOPT + STYLE DISCOVERY) waits for the owner by design and needs task.mjs signoff and task.mjs archsignoff before its gate passes. Later phases are added by the planner at the end of P0 (task.mjs phase-add) from the game's real state.",
-  "updated": "2026-11-14T09:41:34.351Z",
+  "updated": "2026-11-14T09:51:48.078Z",
   "phases": [
     {
       "id": "P0",
@@ -4954,6 +4954,25 @@
       "notes": [],
       "created": "2026-11-14T09:41:34.350Z",
       "model": "opus"
+    },
+    {
+      "id": "P2-062",
+      "phase": "P2",
+      "title": "Model cards accept the Mixamo FBX and convert it to .glb",
+      "desc": "Anmol 2026-11-14: the model card steps say download an FBX from Mixamo, but the Needs you card only accepts .glb. Make the dashboard model upload accept .fbx as well as .glb, and have ingest convert a rigged FBX to .glb (Godot headless through harness/bin/godot.mjs: import the FBX and write a .glb with GLTFDocument, keeping the skeleton, skin and textures), then run the usual model checks. Update the card text: 'Upload the .fbx from Mixamo (or a .glb)'.",
+      "accept": [
+        "A test converts a small rigged FBX fixture; npm test green"
+      ],
+      "deps": [],
+      "agent": "builder",
+      "priority": 1,
+      "kind": "bug",
+      "status": "doing",
+      "attempts": 1,
+      "notes": [],
+      "created": "2026-11-14T09:51:47.815Z",
+      "model": "sonnet",
+      "started": "2026-11-14T09:51:48.077Z"
     }
   ]
 }
