@@ -1,6 +1,6 @@
 {
   "_doc": "Written only by node harness/bin/task.mjs. Phases run in order; P0 (ADOPT + STYLE DISCOVERY) waits for the owner by design and needs task.mjs signoff and task.mjs archsignoff before its gate passes. Later phases are added by the planner at the end of P0 (task.mjs phase-add) from the game's real state.",
-  "updated": "2026-11-14T17:39:14.173Z",
+  "updated": "2026-11-14T18:22:13.871Z",
   "phases": [
     {
       "id": "P0",
@@ -5279,6 +5279,24 @@
       "created": "2026-11-14T17:39:13.193Z",
       "model": "opus",
       "started": "2026-11-14T17:39:14.168Z"
+    },
+    {
+      "id": "P2-073",
+      "phase": "P2",
+      "title": "Forced draw freezes shader TIME in harness shots; relight_live_street regression check",
+      "desc": "From P2-048 attempt 3: game/debug/debug_server.gd force_draw for covered or parked (hidden) windows passed no frame step, so shader TIME froze in every harness shot (LED and any animated shader looked static). Fix on main: force_draw(false, delta). Also relight_live_street fails on trees that carry the parked-window files from P2-065 (main-thread relight 9.3 ms vs 4, GPU p95 15 vs 12) and passes on older trees: find whether the hidden window or the forced draw path causes it and fix, quiet machine numbers quoted.",
+      "accept": [
+        "npm test green"
+      ],
+      "deps": [],
+      "agent": "builder",
+      "priority": 1,
+      "kind": "bug",
+      "status": "todo",
+      "attempts": 0,
+      "notes": [],
+      "created": "2026-11-14T18:22:13.870Z",
+      "model": "sonnet"
     }
   ]
 }

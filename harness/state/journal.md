@@ -677,3 +677,4 @@ One line per event, written by task.mjs (start, done, fail, phase changes, inbox
 - 2026-11-14 22:59 mentor message mmwgoktu5 handled: Noted: look accepted by you; after the builder's final checks a light verifier pass, then merge and rebuild, about 1 to 1.5 hours.
 - 2026-11-14 23:09 [P2-072] added: Mixamo animations on the leads: pick per character, layered blending
 - 2026-11-14 23:09 [P2-072] start (attempt 1): Mixamo animations on the leads: pick per character, layered blending
+- 2026-11-14 23:52 [P2-073] added: Forced draw freezes shader TIME in harness shots; relight_live_street regression check
