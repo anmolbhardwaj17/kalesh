@@ -548,14 +548,11 @@ Decision: every character (and later vehicles and hero props) starts as a pictur
 Why: Anmol 2026-11-14: "maybe i should make image first, finalize in that the look and feel and then once thats done and verified then only we'll think of 3d model step by step". Text to 3D gave cartoon faces and wrong proportions; a settled picture gives image to 3D a clear target.
 By: orchestrator, from the mentor inbox.
 
-<<<<<<< HEAD
 ## 2026-11-14: Test windows are hidden by default; perf budgets are judged with a visible window only at phase gates
 Decision: every harness Godot launch parks its window off every display (borderless, moved off-screen, app hidden); HARNESS_SHOW_WINDOW=1 shows it. A parked window counts as occluded on macOS and reads up to about 2x worse on GPU cost, so per-task perf checks are read as relative (A/B in the same session, with load), and the absolute perf budgets are judged at phase gates with HARNESS_SHOW_WINDOW=1, run when the owner is not using the machine where possible.
 Why: Anmol 2026-11-14 kept seeing test windows over his work (P2-065).
 By: orchestrator.
-=======
 ## 2026-11-14: Every visible object is scored against real photos and improved until it passes
 Decision: harness/design/REALITY_MATCH.md. A catalog of every visible object class is built from the code and data (no hand list); each object gets dated reference photos, an off-screen render alone and in context, and a score 0 to 10 on shape, size, material and colour, wear, detail, mounting, light response and game language; pass is an average of 8 with no line under 6. Builders self-score what they add, verifiers rescore and fail below pass, look critics sweep the catalog worst first and failures become tasks automatically.
 Why: Anmol 2026-11-14: "compare, give a score and improve until it looks good or matches our game language ... I don't have to provide a list of each and every prop".
 By: orchestrator, from the mentor inbox.
->>>>>>> origin/main
