@@ -1,0 +1,24 @@
+{
+  "images": {},
+  "audio": {},
+  "models": {
+    "model_lead_bittu": {
+      "path": "assets/models/model_lead_bittu.glb",
+      "bytes": 15631308,
+      "kind": "model",
+      "ingestedAt": "2026-11-14T10:13:47.304Z"
+    },
+    "model_lead_danny": {
+      "path": "assets/models/model_lead_danny.glb",
+      "bytes": 13732928,
+      "kind": "model",
+      "ingestedAt": "2026-11-14T10:13:59.771Z"
+    },
+    "model_lead_meera": {
+      "path": "assets/models/model_lead_meera.glb",
+      "bytes": 13821928,
+      "kind": "model",
+      "ingestedAt": "2026-11-14T10:14:04.349Z"
+    }
+  }
+}

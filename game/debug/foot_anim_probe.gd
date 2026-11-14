@@ -11,6 +11,10 @@
 ##                      Rana on his right and Danny on his left (two characters that are not the player, standing),
 ##                      and the on-foot camera turned to face them, as a player turns it with the mouse;
 ##                      {clear: true} takes the two away
+##   dress {look}       the player's body is built again as another lead (P2-063: each lead's own model), staging
+##                      only; `anim` takes the same {look} first; {pose} then plays a state of humanoid_anim.gd and
+##                      holds it (drive, sit: the seated poses, seen standing on the pad);
+##                      {standin: true} draws the painted mannequin instead of the lead's model (side by sides)
 extends RefCounted
 
 const Contact := preload("res://characters/foot_contact.gd")
@@ -59,7 +63,7 @@ static func anim(p: Node, gait: String) -> Dictionary:
 	var res := Contact.slide(rl, rr, body, DT, Motor.forward(c.heading), ground)
 	var cost: float = h.cost_ms()
 	var clip: String = h.clip()
-	var built: Dictionary = h.loco().get_meta("gaits", {}).get(clip.trim_prefix("k/"), {})
+	var built: Dictionary = h.locomotion().get_meta("gaits", {}).get(clip.trim_prefix("k/"), {})
 	p.release()
 	await p.ticks(30)
 	return {
@@ -71,6 +75,24 @@ static func anim(p: Node, gait: String) -> Dictionary:
 		"switches": res.switches, "animMsPerTick": cost,
 		"look": h.look_id, "scale": snappedf(h.body_scale, 0.0001),
 	}
+
+
+static func dress(p: Node, id: String, pose := "", stand_in := false) -> Dictionary:
+	var c: CharacterBody3D = p.character()
+	if not id in ["bittu", "meera", "danny"]:
+		return {"error": "foot(dress): look %s (bittu, meera, danny)" % id}
+	if c.humanoid != null:
+		c.remove_child(c.humanoid)
+		c.humanoid.free()
+		c.humanoid = null
+	c.look = id
+	c.stand_in = stand_in
+	c._build_body()
+	if pose != "" and c.humanoid != null and c.humanoid.STATES.has(pose):
+		# at the clip's own pace (a long one-shot time slows the cross fade with it), then held
+		c.humanoid.play(pose, c.humanoid._length(c.humanoid.STATES[pose]))
+		c.humanoid._shot_left = 1e9
+	return {"look": id, "anim": c.humanoid.info() if c.humanoid != null else {}}
 
 
 static func lineup(p: Node, o: Dictionary) -> Dictionary:

@@ -24,8 +24,11 @@ const Moves := preload("res://characters/tools/build_moves.gd")
 const SRC := "res://characters/rig/ual_clips.res"
 const MESH := "res://characters/rig/mannequin_m.scn"
 const OUT := "res://characters/rig/loco_clips.res"
-## The body scale the clips' speeds are exact for (Bittu 0.940; Danny 0.973 and Meera 0.908 play 3.5 percent off).
+const OUT_LEAD := "res://characters/rig/loco_%s.res"
+## The body scale the clips' speeds are exact for (the stand-in Bittu 0.940; Danny 0.973 and Meera 0.908 play 3.5
+## percent off). A lead model's build (`-- lead <id>`, P2-063) uses that model's own scale and writes rig/loco_<id>.res.
 const REF_SCALE := 0.94
+const Leads := preload("res://characters/leads.gd")
 ## A sole point within this of the ground counts as on it (source clips; they sink up to 2.6 cm).
 const TOL := 0.02
 ## A sole point of a built clip within this of the ground is on it; a swinging foot clears the ground by CLEAR.
@@ -60,12 +63,28 @@ func _process(_d: float) -> bool:
 
 
 func _build() -> String:
+	var args := OS.get_cmdline_user_args()
+	var mesh := MESH
+	var out_path := OUT
+	var ref := REF_SCALE
+	var lead_id := ""
+	if args.size() >= 2 and args[0] == "lead":
+		lead_id = args[1]
+		mesh = Leads.MODEL_PATH % lead_id
+		out_path = OUT_LEAD % lead_id
 	var src := load(SRC) as AnimationLibrary
-	var ps := load(MESH) as PackedScene
+	var ps := load(mesh) as PackedScene
 	if src == null or ps == null:
-		return "missing %s or %s (run tools/characters/ual_build.mjs first)" % [SRC, MESH]
+		return "missing %s or %s (run tools/characters/ual_build.mjs or lead_build.mjs first)" % [SRC, mesh]
+	var body := ps.instantiate() as Node3D
+	if lead_id != "":
+		ref = Leads.model_scale(lead_id, body.get_meta("lead", {}))
 	var k := Kit.new()
-	k.setup(root, ps.instantiate(), src)
+	k.ref_scale = ref
+	if lead_id != "":
+		k.fps = 240.0
+		k.forward_knee = true
+	k.setup(root, body, src)
 	var out := AnimationLibrary.new()
 	k.ap.add_animation_library("k", out)
 	var meta := {}
@@ -84,11 +103,13 @@ func _build() -> String:
 	out.set_meta("ground", k.ground)
 	out.set_meta("sole", {"LeftHeel": k.heel["Left"], "LeftBall": k.ball["Left"], "RightHeel": k.heel["Right"], "RightBall": k.ball["Right"],
 		"len": k.foot_len, "ankle": k.ankle_flat})
-	out.set_meta("ref_scale", REF_SCALE)
+	out.set_meta("ref_scale", ref)
 	out.set_meta("source", "Built by characters/tools/build_locomotion.gd from the Universal Animation Library 1 (Quaternius, CC0)")
-	var e := ResourceSaver.save(out, OUT, ResourceSaver.FLAG_COMPRESS)
+	if lead_id != "":
+		out.set_meta("lead", lead_id)
+	var e := ResourceSaver.save(out, out_path, ResourceSaver.FLAG_COMPRESS)
 	if e != OK:
-		return "save %s: %d" % [OUT, e]
+		return "save %s: %d" % [out_path, e]
 	print("ground ", snappedf(k.ground, 0.0001), " reach ", snappedf(k.reach, 0.0001), " foot ", snappedf(k.foot_len, 0.0001))
 	return ""
 
@@ -150,8 +171,8 @@ static func gait(k: Kit, name: String, c: Dictionary) -> Dictionary:
 		st["Right"] = [st["Right"][0] + 1.0, st["Right"][1] + 1.0]
 	var t_cycle := 120.0 / float(c.spm)
 	var duty: float = float(c.duty) if c.has("duty") else float(c.contact_s) / t_cycle
-	var v := float(c.speed) / REF_SCALE
-	var n := roundi(t_cycle * Kit.FPS)
+	var v := float(c.speed) / k.ref_scale
+	var n := roundi(t_cycle * k.fps)
 	var lead := {"Left": 0.0, "Right": 0.5}
 	# pass A: the source poses each built frame takes
 	var body := []
@@ -195,7 +216,7 @@ static func gait(k: Kit, name: String, c: Dictionary) -> Dictionary:
 			shift = sh
 			target = t
 			need = nd
-	var drop := _smooth_cover(need)
+	var drop := _smooth_cover(need, maxi(1, roundi(k.fps / Kit.FPS)))
 	# pass C: pose, plant, record
 	var frames := []
 	var miss := 0.0
@@ -287,17 +308,18 @@ static func _lifted(k: Kit, p: Vector3, lift: float) -> Vector3:
 
 
 ## A smooth looped curve that is nowhere under `need`: widened by two frames, blurred, then lifted back over it.
-static func _smooth_cover(need: PackedFloat32Array) -> PackedFloat32Array:
+## `per`: frames per frame of a 120 keys a second build (2 at a lead build's 240), so the smoothing spans the same time.
+static func _smooth_cover(need: PackedFloat32Array, per := 1) -> PackedFloat32Array:
 	var n := need.size()
 	var wide := PackedFloat32Array()
 	wide.resize(n)
 	for i in n:
 		var m := 0.0
-		for d in range(-2, 3):
+		for d in range(-2 * per, 2 * per + 1):
 			m = maxf(m, need[(i + d + n) % n])
 		wide[i] = m
 	var out := wide
-	for pass_i in 3:
+	for pass_i in 3 * per * per:
 		var next := PackedFloat32Array()
 		next.resize(n)
 		for i in n:
