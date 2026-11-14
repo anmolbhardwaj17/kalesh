@@ -1,6 +1,6 @@
 {
   "_doc": "Written only by node harness/bin/task.mjs. Phases run in order; P0 (ADOPT + STYLE DISCOVERY) waits for the owner by design and needs task.mjs signoff and task.mjs archsignoff before its gate passes. Later phases are added by the planner at the end of P0 (task.mjs phase-add) from the game's real state.",
-  "updated": "2026-11-14T08:21:00.974Z",
+  "updated": "2026-11-14T08:31:47.615Z",
   "phases": [
     {
       "id": "P0",
@@ -4530,6 +4530,25 @@
       ],
       "created": "2026-11-14T08:12:50.313Z",
       "model": "sonnet"
+    },
+    {
+      "id": "P2-050",
+      "phase": "P2",
+      "title": "Dashboard: agents now line per builder and verifier; smaller sign-off",
+      "desc": "Anmol 2026-11-14: on the dashboard overview page, right below the sign-off section, a small 'Agents now' section: one line per running builder or verifier with its lane and what it is doing (for example 'Builder, main lane: P2-010 building kits speed fix'). Nothing more. Data: a small file harness/state/agents.json written by a new CLI (node harness/bin/agents.mjs set <name> --lane <lane> --role <builder|verifier> --task <id> --what \"<one line>\" and agents.mjs clear <name>), which the orchestrator updates at each spawn and each finish; the dashboard reads it live. Make the sign-off section compact now that all three sign-offs are done (one line with the three ticks and dates, details behind a toggle).",
+      "accept": [
+        "agents.mjs has a test; npm test green"
+      ],
+      "deps": [],
+      "agent": "builder",
+      "priority": 1,
+      "kind": "mentor",
+      "status": "doing",
+      "attempts": 1,
+      "notes": [],
+      "created": "2026-11-14T08:31:47.422Z",
+      "model": "sonnet",
+      "started": "2026-11-14T08:31:47.614Z"
     }
   ]
 }

@@ -563,3 +563,6 @@ One line per event, written by task.mjs (start, done, fail, phase changes, inbox
 - 2026-11-14 13:46 mentor message mmwg4t8mv handled: Done: every reference photo gets its date written next to it, old ones are never used for surfaces, signs or colours, and the search keeps going until the set shows what is needed; if free photos fall short, a photo request goes on your dashboard.
 - 2026-11-14 13:48 mentor message mmwg4w892 handled: Agreed. Perf results are now reported with the machine load, and a miss on a busy machine is rerun when quiet or compared with a reference scene in the same run before it counts against the game.
 - 2026-11-14 13:51 mentor message mmwg4z4hn handled: Yes. The tunnel task now has to build the Pragati Maidan tunnel's own look from dated photos (the wall art panels, finish, lights, fans, signs, portals), and the verifier fails it if it looks like a generic tunnel.
+- 2026-11-14 14:01 [P2-050] added: Dashboard: agents now line per builder and verifier; smaller sign-off
+- 2026-11-14 14:01 [P2-050] start (attempt 1): Dashboard: agents now line per builder and verifier; smaller sign-off
+- 2026-11-14 14:01 mentor message mmwg5cz8m handled: On it: P2-050 adds an 'Agents now' section under a smaller sign-off line on the overview page, one line per builder and verifier with its lane and job.
