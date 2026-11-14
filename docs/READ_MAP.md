@@ -23,6 +23,7 @@ Notes: `harness/state/knowledge/rendering-and-look.md`
 - STYLE: all sections that apply to the task.
 - VERIFY: "Visual review rubric (verifier agent)", "Look proof workflow (`lookproof.mjs`)", "Perf probes".
 - Source: `game/scenes/main.tscn` (environment, lights, scene), the stand-in scenes `game/scenes/standin/` (builder.gd sets their environment and sun; style tests restyle these); the look is stylised B by default (no `--style`); the game args `--style=<name>` (`none` is the flat stand-in look), `--light=<preset>` and `--time=<h>` (`game/core/game_args.gd`) switch it, and the day clock `game/core/day_clock.gd` picks the hour; their code is `game/render/` (`style_runner.gd`, `styles/<id>.gd` and `.tres`, `styles/light_<id>.tres`, `shaders/surface.gdshader`; the live relight P1-028: `style_runner.gd` `relight_to_clock`, `stylised.gd` `relight`/`light_environment`, `stylised_b.gd` night lights, `shaders/glow_window.gdshader`, scenario script `harness/verify/scripts/relight_live.js`), tests `game/tests/test_style.gd`.
+- Sign boards (P2-048): `harness/design/areas/signboards.md`, `tools/kits/make_signs.mjs`, `tools/kits/signtext.mjs`, `game/world/kits/kit_pieces.gd`, the board branch of `game/render/shaders/surface_b.gdshaderinc`, `game/render/shaders/sign_pool.gdshader`.
 
 ## UI and input
 Notes: `harness/state/knowledge/ui-and-input.md`

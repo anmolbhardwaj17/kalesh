@@ -1,4 +1,5 @@
-## The pieces the area kits add to some bays (P2-010, kit_modules.gd PIECES): sign boards, outside stairs with their
+## The pieces the area kits add to some bays (P2-010, kit_modules.gd PIECES): sign boards (P2-048: painted, tilted,
+## lamp lit, flex, glow, vertical, band, stacked, enamel, small, paper notices, wall lettering), outside stairs with their
 ## railings, roof tanks and roof railings, AC units, market awnings, lodge signs, and the Lutyens boundary wall and gate
 ## pier (not placed yet), and the Lutyens plot boundary that the bungalow ground floor modules carry. Same module frame
 ## and paint codes as kit_modules.gd.
@@ -9,20 +10,236 @@ const A_AC := Rect2(0.0, 0.75, 0.25, 0.25)
 const WHITE := Color(1, 1, 1)
 
 
-static func _board(m: M, kit: String) -> void:
-	var y0 := 2.72
-	var y1 := 3.14
+## Sign boards (P2-048, harness/design/areas/signboards.md): the sign groups of the kit's sign atlas
+## (tools/kits/make_signs.mjs GROUPS) and the flags the kit shader reads from a board quad's vertex colour.
+const G_FASCIA := 0
+const G_FLEX := 1
+const G_GLOW := 2
+const G_WALL := 3
+const G_VERT := 4
+const G_ENAMEL := 5
+const G_SMALL := 6
+const G_NOTICE := 7
+## flags: white is the wall (key), a backlit glow face, lit by a bracket lamp at night, the lamp head itself
+const F_KEY := 1
+const F_GLOW := 2
+const F_LIT := 4
+const F_LAMP := 8
+const UV1 := Rect2(0, 0, 1, 1)
+const STEEL := Color(0.16, 0.16, 0.17)
+
+
+static func _sign(m: M, grp: int, slot := 0, flags := 0) -> void:
+	m.paint(M.BOARD, M.OWN, Color(grp / 255.0, slot / 255.0, flags / 255.0))
+
+
+## A board face in the wall plane from (x0, y0) to (x1, y1) at depth z, turned by `tilt` degrees about its middle
+## (boards hang a little crooked), its lower right corner bent out by `bend` metres (a dented tin corner). UV 0..1, v down.
+static func _face(m: M, x0: float, y0: float, x1: float, y1: float, z: float, tilt := 0.0, bend := 0.0) -> void:
+	var c := Vector2((x0 + x1) * 0.5, (y0 + y1) * 0.5)
+	var rot := func(x: float, y: float, dz: float) -> Vector3:
+		var p := (Vector2(x, y) - c).rotated(deg_to_rad(tilt)) + c
+		return Vector3(p.x, p.y, z + dz)
+	var was := m.face
+	m.face = true
+	if bend <= 0.0:
+		m.quad(rot.call(x0, y0, 0.0), rot.call(x1, y0, 0.0), rot.call(x1, y1, 0.0), rot.call(x0, y1, 0.0), PackedVector2Array([Vector2(0, 1), Vector2(1, 1), Vector2(1, 0), Vector2(0, 0)]))
+	else:
+		# two panels: the right fifth folds out along a slanted crease
+		var xc := lerpf(x0, x1, 0.8)
+		var uc := 0.8
+		m.quad(rot.call(x0, y0, 0.0), rot.call(xc, y0, 0.0), rot.call(xc + 0.12, y1, 0.0), rot.call(x0, y1, 0.0), PackedVector2Array([Vector2(0, 1), Vector2(uc, 1), Vector2(uc + 0.12 / (x1 - x0), 0), Vector2(0, 0)]))
+		m.quad(rot.call(xc, y0, 0.0), rot.call(x1, y0, bend), rot.call(x1, y1, bend * 0.2), rot.call(xc + 0.12, y1, 0.0), PackedVector2Array([Vector2(uc, 1), Vector2(1, 1), Vector2(1, 0), Vector2(uc + 0.12 / (x1 - x0), 0)]))
+	m.face = was
+
+
+## The painted tin or wooden board over a shop (fascia): on an angle iron frame screwed to the wall, two flat straps
+## from the frame to the wall above it. `o`: tilt (degrees), bend (m), lamp (two bracket lamps over it, it is lit at night).
+static func _board(m: M, kit: String, o := {}) -> void:
+	var x0 := -1.34
+	var x1 := 1.34
+	var y0 := 2.66
+	var y1 := 3.3
 	var z := 0.36
 	if kit == "colonnade":
-		y0 = 2.45
-		y1 = 2.68
+		# Connaught Place: a neat sign under the colonnade, centred, no straps
+		x0 = -0.8
+		x1 = 0.8
+		y0 = 2.34
+		y1 = 2.74
 		z = 0.12
-	m.paint(M.IRON, M.OWN, Color(0.2, 0.2, 0.2))
-	m.box(Vector3(-1.38, y0 - 0.03, z - 0.08), Vector3(1.38, y1 + 0.03, z), true, true)
-	m.paint(M.BOARD, M.OWN, WHITE)
+	var tilt: float = o.get("tilt", 0.0)
+	m.paint(M.IRON, M.OWN, STEEL)
+	m.box(Vector3(x0 - 0.03, y0 + 0.02, z - 0.07), Vector3(x1 + 0.03, y1 - 0.02, z - 0.005), true, true)
+	if kit != "colonnade":
+		# the straps: from the frame back to the wall, so the board visibly hangs from it
+		for x in [x0 + 0.3, x1 - 0.3]:
+			m.box(Vector3(x - 0.025, y1 - 0.12, 0.05), Vector3(x + 0.025, y1 - 0.06, z - 0.06), false, true)
+	var flags := 0
+	if o.get("lamp", false):
+		flags = F_LIT
+		for x in [x0 + 0.55, x1 - 0.55]:
+			_lamp(m, x, y1 + 0.32, 0.62)
+	_sign(m, G_FASCIA, 0, flags)
+	_face(m, x0, y0, x1, y1, z, tilt, float(o.get("bend", 0.0)))
+
+
+## A bracket lamp: a curved arm from a wall plate out to a conical shade over the board; the bulb face under the
+## shade lights at night (flag F_LAMP).
+static func _lamp(m: M, x: float, y: float, reach: float) -> void:
+	m.paint(M.IRON, M.OWN, STEEL)
+	m.box(Vector3(x - 0.06, y - 0.08, 0.05), Vector3(x + 0.06, y + 0.08, 0.08), false, true)
+	m.bar(Vector3(x, y, 0.08), Vector3(x, y, reach), 0.03)
+	m.bar(Vector3(x, y - 0.12, 0.08), Vector3(x, y, 0.3), 0.02)
+	# the shade: a short square cone, open at the bottom
+	var c := Vector3(x, y - 0.05, reach)
+	var r0 := 0.05
+	var r1 := 0.13
+	var h := 0.14
+	var top := [Vector3(c.x - r0, c.y, c.z - r0), Vector3(c.x + r0, c.y, c.z - r0), Vector3(c.x + r0, c.y, c.z + r0), Vector3(c.x - r0, c.y, c.z + r0)]
+	var bot := [Vector3(c.x - r1, c.y - h, c.z - r1), Vector3(c.x + r1, c.y - h, c.z - r1), Vector3(c.x + r1, c.y - h, c.z + r1), Vector3(c.x - r1, c.y - h, c.z + r1)]
+	for i in 4:
+		var j := (i + 1) % 4
+		m.quad(bot[j], bot[i], top[i], top[j])
+	m.quad(top[0], top[3], top[2], top[1])
+	_sign(m, 0, 0, F_LAMP)
+	var b := c.y - h + 0.005
+	m.quad(Vector3(c.x - r1 * 0.8, b, c.z - r1 * 0.8), Vector3(c.x + r1 * 0.8, b, c.z - r1 * 0.8), Vector3(c.x + r1 * 0.8, b, c.z + r1 * 0.8), Vector3(c.x - r1 * 0.8, b, c.z + r1 * 0.8))
+
+
+## A printed flex banner stretched on a steel pipe frame over the shop, taller than a painted board (GB Road machine
+## parts shops): the frame stands on two struts from the wall.
+static func _flex(m: M, _kit: String, _o := {}) -> void:
+	var x0 := -1.36
+	var x1 := 1.36
+	var y0 := 2.62
+	var y1 := 3.64
+	var z := 0.4
+	m.paint(M.IRON, M.OWN, STEEL)
+	m.bar(Vector3(x0, y0, z - 0.03), Vector3(x1, y0, z - 0.03), 0.04)
+	m.bar(Vector3(x0, y1, z - 0.03), Vector3(x1, y1, z - 0.03), 0.04)
+	m.bar(Vector3(x0, y0, z - 0.03), Vector3(x0, y1, z - 0.03), 0.04)
+	m.bar(Vector3(x1, y0, z - 0.03), Vector3(x1, y1, z - 0.03), 0.04)
+	for x in [x0 + 0.4, x1 - 0.4]:
+		m.bar(Vector3(x, y0 + 0.1, 0.06), Vector3(x, y0 + 0.1, z - 0.04), 0.04)
+		m.bar(Vector3(x, y1 - 0.15, 0.06), Vector3(x, y1 - 0.15, z - 0.04), 0.04)
+	_sign(m, G_FLEX)
+	_face(m, x0 + 0.02, y0 + 0.02, x1 - 0.02, y1 - 0.02, z)
+
+
+## An acrylic glow box over the shop: an aluminium box with a printed face lit from inside at night.
+static func _glow(m: M, kit: String, _o := {}) -> void:
+	var x0 := -1.32
+	var x1 := 1.32
+	var y0 := 2.66
+	var y1 := 3.28
+	var z0 := 0.2
+	var z1 := 0.4
+	if kit == "colonnade":
+		x0 = -0.9
+		x1 = 0.9
+		y0 = 2.3
+		y1 = 2.75
+		z0 = 0.05
+		z1 = 0.17
+	m.paint(M.IRON, M.OWN, Color(0.55, 0.56, 0.57))
+	m.box(Vector3(x0, y0, z0), Vector3(x1, y1, z1 - 0.003), true, true)
+	_sign(m, G_GLOW, 0, F_GLOW)
+	_face(m, x0 + 0.02, y0 + 0.02, x1 - 0.02, y1 - 0.02, z1)
+
+
+## A tall board standing out from the wall at the bay's right edge on two brackets, both faces painted (or lit: the
+## even cells of the vertical group are glow boxes, make_signs.mjs), readable from both ways down the street.
+static func _vboard(m: M, y0: float, y1: float, x: float, z0: float, z1: float) -> void:
+	m.paint(M.IRON, M.OWN, STEEL)
+	for y in [y0 + 0.15, y1 - 0.15]:
+		m.bar(Vector3(x, y, 0.05), Vector3(x, y, z0 + 0.02), 0.04)
+	m.box(Vector3(x - 0.025, y0, z0), Vector3(x + 0.025, y1, z1), false, true)
+	_sign(m, G_VERT, 0, F_GLOW)
+	var was := m.face
 	m.face = true
-	m.front(-1.34, y0, 1.34, y1, z + 0.004, Rect2(0, 0, 1, 1))
-	m.face = false
+	# the face towards +x reads with z running left to right seen from +x: left is z1 (out), right z0
+	m.quad(Vector3(x + 0.027, y0, z1), Vector3(x + 0.027, y0, z0), Vector3(x + 0.027, y1, z0), Vector3(x + 0.027, y1, z1), PackedVector2Array([Vector2(0, 1), Vector2(1, 1), Vector2(1, 0), Vector2(0, 0)]))
+	m.quad(Vector3(x - 0.027, y0, z0), Vector3(x - 0.027, y0, z1), Vector3(x - 0.027, y1, z1), Vector3(x - 0.027, y1, z0), PackedVector2Array([Vector2(0, 1), Vector2(1, 1), Vector2(1, 0), Vector2(0, 0)]))
+	m.face = was
+
+
+## A board in the band under an upper floor window (left of the AC unit's place).
+static func _band(m: M, _o := {}) -> void:
+	m.paint(M.IRON, M.OWN, STEEL)
+	m.box(Vector3(-1.38, 0.13, 0.05), Vector3(0.56, 0.59, 0.2), false, true)
+	_sign(m, G_FASCIA, 1)
+	_face(m, -1.38, 0.12, 0.56, 0.6, 0.205)
+
+
+## Boards stacked up a blank upper wall (Paharganj, GB Road): a flex banner and a painted board above it.
+static func _stack(m: M, _o := {}) -> void:
+	m.paint(M.IRON, M.OWN, STEEL)
+	m.box(Vector3(-1.4, 0.26, 0.05), Vector3(1.0, 1.24, 0.17), false, true)
+	m.box(Vector3(-1.32, 1.46, 0.05), Vector3(0.92, 2.04, 0.15), false, true)
+	_sign(m, G_FLEX, 2)
+	_face(m, -1.4, 0.25, 1.0, 1.25, 0.175)
+	_sign(m, G_FASCIA, 2)
+	_face(m, -1.32, 1.45, 0.92, 2.05, 0.155, 0.8)
+
+
+## A round enamel board on the wall right of a door, on a thin rim, screwed through top and bottom.
+static func _enamel(m: M, _o := {}) -> void:
+	var c := Vector2(1.1, 2.05)
+	var r := 0.27
+	var z := 0.075
+	var n := 20
+	# the cell's disc reaches 0.469 of the cell from its middle
+	var ur := 0.469
+	m.paint(M.IRON, M.OWN, Color(0.25, 0.25, 0.27))
+	for i in n:
+		var a0 := TAU * float(i) / n
+		var a1 := TAU * float(i + 1) / n
+		var p0 := Vector3(c.x + cos(a0) * r, c.y + sin(a0) * r, 0.05)
+		var p1 := Vector3(c.x + cos(a1) * r, c.y + sin(a1) * r, 0.05)
+		m.quad(p0, p1, Vector3(p1.x, p1.y, z), Vector3(p0.x, p0.y, z))
+	_sign(m, G_ENAMEL, 0, F_KEY)
+	var was := m.face
+	m.face = true
+	for i in n:
+		var a0 := TAU * float(i) / n
+		var a1 := TAU * float(i + 1) / n
+		var p0 := Vector3(c.x + cos(a0) * r, c.y + sin(a0) * r, z)
+		var p1 := Vector3(c.x + cos(a1) * r, c.y + sin(a1) * r, z)
+		var q0 := Vector2(0.5 + cos(a0) * ur, 0.5 - sin(a0) * ur)
+		var q1 := Vector2(0.5 + cos(a1) * ur, 0.5 - sin(a1) * ur)
+		m.quad(Vector3(c.x, c.y, z), p0, p1, Vector3(c.x, c.y, z), PackedVector2Array([Vector2(0.5, 0.5), q0, q1, Vector2(0.5, 0.5)]))
+	m.face = was
+
+
+## A small painted board left of a door (tailors, repairs, clinics), screwed flat to the wall.
+static func _small(m: M, _o := {}) -> void:
+	m.paint(M.IRON, M.OWN, STEEL)
+	m.box(Vector3(-1.41, 1.76, 0.05), Vector3(-0.83, 2.04, 0.07), false, true)
+	_sign(m, G_SMALL)
+	_face(m, -1.42, 1.75, -0.82, 2.05, 0.072, -1.2)
+
+
+## Paper notices pasted on the wall at eye height (white is the wall).
+static func _notice(m: M, _o := {}) -> void:
+	_sign(m, G_NOTICE, 0, F_KEY)
+	m.front(-1.42, 1.4, -0.78, 1.72, M.SKIN + 0.006, UV1)
+
+
+## Lettering painted straight on a plain bay's wall below its window, at eye height (white is the wall).
+static func _wallsign(m: M, _o := {}) -> void:
+	_sign(m, G_WALL, 0, F_KEY)
+	var was := m.face
+	m.face = true
+	m.front(-1.2, 0.7, 1.2, 1.3, M.SKIN + 0.004, UV1)
+	m.face = was
+
+
+## The light a lit board throws on the pavement in front of it at night (WORLD_LOGIC.md: a shop sign glows on the
+## pavement under it): one flat quad just over the street level, drawn additive by sign_pool.gdshader. UV 0..1.
+static func pool(m: M, width: float, reach: float) -> void:
+	m.paint(M.BOARD, M.OWN, WHITE)
+	m.quad(Vector3(-width, 0.03, 0.45), Vector3(-width, 0.03, reach), Vector3(width, 0.03, reach), Vector3(width, 0.03, 0.45), PackedVector2Array([Vector2(0, 0), Vector2(0, 1), Vector2(1, 1), Vector2(1, 0)]))
 
 
 static func _stair(m: M, _o: Dictionary) -> void:
@@ -117,9 +334,8 @@ static func _awning(m: M, _o: Dictionary) -> void:
 
 
 static func _vsign(m: M, _o: Dictionary) -> void:
-	# a lodge's sign standing out from the wall above its door
-	m.paint(M.ATLAS, M.OWN, WHITE)
-	m.box(Vector3(1.22, 3.6, 0.15), Vector3(1.38, 6.2, 1.05), false, true)
+	# a lodge's tall sign standing out from the wall above its door (P2-048: the vertical sign group)
+	_vboard(m, 3.5, 5.9, 1.32, 0.2, 0.8)
 
 
 static func _wall(m: M, _o: Dictionary) -> void:

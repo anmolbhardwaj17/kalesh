@@ -8,6 +8,12 @@ extends RefCounted
 
 const Modules := preload("res://world/kits/kit_modules.gd")
 const KIT_SHADER := preload("res://render/shaders/kit_b.gdshader")
+const POOL_SHADER := preload("res://render/shaders/sign_pool.gdshader")
+const Pieces := preload("res://world/kits/kit_pieces.gd")
+const MeshSink := preload("res://world/kits/module_mesh.gd")
+## Lit sign pieces (P2-048) that throw a pool of light on the pavement at night: design -> [half width, reach (m),
+## colour]. The pool is a second surface drawn additive (game/render/shaders/sign_pool.gdshader).
+const POOLS := {"glow": [1.4, 2.3, Color(0.9, 0.92, 1.0)], "board_lamp": [1.5, 2.4, Color(1.0, 0.72, 0.42)]}
 const KITS_PATH := "res://world/kits/kits.json"
 const TEX_DIR := "res://world/kits/textures/"
 ## tools/bake/areas/facade.ts PARTS, in its order
@@ -25,6 +31,8 @@ var design_of := {}
 ## kit id -> ShaderMaterial
 var materials := {}
 var shell_material: ShaderMaterial
+## pool colour key -> the additive pavement light material of lit sign pieces
+var pool_materials := {}
 ## id -> true for ids replaced since the library was built
 var replaced := {}
 ## palette words the bake tints walls with: [[r, g, b, sum]] in kits.json `palette` order, and their names
@@ -61,6 +69,7 @@ func material(kit: String) -> ShaderMaterial:
 	s.set_shader_parameter("kit_tiles", load(TEX_DIR + kit + "_tiles.png"))
 	s.set_shader_parameter("kit_atlas", load(TEX_DIR + kit + "_atlas.png"))
 	s.set_shader_parameter("kit_noise", load(TEX_DIR + "kit_noise.png"))
+	s.set_shader_parameter("kit_signs", load(TEX_DIR + kit + "_signs.png"))
 	var acc := PackedVector3Array()
 	for h: String in k.accent:
 		var c := Color.html(h)
@@ -79,6 +88,18 @@ func material(kit: String) -> ShaderMaterial:
 	s.set_shader_parameter("calm", 1.0)
 	s.set_shader_parameter("mottle", 0.7)
 	return s
+
+
+## The additive pavement light under a lit sign (one per colour).
+func pool_material(c: Color) -> ShaderMaterial:
+	var k := c.to_html(false)
+	if not pool_materials.has(k):
+		var s := ShaderMaterial.new()
+		s.shader = POOL_SHADER
+		s.resource_name = "sign_pool"
+		s.set_shader_parameter("tint", Vector3(c.r, c.g, c.b))
+		pool_materials[k] = s
+	return pool_materials[k]
 
 
 ## The share of a kit piece (0 when the kit has none).
@@ -174,6 +195,13 @@ func _add(id: String, kit: String, design: String, opts: Dictionary, by_design: 
 		var mesh := Modules.build(design, opts, kit)
 		if mesh.get_surface_count() > 0 and materials.has(kit):
 			mesh.surface_set_material(0, materials[kit])
+		if POOLS.has(design) and mesh.get_surface_count() > 0:
+			var pd: Array = POOLS[design]
+			var pm := MeshSink.new()
+			Pieces.pool(pm, float(pd[0]), float(pd[1]))
+			mesh.add_surface_from_arrays(Mesh.PRIMITIVE_TRIANGLES, pm.arrays())
+			if not materials.is_empty():
+				mesh.surface_set_material(1, pool_material(pd[2]))
 		by_design[key] = mesh
 	meshes[id] = by_design[key]
 	kit_of[id] = kit

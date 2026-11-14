@@ -5,7 +5,7 @@
 ## tile), wall colour and wear in the MultiMesh custom data (game/render/shaders/kit_b.gdshader reads them; a per-instance
 ## uniform has room for about 4,096 instances only). Each kit adds its own pieces (sign boards, outside stairs, roof
 ## tanks and railings, AC units, awnings) to some bays, decided by a hash of the bay's place, so a rebake that keeps a
-## building keeps its pieces. Modules draw to MODULE_RANGE_M (visibility range from the cell's middle), small pieces to
+## building keeps its pieces; a shop bay takes at most one front sign board (P2-048: one hash, the shares back to back). Modules draw to MODULE_RANGE_M (visibility range from the cell's middle), small pieces to
 ## PIECE_RANGE_M; no module casts a shadow (measured: 5.3 M triangles with shadow passes in the busiest view). Built on a worker thread; attached in steps of STEP_NODES nodes.
 ## Budget: GPU 2.0 ms for generated buildings (perf_budgets.json world.gpuMs.generatedBuildings).
 extends RefCounted
@@ -19,7 +19,7 @@ const CELL_M := 125.0
 ## visibility range ends, measured from a cell's middle (a 125 m cell reaches about 88 m from it)
 const MODULE_RANGE_M := 200.0
 const PIECE_RANGE_M := 120.0
-const SMALL := ["board", "ac", "rail", "vsign", "tank"]
+const SMALL := ["board", "ac", "rail", "vsign", "tank", "board_tilt", "board_lamp", "flex", "glow", "vboard", "band", "stack", "enamel", "small", "notice", "wallsign"]
 const STEP_NODES := 40
 
 ## one library for every streamed city (built on the main thread the first time a system is made)
@@ -120,6 +120,8 @@ static func cells_of(tile: Dictionary, library: Library) -> Dictionary:
 		var part := mid.get_slice(".", 1)
 		var outs := [_lists(lists, meta, mesh, mid, false)]
 		var pieces := []
+		# pieces of one slot (the front sign board, P2-048) share the slot's hash and take back to back ranges of it
+		var slot_at := {}
 		for piece: String in Modules.PIECES:
 			var spec: Dictionary = Modules.PIECES[piece]
 			if not part in spec.from:
@@ -129,7 +131,14 @@ static func cells_of(tile: Dictionary, library: Library) -> Dictionary:
 			var pm: Mesh = library.mesh_of(pid)
 			if s <= 0.0 or pm == null:
 				continue
-			pieces.append([s, bool(spec.column), _lists(lists, meta, pm, pid, piece in SMALL), piece.hash()])
+			var slot: String = spec.get("slot", "")
+			var lo := 0.0
+			var salt := piece.hash()
+			if slot != "":
+				lo = float(slot_at.get(slot, 0.0))
+				slot_at[slot] = lo + s
+				salt = slot.hash()
+			pieces.append([lo + s, bool(spec.column), _lists(lists, meta, pm, pid, piece in SMALL), salt, lo])
 		for i in cnt:
 			var b := i * 12
 			var ox := xf[b + 3]
@@ -140,7 +149,8 @@ static func cells_of(tile: Dictionary, library: Library) -> Dictionary:
 			total += 1
 			for pc: Array in pieces:
 				var hy := 0 if pc[1] else roundi(xf[b + 7] * 2.0)
-				if bay_hash(ox, oz, hy, pc[3]) < float(pc[0]):
+				var h := bay_hash(ox, oz, hy, pc[3])
+				if h < float(pc[0]) and h >= float(pc[4]):
 					(pc[2][cell] as Array).append(key)
 					total += 1
 	var groups := []

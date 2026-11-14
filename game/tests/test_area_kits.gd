@@ -101,7 +101,9 @@ func test_every_module_mesh_is_finite_and_inside_its_bay() -> void:
 		if seen.has(mesh):
 			continue
 		seen[mesh] = true
-		t.ok(mesh.get_surface_count() == 1, "%s is one surface (one draw a cell)" % id)
+		# one surface (one draw a cell); a lit sign piece adds its pavement pool as a second (P2-048, Library.POOLS)
+		var want := 2 if Library.POOLS.has(lib.design_of[id]) else 1
+		t.ok(mesh.get_surface_count() == want, "%s is %d surface(s) (one draw a cell, plus a lit sign's pool)" % [id, want])
 		if mesh.get_surface_count() == 0:
 			continue
 		var a := mesh.surface_get_arrays(0)
@@ -260,8 +262,41 @@ func test_sign_boards_take_names_only_from_the_kit_names_file() -> void:
 			known[JSON.stringify(n.text, "", true)] = true
 		var cells: Array = boards.kits[kit].cells
 		var missing := 0
+		var named := 0
 		for c: Dictionary in cells:
+			# paper notices carry generic words only (P2-048); every other board carries a name of the file
+			if str(c.group) == "notice":
+				continue
+			named += 1
 			if not known.has(JSON.stringify(c.text, "", true)):
 				missing += 1
 		t.ok(str(boards.kits[kit].area) == area, "kit %s boards are from %s" % [kit, area])
-		t.ok(cells.size() == 32 and missing == 0, "kit %s: all %d boards carry a name of %s (%d not)" % [kit, cells.size(), area, missing])
+		t.ok(named >= 60 and missing == 0, "kit %s: all %d named boards carry a name of %s (%d not)" % [kit, named, area, missing])
+
+
+## P2-048: the sign atlas layout the generator wrote (boards.json groups) is the one the kit shader reads (SIGN_RECT and
+## SIGN_GRID in surface_b.gdshaderinc) and the pieces paint (kit_pieces.gd G_*), and every kit has its sign atlas.
+func test_sign_atlas_layout_matches_the_shader_and_pieces() -> void:
+	var f := FileAccess.open(Library.TEX_DIR + "boards.json", FileAccess.READ)
+	var boards: Dictionary = JSON.parse_string(f.get_as_text())
+	var src := FileAccess.get_file_as_string("res://render/shaders/surface_b.gdshaderinc")
+	var size := float(boards.atlas)
+	var order := ["fascia", "flex", "glow", "wall", "vertical", "enamel", "small", "notice"]
+	var Pieces := preload("res://world/kits/kit_pieces.gd")
+	var consts := [Pieces.G_FASCIA, Pieces.G_FLEX, Pieces.G_GLOW, Pieces.G_WALL, Pieces.G_VERT, Pieces.G_ENAMEL, Pieces.G_SMALL, Pieces.G_NOTICE]
+	for i in order.size():
+		var g: Dictionary = boards.groups[i]
+		t.ok(str(g.id) == order[i] and int(consts[i]) == i, "sign group %d is %s" % [i, order[i]])
+		var rect := "vec4(%s, %s, %s, %s)" % [_num(float(g.x) / size), _num(float(g.y) / size), _num(float(g.w) / size), _num(float(g.h) / size)]
+		var grid := "ivec2(%d, %d)" % [int(g.cols), int(g.count)]
+		t.ok(src.contains(rect) and src.contains(grid), "the shader reads group %s at %s %s" % [g.id, rect, grid])
+	var lib := _lib()
+	for kit: String in lib.data.kits:
+		t.ok(ResourceLoader.exists(Library.TEX_DIR + kit + "_signs.png"), "kit %s has its sign atlas" % kit)
+
+
+static func _num(v: float) -> String:
+	var s := "%.5f" % v
+	while s.ends_with("0") and not s.ends_with(".0"):
+		s = s.left(s.length() - 1)
+	return s

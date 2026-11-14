@@ -81,8 +81,21 @@ const RECIPES := {
 ## Pieces a kit adds to some bays (`<kit>.<piece>` ids), from which part, and the kits.json share that decides how
 ## often. A stair and a roof tank are decided per wall column (every floor of a blank column carries the stair, so it
 ## climbs from the street to the top floor); the rest per bay.
+## Sign boards (P2-048): a shop bay takes at most one front board; the pieces with "slot" "front" share one bay hash
+## and their shares add up (buildings.gd). The rest are decided one by one.
 const PIECES := {
-	"board": {"from": ["gf_shop", "gf_colonnade", "gf_arcade"], "share": "board", "column": false},
+	"board": {"from": ["gf_shop", "gf_colonnade", "gf_arcade"], "share": "board", "column": false, "slot": "front"},
+	"board_tilt": {"from": ["gf_shop", "gf_colonnade", "gf_arcade"], "share": "board_tilt", "column": false, "slot": "front"},
+	"board_lamp": {"from": ["gf_shop", "gf_colonnade", "gf_arcade"], "share": "board_lamp", "column": false, "slot": "front"},
+	"flex": {"from": ["gf_shop", "gf_colonnade", "gf_arcade"], "share": "flex", "column": false, "slot": "front"},
+	"glow": {"from": ["gf_shop", "gf_colonnade", "gf_arcade"], "share": "glow", "column": false, "slot": "front"},
+	"vboard": {"from": ["up_window", "up_blank"], "share": "vboard", "column": false},
+	"band": {"from": ["up_window"], "share": "band", "column": false},
+	"stack": {"from": ["up_blank"], "share": "stack", "column": false},
+	"enamel": {"from": ["gf_door"], "share": "enamel", "column": false},
+	"small": {"from": ["gf_door"], "share": "small", "column": false},
+	"notice": {"from": ["gf_door", "gf_plain"], "share": "notice", "column": false},
+	"wallsign": {"from": ["gf_plain"], "share": "wallsign", "column": false},
 	"stair": {"from": ["up_blank"], "share": "stair", "column": true},
 	"tank": {"from": ["roof_parapet"], "share": "tank", "column": true},
 	"rail": {"from": ["roof_parapet"], "share": "roof_rail", "column": true},
@@ -114,6 +127,17 @@ static func build(design: String, o: Dictionary, kit: String) -> ArrayMesh:
 		"glass": _glass(m, o)
 		"parapet": _parapet(m, o)
 		"board": P._board(m, kit)
+		"board_tilt": P._board(m, kit, {"tilt": -2.2, "bend": 0.05})
+		"board_lamp": P._board(m, kit, {"lamp": true, "tilt": 0.7})
+		"flex": P._flex(m, kit)
+		"glow": P._glow(m, kit)
+		"vboard": P._vboard(m, 0.25, 2.45, 1.42, 0.15, 0.75)
+		"band": P._band(m)
+		"stack": P._stack(m)
+		"enamel": P._enamel(m)
+		"small": P._small(m)
+		"notice": P._notice(m)
+		"wallsign": P._wallsign(m)
 		"stair": P._stair(m, o)
 		"tank": P._tank(m, o)
 		"rail": P._rail(m, o)

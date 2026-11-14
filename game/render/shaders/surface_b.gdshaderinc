@@ -33,6 +33,14 @@ uniform vec3 kit_accents[8];
 uniform int kit_accent_count = 1;
 uniform bool kit_shell = false;
 uniform vec3 kit_shell_colour = vec3(0.78, 0.7, 0.58);
+// sign boards (P2-048, tools/kits/make_signs.mjs): the kit's 2048 px sign atlas, its groups of cells (x, y, cell w, h in
+// atlas fractions; columns and count), and the night (project global, set by the look: glow boxes and lamps emit)
+uniform sampler2D kit_signs : source_color, filter_linear_mipmap_anisotropic;
+global uniform float kit_night;
+const vec4 SIGN_RECT[8] = vec4[](vec4(0.0, 0.0, 0.25, 0.0625), vec4(0.0, 0.3125, 0.25, 0.09375), vec4(0.0, 0.5, 0.25, 0.0625),
+	vec4(0.0, 0.625, 0.25, 0.0625), vec4(0.0, 0.6875, 0.0625, 0.25), vec4(0.5, 0.6875, 0.125, 0.125), vec4(0.5, 0.8125, 0.125, 0.0625),
+	vec4(0.0, 0.9375, 0.125, 0.0625));
+const ivec2 SIGN_GRID[8] = ivec2[](ivec2(4, 20), ivec2(4, 8), ivec2(4, 8), ivec2(4, 4), ivec2(8, 8), ivec2(4, 4), ivec2(4, 8), ivec2(8, 8));
 // few and flat varyings (P2-010 perf: the module vertex stream is the main cost of the city): the wall colour and
 // wear in one, the part code, colour mode and the two bay hashes in another; the world position and normal are
 // rebuilt in fragment() from VERTEX and NORMAL
@@ -164,6 +172,7 @@ void fragment() {
 #ifdef KIT
 	int code = int(k_code + 0.5);
 	int mode = int(k_mode + 0.5);
+	vec3 emit = vec3(0.0);
 	float kg = 1.0;
 	vec3 tint = dot(k_tint, vec3(1.0)) > 0.001 ? k_tint : kit_shell_colour;
 	int na = max(kit_accent_count, 1);
@@ -265,13 +274,42 @@ void fragment() {
 			sk = 3;
 			kg = 0.5;
 		} else if (code == 10) {
-			// a sign board: one of the 32 named cells of the atlas, by bay (respect rule: no grime on the lettering)
-			float cell = floor(k_var2 * 31.999);
-			vec2 cuv = (vec2(mod(cell, 4.0), floor(cell / 4.0)) + clamp(k_uv, vec2(0.01, 0.03), vec2(0.99, 0.97))) * vec2(0.25, 0.0625);
-			col = texture(kit_atlas, cuv).rgb;
-			rough = 0.6;
+			// a sign board (P2-048): the vertex colour carries its sign group (r), its slot on the piece (g) and flags (b:
+			// 1 white is the wall, 2 glow box, 4 lit by a bracket lamp, 8 the lamp head); the cell is picked by bay, so
+			// neighbours differ. Wear is painted into each cell (respect rule: no grime over the lettering).
+			int grp = int(COLOR.r * 255.0 + 0.5);
+			int slot = int(COLOR.g * 255.0 + 0.5);
+			int flags = int(COLOR.b * 255.0 + 0.5);
+			if ((flags & 8) != 0) {
+				// the lamp head: a warm bulb under a dark shade, on at night only
+				col = vec3(0.05, 0.045, 0.04);
+				emit = vec3(1.0, 0.72, 0.42) * 7.0 * kit_night;
+				rough = 0.4;
+			} else {
+				int g8 = clamp(grp, 0, 7);
+				vec4 R = SIGN_RECT[g8];
+				ivec2 G = SIGN_GRID[g8];
+				int cell = (int(k_var2 * float(G.y) * 0.9999) + int(k_var * 7.0) * slot + slot * 3) % G.y;
+				vec2 cuv = R.xy + vec2(float(cell % G.x), float(cell / G.x)) * R.zw + clamp(k_uv, vec2(0.006), vec2(0.994)) * R.zw;
+				col = texture(kit_signs, cuv).rgb;
+				if ((flags & 1) != 0) {
+					// painted on the wall, a round enamel board or paper: white is the key and shows the wall
+					float key = smoothstep(0.86, 0.97, min(col.r, min(col.g, col.b)));
+					vec3 wallc = to_linear(tint) * (0.9 + 0.2 * fbm(uv * 0.55));
+					col = mix(col, wallc, key);
+				}
+				if ((flags & 2) != 0 && (g8 != 4 || cell % 2 == 0)) {
+					// a backlit acrylic face: glows through at night
+					emit = col * (0.15 + 2.4 * kit_night) * kit_night;
+				}
+				if ((flags & 4) != 0) {
+					// lit from above by its bracket lamp at night
+					emit = col * kit_night * 1.6 * (1.0 - 0.6 * clamp(k_uv.y, 0.0, 1.0));
+				}
+				rough = (flags & 2) != 0 ? 0.25 : 0.65;
+			}
 			sk = 3;
-			kg = 0.0;
+			kg = 0.2;
 		} else {
 			// a dark interior behind an opening
 			col = base * (0.85 + vnoise(uv * 3.0) * 0.3);
@@ -568,6 +606,7 @@ void fragment() {
 	ROUGHNESS = rough;
 #ifdef KIT
 	METALLIC = metal;
+	EMISSION = emit;
 #else
 	METALLIC = sk == 3 ? 0.35 : 0.0;
 #endif

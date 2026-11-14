@@ -63,13 +63,39 @@ describe('area kits', () => {
   it('keeps old city walls dusty: no bazaar or gali wall colour above 0.3 saturation', () => {
     for (const id of ['bazaar', 'gali']) for (const c of KITS.kits[id].walls.colours) expect(hsv(c)[1], `${id} ${c}`).toBeLessThanOrEqual(0.3);
   });
-  it('writes sign boards only with names from the kit names file', () => {
+  it('writes sign boards only with names from the kit names file (P2-048: every kind but paper notices)', () => {
     for (const [id, k] of Object.entries(KITS.kits)) {
       const b = BOARDS.kits[id];
       expect(b.area, id).toBe(k.area);
-      expect(b.cells.length, id).toBe(32);
+      const total = BOARDS.groups.reduce((a, g) => a + g.count, 0);
+      expect(b.cells.length, id).toBe(total);
       const names = read(`game/data/names/${k.area}.json`).names.map((n) => JSON.stringify(n.text));
-      for (const c of b.cells) expect(names, `${id} cell ${c.cell}`).toContain(JSON.stringify(c.text));
+      for (const c of b.cells) if (c.group !== 'notice') expect(names, `${id} ${c.group} ${c.cell}`).toContain(JSON.stringify(c.text));
     }
+  });
+  it('shows phone numbers one digit short, so no real line is ever on a board', () => {
+    for (const b of Object.values(BOARDS.kits))
+      for (const c of b.cells)
+        for (const e of c.extra) {
+          const m = String(e).match(/^(?:Ph\.|M\.) ([\d ]+)$/);
+          if (m) expect(m[1].replace(/ /g, '').length, e).toBeLessThan(e.startsWith('M.') ? 10 : 8);
+        }
+  });
+  it('lays the sign atlas out without overlaps, inside the atlas', () => {
+    const cells = [];
+    for (const g of BOARDS.groups)
+      for (let i = 0; i < g.count; i++) cells.push([g.x + (i % g.cols) * g.w, g.y + Math.floor(i / g.cols) * g.h, g.w, g.h]);
+    for (const [x, y, w, h] of cells) expect(x >= 0 && y >= 0 && x + w <= BOARDS.atlas && y + h <= BOARDS.atlas).toBe(true);
+    for (let a = 0; a < cells.length; a++)
+      for (let b = a + 1; b < cells.length; b++) {
+        const [ax, ay, aw, ah] = cells[a];
+        const [bx, by, bw, bh] = cells[b];
+        expect(ax < bx + bw && bx < ax + aw && ay < by + bh && by < ay + ah, `${a} ${b}`).toBe(false);
+      }
+  });
+  it('uses only free fonts, each credited (tools/kits/fonts/CREDITS.md)', () => {
+    const credits = fs.readFileSync(path.join(ROOT, 'tools/kits/fonts/CREDITS.md'), 'utf8');
+    for (const f of fs.readdirSync(path.join(ROOT, 'tools/kits/fonts')).filter((x) => x.endsWith('.ttf'))) expect(credits, f).toContain(f);
+    expect(credits).toMatch(/SIL Open Font License/);
   });
 });

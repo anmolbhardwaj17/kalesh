@@ -539,6 +539,248 @@
     "deva": "रात वाली 106.1: देर रात की गाड़ियाँ"
    },
    "weight": 1
+  },
+  {
+   "kind": "hotel",
+   "text": {
+    "latn": "Hotel Tajmahal Ka Chhota Bhai",
+    "deva": "होटल ताजमहल का छोटा भाई"
+   },
+   "weight": 2,
+   "parody": true,
+   "board_style": "glow_box",
+   "tagline": "Do raat ka sukoon"
+  },
+  {
+   "kind": "hotel",
+   "text": {
+    "latn": "Hotel Hawaii Dilli Dream",
+    "deva": "होटल हवाई दिल्ली ड्रीम"
+   },
+   "weight": 2,
+   "parody": true,
+   "board_style": "glow_box",
+   "tagline": "Asli bed, asli bhaav"
+  },
+  {
+   "kind": "hotel",
+   "text": {
+    "latn": "Hotel Marriage Palace",
+    "deva": "होटल मैरिज पैलेस"
+   },
+   "weight": 2,
+   "parody": true,
+   "board_style": "glow_box",
+   "tagline": "Baraat bhi swagat"
+  },
+  {
+   "kind": "lodge",
+   "text": {
+    "latn": "Zozo Hostel",
+    "deva": "ज़ोज़ो हॉस्टल"
+   },
+   "weight": 2,
+   "parody": true,
+   "board_style": "glow_box",
+   "tagline": "Bunk, bonding, bargain"
+  },
+  {
+   "kind": "lodge",
+   "text": {
+    "latn": "Go Chalo Hostel",
+    "deva": "गो चलो हॉस्टल"
+   },
+   "weight": 2,
+   "parody": true,
+   "board_style": "glow_box",
+   "tagline": "Roko mat, ghoomo"
+  },
+  {
+   "kind": "eatery",
+   "text": {
+    "latn": "Lonely Plate Cafe",
+    "deva": "लोनली प्लेट कैफ़े"
+   },
+   "weight": 2,
+   "parody": true,
+   "board_style": "glow_box",
+   "tagline": "Akele khao, akele muskuraao"
+  },
+  {
+   "kind": "eatery",
+   "text": {
+    "latn": "Rough Rasoi Guide Ghar",
+    "deva": "रफ़ रसोई गाइड घर"
+   },
+   "weight": 2,
+   "parody": true,
+   "board_style": "glow_box",
+   "tagline": "Backpackers ka dhaba"
+  },
+  {
+   "kind": "cafe",
+   "text": {
+    "latn": "Cafe Chai Day",
+    "deva": "कैफ़े चाय डे"
+   },
+   "weight": 2,
+   "parody": true,
+   "board_style": "glow_box",
+   "tagline": "Roz chai, roz din"
+  },
+  {
+   "kind": "travel",
+   "text": {
+    "latn": "Book My Bhaiya Travels",
+    "deva": "बुक माय भैया ट्रैवल्स"
+   },
+   "weight": 2,
+   "parody": true,
+   "board_style": "flex",
+   "tagline": "Ticket, taxi, tension"
+  },
+  {
+   "kind": "travel",
+   "text": {
+    "latn": "Yatra Yaari Tours",
+    "deva": "यात्रा यारी टूर्स"
+   },
+   "weight": 2,
+   "parody": true,
+   "board_style": "flex",
+   "tagline": "Dosti, darwaza, door"
+  },
+  {
+   "kind": "travel",
+   "text": {
+    "latn": "Cheap Tickets Cheetah Travels",
+    "deva": "चीप टिकट्स चीता ट्रैवल्स"
+   },
+   "weight": 2,
+   "parody": true,
+   "board_style": "flex",
+   "tagline": "Seat pakki, rate pakka"
+  },
+  {
+   "kind": "office",
+   "text": {
+    "latn": "Western Pyaaz Money Transfer",
+    "deva": "वेस्टर्न प्याज़ मनी ट्रांसफ़र"
+   },
+   "weight": 2,
+   "parody": true,
+   "board_style": "flex",
+   "tagline": "Paise, purani Dilli se"
+  },
+  {
+   "kind": "office",
+   "text": {
+    "latn": "Dollar Dilli Forex",
+    "deva": "डॉलर दिल्ली फ़ॉरेक्स"
+   },
+   "weight": 2,
+   "parody": true,
+   "board_style": "flex",
+   "tagline": "Best rate, best chai"
+  },
+  {
+   "kind": "eatery",
+   "text": {
+    "latn": "Pita Pavilion Cafe",
+    "deva": "पिटा पैवेलियन कैफ़े"
+   },
+   "weight": 2,
+   "parody": true,
+   "board_style": "glow_box",
+   "tagline": "Hummus bhi, halwa bhi"
+  },
+  {
+   "kind": "eatery",
+   "text": {
+    "latn": "Rooftop Raja Restaurant",
+    "deva": "रूफ़टॉप राजा रेस्टोरेंट"
+   },
+   "weight": 2,
+   "parody": true,
+   "board_style": "flex",
+   "tagline": "Station ka nazara"
+  },
+  {
+   "kind": "eatery",
+   "text": {
+    "latn": "Dominic Ka Pizza Pyaar",
+    "deva": "डॉमिनिक का पिज़्ज़ा प्यार"
+   },
+   "weight": 2,
+   "parody": true,
+   "board_style": "flex",
+   "tagline": "Garam, gol, ghar tak"
+  },
+  {
+   "kind": "clothing",
+   "text": {
+    "latn": "Backpack Bazaar",
+    "deva": "बैकपैक बाज़ार"
+   },
+   "weight": 2,
+   "parody": true,
+   "board_style": "flex",
+   "tagline": "Bag bhi, bargain bhi"
+  },
+  {
+   "kind": "clothing",
+   "text": {
+    "latn": "Hippie Hut Harem Pants",
+    "deva": "हिप्पी हट हरेम पैंट्स"
+   },
+   "weight": 2,
+   "parody": true,
+   "board_style": "flex",
+   "tagline": "Ek size, sabke liye"
+  },
+  {
+   "kind": "cafe",
+   "text": {
+    "latn": "Main Bazaar Maha Mela Cafe",
+    "deva": "मेन बाज़ार महा मेला कैफ़े"
+   },
+   "weight": 2,
+   "parody": true,
+   "board_style": "glow_box",
+   "tagline": "Chai, chat, charger"
+  },
+  {
+   "kind": "clothing",
+   "text": {
+    "latn": "Bhaiyya Backpack Bazaar",
+    "deva": "भैया बैकपैक बाज़ार"
+   },
+   "weight": 2,
+   "parody": true,
+   "board_style": "flex",
+   "tagline": "Bag bhi, bargain bhi"
+  },
+  {
+   "kind": "hotel",
+   "text": {
+    "latn": "Hotel Rail Rani",
+    "deva": "होटल रेल रानी"
+   },
+   "weight": 2,
+   "parody": true,
+   "board_style": "glow_box",
+   "tagline": "Gaadi ke saath-saath"
+  },
+  {
+   "kind": "eatery",
+   "text": {
+    "latn": "Raja Rasoi Tandoor",
+    "deva": "राजा रसोई तंदूर"
+   },
+   "weight": 2,
+   "parody": true,
+   "board_style": "glow_box",
+   "tagline": "Naan, nishchint"
   }
  ]
 }
