@@ -407,6 +407,7 @@ function renderMap() {
   ].join('');
   const rules = m.byRule.slice(0, 8).map((r) => `<tr><td>${esc(r.rule)}</td><td class="ms"><b>${n(r.found)}</b></td><td class="dim">${n(r.auto)}</td></tr>`).join('');
   const gates = m.gates.map((g) => `<tr data-gate="${esc(g.key)}"><td>${esc(g.name)}</td><td class="ms">${g.count === null ? '<span class="muted">not measured yet</span>' : `<b>${n(g.count)}</b>`}</td><td class="dim small">${g.explained === null || g.explained === undefined ? '' : g.count === 0 ? 'none' : g.explained === g.count ? `all explained (${esc(g.owners.join(', '))})` : `<span class="chip fail">${n(g.count - g.explained)} not explained</span>`}</td></tr>`).join('');
+  const ground = (m.ground || []).map((g) => `<tr data-ground="${esc(g.id)}"><td>${esc(g.id)} ${esc(g.name)}</td><td class="ms">${g.value === null ? '' : `<b>${g.value.toLocaleString('en-US', { maximumFractionDigits: 4 })}${g.unit ? ' ' + esc(g.unit) : ''}</b>`}</td><td class="dim small">limit ${esc(g.limit)}</td><td>${g.ok === null ? '<span class="muted small">not measured yet</span>' : g.ok ? '<span class="chip ok">ok</span>' : '<span class="chip fail">fails</span>'}</td></tr>`).join('');
   const reportLink = `<a href="/map/${encodeURIComponent(m.report || 'health.json')}" target="_blank" rel="noopener">the full health report</a>`;
   const t = m.timing;
   const bakeLine = t ? `<p class="muted small" data-bake-time>The last ${t.partial ? 'partial bake' : 'whole bake'} took ${(t.totalMs / 1000).toFixed(0)} seconds${m.tiles ? ` and wrote ${n(m.tiles.written)} tiles (${(m.tiles.bytes / 1048576).toFixed(0)} MB, bake hash ${esc(m.tiles.bakeHash)})` : ''}. Every number here is in ${reportLink}.</p>` : `<p class="muted small">Every number here is in ${reportLink}.</p>`;
@@ -419,7 +420,8 @@ function renderMap() {
     <p class="muted small" style="margin:0 0 10px">From the last bake of stage <b>${esc(m.stage)}</b>, ${ago(m.at)}. This is the road and building map under the game, not the game itself.</p>${failed}${bakeLine}
     <div class="signoffs" id="mapTiles">${tiles}</div>
     <p class="muted small">${n(m.overrides.patches)} picks read from ${n(m.overrides.files)} files (${n(m.overrides.byId)} found by id, ${n(m.overrides.byAnchor)} found again by place)${m.overrides.outsideStage ? `, ${n(m.overrides.outsideStage)} belong to another part of the map` : ''}. ${n(m.explained)} problems are explained as real streets.</p>
-    <h2>Gate counts</h2><div class="perfwrap"><table class="perf"><tbody>${gates}</tbody></table></div>${findings}${pics}
+    <h2>Gate counts</h2><div class="perfwrap"><table class="perf"><tbody>${gates}</tbody></table></div>
+    ${ground ? `<h2>Ground checks</h2><p class="muted small">The ground the bake lays around the roads: how well it meets them, and whether it has holes, seams or slivers.</p><div class="perfwrap"><table class="perf" id="mapGround"><tbody>${ground}</tbody></table></div>` : ''}${findings}${pics}
     <h2>Found by rule</h2><div class="perfwrap"><table class="perf"><thead><tr><th>Rule</th><th style="text-align:right">Found</th><th style="text-align:right">Fixed by itself</th></tr></thead><tbody>${rules}</tbody></table></div>
     <h2>Centre places</h2><p class="small">${n(m.pairs.count)} pairs of places checked for direction and distance: ${m.pairs.failed ? `<span class="chip fail">${n(m.pairs.failed)} off</span>` : '<span class="chip ok">all within the limits</span>'}${w ? ` Worst direction error ${w.bearingDeg} degrees, worst distance error ${w.distancePct} percent.` : ''}</p>${stale}`;
 }

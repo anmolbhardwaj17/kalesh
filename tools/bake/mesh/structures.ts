@@ -73,7 +73,31 @@ export interface StructureReport {
   undersides: number;
   roofs: number;
   abutmentWalls: number;
+  /** Tunnel portals (P1-037): where an open ramp meets its roofed part, the wall from the roof up to the parapet. */
+  headwalls: Headwall[];
 }
+
+/** The face across a tunnel mouth from the roof's underside up to the parapet, so the ground above never shows an open slit. */
+export interface Headwall {
+  strip: number;
+  station: number;
+  /** The two ends on the wall lines of the carriageway (block metres). */
+  ax: number;
+  az: number;
+  bx: number;
+  bz: number;
+  /** Height of the roof's underside (the wall's foot) and of the parapet top (m). */
+  bottom: number;
+  top: number;
+  /** Unit normal in plan, towards the open ramp. */
+  nx: number;
+  nz: number;
+  /** A road at grade lies over the roof at the mouth: the wall reaches its surface and has no parapet. */
+  underRoad: boolean;
+}
+
+/** The back of a headwall goes this far above the roof's underside (m): under the ground over the roof, which keeps 0.5 m over it. */
+export const HEADWALL_BACK_M = 0.4;
 
 /** Faces by plan box on a grid: what lies under a pier. */
 export class FaceGrid {
@@ -148,7 +172,7 @@ function pointInFace(fs: FaceSet, f: number, x: number, z: number): boolean {
 const structureOf = (kp: number, kq: number): EdgeKind | null => (kp === K_DECK || kq === K_DECK ? 'deck' : kp === K_FILL || kq === K_FILL ? 'fill' : kp === K_TUNNEL || kq === K_TUNNEL ? 'tunnel' : kp === K_CUT || kq === K_CUT ? 'cut' : null);
 
 export function buildStructures(input: MeshInput, fs: FaceSet, edges: EdgeMap, grid: FaceGrid, sink: Sink, borders: Borders, sheetOfStation: (strip: number, station: number) => number): StructureReport {
-  const out: StructureReport = { segments: [], parapets: 0, byKind: {}, sharedSides: 0, piers: [], piersMoved: 0, maxSpanM: 0, portals: 0, longSpans: [], joints: 0, undersides: 0, roofs: 0, abutmentWalls: 0 };
+  const out: StructureReport = { segments: [], parapets: 0, byKind: {}, sharedSides: 0, piers: [], piersMoved: 0, maxSpanM: 0, portals: 0, longSpans: [], joints: 0, undersides: 0, roofs: 0, abutmentWalls: 0, headwalls: [] };
   input.strips.forEach((s: Strip, si: number) => {
     const kind = input.kinds[si] as ArrayLike<number>;
     let any = false;
@@ -160,6 +184,10 @@ export function buildStructures(input: MeshInput, fs: FaceSet, edges: EdgeMap, g
     const X = (i: number, k: number): number => u.x[i * W + k] as number;
     const Z = (i: number, k: number): number => u.z[i * W + k] as number;
     const roofed = (st: Station, k: number): boolean => k === K_TUNNEL && st.g - st.h >= ROOF_DEPTH_M;
+    /** A segment is roofed when both its stations are: walls to the roof, the roof's underside, no ground cut. */
+    const segRoofed = (j: number): boolean => roofed(s.st[j] as Station, kind[j] as number) && roofed(s.st[j + 1] as Station, kind[j + 1] as number);
+    /** Top of a lowered side wall at a station of a segment that is open to the sky: the ground and a parapet over it. */
+    const openTop = (st: Station, lt: number): number => Math.max(lt, st.g + (st.g - st.h > 0.6 ? PARAPET_RAISE * smoothstep((st.g - st.h - 0.6) / 1.2) : 0));
     for (let i = 0; i + 1 < s.st.length; i++) {
       const p = s.st[i] as Station;
       const q = s.st[i + 1] as Station;
@@ -204,12 +232,15 @@ export function buildStructures(input: MeshInput, fs: FaceSet, edges: EdgeMap, g
           sink.quad('wall', P(p, i, t0), P(q, i + 1, t1), P(q, i + 1, Math.min(bottom(q, kq), t1)), P(p, i, Math.min(bottom(p, kp), t0)), outward);
         } else {
           // lowered: a wall up from the road edge; to the ground and a parapet above it in a cut, to the roof in a tunnel
-          const top = (st: Station, k: number, lt: number): number => (roofed(st, k) ? st.h + HEADROOM : Math.max(lt, st.g + (st.g - st.h > 0.6 ? PARAPET_RAISE * smoothstep((st.g - st.h - 0.6) / 1.2) : 0)));
-          const t0 = top(p, kp, lt0);
-          const t1 = top(q, kq, lt1);
+          // (a segment open to the sky keeps the parapet top at both ends, also where its far station is roofed: the
+          // headwall across the mouth closes the face from the roof up to it, P1-037)
+          const roof = segRoofed(i);
+          const top = (st: Station, lt: number): number => (roof ? st.h + HEADROOM : openTop(st, lt));
+          const t0 = top(p, lt0);
+          const t1 = top(q, lt1);
           if (t0 - lt0 < 0.02 && t1 - lt1 < 0.02) continue;
           sink.quad('wall', P(p, i, lt0), P(q, i + 1, lt1), P(q, i + 1, t1), P(p, i, t0), inward);
-          if (!(roofed(p, kp) && roofed(q, kq))) {
+          if (!roof) {
             parapet = t0 - p.g > 0.05 || t1 - q.g > 0.05;
             sink.quad(parapet ? 'parapet' : 'wall', P(p, i, t0), P(q, i + 1, t1), P(q, i + 1, t1, PARAPET_WIDTH_M), P(p, i, t0, PARAPET_WIDTH_M), [0, 1, 0]);
             if (parapet) sink.quad('parapet', P(p, i, t0, PARAPET_WIDTH_M), P(q, i + 1, t1, PARAPET_WIDTH_M), P(q, i + 1, Math.min(q.g, t1), PARAPET_WIDTH_M), P(p, i, Math.min(p.g, t0), PARAPET_WIDTH_M), outward);
@@ -237,6 +268,73 @@ export function buildStructures(input: MeshInput, fs: FaceSet, edges: EdgeMap, g
         sink.quad('underside', A(i, 0, p.h + HEADROOM), A(i, L, p.h + HEADROOM), A(i + 1, L, q.h + HEADROOM), A(i + 1, 0, q.h + HEADROOM), [0, -1, 0]);
         out.roofs++;
       }
+    }
+    // tunnel portals (P1-037): where a roofed segment meets one open to the sky, a wall across the mouth from the roof's
+    // underside up to the parapet top of the side walls, with a cap and a back face down into the slab, so the ground
+    // above the roof never shows an open slit between itself and the roof. Inside a strip, and at a strip end whose
+    // roofed segment runs on into an open one of the next strip (a cut that becomes a tunnel at a joint).
+    const headwall = (i: number, dx: number, dz: number): void => {
+      const st = s.st[i] as Station;
+      const bottom = st.h + HEADROOM;
+      let top = openTop(st, st.h);
+      const ax = X(i, 0);
+      const az = Z(i, 0);
+      const bx = X(i, L);
+      const bz = Z(i, L);
+      // a road at grade over the roof right at the mouth: the wall stops under its surface and the road is the top
+      let road = Infinity;
+      for (const t of [0.15, 0.5, 0.85]) {
+        const px = ax + (bx - ax) * t - dx * 0.3;
+        const pz = az + (bz - az) * t - dz * 0.3;
+        for (const f of grid.near(px, pz, px, pz)) {
+          if (fs.cut[f] === CUT_NONE || fs.piece[f] === si || !pointInFace(fs, f, px, pz)) continue;
+          const fst = fs.start[f] as number;
+          for (let k = 0; k < (fs.len[f] as number); k++) road = Math.min(road, fs.ys[fst + k] as number);
+        }
+      }
+      const underRoad = road < top;
+      if (underRoad) top = Math.max(bottom + 0.05, road - 0.02);
+      const pw = PARAPET_WIDTH_M;
+      // the cap and the back reach a parapet width past the wall lines, over the ends of the side parapets
+      const C = (x: number, z: number, y: number, along: number, out: number): V3 => [x - dx * along + st.nx * out, y, z - dz * along + st.nz * out];
+      sink.quad('wall', [ax, bottom, az], [bx, bottom, bz], [bx, top, bz], [ax, top, az], [dx, 0, dz]);
+      if (!underRoad) {
+        sink.quad('parapet', C(ax, az, top, 0, pw), C(bx, bz, top, 0, -pw), C(bx, bz, top, pw, -pw), C(ax, az, top, pw, pw), [0, 1, 0]);
+        sink.quad('parapet', C(ax, az, top, pw, pw), C(bx, bz, top, pw, -pw), C(bx, bz, bottom + HEADWALL_BACK_M, pw, -pw), C(ax, az, bottom + HEADWALL_BACK_M, pw, pw), [-dx, 0, -dz]);
+      }
+      out.headwalls.push({ strip: si, station: i, ax, az, bx, bz, bottom, top, nx: dx, nz: dz, underRoad });
+    };
+    const towards = (i: number, j: number): [number, number] => {
+      const a = s.st[i] as Station;
+      const b = s.st[j] as Station;
+      const len = Math.hypot(b.x - a.x, b.z - a.z) || 1;
+      return [(b.x - a.x) / len, (b.z - a.z) / len];
+    };
+    const n = s.st.length;
+    for (let i = 1; i + 1 < n; i++) {
+      const before = segRoofed(i - 1);
+      if (before === segRoofed(i)) continue;
+      const [dx, dz] = towards(i, before ? i + 1 : i - 1);
+      headwall(i, dx, dz);
+    }
+    for (const [e, inner] of [[0, 1], [n - 1, n - 2]] as const) {
+      if (n < 2 || !segRoofed(Math.min(e, inner))) continue;
+      const [dx, dz] = towards(inner, e);
+      const st = s.st[e] as Station;
+      const mid = ((st.b[0] as number) + (st.b[L] as number)) / 2;
+      const px = st.x + st.nx * mid + dx * 0.3;
+      const pz = st.z + st.nz * mid + dz * 0.3;
+      const open = grid.near(px, pz, px, pz).some((f) => {
+        const piece = fs.piece[f] as number;
+        const j = fs.station[f] as number;
+        if (piece === si || piece >= input.strips.length || j < 0 || !pointInFace(fs, f, px, pz)) return false;
+        const ok = input.kinds[piece] as ArrayLike<number>;
+        const os = input.strips[piece] as Strip;
+        const lowered = (k: number): boolean => k === K_CUT || k === K_TUNNEL;
+        if (!lowered(ok[j] as number) && !lowered(ok[j + 1] as number)) return false;
+        return !(roofed(os.st[j] as Station, ok[j] as number) && roofed(os.st[j + 1] as Station, ok[j + 1] as number));
+      });
+      if (open) headwall(e, dx, dz);
     }
     // piers and deck joints
     // the deck joint over a pier or a portal: a line across the carriageway, flush with it

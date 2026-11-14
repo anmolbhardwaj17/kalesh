@@ -88,6 +88,8 @@ export interface Triangulation {
     dropped: { components: number; triangles: number; areaM2: number };
     /** Points put inside a triangle that filled a corner between two road edges of different heights. */
     cornerPoints: number;
+    /** Crossings that got no vertex (segments.forced): how far the segment bent through the nearer end (m), the worst first (block metres). */
+    bent: { over1cm: number; maxM: number; list: { x: number; z: number; bendM: number }[] };
   };
   ms: Record<string, number>;
 }
@@ -154,6 +156,13 @@ export function triangulate(col: Collected, opt: TerrainOptions): Triangulation 
     const t = (((cdt.x[v] as number) - (cdt.x[a] as number)) * dx + ((cdt.z[v] as number) - (cdt.z[a] as number)) * dz) / (dx * dx + dz * dz || 1);
     road.split(a, b, v, t);
     road.split(b, a, v, 1 - t);
+  };
+  const bent: Triangulation['stats']['bent'] = { over1cm: 0, maxM: 0, list: [] };
+  cdt.onForced = (px, pz, v) => {
+    const d = Math.hypot(px - (cdt.x[v] as number), pz - (cdt.z[v] as number)) / UNITS;
+    if (d > 0.01) bent.over1cm++;
+    bent.maxM = Math.max(bent.maxM, d);
+    bent.list.push({ x: px / UNITS, z: pz / UNITS, bendM: d });
   };
   const segStats = newSegmentStats();
   for (let k = 0; k < col.segA.length; k++) insertSegment(cdt, vid[col.segA[k] as number] as number, vid[col.segB[k] as number] as number, col.segLabel[k] as number, opt.eps, segStats);
@@ -282,6 +291,6 @@ export function triangulate(col: Collected, opt: TerrainOptions): Triangulation 
   lap('corners');
   return {
     cdt, vx, vz, road, cls: all, ms,
-    stats: { points: n, vertices: cdt.x.length, triangles: cdt.nt, segments: segStats, flips: cdt.stats.flips, edgeSplits: cdt.stats.edgeSplits, walkSteps: cdt.stats.walkSteps, exactCircleTests: incircleExactCalls() - exact0, inconsistent, dropped, cornerPoints },
+    stats: { points: n, vertices: cdt.x.length, triangles: cdt.nt, segments: segStats, flips: cdt.stats.flips, edgeSplits: cdt.stats.edgeSplits, walkSteps: cdt.stats.walkSteps, exactCircleTests: incircleExactCalls() - exact0, inconsistent, dropped, cornerPoints, bent: { over1cm: bent.over1cm, maxM: Math.round(bent.maxM * 10000) / 10000, list: bent.list.sort((p, q) => q.bendM - p.bendM || p.x - q.x || p.z - q.z).slice(0, 20).map((b) => ({ x: Math.round(b.x * 100) / 100, z: Math.round(b.z * 100) / 100, bendM: Math.round(b.bendM * 10000) / 10000 })) } },
   };
 }

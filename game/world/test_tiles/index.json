@@ -5,24 +5,24 @@
  "block": "centre",
  "size": 250,
  "margin": 250,
- "bakeHash": "1c11dae9f3e55a",
+ "bakeHash": "0ceda442ba9101",
  "offset": [
   621.6,
   467.2
  ],
  "bytes": {
-  "total": 10661997,
-  "average": 1184666,
+  "total": 10662305,
+  "average": 1184701,
   "largest": {
    "id": "-3_-6",
-   "bytes": 1692400
+   "bytes": 1692832
   }
  },
  "blocks": [
   {
    "id": "centre",
    "tiles": 9,
-   "bytes": 10661997
+   "bytes": 10662305
   }
  ],
  "tiles": [
@@ -31,8 +31,8 @@
    "x": -4,
    "z": -8,
    "file": "-4_-8.ktl",
-   "bytes": 951124,
-   "hash": "ba3bc463154345ad",
+   "bytes": 951380,
+   "hash": "9230ac8195bf9446",
    "origin": [
     -1000,
     216,
@@ -51,9 +51,9 @@
     "building",
     "landmark"
    ],
-   "vertices": 15328,
-   "triangles": 7488,
-   "colliderTriangles": 7454,
+   "vertices": 15320,
+   "triangles": 7492,
+   "colliderTriangles": 7458,
    "chunks": 23,
    "largestChunk": 484,
    "buildings": 2,
@@ -66,8 +66,8 @@
    "x": -3,
    "z": -8,
    "file": "-3_-8.ktl",
-   "bytes": 1049604,
-   "hash": "64ade6343547e60f",
+   "bytes": 1050032,
+   "hash": "608c26484ef37330",
    "origin": [
     -750,
     215,
@@ -89,9 +89,9 @@
     "building",
     "landmark"
    ],
-   "vertices": 17171,
-   "triangles": 8040,
-   "colliderTriangles": 7932,
+   "vertices": 17165,
+   "triangles": 8046,
+   "colliderTriangles": 7938,
    "chunks": 24,
    "largestChunk": 500,
    "buildings": 3,
@@ -104,8 +104,8 @@
    "x": -4,
    "z": -7,
    "file": "-4_-7.ktl",
-   "bytes": 947280,
-   "hash": "58c929fdee41c3ae",
+   "bytes": 948208,
+   "hash": "b0f9883961396599",
    "origin": [
     -1000,
     215,
@@ -125,9 +125,9 @@
     "building",
     "landmark"
    ],
-   "vertices": 15121,
-   "triangles": 7909,
-   "colliderTriangles": 7909,
+   "vertices": 15117,
+   "triangles": 7921,
+   "colliderTriangles": 7921,
    "chunks": 26,
    "largestChunk": 494,
    "buildings": 63,
@@ -140,8 +140,8 @@
    "x": -3,
    "z": -7,
    "file": "-3_-7.ktl",
-   "bytes": 1342957,
-   "hash": "a8954d646d82f5df",
+   "bytes": 1341085,
+   "hash": "c63ea6bd1fdc5523",
    "origin": [
     -750,
     215,
@@ -163,9 +163,9 @@
     "building",
     "landmark"
    ],
-   "vertices": 21649,
-   "triangles": 10150,
-   "colliderTriangles": 9912,
+   "vertices": 21605,
+   "triangles": 10140,
+   "colliderTriangles": 9902,
    "chunks": 27,
    "largestChunk": 458,
    "buildings": 19,
@@ -178,8 +178,8 @@
    "x": -3,
    "z": -6,
    "file": "-3_-6.ktl",
-   "bytes": 1692400,
-   "hash": "9fd02b290a43afd0",
+   "bytes": 1692832,
+   "hash": "39c8b629c1cd5600",
    "origin": [
     -750,
     215,
@@ -201,9 +201,9 @@
     "building",
     "landmark"
    ],
-   "vertices": 26938,
-   "triangles": 12790,
-   "colliderTriangles": 12721,
+   "vertices": 26932,
+   "triangles": 12796,
+   "colliderTriangles": 12727,
    "chunks": 34,
    "largestChunk": 497,
    "buildings": 33,
@@ -216,8 +216,8 @@
    "x": 8,
    "z": -6,
    "file": "8_-6.ktl",
-   "bytes": 633080,
-   "hash": "aa8e2331bc3355b9",
+   "bytes": 633544,
+   "hash": "a6456a3dbbfb9ffd",
    "origin": [
     2000,
     206,
@@ -235,9 +235,9 @@
     "building",
     "landmark"
    ],
-   "vertices": 10010,
-   "triangles": 5303,
-   "colliderTriangles": 5303,
+   "vertices": 10006,
+   "triangles": 5308,
+   "colliderTriangles": 5308,
    "chunks": 20,
    "largestChunk": 456,
    "buildings": 12,
@@ -250,8 +250,8 @@
    "x": 9,
    "z": -6,
    "file": "9_-6.ktl",
-   "bytes": 1370192,
-   "hash": "c7b20b73618cc257",
+   "bytes": 1369864,
+   "hash": "0e56ecc448335e0f",
    "origin": [
     2250,
     203,
@@ -278,15 +278,15 @@
     "building",
     "landmark"
    ],
-   "vertices": 23009,
-   "triangles": 11072,
-   "colliderTriangles": 10715,
+   "vertices": 23002,
+   "triangles": 11070,
+   "colliderTriangles": 10713,
    "chunks": 30,
    "largestChunk": 498,
    "buildings": 1,
    "lanes": 81,
    "pins": 0,
-   "overhangM": 17.62
+   "overhangM": 23.43
   },
   {
    "id": "8_-5",
@@ -294,7 +294,7 @@
    "z": -5,
    "file": "8_-5.ktl",
    "bytes": 1071792,
-   "hash": "301d15b5567536f5",
+   "hash": "71bd2d93bacf3904",
    "origin": [
     2000,
     206,
@@ -332,7 +332,7 @@
    "z": -5,
    "file": "9_-5.ktl",
    "bytes": 1603568,
-   "hash": "e1a5f44fee921461",
+   "hash": "97844d9da011bd14",
    "origin": [
     2250,
     206,

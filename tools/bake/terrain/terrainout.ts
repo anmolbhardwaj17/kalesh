@@ -33,15 +33,18 @@ export interface TerrainRecord {
   triangulation: Ground['tg']['stats'];
   heights: { maxOffsetM: number; wallClamped: number; underDeck: number; loweredUnderDeck: number; overTunnel: number; raisedOverTunnel: number };
   /** The gate counts of MAP_REPAIR.md "Verification" this step measures. */
-  gates: { groundGapMaxM: number; groundAboveRoad: number; needleShare: number; seamMismatches: number; holeShare: number };
+  gates: { groundGapMaxM: number; groundAboveRoad: number; needleShare: number; seamMismatches: number; holeShare: number; portalOpenFaces: number };
   gap: TerrainChecks['gap'];
   above: TerrainChecks['above'];
   needles: TerrainChecks['needles'];
   seams: TerrainChecks['seams'];
   area: TerrainChecks['area'];
   classes: TerrainChecks['classes'];
+  portals: TerrainChecks['portals'];
   /** Water bodies over 500 m2 (world metres), largest first. */
-  waters: { level: number; areaM2: number; bankMinM: number; bankMaxM: number; x: number; z: number }[];
+  waters: { level: number; areaM2: number; bankMinM: number; bankMaxM: number; x: number; z: number; sloped?: boolean; fallM?: number; slopePerKm?: number; bankRoomM?: number | null }[];
+  /** Running water (P1-037): bodies whose surface follows the slope of their banks, how far they fall, and the least room under a land bank. */
+  drains: { bodies: number; areaM2: number; maxFallM: number; steepestPerKm: number; leastBankRoomM: number | null };
   files: Record<string, string | string[]>;
 }
 
@@ -81,10 +84,23 @@ export function terrainRecord(g: Ground, checks: TerrainChecks, checksMs: number
     },
     triangulation: g.tg.stats,
     heights: { maxOffsetM: s.maxOffsetM, wallClamped: s.wallClamped, underDeck: s.underDeck, loweredUnderDeck: s.loweredUnderDeck, overTunnel: s.overTunnel, raisedOverTunnel: s.raisedOverTunnel },
-    gates: { groundGapMaxM: checks.gap.maxM, groundAboveRoad: checks.above.aboveRoad + checks.above.throughDeck, needleShare: checks.needles.share, seamMismatches: checks.seams.mismatched, holeShare: checks.area.holeShare },
-    gap: checks.gap, above: checks.above, needles: checks.needles, seams: checks.seams, area: checks.area, classes: checks.classes,
-    waters: g.surface.waters.filter((w) => w.areaM2 >= 500).sort((p, q) => q.areaM2 - p.areaM2).map((w) => ({ level: w.level, areaM2: w.areaM2, bankMinM: w.bankMinM, bankMaxM: w.bankMaxM, x: Math.round((w.x + ox) * 10) / 10, z: Math.round((w.z + oz) * 10) / 10 })),
+    gates: { groundGapMaxM: checks.gap.maxM, groundAboveRoad: checks.above.aboveRoad + checks.above.throughDeck, needleShare: checks.needles.share, seamMismatches: checks.seams.mismatched, holeShare: checks.area.holeShare, portalOpenFaces: checks.portals.open },
+    gap: checks.gap, above: checks.above, needles: checks.needles, seams: checks.seams, area: checks.area, classes: checks.classes, portals: checks.portals,
+    waters: g.surface.waters.filter((w) => w.areaM2 >= 500).sort((p, q) => q.areaM2 - p.areaM2).map((w) => ({
+      level: w.level, areaM2: w.areaM2, bankMinM: w.bankMinM, bankMaxM: w.bankMaxM, x: Math.round((w.x + ox) * 10) / 10, z: Math.round((w.z + oz) * 10) / 10,
+      ...(w.sloped ? { sloped: true, fallM: w.fallM, slopePerKm: w.slopePerKm, bankRoomM: w.bankRoomM } : {}),
+    })),
+    drains: drainSummary(g),
     files,
+  };
+}
+
+function drainSummary(g: Ground): TerrainRecord['drains'] {
+  const list = g.surface.waters.filter((w) => w.sloped);
+  const rooms = list.map((w) => w.bankRoomM).filter((v): v is number => v !== null);
+  return {
+    bodies: list.length, areaM2: list.reduce((a, w) => a + w.areaM2, 0), maxFallM: list.reduce((a, w) => Math.max(a, w.fallM), 0), steepestPerKm: list.reduce((a, w) => Math.max(a, w.slopePerKm), 0),
+    leastBankRoomM: rooms.length ? Math.min(...rooms) : null,
   };
 }
 
@@ -95,13 +111,15 @@ export function terrainLog(r: TerrainRecord): string[] {
   return [
     `built in ${(r.buildMs / 1000).toFixed(2)} s (${Object.entries(r.ms).filter(([k]) => k !== 'total').map(([k, v]) => `${k} ${v}`).join(', ')} ms), checks ${(r.checksMs / 1000).toFixed(2)} s; hash ${r.hash}`,
     `input: ${n.freeEdges} free road edges (${n.wallEdges} at walls) over ${n.roadVertices} road vertices, ${n.ringEdges} ring edges (footprints, water, open land, outline), ${n.splitPoints} points along long segments, ${n.gridPoints} on tile lines, ${n.latticePoints} lattice points; ${n.welded} points welded`,
-    `triangulation: ${t.points} points, ${t.vertices} vertices, ${t.triangles} triangles; ${t.segments.segments} segments (${t.segments.direct} already an edge, ${t.segments.snapped} bent through a near vertex, ${t.segments.crossings} crossings got a vertex, ${t.segments.forced} forced, ${t.segments.failed} failed), ${t.flips} flips, ${t.exactCircleTests} exact circle tests; counts that disagree ${t.inconsistent}; hairlines dropped ${t.dropped.components} (${t.dropped.areaM2} m2); ${t.cornerPoints} points put into corners between road edges of different heights`,
+    `triangulation: ${t.points} points, ${t.vertices} vertices, ${t.triangles} triangles; ${t.segments.segments} segments (${t.segments.direct} already an edge, ${t.segments.snapped} bent through a near vertex, ${t.segments.crossings} crossings got a vertex, ${t.segments.nudged} a vertex a unit or two off a needle, ${t.segments.forced} forced through a corner (${t.bent.over1cm} bent over 1 cm, at most ${t.bent.maxM} m), ${t.segments.failed} failed), ${t.flips} flips, ${t.exactCircleTests} exact circle tests; counts that disagree ${t.inconsistent}; hairlines dropped ${t.dropped.components} (${t.dropped.areaM2} m2); ${t.cornerPoints} points put into corners between road edges of different heights`,
     `ground: ${n.emitted} triangles in ${n.tiles} tiles (${Object.entries(n.byClass).map(([k, v]) => `${k} ${v}`).join(', ')}); ${n.pinned} vertices pinned to road edges, ${n.wallVertices} at walls, ${n.stepVertices} at a height step (${n.stepCorners} corners, ${n.skirts} upright faces, ${n.unresolvedSteps} not closed); ${n.waters} water bodies`,
     `heights: road edges up to ${r.heights.maxOffsetM} m off the ground model; ${r.heights.wallClamped} wall vertices held to their wall; under decks ${r.heights.underDeck} (${r.heights.loweredUnderDeck} lowered), over roofed tunnels ${r.heights.overTunnel} (${r.heights.raisedOverTunnel} raised)`,
     `gap: ${r.gap.samples} points on ${r.gap.edges} road edges, largest ${r.gap.maxM} m, mean ${r.gap.meanM} m, over ${GAP_LIMIT_M} m: ${r.gap.over2cm}; covered ${r.gap.coveredM} m, no ground along ${r.gap.uncoveredM.outsideStage} m outside the stage, ${r.gap.uncoveredM.otherRoad} m under another road, ${r.gap.uncoveredM.other} m other; walls: ${r.gap.wallSamples} points, ${r.gap.wallWrongSide} on the wrong side, highest ${r.gap.wallMaxHeightM} m`,
     `above the road: ${r.above.aboveRoad} of ${r.above.vertices} free ground vertices (${r.above.insideRoadFace} inside a road face); under decks ${r.above.underDeck} vertices and triangle centres, ${r.above.throughDeck} into the slab`,
     `needles: ${r.needles.under1deg} of ${r.needles.triangles} ground triangles under 1 degree (${pct(r.needles.share)}; under 5 degrees ${r.needles.under5deg}); footprint pads ${r.needles.plotsUnder1deg} of ${r.needles.plots}`,
     `seams: ${r.seams.edges} edges on tile lines, ${r.seams.matched} equal across the seam (largest difference ${r.seams.maxDiffM} m), ${r.seams.open} with no ground across, ${r.seams.mismatched} mismatched`,
+    `drains: ${r.drains.bodies} running water bodies (${r.drains.areaM2} m2) follow the slope of their banks: up to ${r.drains.maxFallM} m of fall, steepest ${r.drains.steepestPerKm} m per km, least room under a land bank ${r.drains.leastBankRoomM ?? 'none'} m`,
+    `tunnel mouths: ${r.portals.edges} road edges across a mouth (${r.portals.lengthM} m), ${r.portals.headwalls} headwalls; ${r.portals.missing} with no headwall, ${r.portals.groundOff} ends where the ground leaves the headwall; open faces ${r.portals.open}`,
     `area: outline ${r.area.outlineM2} m2 = ground ${r.area.groundM2} + open land ${r.area.lawnM2} + water ${r.area.waterM2} + footprints ${r.area.plotM2} + road faces ${r.area.roadFacesM2} + hairlines ${r.area.droppedM2} + ${r.area.holeM2} (${pct(r.area.holeShare)}); road triangles ${r.area.roadTrianglesM2} m2; class samples ${r.classes.samples}, ${r.classes.mismatches} differ, ${r.classes.holes} holes`,
   ];
 }
@@ -115,6 +133,7 @@ export function terrainInvariants(r: TerrainRecord, again: string): InvariantRes
     { id: 'TERR-04.seams', ok: r.seams.mismatched === 0 && r.seams.maxDiffM <= SEAM_LIMIT_M, detail: `${r.seams.mismatched} of ${r.seams.edges} edges on tile lines differ across the seam (largest difference of the rest ${r.seams.maxDiffM} m)${r.seams.list.length ? `: ${r.seams.list.slice(0, 2).map((x) => x.what).join('; ')}` : ''}` },
     { id: 'TERR-05.no_hole', ok: r.area.holeShare <= HOLE_LIMIT && r.classes.holes === 0 && t.inconsistent === 0 && t.segments.failed === 0, detail: `ground, footprints and road faces miss the outline area by ${r.area.holeM2} m2 (${(r.area.holeShare * 100).toFixed(3)} percent, limit ${HOLE_LIMIT * 100}); ${r.classes.holes} of ${r.classes.samples} sample points in a hole (${r.classes.mismatches} differ in class), ${t.inconsistent} triangles with two counts, ${t.segments.failed} segments failed` },
     { id: 'TERR-06.same_twice_in_time', ok: r.hash === again && r.buildMs < BUILD_LIMIT_MS, detail: `${r.hash === again ? `the same hash twice (${r.hash})` : `two builds of one input differ: ${r.hash} and ${again}`}; built in ${(r.buildMs / 1000).toFixed(1)} s (limit ${BUILD_LIMIT_MS / 1000} s)` },
+    { id: 'TERR-07.tunnel_mouths', ok: r.portals.open === 0, detail: `${r.portals.open} open faces at ${r.portals.edges} road edges across tunnel mouths (${r.portals.lengthM} m, ${r.portals.headwalls} headwalls)${r.portals.list.length ? `: ${r.portals.list.slice(0, 3).map((x) => `${x.what} at ${x.x}, ${x.z}`).join('; ')}` : ''}` },
   ];
 }
 

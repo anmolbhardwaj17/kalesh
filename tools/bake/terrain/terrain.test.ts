@@ -22,6 +22,7 @@ import { MEET_EDGE, MEET_NONE, MEET_WALL } from './collect';
 import type { TerrainInput } from './collect';
 import { groundHash, groundInBox, terrainInvariants, terrainRecord } from './terrainout';
 import { C_GROUND, C_LAWN, C_PLOT, C_WATER } from './triangulate';
+import { levelAt } from './water';
 
 const slope = (x: number): number => 200 + 0.004 * x;
 const box = (x0: number, z0: number, x1: number, z1: number): P2[] => [{ x: x0, z: z0 }, { x: x1, z: z0 }, { x: x1, z: z1 }, { x: x0, z: z1 }];
@@ -35,7 +36,7 @@ const build = (s: Sketch, extra: Partial<TerrainInput>, half = 150): Built => {
   const st = readStructures({ strips: b.strips, joints: b.joints, junctions: ei.junctions, junctionHeights: res.junctionHeights, tunnels: res.tunnels, crossings: res.crossings, pairSamples: res.pairSamples, water: [], ties: ei.ties ?? [], ground: slope });
   const mi = meshInput(b, res.junctionHeights, st.kinds);
   const mesh = buildRoadMesh(mi);
-  const input: TerrainInput = { fs: mesh.fs, edges: mesh.edges, grid: mesh.grid, strips: mi.strips, kinds: mi.kinds, outline: box(-half, -half, half, half), footprints: [], water: [], open: [], ground: slope, offset: { x: 13.3, z: -7.7 }, ...extra };
+  const input: TerrainInput = { fs: mesh.fs, edges: mesh.edges, grid: mesh.grid, strips: mi.strips, kinds: mi.kinds, outline: box(-half, -half, half, half), footprints: [], water: [], open: [], ground: slope, offset: { x: 13.3, z: -7.7 }, portals: mesh.structures.headwalls, ...extra };
   const g = buildGround(input);
   return { g, c: checkGround(g), input };
 };
@@ -137,9 +138,9 @@ describe('a crossroads at grade with a building, a pond and a lawn', () => {
     expect(groundHash(again)).toBe(groundHash(g));
     const rec = terrainRecord(g, c, 1, groundHash(g), {});
     expect(terrainInvariants(rec, groundHash(again)).map((r) => [r.id, r.ok])).toEqual([
-      ['TERR-01.gap', true], ['TERR-02.nothing_above_the_road', true], ['TERR-03.needles', true], ['TERR-04.seams', true], ['TERR-05.no_hole', true], ['TERR-06.same_twice_in_time', true],
+      ['TERR-01.gap', true], ['TERR-02.nothing_above_the_road', true], ['TERR-03.needles', true], ['TERR-04.seams', true], ['TERR-05.no_hole', true], ['TERR-06.same_twice_in_time', true], ['TERR-07.tunnel_mouths', true],
     ]);
-    expect(rec.gates).toEqual({ groundGapMaxM: c.gap.maxM, groundAboveRoad: 0, needleShare: c.needles.share, seamMismatches: 0, holeShare: c.area.holeShare });
+    expect(rec.gates).toEqual({ groundGapMaxM: c.gap.maxM, groundAboveRoad: 0, needleShare: c.needles.share, seamMismatches: 0, holeShare: c.area.holeShare, portalOpenFaces: 0 });
     // one group for everything gives the same triangles as the tiles together
     const one = emitGround(g, () => 0, () => ({ x: 0, z: 0 })).get(0)!;
     const count = (list: { idx: number[] }[]): number => list.reduce((n, m) => n + m.idx.length / 3, 0);
@@ -192,3 +193,76 @@ describe('collider chunks', () => {
   });
 });
 
+
+describe('a drain on a slope (P1-037)', () => {
+  const s = new Sketch();
+  s.way([[-200, 0], [200, 0]].map((p) => p as [number, number]), { highway: 'primary', name: 'Main Road' });
+  // the ground falls 4 m per km to the west; the drain runs east to west with a bend, the pond lies beside it
+  const drain = { id: 'way/1', kind: 'waterway=drain', pts: [{ x: 130, z: 60 }, { x: 20, z: 70 }, { x: -130, z: 60 }], tunnel: false };
+  const culvert = { id: 'way/2', kind: 'waterway=drain', pts: [{ x: 130, z: -60 }, { x: -130, z: -60 }], tunnel: true };
+  const pond = box(-110, -110, -50, -80);
+  const { g, c } = build(s, { water: [{ id: 'w1', name: 'Pond', kind: 'water=pond', rings: [pond] }], waterLines: [drain, culvert] });
+
+  it('the drain line becomes a channel of its class width whose surface follows the slope of its banks; the pond stays flat; a culvert is not drawn', () => {
+    expect(g.tg.stats.inconsistent).toBe(0);
+    expect(c.classes.holes).toBe(0);
+    const ws = g.surface.waters;
+    expect(ws).toHaveLength(2);
+    const d = ws.find((w) => w.sloped)!;
+    const p = ws.find((w) => !w.sloped)!;
+    expect(p.gx).toBe(0);
+    expect(p.gz).toBe(0);
+    // 5 m wide and about 260 m long
+    expect(d.areaM2).toBeGreaterThan(5 * 255);
+    expect(d.areaM2).toBeLessThan(5 * 275);
+    // the ground model falls 0.004 per metre in x: the surface falls with it, within a quarter
+    expect(d.slopePerKm).toBeGreaterThan(3);
+    expect(d.slopePerKm).toBeLessThan(5);
+    expect(d.gx).toBeGreaterThan(0);
+    expect(d.fallM).toBeGreaterThan(0.75);
+    // never over its banks
+    expect(d.bankRoomM).toBeGreaterThanOrEqual(0.149);
+    // the drawn surface: lower at the west end than at the east end, by the fall
+    const meshes = groundInBox(g, { minX: -150, maxX: 150, minZ: -150, maxZ: 150 });
+    const water = meshes.find((m) => m.material === 'water')!;
+    let west = Infinity;
+    let east = -Infinity;
+    for (let k = 0; k < water.pos.length; k += 3) {
+      if (water.pos[k + 2]! < 40) continue;
+      if (water.pos[k]! < -100) west = Math.min(west, water.pos[k + 1]!);
+      if (water.pos[k]! > 100) east = Math.max(east, water.pos[k + 1]!);
+    }
+    expect(east - west).toBeGreaterThan(0.7);
+    // the bed goes under the water along the middle of the channel, so the surface shows between the banks
+    const bed = meshes.find((m) => m.material === 'bed')!;
+    let under = 0;
+    for (let k = 0; k < bed.pos.length; k += 3) if (bed.pos[k + 1]! < levelAt(d, bed.pos[k]!, bed.pos[k + 2]!) - 0.3) under++;
+    expect(under).toBeGreaterThan(40);
+    // nothing drawn along the culvert
+    for (let k = 0; k < water.pos.length; k += 3) expect(water.pos[k + 2]! > -40 || water.pos[k + 2]! < -75).toBe(true);
+  });
+});
+
+describe('a tunnel under a park (P1-037)', () => {
+  const s = new Sketch();
+  const w = s.way([[-300, 0], [-250, 0]].map((p) => p as [number, number]), { highway: 'primary', name: 'Tunnel Road' });
+  void w;
+  const a = s.elements.filter((e) => e.type === 'node').slice(-1)[0]!.id;
+  const t = s.way([a, [250, 0]], { highway: 'primary', name: 'Tunnel Road', tunnel: 'yes', layer: '-1' });
+  void t;
+  const b = s.elements.filter((e) => e.type === 'node').slice(-1)[0]!.id;
+  s.way([b, [300, 0]], { highway: 'primary', name: 'Tunnel Road' });
+  const { g, c, input } = build(s, {}, 290);
+
+  it('every road edge across a tunnel mouth has a headwall from the roof up to the parapet, and the ground across it stays between the slab and the headwall top', () => {
+    expect(input.portals?.length ?? 0).toBeGreaterThanOrEqual(2);
+    expect(c.portals.edges).toBeGreaterThanOrEqual(2);
+    expect(c.portals.open).toBe(0);
+    expect(c.portals.missing).toBe(0);
+    for (const h of input.portals ?? []) {
+      expect(h.top - h.bottom).toBeGreaterThan(0.7);
+      expect(h.underRoad).toBe(false);
+    }
+    expect(g.tg.stats.segments.forced).toBe(0);
+  });
+});
