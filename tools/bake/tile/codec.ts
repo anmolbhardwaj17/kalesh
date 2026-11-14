@@ -40,6 +40,8 @@ export interface Placement {
   module: string;
   /** Twelve numbers per instance in MultiMesh buffer order: the basis rows, each followed by the origin's part. */
   xforms: number[];
+  /** Optional custom data, one uint32 per instance: the wall colour and the grime wear as 0xRRGGBBWW (P2-009). */
+  data?: number[];
 }
 
 /** One piece of the lane graph inside a tile: a driving lane cut at the tile lines, or a junction path. */
@@ -159,7 +161,7 @@ export interface T1Header {
   margin: number | null;
   meshes: T1MeshHeader[];
   colliders: { name: string; triangles: number; faces: number }[];
-  placements: { module: string; count: number; xforms: number }[];
+  placements: { module: string; count: number; xforms: number; data?: number }[];
   /** The lane pieces of the tile and one float32 array of their points (x, y, z). */
   lanes: { points: number; pts: number; list: T1LaneHeader[] };
   pins: TilePin[];
@@ -192,6 +194,13 @@ export function badVertex(array: string, pos: ArrayLike<number>, size: number, m
   return null;
 }
 
+/** The origins of a placement's instances (places 3, 7 and 11 of each twelve) as x, y, z. */
+export function placementOrigins(xforms: ArrayLike<number>): number[] {
+  const out: number[] = [];
+  for (let i = 0; i + 11 < xforms.length; i += 12) out.push(xforms[i + 3] as number, xforms[i + 7] as number, xforms[i + 11] as number);
+  return out;
+}
+
 /** Every vertex array of a tile through the magnitude rule (meshes, colliders, lanes, pins): the bad ones. */
 export function tileBadVertices(t: TileContent, margin: number): BadVertex[] {
   const out: BadVertex[] = [];
@@ -202,6 +211,7 @@ export function tileBadVertices(t: TileContent, margin: number): BadVertex[] {
   for (const c of t.colliders) add(badVertex(`collider ${c.name}`, c.faces, t.size, margin));
   for (const l of t.lanes ?? []) add(badVertex(`lane ${l.id}`, l.pts, t.size, margin));
   for (const p of t.pins ?? []) add(badVertex(`pin ${p.id}`, p.pos, t.size, margin));
+  for (const p of t.placements) add(badVertex(`placement ${p.module}`, placementOrigins(p.xforms), t.size, margin));
   return out;
 }
 
@@ -235,7 +245,15 @@ export function encodeT1(t: TileContent): Uint8Array {
     return h;
   });
   const colliders = t.colliders.map((c) => ({ name: c.name, triangles: c.faces.length / 9, faces: f32(c.faces) }));
-  const placements = t.placements.map((p) => ({ module: p.module, count: p.xforms.length / 12, xforms: f32(p.xforms) }));
+  const placements = t.placements.map((p) => {
+    const count = p.xforms.length / 12;
+    const h: { module: string; count: number; xforms: number; data?: number } = { module: p.module, count, xforms: f32(p.xforms) };
+    if (p.data) {
+      if (p.data.length !== count) throw new Error(`placement ${p.module}: ${p.data.length} custom data values for ${count} instances`);
+      h.data = u32(p.data);
+    }
+    return h;
+  });
   const lanePts: number[] = [];
   const list: T1LaneHeader[] = (t.lanes ?? []).map((l) => {
     const start = lanePts.length / 3;
@@ -306,6 +324,7 @@ export function decodeT1(bytes: Uint8Array, checkMagnitude = true): DecodedT1 {
       header.meshes.map((x) => badVertex(`mesh ${x.name}`, f32(x.pos, x.vertices * 3), size, m)).find((b) => b) ??
       header.colliders.map((c) => badVertex(`collider ${c.name}`, f32(c.faces, c.triangles * 9), size, m)).find((b) => b) ??
       badVertex('lanes', f32(header.lanes.pts, header.lanes.points * 3), size, m) ??
+      header.placements.map((x) => badVertex(`placement ${x.module}`, placementOrigins(f32(x.xforms, x.count * 12)), size, m)).find((b) => b) ??
       header.pins.map((p) => badVertex(`pin ${p.id}`, p.pos, size, m)).find((b) => b);
     if (bad) throw new Error(`KTL1 tile ${header.tile.x}_${header.tile.z}: vertex ${bad.index} of ${bad.array} at (${bad.value.join(', ')}) is outside the tile plus its ${m} m margin`);
   }
@@ -325,7 +344,7 @@ export function decodeContent(bytes: Uint8Array): TileContent {
       ...(m.uv !== undefined ? { uv: arr(d.f32(m.uv, m.vertices * 2)) } : {}), ...(m.uv2 !== undefined ? { uv2: arr(d.f32(m.uv2, m.vertices * 2)) } : {}),
     })),
     colliders: h.colliders.map((c) => ({ name: c.name, faces: arr(d.f32(c.faces, c.triangles * 9)) })),
-    placements: h.placements.map((p) => ({ module: p.module, xforms: arr(d.f32(p.xforms, p.count * 12)) })),
+    placements: h.placements.map((p) => ({ module: p.module, xforms: arr(d.f32(p.xforms, p.count * 12)), ...(p.data !== undefined ? { data: arr(d.u32(p.data, p.count)) } : {}) })),
     lanes: h.lanes.list.map(({ start, count, ...l }) => ({ ...l, pts: arr(lanePts.subarray(start * 3, (start + count) * 3)) })),
     pins: h.pins,
     ...(h.margin !== null ? { margin: h.margin } : {}),

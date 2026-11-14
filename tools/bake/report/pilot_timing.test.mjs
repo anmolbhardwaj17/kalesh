@@ -23,6 +23,7 @@ describe.skipIf(missing.length > 0)(`pilot centre bake speed${reason ? ` (skippe
       elevation: health.elevation.solveMs,
       mesh: health.mesh.buildMs,
       terrain: health.terrain.buildMs,
+      areas: health.areas.ms.parcels + health.areas.ms.city,
     };
     const limits = budgets.pilotStepMs;
     console.log(`[bake speed] whole bake ${(timing.totalMs / 1000).toFixed(1)} s (load ${measured.loadStart} to ${measured.loadEnd} on ${measured.cpus} cores, ${idle ? 'idle' : 'busy: step limits are not asserted'}); steps ${JSON.stringify(timing.steps)}`);
