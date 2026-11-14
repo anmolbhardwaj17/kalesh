@@ -1,6 +1,6 @@
 {
   "_doc": "Written only by node harness/bin/task.mjs. Phases run in order; P0 (ADOPT + STYLE DISCOVERY) waits for the owner by design and needs task.mjs signoff and task.mjs archsignoff before its gate passes. Later phases are added by the planner at the end of P0 (task.mjs phase-add) from the game's real state.",
-  "updated": "2026-11-14T13:23:12.041Z",
+  "updated": "2026-11-14T13:51:01.499Z",
   "phases": [
     {
       "id": "P0",
@@ -4249,7 +4249,8 @@
       "notes": [
         "Anmol 2026-11-14: emptiness is a blocker, not polish. Flag any street or junction that feels empty, bare or unlike its reference photos.",
         "Held until the end of P2 (its own text says before the gate); the area and kit tasks it would judge are still open.",
-        "Also answer every heading of harness/design/WORLD_LOGIC.md."
+        "Also answer every heading of harness/design/WORLD_LOGIC.md.",
+        "Also sweep harness/design/REALITY_MATCH.md: rescore catalog objects worst first, failures become fix tasks."
       ],
       "created": "2026-11-13T11:54:41.171Z",
       "model": "sonnet"
@@ -4561,18 +4562,20 @@
       "priority": 1,
       "kind": "mentor",
       "status": "doing",
-      "attempts": 1,
+      "attempts": 2,
       "notes": [
         "Anmol 2026-11-14: boards carry wear and tear: rust streaks, faded and peeling paint, bent or dented tin, broken corners, torn flex, missing letters. Add it to signboards.md per area and to the boards (varied per board, more in the old city, less in CP showrooms), and the verifier checks it in the side by side.",
         "Anmol 2026-11-14: every reference photo has its date checked (EXIF, the file page, or visible clues) and written next to it; a photo older than the current state of the place is marked old and never used for surfaces, signs or colours. Before building, check the set actually shows what is needed (the street surface, signs, colours, the view from the player's height); if not, keep searching other free sources until it does. If free photos still do not cover it, register a photo request for Anmol on the dashboard (assets.mjs) and keep working with the best dated set.",
         "Watch Dogs 2 bar (FIDELITY_BAR.md row 7): signs at many sizes and densities per facade (stacked boards up the floors in the bazaar), with the night version (glow boxes and LED letters emissive through the glow and neon materials) built now so P3-007 only switches them on. Shop interiors behind the boards come from P2-056.",
         "Owner photos with real boards: GB Road night (big yellow and blue printed flex of machine part shops with phone numbers), Chandni Chowk stacked boards: OWNER_PHOTOS.md.",
         "Owner reference set: harness/design/reference/owner/signboards/ and OWNER_PHOTOS.md 'Sign boards for old places': hand-painted tin and wood boards, Hindi over English, painted arrows and figures, enamel round boards, lettering on shutters, tall vertical boards, stacked flex walls, estd years and phone numbers, bracket lamps lighting boards, tilted mounting, chipped edges and rust. Two are from a game: quality bar only, never copy their art or text.",
-        "Owner 2026-11-14: some board names should be GTA-style parodies of famous Delhi names (decisions.md). P2-067 adds them to the name files; the board system must read parody entries and their board style."
+        "Owner 2026-11-14: some board names should be GTA-style parodies of famous Delhi names (decisions.md). P2-067 adds them to the name files; the board system must read parody entries and their board style.",
+        "attempt 1 failed: no reason given",
+        "attempt 1 failed: Verifier FAIL: boards read as real (Hindi over English, painted tin, flex, verticals, wear, attached) but density far below the photos (CP, Paharganj, Janpath, old streets: 1 to 2 boards per facade vs 3 to 5 stacked plus notices and cables); boards.json out of sync with the names file (npm test fails); a 'Police Post Ajmeri Gate' shop-style board; flat colour-block product shelves; weak night glow."
       ],
       "created": "2026-11-14T08:07:00.888Z",
       "model": "opus",
-      "started": "2026-11-14T11:42:00.253Z"
+      "started": "2026-11-14T13:39:22.740Z"
     },
     {
       "id": "P2-049",
@@ -4642,7 +4645,8 @@
       "status": "todo",
       "attempts": 0,
       "notes": [
-        "Look critics also answer every heading of harness/design/WORLD_LOGIC.md with a shot per finding."
+        "Look critics also answer every heading of harness/design/WORLD_LOGIC.md with a shot per finding.",
+        "Also sweep harness/design/REALITY_MATCH.md: rescore catalog objects worst first, failures become fix tasks."
       ],
       "created": "2026-11-14T08:58:18.633Z",
       "model": "sonnet"
@@ -4833,7 +4837,8 @@
       "status": "todo",
       "attempts": 0,
       "notes": [
-        "Also answer every heading of harness/design/WORLD_LOGIC.md."
+        "Also answer every heading of harness/design/WORLD_LOGIC.md.",
+        "Also sweep harness/design/REALITY_MATCH.md: rescore catalog objects worst first, failures become fix tasks."
       ],
       "created": "2026-11-14T08:58:18.634Z",
       "model": "sonnet"
@@ -4860,7 +4865,8 @@
       "status": "todo",
       "attempts": 0,
       "notes": [
-        "Also answer every heading of harness/design/WORLD_LOGIC.md."
+        "Also answer every heading of harness/design/WORLD_LOGIC.md.",
+        "Also sweep harness/design/REALITY_MATCH.md: rescore catalog objects worst first, failures become fix tasks."
       ],
       "created": "2026-11-14T08:58:18.634Z",
       "model": "sonnet"
@@ -4887,7 +4893,8 @@
       "status": "todo",
       "attempts": 0,
       "notes": [
-        "Also answer every heading of harness/design/WORLD_LOGIC.md."
+        "Also answer every heading of harness/design/WORLD_LOGIC.md.",
+        "Also sweep harness/design/REALITY_MATCH.md: rescore catalog objects worst first, failures become fix tasks."
       ],
       "created": "2026-11-14T08:58:18.634Z",
       "model": "sonnet"
@@ -5090,12 +5097,15 @@
       "agent": "builder",
       "priority": 1,
       "kind": "bug",
-      "status": "doing",
+      "status": "done",
       "attempts": 1,
       "notes": [],
       "created": "2026-11-14T11:40:16.568Z",
       "model": "sonnet",
-      "started": "2026-11-14T13:23:12.035Z"
+      "started": "2026-11-14T13:23:12.035Z",
+      "done": "2026-11-14T13:51:01.270Z",
+      "summary": "Every harness Godot launch parks its window off all displays (position, borderless park in debug_server, app hider), HARNESS_SHOW_WINDOW=1 shows it; checked with a window list probe through a whole launch. Off-screen perf reads pessimistic (occluded window), so absolute budgets are judged with a visible window at phase gates (decisions.md). Self-checked: 309 harness tests, typecheck.",
+      "commit": "64c564f"
     },
     {
       "id": "P2-066",
@@ -5155,6 +5165,45 @@
       "attempts": 0,
       "notes": [],
       "created": "2026-11-14T12:19:51.889Z",
+      "model": "opus"
+    },
+    {
+      "id": "P2-068",
+      "phase": "P2",
+      "title": "Rebuild the leads from the new models made from the approved pictures",
+      "desc": "Anmol 2026-11-14 uploaded new Mixamo-rigged models made by image to 3D from the approved T-pose pictures (portrait_lead_*): Danny and Meera are in public/assets/models (about 50k triangles, 65 Mixamo bones); Bittu follows. Rerun the P2-063 lead pipeline (tools/characters/lead_build.mjs, game/characters/tools/build_leads.gd: rest pose matched to the mannequin, head scale only if needed, per-lead locomotion, LODs 50k close, about 25k play, about 6k far, stylised B material, heights 1.72, 1.64, 1.78 m) on each new model; check the T-pose source works with the silhouette match. Compare with the approved pictures (assets_inbox/_processed/portrait_lead_*.png): face, clothes, colours, proportions. Bittu is built the same way the moment his FBX lands.",
+      "accept": [
+        "Triangles in play 25,000 or fewer per lead; npm test and verify --quick green (judged with load)"
+      ],
+      "deps": [],
+      "agent": "builder",
+      "priority": 1,
+      "kind": "mentor",
+      "status": "doing",
+      "attempts": 1,
+      "notes": [
+        "Owner 2026-11-14: new Danny's shoulders bulge and arms pin, while the models look right in Mixamo's preview. Keep the delivered bind pose and retarget the clips onto the Mixamo skeleton instead of re-baking the rest pose."
+      ],
+      "created": "2026-11-14T13:28:29.643Z",
+      "model": "opus",
+      "started": "2026-11-14T13:28:30.831Z"
+    },
+    {
+      "id": "P2-069",
+      "phase": "P2",
+      "title": "Reality match tooling: object catalog, reference vs game sheets, scores, dashboard",
+      "desc": "harness/design/REALITY_MATCH.md (Anmol 2026-11-14). Build: (1) a catalog tool that lists every visible object class from the code and data (kit module ids and pieces, infra variants and fittings, street props, landmark parts, vehicles, characters) into harness/data/reality_catalog.json, with the area or kind each belongs to; (2) a render step (off-screen, through the harness) that shoots each object alone (front, three quarter, close) and in context at player height, day and night; (3) a sheet maker that puts 2 to 4 dated reference photos beside the renders with the 8 score lines and writes harness/reports/reality/<id>.jpg; (4) harness/data/reality_scores.json and a CLI to record scores (node harness/bin/reality.mjs score <id> --shape 7 ... --note), list worst first, and show coverage; (5) a dashboard tab 'Reality match' with pass, fail and not-yet-scored and the sheets; (6) a first sweep: score the 30 most visible objects in the pilot (the critic does it with the sheets), and add one fix task per failing group.",
+      "accept": [
+        "npm test green"
+      ],
+      "deps": [],
+      "agent": "builder",
+      "priority": 1,
+      "kind": "mentor",
+      "status": "todo",
+      "attempts": 0,
+      "notes": [],
+      "created": "2026-11-14T13:38:38.609Z",
       "model": "opus"
     }
   ]
