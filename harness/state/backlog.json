@@ -1,6 +1,6 @@
 {
   "_doc": "Written only by node harness/bin/task.mjs. Phases run in order; P0 (ADOPT + STYLE DISCOVERY) waits for the owner by design and needs task.mjs signoff and task.mjs archsignoff before its gate passes. Later phases are added by the planner at the end of P0 (task.mjs phase-add) from the game's real state.",
-  "updated": "2026-11-14T01:22:44.221Z",
+  "updated": "2026-11-14T02:47:23.505Z",
   "phases": [
     {
       "id": "P0",
@@ -47,9 +47,23 @@
       "milestones": [
         "FD0"
       ],
-      "status": "active",
-      "playtest": [],
-      "planned": true
+      "status": "done",
+      "playtest": [
+        "Read this first: buildings are plain box placeholders, there is no traffic, no people and no missions beyond FD0. Judge the ground, roads, movement and feel, not the looks of the buildings. Start with npm run play.",
+        "Frame rate: watch the FPS counter top left while you drive and walk. Does it stay smooth in the CP circle, on the radials and on the ITO flyover? Note where it dips.",
+        "Drive the auto around the CP circle and out along the radials. Does the car feel heavy enough, turn well and stop well? Is the camera easy to read at speed?",
+        "Drive up and over the ITO flyover and back under it. Do the ramps join the road, and do the lanes under and over line up without gaps?",
+        "Ground fit: look for roads floating above the ground or sunk into it, at junctions, kerbs and flyover ramps. Tell me the place if you see one.",
+        "Roads joining: at the big junctions, do roads meet cleanly with no overlaps, holes or flickering patches? Are railings only where they should be?",
+        "Get out of the auto and get back in. Does it feel quick and clear, and does the camera switch well in both directions?",
+        "Walk, jog and sprint, then jump and vault low walls. Do the speeds feel right, and does the camera stay sensible near walls?",
+        "Kerbs and stairs: walk up and down kerbs and steps. Do you step smoothly or get stuck or pop upward?",
+        "Walk into the Chandni Chowk gali. Is it too narrow or too tight, and does the camera cope? Does it feel like a lane in Old Delhi?",
+        "Landmarks: go to India Gate and the Red Fort. Are they in the right place and about the right size, even as placeholders?",
+        "Anything floating, sunk, flickering or stuck anywhere else: write down where, so I can add a fix task."
+      ],
+      "planned": true,
+      "doneAt": "2026-11-14T02:47:23.504Z"
     },
     {
       "id": "P2",
@@ -68,7 +82,7 @@
         "verify --all is green"
       ],
       "milestones": [],
-      "status": "planned",
+      "status": "active",
       "playtest": [],
       "planned": true
     },
@@ -4319,13 +4333,14 @@
       "agent": "builder",
       "priority": 1,
       "kind": "mentor",
-      "status": "todo",
-      "attempts": 0,
+      "status": "doing",
+      "attempts": 1,
       "notes": [
         "Anmol 2026-11-14: 'near India Gate there is a road, but cars can't go there'. Include the India Gate and Kartavya Path car-free stretches: the paved promenade and roads inside the India Gate lawns and around the canopy, closed to cars and open to walkers (barriers at the hexagon); check against current photos and satellite, since closures changed after the Central Vista redevelopment. Also the Kartavya Path east of the hexagon that P1-046 noted as about 14 m of paving: it is a pedestrian promenade, not a car road.",
         "Anmol 2026-11-14: 'it's not even OSM rules, we have to have common sense too for some areas.' OSM access tags are only one input; most car-free places are untagged. Add common-sense rules and a judge pass: (1) width: a way narrower than a car plus margins (under about 2.8 m) is not for cars; under about 1.6 m not for two-wheelers; (2) context: paths inside parks, lawns, monument grounds, campuses and housing compounds, ghats and river banks, market and bazaar lanes, temple, mosque and gurdwara precincts, metro and station forecourts, plazas, steps and ramps are foot-first; (3) surface and shape: unpaved, steps, dead-end stubs into compounds, gated entries are not through roads for cars; (4) a top-view judge pass with satellite and street photos (tools/inspector/judge.mjs) for anything unclear, deciding like a person who knows Delhi, each decision written as a patch with its reason; (5) Anmol's word or the inspector overrides everything. Report counts by reason (OSM tag, width, context, judge)."
       ],
-      "created": "2026-11-13T23:09:47.168Z"
+      "created": "2026-11-13T23:09:47.168Z",
+      "started": "2026-11-14T02:47:04.821Z"
     },
     {
       "id": "P1-050",
@@ -4348,6 +4363,21 @@
       "done": "2026-11-14T00:16:12.978Z",
       "summary": "Warm start lane_conflicts.json kept per hash of the bake inputs (newest 6); pilot_place 'baked twice' passes after the variant bakes. In PR 60.",
       "commit": "a83e2c0"
+    },
+    {
+      "id": "P14-007",
+      "phase": "P14",
+      "title": "Landmark polish from the P2-007 verifier",
+      "desc": "Plain cube buildings around India Gate; stray dark red cube at the right edge of the Red Fort first-sight shot (tile massing beside the Lahori Gate approach); Jama Masjid pose partly hidden by a rooftop slab (move the pose); CP colonnade pale against the sky, no ground-floor shop detail; Red Fort ramparts flat salmon at distance (haze contrast). Also: landmarks_two_heroes GPU cost is load-sensitive (0.98 ms loaded vs 0.35 ms alone, budget 0.5): make the measurement load-robust if it fails at a gate.",
+      "accept": [],
+      "deps": [],
+      "agent": "builder",
+      "priority": 3,
+      "kind": "polish",
+      "status": "todo",
+      "attempts": 0,
+      "notes": [],
+      "created": "2026-11-14T01:56:02.431Z"
     }
   ]
 }

@@ -161,7 +161,7 @@ function gatePath(pid, missionIds) {
   if (dec.ok) {
     info.push(`  path: retry (${rel(retryFile(pid))}, commit ${retry.commit}): ${changed.length} file(s) changed since ${all.commit}, none shared`);
     for (const l of dec.retried) info.push(`    retried ${l}`);
-    info.push(`    verify --quick ok; ${Object.keys(retry.missions.results).length} milestones ok`);
+    info.push(`    verify --quick ok; ${Object.keys((retry.milestones ?? retry.missions)?.results ?? {}).length} milestones ok`);
     return { reasons: [], info, via: 'via the retry' };
   }
   info.push(dec.sharedFiles.length
