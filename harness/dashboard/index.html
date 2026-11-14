@@ -493,21 +493,21 @@ function reviewLine(r) {
 }
 function reqCard(r, type) {
   const isModel = r.kind === 'model';
-  const accept = isModel ? '.glb,model/gltf-binary' : type === 'image' ? 'image/png,image/jpeg,image/webp' : 'audio/*';
+  const accept = isModel ? '.fbx,.glb,model/gltf-binary' : type === 'image' ? 'image/png,image/jpeg,image/webp' : 'audio/*';
   const portrait = isModel && r.source ? (S.requests.images.find((x) => x.id === r.source)?.file || null) : null;
   const thumbFile = isModel ? portrait : r.file;
   const thumb = type === 'image' && thumbFile ? `<div class="thumb" style="background-image:url('/${esc(thumbFile)}?t=${Math.floor(Date.now() / 60000)}')" data-src="/${esc(thumbFile)}" data-name="${esc(r.source && isModel ? r.source : r.id)}"></div>` : `<div class="thumb">${esc(type === 'image' ? r.kind : type)}</div>`;
   const prompt = type === 'image' ? r.prompt : type === 'voice' ? r.text : (r.prompt || r.desc);
   const modelInfo = isModel && r.info ? ` In the game now: ${esc(r.info.triangles)} triangles, ${esc(r.info.materials)} materials.${(r.info.warnings || []).length ? ` Note: ${esc(r.info.warnings.join(' '))}` : ''}` : '';
-  const drop = ` Upload on this card, or drop it as assets_inbox/${esc(r.id)}.${isModel ? 'glb' : type === 'image' ? 'png' : 'mp3'} and run node harness/bin/ingest.mjs.`;
-  const meta = isModel ? `3D model as a .glb file${r.source ? `, made from ${esc(r.source)} (the picture on the left)` : ''}. At most ${esc(r.target?.maxTriangles || 25000)} triangles and ${esc(r.target?.maxMaterials || 3)} materials. Used by ${esc((r.used_by || []).join(', ') || 'the game')}.${modelInfo}${drop}`
+  const drop = ` Upload on this card, or drop it as assets_inbox/${esc(r.id)}.${isModel ? 'fbx (or .glb)' : type === 'image' ? 'png' : 'mp3'} and run node harness/bin/ingest.mjs.`;
+  const meta = isModel ? `3D model: upload the .fbx from Mixamo, or a .glb${r.source ? `, made from ${esc(r.source)} (the picture on the left)` : ''}. At most ${esc(r.target?.maxTriangles || 25000)} triangles and ${esc(r.target?.maxMaterials || 3)} materials. Used by ${esc((r.used_by || []).join(', ') || 'the game')}.${modelInfo}${drop}`
     : type === 'image' ? `Generate as ${esc(r.generate || 'square 1024x1024')}${r.target?.alpha ? ', transparent background' : ''}${r.target?.tileable ? ', seamless tileable' : ''}. In the game: ${esc(r.target?.w || '?')}x${esc(r.target?.h || '?')} ${esc((r.target?.out || '').split('.').pop() || 'webp')}. Used by ${esc((r.used_by || []).join(', ') || 'the game')}.${drop}`
     : type === 'voice' ? `${esc(r.speaker)}${r.milestone ? `, ${esc(r.milestone)}` : ''}. Direction: ${esc(r.direction || 'natural')}.${drop}`
     : `${esc(r.duration_s)} s${r.loop ? ', seamless loop' : ''}. Used by ${esc((r.used_by || []).join(', ') || 'the game')}.${drop}`;
   const audio = type !== 'image' && r.file ? `<audio controls preload="none" src="/${esc(r.file)}" style="width:100%;margin-top:8px"></audio>` : '';
   return `<div class="req">${thumb}<div><div class="id">${esc(r.id)} ${chip(r.status)}</div><div class="muted small">${meta}</div>
     ${prompt ? `<pre${isModel ? ' class="steps"' : ''}>${esc(prompt)}</pre>` : ''}${r.redo && r.status === 'redo' ? `<div class="redo">${isModel ? 'Please upload a new file' : 'Claude asked for a new version'}: ${esc(r.redo.note)}</div>` : ''}${type === 'image' ? reviewLine(r) : ''}${audio}</div>
-    <div class="actions">${prompt ? `<button data-copy="${esc(prompt)}">Copy ${type === 'voice' ? 'line' : isModel ? 'steps' : 'prompt'}</button>` : ''}<button data-upload="${esc(r.id)}" data-accept="${accept}">${r.status === 'ready' ? 'Replace file' : isModel ? 'Upload .glb' : 'Upload file'}</button></div></div>`;
+    <div class="actions">${prompt ? `<button data-copy="${esc(prompt)}">Copy ${type === 'voice' ? 'line' : isModel ? 'steps' : 'prompt'}</button>` : ''}<button data-upload="${esc(r.id)}" data-accept="${accept}">${r.status === 'ready' ? 'Replace file' : isModel ? 'Upload model (.fbx or .glb)' : 'Upload file'}</button></div></div>`;
 }
 
 function reviewSummary() {
