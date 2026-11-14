@@ -1,6 +1,6 @@
 {
   "_doc": "Written only by node harness/bin/task.mjs. Phases run in order; P0 (ADOPT + STYLE DISCOVERY) waits for the owner by design and needs task.mjs signoff and task.mjs archsignoff before its gate passes. Later phases are added by the planner at the end of P0 (task.mjs phase-add) from the game's real state.",
-  "updated": "2026-11-14T11:59:07.141Z",
+  "updated": "2026-11-14T12:05:52.717Z",
   "phases": [
     {
       "id": "P0",
@@ -5081,6 +5081,25 @@
       "notes": [],
       "created": "2026-11-14T11:40:16.568Z",
       "model": "sonnet"
+    },
+    {
+      "id": "P2-066",
+      "phase": "P2",
+      "title": "Dashboard live view of every lane's work in progress",
+      "desc": "Anmol 2026-11-14 wants to watch work as it is made (sign boards, tunnels, characters) and give feedback live. The overview 'Live now: builder' strip reads only the main checkout's harness/reports/shots and a few map folders. Show the newest images from every lane: the main checkout and each worktree in .worktrees/ (map, lane2, verify2; the verify snapshot under the verifier strip), from harness/reports/shots and any task folder under harness/reports/ (signboards, tunnels, leads, kits, access, infra, areas and so on), each card labelled with its lane and the task from harness/state/agents.json, newest first, grouped per lane, click to open full size. One directory listing per folder per poll, no image reads. Plain English labels.",
+      "accept": [
+        "A test for the folder scan; harness tests green"
+      ],
+      "deps": [],
+      "agent": "builder",
+      "priority": 1,
+      "kind": "mentor",
+      "status": "doing",
+      "attempts": 1,
+      "notes": [],
+      "created": "2026-11-14T12:05:51.673Z",
+      "model": "sonnet",
+      "started": "2026-11-14T12:05:52.701Z"
     }
   ]
 }

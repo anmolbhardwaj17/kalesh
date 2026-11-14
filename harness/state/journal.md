@@ -615,3 +615,6 @@ One line per event, written by task.mjs (start, done, fail, phase changes, inbox
 - 2026-11-14 17:29 [P2-032] failed attempt 1: Built and bake green (TUN-01: 1,266 roofed segments, headroom 5.35 m min, 24 mouths, 58 drains, LED strips in all 14 stretches) but: tunnel_drive wheel contacts at kerb edges on 2 routes; walls lit unshaded and look flat; murals read as clean vector art, not hand-painted; tunnel road uses dark city asphalt; pillars in the wide section are paint only.
 - 2026-11-14 17:29 [P2-032] start (attempt 2): Car tunnels built properly: depth, portals, walls, lights
 - 2026-11-14 17:29 mentor message mmwgcs5k0 handled: Agreed and already in motion: the tunnel fix round makes the murals hand-painted and brings back proper shading; the box auto is replaced in the vehicles task P2-054.
+- 2026-11-14 17:35 [P2-066] added: Dashboard live view of every lane's work in progress
+- 2026-11-14 17:35 [P2-066] start (attempt 1): Dashboard live view of every lane's work in progress
+- 2026-11-14 17:35 mentor message mmwgd09jj handled: Yes: P2-066 makes the dashboard show every lane's newest pictures live, labelled by task, and the sign board builder now saves its boards as it makes them, so you can comment in Messages.
