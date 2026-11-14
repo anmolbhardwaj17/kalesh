@@ -128,7 +128,7 @@ export interface LodSlot {
   fromM: number;
   toM: number;
   /** Where the mesh comes from now: the stand-in massing in the tiles, the far silhouette, or nothing yet (P2-007 fills the slot). */
-  source: 'tile_massing' | 'far_silhouette' | 'empty';
+  source: 'tile_massing' | 'far_silhouette' | 'empty' | 'kit';
   trianglesMax: number;
 }
 

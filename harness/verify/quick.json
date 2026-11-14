@@ -402,6 +402,21 @@
         "enter_exit_vehicle",
         "drive_north"
       ]
+    },
+    {
+      "path": "game/world/landmarks/",
+      "scenarios": [
+        "landmark_heroes",
+        "city_landmark_pins"
+      ]
+    },
+    {
+      "path": "game/world/systems/landmarks.gd",
+      "scenarios": [
+        "landmark_heroes",
+        "city_landmark_pins",
+        "city_collide_probe"
+      ]
     }
   ]
 }

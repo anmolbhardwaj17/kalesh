@@ -1043,6 +1043,47 @@
         }
       ],
       "_note": "P1-026: the CPU readings of the per system table (citybase.mjs): a real drive over the ITO flyover at 80 km/h (route ito_flyover) with the frame recording: physics step, vehicle script time per tick, streaming core and attach work, render CPU time. Not in quick."
+    },
+    {
+      "name": "landmark_heroes",
+      "query": "spawn=rajpath_india_gate",
+      "steps": [
+        {
+          "script": "harness/verify/scripts/landmark_heroes.js",
+          "timeout": 420000,
+          "data": "game/data/landmark_poses.json"
+        }
+      ],
+      "_note": "P2-007. The parts kit heroes at player height from their named poses (game/data/landmark_poses.json): India Gate first sight on Kartavya Path, near and from 1.5 and 2.5 km; the Red Fort's Lahori Gate from Netaji Subhash Marg and from Chandni Chowk; the Connaught Place colonnade from the inner circle; Jama Masjid from the road at its grounds. Every kit landmark is built, its built height is within 5 percent of the registry height (city('kit')), the landmark looked at is in the middle half of the frame, Jama Masjid is flagged worship and never a combat arena. Shots hero_* and sig_jama_masjid (default look)."
+    },
+    {
+      "name": "landmarks_two_heroes",
+      "query": "light=afternoon&spawn=rajpath_india_gate",
+      "solo": true,
+      "steps": [
+        {
+          "script": "harness/verify/scripts/landmarks_two_heroes.js",
+          "timeout": 420000
+        }
+      ],
+      "_note": "P2-007 perf. The landmark GPU cost with two heroes in view (India Gate at full detail with the Connaught Place circle on the same line of sight; the Red Fort's Lahori Gate with Jama Masjid): the frame with every landmark shown minus the frame with them hidden (city('kit', {visible})), with the GPU ballast on (harness/bin/ballast.mjs method), median of 4 alternating pairs. Budget perf_budgets.json world.gpuMs.landmarks, 0.5 ms. Not in quick.",
+      "allOnly": true
+    },
+    {
+      "name": "landmark_pop_seq",
+      "query": "light=afternoon&spawn=rajpath_india_gate",
+      "lockstep": true,
+      "steps": [
+        {
+          "script": "harness/verify/scripts/landmark_pop_seq.js",
+          "timeout": 600000,
+          "params": {
+            "kmh": 140
+          }
+        }
+      ],
+      "_note": "P2-007. A 140 km/h approach to India Gate along Kartavya Path as a frame sequence (one frame every 150 ms, 5.83 m apart) through each level change (1,800, 900 and 350 m): shots pop_ig_<boundary>_<k>. Then node harness/bin/popcheck.mjs crops the arch from each frame, writes the sheets pop_ig_<boundary>_sheet.png and fails on a frame to frame change well over its neighbours (a pop). Not in quick.",
+      "allOnly": true
     }
   ]
 }

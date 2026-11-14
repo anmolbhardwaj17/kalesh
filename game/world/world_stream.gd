@@ -23,6 +23,9 @@ const Colliders := preload("res://world/systems/colliders.gd")
 const Lanes := preload("res://world/systems/lanes.gd")
 const SpawnPins := preload("res://world/spawn_pins.gd")
 const LandmarkSlots := preload("res://world/landmark_slots.gd")
+const Landmarks := preload("res://world/systems/landmarks.gd")
+## The kit landmarks within this distance of the start are built before the game says ready (no hero pops in).
+const LANDMARK_READY_M := 1800.0
 const TileReader := preload("res://world/streaming/tile_reader.gd")
 ## Stand-in nodes of the scaffold scene that the tiles replace.
 const STAND_INS := ["Ground", "Road", "NorthPost", "GroundCollider"]
@@ -41,6 +44,8 @@ var lanes: RefCounted = null
 var colliders: RefCounted = null
 var ground_roads: RefCounted = null
 var buildings: RefCounted = null
+## The parts kit landmarks and the far silhouettes (game/world/systems/landmarks.gd, P2-007).
+var landmarks: Node3D = null
 var booted := false
 var load_ms := 0
 ## The start: {pin, name, lane, pos: [x, y, z], heading, offM} (pin "" when the old start near India Gate was used).
@@ -51,7 +56,7 @@ var _teleports := 0
 
 
 ## Opens the folder and builds the core with its systems. False (with the reason printed) when the index is missing.
-func setup(dir: String) -> bool:
+func setup(dir: String, build_landmarks := true) -> bool:
 	_t0 = Time.get_ticks_msec()
 	index = TileIndex.open(dir)
 	if index.error != "":
@@ -71,6 +76,9 @@ func setup(dir: String) -> bool:
 	# The core is this node's first child, before any tile node: children leave the tree last child first, so when
 	# the scene goes the tile nodes have left before the core unloads (tile_mesh.gd dispose relies on it).
 	add_child(core)
+	landmarks = Landmarks.new()
+	landmarks.setup(index, build_landmarks)
+	add_child(landmarks)
 	return true
 
 
@@ -127,6 +135,8 @@ func boot(car: Node3D) -> void:
 	if not sp.is_empty():
 		spawn = {"pin": sp.pin, "name": sp.get("name", ""), "lane": sp.lane, "pos": [sp.pos.x, sp.pos.y, sp.pos.z], "heading": sp.heading, "offM": sp.get("off_m", 0.0)}
 	core.target = car
+	if car != null:
+		await landmarks.settle(car.global_position, LANDMARK_READY_M)
 	booted = true
 	load_ms = Time.get_ticks_msec() - _t0
 	if args != null:
@@ -201,6 +211,7 @@ func teleport(player: Node3D, to: Vector3) -> bool:
 	if mine != _teleports or not is_instance_valid(player):
 		# a later teleport moved the player on while this one waited: that one finishes the job
 		return false
+	await landmarks.settle(to, LANDMARK_READY_M, 10.0)
 	var hit := ground_at(to.x, to.z, to.y + 3.0 if to.y > 0.0 else NAN)
 	if not hit.hit:
 		hit = ground_at(to.x, to.z)
@@ -213,13 +224,18 @@ func teleport(player: Node3D, to: Vector3) -> bool:
 
 
 ## The collider surface under a point: a ray straight down from `from_y` (NAN: from above everything).
-## {hit, y, tile}.
-func ground_at(x: float, z: float, from_y := NAN) -> Dictionary:
+## {hit, y, tile}. `tiles_only` leaves the parts kit landmarks' colliders out (the tile files hold only the ground).
+func ground_at(x: float, z: float, from_y := NAN, tiles_only := false) -> Dictionary:
 	var key: Vector2i = WorldFrame.tile_of(x, z)
 	var base: float = index.tiles[key].origin.y if index.has(key) else 0.0
 	var top := base + RAY_UP if is_nan(from_y) else from_y
 	# layer 1 only: the world's colliders, never a vehicle body (layer 2) standing there
 	var query := PhysicsRayQueryParameters3D.create(Vector3(x, top, z), Vector3(x, base - RAY_DOWN, z), 1)
+	if tiles_only:
+		var skip: Array[RID] = []
+		for b: Node in get_tree().get_nodes_in_group("landmark_kit"):
+			skip.append((b as CollisionObject3D).get_rid())
+		query.exclude = skip
 	var res := get_world_3d().direct_space_state.intersect_ray(query)
 	if res.is_empty():
 		return {"hit": false, "y": 0.0, "tile": WorldFrame.tile_id(key)}
@@ -250,4 +266,5 @@ func info() -> Dictionary:
 	out["lanes"] = lanes.pieces.size()
 	out["spawn"] = spawn
 	out["landmarks"] = {"placed": index.landmarks.size(), "far": index.far_landmarks.size(), "fullDetailCap": LandmarkSlots.cap(index.landmark_limits)}
+	out["landmarks"].merge(landmarks.info())
 	return out
