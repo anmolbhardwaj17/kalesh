@@ -1,6 +1,6 @@
 {
   "_doc": "Written only by node harness/bin/task.mjs. Phases run in order; P0 (ADOPT + STYLE DISCOVERY) waits for the owner by design and needs task.mjs signoff and task.mjs archsignoff before its gate passes. Later phases are added by the planner at the end of P0 (task.mjs phase-add) from the game's real state.",
-  "updated": "2026-11-14T11:16:06.965Z",
+  "updated": "2026-11-14T11:19:25.759Z",
   "phases": [
     {
       "id": "P0",
@@ -5034,7 +5034,9 @@
       "kind": "mentor",
       "status": "doing",
       "attempts": 1,
-      "notes": [],
+      "notes": [
+        "Owner 2026-11-14: shoulders and body structure look weird (hunched, narrow, stiff straight arms, large heads): fix the retarget rest pose (T-pose to the library rest), natural arm hang and swing, head ratio about 7 to 7.5."
+      ],
       "created": "2026-11-14T10:14:45.098Z",
       "model": "opus",
       "started": "2026-11-14T10:14:45.352Z"
