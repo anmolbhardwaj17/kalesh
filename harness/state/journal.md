@@ -583,3 +583,4 @@ One line per event, written by task.mjs (start, done, fail, phase changes, inbox
 - 2026-11-14 14:30 [P8-001] model: sonnet
 - 2026-11-14 14:30 [P11-001] model: sonnet
 - 2026-11-14 14:30 [P14-008] model: sonnet
+- 2026-11-14 15:03 mentor message mmwg7jwa6 handled: Yes, that is exactly what the Bittu card asks for: full body A-pose, under 25k triangles, rig on Mixamo, upload on the card; the art reviewer checks it and the game swaps it in.
