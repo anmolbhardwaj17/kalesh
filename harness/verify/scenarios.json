@@ -700,6 +700,17 @@
       "_note": "P2-063. Shot sheets of the three lead models (rig/lead_<id>.scn), input only, course scene, default look: per lead (the player dressed as that lead, foot('dress')) standing front, side, back and three quarter from 3 m (the play level of the mesh), a close-up of the head and chest from 0.95 m (the full mesh), the hands from 1.1 m, a walk and a jog from the play camera and from a side camera level with the hips, and for Bittu and Danny the seated Driving pose (stand-in for the auto seat and the scooter ride). Checks each body is drawn on its own model and plays the asked state. `node harness/bin/leadsheet.mjs` runs it and lays the shots out under harness/reports/leads/ (<id>.png), which the verifier reads against VERIFY.md and the model cards. Lockstep."
     },
     {
+      "name": "lead_layers",
+      "lockstep": true,
+      "steps": [
+        {
+          "script": "harness/verify/scripts/lead_layers.js",
+          "timeout": 420000
+        }
+      ],
+      "_note": "P2-072. The layers over each lead's Mixamo locomotion (game/characters/anim_layers.gd), shots for the eye, input only, course scene: per lead standing with the pistol aim and the chest aimed 30 degrees left, walking on the phone, walking while texting, standing carrying, a wave, a head flinch at its peak (foot('layer')). Checks the asked action plays. `node harness/bin/mixamostrip.mjs --layers` runs it and draws harness/reports/leads/mixamo_layers.png. Lockstep."
+    },
+    {
       "name": "lead_anim",
       "query": "style=none",
       "headless": true,

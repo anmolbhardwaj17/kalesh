@@ -289,7 +289,9 @@
       "path": "game/characters/humanoid_anim.gd",
       "scenarios": [
         "foot_anim",
-        "foot_feel"
+        "foot_feel",
+        "lead_anim",
+        "lead_layers"
       ]
     },
     {
@@ -309,7 +311,30 @@
       "path": "game/characters/rig/",
       "scenarios": [
         "foot_anim",
-        "foot_feel"
+        "foot_feel",
+        "lead_anim",
+        "lead_layers"
+      ]
+    },
+    {
+      "path": "game/characters/anim_layers.gd",
+      "scenarios": [
+        "lead_layers",
+        "lead_anim"
+      ]
+    },
+    {
+      "path": "game/characters/mixamo.gd",
+      "scenarios": [
+        "lead_layers",
+        "lead_anim"
+      ]
+    },
+    {
+      "path": "game/data/mixamo_",
+      "scenarios": [
+        "lead_anim",
+        "lead_layers"
       ]
     },
     {

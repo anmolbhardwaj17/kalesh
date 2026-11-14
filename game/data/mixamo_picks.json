@@ -1,0 +1,25 @@
+{
+  "note": "Mixamo picks per lead (P2-072), chosen from the strips harness/reports/leads/mixamo_<role>_<lead>.png; reasons in harness/reports/leads/mixamo_picks.md. characters/tools/mixamo_lead.gd builds rig/mx_<id>.res from these. Roles ending _l also get the mirrored right clip.",
+  "leads": {
+    "bittu": {
+      "idle": "idle", "walk": "walking", "jog": {"legs": "slow_run", "mix": "run_forward", "w": 0.5}, "run": {"legs": "fast_run", "mix": "sprint", "w": 0.8, "plant": true},
+      "start": "start_walking", "stop": "stop_walking", "run_stop": "run_to_stop_1",
+      "turn_l": "left_turn", "walk_turn_l": "walking_left_turn", "run_turn": "running_turn_180"
+    },
+    "meera": {
+      "idle": "idle_4", "walk": {"legs": "walking", "upper": "female_walk"}, "jog": {"legs": "slow_run", "mix": "run_forward", "w": 0.5}, "run": {"legs": "fast_run", "mix": "sprint", "w": 0.8, "plant": true},
+      "start": "female_start_walking", "stop": "female_stop_walking", "run_stop": "run_to_stop_1",
+      "turn_l": "left_turn", "walk_turn_l": "walking_left_turn", "run_turn": "running_turn_180"
+    },
+    "danny": {
+      "idle": "neutral_idle", "walk": {"legs": "walking", "upper": "strut_walking"}, "jog": {"legs": "slow_run", "mix": "run_forward", "w": 0.5}, "run": {"legs": "fast_run", "mix": "sprint", "w": 0.8},
+      "start": "start_walking", "stop": "stop_walking", "run_stop": "run_to_stop_1",
+      "turn_l": "left_turn", "walk_turn_l": "walking_left_turn", "run_turn": "running_turn_180"
+    }
+  },
+  "shared": {
+    "up_pistol": "pistol_aim", "up_phone": {"clip": "talking_on_phone", "from": 9.7, "to": 19.4}, "up_text": "texting_while_standing", "up_carry": {"clip": "carrying_turn", "at": 2.6},
+    "up_wave": "waving_gesture", "up_point": "pointing_gesture", "up_shrug": "shrugging",
+    "add_head": "head_hit", "add_body": "big_stomach_hit"
+  }
+}

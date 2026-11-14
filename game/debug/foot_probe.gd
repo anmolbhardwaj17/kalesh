@@ -15,6 +15,7 @@
 ##   animcost {n}            animation cost per character among n walking characters (foot_anim_probe.gd)
 ##   lineup {x, z, h}        the three leads side by side, the camera turned to face them (foot_anim_probe.gd)
 ##   dress {look}            the player's body becomes another lead (bittu, meera, danny), staging only (P2-063)
+##   layer {upper, flinch, strength, aim: [yawDeg, pitchDeg] or false}   the lead body's layers (P2-072), staging only
 ##   feel {test, ...}        how the body moves (foot_feel_probe.gd, P2-041): pops (start, stop, turn), ik (feet on
 ##                           kerbs and stairs), camera (follow lag and sprint sway without jitter)
 extends Node
@@ -85,13 +86,29 @@ func hook(a: Array) -> Dictionary:
 			if r.has("error"):
 				return {"ok": false, "error": r.error}
 			return {"ok": true, "result": r}
+		"layer":
+			# P2-072 (staging only): the lead's layers, the way a weapon, phone or hit system will drive them
+			var h: Node3D = pm.character.humanoid
+			if h == null or not h.has_method("upper") or h.layers == null:
+				return {"ok": false, "error": "foot(layer): the body has no layers (a lead with rig/mx_<id>.res)"}
+			if o.has("upper"):
+				h.upper(str(o.upper))
+			if o.has("flinch"):
+				h.flinch(str(o.flinch), float(o.get("strength", 1.0)))
+			if o.has("aim"):
+				var aim: Variant = o.aim
+				if aim is Array and aim.size() >= 2:
+					h.aim(true, deg_to_rad(float(aim[0])), deg_to_rad(float(aim[1])))
+				else:
+					h.aim(false)
+			return {"ok": true, "result": info().get("anim", {})}
 		"feel":
 			var fr: Dictionary = await FeelProbe.run(self, o)
 			release()
 			if fr.has("error"):
 				return {"ok": false, "error": fr.error}
 			return {"ok": true, "result": fr}
-	return {"ok": false, "error": "foot(cmd): unknown cmd %s (info, stage, run, camrec, cost, anim, animcost, lineup, dress, feel)" % cmd}
+	return {"ok": false, "error": "foot(cmd): unknown cmd %s (info, stage, run, camrec, cost, anim, animcost, lineup, dress, layer, feel)" % cmd}
 
 
 func mode_node() -> Node:
