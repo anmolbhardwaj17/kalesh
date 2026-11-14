@@ -25,6 +25,8 @@ Engine args go before `--`, game args after it. The harness always passes `--qui
 godot --path game --resolution 1280x720 --quit-after 12000 -- --debug --debug-port=47181 --verify
 ```
 
+Environment (read by the debug server only): `HARNESS_PARK_WINDOW=1` makes the window borderless and moves it to 30000,30000, outside every display (the harness sets it for every windowed launch so test runs never show a window on the owner's screen; `HARNESS_SHOW_WINDOW=1` on the harness side leaves the window alone, for debugging). A parked window is occluded, so the server force-draws (see `_keep_drawing`).
+
 | Game arg | Replaces | Meaning |
 |---|---|---|
 | `--debug` | `debug=1` | Starts the debug server. |

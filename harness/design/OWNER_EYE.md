@@ -1,6 +1,6 @@
 # Owner's eye: what Anmol checks, so nobody has to ask him
 
-Every builder brief for a look task, every verifier and every look audit reads this file, and harness/design/WORLD_LOGIC.md (does the scene make physical and urban sense). A verifier fails a task that breaks any line here, the same as a missing feature. The orchestrator adds a line each time Anmol corrects something, so he never has to say it twice.
+Every builder brief for a look task, every verifier and every look audit reads this file, harness/design/WORLD_LOGIC.md (does the scene make physical and urban sense) and harness/design/REALITY_MATCH.md (every object compared with real photos, scored, improved until it passes). A verifier fails a task that breaks any line here, the same as a missing feature. The orchestrator adds a line each time Anmol corrects something, so he never has to say it twice.
 
 ## The bar
 - Watch Dogs 2 is the fidelity bar (STYLE_BIBLE.md). Ask of every shot: would this frame sit next to a Watch Dogs 2 street shot without looking cheap? Density of props, material detail, decals and grime, signage, light and shadow, life on the street.
@@ -14,7 +14,7 @@ Every builder brief for a look task, every verifier and every look audit reads t
 
 ## Detail and wear
 - Delhi houses have balcony grilles and railings, roof parapets with railings, gate and window grilles, and outside stairs.
-- Sign boards look like real Indian shop signs: flex banners, painted tin, glow boxes, stacked boards, Hindi, English and Urdu, phone numbers. Never clean generated graphics.
+- Sign boards look like real Indian shop signs: flex banners, painted tin, glow boxes, stacked boards, Hindi, English and Urdu, phone numbers. Never clean generated graphics. Each board carries real layout richness: several lines (name, goods, phone, address), mixed fonts, outlines and shadows, icons or printed photos, borders; hotel verticals with neon or LED lettering, star ratings, amenities, bulb or LED borders that flicker or chase at night. A single colour rectangle with one line of plain text fails (2026-11-14).
 - Things wear: rust, faded and peeling paint, bent boards, torn flex, stains, soot, rain streaks. Wear is soft and natural, never blocky patches.
 - Emptiness is a blocker, never polish. A street or junction that feels bare fails.
 - Light fittings are attached to something real, line up with the structure, glow, and match the light they cast. A floating or angled bar of flat white fails (tunnel lights, 2026-11-14).

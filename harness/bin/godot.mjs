@@ -156,6 +156,55 @@ export async function resolveGodot({ allowDownload = true } = {}) {
   return { ...hit, cfg };
 }
 
+// ---- Windowed runs stay off the owner's screen (P2-065, owner 2026-11-14) -----------------------------------------------
+// Checked on this Mac (Godot 4.7.2, two displays): `--position 30000,30000` alone does NOT work. macOS clamps a titled
+// window back onto the nearest display (it landed at the bottom right corner of the built-in screen), and `--minimized`
+// is ignored. What works, in three layers:
+//   1. engine arg --position 30000,30000 (windowArgs): the window opens in a corner instead of the centre;
+//   2. HARNESS_PARK_WINDOW=1 in the game's environment: game/debug/debug_server.gd makes the window borderless (macOS does
+//      not clamp a borderless window) and moves it to 30000,30000, far outside every display, as soon as it starts;
+//   3. startWindowHider: hides the Godot app (NSRunningApplication.hide, no Accessibility permission needed) from the
+//      moment it is launched, so even the first second before step 2 never shows a window.
+// A parked, hidden window counts as occluded: Godot stops drawing it and the debug server force-draws (P1-047), so frames,
+// shots and perf keep working. HARNESS_SHOW_WINDOW=1 switches all three off (window where the OS puts it, for debugging).
+export const OFFSCREEN_POSITION = '30000,30000';
+
+/** True when windowed harness runs must stay off screen (macOS only; HARNESS_SHOW_WINDOW=1 shows the window). */
+export function parkWindows(env = process.env, platform = process.platform) {
+  return platform === 'darwin' && String(env.HARNESS_SHOW_WINDOW || '') !== '1';
+}
+
+/** Engine args that keep a windowed run off the owner's screen ([] when HARNESS_SHOW_WINDOW=1 or the args already set a position). */
+export function windowArgs(env = process.env, engineExtra = []) {
+  if (String(env.HARNESS_SHOW_WINDOW || '') === '1') return [];
+  if (engineExtra.some((a) => a === '--position' || String(a).startsWith('--position='))) return [];
+  return ['--position', OFFSCREEN_POSITION];
+}
+
+/** The environment of a windowed game launch: HARNESS_PARK_WINDOW=1 tells the debug server to park the window. */
+export function windowEnv(env = process.env, platform = process.platform) {
+  return parkWindows(env, platform) ? { ...env, HARNESS_PARK_WINDOW: '1' } : env;
+}
+
+const HIDE_SCRIPT = `ObjC.import('AppKit');
+function run(argv) {
+  const pid = Number(argv[0]);
+  while (true) {
+    try { const a = $.NSRunningApplication.runningApplicationWithProcessIdentifier(pid); a.hide(); } catch (e) {}
+    delay(0.03);
+  }
+}`;
+
+/** Keeps the launched Godot app hidden for as long as it lives (macOS), so no window shows before the game parks it. */
+export function startWindowHider(proc, env = process.env, platform = process.platform) {
+  if (!parkWindows(env, platform) || !proc?.pid) return null;
+  const h = spawn('osascript', ['-l', 'JavaScript', '-e', HIDE_SCRIPT, String(proc.pid)], { stdio: 'ignore' });
+  h.on('error', () => {});
+  h.unref?.();
+  proc.once?.('exit', () => { try { h.kill(); } catch { /* already gone */ } });
+  return h;
+}
+
 // ---- Keyboard focus guard (macOS) -------------------------------------------------------------------------------------
 // A windowed Godot launch makes the engine the active app, so keys typed in the terminal are lost. Checked 2026-11-11:
 // the no_focus window flag (display/window/size/no_focus) and --position do not stop the app activating on macOS, so the
@@ -257,6 +306,7 @@ function runGodot(bin, args, { timeoutMs = 300000, echo = true } = {}) {
 function runGodotWindowed(bin, args, { timeoutMs = 300000, echo = true } = {}) {
   return new Promise((resolve) => {
     const proc = spawn(bin, args, { cwd: ROOT, stdio: ['ignore', 'pipe', 'pipe'] });
+    startWindowHider(proc);
     const guard = startFocusGuard(proc);
     let out = '';
     let timedOut = false;
@@ -333,7 +383,7 @@ async function main(argv) {
     try {
       const imp = runGodot(g.path, ['--headless', '--path', project, '--import'], { echo: false });
       if (judge('import', imp)) return 1;
-      const r = await runGodotWindowed(g.path, ['--path', project, '--resolution', res, '--write-movie', path.join(tmp, 'f.png'), '--fixed-fps', '60', '--quit-after', String(frames)]);
+      const r = await runGodotWindowed(g.path, ['--path', project, '--resolution', res, ...windowArgs(), '--write-movie', path.join(tmp, 'f.png'), '--fixed-fps', '60', '--quit-after', String(frames)]);
       const pngs = fs.readdirSync(tmp).filter((f) => f.endsWith('.png')).sort();
       if (!pngs.length) { console.log('godot frame: FAIL (Movie Maker wrote no PNG)'); return 1; }
       fs.mkdirSync(path.dirname(path.resolve(out)), { recursive: true });
