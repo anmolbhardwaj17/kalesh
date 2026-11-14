@@ -233,3 +233,10 @@ textarea::placeholder, input::placeholder { color: var(--dim); }
 .map.drawing canvas { cursor: crosshair; }
 #addKinds { grid-template-columns: repeat(3, minmax(0, 1fr)); }
 #addKinds button { align-items: center; padding: 7px 6px; }
+
+/* the access tab (P2-043) */
+.acc-row { justify-content: space-between; }
+.acc-row .seg button { padding: 6px 11px; border: 0; border-radius: 6px; background: transparent; color: var(--ink); font-size: 12.5px; cursor: pointer; }
+.acc-row .seg button:hover:not(.on) { background: rgba(246, 239, 228, .08); }
+.row-note { padding: 8px 14px; color: var(--mute); }
+.acc-row .seg button.on { background: var(--ink); color: #110d0a; }

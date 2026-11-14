@@ -80,6 +80,8 @@ export interface EdgeBarrier {
   /** True when it stops a car (barrierStops). */
   stopsCar: boolean;
   stopsTwoWheeler: boolean;
+  /** The gate is not open to the public (access private or no, locked, or untagged): see AccessMatch.gate. */
+  restricted?: boolean;
 }
 
 export interface AccessMatch {
@@ -98,6 +100,14 @@ export interface AccessMatch {
   maxWidthM?: number;
   /** Not edges whose name matches this. */
   notName?: string;
+  /** The edge lies in one of these zones of the rules file (a drawn ring: its middle point; a set of circles: every sample point inside one circle). */
+  zones?: readonly string[];
+  /** The edge carries a gate node of OSM that is not open to the public (access private or no, locked, or no access tag at all): a government or compound gate. */
+  gate?: 'restricted';
+  /** The edge's OSM keys hold one of these "key=value" pairs (service access tags: a forecourt road that still takes deliveries). */
+  tagged?: readonly string[];
+  /** Not when the edge's OSM keys hold one of these "key=value" pairs. */
+  notTagged?: readonly string[];
 }
 
 export interface AccessRule {
@@ -110,8 +120,13 @@ export interface AccessRule {
   modes: readonly Mode[];
   hours?: string;
   barrier?: 'bollards' | 'none';
+  /** Allowed but never a through route for traffic (a service access). */
+  private?: boolean;
   match: AccessMatch;
 }
+
+/** A zone of the rules file as a test of an edge's sample points (the driver builds it from circles or a ring). */
+export type ZoneTest = (s: { all: readonly P2[]; mid: P2 }) => boolean;
 
 export interface AccessContext {
   rules: readonly AccessRule[];
@@ -121,6 +136,8 @@ export interface AccessContext {
   areaAt: (x: number, z: number) => { id: string; archetype: string } | null;
   /** Barrier nodes by edge id. */
   barriers: ReadonlyMap<string, readonly EdgeBarrier[]>;
+  /** The zones of the rules file by id. */
+  zones?: ReadonlyMap<string, ZoneTest>;
 }
 
 const sortModes = (set: ReadonlySet<Mode>): Mode[] => MODES.filter((m) => set.has(m));
@@ -205,6 +222,15 @@ export function barrierStops(kind: string, tags: Readonly<Record<string, string>
   return { car: false, twoWheeler: false };
 }
 
+/** A gate or lift gate that is not open to the public: access private or no, locked, or no access tag at all. */
+export function gateRestricted(kind: string, tags: Readonly<Record<string, string>>): boolean {
+  const k = kind.split(';')[0]?.trim() ?? '';
+  if (!['gate', 'lift_gate', 'swing_gate', 'sliding_gate'].includes(k)) return false;
+  const a = (tags['access'] ?? '').trim().toLowerCase();
+  if (a === 'yes' || a === 'permissive' || a === 'designated' || a === 'customers') return false;
+  return (tags['locked'] ?? '').toLowerCase() !== 'no';
+}
+
 /** Points along an edge for the area and circle tests: its ends and its middle by length. */
 function samples(pts: readonly P2[]): { mid: P2; all: P2[] } {
   let len = 0;
@@ -230,13 +256,24 @@ function samples(pts: readonly P2[]): { mid: P2; all: P2[] } {
 }
 
 /** True when a rule's match holds for the edge. */
-export function ruleMatches(m: AccessMatch, e: AccessEdge, ctx: Pick<AccessContext, 'areaAt'>): boolean {
+export function ruleMatches(m: AccessMatch, e: AccessEdge, ctx: Pick<AccessContext, 'areaAt'> & Partial<Pick<AccessContext, 'zones' | 'barriers'>>): boolean {
   if (m.edges && !m.edges.includes(e.id)) return false;
   if (m.ways && !e.ways.some((w) => (m.ways as readonly string[]).includes(w))) return false;
   if (m.classes && !m.classes.includes(e.cls)) return false;
   if (m.name !== undefined && !new RegExp(m.name, 'i').test(e.name)) return false;
   if (m.notName !== undefined && new RegExp(m.notName, 'i').test(e.name)) return false;
   if (m.maxWidthM !== undefined && !(e.width <= m.maxWidthM)) return false;
+  const keyed = (list: readonly string[]): boolean => list.some((kv) => {
+    const i = kv.indexOf('=');
+    return i > 0 && e.tags[kv.slice(0, i)] === kv.slice(i + 1);
+  });
+  if (m.tagged && !keyed(m.tagged)) return false;
+  if (m.notTagged && keyed(m.notTagged)) return false;
+  if (m.gate === 'restricted' && !(ctx.barriers?.get(e.id) ?? []).some((b) => b.restricted)) return false;
+  if (m.zones) {
+    const s = samples(e.pts);
+    if (!m.zones.some((z) => ctx.zones?.get(z)?.(s) === true)) return false;
+  }
   if (m.within || m.areas || m.archetypes) {
     const s = samples(e.pts);
     if (m.within) {
@@ -303,6 +340,7 @@ export function edgeAccess(e: AccessEdge, ctx: AccessContext): EdgeAccess {
     // a rule never opens a way to a vehicle it is too narrow for (the width step stays true)
     const fits = r.modes.filter((m) => !((m === 'car' || m === 'auto' || m === 'emergency') && e.width < CAR_MIN_WIDTH_M && r.by === 'rule'));
     change(fits, reason, r.why, { rule: r.id, ...(r.hours ? { hours: r.hours } : {}) });
+    if (r.private) out = { ...out, private: true };
     if (r.barrier === 'bollards') out = { ...out, barrier: 'bollards' };
     else if (r.barrier === 'none' && out.barrier) {
       const next: EdgeAccess = { ...out };
@@ -407,7 +445,7 @@ export function barrierIndex(barriers: readonly { id: string; kind: string; tags
   for (const b of barriers) {
     if (b.edge === undefined) continue;
     const s = barrierStops(b.kind, b.tags);
-    (out.get(b.edge) ?? out.set(b.edge, []).get(b.edge) as EdgeBarrier[]).push({ id: b.id, kind: b.kind, stopsCar: s.car, stopsTwoWheeler: s.twoWheeler });
+    (out.get(b.edge) ?? out.set(b.edge, []).get(b.edge) as EdgeBarrier[]).push({ id: b.id, kind: b.kind, stopsCar: s.car, stopsTwoWheeler: s.twoWheeler, restricted: gateRestricted(b.kind, b.tags) });
   }
   return out;
 }

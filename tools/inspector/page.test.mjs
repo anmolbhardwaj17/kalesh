@@ -25,6 +25,7 @@ let server = null;
 let tmp = '';
 let overrides = '';
 let inbox = '';
+let accessFile = '';
 const consoleErrors = [];
 const hosts = new Set();
 let page = null;
@@ -55,9 +56,11 @@ beforeAll(async () => {
   tmp = fs.mkdtempSync(path.join(os.tmpdir(), 'inspector-test-'));
   overrides = path.join(tmp, 'overrides');
   inbox = path.join(tmp, 'inbox.jsonl');
+  accessFile = path.join(tmp, 'access.json');
+  fs.copyFileSync(path.join(ROOT, 'harness', 'data', 'access.json'), accessFile);
   // gamePort: a port nothing listens on, so "Open in game" has no game to find
   const closedPort = await freePort();
-  server = await startInspector({ dataDir, overridesDir: overrides, inboxFile: inbox, gamePort: closedPort, date: '2026-11-12' });
+  server = await startInspector({ dataDir, overridesDir: overrides, inboxFile: inbox, accessFile, gamePort: closedPort, date: '2026-11-12' });
   page = await browser.newPage({ viewport: { width: 1600, height: 900 } });
   page.on('console', (m) => { if (m.type() === 'error') consoleErrors.push(m.text()); });
   page.on('pageerror', (e) => consoleErrors.push(`pageerror: ${e.message}`));
@@ -332,6 +335,35 @@ describe('map inspector page', () => {
     const lines = fs.readFileSync(inbox, 'utf8').trim().split('\n').map((l) => JSON.parse(l));
     expect(lines[lines.length - 1].text).toContain(`from ${before} to ${before + 1}`);
     expect(lines[lines.length - 1].source).toBe('inspector');
+    expect(consoleErrors).toEqual([]);
+  }, 60000);
+
+  run('the access tab shows who may use a road, and an edit is saved as an owner rule in the access file (P2-043)', async () => {
+    const lanesFile = path.join(dataDir, 'lanes.json');
+    if (!fs.existsSync(lanesFile)) return;
+    const layer = JSON.parse(fs.readFileSync(lanesFile, 'utf8'));
+    const strip = layer.strips.find((s) => s.acc && s.kind === 'road' && !s.acc.m.includes('car') && s.acc.ways.length > 0 && s.ref.length > 1);
+    if (!strip) return; // a lanes layer baked before P2-043 has no access data
+    await page.click('#accessTab');
+    expect(await page.locator('#accessSummary').textContent()).toMatch(/roads, \d[\d,]* closed to cars/);
+    const counts = await hook(() => window.__inspector.access.counts());
+    expect(counts.overlay.closed + counts.overlay.judgeClosed + counts.overlay.opened + counts.overlay.ownerClosed).toBeGreaterThan(0);
+    const m = strip.ref[Math.floor(strip.ref.length / 2)];
+    expect(await hook(([x, z]) => window.__inspector.access.pickAt(x, z), m)).not.toBeNull();
+    const sel = await hook(() => window.__inspector.access.selected());
+    expect(sel.modes).not.toContain('car');
+    expect(await page.locator('#access').textContent()).toMatch(/Decided by/);
+    await page.click('[data-acc="car"][data-v="1"]');
+    await page.fill('#accNote', 'A van drives through here, I saw it from the street photo');
+    await page.click('#accSave');
+    await page.waitForFunction(() => /Saved as rule/.test(document.querySelector('#accMsg')?.textContent ?? ''));
+    const file = JSON.parse(fs.readFileSync(accessFile, 'utf8'));
+    const rule = file.rules.find((r) => r.by === 'owner' && r.id.startsWith('owner_'));
+    expect(rule).toMatchObject({ by: 'owner', modes: expect.arrayContaining(['car', 'auto']), why: 'A van drives through here, I saw it from the street photo' });
+    expect(rule.match.ways).toEqual(expect.arrayContaining(strip.acc.ways));
+    const after = await hook(() => window.__inspector.access.selected());
+    expect(after.reason).toBe('owner');
+    expect(after.modes).toContain('car');
     expect(consoleErrors).toEqual([]);
   }, 60000);
 

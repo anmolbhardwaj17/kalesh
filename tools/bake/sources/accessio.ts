@@ -3,17 +3,27 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import type { P2 } from '../geom.ts';
-import { boxOf } from '../geom.ts';
+import { boxOf, pointInRing } from '../geom.ts';
 import { buildIndex, parseAreaFiles, resolveAt } from '../areas/profiles.ts';
 import { MODES, barrierIndex, graphAccess, inRings } from '../graph/access.ts';
-import type { AccessContext, AccessRecord, AccessRule, EdgeAccess, EdgeBarrier, Mode } from '../graph/access.ts';
+import type { AccessContext, AccessRecord, AccessRule, EdgeAccess, EdgeBarrier, Mode, ZoneTest } from '../graph/access.ts';
 import { barriersOnEdges } from '../graph/build.ts';
 import type { GraphEdge } from '../graph/build.ts';
 import type { AreaFeature, BarrierFeature } from '../graph/features.ts';
 
 export const ACCESS_FILE = 'harness/data/access.json';
 
+/** A zone of the rules file: a drawn ring (the edge's middle point inside) or circles (every sample point inside one of them). */
+export interface ZoneDef {
+  id: string;
+  why: string;
+  refs: string[];
+  ring?: [number, number][];
+  circles?: { name: string; lat: number; lon: number; radiusM: number }[];
+}
+
 interface RuleFile {
+  zones?: ZoneDef[];
   rules: (Omit<AccessRule, 'match'> & { match: Omit<AccessRule['match'], 'within'> & { within?: { lat: number; lon: number; radiusM: number } } })[];
 }
 
@@ -23,6 +33,18 @@ export function accessFileProblems(file: unknown): string[] {
   const f = file as RuleFile;
   if (!f || !Array.isArray(f.rules)) return ['access.json: needs a rules array'];
   const ids = new Set<string>();
+  const zoneIds = new Set<string>();
+  for (const z of f.zones ?? []) {
+    const at = `access.json zone ${z.id ?? '?'}`;
+    if (typeof z.id !== 'string' || !/^[a-z0-9_]+$/.test(z.id)) out.push(`${at}: id must be lower case letters, digits and underscores`);
+    if (zoneIds.has(z.id)) out.push(`${at}: id used twice`);
+    zoneIds.add(z.id);
+    if (typeof z.why !== 'string' || z.why.length < 20) out.push(`${at}: why must say the reason in a sentence`);
+    if (!Array.isArray(z.refs) || !z.refs.length) out.push(`${at}: needs at least one reference`);
+    const ringOk = Array.isArray(z.ring) && z.ring.length >= 4 && z.ring.every((q) => Array.isArray(q) && q.length === 2 && q.every(Number.isFinite));
+    const circlesOk = Array.isArray(z.circles) && z.circles.length > 0 && z.circles.every((c) => Number.isFinite(c.lat) && Number.isFinite(c.lon) && c.radiusM > 0);
+    if (ringOk === circlesOk) out.push(`${at}: needs a ring of [lat, lon] points (4 or more) or circles, not both`);
+  }
   for (const r of f.rules) {
     const at = `access.json rule ${r.id ?? '?'}`;
     if (typeof r.id !== 'string' || !/^[a-z0-9_]+$/.test(r.id)) out.push(`${at}: id must be lower case letters, digits and underscores`);
@@ -35,6 +57,26 @@ export function accessFileProblems(file: unknown): string[] {
     if (!Array.isArray(r.modes) || r.modes.some((m) => !(MODES as readonly string[]).includes(m))) out.push(`${at}: modes must be from ${MODES.join(', ')}`);
     if (r.barrier !== undefined && r.barrier !== 'bollards' && r.barrier !== 'none') out.push(`${at}: barrier must be bollards or none`);
     if (!r.match || !Object.keys(r.match).length) out.push(`${at}: an empty match would take every road`);
+    for (const z of r.match?.zones ?? []) if (!zoneIds.has(z)) out.push(`${at}: match names the zone ${z}, which the file does not define`);
+    if (r.match?.gate !== undefined && r.match.gate !== 'restricted') out.push(`${at}: match.gate must be restricted`);
+  }
+  return out;
+}
+
+/** The zones of the file as tests of an edge, in block metres. */
+export function readAccessZones(root: string, project: (lat: number, lon: number) => P2): Map<string, ZoneTest> {
+  const file = path.join(root, ACCESS_FILE);
+  const out = new Map<string, ZoneTest>();
+  if (!fs.existsSync(file)) return out;
+  const json = JSON.parse(fs.readFileSync(file, 'utf8')) as RuleFile;
+  for (const z of json.zones ?? []) {
+    if (z.ring) {
+      const ring = z.ring.map(([lat, lon]) => project(lat, lon));
+      out.set(z.id, (s) => pointInRing(s.mid, ring));
+    } else if (z.circles) {
+      const circles = z.circles.map((c) => ({ ...project(c.lat, c.lon), r: c.radiusM }));
+      out.set(z.id, (s) => circles.some((c) => s.all.every((p) => Math.hypot(p.x - c.x, p.z - c.z) <= c.r)));
+    }
   }
   return out;
 }
@@ -93,7 +135,7 @@ export function openLookup(open: readonly AreaFeature[]): (x: number, z: number)
 
 export function accessContext(root: string, project: (lat: number, lon: number) => P2, open: readonly AreaFeature[], barriers: ReadonlyMap<string, readonly EdgeBarrier[]>): AccessContext {
   const areaAt = readAreaLookup(root, project);
-  return { rules: readAccessRules(root, project), openAt: openLookup(open), areaAt, barriers };
+  return { rules: readAccessRules(root, project), openAt: openLookup(open), areaAt, barriers, zones: readAccessZones(root, project) };
 }
 
 /** The access step: every edge of the repaired graph with its modes, the barrier nodes put on the repaired edges. */

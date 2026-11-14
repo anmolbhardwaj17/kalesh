@@ -278,6 +278,8 @@ export interface LanesLayer {
     /** Where the lane count of the edge came from (street.ts LanesFrom) and, for "repair", the id of the issue or override patch. */
     from?: string; by?: string; /** A taper: [length, shift, needed] in metres. */ taper?: [number, number, number];
     lanes: [string, number][]; ref: [number, number][]; n: [number, number][]; b: number[] | number[][];
+    /** Who may use the road (P2-043, graph/access.ts): the modes, the step that decided last and why, the rules file entry, the OSM ways (an owner edit in the inspector matches them). */
+    acc?: { m: Mode[]; r: string; why: string; rule?: string; hours?: string; ways: string[] };
   }[];
   zones: { id: string; kind: string; node: [number, number]; nose: [number, number]; noseM: number }[];
   junctions: { id: string; at: [number, number]; control: string; arms: number; paths: { turn: string; r: number | null; pts: [number, number][] }[] }[];
@@ -301,10 +303,12 @@ export function lanesLayer(b: LaneBuild, block: string, offset: P2, origin?: { l
       const first = (s.st[0] as Station).b;
       const constant = s.st.every((st) => st.b.every((v, k) => Math.abs(v - (first[k] as number)) < 0.002));
       const plan = b.streets.byEdge.get(s.edge);
+      const acc = s.kind === 'zone' ? undefined : b.access?.get(s.edge);
       return {
         id: s.id, edge: s.edge, kind: s.kind, cls: s.cls + (s.link ? '_link' : ''), name: s.name, hero: s.hero, bridge: s.st.some((st) => st.bridge),
         ...(plan ? { from: plan.from, ...(plan.by ? { by: plan.by } : {}) } : {}),
         ...(s.taper ? { taper: [r2(s.taper.length), r2(s.taper.shift), r2(s.taper.needed)] as [number, number, number] } : {}),
+        ...(acc ? { acc: { m: acc.modes, r: acc.reason, why: acc.why, ...(acc.rule ? { rule: acc.rule } : {}), ...(acc.hours ? { hours: acc.hours } : {}), ways: s.ways } } : {}),
         lanes: s.lanes.map((l) => [l.type, l.dir] as [string, number]),
         ref: s.st.map((st) => w(st.x, st.z)), n: s.st.map((st) => [Math.round(st.nx * 1000) / 1000 + 0, Math.round(st.nz * 1000) / 1000 + 0] as [number, number]),
         b: constant ? first.map(r2) : s.st.map((st) => st.b.map(r2)),

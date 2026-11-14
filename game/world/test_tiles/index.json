@@ -5,24 +5,24 @@
  "block": "centre",
  "size": 250,
  "margin": 250,
- "bakeHash": "1507f43d14ce6f",
+ "bakeHash": "1d6c2483be2a11",
  "offset": [
   621.6,
   467.2
  ],
  "bytes": {
-  "total": 12355541,
-  "average": 1372838,
+  "total": 12356537,
+  "average": 1372949,
   "largest": {
    "id": "-3_-6",
-   "bytes": 2145196
+   "bytes": 2145276
   }
  },
  "blocks": [
   {
    "id": "centre",
    "tiles": 9,
-   "bytes": 12355541
+   "bytes": 12356537
   }
  ],
  "tiles": [
@@ -31,8 +31,8 @@
    "x": -4,
    "z": -8,
    "file": "-4_-8.ktl",
-   "bytes": 1001992,
-   "hash": "c6e85205b5d8803b",
+   "bytes": 1002068,
+   "hash": "60244c9714df1c8b",
    "origin": [
     -1000,
     216,
@@ -69,8 +69,8 @@
    "x": -3,
    "z": -8,
    "file": "-3_-8.ktl",
-   "bytes": 1062312,
-   "hash": "9e6fcb3545c01138",
+   "bytes": 1062440,
+   "hash": "ba89fa88edf2d5af",
    "origin": [
     -750,
     215,
@@ -112,8 +112,8 @@
    "x": -4,
    "z": -7,
    "file": "-4_-7.ktl",
-   "bytes": 1293176,
-   "hash": "0a333dec076adf70",
+   "bytes": 1293396,
+   "hash": "1b5aacda15f4e2d8",
    "origin": [
     -1000,
     215,
@@ -151,8 +151,8 @@
    "x": -3,
    "z": -7,
    "file": "-3_-7.ktl",
-   "bytes": 1490597,
-   "hash": "07186773199b5d38",
+   "bytes": 1491089,
+   "hash": "1d8075f408ec705a",
    "origin": [
     -750,
     215,
@@ -192,8 +192,8 @@
    "x": -3,
    "z": -6,
    "file": "-3_-6.ktl",
-   "bytes": 2145196,
-   "hash": "c694ad022eb12dc0",
+   "bytes": 2145276,
+   "hash": "36394e66640921f2",
    "origin": [
     -750,
     215,

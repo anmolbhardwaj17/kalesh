@@ -65,6 +65,1581 @@
       "modes": ["cycle", "foot", "emergency"],
       "barrier": "bollards",
       "match": { "within": { "lat": 28.612894, "lon": 77.229446, "radiusM": 190 } }
+    },
+    {
+      "id": "metro_forecourt_foot",
+      "by": "rule",
+      "kind": "rule",
+      "why": "the road in front of a Delhi Metro entrance or station is a forecourt: walkers only, with emergency vehicles; a way that OSM tags for delivery, destination or permitted motor vehicles keeps its service access",
+      "refs": [
+        "DMRC station forecourts and entrances (public photos of the entrance plazas, e.g. https://commons.wikimedia.org/wiki/Category:Delhi_Metro_stations)",
+        "OpenStreetMap railway=subway_entrance and station=subway nodes (harness/data/access.json zone metro_forecourts)"
+      ],
+      "modes": ["foot", "emergency"],
+      "barrier": "none",
+      "match": {
+        "zones": ["metro_forecourts"],
+        "classes": ["pedestrian", "service", "living_street", "residential", "unclassified", "road", "track"],
+        "notTagged": [
+          "access=delivery",
+          "access=destination",
+          "access=customers",
+          "access=permissive",
+          "motor_vehicle=delivery",
+          "motor_vehicle=destination",
+          "motor_vehicle=yes",
+          "motor_vehicle=designated",
+          "motor_vehicle=permissive",
+          "vehicle=delivery",
+          "vehicle=destination"
+        ]
+      }
+    },
+    {
+      "id": "lutyens_government_gates",
+      "by": "rule",
+      "kind": "rule",
+      "why": "a service or residential way in the Lutyens government zone that carries a closed or private gate (a ministry, a bungalow or an embassy compound) is closed to public cars: cycles, walkers and emergency vehicles only",
+      "refs": [
+        "https://en.wikipedia.org/wiki/Lutyens%27_Delhi (government compounds, the Lutyens Bungalow Zone)",
+        "OpenStreetMap barrier=gate nodes with access=private, locked or no tag, on the way (harness/data/access.json zone lutyens_government)"
+      ],
+      "modes": ["cycle", "foot", "emergency"],
+      "barrier": "none",
+      "match": { "zones": ["lutyens_government"], "gate": "restricted", "classes": ["service", "residential", "unclassified", "living_street", "road", "track"], "maxWidthM": 7 }
+    },
+    {
+      "id": "judge_site_001_closed",
+      "by": "judge",
+      "kind": "context",
+      "why": "38 m lane between low buildings off the road to the rail yard, no vehicle visible, under 4 m of clear width",
+      "refs": ["harness/reports/access/sheet_01.jpg (site 1, Esri World Imagery, judged 2026-11-14)", "harness/reports/access/borderline.json"],
+      "modes": ["two_wheeler", "cycle", "foot", "emergency"],
+      "barrier": "none",
+      "match": { "ways": ["way/423608337"], "within": { "lat": 28.6605949, "lon": 77.2227487, "radiusM": 21 } }
+    },
+    {
+      "id": "judge_site_002_closed",
+      "by": "judge",
+      "kind": "context",
+      "why": "narrow lane between continuous building fronts, no vehicle visible, under 4 m of clear width on the picture",
+      "refs": ["harness/reports/access/sheet_01.jpg (site 2, Esri World Imagery, judged 2026-11-14)", "harness/reports/access/borderline.json"],
+      "modes": ["two_wheeler", "cycle", "foot", "emergency"],
+      "barrier": "none",
+      "match": { "ways": ["way/696600134"], "within": { "lat": 28.6591513, "lon": 77.2231477, "radiusM": 38 } }
+    },
+    {
+      "id": "judge_site_003_closed",
+      "by": "judge",
+      "kind": "context",
+      "why": "narrow lane between continuous building fronts, no vehicle visible, under 4 m of clear width on the picture",
+      "refs": ["harness/reports/access/sheet_01.jpg (site 3, Esri World Imagery, judged 2026-11-14)", "harness/reports/access/borderline.json"],
+      "modes": ["two_wheeler", "cycle", "foot", "emergency"],
+      "barrier": "none",
+      "match": { "ways": ["way/423608337"], "within": { "lat": 28.6591435, "lon": 77.2210901, "radiusM": 12 } }
+    },
+    {
+      "id": "judge_site_004_closed",
+      "by": "judge",
+      "kind": "context",
+      "why": "stubs off the main road: lanes between building fronts, the carriageway beside them is the road",
+      "refs": ["harness/reports/access/sheet_01.jpg (site 4, Esri World Imagery, judged 2026-11-14)", "harness/reports/access/borderline.json"],
+      "modes": ["two_wheeler", "cycle", "foot", "emergency"],
+      "barrier": "none",
+      "match": { "ways": ["way/320348726", "way/1076057775"], "within": { "lat": 28.6587829, "lon": 77.2187056, "radiusM": 42 } }
+    },
+    {
+      "id": "judge_site_005_closed",
+      "by": "judge",
+      "kind": "context",
+      "why": "named galis of Katra Neel and Krishna Gali: dense roofs on both sides, no room for a car",
+      "refs": ["harness/reports/access/sheet_01.jpg (site 5, Esri World Imagery, judged 2026-11-14)", "harness/reports/access/borderline.json"],
+      "modes": ["two_wheeler", "cycle", "foot", "emergency"],
+      "barrier": "none",
+      "match": {
+        "ways": ["way/1377215624", "way/320348697", "way/1377215634", "way/1377215636", "way/1376109493", "way/320348717", "way/1376109495"],
+        "within": { "lat": 28.6577664, "lon": 77.2253778, "radiusM": 66 }
+      }
+    },
+    {
+      "id": "judge_site_006_closed",
+      "by": "judge",
+      "kind": "context",
+      "why": "narrow lane between continuous building fronts, no vehicle visible, under 4 m of clear width on the picture",
+      "refs": ["harness/reports/access/sheet_01.jpg (site 6, Esri World Imagery, judged 2026-11-14)", "harness/reports/access/borderline.json"],
+      "modes": ["two_wheeler", "cycle", "foot", "emergency"],
+      "barrier": "none",
+      "match": { "ways": ["way/693912721", "way/693912719"], "within": { "lat": 28.6574849, "lon": 77.2332764, "radiusM": 59 } }
+    },
+    {
+      "id": "judge_site_007_closed",
+      "by": "judge",
+      "kind": "context",
+      "why": "lanes between roofs and the 95 m track along the park edge: the picture shows no road surface wide enough for a car, and the access scenario rides a scooter into this gali",
+      "refs": ["harness/reports/access/sheet_01.jpg (site 7, Esri World Imagery, judged 2026-11-14)", "harness/reports/access/borderline.json"],
+      "modes": ["two_wheeler", "cycle", "foot", "emergency"],
+      "barrier": "none",
+      "match": { "ways": ["way/1360335935", "way/1360335930", "way/253134120", "way/1360335943", "way/1372244504"], "within": { "lat": 28.656584, "lon": 77.2297114, "radiusM": 73 } }
+    },
+    {
+      "id": "judge_site_009_closed",
+      "by": "judge",
+      "kind": "context",
+      "why": "narrow lane between continuous building fronts, no vehicle visible, under 4 m of clear width on the picture",
+      "refs": ["harness/reports/access/sheet_01.jpg (site 9, Esri World Imagery, judged 2026-11-14)", "harness/reports/access/borderline.json"],
+      "modes": ["two_wheeler", "cycle", "foot", "emergency"],
+      "barrier": "none",
+      "match": { "ways": ["way/264615172", "way/1076276055", "way/80940712", "way/1150383463"], "within": { "lat": 28.6561838, "lon": 77.2324401, "radiusM": 57 } }
+    },
+    {
+      "id": "judge_site_010_closed",
+      "by": "judge",
+      "kind": "context",
+      "why": "short mouth of a gali on the main road, the lane behind it is a gali, no room for a car to turn in",
+      "refs": ["harness/reports/access/sheet_02.jpg (site 10, Esri World Imagery, judged 2026-11-14)", "harness/reports/access/borderline.json"],
+      "modes": ["two_wheeler", "cycle", "foot", "emergency"],
+      "barrier": "none",
+      "match": { "ways": ["way/44141545"], "within": { "lat": 28.6565483, "lon": 77.2255855, "radiusM": 8 } }
+    },
+    {
+      "id": "judge_site_011_closed",
+      "by": "judge",
+      "kind": "context",
+      "why": "narrow lane between continuous building fronts, no vehicle visible, under 4 m of clear width on the picture",
+      "refs": ["harness/reports/access/sheet_02.jpg (site 11, Esri World Imagery, judged 2026-11-14)", "harness/reports/access/borderline.json"],
+      "modes": ["two_wheeler", "cycle", "foot", "emergency"],
+      "barrier": "none",
+      "match": { "ways": ["way/1186764830", "way/48533139", "way/48532953", "way/44830358", "way/1070546914"], "within": { "lat": 28.6559383, "lon": 77.2355814, "radiusM": 100 } }
+    },
+    {
+      "id": "judge_site_012_closed",
+      "by": "judge",
+      "kind": "context",
+      "why": "named old city gali or bazaar lane: two-wheelers, rickshaws and walkers only, stalls take the width",
+      "refs": ["harness/reports/access/sheet_02.jpg (site 12, Esri World Imagery, judged 2026-11-14)", "harness/reports/access/borderline.json"],
+      "modes": ["two_wheeler", "cycle", "foot", "emergency"],
+      "barrier": "none",
+      "match": { "ways": ["way/693912726", "way/44141125", "way/1503251625", "way/44830358", "way/82710765"], "within": { "lat": 28.6556085, "lon": 77.2340813, "radiusM": 129 } }
+    },
+    {
+      "id": "judge_site_013_closed",
+      "by": "judge",
+      "kind": "context",
+      "why": "narrow lane between continuous building fronts, no vehicle visible, under 4 m of clear width on the picture",
+      "refs": ["harness/reports/access/sheet_02.jpg (site 13, Esri World Imagery, judged 2026-11-14)", "harness/reports/access/borderline.json"],
+      "modes": ["two_wheeler", "cycle", "foot", "emergency"],
+      "barrier": "none",
+      "match": { "ways": ["way/169826232"], "within": { "lat": 28.6561519, "lon": 77.2201288, "radiusM": 30 } }
+    },
+    {
+      "id": "judge_site_014_closed",
+      "by": "judge",
+      "kind": "context",
+      "why": "service lanes beside Jama Masjid, hawker stalls and walls on both sides, no room for a car",
+      "refs": ["harness/reports/access/sheet_02.jpg (site 14, Esri World Imagery, judged 2026-11-14)", "harness/reports/access/borderline.json"],
+      "modes": ["two_wheeler", "cycle", "foot", "emergency"],
+      "barrier": "none",
+      "match": { "ways": ["way/1360335929", "way/1360335945", "way/1360335940"], "within": { "lat": 28.6558656, "lon": 77.2223449, "radiusM": 52 } }
+    },
+    {
+      "id": "judge_site_015_closed",
+      "by": "judge",
+      "kind": "context",
+      "why": "narrow lane between continuous building fronts, no vehicle visible, under 4 m of clear width on the picture",
+      "refs": ["harness/reports/access/sheet_02.jpg (site 15, Esri World Imagery, judged 2026-11-14)", "harness/reports/access/borderline.json"],
+      "modes": ["two_wheeler", "cycle", "foot", "emergency"],
+      "barrier": "none",
+      "match": { "ways": ["way/776026191"], "within": { "lat": 28.6561354, "lon": 77.2240926, "radiusM": 29 } }
+    },
+    {
+      "id": "judge_site_016_closed",
+      "by": "judge",
+      "kind": "context",
+      "why": "named old city gali or bazaar lane: two-wheelers, rickshaws and walkers only, stalls take the width",
+      "refs": ["harness/reports/access/sheet_02.jpg (site 16, Esri World Imagery, judged 2026-11-14)", "harness/reports/access/borderline.json"],
+      "modes": ["two_wheeler", "cycle", "foot", "emergency"],
+      "barrier": "none",
+      "match": {
+        "ways": [
+          "way/1372244506",
+          "way/82946131",
+          "way/1362943967",
+          "way/44141276",
+          "way/1364873685",
+          "way/44141146",
+          "way/1362943971",
+          "way/1364873688",
+          "way/82946119",
+          "way/744801990",
+          "way/82946139",
+          "way/798855531"
+        ],
+        "within": { "lat": 28.6554904, "lon": 77.229937, "radiusM": 140 }
+      }
+    },
+    {
+      "id": "judge_site_017_closed",
+      "by": "judge",
+      "kind": "context",
+      "why": "narrow lane between continuous building fronts, no vehicle visible, under 4 m of clear width on the picture",
+      "refs": ["harness/reports/access/sheet_02.jpg (site 17, Esri World Imagery, judged 2026-11-14)", "harness/reports/access/borderline.json"],
+      "modes": ["two_wheeler", "cycle", "foot", "emergency"],
+      "barrier": "none",
+      "match": { "ways": ["way/1360335948"], "within": { "lat": 28.6555524, "lon": 77.2213246, "radiusM": 18 } }
+    },
+    {
+      "id": "judge_site_018_closed",
+      "by": "judge",
+      "kind": "context",
+      "why": "named old city gali or bazaar lane: two-wheelers, rickshaws and walkers only, stalls take the width",
+      "refs": ["harness/reports/access/sheet_02.jpg (site 18, Esri World Imagery, judged 2026-11-14)", "harness/reports/access/borderline.json"],
+      "modes": ["two_wheeler", "cycle", "foot", "emergency"],
+      "barrier": "none",
+      "match": { "ways": ["way/755793902", "way/1364873692", "way/44141299", "way/1364873685", "way/82946139"], "within": { "lat": 28.6547199, "lon": 77.2283694, "radiusM": 106 } }
+    },
+    {
+      "id": "judge_site_019_closed",
+      "by": "judge",
+      "kind": "context",
+      "why": "named old city gali or bazaar lane: two-wheelers, rickshaws and walkers only, stalls take the width",
+      "refs": ["harness/reports/access/sheet_03.jpg (site 19, Esri World Imagery, judged 2026-11-14)", "harness/reports/access/borderline.json"],
+      "modes": ["two_wheeler", "cycle", "foot", "emergency"],
+      "barrier": "none",
+      "match": {
+        "ways": ["way/798855530", "way/44141146", "way/798855531", "way/423608342", "way/293420656", "way/82946100", "way/798855529"],
+        "within": { "lat": 28.6548403, "lon": 77.2315956, "radiusM": 115 }
+      }
+    },
+    {
+      "id": "judge_site_020_closed",
+      "by": "judge",
+      "kind": "context",
+      "why": "named old city gali or bazaar lane: two-wheelers, rickshaws and walkers only, stalls take the width",
+      "refs": ["harness/reports/access/sheet_03.jpg (site 20, Esri World Imagery, judged 2026-11-14)", "harness/reports/access/borderline.json"],
+      "modes": ["two_wheeler", "cycle", "foot", "emergency"],
+      "barrier": "none",
+      "match": { "ways": ["way/293420652", "way/44141146"], "within": { "lat": 28.6549914, "lon": 77.23324, "radiusM": 77 } }
+    },
+    {
+      "id": "judge_site_024_closed",
+      "by": "judge",
+      "kind": "context",
+      "why": "named old city gali or bazaar lane: two-wheelers, rickshaws and walkers only, stalls take the width",
+      "refs": ["harness/reports/access/sheet_03.jpg (site 24, Esri World Imagery, judged 2026-11-14)", "harness/reports/access/borderline.json"],
+      "modes": ["two_wheeler", "cycle", "foot", "emergency"],
+      "barrier": "none",
+      "match": { "ways": ["way/82710787", "way/44141125", "way/293420643", "way/293420646", "way/293420641"], "within": { "lat": 28.6540003, "lon": 77.2327546, "radiusM": 113 } }
+    },
+    {
+      "id": "judge_site_027_closed",
+      "by": "judge",
+      "kind": "context",
+      "why": "named old city gali or bazaar lane: two-wheelers, rickshaws and walkers only, stalls take the width",
+      "refs": ["harness/reports/access/sheet_03.jpg (site 27, Esri World Imagery, judged 2026-11-14)", "harness/reports/access/borderline.json"],
+      "modes": ["two_wheeler", "cycle", "foot", "emergency"],
+      "barrier": "none",
+      "match": {
+        "ways": ["way/82946148", "way/293420640", "way/755068998", "way/1076321095", "way/82710787", "way/755069000"],
+        "within": { "lat": 28.6532144, "lon": 77.2309752, "radiusM": 119 }
+      }
+    },
+    {
+      "id": "judge_site_021_closed",
+      "by": "judge",
+      "kind": "context",
+      "why": "narrow lane between continuous building fronts, no vehicle visible, under 4 m of clear width on the picture",
+      "refs": ["harness/reports/access/sheet_03.jpg (site 21, Esri World Imagery, judged 2026-11-14)", "harness/reports/access/borderline.json"],
+      "modes": ["two_wheeler", "cycle", "foot", "emergency"],
+      "barrier": "none",
+      "match": { "ways": ["way/681792944"], "within": { "lat": 28.6548777, "lon": 77.2250158, "radiusM": 60 } }
+    },
+    {
+      "id": "judge_site_022_closed",
+      "by": "judge",
+      "kind": "context",
+      "why": "narrow lane between continuous building fronts, no vehicle visible, under 4 m of clear width on the picture",
+      "refs": ["harness/reports/access/sheet_03.jpg (site 22, Esri World Imagery, judged 2026-11-14)", "harness/reports/access/borderline.json"],
+      "modes": ["two_wheeler", "cycle", "foot", "emergency"],
+      "barrier": "none",
+      "match": { "ways": ["way/755793907", "way/82946096", "way/1362943964", "way/755793906", "way/755793904"], "within": { "lat": 28.6540761, "lon": 77.2272227, "radiusM": 106 } }
+    },
+    {
+      "id": "judge_site_023_closed",
+      "by": "judge",
+      "kind": "context",
+      "why": "narrow lane between continuous building fronts, no vehicle visible, under 4 m of clear width on the picture",
+      "refs": ["harness/reports/access/sheet_03.jpg (site 23, Esri World Imagery, judged 2026-11-14)", "harness/reports/access/borderline.json"],
+      "modes": ["two_wheeler", "cycle", "foot", "emergency"],
+      "barrier": "none",
+      "match": { "ways": ["way/423608341", "way/82946119", "way/82946116", "way/82946112", "way/82946100"], "within": { "lat": 28.6541839, "lon": 77.2296465, "radiusM": 111 } }
+    },
+    {
+      "id": "judge_site_025_closed",
+      "by": "judge",
+      "kind": "context",
+      "why": "narrow lane between continuous building fronts, no vehicle visible, under 4 m of clear width on the picture",
+      "refs": ["harness/reports/access/sheet_03.jpg (site 25, Esri World Imagery, judged 2026-11-14)", "harness/reports/access/borderline.json"],
+      "modes": ["two_wheeler", "cycle", "foot", "emergency"],
+      "barrier": "none",
+      "match": { "ways": ["way/1042963182"], "within": { "lat": 28.6545275, "lon": 77.2224105, "radiusM": 52 } }
+    },
+    {
+      "id": "judge_site_026_closed",
+      "by": "judge",
+      "kind": "context",
+      "why": "narrow lane between continuous building fronts, no vehicle visible, under 4 m of clear width on the picture",
+      "refs": ["harness/reports/access/sheet_03.jpg (site 26, Esri World Imagery, judged 2026-11-14)", "harness/reports/access/borderline.json"],
+      "modes": ["two_wheeler", "cycle", "foot", "emergency"],
+      "barrier": "none",
+      "match": { "ways": ["way/82710780", "way/44141125"], "within": { "lat": 28.6536501, "lon": 77.234005, "radiusM": 36 } }
+    },
+    {
+      "id": "judge_site_028_closed",
+      "by": "judge",
+      "kind": "context",
+      "why": "named old city gali or bazaar lane: two-wheelers, rickshaws and walkers only, stalls take the width",
+      "refs": ["harness/reports/access/sheet_04.jpg (site 28, Esri World Imagery, judged 2026-11-14)", "harness/reports/access/borderline.json"],
+      "modes": ["two_wheeler", "cycle", "foot", "emergency"],
+      "barrier": "none",
+      "match": { "ways": ["way/82946096", "way/44141545", "way/1362943954"], "within": { "lat": 28.6531792, "lon": 77.2269778, "radiusM": 100 } }
+    },
+    {
+      "id": "judge_site_030_closed",
+      "by": "judge",
+      "kind": "context",
+      "why": "named old city gali or bazaar lane: two-wheelers, rickshaws and walkers only, stalls take the width",
+      "refs": ["harness/reports/access/sheet_04.jpg (site 30, Esri World Imagery, judged 2026-11-14)", "harness/reports/access/borderline.json"],
+      "modes": ["two_wheeler", "cycle", "foot", "emergency"],
+      "barrier": "none",
+      "match": { "ways": ["way/293420636", "way/82710787", "way/82710760", "way/293420645", "way/1067871272"], "within": { "lat": 28.652576, "lon": 77.2322947, "radiusM": 109 } }
+    },
+    {
+      "id": "judge_site_031_closed",
+      "by": "judge",
+      "kind": "context",
+      "why": "named old city gali or bazaar lane: two-wheelers, rickshaws and walkers only, stalls take the width",
+      "refs": ["harness/reports/access/sheet_04.jpg (site 31, Esri World Imagery, judged 2026-11-14)", "harness/reports/access/borderline.json"],
+      "modes": ["two_wheeler", "cycle", "foot", "emergency"],
+      "barrier": "none",
+      "match": { "ways": ["way/755069000", "way/82710788"], "within": { "lat": 28.6522377, "lon": 77.2308085, "radiusM": 84 } }
+    },
+    {
+      "id": "judge_site_033_closed",
+      "by": "judge",
+      "kind": "context",
+      "why": "named old city gali or bazaar lane: two-wheelers, rickshaws and walkers only, stalls take the width",
+      "refs": ["harness/reports/access/sheet_04.jpg (site 33, Esri World Imagery, judged 2026-11-14)", "harness/reports/access/borderline.json"],
+      "modes": ["two_wheeler", "cycle", "foot", "emergency"],
+      "barrier": "none",
+      "match": {
+        "ways": ["way/44141545", "way/1364873694", "way/1079742367", "way/1364873693", "way/1079742368", "way/1364873689"],
+        "within": { "lat": 28.651916, "lon": 77.2277173, "radiusM": 87 }
+      }
+    },
+    {
+      "id": "judge_site_036_closed",
+      "by": "judge",
+      "kind": "context",
+      "why": "named old city gali or bazaar lane: two-wheelers, rickshaws and walkers only, stalls take the width",
+      "refs": ["harness/reports/access/sheet_04.jpg (site 36, Esri World Imagery, judged 2026-11-14)", "harness/reports/access/borderline.json"],
+      "modes": ["two_wheeler", "cycle", "foot", "emergency"],
+      "barrier": "none",
+      "match": {
+        "ways": ["way/82710760", "way/798855522", "way/82710788", "way/1118837805", "way/293420639", "way/260320120"],
+        "within": { "lat": 28.6512794, "lon": 77.2318155, "radiusM": 115 }
+      }
+    },
+    {
+      "id": "judge_site_037_closed",
+      "by": "judge",
+      "kind": "context",
+      "why": "named old city gali or bazaar lane: two-wheelers, rickshaws and walkers only, stalls take the width",
+      "refs": ["harness/reports/access/sheet_05.jpg (site 37, Esri World Imagery, judged 2026-11-14)", "harness/reports/access/borderline.json"],
+      "modes": ["two_wheeler", "cycle", "foot", "emergency"],
+      "barrier": "none",
+      "match": {
+        "ways": ["way/1360335931", "way/1360335933", "way/1360335927", "way/1360335934", "way/1360335942", "way/1360335946"],
+        "within": { "lat": 28.6509997, "lon": 77.225154, "radiusM": 78 }
+      }
+    },
+    {
+      "id": "judge_site_039_closed",
+      "by": "judge",
+      "kind": "context",
+      "why": "named old city gali or bazaar lane: two-wheelers, rickshaws and walkers only, stalls take the width",
+      "refs": ["harness/reports/access/sheet_05.jpg (site 39, Esri World Imagery, judged 2026-11-14)", "harness/reports/access/borderline.json"],
+      "modes": ["two_wheeler", "cycle", "foot", "emergency"],
+      "barrier": "none",
+      "match": {
+        "ways": ["way/1076827636", "way/721594685", "way/1360314041", "way/721594684", "way/1362943963", "way/1362943968"],
+        "within": { "lat": 28.6505567, "lon": 77.2262603, "radiusM": 95 }
+      }
+    },
+    {
+      "id": "judge_site_043_closed",
+      "by": "judge",
+      "kind": "context",
+      "why": "named old city gali or bazaar lane: two-wheelers, rickshaws and walkers only, stalls take the width",
+      "refs": ["harness/reports/access/sheet_05.jpg (site 43, Esri World Imagery, judged 2026-11-14)", "harness/reports/access/borderline.json"],
+      "modes": ["two_wheeler", "cycle", "foot", "emergency"],
+      "barrier": "none",
+      "match": { "ways": ["way/1360313449", "way/1362943969", "way/681794383", "way/1359931146", "way/1360314043"], "within": { "lat": 28.6498236, "lon": 77.2264229, "radiusM": 90 } }
+    },
+    {
+      "id": "judge_site_045_closed",
+      "by": "judge",
+      "kind": "context",
+      "why": "named old city gali or bazaar lane: two-wheelers, rickshaws and walkers only, stalls take the width",
+      "refs": ["harness/reports/access/sheet_05.jpg (site 45, Esri World Imagery, judged 2026-11-14)", "harness/reports/access/borderline.json"],
+      "modes": ["two_wheeler", "cycle", "foot", "emergency"],
+      "barrier": "none",
+      "match": { "ways": ["way/1362943969", "way/1362943966", "way/1362943959", "way/696306284"], "within": { "lat": 28.6492737, "lon": 77.2275655, "radiusM": 76 } }
+    },
+    {
+      "id": "judge_site_040_closed",
+      "by": "judge",
+      "kind": "context",
+      "why": "narrow lane between continuous building fronts, no vehicle visible, under 4 m of clear width on the picture",
+      "refs": ["harness/reports/access/sheet_05.jpg (site 40, Esri World Imagery, judged 2026-11-14)", "harness/reports/access/borderline.json"],
+      "modes": ["two_wheeler", "cycle", "foot", "emergency"],
+      "barrier": "none",
+      "match": { "ways": ["way/1076314747"], "within": { "lat": 28.6511148, "lon": 77.2278861, "radiusM": 29 } }
+    },
+    {
+      "id": "judge_site_041_closed",
+      "by": "judge",
+      "kind": "context",
+      "why": "narrow lane between continuous building fronts, no vehicle visible, under 4 m of clear width on the picture",
+      "refs": ["harness/reports/access/sheet_05.jpg (site 41, Esri World Imagery, judged 2026-11-14)", "harness/reports/access/borderline.json"],
+      "modes": ["two_wheeler", "cycle", "foot", "emergency"],
+      "barrier": "none",
+      "match": { "ways": ["way/293420639", "way/798855534"], "within": { "lat": 28.650725, "lon": 77.2310207, "radiusM": 22 } }
+    },
+    {
+      "id": "judge_site_042_closed",
+      "by": "judge",
+      "kind": "context",
+      "why": "narrow lane between continuous building fronts, no vehicle visible, under 4 m of clear width on the picture",
+      "refs": ["harness/reports/access/sheet_05.jpg (site 42, Esri World Imagery, judged 2026-11-14)", "harness/reports/access/borderline.json"],
+      "modes": ["two_wheeler", "cycle", "foot", "emergency"],
+      "barrier": "none",
+      "match": { "ways": ["way/44141545"], "within": { "lat": 28.6503199, "lon": 77.2293616, "radiusM": 20 } }
+    },
+    {
+      "id": "judge_site_038_open",
+      "by": "judge",
+      "kind": "context",
+      "why": "Fasil Road along the rail yard fence: a long straight road with vehicles on it in the picture, the 3.4 m width is a modelling gap",
+      "refs": ["harness/reports/access/sheet_05.jpg (site 38, Esri World Imagery, judged 2026-11-14)", "harness/reports/access/borderline.json"],
+      "modes": ["car", "auto", "two_wheeler", "cycle", "foot", "emergency"],
+      "barrier": "none",
+      "match": { "ways": ["way/169826205"], "within": { "lat": 28.6510694, "lon": 77.2206202, "radiusM": 74 } }
+    },
+    {
+      "id": "judge_site_047_closed",
+      "by": "judge",
+      "kind": "context",
+      "why": "named old city gali or bazaar lane: two-wheelers, rickshaws and walkers only, stalls take the width",
+      "refs": ["harness/reports/access/sheet_06.jpg (site 47, Esri World Imagery, judged 2026-11-14)", "harness/reports/access/borderline.json"],
+      "modes": ["two_wheeler", "cycle", "foot", "emergency"],
+      "barrier": "none",
+      "match": { "ways": ["way/696306284"], "within": { "lat": 28.6495859, "lon": 77.228416, "radiusM": 27 } }
+    },
+    {
+      "id": "judge_site_049_closed",
+      "by": "judge",
+      "kind": "context",
+      "why": "narrow lane between continuous building fronts, no vehicle visible, under 4 m of clear width on the picture",
+      "refs": ["harness/reports/access/sheet_06.jpg (site 49, Esri World Imagery, judged 2026-11-14)", "harness/reports/access/borderline.json"],
+      "modes": ["two_wheeler", "cycle", "foot", "emergency"],
+      "barrier": "none",
+      "match": { "ways": ["way/793211970", "way/1079457219"], "within": { "lat": 28.6478913, "lon": 77.2335123, "radiusM": 82 } }
+    },
+    {
+      "id": "judge_site_050_closed",
+      "by": "judge",
+      "kind": "context",
+      "why": "narrow lane between continuous building fronts, no vehicle visible, under 4 m of clear width on the picture",
+      "refs": ["harness/reports/access/sheet_06.jpg (site 50, Esri World Imagery, judged 2026-11-14)", "harness/reports/access/borderline.json"],
+      "modes": ["two_wheeler", "cycle", "foot", "emergency"],
+      "barrier": "none",
+      "match": { "ways": ["way/1359931145", "way/1420918100"], "within": { "lat": 28.6470518, "lon": 77.2260098, "radiusM": 103 } }
+    },
+    {
+      "id": "judge_site_051_closed",
+      "by": "judge",
+      "kind": "context",
+      "why": "narrow lane between continuous building fronts, no vehicle visible, under 4 m of clear width on the picture",
+      "refs": ["harness/reports/access/sheet_06.jpg (site 51, Esri World Imagery, judged 2026-11-14)", "harness/reports/access/borderline.json"],
+      "modes": ["two_wheeler", "cycle", "foot", "emergency"],
+      "barrier": "none",
+      "match": { "ways": ["way/266777611", "way/266777610", "way/266777606"], "within": { "lat": 28.6468944, "lon": 77.244436, "radiusM": 44 } }
+    },
+    {
+      "id": "judge_site_052_closed",
+      "by": "judge",
+      "kind": "context",
+      "why": "narrow lane between continuous building fronts, no vehicle visible, under 4 m of clear width on the picture",
+      "refs": ["harness/reports/access/sheet_06.jpg (site 52, Esri World Imagery, judged 2026-11-14)", "harness/reports/access/borderline.json"],
+      "modes": ["two_wheeler", "cycle", "foot", "emergency"],
+      "barrier": "none",
+      "match": { "ways": ["way/1155006392"], "within": { "lat": 28.6470607, "lon": 77.235384, "radiusM": 95 } }
+    },
+    {
+      "id": "judge_site_053_closed",
+      "by": "judge",
+      "kind": "context",
+      "why": "narrow lane between continuous building fronts, no vehicle visible, under 4 m of clear width on the picture",
+      "refs": ["harness/reports/access/sheet_06.jpg (site 53, Esri World Imagery, judged 2026-11-14)", "harness/reports/access/borderline.json"],
+      "modes": ["two_wheeler", "cycle", "foot", "emergency"],
+      "barrier": "none",
+      "match": { "ways": ["way/1076803626"], "within": { "lat": 28.6464996, "lon": 77.231081, "radiusM": 28 } }
+    },
+    {
+      "id": "judge_site_054_open",
+      "by": "judge",
+      "kind": "context",
+      "why": "Kalan Mahal Road: a long straight named road, the same dark band along its whole length, a road in the picture",
+      "refs": ["harness/reports/access/sheet_06.jpg (site 54, Esri World Imagery, judged 2026-11-14)", "harness/reports/access/borderline.json"],
+      "modes": ["car", "auto", "two_wheeler", "cycle", "foot", "emergency"],
+      "barrier": "none",
+      "match": { "ways": ["way/44610955"], "within": { "lat": 28.6462184, "lon": 77.2361404, "radiusM": 119 } }
+    },
+    {
+      "id": "judge_site_056_closed",
+      "by": "judge",
+      "kind": "context",
+      "why": "narrow lane between continuous building fronts, no vehicle visible, under 4 m of clear width on the picture",
+      "refs": ["harness/reports/access/sheet_07.jpg (site 56, Esri World Imagery, judged 2026-11-14)", "harness/reports/access/borderline.json"],
+      "modes": ["two_wheeler", "cycle", "foot", "emergency"],
+      "barrier": "none",
+      "match": { "ways": ["way/1077883505"], "within": { "lat": 28.6462605, "lon": 77.2328801, "radiusM": 34 } }
+    },
+    {
+      "id": "judge_site_060_closed",
+      "by": "judge",
+      "kind": "context",
+      "why": "narrow lane between continuous building fronts, no vehicle visible, under 4 m of clear width on the picture",
+      "refs": ["harness/reports/access/sheet_07.jpg (site 60, Esri World Imagery, judged 2026-11-14)", "harness/reports/access/borderline.json"],
+      "modes": ["two_wheeler", "cycle", "foot", "emergency"],
+      "barrier": "none",
+      "match": { "ways": ["way/1420918096", "way/758558781"], "within": { "lat": 28.6453515, "lon": 77.2275129, "radiusM": 94 } }
+    },
+    {
+      "id": "judge_site_061_closed",
+      "by": "judge",
+      "kind": "context",
+      "why": "narrow lane between continuous building fronts, no vehicle visible, under 4 m of clear width on the picture",
+      "refs": ["harness/reports/access/sheet_07.jpg (site 61, Esri World Imagery, judged 2026-11-14)", "harness/reports/access/borderline.json"],
+      "modes": ["two_wheeler", "cycle", "foot", "emergency"],
+      "barrier": "none",
+      "match": { "ways": ["way/700293872", "way/993539126"], "within": { "lat": 28.6448943, "lon": 77.2353231, "radiusM": 78 } }
+    },
+    {
+      "id": "judge_site_063_closed",
+      "by": "judge",
+      "kind": "context",
+      "why": "narrow lane between continuous building fronts, no vehicle visible, under 4 m of clear width on the picture",
+      "refs": ["harness/reports/access/sheet_07.jpg (site 63, Esri World Imagery, judged 2026-11-14)", "harness/reports/access/borderline.json"],
+      "modes": ["two_wheeler", "cycle", "foot", "emergency"],
+      "barrier": "none",
+      "match": { "ways": ["way/145411837"], "within": { "lat": 28.6452165, "lon": 77.2334498, "radiusM": 102 } }
+    },
+    {
+      "id": "judge_site_057_closed",
+      "by": "judge",
+      "kind": "context",
+      "why": "narrow lane between continuous building fronts, no vehicle visible, under 4 m of clear width on the picture",
+      "refs": ["harness/reports/access/sheet_07.jpg (site 57, Esri World Imagery, judged 2026-11-14)", "harness/reports/access/borderline.json"],
+      "modes": ["two_wheeler", "cycle", "foot", "emergency"],
+      "barrier": "none",
+      "match": { "ways": ["way/1430199534", "way/176466587", "way/1467502621", "way/993539118", "way/661372695"], "within": { "lat": 28.645247, "lon": 77.215413, "radiusM": 95 } }
+    },
+    {
+      "id": "judge_site_058_closed",
+      "by": "judge",
+      "kind": "context",
+      "why": "service drives inside a leafy institutional compound beside a wall, gate-controlled in the picture, not a public street",
+      "refs": ["harness/reports/access/sheet_07.jpg (site 58, Esri World Imagery, judged 2026-11-14)", "harness/reports/access/borderline.json"],
+      "modes": ["two_wheeler", "cycle", "foot", "emergency"],
+      "barrier": "none",
+      "match": { "ways": ["way/1555041329", "way/993539143"], "within": { "lat": 28.6459347, "lon": 77.2421289, "radiusM": 101 } }
+    },
+    {
+      "id": "judge_site_059_closed",
+      "by": "judge",
+      "kind": "context",
+      "why": "short side lanes off the main road, no vehicle on them, lanes between buildings",
+      "refs": ["harness/reports/access/sheet_07.jpg (site 59, Esri World Imagery, judged 2026-11-14)", "harness/reports/access/borderline.json"],
+      "modes": ["two_wheeler", "cycle", "foot", "emergency"],
+      "barrier": "none",
+      "match": { "ways": ["way/38235289", "way/120287345"], "within": { "lat": 28.6453235, "lon": 77.2104601, "radiusM": 62 } }
+    },
+    {
+      "id": "judge_site_062_closed",
+      "by": "judge",
+      "kind": "context",
+      "why": "service strips and stubs beside the main road, tree-lined and narrow, no vehicle visible on them",
+      "refs": ["harness/reports/access/sheet_07.jpg (site 62, Esri World Imagery, judged 2026-11-14)", "harness/reports/access/borderline.json"],
+      "modes": ["two_wheeler", "cycle", "foot", "emergency"],
+      "barrier": "none",
+      "match": { "ways": ["way/120287345", "way/696618262", "way/696618261", "way/696618263"], "within": { "lat": 28.6447085, "lon": 77.213413, "radiusM": 89 } }
+    },
+    {
+      "id": "judge_site_064_open",
+      "by": "judge",
+      "kind": "context",
+      "why": "Sir Sayed Ahmed Road: a named road that stays the same width as it leaves the main road, wider than the lanes beside it",
+      "refs": ["harness/reports/access/sheet_08.jpg (site 64, Esri World Imagery, judged 2026-11-14)", "harness/reports/access/borderline.json"],
+      "modes": ["car", "auto", "two_wheeler", "cycle", "foot", "emergency"],
+      "barrier": "none",
+      "match": { "ways": ["way/44610944"], "within": { "lat": 28.6446031, "lon": 77.2394669, "radiusM": 50 } }
+    },
+    {
+      "id": "judge_site_065_closed",
+      "by": "judge",
+      "kind": "context",
+      "why": "narrow lane between continuous building fronts, no vehicle visible, under 4 m of clear width on the picture",
+      "refs": ["harness/reports/access/sheet_08.jpg (site 65, Esri World Imagery, judged 2026-11-14)", "harness/reports/access/borderline.json"],
+      "modes": ["two_wheeler", "cycle", "foot", "emergency"],
+      "barrier": "none",
+      "match": { "ways": ["way/732808236", "way/123406179", "way/120287341", "way/1127530262"], "within": { "lat": 28.6439964, "lon": 77.215674, "radiusM": 107 } }
+    },
+    {
+      "id": "judge_site_066_open",
+      "by": "judge",
+      "kind": "context",
+      "why": "planned grid colony: straight regular streets of 4 to 5 m between house plots, parked cars in the picture, not an old city lane",
+      "refs": ["harness/reports/access/sheet_08.jpg (site 66, Esri World Imagery, judged 2026-11-14)", "harness/reports/access/borderline.json"],
+      "modes": ["car", "auto", "two_wheeler", "cycle", "foot", "emergency"],
+      "barrier": "none",
+      "match": { "ways": ["way/80429885", "way/80429829"], "within": { "lat": 28.644021, "lon": 77.2409315, "radiusM": 63 } }
+    },
+    {
+      "id": "judge_site_067_open",
+      "by": "judge",
+      "kind": "context",
+      "why": "car park aisles and bus stand service roads with parked cars, taxis and buses in the picture, not old city lanes",
+      "refs": ["harness/reports/access/sheet_08.jpg (site 67, Esri World Imagery, judged 2026-11-14)", "harness/reports/access/borderline.json"],
+      "modes": ["car", "auto", "two_wheeler", "cycle", "foot", "emergency"],
+      "barrier": "none",
+      "match": {
+        "ways": [
+          "way/463710733",
+          "way/463710734",
+          "way/463710724",
+          "way/463710737",
+          "way/463710726",
+          "way/463710719",
+          "way/590609990",
+          "way/1423096198",
+          "way/1423096190",
+          "way/80418129",
+          "way/736467347",
+          "way/704488866",
+          "way/704488865"
+        ],
+        "within": { "lat": 28.6430888, "lon": 77.2229651, "radiusM": 161 }
+      }
+    },
+    {
+      "id": "judge_site_068_open",
+      "by": "judge",
+      "kind": "context",
+      "why": "Sir Sayed Ahmed Road: a named road, the same dark band as at site 64 where it joins the main road",
+      "refs": ["harness/reports/access/sheet_08.jpg (site 68, Esri World Imagery, judged 2026-11-14)", "harness/reports/access/borderline.json"],
+      "modes": ["car", "auto", "two_wheeler", "cycle", "foot", "emergency"],
+      "barrier": "none",
+      "match": { "ways": ["way/44610944"], "within": { "lat": 28.64394, "lon": 77.2381009, "radiusM": 46 } }
+    },
+    {
+      "id": "judge_site_069_open",
+      "by": "judge",
+      "kind": "context",
+      "why": "station car park and taxi stand aisles with rows of parked cars in the picture, not old city lanes",
+      "refs": ["harness/reports/access/sheet_08.jpg (site 69, Esri World Imagery, judged 2026-11-14)", "harness/reports/access/borderline.json"],
+      "modes": ["car", "auto", "two_wheeler", "cycle", "foot", "emergency"],
+      "barrier": "none",
+      "match": {
+        "ways": ["way/696638734", "way/696638733", "way/570812817", "way/745649891", "way/745649892", "way/745649890", "way/745649889", "way/80414540", "way/704509834"],
+        "within": { "lat": 28.6433601, "lon": 77.2184597, "radiusM": 92 }
+      }
+    },
+    {
+      "id": "judge_site_070_closed",
+      "by": "judge",
+      "kind": "context",
+      "why": "named old city gali or bazaar lane: two-wheelers, rickshaws and walkers only, stalls take the width",
+      "refs": ["harness/reports/access/sheet_08.jpg (site 70, Esri World Imagery, judged 2026-11-14)", "harness/reports/access/borderline.json"],
+      "modes": ["two_wheeler", "cycle", "foot", "emergency"],
+      "barrier": "none",
+      "match": { "ways": ["way/38235325", "way/696618262", "way/696618263", "way/1576321777", "way/120287368"], "within": { "lat": 28.6433984, "lon": 77.2134188, "radiusM": 156 } }
+    },
+    {
+      "id": "judge_site_071_closed",
+      "by": "judge",
+      "kind": "context",
+      "why": "named old city gali or bazaar lane: two-wheelers, rickshaws and walkers only, stalls take the width",
+      "refs": ["harness/reports/access/sheet_08.jpg (site 71, Esri World Imagery, judged 2026-11-14)", "harness/reports/access/borderline.json"],
+      "modes": ["two_wheeler", "cycle", "foot", "emergency"],
+      "barrier": "none",
+      "match": { "ways": ["way/38235325", "way/38235329"], "within": { "lat": 28.6428824, "lon": 77.2139543, "radiusM": 81 } }
+    },
+    {
+      "id": "judge_site_072_closed",
+      "by": "judge",
+      "kind": "context",
+      "why": "narrow lane between continuous building fronts, no vehicle visible, under 4 m of clear width on the picture",
+      "refs": ["harness/reports/access/sheet_08.jpg (site 72, Esri World Imagery, judged 2026-11-14)", "harness/reports/access/borderline.json"],
+      "modes": ["two_wheeler", "cycle", "foot", "emergency"],
+      "barrier": "none",
+      "match": { "ways": ["way/1074230251"], "within": { "lat": 28.643582, "lon": 77.2343866, "radiusM": 21 } }
+    },
+    {
+      "id": "judge_site_073_closed",
+      "by": "judge",
+      "kind": "context",
+      "why": "narrow lane between continuous building fronts, no vehicle visible, under 4 m of clear width on the picture",
+      "refs": ["harness/reports/access/sheet_09.jpg (site 73, Esri World Imagery, judged 2026-11-14)", "harness/reports/access/borderline.json"],
+      "modes": ["two_wheeler", "cycle", "foot", "emergency"],
+      "barrier": "none",
+      "match": { "ways": ["way/145411837"], "within": { "lat": 28.6432933, "lon": 77.2326187, "radiusM": 44 } }
+    },
+    {
+      "id": "judge_site_074_closed",
+      "by": "judge",
+      "kind": "context",
+      "why": "narrow lane between continuous building fronts, no vehicle visible, under 4 m of clear width on the picture",
+      "refs": ["harness/reports/access/sheet_09.jpg (site 74, Esri World Imagery, judged 2026-11-14)", "harness/reports/access/borderline.json"],
+      "modes": ["two_wheeler", "cycle", "foot", "emergency"],
+      "barrier": "none",
+      "match": {
+        "ways": ["way/120287367", "way/120287369", "way/120287371", "way/360250365", "way/38235325", "way/120287375", "way/169079848"],
+        "within": { "lat": 28.642691, "lon": 77.217124, "radiusM": 112 }
+      }
+    },
+    {
+      "id": "judge_site_075_closed",
+      "by": "judge",
+      "kind": "context",
+      "why": "narrow lane between continuous building fronts, no vehicle visible, under 4 m of clear width on the picture",
+      "refs": ["harness/reports/access/sheet_09.jpg (site 75, Esri World Imagery, judged 2026-11-14)", "harness/reports/access/borderline.json"],
+      "modes": ["two_wheeler", "cycle", "foot", "emergency"],
+      "barrier": "none",
+      "match": { "ways": ["way/1126626669"], "within": { "lat": 28.6433832, "lon": 77.2394402, "radiusM": 71 } }
+    },
+    {
+      "id": "judge_site_076_open",
+      "by": "judge",
+      "kind": "context",
+      "why": "planned colony block: straight regular 4 m lanes between house plots and gates, a car fits and parks in them",
+      "refs": ["harness/reports/access/sheet_09.jpg (site 76, Esri World Imagery, judged 2026-11-14)", "harness/reports/access/borderline.json"],
+      "modes": ["car", "auto", "two_wheeler", "cycle", "foot", "emergency"],
+      "barrier": "none",
+      "match": { "ways": ["way/80429850"], "within": { "lat": 28.6430277, "lon": 77.2447623, "radiusM": 33 } }
+    },
+    {
+      "id": "judge_site_077_open",
+      "by": "judge",
+      "kind": "context",
+      "why": "station forecourt: taxi stand, car park aisles and bus bays with taxis and cars in the picture, not old city lanes",
+      "refs": ["harness/reports/access/sheet_09.jpg (site 77, Esri World Imagery, judged 2026-11-14)", "harness/reports/access/borderline.json"],
+      "modes": ["car", "auto", "two_wheeler", "cycle", "foot", "emergency"],
+      "barrier": "none",
+      "match": {
+        "ways": [
+          "way/80418111",
+          "way/736467347",
+          "way/704488869",
+          "way/704488867",
+          "way/704488873",
+          "way/704488872",
+          "way/1187194334",
+          "way/1187194336",
+          "way/1187194335",
+          "way/570917342",
+          "way/704488870",
+          "way/736467346",
+          "way/704488871",
+          "way/463710712",
+          "way/541896195"
+        ],
+        "within": { "lat": 28.6425705, "lon": 77.2229539, "radiusM": 94 }
+      }
+    },
+    {
+      "id": "judge_site_078_open",
+      "by": "judge",
+      "kind": "context",
+      "why": "station parking aisles and the long drop-off lanes beside the platforms, rows of parked cars in the picture",
+      "refs": ["harness/reports/access/sheet_09.jpg (site 78, Esri World Imagery, judged 2026-11-14)", "harness/reports/access/borderline.json"],
+      "modes": ["car", "auto", "two_wheeler", "cycle", "foot", "emergency"],
+      "barrier": "none",
+      "match": {
+        "ways": [
+          "way/704509834",
+          "way/80414546",
+          "way/80414540",
+          "way/704509833",
+          "way/570812822",
+          "way/696638734",
+          "way/80414537",
+          "way/570812823",
+          "way/570812817",
+          "way/1386913756",
+          "way/758626077"
+        ],
+        "within": { "lat": 28.6427561, "lon": 77.2187896, "radiusM": 92 }
+      }
+    },
+    {
+      "id": "judge_site_080_closed",
+      "by": "judge",
+      "kind": "context",
+      "why": "narrow lane between continuous building fronts, no vehicle visible, under 4 m of clear width on the picture",
+      "refs": ["harness/reports/access/sheet_09.jpg (site 80, Esri World Imagery, judged 2026-11-14)", "harness/reports/access/borderline.json"],
+      "modes": ["two_wheeler", "cycle", "foot", "emergency"],
+      "barrier": "none",
+      "match": {
+        "ways": ["way/120287354", "way/38235329", "way/1076749545", "way/120287378", "way/38235260", "way/120287343", "way/1076749544", "way/123401417"],
+        "within": { "lat": 28.6421849, "lon": 77.2135995, "radiusM": 112 }
+      }
+    },
+    {
+      "id": "judge_site_081_open",
+      "by": "judge",
+      "kind": "context",
+      "why": "planned grid colony: long straight streets between regular blocks, Rajguru Marg is a named street, a car fits",
+      "refs": ["harness/reports/access/sheet_09.jpg (site 81, Esri World Imagery, judged 2026-11-14)", "harness/reports/access/borderline.json"],
+      "modes": ["car", "auto", "two_wheeler", "cycle", "foot", "emergency"],
+      "barrier": "none",
+      "match": { "ways": ["way/38235289", "way/120287360"], "within": { "lat": 28.6417721, "lon": 77.2101605, "radiusM": 115 } }
+    },
+    {
+      "id": "judge_site_082_private",
+      "by": "judge",
+      "kind": "context",
+      "why": "service drive round a large building with a forecourt, vehicles on the drive at its south end in the picture, not an old city lane",
+      "refs": ["harness/reports/access/sheet_10.jpg (site 82, Esri World Imagery, judged 2026-11-14)", "harness/reports/access/borderline.json"],
+      "modes": ["car", "auto", "two_wheeler", "cycle", "foot", "emergency"],
+      "private": true,
+      "barrier": "none",
+      "match": { "ways": ["way/463710717", "way/463710718"], "within": { "lat": 28.6421523, "lon": 77.2248005, "radiusM": 51 } }
+    },
+    {
+      "id": "judge_site_083_open",
+      "by": "judge",
+      "kind": "context",
+      "why": "station forecourt car park and taxi stand: parked cars and taxis in the picture, not an old city lane",
+      "refs": ["harness/reports/access/sheet_10.jpg (site 83, Esri World Imagery, judged 2026-11-14)", "harness/reports/access/borderline.json"],
+      "modes": ["car", "auto", "two_wheeler", "cycle", "foot", "emergency"],
+      "barrier": "none",
+      "match": { "ways": ["way/704488868", "way/1374636985", "way/1187194333"], "within": { "lat": 28.6420183, "lon": 77.222893, "radiusM": 94 } }
+    },
+    {
+      "id": "judge_site_084_closed",
+      "by": "judge",
+      "kind": "context",
+      "why": "narrow lane between continuous building fronts, no vehicle visible, under 4 m of clear width on the picture",
+      "refs": ["harness/reports/access/sheet_10.jpg (site 84, Esri World Imagery, judged 2026-11-14)", "harness/reports/access/borderline.json"],
+      "modes": ["two_wheeler", "cycle", "foot", "emergency"],
+      "barrier": "none",
+      "match": { "ways": ["way/38235329"], "within": { "lat": 28.6421307, "lon": 77.2172422, "radiusM": 73 } }
+    },
+    {
+      "id": "judge_site_085_closed",
+      "by": "judge",
+      "kind": "context",
+      "why": "named old city gali or bazaar lane: two-wheelers, rickshaws and walkers only, stalls take the width",
+      "refs": ["harness/reports/access/sheet_10.jpg (site 85, Esri World Imagery, judged 2026-11-14)", "harness/reports/access/borderline.json"],
+      "modes": ["two_wheeler", "cycle", "foot", "emergency"],
+      "barrier": "none",
+      "match": {
+        "ways": ["way/120287339", "way/120287343", "way/120287346", "way/120287356", "way/120287370", "way/120287373", "way/123401415"],
+        "within": { "lat": 28.6416197, "lon": 77.2144137, "radiusM": 103 }
+      }
+    },
+    {
+      "id": "judge_site_086_open",
+      "by": "judge",
+      "kind": "context",
+      "why": "Arya Nagar Road: a straight named road off the main road with the same width along it, vehicles at its mouth",
+      "refs": ["harness/reports/access/sheet_10.jpg (site 86, Esri World Imagery, judged 2026-11-14)", "harness/reports/access/borderline.json"],
+      "modes": ["car", "auto", "two_wheeler", "cycle", "foot", "emergency"],
+      "barrier": "none",
+      "match": { "ways": ["way/38235260"], "within": { "lat": 28.6412902, "lon": 77.2127257, "radiusM": 30 } }
+    },
+    {
+      "id": "judge_site_087_open",
+      "by": "judge",
+      "kind": "context",
+      "why": "service road in front of a row of shops, parallel to the main road, parked vehicles along it in the picture",
+      "refs": ["harness/reports/access/sheet_10.jpg (site 87, Esri World Imagery, judged 2026-11-14)", "harness/reports/access/borderline.json"],
+      "modes": ["car", "auto", "two_wheeler", "cycle", "foot", "emergency"],
+      "barrier": "none",
+      "match": { "ways": ["way/80418130"], "within": { "lat": 28.6413659, "lon": 77.2371342, "radiusM": 87 } }
+    },
+    {
+      "id": "judge_site_088_private",
+      "by": "judge",
+      "kind": "context",
+      "why": "ring drives round a large office and mall complex, wide smooth carriageways with vehicles, not old city lanes",
+      "refs": ["harness/reports/access/sheet_10.jpg (site 88, Esri World Imagery, judged 2026-11-14)", "harness/reports/access/borderline.json"],
+      "modes": ["car", "auto", "two_wheeler", "cycle", "foot", "emergency"],
+      "private": true,
+      "barrier": "none",
+      "match": { "ways": ["way/406257310", "way/406257314", "way/406257303", "way/1255941807"], "within": { "lat": 28.6406587, "lon": 77.2279308, "radiusM": 95 } }
+    },
+    {
+      "id": "judge_site_089_open",
+      "by": "judge",
+      "kind": "context",
+      "why": "planned colony: a straight regular lane between house plots, 4 m, cars can use it",
+      "refs": ["harness/reports/access/sheet_10.jpg (site 89, Esri World Imagery, judged 2026-11-14)", "harness/reports/access/borderline.json"],
+      "modes": ["car", "auto", "two_wheeler", "cycle", "foot", "emergency"],
+      "barrier": "none",
+      "match": { "ways": ["way/120287379"], "within": { "lat": 28.6410894, "lon": 77.2093843, "radiusM": 40 } }
+    },
+    {
+      "id": "judge_site_090_closed",
+      "by": "judge",
+      "kind": "context",
+      "why": "a track under trees inside a wooded compound, no vehicle visible on it, no clear road surface",
+      "refs": ["harness/reports/access/sheet_10.jpg (site 90, Esri World Imagery, judged 2026-11-14)", "harness/reports/access/borderline.json"],
+      "modes": ["two_wheeler", "cycle", "foot", "emergency"],
+      "barrier": "none",
+      "match": { "ways": ["way/1076782201"], "within": { "lat": 28.6399408, "lon": 77.2241808, "radiusM": 67 } }
+    },
+    {
+      "id": "judge_site_091_private",
+      "by": "judge",
+      "kind": "context",
+      "why": "paved drive of a leafy hospital, office or residential compound, buildings set back, not an old city lane: a car fits",
+      "refs": ["harness/reports/access/sheet_11.jpg (site 91, Esri World Imagery, judged 2026-11-14)", "harness/reports/access/borderline.json"],
+      "modes": ["car", "auto", "two_wheeler", "cycle", "foot", "emergency"],
+      "private": true,
+      "barrier": "none",
+      "match": { "ways": ["way/696554059", "way/696554061", "way/696554060"], "within": { "lat": 28.6397241, "lon": 77.2373008, "radiusM": 54 } }
+    },
+    {
+      "id": "judge_site_092_private",
+      "by": "judge",
+      "kind": "context",
+      "why": "paved straight service road along the metro station building, buildings set back, not an old city lane",
+      "refs": ["harness/reports/access/sheet_11.jpg (site 92, Esri World Imagery, judged 2026-11-14)", "harness/reports/access/borderline.json"],
+      "modes": ["car", "auto", "two_wheeler", "cycle", "foot", "emergency"],
+      "private": true,
+      "barrier": "none",
+      "match": { "ways": ["way/120287361", "way/79563086"], "within": { "lat": 28.6396742, "lon": 77.2093217, "radiusM": 98 } }
+    },
+    {
+      "id": "judge_site_093_closed",
+      "by": "judge",
+      "kind": "context",
+      "why": "narrow lane between continuous building fronts, no vehicle visible, under 4 m of clear width on the picture",
+      "refs": ["harness/reports/access/sheet_11.jpg (site 93, Esri World Imagery, judged 2026-11-14)", "harness/reports/access/borderline.json"],
+      "modes": ["two_wheeler", "cycle", "foot", "emergency"],
+      "barrier": "none",
+      "match": { "ways": ["way/38235349", "way/164698290", "way/164698291"], "within": { "lat": 28.639321, "lon": 77.2134593, "radiusM": 56 } }
+    },
+    {
+      "id": "judge_site_094_private",
+      "by": "judge",
+      "kind": "context",
+      "why": "paved drive of a leafy hospital, office or residential compound, buildings set back, not an old city lane: a car fits",
+      "refs": ["harness/reports/access/sheet_11.jpg (site 94, Esri World Imagery, judged 2026-11-14)", "harness/reports/access/borderline.json"],
+      "modes": ["car", "auto", "two_wheeler", "cycle", "foot", "emergency"],
+      "private": true,
+      "barrier": "none",
+      "match": { "ways": ["way/1073752573", "way/1073752571"], "within": { "lat": 28.6391196, "lon": 77.2371376, "radiusM": 119 } }
+    },
+    {
+      "id": "judge_site_096_open",
+      "by": "judge",
+      "kind": "context",
+      "why": "a straight paved road through a leafy residential colony, about 4 m, buildings set back",
+      "refs": ["harness/reports/access/sheet_11.jpg (site 96, Esri World Imagery, judged 2026-11-14)", "harness/reports/access/borderline.json"],
+      "modes": ["car", "auto", "two_wheeler", "cycle", "foot", "emergency"],
+      "barrier": "none",
+      "match": { "ways": ["way/1098227972", "way/1253244078"], "within": { "lat": 28.6376174, "lon": 77.2348481, "radiusM": 89 } }
+    },
+    {
+      "id": "judge_site_097_private",
+      "by": "judge",
+      "kind": "context",
+      "why": "loop drive round a block of residential towers, wide and smooth, not an old city lane",
+      "refs": ["harness/reports/access/sheet_11.jpg (site 97, Esri World Imagery, judged 2026-11-14)", "harness/reports/access/borderline.json"],
+      "modes": ["car", "auto", "two_wheeler", "cycle", "foot", "emergency"],
+      "private": true,
+      "barrier": "none",
+      "match": { "ways": ["way/1423096189"], "within": { "lat": 28.6377975, "lon": 77.2248948, "radiusM": 82 } }
+    },
+    {
+      "id": "judge_site_098_private",
+      "by": "judge",
+      "kind": "context",
+      "why": "paved drive of a leafy hospital, office or residential compound, buildings set back, not an old city lane: a car fits",
+      "refs": ["harness/reports/access/sheet_11.jpg (site 98, Esri World Imagery, judged 2026-11-14)", "harness/reports/access/borderline.json"],
+      "modes": ["car", "auto", "two_wheeler", "cycle", "foot", "emergency"],
+      "private": true,
+      "barrier": "none",
+      "match": { "ways": ["way/1478588139"], "within": { "lat": 28.6367608, "lon": 77.2181627, "radiusM": 11 } }
+    },
+    {
+      "id": "judge_site_099_private",
+      "by": "judge",
+      "kind": "context",
+      "why": "paved drive of a leafy hospital, office or residential compound, buildings set back, not an old city lane: a car fits",
+      "refs": ["harness/reports/access/sheet_11.jpg (site 99, Esri World Imagery, judged 2026-11-14)", "harness/reports/access/borderline.json"],
+      "modes": ["car", "auto", "two_wheeler", "cycle", "foot", "emergency"],
+      "private": true,
+      "barrier": "none",
+      "match": { "ways": ["way/1306141820", "way/686914643", "way/686914642", "way/686914641"], "within": { "lat": 28.636062, "lon": 77.2402255, "radiusM": 71 } }
+    },
+    {
+      "id": "judge_site_100_closed",
+      "by": "judge",
+      "kind": "context",
+      "why": "drive inside a government office compound: closed to public cars, in line with the Lutyens government gate rule",
+      "refs": ["harness/reports/access/sheet_12.jpg (site 100, Esri World Imagery, judged 2026-11-14)", "harness/reports/access/borderline.json"],
+      "modes": ["two_wheeler", "cycle", "foot", "emergency"],
+      "barrier": "none",
+      "match": { "ways": ["way/125439736", "way/1076827649"], "within": { "lat": 28.6346284, "lon": 77.211206, "radiusM": 65 } }
+    },
+    {
+      "id": "judge_site_101_private",
+      "by": "judge",
+      "kind": "context",
+      "why": "internal drive of a walled compound or residential society among trees: allowed for residents and staff, never a through route",
+      "refs": ["harness/reports/access/sheet_12.jpg (site 101, Esri World Imagery, judged 2026-11-14)", "harness/reports/access/borderline.json"],
+      "modes": ["car", "auto", "two_wheeler", "cycle", "foot", "emergency"],
+      "private": true,
+      "barrier": "none",
+      "match": { "ways": ["way/1040444894", "way/1306153024"], "within": { "lat": 28.6340737, "lon": 77.2234617, "radiusM": 45 } }
+    },
+    {
+      "id": "judge_site_102_open",
+      "by": "judge",
+      "kind": "context",
+      "why": "parking rows beside the stadium, buses and cars lined up in the picture, car park aisles",
+      "refs": ["harness/reports/access/sheet_12.jpg (site 102, Esri World Imagery, judged 2026-11-14)", "harness/reports/access/borderline.json"],
+      "modes": ["car", "auto", "two_wheeler", "cycle", "foot", "emergency"],
+      "barrier": "none",
+      "match": {
+        "ways": ["way/391534137", "way/1252115371", "way/1252115368", "way/391534136", "way/1252115365", "way/1252115369"],
+        "within": { "lat": 28.6324977, "lon": 77.2155415, "radiusM": 67 }
+      }
+    },
+    {
+      "id": "judge_site_103_private",
+      "by": "judge",
+      "kind": "context",
+      "why": "internal drive of a walled compound or residential society among trees: allowed for residents and staff, never a through route",
+      "refs": ["harness/reports/access/sheet_12.jpg (site 103, Esri World Imagery, judged 2026-11-14)", "harness/reports/access/borderline.json"],
+      "modes": ["car", "auto", "two_wheeler", "cycle", "foot", "emergency"],
+      "private": true,
+      "barrier": "none",
+      "match": { "ways": ["way/1295567440", "way/993539946", "way/1187168561", "way/1184192941"], "within": { "lat": 28.6323599, "lon": 77.2329354, "radiusM": 82 } }
+    },
+    {
+      "id": "judge_site_104_open",
+      "by": "judge",
+      "kind": "context",
+      "why": "a straight paved colony street between bungalow plots, 3 m and a car fits, no gate",
+      "refs": ["harness/reports/access/sheet_12.jpg (site 104, Esri World Imagery, judged 2026-11-14)", "harness/reports/access/borderline.json"],
+      "modes": ["car", "auto", "two_wheeler", "cycle", "foot", "emergency"],
+      "barrier": "none",
+      "match": { "ways": ["way/700293877"], "within": { "lat": 28.6303871, "lon": 77.2311114, "radiusM": 32 } }
+    },
+    {
+      "id": "judge_site_105_private",
+      "by": "judge",
+      "kind": "context",
+      "why": "internal drive of a walled compound or residential society among trees: allowed for residents and staff, never a through route",
+      "refs": ["harness/reports/access/sheet_12.jpg (site 105, Esri World Imagery, judged 2026-11-14)", "harness/reports/access/borderline.json"],
+      "modes": ["car", "auto", "two_wheeler", "cycle", "foot", "emergency"],
+      "private": true,
+      "barrier": "none",
+      "match": { "ways": ["way/1120536727"], "within": { "lat": 28.6302615, "lon": 77.2169669, "radiusM": 29 } }
+    },
+    {
+      "id": "judge_site_106_private",
+      "by": "judge",
+      "kind": "context",
+      "why": "internal drive of a walled compound or residential society among trees: allowed for residents and staff, never a through route",
+      "refs": ["harness/reports/access/sheet_12.jpg (site 106, Esri World Imagery, judged 2026-11-14)", "harness/reports/access/borderline.json"],
+      "modes": ["car", "auto", "two_wheeler", "cycle", "foot", "emergency"],
+      "private": true,
+      "barrier": "none",
+      "match": { "ways": ["way/1121182699"], "within": { "lat": 28.6241527, "lon": 77.230462, "radiusM": 50 } }
+    },
+    {
+      "id": "judge_site_107_private",
+      "by": "judge",
+      "kind": "context",
+      "why": "internal drive of a walled compound or residential society among trees: allowed for residents and staff, never a through route",
+      "refs": ["harness/reports/access/sheet_12.jpg (site 107, Esri World Imagery, judged 2026-11-14)", "harness/reports/access/borderline.json"],
+      "modes": ["car", "auto", "two_wheeler", "cycle", "foot", "emergency"],
+      "private": true,
+      "barrier": "none",
+      "match": { "ways": ["way/705744785", "way/705744786", "way/993538728"], "within": { "lat": 28.6217271, "lon": 77.2199518, "radiusM": 56 } }
+    },
+    {
+      "id": "judge_site_108_private",
+      "by": "judge",
+      "kind": "context",
+      "why": "internal drive of a walled compound or residential society among trees: allowed for residents and staff, never a through route",
+      "refs": ["harness/reports/access/sheet_12.jpg (site 108, Esri World Imagery, judged 2026-11-14)", "harness/reports/access/borderline.json"],
+      "modes": ["car", "auto", "two_wheeler", "cycle", "foot", "emergency"],
+      "private": true,
+      "barrier": "none",
+      "match": { "ways": ["way/1202692538"], "within": { "lat": 28.6211648, "lon": 77.2327638, "radiusM": 32 } }
+    },
+    {
+      "id": "judge_site_109_private",
+      "by": "judge",
+      "kind": "context",
+      "why": "internal drive of a walled compound or residential society among trees: allowed for residents and staff, never a through route",
+      "refs": ["harness/reports/access/sheet_13.jpg (site 109, Esri World Imagery, judged 2026-11-14)", "harness/reports/access/borderline.json"],
+      "modes": ["car", "auto", "two_wheeler", "cycle", "foot", "emergency"],
+      "private": true,
+      "barrier": "none",
+      "match": { "ways": ["way/1121197444", "way/1121197445"], "within": { "lat": 28.6164097, "lon": 77.2342243, "radiusM": 49 } }
+    },
+    {
+      "id": "judge_site_110_closed",
+      "by": "judge",
+      "kind": "context",
+      "why": "drive inside a government office compound: closed to public cars, in line with the Lutyens government gate rule",
+      "refs": ["harness/reports/access/sheet_13.jpg (site 110, Esri World Imagery, judged 2026-11-14)", "harness/reports/access/borderline.json"],
+      "modes": ["two_wheeler", "cycle", "foot", "emergency"],
+      "barrier": "none",
+      "match": { "ways": ["way/582454142"], "within": { "lat": 28.6100288, "lon": 77.2281009, "radiusM": 77 } }
+    },
+    {
+      "id": "judge_site_111_closed",
+      "by": "judge",
+      "kind": "context",
+      "why": "drive inside a government office compound: closed to public cars, in line with the Lutyens government gate rule",
+      "refs": ["harness/reports/access/sheet_13.jpg (site 111, Esri World Imagery, judged 2026-11-14)", "harness/reports/access/borderline.json"],
+      "modes": ["two_wheeler", "cycle", "foot", "emergency"],
+      "barrier": "none",
+      "match": { "ways": ["way/1572438857", "way/1572438860", "way/1572438853", "way/1562150141"], "within": { "lat": 28.6087465, "lon": 77.2352996, "radiusM": 76 } }
+    },
+    {
+      "id": "judge_site_008_e1_closed",
+      "by": "judge",
+      "kind": "context",
+      "why": "the 96 m path along the walled garden carries no road in the picture, only a footpath edge",
+      "refs": ["harness/reports/access/sheet_01.jpg (site 8, Esri World Imagery, judged 2026-11-14)", "harness/reports/access/borderline.json"],
+      "modes": ["two_wheeler", "cycle", "foot", "emergency"],
+      "barrier": "none",
+      "match": { "ways": ["way/320348686"], "within": { "lat": 28.6568763, "lon": 77.2274764, "radiusM": 50 } }
+    },
+    {
+      "id": "judge_site_008_e2_open",
+      "by": "judge",
+      "kind": "context",
+      "why": "Nai Sarak mouth onto the main road is as wide as the road, then a street with vehicles",
+      "refs": ["harness/reports/access/sheet_01.jpg (site 8, Esri World Imagery, judged 2026-11-14)", "harness/reports/access/borderline.json"],
+      "modes": ["car", "auto", "two_wheeler", "cycle", "foot", "emergency"],
+      "barrier": "none",
+      "match": { "ways": ["way/44141299"], "within": { "lat": 28.6564563, "lon": 77.2274426, "radiusM": 8 } }
+    },
+    {
+      "id": "judge_site_009_e4_5_open",
+      "by": "judge",
+      "kind": "context",
+      "why": "6 m mouths onto the main road at the junction, the picture shows them as wide as the road",
+      "refs": ["harness/reports/access/sheet_01.jpg (site 9, Esri World Imagery, judged 2026-11-14)", "harness/reports/access/borderline.json"],
+      "modes": ["car", "auto", "two_wheeler", "cycle", "foot", "emergency"],
+      "barrier": "none",
+      "match": { "ways": ["way/1076276055", "way/80940712"], "within": { "lat": 28.6562691, "lon": 77.2321598, "radiusM": 13 } }
+    },
+    {
+      "id": "judge_site_011_e3_open",
+      "by": "judge",
+      "kind": "context",
+      "why": "the piece lies on a wide main road with vehicles on it in the picture, the 3 m width is a modelling gap",
+      "refs": ["harness/reports/access/sheet_02.jpg (site 11, Esri World Imagery, judged 2026-11-14)", "harness/reports/access/borderline.json"],
+      "modes": ["car", "auto", "two_wheeler", "cycle", "foot", "emergency"],
+      "barrier": "none",
+      "match": { "ways": ["way/44830358"], "within": { "lat": 28.6560926, "lon": 77.2347785, "radiusM": 7 } }
+    },
+    {
+      "id": "judge_site_018_e4_6_open",
+      "by": "judge",
+      "kind": "context",
+      "why": "a straight street visibly wider than the lanes around it, kerb to kerb room for a car",
+      "refs": ["harness/reports/access/sheet_02.jpg (site 18, Esri World Imagery, judged 2026-11-14)", "harness/reports/access/borderline.json"],
+      "modes": ["car", "auto", "two_wheeler", "cycle", "foot", "emergency"],
+      "barrier": "none",
+      "match": { "ways": ["way/1364873685"], "within": { "lat": 28.654682, "lon": 77.228264, "radiusM": 54 } }
+    },
+    {
+      "id": "judge_site_029_e1_closed",
+      "by": "judge",
+      "kind": "context",
+      "why": "narrow lane between continuous building fronts, no vehicle visible, under 4 m of clear width on the picture",
+      "refs": ["harness/reports/access/sheet_04.jpg (site 29, Esri World Imagery, judged 2026-11-14)", "harness/reports/access/borderline.json"],
+      "modes": ["two_wheeler", "cycle", "foot", "emergency"],
+      "barrier": "none",
+      "match": { "ways": ["way/82946139"], "within": { "lat": 28.653671, "lon": 77.2288573, "radiusM": 50 } }
+    },
+    {
+      "id": "judge_site_029_e2_3_open",
+      "by": "judge",
+      "kind": "context",
+      "why": "Nai Sarak: the broad straight street with vehicles on it, much wider than the lanes beside it",
+      "refs": ["harness/reports/access/sheet_04.jpg (site 29, Esri World Imagery, judged 2026-11-14)", "harness/reports/access/borderline.json"],
+      "modes": ["car", "auto", "two_wheeler", "cycle", "foot", "emergency"],
+      "barrier": "none",
+      "match": { "ways": ["way/44141299", "way/1079742369"], "within": { "lat": 28.6527998, "lon": 77.2288118, "radiusM": 66 } }
+    },
+    {
+      "id": "judge_site_032_e3_4_closed",
+      "by": "judge",
+      "kind": "context",
+      "why": "narrow lane between continuous building fronts, no vehicle visible, under 4 m of clear width on the picture",
+      "refs": ["harness/reports/access/sheet_04.jpg (site 32, Esri World Imagery, judged 2026-11-14)", "harness/reports/access/borderline.json"],
+      "modes": ["two_wheeler", "cycle", "foot", "emergency"],
+      "barrier": "none",
+      "match": { "ways": ["way/44923698"], "within": { "lat": 28.6515376, "lon": 77.2200765, "radiusM": 18 } }
+    },
+    {
+      "id": "judge_site_032_e1_2_open",
+      "by": "judge",
+      "kind": "context",
+      "why": "Fasil Road along the rail yard fence is a road with vehicles at its south end, the 3.2 m width is a modelling gap",
+      "refs": ["harness/reports/access/sheet_04.jpg (site 32, Esri World Imagery, judged 2026-11-14)", "harness/reports/access/borderline.json"],
+      "modes": ["car", "auto", "two_wheeler", "cycle", "foot", "emergency"],
+      "barrier": "none",
+      "match": { "ways": ["way/169826205", "way/44923698"], "within": { "lat": 28.6521931, "lon": 77.2198724, "radiusM": 79 } }
+    },
+    {
+      "id": "judge_site_034_e2_4_closed",
+      "by": "judge",
+      "kind": "context",
+      "why": "narrow lane between continuous building fronts, no vehicle visible, under 4 m of clear width on the picture",
+      "refs": ["harness/reports/access/sheet_04.jpg (site 34, Esri World Imagery, judged 2026-11-14)", "harness/reports/access/borderline.json"],
+      "modes": ["two_wheeler", "cycle", "foot", "emergency"],
+      "barrier": "none",
+      "match": { "ways": ["way/1079742369", "way/44141545"], "within": { "lat": 28.6513683, "lon": 77.2289913, "radiusM": 106 } }
+    },
+    {
+      "id": "judge_site_034_e1_3_open",
+      "by": "judge",
+      "kind": "context",
+      "why": "Nai Sarak: the broad straight street running through the picture, vehicles on it",
+      "refs": ["harness/reports/access/sheet_04.jpg (site 34, Esri World Imagery, judged 2026-11-14)", "harness/reports/access/borderline.json"],
+      "modes": ["car", "auto", "two_wheeler", "cycle", "foot", "emergency"],
+      "barrier": "none",
+      "match": { "ways": ["way/44141299"], "within": { "lat": 28.6523992, "lon": 77.2291468, "radiusM": 63 } }
+    },
+    {
+      "id": "judge_site_035_e1_3_closed",
+      "by": "judge",
+      "kind": "context",
+      "why": "narrow lane between continuous building fronts, no vehicle visible, under 4 m of clear width on the picture",
+      "refs": ["harness/reports/access/sheet_04.jpg (site 35, Esri World Imagery, judged 2026-11-14)", "harness/reports/access/borderline.json"],
+      "modes": ["two_wheeler", "cycle", "foot", "emergency"],
+      "barrier": "none",
+      "match": { "ways": ["way/123406190", "way/1076769490"], "within": { "lat": 28.6514461, "lon": 77.2154833, "radiusM": 93 } }
+    },
+    {
+      "id": "judge_site_035_e2_open",
+      "by": "judge",
+      "kind": "context",
+      "why": "Nabi Karim Road is a long straight street, visibly wider than the lanes it crosses",
+      "refs": ["harness/reports/access/sheet_04.jpg (site 35, Esri World Imagery, judged 2026-11-14)", "harness/reports/access/borderline.json"],
+      "modes": ["car", "auto", "two_wheeler", "cycle", "foot", "emergency"],
+      "barrier": "none",
+      "match": { "ways": ["way/38235414"], "within": { "lat": 28.6511335, "lon": 77.2152762, "radiusM": 44 } }
+    },
+    {
+      "id": "judge_site_044_e2_closed",
+      "by": "judge",
+      "kind": "context",
+      "why": "narrow lane between continuous building fronts, no vehicle visible, under 4 m of clear width on the picture",
+      "refs": ["harness/reports/access/sheet_05.jpg (site 44, Esri World Imagery, judged 2026-11-14)", "harness/reports/access/borderline.json"],
+      "modes": ["two_wheeler", "cycle", "foot", "emergency"],
+      "barrier": "none",
+      "match": { "ways": ["way/169826228"], "within": { "lat": 28.6493443, "lon": 77.2216667, "radiusM": 15 } }
+    },
+    {
+      "id": "judge_site_044_e1_3_open",
+      "by": "judge",
+      "kind": "context",
+      "why": "Fasil Road along the rail yard fence: a long straight road with vehicles on it in the picture",
+      "refs": ["harness/reports/access/sheet_05.jpg (site 44, Esri World Imagery, judged 2026-11-14)", "harness/reports/access/borderline.json"],
+      "modes": ["car", "auto", "two_wheeler", "cycle", "foot", "emergency"],
+      "barrier": "none",
+      "match": { "ways": ["way/169826205"], "within": { "lat": 28.6492347, "lon": 77.2219066, "radiusM": 123 } }
+    },
+    {
+      "id": "judge_site_046_e2_closed",
+      "by": "judge",
+      "kind": "context",
+      "why": "narrow lane between continuous building fronts, no vehicle visible, under 4 m of clear width on the picture",
+      "refs": ["harness/reports/access/sheet_06.jpg (site 46, Esri World Imagery, judged 2026-11-14)", "harness/reports/access/borderline.json"],
+      "modes": ["two_wheeler", "cycle", "foot", "emergency"],
+      "barrier": "none",
+      "match": { "ways": ["way/1077916788"], "within": { "lat": 28.6487891, "lon": 77.2333727, "radiusM": 24 } }
+    },
+    {
+      "id": "judge_site_046_e1_open",
+      "by": "judge",
+      "kind": "context",
+      "why": "Matia Mahal street: a straight street from the main road, visibly wider than the lanes around it, vehicles use it in real life",
+      "refs": ["harness/reports/access/sheet_06.jpg (site 46, Esri World Imagery, judged 2026-11-14)", "harness/reports/access/borderline.json"],
+      "modes": ["car", "auto", "two_wheeler", "cycle", "foot", "emergency"],
+      "barrier": "none",
+      "match": { "ways": ["way/266885602"], "within": { "lat": 28.649252, "lon": 77.2335543, "radiusM": 54 } }
+    },
+    {
+      "id": "judge_site_048_e3_4_5_6_closed",
+      "by": "judge",
+      "kind": "context",
+      "why": "narrow lane between continuous building fronts, no vehicle visible, under 4 m of clear width on the picture",
+      "refs": ["harness/reports/access/sheet_06.jpg (site 48, Esri World Imagery, judged 2026-11-14)", "harness/reports/access/borderline.json"],
+      "modes": ["two_wheeler", "cycle", "foot", "emergency"],
+      "barrier": "none",
+      "match": { "ways": ["way/1076769469", "way/1076769470", "way/993539120", "way/1076827640"], "within": { "lat": 28.6476169, "lon": 77.2225935, "radiusM": 72 } }
+    },
+    {
+      "id": "judge_site_048_e1_2_open",
+      "by": "judge",
+      "kind": "context",
+      "why": "Fasil Road end: the road beside the rail yard shed with vehicles on it in the picture",
+      "refs": ["harness/reports/access/sheet_06.jpg (site 48, Esri World Imagery, judged 2026-11-14)", "harness/reports/access/borderline.json"],
+      "modes": ["car", "auto", "two_wheeler", "cycle", "foot", "emergency"],
+      "barrier": "none",
+      "match": { "ways": ["way/169826205", "way/1076827639"], "within": { "lat": 28.6481524, "lon": 77.2225572, "radiusM": 20 } }
+    },
+    {
+      "id": "judge_site_055_e2_3_4_5_6_closed",
+      "by": "judge",
+      "kind": "context",
+      "why": "narrow lane between continuous building fronts, no vehicle visible, under 4 m of clear width on the picture",
+      "refs": ["harness/reports/access/sheet_07.jpg (site 55, Esri World Imagery, judged 2026-11-14)", "harness/reports/access/borderline.json"],
+      "modes": ["two_wheeler", "cycle", "foot", "emergency"],
+      "barrier": "none",
+      "match": { "ways": ["way/936391941", "way/38699588", "way/1076782203", "way/1076782202"], "within": { "lat": 28.6460903, "lon": 77.2236175, "radiusM": 71 } }
+    },
+    {
+      "id": "judge_site_055_e1_open",
+      "by": "judge",
+      "kind": "context",
+      "why": "the 131 m street from the park edge to the busy junction is one continuous dark band with vehicles near its end",
+      "refs": ["harness/reports/access/sheet_07.jpg (site 55, Esri World Imagery, judged 2026-11-14)", "harness/reports/access/borderline.json"],
+      "modes": ["car", "auto", "two_wheeler", "cycle", "foot", "emergency"],
+      "barrier": "none",
+      "match": { "ways": ["way/936391941"], "within": { "lat": 28.6467503, "lon": 77.2229613, "radiusM": 68 } }
+    },
+    {
+      "id": "judge_site_079_e1_2_5_8_closed",
+      "by": "judge",
+      "kind": "context",
+      "why": "narrow lane between continuous building fronts, no vehicle visible, under 4 m of clear width on the picture",
+      "refs": ["harness/reports/access/sheet_09.jpg (site 79, Esri World Imagery, judged 2026-11-14)", "harness/reports/access/borderline.json"],
+      "modes": ["two_wheeler", "cycle", "foot", "emergency"],
+      "barrier": "none",
+      "match": { "ways": ["way/120287372", "way/120287371", "way/120287346", "way/120287374", "way/120287377"], "within": { "lat": 28.6419852, "lon": 77.2154487, "radiusM": 88 } }
+    },
+    {
+      "id": "judge_site_079_e3_4_6_7_open",
+      "by": "judge",
+      "kind": "context",
+      "why": "one straight street through a regular block pattern, the same width along its 250 m, wider than the lanes off it",
+      "refs": ["harness/reports/access/sheet_09.jpg (site 79, Esri World Imagery, judged 2026-11-14)", "harness/reports/access/borderline.json"],
+      "modes": ["car", "auto", "two_wheeler", "cycle", "foot", "emergency"],
+      "barrier": "none",
+      "match": { "ways": ["way/38235329", "way/360250365"], "within": { "lat": 28.6419108, "lon": 77.2155602, "radiusM": 111 } }
+    },
+    {
+      "id": "judge_site_095_e1_closed",
+      "by": "judge",
+      "kind": "context",
+      "why": "path between lawns inside a walled garden, no road surface",
+      "refs": ["harness/reports/access/sheet_11.jpg (site 95, Esri World Imagery, judged 2026-11-14)", "harness/reports/access/borderline.json"],
+      "modes": ["two_wheeler", "cycle", "foot", "emergency"],
+      "barrier": "none",
+      "match": { "ways": ["way/1077915001"], "within": { "lat": 28.6383013, "lon": 77.2496033, "radiusM": 34 } }
+    },
+    {
+      "id": "judge_site_095_e2_private",
+      "by": "judge",
+      "kind": "context",
+      "why": "drive from the car park to the buildings, a paved drive in the picture",
+      "refs": ["harness/reports/access/sheet_11.jpg (site 95, Esri World Imagery, judged 2026-11-14)", "harness/reports/access/borderline.json"],
+      "modes": ["car", "auto", "two_wheeler", "cycle", "foot", "emergency"],
+      "private": true,
+      "barrier": "none",
+      "match": { "ways": ["way/993539150"], "within": { "lat": 28.637477, "lon": 77.2498767, "radiusM": 35 } }
+    },
+    {
+      "id": "judge_spot_011_open",
+      "by": "judge",
+      "kind": "context",
+      "why": "the picture shows this edge is part of the broad diagonal road with vehicles at the junction, not a gali",
+      "refs": ["harness/reports/access/spot_02.jpg (site 11, Esri World Imagery, judged 2026-11-14)", "harness/reports/access/spotcheck.md"],
+      "modes": ["car", "auto", "two_wheeler", "cycle", "foot", "emergency"],
+      "barrier": "none",
+      "match": { "ways": ["way/721594684"], "within": { "lat": 28.6502508, "lon": 77.2260608, "radiusM": 29 } }
+    },
+    {
+      "id": "judge_spot_020_open",
+      "by": "judge",
+      "kind": "context",
+      "why": "planned grid colony: regular straight streets between plots, wider than a gali, a car fits",
+      "refs": ["harness/reports/access/spot_03.jpg (site 20, Esri World Imagery, judged 2026-11-14)", "harness/reports/access/spotcheck.md"],
+      "modes": ["car", "auto", "two_wheeler", "cycle", "foot", "emergency"],
+      "barrier": "none",
+      "match": { "ways": ["way/120287345"], "within": { "lat": 28.6452752, "lon": 77.2104253, "radiusM": 57 } }
+    },
+    {
+      "id": "judge_spot_027_open",
+      "by": "judge",
+      "kind": "context",
+      "why": "station car park aisle with rows of parked cars and taxis in the picture, not an old city lane",
+      "refs": ["harness/reports/access/spot_03.jpg (site 27, Esri World Imagery, judged 2026-11-14)", "harness/reports/access/spotcheck.md"],
+      "modes": ["car", "auto", "two_wheeler", "cycle", "foot", "emergency"],
+      "barrier": "none",
+      "match": { "ways": ["way/80414540"], "within": { "lat": 28.6427809, "lon": 77.2187993, "radiusM": 65 } }
+    },
+    {
+      "id": "judge_spot_030_open",
+      "by": "judge",
+      "kind": "context",
+      "why": "stadium parking rows with buses and cars in the picture, a car park aisle and not an old city lane",
+      "refs": ["harness/reports/access/spot_04.jpg (site 30, Esri World Imagery, judged 2026-11-14)", "harness/reports/access/spotcheck.md"],
+      "modes": ["car", "auto", "two_wheeler", "cycle", "foot", "emergency"],
+      "barrier": "none",
+      "match": { "ways": ["way/1252115368"], "within": { "lat": 28.6325243, "lon": 77.2155073, "radiusM": 39 } }
+    }
+  ],
+  "zones": [
+    {
+      "id": "metro_forecourts",
+      "why": "Delhi Metro station forecourts: 103 circles of 22 m around a subway entrance and 32 m around a subway station node of the OSM extract. The road in front of an entrance is for walkers.",
+      "refs": [
+        "OpenStreetMap railway=subway_entrance and station=subway nodes of the pilot extract (data/pilot_centre/osm.json)",
+        "DMRC station forecourts are pedestrian plazas with a service drive at some stations (references in harness/data/access.json rules metro_forecourt_*)"
+      ],
+      "circles": [
+        { "name": "Seva Teerth", "lat": 28.6095136, "lon": 77.211796, "radiusM": 32, "osm": "node/7018886727" },
+        { "name": "Seva Teerth Metro Station Gate Number 4", "lat": 28.610013, "lon": 77.2111253, "radiusM": 22, "osm": "node/5677934280" },
+        { "name": "Seva Teerth Metro Station Lift Number 4", "lat": 28.610178, "lon": 77.2114287, "radiusM": 22, "osm": "node/7262908476" },
+        { "name": "Seva Teerth Metro Station Gate Number 3", "lat": 28.6104987, "lon": 77.2114659, "radiusM": 22, "osm": "node/5677935474" },
+        { "name": "Seva Teerth Metro Station Gate Number 2", "lat": 28.610759, "lon": 77.2124173, "radiusM": 22, "osm": "node/5677933259" },
+        { "name": "Seva Teerth Metro Station Gate Number 1", "lat": 28.6113043, "lon": 77.21221, "radiusM": 22, "osm": "node/6385537597" },
+        { "name": "Central Secretariat Metro Gate No. 3", "lat": 28.6150769, "lon": 77.212504, "radiusM": 22, "osm": "node/3744313962" },
+        { "name": "Central Secretariat Metro Gate No. 4", "lat": 28.6150989, "lon": 77.2119663, "radiusM": 22, "osm": "node/3744313963" },
+        { "name": "Central Secretariat", "lat": 28.6158794, "lon": 77.2122822, "radiusM": 32, "osm": "node/5453646586" },
+        { "name": "Central Secretariat Metro Gate No. 5", "lat": 28.6165071, "lon": 77.2115007, "radiusM": 22, "osm": "node/5273446052" },
+        { "name": "Central Secretariat Metro Gate No. 2", "lat": 28.6168094, "lon": 77.2130562, "radiusM": 22, "osm": "node/3744490970" },
+        { "name": "Central Secretariat Metro Gate No. 1", "lat": 28.6174987, "lon": 77.2116805, "radiusM": 22, "osm": "node/5273446908" },
+        { "name": "Indraprastha", "lat": 28.6206019, "lon": 77.249551, "radiusM": 32, "osm": "node/6537193575" },
+        { "name": "Patel Chowk Gate No. 3", "lat": 28.6226262, "lon": 77.2138823, "radiusM": 22, "osm": "node/6213742110" },
+        { "name": "Patel Chowk", "lat": 28.6229664, "lon": 77.214031, "radiusM": 32, "osm": "node/7018886726" },
+        { "name": "Supreme Court", "lat": 28.6234752, "lon": 77.2425278, "radiusM": 32, "osm": "node/6539894857" },
+        { "name": "Janpath", "lat": 28.6240485, "lon": 77.2192587, "radiusM": 32, "osm": "node/9584236507" },
+        { "name": "okhla head", "lat": 28.6250585, "lon": 77.2172811, "radiusM": 22, "osm": "node/5790140142" },
+        { "name": "Mandi House Metro Station Gate Number 3", "lat": 28.6253027, "lon": 77.2343462, "radiusM": 22, "osm": "node/11973750071" },
+        { "name": "Mandi House Metro Station Gate Number 4", "lat": 28.6253299, "lon": 77.2337691, "radiusM": 22, "osm": "node/11973744661" },
+        { "name": "Mandi House", "lat": 28.6254336, "lon": 77.2335473, "radiusM": 22, "osm": "node/6191428411" },
+        { "name": "Mandi House", "lat": 28.6255149, "lon": 77.2341926, "radiusM": 32, "osm": "node/9920295123" },
+        { "name": "Mandi House", "lat": 28.6256122, "lon": 77.2341966, "radiusM": 32, "osm": "node/6539894856" },
+        { "name": "Janpath Metro Station Gate Number 3", "lat": 28.6257287, "lon": 77.2195151, "radiusM": 22, "osm": "node/6539240965" },
+        { "name": "Mandi House Metro Station Gate Number 2", "lat": 28.6258306, "lon": 77.23444, "radiusM": 22, "osm": "node/6191428414" },
+        { "name": "Mandi House Metro Station Gate Number 1", "lat": 28.6258661, "lon": 77.2337792, "radiusM": 22, "osm": "node/6191428420" },
+        { "name": "Mandi House", "lat": 28.6259127, "lon": 77.2340788, "radiusM": 22, "osm": "node/6191428413" },
+        { "name": "Janpath Metro Station Gate Number 2", "lat": 28.6265764, "lon": 77.2190574, "radiusM": 22, "osm": "node/5056205486" },
+        { "name": "ITO Metro Gate No. 1", "lat": 28.6275305, "lon": 77.2402112, "radiusM": 22, "osm": "node/6699155483" },
+        { "name": "Metro entrance", "lat": 28.6275942, "lon": 77.2416019, "radiusM": 22, "osm": "node/12593027564" },
+        { "name": "ITO Metro Gate No. 6", "lat": 28.6276667, "lon": 77.2419627, "radiusM": 22, "osm": "node/6699155482" },
+        { "name": "ITO Metro Gate No. 2", "lat": 28.627817, "lon": 77.2405177, "radiusM": 22, "osm": "node/6699155480" },
+        { "name": "ITO Metro Gate No. 5", "lat": 28.6281048, "lon": 77.2418878, "radiusM": 22, "osm": "node/6699155481" },
+        { "name": "ITO", "lat": 28.6281909, "lon": 77.2410437, "radiusM": 32, "osm": "node/9584236508" },
+        { "name": "Metro entrance", "lat": 28.6287649, "lon": 77.211347, "radiusM": 22, "osm": "node/3744340816" },
+        { "name": "Shivaji Stadium", "lat": 28.6288963, "lon": 77.2113218, "radiusM": 32, "osm": "node/554257833" },
+        { "name": "ITO Metro Gate No. 3", "lat": 28.6295035, "lon": 77.2410054, "radiusM": 22, "osm": "node/9943458615" },
+        { "name": "Barakhambha Road", "lat": 28.629575, "lon": 77.2257846, "radiusM": 22, "osm": "node/5068209029" },
+        { "name": "Barakhambha Road", "lat": 28.6296769, "lon": 77.2245609, "radiusM": 22, "osm": "node/5068209232" },
+        { "name": "Barakhambha Road", "lat": 28.6297676, "lon": 77.2250046, "radiusM": 32, "osm": "node/6539894855" },
+        { "name": "Barakhambha Road", "lat": 28.6298695, "lon": 77.2242637, "radiusM": 22, "osm": "node/5068205453" },
+        { "name": "Barakhambha Road", "lat": 28.6302584, "lon": 77.2245925, "radiusM": 22, "osm": "node/5068205964" },
+        { "name": "Barakhambha Road", "lat": 28.6303952, "lon": 77.2233419, "radiusM": 22, "osm": "node/5068201605" },
+        { "name": "ITO Metro Gate No. 4", "lat": 28.6305091, "lon": 77.2414363, "radiusM": 22, "osm": "node/6223177506" },
+        { "name": "Barakhambha Road", "lat": 28.6307933, "lon": 77.2236541, "radiusM": 22, "osm": "node/5068205451" },
+        { "name": "Rajiv Chowk Metro Gate No 6", "lat": 28.6315921, "lon": 77.2192365, "radiusM": 22, "osm": "node/928597615" },
+        { "name": "Rajiv Chowk Metro Gate No 5", "lat": 28.6316211, "lon": 77.2202119, "radiusM": 22, "osm": "node/928597613" },
+        { "name": "Rajiv Chowk Metro Gate No 7", "lat": 28.6323385, "lon": 77.2183526, "radiusM": 22, "osm": "node/928610588" },
+        { "name": "Rajiv Chowk", "lat": 28.6325837, "lon": 77.2180901, "radiusM": 22, "osm": "node/5578451970" },
+        { "name": "Rajiv Chowk", "lat": 28.6327062, "lon": 77.2193123, "radiusM": 32, "osm": "node/6539894851" },
+        { "name": "Rajiv Chowk", "lat": 28.6327786, "lon": 77.2196985, "radiusM": 32, "osm": "node/8018558072" },
+        { "name": "Rajiv Chowk Metro Gate No 8", "lat": 28.6329347, "lon": 77.2182419, "radiusM": 22, "osm": "node/928610590" },
+        { "name": "Metro entrance", "lat": 28.6330365, "lon": 77.2210877, "radiusM": 22, "osm": "node/928597611" },
+        { "name": "Rajiv Chowk Metro Gate No 3", "lat": 28.6336414, "lon": 77.2207506, "radiusM": 22, "osm": "node/928597607" },
+        { "name": "Rajiv Chowk Metro Gate No 1", "lat": 28.6337363, "lon": 77.2187521, "radiusM": 22, "osm": "node/928610585" },
+        { "name": "Rajiv Chowk Metro Gate No 2", "lat": 28.6340158, "lon": 77.2193402, "radiusM": 22, "osm": "node/928592947" },
+        { "name": "Rajiv Chowk", "lat": 28.6340376, "lon": 77.218902, "radiusM": 22, "osm": "node/6180324529" },
+        { "name": "Gate No. 1", "lat": 28.6377339, "lon": 77.2407177, "radiusM": 22, "osm": "node/9943458614" },
+        { "name": "Gate No. 5", "lat": 28.6383777, "lon": 77.2414351, "radiusM": 22, "osm": "node/7266462424" },
+        { "name": "Ramakrishna Ashram Marg Metro Station Gate Number 5", "lat": 28.6388567, "lon": 77.20841, "radiusM": 22, "osm": "node/12833065117" },
+        { "name": "Gate No. 4", "lat": 28.6389453, "lon": 77.2414492, "radiusM": 22, "osm": "node/9943458609" },
+        { "name": "Ramakrishna Ashram Marg Metro Station Gate Number 4", "lat": 28.6389639, "lon": 77.2084881, "radiusM": 22, "osm": "node/3171969268" },
+        { "name": "Ramakrishna Ashram Marg Metro Station Lift Number 4", "lat": 28.6391131, "lon": 77.208242, "radiusM": 22, "osm": "node/12833065115" },
+        { "name": "Ramakrishna Ashram Marg Metro Station Gate Number 3", "lat": 28.6391435, "lon": 77.2081697, "radiusM": 22, "osm": "node/3171969269" },
+        { "name": "Delhi Gate", "lat": 28.6392174, "lon": 77.2407795, "radiusM": 32, "osm": "node/7282286733" },
+        { "name": "Ramakrishna Ashram Marg", "lat": 28.6392436, "lon": 77.2085787, "radiusM": 32, "osm": "node/6539894850" },
+        { "name": "Ramakrishna Ashram Marg Metro Station Lift Number 3", "lat": 28.6395358, "lon": 77.2087414, "radiusM": 22, "osm": "node/12833065116" },
+        { "name": "Gate No. 2", "lat": 28.6397214, "lon": 77.2400611, "radiusM": 22, "osm": "node/9943458613" },
+        { "name": "Ramakrishna Ashram Marg Metro Station Gate Number 2", "lat": 28.6398217, "lon": 77.2087563, "radiusM": 22, "osm": "node/3171969271" },
+        { "name": "Gate No. 3", "lat": 28.6408308, "lon": 77.2391841, "radiusM": 22, "osm": "node/6194483462" },
+        { "name": "New Delhi Airport Express Terminal", "lat": 28.6424786, "lon": 77.2231116, "radiusM": 32, "osm": "node/938409545" },
+        { "name": "New Delhi Metro Station Airport Line", "lat": 28.642554, "lon": 77.2239608, "radiusM": 22, "osm": "node/938409510" },
+        { "name": "New Delhi Metro Station Airport Line", "lat": 28.6427375, "lon": 77.2232711, "radiusM": 22, "osm": "node/3572572202" },
+        { "name": "New Delhi Metro Station Gate No. 1", "lat": 28.642983, "lon": 77.2221067, "radiusM": 22, "osm": "node/410057646" },
+        { "name": "New Delhi Metro Station", "lat": 28.6432957, "lon": 77.2232493, "radiusM": 22, "osm": "node/11123345916" },
+        { "name": "New Delhi", "lat": 28.6434826, "lon": 77.2227421, "radiusM": 32, "osm": "node/554257841" },
+        { "name": "New Delhi Metro Station Gate 4", "lat": 28.643585, "lon": 77.2236228, "radiusM": 22, "osm": "node/3572572201" },
+        { "name": "New Delhi Metro Station Gate No 2", "lat": 28.6436415, "lon": 77.2217373, "radiusM": 22, "osm": "node/3572572200" },
+        { "name": "New Delhi Metro Station Gate 3", "lat": 28.6446782, "lon": 77.2234077, "radiusM": 22, "osm": "node/3560199031" },
+        { "name": "Chawri Bazaar Gate No 1", "lat": 28.6482839, "lon": 77.2258492, "radiusM": 22, "osm": "node/5721282022" },
+        { "name": "Chawri Bazaar Metro Gate Number 2", "lat": 28.6492344, "lon": 77.2262903, "radiusM": 22, "osm": "node/12588445755" },
+        { "name": "Chawri Bazaar", "lat": 28.6492649, "lon": 77.2265153, "radiusM": 32, "osm": "node/7018886725" },
+        { "name": "Chawri Bazaar Gate Number 3", "lat": 28.6493157, "lon": 77.2267525, "radiusM": 22, "osm": "node/2592537222" },
+        { "name": "Jama Masjid Metro Gate No. 1", "lat": 28.6494912, "lon": 77.2375634, "radiusM": 22, "osm": "node/6166529732" },
+        { "name": "Chawri Bazaar Metro Gate Number 2", "lat": 28.6494924, "lon": 77.2264239, "radiusM": 22, "osm": "node/12588445751" },
+        { "name": "Jama Masjid Metro Gate No. 2", "lat": 28.6506159, "lon": 77.2371064, "radiusM": 22, "osm": "node/9943458604" },
+        { "name": "Jama Masjid Metro Gate No. 4", "lat": 28.650704, "lon": 77.2380872, "radiusM": 22, "osm": "node/9943458603" },
+        { "name": "Jama Masjid Metro Gate No. 3", "lat": 28.651483, "lon": 77.238176, "radiusM": 22, "osm": "node/9943458608" },
+        { "name": "Lal Quila Metro Gate Number 1", "lat": 28.6563772, "lon": 77.2364519, "radiusM": 22, "osm": "node/9100600429" },
+        { "name": "Lal Quila Gate Number 4", "lat": 28.656798, "lon": 77.2370315, "radiusM": 22, "osm": "node/9078868493" },
+        { "name": "Chandni Chowk Gate 5", "lat": 28.6570533, "lon": 77.2301955, "radiusM": 22, "osm": "node/10969310413" },
+        { "name": "Lal Quila Metro Lift Number 2", "lat": 28.6573937, "lon": 77.2365208, "radiusM": 22, "osm": "node/12753522220" },
+        { "name": "Lal Quila", "lat": 28.657483, "lon": 77.2366607, "radiusM": 32, "osm": "node/7282286730" },
+        { "name": "Chandni Chowk Metro Gate No. 1", "lat": 28.658028, "lon": 77.2302318, "radiusM": 22, "osm": "node/728128617" },
+        { "name": "Lal Quila Metro Lift Number 1", "lat": 28.6583812, "lon": 77.2372216, "radiusM": 22, "osm": "node/12753522238" },
+        { "name": "Chandni Chowk", "lat": 28.6584227, "lon": 77.2303375, "radiusM": 32, "osm": "node/7018886724" },
+        { "name": "Lal Quila Metro Gate Number 2", "lat": 28.6584922, "lon": 77.2365752, "radiusM": 22, "osm": "node/9100588455" },
+        { "name": "Lal Quila Metro Station", "lat": 28.6586999, "lon": 77.2371695, "radiusM": 22, "osm": "node/7242638952" },
+        { "name": "Chandni Chowk Metro Gate No. 2", "lat": 28.6599591, "lon": 77.2303187, "radiusM": 22, "osm": "node/9956086291" },
+        { "name": "Chandni Chowk Metro Gate No. 3", "lat": 28.6605039, "lon": 77.2297797, "radiusM": 22, "osm": "node/4594376833" },
+        { "name": "Pul Bangash", "lat": 28.6664068, "lon": 77.2074156, "radiusM": 32, "osm": "node/268381463" },
+        { "name": "Tis Hazari", "lat": 28.6671626, "lon": 77.2166306, "radiusM": 32, "osm": "node/561316983" },
+        { "name": "Kashmere Gate", "lat": 28.6672317, "lon": 77.2283223, "radiusM": 22, "osm": "node/6161690830" }
+      ]
+    },
+    {
+      "id": "lutyens_government",
+      "why": "The Lutyens government zone of New Delhi: Rashtrapati Bhavan, the Secretariat blocks, Parliament, the ministers' bungalows and the offices round them, between the Ridge, Barakhamba Road, Mathura Road and Lodhi Road, drawn as a rough ring.",
+      "refs": [
+        "NDMC area of New Delhi (Lutyens Bungalow Zone), https://en.wikipedia.org/wiki/Lutyens%27_Delhi",
+        "The gates of the compounds are mapped in OpenStreetMap as barrier=gate nodes, mostly access=private"
+      ],
+      "ring": [[28.6285, 77.21], [28.6285, 77.2335], [28.593, 77.2335], [28.593, 77.193], [28.615, 77.193], [28.6285, 77.21]]
     }
   ]
 }
