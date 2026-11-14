@@ -1,6 +1,6 @@
 {
   "_doc": "Written only by node harness/bin/task.mjs. Phases run in order; P0 (ADOPT + STYLE DISCOVERY) waits for the owner by design and needs task.mjs signoff and task.mjs archsignoff before its gate passes. Later phases are added by the planner at the end of P0 (task.mjs phase-add) from the game's real state.",
-  "updated": "2026-11-14T12:36:55.793Z",
+  "updated": "2026-11-14T12:40:07.377Z",
   "phases": [
     {
       "id": "P0",
@@ -4982,7 +4982,9 @@
       "kind": "mentor",
       "status": "todo",
       "attempts": 0,
-      "notes": [],
+      "notes": [
+        "Bittu's model will come from the grinning sheet (owner's choice 2026-11-14): the face rig must close the mouth from the open grin as its rest shape (jaw and lip shapes built from the open pose)."
+      ],
       "created": "2026-11-14T09:41:34.350Z",
       "model": "opus"
     },
