@@ -478,7 +478,15 @@
       "priority": 1,
       "batch": "B2-walls",
       "created": "2026-11-14T15:51:16.982Z",
-      "promptAt": "2026-11-14T16:05:09.533Z"
+      "promptAt": "2026-11-14T16:05:09.533Z",
+      "review": {
+        "at": "2026-11-14T18:58:19.393Z",
+        "verdict": "ok",
+        "note": "Very even green plaster; relies on decals for wear.",
+        "ingestedAt": "2026-11-14T17:01:19.699Z",
+        "fit": "pending",
+        "fitNote": "scene check"
+      }
     },
     {
       "id": "tex_wall_old_brick",
@@ -505,7 +513,15 @@
       "priority": 1,
       "batch": "B2-walls",
       "created": "2026-11-14T15:51:17.234Z",
-      "promptAt": "2026-11-14T16:05:10.032Z"
+      "promptAt": "2026-11-14T16:05:10.032Z",
+      "review": {
+        "at": "2026-11-14T18:58:19.815Z",
+        "verdict": "ok",
+        "note": "Looks right for the card.",
+        "ingestedAt": "2026-11-14T17:00:26.735Z",
+        "fit": "pending",
+        "fitNote": "scene check"
+      }
     },
     {
       "id": "tex_wall_lutyens_whitewash",
@@ -532,7 +548,15 @@
       "priority": 2,
       "batch": "B2-walls",
       "created": "2026-11-14T15:51:17.426Z",
-      "promptAt": "2026-11-14T16:05:10.226Z"
+      "promptAt": "2026-11-14T16:05:10.226Z",
+      "review": {
+        "at": "2026-11-14T18:58:20.113Z",
+        "verdict": "ok",
+        "note": "Looks right for the card.",
+        "ingestedAt": "2026-11-14T17:02:54.843Z",
+        "fit": "pending",
+        "fitNote": "scene check"
+      }
     },
     {
       "id": "tex_wall_cp_colonnade_plaster",
@@ -559,7 +583,15 @@
       "priority": 2,
       "batch": "B2-walls",
       "created": "2026-11-14T15:51:17.671Z",
-      "promptAt": "2026-11-14T16:05:10.407Z"
+      "promptAt": "2026-11-14T16:05:10.407Z",
+      "review": {
+        "at": "2026-11-14T18:58:20.435Z",
+        "verdict": "ok",
+        "note": "Clean horizontal rustication grooves, tiny step at vertical seam in 2x2; acceptable.",
+        "ingestedAt": "2026-11-14T17:02:32.450Z",
+        "fit": "pending",
+        "fitNote": "scene check"
+      }
     },
     {
       "id": "tex_wall_modern_office",
@@ -586,7 +618,15 @@
       "priority": 2,
       "batch": "B2-walls",
       "created": "2026-11-14T15:51:17.983Z",
-      "promptAt": "2026-11-14T16:05:10.558Z"
+      "promptAt": "2026-11-14T16:05:10.558Z",
+      "review": {
+        "at": "2026-11-14T18:58:20.696Z",
+        "verdict": "ok",
+        "note": "Bay pattern repeats by design; check tile scale.",
+        "ingestedAt": "2026-11-14T17:03:12.808Z",
+        "fit": "pending",
+        "fitNote": "scene check"
+      }
     },
     {
       "id": "decal_wall_grime_sheet",
@@ -613,7 +653,15 @@
       "priority": 1,
       "batch": "B2-walls",
       "created": "2026-11-14T15:51:18.338Z",
-      "promptAt": "2026-11-14T16:05:12.043Z"
+      "promptAt": "2026-11-14T16:05:12.043Z",
+      "review": {
+        "at": "2026-11-14T18:58:21.060Z",
+        "verdict": "ok",
+        "note": "Looks right for the card.",
+        "ingestedAt": "2026-11-14T17:00:18.727Z",
+        "fit": "pending",
+        "fitNote": "scene check"
+      }
     },
     {
       "id": "decal_wall_peeling_plaster",
@@ -640,7 +688,15 @@
       "priority": 2,
       "batch": "B2-walls",
       "created": "2026-11-14T15:51:18.626Z",
-      "promptAt": "2026-11-14T16:05:12.243Z"
+      "promptAt": "2026-11-14T16:05:12.243Z",
+      "review": {
+        "at": "2026-11-14T18:58:21.289Z",
+        "verdict": "ok",
+        "note": "Looks right for the card.",
+        "ingestedAt": "2026-11-14T17:01:34.773Z",
+        "fit": "pending",
+        "fitNote": "scene check"
+      }
     },
     {
       "id": "tex_shutter_rolling_steel",
@@ -667,7 +723,15 @@
       "priority": 2,
       "batch": "B3-signs",
       "created": "2026-11-14T15:51:20.788Z",
-      "promptAt": "2026-11-14T16:05:10.655Z"
+      "promptAt": "2026-11-14T16:05:10.655Z",
+      "review": {
+        "at": "2026-11-14T18:58:21.597Z",
+        "verdict": "ok",
+        "note": "Looks right for the card.",
+        "ingestedAt": "2026-11-14T17:11:02.499Z",
+        "fit": "pending",
+        "fitNote": "scene check"
+      }
     },
     {
       "id": "decal_goods_sweets_sheet",
@@ -693,7 +757,15 @@
       ],
       "priority": 2,
       "batch": "B3-goods",
-      "created": "2026-11-14T15:51:21.084Z"
+      "created": "2026-11-14T15:51:21.084Z",
+      "review": {
+        "at": "2026-11-14T18:58:21.811Z",
+        "verdict": "ok",
+        "note": "Looks right for the card.",
+        "ingestedAt": "2026-11-14T17:05:21.823Z",
+        "fit": "pending",
+        "fitNote": "scene check"
+      }
     },
     {
       "id": "decal_goods_cloth_sheet",
@@ -719,7 +791,15 @@
       ],
       "priority": 2,
       "batch": "B3-goods",
-      "created": "2026-11-14T15:51:21.373Z"
+      "created": "2026-11-14T15:51:21.373Z",
+      "review": {
+        "at": "2026-11-14T18:58:22.144Z",
+        "verdict": "ok",
+        "note": "Looks right for the card.",
+        "ingestedAt": "2026-11-14T17:05:09.103Z",
+        "fit": "pending",
+        "fitNote": "scene check"
+      }
     },
     {
       "id": "decal_goods_utensils_sheet",
@@ -745,7 +825,15 @@
       ],
       "priority": 3,
       "batch": "B3-goods",
-      "created": "2026-11-14T15:51:21.574Z"
+      "created": "2026-11-14T15:51:21.574Z",
+      "review": {
+        "at": "2026-11-14T18:58:22.605Z",
+        "verdict": "ok",
+        "note": "Looks right for the card.",
+        "ingestedAt": "2026-11-14T17:08:24.151Z",
+        "fit": "pending",
+        "fitNote": "scene check"
+      }
     },
     {
       "id": "decal_goods_dryfruit_sheet",
@@ -771,7 +859,15 @@
       ],
       "priority": 3,
       "batch": "B3-goods",
-      "created": "2026-11-14T15:51:21.740Z"
+      "created": "2026-11-14T15:51:21.740Z",
+      "review": {
+        "at": "2026-11-14T18:58:23.088Z",
+        "verdict": "ok",
+        "note": "Looks right for the card.",
+        "ingestedAt": "2026-11-14T17:05:36.046Z",
+        "fit": "pending",
+        "fitNote": "scene check"
+      }
     },
     {
       "id": "decal_goods_hardware_sheet",
@@ -797,7 +893,15 @@
       ],
       "priority": 3,
       "batch": "B3-goods",
-      "created": "2026-11-14T15:51:21.859Z"
+      "created": "2026-11-14T15:51:21.859Z",
+      "review": {
+        "at": "2026-11-14T18:58:24.501Z",
+        "verdict": "ok",
+        "note": "Looks right for the card.",
+        "ingestedAt": "2026-11-14T17:06:01.800Z",
+        "fit": "pending",
+        "fitNote": "scene check"
+      }
     },
     {
       "id": "decal_goods_phones_bags_sheet",
@@ -823,7 +927,15 @@
       ],
       "priority": 3,
       "batch": "B3-goods",
-      "created": "2026-11-14T15:51:21.999Z"
+      "created": "2026-11-14T15:51:21.999Z",
+      "review": {
+        "at": "2026-11-14T18:58:24.896Z",
+        "verdict": "ok",
+        "note": "Looks right for the card.",
+        "ingestedAt": "2026-11-14T17:06:39.942Z",
+        "fit": "pending",
+        "fitNote": "scene check"
+      }
     },
     {
       "id": "tex_interior_sweet",
@@ -885,7 +997,15 @@
       "priority": 2,
       "batch": "B1b-interiors-night",
       "created": "2026-11-14T15:52:18.624Z",
-      "promptAt": "2026-11-14T16:05:12.514Z"
+      "promptAt": "2026-11-14T16:05:12.514Z",
+      "review": {
+        "at": "2026-11-14T18:58:25.114Z",
+        "verdict": "ok",
+        "note": "Looks right for the card.",
+        "ingestedAt": "2026-11-14T16:50:17.098Z",
+        "fit": "pending",
+        "fitNote": "scene check"
+      }
     },
     {
       "id": "tex_interior_cloth",
@@ -947,7 +1067,15 @@
       "priority": 2,
       "batch": "B1b-interiors-night",
       "created": "2026-11-14T15:52:19.047Z",
-      "promptAt": "2026-11-14T16:05:12.978Z"
+      "promptAt": "2026-11-14T16:05:12.978Z",
+      "review": {
+        "at": "2026-11-14T18:58:25.323Z",
+        "verdict": "ok",
+        "note": "Looks right for the card.",
+        "ingestedAt": "2026-11-14T16:44:58.009Z",
+        "fit": "pending",
+        "fitNote": "scene check"
+      }
     },
     {
       "id": "tex_interior_dryfruit",
@@ -1009,7 +1137,15 @@
       "priority": 2,
       "batch": "B1b-interiors-night",
       "created": "2026-11-14T15:52:19.295Z",
-      "promptAt": "2026-11-14T16:05:13.396Z"
+      "promptAt": "2026-11-14T16:05:13.396Z",
+      "review": {
+        "at": "2026-11-14T18:58:25.462Z",
+        "verdict": "ok",
+        "note": "Looks right for the card.",
+        "ingestedAt": "2026-11-14T16:46:27.685Z",
+        "fit": "pending",
+        "fitNote": "scene check"
+      }
     },
     {
       "id": "tex_interior_utensils",
@@ -1071,7 +1207,15 @@
       "priority": 2,
       "batch": "B1b-interiors-night",
       "created": "2026-11-14T15:52:19.798Z",
-      "promptAt": "2026-11-14T16:05:13.938Z"
+      "promptAt": "2026-11-14T16:05:13.938Z",
+      "review": {
+        "at": "2026-11-14T18:58:25.652Z",
+        "verdict": "ok",
+        "note": "Looks right for the card.",
+        "ingestedAt": "2026-11-14T16:52:25.213Z",
+        "fit": "pending",
+        "fitNote": "scene check"
+      }
     },
     {
       "id": "tex_interior_hardware",
@@ -1133,7 +1277,15 @@
       "priority": 2,
       "batch": "B1b-interiors-night",
       "created": "2026-11-14T15:52:20.080Z",
-      "promptAt": "2026-11-14T16:05:14.243Z"
+      "promptAt": "2026-11-14T16:05:14.243Z",
+      "review": {
+        "at": "2026-11-14T18:58:25.863Z",
+        "verdict": "ok",
+        "note": "Looks right for the card.",
+        "ingestedAt": "2026-11-14T16:47:55.388Z",
+        "fit": "pending",
+        "fitNote": "scene check"
+      }
     },
     {
       "id": "tex_interior_phones",
@@ -1195,7 +1347,15 @@
       "priority": 2,
       "batch": "B1b-interiors-night",
       "created": "2026-11-14T15:52:20.293Z",
-      "promptAt": "2026-11-14T16:05:14.405Z"
+      "promptAt": "2026-11-14T16:05:14.405Z",
+      "review": {
+        "at": "2026-11-14T18:58:26.072Z",
+        "verdict": "ok",
+        "note": "Looks right for the card.",
+        "ingestedAt": "2026-11-14T16:50:09.996Z",
+        "fit": "pending",
+        "fitNote": "scene check"
+      }
     },
     {
       "id": "tex_interior_chemist",
@@ -1257,7 +1417,15 @@
       "priority": 2,
       "batch": "B1b-interiors-night",
       "created": "2026-11-14T15:52:20.524Z",
-      "promptAt": "2026-11-14T16:05:14.563Z"
+      "promptAt": "2026-11-14T16:05:14.563Z",
+      "review": {
+        "at": "2026-11-14T18:58:26.285Z",
+        "verdict": "ok",
+        "note": "Looks right for the card.",
+        "ingestedAt": "2026-11-14T16:44:45.203Z",
+        "fit": "pending",
+        "fitNote": "scene check"
+      }
     },
     {
       "id": "tex_interior_tea_stall",
@@ -1319,7 +1487,15 @@
       "priority": 2,
       "batch": "B1b-interiors-night",
       "created": "2026-11-14T15:52:20.844Z",
-      "promptAt": "2026-11-14T16:05:14.866Z"
+      "promptAt": "2026-11-14T16:05:14.866Z",
+      "review": {
+        "at": "2026-11-14T18:58:26.452Z",
+        "verdict": "ok",
+        "note": "Looks right for the card.",
+        "ingestedAt": "2026-11-14T16:51:07.016Z",
+        "fit": "pending",
+        "fitNote": "scene check"
+      }
     },
     {
       "id": "tex_interior_tailor",
@@ -1381,7 +1557,15 @@
       "priority": 2,
       "batch": "B1b-interiors-night",
       "created": "2026-11-14T15:52:21.496Z",
-      "promptAt": "2026-11-14T16:05:15.043Z"
+      "promptAt": "2026-11-14T16:05:15.043Z",
+      "review": {
+        "at": "2026-11-14T18:58:26.616Z",
+        "verdict": "ok",
+        "note": "Looks right for the card.",
+        "ingestedAt": "2026-11-14T16:51:22.086Z",
+        "fit": "pending",
+        "fitNote": "scene check"
+      }
     },
     {
       "id": "tex_interior_hotel_reception",
@@ -1443,7 +1627,15 @@
       "priority": 2,
       "batch": "B1b-interiors-night",
       "created": "2026-11-14T15:52:25.318Z",
-      "promptAt": "2026-11-14T16:05:15.597Z"
+      "promptAt": "2026-11-14T16:05:15.597Z",
+      "review": {
+        "at": "2026-11-14T18:58:26.938Z",
+        "verdict": "ok",
+        "note": "Looks right for the card.",
+        "ingestedAt": "2026-11-14T16:48:03.022Z",
+        "fit": "pending",
+        "fitNote": "scene check"
+      }
     },
     {
       "id": "tex_interior_bookshop",
@@ -1505,7 +1697,15 @@
       "priority": 2,
       "batch": "B1b-interiors-night",
       "created": "2026-11-14T15:52:30.975Z",
-      "promptAt": "2026-11-14T16:05:15.797Z"
+      "promptAt": "2026-11-14T16:05:15.797Z",
+      "review": {
+        "at": "2026-11-14T18:58:27.360Z",
+        "verdict": "ok",
+        "note": "Looks right for the card.",
+        "ingestedAt": "2026-11-14T16:45:12.922Z",
+        "fit": "pending",
+        "fitNote": "scene check"
+      }
     },
     {
       "id": "tex_interior_jeweller",
@@ -1567,7 +1767,15 @@
       "priority": 2,
       "batch": "B1b-interiors-night",
       "created": "2026-11-14T15:52:35.039Z",
-      "promptAt": "2026-11-14T16:05:15.972Z"
+      "promptAt": "2026-11-14T16:05:15.972Z",
+      "review": {
+        "at": "2026-11-14T18:58:27.881Z",
+        "verdict": "ok",
+        "note": "Looks right for the card.",
+        "ingestedAt": "2026-11-14T16:48:12.374Z",
+        "fit": "pending",
+        "fitNote": "scene check"
+      }
     },
     {
       "id": "tex_interior_home",
@@ -1629,7 +1837,15 @@
       "priority": 2,
       "batch": "B1b-interiors-night",
       "created": "2026-11-14T15:52:38.327Z",
-      "promptAt": "2026-11-14T16:05:16.133Z"
+      "promptAt": "2026-11-14T16:05:16.133Z",
+      "review": {
+        "at": "2026-11-14T18:58:28.047Z",
+        "verdict": "ok",
+        "note": "Looks right for the card.",
+        "ingestedAt": "2026-11-14T16:46:39.729Z",
+        "fit": "pending",
+        "fitNote": "scene check"
+      }
     },
     {
       "id": "tex_interior_office",
@@ -1691,7 +1907,15 @@
       "priority": 2,
       "batch": "B1b-interiors-night",
       "created": "2026-11-14T15:52:40.870Z",
-      "promptAt": "2026-11-14T16:05:16.319Z"
+      "promptAt": "2026-11-14T16:05:16.319Z",
+      "review": {
+        "at": "2026-11-14T18:58:28.224Z",
+        "verdict": "ok",
+        "note": "Looks right for the card.",
+        "ingestedAt": "2026-11-14T16:50:03.579Z",
+        "fit": "pending",
+        "fitNote": "scene check"
+      }
     },
     {
       "id": "tex_wall_oldcity_layer_peel",
@@ -1717,7 +1941,15 @@
       ],
       "priority": 1,
       "batch": "B2-walls",
-      "created": "2026-11-14T16:05:09.871Z"
+      "created": "2026-11-14T16:05:09.871Z",
+      "review": {
+        "at": "2026-11-14T18:58:28.430Z",
+        "verdict": "ok",
+        "note": "Looks right for the card.",
+        "ingestedAt": "2026-11-14T17:00:59.597Z",
+        "fit": "pending",
+        "fitNote": "scene check"
+      }
     },
     {
       "id": "tex_wall_oldcity_layer_brick",
@@ -1743,7 +1975,15 @@
       ],
       "priority": 1,
       "batch": "B2-walls",
-      "created": "2026-11-14T16:05:10.756Z"
+      "created": "2026-11-14T16:05:10.756Z",
+      "review": {
+        "at": "2026-11-14T18:58:28.628Z",
+        "verdict": "ok",
+        "note": "Looks right for the card.",
+        "ingestedAt": "2026-11-14T17:00:45.894Z",
+        "fit": "pending",
+        "fitNote": "scene check"
+      }
     },
     {
       "id": "tex_trim_oldcity",
@@ -1769,7 +2009,15 @@
       ],
       "priority": 2,
       "batch": "B2-trims",
-      "created": "2026-11-14T16:05:11.064Z"
+      "created": "2026-11-14T16:05:11.064Z",
+      "review": {
+        "at": "2026-11-14T18:58:28.829Z",
+        "verdict": "ok",
+        "note": "Looks right for the card.",
+        "ingestedAt": "2026-11-14T16:55:27.258Z",
+        "fit": "pending",
+        "fitNote": "scene check"
+      }
     },
     {
       "id": "tex_trim_lutyens",
@@ -1795,7 +2043,15 @@
       ],
       "priority": 2,
       "batch": "B2-trims",
-      "created": "2026-11-14T16:05:11.194Z"
+      "created": "2026-11-14T16:05:11.194Z",
+      "review": {
+        "at": "2026-11-14T18:58:29.036Z",
+        "verdict": "ok",
+        "note": "Looks right for the card.",
+        "ingestedAt": "2026-11-14T16:55:12.281Z",
+        "fit": "pending",
+        "fitNote": "scene check"
+      }
     },
     {
       "id": "tex_trim_cp_colonnade",
@@ -1821,7 +2077,15 @@
       ],
       "priority": 2,
       "batch": "B2-trims",
-      "created": "2026-11-14T16:05:11.426Z"
+      "created": "2026-11-14T16:05:11.426Z",
+      "review": {
+        "at": "2026-11-14T18:58:29.253Z",
+        "verdict": "ok",
+        "note": "Looks right for the card.",
+        "ingestedAt": "2026-11-14T16:53:58.280Z",
+        "fit": "pending",
+        "fitNote": "scene check"
+      }
     },
     {
       "id": "decal_road_wet_sheet",
@@ -1880,7 +2144,15 @@
       "priority": 1,
       "batch": "B3-signs-painted",
       "created": "2026-11-14T17:19:46.962Z",
-      "promptAt": "2026-11-14T17:19:47.009Z"
+      "promptAt": "2026-11-14T17:19:47.009Z",
+      "review": {
+        "at": "2026-11-14T18:58:29.448Z",
+        "verdict": "ok",
+        "note": "Real-photo look, Hindi correct.",
+        "ingestedAt": "2026-11-14T18:39:59.083Z",
+        "fit": "pending",
+        "fitNote": "scene check"
+      }
     },
     {
       "id": "decal_sign_tin_02",
@@ -1907,7 +2179,15 @@
       "priority": 1,
       "batch": "B3-signs-painted",
       "created": "2026-11-14T17:19:47.054Z",
-      "promptAt": "2026-11-14T17:19:47.101Z"
+      "promptAt": "2026-11-14T17:19:47.101Z",
+      "review": {
+        "at": "2026-11-14T18:58:29.664Z",
+        "verdict": "ok",
+        "note": "Looks right for the card.",
+        "ingestedAt": "2026-11-14T18:40:26.156Z",
+        "fit": "pending",
+        "fitNote": "scene check"
+      }
     },
     {
       "id": "decal_sign_tin_03",
@@ -1934,7 +2214,15 @@
       "priority": 1,
       "batch": "B3-signs-painted",
       "created": "2026-11-14T17:19:47.148Z",
-      "promptAt": "2026-11-14T17:19:47.191Z"
+      "promptAt": "2026-11-14T17:19:47.191Z",
+      "review": {
+        "at": "2026-11-14T18:58:29.838Z",
+        "verdict": "ok",
+        "note": "Looks right for the card.",
+        "ingestedAt": "2026-11-14T18:41:15.093Z",
+        "fit": "pending",
+        "fitNote": "scene check"
+      }
     },
     {
       "id": "decal_sign_tin_04",
@@ -1961,7 +2249,15 @@
       "priority": 2,
       "batch": "B3-signs-painted",
       "created": "2026-11-14T17:19:47.235Z",
-      "promptAt": "2026-11-14T17:19:47.281Z"
+      "promptAt": "2026-11-14T17:19:47.281Z",
+      "review": {
+        "at": "2026-11-14T18:58:30.052Z",
+        "verdict": "ok",
+        "note": "Looks right for the card.",
+        "ingestedAt": "2026-11-14T18:41:40.100Z",
+        "fit": "pending",
+        "fitNote": "scene check"
+      }
     },
     {
       "id": "decal_sign_tin_05",
@@ -1988,7 +2284,15 @@
       "priority": 2,
       "batch": "B3-signs-painted",
       "created": "2026-11-14T17:19:47.325Z",
-      "promptAt": "2026-11-14T17:19:47.370Z"
+      "promptAt": "2026-11-14T17:19:47.370Z",
+      "review": {
+        "at": "2026-11-14T18:58:30.253Z",
+        "verdict": "ok",
+        "note": "Looks right for the card.",
+        "ingestedAt": "2026-11-14T18:41:55.690Z",
+        "fit": "pending",
+        "fitNote": "scene check"
+      }
     },
     {
       "id": "decal_sign_tin_06",
@@ -2015,7 +2319,15 @@
       "priority": 2,
       "batch": "B3-signs-painted",
       "created": "2026-11-14T17:19:47.415Z",
-      "promptAt": "2026-11-14T17:19:47.458Z"
+      "promptAt": "2026-11-14T17:19:47.458Z",
+      "review": {
+        "at": "2026-11-14T18:58:30.514Z",
+        "verdict": "ok",
+        "note": "Looks right for the card.",
+        "ingestedAt": "2026-11-14T18:44:19.928Z",
+        "fit": "pending",
+        "fitNote": "scene check"
+      }
     },
     {
       "id": "decal_sign_enamel_01",
@@ -2042,7 +2354,15 @@
       "priority": 2,
       "batch": "B3-signs-painted",
       "created": "2026-11-14T17:19:47.503Z",
-      "promptAt": "2026-11-14T17:19:47.549Z"
+      "promptAt": "2026-11-14T17:19:47.549Z",
+      "review": {
+        "at": "2026-11-14T18:58:30.803Z",
+        "verdict": "ok",
+        "note": "Looks right for the card.",
+        "ingestedAt": "2026-11-14T18:41:28.777Z",
+        "fit": "pending",
+        "fitNote": "scene check"
+      }
     },
     {
       "id": "decal_sign_enamel_02",
@@ -2069,7 +2389,15 @@
       "priority": 3,
       "batch": "B3-signs-painted",
       "created": "2026-11-14T17:19:47.597Z",
-      "promptAt": "2026-11-14T17:19:47.643Z"
+      "promptAt": "2026-11-14T17:19:47.643Z",
+      "review": {
+        "at": "2026-11-14T18:58:31.026Z",
+        "verdict": "ok",
+        "note": "Looks right for the card.",
+        "ingestedAt": "2026-11-14T18:45:21.565Z",
+        "fit": "pending",
+        "fitNote": "scene check"
+      }
     },
     {
       "id": "decal_shutter_text_01",
@@ -2096,7 +2424,15 @@
       "priority": 2,
       "batch": "B3-signs-painted",
       "created": "2026-11-14T17:19:47.693Z",
-      "promptAt": "2026-11-14T17:19:47.742Z"
+      "promptAt": "2026-11-14T17:19:47.742Z",
+      "review": {
+        "at": "2026-11-14T18:58:31.294Z",
+        "verdict": "ok",
+        "note": "3D shadow lettering slightly graphic but reads as painted; Hindi correct.",
+        "ingestedAt": "2026-11-14T18:41:02.882Z",
+        "fit": "pending",
+        "fitNote": "scene check"
+      }
     },
     {
       "id": "decal_shutter_text_02",
@@ -2123,7 +2459,15 @@
       "priority": 3,
       "batch": "B3-signs-painted",
       "created": "2026-11-14T17:19:47.790Z",
-      "promptAt": "2026-11-14T17:19:47.838Z"
+      "promptAt": "2026-11-14T17:19:47.838Z",
+      "review": {
+        "at": "2026-11-14T18:58:31.463Z",
+        "verdict": "ok",
+        "note": "Looks right for the card.",
+        "ingestedAt": "2026-11-14T18:44:38.779Z",
+        "fit": "pending",
+        "fitNote": "scene check"
+      }
     },
     {
       "id": "decal_shutter_text_03",
@@ -2150,7 +2494,15 @@
       "priority": 3,
       "batch": "B3-signs-painted",
       "created": "2026-11-14T17:19:47.891Z",
-      "promptAt": "2026-11-14T17:19:47.939Z"
+      "promptAt": "2026-11-14T17:19:47.939Z",
+      "review": {
+        "at": "2026-11-14T18:58:31.771Z",
+        "verdict": "ok",
+        "note": "Looks right for the card.",
+        "ingestedAt": "2026-11-14T18:45:15.326Z",
+        "fit": "pending",
+        "fitNote": "scene check"
+      }
     },
     {
       "id": "decal_sign_flex_gb_01",
@@ -2177,7 +2529,15 @@
       "priority": 1,
       "batch": "B3-signs-printed",
       "created": "2026-11-14T17:19:47.987Z",
-      "promptAt": "2026-11-14T17:19:48.034Z"
+      "promptAt": "2026-11-14T17:19:48.034Z",
+      "review": {
+        "at": "2026-11-14T18:58:31.918Z",
+        "verdict": "ok",
+        "note": "Looks right for the card.",
+        "ingestedAt": "2026-11-14T18:47:53.147Z",
+        "fit": "pending",
+        "fitNote": "scene check"
+      }
     },
     {
       "id": "decal_sign_flex_gb_02",
@@ -2204,7 +2564,15 @@
       "priority": 1,
       "batch": "B3-signs-printed",
       "created": "2026-11-14T17:19:48.083Z",
-      "promptAt": "2026-11-14T17:19:48.130Z"
+      "promptAt": "2026-11-14T17:19:48.130Z",
+      "review": {
+        "at": "2026-11-14T18:58:32.053Z",
+        "verdict": "ok",
+        "note": "Looks right for the card.",
+        "ingestedAt": "2026-11-14T18:48:23.532Z",
+        "fit": "pending",
+        "fitNote": "scene check"
+      }
     },
     {
       "id": "decal_sign_flex_gb_03",
@@ -2231,7 +2599,15 @@
       "priority": 2,
       "batch": "B3-signs-printed",
       "created": "2026-11-14T17:19:48.178Z",
-      "promptAt": "2026-11-14T17:19:48.226Z"
+      "promptAt": "2026-11-14T17:19:48.226Z",
+      "review": {
+        "at": "2026-11-14T18:58:32.170Z",
+        "verdict": "ok",
+        "note": "Looks right for the card.",
+        "ingestedAt": "2026-11-14T18:49:34.739Z",
+        "fit": "pending",
+        "fitNote": "scene check"
+      }
     },
     {
       "id": "decal_sign_flex_gb_04",
@@ -2258,7 +2634,15 @@
       "priority": 2,
       "batch": "B3-signs-printed",
       "created": "2026-11-14T17:19:48.276Z",
-      "promptAt": "2026-11-14T17:19:48.323Z"
+      "promptAt": "2026-11-14T17:19:48.323Z",
+      "review": {
+        "at": "2026-11-14T18:58:32.312Z",
+        "verdict": "ok",
+        "note": "Looks right for the card.",
+        "ingestedAt": "2026-11-14T18:49:58.917Z",
+        "fit": "pending",
+        "fitNote": "scene check"
+      }
     },
     {
       "id": "decal_poster_01",
@@ -2285,7 +2669,15 @@
       "priority": 2,
       "batch": "B3-signs-printed",
       "created": "2026-11-14T17:19:48.370Z",
-      "promptAt": "2026-11-14T17:19:48.418Z"
+      "promptAt": "2026-11-14T17:19:48.418Z",
+      "review": {
+        "at": "2026-11-14T18:58:32.451Z",
+        "verdict": "ok",
+        "note": "Hindi correct, good wear.",
+        "ingestedAt": "2026-11-14T18:48:46.366Z",
+        "fit": "pending",
+        "fitNote": "scene check"
+      }
     },
     {
       "id": "decal_poster_02",
@@ -2312,7 +2704,15 @@
       "priority": 2,
       "batch": "B3-signs-printed",
       "created": "2026-11-14T17:19:48.465Z",
-      "promptAt": "2026-11-14T17:19:48.514Z"
+      "promptAt": "2026-11-14T17:19:48.514Z",
+      "review": {
+        "at": "2026-11-14T18:58:32.571Z",
+        "verdict": "ok",
+        "note": "Looks right for the card.",
+        "ingestedAt": "2026-11-14T18:49:10.684Z",
+        "fit": "pending",
+        "fitNote": "scene check"
+      }
     },
     {
       "id": "decal_poster_03",
@@ -2339,7 +2739,15 @@
       "priority": 2,
       "batch": "B3-signs-printed",
       "created": "2026-11-14T17:19:48.562Z",
-      "promptAt": "2026-11-14T17:19:48.609Z"
+      "promptAt": "2026-11-14T17:19:48.609Z",
+      "review": {
+        "at": "2026-11-14T18:58:32.704Z",
+        "verdict": "ok",
+        "note": "Looks right for the card.",
+        "ingestedAt": "2026-11-14T18:49:23.943Z",
+        "fit": "pending",
+        "fitNote": "scene check"
+      }
     },
     {
       "id": "decal_poster_04",
@@ -2366,7 +2774,15 @@
       "priority": 3,
       "batch": "B3-signs-printed",
       "created": "2026-11-14T17:19:48.657Z",
-      "promptAt": "2026-11-14T17:19:48.714Z"
+      "promptAt": "2026-11-14T17:19:48.714Z",
+      "review": {
+        "at": "2026-11-14T18:58:32.915Z",
+        "verdict": "ok",
+        "note": "Looks right for the card.",
+        "ingestedAt": "2026-11-14T18:50:10.031Z",
+        "fit": "pending",
+        "fitNote": "scene check"
+      }
     },
     {
       "id": "decal_sign_hotel_led_01",
@@ -2393,7 +2809,15 @@
       "priority": 1,
       "batch": "B3-signs-lit",
       "created": "2026-11-14T17:19:48.764Z",
-      "promptAt": "2026-11-14T17:19:48.816Z"
+      "promptAt": "2026-11-14T17:19:48.816Z",
+      "review": {
+        "at": "2026-11-14T18:58:33.081Z",
+        "verdict": "ok",
+        "note": "Looks right for the card.",
+        "ingestedAt": "2026-11-14T17:23:13.726Z",
+        "fit": "pending",
+        "fitNote": "scene check"
+      }
     },
     {
       "id": "decal_sign_hotel_led_02",
@@ -2420,7 +2844,15 @@
       "priority": 1,
       "batch": "B3-signs-lit",
       "created": "2026-11-14T17:19:48.867Z",
-      "promptAt": "2026-11-14T17:19:48.922Z"
+      "promptAt": "2026-11-14T17:19:48.922Z",
+      "review": {
+        "at": "2026-11-14T18:58:33.259Z",
+        "verdict": "ok",
+        "note": "Looks right for the card.",
+        "ingestedAt": "2026-11-14T17:24:16.732Z",
+        "fit": "pending",
+        "fitNote": "scene check"
+      }
     },
     {
       "id": "decal_sign_hotel_led_03",
@@ -2447,7 +2879,15 @@
       "priority": 2,
       "batch": "B3-signs-lit",
       "created": "2026-11-14T17:19:48.976Z",
-      "promptAt": "2026-11-14T17:19:49.027Z"
+      "promptAt": "2026-11-14T17:19:49.027Z",
+      "review": {
+        "at": "2026-11-14T18:58:33.389Z",
+        "verdict": "ok",
+        "note": "Strip of sky and tree beside the board: crop to the board in the decal quad.",
+        "ingestedAt": "2026-11-14T17:25:43.611Z",
+        "fit": "pending",
+        "fitNote": "scene check"
+      }
     },
     {
       "id": "decal_sign_hotel_led_04",
@@ -2474,7 +2914,15 @@
       "priority": 2,
       "batch": "B3-signs-lit",
       "created": "2026-11-14T17:19:49.081Z",
-      "promptAt": "2026-11-14T17:19:49.132Z"
+      "promptAt": "2026-11-14T17:19:49.132Z",
+      "review": {
+        "at": "2026-11-14T18:58:33.517Z",
+        "verdict": "ok",
+        "note": "Looks right for the card.",
+        "ingestedAt": "2026-11-14T17:25:54.014Z",
+        "fit": "pending",
+        "fitNote": "scene check"
+      }
     },
     {
       "id": "decal_sign_glowbox_01",
@@ -2501,7 +2949,15 @@
       "priority": 2,
       "batch": "B3-signs-lit",
       "created": "2026-11-14T17:19:49.184Z",
-      "promptAt": "2026-11-14T17:19:49.232Z"
+      "promptAt": "2026-11-14T17:19:49.232Z",
+      "review": {
+        "at": "2026-11-14T18:58:33.720Z",
+        "verdict": "ok",
+        "note": "Crisp and clean, slightly graphic; fine for a modern CP box.",
+        "ingestedAt": "2026-11-14T17:25:12.559Z",
+        "fit": "pending",
+        "fitNote": "scene check"
+      }
     },
     {
       "id": "decal_sign_glowbox_02",
@@ -2528,7 +2984,15 @@
       "priority": 2,
       "batch": "B3-signs-lit",
       "created": "2026-11-14T17:19:49.282Z",
-      "promptAt": "2026-11-14T17:19:49.329Z"
+      "promptAt": "2026-11-14T17:19:49.329Z",
+      "review": {
+        "at": "2026-11-14T18:58:33.926Z",
+        "verdict": "ok",
+        "note": "Looks right for the card.",
+        "ingestedAt": "2026-11-14T17:25:25.763Z",
+        "fit": "pending",
+        "fitNote": "scene check"
+      }
     },
     {
       "id": "decal_sign_glowbox_03",
@@ -2555,7 +3019,15 @@
       "priority": 2,
       "batch": "B3-signs-lit",
       "created": "2026-11-14T17:19:49.379Z",
-      "promptAt": "2026-11-14T17:19:49.431Z"
+      "promptAt": "2026-11-14T17:19:49.431Z",
+      "review": {
+        "at": "2026-11-14T18:58:34.059Z",
+        "verdict": "ok",
+        "note": "Looks right for the card.",
+        "ingestedAt": "2026-11-14T17:25:33.834Z",
+        "fit": "pending",
+        "fitNote": "scene check"
+      }
     }
   ]
 }
