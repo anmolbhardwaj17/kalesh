@@ -1,6 +1,6 @@
 {
   "_doc": "Written only by node harness/bin/task.mjs. Phases run in order; P0 (ADOPT + STYLE DISCOVERY) waits for the owner by design and needs task.mjs signoff and task.mjs archsignoff before its gate passes. Later phases are added by the planner at the end of P0 (task.mjs phase-add) from the game's real state.",
-  "updated": "2026-11-14T14:58:09.106Z",
+  "updated": "2026-11-14T15:09:45.518Z",
   "phases": [
     {
       "id": "P0",
@@ -4565,7 +4565,7 @@
       "priority": 1,
       "kind": "mentor",
       "status": "doing",
-      "attempts": 2,
+      "attempts": 3,
       "notes": [
         "Anmol 2026-11-14: boards carry wear and tear: rust streaks, faded and peeling paint, bent or dented tin, broken corners, torn flex, missing letters. Add it to signboards.md per area and to the boards (varied per board, more in the old city, less in CP showrooms), and the verifier checks it in the side by side.",
         "Anmol 2026-11-14: every reference photo has its date checked (EXIF, the file page, or visible clues) and written next to it; a photo older than the current state of the place is marked old and never used for surfaces, signs or colours. Before building, check the set actually shows what is needed (the street surface, signs, colours, the view from the player's height); if not, keep searching other free sources until it does. If free photos still do not cover it, register a photo request for Anmol on the dashboard (assets.mjs) and keep working with the best dated set.",
@@ -4575,11 +4575,12 @@
         "Owner 2026-11-14: some board names should be GTA-style parodies of famous Delhi names (decisions.md). P2-067 adds them to the name files; the board system must read parody entries and their board style.",
         "attempt 1 failed: no reason given",
         "attempt 1 failed: Verifier FAIL: boards read as real (Hindi over English, painted tin, flex, verticals, wear, attached) but density far below the photos (CP, Paharganj, Janpath, old streets: 1 to 2 boards per facade vs 3 to 5 stacked plus notices and cables); boards.json out of sync with the names file (npm test fails); a 'Police Post Ajmeri Gate' shop-style board; flat colour-block product shelves; weak night glow.",
-        "Owner GB Road street view Oct 2025 (OWNER_PHOTOS.md): the density target for GB Road boards: blue and white printed flex stacked on two levels on every facade."
+        "Owner GB Road street view Oct 2025 (OWNER_PHOTOS.md): the density target for GB Road boards: blue and white printed flex stacked on two levels on every facade.",
+        "attempt 2 failed: Verifier FAIL attempt 2: big step up (GB Road close to the street view, readable night glow, names clean) but wear invisible at play distance (every board kind scores under 6 on wear), gali and Paharganj street level still bare, LED verticals static (no chase or flicker found), bazaar shop a black void at night, perf unproven."
       ],
       "created": "2026-11-14T08:07:00.888Z",
       "model": "opus",
-      "started": "2026-11-14T13:39:22.740Z"
+      "started": "2026-11-14T15:09:45.502Z"
     },
     {
       "id": "P2-049",
