@@ -105,6 +105,14 @@ static func _ranges(header: Dictionary, room: int) -> String:
 		var from := int(c.get("faces", 0))
 		if from < 0 or from + int(c.get("triangles", 0)) * 36 > room:
 			return "collider %s names bytes outside the file" % str(c.get("name", "?"))
+	for p: Variant in header.get("placements", []):
+		if typeof(p) != TYPE_DICTIONARY:
+			return "a placement entry is not an object"
+		var n := int((p as Dictionary).get("count", 0))
+		var xf := int((p as Dictionary).get("xforms", 0))
+		var dt := int((p as Dictionary).get("data", 0))
+		if n < 0 or xf < 0 or dt < 0 or xf + n * 48 > room or dt + n * 4 > room:
+			return "placements %s name bytes outside the file" % str((p as Dictionary).get("module", "?"))
 	var lanes: Variant = header.get("lanes")
 	if typeof(lanes) == TYPE_DICTIONARY and (lanes as Dictionary).has("list"):
 		if int(lanes.get("pts", 0)) < 0 or int(lanes.get("pts", 0)) + int(lanes.get("points", 0)) * 12 > room:
@@ -125,6 +133,12 @@ static func vec3(tile: Dictionary, at: int, count: int) -> PackedVector3Array:
 static func vec2(tile: Dictionary, at: int, count: int) -> PackedVector2Array:
 	var from: int = int(tile.base) + at
 	return (tile.bytes as PackedByteArray).slice(from, from + count * 8).to_vector2_array()
+
+
+## `count` float32 at payload offset `at` (placement transforms, P2-010).
+static func floats(tile: Dictionary, at: int, count: int) -> PackedFloat32Array:
+	var from: int = int(tile.base) + at
+	return (tile.bytes as PackedByteArray).slice(from, from + count * 4).to_float32_array()
 
 
 ## `count` uint32 at payload offset `at` (indices).

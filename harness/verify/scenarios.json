@@ -1110,6 +1110,30 @@
       ],
       "_note": "P2-007. A 140 km/h approach to India Gate along Kartavya Path as a frame sequence (one frame every 150 ms, 5.83 m apart) through each level change (1,800, 900 and 350 m): shots pop_ig_<boundary>_<k>. Then node harness/bin/popcheck.mjs crops the arch from each frame, writes the sheets pop_ig_<boundary>_sheet.png and fails on a frame to frame change well over its neighbours (a pop). Not in quick.",
       "allOnly": true
+    },
+    {
+      "name": "city_buildings_busiest",
+      "query": "light=afternoon&spawn=chandni_chowk_east",
+      "solo": true,
+      "allOnly": true,
+      "steps": [
+        {
+          "script": "harness/verify/scripts/city_buildings_busiest.js",
+          "timeout": 420000
+        }
+      ],
+      "_note": "P2-010 perf. The generated buildings (shells and the area kit modules) in the busiest pilot views (Chandni Chowk from 40 m up and at street eye): GPU cost = the frame with the buildings shown minus hidden (stream layers), GPU ballast on (harness/bin/ballast.mjs method), median of 4 alternating pairs, budget perf_budgets.json world.gpuMs.generatedBuildings 2.0 ms; draw calls of the plain frame 2,500 at most (scenes.city warn). Shots city_buildings_busiest_<pose>. Not in quick."
+    },
+    {
+      "name": "city_kit_shots",
+      "query": "light=afternoon&spawn=chandni_chowk_east",
+      "steps": [
+        {
+          "script": "harness/verify/scripts/city_kit_shots.js",
+          "timeout": 420000
+        }
+      ],
+      "_note": "P2-010 look. One street shot per area kit at player height (kit_colonnade, kit_bazaar, kit_gali, kit_hotel, kit_office, kit_lutyens, kit_market, kit_hardware), the grime pair kit_wear_bazaar and kit_wear_lutyens, and kit_railings_close; the verifier reads them against each area sheet board and the respect rule. Fails only when a view draws no kit module or a tile is bad."
     }
   ]
 }

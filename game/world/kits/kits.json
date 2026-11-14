@@ -1,0 +1,108 @@
+{
+  "_doc": "Area kits (P2-010, DELHI_WORLD.md 'Area kits', KT2 and TX1): one kit per pilot archetype, each read from its area sheet and board (harness/design/areas/<area>.md and _board.jpg). `types` maps every generated building type (tools/bake/areas/schema.ts BUILDING_TYPES) to the kit that draws its modules; a module id stays `<type>.<part>` as the bake wrote it (fixed ids: a mesh is replaced by id, the placements never change). Kit fields: `area` is the names file (game/data/names/<area>.json) its sign boards take their names from; `facade` the facade colours of the kit (palette words of harness/data/areas/palette.json, the colours its profiles paint walls with: the baked tint comes from the same list); `accent` the painted parts (shutters, doors, awnings, grilles), one picked per bay; `boards` the board look (background colours, lettering, scripts in order); `shares` how often the kit adds its own pieces to a bay (sign board on a shop bay, outside stair on a blank upper bay, roof tank and roof railing on a parapet bay; residential kits carry the stair and railings, Anmol 2026-11-13); `tex` the generator parameters of the kit's tiling layers (tools/kits/make_textures.mjs).",
+  "types": {
+    "colonnade_block": "colonnade",
+    "arcade_row": "colonnade",
+    "station_building": "colonnade",
+    "bazaar_block": "bazaar",
+    "shop_house": "bazaar",
+    "haveli": "gali",
+    "house": "gali",
+    "flats_block": "gali",
+    "other": "gali",
+    "hotel_stack": "hotel",
+    "office_slab": "office",
+    "office_tower": "office",
+    "govt_slab": "office",
+    "admin_block": "office",
+    "commercial_block": "office",
+    "civic_hall": "office",
+    "bungalow": "lutyens",
+    "low_row_market": "market",
+    "trade_row": "hardware",
+    "shed": "hardware"
+  },
+  "layers": ["render", "brick", "stone", "concrete", "shutter", "wood", "glass", "cloth"],
+  "kits": {
+    "colonnade": {
+      "name": "Colonial colonnade (Connaught Place)",
+      "area": "cp_inner_circle",
+      "sheet": "harness/design/areas/cp_inner_circle.md",
+      "facade": ["white_render", "cream", "pale_stone", "cream_yellow", "white_marble", "buff_sandstone"],
+      "accent": ["#2f3a34", "#3f5f4a", "#6b2a24", "#1f3a5f", "#7a7d7e", "#4a3a2c"],
+      "boards": {"bg": ["#1c1c1e", "#f2f0ea", "#1c1c1e", "#2c3e70", "#6b2a24"], "fg": "auto", "scripts": ["latn", "deva"], "case": "upper", "plain": true},
+      "shares": {"board": 0.9, "stair": 0, "tank": 0.04, "roof_rail": 0, "ac": 0.15},
+      "tex": {"render": {"patch": 0.15, "crack": 0.05, "tone": 0.03}, "brick": {"w": 64, "h": 22, "mortar": "#d8d2c4", "c": ["#9a5a42", "#8a4e3a", "#a8664a"]}, "stone": {"course": 64, "block": 128, "c": ["#e4dccb", "#d9d0bd", "#ece6d8"]}, "concrete": {"board": 0, "stain": 0.2}, "shutter": {"rib": 10}, "wood": {"c": ["#5a3e2b", "#6b4a33"]}, "glass": {"tint": "#59707c"}, "cloth": {"stripe": 0}}
+    },
+    "bazaar": {
+      "name": "Bazaar shop house (Chandni Chowk main road)",
+      "area": "chandni_chowk_main",
+      "sheet": "harness/design/areas/chandni_chowk_main.md",
+      "facade": ["lime_plaster", "faded_pink", "ochre", "painted_yellow", "faded_green", "brown_brick", "painted_blue", "cream"],
+      "accent": ["#7a7d7e", "#2e6b4f", "#3a5f8a", "#8a3a2e", "#b08a3e", "#556b2f", "#6f94c4"],
+      "boards": {"bg": ["#c0392b", "#f2c230", "#1f5fa8", "#2e8b57", "#e67e22", "#7b2d8b", "#0f7c7c", "#d6336c"], "fg": "auto", "scripts": ["deva", "latn", "arab"], "case": "title", "plain": false},
+      "shares": {"board": 0.95, "stair": 0.2, "tank": 0.25, "roof_rail": 0.5, "ac": 0.35},
+      "tex": {"render": {"patch": 0.7, "crack": 0.45, "tone": 0.1}, "brick": {"w": 46, "h": 14, "mortar": "#b8ab94", "c": ["#8b5e45", "#7d4f39", "#96664b", "#6f4632"]}, "stone": {"course": 56, "block": 100, "c": ["#c9a77c", "#bf9c70", "#d1b088"]}, "concrete": {"board": 1, "stain": 0.6}, "shutter": {"rib": 9}, "wood": {"c": ["#5d4037", "#4e342e", "#6d4c41"]}, "glass": {"tint": "#4d5d62"}, "cloth": {"stripe": 1}}
+    },
+    "gali": {
+      "name": "Gali house (the Old Delhi galis)",
+      "area": "chandni_chowk_galis",
+      "sheet": "harness/design/areas/chandni_chowk_galis.md",
+      "facade": ["faded_pink", "faded_blue", "faded_green", "lime_plaster", "ochre", "painted_pink", "teal", "cream_yellow", "brown_brick"],
+      "accent": ["#2e6b4f", "#3a5f8a", "#7a7d7e", "#8a3a2e", "#3f8f8c", "#5d4037", "#b08a3e"],
+      "boards": {"bg": ["#1f5fa8", "#c0392b", "#2e8b57", "#f2c230", "#0f7c7c", "#7b2d8b"], "fg": "auto", "scripts": ["deva", "arab", "latn"], "case": "title", "plain": false},
+      "shares": {"board": 0.8, "stair": 0.3, "tank": 0.35, "roof_rail": 0.6, "ac": 0.3},
+      "tex": {"render": {"patch": 0.85, "crack": 0.55, "tone": 0.14}, "brick": {"w": 40, "h": 12, "mortar": "#ae9f86", "c": ["#8b5e45", "#7a4c36", "#93604a", "#6a4130"]}, "stone": {"course": 48, "block": 90, "c": ["#b99872", "#a8885f", "#c4a47c"]}, "concrete": {"board": 1, "stain": 0.7}, "shutter": {"rib": 9}, "wood": {"c": ["#4e342e", "#5d4037", "#3e2723"]}, "glass": {"tint": "#46555a"}, "cloth": {"stripe": 1}}
+    },
+    "hotel": {
+      "name": "Hotel and lodge strip (Paharganj)",
+      "area": "paharganj_station",
+      "sheet": "harness/design/areas/paharganj_station.md",
+      "facade": ["painted_yellow", "painted_blue", "painted_pink", "cream", "teal", "ochre", "white_render"],
+      "accent": ["#3a8fd0", "#7a7d7e", "#c0392b", "#2e8b57", "#e2c04f", "#7b2d8b"],
+      "boards": {"bg": ["#f2c230", "#c0392b", "#1f5fa8", "#f2f0ea", "#2e8b57", "#d6336c"], "fg": "auto", "scripts": ["latn", "deva"], "case": "upper", "plain": false},
+      "shares": {"board": 0.95, "stair": 0.1, "tank": 0.3, "roof_rail": 0.5, "ac": 0.6},
+      "tex": {"render": {"patch": 0.55, "crack": 0.3, "tone": 0.08}, "brick": {"w": 56, "h": 18, "mortar": "#c4b8a2", "c": ["#8f5e45", "#a06a4e"]}, "stone": {"course": 60, "block": 120, "c": ["#d8cfb8", "#cfc5ad"]}, "concrete": {"board": 0, "stain": 0.5}, "shutter": {"rib": 9}, "wood": {"c": ["#5d4037", "#6d4c41"]}, "glass": {"tint": "#4a6470"}, "cloth": {"stripe": 1}}
+    },
+    "office": {
+      "name": "Office and institutional blocks (ITO)",
+      "area": "ito",
+      "sheet": "harness/design/areas/ito.md",
+      "facade": ["grey_concrete", "dark_grey", "cream", "blue_band", "orange_brick", "pale_stone", "buff_sandstone"],
+      "accent": ["#4d6fa3", "#66686a", "#9a9a96", "#3f5f4a", "#8c8a84", "#b5b1a8"],
+      "boards": {"bg": ["#1f5fa8", "#2e8b57", "#f2f0ea", "#1c1c1e", "#c0392b"], "fg": "auto", "scripts": ["deva", "latn"], "case": "upper", "plain": true},
+      "shares": {"board": 0.5, "stair": 0, "tank": 0.1, "roof_rail": 0.3, "ac": 0.4},
+      "tex": {"render": {"patch": 0.3, "crack": 0.15, "tone": 0.05}, "brick": {"w": 60, "h": 20, "mortar": "#bfb4a0", "c": ["#b9683a", "#a85e35", "#c47444"]}, "stone": {"course": 72, "block": 144, "c": ["#9a9a96", "#a3a29c", "#8f8e89"]}, "concrete": {"board": 1, "stain": 0.45}, "shutter": {"rib": 10}, "wood": {"c": ["#5d4037"]}, "glass": {"tint": "#5f7884"}, "cloth": {"stripe": 0}}
+    },
+    "lutyens": {
+      "name": "Lutyens bungalow and wall (India Gate edges)",
+      "area": "india_gate_kartavya_path",
+      "sheet": "harness/design/areas/india_gate_kartavya_path.md",
+      "facade": ["white_render", "buff_sandstone", "cream", "pale_stone", "red_sandstone", "lime_plaster"],
+      "accent": ["#2f4f3a", "#3f5f4a", "#f2f0ea", "#5d4037", "#2c3e50", "#7a7d7e"],
+      "boards": {"bg": ["#2e5e3e", "#f2f0ea", "#1f5fa8"], "fg": "auto", "scripts": ["latn", "deva"], "case": "title", "plain": true},
+      "shares": {"board": 0.1, "stair": 0, "tank": 0.02, "roof_rail": 0, "ac": 0.05},
+      "tex": {"render": {"patch": 0.08, "crack": 0.03, "tone": 0.02}, "brick": {"w": 64, "h": 22, "mortar": "#d6cdb8", "c": ["#a4533b", "#9a4c35"]}, "stone": {"course": 80, "block": 150, "c": ["#c9a774", "#c09c68", "#d2b183", "#a4533b"]}, "concrete": {"board": 0, "stain": 0.1}, "shutter": {"rib": 10}, "wood": {"c": ["#2f4f3a", "#3a5a40"]}, "glass": {"tint": "#56686e"}, "cloth": {"stripe": 0}}
+    },
+    "market": {
+      "name": "Market stall row (Janpath)",
+      "area": "janpath",
+      "sheet": "harness/design/areas/janpath.md",
+      "facade": ["cream", "white_render", "painted_red", "painted_yellow", "teal", "ochre", "faded_blue"],
+      "accent": ["#c0392b", "#f2c230", "#2c3e70", "#3a7d44", "#d35400", "#7a4a8c", "#1f6f8b"],
+      "boards": {"bg": ["#2c3e70", "#c0392b", "#f2f0ea", "#1c1c1e", "#2e8b57", "#e67e22"], "fg": "auto", "scripts": ["latn", "deva"], "case": "upper", "plain": false},
+      "shares": {"board": 0.9, "stair": 0, "tank": 0.15, "roof_rail": 0.2, "ac": 0.2},
+      "tex": {"render": {"patch": 0.35, "crack": 0.2, "tone": 0.06}, "brick": {"w": 60, "h": 20, "mortar": "#cbbfa8", "c": ["#8f5e45", "#a06a4e"]}, "stone": {"course": 40, "block": 40, "c": ["#b84a3c", "#e8dcc0", "#b84a3c", "#e8dcc0"]}, "concrete": {"board": 0, "stain": 0.35}, "shutter": {"rib": 9}, "wood": {"c": ["#6d4c41", "#8d6e63"]}, "glass": {"tint": "#52656c"}, "cloth": {"stripe": 1}}
+    },
+    "hardware": {
+      "name": "Hardware shop row (GB Road at street level)",
+      "area": "gb_road_ajmeri_gate",
+      "sheet": "harness/design/areas/gb_road_ajmeri_gate.md",
+      "facade": ["faded_blue", "faded_green", "painted_yellow", "brown_brick", "lime_plaster", "grey_concrete", "teal", "red_orange_plaster"],
+      "accent": ["#2e6b4f", "#3a5f8a", "#7a7d7e", "#b08a3e", "#8a3a2e", "#3f8f8c"],
+      "boards": {"bg": ["#f2c230", "#1f5fa8", "#c0392b", "#f2f0ea", "#2e8b57", "#0f7c7c"], "fg": "auto", "scripts": ["deva", "latn"], "case": "upper", "plain": false},
+      "shares": {"board": 0.95, "stair": 0.2, "tank": 0.3, "roof_rail": 0.5, "ac": 0.3},
+      "tex": {"render": {"patch": 0.7, "crack": 0.4, "tone": 0.1}, "brick": {"w": 50, "h": 16, "mortar": "#b2a58e", "c": ["#8b5e45", "#7d4f39", "#a35a3c"]}, "stone": {"course": 56, "block": 110, "c": ["#a4533b", "#9b4c36", "#b05d43"]}, "concrete": {"board": 1, "stain": 0.65}, "shutter": {"rib": 9}, "wood": {"c": ["#5d4037", "#4e342e"]}, "glass": {"tint": "#4a585c"}, "cloth": {"stripe": 1}}
+    }
+  }
+}

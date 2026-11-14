@@ -112,8 +112,9 @@ func _layers(city: Node, o: Dictionary) -> Dictionary:
 		for n: Variant in o.get(key, []):
 			var name := str(n)
 			var count := 0
-			for node: Node in city.find_children("%s_*" % name, "MeshInstance3D", true, false):
-				(node as MeshInstance3D).visible = key == "show"
+			# meshes and, for buildings, the kit modules' MultiMesh nodes (P2-010)
+			for node: Node in city.find_children("%s_*" % name, "GeometryInstance3D", true, false):
+				(node as GeometryInstance3D).visible = key == "show"
 				count += 1
 			out[name] = {"meshes": count, "visible": key == "show"}
 	return out
