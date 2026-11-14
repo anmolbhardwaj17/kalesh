@@ -1,6 +1,6 @@
 {
   "_doc": "Written only by node harness/bin/task.mjs. Phases run in order; P0 (ADOPT + STYLE DISCOVERY) waits for the owner by design and needs task.mjs signoff and task.mjs archsignoff before its gate passes. Later phases are added by the planner at the end of P0 (task.mjs phase-add) from the game's real state.",
-  "updated": "2026-11-14T19:18:10.081Z",
+  "updated": "2026-11-14T19:19:30.415Z",
   "phases": [
     {
       "id": "P0",
@@ -5328,6 +5328,24 @@
       "created": "2026-11-14T18:54:14.743Z",
       "model": "opus",
       "started": "2026-11-14T19:09:12.399Z"
+    },
+    {
+      "id": "P2-075",
+      "phase": "P2",
+      "title": "Street lights that look real at night",
+      "desc": "Owner 2026-11-14 on the night ITO junction shot: street light bloom and spread look fake and low quality. What is wrong: the pools are flat orange ellipses painted on the ground, the same on road and grass, often under the pole instead of under the lamp head that overhangs the road, with no falloff into the asphalt texture; nothing vertical is lit (poles, kerbs, walls, cars, people); the colour is saturated orange while Delhi now uses LED (warm white about 3500 to 4000 K, some old sodium in the old city); the heads are tiny dark shapes with no glow; no haze around the heads. Fix the Watch Dogs 2 way within the M2 budget: real SpotLights (no shadows, distance fade, clustered Forward+) for the lamps within about 120 m of the camera, aimed from the head down and slightly toward the road, lighting road, kerb, poles, walls and cars correctly; beyond that, projected Decal nodes (not painted quads) so far pools follow the surfaces; emissive heads with a soft glow and a little haze halo (fog or a billboard sprite with depth fade); colour per area (LED warm white on arterials and CP, some sodium orange in the old city); spacing and pole types from P2-036 later. Measure: frame cost A/B with the load quoted, and a night side by side with a dated photo of a Delhi street at night.",
+      "accept": [
+        "Frame cost inside the city budget (same-session A/B, load quoted); npm test and quick green"
+      ],
+      "deps": [],
+      "agent": "builder",
+      "priority": 1,
+      "kind": "mentor",
+      "status": "todo",
+      "attempts": 0,
+      "notes": [],
+      "created": "2026-11-14T19:19:30.415Z",
+      "model": "opus"
     }
   ]
 }
