@@ -1,6 +1,6 @@
 {
   "_doc": "Written only by node harness/bin/task.mjs. Phases run in order; P0 (ADOPT + STYLE DISCOVERY) waits for the owner by design and needs task.mjs signoff and task.mjs archsignoff before its gate passes. Later phases are added by the planner at the end of P0 (task.mjs phase-add) from the game's real state.",
-  "updated": "2026-11-14T10:49:50.822Z",
+  "updated": "2026-11-14T11:13:12.859Z",
   "phases": [
     {
       "id": "P0",
@@ -4245,7 +4245,8 @@
       "attempts": 0,
       "notes": [
         "Anmol 2026-11-14: emptiness is a blocker, not polish. Flag any street or junction that feels empty, bare or unlike its reference photos.",
-        "Held until the end of P2 (its own text says before the gate); the area and kit tasks it would judge are still open."
+        "Held until the end of P2 (its own text says before the gate); the area and kit tasks it would judge are still open.",
+        "Also answer every heading of harness/design/WORLD_LOGIC.md."
       ],
       "created": "2026-11-13T11:54:41.171Z",
       "model": "sonnet"
@@ -4631,7 +4632,9 @@
       "kind": "feature",
       "status": "todo",
       "attempts": 0,
-      "notes": [],
+      "notes": [
+        "Look critics also answer every heading of harness/design/WORLD_LOGIC.md with a shot per finding."
+      ],
       "created": "2026-11-14T08:58:18.633Z",
       "model": "sonnet"
     },
@@ -4816,7 +4819,9 @@
       "kind": "feature",
       "status": "todo",
       "attempts": 0,
-      "notes": [],
+      "notes": [
+        "Also answer every heading of harness/design/WORLD_LOGIC.md."
+      ],
       "created": "2026-11-14T08:58:18.634Z",
       "model": "sonnet"
     },
@@ -4841,7 +4846,9 @@
       "kind": "feature",
       "status": "todo",
       "attempts": 0,
-      "notes": [],
+      "notes": [
+        "Also answer every heading of harness/design/WORLD_LOGIC.md."
+      ],
       "created": "2026-11-14T08:58:18.634Z",
       "model": "sonnet"
     },
@@ -4866,7 +4873,9 @@
       "kind": "feature",
       "status": "todo",
       "attempts": 0,
-      "notes": [],
+      "notes": [
+        "Also answer every heading of harness/design/WORLD_LOGIC.md."
+      ],
       "created": "2026-11-14T08:58:18.634Z",
       "model": "sonnet"
     },
@@ -5028,6 +5037,24 @@
       "created": "2026-11-14T10:14:45.098Z",
       "model": "opus",
       "started": "2026-11-14T10:14:45.352Z"
+    },
+    {
+      "id": "P2-064",
+      "phase": "P2",
+      "title": "World logic checks: automatic plausibility checks for light, support, scale, water, signs and urban logic",
+      "desc": "Anmol 2026-11-14 (harness/design/WORLD_LOGIC.md). Build the automatic layer of the world logic rulebook as a report like the map health report (place, id, rule, a shot link where useful), run in the bake (static: support for poles, signs, wires, fittings and props; wires end on supports; lamp posts not on running lanes; signs face readers or oncoming traffic; drains at low points; scale ranges per prop class) and in a game scenario (live: emitters have light or glow; sky ambient masked inside tunnels, subways and under flyovers; vehicles on their wheels; shadow direction consistent). Start with the rules the current pilot can break today (tunnel lights, kit fittings, wires, signs, lamps, bollards), list the rest as pending with the task that will make them checkable. Wire it into verify --quick as a fast check with a budget of known failures that may only go down.",
+      "accept": [
+        "npm test green"
+      ],
+      "deps": [],
+      "agent": "builder",
+      "priority": 1,
+      "kind": "mentor",
+      "status": "todo",
+      "attempts": 0,
+      "notes": [],
+      "created": "2026-11-14T11:13:12.256Z",
+      "model": "opus"
     }
   ]
 }
