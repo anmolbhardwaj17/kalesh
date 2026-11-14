@@ -54,6 +54,8 @@ export function tileIndex(stage: string, block: string, offset: { x: number; z: 
 }
 
 const mb = (b: number): string => `${(b / 1048576).toFixed(2)} MB`;
+/** Placement bytes of one tile at most (TECH.md "Rendering of the city": about 0.6 MB per dense tile). */
+export const PLACEMENT_BYTES = Math.floor(0.6 * 1024 * 1024);
 
 export function tilesLog(rec: TilesRecord): string[] {
   const s = rec.stats;
@@ -63,6 +65,7 @@ export function tilesLog(rec: TilesRecord): string[] {
     `content: ${s.triangles} drawn triangles, ${s.colliderTriangles} collider triangles in ${s.chunks} chunks (largest ${s.largestChunk}, limit ${CHUNK_LIMIT}; ${s.slivers} slivers left out, ${s.splitBuildings} buildings over one chunk, ${s.joints} deck joint triangles), ${s.buildings} building shells (${s.cutShells} shells over 200 m past their tile cut into parts per tile), ${s.lanes} lane pieces, ${s.pins} pins; farthest vertex ${s.maxOverhangM} m outside its tile (margin ${rec.margin} m); ${s.droppedUv} UV arrays left out, ${s.flipped} needles the 1 mm snap turned over left out`,
     `shells: ${rec.shells.shells} of ${rec.shells.footprints} footprints (${rec.shells.rejected} not a shape), heights from ${Object.entries(rec.shells.byHeight).map(([k, v]) => `${k} ${v}`).join(', ')}`,
   ];
+  if (s.placements !== undefined) out.push(`placements: ${s.placements} facade module instances, ${mb(s.placementBytes ?? 0)} in all (${(((s.placementBytes ?? 0) / Math.max(1, s.tiles)) / 1048576).toFixed(3)} MB a tile on average), densest tile ${s.largestPlacements ? `${s.largestPlacements.id} ${(s.largestPlacements.bytes / 1048576).toFixed(3)} MB (${s.largestPlacements.instances} instances)` : 'none'} (budget ${(PLACEMENT_BYTES / 1048576).toFixed(1)} MB)`);
   for (const c of rec.colliders) out.push(`collider against drawn, ${c.name} (tile ${c.tile}): ${c.points} points, ${c.matched} within 0.05 m, ${c.mismatched} off, ${c.holes} holes, largest difference ${c.maxDiffM} m`);
   const d = rec.deck;
   if (d) out.push(`deck rays: ${d.rays} rays every 5 cm along ${d.lanes} lanes of ${d.strips} deck strips (${d.lengthM} m, ${d.onStationLines} on station lines), ${d.misses} missed the collider${d.firstMiss ? ` (first ${JSON.stringify(d.firstMiss)})` : ''}, largest difference ${d.maxDiffM} m`);
@@ -82,6 +85,7 @@ export function tilesInvariants(rec: TilesRecord, partial: boolean, named: numbe
     },
     { id: 'TILE-04.deck_rays', ok: rec.deck === null ? partial : rec.deck.misses === 0 && rec.deck.rays > 0, detail: rec.deck ? `${rec.deck.misses} of ${rec.deck.rays} rays missed` : 'no deck to cast along' },
   ];
+  if (s.placements !== undefined) out.push({ id: 'TILE-06.placement_bytes', ok: (s.largestPlacements?.bytes ?? 0) <= PLACEMENT_BYTES, detail: `densest tile ${s.largestPlacements ? `${s.largestPlacements.id} ${(s.largestPlacements.bytes / 1048576).toFixed(3)} MB of placements` : 'none'} (budget ${(PLACEMENT_BYTES / 1048576).toFixed(1)} MB)` });
   if (!partial) out.push({ id: 'TILE-05.bytes', ok: s.averageBytes <= TILE_AVERAGE_BYTES && (s.largest?.bytes ?? 0) <= TILE_BUDGET_BYTES, detail: `average ${mb(s.averageBytes)} (budget ${mb(TILE_AVERAGE_BYTES)}), largest ${s.largest ? mb(s.largest.bytes) : 'none'} (budget ${mb(TILE_BUDGET_BYTES)})` });
   return out;
 }

@@ -274,6 +274,13 @@ Fields cover everything in Anmol's message: building types and their mix, height
 - Output: instance placements per tile (module id, transform, tint), plus collider boxes from the same geometry.
 - Variety: within an area, neighbours must differ (type, floors, colour or module), using the profile's spread, not one repeated block.
 
+Built (P2-009, `tools/bake/areas/`, docs/ARCHITECTURE.md "Area generator"): parcels (footprints, blueprints, the odd-footprint check, lots on free frontage), buildings (profile by blend weight, floors, type, roof, colour, wear), shells and facade module placements. What the numbers became:
+- Blend band: the weight of an area's profile falls in a straight line across its edge, from 1 one band depth inside to 0 one depth outside. The depth on each side is `blend_m` times 1.5, times 0.7 where the edge runs along a road or a rail line, and never under 85 m, because a step of at most 20 percent between samples 25 m apart needs 125 m or more from one profile to the other. Rule ground mixes its 100 m cells with a 200 m tent.
+- Floors: the parcels of one tile that follow one profile share its floor distribution, bigger footprints leaning taller; a footprint carries at most 1.2 times the root of its area in floors.
+- Lots: in a profile whose buildings stand wall to wall on the street line (setback up to 1 m, or "shops on every street frontage") all free frontage is cut into lots; elsewhere only a hole of up to 60 m in a row. Lots keep off open land, water and drains, rail lines, landmark zones, paved walking areas and footway lines, the ground under a deck and any strip under 14 m deep between two roads. Block interiors are not filled.
+- Modules: `<building type>.<part>`, one instance per bay and floor of a wall that looks on a street or on open ground (TECH.md "Tile format").
+- Dressing, life points, kits and LOD are their own tasks (P2-010, P2-012, P2-013).
+
 ### Area kits
 
 - One kit per archetype: modular facade, roof, balcony, shopfront and prop pieces. Textures (TX1): one VRAM compressed Texture2DArray per kit for tiling materials and one trim and decal atlas per kit, imported by Godot. Modules keep fixed ids so baked placements never change when a module is replaced (KT2).

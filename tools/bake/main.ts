@@ -23,7 +23,7 @@ import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { projector } from '../geo/projection.ts';
 import { pointInRing } from './geom.ts';
-import type { Box2 } from './geom.ts';
+import type { Box2, P2 } from './geom.ts';
 import { parseArgs } from './cli.ts';
 import type { BakeArgs, Step } from './cli.ts';
 import { groundInvariants, outlineInvariants, sourceInvariants } from './invariants.ts';
@@ -99,7 +99,10 @@ import type { SourceMesh } from './tile/cutter.ts';
 import type { BarrierFeature } from './graph/features.ts';
 import type { MassingStep } from './sources/landmarkstage.ts';
 import { GroundHeights } from './tile/shells.ts';
+import type { Shell } from './tile/shells.ts';
 import { runTileStep } from './sources/tilestage.ts';
+import { runCityStep, runParcelStep } from './sources/areastage.ts';
+import type { AreaStep } from './sources/areastage.ts';
 import { readWarm, warmKey, writeWarm } from './sources/warmstart.ts';
 import type { SourceResult } from './sources/stage.ts';
 
@@ -241,6 +244,9 @@ export async function bake(args: BakeArgs, opts: BakeOptions): Promise<HealthRep
   let landmarked: MassingStep | null = null;
   /** The bollards and gates where the access changes (P2-042): their mesh goes into the tiles with colliders. */
   let barriered: { placements: BarrierPlacement[]; mesh: SourceMesh | null } | null = null;
+  /** The area generator (P2-009): the parcels planned before the ground, and the landmark zones they keep out of. */
+  let areaStep: AreaStep | null = null;
+  let landmarkZones: P2[][] = [];
   let osmBarriers: BarrierFeature[] = [];
   let laneChecks: LaneChecks | null = null;
   let repairIssues: Issue[] = [];
@@ -558,6 +564,14 @@ export async function bake(args: BakeArgs, opts: BakeOptions): Promise<HealthRep
         report.landmarks = placed.rec;
         check(placed.invariants);
       }
+      // the area generator, part one (P2-009): blueprints, odd outlines and the lots of block faces become the parcels
+      // the ground is cut round; landmark zones are left out
+      landmarkZones = placed ? placed.result.placements.flatMap((p) => [p.zone?.ring, p.pad?.ring].filter((r): r is P2[] => r !== undefined && r.length >= 3)) : [];
+      areaStep = runParcelStep(stepCtx, meshed, repaired, landmarkZones, path.dirname(healthFile));
+      if (areaStep) {
+        report.areas = areaStep.rec;
+        fs.writeFileSync(path.join(path.dirname(healthFile), 'context.json'), JSON.stringify(inspectorContext(repaired, blockFrame(districts, plan.def.block).offset, repaired.outline)));
+      }
       // footways, paths, steps and pedestrian areas as paved walking surfaces (P2-042), after the landmark ground
       const walk = walkwayGround({ walkways: repaired.features.walkways ?? [], roads: roadFaceRings(meshed), footprints: repaired.footprints.map((f) => f.ring), water: repaired.features.water.map((w) => w.rings), outline: repaired.outline });
       if (report.access) report.access.walkways = walk.record;
@@ -579,11 +593,22 @@ export async function bake(args: BakeArgs, opts: BakeOptions): Promise<HealthRep
       report.gates['openPorts'] = report.gateReport.gates['openPorts']?.count ?? null;
       for (const l of gateLog(report.gateReport)) opts.log(`[gates] ${l}`);
       check([gateInvariant(report.gateReport)]);
+      // the area generator, part two (P2-009): buildings, shells and facade placements on the built ground
+      let generated: { shells: Shell[]; placements: Map<string, { module: string; xforms: number[]; data: number[] }[]>; lines: number } | undefined;
+      if (areaStep && groundModel) {
+        const heights = new GroundHeights(grounded);
+        const model = groundModel;
+        const g = await runCityStep(stepCtx, areaStep, (x, z) => heights.at(x, z), (x, z) => model.at(x, z), meshed, repaired, landmarkZones);
+        report.areas = g.rec;
+        check(g.invariants);
+        generated = { shells: g.city.shells, placements: new Map([...g.city.placements].map(([id, t]) => [id, t.list])), lines: g.city.lines.length };
+      }
       const res = runTileStep({
         root: opts.root, out: report.tiles.out ?? tileFolder(plan), stage: plan.id, block: plan.def.block, origin: plan.origin, offset: blockFrame(districts, plan.def.block).offset,
         outline: repaired.outline, lanes: laneBuild, meshed, ground: grounded, repaired, places: layout.input.places, only: report.tiles.only, log: opts.log,
         ...(landmarked ? { landmarks: { meshes: landmarked.meshes, pins: landmarked.pins, file: landmarked.file } } : {}),
         ...(barriered ? { access: { meshes: barriered.mesh ? [barriered.mesh] : [], placements: barriered.placements } } : {}),
+        ...(generated ? { generated } : {}),
         // the committed expected hash follows a whole bake of the game's own tile folder (never a partial bake or an --out folder)
         hashFile: report.tiles.only === null && report.tiles.out === DEFAULT_TILES ? TILES_HASH_FILE : undefined,
       });
