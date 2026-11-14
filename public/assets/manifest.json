@@ -1,24 +1,43 @@
 {
-  "images": {},
+  "images": {
+    "portrait_lead_bittu": {
+      "path": "assets/portraits/portrait_lead_bittu.webp",
+      "w": 512,
+      "h": 768,
+      "ingestedAt": "2026-11-14T13:09:30.579Z"
+    },
+    "portrait_lead_danny": {
+      "path": "assets/portraits/portrait_lead_danny.webp",
+      "w": 512,
+      "h": 768,
+      "ingestedAt": "2026-11-14T12:59:12.611Z"
+    },
+    "portrait_lead_meera": {
+      "path": "assets/portraits/portrait_lead_meera.webp",
+      "w": 512,
+      "h": 768,
+      "ingestedAt": "2026-11-14T12:59:18.307Z"
+    }
+  },
   "audio": {},
   "models": {
     "model_lead_bittu": {
       "path": "assets/models/model_lead_bittu.glb",
-      "bytes": 15631308,
+      "bytes": 18412688,
       "kind": "model",
-      "ingestedAt": "2026-11-14T10:13:47.304Z"
+      "ingestedAt": "2026-11-14T13:28:31.039Z"
     },
     "model_lead_danny": {
       "path": "assets/models/model_lead_danny.glb",
-      "bytes": 13732928,
+      "bytes": 17062280,
       "kind": "model",
-      "ingestedAt": "2026-11-14T10:13:59.771Z"
+      "ingestedAt": "2026-11-14T13:16:43.237Z"
     },
     "model_lead_meera": {
       "path": "assets/models/model_lead_meera.glb",
-      "bytes": 13821928,
+      "bytes": 13582220,
       "kind": "model",
-      "ingestedAt": "2026-11-14T10:14:04.349Z"
+      "ingestedAt": "2026-11-14T13:24:11.203Z"
     }
   }
 }

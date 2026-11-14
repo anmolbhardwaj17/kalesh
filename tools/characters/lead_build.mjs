@@ -12,8 +12,11 @@
 //    headless and runs game/characters/tools/build_leads.gd, which writes game/characters/rig/lead_<id>.scn (three
 //    mesh levels, the stylised B material with the model's own texture, VRAM compressed) and lead_<id>_albedo.res, then
 //    game/characters/tools/build_locomotion.gd -- lead <id> (rig/loco_<id>.res: the walk, jog, sprint, crouch walk and
-//    the moves rebuilt on this skeleton, feet planted on its own legs). Those three files per lead are the only
-//    committed outputs; lead_src is removed again.
+//    the moves rebuilt on this skeleton, feet planted on its own legs) and rig/clips_<id>.res (the library clips on the
+//    model's own rest, the limbs aimed at the mannequin's: characters/tools/lead_retarget.gd). P2-068: the model's
+//    bind and rest pose stay exactly as Mixamo delivered them (no silhouette fix, no re-posing). Those four files per
+//    lead are the only committed outputs; lead_src is removed again. A new model for one lead: put its glb in the
+//    manifest (ingest does that) and run `node tools/characters/lead_build.mjs <id>`.
 // Without a model file a lead keeps the stand-in mannequin (humanoid_anim.gd falls back).
 import { spawnSync } from 'node:child_process';
 import fs from 'node:fs';
@@ -97,7 +100,7 @@ function importFile(name) {
     + 'meshes/ensure_tangents=false\nmeshes/generate_lods=false\nmeshes/create_shadow_meshes=false\nmeshes/light_baking=0\n'
     + 'skins/use_named_skins=true\nanimation/import=false\nanimation/fps=30\nanimation/trimming=false\nanimation/remove_immutable_tracks=true\n'
     + 'animation/import_rest_as_RESET=false\nimport_script/path=""\n'
-    + '_subresources={\n"nodes": {\n"PATH:Skeleton3D": {\n"retarget/bone_map": Resource("res://characters/rig/mixamo_bone_map.tres"),\n"retarget/rest_fixer/fix_silhouette/enable": true,\n"retarget/rest_fixer/fix_silhouette/threshold": 1.0\n}\n}\n}\n'
+    + '_subresources={\n"nodes": {\n"PATH:Skeleton3D": {\n"retarget/bone_map": Resource("res://characters/rig/mixamo_bone_map.tres"),\n"retarget/rest_fixer/fix_silhouette/enable": false\n}\n}\n}\n'
     + 'gltf/naming_version=2\ngltf/embedded_image_handling=3\n';
 }
 
@@ -139,13 +142,13 @@ function main() {
     for (const id of built) {
       const lo = godot(['--headless', '--path', 'game', '-s', 'res://characters/tools/build_locomotion.gd', '--quit-after', '20000', '--', 'lead', id], `locomotion ${id}`);
       if (!/build_locomotion: ok/.test(lo)) throw new Error(`locomotion ${id}: no ok line`);
-      console.log(lo.split('\n').filter((l) => /^(gait|move|ground)/.test(l)).map((l) => `${id} ${l}`).join('\n'));
+      console.log(lo.split('\n').filter((l) => /^(aimed|gait|move|ground)/.test(l)).map((l) => `${id} ${l}`).join('\n'));
     }
   } finally {
     if (!process.env.LEAD_BUILD_KEEP) fs.rmSync(SRC, { recursive: true, force: true });
   }
   for (const id of built) {
-    for (const f of [`lead_${id}.scn`, `lead_${id}_albedo.res`, `loco_${id}.res`]) {
+    for (const f of [`lead_${id}.scn`, `lead_${id}_albedo.res`, `loco_${id}.res`, `clips_${id}.res`]) {
       const p = path.join(RIG, f);
       if (fs.existsSync(p)) console.log(`${path.relative(ROOT, p)} ${(fs.statSync(p).size / 1e6).toFixed(2)} MB`);
     }
