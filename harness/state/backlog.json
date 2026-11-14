@@ -1,6 +1,6 @@
 {
   "_doc": "Written only by node harness/bin/task.mjs. Phases run in order; P0 (ADOPT + STYLE DISCOVERY) waits for the owner by design and needs task.mjs signoff and task.mjs archsignoff before its gate passes. Later phases are added by the planner at the end of P0 (task.mjs phase-add) from the game's real state.",
-  "updated": "2026-11-14T04:13:30.700Z",
+  "updated": "2026-11-14T05:53:19.015Z",
   "phases": [
     {
       "id": "P0",
@@ -2471,14 +2471,17 @@
       "agent": "builder",
       "priority": 3,
       "kind": "feature",
-      "status": "doing",
+      "status": "done",
       "attempts": 1,
       "notes": [
         "Anmol 2026-11-13 (DELHI_WORLD.md 'OSM is reference, not the final word'): read area blueprints from harness/data/blueprints/ and let them override OSM footprints (precedence road, landmark zone, blueprint, generator); add the odd-footprint check (slivers, spikes, zig-zags, outliers) that flags shapes to verify against photos and regularises the ones that are not real."
       ],
       "created": "2026-11-11T12:31:54.059Z",
       "model": "fable",
-      "started": "2026-11-14T04:13:30.700Z"
+      "started": "2026-11-14T04:13:30.700Z",
+      "done": "2026-11-14T05:53:18.996Z",
+      "summary": "Area profile generator in the bake: 32,729 footprints to 34,486 parcels and shells, 228 OSM tagged buildings match exactly, floor classes within 0.05 of each profile, transects step 15 to 19 percent, 0 same pairs in a tile, 1.47M facade placements (densest tile 0.59 MB). Self-checked: typecheck, 1074 tests, Godot tests, whole bake 09416ff42f7a92 with AREA-01..07 ok, quick 17/17, plan views read. The game draws them in P2-010.",
+      "commit": "26f5ff7"
     },
     {
       "id": "P2-010",
