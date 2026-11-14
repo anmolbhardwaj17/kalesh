@@ -590,3 +590,4 @@ One line per event, written by task.mjs (start, done, fail, phase changes, inbox
 - 2026-11-14 15:21 [P2-062] start (attempt 1): Model cards accept the Mixamo FBX and convert it to .glb
 - 2026-11-14 15:21 mentor message mmwg87v8t handled: Our mistake: the steps say FBX but the card only took .glb. P2-062 makes the card accept the Mixamo FBX and convert it; keep the file until then.
 - 2026-11-14 15:25 [P2-049] done: All 11 area boards rebuilt with current dated photos first (11 to 20 per area, 8 to 18 at street level, every photo dated with its basis, old ones marked and dimmed), and each sheet has a made-of-today list (surface, kerbs, median, poles, wires, lights, trees, sampled facade colour range, signs, clutter) with changed facts marked. Four gaps go to Anmol as photo requests. Self-checked: boards read, sheets parse.
+- 2026-11-14 15:26 [P2-045] start (attempt 1): Traffic and GPS respect access modes; move pins off car-free roads
