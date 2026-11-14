@@ -273,6 +273,8 @@ func info() -> Dictionary:
 	out["loadMs"] = load_ms
 	out["triangles"] = int(ground_roads.triangles) + int(buildings.triangles) + (int(infra.triangles) if infra != null else 0)
 	out["infra"] = infra.info() if infra != null else {"tiles": 0, "triangles": 0, "nodes": 0}
+	# the area kits (P2-010): live tiles, shell triangles, module instances and MultiMesh nodes
+	out["buildings"] = buildings.info()
 	out["colliderTriangles"] = int(colliders.triangles)
 	out["colliderChunks"] = int(colliders.chunks)
 	out["lanes"] = lanes.pieces.size()
