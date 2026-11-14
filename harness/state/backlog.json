@@ -1,6 +1,6 @@
 {
   "_doc": "Written only by node harness/bin/task.mjs. Phases run in order; P0 (ADOPT + STYLE DISCOVERY) waits for the owner by design and needs task.mjs signoff and task.mjs archsignoff before its gate passes. Later phases are added by the planner at the end of P0 (task.mjs phase-add) from the game's real state.",
-  "updated": "2026-11-14T13:51:01.499Z",
+  "updated": "2026-11-14T13:59:18.614Z",
   "phases": [
     {
       "id": "P0",
@@ -2842,7 +2842,8 @@
       "attempts": 0,
       "notes": [
         "Watch Dogs 2 bar (FIDELITY_BAR.md, OWNER_EYE.md): the side by side sheet is read beside dated current photos and the verifier answers per shot whether it would sit next to a Watch Dogs 2 street shot without looking cheap; any OWNER_EYE.md breach or empty frontage is a fail. Use the layers of P2-052 to P2-058 (grade, wear and normals, vehicles, street life, shop interiors, AA, motion) and tune them by data for this area; do not hand-build what a layer should do.",
-        "Owner photos of the ITO crossing and the ITO skywalk (white tube arch skywalk with fabric roof, round piers with black and yellow bases): OWNER_PHOTOS.md ito section."
+        "Owner photos of the ITO crossing and the ITO skywalk (white tube arch skywalk with fabric roof, round piers with black and yellow bases): OWNER_PHOTOS.md ito section.",
+        "Owner photos (2026-11-14, OWNER_PHOTOS.md ITO second set): satellite plan of the W-Point skywalk (canopy chain along Bahadur Shah Zafar Marg, Tilak Marg branch, two star-shaped plazas either side of Mathura Road), design renders and the entry diagram. Build the skywalk to the satellite footprint."
       ],
       "created": "2026-11-11T12:31:54.059Z",
       "model": "opus"
@@ -2903,7 +2904,8 @@
       "notes": [
         "Anmol 2026-11-13: write this area's blueprint (harness/data/blueprints/) from photos; the area must read in its own style (for CP: the uniform two storey white colonnade ring, towers behind the outer circle), not as raw OSM shapes. Acceptance: side by side of a reference photo and the same view in game.",
         "Watch Dogs 2 bar (FIDELITY_BAR.md, OWNER_EYE.md): the side by side sheet is read beside dated current photos and the verifier answers per shot whether it would sit next to a Watch Dogs 2 street shot without looking cheap; any OWNER_EYE.md breach or empty frontage is a fail. Use the layers of P2-052 to P2-058 (grade, wear and normals, vehicles, street life, shop interiors, AA, motion) and tune them by data for this area; do not hand-build what a layer should do.",
-        "Owner photos of GB Road (day and night: decayed upper floors with jali balconies, dense faded hardware shop flex boards, wires): OWNER_PHOTOS.md. Three of the five look like Mumbai or Kolkata: mood only. Respect rule."
+        "Owner photos of GB Road (day and night: decayed upper floors with jali balconies, dense faded hardware shop flex boards, wires): OWNER_PHOTOS.md. Three of the five look like Mumbai or Kolkata: mood only. Respect rule.",
+        "Owner photos (2026-11-14): GB Road street view Oct 2025 (dense blue printed flex of bearing and machinery shops on two levels, cable band, white pillar colonnade, jali screens, AC units, rooftop plants), GB Road at night from above, and the Ajmeri Gate in three views (red sandstone arch in grey rubble, octagonal bastion, crenellations, iron grille, small plaza with a tree)."
       ],
       "created": "2026-11-11T12:31:54.059Z",
       "model": "opus"
@@ -4571,7 +4573,8 @@
         "Owner reference set: harness/design/reference/owner/signboards/ and OWNER_PHOTOS.md 'Sign boards for old places': hand-painted tin and wood boards, Hindi over English, painted arrows and figures, enamel round boards, lettering on shutters, tall vertical boards, stacked flex walls, estd years and phone numbers, bracket lamps lighting boards, tilted mounting, chipped edges and rust. Two are from a game: quality bar only, never copy their art or text.",
         "Owner 2026-11-14: some board names should be GTA-style parodies of famous Delhi names (decisions.md). P2-067 adds them to the name files; the board system must read parody entries and their board style.",
         "attempt 1 failed: no reason given",
-        "attempt 1 failed: Verifier FAIL: boards read as real (Hindi over English, painted tin, flex, verticals, wear, attached) but density far below the photos (CP, Paharganj, Janpath, old streets: 1 to 2 boards per facade vs 3 to 5 stacked plus notices and cables); boards.json out of sync with the names file (npm test fails); a 'Police Post Ajmeri Gate' shop-style board; flat colour-block product shelves; weak night glow."
+        "attempt 1 failed: Verifier FAIL: boards read as real (Hindi over English, painted tin, flex, verticals, wear, attached) but density far below the photos (CP, Paharganj, Janpath, old streets: 1 to 2 boards per facade vs 3 to 5 stacked plus notices and cables); boards.json out of sync with the names file (npm test fails); a 'Police Post Ajmeri Gate' shop-style board; flat colour-block product shelves; weak night glow.",
+        "Owner GB Road street view Oct 2025 (OWNER_PHOTOS.md): the density target for GB Road boards: blue and white printed flex stacked on two levels on every facade."
       ],
       "created": "2026-11-14T08:07:00.888Z",
       "model": "opus",
