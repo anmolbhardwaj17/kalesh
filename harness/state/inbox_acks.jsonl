@@ -242,3 +242,4 @@
 {"id":"mmwgdopbi","ts":"2026-11-14T12:24:58.664Z","reply":"Much better and approved: a distinct face with a real cop's stare. Small things only: looks slightly older than 31, scowls more than composed, scar not clear.","tasks":[]}
 {"id":"mmwgdrdyx","ts":"2026-11-14T12:26:56.706Z","reply":"Bittu now has real character, approved as the look. For the 3D step, make a closed-mouth variant of the same man first; the card says how.","tasks":[]}
 {"id":"mmwge8990","ts":"2026-11-14T12:40:10.125Z","reply":"Fair: bittu_front.png is ready in the same folder. The face task will handle closing his grin.","tasks":["P3-010"]}
+{"id":"mmwgeq2u7","ts":"2026-11-14T12:53:56.221Z","reply":"Three T-pose front-view prompts are on the picture cards (and in harness/reports/lead_views/tpose_prompts.txt). Upload each on its card; I check them, then you make the 3D models.","tasks":[]}
