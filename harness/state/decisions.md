@@ -560,3 +560,8 @@ By: orchestrator.
 Decision: harness/design/REALITY_MATCH.md. A catalog of every visible object class is built from the code and data (no hand list); each object gets dated reference photos, an off-screen render alone and in context, and a score 0 to 10 on shape, size, material and colour, wear, detail, mounting, light response and game language; pass is an average of 8 with no line under 6. Builders self-score what they add, verifiers rescore and fail below pass, look critics sweep the catalog worst first and failures become tasks automatically.
 Why: Anmol 2026-11-14: "compare, give a score and improve until it looks good or matches our game language ... I don't have to provide a list of each and every prop".
 By: orchestrator, from the mentor inbox.
+
+## 2026-11-14: AI image textures from the owner where they beat procedural ones
+Decision: surfaces whose realism is hard to generate in code (wall plaster, brick, stone, concrete, asphalt and road decals, rust and grime decals, posters and paper notices, hero sign board artwork, mural panels, shop goods sheets) come from the owner's AI images (ChatGPT) through art cards. Cards ask for flat, evenly lit, seamless (tileable where needed) images at 1024 or 2048 px with no shadows, perspective or text unless the card wants text; the ingest makes the normal, roughness and AO maps; the art reviewer checks each in game against REALITY_MATCH; procedural versions stay as placeholders until a card lands, so nothing waits.
+Why: Anmol 2026-11-14 offered images made with ChatGPT; photo-like textures carry the Watch Dogs 2 level of material detail better than procedural ones.
+By: orchestrator, from the mentor inbox.
