@@ -1,0 +1,28 @@
+# Owner's eye: what Anmol checks, so nobody has to ask him
+
+Every builder brief for a look task, every verifier and every look audit reads this file. A verifier fails a task that breaks any line here, the same as a missing feature. The orchestrator adds a line each time Anmol corrects something, so he never has to say it twice.
+
+## The bar
+- Watch Dogs 2 is the fidelity bar (STYLE_BIBLE.md). Ask of every shot: would this frame sit next to a Watch Dogs 2 street shot without looking cheap? Density of props, material detail, decals and grime, signage, light and shadow, life on the street.
+- It must run smoothly on a Mac M2. Look gains that break the budgets are not done.
+
+## Real Delhi, today
+- Build each place as it looks today, from dated current photos, not from the map shape alone (decisions.md 2026-11-14). Check the date of every photo; old photos are never used for surfaces, signs or colours.
+- Check the road surface, kerbs, median, poles, wires, trees, wall colours, signs and clutter against the photos. Chandni Chowk main road is red sandstone and car-free, not asphalt.
+- Wall colours come from the area photos. Bright colours only where the photos show them; in the old city, colour is on goods and signs, walls are dusty.
+- Famous places keep their own style (the Pragati Maidan tunnel wall art, India Gate, CP whitewash colonnades). A generic version fails.
+
+## Detail and wear
+- Delhi houses have balcony grilles and railings, roof parapets with railings, gate and window grilles, and outside stairs.
+- Sign boards look like real Indian shop signs: flex banners, painted tin, glow boxes, stacked boards, Hindi, English and Urdu, phone numbers. Never clean generated graphics.
+- Things wear: rust, faded and peeling paint, bent boards, torn flex, stains, soot, rain streaks. Wear is soft and natural, never blocky patches.
+- Emptiness is a blocker, never polish. A street or junction that feels bare fails.
+
+## Systems are finished, not first steps
+- A system is done when it is complete everywhere it applies in the pilot (tunnels with depth, roof, walls, lights and inside, not an open trench). A planned split is named in the title and told to Anmol.
+
+## Measuring
+- Report perf with the machine load. A miss on a busy machine is rerun when quiet or judged against a reference scene in the same run.
+
+## Reporting
+- Say plainly what is still a stand-in. Show Anmol finished work, not work he has to correct.

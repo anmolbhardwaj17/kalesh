@@ -509,3 +509,8 @@ By: orchestrator, from the mentor inbox.
 Decision: every perf result (frame time, GPU cost) is reported with the machine load at the time (load average, and whether another lane, another project or a bake was running). A perf miss measured while the machine was busy is not a game failure on its own: it is rerun when the machine is quiet, or judged against a reference scene measured in the same run, before any task fails on it.
 Why: Anmol 2026-11-14: "keep in mind other things are also working so it not all a game issue, system is also heavy right now in terms of load." The P2-010 rerun (3.19 ms) ran while another project's perf capture was running.
 By: orchestrator, from the mentor inbox.
+
+## 2026-11-14: The orchestrator judges the look for Anmol, to the Watch Dogs 2 bar
+Decision: Anmol's corrections are collected in harness/design/OWNER_EYE.md, which every look builder, verifier and audit reads; breaking a line is a fail. The verifier asks of every shot whether it would hold up next to a Watch Dogs 2 street shot. The look audit (P2-040) no longer waits for the end of P2: a look critic runs after every few look tasks, compares the pilot with current photos and the Watch Dogs 2 bar, and the orchestrator turns findings into tasks without asking Anmol. The planner checks the P2 plan against the Watch Dogs 2 bar now and adds what is missing, within the M2 budgets.
+Why: Anmol 2026-11-14: "I wanted you to build everything ... I still have to tell you that, oh, this looks good, this doesn't look good ... the game we want to match it with, which is Watch Dogs 2 ... our game should look that level. Do whatever is needed to achieve that, keeping in mind the game should run as well."
+By: orchestrator, from the mentor inbox.
