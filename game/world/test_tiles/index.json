@@ -5,14 +5,14 @@
  "block": "centre",
  "size": 250,
  "margin": 250,
- "bakeHash": "0ceda442ba9101",
+ "bakeHash": "05d4daf76e2e0d",
  "offset": [
   621.6,
   467.2
  ],
  "bytes": {
-  "total": 10662305,
-  "average": 1184701,
+  "total": 10595857,
+  "average": 1177317,
   "largest": {
    "id": "-3_-6",
    "bytes": 1692832
@@ -22,7 +22,7 @@
   {
    "id": "centre",
    "tiles": 9,
-   "bytes": 10662305
+   "bytes": 10595857
   }
  ],
  "tiles": [
@@ -66,8 +66,8 @@
    "x": -3,
    "z": -8,
    "file": "-3_-8.ktl",
-   "bytes": 1050032,
-   "hash": "608c26484ef37330",
+   "bytes": 1012028,
+   "hash": "a3d1cd9944806a02",
    "origin": [
     -750,
     215,
@@ -89,15 +89,15 @@
     "building",
     "landmark"
    ],
-   "vertices": 17165,
-   "triangles": 8046,
-   "colliderTriangles": 7938,
-   "chunks": 24,
+   "vertices": 16448,
+   "triangles": 7615,
+   "colliderTriangles": 7507,
+   "chunks": 22,
    "largestChunk": 500,
    "buildings": 3,
    "lanes": 84,
    "pins": 3,
-   "overhangM": 31.56
+   "overhangM": 14.32
   },
   {
    "id": "-4_-7",
@@ -140,8 +140,8 @@
    "x": -3,
    "z": -7,
    "file": "-3_-7.ktl",
-   "bytes": 1341085,
-   "hash": "c63ea6bd1fdc5523",
+   "bytes": 1312641,
+   "hash": "fb9ba5fbced93216",
    "origin": [
     -750,
     215,
@@ -163,15 +163,15 @@
     "building",
     "landmark"
    ],
-   "vertices": 21605,
-   "triangles": 10140,
-   "colliderTriangles": 9902,
-   "chunks": 27,
+   "vertices": 21048,
+   "triangles": 9825,
+   "colliderTriangles": 9587,
+   "chunks": 28,
    "largestChunk": 458,
    "buildings": 19,
    "lanes": 196,
    "pins": 3,
-   "overhangM": 24.46
+   "overhangM": 20.18
   },
   {
    "id": "-3_-6",
