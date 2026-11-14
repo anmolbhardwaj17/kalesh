@@ -42,3 +42,7 @@ game/bench/roads/gen/
 game/world/tiles/
 # the Universal Animation Library .glb files while tools/characters/ual_build.mjs imports them (removed after the build)
 game/characters/ual_src/
+harness/design/reference/owner/**/*.jp*g
+harness/design/reference/owner/**/*.webp
+harness/design/reference/owner/**/*.avif
+harness/design/reference/owner/**/*.png
