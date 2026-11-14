@@ -129,11 +129,12 @@
       "batch": null,
       "created": "2026-11-14T12:12:01.288Z",
       "review": {
-        "at": "2026-11-14T12:53:45.135Z",
-        "verdict": "redo",
-        "note": "Owner 2026-11-14: redo as a single front view in a strict T-pose for clean image to 3D (arms joined the body in the A-pose model).",
-        "ingestedAt": "2026-11-14T12:26:08.192Z",
-        "removed": false
+        "at": "2026-11-14T13:00:27.079Z",
+        "verdict": "ok",
+        "note": "Approved 2026-11-14 (T-pose front): clean T-pose, clear gaps under the arms and between the legs, closed-mouth faint smile, gamchha, steel watch, rolled sleeves. Ready for image to 3D.",
+        "ingestedAt": "2026-11-14T12:59:05.245Z",
+        "fit": "pending",
+        "fitNote": "Use for image to 3D."
       },
       "redo": {
         "at": "2026-11-14T12:53:45.125Z",
@@ -145,7 +146,7 @@
       "id": "portrait_lead_meera",
       "kind": "portrait",
       "intent": "SI Meera Rana, the cop: the approved look before any 3D model (reference sheet, front, side, back). The 3D model is made from this picture.",
-      "prompt": "Realistic full body photo of ONE person for a game character 3D model, front view only, camera at chest height straight on, plain light grey background. The look of a modern open world game like Watch Dogs 2: grounded, real proportions, natural skin and cloth, photoreal, no cartoon. Pose: a strict T-pose: both arms stretched straight out to the sides at shoulder height, palms facing down, fingers slightly apart, a clear gap between the arms and the body, legs slightly apart with a gap between the knees, feet flat. Clothes hang naturally and do not stick to the body: a visible gap of air under the arms and between the jacket or shirt and the arms. Whole body visible from head to feet with space around it, even soft studio light, no shadow on the background, no text, no logo, only one person in the image. The person: an Indian woman, age 31, sub-inspector in the Delhi police, fit and strong, 1.64 m, realistic proportions about 7.5 heads tall. Face: sharp and composed, defined jaw and cheekbones, strong straight eyebrows, a direct steady stare, mouth closed, a small pale scar through the left eyebrow, thin kohl only. Hair: black, pulled back tight into a neat low bun, no loose strands. Uniform: crisp khaki shirt tucked in, short sleeves, shoulder epaulettes, a plain name plate (no real badges, insignia or force logos), black leather belt with a steel buckle, khaki straight trousers with sharp creases and the two legs clearly separate, polished black lace-up boots, a thin red thread on the right wrist and a plain steel watch on the left wrist.",
+      "prompt": "Realistic full body photo of ONE person for a game character 3D model, front view only, camera at chest height straight on, plain light grey background. The look of a modern open world game like Watch Dogs 2: grounded, real proportions, natural skin and cloth, photoreal, no cartoon. Pose: a strict T-pose: both arms stretched straight out to the sides at shoulder height, palms facing down, fingers slightly apart, a clear gap between the arms and the body, legs apart in a wide stance with the feet about shoulder width plus a hand apart, a clear gap of background visible between the thighs and the knees all the way up to the crotch, feet flat. Clothes hang naturally and do not stick to the body: a visible gap of air under the arms and between the jacket or shirt and the arms. Whole body visible from head to feet with space around it, even soft studio light, no shadow on the background, no text, no logo, only one person in the image. The person: an Indian woman, age 31, sub-inspector in the Delhi police, fit and strong, 1.64 m, realistic proportions about 7.5 heads tall. Face: sharp and composed, defined jaw and cheekbones, strong straight eyebrows, a direct steady stare, mouth closed, a small pale scar through the left eyebrow, thin kohl only. Hair: black, pulled back tight into a neat low bun, no loose strands. Uniform: crisp khaki shirt tucked in, short sleeves, shoulder epaulettes, a plain name plate (no real badges, insignia or force logos), black leather belt with a steel buckle, khaki straight trousers with sharp creases and the two legs clearly separate, polished black lace-up boots, a thin red thread on the right wrist and a plain steel watch on the left wrist.",
       "generate": "portrait 1024x1536",
       "target": {
         "w": 512,
@@ -165,17 +166,17 @@
       "batch": null,
       "created": "2026-11-14T12:12:01.340Z",
       "review": {
-        "at": "2026-11-14T12:53:48.460Z",
+        "at": "2026-11-14T13:00:27.661Z",
         "verdict": "redo",
-        "note": "Owner 2026-11-14: redo as a single front view in a strict T-pose for clean image to 3D.",
-        "ingestedAt": "2026-11-14T12:24:07.645Z",
+        "note": "2026-11-14 T-pose sheet: face, uniform and arms are right and the face is strong (keep it), but her thighs and knees touch, the same thing that fused the trousers in the first 3D model. Redo with a wider stance and visible background between the legs.",
+        "ingestedAt": "2026-11-14T12:59:18.307Z",
         "removed": false
       },
       "redo": {
-        "at": "2026-11-14T12:53:48.440Z",
-        "note": "Owner 2026-11-14: redo as a single front view in a strict T-pose for clean image to 3D."
+        "at": "2026-11-14T13:00:27.661Z",
+        "note": "2026-11-14 T-pose sheet: face, uniform and arms are right and the face is strong (keep it), but her thighs and knees touch, the same thing that fused the trousers in the first 3D model. Redo with a wider stance and visible background between the legs."
       },
-      "promptAt": "2026-11-14T12:53:48.460Z"
+      "promptAt": "2026-11-14T13:00:27.661Z"
     },
     {
       "id": "portrait_lead_danny",
@@ -201,11 +202,12 @@
       "batch": null,
       "created": "2026-11-14T12:12:01.385Z",
       "review": {
-        "at": "2026-11-14T12:53:50.845Z",
-        "verdict": "redo",
-        "note": "Owner 2026-11-14: redo as a single front view in a strict T-pose: the A-pose model had the jacket stuck to the waist.",
-        "ingestedAt": "2026-11-14T12:15:24.381Z",
-        "removed": false
+        "at": "2026-11-14T13:00:27.292Z",
+        "verdict": "ok",
+        "note": "Approved 2026-11-14 (T-pose front): clean T-pose, jacket open with the rib hem clearly separate from the jeans, legs apart, sunglasses up on the head, chain, bangle, watch. Ready for image to 3D.",
+        "ingestedAt": "2026-11-14T12:59:12.611Z",
+        "fit": "pending",
+        "fitNote": "Use for image to 3D."
       },
       "redo": {
         "at": "2026-11-14T12:53:50.839Z",
