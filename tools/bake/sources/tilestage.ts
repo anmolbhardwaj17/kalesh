@@ -51,6 +51,8 @@ export interface TileStepInput {
   landmarks?: { meshes: readonly SourceMesh[]; pins: readonly WorldPin[]; file: unknown };
   /** The bollards and gates where the access changes (P2-042): their mesh, and the placements for access.json. */
   access?: { meshes: readonly SourceMesh[]; placements: readonly BarrierPlacement[] };
+  /** The infrastructure kits (P2-034): the plain shapes they stand on (colliders) and the kit file of the folder. */
+  infra?: { meshes: readonly SourceMesh[]; file: unknown };
   /** The area generator's buildings (P2-009): its shells stand in for the plain ones, and the facade placements by tile id. */
   generated?: { shells: readonly Shell[]; placements: ReadonlyMap<string, readonly { module: string; xforms: readonly number[]; data: readonly number[] }[]>; lines: number };
   log: (line: string) => void;
@@ -122,7 +124,7 @@ export function runTileStep(s: TileStepInput): { record: TilesRecord; invariants
 
   const old: TileRecord[] = partial && fs.existsSync(path.join(dir, 'index.json')) ? (JSON.parse(fs.readFileSync(path.join(dir, 'index.json'), 'utf8')) as TileIndex).tiles : [];
   const res = bakeTiles(
-    { block: s.block, offset: s.offset, road: [...s.meshed.mesh.sink.meshes.values(), ...(s.landmarks?.meshes ?? []), ...(s.access?.meshes ?? [])], ground: s.ground.tiles, shells, lanes, pins, only: s.only ? new Set(s.only) : null, ...(s.generated ? { placements: s.generated.placements } : {}) },
+    { block: s.block, offset: s.offset, road: [...s.meshed.mesh.sink.meshes.values(), ...(s.landmarks?.meshes ?? []), ...(s.access?.meshes ?? []), ...(s.infra?.meshes ?? [])], ground: s.ground.tiles, shells, lanes, pins, only: s.only ? new Set(s.only) : null, ...(s.generated ? { placements: s.generated.placements } : {}) },
     (rec, bytes) => fs.writeFileSync(path.join(dir, rec.file), bytes),
     (id) => keep.has(id),
   );
@@ -140,6 +142,13 @@ export function runTileStep(s: TileStepInput): { record: TilesRecord; invariants
   if (s.landmarks) fs.writeFileSync(path.join(dir, 'landmarks.json'), JSON.stringify(s.landmarks.file) + '\n');
   // the barriers of the folder in world metres (P2-042): the route fixtures and the access scenario read them
   if (s.access) fs.writeFileSync(path.join(dir, 'access.json'), JSON.stringify(accessFile(s.access.placements, s.offset)) + '\n');
+  // the infrastructure kits of the folder (P2-034): the game draws every structure from its variant's kit
+  // (a partial bake writes the records of its own tiles only: the committed test block keeps a small file)
+  if (s.infra) {
+    const file = s.infra.file as { tiles: Record<string, unknown> };
+    const keepOnly = s.only ? { ...file, tiles: Object.fromEntries(Object.entries(file.tiles).filter(([id]) => (s.only as readonly string[]).includes(id))) } : file;
+    fs.writeFileSync(path.join(dir, 'infra.json'), JSON.stringify(keepOnly) + '\n');
+  }
   if (s.hashFile) fs.writeFileSync(path.join(s.root, s.hashFile), JSON.stringify({ _doc: 'The bake hash of the full tile set (game/world/tiles/index.json bakeHash) that the repo expects. Written by a whole bake; harness/bin/tileset.mjs gives a snapshot or play copy the tiles only when they carry this hash.', stage: index.stage, bakeHash: index.bakeHash, tiles: records.length, bytes: index.bytes.total }, null, 1) + '\n');
   const rel = (f: string): string => (f.startsWith(s.root) ? path.relative(s.root, f) : f);
   const record: TilesRecord = {

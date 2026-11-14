@@ -132,8 +132,8 @@ function sides(sink: Sink, material: string, ring: readonly [number, number][], 
   }
 }
 
-/** Draws a portal: two legs from the ground to the beam, and the beam from leg to leg under the deck. */
-export function emitPortal(sink: Sink, st: Station, p: Portal): void {
+/** Draws a portal: two legs from the ground to the beam, and the beam from leg to leg under the deck. Returns the beam's plan ring. */
+export function emitPortal(sink: Sink, st: Station, p: Portal): [number, number][] {
   const tx = -st.nz;
   const tz = st.nx;
   for (const ring of p.legs) sides(sink, 'pier', ring, p.bottom, p.beamBottom);
@@ -147,4 +147,5 @@ export function emitPortal(sink: Sink, st: Station, p: Portal): void {
   // the beam's underside faces down, its top (beside the deck) faces up
   sink.quad('pier', v(a, p.beamBottom), v(d, p.beamBottom), v(c, p.beamBottom), v(b, p.beamBottom), [0, -1, 0]);
   sink.quad('pier', v(a, p.top), v(b, p.top), v(c, p.top), v(d, p.top), [0, 1, 0]);
+  return beam;
 }

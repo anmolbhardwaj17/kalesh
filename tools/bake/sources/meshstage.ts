@@ -39,6 +39,8 @@ import fs from 'node:fs';
 import { writePicture } from './graphinput.ts';
 import { writeSiteTile } from './meshio.ts';
 import type { MedianRef } from '../mesh/medianfaces.ts';
+import { readRules, stripVariants } from '../infra/variants.ts';
+import type { VariantRules } from '../infra/variants.ts';
 
 export interface StepContext {
   root: string;
@@ -59,6 +61,8 @@ export async function runMeshStep(ctx: StepContext, laneBuild: LaneBuild, elevat
   const { plan, log } = ctx;
   const proj = projector(plan.origin);
   const input = meshInput(laneBuild, elevated.junctionHeights, elevated.kinds, readMedianRefs(ctx.root, (lat, lon) => proj.toWorld(lat, lon)));
+  // the infrastructure kit variant of every strip on a structure (P2-034): its pier shape is the pier's collider
+  input.variants = stripVariants(input.strips, input.joints, input.kinds, readInfraRules(ctx.root));
   // built twice: the mesh must not depend on anything but the lane model and the heights
   const mesh = buildRoadMesh(input);
   const hash = meshHash(mesh);
@@ -223,4 +227,15 @@ export function readMedianRefs(root: string, toBlock: (lat: number, lon: number)
     }
     return { names: m.names, width: m.width, type: m.type, source: m.source, ref: m.ref, ...(box ? { box } : {}) };
   });
+}
+
+/** harness/data/infra_variants.json (P2-034): the variant of every structure, checked against the kits. */
+export function readInfraRules(root: string): VariantRules {
+  return readRules(JSON.parse(fs.readFileSync(path.join(root, 'harness/data/infra_variants.json'), 'utf8')));
+}
+
+/** The skyline pieces of harness/data/infra_variants.json (P2-034): far structures outside every stage, by lat and lon. */
+export function infraSkyline(root: string): { id: string; variant: string; name: string; lat: number; lon: number; y: number; bearingDeg: number }[] {
+  const raw = JSON.parse(fs.readFileSync(path.join(root, 'harness/data/infra_variants.json'), 'utf8')) as { skyline?: { id: string; variant: string; name: string; lat: number; lon: number; y: number; bearingDeg: number }[] };
+  return raw.skyline ?? [];
 }

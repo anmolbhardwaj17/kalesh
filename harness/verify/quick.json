@@ -430,6 +430,20 @@
         "city_landmark_pins",
         "city_collide_probe"
       ]
+    },
+    {
+      "path": "game/world/infra/",
+      "scenarios": [
+        "city_path_ito_flyover_60",
+        "city_collide_probe"
+      ]
+    },
+    {
+      "path": "game/world/systems/infra.gd",
+      "scenarios": [
+        "city_path_ito_flyover_60",
+        "city_collide_probe"
+      ]
     }
   ]
 }

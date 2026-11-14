@@ -6,6 +6,8 @@ extends RefCounted
 
 const TileMesh := preload("res://world/systems/tile_mesh.gd")
 const SKIP := ["building"]
+## The plain shapes the infrastructure kits stand on (P2-034): colliders only when the folder has infra.json.
+const KIT_ENVELOPES := ["barrier", "fascia", "retaining", "abutment", "pier", "underside", "railbed", "fob", "platform"]
 
 var id := "ground_roads"
 var lane := "mesh"
@@ -16,6 +18,7 @@ var root: Node3D
 var materials: Dictionary
 var live := 0
 var triangles := 0
+var skip: Array = SKIP.duplicate()
 
 
 func _init(parent: Node3D, stand_ins: Dictionary) -> void:
@@ -24,7 +27,7 @@ func _init(parent: Node3D, stand_ins: Dictionary) -> void:
 
 
 func prepare(tile: Dictionary) -> Variant:
-	return TileMesh.build(tile, materials, [], SKIP)
+	return TileMesh.build(tile, materials, [], skip)
 
 
 func attach(tile: Dictionary, part: Variant) -> bool:

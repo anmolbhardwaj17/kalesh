@@ -1,0 +1,123 @@
+{
+ "_doc": "Variant of every flyover, bridge, viaduct, rail stretch and foot bridge of the bake (P2-034, the infrastructure kits). Ids are the variants of harness/design/reference/infrastructure/ (variant_map.md); the game builds each from its kit (game/world/infra/). road: OSM way of a strip -> variant (from variant_map.json, P2-033); a structure strip on no listed way takes roadDefaults by what it is (a deck over water, over a railway, a short service bridge, a ramp on fill, else by class). rail: OSM way -> variant, else railDefaults by layer and tags. metro: the elevated metro (both tracks on one box, Phase I, decided P2-034) and the ramps. footBridges: foot bridge id -> variant, else the default. Hand edits go here with a reason in _why.",
+ "_why": {
+  "MET-VB1": "P2-034, 2026-11-14: the pilot Blue Line east of Mandi House to Indraprastha opened in 2006 as part of Phase I; metro.md puts the Phase I Blue Line under MET-VB1 (single box, Y piers), so the open item 4 of variant_map.md is settled as VB1 until a photo says otherwise.",
+  "eras": "The FLY-T1 and FLY-B1 split of the named flyovers stays as variant_map.md inferred it (item 1 of its verify list); a photo check per flyover is a follow-up.",
+  "skyline": "P2-034, 2026-11-14: the Signature Bridge (bridges.md BRI-Y2, Wazirabad, outside the baked pilot) stands on the skyline north of the old city as a far piece; its point and bearing are estimates [E] from the map of the Wazirabad crossing (deck about east-north-east), to check against imagery when the north block is baked.",
+  "BRI-Y1": "P2-034, 2026-11-14: item 2 of variant_map.md checked on Esri imagery (harness/reports/infra/vikas_marg_bridge_site.png): the Vikas Marg crossing at the ITO barrage is two parallel decks with a gap between them (the OSM primary and secondary ways), multi-span girders on wall piers in the river; both stay BRI-Y1."
+ },
+ "road": {
+  "way/125736541": "FLY-B1",
+  "way/125736542": "FLY-B1",
+  "way/125736543": "FLY-B1",
+  "way/1313450497": "FLY-B1",
+  "way/614071992": "FLY-B1",
+  "way/614071994": "FLY-B1",
+  "way/1313447924": "FLY-T1",
+  "way/1313447925": "FLY-T1",
+  "way/1510242193": "FLY-T1",
+  "way/70220645": "FLY-T1",
+  "way/70220647": "FLY-T1",
+  "way/691886473": "BRI-Y1",
+  "way/691886475": "BRI-Y1",
+  "way/691886476": "BRI-Y1",
+  "way/70255387": "BRI-Y1",
+  "way/70255388": "BRI-Y1",
+  "way/70255391": "BRI-Y1",
+  "way/463710731": "FLY-T1",
+  "way/463710732": "FLY-T1",
+  "way/125736545": "FLY-R1",
+  "way/125736547": "FLY-R1",
+  "way/1305188982": "FLY-T1",
+  "way/175803995": "FLY-T1",
+  "way/77595118": "FLY-T1",
+  "way/77617246": "FLY-T1",
+  "way/665921719": "FLY-T1",
+  "way/74851427": "FLY-T1",
+  "way/1313447928": "FLY-R1",
+  "way/70237513": "FLY-R1",
+  "way/70237514": "FLY-R1",
+  "way/70255393": "BRI-Y1",
+  "way/70255395": "BRI-Y1",
+  "way/70255399": "BRI-Y1",
+  "way/1313200454": "FLY-T1",
+  "way/1313200455": "FLY-T1",
+  "way/175800226": "FLY-T1",
+  "way/1313200456": "FLY-R1",
+  "way/175800227": "FLY-R1",
+  "way/264770688": "FOB-B4",
+  "way/311524765": "FOB-B4",
+  "way/80429832": "FOB-B4",
+  "way/80429897": "FOB-B4",
+  "way/1313204945": "FLY-B1",
+  "way/44923699": "FLY-B1",
+  "way/77619341": "BRI-ROB",
+  "way/1070588894": "FLY-R1",
+  "way/1070839796": "FLY-T1",
+  "way/175769907": "FLY-R1",
+  "way/1423096198": "BRI-MIN"
+ },
+ "roadDefaults": {
+  "water": "BRI-Y1",
+  "railway": "BRI-ROB",
+  "service": "BRI-MIN",
+  "fill": "FLY-R1",
+  "pedestrian": "FOB-B4",
+  "trunk": "FLY-B1",
+  "default": "FLY-T1"
+ },
+ "rail": {
+  "way/77603072": "RBR-Y1",
+  "way/77603110": "RBR-Y1"
+ },
+ "railDefaults": {
+  "atGrade": "RAIL-BG",
+  "bridge": "RBR-U1",
+  "tunnel": "RBR-CUT",
+  "byName": {
+   "Delhi Ring Railway": "RAIL-RING"
+  }
+ },
+ "metro": {
+  "viaduct": "MET-VB1",
+  "ramp": "MET-RAMP"
+ },
+ "footBridges": {
+  "way/1248031156": "FOB-B4",
+  "way/1248079213": "FOB-B4",
+  "way/1287299124": "FOB-B2",
+  "way/1287299130": "FOB-B2",
+  "way/1294941406": "FOB-B4",
+  "way/1429504126": "FOB-B4",
+  "way/1448561131": "FOB-B3",
+  "way/200251460": "FOB-B4",
+  "way/264770688": "FOB-B5",
+  "way/311524765": "FOB-B5",
+  "way/34404746": "FOB-B1",
+  "way/370765173": "FOB-B4",
+  "way/370765177": "FOB-B4",
+  "way/435426345": "FOB-B4",
+  "way/464312306": "FOB-B2",
+  "way/77614294": "FOB-B5",
+  "way/80414535": "FOB-B1",
+  "way/80429832": "FOB-B4",
+  "way/80429897": "FOB-B4",
+  "way/814940336": "FOB-B3",
+  "way/854903774": "FOB-B3",
+  "way/993862148": "FOB-B4",
+  "way/993862151": "FOB-B4",
+  "way/998790348": "FOB-B3"
+ },
+ "footBridgeDefault": "FOB-B4",
+ "skyline": [
+  {
+   "id": "signature_bridge",
+   "variant": "BRI-Y2",
+   "name": "Signature Bridge",
+   "lat": 28.7068,
+   "lon": 77.2373,
+   "y": 206,
+   "bearingDeg": 78
+  }
+ ]
+}

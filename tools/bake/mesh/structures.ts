@@ -19,6 +19,8 @@ import { K_CUT, K_DECK, K_FILL, K_GRADE, K_TUNNEL } from './stripfaces.ts';
 import type { Borders } from './stripfaces.ts';
 import { sharedArea } from './clip.ts';
 import { PORTAL_AFTER_M, emitPortal, findPortal } from './portal.ts';
+import { VARIANTS } from '../infra/variants.ts';
+import type { PierShape } from '../infra/variants.ts';
 
 export const PARAPET_WIDTH_M = 0.25;
 export const PIER_SPACING_M = 28;
@@ -53,6 +55,63 @@ export interface Pier {
   top: number;
   /** A leg of a portal (portal.ts). */
   portal?: boolean;
+  /** How it stands (P2-034, the strip's kit variant): the collider is this shape inside the ring. */
+  shape?: PierShape;
+  /** Deck width over it and the deck's direction in plan (unit), for the kit's cap beam. */
+  deckW?: number;
+  dir?: [number, number];
+}
+
+/**
+ * What the infrastructure kits (P2-034, game/world/infra/) build on a deck or a fill, in block metres. The bake keeps
+ * the plain shapes as colliders (materials barrier, fascia, retaining, abutment, pier, underside); the game draws
+ * the variant's kit on the same lines instead.
+ */
+export interface KitEdge {
+  strip: number;
+  station: number;
+  side: 'L' | 'R';
+  kind: 'deck' | 'fill';
+  /** The road edge at the lane top at both stations: x, y, z. */
+  a: V3;
+  b: V3;
+  /** Barrier top and wall foot (the deck's underside, or the ground under a fill) at both stations. */
+  top: [number, number];
+  foot: [number, number];
+  /** Outward unit normal in plan. */
+  out: [number, number];
+}
+
+/** The underside of a deck between two stations: the left and right edge at both (x, y, z). */
+export interface KitSoffit {
+  strip: number;
+  station: number;
+  l0: V3;
+  r0: V3;
+  l1: V3;
+  r1: V3;
+}
+
+/** A portal's beam (portal.ts): its four plan corners and its bottom and top. */
+export interface KitBeam {
+  strip: number;
+  station: number;
+  ring: [number, number][];
+  bottom: number;
+  top: number;
+}
+
+/** A plain concrete face of a structure the kit draws as it is (the wall where a ramp becomes a deck). */
+export interface KitFace {
+  strip: number;
+  pts: [V3, V3, V3, V3];
+}
+
+export interface KitRecords {
+  edges: KitEdge[];
+  soffits: KitSoffit[];
+  beams: KitBeam[];
+  faces: KitFace[];
 }
 
 export interface StructureReport {
@@ -75,6 +134,8 @@ export interface StructureReport {
   abutmentWalls: number;
   /** Tunnel portals (P1-037): where an open ramp meets its roofed part, the wall from the roof up to the parapet. */
   headwalls: Headwall[];
+  /** Inputs of the infrastructure kits (P2-034). */
+  kit: KitRecords;
 }
 
 /** The face across a tunnel mouth from the roof's underside up to the parapet, so the ground above never shows an open slit. */
@@ -172,7 +233,7 @@ function pointInFace(fs: FaceSet, f: number, x: number, z: number): boolean {
 const structureOf = (kp: number, kq: number): EdgeKind | null => (kp === K_DECK || kq === K_DECK ? 'deck' : kp === K_FILL || kq === K_FILL ? 'fill' : kp === K_TUNNEL || kq === K_TUNNEL ? 'tunnel' : kp === K_CUT || kq === K_CUT ? 'cut' : null);
 
 export function buildStructures(input: MeshInput, fs: FaceSet, edges: EdgeMap, grid: FaceGrid, sink: Sink, borders: Borders, sheetOfStation: (strip: number, station: number) => number): StructureReport {
-  const out: StructureReport = { segments: [], parapets: 0, byKind: {}, sharedSides: 0, piers: [], piersMoved: 0, maxSpanM: 0, portals: 0, longSpans: [], joints: 0, undersides: 0, roofs: 0, abutmentWalls: 0, headwalls: [] };
+  const out: StructureReport = { segments: [], parapets: 0, byKind: {}, sharedSides: 0, piers: [], piersMoved: 0, maxSpanM: 0, portals: 0, longSpans: [], joints: 0, undersides: 0, roofs: 0, abutmentWalls: 0, headwalls: [], kit: { edges: [], soffits: [], beams: [], faces: [] } };
   input.strips.forEach((s: Strip, si: number) => {
     const kind = input.kinds[si] as ArrayLike<number>;
     let any = false;
@@ -223,13 +284,18 @@ export function buildStructures(input: MeshInput, fs: FaceSet, edges: EdgeMap, g
         if (sc === 'deck' || sc === 'fill') {
           const t0 = p.h + Math.max(raise, grow(p));
           const t1 = q.h + Math.max(raise, grow(q));
+          // P2-034: the crash barrier and the deck's side face (or a ramp's retaining wall) keep their plain shapes as
+          // colliders under their own materials; the game draws the variant's kit on the same lines
           if (t0 - lt0 > 0.02 || t1 - lt1 > 0.02) {
             parapet = true;
-            sink.quad('parapet', P(p, i, lt0, -PARAPET_WIDTH_M), P(q, i + 1, lt1, -PARAPET_WIDTH_M), P(q, i + 1, t1, -PARAPET_WIDTH_M), P(p, i, t0, -PARAPET_WIDTH_M), inward);
-            sink.quad('parapet', P(p, i, t0, -PARAPET_WIDTH_M), P(q, i + 1, t1, -PARAPET_WIDTH_M), P(q, i + 1, t1), P(p, i, t0), [0, 1, 0]);
+            sink.quad('barrier', P(p, i, lt0, -PARAPET_WIDTH_M), P(q, i + 1, lt1, -PARAPET_WIDTH_M), P(q, i + 1, t1, -PARAPET_WIDTH_M), P(p, i, t0, -PARAPET_WIDTH_M), inward);
+            sink.quad('barrier', P(p, i, t0, -PARAPET_WIDTH_M), P(q, i + 1, t1, -PARAPET_WIDTH_M), P(q, i + 1, t1), P(p, i, t0), [0, 1, 0]);
           }
           const bottom = (st: Station, k: number): number => (k === K_DECK ? st.h - DECK_DEPTH : st.g - 0.6);
-          sink.quad('wall', P(p, i, t0), P(q, i + 1, t1), P(q, i + 1, Math.min(bottom(q, kq), t1)), P(p, i, Math.min(bottom(p, kp), t0)), outward);
+          const f0 = Math.min(bottom(p, kp), t0);
+          const f1 = Math.min(bottom(q, kq), t1);
+          sink.quad(sc === 'deck' ? 'fascia' : 'retaining', P(p, i, t0), P(q, i + 1, t1), P(q, i + 1, f1), P(p, i, f0), outward);
+          out.kit.edges.push({ strip: si, station: i, side, kind: sc, a: P(p, i, lt0), b: P(q, i + 1, lt1), top: [t0, t1], foot: [f0, f1], out: [outward[0], outward[2]] });
         } else {
           // lowered: a wall up from the road edge; to the ground and a parapet above it in a cut, to the roof in a tunnel
           // (a segment open to the sky keeps the parapet top at both ends, also where its far station is roofed: the
@@ -254,6 +320,7 @@ export function buildStructures(input: MeshInput, fs: FaceSet, edges: EdgeMap, g
       const A = (i2: number, k: number, y: number): V3 => [X(i2, k), y, Z(i2, k)];
       if (kp === K_DECK && kq === K_DECK) {
         sink.quad('underside', A(i, 0, p.h - DECK_DEPTH), A(i, L, p.h - DECK_DEPTH), A(i + 1, L, q.h - DECK_DEPTH), A(i + 1, 0, q.h - DECK_DEPTH), [0, -1, 0]);
+        out.kit.soffits.push({ strip: si, station: i, l0: A(i, 0, p.h - DECK_DEPTH), r0: A(i, L, p.h - DECK_DEPTH), l1: A(i + 1, 0, q.h - DECK_DEPTH), r1: A(i + 1, L, q.h - DECK_DEPTH) });
         out.undersides++;
       } else if (kp === K_DECK || kq === K_DECK) {
         const at = kp === K_DECK ? q : p;
@@ -261,7 +328,8 @@ export function buildStructures(input: MeshInput, fs: FaceSet, edges: EdgeMap, g
         const tx = q.x - p.x;
         const tz = q.z - p.z;
         const len = Math.hypot(tx, tz) || 1;
-        for (const sgn of [1, -1]) sink.quad('wall', A(ai, 0, at.h - 0.05), A(ai, L, at.h - 0.05), A(ai, L, at.g - 0.6), A(ai, 0, at.g - 0.6), [(tx / len) * sgn, 0, (tz / len) * sgn]);
+        for (const sgn of [1, -1]) sink.quad('abutment', A(ai, 0, at.h - 0.05), A(ai, L, at.h - 0.05), A(ai, L, at.g - 0.6), A(ai, 0, at.g - 0.6), [(tx / len) * sgn, 0, (tz / len) * sgn]);
+        out.kit.faces.push({ strip: si, pts: [A(ai, 0, at.h - 0.05), A(ai, L, at.h - 0.05), A(ai, L, at.g - 0.6), A(ai, 0, at.g - 0.6)] });
         out.abutmentWalls++;
       }
       if (roofed(p, kp) && roofed(q, kq)) {
@@ -387,8 +455,9 @@ export function buildStructures(input: MeshInput, fs: FaceSet, edges: EdgeMap, g
         span(i);
         out.maxSpanM = Math.max(out.maxSpanM, since);
         since = 0;
-        emitPortal(sink, st, portal);
-        for (const leg of portal.legs) out.piers.push({ strip: si, station: i, ring: leg, sheet, bottom: portal.bottom, top: portal.beamBottom, portal: true });
+        const beam = emitPortal(sink, st, portal);
+        for (const leg of portal.legs) out.piers.push({ strip: si, station: i, ring: leg, sheet, bottom: portal.bottom, top: portal.beamBottom, portal: true, shape: 'wall', deckW: (st.b[0] as number) - (st.b[L] as number), dir: [-st.nz, st.nx] });
+        out.kit.beams.push({ strip: si, station: i, ring: beam, bottom: portal.beamBottom, top: portal.top });
         out.portals++;
         joint(st);
         continue;
@@ -398,24 +467,59 @@ export function buildStructures(input: MeshInput, fs: FaceSet, edges: EdgeMap, g
       since = 0;
       const bottom = st.g - 1;
       const top = st.h - DECK_DEPTH;
-      out.piers.push({ strip: si, station: i, ring, sheet, bottom, top });
-      for (let k = 0; k < 4; k++) {
-        const a = ring[k] as [number, number];
-        const b = ring[(k + 1) % 4] as [number, number];
-        const ex = b[0] - a[0];
-        const ez = b[1] - a[1];
-        const len = Math.hypot(ex, ez) || 1;
-        let nx = ez / len;
-        let nz = -ex / len;
-        if (nx * ((a[0] + b[0]) / 2 - cx) + nz * ((a[1] + b[1]) / 2 - cz) < 0) {
-          nx = -nx;
-          nz = -nz;
-        }
-        sink.quad('pier', [a[0], bottom, a[1]], [b[0], bottom, b[1]], [b[0], top, b[1]], [a[0], top, a[1]], [nx, 0, nz]);
-      }
+      const variant = input.variants?.[si];
+      const shape: PierShape = variant ? (VARIANTS[variant]?.pier ?? 'wall') : 'wall';
+      out.piers.push({ strip: si, station: i, ring, sheet, bottom, top, shape, deckW: (st.b[0] as number) - (st.b[L] as number), dir: [tx, tz] });
+      // the collider is the kit's pier inside the ring (P2-034): every shape lies inside it, so the ring's checks hold
+      for (const col of pierColumns(shape, cx, cz, st.nx, st.nz, half)) prismSides(sink, 'pier', col, bottom, top);
       joint(st);
     }
   });
   out.maxSpanM = Math.round(out.maxSpanM * 10) / 10;
   return out;
+}
+
+/** Pier columns (plan rings, counter-clockwise seen from above is not needed: prismSides orients by the centre) of a shape inside a ring of half width `half` across the deck and 0.5 m along it. */
+export function pierColumns(shape: PierShape, cx: number, cz: number, nx: number, nz: number, half: number): [number, number][][] {
+  const tx = -nz;
+  const tz = nx;
+  const rect = (c: number, w: number, along: number): [number, number][] => [
+    [cx + nx * (c + w) + tx * along, cz + nz * (c + w) + tz * along], [cx + nx * (c - w) + tx * along, cz + nz * (c - w) + tz * along],
+    [cx + nx * (c - w) - tx * along, cz + nz * (c - w) - tz * along], [cx + nx * (c + w) - tx * along, cz + nz * (c + w) - tz * along],
+  ];
+  if (shape === 'twin' && half >= 2) return [rect(half - 0.6, 0.6, 0.5), rect(-(half - 0.6), 0.6, 0.5)];
+  if (shape === 'single' || shape === 'twin') return [rect(0, Math.min(half, 1.1), 0.5)];
+  if (shape === 'round') {
+    // an octagon in the deck's frame whose flat sides lie 0.5 m from the centre (inside the ring's 0.5 m along)
+    const r = 0.5 / Math.cos(Math.PI / 8);
+    return [Array.from({ length: 8 }, (_, k) => {
+      const a = (k + 0.5) * (Math.PI / 4);
+      return [cx + (nx * Math.cos(a) + tx * Math.sin(a)) * r, cz + (nz * Math.cos(a) + tz * Math.sin(a)) * r] as [number, number];
+    })];
+  }
+  return [rect(0, half, 0.5)];
+}
+
+/** The side faces of a vertical prism over a plan ring, facing away from its centre. */
+export function prismSides(sink: Sink, material: string, ring: readonly [number, number][], bottom: number, top: number): void {
+  let cx = 0;
+  let cz = 0;
+  for (const [x, z] of ring) {
+    cx += x / ring.length;
+    cz += z / ring.length;
+  }
+  for (let k = 0; k < ring.length; k++) {
+    const a = ring[k] as [number, number];
+    const b = ring[(k + 1) % ring.length] as [number, number];
+    const ex = b[0] - a[0];
+    const ez = b[1] - a[1];
+    const len = Math.hypot(ex, ez) || 1;
+    let nx = ez / len;
+    let nz = -ex / len;
+    if (nx * ((a[0] + b[0]) / 2 - cx) + nz * ((a[1] + b[1]) / 2 - cz) < 0) {
+      nx = -nx;
+      nz = -nz;
+    }
+    sink.quad(material, [a[0], bottom, a[1]], [b[0], bottom, b[1]], [b[0], top, b[1]], [a[0], top, a[1]], [nx, 0, nz]);
+  }
 }

@@ -28,6 +28,10 @@ var landmarks: Array = []
 var far_landmarks: Array = []
 var silhouettes: Array = []
 var landmark_limits := {}
+## The infrastructure kits of the folder (infra.json, P2-034; empty when the folder has none): tile id -> records.
+var infra := {}
+## Far skyline pieces of infra.json (the Signature Bridge): never reachable.
+var infra_skyline: Array = []
 
 
 ## The tile folder of a --tiles value ("" for an unknown name).
@@ -55,6 +59,12 @@ static func open(dir: String) -> RefCounted:
 		var lm: Variant = JSON.parse_string(FileAccess.get_file_as_string(lf))
 		if typeof(lm) == TYPE_DICTIONARY:
 			out.take_landmarks(lm)
+	var inf := dir + "infra.json"
+	if FileAccess.file_exists(inf):
+		var parsed_infra: Variant = JSON.parse_string(FileAccess.get_file_as_string(inf))
+		if typeof(parsed_infra) == TYPE_DICTIONARY and typeof((parsed_infra as Dictionary).get("tiles")) == TYPE_DICTIONARY:
+			out.infra = parsed_infra.tiles
+			out.infra_skyline = parsed_infra.get("skyline", [])
 	return out
 
 

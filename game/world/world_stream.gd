@@ -24,6 +24,7 @@ const Lanes := preload("res://world/systems/lanes.gd")
 const SpawnPins := preload("res://world/spawn_pins.gd")
 const LandmarkSlots := preload("res://world/landmark_slots.gd")
 const Landmarks := preload("res://world/systems/landmarks.gd")
+const Infra := preload("res://world/systems/infra.gd")
 ## The kit landmarks within this distance of the start are built before the game says ready (no hero pops in).
 const LANDMARK_READY_M := 1800.0
 const TileReader := preload("res://world/streaming/tile_reader.gd")
@@ -43,6 +44,8 @@ var core: Node = null
 var lanes: RefCounted = null
 var colliders: RefCounted = null
 var ground_roads: RefCounted = null
+## The infrastructure kits (game/world/systems/infra.gd, P2-034); null when the folder has no infra.json.
+var infra: RefCounted = null
 var buildings: RefCounted = null
 ## The parts kit landmarks and the far silhouettes (game/world/systems/landmarks.gd, P2-007).
 var landmarks: Node3D = null
@@ -71,7 +74,13 @@ func setup(dir: String, build_landmarks := true) -> bool:
 	buildings = Buildings.new(self, stand_ins)
 	colliders = Colliders.new(self)
 	lanes = Lanes.new()
-	for sys: Object in [ground_roads, buildings, colliders, lanes]:
+	var systems: Array = [ground_roads, buildings, colliders, lanes]
+	# the infrastructure kits (P2-034): drawn from infra.json, the tiles' plain shapes stay colliders only
+	if not index.infra.is_empty():
+		infra = Infra.new(self, index.infra)
+		ground_roads.skip.append_array(GroundRoads.KIT_ENVELOPES)
+		systems.append(infra)
+	for sys: Object in systems:
 		core.register(sys)
 	# The core is this node's first child, before any tile node: children leave the tree last child first, so when
 	# the scene goes the tile nodes have left before the core unloads (tile_mesh.gd dispose relies on it).
@@ -79,6 +88,8 @@ func setup(dir: String, build_landmarks := true) -> bool:
 	landmarks = Landmarks.new()
 	landmarks.setup(index, build_landmarks)
 	add_child(landmarks)
+	if infra != null and build_landmarks:
+		Infra.skyline(self, index.infra_skyline, landmarks.haze)
 	return true
 
 
@@ -260,7 +271,8 @@ func info() -> Dictionary:
 	out["indexTiles"] = index.count()
 	out["booted"] = booted
 	out["loadMs"] = load_ms
-	out["triangles"] = int(ground_roads.triangles) + int(buildings.triangles)
+	out["triangles"] = int(ground_roads.triangles) + int(buildings.triangles) + (int(infra.triangles) if infra != null else 0)
+	out["infra"] = infra.info() if infra != null else {"tiles": 0, "triangles": 0, "nodes": 0}
 	out["colliderTriangles"] = int(colliders.triangles)
 	out["colliderChunks"] = int(colliders.chunks)
 	out["lanes"] = lanes.pieces.size()

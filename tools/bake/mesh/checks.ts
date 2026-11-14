@@ -134,8 +134,9 @@ export function checkRoadMesh(input: MeshInput, mesh: RoadMesh): MeshChecks {
 
   // parapets: every triangle of the parapet mesh lies beside a structure station
   const railings: MeshChecks['railings'] = { segments: mesh.structures.segments.length, parapets: mesh.structures.parapets, byKind: mesh.structures.byKind, parapetTriangles: 0, atGrade: 0, list: [] };
-  const par = mesh.sink.meshes.get('parapet');
-  if (par) {
+  // (P2-034: a deck's or a fill's crash barrier is the `barrier` material, a cut's parapet stays `parapet`)
+  for (const par of [mesh.sink.meshes.get('parapet'), mesh.sink.meshes.get('barrier')]) {
+    if (!par) continue;
     for (let t = 0; t + 2 < par.idx.length; t += 3) {
       railings.parapetTriangles++;
       let cx = 0;
