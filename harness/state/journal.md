@@ -584,3 +584,5 @@ One line per event, written by task.mjs (start, done, fail, phase changes, inbox
 - 2026-11-14 14:30 [P11-001] model: sonnet
 - 2026-11-14 14:30 [P14-008] model: sonnet
 - 2026-11-14 15:03 mentor message mmwg7jwa6 handled: Yes, that is exactly what the Bittu card asks for: full body A-pose, under 25k triangles, rig on Mixamo, upload on the card; the art reviewer checks it and the game swaps it in.
+- 2026-11-14 15:11 [P3-010] added: Faces for the three leads: talking mouth, blinks, eye and brow expressions on any delivered model
+- 2026-11-14 15:11 mentor message mmwg7upuw handled: Yes, signed in the architecture: about 12 face shapes per lead (jaw, mouth shapes, blinks, brows, smile, frown), jaw by voice loudness in play and full lip sync in big cutscenes. Text to 3D models come with no face rig, so task P3 adds the face automatically to any model you upload.
