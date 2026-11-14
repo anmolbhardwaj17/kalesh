@@ -1,9 +1,10 @@
 ## Debug probes of the humanoid body (P1-023), commands of the hook foot(cmd, opts) (docs/GAME_HOOKS.md), called by
 ## foot_probe.gd. Input only for the movement: the gait keys are pressed through the InputMap like a player's.
-##   anim {gait}        walk, jog or sprint from rest on the open pad: after 1 s at the gait, three cycles of the clip
-##                      are sampled every tick: foot slide (foot_contact.gd: the stance foot's mean backward speed in
-##                      the body frame against the ground speed), the clip, its rate, and the
-##                      animation cost per tick (advance and bone update, median)
+##   anim {gait}        walk, jog or sprint from rest on the open pad: after 1.5 s at the gait, three cycles are
+##                      sampled every tick: foot slide (foot_contact.gd: the planted foot's mean backward speed in the
+##                      body frame against the ground speed, and how far it moves over the ground while down), the
+##                      clip, its play rate (1 is the built clip's own pace), the cadence, how much faster the built
+##                      cycle is than the library clip it is made from, and the animation cost per tick (median)
 ##   animcost {n}       n characters (the three looks in turn) walk on the pad beside the course: the animation cost
 ##                      per character per tick (each one's median over 2 s, advance and bone update; the median of those)
 ##   lineup {x, z, h}   the three leads side by side on the pad: the player (Bittu) at x, z facing h degrees, SI Meera
@@ -34,12 +35,12 @@ static func anim(p: Node, gait: String) -> Dictionary:
 	p.press("move_forward", 1.0)
 	p.press("walk", 1.0 if gait == "walk" else 0.0)
 	p.press("sprint", 1.0 if gait == "sprint" else 0.0)
-	await p.ticks(60)
+	await p.ticks(90)
 	var st: String = h.state
 	var rate: float = h.rate
-	var clip: Animation = h.clips().get_animation(h.STATES[st])
-	# three cycles: a sprint cycle is only 21 ticks, too few to place the foot switches alone
-	var n := int(ceil(CYCLES * clip.length / maxf(rate, 0.01) / DT)) + 1
+	var spm: float = h.cadence * 120.0
+	# three cycles: a sprint cycle is only 35 ticks, too few to place the foot switches alone
+	var n := int(ceil(CYCLES / maxf(h.cadence, 0.2) / DT)) + 1
 	var rl := PackedVector3Array()
 	var rr := PackedVector3Array()
 	var body := PackedVector3Array()
@@ -57,12 +58,16 @@ static func anim(p: Node, gait: String) -> Dictionary:
 	var ground := Vector2(z.x - a.x, z.z - a.z).length() / ((body.size() - 1) * DT)
 	var res := Contact.slide(rl, rr, body, DT, Motor.forward(c.heading), ground)
 	var cost: float = h.cost_ms()
+	var clip: String = h.clip()
+	var built: Dictionary = h.loco().get_meta("gaits", {}).get(clip.trim_prefix("k/"), {})
 	p.release()
 	await p.ticks(30)
 	return {
-		"gait": gait, "state": st, "states": states.keys(), "clip": h.STATES[st],
-		"rate": snappedf(rate, 0.0001), "sampleTicks": n, "groundMs": snappedf(ground, 0.0001),
+		"gait": gait, "state": st, "states": states.keys(), "clip": clip,
+		"rate": snappedf(rate, 0.0001), "cadenceSpm": snappedf(spm, 0.1), "sourceRate": built.get("source_rate", null),
+		"sampleTicks": n, "groundMs": snappedf(ground, 0.0001),
 		"footMs": snappedf(float(res.footSpeed), 0.0001), "slidePct": snappedf(100.0 * float(res.slide), 0.01),
+		"wanderPct": snappedf(100.0 * float(res.abs), 0.01), "downShare": snappedf(float(res.share), 0.001),
 		"switches": res.switches, "animMsPerTick": cost,
 		"look": h.look_id, "scale": snappedf(h.body_scale, 0.0001),
 	}

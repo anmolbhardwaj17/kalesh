@@ -7,6 +7,9 @@ https://quaternius.itch.io/universal-animation-library-2 (pins in data/SOURCES.j
 Used in this folder: ual_clips.res (clips of both libraries, retargeted to Godot's SkeletonProfileHumanoid),
 mannequin_m.scn (the library's mannequin), mannequin_f.scn (the female mannequin of library 2). Built by
 tools/characters/ual_build.mjs. Credit line: game/data/credits.json, id "ual".
+Also made from the library's clips, by this project (P2-041, tools/characters/loco_build.mjs, no other source):
+loco_clips.res (the walk, jog, sprint and crouch walk cycles re-timed and re-planted for the game's speeds, the start,
+stop and turn clips, the crouch idle lifted onto the common ground). CC0 like the clips they are made from.
 
 The licence text as shipped in both packs (License.txt):
 
