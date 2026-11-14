@@ -165,11 +165,12 @@
       "batch": null,
       "created": "2026-11-14T12:12:01.340Z",
       "review": {
-        "at": "2026-11-14T12:21:55.578Z",
-        "verdict": "redo",
-        "note": "Owner 2026-11-14: unsure about Meera's face and presence (Danny is good, Bittu is off). Optional retry with a stronger, more distinctive face; the current approved sheet stays as the fallback.",
-        "ingestedAt": null,
-        "removed": false
+        "at": "2026-11-14T12:24:47.286Z",
+        "verdict": "ok",
+        "note": "Approved 2026-11-14 (second sheet): sharper, more distinctive face, direct assessing stare, strong brows, tight low bun, crisp uniform, red thread and steel watch, consistent views. Minor: reads a little older than 31 and more scowling than composed; the eyebrow scar shows as a faint line at the hairline instead.",
+        "ingestedAt": "2026-11-14T12:24:07.645Z",
+        "fit": "pending",
+        "fitNote": "Sheet; use the original for image to 3D."
       },
       "redo": {
         "at": "2026-11-14T12:21:55.577Z",
