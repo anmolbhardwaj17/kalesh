@@ -1,6 +1,6 @@
 {
   "_doc": "Written only by node harness/bin/task.mjs. Phases run in order; P0 (ADOPT + STYLE DISCOVERY) waits for the owner by design and needs task.mjs signoff and task.mjs archsignoff before its gate passes. Later phases are added by the planner at the end of P0 (task.mjs phase-add) from the game's real state.",
-  "updated": "2026-11-14T15:09:45.518Z",
+  "updated": "2026-11-14T15:29:39.246Z",
   "phases": [
     {
       "id": "P0",
@@ -4086,7 +4086,8 @@
       "notes": [
         "Anmol 2026-11-14, quality bar: peak quality, match the real road from photos (add what is missing, remove what is wrong), and never empty. Acceptance adds: (1) side by side of a reference photo and the game at the play camera for at least 3 spots per hero road, read by a verifier; (2) an emptiness check: walking or driving the stretch, no 40 m of frontage without something real (shop, wall, tree, parked vehicle, sign, vendor, furniture) and props per 100 m within the area profile; (3) the look audit (P2-040) lists anything that feels empty as a blocker.",
         "Watch Dogs 2 bar (FIDELITY_BAR.md row 5, gap 2): today the asphalt is one flat colour with a single zebra. Reach: textured asphalt with patches, cracks, tyre and oil marks by class and area, faded and fresh paint, manholes and grates, chipped kerbs with paint, pavers by area, wet and oil patches that use P2-053's low-roughness response. Decal atlas laid by the bake, not per-node decals. Cost 0.2 ms or less (--style-off token printed), within the city line. The verifier answers the WD2 bar question on the 4 photo sites.",
-        "Owner 2026-11-14: at night the lane lines are pure white, glow and look razor sharp (they read as unlit or emissive). Road paint must be a lit material (worn off-white, albedo about 0.6 to 0.7, darker and dirtier with wear), soft edges with mipmaps and anti-aliasing, and brighter only where a light or the vehicle headlights hit it (retroreflective boost in the headlight cone). WORLD_LOGIC: nothing glows that has no power."
+        "Owner 2026-11-14: at night the lane lines are pure white, glow and look razor sharp (they read as unlit or emissive). Road paint must be a lit material (worn off-white, albedo about 0.6 to 0.7, darker and dirtier with wear), soft edges with mipmaps and anti-aliasing, and brighter only where a light or the vehicle headlights hit it (retroreflective boost in the headlight cone). WORLD_LOGIC: nothing glows that has no power.",
+        "Owner 2026-11-14: roads look weird (tunnel shot: golden glitter road, uniform speckles). Road surfaces everywhere to the Watch Dogs 2 standard: dark grounded asphalt, barely visible aggregate, tyre lanes, decals for cracks, patches, manholes and tyre marks, controlled rough specular, wet only in patches."
       ],
       "created": "2026-11-13T11:54:41.170Z"
     },
