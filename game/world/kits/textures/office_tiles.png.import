@@ -1,0 +1,30 @@
+[remap]
+
+importer="2d_array_texture"
+type="CompressedTexture2DArray"
+uid="uid://c7vicdmvq5hvv"
+path.s3tc="res://.godot/imported/office_tiles.png-5fe58fd111503886eb7b9d39476de2a6.s3tc.ctexarray"
+path.etc2="res://.godot/imported/office_tiles.png-5fe58fd111503886eb7b9d39476de2a6.etc2.ctexarray"
+metadata={
+"imported_formats": ["s3tc_bptc", "etc2_astc"],
+"vram_texture": true
+}
+
+[deps]
+
+source_file="res://world/kits/textures/office_tiles.png"
+dest_files=["res://.godot/imported/office_tiles.png-5fe58fd111503886eb7b9d39476de2a6.s3tc.ctexarray", "res://.godot/imported/office_tiles.png-5fe58fd111503886eb7b9d39476de2a6.etc2.ctexarray"]
+
+[params]
+
+compress/mode=2
+compress/high_quality=false
+compress/lossy_quality=0.7
+compress/uastc_level=0
+compress/rdo_quality_loss=0.0
+compress/hdr_compression=1
+compress/channel_pack=0
+mipmaps/generate=true
+mipmaps/limit=-1
+slices/horizontal=1
+slices/vertical=8

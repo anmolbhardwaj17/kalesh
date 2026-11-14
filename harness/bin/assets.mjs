@@ -23,7 +23,7 @@ Images (textures, decals, icons, portraits, keyart, backdrops, ui):
 3D model (kind model, ids model_<name>, a .glb; rigged characters need a skeleton):
   add --kind model --id model_guard --intent "what it is" --prompt "step by step instructions for the owner"
       [--portrait portrait_guard] [--used-by L01] [--priority 2] [--batch "B3 models"]
-      Limits after ingest: at most 25000 triangles and 3 materials. Upload the .glb on the dashboard card, ingest checks it.
+      Limits after ingest: at most 25000 triangles and 3 materials. Upload the Mixamo .fbx or a .glb on the dashboard card; ingest converts an .fbx to .glb and checks it.
 Sound:
   sfx-add --id sfx_x --desc "..." [--prompt "..."] [--duration 1.5] [--loop] [--used-by L03] [--priority n]
   music-add --id mus_x --desc "..." [--prompt "..."] [--duration 90] [--loop] [--mood "..."]

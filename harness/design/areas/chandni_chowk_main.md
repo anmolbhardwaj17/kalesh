@@ -135,3 +135,5 @@ The main axis of Old Delhi: a straight avenue from the Red Fort to Fatehpuri Mas
 ## Edge blending (what changes first)
 
 Edges: east end hits the Red Fort and its open lawns; west end hits Fatehpuri Masjid and Khari Baoli; north and south side lanes (galis) become narrower first (road width falls from 15 m to 3 m), then building height rises and balconies join overhead.
+
+**Owner photos (2026-11-14) settle the surface:** the main road is red sandstone wall to wall with no asphalt and no kerb, carved octagonal sandstone bollards, central planter beds, heritage double-arm lamps. See harness/design/reference/owner/OWNER_PHOTOS.md.

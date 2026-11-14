@@ -1,6 +1,6 @@
 # Owner's eye: what Anmol checks, so nobody has to ask him
 
-Every builder brief for a look task, every verifier and every look audit reads this file. A verifier fails a task that breaks any line here, the same as a missing feature. The orchestrator adds a line each time Anmol corrects something, so he never has to say it twice.
+Every builder brief for a look task, every verifier and every look audit reads this file, and harness/design/WORLD_LOGIC.md (does the scene make physical and urban sense). A verifier fails a task that breaks any line here, the same as a missing feature. The orchestrator adds a line each time Anmol corrects something, so he never has to say it twice.
 
 ## The bar
 - Watch Dogs 2 is the fidelity bar (STYLE_BIBLE.md). Ask of every shot: would this frame sit next to a Watch Dogs 2 street shot without looking cheap? Density of props, material detail, decals and grime, signage, light and shadow, life on the street.
@@ -17,6 +17,8 @@ Every builder brief for a look task, every verifier and every look audit reads t
 - Sign boards look like real Indian shop signs: flex banners, painted tin, glow boxes, stacked boards, Hindi, English and Urdu, phone numbers. Never clean generated graphics.
 - Things wear: rust, faded and peeling paint, bent boards, torn flex, stains, soot, rain streaks. Wear is soft and natural, never blocky patches.
 - Emptiness is a blocker, never polish. A street or junction that feels bare fails.
+- Light fittings are attached to something real, line up with the structure, glow, and match the light they cast. A floating or angled bar of flat white fails (tunnel lights, 2026-11-14).
+- Light on surfaces matches its source: a continuous strip gives even light, never spaced pools; no sky light inside tunnels or rooms (2026-11-14).
 
 ## Systems are finished, not first steps
 - A system is done when it is complete everywhere it applies in the pilot (tunnels with depth, roof, walls, lights and inside, not an open trench). A planned split is named in the title and told to Anmol.

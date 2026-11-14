@@ -18,7 +18,7 @@ import { inspectorHandler } from '../../tools/inspector/server.mjs';
 
 const PORT = Number(process.env.HARNESS_DASHBOARD_PORT || config().dashboardPort || 4477);
 const MIME = { '.html': 'text/html; charset=utf-8', '.js': 'text/javascript', '.css': 'text/css', '.json': 'application/json', '.png': 'image/png', '.jpg': 'image/jpeg', '.webp': 'image/webp', '.svg': 'image/svg+xml', '.wasm': 'application/wasm', '.mp3': 'audio/mpeg', '.ogg': 'audio/ogg', '.wav': 'audio/wav', '.glb': 'model/gltf-binary', '.woff2': 'font/woff2', '.woff': 'font/woff', '.ttf': 'font/ttf', '.otf': 'font/otf', '.webmanifest': 'application/manifest+json' };
-const UPLOAD_EXT = new Set(['png', 'jpg', 'jpeg', 'webp', 'mp3', 'wav', 'ogg', 'm4a', 'aac', 'flac', 'glb']);
+const UPLOAD_EXT = new Set(['png', 'jpg', 'jpeg', 'webp', 'mp3', 'wav', 'ogg', 'm4a', 'aac', 'flac', 'glb', 'fbx']);
 
 function tail(file, n) { try { return fs.readFileSync(file, 'utf8').split('\n').filter((l) => l.startsWith('- ')).slice(-n); } catch { return []; } }
 function mtime(file) { try { return fs.statSync(file).mtimeMs; } catch { return 0; } }
@@ -324,7 +324,7 @@ const server = http.createServer(async (req, res) => {
       const ext = (name.split('.').pop() || '').toLowerCase();
       if (!/^[A-Za-z0-9_]+$/.test(id) || !knownRequest(id)) return send(res, 400, { error: `unknown request id ${id}` });
       if (!UPLOAD_EXT.has(ext)) return send(res, 400, { error: `unsupported file type .${ext}` });
-      const data = await readBody(req, (ext === 'glb' ? 200 : 40) * 1024 * 1024);
+      const data = await readBody(req, (ext === 'glb' || ext === 'fbx' ? 200 : 40) * 1024 * 1024);
       fs.mkdirSync(PATHS.inboxDir, { recursive: true });
       for (const f of fs.readdirSync(PATHS.inboxDir)) if (f.startsWith(id + '.') && fs.statSync(path.join(PATHS.inboxDir, f)).isFile()) fs.unlinkSync(path.join(PATHS.inboxDir, f));
       fs.writeFileSync(path.join(PATHS.inboxDir, `${id}.${ext}`), data);
@@ -334,7 +334,7 @@ const server = http.createServer(async (req, res) => {
     }
     send(res, 404, { error: 'not found' });
   } catch (e) {
-    if (String(e.message) === 'too large') return send(res, 413, { error: 'This file is too big to upload (models up to 200 MB, images and audio up to 40 MB). For a .glb, keep it under about 30 MB.' });
+    if (String(e.message) === 'too large') return send(res, 413, { error: 'This file is too big to upload (models up to 200 MB, images and audio up to 40 MB). For a model, keep it under about 30 MB.' });
     send(res, 500, { error: String(e.message || e) });
   }
 });

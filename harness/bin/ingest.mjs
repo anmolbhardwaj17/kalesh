@@ -4,7 +4,8 @@
 //   images: resized to the request's target size (sharp), alpha kept when the request needs it, encoded WebP.
 //           Without sharp installed the file is copied as is (a warning goes in the log).
 //   audio:  loudness-normalised MP3 with ffmpeg when it is on the PATH, else copied.
-//   models: .glb copied; a file that is not glTF binary is rejected with a plain message on the card. A hero landmark
+//   models: .glb copied; an .fbx (the Mixamo download) is first converted to .glb with the pinned Godot engine (fbx2glb.mjs,
+//           skeleton, weights, materials and textures kept; the FBX stays in _processed/); the note lists triangles, materials and bones; a file that is not glTF binary is rejected with a plain message on the card. A hero landmark
 //           model (id model_lm_<registry id>) must also pass the hero rule (glbcheck.mjs heroRule: at most 8 parts of
 //           25,000 triangles, 6 materials, 3 levels a part, one far silhouette under 2,000 triangles) or it is
 //           rejected with every reason; once in the manifest it replaces the parts kit stand-in by id (P2-007).
@@ -15,7 +16,9 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { execFileSync } from 'node:child_process';
 import { H, PATHS, readJSON, writeJSON, nowISO, parseArgs, withLock } from './lib.mjs';
-import { heroRule, isHeroModelId, parseGlb } from './glbcheck.mjs';
+import os from 'node:os';
+import { heroRule, isHeroModelId, modelStats, parseGlb } from './glbcheck.mjs';
+import { convertFbxToGlb } from './fbx2glb.mjs';
 
 const args = parseArgs(process.argv.slice(2));
 const IMG = new Set(['png', 'jpg', 'jpeg', 'webp']);
@@ -66,20 +69,42 @@ function processAudio(file, req, type) {
   return { entry: { path: `assets/audio/${sub}/${path.basename(copy)}`, ingestedAt: nowISO() }, note: ' copied (no ffmpeg on the PATH)' };
 }
 
-function processModel(file, req) {
-  const buf = fs.readFileSync(file);
-  if (buf.length < 12 || buf.toString('latin1', 0, 4) !== 'glTF') throw new Error('this is not a binary glTF (.glb) file');
-  let hero = '';
-  if (isHeroModelId(req.id)) {
-    const limits = readJSON(H('verify', 'perf_budgets.json'), { world: { landmarks: {} } }).world?.landmarks ?? {};
-    const r = heroRule(parseGlb(buf).json, limits);
-    if (!r.ok) throw new Error(`the hero rule: ${r.reasons.join('; ')}`);
-    hero = `, hero rule ok: ${Object.keys(r.parts).length} parts, far ${r.far} triangles, ${r.materials} materials`;
+async function processModel(file, req, ext = 'glb') {
+  let glbFile = file;
+  let tmp = null;
+  let from = '';
+  try {
+    if (ext === 'fbx') {
+      tmp = fs.mkdtempSync(path.join(os.tmpdir(), 'fbx2glb-'));
+      glbFile = path.join(tmp, `${req.id}.glb`);
+      const c = await convertFbxToGlb(file, glbFile);
+      if (!c.meshes) throw new Error('the FBX has no mesh in it');
+      from = `converted from FBX (${c.bones} bones), `;
+    }
+    const buf = fs.readFileSync(glbFile);
+    if (buf.length < 12 || buf.toString('latin1', 0, 4) !== 'glTF') throw new Error('this is not a binary glTF (.glb) file');
+    const json = parseGlb(buf).json;
+    let hero = '';
+    if (isHeroModelId(req.id)) {
+      const limits = readJSON(H('verify', 'perf_budgets.json'), { world: { landmarks: {} } }).world?.landmarks ?? {};
+      const r = heroRule(json, limits);
+      if (!r.ok) throw new Error(`the hero rule: ${r.reasons.join('; ')}`);
+      hero = `, hero rule ok: ${Object.keys(r.parts).length} parts, far ${r.far} triangles, ${r.materials} materials`;
+    }
+    // Stats and warnings only: the card says "upload it anyway", the reviewer says what to change.
+    const st = modelStats(json);
+    const warn = [];
+    if (req.target?.maxTriangles && st.triangles > req.target.maxTriangles) warn.push(`over the ${req.target.maxTriangles} triangle target`);
+    if (req.target?.maxMaterials && st.materials > req.target.maxMaterials) warn.push(`over the ${req.target.maxMaterials} material target`);
+    if (/rigged|skeleton/.test(String(req.generate || '')) && (!st.skins || !st.weighted)) warn.push('no skeleton with skin weights found');
+    const stats = `${st.triangles} triangles, ${st.materials} materials, ${st.joints} bones${warn.length ? `, WARNING: ${warn.join('; ')}` : ''}`;
+    const out = path.join(PATHS.publicAssets, req.target?.out || `models/${req.id}.glb`);
+    fs.mkdirSync(path.dirname(out), { recursive: true });
+    fs.copyFileSync(glbFile, out);
+    return { entry: { path: `assets/${path.relative(PATHS.publicAssets, out).replace(/\\/g, '/')}`, bytes: buf.length, kind: 'model', ingestedAt: nowISO() }, note: ` ${from}${Math.round(buf.length / 1024)} KB, ${stats}${hero}` };
+  } finally {
+    if (tmp) fs.rmSync(tmp, { recursive: true, force: true });
   }
-  const out = path.join(PATHS.publicAssets, req.target?.out || `models/${req.id}.glb`);
-  fs.mkdirSync(path.dirname(out), { recursive: true });
-  fs.copyFileSync(file, out);
-  return { entry: { path: `assets/${path.relative(PATHS.publicAssets, out).replace(/\\/g, '/')}`, bytes: buf.length, kind: 'model', ingestedAt: nowISO() }, note: ` ${Math.round(buf.length / 1024)} KB${hero}` };
 }
 
 async function main() {
@@ -95,7 +120,7 @@ async function main() {
     if (!hit) { fs.renameSync(src, path.join(dirs.unmatched, f)); log(`${f}: no request with id ${id}, moved to _unmatched`); continue; }
     try {
       let r;
-      if (hit.type === 'image' && hit.req.kind === 'model') { if (ext !== 'glb') throw new Error('upload a .glb file'); r = processModel(src, hit.req); }
+      if (hit.type === 'image' && hit.req.kind === 'model') { if (ext !== 'glb' && ext !== 'fbx') throw new Error('upload the .fbx from Mixamo, or a .glb file'); r = await processModel(src, hit.req, ext); }
       else if (hit.type === 'image') { if (!IMG.has(ext)) throw new Error(`upload an image (${[...IMG].join(', ')})`); r = await processImage(src, hit.req); }
       else { if (!AUD.has(ext)) throw new Error(`upload audio (${[...AUD].join(', ')})`); r = processAudio(src, hit.req, hit.type); }
       withLock(() => {
