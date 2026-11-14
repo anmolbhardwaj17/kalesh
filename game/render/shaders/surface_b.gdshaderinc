@@ -410,6 +410,42 @@ void fragment() {
 			col = mix(col, col * vec3(0.42, 0.39, 0.33), damp * 0.9 * w);
 			col = mix(col, vec3(0.06, 0.05, 0.04), tide * 0.6 * w);
 			col = mix(col, col * 1.15 + vec3(0.04), salt * 0.5 * w * step(0.5, vnoise(vec2(uv.x * 3.0, 1.7))));
+#ifdef KIT
+			// area kits (P2-010 fix round): soft, natural grime that holds up at player height (the noise is a baked 8 bit
+			// texture, so every edge is a smoothstep over a few hundredths, never a hard threshold that shows its texels)
+			// rain and soot streaks under every floor band (sills, chhajjas, the parapet): the start of each streak wanders
+			// and fades in, the streak darkens the paint rather than painting black
+			float band = 0.4 + 3.2 * ceil((h - 0.4) / 3.2) + (vnoise(vec2(uv.x * 1.3, 7.0)) - 0.5) * 0.5;
+			float below = band - h;
+			float len = 0.6 + vnoise(vec2(uv.x * 2.2, 0.5)) * 2.4;
+			float run = smoothstep(0.42, 0.78, vnoise(vec2(uv.x * 4.5, 2.0))) * smoothstep(0.0, 0.35, below) * (1.0 - smoothstep(0.2, len, below));
+			run *= step(1.2, band) * (0.55 + 0.45 * vnoise(vec2(uv.x * 30.0, h * 1.2)));
+			col = mix(col, col * vec3(0.5, 0.47, 0.42), run * 0.75 * w);
+			// tea-coloured water stains, soft edged with a faint darker rim
+			float sf = fbm(uv * 0.5 + 13.0);
+			float stain = smoothstep(0.56, 0.66, sf);
+			float rim = smoothstep(0.6, 0.64, sf) * (1.0 - smoothstep(0.66, 0.71, sf));
+			col = mix(col, col * vec3(0.8, 0.72, 0.58), stain * 0.5 * w);
+			col = mix(col, col * 0.72, rim * 0.35 * w);
+			// peeling paint: small flakes along the wall base and under the bands, an older, darker coat or brick under them
+			// (only where paint really fails: the splash zone at the base and the drip line under each band)
+			float near = max(1.0 - smoothstep(0.7, 1.5, h), 1.0 - smoothstep(0.1, 0.55, below));
+			float pf = fbm(uv * 2.2 + 31.0);
+			float paint = step(0.12, lum) * (sk == 0 ? 1.0 : 0.0) * near;
+			float peel = smoothstep(0.63, 0.66, pf) * step(0.3, h) * paint;
+			float edge = smoothstep(0.6, 0.63, pf) * (1.0 - peel) * paint;
+			// (from the lit wall, not the paint colour: a flake must never read paler than the wall round it)
+			vec3 under = mix(vec3(luma(col)), col, 0.45) * 0.72;
+			if (tex_mix > 0.0 && !brick && hash12(floor(uv * 0.35)) > 0.5) {
+				under = layer(tuv, 0.96, L_BRICK).rgb * 0.75;
+			}
+			col = mix(col, under, peel * w);
+			// a thin dirty lip round each flake
+			col = mix(col, col * 0.82, edge * 0.5 * w);
+			// patched plaster: soft clouds of fresher, paler lime
+			float patched = smoothstep(0.6, 0.72, fbm(uv * 0.42 + 51.0)) * smoothstep(1.0, 1.6, h);
+			col = mix(col, mix(vec3(luma(col)), col, 0.6) * 1.12, patched * 0.35 * w);
+#else
 			// soot and rain streaks that run down from the floor band above (stand-in storeys: 3.2 m from 0.4 m)
 			float band = 0.4 + 3.2 * ceil((h - 0.4) / 3.2);
 			float below = band - h;
@@ -441,6 +477,7 @@ void fragment() {
 			vec2 cell = floor(uv * vec2(0.8, 1.25));
 			float patched = step(0.9, hash12(cell + 11.0)) * step(1.2, h);
 			col = mix(col, vec3(0.45, 0.42, 0.36), patched * 0.55 * w);
+#endif
 			// cracks and joints hold dirt
 			col = mix(col, col * 0.45, mask * 0.6 * w);
 		} else {

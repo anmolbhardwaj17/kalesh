@@ -81,15 +81,16 @@ function render(t, s) {
     const big = fbm(x, y, 3, s) - 0.5;
     const mid = fbm(x, y, 12, s + 7) - 0.5;
     const fine = hash2(x, y, s + 3) - 0.5;
-    // patches of newer plaster: blocky cells
-    const cell = hash2(Math.floor(x / 96), Math.floor(y / 72), s + 11);
-    const patch = cell > 1 - t.patch * 0.35 ? 10 * (cell - 0.5) : 0;
+    // patches of newer plaster: soft clouds, never cells (blocky patches read as pixels on a wall)
+    const pf = fbm(x, y, 4, s + 11, 3);
+    const patch = Math.max(0, Math.min(1, (pf - (0.72 - t.patch * 0.12)) / 0.08)) * 9;
     const v = GREY + big * 40 * (0.3 + t.patch) + mid * 18 * (0.4 + t.tone * 4) + fine * 6 + patch;
-    // hairline cracks: thin ridges of a noise field
+    // hairline cracks: short runs of a thin noise ridge, only where a second field allows (not contour lines everywhere)
     const cn = fbm(x, y, 6, s + 21, 3);
-    const crack = t.crack > 0 ? Math.max(0, 1 - Math.abs(cn - 0.5) * (220 / (0.4 + t.crack))) * t.crack : 0;
+    const allow = Math.max(0, Math.min(1, (fbm(x, y, 5, s + 41, 2) - 0.6) / 0.08));
+    const crack = t.crack > 0 ? Math.max(0, 1 - Math.abs(cn - 0.5) * (320 / (0.4 + t.crack))) * t.crack * allow : 0;
     const warm = big * 8 * t.tone * 10;
-    return [v - crack * 70 + warm, v - crack * 70, v - crack * 72 - warm * 0.6, crack * 255 + Math.max(0, -mid) * 60];
+    return [v - crack * 55 + warm, v - crack * 55, v - crack * 57 - warm * 0.6, crack * 220 + Math.max(0, -mid) * 50];
   });
 }
 

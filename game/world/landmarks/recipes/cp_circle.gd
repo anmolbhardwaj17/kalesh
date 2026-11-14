@@ -17,8 +17,11 @@ const GROUND_M := 5.4
 const BAY_M := 4.0
 const FLAG_POLE_M := 63.0
 const FLAG_W_M := 27.0
-const CREAM := Color("#e8e3d5")
-const RENDER := Color("#f2f0ea")
+## CP whitewash as the area board shows it (P2-010 fix round: game/world/kits/kits.json colonnade walls, sampled from
+## harness/design/areas/cp_inner_circle_board.jpg): bright but under 0.83, so the columns and arches keep their
+## shading in the afternoon sun instead of blowing out
+const CREAM := Color("#c9c1ae")
+const RENDER := Color("#d0cfc7")
 const SHOP := Color("#2f3a40")
 const ROOF := Color("#a7a39a")
 
@@ -106,7 +109,7 @@ static func _block(m: KitMesh, r0: float, r1: float, a0: float, a1: float, base:
 		_hulls(m, r0 + WALK_M, r1 - WALK_M, inner_a0, inner_a1, foot, GROUND_M)
 	# the walk under the colonnade (cream stone) at the foot
 	if lod <= 1:
-		m.prism(outer, foot, base + 0.05, Color("#d9cfbd"), Color("#d9cfbd"), false)
+		m.prism(outer, foot, base + 0.05, Color("#c4baa6"), Color("#c4baa6"), false)
 	# shopfront glass and sign band on the two curved faces under the colonnade
 	if lod <= 1:
 		for r in [r0 + WALK_M, r1 - WALK_M]:

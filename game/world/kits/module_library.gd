@@ -27,6 +27,11 @@ var materials := {}
 var shell_material: ShaderMaterial
 ## id -> true for ids replaced since the library was built
 var replaced := {}
+## palette words the bake tints walls with: [[r, g, b, sum]] in kits.json `palette` order, and their names
+var _words := []
+var _word_names := []
+## kit id -> word index -> PackedInt32Array of the kit's wall colours (0xRRGGBB) for walls tinted with that word
+var _walls := {}
 
 
 func _init(with_materials := true) -> void:
@@ -37,6 +42,7 @@ func _init(with_materials := true) -> void:
 		shell_material = material(SHELL_KIT)
 		shell_material.set_shader_parameter("kit_shell", true)
 	_build()
+	_build_walls()
 
 
 static func load_data() -> Dictionary:
@@ -66,7 +72,8 @@ func material(kit: String) -> ShaderMaterial:
 	s.set_shader_parameter("kit_accent_count", n)
 	s.set_shader_parameter("roughness_base", 0.92)
 	s.set_shader_parameter("detail", 1.0)
-	s.set_shader_parameter("albedo_saturation", 1.15)
+	# the wall colours are sampled from the area photos (kits.json walls): no saturation boost on top of them
+	s.set_shader_parameter("albedo_saturation", 1.0)
 	s.set_shader_parameter("wear_scale", 1.15)
 	s.set_shader_parameter("tex_mix", 1.0)
 	s.set_shader_parameter("calm", 1.0)
@@ -81,6 +88,67 @@ func share(kit: String, piece: String) -> float:
 		return float(extra[piece])
 	var sh: Dictionary = data.kits[kit].get("shares", {})
 	return float(sh.get(Modules.PIECES[piece].share, 0.0))
+
+
+## Wall colours from the area photos (P2-010 fix round, tools/kits/sample_walls.mjs): the bake tints a building with a
+## palette word, scaled by a shade of 0.92 to 1.06 (tools/bake/areas/plan.ts). The word comes back from the tint's
+## chromaticity, and the wall takes one of the kit's photo colours nearest that word (picked by the tint, so a
+## building keeps its colour and its neighbours differ), at the same shade. Brick words keep their colour. Pure.
+func wall_tint(kit: String, rgb: int) -> int:
+	var table: Array = _walls.get(kit, [])
+	if table.is_empty() or rgb <= 0:
+		return rgb
+	var r := float((rgb >> 16) & 255)
+	var g := float((rgb >> 8) & 255)
+	var b := float(rgb & 255)
+	var sum := r + g + b
+	if sum <= 0.0:
+		return rgb
+	var best := -1
+	var best_d := INF
+	var best_f := 1.0
+	for i in _words.size():
+		var w: PackedFloat32Array = _words[i]
+		var f := sum / w[3]
+		var d := absf(r / sum - w[0] / w[3]) + absf(g / sum - w[1] / w[3]) + absf(b / sum - w[2] / w[3])
+		# the shade is 0.92 to 1.06 (a bright word clips at 255, so allow a little more below)
+		d += maxf(0.0, 0.88 - f) + maxf(0.0, f - 1.09)
+		if d < best_d:
+			best_d = d
+			best = i
+			best_f = f
+	var cands: PackedInt32Array = table[best]
+	if cands.is_empty():
+		return rgb
+	var c := cands[(((rgb * 2654435761) >> 13) & 0xffff) % cands.size()]
+	var f := clampf(best_f, 0.9, 1.08)
+	var nr := clampi(roundi(float((c >> 16) & 255) * f), 0, 255)
+	var ng := clampi(roundi(float((c >> 8) & 255) * f), 0, 255)
+	var nb := clampi(roundi(float(c & 255) * f), 0, 255)
+	return (nr << 16) | (ng << 8) | nb
+
+
+func _build_walls() -> void:
+	var pal: Dictionary = data.get("palette", {})
+	for word: String in pal:
+		var c := Color.html(pal[word])
+		var r := roundf(c.r * 255.0)
+		var g := roundf(c.g * 255.0)
+		var b := roundf(c.b * 255.0)
+		_words.append(PackedFloat32Array([r, g, b, maxf(1.0, r + g + b)]))
+		_word_names.append(word)
+	for kit: String in data.kits:
+		var w: Dictionary = data.kits[kit].get("walls", {})
+		var m: Dictionary = w.get("map", {})
+		if m.is_empty():
+			continue
+		var table := []
+		for word: String in _word_names:
+			var list := PackedInt32Array()
+			for h: String in m.get(word, []):
+				list.append(Color.html(h).to_rgba32() >> 8)
+			table.append(list)
+		_walls[kit] = table
 
 
 func _build() -> void:

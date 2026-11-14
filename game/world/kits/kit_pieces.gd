@@ -1,6 +1,7 @@
 ## The pieces the area kits add to some bays (P2-010, kit_modules.gd PIECES): sign boards, outside stairs with their
 ## railings, roof tanks and roof railings, AC units, market awnings, lodge signs, and the Lutyens boundary wall and gate
-## pier (not placed yet). Same module frame and paint codes as kit_modules.gd.
+## pier (not placed yet), and the Lutyens plot boundary that the bungalow ground floor modules carry. Same module frame
+## and paint codes as kit_modules.gd.
 extends RefCounted
 
 const M := preload("res://world/kits/module_mesh.gd")
@@ -132,3 +133,57 @@ static func _gate_pier(m: M, _o: Dictionary) -> void:
 	m.paint(M.STONE, M.OWN, Color(0.8, 0.66, 0.46))
 	m.box(Vector3(-0.35, 0.0, -0.35), Vector3(0.35, 2.4, 0.35), true, false)
 	m.box(Vector3(-0.45, 2.4, -0.45), Vector3(0.45, 2.6, 0.45), true, true)
+
+
+## The front boundary of a bungalow plot, FENCE_Z in front of the wall: a low rendered wall (the wall colour) with a
+## stone coping and a dark green iron railing on top, a pier at the bay's left edge (the next bay's pier closes the
+## right), and with `gate` a pair of iron gate leaves between two taller piers. Reaches below the floor so a sloping
+## plot shows no gap.
+const FENCE_Z := 2.4
+const FENCE_GREEN := Color(0.16, 0.25, 0.19)
+
+
+static func _fence(m: M, gate: bool) -> void:
+	var z := FENCE_Z
+	var spans := [[-1.2, 1.5]] if not gate else [[-1.2, -1.02], [1.02, 1.5]]
+	m.paint(M.RENDER, M.WALL, Color(0.92, 0.92, 0.92))
+	for sp: Array in spans:
+		m.box(Vector3(sp[0], -0.4, z - 0.12), Vector3(sp[1], 0.6, z + 0.12), true, false)
+	# piers: the bay's left edge, and the two gate piers
+	var piers := [[-1.5, -1.2, 1.5]]
+	if gate:
+		piers.append([-1.02, -0.78, 1.75])
+		piers.append([0.78, 1.02, 1.75])
+	for pr: Array in piers:
+		m.paint(M.RENDER, M.WALL, Color(0.92, 0.92, 0.92))
+		m.box(Vector3(pr[0], -0.4, z - 0.17), Vector3(pr[1], pr[2], z + 0.17), true, false)
+		m.paint(M.STONE, M.OWN, Color(0.74, 0.7, 0.62))
+		m.box(Vector3(pr[0] - 0.03, pr[2], z - 0.2), Vector3(pr[1] + 0.03, pr[2] + 0.08, z + 0.2), true, true)
+	m.paint(M.STONE, M.OWN, Color(0.74, 0.7, 0.62))
+	for sp: Array in spans:
+		m.box(Vector3(sp[0], 0.6, z - 0.15), Vector3(sp[1], 0.66, z + 0.15), true, true)
+	# the railing on the wall: top and middle rails, bars every 12 cm, spear tips
+	m.paint(M.IRON, M.OWN, FENCE_GREEN)
+	for sp: Array in spans:
+		m.bar(Vector3(sp[0], 1.38, z), Vector3(sp[1], 1.38, z), 0.035)
+		m.bar(Vector3(sp[0], 0.74, z), Vector3(sp[1], 0.74, z), 0.03)
+		m.fine = true
+		var x: float = sp[0] + 0.06
+		while x < sp[1] - 0.02:
+			m.quad(Vector3(x - 0.011, 0.66, z), Vector3(x + 0.011, 0.66, z), Vector3(x + 0.011, 1.46, z), Vector3(x - 0.011, 1.46, z))
+			m.quad(Vector3(x + 0.011, 0.66, z), Vector3(x - 0.011, 0.66, z), Vector3(x - 0.011, 1.46, z), Vector3(x + 0.011, 1.46, z))
+			x += 0.12
+		m.fine = false
+	if gate:
+		# two gate leaves: frame, rails and bars, standing on the drive
+		m.bar(Vector3(-0.78, 1.5, z), Vector3(0.78, 1.5, z), 0.04)
+		m.bar(Vector3(-0.78, 0.08, z), Vector3(0.78, 0.08, z), 0.04)
+		m.bar(Vector3(-0.78, 0.8, z), Vector3(0.78, 0.8, z), 0.03)
+		m.bar(Vector3(0.0, 0.05, z), Vector3(0.0, 1.55, z), 0.04)
+		m.fine = true
+		var gx := -0.7
+		while gx < 0.75:
+			m.quad(Vector3(gx - 0.012, 0.08, z), Vector3(gx + 0.012, 0.08, z), Vector3(gx + 0.012, 1.62, z), Vector3(gx - 0.012, 1.62, z))
+			m.quad(Vector3(gx + 0.012, 0.08, z), Vector3(gx - 0.012, 0.08, z), Vector3(gx - 0.012, 1.62, z), Vector3(gx + 0.012, 1.62, z))
+			gx += 0.11
+		m.fine = false

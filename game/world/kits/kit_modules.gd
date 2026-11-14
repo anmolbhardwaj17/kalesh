@@ -61,8 +61,11 @@ const RECIPES := {
 		"up_blank": ["blank", {"concrete": true}], "up_balcony": ["balcony", {"solid": true}], "roof_parapet": ["parapet", {"concrete": true}],
 	},
 	"lutyens": {
-		"gf_plain": ["window", {"shutters": true, "tall": true, "cornice": true}], "gf_door": ["door", {"portico": true}],
-		"gf_colonnade": ["colonnade", {"z": 1.4, "shop": false}], "up_window": ["window", {"shutters": true, "cornice": true}],
+		# window grilles, and the front boundary: a low rendered wall with a green iron railing on top and a gate at the
+		# door (India Gate board; Delhi bungalows keep their plot behind a wall and gate, Anmol 2026-11-14)
+		"gf_plain": ["window", {"shutters": true, "tall": true, "cornice": true, "grille": true, "fence": true}],
+		"gf_door": ["door", {"portico": true, "fence": "gate"}],
+		"gf_colonnade": ["colonnade", {"z": 1.4, "shop": false, "fence": true}], "up_window": ["window", {"shutters": true, "cornice": true, "grille": true}],
 		"up_blank": ["blank", {"cornice": true}], "roof_parapet": ["parapet", {"balustrade": true}],
 	},
 	"market": {
@@ -183,7 +186,7 @@ static func _opening(m: M, r: Rect2, depth: float, inner_code: int, inner_mode: 
 
 ## Columns as eight-sided shafts with a base block and a capital.
 static func _column(m: M, x: float, z: float, y0: float, y1: float, r: float) -> void:
-	m.paint(M.STONE, M.OWN, Color(0.95, 0.94, 0.9))
+	m.paint(M.STONE, M.OWN, Color(0.8, 0.78, 0.73))
 	m.box(Vector3(x - r * 1.35, y0, z - r * 1.35), Vector3(x + r * 1.35, y0 + 0.35, z + r * 1.35), true, false)
 	m.paint(M.RENDER, M.WALL, WHITE)
 	var n := 8
@@ -272,6 +275,8 @@ static func _door(m: M, o: Dictionary) -> void:
 	m.paint(M.STONE, M.OWN, Color(0.6, 0.58, 0.55))
 	m.box(Vector3(-0.8, 0.0, 0.0), Vector3(0.8, 0.15, 0.4), false, false)
 	_band(m, M.MODULE_H - 0.1, M.MODULE_H, 0.06)
+	if o.has("fence"):
+		P._fence(m, o.fence == "gate")
 
 
 static func _plain(m: M, o: Dictionary) -> void:
@@ -343,9 +348,11 @@ static func _colonnade(m: M, o: Dictionary) -> void:
 	m.box(Vector3(-1.5, 3.0, z - 0.3), Vector3(1.5, M.MODULE_H, z + 0.3), false, true)
 	m.paint(M.RENDER, M.WALL, Color(0.8, 0.8, 0.8))
 	m.box(Vector3(-1.5, 3.05, 0.0), Vector3(1.5, 3.15, z - 0.3), false, true)
-	# the floor of the walk: cream stone
-	m.paint(M.STONE, M.OWN, Color(0.93, 0.9, 0.84))
+	# the floor of the walk: cream stone (kept under the whitewash so it does not glare in the sun)
+	m.paint(M.STONE, M.OWN, Color(0.78, 0.75, 0.69))
 	m.box(Vector3(-1.5, 0.0, 0.0), Vector3(1.5, 0.12, z + 0.35), false, false)
+	if o.get("fence", false):
+		P._fence(m, false)
 
 
 static func _arch_fill(m: M, x0: float, x1: float, spring: float, top: float, z: float) -> void:
@@ -415,6 +422,8 @@ static func _window(m: M, o: Dictionary) -> void:
 		_band(m, M.MODULE_H - 0.22, M.MODULE_H, 0.16)
 	else:
 		_band(m, M.MODULE_H - 0.1, M.MODULE_H, 0.05)
+	if o.get("fence", false):
+		P._fence(m, false)
 
 
 static func _balcony(m: M, o: Dictionary) -> void:

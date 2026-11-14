@@ -54,10 +54,13 @@ static func library() -> Library:
 
 
 func prepare(tile: Dictionary) -> Variant:
-	var shell := TileMesh.build(tile, materials, ONLY, [])
+	var cells := cells_of(tile, lib)
+	# the shells take the same photo wall colours as their modules (a far building keeps its colour as it nears)
+	var tints: Dictionary = cells.tints
+	var kit: String = cells.kit
+	var shell := TileMesh.build(tile, materials, ONLY, [], func(uv2: PackedVector2Array) -> PackedVector2Array: return shell_tints(uv2, tints, kit, lib))
 	if shell.has("error"):
 		return shell
-	var cells := cells_of(tile, lib)
 	var groups := []
 	for g: Dictionary in cells.groups:
 		var mm := MultiMesh.new()
@@ -80,6 +83,9 @@ static func cells_of(tile: Dictionary, library: Library) -> Dictionary:
 	var datas := []
 	var unknown_n := 0
 	var total := 0
+	# baked tint -> photo wall colour (P2-010 fix round, module_library.gd wall_tint), and how many instances each kit has
+	var tints := {}
+	var kit_n := {}
 	var placements: Array = tile.header.get("placements", [])
 	for pi in placements.size():
 		var p: Dictionary = placements[pi]
@@ -93,9 +99,24 @@ static func cells_of(tile: Dictionary, library: Library) -> Dictionary:
 			continue
 		var xf := TileReader.floats(tile, int(p.xforms), cnt * 12)
 		var data := TileReader.ints(tile, int(p.data), cnt)
+		var kit: String = library.kit_of[mid]
+		kit_n[kit] = int(kit_n.get(kit, 0)) + cnt
+		var last := -1
+		var last_out := 0
+		for i in cnt:
+			var d: int = data[i]
+			var rgb := (d >> 8) & 0xffffff
+			if rgb != last:
+				last = rgb
+				var key := "%s:%d" % [kit, rgb]
+				if not tints.has(key):
+					tints[key] = library.wall_tint(kit, rgb)
+					if not tints.has(rgb):
+						tints[rgb] = tints[key]
+				last_out = tints[key]
+			data[i] = (last_out << 8) | (d & 255)
 		xfs.append(xf)
 		datas.append(data)
-		var kit: String = library.kit_of[mid]
 		var part := mid.get_slice(".", 1)
 		var outs := [_lists(lists, meta, mesh, mid, false)]
 		var pieces := []
@@ -146,7 +167,28 @@ static func cells_of(tile: Dictionary, library: Library) -> Dictionary:
 				buf[o + 15] = float(d & 255) / 255.0
 				o += 16
 			groups.append({"id": m.id, "mesh": m.mesh, "cell": cell, "small": m.small, "count": list.size(), "buffer": buf})
-	return {"groups": groups, "instances": total, "unknown": unknown_n}
+	var top := ""
+	for k: String in kit_n:
+		if top == "" or int(kit_n[k]) > int(kit_n[top]):
+			top = k
+	return {"groups": groups, "instances": total, "unknown": unknown_n, "tints": tints, "kit": top if top != "" else Library.SHELL_KIT}
+
+
+## The shell UV2 with every wall tint repainted: the colour its modules took (same building, same baked tint), else the
+## photo colour of the tile's main kit. UV2.x is the tint as a whole number (0 = no tint), y the wear.
+static func shell_tints(uv2: PackedVector2Array, tints: Dictionary, kit: String, library: Library) -> PackedVector2Array:
+	var last := -1.0
+	var last_out := 0.0
+	for i in uv2.size():
+		var t := uv2[i].x
+		if t < 0.5:
+			continue
+		if t != last:
+			last = t
+			var rgb := roundi(t)
+			last_out = float(tints[rgb] if tints.has(rgb) else library.wall_tint(kit, rgb))
+		uv2[i].x = last_out
+	return uv2
 
 
 static func _lists(lists: Dictionary, meta: Dictionary, mesh: Mesh, mid: String, small: bool) -> Array:

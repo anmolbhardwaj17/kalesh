@@ -32,6 +32,34 @@ func test_every_kit_has_eight_modules_and_six_facade_colours() -> void:
 		t.ok(colours.size() >= 6, "kit %s has at least 6 facade colours (%d)" % [kit, colours.size()])
 
 
+## Wall colours from the area photos (P2-010 fix round): a wall the bake tinted with a palette word comes back as one of
+## the kit's sampled photo colours (kits.json walls.map) at the bake's shade, the same tint always gives the same
+## colour, and a brick word keeps its colour.
+func test_walls_take_the_kits_photo_colours() -> void:
+	var lib := _lib()
+	for kit: String in lib.data.kits:
+		var walls: Dictionary = lib.data.kits[kit].walls
+		t.ok(walls.colours.size() >= 6, "kit %s has at least 6 photo wall colours (%d)" % [kit, walls.colours.size()])
+		var ok := true
+		for word: String in ["painted_pink", "teal", "cream", "white_render", "ochre"]:
+			for f in [0.93, 1.0, 1.05]:
+				var c := Color.html(lib.data.palette[word])
+				var rgb := (clampi(roundi(c.r * 255.0 * f), 0, 255) << 16) | (clampi(roundi(c.g * 255.0 * f), 0, 255) << 8) | clampi(roundi(c.b * 255.0 * f), 0, 255)
+				var out := lib.wall_tint(kit, rgb)
+				var hit := false
+				for h: String in walls.map[word]:
+					var k := Color.html(h)
+					var o := Color8((out >> 16) & 255, (out >> 8) & 255, out & 255)
+					# the shade of 0.9 to 1.08 on a photo colour
+					if absf(o.r - k.r * f) < 0.04 and absf(o.g - k.g * f) < 0.04 and absf(o.b - k.b * f) < 0.04:
+						hit = true
+				ok = ok and hit and lib.wall_tint(kit, rgb) == out
+		t.ok(ok, "kit %s repaints palette words with its photo colours, the same every time" % kit)
+	var brick := Color.html(lib.data.palette["brown_brick"])
+	var brgb := (roundi(brick.r * 255.0) << 16) | (roundi(brick.g * 255.0) << 8) | roundi(brick.b * 255.0)
+	t.ok(lib.wall_tint("bazaar", brgb) == brgb, "a brick word keeps its colour")
+
+
 ## Bytes of a VRAM compressed texture of this format and size with its mipmaps.
 static func _bytes(fmt: int, w: int, h: int, mips: bool) -> float:
 	var bpp := 32.0
@@ -173,8 +201,9 @@ static func _rows(out: Dictionary, mesh: Mesh = null) -> Array:
 	return rows
 
 
-## The rows of one module id straight from the tile's placements.
-static func _baked_rows(tile: Dictionary, id: String) -> Array:
+## The rows of one module id straight from the tile's placements, the baked tint repainted with the kit's photo wall
+## colour (module_library.gd wall_tint).
+static func _baked_rows(tile: Dictionary, id: String, lib: Library) -> Array:
 	var rows := []
 	for p: Dictionary in tile.header.placements:
 		if str(p.module) != id:
@@ -183,7 +212,8 @@ static func _baked_rows(tile: Dictionary, id: String) -> Array:
 		var data := TileReader.ints(tile, int(p.data), int(p.count))
 		for i in int(p.count):
 			var r := xf.slice(i * 12, i * 12 + 12)
-			var d := data[i]
+			var d0 := data[i]
+			var d := (lib.wall_tint(lib.kit_of[id], (d0 >> 8) & 0xffffff) << 8) | (d0 & 255)
 			r.append_array(PackedFloat32Array([float((d >> 24) & 255) / 255.0, float((d >> 16) & 255) / 255.0, float((d >> 8) & 255) / 255.0, float(d & 255) / 255.0]))
 			rows.append(str(r))
 	rows.sort()
@@ -209,7 +239,7 @@ func test_replacing_a_module_by_id_leaves_the_placements() -> void:
 	var after := Buildings.cells_of(tile, lib)
 	t.ok(lib.mesh_of(id) == fresh and old != fresh, "the library hands out the new mesh for %s" % id)
 	t.ok(_rows(before) == _rows(after), "every drawn instance (transform, colour, wear) is the same before and after replacing %s (%d)" % [id, _rows(after).size()])
-	var baked := _baked_rows(tile, id)
+	var baked := _baked_rows(tile, id, lib)
 	t.ok(baked.size() == most and _rows(after, fresh) == baked, "the new mesh draws exactly the %d baked placements of %s" % [most, id])
 	t.ok(int(before.instances) == int(after.instances), "the same number of instances (%d)" % int(after.instances))
 
