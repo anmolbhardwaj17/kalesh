@@ -1,6 +1,6 @@
 {
   "_doc": "Written only by node harness/bin/task.mjs. Phases run in order; P0 (ADOPT + STYLE DISCOVERY) waits for the owner by design and needs task.mjs signoff and task.mjs archsignoff before its gate passes. Later phases are added by the planner at the end of P0 (task.mjs phase-add) from the game's real state.",
-  "updated": "2026-11-14T15:51:52.457Z",
+  "updated": "2026-11-14T15:56:31.376Z",
   "phases": [
     {
       "id": "P0",
@@ -4705,7 +4705,9 @@
       "kind": "feature",
       "status": "todo",
       "attempts": 0,
-      "notes": [],
+      "notes": [
+        "Owner 2026-11-14 (REALITY_MATCH.md 'Image textures vs procedural'): build the anti-tiling texture path every surface uses: fixed texel density, stochastic or rotated tiling, a macro variation layer, near detail fading with distance, rule-placed decals, a repetition check on 60 m shots, and an A/B harness that shows a surface with the procedural and the image texture at 2, 15 and 60 m, day and night."
+      ],
       "created": "2026-11-14T08:58:18.634Z"
     },
     {
