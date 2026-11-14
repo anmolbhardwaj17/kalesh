@@ -1,6 +1,6 @@
 {
   "_doc": "Written only by node harness/bin/task.mjs. Phases run in order; P0 (ADOPT + STYLE DISCOVERY) waits for the owner by design and needs task.mjs signoff and task.mjs archsignoff before its gate passes. Later phases are added by the planner at the end of P0 (task.mjs phase-add) from the game's real state.",
-  "updated": "2026-11-14T15:29:39.246Z",
+  "updated": "2026-11-14T15:51:52.457Z",
   "phases": [
     {
       "id": "P0",
@@ -4775,7 +4775,8 @@
       "status": "todo",
       "attempts": 0,
       "notes": [
-        "Owner 2026-11-14: shop fronts are bright boxes today; from the street you must see a little way inside each shop: open shutters showing a counter, shelves and goods by shop kind (sweets, cloth, hardware, phone), a shopkeeper or stool, a tube light or bulb lighting the inside, depth through windows. Near shops get a real shallow interior (1 to 2 m modelled), far ones a parallax interior map; night: lit interiors spill light onto the pavement."
+        "Owner 2026-11-14: shop fronts are bright boxes today; from the street you must see a little way inside each shop: open shutters showing a counter, shelves and goods by shop kind (sweets, cloth, hardware, phone), a shopkeeper or stool, a tube light or bulb lighting the inside, depth through windows. Near shops get a real shallow interior (1 to 2 m modelled), far ones a parallax interior map; night: lit interiors spill light onto the pavement.",
+        "Owner 2026-11-14: shop insides look fake. Approach decided: near shops get a real shallow interior (counter, shelves, goods, tube light, 1 to 2 m modelled); everything behind uses interior mapping (parallax fake room) fed by the owner's AI shop interior images per shop kind (one-point perspective cards, day and night); never a flat image in the opening and no blur used to hide detail (glass gets a light reflection and slight dimming only)."
       ],
       "created": "2026-11-14T08:58:18.634Z"
     },
