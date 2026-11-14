@@ -15,6 +15,9 @@ const COLORS := {
 	# the massing in buff and in red sandstone until the parts kit (P2-007) builds the real shapes
 	"forecourt": Color(0.72, 0.62, 0.5), "pad": Color(0.8, 0.73, 0.62), "wallbase": Color(0.5, 0.3, 0.25), "moat": Color(0.42, 0.38, 0.3),
 	"landmark": Color(0.84, 0.74, 0.58), "landmark_red": Color(0.66, 0.33, 0.27),
+	# who may use each road (P2-042): paved footways, paths and pedestrian areas in the ground, and the bollards and
+	# gates where the access changes (dark steel; the parts kit gives them their stripes later)
+	"walkway": Color(0.7, 0.6, 0.52), "bollard": Color(0.2, 0.2, 0.22),
 }
 ## The material of a name the table does not know.
 const OTHER := "_"

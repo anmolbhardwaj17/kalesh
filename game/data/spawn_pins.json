@@ -6,6 +6,8 @@
     "cp_inner_circle": { "name": "the south side of the Connaught Place inner circle (clockwise)", "lat": 28.631834, "lon": 77.220021, "headingDeg": 285, "vehicle": "auto" },
     "ito_flyover_south": { "name": "the Ring Road south of the ITO flyover, northbound", "lat": 28.62559, "lon": 77.246876, "headingDeg": 0, "vehicle": "auto" },
     "chandni_chowk_east": { "name": "Chandni Chowk main road at its east end, westbound", "lat": 28.656007, "lon": 77.235311, "headingDeg": 270, "vehicle": "auto" },
-    "rajpath_india_gate": { "name": "Kartavya Path west of the India Gate hexagon, eastbound", "lat": 28.613139, "lon": 77.226158, "headingDeg": 90, "vehicle": "auto" }
+    "rajpath_india_gate": { "name": "Kartavya Path west of the India Gate hexagon, eastbound", "lat": 28.613139, "lon": 77.226158, "headingDeg": 90, "vehicle": "auto" },
+    "chandni_bollards_nsm": { "name": "Netaji Subhash Marg southbound, 120 m short of the Red Fort end of Chandni Chowk (P2-042: the car meets the bollards)", "lat": 28.657261, "lon": 77.236915, "headingDeg": 183, "vehicle": "car" },
+    "gali_scooter_entry": { "name": "a residential lane north of Chandni Chowk that runs on into a gali (P2-042: the scooter rides in)", "lat": 28.657608, "lon": 77.229239, "headingDeg": 171, "vehicle": "scooter" }
   }
 }

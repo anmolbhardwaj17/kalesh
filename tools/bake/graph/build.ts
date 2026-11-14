@@ -7,15 +7,16 @@
 // part), so overrides survive a new extract. Pure: the driver reads the files (tools/bake/sources/graphinput.ts).
 import { projector } from '../../geo/projection.ts';
 import type { LatLon } from '../../geo/projection.ts';
-import { boxOf, polylineLength } from '../geom.ts';
+import { boxOf, pointSegment, polylineLength } from '../geom.ts';
 import type { P2 } from '../geom.ts';
 import { buildMap } from '../osm.ts';
 import type { OsmElement, Road, Tags } from '../osm.ts';
 import { clipRoads } from '../layout/edge.ts';
+import { ACCESS_KEYS } from './access.ts';
 import { classifyRoad } from './classify.ts';
 import type { Carriageway, RoadClass } from './classify.ts';
 import { readFeatures } from './features.ts';
-import type { Features } from './features.ts';
+import type { BarrierFeature, Features } from './features.ts';
 import { mergeStageFootprints, overtureFootprints } from './footprints.ts';
 import type { OvertureRow } from './footprints.ts';
 import { PAIR_CLASSES, pairCarriageways } from './pairs.ts';
@@ -69,6 +70,11 @@ export interface GraphEdge {
   road: RoadClass;
   /** The edges of the other carriageway of the same street. */
   pairedWith: string[];
+  /**
+   * The access keys of its ways (graph/access.ts ACCESS_KEYS, P2-042): per key the value of the pieces that carry it
+   * over the most length, kept when those pieces cover at least half the edge. Absent when no way carries any.
+   */
+  access?: Record<string, string>;
 }
 
 export interface GraphPair {
@@ -220,6 +226,23 @@ export function normaliseRoads(roads: readonly Road[], tol = 0.02): { roads: Roa
   return { roads: out, snapped: rep.size, duplicates, degenerate };
 }
 
+/** The access keys of a draft's way pieces (GraphEdge.access): a key counts where its pieces cover half the edge. */
+export function edgeAccessTags(parts: readonly { road: { tags: Tags }; pts: readonly P2[] }[]): Record<string, string> | undefined {
+  const total = parts.reduce((s, p) => s + polylineLength(p.pts), 0);
+  const out: Record<string, string> = {};
+  for (const key of ACCESS_KEYS) {
+    const byValue = new Map<string, number>();
+    for (const p of parts) {
+      const v = p.road.tags[key];
+      if (v !== undefined) byValue.set(v, (byValue.get(v) ?? 0) + polylineLength(p.pts));
+    }
+    let best: [string, number] | null = null;
+    for (const [v, l] of [...byValue.entries()].sort((a, b) => (a[0] < b[0] ? -1 : 1))) if (!best || l > best[1] + 1e-9) best = [v, l];
+    if (best && best[1] >= total * 0.5) out[key] = best[0];
+  }
+  return Object.keys(out).length ? out : undefined;
+}
+
 /** The longest way piece of a draft (its tags classify the edge). */
 function longestPart(d: Draft): Draft['parts'][number] {
   let best = d.parts[0] as Draft['parts'][number];
@@ -307,6 +330,10 @@ export function buildBlockGraph(input: GraphInput): BlockGraph {
         roundabout: d.parts.some((p) => p.road.tags['junction'] === 'roundabout' || p.road.tags['junction'] === 'circular'),
         ta: h.start ? unit(h.start.x, h.start.z) : unit(p1.x - p0.x, p1.z - p0.z), tb: h.end ? unit(h.end.x, h.end.z) : unit(q1.x - q0.x, q1.z - q0.z),
         pieces, road: classifyRoad(d.cls, d.link, d.oneway ? 'one_way' : 'two_way', tags, main.reversed), pairedWith: [],
+        ...(() => {
+          const access = edgeAccessTags(d.parts);
+          return access ? { access } : {};
+        })(),
       },
     });
   }
@@ -356,6 +383,7 @@ export function buildBlockGraph(input: GraphInput): BlockGraph {
     return { id: f.id, source: f.source, ring: f.ring.map((p) => ({ x: Math.round(p.x * 100) / 100 + 0, z: Math.round(p.z * 100) / 100 + 0 })), area: Math.round(f.area * 10) / 10, height: f.height, levels: f.levels, tags };
   });
   roundFeatures(features);
+  if (features.barriers) barriersOnEdges(features.barriers, edges);
 
   return {
     version: GRAPH_VERSION, block: input.block, stage: input.stage, origin: { lat: input.origin.lat, lon: input.origin.lon }, outline: ring.map(rp),
@@ -381,5 +409,42 @@ function roundFeatures(f: Features): void {
   for (const s of f.stations) {
     s.x = r3(s.x);
     s.z = r3(s.z);
+  }
+  for (const w of f.walkways ?? []) {
+    w.pts = w.pts.map(rp);
+    if (w.rings) w.rings = w.rings.map((r) => r.map(rp));
+  }
+  for (const b of f.barriers ?? []) {
+    b.x = r3(b.x);
+    b.z = r3(b.z);
+  }
+}
+
+/** Puts every barrier node on the edge whose centre line passes through it (within 5 cm): edge id and metres along. */
+export function barriersOnEdges(barriers: BarrierFeature[], edges: readonly GraphEdge[]): void {
+  const CELL = 25;
+  const grid = new Map<string, number[]>();
+  edges.forEach((e, i) => {
+    const b = boxOf(e.pts);
+    for (let x = Math.floor(b.minX / CELL); x <= Math.floor(b.maxX / CELL); x++) for (let z = Math.floor(b.minZ / CELL); z <= Math.floor(b.maxZ / CELL); z++) (grid.get(`${x},${z}`) ?? grid.set(`${x},${z}`, []).get(`${x},${z}`) as number[]).push(i);
+  });
+  for (const bar of barriers) {
+    let best: { e: number; d: number; s: number } | null = null;
+    for (const i of grid.get(`${Math.floor(bar.x / CELL)},${Math.floor(bar.z / CELL)}`) ?? []) {
+      const e = edges[i] as GraphEdge;
+      let acc = 0;
+      for (let k = 1; k < e.pts.length; k++) {
+        const a = e.pts[k - 1] as P2;
+        const b = e.pts[k] as P2;
+        const q = pointSegment(bar, a, b);
+        const l = Math.hypot(b.x - a.x, b.z - a.z);
+        if (q.d < 0.05 && (!best || q.d < best.d - 1e-9)) best = { e: i, d: q.d, s: acc + q.t * l };
+        acc += l;
+      }
+    }
+    if (best) {
+      bar.edge = (edges[best.e] as GraphEdge).id;
+      bar.s = r3(best.s);
+    }
   }
 }

@@ -2,6 +2,9 @@
 // bake invariants: a failed invariant stops the bake before it writes tiles (TECH.md "World pipeline"). Pure; the
 // driver writes the file. The report holds no clock time, so the same inputs give the same file (except the graph
 // step's build time, `graph.buildMs`, which the acceptance asks for).
+import type { AccessRecord } from '../graph/access.ts';
+import type { BarriersRecord } from '../mesh/barriers.ts';
+import type { WalkwaysRecord } from '../terrain/walkways.ts';
 import type { LandmarksRecord } from '../landmarks/placeout.ts';
 import type { GraphCounts } from '../graph/checks.ts';
 import type { RepairResult, RepairSummary } from '../repair/engine.ts';
@@ -114,6 +117,8 @@ export interface HealthReport {
   buildings?: BuildingsRecord;
   /** Underground structures (P1-041, graph/underground.ts): every one with its reason, and what the class took out; set by the graph and repair steps. */
   underground?: UndergroundHealth;
+  /** Who may use each road (P2-042, graph/access.ts): edges and km by mode and by reason; barriers (mesh step) and walkways (terrain step). */
+  access?: AccessRecord & { barriers?: BarriersRecord; walkways?: WalkwaysRecord };
 }
 
 export interface UndergroundHealth {

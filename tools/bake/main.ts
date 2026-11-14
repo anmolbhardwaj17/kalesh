@@ -90,7 +90,13 @@ import { OfflineError, realNet } from './sources/net.ts';
 import type { Net } from './sources/net.ts';
 import { loadSources } from './sources/pinfile.ts';
 import { runSourcesStage } from './sources/stage.ts';
-import { runMassingStep, runPlaceStep } from './sources/landmarkstage.ts';
+import { roadFaceRings, runMassingStep, runPlaceStep } from './sources/landmarkstage.ts';
+import { runAccessStep } from './sources/accessio.ts';
+import { placeBarriers } from './mesh/barriers.ts';
+import type { BarrierPlacement } from './mesh/barriers.ts';
+import { walkwayGround } from './terrain/walkways.ts';
+import type { SourceMesh } from './tile/cutter.ts';
+import type { BarrierFeature } from './graph/features.ts';
 import type { MassingStep } from './sources/landmarkstage.ts';
 import { GroundHeights } from './tile/shells.ts';
 import { runTileStep } from './sources/tilestage.ts';
@@ -233,6 +239,9 @@ export async function bake(args: BakeArgs, opts: BakeOptions): Promise<HealthRep
   let grounded: Ground | null = null;
   /** What the landmark placement hands the tile step: the stand-in massing, the pins and the landmark file (P2-006). */
   let landmarked: MassingStep | null = null;
+  /** The bollards and gates where the access changes (P2-042): their mesh goes into the tiles with colliders. */
+  let barriered: { placements: BarrierPlacement[]; mesh: SourceMesh | null } | null = null;
+  let osmBarriers: BarrierFeature[] = [];
   let laneChecks: LaneChecks | null = null;
   let repairIssues: Issue[] = [];
   let meshChecks: MeshChecks | null = null;
@@ -378,6 +387,16 @@ export async function bake(args: BakeArgs, opts: BakeOptions): Promise<HealthRep
       // the repair step's last lane model is this model (the same graph and inputs); built again for the hash check
       const build: LaneBuild = laneBuild ?? buildLaneModel(input);
       opts.faults?.lanes?.(build);
+      // who may use each road (P2-042): the lane graph and the tiles carry the modes of every lane
+      const acc = runAccessStep(opts.root, (lat, lon) => proj.toWorld(lat, lon), repaired);
+      build.access = acc.access;
+      report.access = acc.record;
+      osmBarriers = acc.barriers;
+      {
+        const a = acc.record;
+        opts.log(`[access] modes by edges: ${Object.entries(a.byMode).map(([m, v]) => `${m} ${v.edges} (${v.km} km)`).join(', ')}; closed to cars ${a.carFree.edges} edges (${a.carFree.km} km), private ${a.private.edges}`);
+        opts.log(`[access] decided by: ${Object.entries(a.byReason).filter(([, v]) => v.edges > 0).map(([r, v]) => `${r} ${v.edges} (${v.closedToCars} closed to cars)`).join(', ')}; rules: ${a.rules.map((r) => `${r.id} ${r.edges}`).join(', ')}; OSM barrier nodes ${a.osmBarriers.total} (${a.osmBarriers.onEdges} on the road graph, ${a.osmBarriers.stopCar} stop a car)`);
+      }
       const buildMs = laneBuild ? Math.round(laneBuild.ms['total'] ?? 0) : Math.round(clock.now() - t0);
       const model = laneModelFile(build, plan.def.block, plan.id);
       const hash = laneModelHash(model);
@@ -503,6 +522,20 @@ export async function bake(args: BakeArgs, opts: BakeOptions): Promise<HealthRep
       if (!laneBuild || !elevated) throw new Error('the mesh step needs the lanes and the elevation step before it');
       const m = await runMeshStep(stepCtx, laneBuild, elevated, graph && repaired ? { raw: graph, repaired, issues: repairIssues } : undefined);
       meshed = { input: m.input, mesh: m.mesh };
+      // bollards and gates where the access changes (P2-042), on the solved heights
+      if (laneBuild.access) {
+        const b = placeBarriers({ strips: laneBuild.strips, joints: laneBuild.joints, junctions: laneBuild.junctions, access: laneBuild.access, osm: osmBarriers });
+        barriered = { placements: b.placements, mesh: b.mesh };
+        const dir = path.join(path.dirname(healthFile), 'access');
+        fs.mkdirSync(dir, { recursive: true });
+        const file = path.join(dir, 'barriers.json');
+        fs.writeFileSync(file, JSON.stringify({ _doc: 'Bollards and gates where the access changes (P2-042, tools/bake/mesh/barriers.ts). x, z block metres (world = block + offset), y the road height, dir the road direction; posts are block metres.', offset: [stepCtx.offset.x, stepCtx.offset.z], placements: b.placements }, null, 1) + '\n');
+        b.record.file = path.relative(opts.root, file);
+        if (report.access) report.access.barriers = b.record;
+        const r = b.record;
+        opts.log(`[access] barriers: ${r.lines} lines, ${r.posts} posts (${r.triangles} triangles): ${Object.entries(r.bySource).map(([k, v]) => `${k} ${v}`).join(', ')}; ${Object.entries(r.byKind).map(([k, v]) => `${k} ${v}`).join(', ')}; by rule ${Object.entries(r.byRule).map(([k, v]) => `${k} ${v}`).join(', ')}; widest gap of a car-stopping line ${r.maxGapM} m; missing ${r.missing.length}; OSM barrier nodes not placed (inside a junction) ${r.osmUnplaced.length}`);
+        check([{ id: 'ACCESS-01.barriers', ok: r.missing.length === 0 && r.maxGapM <= 1.3, detail: r.missing.length === 0 && r.maxGapM <= 1.3 ? `${r.lines} barrier lines, every closed way that meets a road open to cars has its bollards, widest gap ${r.maxGapM} m` : `${r.missing.length} closed ways with no barrier line (${r.missing.slice(0, 3).map((x) => `${x.edge} at ${x.at}`).join(', ')}), widest gap ${r.maxGapM} m (limit 1.3)` }]);
+      }
       meshChecks = m.checks;
       report.mesh = m.rec;
       for (const k of ['overlappingRoadFaces', 'openBoundaryEdges', 'unjoinedEnds', 'floatingEnds', 'railingsAtGrade', 'piersInLane'] as const) report.gates[k] = m.rec.gates[k];
@@ -525,7 +558,11 @@ export async function bake(args: BakeArgs, opts: BakeOptions): Promise<HealthRep
         report.landmarks = placed.rec;
         check(placed.invariants);
       }
-      const t = await runTerrainStep(stepCtx, meshed, repaired, groundModel, placed?.ground ?? []);
+      // footways, paths, steps and pedestrian areas as paved walking surfaces (P2-042), after the landmark ground
+      const walk = walkwayGround({ walkways: repaired.features.walkways ?? [], roads: roadFaceRings(meshed), footprints: repaired.footprints.map((f) => f.ring), water: repaired.features.water.map((w) => w.rings), outline: repaired.outline });
+      if (report.access) report.access.walkways = walk.record;
+      opts.log(`[access] walkways: ${walk.record.ways} ways (${Object.entries(walk.record.byKind).map(([k, v]) => `${k} ${v.ways}${v.m ? ` ${v.m} m` : ''}${v.m2 ? ` ${v.m2} m2` : ''}`).join(', ')}): ${walk.record.areaM2} m2 of paving in ${walk.record.pieces} pieces (${walk.record.holes} holes), ${walk.record.cutM2} m2 on roads, buildings and water left to them`);
+      const t = await runTerrainStep(stepCtx, meshed, repaired, groundModel, [...(placed?.ground ?? []), ...walk.pieces]);
       grounded = t.ground;
       report.terrain = t.rec;
       for (const [k, n] of Object.entries(t.rec.gates)) report.gates[k] = n;
@@ -546,6 +583,7 @@ export async function bake(args: BakeArgs, opts: BakeOptions): Promise<HealthRep
         root: opts.root, out: report.tiles.out ?? tileFolder(plan), stage: plan.id, block: plan.def.block, origin: plan.origin, offset: blockFrame(districts, plan.def.block).offset,
         outline: repaired.outline, lanes: laneBuild, meshed, ground: grounded, repaired, places: layout.input.places, only: report.tiles.only, log: opts.log,
         ...(landmarked ? { landmarks: { meshes: landmarked.meshes, pins: landmarked.pins, file: landmarked.file } } : {}),
+        ...(barriered ? { access: { meshes: barriered.mesh ? [barriered.mesh] : [], placements: barriered.placements } } : {}),
         // the committed expected hash follows a whole bake of the game's own tile folder (never a partial bake or an --out folder)
         hashFile: report.tiles.only === null && report.tiles.out === DEFAULT_TILES ? TILES_HASH_FILE : undefined,
       });

@@ -26,7 +26,7 @@ export function lanePieces(g: LaneGraphFile, strips: readonly Strip[], offset: P
     const pts = l.pts.map((p, i) => [p[0] + offset.x, hs[i] ?? hs[hs.length - 1] ?? 0, p[1] + offset.z] as V3);
     firstHeight.set(l.id, pts[0]?.[1] ?? 0);
     lastHeight.set(l.id, pts[pts.length - 1]?.[1] ?? 0);
-    const base = { kind: 'lane' as const, of: l.id, cls: l.cls, widthM: l.widthM, layer: l.layer, ...(l.gali ? { gali: true as const } : {}) };
+    const base = { kind: 'lane' as const, of: l.id, cls: l.cls, widthM: l.widthM, layer: l.layer, ...(l.gali ? { gali: true as const } : {}), ...(l.modes ? { modes: l.modes } : {}), ...(l.private ? { private: true as const } : {}) };
     const list = cut(pts, (k, tile, p) => ({ ...base, id: `${l.id}:${k}`, part: k, next: [], pts: p, tile }));
     if (!list.length) continue;
     firstPiece.set(l.id, (list[0] as LanePiece).id);
@@ -44,7 +44,7 @@ export function lanePieces(g: LaneGraphFile, strips: readonly Strip[], offset: P
       return [q[0] + offset.x, h0 + (h1 - h0) * (total > 0 ? run / total : 0), q[1] + offset.z] as V3;
     });
     const from = byId.get(p.from);
-    const base = { kind: 'path' as const, of: p.id, cls: from?.cls ?? '', widthM: from?.widthM ?? 0, layer: from?.layer ?? 0, junction: p.junction, turn: p.turn, stop: p.stop };
+    const base = { kind: 'path' as const, of: p.id, cls: from?.cls ?? '', widthM: from?.widthM ?? 0, layer: from?.layer ?? 0, junction: p.junction, turn: p.turn, stop: p.stop, ...(p.modes ? { modes: p.modes } : {}) };
     const list = cut(pts, (k, tile, q) => ({ ...base, id: `${p.id}:${k}`, part: k, next: [], pts: q, tile }));
     if (!list.length) continue;
     firstPiece.set(p.id, (list[0] as LanePiece).id);

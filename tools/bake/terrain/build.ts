@@ -33,8 +33,8 @@ export interface Ground {
 }
 
 export const MATERIAL_OF: Readonly<Record<number, string>> = { [C_GROUND]: 'ground', [C_LAWN]: 'lawn', [C_PLOT]: 'plot', [C_WATER]: 'bed' };
-/** Landmark ground (P2-006) follows the plain classes: a forecourt, a flat pad, the footing strip of a wall, a moat. */
-export const GROUND_MATERIALS = ['ground', 'lawn', 'plot', 'bed', 'water', 'forecourt', 'pad', 'wallbase', 'moat'] as const;
+/** Landmark ground (P2-006) follows the plain classes: a forecourt, a flat pad, the footing strip of a wall, a moat; then the walkways (P2-042). */
+export const GROUND_MATERIALS = ['ground', 'lawn', 'plot', 'bed', 'water', 'forecourt', 'pad', 'wallbase', 'moat', 'walkway'] as const;
 
 class Group {
   readonly meshes = new Map<string, MeshData>();

@@ -752,6 +752,32 @@
       "_note": "P1-024 base test 2d: the auto drives Chandni Chowk main road (route chandni_main), F gets the player out and the player walks a gali (walk chandni_gali), real inputs: wheels and feet within 0.05 m of the drawn surface, never under it, never stuck; the streaming focus follows the walker. Shot city_chandni_gali_foot at the on-foot camera (default look)."
     },
     {
+      "name": "city_access_bollards",
+      "query": "spawn=chandni_bollards_nsm",
+      "lockstep": true,
+      "steps": [
+        {
+          "script": "harness/verify/scripts/city_access_bollards.js",
+          "timeout": 180000,
+          "data": "harness/data/fixtures/city_routes.json"
+        }
+      ],
+      "_note": "P2-042: a car turns from Netaji Subhash Marg into the Red Fort end of Chandni Chowk (a non-motorised zone in the day) and the bollard line (colliders, gaps under 1.3 m) stops it 1 to 5 m short, at rest; real inputs (route chandni_bollards of city_routes.json). Shot city_access_bollards."
+    },
+    {
+      "name": "city_access_scooter_gali",
+      "query": "spawn=gali_scooter_entry",
+      "lockstep": true,
+      "steps": [
+        {
+          "script": "harness/verify/scripts/city_access_scooter_gali.js",
+          "timeout": 180000,
+          "data": "harness/data/fixtures/city_routes.json"
+        }
+      ],
+      "_note": "P2-042: a scooter rides from a lane open to cars into a 3 m gali closed to cars (two-wheelers, cycles and walkers only, no barrier: a car there is a violation) to its far end; real inputs (route gali_scooter of city_routes.json). Shot city_access_scooter_gali."
+    },
+    {
       "name": "city_north_up",
       "lockstep": true,
       "steps": [

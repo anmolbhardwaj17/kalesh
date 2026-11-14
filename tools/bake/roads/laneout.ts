@@ -6,6 +6,9 @@
 import type { DividerFit } from './dividers.ts';
 import type { P2 } from '../geom.ts';
 import { hashText } from '../graph/checks.ts';
+import { MODES, classModes } from '../graph/access.ts';
+import { transitionLines } from '../mesh/barriers.ts';
+import type { Mode } from '../graph/access.ts';
 import type { GraphEdge } from '../graph/build.ts';
 import { tileId, tileOf } from '../layout/grid.ts';
 import type { GEnd } from './graph.ts';
@@ -75,6 +78,10 @@ export interface GraphLane {
   lengthM: number;
   layer: number;
   gali?: true;
+  /** Who may use the lane (P2-042, graph/access.ts MODES): car, auto, two_wheeler, cycle, foot, emergency. */
+  modes: Mode[];
+  /** Allowed but private (access=private, destination, customers): never a through route for traffic. */
+  private?: true;
   /** Both ways: the one lane of a narrow street. `next` then lists what follows at its far end, `back` at its near end. */
   bothWays?: true;
   /** Centre line in the direction of travel, block metres. */
@@ -94,6 +101,8 @@ export interface GraphPath {
   to: string;
   /** True when the lane it leaves stops at a stop line before the junction. */
   stop: boolean;
+  /** The modes of both the lane it leaves and the lane it leads to. */
+  modes: Mode[];
   pts: [number, number][];
   tile: string;
 }
@@ -115,6 +124,7 @@ const laneName = (strip: number, lane: number): string => `s${strip}.${lane}`;
 
 /** The lane graph traffic, pursuit and barricades follow: driving lanes and junction paths with their successors. */
 export function laneGraph(b: LaneBuild, block: string, offset: P2): LaneGraphFile {
+  const stripModes = stripAccess(b);
   const lanes: GraphLane[] = [];
   const index = new Map<string, number>();
   const tileAt = (p: readonly [number, number]): string => {
@@ -138,7 +148,8 @@ export function laneGraph(b: LaneBuild, block: string, offset: P2): LaneGraphFil
       const mid = s.st[Math.floor(s.st.length / 2)] as Station;
       const lane: GraphLane = {
         id: laneName(si, k), strip: si, lane: k, cls: s.cls + (s.link ? '_link' : ''), widthM: r2((mid.b[k] as number) - (mid.b[k + 1] as number)), lengthM: r2(length), layer: mid.layer,
-        ...(l.tag === 'gali' ? { gali: true as const } : {}), ...(l.dir === 0 ? { bothWays: true as const, back: [] } : {}),
+        ...(l.tag === 'gali' ? { gali: true as const } : {}), modes: (stripModes[si] as { modes: Mode[] }).modes, ...((stripModes[si] as { private?: true }).private ? { private: true as const } : {}),
+        ...(l.dir === 0 ? { bothWays: true as const, back: [] } : {}),
         pts, next: [], tile: tileAt(pts[Math.floor(pts.length / 2)] as [number, number]),
       };
       index.set(lane.id, lanes.length);
@@ -164,14 +175,21 @@ export function laneGraph(b: LaneBuild, block: string, offset: P2): LaneGraphFil
     }
   }
   const paths: GraphPath[] = [];
+  // the strip ends a line of bollards closes (mesh/barriers.ts): no car, auto or emergency path through them
+  const barred = new Set(b.access ? transitionLines({ strips: b.strips, joints: b.joints, junctions: b.junctions, access: b.access }).map((t) => `${t.strip}:${t.end}`) : []);
+  const WIDE: readonly Mode[] = ['car', 'auto', 'emergency'];
   b.junctions.forEach((j) => {
     j.paths.forEach((p, n) => {
       const id = `${j.id}.${n}`;
       const arm = j.arms[p.fromArm];
       const pts = p.pts.map((q) => [r2(q.x), r2(q.z)] as [number, number]);
+      const mf = (stripModes[p.from[0]] as { modes: Mode[] }).modes;
+      const toArm = j.arms[p.toArm];
+      const shut = (arm && barred.has(`${arm.strip}:${arm.end}`)) || (toArm && barred.has(`${toArm.strip}:${toArm.end}`));
+      const mt = (stripModes[p.to[0]] as { modes: Mode[] }).modes.filter((m) => !(shut && WIDE.includes(m)));
       paths.push({
         id, junction: j.id, turn: p.turn, radiusM: p.radius, lengthM: p.length, from: laneName(p.from[0], p.from[1]), to: laneName(p.to[0], p.to[1]), stop: (arm?.stopBack ?? 0) > 0 || j.control === 'signals',
-        pts, tile: tileAt(pts[Math.floor(pts.length / 2)] as [number, number]),
+        modes: mf.filter((m) => mt.includes(m)), pts, tile: tileAt(pts[Math.floor(pts.length / 2)] as [number, number]),
       });
       if (arm) follow(p.from[0], p.from[1], arm.end, id);
     });
@@ -220,6 +238,32 @@ export function laneGraph(b: LaneBuild, block: string, offset: P2): LaneGraphFil
     _doc: 'Lane graph of one bake stage (tools/bake/roads/laneout.ts): every driving lane as a centre line in its direction of travel and every connecting lane path through a junction, block metres (x east, z south). next names what follows: lanes ("s<strip>.<lane>") and paths ("<junction>.<n>"); a path leads to one lane (to). tiles files both under the 250 m world tile of their middle point (world = block + offset).',
     block, offset: [offset.x, offset.z], lanes, paths, tiles: sorted,
   };
+}
+
+/**
+ * The modes of every strip: its edge's access (graph/access.ts); a split zone (its edge names a node) takes the modes
+ * any of the strips it joins allows; a build with no access (a test of the lane model alone) allows the class default.
+ */
+export function stripAccess(b: LaneBuild): { modes: Mode[]; private?: true }[] {
+  const out: ({ modes: Mode[]; private?: true } | null)[] = b.strips.map((s) => {
+    const a = b.access?.get(s.edge);
+    if (a) return { modes: a.modes, ...(a.private ? { private: true as const } : {}) };
+    return s.kind === 'zone' && b.access ? null : { modes: classModes(s.cls) };
+  });
+  const zones = out.map((x, i) => (x === null ? i : -1)).filter((i) => i >= 0);
+  for (let round = 0; round < 3 && zones.some((i) => out[i] === null); round++) {
+    const next = new Map<number, Set<Mode>>();
+    for (const j of b.joints) {
+      for (const [x, y] of [[j.a.strip, j.b.strip], [j.b.strip, j.a.strip]] as const) {
+        const other = out[y];
+        if (out[x] !== null || !other) continue;
+        const set = next.get(x) ?? next.set(x, new Set()).get(x) as Set<Mode>;
+        for (const m of other.modes) set.add(m);
+      }
+    }
+    for (const [x, set] of next) out[x] = { modes: MODES.filter((m) => set.has(m)) };
+  }
+  return out.map((x, i) => x ?? { modes: classModes((b.strips[i] as Strip).cls) });
 }
 
 export interface LanesLayer {

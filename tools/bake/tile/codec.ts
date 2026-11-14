@@ -58,6 +58,10 @@ export interface TileLane {
   /** Both ways (one shared lane): pieces that follow at the near end. */
   back?: string[];
   gali?: true;
+  /** Who may use it (P2-042, graph/access.ts MODES); absent in tiles written before. */
+  modes?: string[];
+  /** Allowed but private: never a through route for traffic. */
+  private?: true;
   /** Path only: its junction, the turn and whether traffic stops before it. */
   junction?: string;
   turn?: string;
@@ -137,6 +141,8 @@ export interface T1LaneHeader {
   next: string[];
   back?: string[];
   gali?: true;
+  modes?: string[];
+  private?: true;
   junction?: string;
   turn?: string;
   stop?: boolean;

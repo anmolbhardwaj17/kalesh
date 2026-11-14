@@ -262,8 +262,8 @@ describe('lane pieces', () => {
     const strip = { id: 'a', name: 'A', lanes: [{ type: 'drive', dir: 1 }], st: [st(200, 1), st(240, 2), st(260, 3), st(300, 4)] } as unknown as Strip;
     const g: LaneGraphFile = {
       format: 'x', _doc: '', block: 'b', offset: [0, 0],
-      lanes: [{ id: 's0.0', strip: 0, lane: 0, cls: 'primary', widthM: 3.5, lengthM: 100, layer: 0, pts: [[200, 10], [240, 10], [260, 10], [300, 10]], next: ['j1.0'], tile: '0_0' }],
-      paths: [{ id: 'j1.0', junction: 'j1', turn: 'straight', radiusM: null, lengthM: 10, from: 's0.0', to: 's0.0', stop: false, pts: [[300, 10], [310, 10]], tile: '1_0' }],
+      lanes: [{ id: 's0.0', strip: 0, lane: 0, cls: 'primary', widthM: 3.5, lengthM: 100, layer: 0, modes: ['foot', 'cycle'], pts: [[200, 10], [240, 10], [260, 10], [300, 10]], next: ['j1.0'], tile: '0_0' }],
+      paths: [{ id: 'j1.0', junction: 'j1', turn: 'straight', radiusM: null, lengthM: 10, from: 's0.0', to: 's0.0', stop: false, modes: ['cycle'], pts: [[300, 10], [310, 10]], tile: '1_0' }],
       tiles: {},
     };
     const p = lanePieces(g, [strip], { x: 0, z: 0 });
@@ -276,6 +276,8 @@ describe('lane pieces', () => {
     expect(p[0]!.pts.filter((_, i) => i % 3 === 1)).toEqual([1, 2]);
     expect(p[1]!.pts.filter((_, i) => i % 3 === 1)).toEqual([2, 3, 4]);
     expect(p[2]!.pts[1]).toBe(4);
+    // who may use them (P2-042): a lane's modes and a path's modes ride on every piece
+    expect(p.map((x) => x.modes)).toEqual([['foot', 'cycle'], ['foot', 'cycle'], ['cycle']]);
   });
 });
 

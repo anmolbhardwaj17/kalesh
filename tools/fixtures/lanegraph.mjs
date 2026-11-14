@@ -4,6 +4,11 @@
 import fs from 'node:fs';
 import path from 'node:path';
 
+/** Every mode (P2-042): a piece of a tile baked before the access model allows them all. */
+export const ALL_MODES = ['car', 'auto', 'two_wheeler', 'cycle', 'foot', 'emergency'];
+/** True when `mode` may use the piece (no mode: anything goes, a staged drive that breaks the rule on purpose). */
+export const allows = (p, mode) => !mode || (p.modes || ALL_MODES).includes(mode);
+
 /** Cost factor of small roads in a route (a car keeps to the main roads). */
 export const SMALL = { service: 4, residential: 2.5, living_street: 4, unclassified: 2, tertiary: 1.4, pedestrian: 6, track: 6 };
 
@@ -33,16 +38,17 @@ export function readLaneGraph(tilesDir) {
       }
       let len = 0;
       for (let i = 1; i < pts.length; i++) len += Math.hypot(pts[i][0] - pts[i - 1][0], pts[i][2] - pts[i - 1][2]);
-      pieces.set(l.id, { id: l.id, cls: l.cls || '', kind: l.kind || '', layer: l.layer || 0, widthM: l.widthM || 0, next: l.next || [], back: l.back || [], pts, len, tile: rec.id });
+      pieces.set(l.id, { id: l.id, cls: l.cls || '', kind: l.kind || '', layer: l.layer || 0, widthM: l.widthM || 0, next: l.next || [], back: l.back || [], modes: l.modes || ALL_MODES, pts, len, tile: rec.id });
     }
   }
   return { index, pieces };
 }
 
 /** The lane piece at grade nearest to a world point: {id, d, at: [x, y, z], i (point index)}. `accept(piece)` filters. */
-export function nearest(pieces, x, z, { maxM = 400, minLen = 8, accept = null } = {}) {
+export function nearest(pieces, x, z, { maxM = 400, minLen = 8, accept = null, mode = null } = {}) {
   let best = null;
   for (const p of pieces.values()) {
+    if (!allows(p, mode)) continue;
     if (accept ? !accept(p) : (p.layer !== 0 || p.kind !== 'lane' || p.len < minLen || (SMALL[p.cls] || 1) > 2.5)) continue;
     p.pts.forEach((q, i) => {
       const d = Math.hypot(q[0] - x, q[2] - z);
@@ -52,8 +58,11 @@ export function nearest(pieces, x, z, { maxM = 400, minLen = 8, accept = null } 
   return best;
 }
 
-/** Dijkstra over `next` links from piece a to piece b (length, small roads and turns cost). The piece ids, or null. */
-export function route(pieces, a, b, { turnCost = 60 } = {}) {
+/**
+ * Dijkstra over `next` links from piece a to piece b (length, small roads and turns cost). The piece ids, or null.
+ * `mode` (P2-042): only pieces that mode may use (a car route never enters a car-free street).
+ */
+export function route(pieces, a, b, { turnCost = 60, mode = null } = {}) {
   const dist = new Map([[a, 0]]);
   const prev = new Map();
   const open = [[0, a]];
@@ -68,7 +77,7 @@ export function route(pieces, a, b, { turnCost = 60 } = {}) {
     const p = pieces.get(id);
     for (const n of p.next) {
       const q = pieces.get(n);
-      if (!q || done.has(n)) continue;
+      if (!q || done.has(n) || !allows(q, mode)) continue;
       const e = endDir(p);
       const s = startDir(q);
       const turn = 1 - (e[0] * s[0] + e[1] * s[1]);
@@ -113,9 +122,10 @@ export function thin(all, tol = 0.25) {
  * at a junction lies nearest a target but no lane chain leads into it). Candidates are tried nearest first, within
  * `slackM` of the nearest one.
  */
-export function nearestReachable(pieces, from, x, z, { slackM = 12, accept = null, maxM = 400 } = {}) {
+export function nearestReachable(pieces, from, x, z, { slackM = 12, accept = null, maxM = 400, mode = null } = {}) {
   const cands = [];
   for (const p of pieces.values()) {
+    if (!allows(p, mode)) continue;
     if (accept ? !accept(p) : (p.layer !== 0 || p.kind !== 'lane' || p.len < 8 || (SMALL[p.cls] || 1) > 2.5)) continue;
     let d = Infinity;
     for (const q of p.pts) d = Math.min(d, Math.hypot(q[0] - x, q[2] - z));
@@ -124,7 +134,7 @@ export function nearestReachable(pieces, from, x, z, { slackM = 12, accept = nul
   cands.sort((a, b) => a.d - b.d || (a.id < b.id ? -1 : 1));
   for (const c of cands) {
     if (c.d > (cands[0]?.d ?? 0) + slackM) break;
-    const leg = c.id === from ? [from] : route(pieces, from, c.id);
+    const leg = c.id === from ? [from] : route(pieces, from, c.id, { mode });
     if (leg) return { id: c.id, d: c.d, leg };
   }
   return null;

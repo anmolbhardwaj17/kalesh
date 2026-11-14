@@ -6,7 +6,7 @@ import { FillRule, intersectD } from 'clipper2-ts';
 import type { PathD, PathsD } from 'clipper2-ts';
 import { boxOf, boxesMeet, pointInRing, polylineLength, ringArea } from '../geom.ts';
 import type { P2 } from '../geom.ts';
-import { openKind } from '../osm.ts';
+import { ROAD_CLASSES, openKind } from '../osm.ts';
 import type { OsmElement, Tags } from '../osm.ts';
 
 export type LineKind = 'rail' | 'metro';
@@ -59,12 +59,54 @@ export interface Features {
   footBridges: FootBridge[];
   /** Multipolygon rings left open because a member way is outside the extract. */
   openRings: number;
+  /**
+   * Footways, paths, steps, cycleways, sidewalks drawn as their own ways and pedestrian areas at ground level (P2-042):
+   * built as paved walking surfaces in the ground (terrain/walkways.ts), never as roads. Absent in graphs made before.
+   */
+  walkways?: WalkwayFeature[];
+  /** Barrier nodes of OSM on road ways (bollards, gates, lift gates, blocks), P2-042: the edge they stand on is set by graph/build.ts. */
+  barriers?: BarrierFeature[];
+}
+
+export interface WalkwayFeature {
+  /** "way/<id>" or "relation/<id>", "#<k>" for the k-th piece inside the outline. */
+  id: string;
+  /** footway, sidewalk, path, steps, cycleway, pedestrian_area, footway_area. */
+  kind: string;
+  name: string;
+  /** A line (area false), or the first ring of an area (area true: every ring is in `rings`). */
+  pts: P2[];
+  area: boolean;
+  /** An area's rings cut to the outline (EvenOdd: a hole stays a hole). */
+  rings?: P2[][];
+  /** Width of a line in metres: the width tag, else the kind's default. */
+  width: number;
+}
+
+export interface BarrierFeature {
+  /** "n<osm node id>" */
+  id: string;
+  /** The barrier tag (bollard, gate, lift_gate, block, ...). */
+  kind: string;
+  x: number;
+  z: number;
+  /** barrier, bollard, locked, access, motor_vehicle, motor_vehicle:conditional, maxwidth:physical. */
+  tags: Record<string, string>;
+  /** The graph edge it stands on and metres along it (graph/build.ts); absent when it is on no edge. */
+  edge?: string;
+  s?: number;
 }
 
 const RAIL = new Set(['rail', 'subway', 'light_rail', 'monorail', 'narrow_gauge', 'tram']);
 const METRO = new Set(['subway', 'light_rail', 'monorail']);
 const WATER_LINES = new Set(['river', 'stream', 'canal', 'drain', 'ditch']);
 const FOOT = new Set(['footway', 'steps', 'pedestrian', 'path']);
+/** Walkway kinds and their default widths (m). */
+export const WALKWAY_WIDTH: Readonly<Record<string, number>> = { footway: 2, sidewalk: 2, path: 1.5, steps: 2.5, cycleway: 2, bridleway: 1.5 };
+const WALK_LINES = new Set(['footway', 'path', 'steps', 'cycleway', 'bridleway']);
+/** Barrier values kept on road ways (a kerb tag on a road node is a lowered kerb, not a barrier). */
+export const ROAD_BARRIERS = new Set(['bollard', 'gate', 'lift_gate', 'swing_gate', 'sliding_gate', 'hampshire_gate', 'block', 'jersey_barrier', 'cycle_barrier', 'motorcycle_barrier', 'turnstile', 'full-height_turnstile', 'stile', 'kissing_gate', 'gate;bollard', 'bollard;gate']);
+const BARRIER_KEYS = ['barrier', 'bollard', 'locked', 'access', 'motor_vehicle', 'motor_vehicle:conditional', 'maxwidth:physical'];
 
 const num = (v: string | undefined): number => {
   const m = v === undefined ? null : /^\s*(-?\d+)/.exec(v);
@@ -167,7 +209,8 @@ const areaOf = (rings: readonly P2[][]): number => Math.abs(rings.reduce((s, r) 
 
 /** Features of the OSM elements inside the outline `ring` (block metres). `pos` gives a node's position. */
 export function readFeatures(elements: readonly OsmElement[], pos: (id: number) => P2 | undefined, ring: readonly P2[]): Features {
-  const out: Features = { rail: [], stations: [], water: [], waterLines: [], open: [], footBridges: [], openRings: 0 };
+  const out: Features = { rail: [], stations: [], water: [], waterLines: [], open: [], footBridges: [], openRings: 0, walkways: [], barriers: [] };
+  const walkways = out.walkways as WalkwayFeature[];
   const outlineBox = boxOf(ring);
   const ptsOf = (ids: readonly number[]): P2[] => ids.map(pos).filter((p): p is P2 => p !== undefined);
   const ways = new Map<number, OsmElement>();
@@ -207,6 +250,20 @@ export function readFeatures(elements: readonly OsmElement[], pos: (id: number) 
       foot.push(w);
       continue;
     }
+    const walk = walkwayKind(t, ids);
+    if (walk) {
+      const pts = ptsOf(ids);
+      if (pts.length >= 2 && boxesMeet(boxOf(pts), outlineBox)) {
+        if (walk.area) {
+          const cut = clipArea([pts], ring);
+          if (cut.length) walkways.push({ id: `way/${w.id}`, kind: walk.kind, name: t['name'] ?? '', pts: cut[0] as P2[], area: true, width: 0, rings: cut });
+        } else {
+          const pieces = clipLine(pts, ring);
+          pieces.forEach((p, i) => walkways.push({ id: pieces.length > 1 ? `way/${w.id}#${i}` : `way/${w.id}`, kind: walk.kind, name: t['name'] ?? '', pts: p, area: false, width: walk.width }));
+        }
+      }
+      continue;
+    }
     if (t['waterway'] !== undefined && WATER_LINES.has(t['waterway'])) {
       lines(w, `waterway=${t['waterway']}`, out.waterLines);
       continue;
@@ -222,6 +279,16 @@ export function readFeatures(elements: readonly OsmElement[], pos: (id: number) 
   }
   for (const r of elements) {
     if (r.type !== 'relation' || !r.tags || r.tags['type'] !== 'multipolygon' || r.tags['building'] !== undefined) continue;
+    if (r.tags['highway'] === 'pedestrian' || r.tags['highway'] === 'footway') {
+      const members = (r.members ?? []).filter((m) => m.type === 'way' && (m.role === 'outer' || m.role === 'inner' || m.role === ''));
+      const asm = assembleRings(members.map((m) => ways.get(m.ref)?.nodes ?? []).filter((n) => n.length >= 2));
+      const rings = asm.rings.map(ptsOf).filter((p) => p.length >= 4);
+      if (rings.length && boxesMeet(boxOf(rings.flat()), outlineBox) && !yes(r.tags['indoor']) && num(r.tags['layer']) === 0) {
+        const cut = clipArea(rings, ring);
+        if (cut.length) walkways.push({ id: `relation/${r.id}`, kind: `${r.tags['highway']}_area`, name: r.tags['name'] ?? '', pts: cut[0] as P2[], area: true, width: 0, rings: cut });
+      }
+      continue;
+    }
     const wk = waterKind(r.tags);
     const ok = wk ? null : openKind(r.tags);
     if (!wk && !ok) continue;
@@ -232,12 +299,50 @@ export function readFeatures(elements: readonly OsmElement[], pos: (id: number) 
     area(`relation/${r.id}`, (wk ?? ok) as string, r.tags['name'] ?? '', rings, wk ? out.water : out.open);
   }
   out.footBridges = footBridges(foot, ptsOf, ring);
+  // barrier nodes on road ways inside the outline
+  const roadNodes = new Set<number>();
+  for (const w of ways.values()) {
+    const hw = w.tags?.['highway'];
+    if (hw === undefined) continue;
+    const cls = hw.endsWith('_link') ? hw.slice(0, -5) : hw;
+    if ((ROAD_CLASSES as readonly string[]).includes(cls) && w.tags?.['area'] !== 'yes') for (const n of w.nodes ?? []) roadNodes.add(n);
+  }
+  const barriers = out.barriers as BarrierFeature[];
+  for (const e of elements) {
+    const k = e.type === 'node' ? e.tags?.['barrier'] : undefined;
+    if (k === undefined || !ROAD_BARRIERS.has(k) || !roadNodes.has(e.id)) continue;
+    const p = pos(e.id);
+    if (!p || !pointInRing(p, ring)) continue;
+    const tags: Record<string, string> = {};
+    for (const key of BARRIER_KEYS) if (e.tags?.[key] !== undefined) tags[key] = e.tags[key] as string;
+    if (!barriers.some((b) => b.id === `n${e.id}`)) barriers.push({ id: `n${e.id}`, kind: k, x: p.x, z: p.z, tags });
+  }
+  barriers.sort((a, b) => (a.id < b.id ? -1 : a.id > b.id ? 1 : 0));
+  walkways.sort((a, b) => (a.id < b.id ? -1 : a.id > b.id ? 1 : 0));
   const byId = (a: { id: string }, b: { id: string }): number => (a.id < b.id ? -1 : a.id > b.id ? 1 : 0);
   out.water.sort(byId);
   out.open.sort(byId);
   out.stations.sort(byId);
   out.stations = out.stations.filter((st, i) => i === 0 || st.id !== (out.stations[i - 1] as StationFeature).id);
   return out;
+}
+
+/**
+ * The walkway kind of a way at ground level, or null: footways (a sidewalk drawn as its own way is a sidewalk), paths,
+ * steps, cycleways and closed pedestrian or footway areas. Crossings and traffic islands lie on the carriageway (the
+ * road mesh draws them); bridges are foot bridges, tunnels are subways, indoor corridors are inside buildings.
+ */
+export function walkwayKind(t: Tags, ids: readonly number[]): { kind: string; area: boolean; width: number } | null {
+  const hw = t['highway'];
+  if (hw === undefined || yes(t['bridge']) || yes(t['tunnel']) || yes(t['indoor']) || num(t['layer']) !== 0) return null;
+  if (t['footway'] === 'crossing' || t['footway'] === 'traffic_island' || t['cycleway'] === 'crossing' || t['path'] === 'crossing') return null;
+  const closed = ids.length >= 4 && ids[0] === ids[ids.length - 1];
+  if ((hw === 'pedestrian' || hw === 'footway') && t['area'] === 'yes' && closed) return { kind: `${hw}_area`, area: true, width: 0 };
+  if (!WALK_LINES.has(hw) || t['area'] === 'yes') return null;
+  const kind = hw === 'footway' && t['footway'] === 'sidewalk' ? 'sidewalk' : hw;
+  const w = /^\s*(\d+(?:\.\d+)?)/.exec(t['width'] ?? '');
+  const tagged = w ? Number(w[1]) : NaN;
+  return { kind, area: false, width: tagged >= 0.8 && tagged <= 12 ? tagged : (WALKWAY_WIDTH[kind] as number) };
 }
 
 /** Foot ways with a bridge tag, joined where they share a node (a bridge deck and its stairs are one bridge). */
