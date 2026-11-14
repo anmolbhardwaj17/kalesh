@@ -110,8 +110,10 @@ vec3 lit_window(float h, float b, vec2 uv) {
 	}
 	float k = fract(h * 7.31 + b * 3.7);
 	vec3 c = k < 0.55 ? vec3(1.0, 0.64, 0.34) : (k < 0.9 ? vec3(1.0, 0.82, 0.6) : vec3(0.82, 0.86, 0.88));
-	float curtain = 0.45 + 0.6 * vnoise(uv * vec2(2.7, 1.3) + h * 40.0);
-	return c * curtain * (0.6 + 0.6 * fract(h * 13.7)) * 0.9 * kit_night;
+	float curtain = 0.3 + 0.8 * vnoise(uv * vec2(2.7, 1.3) + h * 40.0);
+	// capped gain (P2-052 round 2): the brightest pane peaks near 0.45 (night's exposure is 1.45 under the filmic curve),
+	// so no window blows out to a flat cream slab; the cool tubes are dimmer still (they read white first)
+	return c * curtain * (0.55 + 0.45 * fract(h * 13.7)) * (k < 0.9 ? 0.4 : 0.3) * kit_night;
 }
 #else
 float vnoise(vec2 p) {
@@ -888,6 +890,15 @@ void fragment() {
 		AO = ao;
 		AO_LIGHT_AFFECT = 0.25;
 	}
+#ifdef KIT
+	// roofs differ per building (P2-052 round 2): a little lighter or darker, warmer or greyer by the building's draw, and
+	// at night a few carry the faint warm spill of a rooftop bulb or a stair light, so the roofscape is not one flat tone
+	if (!vertical && wnrm.y > 0.9) {
+		float rb = hash12(tint.rg * 53.0 + tint.b * 7.0 + 0.37);
+		col *= mix(0.86, 1.12, rb) * mix(vec3(1.0), vec3(1.05, 1.0, 0.9), step(0.6, fract(rb * 7.3)));
+		emit += vec3(1.0, 0.68, 0.4) * col * step(0.72, fract(rb * 13.1)) * 0.2 * kit_night;
+	}
+#endif
 	ALBEDO = col;
 	ROUGHNESS = rough;
 #ifdef KIT

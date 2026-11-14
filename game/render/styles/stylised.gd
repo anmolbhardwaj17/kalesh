@@ -327,9 +327,15 @@ func _flat_twin(o: StandardMaterial3D) -> StandardMaterial3D:
 	var tw := o.duplicate() as StandardMaterial3D
 	var c := o.albedo_color.srgb_to_linear()
 	var g := flat_gain(c)
+	c = _flat_tint(c)
 	tw.albedo_color = Color(c.r * g, c.g * g, c.b * g, c.a).linear_to_srgb()
 	_flat[o] = tw
 	return tw
+
+
+## The colour of a flat stand-in's twin before its gain (linear); a look may shift it (stylised_b: neutral asphalt).
+func _flat_tint(c: Color) -> Color:
+	return c
 
 
 ## Called for every MeshInstance3D that enters the tree, after its materials are swapped. Look B adds nothing.

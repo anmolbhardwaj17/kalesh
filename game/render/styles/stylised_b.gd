@@ -17,6 +17,8 @@ const GLOW_WINDOW_SHADER := preload("res://render/shaders/glow_window.gdshader")
 const HAZE_SHADER := preload("res://render/shaders/haze_b.gdshader")
 const SKY_SHADER := preload("res://render/shaders/sky_b.gdshader")
 const STREET_LAMPS := preload("res://render/street_lamps.gd")
+## A sky uniform change smaller than this (a colour channel or a number) is not worth a radiance rebuild.
+const SKY_EPS := 0.004
 const Geo := preload("res://scenes/standin/geo.gd")
 const Kit := preload("res://scenes/standin/kit.gd")
 const TEX_DIR := "res://render/textures/"
@@ -136,19 +138,55 @@ func _sky_b(env: Environment) -> void:
 		# over a few frames, keeps the live relight off the frame time (P2-052, relight_live_street)
 		env.sky.radiance_size = Sky.RADIANCE_SIZE_128
 		env.sky.process_mode = Sky.PROCESS_MODE_INCREMENTAL
-	sm.set_shader_parameter("sky_top", light.sky_top)
-	sm.set_shader_parameter("sky_horizon", light.sky_horizon)
-	sm.set_shader_parameter("ground_horizon", light.ground_horizon)
-	sm.set_shader_parameter("ground_bottom", light.ground_bottom)
-	sm.set_shader_parameter("energy", light.sky_energy)
-	sm.set_shader_parameter("glow_deg", light.sun_disc_deg)
-	sm.set_shader_parameter("glow_curve", light.sun_curve)
-	sm.set_shader_parameter("disc_deg", light.disc_deg)
-	sm.set_shader_parameter("disc_energy", light.disc_energy)
-	sm.set_shader_parameter("cloud_cover", light.cloud_cover)
-	sm.set_shader_parameter("cloud_color", light.cloud_color)
-	sm.set_shader_parameter("cloud_shade", light.cloud_shade)
-	sm.set_shader_parameter("city_glow", light.city_glow)
+	# incremental (P2-052 round 2): a sky uniform that changes marks the radiance map for a rebuild, so only the ones
+	# that moved by more than a hair since the last relight are set
+	_sky_param(sm, "sky_top", light.sky_top)
+	_sky_param(sm, "sky_horizon", light.sky_horizon)
+	_sky_param(sm, "ground_horizon", light.ground_horizon)
+	_sky_param(sm, "ground_bottom", light.ground_bottom)
+	_sky_param(sm, "energy", light.sky_energy)
+	_sky_param(sm, "glow_deg", light.sun_disc_deg)
+	_sky_param(sm, "glow_curve", light.sun_curve)
+	_sky_param(sm, "disc_deg", light.disc_deg)
+	_sky_param(sm, "disc_energy", light.disc_energy)
+	_sky_param(sm, "cloud_cover", light.cloud_cover)
+	_sky_param(sm, "cloud_color", light.cloud_color)
+	_sky_param(sm, "cloud_shade", light.cloud_shade)
+	_sky_param(sm, "city_glow", light.city_glow)
+
+
+## Dark grey stand-ins of the streamed city (the road, joints, parking, bollards) are a neutral, slightly dusty grey
+## (P2-052 round 2): their bake colours lean blue (road 0.22, 0.22, 0.24 sRGB), and in shade under the sky share of the
+## fill the gali lanes read cool blue-grey (blue minus red +10, the bar is 6). Light and coloured stand-ins keep theirs.
+## Pure apart from the lean check.
+func _flat_tint(c: Color) -> Color:
+	if not _lean():
+		return c
+	return neutral_dark(c)
+
+
+## A dark (linear luma under about 0.1), nearly grey colour moved to a warm neutral of the same luma; others unchanged.
+static func neutral_dark(c: Color) -> Color:
+	var l := c.r * 0.2126 + c.g * 0.7152 + c.b * 0.0722
+	var hi := maxf(c.r, maxf(c.g, c.b))
+	var sat := (hi - minf(c.r, minf(c.g, c.b))) / maxf(hi, 1e-5)
+	var k := (1.0 - smoothstep(0.06, 0.12, l)) * (1.0 - smoothstep(0.2, 0.35, sat))
+	var n := Color(l * 1.07, l, l * 0.86, c.a)
+	return c.lerp(n, k)
+
+
+## Sets one sky uniform when it moved by more than SKY_EPS (a colour by any channel) since it was last set.
+func _sky_param(sm: ShaderMaterial, key: String, v: Variant) -> void:
+	var old: Variant = sm.get_shader_parameter(key)
+	if old != null and typeof(old) == typeof(v):
+		if v is Color:
+			var a: Color = old
+			var b: Color = v
+			if absf(a.r - b.r) < SKY_EPS and absf(a.g - b.g) < SKY_EPS and absf(a.b - b.b) < SKY_EPS:
+				return
+		elif v is float and absf(float(old) - float(v)) < SKY_EPS:
+			return
+	sm.set_shader_parameter(key, v)
 
 
 ## The lean (performance target) path of stylised B; the realistic reference look (realistic.gd) keeps the P0-034 setup.

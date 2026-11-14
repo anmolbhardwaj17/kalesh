@@ -419,6 +419,7 @@ func test_flat_stand_ins_get_a_darker_twin() -> void:
 
 
 const StreetLamps := preload("res://render/street_lamps.gd")
+const StylisedBScript := preload("res://render/styles/stylised_b.gd")
 
 
 ## The shade fill is the preset's neutral warm grey with only a share of the sky's light, in every light: never blue
@@ -451,3 +452,17 @@ func test_street_lamp_kerb_points() -> void:
 	t.ok((f[0][1] as Vector3).is_equal_approx(Vector3(1, 0, 0)), "the kerb lamp faces the lane (east)")
 	t.near((f[1][0] as Vector3).x, 1.75 + 1.3, 1e-4, "the right side lamp is east")
 	t.near((f[4][0] as Vector3).z, -75.0, 1e-4, "spacing carries over the segment joint")
+
+
+func test_stylised_b_dark_stand_ins_are_neutral_grey() -> void:
+	# P2-052 round 2: the bake's road grey leans blue; stylised B moves dark greys to a warm neutral of the same luma
+	var road := Color(0.22, 0.22, 0.24).srgb_to_linear()
+	var n: Color = StylisedBScript.neutral_dark(road)
+	var l0 := road.r * 0.2126 + road.g * 0.7152 + road.b * 0.0722
+	var l1 := n.r * 0.2126 + n.g * 0.7152 + n.b * 0.0722
+	t.near(l1, l0, 0.002, "the luma stays")
+	t.ok(n.b < n.r, "blue below red (%.4f, %.4f)" % [n.r, n.b])
+	var lawn := Color(0.42, 0.55, 0.32).srgb_to_linear()
+	t.ok(StylisedBScript.neutral_dark(lawn).is_equal_approx(lawn), "a coloured stand-in keeps its colour")
+	var path := Color(0.66, 0.64, 0.6).srgb_to_linear()
+	t.ok(StylisedBScript.neutral_dark(path).is_equal_approx(path), "a light stand-in keeps its colour")

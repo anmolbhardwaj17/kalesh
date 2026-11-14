@@ -17,6 +17,12 @@ const RADIUS := 220.0
 const REBUILD_M := 60.0
 ## Real lights at the heads nearest the camera.
 const LIGHTS := 6
+## The street glow (P2-052 round 2): one wide, soft warm light hung over the camera, the summed spill of the lamps
+## round the player off the road, the walls and the haze. Without it the road just in front of the play camera, between
+## two pools, was a near black wedge at night. Its strength follows how many lamps stand within GLOW_NEAR_M.
+const GLOW_H := 14.0
+const GLOW_ENERGY := 4.5
+const GLOW_NEAR_M := 45.0
 const POLE_H := 8.5
 const ARM := 1.8
 ## Wall bracket lamps in galis and car-free streets (WORLD_LOGIC.md: deep galis are lit by their own lamps).
@@ -41,9 +47,10 @@ var _pools: MultiMeshInstance3D
 var _head_mat := StandardMaterial3D.new()
 var _pool_mat := ShaderMaterial.new()
 var _lights: Array[SpotLight3D] = []
+var _street_glow: SpotLight3D
 var _t := 0.0
 ## What the last placement did (state().time.live.streetLamps): lamps placed and candidates left out, by reason.
-var stats := {"lamps": 0, "wall": 0, "lit": 0, "inLane": 0, "junction": 0, "ground": 0, "blocked": 0, "near": 0}
+var stats := {"lamps": 0, "wall": 0, "lit": 0, "glow": 0.0, "inLane": 0, "junction": 0, "ground": 0, "blocked": 0, "near": 0}
 
 
 func _ready() -> void:
@@ -78,6 +85,18 @@ func _ready() -> void:
 		s.visible = false
 		add_child(s)
 		_lights.append(s)
+	_street_glow = SpotLight3D.new()
+	_street_glow.name = "StreetGlow"
+	_street_glow.light_color = SODIUM.lerp(Color(1, 1, 1), 0.15)
+	_street_glow.spot_range = 34.0
+	_street_glow.spot_angle = 74.0
+	_street_glow.spot_angle_attenuation = 0.6
+	_street_glow.spot_attenuation = 1.3
+	_street_glow.light_specular = 0.0
+	_street_glow.shadow_enabled = false
+	_street_glow.light_volumetric_fog_energy = 0.0
+	_street_glow.visible = false
+	add_child(_street_glow)
 	_apply_night()
 
 
@@ -97,6 +116,9 @@ func _mm(n: String, mesh: Mesh, mat: Material, shadow: GeometryInstance3D.Shadow
 
 ## The night (0 day, 1 full night) and the look's lamp gain; called by stylised_b on every relight.
 func set_night(n: float, lamp_gain: float) -> void:
+	# a live relight calls this many times a minute: skip the steps too small to see (the endpoints always land)
+	if is_inside_tree() and absf(n - night) < 0.01 and absf(lamp_gain - gain) < 0.02 and n != 0.0 and n != 1.0:
+		return
 	night = n
 	gain = lamp_gain
 	if is_inside_tree():
@@ -112,6 +134,11 @@ func _apply_night() -> void:
 
 
 func _process(delta: float) -> void:
+	# the glow rides with the camera every frame (the lamps are placed twice a second)
+	if _street_glow.visible:
+		var gc := get_viewport().get_camera_3d()
+		if gc != null:
+			_street_glow.global_position = gc.global_position + Vector3.UP * GLOW_H
 	_t += delta
 	if _t < 0.5:
 		return
@@ -268,6 +295,17 @@ func _place_lights() -> void:
 			order.append([_heads[i].distance_squared_to(c), _heads[i], _head_e[i]])
 		order.sort_custom(func(a: Array, b: Array) -> bool: return a[0] < b[0])
 	stats.lit = mini(order.size(), _lights.size())
+	# the street glow over the camera, as strong as the lamps near it allow (a third at least: the haze glows anyway)
+	var near := 0
+	for o: Array in order:
+		if float(o[0]) > GLOW_NEAR_M * GLOW_NEAR_M:
+			break
+		near += 1
+	_street_glow.visible = on and cam != null
+	if _street_glow.visible:
+		_street_glow.light_energy = GLOW_ENERGY * night * clampf(near / 4.0, 0.35, 1.0)
+		_street_glow.transform = Transform3D(Basis.looking_at(Vector3.DOWN, Vector3.FORWARD), cam.global_position + Vector3.UP * GLOW_H)
+	stats.glow = snappedf(_street_glow.light_energy, 0.01) if _street_glow.visible else 0.0
 	for i in _lights.size():
 		var l := _lights[i]
 		if not on or i >= order.size():
