@@ -100,6 +100,24 @@ export function barrierLines(elements: readonly OsmElement[], project: (lat: num
   return out.sort((a, b) => (a.id < b.id ? -1 : 1));
 }
 
+/** Every road face the ground meets (block metres): what a landmark pad and a walkway keep off. */
+export function roadFaceRings(meshed: { input: MeshInput; mesh: RoadMesh }): P2[][] {
+  const faces = meshed.mesh.fs;
+  const meet = { fs: faces, strips: meshed.input.strips, kinds: meshed.input.kinds };
+  const roads: P2[][] = [];
+  for (let f = 0; f < faces.faces; f++) {
+    if (meetOf(meet, f) === MEET_NONE) continue;
+    const ring: P2[] = [];
+    const start = faces.start[f] as number;
+    for (let k = 0; k < (faces.len[f] as number); k++) {
+      const v = faces.ids[start + k] as number;
+      ring.push({ x: faces.vx[v] as number, z: faces.vz[v] as number });
+    }
+    if (ring.length >= 3) roads.push(ring);
+  }
+  return roads;
+}
+
 /**
  * Places the landmarks of the stage. Changes `repaired.footprints` in place: the footprints inside a landmark zone
  * leave the plain buildings (as the clear step takes buildings off the roads). Null when there is no registry for
@@ -118,19 +136,7 @@ export async function runPlaceStep(
   const proj = projector(plan.origin);
   const project = (lat: number, lon: number): P2 => proj.toWorld(lat, lon);
   // every road face the ground meets
-  const faces = meshed.mesh.fs;
-  const meet = { fs: faces, strips: meshed.input.strips, kinds: meshed.input.kinds };
-  const roads: P2[][] = [];
-  for (let f = 0; f < faces.faces; f++) {
-    if (meetOf(meet, f) === MEET_NONE) continue;
-    const ring: P2[] = [];
-    const start = faces.start[f] as number;
-    for (let k = 0; k < (faces.len[f] as number); k++) {
-      const v = faces.ids[start + k] as number;
-      ring.push({ x: faces.vx[v] as number, z: faces.vz[v] as number });
-    }
-    if (ring.length >= 3) roads.push(ring);
-  }
+  const roads = roadFaceRings(meshed);
   // far landmarks: the frame of the block they will stand in, else of the nearest block
   const pivot = districts.method.pivot;
   const farWorld = (e: Entry): { x: number; z: number; block: string; factor: number } => {

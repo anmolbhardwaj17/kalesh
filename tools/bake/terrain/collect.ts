@@ -36,8 +36,11 @@ export interface WaterInput {
  */
 export interface LandmarkGround {
   landmark: string;
-  cls: 'pad' | 'forecourt' | 'wallbase' | 'moat';
+  /** walkway: a paved footway, path or pedestrian area (P2-042, terrain/walkways.ts), over plain ground, lawn and plot. */
+  cls: 'pad' | 'forecourt' | 'wallbase' | 'moat' | 'walkway';
   ring: readonly P2[];
+  /** Holes of the ring (a walkway round a lawn); their edges are forced too and their inside is not the piece. */
+  holes?: readonly (readonly P2[])[];
   /** A pad: its level (m). */
   level?: number;
   /** A moat: how far its bed lies under the ground (m). */
@@ -366,6 +369,7 @@ export function collect(input: TerrainInput, opt: TerrainOptions): Collected {
   // landmark ground: rings of no class of their own (the surface gives their triangles a material), and points on
   // the bed of a moat so it has a floor to lower
   for (const g of input.landmarks ?? []) rings([g.ring], -1);
+  for (const g of input.landmarks ?? []) for (const h of g.holes ?? []) rings([h], -1);
   for (const g of input.landmarks ?? []) {
     if (g.cls !== 'moat') continue;
     let x0 = Infinity;

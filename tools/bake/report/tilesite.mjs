@@ -7,6 +7,7 @@
 //   node tools/bake/report/tilesite.mjs --site <id> [--tiles game/world/tiles] [--out harness/reports/map/x.png]
 //   node tools/bake/report/tilesite.mjs --lat <lat> --lon <lon> --half <m> --out <file> [--title <text>]
 //   node tools/bake/report/tilesite.mjs --sheet <prefix>      (one sheet of every <prefix>_<site>_before/_after pair)
+//   --modes  (P2-042) draws every lane piece over the picture coloured by who may use it (cars, two-wheelers, walkers)
 //
 // World metres: block metres plus the tile index's block offset (x east, z south, north up in the picture).
 import fs from 'node:fs';
@@ -29,6 +30,9 @@ const COLOUR = {
   ground: [128, 138, 104], plot: [150, 140, 118], lawn: [104, 150, 82], bed: [120, 104, 76], water: [70, 110, 150], hedge: [70, 110, 60],
   road: [72, 72, 78], parking: [104, 104, 112], gore: [140, 128, 90], marking: [245, 245, 240], footpath: [185, 173, 152], kerb: [205, 200, 190],
   median: [178, 172, 150], planter: [96, 140, 74], building: [120, 92, 80], wall: [150, 130, 110], pier: [160, 160, 160], underside: [90, 90, 96], joint: [60, 60, 60],
+  forecourt: [196, 170, 140], pad: [214, 196, 160], wallbase: [128, 76, 64], moat: [108, 98, 78], landmark: [214, 190, 150], landmark_red: [168, 84, 70],
+  // P2-042: paved walkways in the ground, and the bollards and gates (drawn bright so a top view shows every post)
+  walkway: [222, 196, 150], bollard: [250, 210, 0],
 };
 
 const args = process.argv.slice(2);
@@ -38,7 +42,7 @@ const arg = (n, d) => {
 };
 
 /** Draws the box and writes a PNG; returns the triangle count drawn. */
-export async function drawSite({ tilesDir, lat, lon, half, out, title, mPerPx = 0.1 }) {
+export async function drawSite({ tilesDir, lat, lon, half, out, title, mPerPx = 0.1, modes = false }) {
   const index = JSON.parse(fs.readFileSync(path.join(tilesDir, 'index.json'), 'utf8'));
   const [ox, oz] = index.offset;
   const p = projector(ORIGIN).toWorld(lat, lon);
@@ -52,11 +56,23 @@ export async function drawSite({ tilesDir, lat, lon, half, out, title, mPerPx = 
   const top = new Float32Array(W * H).fill(-1e9);
   for (let i = 0; i < W * H; i++) rgb.set([40, 42, 46], i * 3);
   let drawn = 0;
+  // P2-042 (--modes): lane pieces over the picture, coloured by who may use them
+  const laneLines = [];
   for (const t of index.tiles) {
     const tx0 = t.origin[0];
     const tz0 = t.origin[2];
     if (tx0 > cx + half + 250 || tx0 + index.size < cx - half - 250 || tz0 > cz + half + 250 || tz0 + index.size < cz - half - 250) continue;
     const c = decodeContent(new Uint8Array(fs.readFileSync(path.join(tilesDir, t.file))));
+    if (modes) {
+      for (const l of c.lanes ?? []) {
+        const pts = [];
+        for (let i = 0; i + 2 < l.pts.length; i += 3) pts.push([(l.pts[i] + c.origin[0] - minX) / mPerPx, (l.pts[i + 2] + c.origin[2] - minZ) / mPerPx]);
+        if (pts.every(([x, z]) => x < -50 || z < -50 || x > W + 50 || z > H + 50)) continue;
+        const ms = l.modes ?? ['car', 'auto', 'two_wheeler', 'cycle', 'foot', 'emergency'];
+        const colour = ms.includes('car') ? '#2f7cff' : ms.includes('two_wheeler') ? '#ff8c1a' : '#21c45a';
+        laneLines.push(`<polyline points="${pts.map(([x, z]) => `${x.toFixed(1)},${z.toFixed(1)}`).join(' ')}" fill="none" stroke="${colour}" stroke-width="${l.kind === 'path' ? 2 : 4}" stroke-opacity="0.9"/>`);
+      }
+    }
     for (const m of c.meshes) {
       const col = COLOUR[m.material] ?? [200, 0, 200];
       const pos = m.pos;
@@ -121,7 +137,7 @@ export async function drawSite({ tilesDir, lat, lon, half, out, title, mPerPx = 
     }
   }
   const bar = Math.round(20 / mPerPx);
-  const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="${W}" height="${H}"><rect width="${W}" height="34" fill="#1d1f24" opacity="0.85"/><text x="10" y="23" font-family="Helvetica, Arial" font-size="17" fill="#fff">${title.replace(/&/g, '&amp;').replace(/</g, '&lt;')}</text><rect x="12" y="${H - 22}" width="${bar}" height="6" fill="#fff"/><text x="12" y="${H - 28}" font-family="Helvetica" font-size="14" fill="#fff">20 m</text><polygon points="${W - 30},44 ${W - 38},70 ${W - 30},64 ${W - 22},70" fill="#fff"/><text x="${W - 36}" y="88" font-family="Helvetica" font-size="15" font-weight="bold" fill="#fff">N</text></svg>`;
+  const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="${W}" height="${H}"><rect width="${W}" height="34" fill="#1d1f24" opacity="0.85"/><text x="10" y="23" font-family="Helvetica, Arial" font-size="17" fill="#fff">${title.replace(/&/g, '&amp;').replace(/</g, '&lt;')}</text><rect x="12" y="${H - 22}" width="${bar}" height="6" fill="#fff"/><text x="12" y="${H - 28}" font-family="Helvetica" font-size="14" fill="#fff">20 m</text><polygon points="${W - 30},44 ${W - 38},70 ${W - 30},64 ${W - 22},70" fill="#fff"/><text x="${W - 36}" y="88" font-family="Helvetica" font-size="15" font-weight="bold" fill="#fff">N</text>${laneLines.join('')}${modes ? `<rect x="${W - 330}" y="${H - 96}" width="318" height="84" fill="#1d1f24" opacity="0.85"/><rect x="${W - 320}" y="${H - 86}" width="22" height="6" fill="#2f7cff"/><text x="${W - 290}" y="${H - 78}" font-family="Helvetica" font-size="14" fill="#fff">lanes open to cars</text><rect x="${W - 320}" y="${H - 60}" width="22" height="6" fill="#ff8c1a"/><text x="${W - 290}" y="${H - 52}" font-family="Helvetica" font-size="14" fill="#fff">two-wheelers, cycles, walkers</text><rect x="${W - 320}" y="${H - 34}" width="22" height="6" fill="#21c45a"/><text x="${W - 290}" y="${H - 26}" font-family="Helvetica" font-size="14" fill="#fff">walkers, cycles, emergency only</text>` : ''}</svg>`;
   fs.mkdirSync(path.dirname(out), { recursive: true });
   await sharp(Buffer.from(shade), { raw: { width: W, height: H, channels: 3 } }).composite([{ input: Buffer.from(svg) }]).png().toFile(out);
   return drawn;
@@ -159,7 +175,7 @@ async function main() {
   const tag = arg('--tag', '');
   for (const s of list) {
     const out = arg('--out') && list.length === 1 ? path.resolve(ROOT, arg('--out')) : path.join(outDir, `${arg('--prefix', 'p1-032')}_${s.id}${tag ? `_${tag}` : ''}.png`);
-    const n = await drawSite({ tilesDir, lat: s.lat, lon: s.lon, half: s.half, out, title: `${s.name}${tag ? ` (${tag})` : ''}`, mPerPx: Number(arg('--m-per-px', String(Math.max(0.06, (2 * s.half) / 1600)))) });
+    const n = await drawSite({ tilesDir, lat: s.lat, lon: s.lon, half: s.half, out, title: `${s.name}${tag ? ` (${tag})` : ''}`, mPerPx: Number(arg('--m-per-px', String(Math.max(0.06, (2 * s.half) / 1600)))), modes: args.includes('--modes') });
     console.log(`${path.relative(ROOT, out)}: ${n} triangles`);
   }
 }

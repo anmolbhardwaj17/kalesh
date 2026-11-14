@@ -59,7 +59,7 @@ export interface Surface {
     emitted: number; byClass: Record<string, number>; pinned: number; wallVertices: number; stepVertices: number; stepCorners: number; unresolvedSteps: number; skirts: number;
     underDeck: number; loweredUnderDeck: number; overTunnel: number; raisedOverTunnel: number; maxOffsetM: number; wallClamped: number;
     /** Landmark ground (P2-006): triangles by class, pad vertices at their level, pad corners a road pin holds off it, moat bed vertices. */
-    landmark: { pad: number; forecourt: number; wallbase: number; moat: number; padVertices: number; padPinnedByRoad: number; moatBed: number };
+    landmark: { pad: number; forecourt: number; wallbase: number; moat: number; walkway: number; padVertices: number; padPinnedByRoad: number; moatBed: number };
   };
 }
 
@@ -187,7 +187,7 @@ export function buildSurface(input: TerrainInput, tg: Triangulation, meet: Uint8
   // strip and a moat lie over ground, lawn and plot; a forecourt only over plain ground.
   const pieces = input.landmarks ?? [];
   const over = new Int32Array(ne).fill(-1);
-  const lmStats = { pad: 0, forecourt: 0, wallbase: 0, moat: 0, padVertices: 0, padPinnedByRoad: 0, moatBed: 0 };
+  const lmStats = { pad: 0, forecourt: 0, wallbase: 0, moat: 0, walkway: 0, padVertices: 0, padPinnedByRoad: 0, moatBed: 0 };
   const padLevel = new Float64Array(nv).fill(NaN);
   if (pieces.length) {
     const PC = 50;
@@ -238,8 +238,11 @@ export function buildSurface(input: TerrainInput, tg: Triangulation, meet: Uint8
       for (const gi of list) {
         const g = pieces[gi] as LandmarkGround;
         if (g.cls === 'forecourt' && k !== C_GROUND) continue;
+        // a walkway lies over plain ground, lawn and plot (a path through a park)
+        if (g.cls === 'walkway' && k !== C_GROUND && k !== C_LAWN && k !== C_PLOT) continue;
         const bx = boxes[gi] as { x0: number; x1: number; z0: number; z1: number };
         if (cx < bx.x0 || cx > bx.x1 || cz < bx.z0 || cz > bx.z1 || !inRing(g.ring, cx, cz)) continue;
+        if (g.holes && g.holes.some((h) => inRing(h, cx, cz))) continue;
         over[e] = gi;
         lmStats[g.cls]++;
         if (g.cls === 'pad') for (const v of [a, b, c]) padLevel[v] = g.level as number;

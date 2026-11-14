@@ -374,7 +374,9 @@
         "city_north_up",
         "city_ito_flyover_drive",
         "city_india_gate",
-        "city_cp_circle_lap"
+        "city_cp_circle_lap",
+        "city_access_bollards",
+        "city_access_scooter_gali"
       ]
     },
     {
@@ -384,7 +386,18 @@
         "city_cp_circle_lap",
         "city_chandni_walk",
         "city_india_gate",
-        "city_north_up"
+        "city_north_up",
+        "city_access_bollards",
+        "city_access_scooter_gali"
+      ]
+    },
+    {
+      "path": "harness/data/access.json",
+      "scenarios": [
+        "city_access_bollards",
+        "city_access_scooter_gali",
+        "city_chandni_walk",
+        "city_india_gate"
       ]
     },
     {

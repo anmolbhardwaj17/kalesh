@@ -7,12 +7,17 @@ extends RefCounted
 
 const TileReader := preload("res://world/streaming/tile_reader.gd")
 
+## Every mode, for pieces of tiles baked before P2-042.
+const ALL_MODES := ["car", "auto", "two_wheeler", "cycle", "foot", "emergency"]
+
 var id := "lanes"
 var lane := "data"
 var exclusive := false
 var per_frame := 0
 var budget_ms := 0.3
-## Piece id -> {id, of, kind, cls, layer, width, next, back, tile: Vector2i, pts: PackedVector3Array, length}.
+## Piece id -> {id, of, kind, cls, layer, width, next, back, modes, private, tile: Vector2i, pts: PackedVector3Array, length}.
+## `modes` (P2-042): who may use the piece (car, auto, two_wheeler, cycle, foot, emergency); tiles baked before have
+## none and allow every vehicle mode.
 var pieces := {}
 
 
@@ -34,6 +39,7 @@ func prepare(tile: Dictionary) -> Variant:
 		out.append({
 			"id": str(l.id), "of": str(l.get("of", "")), "kind": str(l.get("kind", "lane")), "cls": str(l.get("cls", "")),
 			"layer": int(l.get("layer", 0)), "width": float(l.get("widthM", 0.0)), "next": l.get("next", []), "back": l.get("back", []),
+			"modes": l.get("modes", ALL_MODES), "private": bool(l.get("private", false)),
 			"tile": tile.key, "pts": pts, "length": length,
 		})
 	return {"pieces": out, "on": false}
@@ -54,6 +60,13 @@ func dispose(tile: Dictionary, part: Variant) -> bool:
 	part.on = false
 	part.pieces = [] as Array[Dictionary]
 	return true
+
+
+## True when `mode` (car, auto, two_wheeler, cycle, foot, emergency) may use the piece of this id (P2-042): traffic,
+## the route line and missions keep to the pieces their mode may use.
+func allows(piece_id: String, mode: String) -> bool:
+	var p: Dictionary = pieces.get(piece_id, {})
+	return not p.is_empty() and mode in (p.get("modes", ALL_MODES) as Array)
 
 
 ## The piece of an id, or {} when its tile is not loaded.

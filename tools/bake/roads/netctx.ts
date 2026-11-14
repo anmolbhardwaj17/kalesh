@@ -1,6 +1,7 @@
 // Shared types and constants of the lane model builder (network.ts and its phases netzones.ts, netclusters.ts,
 // netstrips.ts). The public types of the model (LaneBuild, LaneJunction, ...) live here and are re-exported by
 // network.ts, the module every caller imports. Pure.
+import type { EdgeAccess } from '../graph/access.ts';
 import type { P2 } from '../geom.ts';
 import type { GraphEdge, GraphNode } from '../graph/build.ts';
 import type { RoadFilter, RoadGraph } from './blockgraph.ts';
@@ -135,6 +136,8 @@ export interface LaneBuild {
   problems: string[];
   rounds: number;
   ms: Record<string, number>;
+  /** Who may use each graph edge (P2-042, graph/access.ts), set by the lanes step after the build: the lane graph reads it. */
+  access?: Map<string, EdgeAccess>;
 }
 
 export interface TurnRulesReport {

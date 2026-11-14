@@ -20,8 +20,9 @@ const OUT = path.join(ROOT, 'harness', 'data', 'fixtures', 'stream_routes.json')
 // ---- the lane graph of every tile, in world metres (tools/fixtures/lanegraph.mjs)
 const { index, pieces } = readLaneGraph(TILES);
 const [offX, offZ] = index.offset;
-const nearest = (x, z) => nearestIn(pieces, x, z);
-const route = (a, b) => routeIn(pieces, a, b);
+// cars only (P2-042): a stream route keeps to lanes a car may use, so it never runs down a car-free street
+const nearest = (x, z) => nearestIn(pieces, x, z, { mode: 'car' });
+const route = (a, b) => routeIn(pieces, a, b, { mode: 'car' });
 const polyline = (ids) => polylineIn(pieces, ids);
 
 // ---- places

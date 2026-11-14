@@ -1,0 +1,70 @@
+{
+  "_doc": "Who may use each road (P2-042, tools/bake/graph/access.ts). The bake starts from the class default, then the OSM access tags, OSM barrier nodes and common sense (width, surface, ways inside parks and lawns), then the entries below in order: `by: rule` (kind rule: a Delhi rule from references; kind context: a common sense rule for a kind of place), then `by: judge` (top-view judge decisions, harness/data/judge/), then `by: owner` (Anmol's word or an inspector pick, overrides everything). Within one rank a later entry wins. modes: car, auto, two_wheeler, cycle (bicycles and cycle rickshaws), foot (walkers on the carriageway itself), emergency (fire, ambulance and police). match: ways (\"way/<id>\"), edges, name (regex), notName, classes, maxWidthM, within {lat, lon, radiusM} (every point of the edge inside), areas (area ids of harness/data/areas/areas.geojson) and archetypes (of a drawn area or a 100 m rule cell) at the edge's middle. barrier: bollards puts a line of bollards with colliders across the way where a road open to cars meets it; none means a violation only (no barrier in reality). A rule never opens a way to cars that is under 2.8 m wide.",
+  "rules": [
+    {
+      "id": "chandni_chowk_main_nmv",
+      "by": "rule",
+      "kind": "rule",
+      "why": "Chandni Chowk main road, Red Fort to Fatehpuri Masjid, is a non-motorised zone from 9 am to 9 pm since the 2021 redevelopment: walkers, cycle rickshaws and emergency vehicles only, bollards at the entries",
+      "refs": [
+        "harness/design/areas/chandni_chowk_main.md (Footpaths: the redeveloped pedestrian priority avenue, about 2021)",
+        "https://commons.wikimedia.org/wiki/File:Chandni_Chowk_Area.jpg (CC0, 2025-04-03: the redeveloped road, no cars)",
+        "https://en.wikipedia.org/wiki/Chandni_Chowk (redevelopment and the non-motorised vehicle zone)",
+        "OSM ways 1136687918, 1136687919, 1147871209, 1147871210 at the Red Fort end carry motor_vehicle=no"
+      ],
+      "modes": ["cycle", "foot", "emergency"],
+      "hours": "09:00-21:00",
+      "barrier": "bollards",
+      "match": { "ways": ["way/44141357", "way/80940694", "way/1136687918", "way/1136687919", "way/1147871209", "way/1147871210"] }
+    },
+    {
+      "id": "old_city_galis",
+      "by": "rule",
+      "kind": "context",
+      "why": "an old city gali or bazaar lane (Shahjahanabad): two-wheelers, cycle rickshaws and walkers only; a car does not fit between the shop spill and the walls",
+      "refs": [
+        "harness/design/areas/chandni_chowk_galis.md (lanes 2.5 to 6 m, shop spill 0.5 to 1.5 m each side)",
+        "https://commons.wikimedia.org/wiki/File:Narrow_Lane_of_Ballimaran,_Old_Delhi_(Gali-E-Ghalib).jpg (CC BY-SA 4.0)",
+        "https://commons.wikimedia.org/wiki/File:Old_Delhi-Kinari_Bazar-1-20131006.jpg (CC BY-SA 3.0)"
+      ],
+      "modes": ["two_wheeler", "cycle", "foot", "emergency"],
+      "barrier": "none",
+      "match": { "archetypes": ["old_city_lanes", "old_city_bazaar"], "classes": ["residential", "living_street", "service", "unclassified", "pedestrian", "road", "track"] }
+    },
+    {
+      "id": "old_city_dense_lanes",
+      "by": "rule",
+      "kind": "context",
+      "why": "a lane under 4.5 m in dense old city fabric: two-wheelers, cycle rickshaws and walkers only",
+      "refs": ["harness/design/areas/chandni_chowk_galis.md", "harness/data/areas/rules.json (old_city_dense cells)"],
+      "modes": ["two_wheeler", "cycle", "foot", "emergency"],
+      "barrier": "none",
+      "match": { "archetypes": ["old_city_dense"], "classes": ["residential", "living_street", "service", "unclassified", "road", "track"], "maxWidthM": 4.5 }
+    },
+    {
+      "id": "kartavya_path_promenade",
+      "by": "rule",
+      "kind": "rule",
+      "why": "Kartavya Path west of the India Gate hexagon is a paved promenade since the Central Vista redevelopment (paving stones, no lane marks): walkers and cycles, closed to cars with low bollards at the hexagon",
+      "refs": [
+        "harness/design/areas/india_gate_kartavya_path.md (Boundaries: low chain-link bollards at the hexagon)",
+        "https://commons.wikimedia.org/wiki/File:Kartavya_Path_in_the_evening_in_New_Delhi_01.jpg (CC BY-SA 4.0, 2022-09-12)",
+        "OSM way 537797267: access=no, surface=paving_stones, lane_markings=no",
+        "Anmol 2026-11-14: near India Gate there is a road, but cars can't go there"
+      ],
+      "modes": ["cycle", "foot", "emergency"],
+      "barrier": "bollards",
+      "match": { "ways": ["way/537797267"] }
+    },
+    {
+      "id": "india_gate_inside_hexagon",
+      "by": "rule",
+      "kind": "rule",
+      "why": "inside the India Gate hexagon (the lawns, the canopy and the paths round the memorial) is open to walkers only since the Central Vista redevelopment",
+      "refs": ["harness/design/areas/india_gate_kartavya_path.md", "Anmol 2026-11-14: the promenade and roads inside the India Gate lawns and around the canopy are closed to cars"],
+      "modes": ["cycle", "foot", "emergency"],
+      "barrier": "bollards",
+      "match": { "within": { "lat": 28.612894, "lon": 77.229446, "radiusM": 190 } }
+    }
+  ]
+}
