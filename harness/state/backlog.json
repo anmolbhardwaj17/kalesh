@@ -1,6 +1,6 @@
 {
   "_doc": "Written only by node harness/bin/task.mjs. Phases run in order; P0 (ADOPT + STYLE DISCOVERY) waits for the owner by design and needs task.mjs signoff and task.mjs archsignoff before its gate passes. Later phases are added by the planner at the end of P0 (task.mjs phase-add) from the game's real state.",
-  "updated": "2026-11-14T17:29:46.503Z",
+  "updated": "2026-11-14T17:39:14.173Z",
   "phases": [
     {
       "id": "P0",
@@ -5051,7 +5051,9 @@
       "kind": "mentor",
       "status": "todo",
       "attempts": 0,
-      "notes": [],
+      "notes": [
+        "Mostly done ahead of time on 2026-11-14: 161 clips downloaded and sorted in assets_inbox/mixamo; wiring in P2-072."
+      ],
       "created": "2026-11-14T10:02:32.266Z",
       "model": "opus"
     },
@@ -5258,6 +5260,25 @@
       "notes": [],
       "created": "2026-11-14T17:20:37.299Z",
       "model": "sonnet"
+    },
+    {
+      "id": "P2-072",
+      "phase": "P2",
+      "title": "Mixamo animations on the leads: pick per character, layered blending",
+      "desc": "161 Mixamo clips (FBX, without skin, 30 fps, in place where offered) downloaded with the owner's account, sorted in assets_inbox/mixamo/<category>/ (gitignored: Mixamo licence allows use in the game but not sharing raw files; commit only converted game resources). The leads (Bittu, Meera, Danny) share the Mixamo skeleton they were rigged with, so clips play without retargeting. 1) Import the clips into the game's animation library for the leads (convert to Godot animation resources, root motion removed or used consistently, loop flags right). 2) Pick per lead by comparing candidates in game on each lead (shot strips from behind and the side, read them): idle (Breathing, Standing, Short, Weight Shift, Neutral, Happy; Meera: Female Idle, Female Standing Idle), walk (Male Standard Walk, Walk Forward 01/02/03, Happy, Hurried, Careful, Strut, Walking With A Swagger; Meera: Female Normal Walk), jog (Jogging), run (Running Forward, Running Fast, Slow Run Forward, Standard Sprint), start and stop walking, turns (mirror the left walking turn for the right); personality: loose for Bittu, upright and precise for Meera, swagger for Danny (P3-012). 3) Layered blending: lower body locomotion blend space by speed with crossfades; upper body layer by bone mask for pistol aim and shoot, phone talk, texting, gestures, carrying; aim IK for the spine; additive flinches. 4) Wire the rest by category (combat, climbing, swimming, driving, injured and drunk, actions) as named clips for later systems, with a test that lists them. Stand-ins and crowds keep the library clips.",
+      "accept": [
+        "All 161 clips import and are listed by name; raw FBX stay out of git; npm test and verify --quick green"
+      ],
+      "deps": [],
+      "agent": "builder",
+      "priority": 1,
+      "kind": "mentor",
+      "status": "doing",
+      "attempts": 1,
+      "notes": [],
+      "created": "2026-11-14T17:39:13.193Z",
+      "model": "opus",
+      "started": "2026-11-14T17:39:14.168Z"
     }
   ]
 }
