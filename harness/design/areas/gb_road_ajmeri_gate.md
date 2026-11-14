@@ -6,42 +6,96 @@ Status: draft from street-level reference research, P2-002 (2026-11-13). Id `gb_
 
 **Evidence note.** 30 street-level photos (tiles 1 to 30), all Wikimedia Commons, openly viewable, each with link and licence in the table. Mapillary and Flickr need a login or token, so they were not used. Commons has no usable street view of the length of GB Road itself, so the sheet is built from the places at its ends and the streets of the same type: the Ajmeri Gate and the road along it (1 to 9), the station front at night and the rail line beside it (10, 11), the New Delhi station forecourt on the Ajmeri Gate side (12 to 22), Hauz Qazi Chowk (23 to 27), and the Delhi Gate and Turkman Gate on the old wall line (28 to 30). **Confidence: medium** for the Ajmeri Gate end, the gate, the hardware-shop building type and the station forecourt; **low** for the middle of GB Road, which has no openly licensed street-level photo. It cannot be higher until the owner adds his own photos, or Mapillary is used with a token. A line that says "about" was read from the photos by scale cues (a car is about 1.7 m wide, a person about 1.7 m tall) and is not surveyed.
 
+
+
+
+
+<!-- P2-049:start -->
+## Current photos and what the street is made of today (P2-049, 2026-11-14)
+
+Added 2026-11-14 on Anmol's rule: areas are built from how they look today, and every photo carries its date. **State used:** no big rebuild known since 2019: photos from 2019 on count. Board: `gb_road_ajmeri_gate_board.jpg` (current photos first, the earlier P0 board below it, dimmed; the old board alone is `gb_road_ajmeri_gate_board_old.jpg`).
+
+Date basis: Commons "date" field. EXIF = a time of day is present (taken from the camera tags); stated = the uploader typed the date (no time of day), treated as unverified. Licences are as shown by Commons on 2026-11-14.
+
+| C | File | Date (basis) | View | Author | Licence | URL |
+|---|---|---|---|---|---|---|
+| C1 | Ajmeri Gate shot from New Delhi railway station.jpg | 2022-04-13 (stated) | street | Ravi Dwivedi | CC BY-SA 4.0 | https://commons.wikimedia.org/wiki/File:Ajmeri_Gate_shot_from_New_Delhi_railway_station.jpg |
+| C2 | New Delhi Railway Station Ajmeri Gate side, India. 01.jpg | 2022-04-13 (stated) | street | Ravi Dwivedi | CC BY-SA 4.0 | https://commons.wikimedia.org/wiki/File:New_Delhi_Railway_Station_Ajmeri_Gate_side,_India._01.jpg |
+| C3 | New Delhi Railway Station Ajmeri Gate side, India. 03.jpg | 2022-04-13 (stated) | street | Ravi Dwivedi | CC BY-SA 4.0 | https://commons.wikimedia.org/wiki/File:New_Delhi_Railway_Station_Ajmeri_Gate_side,_India._03.jpg |
+| C4 | New Delhi Railway Station Ajmeri Gate side, India. 04.jpg | 2022-04-13 (stated) | street | Ravi Dwivedi | CC BY-SA 4.0 | https://commons.wikimedia.org/wiki/File:New_Delhi_Railway_Station_Ajmeri_Gate_side,_India._04.jpg |
+| C5 | New Delhi Railway Station Ajmeri Gate side, India. 06.jpg | 2022-04-13 (stated) | street | Ravi Dwivedi | CC BY-SA 4.0 | https://commons.wikimedia.org/wiki/File:New_Delhi_Railway_Station_Ajmeri_Gate_side,_India._06.jpg |
+| C6 | New Delhi Railway Station Ajmeri Gate side, India. 07.jpg | 2022-04-13 (stated) | street | Ravi Dwivedi | CC BY-SA 4.0 | https://commons.wikimedia.org/wiki/File:New_Delhi_Railway_Station_Ajmeri_Gate_side,_India._07.jpg |
+| C7 | New Delhi railway station from Ajmeri Gate side.jpg | 2022-04-19 (stated) | street | Ravi Dwivedi | CC BY-SA 4.0 | https://commons.wikimedia.org/wiki/File:New_Delhi_railway_station_from_Ajmeri_Gate_side.jpg |
+| C8 | New Delhi railway station at night 01.jpg | 2022-09-15 (EXIF) | street | Pinakpani | CC BY-SA 4.0 | https://commons.wikimedia.org/wiki/File:New_Delhi_railway_station_at_night_01.jpg |
+| C9 | New Delhi railway station at night 04.jpg | 2022-09-15 (EXIF) | street | Pinakpani | CC BY-SA 4.0 | https://commons.wikimedia.org/wiki/File:New_Delhi_railway_station_at_night_04.jpg |
+| C10 | New Delhi railway station ajmeri gate entrance.jpg | 2025-07-22 (EXIF) | street | KhubsuratInsaan | CC BY-SA 4.0 | https://commons.wikimedia.org/wiki/File:New_Delhi_railway_station_ajmeri_gate_entrance.jpg |
+| C11 | New Delhi Railway Station Entry.jpg | 2021-06-19 (EXIF) | landmark | Anjalipapreja | CC BY-SA 4.0 | https://commons.wikimedia.org/wiki/File:New_Delhi_Railway_Station_Entry.jpg |
+| C12 | Delhi gate photo.jpg | 2021-08-23 (EXIF) | landmark | Javedgolaghat | CC BY-SA 4.0 | https://commons.wikimedia.org/wiki/File:Delhi_gate_photo.jpg |
+| C13 | Delhi Gate Full View.jpg | 2021-09-14 (stated) | landmark | IshiSenpai | CC BY-SA 4.0 | https://commons.wikimedia.org/wiki/File:Delhi_Gate_Full_View.jpg |
+| C14 | Delhi Gate Back View.jpg | 2021-09-28 (EXIF) | landmark | IshiSenpai | CC BY-SA 4.0 | https://commons.wikimedia.org/wiki/File:Delhi_Gate_Back_View.jpg |
+| C15 | Entrances of New Delhi railway station.jpg | 2022-10-28 (stated) | landmark | Anjalipapreja (top image) and FacetsOfNonStickPans | CC BY-SA 4.0 | https://commons.wikimedia.org/wiki/File:Entrances_of_New_Delhi_railway_station.jpg |
+| C16 | Delhi Gate, Old Delhi.jpg | 2024-04-27 (EXIF) | landmark | Tamjeed Ahmed | CC BY-SA 4.0 | https://commons.wikimedia.org/wiki/File:Delhi_Gate,_Old_Delhi.jpg |
+| C17 | Turkman Gate, Chandni chowk.jpg | 2024-08-31 (EXIF) | landmark | Luma2rk | CC BY-SA 4.0 | https://commons.wikimedia.org/wiki/File:Turkman_Gate,_Chandni_chowk.jpg |
+
+Count: 17 current photos, 10 at street level or from the player's height (view = street), oldest current date 2021-06-19.
+
+### What it is made of today
+
+- **Changed since the old photos:** The Commons photos of the New Delhi station Ajmeri Gate side (2022) are current. No dated free photo of G.B. Road (Shraddhanand Marg) itself and no photo of Ajmeri Gate (Delhi) was found: the search results for "Ajmeri Gate" are Ajmer and Jaipur. Old photos kept on the sheet are marked OLD.
+- **Facade colours (sampled):** k-means on the building band (18% to 52% of the frame height, sky, foliage, black and shadow removed, shown dark to light) of 10 street-level current photos (night shots skipped): #616055 (16%), #95773C (19%), #878579 (19%), #B6A983 (17%), #CCCAC0 (11%). Treat as the range; pick facade paints from these, and bright colours only where a photo shows them.
+- **Road surface sampled:** the bottom centre of the same photos, largest colour cluster #B0A799, others #2E2F25, #756C61 (cars, paint and shadow are mixed in, so read the main value as the surface and judge it against the photos).
+- Road surface and colour: worn dark grey asphalt on the forecourt road, black and yellow painted kerb stones, white edge lines (seen, C-photos of the Ajmeri Gate side).
+- Kerbs: raised stone kerb painted black and yellow in segments (seen).
+- Footpath: wide forecourt of grey tile and concrete in front of the station, cycle rickshaw stand at the edge (seen).
+- Median: none on the forecourt.
+- Poles and wires: tall mast floodlights on the forecourt, ordinary steel poles with cobra-head lamps; overhead rail wires beyond (seen).
+- Lights: mast lights glaring white at night, autos with tail lamps, station sign lit (seen, 2022 night series).
+- Trees: a few palms and neem at the forecourt edge (seen).
+- Signs: big red and white "NEW DELHI" sign with Hindi and Urdu, a green, yellow and white artwork banner over the arcade, parking and auto stand boards (seen).
+- Typical clutter: green and yellow autos and e-rickshaws, white taxis, a red balloon, porters, cycle rickshaws, tuk-tuks queueing (seen).
+
+### Photo requests for Anmol
+
+- A street-level photo along G.B. Road (Shraddhanand Marg) from the road, 2019 or later, in daylight: the shopfronts, the pavement, the poles and wires. No free dated photo of this street exists on Commons, so the facade colours and the surface here are still from the map and the old sheet.
+- The Ajmeri Gate itself (the Delhi city gate near Ajmeri Gate Chowk), 2019 or later, street level.
+<!-- P2-049:end -->
+
 ## Sources
 
 Board tile number, file, page URL, licence, author and date. All are Wikimedia Commons pages; the licence is as shown by Commons on 2026-11-13 and must be rechecked before any image is reused outside this internal board.
 
 | # | File | URL | Licence | Author, date |
 |---|---|---|---|---|
-| 1 | Ajmeri Gate (22227698363).jpg | https://commons.wikimedia.org/wiki/File:Ajmeri_Gate_(22227698363).jpg | CC BY 2.0 | Varun Shiv Kapur from New Delhi, India 2015-11-06 |
-| 2 | Ajmeri Gate (22660830350).jpg | https://commons.wikimedia.org/wiki/File:Ajmeri_Gate_(22660830350).jpg | CC BY 2.0 | Varun Shiv Kapur from New Delhi, India 2015-11-06 |
-| 3 | Ajmeri Gate Shahjahanabad Old Delhi.jpg | https://commons.wikimedia.org/wiki/File:Ajmeri_Gate_Shahjahanabad_Old_Delhi.jpg | CC BY-SA 4.0 | Rashid Jorvee 2017-10-29 |
+| 1 | Ajmeri Gate (22227698363).jpg | https://commons.wikimedia.org/wiki/File:Ajmeri_Gate_(22227698363).jpg | CC BY 2.0 | Varun Shiv Kapur from New Delhi, India 2015-11-06 **OLD (2015, before 2019): not used for surfaces, signs or colours** |
+| 2 | Ajmeri Gate (22660830350).jpg | https://commons.wikimedia.org/wiki/File:Ajmeri_Gate_(22660830350).jpg | CC BY 2.0 | Varun Shiv Kapur from New Delhi, India 2015-11-06 **OLD (2015, before 2019): not used for surfaces, signs or colours** |
+| 3 | Ajmeri Gate Shahjahanabad Old Delhi.jpg | https://commons.wikimedia.org/wiki/File:Ajmeri_Gate_Shahjahanabad_Old_Delhi.jpg | CC BY-SA 4.0 | Rashid Jorvee 2017-10-29 **OLD (2017, before 2019): not used for surfaces, signs or colours** |
 | 4 | Ajmeri gate(view from road).JPG | https://commons.wikimedia.org/wiki/File:Ajmeri_gate(view_from_road).JPG | CC BY-SA 3.0 | Rahul noida Taken on 2 |
-| 5 | Along Ajmeri Gate road (22226027894).jpg | https://commons.wikimedia.org/wiki/File:Along_Ajmeri_Gate_road_(22226027894).jpg | CC BY 2.0 | Varun Shiv Kapur from New Delhi, India 2015-11-06 |
-| 6 | Along Ajmeri Gate road (22227637333).jpg | https://commons.wikimedia.org/wiki/File:Along_Ajmeri_Gate_road_(22227637333).jpg | CC BY 2.0 | Varun Shiv Kapur from New Delhi, India 2015-11-06 |
-| 7 | Along Ajmeri Gate road (22859916661).jpg | https://commons.wikimedia.org/wiki/File:Along_Ajmeri_Gate_road_(22859916661).jpg | CC BY 2.0 | Varun Shiv Kapur from New Delhi, India 2015-11-06 |
-| 8 | Anglo arabic model school ajmeri gate.JPG | https://commons.wikimedia.org/wiki/File:Anglo_arabic_model_school_ajmeri_gate.JPG | CC BY 3.0 | Akkkanksha 2011-03-12 |
-| 9 | Near Ajmeri Gate (22962551512).jpg | https://commons.wikimedia.org/wiki/File:Near_Ajmeri_Gate_(22962551512).jpg | CC BY 2.0 | Varun Shiv Kapur from New Delhi, India 2015-11-09 |
+| 5 | Along Ajmeri Gate road (22226027894).jpg | https://commons.wikimedia.org/wiki/File:Along_Ajmeri_Gate_road_(22226027894).jpg | CC BY 2.0 | Varun Shiv Kapur from New Delhi, India 2015-11-06 **OLD (2015, before 2019): not used for surfaces, signs or colours** |
+| 6 | Along Ajmeri Gate road (22227637333).jpg | https://commons.wikimedia.org/wiki/File:Along_Ajmeri_Gate_road_(22227637333).jpg | CC BY 2.0 | Varun Shiv Kapur from New Delhi, India 2015-11-06 **OLD (2015, before 2019): not used for surfaces, signs or colours** |
+| 7 | Along Ajmeri Gate road (22859916661).jpg | https://commons.wikimedia.org/wiki/File:Along_Ajmeri_Gate_road_(22859916661).jpg | CC BY 2.0 | Varun Shiv Kapur from New Delhi, India 2015-11-06 **OLD (2015, before 2019): not used for surfaces, signs or colours** |
+| 8 | Anglo arabic model school ajmeri gate.JPG | https://commons.wikimedia.org/wiki/File:Anglo_arabic_model_school_ajmeri_gate.JPG | CC BY 3.0 | Akkkanksha 2011-03-12 **OLD (2011, before 2019): not used for surfaces, signs or colours** |
+| 9 | Near Ajmeri Gate (22962551512).jpg | https://commons.wikimedia.org/wiki/File:Near_Ajmeri_Gate_(22962551512).jpg | CC BY 2.0 | Varun Shiv Kapur from New Delhi, India 2015-11-09 **OLD (2015, before 2019): not used for surfaces, signs or colours** |
 | 10 | Ajmeri Gate - panoramio.jpg | https://commons.wikimedia.org/wiki/File:Ajmeri_Gate_-_panoramio.jpg | CC BY-SA 3.0 | Harpreet Sidhu 29 Septemb |
 | 11 | Ajmeri Gate shot from New Delhi railway station.jpg | https://commons.wikimedia.org/wiki/File:Ajmeri_Gate_shot_from_New_Delhi_railway_station.jpg | CC BY-SA 4.0 | Ravi Dwivedi 2022-04-13 |
 | 12 | New Delhi Railway Station Ajmeri Gate side, India. 01.jpg | https://commons.wikimedia.org/wiki/File:New_Delhi_Railway_Station_Ajmeri_Gate_side,_India._01.jpg | CC BY-SA 4.0 | Ravi Dwivedi 2022-04-13 |
 | 13 | New Delhi Railway Station Ajmeri Gate side, India. 02.jpg | https://commons.wikimedia.org/wiki/File:New_Delhi_Railway_Station_Ajmeri_Gate_side,_India._02.jpg | CC BY-SA 4.0 | Ravi Dwivedi 2022-04-13 |
 | 14 | New Delhi Railway Station Ajmeri Gate side, India. 03.jpg | https://commons.wikimedia.org/wiki/File:New_Delhi_Railway_Station_Ajmeri_Gate_side,_India._03.jpg | CC BY-SA 4.0 | Ravi Dwivedi 2022-04-13 |
 | 15 | New Delhi Railway Station Ajmeri Gate side, India. 04.jpg | https://commons.wikimedia.org/wiki/File:New_Delhi_Railway_Station_Ajmeri_Gate_side,_India._04.jpg | CC BY-SA 4.0 | Ravi Dwivedi 2022-04-13 |
-| 16 | New Delhi railway station, Ajmeri Gate exit area, 2018.jpg | https://commons.wikimedia.org/wiki/File:New_Delhi_railway_station,_Ajmeri_Gate_exit_area,_2018.jpg | CC BY-SA 4.0 | FacetsOfNonStickPans 2018-01-03 |
-| 17 | New Delhi railway station, Ajmeri Gate exit area from second floor exit, 2018.jpg | https://commons.wikimedia.org/wiki/File:New_Delhi_railway_station,_Ajmeri_Gate_exit_area_from_second_floor_exit,_2018.jpg | CC BY-SA 4.0 | FacetsOfNonStickPans 2018-01-03 |
+| 16 | New Delhi railway station, Ajmeri Gate exit area, 2018.jpg | https://commons.wikimedia.org/wiki/File:New_Delhi_railway_station,_Ajmeri_Gate_exit_area,_2018.jpg | CC BY-SA 4.0 | FacetsOfNonStickPans 2018-01-03 **OLD (2018, before 2019): not used for surfaces, signs or colours** |
+| 17 | New Delhi railway station, Ajmeri Gate exit area from second floor exit, 2018.jpg | https://commons.wikimedia.org/wiki/File:New_Delhi_railway_station,_Ajmeri_Gate_exit_area_from_second_floor_exit,_2018.jpg | CC BY-SA 4.0 | FacetsOfNonStickPans 2018-01-03 **OLD (2018, before 2019): not used for surfaces, signs or colours** |
 | 18 | New Delhi railway station ajmeri gate entrance.jpg | https://commons.wikimedia.org/wiki/File:New_Delhi_railway_station_ajmeri_gate_entrance.jpg | CC BY-SA 4.0 | KhubsuratInsaan 22 July 20 |
 | 19 | New Delhi railway station from Ajmeri Gate side.jpg | https://commons.wikimedia.org/wiki/File:New_Delhi_railway_station_from_Ajmeri_Gate_side.jpg | CC BY-SA 4.0 | Ravi Dwivedi 2022-04-19 |
 | 20 | Entrances of New Delhi railway station.jpg | https://commons.wikimedia.org/wiki/File:Entrances_of_New_Delhi_railway_station.jpg | CC BY-SA 4.0 | Anjalipapreja (top image) and FacetsOfNonStickPans 2022-10-28 |
 | 21 | New Delhi Railway Station Entry.jpg | https://commons.wikimedia.org/wiki/File:New_Delhi_Railway_Station_Entry.jpg | CC BY-SA 4.0 | Anjalipapreja 2021-06-19 |
-| 22 | New Delhi railway station.jpg | https://commons.wikimedia.org/wiki/File:New_Delhi_railway_station.jpg | CC BY-SA 4.0 | Spsingh2123 2017-12-21 |
-| 23 | Hauz Qazi Chowk (22226119264).jpg | https://commons.wikimedia.org/wiki/File:Hauz_Qazi_Chowk_(22226119264).jpg | CC BY 2.0 | Varun Shiv Kapur from New Delhi, India 2015-11-06 |
-| 24 | Hauz Qazi Chowk (22227705823).jpg | https://commons.wikimedia.org/wiki/File:Hauz_Qazi_Chowk_(22227705823).jpg | CC BY 2.0 | Varun Shiv Kapur from New Delhi, India 2015-11-06 |
-| 25 | Hauz Qazi Chowk (22227772063).jpg | https://commons.wikimedia.org/wiki/File:Hauz_Qazi_Chowk_(22227772063).jpg | CC BY 2.0 | Varun Shiv Kapur from New Delhi, India 2015-11-06 |
-| 26 | Hauz Qazi Chowk (22430557297).jpg | https://commons.wikimedia.org/wiki/File:Hauz_Qazi_Chowk_(22430557297).jpg | CC BY 2.0 | Varun Shiv Kapur from New Delhi, India 2015-11-06 |
-| 27 | Hauz Qazi Chowk (22430587357).jpg | https://commons.wikimedia.org/wiki/File:Hauz_Qazi_Chowk_(22430587357).jpg | CC BY 2.0 | Varun Shiv Kapur from New Delhi, India 2015-11-06 |
-| 28 | Delhi Gate, Turkman Gate, New Delhi 01.jpg | https://commons.wikimedia.org/wiki/File:Delhi_Gate,_Turkman_Gate,_New_Delhi_01.jpg | CC BY-SA 4.0 | Sidheeq 2017-07-06 |
+| 22 | New Delhi railway station.jpg | https://commons.wikimedia.org/wiki/File:New_Delhi_railway_station.jpg | CC BY-SA 4.0 | Spsingh2123 2017-12-21 **OLD (2017, before 2019): not used for surfaces, signs or colours** |
+| 23 | Hauz Qazi Chowk (22226119264).jpg | https://commons.wikimedia.org/wiki/File:Hauz_Qazi_Chowk_(22226119264).jpg | CC BY 2.0 | Varun Shiv Kapur from New Delhi, India 2015-11-06 **OLD (2015, before 2019): not used for surfaces, signs or colours** |
+| 24 | Hauz Qazi Chowk (22227705823).jpg | https://commons.wikimedia.org/wiki/File:Hauz_Qazi_Chowk_(22227705823).jpg | CC BY 2.0 | Varun Shiv Kapur from New Delhi, India 2015-11-06 **OLD (2015, before 2019): not used for surfaces, signs or colours** |
+| 25 | Hauz Qazi Chowk (22227772063).jpg | https://commons.wikimedia.org/wiki/File:Hauz_Qazi_Chowk_(22227772063).jpg | CC BY 2.0 | Varun Shiv Kapur from New Delhi, India 2015-11-06 **OLD (2015, before 2019): not used for surfaces, signs or colours** |
+| 26 | Hauz Qazi Chowk (22430557297).jpg | https://commons.wikimedia.org/wiki/File:Hauz_Qazi_Chowk_(22430557297).jpg | CC BY 2.0 | Varun Shiv Kapur from New Delhi, India 2015-11-06 **OLD (2015, before 2019): not used for surfaces, signs or colours** |
+| 27 | Hauz Qazi Chowk (22430587357).jpg | https://commons.wikimedia.org/wiki/File:Hauz_Qazi_Chowk_(22430587357).jpg | CC BY 2.0 | Varun Shiv Kapur from New Delhi, India 2015-11-06 **OLD (2015, before 2019): not used for surfaces, signs or colours** |
+| 28 | Delhi Gate, Turkman Gate, New Delhi 01.jpg | https://commons.wikimedia.org/wiki/File:Delhi_Gate,_Turkman_Gate,_New_Delhi_01.jpg | CC BY-SA 4.0 | Sidheeq 2017-07-06 **OLD (2017, before 2019): not used for surfaces, signs or colours** |
 | 29 | Delhi Gate - Full Photo - Front.jpg | https://commons.wikimedia.org/wiki/File:Delhi_Gate_-_Full_Photo_-_Front.jpg | CC BY-SA 4.0 | IshiSenpai 2021-09-28 |
-| 30 | Delhi Gate View from Road.JPG | https://commons.wikimedia.org/wiki/File:Delhi_Gate_View_from_Road.JPG | CC BY-SA 3.0 | Nvvchar 2009-05-31 |
+| 30 | Delhi Gate View from Road.JPG | https://commons.wikimedia.org/wiki/File:Delhi_Gate_View_from_Road.JPG | CC BY-SA 3.0 | Nvvchar 2009-05-31 **OLD (2009, before 2019): not used for surfaces, signs or colours** |
 
 Total cited sources: 30.
 

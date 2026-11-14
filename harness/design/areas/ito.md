@@ -8,36 +8,92 @@ Status: draft from reference research, P0-035 (2026-11-11). Id `ito`. Internal r
 
 Where a line says 'about', the number was read from the photos by scale cues (a car is about 1.7 m wide, a person about 1.7 m tall) and is not surveyed. Lines are read from the board photos except where the evidence note says the area is thin; those lines also use general knowledge and must be rechecked with street imagery. Confidence per area is in DELHI_WORLD.md section 2a.
 
+
+
+
+
+
+<!-- P2-049:start -->
+## Current photos and what the street is made of today (P2-049, 2026-11-14)
+
+Added 2026-11-14 on Anmol's rule: areas are built from how they look today, and every photo carries its date. **State used:** Pragati Maidan tunnel opened June 2022, ITPO complex finished 2023: only photos from 2022-06-19 on count. Board: `ito_board.jpg` (current photos first, the earlier P0 board below it, dimmed; the old board alone is `ito_board_old.jpg`).
+
+Date basis: Commons "date" field. EXIF = a time of day is present (taken from the camera tags); stated = the uploader typed the date (no time of day), treated as unverified. Licences are as shown by Commons on 2026-11-14.
+
+| C | File | Date (basis) | View | Author | Licence | URL |
+|---|---|---|---|---|---|---|
+| C1 | New Delhi Outer Ring Road Picture.jpg | 2022-07-08 (stated) | street | Arygup05 | CC BY-SA 4.0 | https://commons.wikimedia.org/wiki/File:New_Delhi_Outer_Ring_Road_Picture.jpg |
+| C2 | OuterRingRoad.jpg | 2022-07-08 (EXIF) | street | Arygup05 | CC BY-SA 4.0 | https://commons.wikimedia.org/wiki/File:OuterRingRoad.jpg |
+| C3 | Barakhamba Road in New Delhi 01.jpg | 2022-08-30 (EXIF) | street | Pinakpani | CC BY-SA 4.0 | https://commons.wikimedia.org/wiki/File:Barakhamba_Road_in_New_Delhi_01.jpg |
+| C4 | Barakhamba Road in New Delhi 06.jpg | 2022-08-30 (EXIF) | street | Pinakpani | CC BY-SA 4.0 | https://commons.wikimedia.org/wiki/File:Barakhamba_Road_in_New_Delhi_06.jpg |
+| C5 | Barakhamba Road in New Delhi 07.jpg | 2022-08-30 (EXIF) | street | Pinakpani | CC BY-SA 4.0 | https://commons.wikimedia.org/wiki/File:Barakhamba_Road_in_New_Delhi_07.jpg |
+| C6 | Bharat Mandapam19feb2025.jpg | 2025-02-19 (stated) | street | Rirubi | CC BY-SA 4.0 | https://commons.wikimedia.org/wiki/File:Bharat_Mandapam19feb2025.jpg |
+| C7 | Bharat Mandapam Convention Centre.jpg | 2025-07-02 (EXIF) | street | Aloofmanish | CC0 | https://commons.wikimedia.org/wiki/File:Bharat_Mandapam_Convention_Centre.jpg |
+| C8 | Bharat Mandapam view from East.jpg | 2026-02-20 (EXIF) | street | Kuldeepburjbhalaike | CC BY-SA 4.0 | https://commons.wikimedia.org/wiki/File:Bharat_Mandapam_view_from_East.jpg |
+| C9 | ITO - Income Tax Office metro station (Delhi).jpg | 2022-11-23 (stated) | landmark | Santosh4118 | CC BY-SA 4.0 | https://commons.wikimedia.org/wiki/File:ITO_-_Income_Tax_Office_metro_station_(Delhi).jpg |
+| C10 | Facade of Hall 3 of Pragati Maidan.jpg | 2023-11-23 (EXIF) | landmark | DesiBoy101 | CC BY 4.0 | https://commons.wikimedia.org/wiki/File:Facade_of_Hall_3_of_Pragati_Maidan.jpg |
+| C11 | Hall 1 to 5 of Pragati Maidan illuminated.jpg | 2023-11-23 (EXIF) | landmark | DesiBoy101 | CC BY 4.0 | https://commons.wikimedia.org/wiki/File:Hall_1_to_5_of_Pragati_Maidan_illuminated.jpg |
+
+Picked but OLD (before the state above): not used for surfaces, signs or colours.
+
+| File | Date | Author | Licence |
+|---|---|---|---|
+| A JBM CityLife CNG AC Bus on Delhi's Outer Ring Road (Road No. 56) near Ramprastha-Yojna Vihar.jpg | 2022-02-23 (stated) | Kool Nerd 123 | CC BY 4.0 |
+| Delhi Police Headquarters.jpg | 2019-11-28 (EXIF) | Ji-Elle | CC BY-SA 4.0 |
+
+Count: 11 current photos, 8 at street level or from the player's height (view = street), oldest current date 2022-07-08.
+
+### What it is made of today
+
+- **Changed since the old photos:** Pragati Maidan area: the Pragati Maidan Integrated Transit Corridor and its tunnel opened in June 2022; the ITPO complex (Bharat Mandapam) was rebuilt and opened 2023. Photos before 2022 are marked OLD.
+- **Changed since the old photos:** Photos of the ITO crossing and the Pragati Maidan tunnel from road level were not found among the free dated files; see Photo requests.
+- **Facade colours (sampled):** k-means on the building band (18% to 52% of the frame height, sky, foliage, black and shadow removed, shown dark to light) of 8 street-level current photos (night shots skipped): #665B55 (22%), #D56E49 (12%), #94837F (11%), #D2A696 (7%), #DED6D1 (7%). Treat as the range; pick facade paints from these, and bright colours only where a photo shows them.
+- **Road surface sampled:** the bottom centre of the same photos, largest colour cluster #716F72, others #A79F9C, #3B3B24 (cars, paint and shadow are mixed in, so read the main value as the surface and judge it against the photos).
+- Road surface and colour: dark grey asphalt with white lane lines on the Outer Ring Road and Barakhamba Road; black and yellow painted kerbs (seen, Barakhamba Road 2022, Outer Ring Road 2022).
+- Kerbs: black and yellow painted kerb stones along medians and refuges (seen).
+- Footpath: grey concrete tile footpath, wide at the metro entrance, tree pits (seen).
+- Median: raised concrete median with black and yellow edges, reflective bollards and planting (seen).
+- Poles and wires: tall double-arm streetlight poles on the ring road median, overhead metro and traffic wires near the ITO crossing (seen, night shot).
+- Lights: orange-white double-arm lights at night over the ring road (seen, 2022).
+- Trees: avenue trees along Barakhamba Road; ring road edges are mostly bare with some planted strips (seen).
+- Signs: green street signs, blue directional boards, the ITO metro station entrance with its yellow and blue shop boards, CNG bus route boards (seen).
+- Typical clutter: blue DTC buses, autos, scooters at the metro entrance steps (seen).
+
+### Photo requests for Anmol
+
+- A street-level photo of the ITO crossing (Vikas Marg, Bahadur Shah Zafar Marg, Tilak Marg) and of the Pragati Maidan tunnel mouth (2022 or later), at the height of a car driver. Free dated photos of both could not be found.
+<!-- P2-049:end -->
+
 ## Sources
 
 Board tile number, file, page URL, licence, author and date. All are Wikimedia Commons pages; the licence is as shown by Commons on 2026-11-11 and must be rechecked before any image is reused outside this internal board.
 
 | # | File | URL | Licence | Author, date |
 |---|---|---|---|---|
-| 1 | Delhi Police Headquarters.jpg | https://commons.wikimedia.org/wiki/File:Delhi_Police_Headquarters.jpg | CC BY-SA 4.0 | Ji-Elle 2019-11-28 |
-| 2 | Delhi police headquarters.JPG | https://commons.wikimedia.org/wiki/File:Delhi_police_headquarters.JPG | CC BY-SA 3.0 | Arjuncm3 2013-03-26 |
+| 1 | Delhi Police Headquarters.jpg | https://commons.wikimedia.org/wiki/File:Delhi_Police_Headquarters.jpg | CC BY-SA 4.0 | Ji-Elle 2019-11-28 **OLD (2019, before 2022): not used for surfaces, signs or colours** |
+| 2 | Delhi police headquarters.JPG | https://commons.wikimedia.org/wiki/File:Delhi_police_headquarters.JPG | CC BY-SA 3.0 | Arjuncm3 2013-03-26 **OLD (2013, before 2022): not used for surfaces, signs or colours** |
 | 3 | ITO - Income Tax Office metro station (Delhi).jpg | https://commons.wikimedia.org/wiki/File:ITO_-_Income_Tax_Office_metro_station_(Delhi).jpg | CC BY-SA 4.0 | Santosh4118 2022-11-23 |
-| 4 | Historic place delhi(puranaquila).jpg | https://commons.wikimedia.org/wiki/File:Historic_place_delhi(puranaquila).jpg | CC BY-SA 4.0 | Nikkraj007 2018-12-05 |
+| 4 | Historic place delhi(puranaquila).jpg | https://commons.wikimedia.org/wiki/File:Historic_place_delhi(puranaquila).jpg | CC BY-SA 4.0 | Nikkraj007 2018-12-05 **OLD (2018, before 2022): not used for surfaces, signs or colours** |
 | 5 | Pragati Maidan Tunnel (Delhi).jpg | https://commons.wikimedia.org/wiki/File:Pragati_Maidan_Tunnel_(Delhi).jpg | CC0 | SHUBHAM KR SONI 2025-08-19 |
-| 6 | Purana Quila ( Old Fort), near Pragati Maidan, New Delhi.jpg | https://commons.wikimedia.org/wiki/File:Purana_Quila_(_Old_Fort),_near_Pragati_Maidan,_New_Delhi.jpg | CC BY-SA 3.0 | Tarunpant 2013-02-18 |
-| 7 | Purana Quila ( Old Fort) and the surrounding 'sabza', near Pragati Maidan, New Delhi.jpg | https://commons.wikimedia.org/wiki/File:Purana_Quila_(_Old_Fort)_and_the_surrounding_%27sabza%27,_near_Pragati_Maidan,_New_Delhi.jpg | CC BY-SA 3.0 | Tarunpant 2013-02-18 |
-| 8 | Agrasen Ki Baoli- Middle Arche.JPG | https://commons.wikimedia.org/wiki/File:Agrasen_Ki_Baoli-_Middle_Arche.JPG | CC BY-SA 3.0 | Ankan Guha 2012-07-29 |
-| 9 | Doordarshan Bhawan, Copernicus Marg, Delhi.jpg | https://commons.wikimedia.org/wiki/File:Doordarshan_Bhawan,_Copernicus_Marg,_Delhi.jpg | CC BY-SA 3.0 | Ekabhishek 2013-12-14 |
-| 10 | Mandi House metro station.jpg | https://commons.wikimedia.org/wiki/File:Mandi_House_metro_station.jpg | CC BY-SA 4.0 | Superfast1111 2015-12-30 |
-| 11 | Mandi House metro station - Station board.jpg | https://commons.wikimedia.org/wiki/File:Mandi_House_metro_station_-_Station_board.jpg | CC BY-SA 4.0 | Superfast1111 2015-12-30 |
+| 6 | Purana Quila ( Old Fort), near Pragati Maidan, New Delhi.jpg | https://commons.wikimedia.org/wiki/File:Purana_Quila_(_Old_Fort),_near_Pragati_Maidan,_New_Delhi.jpg | CC BY-SA 3.0 | Tarunpant 2013-02-18 **OLD (2013, before 2022): not used for surfaces, signs or colours** |
+| 7 | Purana Quila ( Old Fort) and the surrounding 'sabza', near Pragati Maidan, New Delhi.jpg | https://commons.wikimedia.org/wiki/File:Purana_Quila_(_Old_Fort)_and_the_surrounding_%27sabza%27,_near_Pragati_Maidan,_New_Delhi.jpg | CC BY-SA 3.0 | Tarunpant 2013-02-18 **OLD (2013, before 2022): not used for surfaces, signs or colours** |
+| 8 | Agrasen Ki Baoli- Middle Arche.JPG | https://commons.wikimedia.org/wiki/File:Agrasen_Ki_Baoli-_Middle_Arche.JPG | CC BY-SA 3.0 | Ankan Guha 2012-07-29 **OLD (2012, before 2022): not used for surfaces, signs or colours** |
+| 9 | Doordarshan Bhawan, Copernicus Marg, Delhi.jpg | https://commons.wikimedia.org/wiki/File:Doordarshan_Bhawan,_Copernicus_Marg,_Delhi.jpg | CC BY-SA 3.0 | Ekabhishek 2013-12-14 **OLD (2013, before 2022): not used for surfaces, signs or colours** |
+| 10 | Mandi House metro station.jpg | https://commons.wikimedia.org/wiki/File:Mandi_House_metro_station.jpg | CC BY-SA 4.0 | Superfast1111 2015-12-30 **OLD (2015, before 2022): not used for surfaces, signs or colours** |
+| 11 | Mandi House metro station - Station board.jpg | https://commons.wikimedia.org/wiki/File:Mandi_House_metro_station_-_Station_board.jpg | CC BY-SA 4.0 | Superfast1111 2015-12-30 **OLD (2015, before 2022): not used for surfaces, signs or colours** |
 | 12 | Safdar Hashmi Marg in New Delhi 01.jpg | https://commons.wikimedia.org/wiki/File:Safdar_Hashmi_Marg_in_New_Delhi_01.jpg | CC BY-SA 4.0 | Pinakpani 2022-08-30 |
 | 13 | Safdar Hashmi Marg in New Delhi 02.jpg | https://commons.wikimedia.org/wiki/File:Safdar_Hashmi_Marg_in_New_Delhi_02.jpg | CC BY-SA 4.0 | Pinakpani 2022-08-30 |
 | 14 | Todarmal Lane in New Delhi 01.jpg | https://commons.wikimedia.org/wiki/File:Todarmal_Lane_in_New_Delhi_01.jpg | CC BY-SA 4.0 | Pinakpani 2022-08-30 |
 | 15 | Todarmal Lane in New Delhi 02.jpg | https://commons.wikimedia.org/wiki/File:Todarmal_Lane_in_New_Delhi_02.jpg | CC BY-SA 4.0 | Pinakpani 2022-08-30 |
-| 16 | Alexander Pushkin Statue Mandi House New Delhi.jpg (low value, shown for street life or context) | https://commons.wikimedia.org/wiki/File:Alexander_Pushkin_Statue_Mandi_House_New_Delhi.jpg | CC BY-SA 4.0 | Pallav.journo 2009-08-23 |
-| 25 | Delhi Metro Rail Track in Sunset.jpg | https://commons.wikimedia.org/wiki/File:Delhi_Metro_Rail_Track_in_Sunset.jpg | Public domain | Rameshng at Malayalam Wikipedia 2010-06-23 |
+| 16 | Alexander Pushkin Statue Mandi House New Delhi.jpg (low value, shown for street life or context) | https://commons.wikimedia.org/wiki/File:Alexander_Pushkin_Statue_Mandi_House_New_Delhi.jpg | CC BY-SA 4.0 | Pallav.journo 2009-08-23 **OLD (2009, before 2022): not used for surfaces, signs or colours** |
+| 25 | Delhi Metro Rail Track in Sunset.jpg | https://commons.wikimedia.org/wiki/File:Delhi_Metro_Rail_Track_in_Sunset.jpg | Public domain | Rameshng at Malayalam Wikipedia 2010-06-23 **OLD (2010, before 2022): not used for surfaces, signs or colours** |
 | 26 | Delhi Transco Limited, Shakti Sadan.jpg | https://commons.wikimedia.org/wiki/File:Delhi_Transco_Limited,_Shakti_Sadan.jpg | CC BY 4.0 | VartamanVarta 2026-05-20 |
-| 27 | The SAARC Car Rally 2007 crossing over at ITO flyover, in New Delhi on April 01, 2007.jpg | https://commons.wikimedia.org/wiki/File:The_SAARC_Car_Rally_2007_crossing_over_at_ITO_flyover,_in_New_Delhi_on_April_01,_2007.jpg | GODL-India | Ministry of External Affairs 2007-04-01 |
-| 28 | Delhi Police Headquarters.jpg | https://commons.wikimedia.org/wiki/File:Delhi_Police_Headquarters.jpg | CC BY-SA 4.0 | Ji-Elle 2019-11-28 |
-| 29 | Delhi police headquarters.JPG | https://commons.wikimedia.org/wiki/File:Delhi_police_headquarters.JPG | CC BY-SA 3.0 | Arjuncm3 2013-03-26 |
+| 27 | The SAARC Car Rally 2007 crossing over at ITO flyover, in New Delhi on April 01, 2007.jpg | https://commons.wikimedia.org/wiki/File:The_SAARC_Car_Rally_2007_crossing_over_at_ITO_flyover,_in_New_Delhi_on_April_01,_2007.jpg | GODL-India | Ministry of External Affairs 2007-04-01 **OLD (2007, before 2022): not used for surfaces, signs or colours** |
+| 28 | Delhi Police Headquarters.jpg | https://commons.wikimedia.org/wiki/File:Delhi_Police_Headquarters.jpg | CC BY-SA 4.0 | Ji-Elle 2019-11-28 **OLD (2019, before 2022): not used for surfaces, signs or colours** |
+| 29 | Delhi police headquarters.JPG | https://commons.wikimedia.org/wiki/File:Delhi_police_headquarters.JPG | CC BY-SA 3.0 | Arjuncm3 2013-03-26 **OLD (2013, before 2022): not used for surfaces, signs or colours** |
 | 30 | Shaheedi Park.jpg | https://commons.wikimedia.org/wiki/File:Shaheedi_Park.jpg | CC BY-SA 4.0 | Pur 0 0 2024-08-24 |
-| 31 | Mandi House metro station - Station board.jpg | https://commons.wikimedia.org/wiki/File:Mandi_House_metro_station_-_Station_board.jpg | CC BY-SA 4.0 | Superfast1111 2015-12-30 |
-| 32 | Mandi House metro station.jpg | https://commons.wikimedia.org/wiki/File:Mandi_House_metro_station.jpg | CC BY-SA 4.0 | Superfast1111 2015-12-30 |
+| 31 | Mandi House metro station - Station board.jpg | https://commons.wikimedia.org/wiki/File:Mandi_House_metro_station_-_Station_board.jpg | CC BY-SA 4.0 | Superfast1111 2015-12-30 **OLD (2015, before 2022): not used for surfaces, signs or colours** |
+| 32 | Mandi House metro station.jpg | https://commons.wikimedia.org/wiki/File:Mandi_House_metro_station.jpg | CC BY-SA 4.0 | Superfast1111 2015-12-30 **OLD (2015, before 2022): not used for surfaces, signs or colours** |
 | 33 | Safdar Hashmi Marg in New Delhi 01.jpg | https://commons.wikimedia.org/wiki/File:Safdar_Hashmi_Marg_in_New_Delhi_01.jpg | CC BY-SA 4.0 | Pinakpani 2022-08-30 |
 | 34 | Safdar Hashmi Marg in New Delhi 03.jpg | https://commons.wikimedia.org/wiki/File:Safdar_Hashmi_Marg_in_New_Delhi_03.jpg | CC BY-SA 4.0 | Pinakpani 2022-08-30 |
 | 35 | Safdar Hashmi Marg in New Delhi 05.jpg | https://commons.wikimedia.org/wiki/File:Safdar_Hashmi_Marg_in_New_Delhi_05.jpg | CC BY-SA 4.0 | Pinakpani 2022-08-30 |
@@ -46,13 +102,13 @@ Board tile number, file, page URL, licence, author and date. All are Wikimedia C
 | 38 | Todarmal Lane in New Delhi 01.jpg | https://commons.wikimedia.org/wiki/File:Todarmal_Lane_in_New_Delhi_01.jpg | CC BY-SA 4.0 | Pinakpani 2022-08-30 |
 | 39 | Todarmal Lane in New Delhi 03.jpg | https://commons.wikimedia.org/wiki/File:Todarmal_Lane_in_New_Delhi_03.jpg | CC BY-SA 4.0 | Pinakpani 2022-08-30 |
 | 40 | Todarmal Lane in New Delhi 05.jpg | https://commons.wikimedia.org/wiki/File:Todarmal_Lane_in_New_Delhi_05.jpg | CC BY-SA 4.0 | Pinakpani 2022-08-30 |
-| 41 | Doordarshan Bhawan, Copernicus Marg, Delhi.jpg | https://commons.wikimedia.org/wiki/File:Doordarshan_Bhawan,_Copernicus_Marg,_Delhi.jpg | CC BY-SA 3.0 | Ekabhishek 2013-12-14 |
-| 42 | Bhairon Marg - Pragati Maidan Area - New Delhi 2014-05-06 0886.JPG | https://commons.wikimedia.org/wiki/File:Bhairon_Marg_-_Pragati_Maidan_Area_-_New_Delhi_2014-05-06_0886.JPG | CC BY 3.0 | Biswarup Ganguly 2014-05-06 |
-| 43 | Bhairon Marg - Pragati Maidan Area - New Delhi 2014-05-06 0887.JPG | https://commons.wikimedia.org/wiki/File:Bhairon_Marg_-_Pragati_Maidan_Area_-_New_Delhi_2014-05-06_0887.JPG | CC BY 3.0 | Biswarup Ganguly 2014-05-06 |
-| 44 | Bus Shelter - Pragati Maidan - Bhairon Marg - New Delhi 2014-05-06 0884.JPG | https://commons.wikimedia.org/wiki/File:Bus_Shelter_-_Pragati_Maidan_-_Bhairon_Marg_-_New_Delhi_2014-05-06_0884.JPG | CC BY 3.0 | Biswarup Ganguly 2014-05-06 |
-| 45 | Underpass - Pragati Maidan - Bhairon Marg - New Delhi 2014-05-13 2723.JPG | https://commons.wikimedia.org/wiki/File:Underpass_-_Pragati_Maidan_-_Bhairon_Marg_-_New_Delhi_2014-05-13_2723.JPG | CC BY 3.0 | Biswarup Ganguly 2014-05-13 |
-| 46 | Jawaharlal Nehru Marg - New Delhi 2014-05-13 3112.JPG | https://commons.wikimedia.org/wiki/File:Jawaharlal_Nehru_Marg_-_New_Delhi_2014-05-13_3112.JPG | CC BY 3.0 | Biswarup Ganguly 2014-05-13 |
-| 47 | Jawaharlal Nehru Marg - New Delhi 2014-05-13 3113.JPG | https://commons.wikimedia.org/wiki/File:Jawaharlal_Nehru_Marg_-_New_Delhi_2014-05-13_3113.JPG | CC BY 3.0 | Biswarup Ganguly 2014-05-13 |
+| 41 | Doordarshan Bhawan, Copernicus Marg, Delhi.jpg | https://commons.wikimedia.org/wiki/File:Doordarshan_Bhawan,_Copernicus_Marg,_Delhi.jpg | CC BY-SA 3.0 | Ekabhishek 2013-12-14 **OLD (2013, before 2022): not used for surfaces, signs or colours** |
+| 42 | Bhairon Marg - Pragati Maidan Area - New Delhi 2014-05-06 0886.JPG | https://commons.wikimedia.org/wiki/File:Bhairon_Marg_-_Pragati_Maidan_Area_-_New_Delhi_2014-05-06_0886.JPG | CC BY 3.0 | Biswarup Ganguly 2014-05-06 **OLD (2014, before 2022): not used for surfaces, signs or colours** |
+| 43 | Bhairon Marg - Pragati Maidan Area - New Delhi 2014-05-06 0887.JPG | https://commons.wikimedia.org/wiki/File:Bhairon_Marg_-_Pragati_Maidan_Area_-_New_Delhi_2014-05-06_0887.JPG | CC BY 3.0 | Biswarup Ganguly 2014-05-06 **OLD (2014, before 2022): not used for surfaces, signs or colours** |
+| 44 | Bus Shelter - Pragati Maidan - Bhairon Marg - New Delhi 2014-05-06 0884.JPG | https://commons.wikimedia.org/wiki/File:Bus_Shelter_-_Pragati_Maidan_-_Bhairon_Marg_-_New_Delhi_2014-05-06_0884.JPG | CC BY 3.0 | Biswarup Ganguly 2014-05-06 **OLD (2014, before 2022): not used for surfaces, signs or colours** |
+| 45 | Underpass - Pragati Maidan - Bhairon Marg - New Delhi 2014-05-13 2723.JPG | https://commons.wikimedia.org/wiki/File:Underpass_-_Pragati_Maidan_-_Bhairon_Marg_-_New_Delhi_2014-05-13_2723.JPG | CC BY 3.0 | Biswarup Ganguly 2014-05-13 **OLD (2014, before 2022): not used for surfaces, signs or colours** |
+| 46 | Jawaharlal Nehru Marg - New Delhi 2014-05-13 3112.JPG | https://commons.wikimedia.org/wiki/File:Jawaharlal_Nehru_Marg_-_New_Delhi_2014-05-13_3112.JPG | CC BY 3.0 | Biswarup Ganguly 2014-05-13 **OLD (2014, before 2022): not used for surfaces, signs or colours** |
+| 47 | Jawaharlal Nehru Marg - New Delhi 2014-05-13 3113.JPG | https://commons.wikimedia.org/wiki/File:Jawaharlal_Nehru_Marg_-_New_Delhi_2014-05-13_3113.JPG | CC BY 3.0 | Biswarup Ganguly 2014-05-13 **OLD (2014, before 2022): not used for surfaces, signs or colours** |
 
 Web pages cited (text and layout facts, not downloaded):
 
