@@ -557,3 +557,5 @@ One line per event, written by task.mjs (start, done, fail, phase changes, inbox
 - 2026-11-14 13:39 mentor message mmwg4k1hj handled: Added to P2-048: rust, faded and peeling paint, bent and broken boards, torn flex and missing letters, more in the old city, varied per board, checked against the photos.
 - 2026-11-14 13:42 [P2-049] added: Refresh every area board with current photos and a what-it-is-made-of list
 - 2026-11-14 13:42 mentor message mmwg4oluj handled: Mostly yes: 11 area sheets with about 24 free photos each guide the build, and the area passes compare game shots with them side by side. But many photos are old or weak, so P2-049 refreshes every board with current photos and a list of what each street is made of.
+- 2026-11-14 13:43 [P2-032] start (attempt 1): Car tunnels built properly: depth, portals, walls, lights
+- 2026-11-14 13:43 mentor message mmwg4oz6n handled: Yes, real tunnels are P2-032 and not built yet. Started now in the map lane: Pragati Maidan tunnel and underpasses with proper depth, ramps, portals, lights and inside walls, checked against photos.
