@@ -1,6 +1,6 @@
 {
   "_doc": "Written only by node harness/bin/task.mjs. Phases run in order; P0 (ADOPT + STYLE DISCOVERY) waits for the owner by design and needs task.mjs signoff and task.mjs archsignoff before its gate passes. Later phases are added by the planner at the end of P0 (task.mjs phase-add) from the game's real state.",
-  "updated": "2026-11-14T10:14:05.773Z",
+  "updated": "2026-11-14T10:14:45.353Z",
   "phases": [
     {
       "id": "P0",
@@ -5007,6 +5007,25 @@
       "notes": [],
       "created": "2026-11-14T10:02:32.266Z",
       "model": "opus"
+    },
+    {
+      "id": "P2-063",
+      "phase": "P2",
+      "title": "Use the owner's three lead models in game: retarget, LODs, stylised B look",
+      "desc": "Anmol uploaded Bittu, Meera and Danny as Mixamo-rigged FBX (text to 3D); ingest converted them to public/assets/models/model_lead_{bittu,meera,danny}.glb: about 50,000 triangles each, 1 material, 52 to 65 Mixamo bones, 13 to 15 MB. Put them in the game in place of the stand-ins (game/characters/leads.gd): retarget from the Mixamo rig to the game's skeleton and animation library (Godot BoneMap and SkeletonProfileHumanoid), so every existing clip plays without foot sliding or twisted hands; make a gameplay LOD within the 25,000 triangle target and a lower LOD for distance (decimate in Godot import or a tool), keep the full mesh for close-ups; give them the stylised B character shading (STYLE_BIBLE.md Characters) without losing their textures; scale to their heights (Bittu 1.72 m, Meera 1.64 m, Danny 1.78 m); textures VRAM compressed. Judge each against the card intent and OWNER_EYE.md (real adult proportions, no caricature, Watch Dogs 2 bar): note what is off for the owner to regenerate, but use them now. Faces come in P3-010.",
+      "accept": [
+        "Triangles in play 25,000 or fewer per lead with LODs; character perf scenario inside budget; npm test and verify --quick green"
+      ],
+      "deps": [],
+      "agent": "builder",
+      "priority": 1,
+      "kind": "mentor",
+      "status": "doing",
+      "attempts": 1,
+      "notes": [],
+      "created": "2026-11-14T10:14:45.098Z",
+      "model": "opus",
+      "started": "2026-11-14T10:14:45.352Z"
     }
   ]
 }
