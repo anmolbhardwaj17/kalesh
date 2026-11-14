@@ -2,17 +2,17 @@
   "note": "Mixamo picks per lead (P2-072), chosen from the strips harness/reports/leads/mixamo_<role>_<lead>.png; reasons in harness/reports/leads/mixamo_picks.md. characters/tools/mixamo_lead.gd builds rig/mx_<id>.res from these. Roles ending _l also get the mirrored right clip.",
   "leads": {
     "bittu": {
-      "idle": "idle", "walk": "walking", "jog": {"legs": "slow_run", "mix": "run_forward", "w": 0.5}, "run": {"legs": "fast_run", "mix": "sprint", "w": 0.8, "plant": true},
+      "idle": "idle", "walk": "walking", "jog": {"legs": "slow_run", "mix": "run_forward", "w": 0.55}, "run": {"legs": "fast_run", "mix": "sprint", "w": 0.8, "plant": true},
       "start": "start_walking", "stop": "stop_walking", "run_stop": "run_to_stop_1",
       "turn_l": "left_turn", "walk_turn_l": "walking_left_turn", "run_turn": "running_turn_180"
     },
     "meera": {
-      "idle": "idle_4", "walk": {"legs": "walking", "upper": "female_walk"}, "jog": {"legs": "slow_run", "mix": "run_forward", "w": 0.5}, "run": {"legs": "fast_run", "mix": "sprint", "w": 0.8, "plant": true},
+      "idle": "idle_4", "walk": {"legs": "walking", "upper": "female_walk"}, "jog": {"legs": "slow_run", "mix": "run_forward", "w": 0.55}, "run": {"legs": "fast_run", "mix": "sprint", "w": 0.8, "plant": true},
       "start": "female_start_walking", "stop": "female_stop_walking", "run_stop": "run_to_stop_1",
       "turn_l": "left_turn", "walk_turn_l": "walking_left_turn", "run_turn": "running_turn_180"
     },
     "danny": {
-      "idle": "neutral_idle", "walk": {"legs": "walking", "upper": "strut_walking"}, "jog": {"legs": "slow_run", "mix": "run_forward", "w": 0.5}, "run": {"legs": "fast_run", "mix": "sprint", "w": 0.8},
+      "idle": "neutral_idle", "walk": {"legs": "walking", "upper": "strut_walking"}, "jog": {"legs": "slow_run", "mix": "run_forward", "w": 0.55}, "run": {"legs": "fast_run", "mix": "sprint", "w": 0.8},
       "start": "start_walking", "stop": "stop_walking", "run_stop": "run_to_stop_1",
       "turn_l": "left_turn", "walk_turn_l": "walking_left_turn", "run_turn": "running_turn_180"
     }
