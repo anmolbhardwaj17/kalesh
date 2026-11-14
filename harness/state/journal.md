@@ -626,3 +626,4 @@ One line per event, written by task.mjs (start, done, fail, phase changes, inbox
 - 2026-11-14 17:46 mentor message mmwgde4l8 handled: All three approved: realistic, right ages and builds, every detail from the cards, consistent front, side and back. The model cards now say to use these sheets in image to 3D.
 - 2026-11-14 17:49 [P3-012] added: Signature presence for the three leads: walk, idles, gestures, props, barks
 - 2026-11-14 17:49 mentor message mmwgdia86 handled: They do in the story (each has a want, a wound, a flaw and a voice); P3-012 puts it on screen: own walk, idles, signature props and barks for each.
+- 2026-11-14 17:51 mentor message mmwgdkxwu handled: Danny stays. Bittu and Meera are back in Needs you with sharper face prompts for a distinct film-lead look (Bittu 28 with a crooked grin and chipped tooth; Meera with a sharp composed face and a small eyebrow scar). Meera's current sheet stays as the fallback.
