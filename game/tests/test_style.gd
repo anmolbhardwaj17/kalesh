@@ -308,10 +308,10 @@ func test_relight_in_place_matches_a_fresh_build() -> void:
 		st.relight(DayCycle.key(pair[1]).duplicate(), true)
 		var fresh: Environment = _style("stylised_b", pair[1]).environment()
 		t.ok(st.environment() == env, "%s to %s: the same Environment object (no rebuild)" % pair)
-		var sm: ProceduralSkyMaterial = env.sky.sky_material
-		var fm: ProceduralSkyMaterial = fresh.sky.sky_material
-		t.ok(sm.sky_top_color == fm.sky_top_color and sm.sky_horizon_color == fm.sky_horizon_color
-			and sm.sky_energy_multiplier == fm.sky_energy_multiplier, "%s to %s: the sky" % pair)
+		var sm: ShaderMaterial = env.sky.sky_material
+		var fm: ShaderMaterial = fresh.sky.sky_material
+		for u in ["sky_top", "sky_horizon", "energy", "disc_deg", "cloud_cover", "city_glow"]:
+			t.ok(sm.get_shader_parameter(u) == fm.get_shader_parameter(u), "%s to %s: the sky %s" % [pair[0], pair[1], u])
 		for p in ["ambient_light_energy", "ambient_light_color", "ambient_light_sky_contribution", "tonemap_exposure",
 				"fog_light_color", "fog_density", "fog_sun_scatter", "adjustment_contrast"]:
 			t.ok(env.get(p) == fresh.get(p), "%s to %s: %s %s (fresh %s)" % [pair[0], pair[1], p, env.get(p), fresh.get(p)])
@@ -413,3 +413,56 @@ func test_flat_stand_ins_get_a_darker_twin() -> void:
 	t.ok(st.material_for(StandardMaterial3D.new()) == null, "an unmarked material is kept")
 	var TileMesh := load("res://world/systems/tile_mesh.gd")
 	t.ok((TileMesh.stand_ins()["ground"] as Material).has_meta(Stylised.FLAT_META), "the city tile materials are flat stand-ins")
+
+
+# ---------------------------------------------------------------- shade, sky and street lamps (P2-052)
+
+
+const StreetLamps := preload("res://render/street_lamps.gd")
+const StylisedBScript := preload("res://render/styles/stylised_b.gd")
+
+
+## The shade fill is the preset's neutral warm grey with only a share of the sky's light, in every light: never blue
+## (FIDELITY_BAR.md row 8); the sky is the stylised B sky shader with a disc by day and clouds in all four lights.
+func test_shade_is_warm_grey_and_the_sky_has_clouds_and_a_sun() -> void:
+	for light in ["dawn", "afternoon", "golden", "dusk", "night"]:
+		var p: Resource = DayCycle.key(light)
+		var c: Color = p.ambient_color
+		t.ok(c.b <= c.r and c.b <= c.g, "%s: the shade colour is not blue (%s)" % [light, c])
+		t.ok(p.ambient_sky_share <= 0.4, "%s: at most 40%% of the fill from the sky (%.2f)" % [light, p.ambient_sky_share])
+		t.ok(p.shadow_tint.z <= p.shadow_tint.x + 0.005, "%s: the grade does not push shade toward blue" % light)
+		t.ok(p.cloud_cover > 0.0, "%s: a cloud layer" % light)
+	for light in ["dawn", "afternoon", "golden"]:
+		t.ok(DayCycle.key(light).disc_deg > 0.5, "%s: a sun disc" % light)
+	var env: Environment = _style("stylised_b", "afternoon").environment()
+	t.ok(env.sky.sky_material is ShaderMaterial, "the stylised B sky shader")
+	t.near(env.ambient_light_sky_contribution, DayCycle.key("afternoon").ambient_sky_share, 1e-6, "the fill's sky share")
+	t.ok(env.ambient_light_color == DayCycle.key("afternoon").ambient_color, "the fill colour from the preset")
+
+
+## Lamp feet along a lane: one every spacing metres on each side, set out by half the width plus 1.3 m, facing the lane.
+func test_street_lamp_kerb_points() -> void:
+	# a lane running north (-Z) along x = 0, 100 m long, 3.5 m wide
+	var pts := PackedVector3Array([Vector3(0, 0, 0), Vector3(0, 0, -50), Vector3(0, 0, -100)])
+	var f: Array = StreetLamps.kerb_points(pts, 3.5, 30.0)
+	t.ok(f.size() == 6, "3 stations, 2 sides (%d)" % f.size())
+	var q: Vector3 = f[0][0]
+	t.near(q.x, -(1.75 + 1.3), 1e-4, "the kerb side of a north lane is west (left when traffic keeps left)")
+	t.near(q.z, -15.0, 1e-4, "the first station half a spacing in")
+	t.ok((f[0][1] as Vector3).is_equal_approx(Vector3(1, 0, 0)), "the kerb lamp faces the lane (east)")
+	t.near((f[1][0] as Vector3).x, 1.75 + 1.3, 1e-4, "the right side lamp is east")
+	t.near((f[4][0] as Vector3).z, -75.0, 1e-4, "spacing carries over the segment joint")
+
+
+func test_stylised_b_dark_stand_ins_are_neutral_grey() -> void:
+	# P2-052 round 2: the bake's road grey leans blue; stylised B moves dark greys to a warm neutral of the same luma
+	var road := Color(0.22, 0.22, 0.24).srgb_to_linear()
+	var n: Color = StylisedBScript.neutral_dark(road)
+	var l0 := road.r * 0.2126 + road.g * 0.7152 + road.b * 0.0722
+	var l1 := n.r * 0.2126 + n.g * 0.7152 + n.b * 0.0722
+	t.near(l1, l0, 0.002, "the luma stays")
+	t.ok(n.b < n.r, "blue below red (%.4f, %.4f)" % [n.r, n.b])
+	var lawn := Color(0.42, 0.55, 0.32).srgb_to_linear()
+	t.ok(StylisedBScript.neutral_dark(lawn).is_equal_approx(lawn), "a coloured stand-in keeps its colour")
+	var path := Color(0.66, 0.64, 0.6).srgb_to_linear()
+	t.ok(StylisedBScript.neutral_dark(path).is_equal_approx(path), "a light stand-in keeps its colour")

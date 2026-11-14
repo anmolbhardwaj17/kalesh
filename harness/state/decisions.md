@@ -589,6 +589,15 @@ Decision: harness/design/REALITY_MATCH.md. A catalog of every visible object cla
 Why: Anmol 2026-11-14: "compare, give a score and improve until it looks good or matches our game language ... I don't have to provide a list of each and every prop".
 By: orchestrator, from the mentor inbox.
 
+## 2026-11-14: Shade fill is a neutral warm grey, not the sky; street lamps from the lane graph until P2-036 (P2-052)
+Decision: the stylised B shade fill takes the light preset's ambient_color with a small sky share (0.12 to 0.35), so shadows read warm grey, never navy; a procedural sky with clouds and a sun disc; lit windows at night varying per window and building; street lamps placed from the lane graph in game/render (poles every 30 m on kerbs and medians, bracket lamps in galis), drawn as warm LED white, until P2-036 bakes real lamps.
+Why: owner screenshots of navy shade and a flat blue dusk with black windows (2026-11-14); FIDELITY_BAR gap 1.
+By: builder, P2-052.
+
+## 2026-11-15: Night readability from a street glow light over the camera, not ambient (P2-052 round 2)
+Decision: street_lamps.gd hangs one soft warm SpotLight 14 m over the camera at night, its strength set by the lamps within 45 m (a third at least); the ambient stays the warm low fill. Dark grey city stand-ins (road, joints, parking) are tinted to a warm neutral in stylised_b.
+Why: verifier FAIL on attempt 1: night cp_street_eye mean luma 0.144 under the 0.15 floor with a near black wedge of road at the camera; more ambient would bring back the blue shade. The gali lanes read blue-grey (B-R +10) from the bake's bluish road grey.
+By: builder, P2-052.
 ## 2026-11-14: AI image textures from the owner where they beat procedural ones
 Decision: surfaces whose realism is hard to generate in code (wall plaster, brick, stone, concrete, asphalt and road decals, rust and grime decals, posters and paper notices, hero sign board artwork, mural panels, shop goods sheets) come from the owner's AI images (ChatGPT) through art cards. Cards ask for flat, evenly lit, seamless (tileable where needed) images at 1024 or 2048 px with no shadows, perspective or text unless the card wants text; the ingest makes the normal, roughness and AO maps; the art reviewer checks each in game against REALITY_MATCH; procedural versions stay as placeholders until a card lands, so nothing waits.
 Why: Anmol 2026-11-14 offered images made with ChatGPT; photo-like textures carry the Watch Dogs 2 level of material detail better than procedural ones.

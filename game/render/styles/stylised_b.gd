@@ -15,6 +15,10 @@ const SURFACE_B := preload("res://render/shaders/surface_b.gdshader")
 const SHIMMER_SHADER := preload("res://render/shaders/shimmer.gdshader")
 const GLOW_WINDOW_SHADER := preload("res://render/shaders/glow_window.gdshader")
 const HAZE_SHADER := preload("res://render/shaders/haze_b.gdshader")
+const SKY_SHADER := preload("res://render/shaders/sky_b.gdshader")
+const STREET_LAMPS := preload("res://render/street_lamps.gd")
+## A sky uniform change smaller than this (a colour channel or a number) is not worth a radiance rebuild.
+const SKY_EPS := 0.004
 const Geo := preload("res://scenes/standin/geo.gd")
 const Kit := preload("res://scenes/standin/kit.gd")
 const TEX_DIR := "res://render/textures/"
@@ -63,6 +67,8 @@ var _night_lights: Array = []
 var _hazes: Array = []
 ## [shimmer MeshInstance3D, its ShaderMaterial]
 var _shimmers: Array = []
+## the street lamps node of the streamed city (P2-052), or null
+var _street_lamps: Node = null
 
 
 ## Switch features off by name (cost measuring); rebuilds the materials.
@@ -105,20 +111,82 @@ func light_environment(env: Environment, sync := true) -> void:
 	RenderingServer.global_shader_parameter_set("kit_night", 0.0 if off.has("lights") else clampf(light.night, 0.0, 1.0))
 	if not _lean():
 		return
-	# moonlit sky fill at night: a cool grey-blue ambient so no surface that faces away from every lamp goes black
-	var n: float = light.night
-	if n > 0.0:
-		env.ambient_light_color = Color(0.36, 0.42, 0.58)
-		env.ambient_light_sky_contribution = 1.0 - 0.55 * n
-		env.ambient_light_energy = light.ambient_energy * (1.0 + 0.9 * n)
-	else:
-		# the Environment defaults (what a daylight build never touched)
-		env.ambient_light_color = Color(0, 0, 0, 1)
-		env.ambient_light_sky_contribution = 1.0
+	_sky_b(env)
+	# shade colour (P2-052, FIDELITY_BAR.md row 8): the fill is the preset's neutral warm grey mixed with only a share
+	# of the sky's light, so a blue sky top no longer turns every shadow navy; at night it is the city's warm glow off
+	# the haze (the lamps, windows and signs light the street, not a blue moonlit fill)
+	env.ambient_light_color = light.ambient_color
+	env.ambient_light_sky_contribution = clampf(light.ambient_sky_share, 0.0, 1.0)
+	env.ambient_light_energy = light.ambient_energy
 	# dawn reads flat through its thick haze: a little more contrast and slightly thinner haze
 	var dawn := _dawn_weight()
 	env.adjustment_contrast = preset.contrast + 0.08 * dawn
 	env.fog_density = light.fog_density * (1.0 - 0.15 * dawn)
+
+
+## The stylised B sky (P2-052): sky_b.gdshader in place of the ProceduralSkyMaterial (a sun disc and a cloud layer;
+## --style-off=skyb keeps the old sky), its uniforms from the light preset.
+func _sky_b(env: Environment) -> void:
+	if env.sky == null or off.has("skyb"):
+		return
+	var sm := env.sky.sky_material as ShaderMaterial
+	if sm == null or sm.shader != SKY_SHADER:
+		sm = ShaderMaterial.new()
+		sm.shader = SKY_SHADER
+		env.sky.sky_material = sm
+		# the radiance map feeds only a third of the fill (ambient_sky_share) and matte reflections: a small one, updated
+		# over a few frames, keeps the live relight off the frame time (P2-052, relight_live_street)
+		env.sky.radiance_size = Sky.RADIANCE_SIZE_128
+		env.sky.process_mode = Sky.PROCESS_MODE_INCREMENTAL
+	# incremental (P2-052 round 2): a sky uniform that changes marks the radiance map for a rebuild, so only the ones
+	# that moved by more than a hair since the last relight are set
+	_sky_param(sm, "sky_top", light.sky_top)
+	_sky_param(sm, "sky_horizon", light.sky_horizon)
+	_sky_param(sm, "ground_horizon", light.ground_horizon)
+	_sky_param(sm, "ground_bottom", light.ground_bottom)
+	_sky_param(sm, "energy", light.sky_energy)
+	_sky_param(sm, "glow_deg", light.sun_disc_deg)
+	_sky_param(sm, "glow_curve", light.sun_curve)
+	_sky_param(sm, "disc_deg", light.disc_deg)
+	_sky_param(sm, "disc_energy", light.disc_energy)
+	_sky_param(sm, "cloud_cover", light.cloud_cover)
+	_sky_param(sm, "cloud_color", light.cloud_color)
+	_sky_param(sm, "cloud_shade", light.cloud_shade)
+	_sky_param(sm, "city_glow", light.city_glow)
+
+
+## Dark grey stand-ins of the streamed city (the road, joints, parking, bollards) are a neutral, slightly dusty grey
+## (P2-052 round 2): their bake colours lean blue (road 0.22, 0.22, 0.24 sRGB), and in shade under the sky share of the
+## fill the gali lanes read cool blue-grey (blue minus red +10, the bar is 6). Light and coloured stand-ins keep theirs.
+## Pure apart from the lean check.
+func _flat_tint(c: Color) -> Color:
+	if not _lean():
+		return c
+	return neutral_dark(c)
+
+
+## A dark (linear luma under about 0.1), nearly grey colour moved to a warm neutral of the same luma; others unchanged.
+static func neutral_dark(c: Color) -> Color:
+	var l := c.r * 0.2126 + c.g * 0.7152 + c.b * 0.0722
+	var hi := maxf(c.r, maxf(c.g, c.b))
+	var sat := (hi - minf(c.r, minf(c.g, c.b))) / maxf(hi, 1e-5)
+	var k := (1.0 - smoothstep(0.06, 0.12, l)) * (1.0 - smoothstep(0.2, 0.35, sat))
+	var n := Color(l * 1.07, l, l * 0.86, c.a)
+	return c.lerp(n, k)
+
+
+## Sets one sky uniform when it moved by more than SKY_EPS (a colour by any channel) since it was last set.
+func _sky_param(sm: ShaderMaterial, key: String, v: Variant) -> void:
+	var old: Variant = sm.get_shader_parameter(key)
+	if old != null and typeof(old) == typeof(v):
+		if v is Color:
+			var a: Color = old
+			var b: Color = v
+			if absf(a.r - b.r) < SKY_EPS and absf(a.g - b.g) < SKY_EPS and absf(a.b - b.b) < SKY_EPS:
+				return
+		elif v is float and absf(float(old) - float(v)) < SKY_EPS:
+			return
+	sm.set_shader_parameter(key, v)
 
 
 ## The lean (performance target) path of stylised B; the realistic reference look (realistic.gd) keeps the P0-034 setup.
@@ -182,6 +250,7 @@ func _decal(holder: Node3D, p: Vector3, y: float, n: Vector3, size: Vector2, tex
 ## A live look (P1-028) makes it at any hour and shows it only while the light is hot (heat 0.3 or more). A
 ## WorldEnvironment with the metadata no_heat_shimmer gets none.
 func decorate_environment(we: WorldEnvironment) -> void:
+	_add_street_lamps(we)
 	if off.has("shimmer") or we.get_parent() == null or (light.heat < 0.3 and not can_relight()):
 		return
 	# a scene can opt out (the flat scaffold test ground: on its long plain edges the wobble read as broken geometry)
@@ -202,6 +271,22 @@ func decorate_environment(we: WorldEnvironment) -> void:
 	mi.visible = light.heat >= 0.3
 	_shimmers.append([mi, m])
 	we.get_parent().add_child.call_deferred(mi)
+
+
+## The street lamps of the streamed city (P2-052, game/render/street_lamps.gd): one node per scene, which places itself
+## only where a world stream is loaded (the stand-in scenes keep their own dressed lamps). --style-off=lamps (or lights)
+## leaves them out.
+func _add_street_lamps(we: WorldEnvironment) -> void:
+	if off.has("lamps") or off.has("lights") or not _lean() or we.get_parent() == null:
+		return
+	var parent := we.get_parent()
+	var lamps := parent.get_node_or_null("StreetLamps")
+	if lamps == null:
+		lamps = STREET_LAMPS.new()
+		lamps.name = "StreetLamps"
+		parent.add_child.call_deferred(lamps)
+	_street_lamps = lamps
+	_street_lamps.set_night(light.night, light.lamp_gain)
 
 
 # ---------------------------------------------------------------- materials
@@ -311,6 +396,8 @@ func _relight_materials() -> void:
 			(e[1] as ShaderMaterial).set_shader_parameter("strength", light.heat)
 			keep.append(e)
 	_shimmers = keep
+	if _street_lamps != null and is_instance_valid(_street_lamps):
+		_street_lamps.set_night(n, light.lamp_gain)
 
 
 ## Registers a night light the dressing made and sets it for the light now. energy is the light's energy at full night
@@ -342,7 +429,8 @@ func live_stats() -> Dictionary:
 			if (e[0] as Node3D).visible:
 				on += 1
 	return {"night": light.night, "windowShare": light.window_share, "nightLights": night, "nightLightsOn": on,
-		"hazes": _hazes.size(), "shimmer": light.heat >= 0.3 and not _shimmers.is_empty()}
+		"hazes": _hazes.size(), "shimmer": light.heat >= 0.3 and not _shimmers.is_empty(),
+		"streetLamps": (_street_lamps.stats as Dictionary).duplicate() if _street_lamps != null and is_instance_valid(_street_lamps) else {}}
 
 
 ## A generated texture as an Image (imported texture first; the raw PNG only before the project was imported).

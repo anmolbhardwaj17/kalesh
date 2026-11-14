@@ -1,0 +1,43 @@
+{
+  "views": {
+    "cp_street_eye": {
+      "file": "cp_street_eye.png",
+      "at": "2026-11-14T15:32:49.441Z",
+      "query": "debug=1&verify=1&light=afternoon",
+      "error": null
+    },
+    "ito_junction": {
+      "file": "ito_junction.png",
+      "at": "2026-11-14T14:35:18.702Z",
+      "query": "debug=1&verify=1&light=afternoon",
+      "error": null
+    },
+    "city_flyover_ramp": {
+      "file": "city_flyover_ramp.png",
+      "at": "2026-11-14T14:35:26.233Z",
+      "query": "debug=1&verify=1&light=afternoon",
+      "error": null
+    },
+    "gali_foot": {
+      "file": "gali_foot.png",
+      "at": "2026-11-14T14:35:54.236Z",
+      "query": "debug=1&verify=1&light=afternoon",
+      "error": "script harness/verify/scripts/city_look_gali.js: into the gali: stuck at 53.3 of 165 m (1253.86, 217.14, -4156.87)"
+    },
+    "india_gate_lawns": {
+      "file": "india_gate_lawns.png",
+      "at": "2026-11-14T15:32:54.981Z",
+      "query": "debug=1&verify=1&light=afternoon",
+      "error": null
+    },
+    "city_busiest_40m": {
+      "file": "city_busiest_40m.png",
+      "at": "2026-11-14T14:36:14.498Z",
+      "query": "debug=1&verify=1&light=afternoon",
+      "error": null
+    }
+  },
+  "commit": "7b7cfe8",
+  "gl": "Godot 4.7.2.stable Apple M2 Pro (Apple8) (metal, forward_plus)",
+  "at": "2026-11-14T15:32:55.344Z"
+}
