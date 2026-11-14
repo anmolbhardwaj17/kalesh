@@ -233,7 +233,15 @@
       "priority": 1,
       "batch": "B1-tunnel-road",
       "created": "2026-11-14T15:51:14.440Z",
-      "promptAt": "2026-11-14T16:04:36.018Z"
+      "promptAt": "2026-11-14T16:04:36.018Z",
+      "review": {
+        "at": "2026-11-14T16:44:14.591Z",
+        "verdict": "ok",
+        "note": "Seamless in 2x1 tile, dense folk motifs, even light",
+        "ingestedAt": "2026-11-14T16:25:33.198Z",
+        "fit": "pending",
+        "fitNote": "scene check when wired (P2-032/P2-056)"
+      }
     },
     {
       "id": "tex_pragati_mural_madhubani",
@@ -260,7 +268,15 @@
       "priority": 1,
       "batch": "B1-tunnel-road",
       "created": "2026-11-14T15:51:14.899Z",
-      "promptAt": "2026-11-14T16:04:36.737Z"
+      "promptAt": "2026-11-14T16:04:36.737Z",
+      "review": {
+        "at": "2026-11-14T16:44:14.639Z",
+        "verdict": "ok",
+        "note": "Seamless, dense Madhubani fish band, even light",
+        "ingestedAt": "2026-11-14T16:24:43.999Z",
+        "fit": "pending",
+        "fitNote": "scene check when wired (P2-032/P2-056)"
+      }
     },
     {
       "id": "tex_pragati_mural_warli",
@@ -287,7 +303,15 @@
       "priority": 1,
       "batch": "B1-tunnel-road",
       "created": "2026-11-14T15:51:15.316Z",
-      "promptAt": "2026-11-14T16:04:37.115Z"
+      "promptAt": "2026-11-14T16:04:37.115Z",
+      "review": {
+        "at": "2026-11-14T16:44:14.681Z",
+        "verdict": "ok",
+        "note": "Seamless, Warli figures on red, even light",
+        "ingestedAt": "2026-11-14T16:25:07.140Z",
+        "fit": "pending",
+        "fitNote": "scene check when wired (P2-032/P2-056)"
+      }
     },
     {
       "id": "tex_pragati_ramp_wall",
@@ -314,7 +338,15 @@
       "priority": 1,
       "batch": "B1-tunnel-road",
       "created": "2026-11-14T15:51:15.707Z",
-      "promptAt": "2026-11-14T16:04:37.374Z"
+      "promptAt": "2026-11-14T16:04:37.374Z",
+      "review": {
+        "at": "2026-11-14T16:44:14.729Z",
+        "verdict": "ok",
+        "note": "Seamless, lotus swans trees tricolour; tricolour bands will repeat with height so wire as a strip not a tile",
+        "ingestedAt": "2026-11-14T16:25:59.322Z",
+        "fit": "pending",
+        "fitNote": "scene check when wired (P2-032/P2-056)"
+      }
     },
     {
       "id": "tex_road_asphalt_delhi",
@@ -341,7 +373,15 @@
       "priority": 1,
       "batch": "B1-tunnel-road",
       "created": "2026-11-14T15:51:16.131Z",
-      "promptAt": "2026-11-14T16:05:08.877Z"
+      "promptAt": "2026-11-14T16:05:08.877Z",
+      "review": {
+        "at": "2026-11-14T16:44:14.772Z",
+        "verdict": "ok",
+        "note": "Seamless even asphalt, no standout feature; tyre lanes should be done by decals or shader",
+        "ingestedAt": "2026-11-14T16:26:33.371Z",
+        "fit": "pending",
+        "fitNote": "scene check when wired (P2-032/P2-056)"
+      }
     },
     {
       "id": "tex_tunnel_concrete_panel",
@@ -368,7 +408,15 @@
       "priority": 1,
       "batch": "B1-tunnel-road",
       "created": "2026-11-14T15:51:16.321Z",
-      "promptAt": "2026-11-14T16:05:09.169Z"
+      "promptAt": "2026-11-14T16:05:09.169Z",
+      "review": {
+        "at": "2026-11-14T16:44:14.817Z",
+        "verdict": "ok",
+        "note": "Seamless board-formed concrete with tie holes; hole grid is real but visible at distance, check scale",
+        "ingestedAt": "2026-11-14T16:27:08.650Z",
+        "fit": "pending",
+        "fitNote": "scene check when wired (P2-032/P2-056)"
+      }
     },
     {
       "id": "decal_road_marks_sheet",
@@ -395,7 +443,15 @@
       "priority": 1,
       "batch": "B1-tunnel-road",
       "created": "2026-11-14T15:51:16.743Z",
-      "promptAt": "2026-11-14T16:05:11.838Z"
+      "promptAt": "2026-11-14T16:05:11.838Z",
+      "review": {
+        "at": "2026-11-14T16:44:14.862Z",
+        "verdict": "ok",
+        "note": "Clean alpha sheet: cracks, patches, oil, manhole, grate, tyre marks, gravel; slice into atlas",
+        "ingestedAt": "2026-11-14T16:26:42.067Z",
+        "fit": "pending",
+        "fitNote": "scene check when wired (P2-032/P2-056)"
+      }
     },
     {
       "id": "tex_wall_oldcity_plaster",
@@ -924,7 +980,15 @@
       "priority": 1,
       "batch": "B1b-interiors",
       "created": "2026-11-14T15:52:18.472Z",
-      "promptAt": "2026-11-14T16:05:12.388Z"
+      "promptAt": "2026-11-14T16:05:12.388Z",
+      "review": {
+        "at": "2026-11-14T16:44:14.952Z",
+        "verdict": "ok",
+        "note": "Good one-point room, symmetric, text is on the card",
+        "ingestedAt": "2026-11-14T16:40:57.338Z",
+        "fit": "pending",
+        "fitNote": "scene check when wired (P2-032/P2-056)"
+      }
     },
     {
       "id": "tex_interior_sweet_night",
@@ -978,7 +1042,15 @@
       "priority": 1,
       "batch": "B1b-interiors",
       "created": "2026-11-14T15:52:18.789Z",
-      "promptAt": "2026-11-14T16:05:12.786Z"
+      "promptAt": "2026-11-14T16:05:12.786Z",
+      "review": {
+        "at": "2026-11-14T16:44:14.996Z",
+        "verdict": "ok",
+        "note": "Good, saree shelves, centred",
+        "ingestedAt": "2026-11-14T16:33:31.937Z",
+        "fit": "pending",
+        "fitNote": "scene check when wired (P2-032/P2-056)"
+      }
     },
     {
       "id": "tex_interior_cloth_night",
@@ -1032,7 +1104,15 @@
       "priority": 1,
       "batch": "B1b-interiors",
       "created": "2026-11-14T15:52:19.188Z",
-      "promptAt": "2026-11-14T16:05:13.115Z"
+      "promptAt": "2026-11-14T16:05:13.115Z",
+      "review": {
+        "at": "2026-11-14T16:44:15.037Z",
+        "verdict": "ok",
+        "note": "Good, sacks and spice jars; slightly left-right asymmetric, fine",
+        "ingestedAt": "2026-11-14T16:33:47.176Z",
+        "fit": "pending",
+        "fitNote": "scene check when wired (P2-032/P2-056)"
+      }
     },
     {
       "id": "tex_interior_dryfruit_night",
@@ -1086,7 +1166,15 @@
       "priority": 1,
       "batch": "B1b-interiors",
       "created": "2026-11-14T15:52:19.430Z",
-      "promptAt": "2026-11-14T16:05:13.786Z"
+      "promptAt": "2026-11-14T16:05:13.786Z",
+      "review": {
+        "at": "2026-11-14T16:44:15.080Z",
+        "verdict": "ok",
+        "note": "Good, steel shelves symmetric",
+        "ingestedAt": "2026-11-14T16:41:41.215Z",
+        "fit": "pending",
+        "fitNote": "scene check when wired (P2-032/P2-056)"
+      }
     },
     {
       "id": "tex_interior_utensils_night",
@@ -1140,7 +1228,15 @@
       "priority": 1,
       "batch": "B1b-interiors",
       "created": "2026-11-14T15:52:19.956Z",
-      "promptAt": "2026-11-14T16:05:14.048Z"
+      "promptAt": "2026-11-14T16:05:14.048Z",
+      "review": {
+        "at": "2026-11-14T16:44:15.118Z",
+        "verdict": "ok",
+        "note": "Good, GB Road parts look",
+        "ingestedAt": "2026-11-14T16:37:51.843Z",
+        "fit": "pending",
+        "fitNote": "scene check when wired (P2-032/P2-056)"
+      }
     },
     {
       "id": "tex_interior_hardware_night",
@@ -1194,7 +1290,15 @@
       "priority": 1,
       "batch": "B1b-interiors",
       "created": "2026-11-14T15:52:20.171Z",
-      "promptAt": "2026-11-14T16:05:14.334Z"
+      "promptAt": "2026-11-14T16:05:14.334Z",
+      "review": {
+        "at": "2026-11-14T16:44:15.161Z",
+        "verdict": "ok",
+        "note": "Good, clean glass counters",
+        "ingestedAt": "2026-11-14T16:40:52.015Z",
+        "fit": "pending",
+        "fitNote": "scene check when wired (P2-032/P2-056)"
+      }
     },
     {
       "id": "tex_interior_phones_night",
@@ -1248,7 +1352,15 @@
       "priority": 1,
       "batch": "B1b-interiors",
       "created": "2026-11-14T15:52:20.402Z",
-      "promptAt": "2026-11-14T16:05:14.470Z"
+      "promptAt": "2026-11-14T16:05:14.470Z",
+      "review": {
+        "at": "2026-11-14T16:44:15.202Z",
+        "verdict": "ok",
+        "note": "Good, green cross, symmetric",
+        "ingestedAt": "2026-11-14T16:29:23.591Z",
+        "fit": "pending",
+        "fitNote": "scene check when wired (P2-032/P2-056)"
+      }
     },
     {
       "id": "tex_interior_chemist_night",
@@ -1302,7 +1414,15 @@
       "priority": 1,
       "batch": "B1b-interiors",
       "created": "2026-11-14T15:52:20.672Z",
-      "promptAt": "2026-11-14T16:05:14.690Z"
+      "promptAt": "2026-11-14T16:05:14.690Z",
+      "review": {
+        "at": "2026-11-14T16:44:15.246Z",
+        "verdict": "ok",
+        "note": "Good, soot wall, stools; side stools near camera ok",
+        "ingestedAt": "2026-11-14T16:41:37.232Z",
+        "fit": "pending",
+        "fitNote": "scene check when wired (P2-032/P2-056)"
+      }
     },
     {
       "id": "tex_interior_tea_stall_night",
@@ -1356,7 +1476,15 @@
       "priority": 1,
       "batch": "B1b-interiors",
       "created": "2026-11-14T15:52:21.002Z",
-      "promptAt": "2026-11-14T16:05:14.942Z"
+      "promptAt": "2026-11-14T16:05:14.942Z",
+      "review": {
+        "at": "2026-11-14T16:44:15.287Z",
+        "verdict": "ok",
+        "note": "Good, machines and mannequin",
+        "ingestedAt": "2026-11-14T16:41:19.500Z",
+        "fit": "pending",
+        "fitNote": "scene check when wired (P2-032/P2-056)"
+      }
     },
     {
       "id": "tex_interior_tailor_night",
@@ -1410,7 +1538,15 @@
       "priority": 1,
       "batch": "B1b-interiors",
       "created": "2026-11-14T15:52:22.827Z",
-      "promptAt": "2026-11-14T16:05:15.288Z"
+      "promptAt": "2026-11-14T16:05:15.288Z",
+      "review": {
+        "at": "2026-11-14T16:44:15.330Z",
+        "verdict": "ok",
+        "note": "Good, Himalaya mural, stairs",
+        "ingestedAt": "2026-11-14T16:38:34.788Z",
+        "fit": "pending",
+        "fitNote": "scene check when wired (P2-032/P2-056)"
+      }
     },
     {
       "id": "tex_interior_hotel_reception_night",
@@ -1464,7 +1600,15 @@
       "priority": 1,
       "batch": "B1b-interiors",
       "created": "2026-11-14T15:52:27.658Z",
-      "promptAt": "2026-11-14T16:05:15.678Z"
+      "promptAt": "2026-11-14T16:05:15.678Z",
+      "review": {
+        "at": "2026-11-14T16:44:15.370Z",
+        "verdict": "ok",
+        "note": "Good, ladder and shelves",
+        "ingestedAt": "2026-11-14T16:29:03.314Z",
+        "fit": "pending",
+        "fitNote": "scene check when wired (P2-032/P2-056)"
+      }
     },
     {
       "id": "tex_interior_bookshop_night",
@@ -1518,7 +1662,15 @@
       "priority": 1,
       "batch": "B1b-interiors",
       "created": "2026-11-14T15:52:33.555Z",
-      "promptAt": "2026-11-14T16:05:15.876Z"
+      "promptAt": "2026-11-14T16:05:15.876Z",
+      "review": {
+        "at": "2026-11-14T16:44:15.412Z",
+        "verdict": "ok",
+        "note": "Good, vault and counters",
+        "ingestedAt": "2026-11-14T16:38:49.049Z",
+        "fit": "pending",
+        "fitNote": "scene check when wired (P2-032/P2-056)"
+      }
     },
     {
       "id": "tex_interior_jeweller_night",
@@ -1572,7 +1724,15 @@
       "priority": 1,
       "batch": "B1b-interiors",
       "created": "2026-11-14T15:52:37.144Z",
-      "promptAt": "2026-11-14T16:05:16.056Z"
+      "promptAt": "2026-11-14T16:05:16.056Z",
+      "review": {
+        "at": "2026-11-14T16:44:15.455Z",
+        "verdict": "ok",
+        "note": "Good, bed, window curtain, plant",
+        "ingestedAt": "2026-11-14T16:39:29.423Z",
+        "fit": "pending",
+        "fitNote": "scene check when wired (P2-032/P2-056)"
+      }
     },
     {
       "id": "tex_interior_home_night",
@@ -1626,7 +1786,15 @@
       "priority": 1,
       "batch": "B1b-interiors",
       "created": "2026-11-14T15:52:39.525Z",
-      "promptAt": "2026-11-14T16:05:16.221Z"
+      "promptAt": "2026-11-14T16:05:16.221Z",
+      "review": {
+        "at": "2026-11-14T16:44:15.498Z",
+        "verdict": "ok",
+        "note": "Good, desks, lockers, cooler",
+        "ingestedAt": "2026-11-14T16:38:55.198Z",
+        "fit": "pending",
+        "fitNote": "scene check when wired (P2-032/P2-056)"
+      }
     },
     {
       "id": "tex_interior_office_night",
@@ -1807,7 +1975,15 @@
       "used_by": [],
       "priority": 2,
       "batch": "B1-tunnel-road",
-      "created": "2026-11-14T16:05:11.612Z"
+      "created": "2026-11-14T16:05:11.612Z",
+      "review": {
+        "at": "2026-11-14T16:44:14.910Z",
+        "verdict": "ok",
+        "note": "Clean alpha sheet: wet patches, puddles, tyre streaks; soft edges fine",
+        "ingestedAt": "2026-11-14T16:28:44.518Z",
+        "fit": "pending",
+        "fitNote": "scene check when wired (P2-032/P2-056)"
+      }
     }
   ]
 }
