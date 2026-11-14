@@ -795,7 +795,7 @@
           "data": "harness/data/fixtures/city_routes.json"
         }
       ],
-      "_note": "P1-024 base test 2d: the auto drives Chandni Chowk main road (route chandni_main), F gets the player out and the player walks a gali (walk chandni_gali), real inputs: wheels and feet within 0.05 m of the drawn surface, never under it, never stuck; the streaming focus follows the walker. Shot city_chandni_gali_foot at the on-foot camera (default look)."
+      "_note": "P1-024 base test 2d: the auto drives Netaji Subhash Marg and the lane south of Chandni Chowk (route chandni_main; P2-045: the main road is car-free, the auto keeps off it), F gets the player out and the player walks up a two-wheeler gali onto Chandni Chowk main road (walk chandni_gali), real inputs: wheels and feet within 0.05 m of the drawn surface, never under it, never stuck; the streaming focus follows the walker. Shot city_chandni_gali_foot at the on-foot camera (default look)."
     },
     {
       "name": "city_access_bollards",
@@ -822,6 +822,44 @@
         }
       ],
       "_note": "P2-042: a scooter rides from a lane open to cars into a 3 m gali closed to cars (two-wheelers, cycles and walkers only, no barrier: a car there is a violation) to its far end; real inputs (route gali_scooter of city_routes.json). Shot city_access_scooter_gali."
+    },
+    {
+      "name": "city_access_violation",
+      "query": "spawn=gali_car_entry",
+      "lockstep": true,
+      "steps": [
+        {
+          "script": "harness/verify/scripts/city_access_violation.js",
+          "timeout": 180000,
+          "data": "harness/data/fixtures/city_routes.json"
+        }
+      ],
+      "_note": "P2-045: a car drives the scooter's way into the 3 m gali closed to cars, where no bollards stand (route gali_car, real inputs), 25 m in, and stops: exactly one access_violation event (piece, mode car, position at the entry, barrier false), none before the turn, state().world.access agrees. Shot city_access_violation."
+    },
+    {
+      "name": "city_access_traffic",
+      "query": "spawn=chandni_chowk_east",
+      "lockstep": true,
+      "steps": [
+        {
+          "script": "harness/verify/scripts/city_access_traffic.js",
+          "timeout": 240000
+        }
+      ],
+      "_note": "P2-045: the traffic stand-in (traffic('start'), 30 cars, autos and scooters within 260 m of Netaji Subhash Marg at the Red Fort end of Chandni Chowk) runs 45 s of sim: no car or auto is ever on a piece closed to it (sampled every 3 s and the game's own audit of every agent tick), scooters ride two-wheeler galis, the agents move on. Shot city_access_traffic."
+    },
+    {
+      "name": "city_access_gps",
+      "query": "spawn=chandni_chowk_east",
+      "lockstep": true,
+      "steps": [
+        {
+          "script": "harness/verify/scripts/city_access_gps.js",
+          "timeout": 180000,
+          "data": "harness/data/fixtures/city_routes.json"
+        }
+      ],
+      "_note": "P2-045: the route line to a point on Chandni Chowk main road (car-free in the day): in the auto it keeps to pieces an auto may use and ends at the nearest point an auto reaches (routes.chandni_main_target); on foot (gps plan, then for real after F) it walks in; the walker's route comes within 1 s of getting out. Shots city_access_gps_auto (the ribbon) and city_access_gps_foot."
     },
     {
       "name": "city_north_up",
@@ -859,7 +897,7 @@
           "data": "harness/data/fixtures/city_routes.json"
         }
       ],
-      "_note": "P1-024 shot: the auto drives Kartavya Path east toward the India Gate hexagon (route rajpath, real inputs) and stops; India Gate is in the middle half of the play camera. Shot city_india_gate_hexagon (default look)."
+      "_note": "P1-024 shot: the auto drives the road from the south-west into the India Gate hexagon (route rajpath, real inputs; P2-045: Kartavya Path is closed to cars) and stops; India Gate is in the middle half of the play camera. Shot city_india_gate_hexagon (default look)."
     },
     {
       "name": "city_path_cp_radial_60",

@@ -1,10 +1,12 @@
 // P1-024 base test (2d): Chandni Chowk on wheels and on foot. Start: spawn pin chandni_chowk_east (--spawn), in the auto
-// on the main road. The auto drives the main road westbound (route chandni_main, about 190 m) past the mouth of a gali
-// and stops; F gets the player out (PlayerMode); the player walks round the back of the auto into the gali and through
-// it (walk chandni_gali, a 3 m lane between building shells, about 140 m), real inputs only. city('watch') compares every wheel contact on the drive and the feet on every
-// grounded tick in the gali with the drawn surface. Pass: nothing over 0.05 m off, nothing on an undrawn spot, never
-// under the surface, never stuck; the streaming focus follows the player on foot (the ring stays round the walker).
-// Shot city_chandni_gali_foot in the gali at the on-foot camera.
+// on Netaji Subhash Marg south of the Red Fort end (P2-045: the main road is car-free in the day, so the auto keeps off
+// it). The auto drives north and west along the lane south of Chandni Chowk (route chandni_main, about 190 m) and stops
+// 12 m short of a two-wheeler gali's mouth; F gets the player out (PlayerMode); the player walks past the auto's side,
+// up the gali (3 m, between building shells) onto Chandni Chowk main road and along it (walk chandni_gali, about 190 m,
+// never through a line of bollards), real inputs only. city('watch') compares every wheel contact on the drive and the
+// feet on every grounded tick of the walk with the drawn surface. Pass: nothing over 0.05 m off, nothing on an undrawn
+// spot, never under the surface, never stuck; the streaming focus follows the player on foot (the ring stays round the
+// walker). Shot city_chandni_gali_foot in the gali at the on-foot camera.
 const S = window.__sim;
 const D = S.D;
 const data = window.__scriptData || {};
@@ -21,11 +23,11 @@ const judge = (what, w) => {
   if (w.fallTicks > 0) problems.push(`${what}: under the drawn surface for ${w.fallTicks} ticks (${JSON.stringify(w.fall)})`);
 };
 await D.city('watch', { on: true });
-const res = await S.drive(r.points, { kmh: 25, label: 'Chandni Chowk main road' });
+const res = await S.drive(r.points, { kmh: 25, label: 'Netaji Subhash Marg and the lane south of Chandni Chowk' });
 const wd = await D.city('watch', { on: false });
 S.log('drive', { s: res.s, length: res.length, maxOffM: res.maxOffM, simS: res.simS });
 S.log('drive watch', wd);
-judge('the main road drive', wd);
+judge('the drive', wd);
 // out of the auto: F, held until the player stands
 D.input('enter_exit', 1);
 await S.until(() => D.state().player.mode === 'foot', { sim: 6, label: 'out of the auto' });
@@ -33,16 +35,16 @@ D.input('enter_exit', 0);
 await S.waitSim(0.6);
 const out = D.state().player;
 S.log('on foot', out);
-// round the back of the parked auto (5 m behind it, on the side the player got out), to the gali's first point, then
-// through it; the feet are watched from the gali's start on
+// past the side of the parked auto the player got out on (3.5 m ahead of its centre), to the walk's first point 12 m
+// ahead of it, then up the gali; the feet are watched from the walk's start on
 const h = res.end.heading;
 const fwd = [Math.sin(h), -Math.cos(h)];
 const right = [Math.cos(h), Math.sin(h)];
 const car = res.end.pos;
 const side = Math.sign((out.pos[0] - car[0]) * right[0] + (out.pos[2] - car[2]) * right[1]) || 1;
-const rear = [car[0] - fwd[0] * 5 + right[0] * side * 1.2, car[1], car[2] - fwd[1] * 5 + right[1] * side * 1.2];
-const pts = [out.pos, rear, ...g.points];
-const approach = Math.hypot(rear[0] - out.pos[0], rear[2] - out.pos[2]) + Math.hypot(g.points[0][0] - rear[0], g.points[0][2] - rear[2]);
+const pass = [car[0] + fwd[0] * 3.5 + right[0] * side * 1.1, car[1], car[2] + fwd[1] * 3.5 + right[1] * side * 1.1];
+const pts = [out.pos, pass, ...g.points];
+const approach = Math.hypot(pass[0] - out.pos[0], pass[2] - out.pos[2]) + Math.hypot(g.points[0][0] - pass[0], g.points[0][2] - pass[2]);
 let watching = false;
 let shot = false;
 let maxRingM = 0;

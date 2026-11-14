@@ -3,8 +3,8 @@
     {
       "id": "model_lead_bittu",
       "kind": "model",
-      "intent": "Bittu, the auto driver (about 35, 1.72 m, lean, tired but alert): khaki uniform shirt with rolled sleeves worn loose, dark trousers, sandals, a red and white checked cotton gamchha over the left shoulder, short black hair, a thin moustache. No logo or brand. Real adult proportions (7.5 heads), stylised B finish (simplified skin and cloth, clean colours from STYLE_BIBLE.md 'Characters'), respect rule: no caricature. Rigged to the Universal Animation Library skeleton (Unreal mannequin bone names) so the game's clips play on it; the stand-in today is the library mannequin with painted colours (game/characters/leads.gd).",
-      "prompt": "Optional. No Blender needed. Note (2026-11-13): Meshy lets you generate for free but its download needs a paid plan (crown icon), so check the download is free BEFORE generating; try tripo3d.ai or Hunyuan3D on huggingface.co first. If no free download works, skip this card: the stand-in stays and nothing waits. 1. Open meshy.ai (or tripo3d.ai) and pick Text to 3D. 2. Paste this: \"an Indian auto-rickshaw driver, about 35, lean, short black hair, thin moustache, khaki shirt with rolled sleeves worn loose, dark trousers, sandals, a red and white checked cotton towel over the left shoulder, full body, standing in A-pose, arms slightly away from the body, stylised game character, clean simple clothes, realistic adult proportions\". 3. Pick the result you like and download it as .fbx. 4. Open mixamo.com (free Adobe login), click Upload Character, choose that .fbx, place the chin, wrists, elbows, knees and groin markers, and press Next (it rigs it for you). 5. Download it with the default settings (FBX, T-pose, no animation). 6. Upload that .fbx file on this card as it is (the dashboard converts it to .glb for you). The game plays its own animations on it. If anything looks wrong, just upload it anyway: the reviewer will say what to change.",
+      "intent": "Bittu, the auto driver (28, 1.72 m, lean, tired but alert): khaki uniform shirt with rolled sleeves worn loose, dark trousers, sandals, a red and white checked cotton gamchha over the left shoulder, short black hair, a thin moustache. No logo or brand. Real adult proportions (7.5 heads), stylised B finish (simplified skin and cloth, clean colours from STYLE_BIBLE.md 'Characters'), respect rule: no caricature. Rigged to the Universal Animation Library skeleton (Unreal mannequin bone names) so the game's clips play on it; the stand-in today is the library mannequin with painted colours (game/characters/leads.gd).",
+      "prompt": "The look is approved (portrait_lead_bittu). Before the 3D step, make one more sheet of the SAME man from that picture in your image tool: 'Same person, same clothes and pose, front, side and back on plain grey, relaxed face with mouth closed and a faint smile, no red patches under the eyes, even skin.' Use that neutral sheet for 3D, because a wide open grin baked into the model fights the game's face animation. Then: 1. Image to 3D tool with a free download (tripo3d.ai or Hunyuan3D on huggingface.co); multi-view if offered, else the front view cut out alone. 2. T-pose or A-pose, polygons near 20,000 to 25,000, normal texture size. 3. Rig on mixamo.com (chin, wrists, elbows, knees, groin; Use Symmetry; Standard Skeleton), download FBX Binary, T-pose, With Skin. 4. Upload the .fbx on this card.",
       "generate": "rigged .glb (or the Mixamo .fbx, converted on upload), humanoid skeleton, up to 25000 triangles and 3 materials",
       "target": {
         "out": "models/model_lead_bittu.glb",
@@ -19,15 +19,27 @@
       "used_by": [
         "P1-023"
       ],
-      "priority": 3,
+      "priority": 2,
       "batch": null,
-      "created": "2026-11-13T07:39:51.061Z"
+      "created": "2026-11-13T07:39:51.061Z",
+      "redo": {
+        "at": "2026-11-14T12:11:20.758Z",
+        "note": "Owner 2026-11-14: regenerate for a realistic look: the first model has a cartoon face (big eyes, thick moustache), a head about 8% too big and a ragged shirt hem."
+      },
+      "promptAt": "2026-11-14T12:26:55.279Z",
+      "review": {
+        "at": "2026-11-14T12:11:20.758Z",
+        "verdict": "redo",
+        "note": "Owner 2026-11-14: regenerate for a realistic look: the first model has a cartoon face (big eyes, thick moustache), a head about 8% too big and a ragged shirt hem.",
+        "ingestedAt": "2026-11-14T10:13:47.304Z",
+        "removed": false
+      }
     },
     {
       "id": "model_lead_meera",
       "kind": "model",
-      "intent": "SI Meera Rana, the cop (about 30, 1.64 m, fit, direct stare): Delhi-like khaki police uniform of an invented force (no real badges or unit names), full sleeves tucked in, plain dark belt with a holstered service pistol on the right hip, black shoes, hair in a bun. Real adult proportions (7.5 heads), stylised B finish (simplified skin and cloth, clean colours from STYLE_BIBLE.md 'Characters'), respect rule: no caricature. Rigged to the Universal Animation Library skeleton (Unreal mannequin bone names) so the game's clips play on it; the stand-in today is the library mannequin with painted colours (game/characters/leads.gd).",
-      "prompt": "Optional. No Blender needed. Note (2026-11-13): Meshy lets you generate for free but its download needs a paid plan (crown icon), so check the download is free BEFORE generating; try tripo3d.ai or Hunyuan3D on huggingface.co first. If no free download works, skip this card: the stand-in stays and nothing waits. 1. Open meshy.ai (or tripo3d.ai) and pick Text to 3D. 2. Paste this: \"an Indian woman police sub-inspector, about 30, fit, hair in a bun, plain khaki police uniform with no badges, dark belt with a holster on the right hip, black shoes, full body, standing in A-pose, arms slightly away from the body, stylised game character, clean simple clothes, realistic adult proportions\". 3. Pick the result you like and download it as .fbx. 4. Open mixamo.com (free Adobe login), click Upload Character, choose that .fbx, place the chin, wrists, elbows, knees and groin markers, and press Next (it rigs it for you). 5. Download it with the default settings (FBX, T-pose, no animation). 6. Upload that .fbx file on this card as it is (the dashboard converts it to .glb for you). The game plays its own animations on it. If anything looks wrong, just upload it anyway: the reviewer will say what to change.",
+      "intent": "SI Meera Rana, the cop (31, 1.64 m, fit, direct stare): Delhi-like khaki police uniform of an invented force (no real badges or unit names), full sleeves tucked in, plain dark belt with a holstered service pistol on the right hip, black shoes, hair in a bun. Real adult proportions (7.5 heads), stylised B finish (simplified skin and cloth, clean colours from STYLE_BIBLE.md 'Characters'), respect rule: no caricature. Rigged to the Universal Animation Library skeleton (Unreal mannequin bone names) so the game's clips play on it; the stand-in today is the library mannequin with painted colours (game/characters/leads.gd).",
+      "prompt": "The picture is approved (portrait_lead_meera). 1. Open an image to 3D tool whose download is free (tripo3d.ai Image to 3D or multi-view, or Hunyuan3D on huggingface.co; check the download before you generate). 2. Use your original sheet image: if the tool takes several views, give it the front, side and back cut from the sheet; otherwise cut out the front view alone (crop to just the person). 3. Settings: T-pose or A-pose if offered, polygons near 20,000 to 25,000, normal texture size (not 8K). 4. Rig on mixamo.com: Upload Character, place chin, wrists, elbows, knees, groin, Use Symmetry on, Standard Skeleton; download FBX Binary, T-pose, With Skin, no animation. 5. Upload the .fbx on this card. The game converts it and keeps the current model until the new one passes.",
       "generate": "rigged .glb (or the Mixamo .fbx, converted on upload), humanoid skeleton, up to 25000 triangles and 3 materials",
       "target": {
         "out": "models/model_lead_meera.glb",
@@ -42,15 +54,27 @@
       "used_by": [
         "P1-023"
       ],
-      "priority": 3,
+      "priority": 2,
       "batch": null,
-      "created": "2026-11-13T07:39:51.097Z"
+      "created": "2026-11-13T07:39:51.097Z",
+      "redo": {
+        "at": "2026-11-14T12:11:20.825Z",
+        "note": "Owner 2026-11-14: regenerate: trousers came fused between the legs with a slab under the shoes, flared hems, stylised face."
+      },
+      "promptAt": "2026-11-14T12:16:28.286Z",
+      "review": {
+        "at": "2026-11-14T12:11:20.827Z",
+        "verdict": "redo",
+        "note": "Owner 2026-11-14: regenerate: trousers came fused between the legs with a slab under the shoes, flared hems, stylised face.",
+        "ingestedAt": "2026-11-14T10:14:04.349Z",
+        "removed": false
+      }
     },
     {
       "id": "model_lead_danny",
       "kind": "model",
       "intent": "Danny, the small-time fixer (about 28, 1.78 m): flashy maroon jacket open over a patterned shirt, gold chain, sunglasses pushed up into his hair, black trousers, white trainers. No logo or brand. Real adult proportions (7.5 heads), stylised B finish (simplified skin and cloth, clean colours from STYLE_BIBLE.md 'Characters'), respect rule: no caricature. Rigged to the Universal Animation Library skeleton (Unreal mannequin bone names) so the game's clips play on it; the stand-in today is the library mannequin with painted colours (game/characters/leads.gd).",
-      "prompt": "Optional. No Blender needed. Note (2026-11-13): Meshy lets you generate for free but its download needs a paid plan (crown icon), so check the download is free BEFORE generating; try tripo3d.ai or Hunyuan3D on huggingface.co first. If no free download works, skip this card: the stand-in stays and nothing waits. 1. Open meshy.ai (or tripo3d.ai) and pick Text to 3D. 2. Paste this: \"an Indian man, about 28, flashy maroon jacket open over a patterned shirt, gold chain, sunglasses pushed up into his hair, black trousers, white trainers, full body, standing in A-pose, arms slightly away from the body, stylised game character, clean simple clothes, realistic adult proportions\". 3. Pick the result you like and download it as .fbx. 4. Open mixamo.com (free Adobe login), click Upload Character, choose that .fbx, place the chin, wrists, elbows, knees and groin markers, and press Next (it rigs it for you). 5. Download it with the default settings (FBX, T-pose, no animation). 6. Upload that .fbx file on this card as it is (the dashboard converts it to .glb for you). The game plays its own animations on it. If anything looks wrong, just upload it anyway: the reviewer will say what to change.",
+      "prompt": "The picture is approved (portrait_lead_danny). 1. Open an image to 3D tool whose download is free (tripo3d.ai Image to 3D or multi-view, or Hunyuan3D on huggingface.co; check the download before you generate). 2. Use your original sheet image: if the tool takes several views, give it the front, side and back cut from the sheet; otherwise cut out the front view alone (crop to just the person). 3. Settings: T-pose or A-pose if offered, polygons near 20,000 to 25,000, normal texture size (not 8K). 4. Rig on mixamo.com: Upload Character, place chin, wrists, elbows, knees, groin, Use Symmetry on, Standard Skeleton; download FBX Binary, T-pose, With Skin, no animation. 5. Upload the .fbx on this card. The game converts it and keeps the current model until the new one passes.",
       "generate": "rigged .glb (or the Mixamo .fbx, converted on upload), humanoid skeleton, up to 25000 triangles and 3 materials",
       "target": {
         "out": "models/model_lead_danny.glb",
@@ -65,9 +89,127 @@
       "used_by": [
         "P1-023"
       ],
-      "priority": 3,
+      "priority": 2,
       "batch": null,
-      "created": "2026-11-13T07:39:51.133Z"
+      "created": "2026-11-13T07:39:51.133Z",
+      "redo": {
+        "at": "2026-11-14T12:11:20.903Z",
+        "note": "Owner 2026-11-14: regenerate: sunglasses sat on the eyes instead of pushed up into the hair, boxy puffed jacket shoulders, legs of different lengths, stylised face."
+      },
+      "promptAt": "2026-11-14T12:16:28.353Z",
+      "review": {
+        "at": "2026-11-14T12:11:20.907Z",
+        "verdict": "redo",
+        "note": "Owner 2026-11-14: regenerate: sunglasses sat on the eyes instead of pushed up into the hair, boxy puffed jacket shoulders, legs of different lengths, stylised face.",
+        "ingestedAt": "2026-11-14T10:13:59.771Z",
+        "removed": false
+      }
+    },
+    {
+      "id": "portrait_lead_bittu",
+      "kind": "portrait",
+      "intent": "Bittu, the auto driver: the approved look before any 3D model (reference sheet, front, side, back). The 3D model is made from this picture.",
+      "prompt": "Realistic character reference sheet for a modern open world game (the look of Watch Dogs 2: grounded, real proportions, natural skin and cloth, no cartoon). Three full body views of the same person side by side on a plain light grey background: front, left side, back. Standing straight in a relaxed A-pose, arms slightly away from the body, feet flat, whole body visible from head to feet with space around it, even soft studio light, no text, no logos, photoreal game art. A memorable lead character with a distinct face you would recognise again, like a film lead, not a generic stock person. The person: an Indian man from Delhi, age 28, auto-rickshaw driver, young but sun-worn, lean wiry build, 1.72 m, realistic proportions about 7.5 heads tall. Face: warm brown skin tanned darker on the forehead and cheeks, a lively expressive face with a quick crooked grin and laugh lines starting at the eyes, slightly sleepy tired eyes that still look amused, thin neat moustache and two days of stubble, a small chipped front tooth, short black hair messy from wind with a few strands on the forehead. Clothes: loose faded khaki uniform shirt with sleeves rolled to the elbows, top button open, worn untucked, sweat marks at the collar, dark grey cotton trousers, worn rubber sandals, a red and white checked cotton gamchha towel over the left shoulder, an old plain steel wristwatch on the left wrist. He looks like the funniest man at the auto stand.",
+      "generate": "portrait 1024x1536",
+      "target": {
+        "w": 512,
+        "h": 768,
+        "tileable": false,
+        "normalMap": false,
+        "alpha": true,
+        "out": "portraits/portrait_lead_bittu.webp"
+      },
+      "placeholder": {
+        "color": "#1f2533",
+        "pattern": "flat",
+        "scale": 1
+      },
+      "used_by": [],
+      "priority": 2,
+      "batch": null,
+      "created": "2026-11-14T12:12:01.288Z",
+      "review": {
+        "at": "2026-11-14T12:26:55.074Z",
+        "verdict": "ok",
+        "note": "Approved 2026-11-14 as the look: 28, lean, a big crooked grin and laugh lines, wind-messy hair, sweat on the shirt, steel watch, gamchha; reads as the funniest man at the stand. For the 3D model, make one more sheet of the same man with a closed-mouth relaxed face (open grin baked into a 3D face fights the face animation), and without the reddish patches under the eyes.",
+        "ingestedAt": "2026-11-14T12:26:08.192Z",
+        "fit": "pending",
+        "fitNote": "Sheet; for image to 3D use a neutral-face variant."
+      },
+      "redo": {
+        "at": "2026-11-14T12:20:09.664Z",
+        "note": "Story check 2026-11-14: Bittu is 28 in the story (STORY_OUTLINE.md: he was 13 at the fire 15 years ago, same as Danny), but the card said 35 and the sheet reads 35 to 40. Redo younger, and add his father's steel watch stopped at 6:10."
+      },
+      "promptAt": "2026-11-14T12:21:55.409Z"
+    },
+    {
+      "id": "portrait_lead_meera",
+      "kind": "portrait",
+      "intent": "SI Meera Rana, the cop: the approved look before any 3D model (reference sheet, front, side, back). The 3D model is made from this picture.",
+      "prompt": "Realistic character reference sheet for a modern open world game (the look of Watch Dogs 2: grounded, real proportions, natural skin and cloth, no cartoon). Three full body views of the same person side by side on a plain light grey background: front, left side, back. Standing straight in a relaxed A-pose, arms slightly away from the body, feet flat, whole body visible from head to feet with space around it, even soft studio light, no text, no logos, photoreal game art. A memorable lead character with a distinct face you would recognise again, like a film lead, not a generic stock person. The person: an Indian woman, age 31, sub-inspector in the Delhi police, fit and strong from training, 1.64 m, realistic proportions about 7.5 heads tall. Face: sharp and composed, defined jaw and cheekbones, strong straight eyebrows, dark intelligent eyes with a direct assessing stare that judges fast, a small pale scar through the left eyebrow, no makeup except a thin line of kohl, a faint frown line between the brows, lips pressed in a straight line; she looks like she is already reading you. Hair: black, pulled back tight into a neat low bun tied the same way every day with a plain black band, no loose strands. Uniform: crisp pressed khaki shirt tucked in, sleeves folded to a sharp crease above the elbow, shoulder epaulettes, a plain name plate (no real badges, insignia or force logos), black leather belt with a steel buckle, khaki straight trousers with sharp creases and separate legs, polished black lace-up boots. A thin red thread on the right wrist and a plain steel watch on the left. Proud, clean, a little severe.",
+      "generate": "portrait 1024x1536",
+      "target": {
+        "w": 512,
+        "h": 768,
+        "tileable": false,
+        "normalMap": false,
+        "alpha": true,
+        "out": "portraits/portrait_lead_meera.webp"
+      },
+      "placeholder": {
+        "color": "#1f2533",
+        "pattern": "flat",
+        "scale": 1
+      },
+      "used_by": [],
+      "priority": 2,
+      "batch": null,
+      "created": "2026-11-14T12:12:01.340Z",
+      "review": {
+        "at": "2026-11-14T12:24:47.286Z",
+        "verdict": "ok",
+        "note": "Approved 2026-11-14 (second sheet): sharper, more distinctive face, direct assessing stare, strong brows, tight low bun, crisp uniform, red thread and steel watch, consistent views. Minor: reads a little older than 31 and more scowling than composed; the eyebrow scar shows as a faint line at the hairline instead.",
+        "ingestedAt": "2026-11-14T12:24:07.645Z",
+        "fit": "pending",
+        "fitNote": "Sheet; use the original for image to 3D."
+      },
+      "redo": {
+        "at": "2026-11-14T12:21:55.577Z",
+        "note": "Owner 2026-11-14: unsure about Meera's face and presence (Danny is good, Bittu is off). Optional retry with a stronger, more distinctive face; the current approved sheet stays as the fallback."
+      },
+      "promptAt": "2026-11-14T12:21:55.578Z"
+    },
+    {
+      "id": "portrait_lead_danny",
+      "kind": "portrait",
+      "intent": "Danny, the small-time fixer: the approved look before any 3D model (reference sheet, front, side, back). The 3D model is made from this picture.",
+      "prompt": "Realistic character reference sheet for a modern open world game (the look of Watch Dogs 2: grounded, real proportions, natural skin and cloth, no cartoon). Three full body views of the same person side by side on a plain light grey background: front, left side, back. Standing straight in a relaxed A-pose, arms slightly away from the body, feet flat, whole body visible from head to feet with space around it, even soft studio light, no shadows on the background, no text, no logos, photoreal game art. The person: an Indian man from Delhi, age 28, small-time fixer, slim build, 1.78 m, realistic proportions about 7.5 heads tall, small head, natural face with a confident half smile, styled black hair with sunglasses pushed up on top of the head, fitted maroon bomber jacket open at the front with natural shoulders, patterned printed shirt, thin gold chain, slim dark jeans, white sneakers.",
+      "generate": "portrait 1024x1536",
+      "target": {
+        "w": 512,
+        "h": 768,
+        "tileable": false,
+        "normalMap": false,
+        "alpha": true,
+        "out": "portraits/portrait_lead_danny.webp"
+      },
+      "placeholder": {
+        "color": "#1f2533",
+        "pattern": "flat",
+        "scale": 1
+      },
+      "used_by": [],
+      "priority": 2,
+      "batch": null,
+      "created": "2026-11-14T12:12:01.385Z",
+      "review": {
+        "at": "2026-11-14T12:16:28.145Z",
+        "verdict": "ok",
+        "note": "Approved 2026-11-14: realistic, slim 28 year old, sunglasses pushed up on the head, maroon bomber with natural shoulders, patterned shirt, thin gold chain, dark jeans, white sneakers; consistent views.",
+        "ingestedAt": "2026-11-14T12:15:24.381Z",
+        "fit": "pending",
+        "fitNote": "Sheet; use the original for image to 3D."
+      }
     }
   ]
 }
