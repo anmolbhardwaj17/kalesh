@@ -81,6 +81,19 @@ describe('area kits', () => {
           if (m) expect(m[1].replace(/ /g, '').length, e).toBeLessThan(e.startsWith('M.') ? 10 : 8);
         }
   });
+  it('keeps official names off shop boards: no police, court, municipal, government or thana on any board (P2-048)', () => {
+    // its own word list (not the generator's), so a change there cannot quietly let an official name through
+    const LATN = ['police', 'thana', 'chowki', 'court', 'municipal', 'government', 'govt', 'ministry', 'secretariat', 'department', 'sarkari', 'nagar nigam', 'parliament', 'tribunal'];
+    const OTHER = ['पुलिस', 'थाना', 'चौकी', 'न्यायालय', 'अदालत', 'सरकार', 'नगर निगम', 'मंत्रालय', 'विभाग', 'سرکار', 'پولیس'];
+    for (const [id, b] of Object.entries(BOARDS.kits))
+      for (const c of b.cells) {
+        if (c.group === 'notice') continue;
+        const all = [...Object.values(c.text || {}), c.tagline || '', ...c.extra.map(String)].join(' | ');
+        const low = all.toLowerCase();
+        for (const w of LATN) expect(new RegExp(`(^|[^a-z])${w}($|[^a-z])`).test(low), `${id} ${c.group} ${c.cell}: "${all}" has "${w}"`).toBe(false);
+        for (const w of OTHER) expect(all.includes(w), `${id} ${c.group} ${c.cell}: "${all}" has "${w}"`).toBe(false);
+      }
+  });
   it('lays the sign atlas out without overlaps, inside the atlas', () => {
     const cells = [];
     for (const g of BOARDS.groups)

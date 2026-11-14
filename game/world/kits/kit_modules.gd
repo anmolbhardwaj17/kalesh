@@ -82,7 +82,9 @@ const RECIPES := {
 ## often. A stair and a roof tank are decided per wall column (every floor of a blank column carries the stair, so it
 ## climbs from the street to the top floor); the rest per bay.
 ## Sign boards (P2-048): a shop bay takes at most one front board; the pieces with "slot" "front" share one bay hash
-## and their shares add up (buildings.gd). The rest are decided one by one.
+## and their shares add up (buildings.gd). Under an upper window the board band, a flex sheet and the AC unit take the
+## same place ("sill"), so at most one of them. The rest are decided one by one: an upper window bay can carry its
+## pier and over-window boards, a vertical board and one sill piece at once (the stacked fronts of the photos).
 const PIECES := {
 	"board": {"from": ["gf_shop", "gf_colonnade", "gf_arcade"], "share": "board", "column": false, "slot": "front"},
 	"board_tilt": {"from": ["gf_shop", "gf_colonnade", "gf_arcade"], "share": "board_tilt", "column": false, "slot": "front"},
@@ -90,7 +92,12 @@ const PIECES := {
 	"flex": {"from": ["gf_shop", "gf_colonnade", "gf_arcade"], "share": "flex", "column": false, "slot": "front"},
 	"glow": {"from": ["gf_shop", "gf_colonnade", "gf_arcade"], "share": "glow", "column": false, "slot": "front"},
 	"vboard": {"from": ["up_window", "up_blank"], "share": "vboard", "column": false},
-	"band": {"from": ["up_window"], "share": "band", "column": false},
+	"band": {"from": ["up_window"], "share": "band", "column": false, "slot": "sill"},
+	"upflex": {"from": ["up_window"], "share": "upflex", "column": false, "slot": "sill"},
+	"upboards": {"from": ["up_window"], "share": "upboards", "column": false},
+	"blade": {"from": ["gf_shop", "gf_door"], "share": "blade", "column": false},
+	"shutpaint": {"from": ["gf_shop"], "share": "shutpaint", "column": false},
+	"cables": {"from": ["gf_shop", "gf_door", "gf_plain", "gf_gate"], "share": "cables", "column": false},
 	"stack": {"from": ["up_blank"], "share": "stack", "column": false},
 	"enamel": {"from": ["gf_door"], "share": "enamel", "column": false},
 	"small": {"from": ["gf_door"], "share": "small", "column": false},
@@ -99,7 +106,7 @@ const PIECES := {
 	"stair": {"from": ["up_blank"], "share": "stair", "column": true},
 	"tank": {"from": ["roof_parapet"], "share": "tank", "column": true},
 	"rail": {"from": ["roof_parapet"], "share": "roof_rail", "column": true},
-	"ac": {"from": ["up_window", "up_strip"], "share": "ac", "column": false},
+	"ac": {"from": ["up_window", "up_strip"], "share": "ac", "column": false, "slot": "sill"},
 	"awning": {"from": ["gf_shop"], "share": "awning", "column": false},
 	"vsign": {"from": ["gf_door"], "share": "vsign", "column": false},
 }
@@ -133,6 +140,15 @@ static func build(design: String, o: Dictionary, kit: String) -> ArrayMesh:
 		"glow": P._glow(m, kit)
 		"vboard": P._vboard(m, 0.25, 2.45, 1.42, 0.15, 0.75)
 		"band": P._band(m)
+		"upflex": P._upflex(m)
+		"upboards": P._upboards(m, kit)
+		"blade": P._blade(m)
+		"cables": P._cables(m, kit)
+		"shutpaint":
+			var sr: Array = RECIPES.get(kit, {}).get("gf_shop", DEFAULT["gf_shop"])
+			var so: Dictionary = sr[1]
+			if not so.get("glass", false) and float(so.get("shutter", 0.2)) > 0.0:
+				P.shutpaint(m, 1.15 if so.get("narrow", false) else 1.3, float(so.get("shutter", 0.2)))
 		"stack": P._stack(m)
 		"enamel": P._enamel(m)
 		"small": P._small(m)
@@ -238,9 +254,8 @@ static func _shop(m: M, o: Dictionary) -> void:
 		m.reveal(r, 0.18)
 		m.paint(M.ATLAS, M.OWN, WHITE)
 		m.front(-w, 0.0, w, top, M.SKIN + 0.004, A_GOODS[int(o.get("goods", 0))])
-		m.paint(M.GLASS, M.OWN, Color(0.55, 0.62, 0.66))
-		m.front(-w, 0.0, w, top, 0.12)
 		m.paint(M.IRON, M.OWN, BLACK)
+		m.front(-w, 0.0, w, 0.08, 0.13)
 		for x in [-w, -0.4, 0.4, w]:
 			m.front(x - 0.03, 0.0, x + 0.03, top, 0.13)
 		m.front(-w, top - 0.35, w, top - 0.3, 0.13)
@@ -355,12 +370,14 @@ static func _colonnade(m: M, o: Dictionary) -> void:
 	m.paint(M.RENDER, M.WALL, WHITE)
 	m.skin(0.0, M.MODULE_H, [r] if o.get("shop", true) else [Rect2(-0.65, 0.3, 1.3, 2.2)])
 	if o.get("shop", true):
+		# the showroom seen through its glass (P2-048: the glass is clear, its frame and door bars carry it)
 		m.paint(M.ATLAS, M.OWN, WHITE)
 		m.front(-1.25, 0.0, 1.25, 2.7, M.SKIN + 0.004, A_GOODS[0])
-		m.paint(M.GLASS, M.OWN, Color(0.55, 0.62, 0.66))
-		m.front(-1.25, 0.0, 1.25, 2.4, 0.1)
 		m.paint(M.IRON, M.OWN, BLACK)
 		m.front(-1.25, 2.4, 1.25, 2.45, 0.11)
+		for x in [-1.22, -0.42, 0.42, 1.22]:
+			m.front(x - 0.03, 0.0, x + 0.03, 2.4, 0.11)
+		m.front(-1.25, 0.0, 1.25, 0.08, 0.11)
 	else:
 		_opening(m, Rect2(-0.65, 0.3, 1.3, 2.2), 0.12, M.GLASS, M.OWN, DARK_GLASS)
 		m.paint(M.WOOD, M.ACCENT, WHITE)

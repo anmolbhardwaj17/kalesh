@@ -19,7 +19,7 @@ const CELL_M := 125.0
 ## visibility range ends, measured from a cell's middle (a 125 m cell reaches about 88 m from it)
 const MODULE_RANGE_M := 200.0
 const PIECE_RANGE_M := 120.0
-const SMALL := ["board", "ac", "rail", "vsign", "tank", "board_tilt", "board_lamp", "flex", "glow", "vboard", "band", "stack", "enamel", "small", "notice", "wallsign"]
+const SMALL := ["board", "ac", "rail", "vsign", "tank", "board_tilt", "board_lamp", "flex", "glow", "vboard", "band", "stack", "enamel", "small", "notice", "wallsign", "upflex", "upboards", "blade", "shutpaint", "cables"]
 const STEP_NODES := 40
 
 ## one library for every streamed city (built on the main thread the first time a system is made)

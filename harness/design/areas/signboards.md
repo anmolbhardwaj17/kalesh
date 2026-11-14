@@ -86,15 +86,31 @@ up the floors; in CP one sign per bay; around India Gate and Jantar Mantar none.
   `enamel` (disc right of a door), `small` (left of a door), `notice` (paper on the wall), `wallsign` (lettering on a
   plain wall). A shop bay takes one front board of the first five (shares in `kits.json` add up); the cell is picked
   by the bay, so neighbours differ.
+- Fix round (attempt 2, density to the photos): new pieces `upboards` (two small boards on the pier left of an upper
+  window and a board over it; a lit box in the hotel kit), `upflex` (flex sheet over the lower part of an upper
+  window), `blade` (a small board standing out from the shop's right edge, read down the street), `shutpaint`
+  (lettering painted on the part of the shutter left down, keyed to the shutter: flag 16 in the kit shader, about half
+  the shutters), `cables` (four or five wires, ten in GB Road and the galis, sagging between wall brackets on junction
+  boxes at the bay edges, in front of the boards). Under an upper window the band, a flex sheet and the AC unit share
+  one place ("sill" slot). Connaught Place: a big lit fascia box (or painted fascia) across every bay over clear glass.
+  GB Road: blue and white printed boards with "importers and stockists" lines (owner street view, Oct 2025).
+  Shares per kit in `kits.json`: Paharganj and GB Road densest, then the old city; Janpath one board per shop at one
+  height; ITO offices medium; Lutyens almost none.
+- Shop goods (`tools/kits/make_goods.mjs`): three goods cells per kit in the trim atlas (sweets, cloth, gota reels in
+  the bazaar; sacks, steel utensils, reels in the galis; motors, pipes and belts, cartons on GB Road; clothes, bags,
+  phone accessories in Paharganj; brass and stoles at Janpath; books, clothes, phones in CP; books, cartons, phones at
+  ITO), the shader picks one per bay; they glow warm at night (the shop's tube lights).
 - Night: the project global `kit_night` (set by the look from the day clock) lights glow faces and the even vertical
-  boards, the lamp heads, and the boards under lamps; glow boxes and lamp boards throw a soft pool on the pavement in
-  front (`game/render/shaders/sign_pool.gdshader`).
+  boards, the lamp heads, and the boards under lamps; glow boxes, lamp boards and tube-lit flex throw a warm pool on the pavement in
+  front (`game/render/shaders/sign_pool.gdshader`), only on surfaces at pavement height (a depth check, so never on the road below the kerb).
+- Official names (police, thana, court, municipal, government and the like, `OFFICIAL` in make_signs.mjs) never go on
+  a shop board; tools/kits/kits.test.mjs blocks them with its own word list.
 - Names only from `game/data/names/<area>.json` (respect rule; the parody entries' `board_style` picks their kind and
   their `tagline` becomes a second line). Other words are generic shop words. Phone numbers are one digit short
   (mobile 9 digits, landline 7), so no real line is shown. Fonts are free (OFL) and credited in
   `tools/kits/fonts/CREDITS.md`; the text is shaped with HarfBuzz (harfbuzzjs) into the atlas.
-- Not yet: separate LED channel letters, lettering painted on closed shutters (needs closed shutters at night,
-  P3-007), cable bundles crossing the boards (street dressing), a per-area name lookup for shop houses of one kit in
+- Not yet: separate LED channel letters, lettering on fully closed shutters at night (P3-007), the thin white pillar
+  colonnade of GB Road shop fronts (module work), a per-area name lookup for shop houses of one kit in
   another area (P2-010 follow-up). GB Road has no free current photos of its shop boards on Commons; the owner photos
   cover it, and a photo request is noted for Anmol.
 

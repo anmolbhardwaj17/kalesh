@@ -25,6 +25,8 @@ const F_KEY := 1
 const F_GLOW := 2
 const F_LIT := 4
 const F_LAMP := 8
+## lettering painted on a rolled-down shutter: the key shows the shutter (its ribbed layer and the bay accent)
+const F_SHUTTER := 16
 const UV1 := Rect2(0, 0, 1, 1)
 const STEEL := Color(0.16, 0.16, 0.17)
 
@@ -62,11 +64,11 @@ static func _board(m: M, kit: String, o := {}) -> void:
 	var y1 := 3.3
 	var z := 0.36
 	if kit == "colonnade":
-		# Connaught Place: a neat sign under the colonnade, centred, no straps
-		x0 = -0.8
-		x1 = 0.8
-		y0 = 2.34
-		y1 = 2.74
+		# Connaught Place: a neat painted fascia across the bay over the glass, no straps
+		x0 = -1.2
+		x1 = 1.2
+		y0 = 2.46
+		y1 = 3.0
 		z = 0.12
 	var tilt: float = o.get("tilt", 0.0)
 	m.paint(M.IRON, M.OWN, STEEL)
@@ -123,7 +125,13 @@ static func _flex(m: M, _kit: String, _o := {}) -> void:
 	for x in [x0 + 0.4, x1 - 0.4]:
 		m.bar(Vector3(x, y0 + 0.1, 0.06), Vector3(x, y0 + 0.1, z - 0.04), 0.04)
 		m.bar(Vector3(x, y1 - 0.15, 0.06), Vector3(x, y1 - 0.15, z - 0.04), 0.04)
-	_sign(m, G_FLEX)
+	# two tube lights on short arms along the top light the banner at night (GB Road night photo O-gb_road/03)
+	for x in [x0 + 0.65, x1 - 0.65]:
+		m.paint(M.IRON, M.OWN, STEEL)
+		m.bar(Vector3(x, y1 + 0.04, z - 0.03), Vector3(x, y1 + 0.04, z + 0.2), 0.025)
+		_sign(m, 0, 0, F_LAMP)
+		m.box(Vector3(x - 0.3, y1 + 0.01, z + 0.18), Vector3(x + 0.3, y1 + 0.05, z + 0.23), false, true)
+	_sign(m, G_FLEX, 0, F_LIT)
 	_face(m, x0 + 0.02, y0 + 0.02, x1 - 0.02, y1 - 0.02, z)
 
 
@@ -136,12 +144,14 @@ static func _glow(m: M, kit: String, _o := {}) -> void:
 	var z0 := 0.2
 	var z1 := 0.4
 	if kit == "colonnade":
-		x0 = -0.9
-		x1 = 0.9
-		y0 = 2.3
-		y1 = 2.75
-		z0 = 0.05
-		z1 = 0.17
+		# Connaught Place showrooms: a big lit fascia box across the whole bay over the glass, under the walk's
+		# ceiling (photos #15 2025-08-14, #16 2024-03-04)
+		x0 = -1.24
+		x1 = 1.24
+		y0 = 2.44
+		y1 = 3.02
+		z0 = 0.06
+		z1 = 0.24
 	m.paint(M.IRON, M.OWN, Color(0.55, 0.56, 0.57))
 	m.box(Vector3(x0, y0, z0), Vector3(x1, y1, z1 - 0.003), true, true)
 	_sign(m, G_GLOW, 0, F_GLOW)
@@ -224,6 +234,9 @@ static func _small(m: M, _o := {}) -> void:
 static func _notice(m: M, _o := {}) -> void:
 	_sign(m, G_NOTICE, 0, F_KEY)
 	m.front(-1.42, 1.4, -0.78, 1.72, M.SKIN + 0.006, UV1)
+	# a second cluster lower on the other side of the bay (notices gather in layers, photo #7)
+	_sign(m, G_NOTICE, 1, F_KEY)
+	m.front(0.8, 1.05, 1.44, 1.37, M.SKIN + 0.007, UV1)
 
 
 ## Lettering painted straight on a plain bay's wall below its window, at eye height (white is the wall).
@@ -235,11 +248,131 @@ static func _wallsign(m: M, _o := {}) -> void:
 	m.face = was
 
 
-## The light a lit board throws on the pavement in front of it at night (WORLD_LOGIC.md: a shop sign glows on the
-## pavement under it): one flat quad just over the street level, drawn additive by sign_pool.gdshader. UV 0..1.
-static func pool(m: M, width: float, reach: float) -> void:
+## A small board standing out from the bay's right edge on a bracket, both faces painted, read from down the street
+## (projecting shop signs, photos #1, #6): above head height, under the awning.
+static func _blade(m: M, _o := {}) -> void:
+	var x := 1.43
+	var y0 := 2.0
+	var y1 := 2.36
+	var z0 := 0.14
+	var z1 := 0.86
+	m.paint(M.IRON, M.OWN, STEEL)
+	m.bar(Vector3(x, y1 + 0.05, 0.05), Vector3(x, y1 + 0.05, z1 + 0.03), 0.03)
+	m.bar(Vector3(x, y0 + 0.08, 0.05), Vector3(x, y0 + 0.08, z0 + 0.01), 0.03)
+	for z in [z0 + 0.08, z1 - 0.08]:
+		m.bar(Vector3(x, y1 + 0.03, z), Vector3(x, y1 + 0.005, z), 0.012)
+	m.box(Vector3(x - 0.02, y0, z0), Vector3(x + 0.02, y1, z1), false, true)
+	_sign(m, G_SMALL, 3)
+	var was := m.face
+	m.face = true
+	m.quad(Vector3(x + 0.022, y0, z1), Vector3(x + 0.022, y0, z0), Vector3(x + 0.022, y1, z0), Vector3(x + 0.022, y1, z1), PackedVector2Array([Vector2(0, 1), Vector2(1, 1), Vector2(1, 0), Vector2(0, 0)]))
+	m.quad(Vector3(x - 0.022, y0, z0), Vector3(x - 0.022, y0, z1), Vector3(x - 0.022, y1, z1), Vector3(x - 0.022, y1, z0), PackedVector2Array([Vector2(0, 1), Vector2(1, 1), Vector2(1, 0), Vector2(0, 0)]))
+	m.face = was
+
+
+## Boards up an upper floor (Paharganj, GB Road, old city stacks, photos #1, #6, O-gb_road/02): two small boards one
+## over the other on the wall left of the window, and a board over the window under the floor above (a lit box in the
+## hotel kit: guest houses light their name on every floor).
+static func _upboards(m: M, kit: String, _o := {}) -> void:
+	m.paint(M.IRON, M.OWN, STEEL)
+	m.box(Vector3(-1.43, 1.53, 0.05), Vector3(-0.83, 1.83, 0.07), false, true)
+	m.box(Vector3(-1.43, 1.98, 0.05), Vector3(-0.83, 2.28, 0.07), false, true)
+	_sign(m, G_SMALL, 1)
+	_face(m, -1.44, 1.52, -0.82, 1.84, 0.072, 0.9)
+	_sign(m, G_SMALL, 2)
+	_face(m, -1.44, 1.97, -0.82, 2.29, 0.072, -0.6)
+	if kit == "hotel":
+		m.paint(M.IRON, M.OWN, Color(0.55, 0.56, 0.57))
+		m.box(Vector3(-1.0, 2.66, 0.05), Vector3(1.0, 3.07, 0.2), false, true)
+		_sign(m, G_GLOW, 1, F_GLOW)
+		_face(m, -0.98, 2.68, 0.98, 3.05, 0.203)
+	else:
+		m.box(Vector3(-0.96, 2.68, 0.05), Vector3(0.96, 3.06, 0.08), false, true)
+		_sign(m, G_FASCIA, 3)
+		_face(m, -0.98, 2.66, 0.98, 3.08, 0.085, 0.5)
+
+
+## A printed flex sheet on a pipe frame over the lower part of an upper window, clear of the ground floor boards below (GB Road machine shops advertise on every
+## floor, O-gb_road/02): the frame stands off the wall on struts in front of the grille.
+static func _upflex(m: M, _o := {}) -> void:
+	var x0 := -1.42
+	var x1 := 1.3
+	var y0 := 0.46
+	var y1 := 1.4
+	var z := 0.34
+	m.paint(M.IRON, M.OWN, STEEL)
+	m.bar(Vector3(x0, y0, z - 0.03), Vector3(x1, y0, z - 0.03), 0.035)
+	m.bar(Vector3(x0, y1, z - 0.03), Vector3(x1, y1, z - 0.03), 0.035)
+	m.bar(Vector3(x0, y0, z - 0.03), Vector3(x0, y1, z - 0.03), 0.035)
+	m.bar(Vector3(x1, y0, z - 0.03), Vector3(x1, y1, z - 0.03), 0.035)
+	for x in [x0 + 0.15, x1 - 0.15]:
+		m.bar(Vector3(x, y0 + 0.1, 0.06), Vector3(x, y0 + 0.1, z - 0.04), 0.035)
+		m.bar(Vector3(x, y1 - 0.1, 0.06), Vector3(x, y1 - 0.1, z - 0.04), 0.035)
+	_sign(m, G_FLEX, 1)
+	_face(m, x0 + 0.02, y0 + 0.02, x1 - 0.02, y1 - 0.02, z)
+
+
+## Lettering painted on the part of the shutter left down (old city galis, O-signboards/03 "जोबट" shutter): a quad just
+## in front of the shutter, keyed to the shutter itself in the kit shader (F_SHUTTER), so it reads as paint on the ribs.
+## `w` and `down` come from the kit's shop recipe (kit_modules.gd), so it covers that shutter exactly.
+static func shutpaint(m: M, w: float, down: float) -> void:
+	var top := 2.55
+	var y1 := top - 0.22
+	# the lettering band keeps the cell's 4:1 shape at the foot of the part left down (the rest stays plain shutter)
+	var y0 := y1 - minf(top * down, (w * 2.0 - 0.04) / 3.6)
+	_sign(m, G_WALL, 1, F_SHUTTER)
+	var was := m.face
+	m.face = true
+	m.front(-w + 0.02, y0, w - 0.02, y1, 0.304, UV1)
+	m.face = was
+
+
+## Cable bundles across the shop fronts (old city, GB Road, Paharganj: photos #6, #7, O-gb_road/02): four or five
+## wires sagging between two wall brackets at the bay's edges, in front of the boards, each bracket on a junction box,
+## so no wire ends in the air (WORLD_LOGIC 2). Neighbouring bays continue the run; GB Road and the galis carry ten.
+static func _cables(m: M, kit := "", _o := {}) -> void:
+	var xe := 1.47
+	var yb := 3.52
+	var zb := 0.8
+	m.paint(M.IRON, M.OWN, Color(0.2, 0.2, 0.21))
+	for x in [-xe, xe]:
+		m.box(Vector3(x - 0.07, yb - 0.1, 0.05), Vector3(x + 0.07, yb + 0.08, 0.13), false, true)
+		m.bar(Vector3(x, yb, 0.13), Vector3(x, yb, zb + 0.08), 0.022)
+	m.paint(M.IRON, M.OWN, Color(0.05, 0.05, 0.055))
+	var wires := [[0.0, 0.22, 0.0], [0.05, 0.34, 0.04], [-0.04, 0.27, 0.08], [0.02, 0.48, -0.04], [-0.02, 0.4, 0.11]]
+	if kit == "hardware" or kit == "gali":
+		# a thick band of cables across the first floor (GB Road street view Oct 2025, old city galis)
+		wires.append_array([[0.03, 0.3, 0.02], [-0.03, 0.36, 0.06], [0.06, 0.25, -0.02], [-0.05, 0.44, 0.09], [0.01, 0.31, 0.13]])
+	var n := 6
+	var was := m.fine
+	m.fine = true
+	for wd: Array in wires:
+		var y0: float = yb + float(wd[0])
+		var sag: float = wd[1]
+		var z: float = zb + float(wd[2])
+		var h := 0.016
+		for i in n:
+			var xa := lerpf(-xe, xe, float(i) / n)
+			var xb := lerpf(-xe, xe, float(i + 1) / n)
+			var ya := y0 - sag * (1.0 - pow(xa / xe, 2.0))
+			var yb2 := y0 - sag * (1.0 - pow(xb / xe, 2.0))
+			m.quad(Vector3(xa, ya - h, z), Vector3(xb, yb2 - h, z), Vector3(xb, yb2 + h, z), Vector3(xa, ya + h, z))
+			m.both(Vector3(xa, ya - h, z - h), Vector3(xb, yb2 - h, z - h), Vector3(xb, yb2 - h, z + h), Vector3(xa, ya - h, z + h))
+	m.fine = was
+
+
+## The light a lit board throws round it at night (WORLD_LOGIC.md: a shop sign glows on the pavement under it), drawn
+## additive by sign_pool.gdshader: `ground` [half width, reach] a flat quad just over the street level in front of the
+## bay (UV x across, y out), `wall` [x0, y0, x1, y1] a quad just off the wall round the board (the soft spill on the wall,
+## the awning and the boards near it). Either may be empty.
+static func pool(m: M, ground: Array, wall: Array) -> void:
 	m.paint(M.BOARD, M.OWN, WHITE)
-	m.quad(Vector3(-width, 0.03, 0.45), Vector3(-width, 0.03, reach), Vector3(width, 0.03, reach), Vector3(width, 0.03, 0.45), PackedVector2Array([Vector2(0, 0), Vector2(0, 1), Vector2(1, 1), Vector2(1, 0)]))
+	if ground.size() == 2:
+		var width: float = ground[0]
+		var reach: float = ground[1]
+		m.quad(Vector3(-width, 0.03, 0.45), Vector3(-width, 0.03, reach), Vector3(width, 0.03, reach), Vector3(width, 0.03, 0.45), PackedVector2Array([Vector2(0, 0), Vector2(0, 1), Vector2(1, 1), Vector2(1, 0)]))
+	if wall.size() == 4:
+		m.front(wall[0], wall[1], wall[2], wall[3], 0.065, Rect2(0, 0, 1, 1))
 
 
 static func _stair(m: M, _o: Dictionary) -> void:

@@ -31,7 +31,7 @@
       "facade": ["white_render", "cream", "pale_stone", "cream_yellow", "white_marble", "buff_sandstone"],
       "accent": ["#2f3a34", "#3f5f4a", "#6b2a24", "#1f3a5f", "#7a7d7e", "#4a3a2c"],
       "boards": {"bg": ["#1c1c1e", "#f2f0ea", "#1c1c1e", "#2c3e70", "#6b2a24"], "fg": "auto", "scripts": ["latn", "deva"], "case": "upper", "plain": true},
-      "shares": {"board": 0.5, "stair": 0, "tank": 0.04, "roof_rail": 0, "ac": 0.15, "board_tilt": 0, "board_lamp": 0, "flex": 0, "glow": 0.4, "vboard": 0, "band": 0.05, "stack": 0, "enamel": 0, "small": 0.1, "notice": 0.05, "wallsign": 0},
+      "shares": {"board": 0.3, "stair": 0, "tank": 0.04, "roof_rail": 0, "ac": 0.15, "board_tilt": 0, "board_lamp": 0, "flex": 0, "glow": 0.7, "vboard": 0, "band": 0.05, "stack": 0, "enamel": 0, "small": 0.1, "notice": 0.05, "wallsign": 0, "upflex": 0, "upboards": 0, "blade": 0.2, "shutpaint": 0, "cables": 0},
       "tex": {
         "render": {"patch": 0.15, "crack": 0.05, "tone": 0.03},
         "brick": {"w": 64, "h": 22, "mortar": "#d8d2c4", "c": ["#9a5a42", "#8a4e3a", "#a8664a"]},
@@ -99,7 +99,7 @@
         "case": "title",
         "plain": false
       },
-      "shares": {"board": 0.3, "stair": 0.2, "tank": 0.25, "roof_rail": 0.5, "ac": 0.35, "board_tilt": 0.15, "board_lamp": 0.1, "flex": 0.2, "glow": 0.15, "vboard": 0.2, "band": 0.5, "stack": 0.6, "enamel": 0.25, "small": 0.3, "notice": 0.4, "wallsign": 0.25},
+      "shares": {"board": 0.25, "stair": 0.2, "tank": 0.25, "roof_rail": 0.5, "ac": 0.3, "board_tilt": 0.12, "board_lamp": 0.12, "flex": 0.18, "glow": 0.3, "vboard": 0.35, "band": 0.4, "stack": 0.7, "enamel": 0.3, "small": 0.35, "notice": 0.5, "wallsign": 0.3, "upflex": 0.15, "upboards": 0.55, "blade": 0.55, "shutpaint": 0.9, "cables": 0.85},
       "tex": {
         "render": {"patch": 0.7, "crack": 0.45, "tone": 0.1},
         "brick": {"w": 46, "h": 14, "mortar": "#b8ab94", "c": ["#8b5e45", "#7d4f39", "#96664b", "#6f4632"]},
@@ -163,7 +163,7 @@
       "facade": ["faded_pink", "faded_blue", "faded_green", "lime_plaster", "ochre", "painted_pink", "teal", "cream_yellow", "brown_brick"],
       "accent": ["#2e6b4f", "#3a5f8a", "#7a7d7e", "#8a3a2e", "#3f8f8c", "#5d4037", "#b08a3e"],
       "boards": {"bg": ["#1f5fa8", "#c0392b", "#2e8b57", "#f2c230", "#0f7c7c", "#7b2d8b"], "fg": "auto", "scripts": ["deva", "arab", "latn"], "case": "title", "plain": false},
-      "shares": {"board": 0.35, "stair": 0.3, "tank": 0.35, "roof_rail": 0.6, "ac": 0.3, "board_tilt": 0.2, "board_lamp": 0.12, "flex": 0.08, "glow": 0.1, "vboard": 0.08, "band": 0.45, "stack": 0.45, "enamel": 0.3, "small": 0.35, "notice": 0.5, "wallsign": 0.4},
+      "shares": {"board": 0.4, "stair": 0.3, "tank": 0.35, "roof_rail": 0.6, "ac": 0.3, "board_tilt": 0.25, "board_lamp": 0.12, "flex": 0.08, "glow": 0.08, "vboard": 0.15, "band": 0.45, "stack": 0.5, "enamel": 0.35, "small": 0.55, "notice": 0.6, "wallsign": 0.5, "upflex": 0.05, "upboards": 0.5, "blade": 0.6, "shutpaint": 1, "cables": 0.95},
       "tex": {
         "render": {"patch": 0.85, "crack": 0.55, "tone": 0.14},
         "brick": {"w": 40, "h": 12, "mortar": "#ae9f86", "c": ["#8b5e45", "#7a4c36", "#93604a", "#6a4130"]},
@@ -227,7 +227,7 @@
       "facade": ["painted_yellow", "painted_blue", "painted_pink", "cream", "teal", "ochre", "white_render"],
       "accent": ["#3a8fd0", "#7a7d7e", "#c0392b", "#2e8b57", "#e2c04f", "#7b2d8b"],
       "boards": {"bg": ["#f2c230", "#c0392b", "#1f5fa8", "#f2f0ea", "#2e8b57", "#d6336c"], "fg": "auto", "scripts": ["latn", "deva"], "case": "upper", "plain": false},
-      "shares": {"board": 0.25, "stair": 0.1, "tank": 0.3, "roof_rail": 0.5, "ac": 0.6, "board_tilt": 0.1, "board_lamp": 0.05, "flex": 0.25, "glow": 0.3, "vboard": 0.55, "band": 0.6, "stack": 0.6, "enamel": 0.1, "small": 0.3, "notice": 0.35, "wallsign": 0.2},
+      "shares": {"board": 0.2, "stair": 0.1, "tank": 0.3, "roof_rail": 0.5, "ac": 0.4, "board_tilt": 0.08, "board_lamp": 0.05, "flex": 0.25, "glow": 0.4, "vboard": 0.75, "band": 0.45, "stack": 0.75, "enamel": 0.1, "small": 0.35, "notice": 0.4, "wallsign": 0.2, "upflex": 0.1, "upboards": 0.7, "blade": 0.6, "shutpaint": 0.5, "cables": 0.85},
       "tex": {
         "render": {"patch": 0.55, "crack": 0.3, "tone": 0.08},
         "brick": {"w": 56, "h": 18, "mortar": "#c4b8a2", "c": ["#8f5e45", "#a06a4e"]},
@@ -293,7 +293,7 @@
       "facade": ["grey_concrete", "dark_grey", "cream", "blue_band", "orange_brick", "pale_stone", "buff_sandstone"],
       "accent": ["#4d6fa3", "#66686a", "#9a9a96", "#3f5f4a", "#8c8a84", "#b5b1a8"],
       "boards": {"bg": ["#1f5fa8", "#2e8b57", "#f2f0ea", "#1c1c1e", "#c0392b"], "fg": "auto", "scripts": ["deva", "latn"], "case": "upper", "plain": true},
-      "shares": {"board": 0.25, "stair": 0, "tank": 0.1, "roof_rail": 0.3, "ac": 0.4, "board_tilt": 0.05, "board_lamp": 0, "flex": 0.1, "glow": 0.1, "vboard": 0.05, "band": 0.1, "stack": 0.1, "enamel": 0, "small": 0.2, "notice": 0, "wallsign": 0},
+      "shares": {"board": 0.3, "stair": 0, "tank": 0.1, "roof_rail": 0.3, "ac": 0.3, "board_tilt": 0.08, "board_lamp": 0, "flex": 0.2, "glow": 0.3, "vboard": 0.3, "band": 0.4, "stack": 0.45, "enamel": 0, "small": 0.5, "notice": 0.35, "wallsign": 0.3, "upflex": 0.15, "upboards": 0.5, "blade": 0.5, "shutpaint": 0, "cables": 0.6},
       "tex": {
         "render": {"patch": 0.3, "crack": 0.15, "tone": 0.05},
         "brick": {"w": 60, "h": 20, "mortar": "#bfb4a0", "c": ["#b9683a", "#a85e35", "#c47444"]},
@@ -354,7 +354,7 @@
       "facade": ["white_render", "buff_sandstone", "cream", "pale_stone", "red_sandstone", "lime_plaster"],
       "accent": ["#2f4f3a", "#3f5f4a", "#f2f0ea", "#5d4037", "#2c3e50", "#7a7d7e"],
       "boards": {"bg": ["#2e5e3e", "#f2f0ea", "#1f5fa8"], "fg": "auto", "scripts": ["latn", "deva"], "case": "title", "plain": true},
-      "shares": {"board": 0.1, "stair": 0, "tank": 0.02, "roof_rail": 0, "ac": 0.05, "board_tilt": 0, "board_lamp": 0, "flex": 0, "glow": 0, "vboard": 0, "band": 0, "stack": 0, "enamel": 0, "small": 0, "notice": 0, "wallsign": 0},
+      "shares": {"board": 0.1, "stair": 0, "tank": 0.02, "roof_rail": 0, "ac": 0.05, "board_tilt": 0, "board_lamp": 0, "flex": 0, "glow": 0, "vboard": 0, "band": 0, "stack": 0, "enamel": 0, "small": 0, "notice": 0, "wallsign": 0, "upflex": 0, "upboards": 0, "blade": 0, "shutpaint": 0, "cables": 0},
       "tex": {
         "render": {"patch": 0.08, "crack": 0.03, "tone": 0.02},
         "brick": {"w": 64, "h": 22, "mortar": "#d6cdb8", "c": ["#a4533b", "#9a4c35"]},
@@ -416,7 +416,7 @@
       "facade": ["cream", "white_render", "painted_red", "painted_yellow", "teal", "ochre", "faded_blue"],
       "accent": ["#c0392b", "#f2c230", "#2c3e70", "#3a7d44", "#d35400", "#7a4a8c", "#1f6f8b"],
       "boards": {"bg": ["#2c3e70", "#c0392b", "#f2f0ea", "#1c1c1e", "#2e8b57", "#e67e22"], "fg": "auto", "scripts": ["latn", "deva"], "case": "upper", "plain": false},
-      "shares": {"board": 0.3, "stair": 0, "tank": 0.15, "roof_rail": 0.2, "ac": 0.2, "board_tilt": 0.1, "board_lamp": 0.05, "flex": 0.2, "glow": 0.25, "vboard": 0.1, "band": 0.2, "stack": 0.2, "enamel": 0.05, "small": 0.3, "notice": 0.2, "wallsign": 0.1},
+      "shares": {"board": 0.35, "stair": 0, "tank": 0.15, "roof_rail": 0.2, "ac": 0.2, "board_tilt": 0.1, "board_lamp": 0.05, "flex": 0.25, "glow": 0.25, "vboard": 0.15, "band": 0.35, "stack": 0.3, "enamel": 0.05, "small": 0.35, "notice": 0.25, "wallsign": 0.1, "upflex": 0.05, "upboards": 0.4, "blade": 0.4, "shutpaint": 0.3, "cables": 0.5},
       "tex": {
         "render": {"patch": 0.35, "crack": 0.2, "tone": 0.06},
         "brick": {"w": 60, "h": 20, "mortar": "#cbbfa8", "c": ["#8f5e45", "#a06a4e"]},
@@ -477,7 +477,7 @@
       "facade": ["faded_blue", "faded_green", "painted_yellow", "brown_brick", "lime_plaster", "grey_concrete", "teal", "red_orange_plaster"],
       "accent": ["#2e6b4f", "#3a5f8a", "#7a7d7e", "#b08a3e", "#8a3a2e", "#3f8f8c"],
       "boards": {"bg": ["#f2c230", "#1f5fa8", "#c0392b", "#f2f0ea", "#2e8b57", "#0f7c7c"], "fg": "auto", "scripts": ["deva", "latn"], "case": "upper", "plain": false},
-      "shares": {"board": 0.2, "stair": 0.2, "tank": 0.3, "roof_rail": 0.5, "ac": 0.3, "board_tilt": 0.12, "board_lamp": 0.05, "flex": 0.45, "glow": 0.13, "vboard": 0.25, "band": 0.5, "stack": 0.65, "enamel": 0.1, "small": 0.25, "notice": 0.35, "wallsign": 0.3},
+      "shares": {"board": 0.15, "stair": 0.2, "tank": 0.3, "roof_rail": 0.5, "ac": 0.15, "board_tilt": 0.1, "board_lamp": 0.05, "flex": 0.6, "glow": 0.08, "vboard": 0.35, "band": 0.3, "stack": 0.8, "enamel": 0.1, "small": 0.3, "notice": 0.45, "wallsign": 0.35, "upflex": 0.5, "upboards": 0.55, "blade": 0.45, "shutpaint": 0.6, "cables": 0.95},
       "tex": {
         "render": {"patch": 0.7, "crack": 0.4, "tone": 0.1},
         "brick": {"w": 50, "h": 16, "mortar": "#b2a58e", "c": ["#8b5e45", "#7d4f39", "#a35a3c"]},

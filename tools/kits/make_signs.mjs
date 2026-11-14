@@ -38,7 +38,14 @@ export const GROUPS = [
 const STYLE = {
   bazaar: { wear: 0.72, estd: [1898, 1988], wood: 0.35, urdu: true },
   gali: { wear: 0.85, estd: [1890, 1980], wood: 0.45, urdu: true },
-  hardware: { wear: 0.8, estd: [1935, 1995], wood: 0.25 },
+  // GB Road today (owner street view, Oct 2025): printed boards mostly blue with white letters or white with blue, a few
+  // red or yellow; "importers and stockists" lines and goods lists of bearings and machinery
+  hardware: {
+    wear: 0.8, estd: [1935, 1995], wood: 0.25,
+    flex: [['#1f5fa8', '#ffffff', '#f2c230'], ['#ffffff', '#1d3f8f', '#1f5fa8'], ['#2a6fbf', '#ffffff', '#ffffff'], ['#f4f6f8', '#1f4f99', '#c0261e'], ['#1d3f8f', '#f2f0e6', '#ffffff'], ['#c0261e', '#ffffff', '#f2c230'], ['#f2c230', '#1d3f8f', '#c0261e']],
+    paint: [['#1f4f99', '#f2f0e6', '#0e1f3a'], ['#f1ecdf', '#1d3f8f', '#7d7d7d'], ['#2a6fbf', '#ffffff', '#10284a'], ['#f1ecdf', '#b3261e', '#2a2a2a'], ['#e8b923', '#1d3f8f', '#3a1d12']],
+    tops: ['IMPORTERS & STOCKISTS', 'DEALS IN', 'AUTHORISED DEALERS', 'WHOLESALE DEALERS'],
+  },
   hotel: { wear: 0.6, estd: [1965, 2010], wood: 0.15 },
   market: { wear: 0.45, estd: [1950, 2005], wood: 0.2 },
   office: { wear: 0.35, estd: [1960, 2012], wood: 0.05 },
@@ -46,6 +53,20 @@ const STYLE = {
   lutyens: { wear: 0.15, estd: [1931, 1990], wood: 0.0, showroom: true },
 };
 
+/** The address line real boards print under the name: street and area only (public place names, no business). */
+const ADDRESS = {
+  bazaar: ['Chandni Chowk, Delhi-6', 'Main Road Chandni Chowk', 'Near Town Hall, Delhi-6'],
+  gali: ['Kinari Bazar, Delhi-6', 'Khari Baoli, Delhi-6', 'Gali No. 4, Delhi-6'],
+  hardware: ['G.B. Road, Delhi-6', 'Shradhanand Marg, Delhi', 'Ajmeri Gate, Delhi-6'],
+  hotel: ['Main Bazar, Paharganj', 'Paharganj, New Delhi-55', 'Near New Delhi Rly. Stn.'],
+  market: ['Janpath, New Delhi-1', 'Tibetan Market, Janpath'],
+  office: ['Daryaganj, New Delhi-2', 'Asaf Ali Road, New Delhi', 'I.T.O., New Delhi'],
+  colonnade: ['Connaught Place, New Delhi', 'Inner Circle, C.P.', 'Outer Circle, C.P.'],
+  lutyens: ['New Delhi', 'Janpath, New Delhi'],
+};
+/** What hotels and lodges print on their boards. */
+const HOTEL_LINES = ['AC ROOMS', 'LIFT', '24 HRS HOT WATER', 'WIFI', 'ROOFTOP', 'CCTV', 'TRAVEL DESK', 'ATTACHED BATH', 'FAMILY ROOMS'];
+const LODGING = new Set(['hotel', 'lodge', 'dharamshala']);
 /** Generic goods words per shop kind (Hindi, English): no names, no brands. */
 const GOODS = {
   cloth: [['साड़ी', 'सूट', 'दुपट्टा'], ['Sarees', 'Suits', 'Dupattas']],
@@ -72,7 +93,7 @@ const GOODS = {
   printing: [['छपाई', 'शादी कार्ड'], ['Printing', 'Wedding Cards']],
   repair: [['मरम्मत'], ['Repairing', 'Mobile', 'Watch']],
   tailor: [['सिलाई'], ['Ladies & Gents Tailors']],
-  hardware: [['मोटर', 'पंप', 'बेयरिंग', 'पाइप'], ['Motors', 'Pumps', 'Bearings', 'Pipe Fittings', 'V-Belts']],
+  hardware: [['मोटर', 'पंप', 'बेयरिंग', 'पाइप'], ['All Types of Bearings', 'Sleeves', 'Plummer Blocks', 'Motors', 'V-Belts']],
   bangles: [['चूड़ियाँ'], ['Bangles']],
   bakery: [['केक', 'पेस्ट्री'], ['Cakes', 'Pastries', 'Breads']],
   cafe: [['कॉफ़ी'], ['Coffee', 'Snacks']],
@@ -123,6 +144,10 @@ function withHi(x) {
   return x;
 }
 const NOT_BOARDS = new Set(['wall_writing', 'poster_line', 'cart', 'hoarding', 'protest', 'govt_board']);
+/** Official names never go on a shop board (police posts, courts, municipal and government offices): their own boards
+ * are a separate kind (govt_board, street dressing). Matched in every script of the entry and its tagline. */
+export const OFFICIAL = /(^|[^a-z])(police|thana|chowki|court|municipal|government|govt|ministry|secretariat|department|sarkari|nagar nigam|parliament|assembly|revenue|tribunal|directorate|post office|ward office)($|[^a-z])|पुलिस|थाना|चौकी|न्यायालय|अदालत|सरकार|नगर निगम|मंत्रालय|विभाग|सचिवालय|पोस्ट ऑफिस|پولیس|عدالت|سرکار/i;
+export const isOfficial = (x) => OFFICIAL.test([...Object.values(x.text || {}), x.hi || '', x.tagline || ''].join(' | ').toLowerCase());
 
 // ------------------------------------------------------------------ small helpers
 function rngOf(seed) {
@@ -198,7 +223,7 @@ const GLOW = [['#f7f5ef', '#c0261e', '#1d3f8f'], ['#1d3f8f', '#ffffff', '#f2c230
 
 /** The board names of a group: shop kinds of the names file, preferred kinds first, then by weight; deterministic. */
 export function namesFor(group, names, n, seed) {
-  const list = names.names.filter((x) => !NOT_BOARDS.has(x.kind) && x.text && x.text.latn).map(withHi);
+  const list = names.names.filter((x) => !NOT_BOARDS.has(x.kind) && x.text && x.text.latn && !isOfficial(x)).map(withHi);
   const pref = PREFER[group] || [];
   const r = rngOf(seed);
   // an entry with a board_style (the parody entries, decisions.md 2026-11-14) goes on that kind of board first
@@ -237,6 +262,43 @@ function arrow(x, y, w, h, fill, left) {
   const d = left ? `M${x + w},${y + h * 0.35} L${x + h * 0.6},${y + h * 0.35} L${x + h * 0.6},${y} L${x},${y + h / 2} L${x + h * 0.6},${y + h} L${x + h * 0.6},${y + h * 0.65} L${x + w},${y + h * 0.65} Z` : `M${x},${y + h * 0.35} L${x + w - h * 0.6},${y + h * 0.35} L${x + w - h * 0.6},${y} L${x + w},${y + h / 2} L${x + w - h * 0.6},${y + h} L${x + w - h * 0.6},${y + h * 0.65} L${x},${y + h * 0.65} Z`;
   return `<path d="${d}" fill="${fill}"/>`;
 }
+function pickN(r, a, n) {
+  const c = a.slice();
+  const out = [];
+  while (out.length < n && c.length) out.push(c.splice(Math.floor(r() * c.length) % c.length, 1)[0]);
+  return out;
+}
+function stars(cx, y, n, size, fill) {
+  let s = '';
+  for (let i = 0; i < n; i++) {
+    const sx = cx + (i - (n - 1) / 2) * size * 1.15;
+    const pts = [];
+    for (let k = 0; k < 10; k++) {
+      const a = -Math.PI / 2 + (k * Math.PI) / 5;
+      const rr = k % 2 ? size * 0.22 : size * 0.5;
+      pts.push(`${(sx + Math.cos(a) * rr).toFixed(1)},${(y + Math.sin(a) * rr).toFixed(1)}`);
+    }
+    s += `<polygon points="${pts.join(' ')}" fill="${fill}"/>`;
+  }
+  return s;
+}
+/** A border of bulbs (or LED dots) round a board, inset `i` px, every `step` px: yellow, the kit shader chases them at night. */
+function bulbs(x, y, w, h, i, step, fill = '#ffd34d') {
+  let s = '';
+  for (let px = x + i; px <= x + w - i; px += step) s += `<circle cx="${px.toFixed(1)}" cy="${y + i}" r="2.6" fill="${fill}"/><circle cx="${px.toFixed(1)}" cy="${y + h - i}" r="2.6" fill="${fill}"/>`;
+  for (let py = y + i + step; py < y + h - i; py += step) s += `<circle cx="${x + i}" cy="${py.toFixed(1)}" r="2.6" fill="${fill}"/><circle cx="${x + w - i}" cy="${py.toFixed(1)}" r="2.6" fill="${fill}"/>`;
+  return s;
+}
+let GRAD = 0;
+/** A linear gradient fill (printed flex and acrylic faces are rarely one flat colour). */
+function grad(a, b, vertical = true) {
+  const id = `gr${GRAD++}`;
+  return { id, def: `<defs><linearGradient id="${id}" x1="0" y1="0" x2="${vertical ? 0 : 1}" y2="${vertical ? 1 : 0}"><stop offset="0" stop-color="${a}"/><stop offset="1" stop-color="${b}"/></linearGradient></defs>`, fill: `url(#${id})` };
+}
+function shade(h, k) {
+  const c = hex(h).map((v) => Math.max(0, Math.min(255, Math.round(v * k))));
+  return '#' + c.map((v) => v.toString(16).padStart(2, '0')).join('');
+}
 function screws(x, y, w, h, inset) {
   return [[x + inset, y + inset], [x + w - inset, y + inset], [x + inset, y + h - inset], [x + w - inset, y + h - inset]];
 }
@@ -244,7 +306,7 @@ function screws(x, y, w, h, inset) {
 function fascia(c, n, ctx) {
   const { r, st, kit } = ctx;
   const [x, y, w, h] = c;
-  const pal = st.showroom ? pick(r, PAINT_SHOWROOM) : pick(r, PAINT);
+  const pal = st.showroom ? pick(r, PAINT_SHOWROOM) : pick(r, st.paint || PAINT);
   const [bg, fg, sh] = pal;
   const wood = r() < st.wood;
   const upper = ctx.boards.case === 'upper' || r() < 0.4;
@@ -278,7 +340,9 @@ function fascia(c, n, ctx) {
     s += fitLine(r() < 0.5 && gl[0].length ? 'mukta' : 'oswald', g, { x: x + w / 2, y: y + h * 0.87, maxW: w - 50, size: h * 0.19, attrs: `fill="${bg}"` }).svg;
     extra.push(g);
   } else {
-    // Hindi (or the first script) big over the second line small, with the estd year or a phone number
+    // Hindi (or the first script) big over the second line small, with the estd year or a phone number; a board with
+    // one name line carries its goods (or, for lodging, its rooms) as the second line, as real boards do
+    if (!l2) l2 = ['latn', LODGING.has(n.kind) ? pickN(r, HOTEL_LINES, 3).join(' • ') : gl[1].slice(0, 3).join(' • ')];
     const big = l2 ? 0.44 : 0.56;
     const corner = hasEstd || (!st.showroom && r() < 0.5);
     s += line(f1, t1, { x: x + w / 2, y: y + h * (l2 ? 0.5 : 0.66), maxW: corner ? w - 210 : w - 46, size: h * big, jitter: jit, drop }, fg, shadow, sd);
@@ -295,8 +359,13 @@ function fascia(c, n, ctx) {
       s += fitLine('oswald', p, { x: x + w - 16, y: y + h * 0.3, maxW: 110, size: 15, anchor: 'end', attrs: `fill="${fg}"` }).svg;
       extra.push(p);
     }
-    if (layout === 4 && !l2) {
-      s += arrow(x + w - 92, y + h - 34, 72, 22, fg, false);
+    if (layout === 4) {
+      s += arrow(x + w - 70, y + h - 30, 52, 18, fg, false);
+    }
+    if (!st.showroom && !hasEstd && !corner && r() < 0.7) {
+      const a = pick(r, ADDRESS[kit] || ADDRESS.market);
+      s += fitLine('oswald', a, { x: x + 16, y: y + h * 0.27, maxW: 150, size: 13, anchor: 'start', attrs: `fill="${fg}"` }).svg;
+      extra.push(a);
     }
   }
   const mat = wood ? 'wood' : 'tin';
@@ -342,19 +411,25 @@ function product(x, y, s, kind, r) {
 function flex(c, n, ctx) {
   const { r, st } = ctx;
   const [x, y, w, h] = c;
-  const [bg, fg, ac] = pick(r, FLEX);
+  const [bg, fg, ac] = pick(r, st.flex || FLEX);
   const [l1, l2] = nameLines(n, ctx.boards.scripts, r);
   const gl = GOODS[n.kind] || DEFAULT_GOODS;
-  let s = `<rect x="${x + 2}" y="${y + 2}" width="${w - 4}" height="${h - 4}" fill="${bg}"/>`;
+  const gf = grad(shade(bg, 1.12), shade(bg, 0.78), r() < 0.7);
+  let s = `${gf.def}<rect x="${x + 2}" y="${y + 2}" width="${w - 4}" height="${h - 4}" fill="${gf.fill}"/>`;
+  // a printed photo backdrop: soft blobs of the goods' colours behind the name
+  for (let k = 0; k < 5; k++) s += `<ellipse cx="${(x + 30 + r() * (w - 60)).toFixed(1)}" cy="${(y + h * (0.15 + r() * 0.25)).toFixed(1)}" rx="${(30 + r() * 60).toFixed(1)}" ry="${(14 + r() * 24).toFixed(1)}" fill="${pick(r, ['#ffffff', '#000000', ac])}" opacity="0.08"/>`;
   // a printed gradient band behind the name and a contrasting strip
   s += `<rect x="${x + 2}" y="${y + 2}" width="${w - 4}" height="${h * 0.42}" fill="#fff" opacity="0.12"/>`;
   s += `<rect x="${x + 2}" y="${y + h * 0.45}" width="${w - 4}" height="${h * 0.1}" fill="${ac}"/>`;
   const extra = [];
-  const top = n.tagline ? n.tagline.toUpperCase() : r() < 0.5 ? 'AUTHORISED DEALERS' : 'DEALS IN';
+  const top = n.tagline ? n.tagline.toUpperCase() : st.tops ? pick(r, st.tops) : r() < 0.5 ? 'AUTHORISED DEALERS' : 'DEALS IN';
   s += fitLine('oswald', top, { x: x + w / 2, y: y + h * 0.1, maxW: w * 0.5, size: h * 0.075, attrs: `fill="${fg}"` }).svg;
   if (!n.tagline) extra.push(top);
   const f1 = fontFor(l1[0], 'flex', r);
-  s += fitLine(f1, capsOf(l1[1], l1[0], true), { x: x + w / 2, y: y + h * 0.33, maxW: w - 30, size: h * 0.22, attrs: `fill="${fg}" stroke="${bg === '#ffffff' ? '#ffffff' : '#000'}" stroke-width="0" ` }).svg;
+  // the name with a printed outline and a drop shadow
+  const nm = capsOf(l1[1], l1[0], true);
+  s += fitLine(f1, nm, { x: x + w / 2 + 2, y: y + h * 0.33 + 2, maxW: w - 30, size: h * 0.22, attrs: `fill="#000" opacity="0.35"` }).svg;
+  s += fitLine(f1, nm, { x: x + w / 2, y: y + h * 0.33, maxW: w - 30, size: h * 0.22, attrs: `fill="${fg}" stroke="${ac}" stroke-width="1.6" paint-order="stroke"` }).svg;
   if (l2) s += fitLine(l2[0] === 'deva' ? 'mukta' : 'oswald', capsOf(l2[1], l2[0], true), { x: x + w / 2, y: y + h * 0.43, maxW: w - 80, size: h * 0.085, attrs: `fill="${fg}"` }).svg;
   const g = gl[1].join(' • ');
   s += fitLine('oswald', g.toUpperCase(), { x: x + w / 2, y: y + h * 0.535, maxW: w - 40, size: h * 0.07, attrs: `fill="${bg}"` }).svg;
@@ -366,8 +441,10 @@ function flex(c, n, ctx) {
   for (let i = 0; i < np; i++) s += product(x + 12 + i * (ps + 6) + (ps - pss) / 2, y + h * 0.59, pss, n.kind, r);
   const p1 = phone(r, false);
   const p2 = phone(r, r() < 0.5);
-  s += fitLine('anton', `${p1}, ${p2}`, { x: x + w / 2, y: y + h * 0.95, maxW: w - 30, size: h * 0.075, attrs: `fill="${ac === '#ffffff' ? fg : ac}"` }).svg;
-  extra.push(p1, p2);
+  const ad = pick(r, ADDRESS[ctx.kit] || ADDRESS.market);
+  s += fitLine('anton', `${p1}, ${p2}`, { x: x + w * 0.3, y: y + h * 0.95, maxW: w * 0.56, size: h * 0.075, attrs: `fill="${ac === '#ffffff' ? fg : ac}"` }).svg;
+  s += fitLine('oswald', ad, { x: x + w * 0.78, y: y + h * 0.95, maxW: w * 0.4, size: h * 0.062, attrs: `fill="${fg}"` }).svg;
+  extra.push(p1, p2, ad);
   return { svg: s, extra, wear: { mat: 'flex', bg: hex(bg), screws: [], wear: st.wear * (0.5 + r() * 0.8), tear: r() < st.wear * 0.7 } };
 }
 
@@ -376,13 +453,41 @@ function glow(c, n, ctx) {
   const [x, y, w, h] = c;
   const [bg, fg, ac] = pick(r, GLOW);
   let [l1, l2] = nameLines(n, ctx.boards.scripts, r);
+  const gl = GOODS[n.kind] || DEFAULT_GOODS;
+  const lodging = LODGING.has(n.kind);
   if (n.tagline && !l2) l2 = ['latn', n.tagline];
-  let s = `<rect x="${x + 2}" y="${y + 2}" width="${w - 4}" height="${h - 4}" fill="#3a3a3c"/><rect x="${x + 8}" y="${y + 8}" width="${w - 16}" height="${h - 16}" fill="${bg}"/>`;
-  s += `<rect x="${x + 8}" y="${y + h - 26}" width="${w - 16}" height="10" fill="${ac}"/>`;
+  // a printed acrylic face: a gradient ground, a colour stripe, an outline frame, an icon disc with the initial, the
+  // name with an outline, a services or goods line, and phone numbers or the address (shops print three or four lines)
+  const gf = grad(shade(bg, 1.08), shade(bg, 0.86));
+  let s = `${gf.def}<rect x="${x + 2}" y="${y + 2}" width="${w - 4}" height="${h - 4}" fill="#3a3a3c"/><rect x="${x + 8}" y="${y + 8}" width="${w - 16}" height="${h - 16}" fill="${gf.fill}"/>`;
+  s += `<rect x="${x + 12}" y="${y + 12}" width="${w - 24}" height="${h - 24}" fill="none" stroke="${ac}" stroke-width="2.5"/>`;
+  const stripe = r() < 0.5;
+  if (stripe) s += `<rect x="${x + 8}" y="${y + h - 34}" width="${w - 16}" height="22" fill="${ac}"/>`;
+  const icon = r() < 0.65;
+  const ix = x + 46;
+  if (icon) {
+    s += `<circle cx="${ix}" cy="${y + h * 0.42}" r="27" fill="${ac}"/><circle cx="${ix}" cy="${y + h * 0.42}" r="22" fill="none" stroke="${bg}" stroke-width="2"/>`;
+    if (lodging) s += stars(ix, y + h * 0.42, 1, 26, bg);
+    else s += fitLine('alfa', n.text.latn.replace(/[^A-Za-z]/g, '').slice(0, 1).toUpperCase() || 'A', { x: ix, y: y + h * 0.42 + 11, maxW: 30, size: 30, attrs: `fill="${bg}"` }).svg;
+  }
+  const tx = icon ? x + w / 2 + 34 : x + w / 2;
+  const tw = icon ? w - 120 : w - 50;
   const f1 = fontFor(l1[0], 'glow', r);
-  s += fitLine(f1, capsOf(l1[1], l1[0], true), { x: x + w / 2, y: y + h * (l2 ? 0.52 : 0.62), maxW: w - 50, size: h * (l2 ? 0.42 : 0.5), attrs: `fill="${fg}"` }).svg;
-  if (l2) s += fitLine(l2[0] === 'deva' ? 'hind' : 'oswald', capsOf(l2[1], l2[0], true), { x: x + w / 2, y: y + h * 0.74, maxW: w - 140, size: h * 0.16, attrs: `fill="${fg}"` }).svg;
-  return { svg: s, extra: [], wear: { mat: 'acrylic', bg: hex(bg), screws: [], wear: st.wear * (0.3 + r() * 0.5) } };
+  const nm = capsOf(l1[1], l1[0], true);
+  s += fitLine(f1, nm, { x: tx, y: y + h * 0.5, maxW: tw, size: h * 0.36, attrs: `fill="${fg}" stroke="${shade(bg, 0.6)}" stroke-width="1.4" paint-order="stroke"` }).svg;
+  if (lodging) s += stars(tx, y + h * 0.13 + 4, 3, 13, '#f2c230');
+  const extra = [];
+  const second = l2 ? capsOf(l2[1], l2[0], true) : null;
+  const svc = lodging ? pickN(r, HOTEL_LINES, 3).join(' • ') : gl[1].slice(0, 3).join(' • ').toUpperCase();
+  const line2 = second && r() < 0.5 ? second : svc;
+  if (line2 === svc) extra.push(svc);
+  s += fitLine(line2 === second && l2[0] === 'deva' ? 'hind' : 'oswald', line2, { x: tx, y: y + h * 0.69, maxW: tw, size: h * 0.13, attrs: `fill="${fg}"` }).svg;
+  const p = phone(r, r() < 0.4);
+  const ad = pick(r, ADDRESS[ctx.kit] || ADDRESS.market);
+  const last = `${p}  •  ${ad}`;
+  s += fitLine('oswald', last, { x: x + w / 2, y: y + h - 17, maxW: w - 40, size: 13, attrs: `fill="${stripe ? (luma(hex(ac)) > 150 ? '#1c1c1e' : '#ffffff') : fg}"` }).svg;
+  extra.push(p, ad);
+  return { svg: s, extra, wear: { mat: 'acrylic', bg: hex(bg), screws: [], wear: st.wear * (0.3 + r() * 0.5) } };
 }
 
 function wall(c, n, ctx) {
@@ -408,29 +513,52 @@ function wall(c, n, ctx) {
 function vertical(c, n, ctx, idx) {
   const { r, st } = ctx;
   const [x, y, w, h] = c;
-  // the even cells are glow boxes, the odd ones painted (the kit shader lights the even ones at night)
+  // the even cells are glow boxes or LED boards (lit at night, a bulb border the kit shader chases), the odd ones painted
   const lit = idx % 2 === 0;
-  const [bg, fg, sh] = lit ? pick(r, GLOW) : st.showroom ? pick(r, PAINT_SHOWROOM) : pick(r, PAINT);
-  let s = `<rect x="${x + 2}" y="${y + 2}" width="${w - 4}" height="${h - 4}" fill="${bg}"/>`;
-  if (!lit) s += `<rect x="${x + 7}" y="${y + 7}" width="${w - 14}" height="${h - 14}" fill="none" stroke="${fg}" stroke-width="3"/>`;
-  // the first word stacked letter by letter (Latin) or word by word (Devanagari), the rest small at the foot
+  const [bg, fg, sh] = lit ? pick(r, GLOW) : st.showroom ? pick(r, PAINT_SHOWROOM) : pick(r, st.paint || PAINT);
+  const ac = lit ? pick(r, ['#f2c230', '#c0261e', '#2e7d32', '#1d3f8f', '#ffffff']) : fg;
+  const gf = grad(shade(bg, 1.1), shade(bg, 0.8));
+  let s = `${gf.def}<rect x="${x + 2}" y="${y + 2}" width="${w - 4}" height="${h - 4}" fill="${lit ? gf.fill : bg}"/>`;
+  if (lit) s += `<rect x="${x + 14}" y="${y + 14}" width="${w - 28}" height="${h - 28}" fill="none" stroke="${ac}" stroke-width="2"/>` + bulbs(x, y, w, h, 7, 13);
+  else s += `<rect x="${x + 7}" y="${y + 7}" width="${w - 14}" height="${h - 14}" fill="none" stroke="${fg}" stroke-width="3"/>`;
   const latn = n.text.latn;
   const words = latn.toUpperCase().split(/\s+/);
-  const kindWord = { hotel: 'HOTEL', lodge: 'LODGE', dharamshala: 'DHARAMSHALA', clinic: 'CLINIC', hakim: 'DAWAKHANA', coaching: 'CLASSES' }[n.kind];
-  let main = words.find((wd) => wd.length >= 3 && wd !== kindWord) || words[0];
-  main = main.replace(/[^A-Z0-9&]/g, '').slice(0, 9);
+  const kindWord = { hotel: 'HOTEL', lodge: 'GUEST HOUSE', dharamshala: 'DHARAMSHALA', clinic: 'CLINIC', hakim: 'DAWAKHANA', coaching: 'CLASSES' }[n.kind];
+  let main = words.find((wd) => wd.length >= 3 && !(kindWord || '').includes(wd)) || words[0];
+  main = main.replace(/[^A-Z0-9&]/g, '').slice(0, 10);
   const letters = [...main];
-  const lh = Math.min(48, (h * 0.78) / Math.max(4, letters.length));
-  const top = y + 16;
-  if (n.text.deva && r() < 0.5) {
-    s += fitLine('mukta', n.text.deva.split(' ')[0], { x: x + w / 2, y: top + 26, maxW: w - 16, size: 26, attrs: `fill="${fg}"` }).svg;
+  const lodging = LODGING.has(n.kind);
+  // the head: stars for lodging, the Hindi word, or the kind word
+  let top = y + 22;
+  if (lodging) {
+    s += stars(x + w / 2, top + 4, 3, 22, lit ? '#f2c230' : fg);
+    top += 18;
   }
+  if (n.text.deva && r() < 0.7) {
+    s += fitLine('mukta', n.text.deva.split(' ')[0], { x: x + w / 2, y: top + 24, maxW: w - 30, size: 26, attrs: `fill="${fg}"` }).svg;
+    top += 28;
+  } else if (kindWord) {
+    s += fitLine('oswald', kindWord, { x: x + w / 2, y: top + 18, maxW: w - 30, size: 18, attrs: `fill="${fg}"` }).svg;
+    top += 22;
+  }
+  const footH = 120;
+  const lh = Math.min(44, (y + h - footH - top - 10) / Math.max(4, letters.length));
   letters.forEach((ch, i) => {
-    s += fitLine(lit ? 'oswald' : 'alfa', ch, { x: x + w / 2, y: top + 40 + (i + 1) * lh, maxW: w - 22, size: lh * 0.95, attrs: `fill="${fg}"` }).svg;
+    s += fitLine(lit ? 'oswald' : 'alfa', ch, { x: x + w / 2, y: top + 8 + (i + 1) * lh, maxW: w - 36, size: lh * 0.95, attrs: `fill="${fg}" stroke="${lit ? ac : sh}" stroke-width="${lit ? 1.6 : 0}" paint-order="stroke"` }).svg;
   });
-  const foot = kindWord || words.filter((wd) => wd !== main).join(' ');
-  if (foot) s += fitLine('oswald', foot, { x: x + w / 2, y: y + h - 18, maxW: w - 16, size: 20, attrs: `fill="${sh === '#000000' ? fg : fg}"` }).svg;
-  return { svg: s, extra: [main, foot].filter(Boolean), wear: { mat: lit ? 'acrylic' : 'tin', bg: hex(bg), screws: lit ? [] : screws(x, y, w, h, 10), wear: st.wear * (0.5 + r() * 0.6), lit } };
+  // the foot: services or goods in small lines, then a phone number on a band
+  const gl = GOODS[n.kind] || DEFAULT_GOODS;
+  const lines = lodging ? pickN(r, HOTEL_LINES, 3) : gl[1].slice(0, 3).map((g) => g.toUpperCase());
+  let fy = y + h - footH + 14;
+  s += `<rect x="${x + 16}" y="${fy - 12}" width="${w - 32}" height="2" fill="${ac}"/>`;
+  for (const t of lines) {
+    s += fitLine('oswald', t, { x: x + w / 2, y: fy + 12, maxW: w - 34, size: 14, attrs: `fill="${fg}"` }).svg;
+    fy += 20;
+  }
+  const p = phone(r, false);
+  s += `<rect x="${x + 14}" y="${y + h - 38}" width="${w - 28}" height="22" fill="${lit ? ac : fg}"/>`;
+  s += fitLine('oswald', p, { x: x + w / 2, y: y + h - 21, maxW: w - 36, size: 14, attrs: `fill="${lit ? bg : bg}"` }).svg;
+  return { svg: s, extra: [main, ...(kindWord ? [kindWord] : []), ...lines, p], wear: { mat: lit ? 'acrylic' : 'tin', bg: hex(bg), screws: lit ? [] : screws(x, y, w, h, 10), wear: st.wear * (0.5 + r() * 0.6), lit } };
 }
 
 function enamel(c, n, ctx) {

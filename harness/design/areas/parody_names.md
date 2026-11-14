@@ -34,12 +34,12 @@ Task P2-067. Rule (decisions.md): boards use parodies of famous Delhi shops and 
 | Parody | Echoes | Kind | Board | Why it is safe |
 |---|---|---|---|---|
 | Parantha Palace Gali No. 3 | Paranthe Wali Gali | eatery | enamel | Invented word play on a shop type, no person or group |
-| Rani Paranthe Wali | Paranthe Wali Gali | eatery | hand_painted | Invented word play on a shop type, no person or group |
+| Rani Paratha Point | Paranthe Wali Gali | eatery | hand_painted | Invented word play on a shop type, no person or group |
 | Kanji Vada Karnama | kanji vada stalls | eatery | hand_painted | Invented word play on a shop type, no person or group |
 | Gali Ka Gola Guru | ice gola carts | cart | vertical | Invented word play on a shop type, no person or group |
 | Kulfi Kothi Falooda Wali | Kuremal Mohan Lal Kulfi | sweets | hand_painted | Invented word play on a shop type, no person or group |
-| Bhujia Bhandar Bikaneri Style | Bikanervala | sweets | glow_box | Invented word play on a shop type, no person or group |
-| Bikaner Bandhu Namkeen | Bikanervala | sweets | flex | Invented word play on a shop type, no person or group |
+| Bhujia Bhandar Desert Style | Bikanervala | sweets | glow_box | Invented word play on a shop type, no person or group |
+| Beekaner Bandhu Namkeen | Bikanervala | sweets | flex | Invented word play on a shop type, no person or group |
 | Sukoon Ram Mithai | Chaina Ram | sweets | enamel | Invented word play on a shop type, no person or group |
 | Gali Ghanti Peda | Ghantewala | sweets | hand_painted | Invented word play on a shop type, no person or group |
 | Khushboo Wala Attar Ghar | old perfumer houses of the lane | attar | hand_painted | Invented word play on a shop type, no person or group |
@@ -85,7 +85,7 @@ Task P2-067. Rule (decisions.md): boards use parodies of famous Delhi shops and 
 
 | Parody | Echoes | Kind | Board | Why it is safe |
 |---|---|---|---|---|
-| Bikaner Bandhu Mithai Mart | Bikanervala | sweets | flex | Invented word play on a shop type, no person or group |
+| Beekaner Bandhu Mithai Mart | Bikanervala | sweets | flex | Invented word play on a shop type, no person or group |
 | Dilli Darbar Dosa | Saravana Bhavan | restaurant | flex | Invented word play on a shop type, no person or group |
 | Sagar Mahal Sambhar Sabha | Sagar Ratna | restaurant | flex | Invented word play on a shop type, no person or group |
 | Khadi Khoobsurat Ghar | Fabindia | clothing | flex | Invented word play on a shop type, no person or group |
@@ -97,7 +97,7 @@ Task P2-067. Rule (decisions.md): boards use parodies of famous Delhi shops and 
 | Jeevan Jyoti Bima Mahal | insurance giant offices | office | flex | Invented word play on a shop type, no person or group |
 | Bank Of Barakhamba | state banks on CP | bank | glow_box | Invented word play on a shop type, no person or group |
 | Hotel Regency Raj | business hotels near CP | hotel | glow_box | Invented word play on a shop type, no person or group |
-| Pizza Palace Pehle Aap | pizza delivery chains | restaurant | flex | Invented word play on a shop type, no person or group |
+| Pizza Palace Pehle Aaiye | pizza delivery chains | restaurant | flex | Invented word play on a shop type, no person or group |
 | Barakhamba Burger Bandhu | burger chains | restaurant | flex | Invented word play on a shop type, no person or group |
 | Chai Sitara Booth | Starbucks | cafe | flex | Invented word play on a shop type, no person or group |
 | Career Rocket Institute | Career Launcher and coaching chains | coaching | flex | Invented word play on a shop type, no person or group |
@@ -172,7 +172,7 @@ Task P2-067. Rule (decisions.md): boards use parodies of famous Delhi shops and 
 | Kaun Banega Chai Wala | Kaun Banega Crorepati (TV quiz) | tea | hand_painted | Invented word play on a shop type, no person or group |
 | Pragati Maidan Pakora Point | Pragati Maidan fair snacks | eatery | hand_painted | Invented word play on a shop type, no person or group |
 | Haldi Ram Rajdhani Snacks | Haldiram's | eatery | glow_box | Invented word play on a shop type, no person or group |
-| Bikaner Wale Bhaiya Chaat | Bikanervala | eatery | hand_painted | Invented word play on a shop type, no person or group |
+| Bhujiya Bhaiya Chaat | Bikanervala | eatery | hand_painted | Invented word play on a shop type, no person or group |
 | Press Club Pakwan | Press Club canteens | eatery | enamel | Invented word play on a shop type, no person or group |
 | Samay Samachar Tak | 24-hour news channels | office | hoarding | Invented word play on a shop type, no person or group |
 | Phir Bhi Photo Studio | photo studios near government offices | photo | hand_painted | Invented word play on a shop type, no person or group |
@@ -282,7 +282,7 @@ Task P2-067. Rule (decisions.md): boards use parodies of famous Delhi shops and 
 | Roshni Aur Awaaz Show | Sound and Light show kiosks | tourist | flex | Invented word play on a shop type, no person or group |
 | Ghaat Ghaat Ki Chai | chai stalls | tea | enamel | Invented word play on a shop type, no person or group |
 | Rickshaw Rajdhani Tours | heritage walks and rickshaw tours | transport | flex | Invented word play on a shop type, no person or group |
-| Hotel Qila View | hotels near the Fort | hotel | glow_box | Invented word play on a shop type, no person or group |
+| Hotel Qila View (Lal Qila Wale) | hotels near the Fort | hotel | glow_box | Invented word play on a shop type, no person or group |
 | Fort Wallah Photo Studio | tourist photo studios | photo | hand_painted | Invented word play on a shop type, no person or group |
 | Qila Kulfi Wale Chacha | kulfi vendors outside the Fort | sweets | vertical | Invented word play on a shop type, no person or group |
 | Dilli Doli Handloom | Handloom emporiums | handicraft | flex | Invented word play on a shop type, no person or group |

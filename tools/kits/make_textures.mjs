@@ -2,7 +2,7 @@
 // Area kit textures (P2-010, TECH.md "Rendering of the city" TX1): for every kit of game/world/kits/kits.json one tiling
 // texture array (8 layers of 512 px stacked top to bottom: render, brick, stone, concrete, shutter, wood, glass, cloth;
 // imported by Godot as a VRAM compressed Texture2DArray), one trim and decal atlas (1024 px: doors, gates, posters, AC
-// units, shop goods in the lower half) and one sign atlas (make_signs.mjs, P2-048). Procedural stand-ins in the signed
+// units, three kinds of shop goods in the lower half, make_goods.mjs) and one sign atlas (make_signs.mjs, P2-048). Procedural stand-ins in the signed
 // stylised B look: the AI texture cards replace them file for file (same names, same layout).
 //   node tools/kits/make_textures.mjs            writes game/world/kits/textures/<kit>_tiles.png, <kit>_atlas.png, <kit>_signs.png, boards.json
 //   node tools/kits/make_textures.mjs --signs-only   only the sign atlases and boards.json
@@ -15,6 +15,7 @@ import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import sharp from 'sharp';
 import { allSigns, GROUPS, SIGN_ATLAS } from './make_signs.mjs';
+import { goodsSvg } from './make_goods.mjs';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..', '..');
 const KITS = JSON.parse(fs.readFileSync(path.join(ROOT, 'game/world/kits/kits.json'), 'utf8'));
@@ -211,7 +212,7 @@ function cloth(t, s) {
 }
 
 // ------------------------------------------------------------------ atlas
-/** The lower half of the atlas: 8 cells of 256 px. Row 512: posters, door, gate, jali. Row 768: AC, goods A, goods B, hotel sign. */
+/** The lower half of the atlas: 8 cells of 256 px. Row 512: posters, door, gate, jali. Row 768: AC, goods A, goods B, goods C. */
 function cellsSvg(id, kit) {
   const acc = kit.accent;
   const wood = kit.tex.wood.c[0];
@@ -246,33 +247,8 @@ function cellsSvg(id, kit) {
   s += `<rect x="0" y="768" width="256" height="256" fill="#d9d6cc"/><rect x="16" y="800" width="224" height="180" fill="#bdb8ac"/>`;
   for (let i = 0; i < 14; i++) s += `<rect x="24" y="${808 + i * 12}" width="208" height="5" fill="#8c877c"/>`;
   s += `<circle cx="128" cy="890" r="70" fill="none" stroke="#7a756b" stroke-width="6"/>`;
-  // 5 and 6 goods on shelves behind the shop front (kit by kit)
-  const goods = {
-    bazaar: ['#c0392b', '#e6b422', '#2c3e70', '#d35400', '#7a4a8c', '#3a7d44', '#c2185b', '#f4efe4'],
-    gali: ['#e6b422', '#d35400', '#8d5a3b', '#f4efe4', '#3a7d44', '#b03a2e'],
-    hotel: ['#2c3e70', '#b03a2e', '#e6b422', '#1f6f8b', '#7a4a8c', '#f4efe4'],
-    office: ['#9a9a96', '#66686a', '#4d6fa3', '#b5b1a8'],
-    colonnade: ['#1c1c1e', '#f2f0ea', '#7a2a22', '#2c3e70', '#c9a77c', '#b5b1a8'],
-    lutyens: ['#5d4037', '#2f4f3a', '#d8cfb8'],
-    market: ['#c0392b', '#e6b422', '#1f6f8b', '#d35400', '#7a4a8c', '#3a7d44', '#c2185b', '#f4efe4'],
-    hardware: ['#7a7d7e', '#3a5f8a', '#b08a3e', '#c0392b', '#2e6b4f', '#9a9a96', '#e6b422'],
-  }[id];
-  for (let cell = 0; cell < 2; cell++) {
-    const x0 = 256 + cell * 256;
-    s += `<rect x="${x0}" y="768" width="256" height="256" fill="#3a2f26"/>`;
-    for (let shelf = 0; shelf < 4; shelf++) {
-      const y = 780 + shelf * 60;
-      s += `<rect x="${x0}" y="${y + 50}" width="256" height="6" fill="#6d4c41"/>`;
-      for (let k = 0; k < 10; k++) {
-        const c = goods[(k * 3 + shelf * 5 + cell * 7) % goods.length];
-        if (id === 'hardware') s += cell ? `<rect x="${x0 + 6 + k * 25}" y="${y + 6}" width="18" height="44" rx="3" fill="${c}"/>` : `<circle cx="${x0 + 16 + k * 25}" cy="${y + 34}" r="12" fill="${c}"/><rect x="${x0 + 4 + k * 25}" y="${y + 6}" width="24" height="6" fill="${c}"/>`;
-        else if (id === 'office' || id === 'lutyens') s += `<rect x="${x0 + 6 + k * 25}" y="${y + 10}" width="20" height="40" fill="${c}" opacity="0.8"/>`;
-        else s += `<rect x="${x0 + 4 + k * 25}" y="${y + 8 + (k % 3) * 4}" width="22" height="${42 - (k % 3) * 4}" fill="${c}"/>`;
-      }
-    }
-  }
-  // 7 vertical sign blank (hotel and lodge signs) and a striped awning edge
-  s += `<rect x="768" y="768" width="256" height="256" fill="#f2c230"/><rect x="776" y="776" width="240" height="240" fill="none" stroke="#c0392b" stroke-width="8"/>`;
+  // 5, 6 and 7: goods on shelves behind the shop front, three kinds per kit (make_goods.mjs; the shader picks one per bay)
+  s += goodsSvg(id);
   return s;
 }
 

@@ -269,7 +269,22 @@ void fragment() {
 			sk = 3;
 			kg = 0.5;
 		} else if (code == 9) {
-			col = texture(kit_atlas, k_uv).rgb * (mode == 0 ? base / max(vec3(0.6), base) : base);
+			vec2 auv = k_uv;
+			bool goods = auv.y > 0.75 && auv.x > 0.25 && auv.x < 0.75;
+			if (goods) {
+				// shop goods (P2-048): one of the kit's three goods cells per bay (make_goods.mjs), so neighbours differ
+				float lu = clamp(auv.x - (auv.x >= 0.5 ? 0.5 : 0.25), 0.002, 0.248);
+				auv.x = 0.25 + floor(k_var2 * 2.999) * 0.25 + lu;
+			}
+			col = texture(kit_atlas, auv).rgb * (mode == 0 ? base / max(vec3(0.6), base) : base);
+			if (goods) {
+				// real goods colours, a little duller than print, darker deep in the shop and low down
+				col = mix(vec3(luma(col)), col, 0.82) * (0.78 + 0.22 * (1.0 - clamp(fract(auv.y * 4.0) * 1.2, 0.0, 1.0)));
+				// at night the shop's tube light at the top of the opening lights them: a warm light falling off downwards
+				// (the light the goods reflect, not a glow of their own)
+				float tube = 1.0 - smoothstep(0.0, 0.95, fract(auv.y * 4.0));
+				emit = col * vec3(1.0, 0.86, 0.66) * kit_night * (0.08 + 0.42 * tube * tube) * (0.6 + 0.5 * k_var);
+			}
 			rough = 0.8;
 			sk = 3;
 			kg = 0.5;
@@ -292,24 +307,65 @@ void fragment() {
 				int cell = (int(k_var2 * float(G.y) * 0.9999) + int(k_var * 7.0) * slot + slot * 3) % G.y;
 				vec2 cuv = R.xy + vec2(float(cell % G.x), float(cell / G.x)) * R.zw + clamp(k_uv, vec2(0.006), vec2(0.994)) * R.zw;
 				col = texture(kit_signs, cuv).rgb;
-				if ((flags & 1) != 0) {
+				if ((flags & 16) != 0) {
+					// lettering painted on a rolled-down shutter (P2-048 galis): the key is the shutter itself (the same
+					// ribbed layer and bay accent the shutter under it draws), the letters a bright paint picked per bay;
+					// about half the shutters carry none
+					float key = smoothstep(0.86, 0.97, min(col.r, min(col.g, col.b)));
+					if (k_var > 0.55) {
+						key = 1.0;
+					}
+					vec3 sb = to_linear(acc);
+					sb = max(mix(vec3(luma(sb)), sb, albedo_saturation), vec3(0.0));
+					vec3 shut = sb * texture(kit_tiles, vec3(tuv, 4.0)).rgb * 2.0;
+					int pc = int(k_var2 * 3.999);
+					vec3 ink = pc == 0 ? vec3(0.85, 0.62, 0.08) : (pc == 1 ? vec3(0.86, 0.85, 0.8) : (pc == 2 ? vec3(0.62, 0.06, 0.04) : vec3(0.05, 0.05, 0.06)));
+					col = mix(ink * (0.85 + 0.3 * vnoise(uv * 23.0)), shut, key);
+					metal = 0.35 * key;
+				} else if ((flags & 1) != 0) {
 					// painted on the wall, a round enamel board or paper: white is the key and shows the wall
 					float key = smoothstep(0.86, 0.97, min(col.r, min(col.g, col.b)));
 					vec3 wallc = to_linear(tint) * (0.9 + 0.2 * fbm(uv * 0.55));
 					col = mix(col, wallc, key);
 				}
 				if ((flags & 2) != 0 && (g8 != 4 || cell % 2 == 0)) {
-					// a backlit acrylic face: glows through at night
-					emit = col * (0.15 + 2.4 * kit_night) * kit_night;
+					// a backlit acrylic face: glows through at night, brighter than anything it lights (WORLD_LOGIC 1)
+					// exposure safe (P2-048 night round): the face keeps its colours and letters, brightest in the middle with
+					// a soft falloff to the frame, never a white slab
+					vec2 cq = abs(k_uv * 2.0 - 1.0);
+					float mid = 1.0 - 0.35 * smoothstep(0.2, 1.0, max(cq.x, cq.y * 0.8));
+					emit = min(col * 1.25 * mid, vec3(0.95)) * kit_night;
+					if (g8 == 4) {
+						// the bulb border of a lit vertical board (make_signs.mjs bulbs): on about half of them the bulbs
+						// chase round at night; a few boards flicker (a loose tube), each on its own seed
+						vec2 eb = min(k_uv, vec2(1.0) - k_uv);
+						bool bulb = (eb.x < 0.11 || eb.y < 0.03) && col.r > 0.75 && col.g > 0.4 && col.b < 0.25;
+						if (bulb) {
+							float ph = k_var > 0.45 ? step(0.5, fract(k_uv.y * 26.0 + k_uv.x * 3.0 - TIME * 1.6 + k_var * 7.0)) : 1.0;
+							emit = vec3(1.0, 0.72, 0.28) * (0.25 + 0.75 * ph) * kit_night;
+						}
+						if (k_var2 > 0.86) {
+							float fl = step(0.18, fract(sin(floor(TIME * 9.0) * 12.9898 + k_var * 78.233) * 43758.55));
+							emit *= 0.35 + 0.65 * fl;
+						}
+					}
 				}
 				if ((flags & 4) != 0) {
-					// lit from above by its bracket lamp at night
-					emit = col * kit_night * 1.6 * (1.0 - 0.6 * clamp(k_uv.y, 0.0, 1.0));
+					// lit from above by its bracket lamp or tube light at night: bright under the lamps, falling off down
+					emit = min(col * 1.0 * (1.0 - 0.6 * clamp(k_uv.y, 0.0, 1.0)), vec3(0.7)) * kit_night;
 				}
-				rough = (flags & 2) != 0 ? 0.25 : 0.65;
+				bool lit_face = ((flags & 2) != 0 && (g8 != 4 || cell % 2 == 0)) || (flags & 4) != 0;
+				if (!lit_face && (flags & 17) == 0) {
+					// an unlit board: its frame shades the edge (it stands off the wall), and at night it takes only the light
+					// of lamps and lit boards near it (sign_pool.gdshader spill), not a flat sky fill
+					vec2 eq = min(k_uv, vec2(1.0) - k_uv);
+					col *= 0.72 + 0.28 * smoothstep(0.0, 0.06, min(eq.x, eq.y * 0.5));
+					col *= 1.0 - 0.45 * kit_night;
+				}
+				rough = (flags & 2) != 0 ? 0.25 : ((flags & 16) != 0 ? 0.55 : 0.65);
 			}
 			sk = 3;
-			kg = 0.2;
+			kg = (flags & 16) != 0 ? 1.0 : 0.2;
 		} else {
 			// a dark interior behind an opening
 			col = base * (0.85 + vnoise(uv * 3.0) * 0.3);

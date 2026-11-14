@@ -93,15 +93,6 @@
      "group": "fascia",
      "cell": 1,
      "extra": [],
-     "kind": "handicraft",
-     "text": {
-      "latn": "Kashida Embroidery House"
-     }
-    },
-    {
-     "group": "fascia",
-     "cell": 2,
-     "extra": [],
      "kind": "clothing",
      "text": {
       "latn": "Madras Cotton House"
@@ -109,7 +100,7 @@
     },
     {
      "group": "fascia",
-     "cell": 3,
+     "cell": 2,
      "extra": [],
      "kind": "clothing",
      "text": {
@@ -119,80 +110,7 @@
     },
     {
      "group": "fascia",
-     "cell": 4,
-     "extra": [],
-     "kind": "hotel",
-     "text": {
-      "latn": "The Colonnade Inn"
-     }
-    },
-    {
-     "group": "fascia",
-     "cell": 5,
-     "extra": [],
-     "kind": "office",
-     "text": {
-      "latn": "Dhar and Mehta Solicitors"
-     }
-    },
-    {
-     "group": "fascia",
-     "cell": 6,
-     "extra": [],
-     "kind": "clothing",
-     "text": {
-      "latn": "Heritage Handloom House",
-      "deva": "हेरिटेज हैंडलूम हाउस"
-     }
-    },
-    {
-     "group": "fascia",
-     "cell": 7,
-     "extra": [],
-     "kind": "handicraft",
-     "text": {
-      "latn": "State Emporium Craft Hall"
-     }
-    },
-    {
-     "group": "fascia",
-     "cell": 8,
-     "extra": [],
-     "kind": "office",
-     "text": {
-      "latn": "Barakhamba Legal Chambers"
-     }
-    },
-    {
-     "group": "fascia",
-     "cell": 9,
-     "extra": [],
-     "kind": "coaching",
-     "text": {
-      "latn": "Career Bridge Institute"
-     }
-    },
-    {
-     "group": "fascia",
-     "cell": 10,
-     "extra": [],
-     "kind": "restaurant",
-     "text": {
-      "latn": "Mehfil Bar and Kitchen"
-     }
-    },
-    {
-     "group": "fascia",
-     "cell": 11,
-     "extra": [],
-     "kind": "clothing",
-     "text": {
-      "latn": "Linen and Loom"
-     }
-    },
-    {
-     "group": "fascia",
-     "cell": 12,
+     "cell": 3,
      "extra": [],
      "kind": "transport",
      "text": {
@@ -202,7 +120,81 @@
     },
     {
      "group": "fascia",
-     "cell": 13,
+     "cell": 4,
+     "extra": [],
+     "kind": "office",
+     "text": {
+      "latn": "Dhar and Mehta Solicitors"
+     }
+    },
+    {
+     "group": "fascia",
+     "cell": 5,
+     "extra": [],
+     "kind": "clothing",
+     "text": {
+      "latn": "Heritage Handloom House",
+      "deva": "हेरिटेज हैंडलूम हाउस"
+     }
+    },
+    {
+     "group": "fascia",
+     "cell": 6,
+     "extra": [],
+     "kind": "handicraft",
+     "text": {
+      "latn": "Kashida Embroidery House"
+     }
+    },
+    {
+     "group": "fascia",
+     "cell": 7,
+     "extra": [],
+     "kind": "office",
+     "text": {
+      "latn": "Barakhamba Legal Chambers"
+     }
+    },
+    {
+     "group": "fascia",
+     "cell": 8,
+     "extra": [],
+     "kind": "restaurant",
+     "text": {
+      "latn": "Mehfil Bar and Kitchen"
+     }
+    },
+    {
+     "group": "fascia",
+     "cell": 9,
+     "extra": [],
+     "kind": "handicraft",
+     "text": {
+      "latn": "State Emporium Craft Hall"
+     }
+    },
+    {
+     "group": "fascia",
+     "cell": 10,
+     "extra": [],
+     "kind": "clothing",
+     "text": {
+      "latn": "Linen and Loom"
+     }
+    },
+    {
+     "group": "fascia",
+     "cell": 11,
+     "extra": [],
+     "kind": "transport",
+     "text": {
+      "latn": "Pre-paid Auto Stand",
+      "deva": "प्रीपेड ऑटो स्टैंड"
+     }
+    },
+    {
+     "group": "fascia",
+     "cell": 12,
      "extra": [],
      "kind": "optician",
      "text": {
@@ -211,11 +203,21 @@
     },
     {
      "group": "fascia",
+     "cell": 13,
+     "extra": [],
+     "kind": "gallery",
+     "text": {
+      "latn": "Gallery Kala Ghar",
+      "deva": "गैलरी कला घर"
+     }
+    },
+    {
+     "group": "fascia",
      "cell": 14,
      "extra": [],
-     "kind": "office",
+     "kind": "cinema",
      "text": {
-      "latn": "Colonnade Travel Desk"
+      "latn": "Sapna Picture Palace"
      }
     },
     {
@@ -224,12 +226,21 @@
      "extra": [],
      "kind": "office",
      "text": {
-      "latn": "Capital Insurance Agents"
+      "latn": "Colonnade Travel Desk"
      }
     },
     {
      "group": "fascia",
      "cell": 16,
+     "extra": [],
+     "kind": "office",
+     "text": {
+      "latn": "Capital Insurance Agents"
+     }
+    },
+    {
+     "group": "fascia",
+     "cell": 17,
      "extra": [],
      "kind": "travel",
      "text": {
@@ -238,16 +249,16 @@
     },
     {
      "group": "fascia",
-     "cell": 17,
+     "cell": 18,
      "extra": [],
      "kind": "coaching",
      "text": {
-      "latn": "Spoken English Academy"
+      "latn": "Career Bridge Institute"
      }
     },
     {
      "group": "fascia",
-     "cell": 18,
+     "cell": 19,
      "extra": [],
      "kind": "hotel",
      "text": {
@@ -256,21 +267,13 @@
      }
     },
     {
-     "group": "fascia",
-     "cell": 19,
-     "extra": [],
-     "kind": "books",
-     "text": {
-      "latn": "Old Page Second Hand Books"
-     }
-    },
-    {
      "group": "flex",
      "cell": 0,
      "extra": [
       "Goods Transport • Bus Booking",
-      "M. 99207 3662",
-      "Ph. 2314 036"
+      "M. 97850 2175",
+      "Ph. 2337 830",
+      "Inner Circle, C.P."
      ],
      "kind": "transport",
      "text": {
@@ -284,23 +287,9 @@
      "cell": 1,
      "extra": [
       "Veg & Non-Veg • Family Restaurant",
-      "M. 97121 0110",
-      "M. 98419 3736"
-     ],
-     "kind": "restaurant",
-     "text": {
-      "latn": "Samudra Ratan Dosa Haus",
-      "deva": "समुद्र रतन डोसा हाउस"
-     },
-     "tagline": "Idli ka itihaas"
-    },
-    {
-     "group": "flex",
-     "cell": 2,
-     "extra": [
-      "Veg & Non-Veg • Family Restaurant",
-      "M. 99972 8582",
-      "M. 98489 7956"
+      "M. 98066 5814",
+      "Ph. 2377 117",
+      "Connaught Place, New Delhi"
      ],
      "kind": "restaurant",
      "text": {
@@ -311,12 +300,29 @@
     },
     {
      "group": "flex",
+     "cell": 2,
+     "extra": [
+      "Veg & Non-Veg • Family Restaurant",
+      "M. 99061 9954",
+      "M. 98002 6993",
+      "Outer Circle, C.P."
+     ],
+     "kind": "restaurant",
+     "text": {
+      "latn": "Samudra Ratan Dosa Haus",
+      "deva": "समुद्र रतन डोसा हाउस"
+     },
+     "tagline": "Idli ka itihaas"
+    },
+    {
+     "group": "flex",
      "cell": 3,
      "extra": [
-      "DEALS IN",
+      "AUTHORISED DEALERS",
       "Readymade Garments • Kurtas • Jeans",
-      "M. 97649 0828",
-      "Ph. 2303 771"
+      "M. 99842 4839",
+      "M. 99820 8456",
+      "Connaught Place, New Delhi"
      ],
      "kind": "clothing",
      "text": {
@@ -327,10 +333,11 @@
      "group": "flex",
      "cell": 4,
      "extra": [
-      "DEALS IN",
+      "AUTHORISED DEALERS",
       "Tours & Travels • Air & Rail Tickets • Taxi",
-      "M. 97370 0514",
-      "Ph. 2310 749"
+      "M. 98256 9393",
+      "M. 97052 0354",
+      "Connaught Place, New Delhi"
      ],
      "kind": "travel",
      "text": {
@@ -341,10 +348,11 @@
      "group": "flex",
      "cell": 5,
      "extra": [
-      "DEALS IN",
+      "AUTHORISED DEALERS",
       "Tours & Travels • Air & Rail Tickets • Taxi",
-      "M. 98811 3559",
-      "Ph. 2345 903"
+      "M. 98322 8411",
+      "M. 98407 0299",
+      "Connaught Place, New Delhi"
      ],
      "kind": "travel",
      "text": {
@@ -355,10 +363,11 @@
      "group": "flex",
      "cell": 6,
      "extra": [
-      "AUTHORISED DEALERS",
+      "DEALS IN",
       "Readymade Garments • Kurtas • Jeans",
-      "M. 98409 8732",
-      "M. 99609 3498"
+      "M. 98057 9746",
+      "M. 99698 8211",
+      "Outer Circle, C.P."
      ],
      "kind": "clothing",
      "text": {
@@ -369,10 +378,11 @@
      "group": "flex",
      "cell": 7,
      "extra": [
-      "DEALS IN",
+      "AUTHORISED DEALERS",
       "Readymade Garments • Kurtas • Jeans",
-      "M. 99578 9565",
-      "Ph. 2330 889"
+      "M. 97786 1337",
+      "Ph. 2348 821",
+      "Inner Circle, C.P."
      ],
      "kind": "clothing",
      "text": {
@@ -383,40 +393,11 @@
     {
      "group": "glow",
      "cell": 0,
-     "extra": [],
-     "kind": "cafe",
-     "text": {
-      "latn": "Bhista Cafe",
-      "deva": "भिस्ता कैफ़े"
-     },
-     "tagline": "Filter ka fatafat"
-    },
-    {
-     "group": "glow",
-     "cell": 1,
-     "extra": [],
-     "kind": "restaurant",
-     "text": {
-      "latn": "Chole Chakkar Bhature",
-      "deva": "छोले चक्कर भटूरे"
-     },
-     "tagline": "Chole ka cricket"
-    },
-    {
-     "group": "glow",
-     "cell": 2,
-     "extra": [],
-     "kind": "restaurant",
-     "text": {
-      "latn": "Rabri Raja Falooda",
-      "deva": "रबड़ी राजा फ़ालूदा"
-     },
-     "tagline": "Rooh afza, rang, rabri"
-    },
-    {
-     "group": "glow",
-     "cell": 3,
-     "extra": [],
+     "extra": [
+      "COFFEE • SNACKS",
+      "M. 97479 6175",
+      "Inner Circle, C.P."
+     ],
      "kind": "cafe",
      "text": {
       "latn": "Kaapi Kothi",
@@ -426,30 +407,25 @@
     },
     {
      "group": "glow",
-     "cell": 4,
-     "extra": [],
-     "kind": "clothing",
+     "cell": 1,
+     "extra": [
+      "Ph. 2364 419",
+      "Outer Circle, C.P."
+     ],
+     "kind": "cafe",
      "text": {
-      "latn": "Bunai Dukaan",
-      "deva": "बुनाई दुकान"
+      "latn": "Bhista Cafe",
+      "deva": "भिस्ता कैफ़े"
      },
-     "tagline": "Hathkargha ka haath"
+     "tagline": "Filter ka fatafat"
     },
     {
      "group": "glow",
-     "cell": 5,
-     "extra": [],
-     "kind": "restaurant",
-     "text": {
-      "latn": "Nirmala's Ice Cream Parlour",
-      "deva": "निर्मला'स आइसक्रीम पार्लर"
-     },
-     "tagline": "Sundae ke sapne"
-    },
-    {
-     "group": "glow",
-     "cell": 6,
-     "extra": [],
+     "cell": 2,
+     "extra": [
+      "Ph. 2331 170",
+      "Inner Circle, C.P."
+     ],
      "kind": "cafe",
      "text": {
       "latn": "Chai Haus",
@@ -459,8 +435,25 @@
     },
     {
      "group": "glow",
-     "cell": 7,
-     "extra": [],
+     "cell": 3,
+     "extra": [
+      "Ph. 2387 529",
+      "Connaught Place, New Delhi"
+     ],
+     "kind": "restaurant",
+     "text": {
+      "latn": "Sundae Sansaar Ice Cream House",
+      "deva": "संडे संसार आइसक्रीम हाउस"
+     },
+     "tagline": "Thandi yaadein"
+    },
+    {
+     "group": "glow",
+     "cell": 4,
+     "extra": [
+      "Ph. 2330 379",
+      "Outer Circle, C.P."
+     ],
      "kind": "clothing",
      "text": {
       "latn": "Suit Ka Suit Avenue",
@@ -469,20 +462,51 @@
      "tagline": "Naap ka naya andaaz"
     },
     {
-     "group": "wall",
-     "cell": 0,
+     "group": "glow",
+     "cell": 5,
      "extra": [
-      "गली में"
+      "READYMADE GARMENTS • KURTAS • JEANS",
+      "Ph. 2383 023",
+      "Connaught Place, New Delhi"
      ],
-     "kind": "transport",
+     "kind": "clothing",
      "text": {
-      "latn": "Metro Rajiv Chowk Exit Four",
-      "deva": "मेट्रो राजीव चौक निकास चार"
-     }
+      "latn": "Bunai Dukaan",
+      "deva": "बुनाई दुकान"
+     },
+     "tagline": "Hathkargha ka haath"
+    },
+    {
+     "group": "glow",
+     "cell": 6,
+     "extra": [
+      "M. 97544 6629",
+      "Outer Circle, C.P."
+     ],
+     "kind": "shoes",
+     "text": {
+      "latn": "Bhatia Boot House",
+      "deva": "भाटिया बूट हाउस"
+     },
+     "tagline": "Jootay jo chalte hain"
+    },
+    {
+     "group": "glow",
+     "cell": 7,
+     "extra": [
+      "M. 99767 4378",
+      "Connaught Place, New Delhi"
+     ],
+     "kind": "bakery",
+     "text": {
+      "latn": "Wonder Wallah Bakery",
+      "deva": "वंडर वाला बेकरी"
+     },
+     "tagline": "Patties, pastries, pyaar"
     },
     {
      "group": "wall",
-     "cell": 1,
+     "cell": 0,
      "extra": [
       "गली में"
      ],
@@ -494,13 +518,25 @@
     },
     {
      "group": "wall",
-     "cell": 2,
+     "cell": 1,
      "extra": [
       "ऊपर"
      ],
      "kind": "coaching",
      "text": {
       "latn": "Spoken English Academy"
+     }
+    },
+    {
+     "group": "wall",
+     "cell": 2,
+     "extra": [
+      "गली में"
+     ],
+     "kind": "transport",
+     "text": {
+      "latn": "Metro Rajiv Chowk Exit Four",
+      "deva": "मेट्रो राजीव चौक निकास चार"
      }
     },
     {
@@ -517,7 +553,11 @@
      "cell": 0,
      "extra": [
       "CONNAUGHT",
-      "HOTEL"
+      "HOTEL",
+      "FAMILY ROOMS",
+      "LIFT",
+      "CCTV",
+      "M. 98148 1127"
      ],
      "kind": "hotel",
      "text": {
@@ -530,7 +570,11 @@
      "cell": 1,
      "extra": [
       "THE",
-      "HOTEL"
+      "HOTEL",
+      "FAMILY ROOMS",
+      "AC ROOMS",
+      "WIFI",
+      "M. 99090 0703"
      ],
      "kind": "hotel",
      "text": {
@@ -541,20 +585,9 @@
      "group": "vertical",
      "cell": 2,
      "extra": [
-      "REGENT",
-      "HOTEL"
-     ],
-     "kind": "hotel",
-     "text": {
-      "latn": "Hotel Regent Court"
-     }
-    },
-    {
-     "group": "vertical",
-     "cell": 3,
-     "extra": [
       "DHAR",
-      "AND MEHTA SOLICITORS"
+      "OFFICE",
+      "M. 99382 4553"
      ],
      "kind": "office",
      "text": {
@@ -563,10 +596,11 @@
     },
     {
      "group": "vertical",
-     "cell": 4,
+     "cell": 3,
      "extra": [
       "DELHI",
-      "CHAMBER OF COMMERCE"
+      "OFFICE",
+      "M. 98695 4079"
      ],
      "kind": "office",
      "text": {
@@ -576,10 +610,11 @@
     },
     {
      "group": "vertical",
-     "cell": 5,
+     "cell": 4,
      "extra": [
       "RAISINA",
-      "ASSOCIATES CHARTERED ACCOUNTANTS"
+      "OFFICE",
+      "M. 97962 3360"
      ],
      "kind": "office",
      "text": {
@@ -588,10 +623,13 @@
     },
     {
      "group": "vertical",
-     "cell": 6,
+     "cell": 5,
      "extra": [
       "SILVER",
-      "WINGS TRAVELS"
+      "TOURS & TRAVELS",
+      "AIR & RAIL TICKETS",
+      "TAXI",
+      "M. 99973 3741"
      ],
      "kind": "travel",
      "text": {
@@ -600,14 +638,31 @@
     },
     {
      "group": "vertical",
-     "cell": 7,
+     "cell": 6,
      "extra": [
       "COLONNADE",
-      "TRAVEL DESK"
+      "OFFICE",
+      "M. 97712 4954"
      ],
      "kind": "office",
      "text": {
       "latn": "Colonnade Travel Desk"
+     }
+    },
+    {
+     "group": "vertical",
+     "cell": 7,
+     "extra": [
+      "CAREER",
+      "CLASSES",
+      "COACHING",
+      "SPOKEN ENGLISH",
+      "TUITION",
+      "M. 97073 9693"
+     ],
+     "kind": "coaching",
+     "text": {
+      "latn": "Career Bridge Institute"
      }
     },
     {
@@ -678,7 +733,7 @@
      ],
      "kind": "coaching",
      "text": {
-      "latn": "Career Bridge Institute"
+      "latn": "Spoken English Academy"
      }
     },
     {
@@ -702,7 +757,7 @@
      ],
      "kind": "coaching",
      "text": {
-      "latn": "Spoken English Academy"
+      "latn": "Career Bridge Institute"
      }
     },
     {
@@ -745,12 +800,12 @@
      "group": "small",
      "cell": 7,
      "extra": [
-      "Handicrafts",
-      "Ph. 2320 290"
+      "Readymade Garments",
+      "Ph. 2329 013"
      ],
-     "kind": "handicraft",
+     "kind": "clothing",
      "text": {
-      "latn": "Kashida Embroidery House"
+      "latn": "Madras Cotton House"
      }
     },
     {
@@ -1026,7 +1081,9 @@
     {
      "group": "fascia",
      "cell": 15,
-     "extra": [],
+     "extra": [
+      "Near Town Hall, Delhi-6"
+     ],
      "kind": "cloth",
      "text": {
       "latn": "Kapda Mandir",
@@ -1084,8 +1141,9 @@
      "cell": 0,
      "extra": [
       "Sarees • Suits • Dupattas",
-      "M. 98736 9306",
-      "Ph. 2360 073"
+      "M. 98615 0909",
+      "Ph. 2339 863",
+      "Near Town Hall, Delhi-6"
      ],
      "kind": "cloth",
      "text": {
@@ -1099,8 +1157,9 @@
      "cell": 1,
      "extra": [
       "Sarees • Suits • Dupattas",
-      "M. 97227 3683",
-      "M. 99951 7740"
+      "M. 97592 8726",
+      "Ph. 2372 457",
+      "Main Road Chandni Chowk"
      ],
      "kind": "cloth",
      "text": {
@@ -1114,8 +1173,9 @@
      "cell": 2,
      "extra": [
       "Lehengas • Sherwanis • Bridal Wear",
-      "M. 99977 3340",
-      "M. 99118 9271"
+      "M. 97727 9110",
+      "M. 98637 6978",
+      "Chandni Chowk, Delhi-6"
      ],
      "kind": "bridal",
      "text": {
@@ -1129,8 +1189,9 @@
      "cell": 3,
      "extra": [
       "Lehengas • Sherwanis • Bridal Wear",
-      "M. 97138 7194",
-      "M. 98080 1691"
+      "M. 98308 4283",
+      "Ph. 2378 647",
+      "Near Town Hall, Delhi-6"
      ],
      "kind": "bridal",
      "text": {
@@ -1144,8 +1205,9 @@
      "cell": 4,
      "extra": [
       "Spices • Dry Fruits • Tea",
-      "M. 99285 7494",
-      "Ph. 2375 395"
+      "M. 98292 2654",
+      "M. 97933 1977",
+      "Near Town Hall, Delhi-6"
      ],
      "kind": "spice",
      "text": {
@@ -1159,8 +1221,9 @@
      "cell": 5,
      "extra": [
       "Sweets • Namkeen • Pure Ghee",
-      "M. 97294 4081",
-      "M. 99889 6547"
+      "M. 98897 7760",
+      "M. 97350 5254",
+      "Near Town Hall, Delhi-6"
      ],
      "kind": "sweets",
      "text": {
@@ -1173,10 +1236,11 @@
      "group": "flex",
      "cell": 6,
      "extra": [
-      "AUTHORISED DEALERS",
+      "DEALS IN",
       "Sarees • Suits • Dupattas",
-      "M. 98093 1053",
-      "M. 98493 5540"
+      "M. 99108 9345",
+      "Ph. 2317 507",
+      "Near Town Hall, Delhi-6"
      ],
      "kind": "cloth",
      "text": {
@@ -1188,10 +1252,11 @@
      "group": "flex",
      "cell": 7,
      "extra": [
-      "DEALS IN",
+      "AUTHORISED DEALERS",
       "Veg Thali • Parathas • Lassi",
-      "M. 98238 4572",
-      "M. 98026 5655"
+      "M. 98514 8966",
+      "Ph. 2370 003",
+      "Chandni Chowk, Delhi-6"
      ],
      "kind": "eatery",
      "text": {
@@ -1202,7 +1267,10 @@
     {
      "group": "glow",
      "cell": 0,
-     "extra": [],
+     "extra": [
+      "M. 97453 6576",
+      "Near Town Hall, Delhi-6"
+     ],
      "kind": "jeweller",
      "text": {
       "latn": "Chandi Mahal Jewels",
@@ -1213,7 +1281,11 @@
     {
      "group": "glow",
      "cell": 1,
-     "extra": [],
+     "extra": [
+      "GOLD • SILVER • DIAMOND",
+      "M. 98432 9064",
+      "Main Road Chandni Chowk"
+     ],
      "kind": "jeweller",
      "text": {
       "latn": "Dariba Sona Sansaar",
@@ -1224,7 +1296,10 @@
     {
      "group": "glow",
      "cell": 2,
-     "extra": [],
+     "extra": [
+      "Ph. 2394 634",
+      "Chandni Chowk, Delhi-6"
+     ],
      "kind": "eatery",
      "text": {
       "latn": "Kababi Kothi Kamaal",
@@ -1235,7 +1310,10 @@
     {
      "group": "glow",
      "cell": 3,
-     "extra": [],
+     "extra": [
+      "M. 98952 9593",
+      "Near Town Hall, Delhi-6"
+     ],
      "kind": "eatery",
      "text": {
       "latn": "Makkhan Da Parantha Hut",
@@ -1246,7 +1324,11 @@
     {
      "group": "glow",
      "cell": 4,
-     "extra": [],
+     "extra": [
+      "SWEETS • NAMKEEN • PURE GHEE",
+      "M. 99861 6440",
+      "Chandni Chowk, Delhi-6"
+     ],
      "kind": "sweets",
      "text": {
       "latn": "Halwa Ramji Mithai",
@@ -1257,7 +1339,10 @@
     {
      "group": "glow",
      "cell": 5,
-     "extra": [],
+     "extra": [
+      "Ph. 2384 377",
+      "Near Town Hall, Delhi-6"
+     ],
      "kind": "clinic",
      "text": {
       "latn": "Shri Dhanvantri Clinic",
@@ -1267,7 +1352,11 @@
     {
      "group": "glow",
      "cell": 6,
-     "extra": [],
+     "extra": [
+      "CLINIC • TIMING 10 AM - 2 PM",
+      "M. 97528 9712",
+      "Main Road Chandni Chowk"
+     ],
      "kind": "clinic",
      "text": {
       "latn": "Unani Dawakhana",
@@ -1277,7 +1366,10 @@
     {
      "group": "glow",
      "cell": 7,
-     "extra": [],
+     "extra": [
+      "M. 99037 8713",
+      "Main Road Chandni Chowk"
+     ],
      "kind": "pharmacy",
      "text": {
       "latn": "Janta Medical Store",
@@ -1331,7 +1423,10 @@
      "cell": 0,
      "extra": [
       "KULFI",
-      "KINGDOM KULHAD"
+      "SWEETS",
+      "NAMKEEN",
+      "PURE GHEE",
+      "M. 98884 3883"
      ],
      "kind": "sweets",
      "text": {
@@ -1345,7 +1440,11 @@
      "cell": 1,
      "extra": [
       "GULAB",
-      "HOTEL"
+      "HOTEL",
+      "TRAVEL DESK",
+      "LIFT",
+      "24 HRS HOT WATER",
+      "M. 97857 7889"
      ],
      "kind": "hotel",
      "text": {
@@ -1358,7 +1457,11 @@
      "cell": 2,
      "extra": [
       "CHANDNI",
-      "LODGE"
+      "GUEST HOUSE",
+      "LIFT",
+      "24 HRS HOT WATER",
+      "TRAVEL DESK",
+      "M. 97252 6284"
      ],
      "kind": "lodge",
      "text": {
@@ -1371,7 +1474,10 @@
      "cell": 3,
      "extra": [
       "VERMA",
-      "CLINIC"
+      "CLINIC",
+      "CLINIC",
+      "TIMING 10 AM - 2 PM",
+      "M. 98479 3299"
      ],
      "kind": "clinic",
      "text": {
@@ -1384,7 +1490,11 @@
      "cell": 4,
      "extra": [
       "SHANTI",
-      "HOTEL"
+      "HOTEL",
+      "AC ROOMS",
+      "FAMILY ROOMS",
+      "LIFT",
+      "M. 98579 9561"
      ],
      "kind": "hotel",
      "text": {
@@ -1397,7 +1507,8 @@
      "cell": 5,
      "extra": [
       "JAIN",
-      "BROTHERS COMMISSION AGENTS"
+      "OFFICE",
+      "M. 97726 4589"
      ],
      "kind": "office",
      "text": {
@@ -1410,7 +1521,8 @@
      "cell": 6,
      "extra": [
       "DELHI",
-      "KAPDA VYAPAR MANDAL"
+      "OFFICE",
+      "M. 99486 0597"
      ],
      "kind": "office",
      "text": {
@@ -1423,7 +1535,8 @@
      "cell": 7,
      "extra": [
       "GUPTA",
-      "AND SONS TRADERS"
+      "OFFICE",
+      "M. 99248 8190"
      ],
      "kind": "office",
      "text": {
@@ -1702,7 +1815,9 @@
     {
      "group": "fascia",
      "cell": 2,
-     "extra": [],
+     "extra": [
+      "Gali No. 4, Delhi-6"
+     ],
      "kind": "cloth",
      "text": {
       "latn": "Meena Mela Bazaar",
@@ -1765,7 +1880,9 @@
     {
      "group": "fascia",
      "cell": 7,
-     "extra": [],
+     "extra": [
+      "Khari Baoli, Delhi-6"
+     ],
      "kind": "attar",
      "text": {
       "latn": "Khushboo Wala Attar Ghar",
@@ -1870,7 +1987,9 @@
     {
      "group": "fascia",
      "cell": 16,
-     "extra": [],
+     "extra": [
+      "Khari Baoli, Delhi-6"
+     ],
      "kind": "cloth",
      "text": {
       "latn": "Dupatta Rangai Wale",
@@ -1916,12 +2035,13 @@
      "cell": 0,
      "extra": [
       "Sweets • Namkeen • Pure Ghee",
-      "M. 97788 5646",
-      "M. 99923 7564"
+      "M. 99310 0983",
+      "M. 98926 1291",
+      "Kinari Bazar, Delhi-6"
      ],
      "kind": "sweets",
      "text": {
-      "latn": "Bikaner Bandhu Namkeen",
+      "latn": "Beekaner Bandhu Namkeen",
       "deva": "बीकानेर बंधु नमकीन"
      },
      "tagline": "Pehle khao phir socho"
@@ -1930,10 +2050,11 @@
      "group": "flex",
      "cell": 1,
      "extra": [
-      "AUTHORISED DEALERS",
-      "Motors • Pumps • Bearings • Pipe Fittings • V-Belts",
-      "M. 99817 3078",
-      "M. 98903 8110"
+      "DEALS IN",
+      "All Types of Bearings • Sleeves • Plummer Blocks • Motors • V-Belts",
+      "M. 99752 1772",
+      "Ph. 2373 312",
+      "Gali No. 4, Delhi-6"
      ],
      "kind": "hardware",
      "text": {
@@ -1945,10 +2066,11 @@
      "group": "flex",
      "cell": 2,
      "extra": [
-      "AUTHORISED DEALERS",
+      "DEALS IN",
       "Sarees • Suits • Dupattas",
-      "M. 99338 6333",
-      "M. 99585 4135"
+      "M. 98053 1423",
+      "M. 97730 9561",
+      "Gali No. 4, Delhi-6"
      ],
      "kind": "cloth",
      "text": {
@@ -1962,8 +2084,9 @@
      "extra": [
       "DEALS IN",
       "Veg Thali • Parathas • Lassi",
-      "M. 98819 8678",
-      "M. 98124 0265"
+      "M. 97213 2769",
+      "M. 97182 7714",
+      "Gali No. 4, Delhi-6"
      ],
      "kind": "eatery",
      "text": {
@@ -1975,10 +2098,11 @@
      "group": "flex",
      "cell": 4,
      "extra": [
-      "DEALS IN",
+      "AUTHORISED DEALERS",
       "Veg Thali • Parathas • Lassi",
-      "M. 99146 1763",
-      "Ph. 2344 741"
+      "M. 98564 7006",
+      "Ph. 2337 367",
+      "Gali No. 4, Delhi-6"
      ],
      "kind": "eatery",
      "text": {
@@ -1992,8 +2116,9 @@
      "extra": [
       "AUTHORISED DEALERS",
       "Sarees • Suits • Dupattas",
-      "M. 98222 7349",
-      "Ph. 2314 070"
+      "M. 99604 9984",
+      "M. 97722 5055",
+      "Gali No. 4, Delhi-6"
      ],
      "kind": "cloth",
      "text": {
@@ -2005,10 +2130,11 @@
      "group": "flex",
      "cell": 6,
      "extra": [
-      "DEALS IN",
+      "AUTHORISED DEALERS",
       "Sarees • Suits • Dupattas",
-      "M. 98103 1842",
-      "M. 97223 8006"
+      "M. 99196 6858",
+      "M. 98732 2391",
+      "Khari Baoli, Delhi-6"
      ],
      "kind": "cloth",
      "text": {
@@ -2022,8 +2148,9 @@
      "extra": [
       "AUTHORISED DEALERS",
       "Sarees • Suits • Dupattas",
-      "M. 97831 4289",
-      "M. 97448 1505"
+      "M. 99853 7656",
+      "Ph. 2392 100",
+      "Gali No. 4, Delhi-6"
      ],
      "kind": "cloth",
      "text": {
@@ -2034,7 +2161,10 @@
     {
      "group": "glow",
      "cell": 0,
-     "extra": [],
+     "extra": [
+      "Ph. 2363 392",
+      "Khari Baoli, Delhi-6"
+     ],
      "kind": "sweets",
      "text": {
       "latn": "Bhujia Bhandar Desert Style",
@@ -2045,7 +2175,11 @@
     {
      "group": "glow",
      "cell": 1,
-     "extra": [],
+     "extra": [
+      "VEG THALI • PARATHAS • LASSI",
+      "Ph. 2320 925",
+      "Khari Baoli, Delhi-6"
+     ],
      "kind": "eatery",
      "text": {
       "latn": "Purani Dilli Pakwan",
@@ -2056,7 +2190,11 @@
     {
      "group": "glow",
      "cell": 2,
-     "extra": [],
+     "extra": [
+      "BANGLES",
+      "Ph. 2385 464",
+      "Khari Baoli, Delhi-6"
+     ],
      "kind": "bangles",
      "text": {
       "latn": "Jaipuri Churi Ghar",
@@ -2067,7 +2205,10 @@
     {
      "group": "glow",
      "cell": 3,
-     "extra": [],
+     "extra": [
+      "M. 97742 6908",
+      "Khari Baoli, Delhi-6"
+     ],
      "kind": "pharmacy",
      "text": {
       "latn": "Gali Medical Hall",
@@ -2077,7 +2218,11 @@
     {
      "group": "glow",
      "cell": 4,
-     "extra": [],
+     "extra": [
+      "CLINIC • TIMING 10 AM - 2 PM",
+      "M. 99436 6076",
+      "Khari Baoli, Delhi-6"
+     ],
      "kind": "clinic",
      "text": {
       "latn": "Dr Rizvi Clinic",
@@ -2088,7 +2233,11 @@
     {
      "group": "glow",
      "cell": 5,
-     "extra": [],
+     "extra": [
+      "GOLD • SILVER • DIAMOND",
+      "M. 97977 7142",
+      "Khari Baoli, Delhi-6"
+     ],
      "kind": "jeweller",
      "text": {
       "latn": "Ballimaran Sone Chandi",
@@ -2098,7 +2247,10 @@
     {
      "group": "glow",
      "cell": 6,
-     "extra": [],
+     "extra": [
+      "Ph. 2384 383",
+      "Gali No. 4, Delhi-6"
+     ],
      "kind": "jeweller",
      "text": {
       "latn": "Dariba Silver Works",
@@ -2108,7 +2260,11 @@
     {
      "group": "glow",
      "cell": 7,
-     "extra": [],
+     "extra": [
+      "VEG THALI • PARATHAS • LASSI",
+      "M. 98412 9502",
+      "Khari Baoli, Delhi-6"
+     ],
      "kind": "eatery",
      "text": {
       "latn": "Qorma Roti Hotel",
@@ -2164,7 +2320,8 @@
      "cell": 0,
      "extra": [
       "GALI",
-      "RESIDENTS WELFARE COMMITTEE"
+      "OFFICE",
+      "M. 99908 3877"
      ],
      "kind": "office",
      "text": {
@@ -2177,7 +2334,10 @@
      "cell": 1,
      "extra": [
       "RIZVI",
-      "CLINIC"
+      "CLINIC",
+      "CLINIC",
+      "TIMING 10 AM - 2 PM",
+      "M. 99640 7994"
      ],
      "kind": "clinic",
      "text": {
@@ -2191,7 +2351,11 @@
      "cell": 2,
      "extra": [
       "HAVELI",
-      "LODGE"
+      "GUEST HOUSE",
+      "24 HRS HOT WATER",
+      "ROOFTOP",
+      "CCTV",
+      "M. 98160 8772"
      ],
      "kind": "lodge",
      "text": {
@@ -2204,7 +2368,11 @@
      "cell": 3,
      "extra": [
       "URDU",
-      "CLASSES"
+      "CLASSES",
+      "COACHING",
+      "SPOKEN ENGLISH",
+      "TUITION",
+      "M. 99450 9060"
      ],
      "kind": "coaching",
      "text": {
@@ -2217,7 +2385,9 @@
      "cell": 4,
      "extra": [
       "HAKIM",
-      "DAWAKHANA"
+      "DAWAKHANA",
+      "UNANI DAWAKHANA",
+      "M. 98602 9689"
      ],
      "kind": "hakim",
      "text": {
@@ -2230,7 +2400,11 @@
      "cell": 5,
      "extra": [
       "GALI",
-      "DHARAMSHALA"
+      "DHARAMSHALA",
+      "AC ROOMS",
+      "24 HRS HOT WATER",
+      "CCTV",
+      "M. 98902 8590"
      ],
      "kind": "dharamshala",
      "text": {
@@ -2243,7 +2417,8 @@
      "cell": 6,
      "extra": [
       "HAVELI",
-      "HERITAGE GUEST HOUSE"
+      "OFFICE",
+      "M. 99196 0801"
      ],
      "kind": "office",
      "text": {
@@ -2256,7 +2431,8 @@
      "cell": 7,
      "extra": [
       "HAND",
-      "EMBROIDERY CO-OPERATIVE"
+      "OFFICE",
+      "M. 98077 7204"
      ],
      "kind": "office",
      "text": {
@@ -2605,7 +2781,7 @@
      "group": "fascia",
      "cell": 9,
      "extra": [
-      "M. 99388 6928"
+      "M. 98886 9286"
      ],
      "kind": "handicraft",
      "text": {
@@ -2647,7 +2823,9 @@
     {
      "group": "fascia",
      "cell": 13,
-     "extra": [],
+     "extra": [
+      "Paharganj, New Delhi-55"
+     ],
      "kind": "transport",
      "text": {
       "latn": "Luggage Cloak Room",
@@ -2670,18 +2848,8 @@
      "group": "fascia",
      "cell": 15,
      "extra": [
-      "कार्यालय"
+      "चाय • लस्सी • नाश्ता"
      ],
-     "kind": "office",
-     "text": {
-      "latn": "Internet and Calling Booth",
-      "deva": "इंटरनेट और कॉलिंग बूथ"
-     }
-    },
-    {
-     "group": "fascia",
-     "cell": 16,
-     "extra": [],
      "kind": "tea",
      "text": {
       "latn": "Chai Wala Station Gate",
@@ -2690,9 +2858,9 @@
     },
     {
      "group": "fascia",
-     "cell": 17,
+     "cell": 16,
      "extra": [
-      "छोले भटूरे • पराठे • थाली"
+      "Near New Delhi Rly. Stn."
      ],
      "kind": "eatery",
      "text": {
@@ -2702,12 +2870,24 @@
     },
     {
      "group": "fascia",
-     "cell": 18,
-     "extra": [],
+     "cell": 17,
+     "extra": [
+      "कमरे उपलब्ध • एसी"
+     ],
      "kind": "hotel",
      "text": {
       "latn": "Hotel Raj Mahal Inn",
       "deva": "होटल राज महल इन"
+     }
+    },
+    {
+     "group": "fascia",
+     "cell": 18,
+     "extra": [],
+     "kind": "eatery",
+     "text": {
+      "latn": "Main Bazaar Thali House",
+      "deva": "मेन बाज़ार थाली हाउस"
      }
     },
     {
@@ -2718,8 +2898,8 @@
      ],
      "kind": "eatery",
      "text": {
-      "latn": "Main Bazaar Thali House",
-      "deva": "मेन बाज़ार थाली हाउस"
+      "latn": "Dosa Corner",
+      "deva": "डोसा कॉर्नर"
      }
     },
     {
@@ -2727,23 +2907,9 @@
      "cell": 0,
      "extra": [
       "Tours & Travels • Air & Rail Tickets • Taxi",
-      "M. 97201 0581",
-      "Ph. 2342 600"
-     ],
-     "kind": "travel",
-     "text": {
-      "latn": "Yatra Yaari Tours",
-      "deva": "यात्रा यारी टूर्स"
-     },
-     "tagline": "Dosti, darwaza, door"
-    },
-    {
-     "group": "flex",
-     "cell": 1,
-     "extra": [
-      "Tours & Travels • Air & Rail Tickets • Taxi",
-      "M. 97784 4361",
-      "Ph. 2392 299"
+      "M. 98701 6838",
+      "Ph. 2330 691",
+      "Near New Delhi Rly. Stn."
      ],
      "kind": "travel",
      "text": {
@@ -2754,41 +2920,44 @@
     },
     {
      "group": "flex",
-     "cell": 2,
+     "cell": 1,
      "extra": [
       "Tours & Travels • Air & Rail Tickets • Taxi",
-      "M. 98337 7213",
-      "Ph. 2375 983"
+      "M. 97252 8479",
+      "M. 98952 1234",
+      "Main Bazar, Paharganj"
      ],
      "kind": "travel",
      "text": {
-      "latn": "Book My Bhaiya Travels",
-      "deva": "बुक माय भैया ट्रैवल्स"
+      "latn": "Yatra Yaari Tours",
+      "deva": "यात्रा यारी टूर्स"
      },
-     "tagline": "Ticket, taxi, tension"
+     "tagline": "Dosti, darwaza, door"
+    },
+    {
+     "group": "flex",
+     "cell": 2,
+     "extra": [
+      "Veg Thali • Parathas • Lassi",
+      "M. 97349 5940",
+      "Ph. 2369 250",
+      "Paharganj, New Delhi-55"
+     ],
+     "kind": "eatery",
+     "text": {
+      "latn": "Dominic Ka Pizza Pyaar",
+      "deva": "डॉमिनिक का पिज़्ज़ा प्यार"
+     },
+     "tagline": "Garam, gol, ghar tak"
     },
     {
      "group": "flex",
      "cell": 3,
      "extra": [
-      "Veg Thali • Parathas • Lassi",
-      "M. 98475 5102",
-      "M. 98393 4055"
-     ],
-     "kind": "eatery",
-     "text": {
-      "latn": "Rooftop Raja Restaurant",
-      "deva": "रूफ़टॉप राजा रेस्टोरेंट"
-     },
-     "tagline": "Station ka nazara"
-    },
-    {
-     "group": "flex",
-     "cell": 4,
-     "extra": [
       "Readymade Garments • Kurtas • Jeans",
-      "M. 99859 6877",
-      "Ph. 2367 347"
+      "M. 98958 5544",
+      "M. 99942 9645",
+      "Near New Delhi Rly. Stn."
      ],
      "kind": "clothing",
      "text": {
@@ -2799,26 +2968,28 @@
     },
     {
      "group": "flex",
-     "cell": 5,
+     "cell": 4,
      "extra": [
-      "Readymade Garments • Kurtas • Jeans",
-      "M. 97544 6425",
-      "M. 97294 7115"
+      "Tours & Travels • Air & Rail Tickets • Taxi",
+      "M. 99369 1575",
+      "Ph. 2318 287",
+      "Near New Delhi Rly. Stn."
      ],
-     "kind": "clothing",
+     "kind": "travel",
      "text": {
-      "latn": "Backpack Bazaar",
-      "deva": "बैकपैक बाज़ार"
+      "latn": "Book My Bhaiya Travels",
+      "deva": "बुक माय भैया ट्रैवल्स"
      },
-     "tagline": "Bag bhi, bargain bhi"
+     "tagline": "Ticket, taxi, tension"
     },
     {
      "group": "flex",
-     "cell": 6,
+     "cell": 5,
      "extra": [
       "Readymade Garments • Kurtas • Jeans",
-      "M. 97572 5379",
-      "M. 97982 0074"
+      "M. 99803 9179",
+      "M. 99202 8362",
+      "Near New Delhi Rly. Stn."
      ],
      "kind": "clothing",
      "text": {
@@ -2829,23 +3000,43 @@
     },
     {
      "group": "flex",
+     "cell": 6,
+     "extra": [
+      "Readymade Garments • Kurtas • Jeans",
+      "M. 98097 8181",
+      "Ph. 2370 464",
+      "Paharganj, New Delhi-55"
+     ],
+     "kind": "clothing",
+     "text": {
+      "latn": "Backpack Bazaar",
+      "deva": "बैकपैक बाज़ार"
+     },
+     "tagline": "Bag bhi, bargain bhi"
+    },
+    {
+     "group": "flex",
      "cell": 7,
      "extra": [
       "Veg Thali • Parathas • Lassi",
-      "M. 97672 3788",
-      "M. 97895 8157"
+      "M. 99931 1022",
+      "Ph. 2394 241",
+      "Near New Delhi Rly. Stn."
      ],
      "kind": "eatery",
      "text": {
-      "latn": "Dominic Ka Pizza Pyaar",
-      "deva": "डॉमिनिक का पिज़्ज़ा प्यार"
+      "latn": "Rooftop Raja Restaurant",
+      "deva": "रूफ़टॉप राजा रेस्टोरेंट"
      },
-     "tagline": "Garam, gol, ghar tak"
+     "tagline": "Station ka nazara"
     },
     {
      "group": "glow",
      "cell": 0,
-     "extra": [],
+     "extra": [
+      "Ph. 2315 643",
+      "Paharganj, New Delhi-55"
+     ],
      "kind": "cafe",
      "text": {
       "latn": "Cafe Chai Day",
@@ -2856,18 +3047,11 @@
     {
      "group": "glow",
      "cell": 1,
-     "extra": [],
-     "kind": "cafe",
-     "text": {
-      "latn": "Main Bazaar Maha Mela Cafe",
-      "deva": "मेन बाज़ार महा मेला कैफ़े"
-     },
-     "tagline": "Chai, chat, charger"
-    },
-    {
-     "group": "glow",
-     "cell": 2,
-     "extra": [],
+     "extra": [
+      "TRAVEL DESK • ROOFTOP • WIFI",
+      "Ph. 2357 519",
+      "Paharganj, New Delhi-55"
+     ],
      "kind": "hotel",
      "text": {
       "latn": "Hotel Rail Rani",
@@ -2877,19 +3061,40 @@
     },
     {
      "group": "glow",
+     "cell": 2,
+     "extra": [
+      "M. 98023 9064",
+      "Main Bazar, Paharganj"
+     ],
+     "kind": "cafe",
+     "text": {
+      "latn": "Main Bazaar Maha Mela Cafe",
+      "deva": "मेन बाज़ार महा मेला कैफ़े"
+     },
+     "tagline": "Chai, chat, charger"
+    },
+    {
+     "group": "glow",
      "cell": 3,
-     "extra": [],
+     "extra": [
+      "FAMILY ROOMS • LIFT • CCTV",
+      "M. 99842 2196",
+      "Paharganj, New Delhi-55"
+     ],
      "kind": "hotel",
      "text": {
-      "latn": "Hotel Tajmahal Ka Chhota Bhai",
-      "deva": "होटल ताजमहल का छोटा भाई"
+      "latn": "Hotel Hawaii Dilli Dream",
+      "deva": "होटल हवाई दिल्ली ड्रीम"
      },
-     "tagline": "Do raat ka sukoon"
+     "tagline": "Asli bed, asli bhaav"
     },
     {
      "group": "glow",
      "cell": 4,
-     "extra": [],
+     "extra": [
+      "M. 98330 3932",
+      "Main Bazar, Paharganj"
+     ],
      "kind": "hotel",
      "text": {
       "latn": "Hotel Marriage Palace",
@@ -2900,29 +3105,38 @@
     {
      "group": "glow",
      "cell": 5,
-     "extra": [],
+     "extra": [
+      "M. 98629 9982",
+      "Main Bazar, Paharganj"
+     ],
      "kind": "hotel",
      "text": {
-      "latn": "Hotel Hawaii Dilli Dream",
-      "deva": "होटल हवाई दिल्ली ड्रीम"
+      "latn": "Hotel Tajmahal Ka Chhota Bhai",
+      "deva": "होटल ताजमहल का छोटा भाई"
      },
-     "tagline": "Asli bed, asli bhaav"
+     "tagline": "Do raat ka sukoon"
     },
     {
      "group": "glow",
      "cell": 6,
-     "extra": [],
+     "extra": [
+      "M. 99091 8891",
+      "Near New Delhi Rly. Stn."
+     ],
      "kind": "eatery",
      "text": {
-      "latn": "Rough Rasoi Guide Ghar",
-      "deva": "रफ़ रसोई गाइड घर"
+      "latn": "Raja Rasoi Tandoor",
+      "deva": "राजा रसोई तंदूर"
      },
-     "tagline": "Backpackers ka dhaba"
+     "tagline": "Naan, nishchint"
     },
     {
      "group": "glow",
      "cell": 7,
-     "extra": [],
+     "extra": [
+      "Ph. 2336 050",
+      "Near New Delhi Rly. Stn."
+     ],
      "kind": "eatery",
      "text": {
       "latn": "Pita Pavilion Cafe",
@@ -2979,7 +3193,11 @@
      "cell": 0,
      "extra": [
       "SUNRISE",
-      "HOTEL"
+      "HOTEL",
+      "FAMILY ROOMS",
+      "LIFT",
+      "24 HRS HOT WATER",
+      "M. 99582 6911"
      ],
      "kind": "hotel",
      "text": {
@@ -2991,8 +3209,12 @@
      "group": "vertical",
      "cell": 1,
      "extra": [
-      "BACKPACKE",
-      "LODGE"
+      "BACKPACKER",
+      "GUEST HOUSE",
+      "FAMILY ROOMS",
+      "24 HRS HOT WATER",
+      "CCTV",
+      "M. 98506 6568"
      ],
      "kind": "lodge",
      "text": {
@@ -3004,7 +3226,11 @@
      "cell": 2,
      "extra": [
       "ROOFTOP",
-      "LODGE"
+      "GUEST HOUSE",
+      "24 HRS HOT WATER",
+      "FAMILY ROOMS",
+      "AC ROOMS",
+      "M. 97595 7282"
      ],
      "kind": "lodge",
      "text": {
@@ -3016,7 +3242,11 @@
      "cell": 3,
      "extra": [
       "BHOLA",
-      "LODGE"
+      "GUEST HOUSE",
+      "ATTACHED BATH",
+      "AC ROOMS",
+      "LIFT",
+      "M. 97943 5294"
      ],
      "kind": "lodge",
      "text": {
@@ -3029,7 +3259,11 @@
      "cell": 4,
      "extra": [
       "RAJ",
-      "HOTEL"
+      "HOTEL",
+      "WIFI",
+      "TRAVEL DESK",
+      "FAMILY ROOMS",
+      "M. 99119 9032"
      ],
      "kind": "hotel",
      "text": {
@@ -3042,7 +3276,11 @@
      "cell": 5,
      "extra": [
       "YATRI",
-      "DHARAMSHALA"
+      "DHARAMSHALA",
+      "LIFT",
+      "24 HRS HOT WATER",
+      "ROOFTOP",
+      "M. 97004 1982"
      ],
      "kind": "dharamshala",
      "text": {
@@ -3055,7 +3293,11 @@
      "cell": 6,
      "extra": [
       "SATKAR",
-      "HOTEL"
+      "HOTEL",
+      "ATTACHED BATH",
+      "CCTV",
+      "WIFI",
+      "M. 97763 3315"
      ],
      "kind": "hotel",
      "text": {
@@ -3068,7 +3310,11 @@
      "cell": 7,
      "extra": [
       "MOONLIGHT",
-      "HOTEL"
+      "HOTEL",
+      "ATTACHED BATH",
+      "AC ROOMS",
+      "FAMILY ROOMS",
+      "M. 98346 7523"
      ],
      "kind": "hotel",
      "text": {
@@ -3127,21 +3373,8 @@
      "group": "small",
      "cell": 0,
      "extra": [
-      "दवाइयाँ",
+      "डॉक्टर",
       "Ph. 2391 672"
-     ],
-     "kind": "pharmacy",
-     "text": {
-      "latn": "Station Road Medical Hall",
-      "deva": "स्टेशन रोड मेडिकल हॉल"
-     }
-    },
-    {
-     "group": "small",
-     "cell": 1,
-     "extra": [
-      "Clinic",
-      "Ph. 2374 149"
      ],
      "kind": "clinic",
      "text": {
@@ -3151,15 +3384,28 @@
     },
     {
      "group": "small",
-     "cell": 2,
+     "cell": 1,
      "extra": [
       "Coaching",
-      "Ph. 2348 323"
+      "Ph. 2374 149"
      ],
      "kind": "coaching",
      "text": {
       "latn": "Railway Exam Coaching Point",
       "deva": "रेलवे परीक्षा कोचिंग पॉइंट"
+     }
+    },
+    {
+     "group": "small",
+     "cell": 2,
+     "extra": [
+      "Medicines",
+      "Ph. 2348 323"
+     ],
+     "kind": "pharmacy",
+     "text": {
+      "latn": "Station Road Medical Hall",
+      "deva": "स्टेशन रोड मेडिकल हॉल"
      }
     },
     {
@@ -3317,6 +3563,19 @@
      "extra": [
       "स्था. 1987"
      ],
+     "kind": "photo",
+     "text": {
+      "latn": "Phir Bhi Photo Studio",
+      "deva": "फिर भी फ़ोटो स्टूडियो"
+     },
+     "tagline": "Passport size, dil size"
+    },
+    {
+     "group": "fascia",
+     "cell": 1,
+     "extra": [
+      "I.T.O., New Delhi"
+     ],
      "kind": "eatery",
      "text": {
       "latn": "Bhujiya Bhaiya Chaat",
@@ -3326,8 +3585,10 @@
     },
     {
      "group": "fascia",
-     "cell": 1,
-     "extra": [],
+     "cell": 2,
+     "extra": [
+      "Daryaganj, New Delhi-2"
+     ],
      "kind": "eatery",
      "text": {
       "latn": "Tikki Tashan Tilak Marg",
@@ -3337,29 +3598,7 @@
     },
     {
      "group": "fascia",
-     "cell": 2,
-     "extra": [],
-     "kind": "tea",
-     "text": {
-      "latn": "Kaun Banega Chai Wala",
-      "deva": "कौन बनेगा चाय वाला"
-     },
-     "tagline": "Phone-a-friend, bill-a-friend"
-    },
-    {
-     "group": "fascia",
      "cell": 3,
-     "extra": [],
-     "kind": "books",
-     "text": {
-      "latn": "Tilak Marg Kitab Ghar",
-      "deva": "तिलक मार्ग किताब घर"
-     },
-     "tagline": "Court ki kitaabein"
-    },
-    {
-     "group": "fascia",
-     "cell": 4,
      "extra": [],
      "kind": "eatery",
      "text": {
@@ -3370,14 +3609,28 @@
     },
     {
      "group": "fascia",
-     "cell": 5,
-     "extra": [],
-     "kind": "photo",
+     "cell": 4,
+     "extra": [
+      "Asaf Ali Road, New Delhi"
+     ],
+     "kind": "tea",
      "text": {
-      "latn": "Phir Bhi Photo Studio",
-      "deva": "फिर भी फ़ोटो स्टूडियो"
+      "latn": "Kaun Banega Chai Wala",
+      "deva": "कौन बनेगा चाय वाला"
      },
-     "tagline": "Passport size, dil size"
+     "tagline": "Phone-a-friend, bill-a-friend"
+    },
+    {
+     "group": "fascia",
+     "cell": 5,
+     "extra": [
+      "स्था. 1986"
+     ],
+     "kind": "eatery",
+     "text": {
+      "latn": "Samosa Junction",
+      "deva": "समोसा जंक्शन"
+     }
     },
     {
      "group": "fascia",
@@ -3387,8 +3640,8 @@
      ],
      "kind": "eatery",
      "text": {
-      "latn": "Chhole Bhature Wala",
-      "deva": "छोले भटूरे वाला"
+      "latn": "Office Tiffin Service",
+      "deva": "ऑफ़िस टिफ़िन सर्विस"
      }
     },
     {
@@ -3399,8 +3652,8 @@
      ],
      "kind": "eatery",
      "text": {
-      "latn": "Rajma Chawal Counter",
-      "deva": "राजमा चावल काउंटर"
+      "latn": "South Indian Canteen",
+      "deva": "साउथ इंडियन कैंटीन"
      }
     },
     {
@@ -3409,49 +3662,28 @@
      "extra": [],
      "kind": "eatery",
      "text": {
-      "latn": "Office Tiffin Service",
-      "deva": "ऑफ़िस टिफ़िन सर्विस"
+      "latn": "Rajma Chawal Counter",
+      "deva": "राजमा चावल काउंटर"
      }
     },
     {
      "group": "fascia",
      "cell": 9,
      "extra": [
-      "Office"
+      "स्था. 2011"
      ],
-     "kind": "office",
+     "kind": "eatery",
      "text": {
-      "latn": "Metro Rail Office Block"
+      "latn": "Chhole Bhature Wala",
+      "deva": "छोले भटूरे वाला"
      }
     },
     {
      "group": "fascia",
      "cell": 10,
      "extra": [
-      "Veg Thali • Parathas • Lassi"
+      "Tea • Coffee • Snacks"
      ],
-     "kind": "eatery",
-     "text": {
-      "latn": "South Indian Canteen",
-      "deva": "साउथ इंडियन कैंटीन"
-     }
-    },
-    {
-     "group": "fascia",
-     "cell": 11,
-     "extra": [
-      "स्था. 1964"
-     ],
-     "kind": "transport",
-     "text": {
-      "latn": "E-Rickshaw Stand Mandi House",
-      "deva": "ई-रिक्शा स्टैंड मंडी हाउस"
-     }
-    },
-    {
-     "group": "fascia",
-     "cell": 12,
-     "extra": [],
      "kind": "tea",
      "text": {
       "latn": "Rangkarmi Tea Stall",
@@ -3460,14 +3692,36 @@
     },
     {
      "group": "fascia",
-     "cell": 13,
+     "cell": 11,
      "extra": [
-      "स्था. 1972"
+      "स्था. 1964"
      ],
+     "kind": "office",
+     "text": {
+      "latn": "Water Board Complaint Cell",
+      "deva": "जल बोर्ड शिकायत प्रकोष्ठ"
+     }
+    },
+    {
+     "group": "fascia",
+     "cell": 12,
+     "extra": [],
      "kind": "eatery",
      "text": {
       "latn": "Ito Highway Dhaba",
       "deva": "आईटीओ हाईवे ढाबा"
+     }
+    },
+    {
+     "group": "fascia",
+     "cell": 13,
+     "extra": [
+      "स्था. 1972"
+     ],
+     "kind": "transport",
+     "text": {
+      "latn": "Cluster Bus Terminus",
+      "deva": "क्लस्टर बस टर्मिनस"
      }
     },
     {
@@ -3478,8 +3732,8 @@
      ],
      "kind": "tea",
      "text": {
-      "latn": "Press Wale Chacha Chai",
-      "deva": "प्रेस वाले चाचा चाय"
+      "latn": "Mandi House Chai Adda",
+      "deva": "मंडी हाउस चाय अड्डा"
      }
     },
     {
@@ -3490,8 +3744,8 @@
      ],
      "kind": "office",
      "text": {
-      "latn": "Pension Disbursement Counter",
-      "deva": "पेंशन वितरण काउंटर"
+      "latn": "Land Records Branch",
+      "deva": "भूमि अभिलेख शाखा"
      }
     },
     {
@@ -3502,8 +3756,8 @@
      ],
      "kind": "newsroom",
      "text": {
-      "latn": "NewsTez 24 Studio Tower",
-      "deva": "न्यूज़तेज़ 24 स्टूडियो टावर"
+      "latn": "Daily Rajkaaj Newspaper",
+      "deva": "दैनिक राजकाज"
      }
     },
     {
@@ -3524,22 +3778,22 @@
      "extra": [
       "Estd. 1985"
      ],
-     "kind": "theatre",
+     "kind": "office",
      "text": {
-      "latn": "Kala Bhavan Hall",
-      "deva": "कला भवन हॉल"
+      "latn": "Press Enclave Annexe",
+      "deva": "प्रेस एन्क्लेव एनेक्स"
      }
     },
     {
      "group": "fascia",
      "cell": 19,
      "extra": [
-      "माल ढुलाई • बस बुकिंग"
+      "समाचार"
      ],
-     "kind": "transport",
+     "kind": "newsroom",
      "text": {
-      "latn": "Cluster Bus Terminus",
-      "deva": "क्लस्टर बस टर्मिनस"
+      "latn": "Press Club Canteen",
+      "deva": "प्रेस क्लब कैंटीन"
      }
     },
     {
@@ -3547,38 +3801,9 @@
      "cell": 0,
      "extra": [
       "News",
-      "M. 97623 1225",
-      "Ph. 2387 572"
-     ],
-     "kind": "newsroom",
-     "text": {
-      "latn": "Subah Savere Sandesh",
-      "deva": "सुबह सवेरे संदेश"
-     },
-     "tagline": "Chai ke saath padho"
-    },
-    {
-     "group": "flex",
-     "cell": 1,
-     "extra": [
-      "News",
-      "M. 98629 1479",
-      "Ph. 2374 991"
-     ],
-     "kind": "newsroom",
-     "text": {
-      "latn": "Times Of Dilli Press",
-      "deva": "टाइम्स ऑफ़ दिल्ली प्रेस"
-     },
-     "tagline": "Subah ki khabar, shaam ki chai"
-    },
-    {
-     "group": "flex",
-     "cell": 2,
-     "extra": [
-      "News",
-      "M. 99471 1775",
-      "M. 98116 8253"
+      "M. 97200 8824",
+      "Ph. 2370 226",
+      "Daryaganj, New Delhi-2"
      ],
      "kind": "newsroom",
      "text": {
@@ -3589,11 +3814,28 @@
     },
     {
      "group": "flex",
-     "cell": 3,
+     "cell": 1,
      "extra": [
       "News",
-      "M. 97955 0577",
-      "M. 99952 1866"
+      "M. 99394 5830",
+      "Ph. 2333 705",
+      "Asaf Ali Road, New Delhi"
+     ],
+     "kind": "newsroom",
+     "text": {
+      "latn": "Dilli Hindustani Patrika",
+      "deva": "दिल्ली हिंदुस्तानी पत्रिका"
+     },
+     "tagline": "Roz ka sach, roz ki chai"
+    },
+    {
+     "group": "flex",
+     "cell": 2,
+     "extra": [
+      "News",
+      "M. 97744 1932",
+      "M. 97935 1513",
+      "I.T.O., New Delhi"
      ],
      "kind": "newsroom",
      "text": {
@@ -3604,26 +3846,44 @@
     },
     {
      "group": "flex",
+     "cell": 3,
+     "extra": [
+      "News",
+      "M. 98626 6507",
+      "Ph. 2329 695",
+      "Asaf Ali Road, New Delhi"
+     ],
+     "kind": "newsroom",
+     "text": {
+      "latn": "Subah Savere Sandesh",
+      "deva": "सुबह सवेरे संदेश"
+     },
+     "tagline": "Chai ke saath padho"
+    },
+    {
+     "group": "flex",
      "cell": 4,
      "extra": [
-      "Office",
-      "M. 97949 0843",
-      "Ph. 2353 959"
+      "News",
+      "M. 99411 2809",
+      "M. 98864 0068",
+      "I.T.O., New Delhi"
      ],
-     "kind": "office",
+     "kind": "newsroom",
      "text": {
-      "latn": "Samay Samachar Tak",
-      "deva": "समय समाचार तक"
+      "latn": "Times Of Dilli Press",
+      "deva": "टाइम्स ऑफ़ दिल्ली प्रेस"
      },
-     "tagline": "Khabar abhi, sach baad mein"
+     "tagline": "Subah ki khabar, shaam ki chai"
     },
     {
      "group": "flex",
      "cell": 5,
      "extra": [
       "Office",
-      "M. 99391 9834",
-      "M. 99059 2455"
+      "M. 97135 3844",
+      "M. 99631 0568",
+      "I.T.O., New Delhi"
      ],
      "kind": "office",
      "text": {
@@ -3637,8 +3897,9 @@
      "cell": 6,
      "extra": [
       "News",
-      "M. 98714 0574",
-      "M. 98539 4417"
+      "M. 98416 2116",
+      "Ph. 2393 359",
+      "Asaf Ali Road, New Delhi"
      ],
      "kind": "newsroom",
      "text": {
@@ -3652,8 +3913,9 @@
      "cell": 7,
      "extra": [
       "News",
-      "M. 98050 8478",
-      "Ph. 2395 331"
+      "M. 98126 6483",
+      "M. 98606 1789",
+      "Daryaganj, New Delhi-2"
      ],
      "kind": "newsroom",
      "text": {
@@ -3665,18 +3927,25 @@
     {
      "group": "glow",
      "cell": 0,
-     "extra": [],
-     "kind": "office",
+     "extra": [
+      "TEA • COFFEE • SNACKS",
+      "M. 98182 1349",
+      "I.T.O., New Delhi"
+     ],
+     "kind": "tea",
      "text": {
-      "latn": "Bharat Bima Nigam Bhavan",
-      "deva": "भारत बीमा निगम भवन"
+      "latn": "Samachar Sabha Cafe",
+      "deva": "समाचार सभा कैफ़े"
      },
-     "tagline": "Zindagi ke saath bhi"
+     "tagline": "Headline ke saath chai"
     },
     {
      "group": "glow",
      "cell": 1,
-     "extra": [],
+     "extra": [
+      "M. 97969 5272",
+      "Daryaganj, New Delhi-2"
+     ],
      "kind": "theatre",
      "text": {
       "latn": "Kala Kendra Canteen",
@@ -3687,29 +3956,10 @@
     {
      "group": "glow",
      "cell": 2,
-     "extra": [],
-     "kind": "eatery",
-     "text": {
-      "latn": "Haldi Ram Rajdhani Snacks",
-      "deva": "हल्दी राम राजधानी स्नैक्स"
-     },
-     "tagline": "Samosa, chutney, simple"
-    },
-    {
-     "group": "glow",
-     "cell": 3,
-     "extra": [],
-     "kind": "tea",
-     "text": {
-      "latn": "Samachar Sabha Cafe",
-      "deva": "समाचार सभा कैफ़े"
-     },
-     "tagline": "Headline ke saath chai"
-    },
-    {
-     "group": "glow",
-     "cell": 4,
-     "extra": [],
+     "extra": [
+      "Ph. 2301 808",
+      "I.T.O., New Delhi"
+     ],
      "kind": "theatre",
      "text": {
       "latn": "Mandi House Natak Cafe",
@@ -3719,18 +3969,40 @@
     },
     {
      "group": "glow",
-     "cell": 5,
-     "extra": [],
-     "kind": "clinic",
+     "cell": 3,
+     "extra": [
+      "Ph. 2343 251",
+      "Asaf Ali Road, New Delhi"
+     ],
+     "kind": "eatery",
      "text": {
-      "latn": "Government Dispensary",
-      "deva": "सरकारी औषधालय"
-     }
+      "latn": "Haldi Ram Rajdhani Snacks",
+      "deva": "हल्दी राम राजधानी स्नैक्स"
+     },
+     "tagline": "Samosa, chutney, simple"
     },
     {
      "group": "glow",
-     "cell": 6,
-     "extra": [],
+     "cell": 4,
+     "extra": [
+      "Ph. 2372 520",
+      "I.T.O., New Delhi"
+     ],
+     "kind": "office",
+     "text": {
+      "latn": "Bharat Bima Nigam Bhavan",
+      "deva": "भारत बीमा निगम भवन"
+     },
+     "tagline": "Zindagi ke saath bhi"
+    },
+    {
+     "group": "glow",
+     "cell": 5,
+     "extra": [
+      "MEDICINES • SURGICALS",
+      "M. 98100 4938",
+      "I.T.O., New Delhi"
+     ],
      "kind": "pharmacy",
      "text": {
       "latn": "Press Chemist",
@@ -3739,12 +4011,28 @@
     },
     {
      "group": "glow",
-     "cell": 7,
-     "extra": [],
+     "cell": 6,
+     "extra": [
+      "M. 97382 5494",
+      "Asaf Ali Road, New Delhi"
+     ],
      "kind": "clinic",
      "text": {
       "latn": "Dr Saxena Physiotherapy",
       "deva": "डॉ सक्सेना फ़िज़ियोथेरेपी"
+     }
+    },
+    {
+     "group": "glow",
+     "cell": 7,
+     "extra": [
+      "M. 97396 8402",
+      "I.T.O., New Delhi"
+     ],
+     "kind": "eatery",
+     "text": {
+      "latn": "Chhole Bhature Wala",
+      "deva": "छोले भटूरे वाला"
      }
     },
     {
@@ -3755,26 +4043,14 @@
      ],
      "kind": "transport",
      "text": {
-      "latn": "E-Rickshaw Stand Mandi House",
-      "deva": "ई-रिक्शा स्टैंड मंडी हाउस"
+      "latn": "Cluster Bus Terminus",
+      "deva": "क्लस्टर बस टर्मिनस"
      }
     },
     {
      "group": "wall",
      "cell": 1,
      "extra": [],
-     "kind": "transport",
-     "text": {
-      "latn": "Auto Stand Ito",
-      "deva": "ऑटो स्टैंड आईटीओ"
-     }
-    },
-    {
-     "group": "wall",
-     "cell": 2,
-     "extra": [
-      "गली में"
-     ],
      "kind": "coaching",
      "text": {
       "latn": "Journalism Crash Course",
@@ -3783,86 +4059,34 @@
     },
     {
      "group": "wall",
+     "cell": 2,
+     "extra": [],
+     "kind": "transport",
+     "text": {
+      "latn": "Cab Waiting Bay"
+     }
+    },
+    {
+     "group": "wall",
      "cell": 3,
      "extra": [
       "गली में"
      ],
      "kind": "transport",
      "text": {
-      "latn": "Cluster Bus Terminus",
-      "deva": "क्लस्टर बस टर्मिनस"
+      "latn": "E-Rickshaw Stand Mandi House",
+      "deva": "ई-रिक्शा स्टैंड मंडी हाउस"
      }
     },
     {
      "group": "vertical",
      "cell": 0,
      "extra": [
-      "WATER",
-      "BOARD COMPLAINT CELL"
-     ],
-     "kind": "office",
-     "text": {
-      "latn": "Water Board Complaint Cell",
-      "deva": "जल बोर्ड शिकायत प्रकोष्ठ"
-     }
-    },
-    {
-     "group": "vertical",
-     "cell": 1,
-     "extra": [
-      "LAND",
-      "RECORDS BRANCH"
-     ],
-     "kind": "office",
-     "text": {
-      "latn": "Land Records Branch",
-      "deva": "भूमि अभिलेख शाखा"
-     }
-    },
-    {
-     "group": "vertical",
-     "cell": 2,
-     "extra": [
-      "METRO",
-      "RAIL OFFICE BLOCK"
-     ],
-     "kind": "office",
-     "text": {
-      "latn": "Metro Rail Office Block"
-     }
-    },
-    {
-     "group": "vertical",
-     "cell": 3,
-     "extra": [
-      "PENSION",
-      "DISBURSEMENT COUNTER"
-     ],
-     "kind": "office",
-     "text": {
-      "latn": "Pension Disbursement Counter",
-      "deva": "पेंशन वितरण काउंटर"
-     }
-    },
-    {
-     "group": "vertical",
-     "cell": 4,
-     "extra": [
-      "MUNICIPAL",
-      "ENGINEERS OFFICE"
-     ],
-     "kind": "office",
-     "text": {
-      "latn": "Municipal Engineers Office",
-      "deva": "नगर अभियंता कार्यालय"
-     }
-    },
-    {
-     "group": "vertical",
-     "cell": 5,
-     "extra": [
       "SAXENA",
-      "CLINIC"
+      "CLINIC",
+      "CLINIC",
+      "TIMING 10 AM - 2 PM",
+      "M. 97252 1912"
      ],
      "kind": "clinic",
      "text": {
@@ -3872,23 +4096,52 @@
     },
     {
      "group": "vertical",
-     "cell": 6,
+     "cell": 1,
      "extra": [
-      "DELHI",
-      "REVENUE BHAWAN"
+      "WATER",
+      "OFFICE",
+      "M. 98384 3880"
      ],
      "kind": "office",
      "text": {
-      "latn": "Delhi Revenue Bhawan",
-      "deva": "दिल्ली राजस्व भवन"
+      "latn": "Water Board Complaint Cell",
+      "deva": "जल बोर्ड शिकायत प्रकोष्ठ"
      }
     },
     {
      "group": "vertical",
-     "cell": 7,
+     "cell": 2,
+     "extra": [
+      "LAND",
+      "OFFICE",
+      "M. 97965 8553"
+     ],
+     "kind": "office",
+     "text": {
+      "latn": "Land Records Branch",
+      "deva": "भूमि अभिलेख शाखा"
+     }
+    },
+    {
+     "group": "vertical",
+     "cell": 3,
+     "extra": [
+      "METRO",
+      "OFFICE",
+      "M. 99652 5490"
+     ],
+     "kind": "office",
+     "text": {
+      "latn": "Metro Rail Office Block"
+     }
+    },
+    {
+     "group": "vertical",
+     "cell": 4,
      "extra": [
       "PRESS",
-      "ENCLAVE ANNEXE"
+      "OFFICE",
+      "M. 97937 1311"
      ],
      "kind": "office",
      "text": {
@@ -3897,21 +4150,56 @@
      }
     },
     {
-     "group": "enamel",
-     "cell": 0,
+     "group": "vertical",
+     "cell": 5,
      "extra": [
-      "किताबें कॉपियाँ"
+      "JOURNALISM",
+      "CLASSES",
+      "COACHING",
+      "SPOKEN ENGLISH",
+      "TUITION",
+      "M. 98302 5048"
      ],
-     "kind": "books",
+     "kind": "coaching",
      "text": {
-      "latn": "Kitaab Mahal Law Books",
-      "deva": "किताब महल लॉ बुक्स"
-     },
-     "tagline": "Section, sub-section, sab milega"
+      "latn": "Journalism Crash Course",
+      "deva": "पत्रकारिता क्रैश कोर्स"
+     }
+    },
+    {
+     "group": "vertical",
+     "cell": 6,
+     "extra": [
+      "PENSION",
+      "OFFICE",
+      "M. 98495 3057"
+     ],
+     "kind": "office",
+     "text": {
+      "latn": "Pension Disbursement Counter",
+      "deva": "पेंशन वितरण काउंटर"
+     }
+    },
+    {
+     "group": "vertical",
+     "cell": 7,
+     "extra": [
+      "DRAMA",
+      "CLASSES",
+      "COACHING",
+      "SPOKEN ENGLISH",
+      "TUITION",
+      "M. 97417 1203"
+     ],
+     "kind": "coaching",
+     "text": {
+      "latn": "Drama School Admissions",
+      "deva": "ड्रामा स्कूल प्रवेश"
+     }
     },
     {
      "group": "enamel",
-     "cell": 1,
+     "cell": 0,
      "extra": [
       "छोले भटूरे पराठे थाली"
      ],
@@ -3924,14 +4212,27 @@
     },
     {
      "group": "enamel",
+     "cell": 1,
+     "extra": [
+      "किताबें कॉपियाँ"
+     ],
+     "kind": "books",
+     "text": {
+      "latn": "Kitaab Mahal Law Books",
+      "deva": "किताब महल लॉ बुक्स"
+     },
+     "tagline": "Section, sub-section, sab milega"
+    },
+    {
+     "group": "enamel",
      "cell": 2,
      "extra": [
       "चाय लस्सी नाश्ता"
      ],
      "kind": "tea",
      "text": {
-      "latn": "Mandi House Chai Adda",
-      "deva": "मंडी हाउस चाय अड्डा"
+      "latn": "Press Wale Chacha Chai",
+      "deva": "प्रेस वाले चाचा चाय"
      }
     },
     {
@@ -3942,29 +4243,16 @@
      ],
      "kind": "tea",
      "text": {
-      "latn": "Rangkarmi Tea Stall",
-      "deva": "रंगकर्मी चाय स्टॉल"
+      "latn": "Mandi House Chai Adda",
+      "deva": "मंडी हाउस चाय अड्डा"
      }
     },
     {
      "group": "small",
      "cell": 0,
      "extra": [
-      "मरम्मत",
+      "डॉक्टर",
       "Ph. 2300 248"
-     ],
-     "kind": "repair",
-     "text": {
-      "latn": "Auto Spare Parts Corner",
-      "deva": "ऑटो स्पेयर पार्ट्स कॉर्नर"
-     }
-    },
-    {
-     "group": "small",
-     "cell": 1,
-     "extra": [
-      "Clinic",
-      "Ph. 2343 874"
      ],
      "kind": "clinic",
      "text": {
@@ -3974,23 +4262,10 @@
     },
     {
      "group": "small",
-     "cell": 2,
+     "cell": 1,
      "extra": [
-      "डॉक्टर",
-      "Ph. 2361 785"
-     ],
-     "kind": "clinic",
-     "text": {
-      "latn": "Government Dispensary",
-      "deva": "सरकारी औषधालय"
-     }
-    },
-    {
-     "group": "small",
-     "cell": 3,
-     "extra": [
-      "मरम्मत",
-      "Ph. 2333 508"
+      "Repairing",
+      "Ph. 2343 874"
      ],
      "kind": "repair",
      "text": {
@@ -4000,10 +4275,23 @@
     },
     {
      "group": "small",
-     "cell": 4,
+     "cell": 2,
+     "extra": [
+      "कोचिंग",
+      "Ph. 2361 785"
+     ],
+     "kind": "coaching",
+     "text": {
+      "latn": "Journalism Crash Course",
+      "deva": "पत्रकारिता क्रैश कोर्स"
+     }
+    },
+    {
+     "group": "small",
+     "cell": 3,
      "extra": [
       "दवाइयाँ",
-      "Ph. 2322 946"
+      "Ph. 2333 508"
      ],
      "kind": "pharmacy",
      "text": {
@@ -4013,15 +4301,28 @@
     },
     {
      "group": "small",
-     "cell": 5,
+     "cell": 4,
      "extra": [
-      "Coaching",
-      "Ph. 2393 074"
+      "कोचिंग",
+      "Ph. 2322 946"
      ],
      "kind": "coaching",
      "text": {
       "latn": "Drama School Admissions",
       "deva": "ड्रामा स्कूल प्रवेश"
+     }
+    },
+    {
+     "group": "small",
+     "cell": 5,
+     "extra": [
+      "Repairing",
+      "Ph. 2393 074"
+     ],
+     "kind": "repair",
+     "text": {
+      "latn": "Auto Spare Parts Corner",
+      "deva": "ऑटो स्पेयर पार्ट्स कॉर्नर"
      }
     },
     {
@@ -4041,13 +4342,13 @@
      "group": "small",
      "cell": 7,
      "extra": [
-      "कोचिंग",
+      "फोटो",
       "Ph. 2355 630"
      ],
-     "kind": "coaching",
+     "kind": "photo",
      "text": {
-      "latn": "Journalism Crash Course",
-      "deva": "पत्रकारिता क्रैश कोर्स"
+      "latn": "Passport Photo Studio",
+      "deva": "पासपोर्ट फ़ोटो स्टूडियो"
      }
     },
     {
@@ -4138,8 +4439,8 @@
      "extra": [],
      "kind": "eatery",
      "text": {
-      "latn": "Gate Canteen",
-      "deva": "गेट कैंटीन"
+      "latn": "Sunset Chai Point",
+      "deva": "सनसेट चाय पॉइंट"
      }
     },
     {
@@ -4148,8 +4449,8 @@
      "extra": [],
      "kind": "eatery",
      "text": {
-      "latn": "Family Picnic Meals",
-      "deva": "फ़ैमिली पिकनिक भोजन"
+      "latn": "Gate Canteen",
+      "deva": "गेट कैंटीन"
      }
     },
     {
@@ -4196,15 +4497,24 @@
      "group": "fascia",
      "cell": 6,
      "extra": [],
-     "kind": "office",
+     "kind": "eatery",
      "text": {
-      "latn": "Ministry Block Reception",
-      "deva": "मंत्रालय ब्लॉक स्वागत कक्ष"
+      "latn": "Family Picnic Meals",
+      "deva": "फ़ैमिली पिकनिक भोजन"
      }
     },
     {
      "group": "fascia",
      "cell": 7,
+     "extra": [],
+     "kind": "eatery",
+     "text": {
+      "latn": "Lawn Side Snack Bar"
+     }
+    },
+    {
+     "group": "fascia",
+     "cell": 8,
      "extra": [],
      "kind": "office",
      "text": {
@@ -4214,96 +4524,7 @@
     },
     {
      "group": "fascia",
-     "cell": 8,
-     "extra": [],
-     "kind": "eatery",
-     "text": {
-      "latn": "Sunset Chai Point",
-      "deva": "सनसेट चाय पॉइंट"
-     }
-    },
-    {
-     "group": "fascia",
      "cell": 9,
-     "extra": [],
-     "kind": "eatery",
-     "text": {
-      "latn": "Lawn Side Snack Bar"
-     }
-    },
-    {
-     "group": "fascia",
-     "cell": 10,
-     "extra": [],
-     "kind": "office",
-     "text": {
-      "latn": "Rajdhani Police Post India Gate",
-      "deva": "राजधानी पुलिस चौकी इंडिया गेट"
-     }
-    },
-    {
-     "group": "fascia",
-     "cell": 11,
-     "extra": [],
-     "kind": "clinic",
-     "text": {
-      "latn": "Ambulance Standby",
-      "deva": "एम्बुलेंस स्टैंडबाय"
-     }
-    },
-    {
-     "group": "fascia",
-     "cell": 12,
-     "extra": [],
-     "kind": "transport",
-     "text": {
-      "latn": "Metro Shuttle Stand",
-      "deva": "मेट्रो शटल स्टैंड"
-     }
-    },
-    {
-     "group": "fascia",
-     "cell": 13,
-     "extra": [],
-     "kind": "tourist",
-     "text": {
-      "latn": "Boat Ride Counter",
-      "deva": "नाव सवारी काउंटर"
-     }
-    },
-    {
-     "group": "fascia",
-     "cell": 14,
-     "extra": [],
-     "kind": "transport",
-     "text": {
-      "latn": "Tourist Bus Stop",
-      "deva": "टूरिस्ट बस स्टॉप"
-     }
-    },
-    {
-     "group": "fascia",
-     "cell": 15,
-     "extra": [],
-     "kind": "tourist",
-     "text": {
-      "latn": "Souvenir Flag and Cap Stall",
-      "deva": "झंडा टोपी स्मृति चिह्न"
-     }
-    },
-    {
-     "group": "fascia",
-     "cell": 16,
-     "extra": [],
-     "kind": "office",
-     "text": {
-      "latn": "Horticulture Department Depot",
-      "deva": "उद्यान विभाग डिपो"
-     }
-    },
-    {
-     "group": "fascia",
-     "cell": 17,
      "extra": [],
      "kind": "clinic",
      "text": {
@@ -4313,7 +4534,57 @@
     },
     {
      "group": "fascia",
-     "cell": 18,
+     "cell": 10,
+     "extra": [],
+     "kind": "tourist",
+     "text": {
+      "latn": "Handicraft Souvenir Cart",
+      "deva": "हस्तशिल्प स्मृति ठेला"
+     }
+    },
+    {
+     "group": "fascia",
+     "cell": 11,
+     "extra": [],
+     "kind": "transport",
+     "text": {
+      "latn": "Metro Shuttle Stand",
+      "deva": "मेट्रो शटल स्टैंड"
+     }
+    },
+    {
+     "group": "fascia",
+     "cell": 12,
+     "extra": [],
+     "kind": "tourist",
+     "text": {
+      "latn": "Boat Ride Counter",
+      "deva": "नाव सवारी काउंटर"
+     }
+    },
+    {
+     "group": "fascia",
+     "cell": 13,
+     "extra": [],
+     "kind": "transport",
+     "text": {
+      "latn": "Tourist Bus Stop",
+      "deva": "टूरिस्ट बस स्टॉप"
+     }
+    },
+    {
+     "group": "fascia",
+     "cell": 14,
+     "extra": [],
+     "kind": "tourist",
+     "text": {
+      "latn": "Souvenir Flag and Cap Stall",
+      "deva": "झंडा टोपी स्मृति चिह्न"
+     }
+    },
+    {
+     "group": "fascia",
+     "cell": 15,
      "extra": [],
      "kind": "tourist",
      "text": {
@@ -4323,7 +4594,7 @@
     },
     {
      "group": "fascia",
-     "cell": 19,
+     "cell": 16,
      "extra": [],
      "kind": "tourist",
      "text": {
@@ -4331,12 +4602,43 @@
      }
     },
     {
+     "group": "fascia",
+     "cell": 17,
+     "extra": [],
+     "kind": "tourist",
+     "text": {
+      "latn": "Horse Cart Ride",
+      "deva": "घोड़ागाड़ी सवारी"
+     }
+    },
+    {
+     "group": "fascia",
+     "cell": 18,
+     "extra": [],
+     "kind": "clinic",
+     "text": {
+      "latn": "Ambulance Standby",
+      "deva": "एम्बुलेंस स्टैंडबाय"
+     }
+    },
+    {
+     "group": "fascia",
+     "cell": 19,
+     "extra": [],
+     "kind": "tourist",
+     "text": {
+      "latn": "Guide for Memorial Tour",
+      "deva": "स्मारक भ्रमण गाइड"
+     }
+    },
+    {
      "group": "flex",
      "cell": 0,
      "extra": [
       "Goods Transport • Bus Booking",
-      "M. 99883 1129",
-      "Ph. 2372 286"
+      "M. 98480 0564",
+      "M. 97930 6147",
+      "Janpath, New Delhi"
      ],
      "kind": "transport",
      "text": {
@@ -4350,8 +4652,9 @@
      "cell": 1,
      "extra": [
       "Goods Transport • Bus Booking",
-      "M. 98425 5765",
-      "M. 98917 7667"
+      "M. 98648 7519",
+      "M. 97240 3864",
+      "New Delhi"
      ],
      "kind": "transport",
      "text": {
@@ -4365,23 +4668,9 @@
      "cell": 2,
      "extra": [
       "Veg Thali • Parathas • Lassi",
-      "M. 99411 0900",
-      "M. 98586 5330"
-     ],
-     "kind": "eatery",
-     "text": {
-      "latn": "Nirmal Nashta Van",
-      "deva": "निर्मल नाश्ता वैन"
-     },
-     "tagline": "Roll, rice, raunak"
-    },
-    {
-     "group": "flex",
-     "cell": 3,
-     "extra": [
-      "Veg Thali • Parathas • Lassi",
-      "M. 97771 2994",
-      "M. 99502 8732"
+      "M. 99496 8597",
+      "M. 98131 0178",
+      "Janpath, New Delhi"
      ],
      "kind": "eatery",
      "text": {
@@ -4392,11 +4681,12 @@
     },
     {
      "group": "flex",
-     "cell": 4,
+     "cell": 3,
      "extra": [
       "Veg Thali • Parathas • Lassi",
-      "M. 99726 3917",
-      "M. 97279 1736"
+      "M. 97873 1821",
+      "M. 97229 7196",
+      "Janpath, New Delhi"
      ],
      "kind": "eatery",
      "text": {
@@ -4407,11 +4697,28 @@
     },
     {
      "group": "flex",
+     "cell": 4,
+     "extra": [
+      "Veg Thali • Parathas • Lassi",
+      "M. 97092 2491",
+      "Ph. 2318 216",
+      "Janpath, New Delhi"
+     ],
+     "kind": "eatery",
+     "text": {
+      "latn": "Nirmal Nashta Van",
+      "deva": "निर्मल नाश्ता वैन"
+     },
+     "tagline": "Roll, rice, raunak"
+    },
+    {
+     "group": "flex",
      "cell": 5,
      "extra": [
       "Tourist Information",
-      "M. 97787 7128",
-      "Ph. 2398 115"
+      "M. 98519 9645",
+      "M. 97602 4019",
+      "Janpath, New Delhi"
      ],
      "kind": "tourist",
      "text": {
@@ -4425,8 +4732,9 @@
      "cell": 6,
      "extra": [
       "Tourist Information",
-      "M. 99924 1861",
-      "M. 99662 4200"
+      "M. 97310 3588",
+      "Ph. 2305 624",
+      "Janpath, New Delhi"
      ],
      "kind": "tourist",
      "text": {
@@ -4440,8 +4748,9 @@
      "cell": 7,
      "extra": [
       "Tourist Information",
-      "M. 97738 2558",
-      "M. 99440 8625"
+      "M. 99449 9469",
+      "M. 99271 8332",
+      "Janpath, New Delhi"
      ],
      "kind": "tourist",
      "text": {
@@ -4453,17 +4762,10 @@
     {
      "group": "glow",
      "cell": 0,
-     "extra": [],
-     "kind": "clinic",
-     "text": {
-      "latn": "Ambulance Standby",
-      "deva": "एम्बुलेंस स्टैंडबाय"
-     }
-    },
-    {
-     "group": "glow",
-     "cell": 1,
-     "extra": [],
+     "extra": [
+      "M. 98576 9119",
+      "New Delhi"
+     ],
      "kind": "clinic",
      "text": {
       "latn": "First Aid Post",
@@ -4472,8 +4774,39 @@
     },
     {
      "group": "glow",
+     "cell": 1,
+     "extra": [
+      "CLINIC • TIMING 10 AM - 2 PM",
+      "Ph. 2352 431",
+      "New Delhi"
+     ],
+     "kind": "clinic",
+     "text": {
+      "latn": "Ambulance Standby",
+      "deva": "एम्बुलेंस स्टैंडबाय"
+     }
+    },
+    {
+     "group": "glow",
      "cell": 2,
-     "extra": [],
+     "extra": [
+      "VEG THALI • PARATHAS • LASSI",
+      "M. 99581 0499",
+      "Janpath, New Delhi"
+     ],
+     "kind": "eatery",
+     "text": {
+      "latn": "Lawn Side Snack Bar"
+     }
+    },
+    {
+     "group": "glow",
+     "cell": 3,
+     "extra": [
+      "VEG THALI • PARATHAS • LASSI",
+      "M. 97157 3479",
+      "New Delhi"
+     ],
      "kind": "eatery",
      "text": {
       "latn": "Gate Canteen",
@@ -4482,18 +4815,12 @@
     },
     {
      "group": "glow",
-     "cell": 3,
-     "extra": [],
-     "kind": "office",
-     "text": {
-      "latn": "Horticulture Department Depot",
-      "deva": "उद्यान विभाग डिपो"
-     }
-    },
-    {
-     "group": "glow",
      "cell": 4,
-     "extra": [],
+     "extra": [
+      "VEG THALI • PARATHAS • LASSI",
+      "M. 98329 8081",
+      "New Delhi"
+     ],
      "kind": "eatery",
      "text": {
       "latn": "Family Picnic Meals",
@@ -4503,16 +4830,11 @@
     {
      "group": "glow",
      "cell": 5,
-     "extra": [],
-     "kind": "eatery",
-     "text": {
-      "latn": "Lawn Side Snack Bar"
-     }
-    },
-    {
-     "group": "glow",
-     "cell": 6,
-     "extra": [],
+     "extra": [
+      "VEG THALI • PARATHAS • LASSI",
+      "M. 99992 2009",
+      "Janpath, New Delhi"
+     ],
      "kind": "eatery",
      "text": {
       "latn": "Sunset Chai Point",
@@ -4521,12 +4843,29 @@
     },
     {
      "group": "glow",
-     "cell": 7,
-     "extra": [],
+     "cell": 6,
+     "extra": [
+      "M. 98755 2797",
+      "Janpath, New Delhi"
+     ],
      "kind": "transport",
      "text": {
       "latn": "Cycle Hire Point",
       "deva": "साइकिल किराया केंद्र"
+     }
+    },
+    {
+     "group": "glow",
+     "cell": 7,
+     "extra": [
+      "OFFICE",
+      "Ph. 2398 411",
+      "Janpath, New Delhi"
+     ],
+     "kind": "office",
+     "text": {
+      "latn": "Memorial Management Office",
+      "deva": "स्मारक प्रबंधन कार्यालय"
      }
     },
     {
@@ -4580,7 +4919,8 @@
      "cell": 0,
      "extra": [
       "BOAT",
-      "CLUB BALLOON WALE"
+      "TOURIST INFORMATION",
+      "M. 98450 4557"
      ],
      "kind": "tourist",
      "text": {
@@ -4593,21 +4933,9 @@
      "group": "vertical",
      "cell": 1,
      "extra": [
-      "RAJDHANI",
-      "POLICE POST INDIA GATE"
-     ],
-     "kind": "office",
-     "text": {
-      "latn": "Rajdhani Police Post India Gate",
-      "deva": "राजधानी पुलिस चौकी इंडिया गेट"
-     }
-    },
-    {
-     "group": "vertical",
-     "cell": 2,
-     "extra": [
-      "EXSERVICE",
-      "EX-SERVICEMEN ASSOCIATION STALL"
+      "EXSERVICEM",
+      "OFFICE",
+      "M. 97430 6759"
      ],
      "kind": "office",
      "text": {
@@ -4617,36 +4945,27 @@
     },
     {
      "group": "vertical",
+     "cell": 2,
+     "extra": [
+      "FIRST",
+      "CLINIC",
+      "CLINIC",
+      "TIMING 10 AM - 2 PM",
+      "M. 97357 4625"
+     ],
+     "kind": "clinic",
+     "text": {
+      "latn": "First Aid Post",
+      "deva": "प्राथमिक उपचार केंद्र"
+     }
+    },
+    {
+     "group": "vertical",
      "cell": 3,
      "extra": [
-      "HORTICULT",
-      "HORTICULTURE DEPARTMENT DEPOT"
-     ],
-     "kind": "office",
-     "text": {
-      "latn": "Horticulture Department Depot",
-      "deva": "उद्यान विभाग डिपो"
-     }
-    },
-    {
-     "group": "vertical",
-     "cell": 4,
-     "extra": [
-      "MINISTRY",
-      "BLOCK RECEPTION"
-     ],
-     "kind": "office",
-     "text": {
-      "latn": "Ministry Block Reception",
-      "deva": "मंत्रालय ब्लॉक स्वागत कक्ष"
-     }
-    },
-    {
-     "group": "vertical",
-     "cell": 5,
-     "extra": [
       "MEMORIAL",
-      "MANAGEMENT OFFICE"
+      "OFFICE",
+      "M. 97931 2110"
      ],
      "kind": "office",
      "text": {
@@ -4656,10 +4975,13 @@
     },
     {
      "group": "vertical",
-     "cell": 6,
+     "cell": 4,
      "extra": [
       "AMBULANCE",
-      "CLINIC"
+      "CLINIC",
+      "CLINIC",
+      "TIMING 10 AM - 2 PM",
+      "M. 97086 5496"
      ],
      "kind": "clinic",
      "text": {
@@ -4669,15 +4991,49 @@
     },
     {
      "group": "vertical",
+     "cell": 5,
+     "extra": [
+      "GATE",
+      "VEG THALI",
+      "PARATHAS",
+      "LASSI",
+      "M. 98459 2617"
+     ],
+     "kind": "eatery",
+     "text": {
+      "latn": "Gate Canteen",
+      "deva": "गेट कैंटीन"
+     }
+    },
+    {
+     "group": "vertical",
+     "cell": 6,
+     "extra": [
+      "LAWN",
+      "VEG THALI",
+      "PARATHAS",
+      "LASSI",
+      "M. 98702 6422"
+     ],
+     "kind": "eatery",
+     "text": {
+      "latn": "Lawn Side Snack Bar"
+     }
+    },
+    {
+     "group": "vertical",
      "cell": 7,
      "extra": [
-      "FIRST",
-      "CLINIC"
+      "FAMILY",
+      "VEG THALI",
+      "PARATHAS",
+      "LASSI",
+      "M. 99362 0235"
      ],
-     "kind": "clinic",
+     "kind": "eatery",
      "text": {
-      "latn": "First Aid Post",
-      "deva": "प्राथमिक उपचार केंद्र"
+      "latn": "Family Picnic Meals",
+      "deva": "फ़ैमिली पिकनिक भोजन"
      }
     },
     {
@@ -4688,13 +5044,24 @@
      ],
      "kind": "eatery",
      "text": {
-      "latn": "Family Picnic Meals",
-      "deva": "फ़ैमिली पिकनिक भोजन"
+      "latn": "Sunset Chai Point",
+      "deva": "सनसेट चाय पॉइंट"
      }
     },
     {
      "group": "enamel",
      "cell": 1,
+     "extra": [
+      "छोले भटूरे पराठे थाली"
+     ],
+     "kind": "eatery",
+     "text": {
+      "latn": "Lawn Side Snack Bar"
+     }
+    },
+    {
+     "group": "enamel",
+     "cell": 2,
      "extra": [
       "माल ढुलाई बस बुकिंग"
      ],
@@ -4706,25 +5073,14 @@
     },
     {
      "group": "enamel",
-     "cell": 2,
-     "extra": [
-      "कार्यालय"
-     ],
-     "kind": "office",
-     "text": {
-      "latn": "Ministry Block Reception",
-      "deva": "मंत्रालय ब्लॉक स्वागत कक्ष"
-     }
-    },
-    {
-     "group": "enamel",
      "cell": 3,
      "extra": [
       "छोले भटूरे पराठे थाली"
      ],
      "kind": "eatery",
      "text": {
-      "latn": "Lawn Side Snack Bar"
+      "latn": "Family Picnic Meals",
+      "deva": "फ़ैमिली पिकनिक भोजन"
      }
     },
     {
@@ -4762,54 +5118,29 @@
      ],
      "kind": "eatery",
      "text": {
-      "latn": "Gate Canteen",
-      "deva": "गेट कैंटीन"
-     }
-    },
-    {
-     "group": "small",
-     "cell": 3,
-     "extra": [
-      "Veg Thali",
-      "Ph. 2316 611"
-     ],
-     "kind": "eatery",
-     "text": {
-      "latn": "Lawn Side Snack Bar"
-     }
-    },
-    {
-     "group": "small",
-     "cell": 4,
-     "extra": [
-      "छोले भटूरे",
-      "Ph. 2351 452"
-     ],
-     "kind": "eatery",
-     "text": {
       "latn": "Family Picnic Meals",
       "deva": "फ़ैमिली पिकनिक भोजन"
      }
     },
     {
      "group": "small",
-     "cell": 5,
+     "cell": 3,
      "extra": [
-      "Office",
-      "Ph. 2392 510"
+      "कार्यालय",
+      "Ph. 2366 117"
      ],
      "kind": "office",
      "text": {
-      "latn": "Rajdhani Police Post India Gate",
-      "deva": "राजधानी पुलिस चौकी इंडिया गेट"
+      "latn": "Ex-Servicemen Association Stall",
+      "deva": "पूर्व सैनिक संघ स्टॉल"
      }
     },
     {
      "group": "small",
-     "cell": 6,
+     "cell": 4,
      "extra": [
-      "Goods Transport",
-      "Ph. 2384 705"
+      "माल ढुलाई",
+      "Ph. 2351 452"
      ],
      "kind": "transport",
      "text": {
@@ -4819,15 +5150,40 @@
     },
     {
      "group": "small",
-     "cell": 7,
+     "cell": 5,
      "extra": [
       "Veg Thali",
-      "Ph. 2337 564"
+      "Ph. 2359 251"
+     ],
+     "kind": "eatery",
+     "text": {
+      "latn": "Lawn Side Snack Bar"
+     }
+    },
+    {
+     "group": "small",
+     "cell": 6,
+     "extra": [
+      "Veg Thali",
+      "Ph. 2384 705"
      ],
      "kind": "eatery",
      "text": {
       "latn": "Sunset Chai Point",
       "deva": "सनसेट चाय पॉइंट"
+     }
+    },
+    {
+     "group": "small",
+     "cell": 7,
+     "extra": [
+      "Tourist Information",
+      "Ph. 2337 564"
+     ],
+     "kind": "tourist",
+     "text": {
+      "latn": "Horse Cart Ride",
+      "deva": "घोड़ागाड़ी सवारी"
      }
     },
     {
@@ -4917,7 +5273,9 @@
     {
      "group": "fascia",
      "cell": 0,
-     "extra": [],
+     "extra": [
+      "Tibetan Market, Janpath"
+     ],
      "kind": "books",
      "text": {
       "latn": "Kitaab Kothi Janpath",
@@ -4993,7 +5351,9 @@
     {
      "group": "fascia",
      "cell": 6,
-     "extra": [],
+     "extra": [
+      "Tibetan Market, Janpath"
+     ],
      "kind": "shoes",
      "text": {
       "latn": "Jootiyan Jaipur Wali",
@@ -5007,23 +5367,23 @@
      "extra": [
       "Estd. 1959"
      ],
-     "kind": "handicraft",
-     "text": {
-      "latn": "Bhaav Taav Bazaar",
-      "deva": "भाव ताव बाज़ार"
-     },
-     "tagline": "Aadha daam, poori shaan"
-    },
-    {
-     "group": "fascia",
-     "cell": 8,
-     "extra": [],
      "kind": "clothing",
      "text": {
       "latn": "Janpath Jhola Junction",
       "deva": "जनपथ झोला जंक्शन"
      },
      "tagline": "Bag bharo, dil bharo"
+    },
+    {
+     "group": "fascia",
+     "cell": 8,
+     "extra": [],
+     "kind": "handicraft",
+     "text": {
+      "latn": "Bhaav Taav Bazaar",
+      "deva": "भाव ताव बाज़ार"
+     },
+     "tagline": "Aadha daam, poori shaan"
     },
     {
      "group": "fascia",
@@ -5041,7 +5401,7 @@
      "group": "fascia",
      "cell": 10,
      "extra": [
-      "M. 97805 6089"
+      "Ph. 2380 560"
      ],
      "kind": "eatery",
      "text": {
@@ -5154,8 +5514,9 @@
      "cell": 0,
      "extra": [
       "Tours & Travels • Air & Rail Tickets • Taxi",
-      "M. 98583 1883",
-      "M. 99809 4630"
+      "M. 97270 4844",
+      "Ph. 2330 219",
+      "Janpath, New Delhi-1"
      ],
      "kind": "travel",
      "text": {
@@ -5169,8 +5530,9 @@
      "cell": 1,
      "extra": [
       "Tours & Travels • Air & Rail Tickets • Taxi",
-      "M. 97981 8273",
-      "Ph. 2326 622"
+      "M. 98342 2272",
+      "M. 98851 8909",
+      "Tibetan Market, Janpath"
      ],
      "kind": "travel",
      "text": {
@@ -5184,8 +5546,9 @@
      "cell": 2,
      "extra": [
       "Handicrafts • Brass • Stoles",
-      "M. 97799 4459",
-      "M. 97138 9618"
+      "M. 98366 6976",
+      "M. 99309 1649",
+      "Tibetan Market, Janpath"
      ],
      "kind": "handicraft",
      "text": {
@@ -5198,10 +5561,11 @@
      "group": "flex",
      "cell": 3,
      "extra": [
-      "DEALS IN",
+      "AUTHORISED DEALERS",
       "Goods Transport • Bus Booking",
-      "M. 97777 8947",
-      "Ph. 2332 860"
+      "M. 98867 8161",
+      "M. 99551 4501",
+      "Janpath, New Delhi-1"
      ],
      "kind": "transport",
      "text": {
@@ -5214,8 +5578,9 @@
      "extra": [
       "AUTHORISED DEALERS",
       "Veg Thali • Parathas • Lassi",
-      "M. 99664 1970",
-      "M. 98082 4269"
+      "M. 98853 0562",
+      "Ph. 2317 628",
+      "Tibetan Market, Janpath"
      ],
      "kind": "eatery",
      "text": {
@@ -5227,10 +5592,11 @@
      "group": "flex",
      "cell": 5,
      "extra": [
-      "DEALS IN",
+      "AUTHORISED DEALERS",
       "Readymade Garments • Kurtas • Jeans",
-      "M. 98410 2628",
-      "Ph. 2345 642"
+      "M. 97051 0410",
+      "M. 97931 8560",
+      "Tibetan Market, Janpath"
      ],
      "kind": "clothing",
      "text": {
@@ -5244,8 +5610,9 @@
      "extra": [
       "AUTHORISED DEALERS",
       "Tours & Travels • Air & Rail Tickets • Taxi",
-      "M. 99432 3911",
-      "Ph. 2323 681"
+      "M. 97950 9489",
+      "Ph. 2379 497",
+      "Janpath, New Delhi-1"
      ],
      "kind": "travel",
      "text": {
@@ -5256,10 +5623,11 @@
      "group": "flex",
      "cell": 7,
      "extra": [
-      "AUTHORISED DEALERS",
+      "DEALS IN",
       "Readymade Garments • Kurtas • Jeans",
-      "M. 97420 0973",
-      "Ph. 2360 688"
+      "M. 99490 2752",
+      "Ph. 2356 105",
+      "Janpath, New Delhi-1"
      ],
      "kind": "clothing",
      "text": {
@@ -5270,7 +5638,10 @@
     {
      "group": "glow",
      "cell": 0,
-     "extra": [],
+     "extra": [
+      "Ph. 2311 269",
+      "Tibetan Market, Janpath"
+     ],
      "kind": "hotel",
      "text": {
       "latn": "Hotel Samrat Sansaar",
@@ -5281,7 +5652,10 @@
     {
      "group": "glow",
      "cell": 1,
-     "extra": [],
+     "extra": [
+      "Ph. 2399 248",
+      "Janpath, New Delhi-1"
+     ],
      "kind": "hotel",
      "text": {
       "latn": "Hotel Janpath Janata Palace",
@@ -5292,7 +5666,11 @@
     {
      "group": "glow",
      "cell": 2,
-     "extra": [],
+     "extra": [
+      "HANDICRAFTS • BRASS • STOLES",
+      "Ph. 2347 075",
+      "Janpath, New Delhi-1"
+     ],
      "kind": "handicraft",
      "text": {
       "latn": "Cottage Karigari Corner",
@@ -5303,7 +5681,10 @@
     {
      "group": "glow",
      "cell": 3,
-     "extra": [],
+     "extra": [
+      "M. 99111 9691",
+      "Tibetan Market, Janpath"
+     ],
      "kind": "handicraft",
      "text": {
       "latn": "Kendra Kutir Emporium",
@@ -5314,7 +5695,11 @@
     {
      "group": "glow",
      "cell": 4,
-     "extra": [],
+     "extra": [
+      "TEA • COFFEE • SNACKS",
+      "M. 99766 1055",
+      "Janpath, New Delhi-1"
+     ],
      "kind": "tea",
      "text": {
       "latn": "Kullad Kulhad Cafe",
@@ -5325,18 +5710,11 @@
     {
      "group": "glow",
      "cell": 5,
-     "extra": [],
-     "kind": "handicraft",
-     "text": {
-      "latn": "Sarkari Sona Emporium",
-      "deva": "सरकारी सोना एम्पोरियम"
-     },
-     "tagline": "Ghar ki shobha"
-    },
-    {
-     "group": "glow",
-     "cell": 6,
-     "extra": [],
+     "extra": [
+      "VEG THALI • PARATHAS • LASSI",
+      "M. 98380 4493",
+      "Tibetan Market, Janpath"
+     ],
      "kind": "eatery",
      "text": {
       "latn": "Dosa Darbar Express",
@@ -5346,14 +5724,32 @@
     },
     {
      "group": "glow",
-     "cell": 7,
-     "extra": [],
+     "cell": 6,
+     "extra": [
+      "VEG THALI • PARATHAS • LASSI",
+      "M. 98718 0088",
+      "Janpath, New Delhi-1"
+     ],
      "kind": "eatery",
      "text": {
       "latn": "Momo Mohalla Express",
       "deva": "मोमो मोहल्ला एक्सप्रेस"
      },
      "tagline": "Steam, sauce, satisfaction"
+    },
+    {
+     "group": "glow",
+     "cell": 7,
+     "extra": [
+      "M. 98041 5448",
+      "Tibetan Market, Janpath"
+     ],
+     "kind": "eatery",
+     "text": {
+      "latn": "Bhatura Boulevard",
+      "deva": "भटूरा बुलेवार्ड"
+     },
+     "tagline": "Chole ke saath dosti"
     },
     {
      "group": "wall",
@@ -5399,7 +5795,11 @@
      "cell": 0,
      "extra": [
       "PALASH",
-      "HOTEL"
+      "HOTEL",
+      "ATTACHED BATH",
+      "WIFI",
+      "24 HRS HOT WATER",
+      "M. 99892 7706"
      ],
      "kind": "hotel",
      "text": {
@@ -5411,7 +5811,11 @@
      "cell": 1,
      "extra": [
       "JANPATH",
-      "LODGE"
+      "GUEST HOUSE",
+      "24 HRS HOT WATER",
+      "AC ROOMS",
+      "FAMILY ROOMS",
+      "M. 99759 2725"
      ],
      "kind": "lodge",
      "text": {
@@ -5424,7 +5828,11 @@
      "cell": 2,
      "extra": [
       "JANPATH",
-      "HOTEL"
+      "HOTEL",
+      "CCTV",
+      "24 HRS HOT WATER",
+      "ROOFTOP",
+      "M. 98878 7085"
      ],
      "kind": "hotel",
      "text": {
@@ -5437,7 +5845,8 @@
      "cell": 3,
      "extra": [
       "TOURIST",
-      "INFORMATION BOOTH"
+      "OFFICE",
+      "M. 98553 2798"
      ],
      "kind": "office",
      "text": {
@@ -5450,7 +5859,8 @@
      "cell": 4,
      "extra": [
       "STATE",
-      "CRAFTS EMPORIUM OFFICE"
+      "OFFICE",
+      "M. 98021 0046"
      ],
      "kind": "office",
      "text": {
@@ -5462,7 +5872,8 @@
      "cell": 5,
      "extra": [
       "JANPATH",
-      "MARKET TRADERS ASSOCIATION"
+      "OFFICE",
+      "M. 97942 6529"
      ],
      "kind": "office",
      "text": {
@@ -5474,8 +5885,9 @@
      "group": "vertical",
      "cell": 6,
      "extra": [
-      "HANDICRAF",
-      "HANDICRAFTS COOPERATIVE SOCIETY"
+      "HANDICRAFT",
+      "OFFICE",
+      "M. 98600 7333"
      ],
      "kind": "office",
      "text": {
@@ -5488,7 +5900,11 @@
      "cell": 7,
      "extra": [
       "YOGA",
-      "CLASSES"
+      "CLASSES",
+      "COACHING",
+      "SPOKEN ENGLISH",
+      "TUITION",
+      "M. 99875 4389"
      ],
      "kind": "coaching",
      "text": {
@@ -5730,14 +6146,14 @@
      "group": "fascia",
      "cell": 0,
      "extra": [
-      "माल ढुलाई • बस बुकिंग"
+      "मोटर • पंप • बेयरिंग • पाइप"
      ],
-     "kind": "transport",
+     "kind": "hardware",
      "text": {
-      "latn": "Bijli Battery Ghar",
-      "deva": "बिजली बैटरी घर"
+      "latn": "Cromwell Fans Aur Motor",
+      "deva": "क्रॉमवेल फ़ैन्स और मोटर"
      },
-     "tagline": "Jhatka nahi, jaan"
+     "tagline": "Ghoomta hai to chalta hai"
     },
     {
      "group": "fascia",
@@ -5747,10 +6163,10 @@
      ],
      "kind": "hardware",
      "text": {
-      "latn": "Karlo Engines Pump House",
-      "deva": "करलो इंजन पंप हाउस"
+      "latn": "Sunder Fasteners Chain",
+      "deva": "सुंदर फ़ास्टनर्स"
      },
-     "tagline": "Paani chalega"
+     "tagline": "Chhota nut, bada kaam"
     },
     {
      "group": "fascia",
@@ -5771,44 +6187,18 @@
      "extra": [
       "Estd. 1955"
      ],
-     "kind": "transport",
+     "kind": "hardware",
      "text": {
-      "latn": "Chakka Chalega Truck Parts",
-      "deva": "चक्का चलेगा ट्रक पार्ट्स"
+      "latn": "Bharat Bolt Bhandar",
+      "deva": "भारत बोल्ट भंडार"
      },
-     "tagline": "Chassis se chakka tak"
+     "tagline": "Nut-bolt ka naya naam"
     },
     {
      "group": "fascia",
      "cell": 4,
      "extra": [
       "Estd. 1939"
-     ],
-     "kind": "hardware",
-     "text": {
-      "latn": "Jugaad Jack Hydraulics",
-      "deva": "जुगाड़ जैक हाइड्रॉलिक्स"
-     },
-     "tagline": "Dabaav mein kaam"
-    },
-    {
-     "group": "fascia",
-     "cell": 5,
-     "extra": [
-      "M. 98292 0275"
-     ],
-     "kind": "transport",
-     "text": {
-      "latn": "Hira Cycle Spare Mart",
-      "deva": "हीरा साइकिल स्पेयर मार्ट"
-     },
-     "tagline": "Pedal se paisa"
-    },
-    {
-     "group": "fascia",
-     "cell": 6,
-     "extra": [
-      "Motors • Pumps • Bearings • Pipe Fittings • V-Belts"
      ],
      "kind": "hardware",
      "text": {
@@ -5819,9 +6209,48 @@
     },
     {
      "group": "fascia",
+     "cell": 5,
+     "extra": [
+      "M. 98292 0275"
+     ],
+     "kind": "transport",
+     "text": {
+      "latn": "Bijli Battery Ghar",
+      "deva": "बिजली बैटरी घर"
+     },
+     "tagline": "Jhatka nahi, jaan"
+    },
+    {
+     "group": "fascia",
+     "cell": 6,
+     "extra": [
+      "All Types of Bearings • Sleeves • Plummer Blocks • Motors • V-Belts"
+     ],
+     "kind": "hardware",
+     "text": {
+      "latn": "Jugaad Jack Hydraulics",
+      "deva": "जुगाड़ जैक हाइड्रॉलिक्स"
+     },
+     "tagline": "Dabaav mein kaam"
+    },
+    {
+     "group": "fascia",
      "cell": 7,
      "extra": [
       "Estd. 1944"
+     ],
+     "kind": "hardware",
+     "text": {
+      "latn": "Karlo Engines Pump House",
+      "deva": "करलो इंजन पंप हाउस"
+     },
+     "tagline": "Paani chalega"
+    },
+    {
+     "group": "fascia",
+     "cell": 8,
+     "extra": [
+      "स्था. 1952"
      ],
      "kind": "transport",
      "text": {
@@ -5832,42 +6261,29 @@
     },
     {
      "group": "fascia",
-     "cell": 8,
-     "extra": [
-      "स्था. 1952"
-     ],
-     "kind": "hardware",
-     "text": {
-      "latn": "Bharat Bolt Bhandar",
-      "deva": "भारत बोल्ट भंडार"
-     },
-     "tagline": "Nut-bolt ka naya naam"
-    },
-    {
-     "group": "fascia",
      "cell": 9,
      "extra": [
       "स्था. 1988"
      ],
-     "kind": "hardware",
+     "kind": "transport",
      "text": {
-      "latn": "Sunder Fasteners Chain",
-      "deva": "सुंदर फ़ास्टनर्स"
+      "latn": "Hira Cycle Spare Mart",
+      "deva": "हीरा साइकिल स्पेयर मार्ट"
      },
-     "tagline": "Chhota nut, bada kaam"
+     "tagline": "Pedal se paisa"
     },
     {
      "group": "fascia",
      "cell": 10,
      "extra": [
-      "Motors • Pumps • Bearings • Pipe Fittings • V-Belts"
+      "Goods Transport • Bus Booking"
      ],
-     "kind": "hardware",
+     "kind": "transport",
      "text": {
-      "latn": "Jangal Steel Traders",
-      "deva": "जंगल स्टील ट्रेडर्स"
+      "latn": "Chakka Chalega Truck Parts",
+      "deva": "चक्का चलेगा ट्रक पार्ट्स"
      },
-     "tagline": "Sariya, angle, patti"
+     "tagline": "Chassis se chakka tak"
     },
     {
      "group": "fascia",
@@ -5877,10 +6293,10 @@
      ],
      "kind": "hardware",
      "text": {
-      "latn": "Cromwell Fans Aur Motor",
-      "deva": "क्रॉमवेल फ़ैन्स और मोटर"
+      "latn": "Jangal Steel Traders",
+      "deva": "जंगल स्टील ट्रेडर्स"
      },
-     "tagline": "Ghoomta hai to chalta hai"
+     "tagline": "Sariya, angle, patti"
     },
     {
      "group": "fascia",
@@ -5914,8 +6330,8 @@
      ],
      "kind": "eatery",
      "text": {
-      "latn": "Truckers Dhaba",
-      "deva": "ट्रकर्स ढाबा"
+      "latn": "Parantha Tiffin Wale",
+      "deva": "परांठा टिफ़िन वाले"
      }
     },
     {
@@ -5976,9 +6392,10 @@
      "group": "flex",
      "cell": 0,
      "extra": [
-      "Motors • Pumps • Bearings • Pipe Fittings • V-Belts",
-      "M. 98176 6682",
-      "Ph. 2367 495"
+      "All Types of Bearings • Sleeves • Plummer Blocks • Motors • V-Belts",
+      "M. 99400 9955",
+      "Ph. 2370 959",
+      "G.B. Road, Delhi-6"
      ],
      "kind": "hardware",
      "text": {
@@ -5992,8 +6409,9 @@
      "cell": 1,
      "extra": [
       "Goods Transport • Bus Booking",
-      "M. 98982 6096",
-      "Ph. 2350 407"
+      "M. 98634 4677",
+      "M. 99446 2390",
+      "Shradhanand Marg, Delhi"
      ],
      "kind": "transport",
      "text": {
@@ -6006,10 +6424,11 @@
      "group": "flex",
      "cell": 2,
      "extra": [
-      "DEALS IN",
-      "Motors • Pumps • Bearings • Pipe Fittings • V-Belts",
-      "M. 99146 7272",
-      "M. 97004 1008"
+      "IMPORTERS & STOCKISTS",
+      "All Types of Bearings • Sleeves • Plummer Blocks • Motors • V-Belts",
+      "M. 98326 8015",
+      "M. 98525 8433",
+      "Shradhanand Marg, Delhi"
      ],
      "kind": "hardware",
      "text": {
@@ -6021,10 +6440,11 @@
      "group": "flex",
      "cell": 3,
      "extra": [
-      "AUTHORISED DEALERS",
-      "Motors • Pumps • Bearings • Pipe Fittings • V-Belts",
-      "M. 98582 9721",
-      "Ph. 2328 468"
+      "DEALS IN",
+      "All Types of Bearings • Sleeves • Plummer Blocks • Motors • V-Belts",
+      "M. 97215 7902",
+      "M. 97484 5892",
+      "Shradhanand Marg, Delhi"
      ],
      "kind": "hardware",
      "text": {
@@ -6037,9 +6457,10 @@
      "cell": 4,
      "extra": [
       "DEALS IN",
-      "Motors • Pumps • Bearings • Pipe Fittings • V-Belts",
-      "M. 97181 8377",
-      "Ph. 2322 311"
+      "All Types of Bearings • Sleeves • Plummer Blocks • Motors • V-Belts",
+      "M. 97703 0928",
+      "Ph. 2399 947",
+      "G.B. Road, Delhi-6"
      ],
      "kind": "hardware",
      "text": {
@@ -6052,9 +6473,10 @@
      "cell": 5,
      "extra": [
       "AUTHORISED DEALERS",
-      "Motors • Pumps • Bearings • Pipe Fittings • V-Belts",
-      "M. 97475 4958",
-      "M. 98344 9467"
+      "All Types of Bearings • Sleeves • Plummer Blocks • Motors • V-Belts",
+      "M. 98501 5864",
+      "M. 97820 6699",
+      "Ajmeri Gate, Delhi-6"
      ],
      "kind": "hardware",
      "text": {
@@ -6066,10 +6488,11 @@
      "group": "flex",
      "cell": 6,
      "extra": [
-      "AUTHORISED DEALERS",
-      "Motors • Pumps • Bearings • Pipe Fittings • V-Belts",
-      "M. 97359 4723",
-      "M. 98222 2020"
+      "DEALS IN",
+      "All Types of Bearings • Sleeves • Plummer Blocks • Motors • V-Belts",
+      "M. 99920 5638",
+      "M. 98868 7642",
+      "G.B. Road, Delhi-6"
      ],
      "kind": "hardware",
      "text": {
@@ -6082,9 +6505,10 @@
      "cell": 7,
      "extra": [
       "DEALS IN",
-      "Motors • Pumps • Bearings • Pipe Fittings • V-Belts",
-      "M. 97189 3715",
-      "M. 98073 1490"
+      "All Types of Bearings • Sleeves • Plummer Blocks • Motors • V-Belts",
+      "M. 98963 2550",
+      "Ph. 2304 869",
+      "G.B. Road, Delhi-6"
      ],
      "kind": "hardware",
      "text": {
@@ -6095,29 +6519,10 @@
     {
      "group": "glow",
      "cell": 0,
-     "extra": [],
-     "kind": "hardware",
-     "text": {
-      "latn": "Drill Bahadur Tools",
-      "deva": "ड्रिल बहादुर टूल्स"
-     },
-     "tagline": "Drill, grinder, grip"
-    },
-    {
-     "group": "glow",
-     "cell": 1,
-     "extra": [],
-     "kind": "hardware",
-     "text": {
-      "latn": "Roshni Inverter Wale",
-      "deva": "रोशनी इन्वर्टर वाले"
-     },
-     "tagline": "Light gayi? Humein bulao"
-    },
-    {
-     "group": "glow",
-     "cell": 2,
-     "extra": [],
+     "extra": [
+      "Ph. 2314 549",
+      "Shradhanand Marg, Delhi"
+     ],
      "kind": "hardware",
      "text": {
       "latn": "Rang Bahaar Paints",
@@ -6127,8 +6532,42 @@
     },
     {
      "group": "glow",
+     "cell": 1,
+     "extra": [
+      "ALL TYPES OF BEARINGS • SLEEVES • PLUMMER BLOCKS",
+      "M. 97620 1898",
+      "Shradhanand Marg, Delhi"
+     ],
+     "kind": "hardware",
+     "text": {
+      "latn": "Drill Bahadur Tools",
+      "deva": "ड्रिल बहादुर टूल्स"
+     },
+     "tagline": "Drill, grinder, grip"
+    },
+    {
+     "group": "glow",
+     "cell": 2,
+     "extra": [
+      "ALL TYPES OF BEARINGS • SLEEVES • PLUMMER BLOCKS",
+      "M. 99397 8717",
+      "G.B. Road, Delhi-6"
+     ],
+     "kind": "hardware",
+     "text": {
+      "latn": "Roshni Inverter Wale",
+      "deva": "रोशनी इन्वर्टर वाले"
+     },
+     "tagline": "Light gayi? Humein bulao"
+    },
+    {
+     "group": "glow",
      "cell": 3,
-     "extra": [],
+     "extra": [
+      "ALL TYPES OF BEARINGS • SLEEVES • PLUMMER BLOCKS",
+      "Ph. 2315 568",
+      "G.B. Road, Delhi-6"
+     ],
      "kind": "hardware",
      "text": {
       "latn": "Rang Rasiya Paint House",
@@ -6139,17 +6578,11 @@
     {
      "group": "glow",
      "cell": 4,
-     "extra": [],
-     "kind": "clinic",
-     "text": {
-      "latn": "Free Health Check Camp",
-      "deva": "मुफ़्त स्वास्थ्य जाँच शिविर"
-     }
-    },
-    {
-     "group": "glow",
-     "cell": 5,
-     "extra": [],
+     "extra": [
+      "CLINIC • TIMING 10 AM - 2 PM",
+      "M. 99631 0338",
+      "Ajmeri Gate, Delhi-6"
+     ],
      "kind": "clinic",
      "text": {
       "latn": "Dr Joshi Clinic",
@@ -6158,8 +6591,11 @@
     },
     {
      "group": "glow",
-     "cell": 6,
-     "extra": [],
+     "cell": 5,
+     "extra": [
+      "M. 98073 1641",
+      "Ajmeri Gate, Delhi-6"
+     ],
      "kind": "pharmacy",
      "text": {
       "latn": "GB Road Medical Store",
@@ -6168,8 +6604,24 @@
     },
     {
      "group": "glow",
+     "cell": 6,
+     "extra": [
+      "M. 99240 0123",
+      "Shradhanand Marg, Delhi"
+     ],
+     "kind": "clinic",
+     "text": {
+      "latn": "Free Health Check Camp",
+      "deva": "मुफ़्त स्वास्थ्य जाँच शिविर"
+     }
+    },
+    {
+     "group": "glow",
      "cell": 7,
-     "extra": [],
+     "extra": [
+      "M. 99336 4165",
+      "G.B. Road, Delhi-6"
+     ],
      "kind": "hardware",
      "text": {
       "latn": "Agrawal Nut Bolt Bhandar",
@@ -6227,7 +6679,10 @@
      "cell": 0,
      "extra": [
       "FREE",
-      "CLINIC"
+      "CLINIC",
+      "CLINIC",
+      "TIMING 10 AM - 2 PM",
+      "M. 97454 8201"
      ],
      "kind": "clinic",
      "text": {
@@ -6239,47 +6694,11 @@
      "group": "vertical",
      "cell": 1,
      "extra": [
-      "ACCOUNTS",
-      "AND BILLING DESK"
-     ],
-     "kind": "office",
-     "text": {
-      "latn": "Accounts and Billing Desk",
-      "deva": "लेखा और बिलिंग डेस्क"
-     }
-    },
-    {
-     "group": "vertical",
-     "cell": 2,
-     "extra": [
-      "GODOWN",
-      "NUMBER NINE"
-     ],
-     "kind": "office",
-     "text": {
-      "latn": "Godown Number Nine",
-      "deva": "गोदाम नंबर नौ"
-     }
-    },
-    {
-     "group": "vertical",
-     "cell": 3,
-     "extra": [
-      "NIGHT",
-      "CLASSES"
-     ],
-     "kind": "coaching",
-     "text": {
-      "latn": "Night School for Workers",
-      "deva": "कामगारों के लिए रात्रि विद्यालय"
-     }
-    },
-    {
-     "group": "vertical",
-     "cell": 4,
-     "extra": [
       "JOSHI",
-      "CLINIC"
+      "CLINIC",
+      "CLINIC",
+      "TIMING 10 AM - 2 PM",
+      "M. 98000 5578"
      ],
      "kind": "clinic",
      "text": {
@@ -6289,10 +6708,56 @@
     },
     {
      "group": "vertical",
+     "cell": 2,
+     "extra": [
+      "COMPUTER",
+      "CLASSES",
+      "COACHING",
+      "SPOKEN ENGLISH",
+      "TUITION",
+      "M. 97267 9949"
+     ],
+     "kind": "coaching",
+     "text": {
+      "latn": "Computer and Typing Class",
+      "deva": "कंप्यूटर और टाइपिंग क्लास"
+     }
+    },
+    {
+     "group": "vertical",
+     "cell": 3,
+     "extra": [
+      "ACCOUNTS",
+      "OFFICE",
+      "M. 99290 4147"
+     ],
+     "kind": "office",
+     "text": {
+      "latn": "Accounts and Billing Desk",
+      "deva": "लेखा और बिलिंग डेस्क"
+     }
+    },
+    {
+     "group": "vertical",
+     "cell": 4,
+     "extra": [
+      "GODOWN",
+      "OFFICE",
+      "M. 97128 4928"
+     ],
+     "kind": "office",
+     "text": {
+      "latn": "Godown Number Nine",
+      "deva": "गोदाम नंबर नौ"
+     }
+    },
+    {
+     "group": "vertical",
      "cell": 5,
      "extra": [
       "AJMERI",
-      "GATE TRADERS ASSOCIATION"
+      "OFFICE",
+      "M. 99796 6047"
      ],
      "kind": "office",
      "text": {
@@ -6304,8 +6769,9 @@
      "group": "vertical",
      "cell": 6,
      "extra": [
-      "COMMISSIO",
-      "COMMISSION AGENTS OFFICE"
+      "COMMISSION",
+      "OFFICE",
+      "M. 98443 1311"
      ],
      "kind": "office",
      "text": {
@@ -6317,31 +6783,22 @@
      "group": "vertical",
      "cell": 7,
      "extra": [
-      "RAJDHANI",
-      "POLICE POST AJMERI GATE"
+      "NIGHT",
+      "CLASSES",
+      "COACHING",
+      "SPOKEN ENGLISH",
+      "TUITION",
+      "M. 97044 0386"
      ],
-     "kind": "office",
+     "kind": "coaching",
      "text": {
-      "latn": "Rajdhani Police Post Ajmeri Gate",
-      "deva": "राजधानी पुलिस चौकी अजमेरी गेट"
+      "latn": "Night School for Workers",
+      "deva": "कामगारों के लिए रात्रि विद्यालय"
      }
     },
     {
      "group": "enamel",
      "cell": 0,
-     "extra": [
-      "मोटर पंप बेयरिंग पाइप"
-     ],
-     "kind": "hardware",
-     "text": {
-      "latn": "Hindustan Hatheda Hardware",
-      "deva": "हिंदुस्तान हथौड़ा हार्डवेयर"
-     },
-     "tagline": "Thok ke bechte hain"
-    },
-    {
-     "group": "enamel",
-     "cell": 1,
      "extra": [
       "मोटर पंप बेयरिंग पाइप"
      ],
@@ -6354,20 +6811,20 @@
     },
     {
      "group": "enamel",
-     "cell": 2,
+     "cell": 1,
      "extra": [
       "मोटर पंप बेयरिंग पाइप"
      ],
      "kind": "hardware",
      "text": {
-      "latn": "Hawa Wire Cable Co",
-      "deva": "हवा वायर केबल कंपनी"
+      "latn": "Hindustan Hatheda Hardware",
+      "deva": "हिंदुस्तान हथौड़ा हार्डवेयर"
      },
-     "tagline": "Current ki guarantee"
+     "tagline": "Thok ke bechte hain"
     },
     {
      "group": "enamel",
-     "cell": 3,
+     "cell": 2,
      "extra": [
       "मोटर पंप बेयरिंग पाइप"
      ],
@@ -6377,6 +6834,19 @@
       "deva": "कसना स्पैनर हाउस"
      },
      "tagline": "Kasne ka kamaal"
+    },
+    {
+     "group": "enamel",
+     "cell": 3,
+     "extra": [
+      "मोटर पंप बेयरिंग पाइप"
+     ],
+     "kind": "hardware",
+     "text": {
+      "latn": "Hawa Wire Cable Co",
+      "deva": "हवा वायर केबल कंपनी"
+     },
+     "tagline": "Current ki guarantee"
     },
     {
      "group": "small",
@@ -6395,39 +6865,39 @@
      "group": "small",
      "cell": 1,
      "extra": [
-      "Coaching",
+      "Repairing",
       "Ph. 2345 873"
      ],
-     "kind": "coaching",
+     "kind": "repair",
      "text": {
-      "latn": "Night School for Workers",
-      "deva": "कामगारों के लिए रात्रि विद्यालय"
+      "latn": "Tyre Retreading Shop",
+      "deva": "टायर रिट्रेडिंग शॉप"
      }
     },
     {
      "group": "small",
      "cell": 2,
      "extra": [
-      "डॉक्टर",
+      "मरम्मत",
       "Ph. 2350 064"
      ],
-     "kind": "clinic",
+     "kind": "repair",
      "text": {
-      "latn": "Free Health Check Camp",
-      "deva": "मुफ़्त स्वास्थ्य जाँच शिविर"
+      "latn": "Gas Cylinder Repair",
+      "deva": "गैस सिलेंडर मरम्मत"
      }
     },
     {
      "group": "small",
      "cell": 3,
      "extra": [
-      "दवाइयाँ",
+      "डॉक्टर",
       "Ph. 2398 527"
      ],
-     "kind": "pharmacy",
+     "kind": "clinic",
      "text": {
-      "latn": "GB Road Medical Store",
-      "deva": "जीबी रोड मेडिकल स्टोर"
+      "latn": "Free Health Check Camp",
+      "deva": "मुफ़्त स्वास्थ्य जाँच शिविर"
      }
     },
     {
@@ -6447,26 +6917,26 @@
      "group": "small",
      "cell": 5,
      "extra": [
-      "मरम्मत",
+      "कोचिंग",
       "Ph. 2328 793"
      ],
-     "kind": "repair",
+     "kind": "coaching",
      "text": {
-      "latn": "Gas Cylinder Repair",
-      "deva": "गैस सिलेंडर मरम्मत"
+      "latn": "Computer and Typing Class",
+      "deva": "कंप्यूटर और टाइपिंग क्लास"
      }
     },
     {
      "group": "small",
      "cell": 6,
      "extra": [
-      "Repairing",
+      "Medicines",
       "Ph. 2319 340"
      ],
-     "kind": "repair",
+     "kind": "pharmacy",
      "text": {
-      "latn": "Tyre Retreading Shop",
-      "deva": "टायर रिट्रेडिंग शॉप"
+      "latn": "GB Road Medical Store",
+      "deva": "जीबी रोड मेडिकल स्टोर"
      }
     },
     {
@@ -6478,8 +6948,8 @@
      ],
      "kind": "coaching",
      "text": {
-      "latn": "Computer and Typing Class",
-      "deva": "कंप्यूटर और टाइपिंग क्लास"
+      "latn": "Night School for Workers",
+      "deva": "कामगारों के लिए रात्रि विद्यालय"
      }
     },
     {

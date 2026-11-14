@@ -11,9 +11,16 @@ const KIT_SHADER := preload("res://render/shaders/kit_b.gdshader")
 const POOL_SHADER := preload("res://render/shaders/sign_pool.gdshader")
 const Pieces := preload("res://world/kits/kit_pieces.gd")
 const MeshSink := preload("res://world/kits/module_mesh.gd")
-## Lit sign pieces (P2-048) that throw a pool of light on the pavement at night: design -> [half width, reach (m),
-## colour]. The pool is a second surface drawn additive (game/render/shaders/sign_pool.gdshader).
-const POOLS := {"glow": [1.4, 2.3, Color(0.9, 0.92, 1.0)], "board_lamp": [1.5, 2.4, Color(1.0, 0.72, 0.42)]}
+## Lit sign pieces (P2-048) that throw light round them at night: design -> [ground pool [half width, reach] or [],
+## wall spill [x0, y0, x1, y1] or [], colour, vertical (lit only when the bay's vertical cell is a glow box)]. The light is
+## a second surface drawn additive (game/render/shaders/sign_pool.gdshader).
+const POOLS := {
+	"glow": [[1.45, 2.1], [-1.85, 1.9, 1.85, 4.1], Color(1.0, 0.86, 0.66), false],
+	"board_lamp": [[1.5, 2.1], [-1.85, 1.95, 1.85, 4.2], Color(1.0, 0.72, 0.42), false],
+	"flex": [[1.5, 2.1], [-1.85, 1.85, 1.85, 4.4], Color(1.0, 0.8, 0.56), false],
+	"vboard": [[], [0.22, -0.45, 2.62, 3.15], Color(1.0, 0.88, 0.7), true],
+	"vsign": [[], [0.12, 2.8, 2.52, 6.6], Color(1.0, 0.88, 0.7), true],
+}
 const KITS_PATH := "res://world/kits/kits.json"
 const TEX_DIR := "res://world/kits/textures/"
 ## tools/bake/areas/facade.ts PARTS, in its order
@@ -91,13 +98,14 @@ func material(kit: String) -> ShaderMaterial:
 
 
 ## The additive pavement light under a lit sign (one per colour).
-func pool_material(c: Color) -> ShaderMaterial:
-	var k := c.to_html(false)
+func pool_material(c: Color, vertical := false) -> ShaderMaterial:
+	var k := c.to_html(false) + ("v" if vertical else "")
 	if not pool_materials.has(k):
 		var s := ShaderMaterial.new()
 		s.shader = POOL_SHADER
 		s.resource_name = "sign_pool"
 		s.set_shader_parameter("tint", Vector3(c.r, c.g, c.b))
+		s.set_shader_parameter("vertical_cells", 1 if vertical else 0)
 		pool_materials[k] = s
 	return pool_materials[k]
 
@@ -198,10 +206,10 @@ func _add(id: String, kit: String, design: String, opts: Dictionary, by_design: 
 		if POOLS.has(design) and mesh.get_surface_count() > 0:
 			var pd: Array = POOLS[design]
 			var pm := MeshSink.new()
-			Pieces.pool(pm, float(pd[0]), float(pd[1]))
+			Pieces.pool(pm, pd[0], pd[1])
 			mesh.add_surface_from_arrays(Mesh.PRIMITIVE_TRIANGLES, pm.arrays())
 			if not materials.is_empty():
-				mesh.surface_set_material(1, pool_material(pd[2]))
+				mesh.surface_set_material(1, pool_material(pd[2], bool(pd[3])))
 		by_design[key] = mesh
 	meshes[id] = by_design[key]
 	kit_of[id] = kit
