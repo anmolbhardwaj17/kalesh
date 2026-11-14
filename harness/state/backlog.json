@@ -1,6 +1,6 @@
 {
   "_doc": "Written only by node harness/bin/task.mjs. Phases run in order; P0 (ADOPT + STYLE DISCOVERY) waits for the owner by design and needs task.mjs signoff and task.mjs archsignoff before its gate passes. Later phases are added by the planner at the end of P0 (task.mjs phase-add) from the game's real state.",
-  "updated": "2026-11-14T17:20:37.301Z",
+  "updated": "2026-11-14T17:29:46.503Z",
   "phases": [
     {
       "id": "P0",
@@ -4009,7 +4009,8 @@
         "Owner 2026-11-14: some tunnels still have the old angled light bars; every tunnel and underpass must get the new fittings, proven with a shot inside each. Murals read as blocky rectangles: need real painted motifs.",
         "attempt 1 failed: Built and bake green (TUN-01: 1,266 roofed segments, headroom 5.35 m min, 24 mouths, 58 drains, LED strips in all 14 stretches) but: tunnel_drive wheel contacts at kerb edges on 2 routes; walls lit unshaded and look flat; murals read as clean vector art, not hand-painted; tunnel road uses dark city asphalt; pillars in the wide section are paint only.",
         "Owner 2026-11-14 screenshot (attempt 2 in progress): flat unshaded look, jet fans huge and hanging into view, fire boxes oversized red cubes, flat pale road; window visible again.",
-        "attempt 2 failed: Verifier FAIL on the owner's eye bar (engineering passes: TUN-01, tunnel_drive). Interior scores 4.5: light flat and overexposed (no bloom, falloff, dark feet, road sheen), clean flat materials (no grime, stains, petals, tyre marks), bare ceiling (no trays, conduits, ducts), no atmosphere or depth, sparse graphic murals."
+        "attempt 2 failed: Verifier FAIL on the owner's eye bar (engineering passes: TUN-01, tunnel_drive). Interior scores 4.5: light flat and overexposed (no bloom, falloff, dark feet, road sheen), clean flat materials (no grime, stains, petals, tyre marks), bare ceiling (no trays, conduits, ducts), no atmosphere or depth, sparse graphic murals.",
+        "Owner 2026-11-14: the current tunnel look is ok to him (attempt 3 live shots). Verifier confirms nothing broke and scores it; merge after."
       ],
       "created": "2026-11-13T11:50:33.337Z",
       "started": "2026-11-14T14:58:09.096Z"

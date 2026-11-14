@@ -674,3 +674,4 @@ One line per event, written by task.mjs (start, done, fail, phase changes, inbox
 - 2026-11-14 21:33 [P2-052] start (attempt 2): Shade, sky and grade on the streamed city to the Watch Dogs 2 bar
 - 2026-11-14 22:43 mentor message mmwgo03l0 handled: Agreed. Sign cards are being rewritten as real documentary photos of single boards (hand-painted signwriter letters, cheap print-shop flex, real wear), one board per card, with the script chosen by place and trade; the sign builder got the same language rule.
 - 2026-11-14 22:50 [P2-071] added: Wire the owner's sign board photos into the kit sign atlases
+- 2026-11-14 22:59 mentor message mmwgoktu5 handled: Noted: look accepted by you; after the builder's final checks a light verifier pass, then merge and rebuild, about 1 to 1.5 hours.
