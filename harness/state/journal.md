@@ -538,3 +538,6 @@ One line per event, written by task.mjs (start, done, fail, phase changes, inbox
 - 2026-11-14 08:17 [P2-042] start (attempt 1): Who may use each road: car-free streets, two-wheeler galis, footways, bollards and gates
 - 2026-11-14 08:17 PHASE P1 DONE: Foundation: drive and walk the real pilot centre. Next: P2 Pilot made rich: landmarks, areas and hero roads in stylised B
 - 2026-11-14 08:37 [P2-007] done: PR 62. Parts kit landmarks built in game from bake inputs: India Gate 42/42 m, Red Fort 33/33, CP 11.5/11.5, Jama Masjid 40.9/41; hero rule (8 parts, 24.3k tris max), far silhouettes, no pop at the LOD switches at 140 km/h, GPU 0.35 ms of 0.5; ingest applies the hero rule and a delivered model replaces the stand-in. Verifier PASS (6 hero shots, landmark scenarios, quick). Rebaked after merging P1-037: hash 0b3eca3f7f1f80, 1031 tests, quick 15/15. Polish in P14-007.
+- 2026-11-14 09:22 [P2-043] added: Access judge pass and owner edits
+- 2026-11-14 09:22 [P2-044] added: Car-free streets look like pedestrian streets; striped bollards
+- 2026-11-14 09:22 [P2-045] added: Traffic and GPS respect access modes; move pins off car-free roads
