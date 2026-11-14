@@ -648,3 +648,6 @@ One line per event, written by task.mjs (start, done, fail, phase changes, inbox
 - 2026-11-14 19:05 mentor message mmwgg72tc handled: Agreed, it is our retarget for all three, not your files. The builder fixes all three by keeping your Mixamo skeleton as is and proves each matches the Mixamo preview.
 - 2026-11-14 19:08 [P2-069] added: Reality match tooling: object catalog, reference vs game sheets, scores, dashboard
 - 2026-11-14 19:08 mentor message mmwggblcc handled: Got it, and no list needed: REALITY_MATCH.md makes every object (found automatically from the code) get real photos, a side by side, a score on 8 lines and fixes until it passes; P2-069 builds the catalog, sheets, scores and a dashboard tab, and every builder, verifier and critic uses it.
+- 2026-11-14 19:09 [P2-048] failed attempt 1: no reason given
+- 2026-11-14 19:09 [P2-048] failed attempt 1: Verifier FAIL: boards read as real (Hindi over English, painted tin, flex, verticals, wear, attached) but density far below the photos (CP, Paharganj, Janpath, old streets: 1 to 2 boards per facade vs 3 to 5 stacked plus notices and cables); boards.json out of sync with the names file (npm test fails); a 'Police Post Ajmeri Gate' shop-style board; flat colour-block product shelves; weak night glow.
+- 2026-11-14 19:09 [P2-048] start (attempt 2): Shop sign boards from real Indian references, by area
