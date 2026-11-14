@@ -66,6 +66,12 @@ export interface MeshInput {
   medianRefs: readonly MedianRef[];
   /** Crossings away from the junctions (the lane model's, P1-032). */
   crossings: readonly MidCrossing[];
+  /**
+   * The infrastructure kit variant of each strip on a deck or a fill (P2-034, infra/variants.ts; null at grade). Its
+   * pier shape decides the collider of a pier (two columns, one, a wall, a round one), so the collider is the drawn
+   * pier. Absent: every pier is the wall of its ring (as before P2-034).
+   */
+  variants?: readonly (string | null)[];
 }
 
 /**

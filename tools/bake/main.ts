@@ -64,7 +64,7 @@ import { explainGates, gateInvariant, gateLog } from './report/gates.ts';
 import type { GateFile } from './report/gates.ts';
 import { gateItems } from './report/gateitems.ts';
 import type { MeshChecks } from './mesh/checks.ts';
-import { NOT_TWICE, defaultBenchDir, readMedianRefs, runClearStep, runMeshStep, runTerrainStep } from './sources/meshstage.ts';
+import { NOT_TWICE, defaultBenchDir, infraSkyline, readInfraRules, readMedianRefs, runClearStep, runMeshStep, runTerrainStep } from './sources/meshstage.ts';
 import { laneGraph, laneModelFile, laneModelHash, lanesLayer, lanesRecord } from './roads/laneout.ts';
 import { lanesSvg } from './roads/lanerender.ts';
 import { buildLaneModel, giveWaySolved } from './roads/network.ts';
@@ -99,6 +99,10 @@ import type { SourceMesh } from './tile/cutter.ts';
 import type { BarrierFeature } from './graph/features.ts';
 import type { MassingStep } from './sources/landmarkstage.ts';
 import { GroundHeights } from './tile/shells.ts';
+import { buildInfra } from './infra/build.ts';
+import { RoadProbe } from './infra/probe.ts';
+import { platformSources } from './infra/platforms.ts';
+import type { OverheadResult } from './elevation/overhead.ts';
 import { runTileStep } from './sources/tilestage.ts';
 import { readWarm, warmKey, writeWarm } from './sources/warmstart.ts';
 import type { SourceResult } from './sources/stage.ts';
@@ -241,6 +245,8 @@ export async function bake(args: BakeArgs, opts: BakeOptions): Promise<HealthRep
   let landmarked: MassingStep | null = null;
   /** The bollards and gates where the access changes (P2-042): their mesh goes into the tiles with colliders. */
   let barriered: { placements: BarrierPlacement[]; mesh: SourceMesh | null } | null = null;
+  // the metro viaducts and foot bridges of the elevation step, for the infrastructure kits (P2-034)
+  let overhead: OverheadResult | null = null;
   let osmBarriers: BarrierFeature[] = [];
   let laneChecks: LaneChecks | null = null;
   let repairIssues: Issue[] = [];
@@ -466,6 +472,7 @@ export async function bake(args: BakeArgs, opts: BakeOptions): Promise<HealthRep
         rails: input.rails ?? [], metro: repaired.features.rail.filter((r) => r.kind === 'metro').map((r) => ({ id: r.id, name: r.name, pts: r.pts, layer: r.layer, bridge: r.bridge, tunnel: r.tunnel })),
         footBridges: repaired.features.footBridges, water: input.water ?? [], ground: input.ground, railEmbankment: RAIL_EMBANKMENT_M,
       });
+      overhead = over;
       // strips on each other only on the solved levels (a ramp on fill beside a road at grade): their edge lanes give
       // way, and the lane files are written again (P1-042)
       const solvedBefore = checkPlanOverlap(build.strips, build.joints, undefined, st.kinds);
@@ -579,11 +586,33 @@ export async function bake(args: BakeArgs, opts: BakeOptions): Promise<HealthRep
       report.gates['openPorts'] = report.gateReport.gates['openPorts']?.count ?? null;
       for (const l of gateLog(report.gateReport)) opts.log(`[gates] ${l}`);
       check([gateInvariant(report.gateReport)]);
+      // the infrastructure kits (P2-034): every flyover, bridge, viaduct, rail stretch and foot bridge from its variant
+      const finalGround = new GroundHeights(grounded);
+      const probe = new RoadProbe(meshed.mesh.fs, meshed.mesh.grid);
+      const model = groundModel;
+      const blockProj = projector(plan.origin);
+      const infra = buildInfra({
+        strips: meshed.input.strips, variants: meshed.input.variants ?? [], kit: meshed.mesh.structures.kit, piers: meshed.mesh.structures.piers,
+        rails: repaired.features.rail, viaducts: overhead?.viaducts ?? [], footBridges: repaired.features.footBridges, footHeights: overhead?.footBridges ?? [],
+        ground: (x, z) => finalGround.at(x, z), groundModel: (x, z) => (model ? model.at(x, z) : 0), roadAt: (x, z, near) => probe.roadAt(x, z, near),
+        blocked: (x, z, r, below) => probe.blocked(x, z, r, below), railEmbankment: RAIL_EMBANKMENT_M, rules: readInfraRules(opts.root),
+        skyline: infraSkyline(opts.root).map((k) => {
+          const w = blockProj.toWorld(k.lat, k.lon);
+          return { ...k, x: w.x, z: w.z };
+        }),
+        platforms: graphInput ? platformSources(graphInput.elements, (lat, lon) => { const w = blockProj.toWorld(lat, lon); return { x: w.x, z: w.z }; }) : [],
+        offset: blockFrame(districts, plan.def.block).offset, stage: plan.id, block: plan.def.block,
+      });
+      report.infra = infra.record;
+      const ir = infra.record;
+      opts.log(`[infra] kits: ${Object.entries(ir.variants).map(([k, v]) => `${k} ${v}`).join(', ')}; ${Math.round(ir.edgesM)} m of deck and ramp sides, ${ir.piers} road piers; ${ir.tracksKm} km of track (${ir.railBridges} rail bridges, ${ir.embankmentM} m on approach embankments, ${ir.levelCrossingSamples} level crossing samples), ${ir.masts} overhead line masts, ${ir.platforms} platforms (${ir.platformsSkipped} left out: no rail track beside them); ${ir.metroDecks} metro decks on ${ir.metroPiers} piers (${ir.metroPiersMoved} moved off a road, ${ir.metroPiersSkipped} left out); ${ir.footBridges} foot bridges on ${ir.footColumns} columns with ${ir.stairs} stairs; ${ir.tiles} tiles, ${ir.envelopeTriangles} collider triangles`);
+      check([{ id: 'INFRA-01.every_structure_has_a_kit', ok: ir.withoutKit.length === 0, detail: ir.withoutKit.length === 0 ? `every flyover, bridge, viaduct, rail stretch and foot bridge is built from a variant kit (${Object.keys(ir.variants).length} variants)` : `${ir.withoutKit.length} structure strips have no variant: ${ir.withoutKit.slice(0, 5).join(', ')}` }]);
       const res = runTileStep({
         root: opts.root, out: report.tiles.out ?? tileFolder(plan), stage: plan.id, block: plan.def.block, origin: plan.origin, offset: blockFrame(districts, plan.def.block).offset,
         outline: repaired.outline, lanes: laneBuild, meshed, ground: grounded, repaired, places: layout.input.places, only: report.tiles.only, log: opts.log,
         ...(landmarked ? { landmarks: { meshes: landmarked.meshes, pins: landmarked.pins, file: landmarked.file } } : {}),
         ...(barriered ? { access: { meshes: barriered.mesh ? [barriered.mesh] : [], placements: barriered.placements } } : {}),
+        infra: { meshes: infra.meshes, file: infra.file },
         // the committed expected hash follows a whole bake of the game's own tile folder (never a partial bake or an --out folder)
         hashFile: report.tiles.only === null && report.tiles.out === DEFAULT_TILES ? TILES_HASH_FILE : undefined,
       });

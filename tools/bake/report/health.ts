@@ -2,6 +2,7 @@
 // bake invariants: a failed invariant stops the bake before it writes tiles (TECH.md "World pipeline"). Pure; the
 // driver writes the file. The report holds no clock time, so the same inputs give the same file (except the graph
 // step's build time, `graph.buildMs`, which the acceptance asks for).
+import type { InfraRecord } from '../infra/build.ts';
 import type { AccessRecord } from '../graph/access.ts';
 import type { BarriersRecord } from '../mesh/barriers.ts';
 import type { WalkwaysRecord } from '../terrain/walkways.ts';
@@ -108,6 +109,8 @@ export interface HealthReport {
   /** The tile step (tools/bake/tile/): what was written, where, the checks on the bytes read back; record is null until it runs. */
   /** The landmark placement (P2-006): pads, zones, the buildings the zones took, the far landmarks, the pad check. */
   landmarks?: LandmarksRecord;
+  /** The infrastructure kits (P2-034, tools/bake/infra/): variants used, what each kind built, structures with no kit (0). */
+  infra?: InfraRecord;
   tiles: { written: number; out: string | null; only: string[] | null; record?: TilesRecord };
   /** The six gate counts item by item, each explained or not, and the known findings with their owners (P1-017); set before the tile step. */
   gateReport?: GateReport;

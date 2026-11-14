@@ -2,7 +2,8 @@
 // Made from the drawn vertices of the tile's meshes (the same numbers, so the collider is the drawn surface), in
 // chunks of about 500 triangles and never more than 600 (a whole tile collider in one piece is a 17 ms frame).
 // - Every surface a wheel or a foot can touch is in: roads and junctions, kerbs, footpaths, medians, walls and
-//   parapets, piers, the ground and its pads, river beds and the building shells. Paint, the water surface and the
+//   parapets, piers (P2-034: crash barriers, deck sides, retaining and abutment walls, rail beds and foot bridge
+//   decks are the plain shapes the infrastructure kits draw over), the ground and its pads, river beds and the building shells. Paint, the water surface and the
 //   ceilings of decks and tunnels are not.
 // - One building shell stays in one chunk (unless one building alone is over the chunk limit).
 // - The deck joints (the `joint` strips over the piers) are in: the strip is closed and covers the station line of
@@ -14,7 +15,7 @@
 // inside it, then cut into nearly equal chunks. Pure.
 import type { ColliderChunk, MeshData } from './codec.ts';
 
-export const COLLIDER_MATERIALS: readonly string[] = ['road', 'parking', 'gore', 'joint', 'median', 'planter', 'footpath', 'kerb', 'wall', 'pier', 'ground', 'lawn', 'plot', 'bed', 'forecourt', 'pad', 'wallbase', 'moat', 'walkway', 'building', 'landmark', 'landmark_red', 'bollard'];
+export const COLLIDER_MATERIALS: readonly string[] = ['road', 'parking', 'gore', 'joint', 'median', 'planter', 'footpath', 'kerb', 'wall', 'barrier', 'fascia', 'retaining', 'abutment', 'pier', 'railbed', 'fob', 'platform', 'ground', 'lawn', 'plot', 'bed', 'forecourt', 'pad', 'wallbase', 'moat', 'walkway', 'building', 'landmark', 'landmark_red', 'bollard'];
 /** Aim and hard limit of a chunk (triangles). */
 export const CHUNK_TARGET = 500;
 export const CHUNK_LIMIT = 600;

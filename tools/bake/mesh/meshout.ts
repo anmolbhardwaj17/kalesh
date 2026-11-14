@@ -242,7 +242,7 @@ export function siteTile(input: MeshInput, mesh: RoadMesh, site: MeshSite, groun
   }
 
   const origin: [number, number, number] = [Math.floor(box.minX), Math.floor(minY) - 4, Math.floor(box.minZ)];
-  const NAME: Readonly<Record<string, string>> = { kerbface: 'kerb', parapet: 'wall' };
+  const NAME: Readonly<Record<string, string>> = { kerbface: 'kerb', parapet: 'wall', barrier: 'wall', fascia: 'wall', retaining: 'wall', abutment: 'wall' };
   const by = new Map<string, MeshData>();
   let triangles = 0;
   const take = (material: string, pos: readonly number[], nrm: readonly number[], idx: readonly number[], all: boolean): void => {
