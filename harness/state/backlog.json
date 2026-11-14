@@ -1,6 +1,6 @@
 {
   "_doc": "Written only by node harness/bin/task.mjs. Phases run in order; P0 (ADOPT + STYLE DISCOVERY) waits for the owner by design and needs task.mjs signoff and task.mjs archsignoff before its gate passes. Later phases are added by the planner at the end of P0 (task.mjs phase-add) from the game's real state.",
-  "updated": "2026-11-14T13:39:22.751Z",
+  "updated": "2026-11-14T13:51:01.499Z",
   "phases": [
     {
       "id": "P0",
@@ -5097,12 +5097,15 @@
       "agent": "builder",
       "priority": 1,
       "kind": "bug",
-      "status": "doing",
+      "status": "done",
       "attempts": 1,
       "notes": [],
       "created": "2026-11-14T11:40:16.568Z",
       "model": "sonnet",
-      "started": "2026-11-14T13:23:12.035Z"
+      "started": "2026-11-14T13:23:12.035Z",
+      "done": "2026-11-14T13:51:01.270Z",
+      "summary": "Every harness Godot launch parks its window off all displays (position, borderless park in debug_server, app hider), HARNESS_SHOW_WINDOW=1 shows it; checked with a window list probe through a whole launch. Off-screen perf reads pessimistic (occluded window), so absolute budgets are judged with a visible window at phase gates (decisions.md). Self-checked: 309 harness tests, typecheck.",
+      "commit": "64c564f"
     },
     {
       "id": "P2-066",

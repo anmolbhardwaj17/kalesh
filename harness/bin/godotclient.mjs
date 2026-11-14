@@ -12,7 +12,7 @@ import net from 'node:net';
 import path from 'node:path';
 import { spawn } from 'node:child_process';
 import { fileURLToPath } from 'node:url';
-import { resolveGodot, godotConfig, stripAnsi, startFocusGuard } from './godot.mjs';
+import { resolveGodot, godotConfig, stripAnsi, startFocusGuard, windowArgs, windowEnv, startWindowHider } from './godot.mjs';
 
 const ROOT = process.env.HARNESS_ROOT
   ? path.resolve(process.env.HARNESS_ROOT)
@@ -162,11 +162,14 @@ export class GodotDebugClient {
 
 /** The engine and user args for a game run. Engine args go before `--`, game args after it. */
 export function gameArgs({ project, exported = false, debug = true, verify = true, port, quitAfter = 7200, resolution = '1280x720',
-  headless = false, extra = [], engineExtra = [] } = {}) {
+  headless = false, extra = [], engineExtra = [], env = process.env } = {}) {
   // An exported app (HARNESS_EXPORTED_APP) carries its own project: no --path.
   const engine = [...(exported ? [] : ['--path', project]), '--quit-after', String(quitAfter), ...engineExtra];
   if (headless) engine.unshift('--headless');
-  else if (resolution) engine.push('--resolution', resolution);
+  else {
+    if (resolution) engine.push('--resolution', resolution);
+    engine.push(...windowArgs(env, engineExtra));
+  }
   const user = [];
   if (debug) user.push('--debug');
   if (port) user.push(`--debug-port=${port}`);
@@ -191,7 +194,10 @@ export async function launchGame(opts = {}) {
   const project = path.join(ROOT, g.cfg.project);
   const port = opts.port || await freePort();
   const args = gameArgs({ ...opts, project, port, exported: !!exportedBin });
-  const proc = spawn(g.path, args, { cwd: ROOT, stdio: ['ignore', 'pipe', 'pipe'] });
+  const windowed = !opts.headless;
+  const proc = spawn(g.path, args, { cwd: ROOT, stdio: ['ignore', 'pipe', 'pipe'], env: windowed ? windowEnv() : process.env });
+  // A windowed run stays off the owner's screen (godot.mjs "Windowed runs stay off the owner's screen").
+  if (windowed) startWindowHider(proc);
   // A windowed run must not take keyboard focus from the terminal (macOS): see startFocusGuard in godot.mjs.
   if (!opts.headless && !opts.keepFocus) startFocusGuard(proc);
   const log = [];
