@@ -1,6 +1,6 @@
 {
   "_doc": "Written only by node harness/bin/task.mjs. Phases run in order; P0 (ADOPT + STYLE DISCOVERY) waits for the owner by design and needs task.mjs signoff and task.mjs archsignoff before its gate passes. Later phases are added by the planner at the end of P0 (task.mjs phase-add) from the game's real state.",
-  "updated": "2026-11-14T12:10:40.891Z",
+  "updated": "2026-11-14T12:14:04.652Z",
   "phases": [
     {
       "id": "P0",
@@ -5119,7 +5119,9 @@
       "kind": "mentor",
       "status": "todo",
       "attempts": 0,
-      "notes": [],
+      "notes": [
+        "Written by the content writer into the P2-048 working tree (232 parody names in 11 files, harness/design/areas/parody_names.md); one off-tone tagline replaced by the orchestrator. Ships and is marked done with the P2-048 PR."
+      ],
       "created": "2026-11-14T12:08:13.584Z",
       "model": "sonnet"
     }
