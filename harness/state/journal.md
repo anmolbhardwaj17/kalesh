@@ -566,3 +566,4 @@ One line per event, written by task.mjs (start, done, fail, phase changes, inbox
 - 2026-11-14 14:01 [P2-050] added: Dashboard: agents now line per builder and verifier; smaller sign-off
 - 2026-11-14 14:01 [P2-050] start (attempt 1): Dashboard: agents now line per builder and verifier; smaller sign-off
 - 2026-11-14 14:01 mentor message mmwg5cz8m handled: On it: P2-050 adds an 'Agents now' section under a smaller sign-off line on the overview page, one line per builder and verifier with its lane and job.
+- 2026-11-14 14:03 [P2-049] start (attempt 1): Refresh every area board with current photos and a what-it-is-made-of list
