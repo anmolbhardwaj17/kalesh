@@ -1,6 +1,6 @@
 {
   "_doc": "Written only by node harness/bin/task.mjs. Phases run in order; P0 (ADOPT + STYLE DISCOVERY) waits for the owner by design and needs task.mjs signoff and task.mjs archsignoff before its gate passes. Later phases are added by the planner at the end of P0 (task.mjs phase-add) from the game's real state.",
-  "updated": "2026-11-14T12:40:07.377Z",
+  "updated": "2026-11-14T13:06:24.619Z",
   "phases": [
     {
       "id": "P0",
@@ -4666,7 +4666,9 @@
       "kind": "feature",
       "status": "todo",
       "attempts": 0,
-      "notes": [],
+      "notes": [
+        "Owner 2026-11-14 dusk and night shot (city_buildings_busiest): the whole city goes flat blue-grey, windows are black holes, no lit windows, no street lamps on, sky ambient dominates. Dusk and night must read: warm lit windows varying per building, street lamps on with pools (emissive plus near real lights), shop fronts glowing, sky ambient lowered so night is lit by the city, not tinted blue."
+      ],
       "created": "2026-11-14T08:58:18.634Z"
     },
     {
