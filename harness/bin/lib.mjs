@@ -20,6 +20,8 @@ export const PATHS = {
   inboxAcks: H('state', 'inbox_acks.jsonl'),
   // P2B-106: dashboard notices (push failures and similar), managed with harness/bin/notice.mjs.
   notices: H('state', 'notices.jsonl'),
+  // Agents now (P2-050): who is working, one line each, managed with harness/bin/agents.mjs. Live file, not committed.
+  agents: H('state', 'agents.json'),
   // Milestones: the playable end-to-end units of the game (levels, missions, stages, quests). Word and files in kit.config.json.
   milestoneStatus: H('state', 'milestones_status.json'),
   milestones: H('data', 'milestones.json'),
