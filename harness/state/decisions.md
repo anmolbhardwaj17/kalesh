@@ -504,3 +504,8 @@ By: orchestrator, from the mentor inbox.
 Decision: every reference photo carries its date (EXIF, the source page or visible clues) next to it in the area sheet or board list. Photos older than the place's current state are marked old and not used for surfaces, signs or colours. Before a build starts, the set is checked against what the task needs (street surface, signs, colours, the player's view); if it falls short, the search continues across other free sources, and if those still fall short a photo request goes to Anmol on the dashboard while work continues with the best dated set.
 Why: Anmol 2026-11-14: "we have to see how old they were ... Is that a correct image of what I want? Otherwise keep asking for more photos until you achieve what you are looking for."
 By: orchestrator, from the mentor inbox.
+
+## 2026-11-14: Perf numbers are read with the machine load
+Decision: every perf result (frame time, GPU cost) is reported with the machine load at the time (load average, and whether another lane, another project or a bake was running). A perf miss measured while the machine was busy is not a game failure on its own: it is rerun when the machine is quiet, or judged against a reference scene measured in the same run, before any task fails on it.
+Why: Anmol 2026-11-14: "keep in mind other things are also working so it not all a game issue, system is also heavy right now in terms of load." The P2-010 rerun (3.19 ms) ran while another project's perf capture was running.
+By: orchestrator, from the mentor inbox.
