@@ -1,6 +1,6 @@
 {
   "_doc": "Written only by node harness/bin/task.mjs. Phases run in order; P0 (ADOPT + STYLE DISCOVERY) waits for the owner by design and needs task.mjs signoff and task.mjs archsignoff before its gate passes. Later phases are added by the planner at the end of P0 (task.mjs phase-add) from the game's real state.",
-  "updated": "2026-11-14T08:09:17.323Z",
+  "updated": "2026-11-14T08:12:50.314Z",
   "phases": [
     {
       "id": "P0",
@@ -4502,6 +4502,24 @@
       ],
       "created": "2026-11-14T08:07:00.888Z",
       "model": "opus"
+    },
+    {
+      "id": "P2-049",
+      "phase": "P2",
+      "title": "Refresh every area board with current photos and a what-it-is-made-of list",
+      "desc": "Anmol 2026-11-14 (decisions.md 'Areas are built from how they look today'). The 11 area boards in harness/design/areas/ hold about 24 free-licence photos each, but many are old (Chandni Chowk main is from 2008, before the redevelopment) or low value (food, shop interiors). For each pilot area add current photos (2019 or later where they exist, free licences only, credited) at street level and from the player's height, and add to each sheet a short list of what the street is made of today: road surface and colour, kerbs, footpath, median, poles and wires, lights, trees, facade colours (sampled), signs, typical clutter. Mark facts that changed since the old photos. Area passes P2-020 to P2-024, P2-047 and P2-048 use these.",
+      "accept": [
+        "Changed facts (like Chandni Chowk's redevelopment) are marked in the sheet"
+      ],
+      "deps": [],
+      "agent": "builder",
+      "priority": 1,
+      "kind": "mentor",
+      "status": "todo",
+      "attempts": 0,
+      "notes": [],
+      "created": "2026-11-14T08:12:50.313Z",
+      "model": "sonnet"
     }
   ]
 }
