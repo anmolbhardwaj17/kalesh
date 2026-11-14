@@ -196,6 +196,13 @@ export interface MassingRecord {
   gateM: number;
 }
 
+/** What the parts kit builds instead (P2-007, kit.ts): the body and wall line of these landmarks, and these parts. */
+export interface KitSkip {
+  ids: ReadonlySet<string>;
+  parts: ReadonlySet<string>;
+}
+const NO_KIT: KitSkip = { ids: new Set(), parts: new Set() };
+
 export interface Massing {
   meshes: SourceMesh[];
   records: MassingRecord[];
@@ -206,7 +213,7 @@ export interface Massing {
  * The massing of every placed landmark, in block metres. `ground` is the solved ground (NaN under a road),
  * `fallback` the ground model.
  */
-export function buildMassing(placements: readonly Placement[], footprints: ReadonlyMap<string, PlaceFootprint>, ground: (x: number, z: number) => number, fallback: (x: number, z: number) => number): Massing {
+export function buildMassing(placements: readonly Placement[], footprints: ReadonlyMap<string, PlaceFootprint>, ground: (x: number, z: number) => number, fallback: (x: number, z: number) => number, kit: KitSkip = NO_KIT): Massing {
   const sets: Record<string, Tris> = { landmark: new Tris(), landmark_red: new Tris() };
   const records: MassingRecord[] = [];
   const at = (x: number, z: number): number => {
@@ -221,7 +228,8 @@ export function buildMassing(placements: readonly Placement[], footprints: Reado
     let parts = 0;
     let wallM = 0;
     let gateM = 0;
-    if (p.mode === 'structure' && p.pad) {
+    const byKit = kit.ids.has(p.id);
+    if (p.mode === 'structure' && p.pad && !byKit) {
       const lo = p.pad.level - SINK_M;
       for (const ring of p.body) {
         // the piers of a gate and the body of a block go down into the pad; what stands on them starts where they end
@@ -233,7 +241,7 @@ export function buildMassing(placements: readonly Placement[], footprints: Reado
     }
     for (const id of p.partIds) {
       const f = footprints.get(id);
-      if (!f) continue;
+      if (!f || kit.parts.has(id)) continue;
       let lo = Infinity;
       let hi = -Infinity;
       for (const q of f.ring) {
@@ -247,7 +255,7 @@ export function buildMassing(placements: readonly Placement[], footprints: Reado
       top = Math.max(top, hi + h);
       parts++;
     }
-    for (const w of p.walls) {
+    for (const w of byKit ? [] : p.walls) {
       const n = w.pts.length;
       for (let k = 0; k < (w.closed ? n : n - 1); k++) {
         const a = w.pts[k] as P2;

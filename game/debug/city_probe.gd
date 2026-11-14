@@ -6,6 +6,10 @@
 ##                            [{id, pos, bearing, distance, reachable, nav}], heroesAtFullDetail, plan: [{id, tier,
 ##                            level, distance}]}: the LOD slot each landmark shows from `at` (the camera when left
 ##                            out), nearest first; level -1 is the far silhouette (game/world/landmark_slots.gd)
+##   kit {visible, at: [x, z]}  the parts kit landmarks (P2-007, game/world/systems/landmarks.gd): {ready, building,
+##                            shown, far, landmarks: [{id, tier, recipe, source kit|model, built, pos, registryHeightM,
+##                            heightM, heightPart, topM, heightErrPct, triangles per level, parts, colliders, ranges,
+##                            distance, level, worship, combatArena}]}; `visible` shows or hides them all first
 ##   geo {places: [{id, lat, lon}]}  where the game's projection puts each place: [{id, x, z}] (the world frame of the
 ##                            loaded tile index: offset + geo_to_world, game/geo/world_frame.gd)
 ##   screen {points: [[x, y, z]]}  where the current camera draws each world point: {size: [w, h], points: [{x, y,
@@ -69,6 +73,17 @@ func hook(a: Array) -> Dictionary:
 				"limits": city.index.landmark_limits, "placed": city.index.landmarks.size(), "silhouettes": city.index.silhouettes.size(), "far": far,
 				"heroesAtFullDetail": LandmarkSlots.heroes_at_full_detail(plan), "plan": plan.slice(0, int(o.get("limit", 24))),
 			}}
+		"kit":
+			# the parts kit landmarks (P2-007): built heights, triangles, levels; {visible: bool} shows or hides them all
+			if o.has("visible"):
+				city.landmarks.set_shown(bool(o.visible))
+			var eye2 := Vector3.ZERO
+			var cam2 := get_viewport().get_camera_3d()
+			if o.get("at") is Array and (o.at as Array).size() >= 2:
+				eye2 = Vector3(float(o.at[0]), 0.0, float(o.at[1]))
+			elif cam2 != null:
+				eye2 = cam2.global_position
+			return {"ok": true, "result": city.landmarks.report(eye2)}
 		"geo":
 			var out := []
 			for p: Variant in o.get("places", []):
@@ -85,7 +100,7 @@ func hook(a: Array) -> Dictionary:
 					return {"ok": false, "error": "city(surface, {points: [[x, z]]}): every point is [x, z] in world metres"}
 				var x := float(q[0])
 				var z := float(q[1])
-				var ray: Dictionary = city.ground_at(x, z)
+				var ray: Dictionary = city.ground_at(x, z, NAN, true)
 				var top: Dictionary = ds.top(x, z)
 				var drawn := not top.is_empty()
 				res.append({
@@ -105,7 +120,7 @@ func hook(a: Array) -> Dictionary:
 			var out := _w.duplicate(true)
 			out["readMs"] = _ds.read_ms if _ds != null else 0.0
 			return {"ok": true, "result": out}
-	return {"ok": false, "error": "city(cmd, opts): unknown cmd '%s' (pins, geo, screen, mirror, surface, watch)" % cmd}
+	return {"ok": false, "error": "city(cmd, opts): unknown cmd '%s' (pins, landmarks, kit, geo, screen, mirror, surface, watch)" % cmd}
 
 
 func _surface(city: Node) -> RefCounted:

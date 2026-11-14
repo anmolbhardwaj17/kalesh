@@ -4,14 +4,18 @@
 //   images: resized to the request's target size (sharp), alpha kept when the request needs it, encoded WebP.
 //           Without sharp installed the file is copied as is (a warning goes in the log).
 //   audio:  loudness-normalised MP3 with ffmpeg when it is on the PATH, else copied.
-//   models: .glb copied; a file that is not glTF binary is rejected with a plain message on the card.
+//   models: .glb copied; a file that is not glTF binary is rejected with a plain message on the card. A hero landmark
+//           model (id model_lm_<registry id>) must also pass the hero rule (glbcheck.mjs heroRule: at most 8 parts of
+//           25,000 triangles, 6 materials, 3 levels a part, one far silhouette under 2,000 triangles) or it is
+//           rejected with every reason; once in the manifest it replaces the parts kit stand-in by id (P2-007).
 // Processed originals move to assets_inbox/_processed/, files with no matching request to _unmatched/, bad ones to _rejected/.
 // Usage: node harness/bin/ingest.mjs [--id <id>]
 // (The original harness's ingest also built normal and roughness maps and decimated rigged models; add such steps here per game.)
 import fs from 'node:fs';
 import path from 'node:path';
 import { execFileSync } from 'node:child_process';
-import { PATHS, readJSON, writeJSON, nowISO, parseArgs, withLock } from './lib.mjs';
+import { H, PATHS, readJSON, writeJSON, nowISO, parseArgs, withLock } from './lib.mjs';
+import { heroRule, isHeroModelId, parseGlb } from './glbcheck.mjs';
 
 const args = parseArgs(process.argv.slice(2));
 const IMG = new Set(['png', 'jpg', 'jpeg', 'webp']);
@@ -65,10 +69,17 @@ function processAudio(file, req, type) {
 function processModel(file, req) {
   const buf = fs.readFileSync(file);
   if (buf.length < 12 || buf.toString('latin1', 0, 4) !== 'glTF') throw new Error('this is not a binary glTF (.glb) file');
+  let hero = '';
+  if (isHeroModelId(req.id)) {
+    const limits = readJSON(H('verify', 'perf_budgets.json'), { world: { landmarks: {} } }).world?.landmarks ?? {};
+    const r = heroRule(parseGlb(buf).json, limits);
+    if (!r.ok) throw new Error(`the hero rule: ${r.reasons.join('; ')}`);
+    hero = `, hero rule ok: ${Object.keys(r.parts).length} parts, far ${r.far} triangles, ${r.materials} materials`;
+  }
   const out = path.join(PATHS.publicAssets, req.target?.out || `models/${req.id}.glb`);
   fs.mkdirSync(path.dirname(out), { recursive: true });
   fs.copyFileSync(file, out);
-  return { entry: { path: `assets/${path.relative(PATHS.publicAssets, out).replace(/\\/g, '/')}`, bytes: buf.length, kind: 'model', ingestedAt: nowISO() }, note: ` ${Math.round(buf.length / 1024)} KB` };
+  return { entry: { path: `assets/${path.relative(PATHS.publicAssets, out).replace(/\\/g, '/')}`, bytes: buf.length, kind: 'model', ingestedAt: nowISO() }, note: ` ${Math.round(buf.length / 1024)} KB${hero}` };
 }
 
 async function main() {
