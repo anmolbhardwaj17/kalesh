@@ -601,3 +601,4 @@ One line per event, written by task.mjs (start, done, fail, phase changes, inbox
 - 2026-11-14 15:44 [P2-063] added: Use the owner's three lead models in game: retarget, LODs, stylised B look
 - 2026-11-14 15:44 mentor message mmwg91dx6 handled: All three converted fine (65 bones, about 50k triangles each). P2-063 puts them in the game now: retargeted to our animations, lighter versions for play, our look, checked in shots.
 - 2026-11-14 15:44 [P2-063] start (attempt 1): Use the owner's three lead models in game: retarget, LODs, stylised B look
+- 2026-11-14 15:55 mentor message mmwg9fjb8 handled: Seen: the lights are short angled bars floating under the ceiling. Sent to the tunnel builder: continuous LED strips along the ceiling edges as in your photos, proper glow, plus the murals, with a shot from the same spot.
