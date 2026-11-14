@@ -166,11 +166,12 @@
       "batch": null,
       "created": "2026-11-14T12:12:01.340Z",
       "review": {
-        "at": "2026-11-14T13:00:27.661Z",
-        "verdict": "redo",
-        "note": "2026-11-14 T-pose sheet: face, uniform and arms are right and the face is strong (keep it), but her thighs and knees touch, the same thing that fused the trousers in the first 3D model. Redo with a wider stance and visible background between the legs.",
+        "at": "2026-11-14T13:02:26.364Z",
+        "verdict": "ok",
+        "note": "Approved 2026-11-14 (T-pose front): clean T-pose, clear background between the legs up to the crotch (an earlier squashed crop of mine wrongly showed them touching), strong composed face with the eyebrow scar, tight bun, uniform, red thread and watch. Ready for image to 3D.",
         "ingestedAt": "2026-11-14T12:59:18.307Z",
-        "removed": false
+        "fit": "pending",
+        "fitNote": "Use for image to 3D."
       },
       "redo": {
         "at": "2026-11-14T13:00:27.661Z",
