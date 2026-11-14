@@ -1,6 +1,6 @@
 {
   "_doc": "Written only by node harness/bin/task.mjs. Phases run in order; P0 (ADOPT + STYLE DISCOVERY) waits for the owner by design and needs task.mjs signoff and task.mjs archsignoff before its gate passes. Later phases are added by the planner at the end of P0 (task.mjs phase-add) from the game's real state.",
-  "updated": "2026-11-14T05:53:19.015Z",
+  "updated": "2026-11-14T06:30:39.512Z",
   "phases": [
     {
       "id": "P0",
@@ -4011,13 +4011,17 @@
       "agent": "builder",
       "priority": 1,
       "kind": "mentor",
-      "status": "doing",
+      "status": "done",
       "attempts": 1,
       "notes": [
-        "From P2-033: variants and the pilot map are in harness/design/reference/infrastructure/ (31 variants, variant_map.json). Many dimensions are [E] estimates: check them against street-level imagery or drawings before a kit is final (the 6-item list at the end of variant_map.md). No CC photo was found for the ITO skywalk, the ITO/Vikas Marg Yamuna bridge or the Delhi Junction facade."
+        "From P2-033: variants and the pilot map are in harness/design/reference/infrastructure/ (31 variants, variant_map.json). Many dimensions are [E] estimates: check them against street-level imagery or drawings before a kit is final (the 6-item list at the end of variant_map.md). No CC photo was found for the ITO skywalk, the ITO/Vikas Marg Yamuna bridge or the Delhi Junction facade.",
+        "Verifier PASS on 04a557b. Flake noted: city_path_ito_flyover_60 and _140 hitch check failed once under load 10-12 of 12 cores, passed alone (p95 7.6 and 2.3 ms). Watch at the P2 gate. Polish: far Signature Bridge and Red Fort float on the horizon past the far plane; FOB-B4 and BRI-MIN close shots blocked by boxes; distant wires alias; RAIL-BG ballast flatter than the reference."
       ],
       "created": "2026-11-13T11:53:07.495Z",
-      "started": "2026-11-14T04:13:30.659Z"
+      "started": "2026-11-14T04:13:30.659Z",
+      "done": "2026-11-14T06:30:39.495Z",
+      "summary": "PR 65. Every flyover, bridge, metro viaduct, rail stretch, platform and foot bridge built from its variant kit (19 variants, INFRA-01 ok). Verifier PASS (side by sides, wide shots, city paths, quick). Merged main (P2-009) and rebaked: 1b5c45554efb21, 66 invariants ok, 1083 tests, Godot 139, city paths 12/12, quick 17/17. Polish and one load flake in notes.",
+      "commit": "4a38588"
     },
     {
       "id": "P2-035",
