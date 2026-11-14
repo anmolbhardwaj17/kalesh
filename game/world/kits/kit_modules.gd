@@ -139,6 +139,7 @@ static func _chhajja(m: M, y: float, depth: float) -> void:
 
 static func _grille(m: M, r: Rect2, z: float, step := 0.17) -> void:
 	m.paint(M.IRON, M.ACCENT, WHITE)
+	m.fine = true
 	var x := r.position.x + step * 0.5
 	while x < r.end.x:
 		m.front(x - 0.012, r.position.y, x + 0.012, r.end.y, z)
@@ -146,6 +147,7 @@ static func _grille(m: M, r: Rect2, z: float, step := 0.17) -> void:
 	for f in [0.08, 0.5, 0.92]:
 		var y: float = r.position.y + r.size.y * f
 		m.front(r.position.x, y - 0.015, r.end.x, y + 0.015, z + 0.005)
+	m.fine = false
 
 
 ## Front-only bars of a railing (module_mesh.gd railing).
@@ -158,6 +160,7 @@ static func _side_railing(m: M, x: float, z0: float, z1: float, y: float, h: flo
 	m.paint(M.IRON, M.ACCENT, WHITE)
 	m.bar(Vector3(x, y + h, z0), Vector3(x, y + h, z1), 0.04)
 	var z := z0 + 0.12
+	m.fine = true
 	while z < z1:
 		var a := Vector3(x, y, z - 0.01)
 		var b := Vector3(x, y, z + 0.01)
@@ -166,13 +169,16 @@ static func _side_railing(m: M, x: float, z0: float, z1: float, y: float, h: flo
 		else:
 			m.quad(b, a, a + Vector3(0, h, 0), b + Vector3(0, h, 0))
 		z += 0.16
+	m.fine = false
 
 
 static func _opening(m: M, r: Rect2, depth: float, inner_code: int, inner_mode: int, inner: Color, atlas := Rect2()) -> void:
 	m.paint(M.RENDER, M.WALL, Color(0.9, 0.9, 0.9))
 	m.reveal(r, depth)
 	m.paint(inner_code, inner_mode, inner)
+	m.face = true
 	m.front(r.position.x, r.position.y, r.end.x, r.end.y, M.SKIN + 0.004, atlas)
+	m.face = false
 
 
 ## Columns as eight-sided shafts with a base block and a capital.
@@ -302,9 +308,11 @@ static func _gate(m: M, _o: Dictionary) -> void:
 	m.box(Vector3(-1.15, 2.18, 0.12), Vector3(1.15, 2.25, 0.2), false, true)
 	m.box(Vector3(-1.15, 1.1, 0.12), Vector3(1.15, 1.16, 0.2), false, true)
 	var x := -1.0
+	m.fine = true
 	while x < 1.05:
 		m.front(x - 0.015, 0.05, x + 0.015, 2.2, 0.2)
 		x += 0.13
+	m.fine = false
 	m.paint(M.RENDER, M.WALL, Color(0.85, 0.85, 0.85))
 	m.box(Vector3(-1.5, 0.0, 0.0), Vector3(-1.15, 2.6, 0.3), false, false)
 	m.box(Vector3(1.15, 0.0, 0.0), Vector3(1.5, 2.6, 0.3), false, false)
@@ -433,9 +441,11 @@ static func _balcony(m: M, o: Dictionary) -> void:
 			# a full-height grille cage (lodges and flats keep pigeons and thieves out)
 			m.paint(M.IRON, M.ACCENT, WHITE)
 			var x := -1.4
+			m.fine = true
 			while x < 1.45:
 				m.front(x - 0.01, 1.07, x + 0.01, 2.7, d - 0.02)
 				x += 0.15
+			m.fine = false
 			m.bar(Vector3(-1.45, 2.7, d - 0.02), Vector3(1.45, 2.7, d - 0.02), 0.04)
 	_chhajja(m, 2.75, d + 0.1)
 

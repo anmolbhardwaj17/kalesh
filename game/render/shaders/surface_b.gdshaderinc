@@ -33,13 +33,12 @@ uniform vec3 kit_accents[8];
 uniform int kit_accent_count = 1;
 uniform bool kit_shell = false;
 uniform vec3 kit_shell_colour = vec3(0.78, 0.7, 0.58);
-varying float wear;
-varying vec3 k_tint;
-varying float k_code;
-varying float k_mode;
+// few and flat varyings (P2-010 perf: the module vertex stream is the main cost of the city): the wall colour and
+// wear in one, the part code, colour mode and the two bay hashes in another; the world position and normal are
+// rebuilt in fragment() from VERTEX and NORMAL
+varying flat vec4 k_a;
+varying flat vec4 k_b;
 varying vec2 k_uv;
-varying float k_var;
-varying float k_var2;
 #endif
 
 const int L_PLASTER = 0;
@@ -55,8 +54,10 @@ const vec3 KIT_PAVER = vec3(0.604, 0.553, 0.502);
 const vec3 KIT_GROUND_A = vec3(0.612, 0.561, 0.471);
 const vec3 KIT_GROUND_B = vec3(0.604, 0.541, 0.439);
 
+#ifndef KIT
 varying vec3 wpos;
 varying vec3 wnrm;
+#endif
 
 vec3 to_linear(vec3 c) {
 	return mix(c / 12.92, pow((c + 0.055) / 1.055, vec3(2.4)), step(vec3(0.04045), c));
@@ -68,6 +69,20 @@ float hash12(vec2 p) {
 	return fract((p3.x + p3.y) * p3.z);
 }
 
+#ifdef KIT
+// the kit shader reads its noise from a baked tiling square (tools/kits/make_noise.mjs: 64 noise cells; grey a 4 octave
+// fbm with the same amplitudes, alpha one octave of value noise): one fetch instead of 16 or 4 hashes; the grime layer
+// calls fbm five times and value noise four times a wall pixel (P2-010 perf)
+uniform sampler2D kit_noise : filter_linear_mipmap, repeat_enable;
+
+float vnoise(vec2 p) {
+	return texture(kit_noise, p * (1.0 / 64.0)).a;
+}
+
+float fbm(vec2 p) {
+	return texture(kit_noise, p * (1.0 / 64.0)).r;
+}
+#else
 float vnoise(vec2 p) {
 	vec2 i = floor(p);
 	vec2 f = fract(p);
@@ -86,6 +101,7 @@ float fbm(vec2 p) {
 	}
 	return s;
 }
+#endif
 
 float luma(vec3 c) {
 	return dot(c, vec3(0.2126, 0.7152, 0.0722));
@@ -110,32 +126,38 @@ vec4 fine(vec4 t, vec2 tuv, float tile, int l) {
 }
 
 void vertex() {
+#ifndef KIT
 	wpos = (MODEL_MATRIX * vec4(VERTEX, 1.0)).xyz;
 	wnrm = normalize((MODEL_MATRIX * vec4(NORMAL, 0.0)).xyz);
-#ifdef KIT
+#else
 	k_uv = UV;
 	if (kit_shell) {
 		float t = UV2.x;
-		k_tint = t > 0.5 ? vec3(floor(t / 65536.0), mod(floor(t / 256.0), 256.0), mod(t, 256.0)) / 255.0 : kit_shell_colour;
-		wear = UV2.y;
-		k_code = 0.0;
-		k_mode = 1.0;
-		k_var = 0.0;
-		k_var2 = 0.0;
+		vec3 tint = t > 0.5 ? vec3(floor(t / 65536.0), mod(floor(t / 256.0), 256.0), mod(t, 256.0)) / 255.0 : kit_shell_colour;
+		k_a = vec4(tint, UV2.y);
+		k_b = vec4(0.0, 1.0, 0.0, 0.0);
 	} else {
-		k_tint = INSTANCE_CUSTOM.rgb;
-		wear = INSTANCE_CUSTOM.a;
-		k_code = UV2.x;
-		k_mode = UV2.y;
 		// one draw per bay (the instance's origin): accent colour and sign board cell
 		vec3 o = MODEL_MATRIX[3].xyz;
-		k_var = hash12(floor(o.xz * 4.0) * 0.37 + vec2(0.5));
-		k_var2 = hash12(floor(o.xz * 4.0) * 0.23 + vec2(floor(o.y * 2.0) * 1.7, 3.1));
+		float v1 = hash12(floor(o.xz * 4.0) * 0.37 + vec2(0.5));
+		float v2 = hash12(floor(o.xz * 4.0) * 0.23 + vec2(floor(o.y * 2.0) * 1.7, 3.1));
+		k_a = INSTANCE_CUSTOM;
+		k_b = vec4(UV2.x, UV2.y, v1, v2);
 	}
 #endif
 }
 
 void fragment() {
+#ifdef KIT
+	vec3 wpos = (INV_VIEW_MATRIX * vec4(VERTEX, 1.0)).xyz;
+	vec3 wnrm = normalize((INV_VIEW_MATRIX * vec4(NORMAL, 0.0)).xyz);
+	vec3 k_tint = k_a.rgb;
+	float wear = k_a.a;
+	float k_code = k_b.x;
+	float k_mode = k_b.y;
+	float k_var = k_b.z;
+	float k_var2 = k_b.w;
+#endif
 	vec3 srgb = COLOR.rgb;
 	int sk = surface_kind;
 	float metal = 0.0;
@@ -513,5 +535,8 @@ void fragment() {
 	METALLIC = sk == 3 ? 0.35 : 0.0;
 #endif
 	SPECULAR = pbr > 0.0 ? 0.5 : 0.4;
+#ifndef KIT
+	// (no kit sets a backlight: leaving it out keeps the backlight term out of the kit's light loop)
 	BACKLIGHT = backlight_tint * col;
+#endif
 }

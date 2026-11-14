@@ -174,10 +174,11 @@ func attach(tile: Dictionary, part: Variant) -> bool:
 	for gi in range(int(part.at), end):
 		var g: Dictionary = groups[gi]
 		var mmi := MultiMeshInstance3D.new()
-		mmi.name = "%s_%s_m%d" % [id, tile.id, gi]
+		var small: bool = g.small
+		# modules buildings_<tile>_m<n>, small pieces buildings_<tile>_p<n> (stream layers can hide either alone)
+		mmi.name = "%s_%s_%s%d" % [id, tile.id, "p" if small else "m", gi]
 		mmi.multimesh = g.mm
 		mmi.position = tile.origin
-		var small: bool = g.small
 		mmi.visibility_range_end = PIECE_RANGE_M if small else MODULE_RANGE_M
 		mmi.visibility_range_end_margin = 20.0
 		mmi.visibility_range_fade_mode = GeometryInstance3D.VISIBILITY_RANGE_FADE_SELF

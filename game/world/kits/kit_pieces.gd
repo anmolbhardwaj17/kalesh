@@ -19,7 +19,9 @@ static func _board(m: M, kit: String) -> void:
 	m.paint(M.IRON, M.OWN, Color(0.2, 0.2, 0.2))
 	m.box(Vector3(-1.38, y0 - 0.03, z - 0.08), Vector3(1.38, y1 + 0.03, z), true, true)
 	m.paint(M.BOARD, M.OWN, WHITE)
+	m.face = true
 	m.front(-1.34, y0, 1.34, y1, z + 0.004, Rect2(0, 0, 1, 1))
+	m.face = false
 
 
 static func _stair(m: M, _o: Dictionary) -> void:
@@ -83,9 +85,11 @@ static func _rail(m: M, _o: Dictionary) -> void:
 	m.bar(Vector3(-1.5, M.PARAPET_H + 0.95, 0.1), Vector3(1.5, M.PARAPET_H + 0.95, 0.1), 0.035)
 	m.bar(Vector3(-1.5, M.PARAPET_H + 0.5, 0.1), Vector3(1.5, M.PARAPET_H + 0.5, 0.1), 0.025)
 	var x := -1.35
+	m.fine = true
 	while x < 1.4:
 		m.front(x - 0.008, M.PARAPET_H, x + 0.008, M.PARAPET_H + 0.95, 0.12)
 		x += 0.15
+	m.fine = false
 
 
 static func _ac(m: M, _o: Dictionary) -> void:

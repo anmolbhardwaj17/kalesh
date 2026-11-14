@@ -54,6 +54,7 @@ func material(kit: String) -> ShaderMaterial:
 	s.resource_name = "kit_%s" % kit
 	s.set_shader_parameter("kit_tiles", load(TEX_DIR + kit + "_tiles.png"))
 	s.set_shader_parameter("kit_atlas", load(TEX_DIR + kit + "_atlas.png"))
+	s.set_shader_parameter("kit_noise", load(TEX_DIR + "kit_noise.png"))
 	var acc := PackedVector3Array()
 	for h: String in k.accent:
 		var c := Color.html(h)

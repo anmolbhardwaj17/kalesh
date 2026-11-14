@@ -30,6 +30,15 @@ const OWN := 0
 const WALL := 1
 const ACCENT := 2
 const ACCENT2 := 3
+## detail levels of a quad (P2-010 perf, mesh LOD index buffers): FINE quads (balusters, grille, cage and gate bars,
+## rails, reveals) draw in LOD 0 only; RELIEF (slabs, sills, ledges, awnings, boxes) in LODs 0 and 1; FACE (the wall
+## skin, openings, boards) in every LOD. A MultiMesh picks its LOD by the distance of its cell (Godot mesh LOD).
+const FACE := 0
+const RELIEF := 1
+const FINE := 2
+## LOD switch distances in metres at a 1280 px wide view (FOV 70): LOD 1 past LOD1_M, LOD 2 past LOD2_M
+const LOD1_M := 80.0
+const LOD2_M := 150.0
 
 var v := PackedVector3Array()
 var n := PackedVector3Array()
@@ -42,6 +51,11 @@ var triangles := 0
 var code := RENDER
 var mode := WALL
 var col := Color(1, 1, 1)
+## true while fine detail is drawn (FINE); `face` true while flat wall faces are drawn (FACE); otherwise RELIEF
+var fine := false
+var face := false
+## the detail level of each quad, in order
+var levels := PackedByteArray()
 
 
 func paint(part_code: int, colour_mode: int, colour := Color(1, 1, 1)) -> void:
@@ -65,6 +79,7 @@ func quad(a: Vector3, b: Vector3, cc: Vector3, d: Vector3, uvs: PackedVector2Arr
 	else:
 		uv.append_array([Vector2.ZERO, Vector2.ZERO, Vector2.ZERO, Vector2.ZERO])
 	var p := Vector2(code, mode)
+	levels.append(FINE if fine else (FACE if face else RELIEF))
 	uv2.append_array([p, p, p, p])
 	idx.append_array([base, base + 2, base + 1, base, base + 3, base + 2])
 	triangles += 2
@@ -98,7 +113,10 @@ func box(lo: Vector3, hi: Vector3, back := false, bottom := true) -> void:
 ## A thin bar from a to b (points in the frame), square section `t`; for railings, grilles and posts.
 func bar(a: Vector3, b: Vector3, t: float) -> void:
 	var h := t * 0.5
+	var was := fine
+	fine = true
 	box(Vector3(minf(a.x, b.x) - h, minf(a.y, b.y) - h, minf(a.z, b.z) - h), Vector3(maxf(a.x, b.x) + h, maxf(a.y, b.y) + h, maxf(a.z, b.z) + h), false, true)
+	fine = was
 
 
 ## A sloped flat strip (stair flight, awning): four corners, both sides drawn.
@@ -113,6 +131,8 @@ func both(a: Vector3, b: Vector3, cc: Vector3, d: Vector3, uvs := PackedVector2A
 ## The wall skin of a bay from y0 to y1 with rectangular openings (x0, y0, x1, y1 each), at z SKIN.
 func skin(y0: float, y1: float, holes: Array, x0 := -MODULE_W * 0.5, x1 := MODULE_W * 0.5) -> void:
 	# split into horizontal bands at every hole edge, then fill each band between the holes it crosses
+	var was := face
+	face = true
 	var ys := [y0, y1]
 	for h: Rect2 in holes:
 		ys.append(clampf(h.position.y, y0, y1))
@@ -136,6 +156,7 @@ func skin(y0: float, y1: float, holes: Array, x0 := -MODULE_W * 0.5, x1 := MODUL
 			x = maxf(x, s[1])
 		if x < x1 - 1e-4:
 			front(x, a, x1, b, SKIN)
+	face = was
 
 
 ## Front-only bars of a painted iron railing from x0 to x1 at depth z, height h above y; posts every `step`.
@@ -144,13 +165,17 @@ func railing(x0: float, x1: float, y: float, h: float, z: float, step := 0.16) -
 	bar(Vector3(x0, y + h, z), Vector3(x1, y + h, z), 0.04)
 	front(x0, y + 0.1, x1, y + 0.13, z)
 	var x := x0 + step * 0.5
+	fine = true
 	while x < x1:
 		front(x - 0.01, y, x + 0.01, y + h, z)
 		x += step
+	fine = false
 
 
 ## The four reveal sides of an opening (depth d into the wall is not possible: the reveal stands out from the skin).
 func reveal(r: Rect2, d: float, z := SKIN) -> void:
+	var was := fine
+	fine = true
 	var x0 := r.position.x
 	var x1 := r.end.x
 	var y0 := r.position.y
@@ -159,6 +184,7 @@ func reveal(r: Rect2, d: float, z := SKIN) -> void:
 	quad(Vector3(x1, y0, z + d), Vector3(x1, y1, z + d), Vector3(x1, y1, z), Vector3(x1, y0, z)) # right side faces -x
 	quad(Vector3(x0, y1, z), Vector3(x1, y1, z), Vector3(x1, y1, z + d), Vector3(x0, y1, z + d)) # head faces -y
 	quad(Vector3(x0, y0, z + d), Vector3(x1, y0, z + d), Vector3(x1, y0, z), Vector3(x0, y0, z)) # sill faces +y
+	fine = was
 
 
 ## The arrays of one surface (ARRAY_MAX long), or an empty array when nothing was drawn.
@@ -180,5 +206,26 @@ func mesh() -> ArrayMesh:
 	var m := ArrayMesh.new()
 	var a := arrays()
 	if not a.is_empty():
-		m.add_surface_from_arrays(Mesh.PRIMITIVE_TRIANGLES, a)
+		m.add_surface_from_arrays(Mesh.PRIMITIVE_TRIANGLES, a, [], lods())
 	return m
+
+
+## The LOD index buffers {edge length: indices}: LOD 1 leaves out the FINE quads, LOD 2 keeps the FACE quads only; a
+## level that drops nothing is left out. Godot draws LOD i once edge * view width / (distance * 2 tan(hfov / 2)) is
+## under the mesh LOD threshold (1 px), so the key for a switch at d metres is d * 2 tan(hfov / 2) / 1280.
+func lods() -> Dictionary:
+	var out := {}
+	var k := 2.0 * tan(deg_to_rad(35.0)) * (16.0 / 9.0) / 1280.0
+	var last := idx.size()
+	for lv: Array in [[LOD1_M, RELIEF], [LOD2_M, FACE]]:
+		var keep := PackedInt32Array()
+		for q in levels.size():
+			if levels[q] <= int(lv[1]):
+				keep.append_array(idx.slice(q * 6, q * 6 + 6))
+		if keep.is_empty():
+			# nothing left (a rail is bars only): one triangle with no area
+			keep = PackedInt32Array([0, 0, 0])
+		if keep.size() < last:
+			out[float(lv[0]) * k] = keep
+			last = keep.size()
+	return out

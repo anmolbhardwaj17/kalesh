@@ -99,6 +99,30 @@ func _tile(path: String) -> Dictionary:
 	return TileReader.read(path)
 
 
+func test_module_lods_drop_fine_detail_first() -> void:
+	# P2-010 perf: the far LODs are subsets of the full mesh, each smaller than the last, and keep the wall face
+	const KM := preload("res://world/kits/kit_modules.gd")
+	var m := M.new()
+	KM._balcony(m, {"railing": true})
+	var l := m.lods()
+	var keys := l.keys()
+	t.ok(keys.size() == 2, "a railed balcony has two LODs (%d)" % keys.size())
+	var last := m.idx.size()
+	var prev_key := 0.0
+	for k: float in keys:
+		var ix: PackedInt32Array = l[k]
+		t.ok(k > prev_key and ix.size() < last and ix.size() % 3 == 0, "LOD %.3f: %d indices, fewer than %d" % [k, ix.size(), last])
+		var bad := 0
+		for i in ix:
+			if i < 0 or i >= m.v.size():
+				bad += 1
+		t.ok(bad == 0, "LOD %.3f: every index is a vertex of the mesh" % k)
+		prev_key = k
+		last = ix.size()
+	t.ok(m.levels.size() * 6 == m.idx.size(), "one detail level a quad")
+	t.ok(absf(float(keys[0]) * 1280.0 / (2.0 * tan(deg_to_rad(35.0)) * 16.0 / 9.0) - M.LOD1_M) < 0.01, "the first LOD switches at LOD1_M at a 1280 px view")
+
+
 func test_buildings_group_the_test_tiles_by_module_and_cell() -> void:
 	var lib := _lib()
 	for path: String in TEST_TILES:
