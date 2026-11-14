@@ -689,6 +689,52 @@
       "_note": "P2-041. Frame strips of the on-foot body, input only, in the course scene: a walk, a jog, a sprint, a start from standing, a stop from a jog and a plant-and-turn back, 12 frames each a few ticks apart, every frame taken from the play camera and from a side camera level with the hips while the sim is held. Checks that the start, stop and turn clips play. `node harness/bin/footstrip.mjs` runs it and lays the shots out under harness/reports/foot/ (strip_<move>.png and strips.png), which the verifier reads against VERIFY.md and the task's 'grounded, not bouncy' bar. Default look. Lockstep."
     },
     {
+      "name": "lead_sheet",
+      "lockstep": true,
+      "steps": [
+        {
+          "script": "harness/verify/scripts/lead_sheet.js",
+          "timeout": 420000
+        }
+      ],
+      "_note": "P2-063. Shot sheets of the three lead models (rig/lead_<id>.scn), input only, course scene, default look: per lead (the player dressed as that lead, foot('dress')) standing front, side, back and three quarter from 3 m (the play level of the mesh), a close-up of the head and chest from 0.95 m (the full mesh), the hands from 1.1 m, a walk and a jog from the play camera and from a side camera level with the hips, and for Bittu and Danny the seated Driving pose (stand-in for the auto seat and the scooter ride). Checks each body is drawn on its own model and plays the asked state. `node harness/bin/leadsheet.mjs` runs it and lays the shots out under harness/reports/leads/ (<id>.png), which the verifier reads against VERIFY.md and the model cards. Lockstep."
+    },
+    {
+      "name": "lead_anim",
+      "query": "style=none",
+      "headless": true,
+      "steps": [
+        {
+          "script": "harness/verify/scripts/lead_anim.js",
+          "timeout": 420000
+        }
+      ],
+      "_note": "P2-063. Each lead on its own model and its own locomotion clips (rig/loco_<id>.res, built on its skeleton), input only, course scene: per lead (foot('dress')) foot('anim') at walk, jog and sprint (play rate 0.9 to 1.15, planted foot slide and wander under 5 percent) and foot('feel', {test: 'pops'}) at a steady walk, jog and sprint (trunk bones at most 12 degrees a tick, limbs 42, the hips' step changes by at most 0.045 m and an ankle's by 0.17 m). Headless."
+    },
+    {
+      "name": "lead_compare",
+      "lockstep": true,
+      "steps": [
+        {
+          "script": "harness/verify/scripts/lead_compare.js",
+          "timeout": 600000
+        }
+      ],
+      "_note": "P2-063. Side by sides of the painted stand-in mannequin and each lead's own model in the same frame of idle, walk and jog (same staging and timing), from behind and from the side, input only, course scene, sim held. Shots cmp_<id>_<standin|model>_<move>_<back|side>, laid out by `node harness/bin/leadsheet.mjs --compare` as harness/reports/leads/compare_<id>.png. Lockstep."
+    },
+    {
+      "name": "lead_street",
+      "query": "spawn=chandni_chowk_east",
+      "lockstep": true,
+      "steps": [
+        {
+          "script": "harness/verify/scripts/lead_street.js",
+          "timeout": 240000
+        }
+      ],
+      "_note": "P2-063. The three lead models in a real street at player height (full pilot tiles, spawn pin chandni_chowk_east, default look): out of the auto with F, a few steps along Chandni Chowk, then each lead in turn (foot('dress')) from the on-foot play camera and from 2.2 m in front at eye height, sim held. Checks each is drawn on its own model. Shots lead_<id>_street_play and lead_<id>_street_close, laid out by harness/bin/leadsheet.mjs. Lockstep."
+    },
+    {
       "name": "city_landmark_pins",
       "query": "style=none",
       "steps": [
@@ -761,7 +807,7 @@
           "data": "harness/data/fixtures/city_routes.json"
         }
       ],
-      "_note": "P1-024 base test 2d: the auto drives Chandni Chowk main road (route chandni_main), F gets the player out and the player walks a gali (walk chandni_gali), real inputs: wheels and feet within 0.05 m of the drawn surface, never under it, never stuck; the streaming focus follows the walker. Shot city_chandni_gali_foot at the on-foot camera (default look)."
+      "_note": "P1-024 base test 2d: the auto drives Netaji Subhash Marg and the lane south of Chandni Chowk (route chandni_main; P2-045: the main road is car-free, the auto keeps off it), F gets the player out and the player walks up a two-wheeler gali onto Chandni Chowk main road (walk chandni_gali), real inputs: wheels and feet within 0.05 m of the drawn surface, never under it, never stuck; the streaming focus follows the walker. Shot city_chandni_gali_foot at the on-foot camera (default look)."
     },
     {
       "name": "city_access_bollards",
@@ -788,6 +834,44 @@
         }
       ],
       "_note": "P2-042: a scooter rides from a lane open to cars into a 3 m gali closed to cars (two-wheelers, cycles and walkers only, no barrier: a car there is a violation) to its far end; real inputs (route gali_scooter of city_routes.json). Shot city_access_scooter_gali."
+    },
+    {
+      "name": "city_access_violation",
+      "query": "spawn=gali_car_entry",
+      "lockstep": true,
+      "steps": [
+        {
+          "script": "harness/verify/scripts/city_access_violation.js",
+          "timeout": 180000,
+          "data": "harness/data/fixtures/city_routes.json"
+        }
+      ],
+      "_note": "P2-045: a car drives the scooter's way into the 3 m gali closed to cars, where no bollards stand (route gali_car, real inputs), 25 m in, and stops: exactly one access_violation event (piece, mode car, position at the entry, barrier false), none before the turn, state().world.access agrees. Shot city_access_violation."
+    },
+    {
+      "name": "city_access_traffic",
+      "query": "spawn=chandni_chowk_east",
+      "lockstep": true,
+      "steps": [
+        {
+          "script": "harness/verify/scripts/city_access_traffic.js",
+          "timeout": 240000
+        }
+      ],
+      "_note": "P2-045: the traffic stand-in (traffic('start'), 30 cars, autos and scooters within 260 m of Netaji Subhash Marg at the Red Fort end of Chandni Chowk) runs 45 s of sim: no car or auto is ever on a piece closed to it (sampled every 3 s and the game's own audit of every agent tick), scooters ride two-wheeler galis, the agents move on. Shot city_access_traffic."
+    },
+    {
+      "name": "city_access_gps",
+      "query": "spawn=chandni_chowk_east",
+      "lockstep": true,
+      "steps": [
+        {
+          "script": "harness/verify/scripts/city_access_gps.js",
+          "timeout": 180000,
+          "data": "harness/data/fixtures/city_routes.json"
+        }
+      ],
+      "_note": "P2-045: the route line to a point on Chandni Chowk main road (car-free in the day): in the auto it keeps to pieces an auto may use and ends at the nearest point an auto reaches (routes.chandni_main_target); on foot (gps plan, then for real after F) it walks in; the walker's route comes within 1 s of getting out. Shots city_access_gps_auto (the ribbon) and city_access_gps_foot."
     },
     {
       "name": "city_north_up",
@@ -825,7 +909,7 @@
           "data": "harness/data/fixtures/city_routes.json"
         }
       ],
-      "_note": "P1-024 shot: the auto drives Kartavya Path east toward the India Gate hexagon (route rajpath, real inputs) and stops; India Gate is in the middle half of the play camera. Shot city_india_gate_hexagon (default look)."
+      "_note": "P1-024 shot: the auto drives the road from the south-west into the India Gate hexagon (route rajpath, real inputs; P2-045: Kartavya Path is closed to cars) and stops; India Gate is in the middle half of the play camera. Shot city_india_gate_hexagon (default look)."
     },
     {
       "name": "city_path_cp_radial_60",
@@ -1162,6 +1246,35 @@
       ],
       "_note": "P2-007. A 140 km/h approach to India Gate along Kartavya Path as a frame sequence (one frame every 150 ms, 5.83 m apart) through each level change (1,800, 900 and 350 m): shots pop_ig_<boundary>_<k>. Then node harness/bin/popcheck.mjs crops the arch from each frame, writes the sheets pop_ig_<boundary>_sheet.png and fails on a frame to frame change well over its neighbours (a pop). Not in quick.",
       "allOnly": true
+    },
+    {
+      "name": "city_buildings_busiest",
+      "query": "light=afternoon&spawn=chandni_chowk_east",
+      "solo": true,
+      "allOnly": true,
+      "steps": [
+        {
+          "script": "harness/verify/scripts/city_buildings_busiest.js",
+          "timeout": 420000
+        }
+      ],
+      "_note": "P2-010 perf. The generated buildings (shells and the area kit modules) in the busiest pilot views (Chandni Chowk from 40 m up and at street eye): GPU cost = the frame with the buildings shown minus hidden (stream layers), GPU ballast on (harness/bin/ballast.mjs method), median of 4 alternating pairs, budget perf_budgets.json world.gpuMs.generatedBuildings 2.0 ms; draw calls of the plain frame 2,500 at most (scenes.city warn). Shots city_buildings_busiest_<pose>. Not in quick."
+    },
+    {"name": "city_sign_shots", "query": "light=afternoon&spawn=chandni_chowk_east", "steps": [{"script": "harness/verify/scripts/city_kit_shots.js", "timeout": 420000, "params": {"views": [["signs_bazaar", 979.5, 222.9, -4317.7, 0.11, -0.99, 5, 8, 3], ["signs_gbroad", -26.5, 223.6, -3449.0, 0.1, -0.99, 5, 8, 3], ["signs_paharganj", -726.0, 225.1, -2704.8, 0.98, -0.18, 4.5, 7, 3], ["signs_janpath", -335.3, 215.1, -976.6, 1.0, -0.01, 5, 7, 3], ["signs_cp", -0.6, 217.1, -1630.4, -0.27, 0.96, 6, 8, 3], ["signs_gali", 87.8, 225.9, -4276.4, 1.0, 0.08, 1.5, 3, 10], ["signs_ito", 1694.4, 210.7, -1260.5, -1.0, 0.03, 7, 9, 4], ["signs_wear_gali", 87.8, 225.9, -4276.4, 1.0, 0.08, 2.6, 4, -4], ["signs_wear_gbroad", -26.5, 223.6, -3449.0, 0.1, -0.99, 4.5, 3, -3], ["signs_paharganj_street", -726.0, 225.1, -2704.8, 0.98, -0.18, 6, 9, -9]]}}], "_note": "P2-048 look. Shop front sign boards per pilot kit at street eye, close (signs_<area>.png): the verifier reads them beside harness/design/areas/signboards_board.jpg and signboards.md (kinds, scripts, wear by area, mounting); signs_wear_gali and signs_wear_gbroad are close views of worn boards (2.6 and 4.5 m), signs_paharganj_street the street from the middle of the road. Fails only when a view draws no kit module or a tile is bad."},
+    {"name": "city_sign_night", "query": "light=night&spawn=chandni_chowk_east", "steps": [{"script": "harness/verify/scripts/city_kit_shots.js", "timeout": 420000, "params": {"views": [["signs_bazaar_night", 979.5, 222.9, -4317.7, 0.11, -0.99, 5, 8, 3], ["signs_gbroad_night", -26.5, 223.6, -3449.0, 0.1, -0.99, 5, 8, 3], ["signs_paharganj_night", -726.0, 225.1, -2704.8, 0.98, -0.18, 4.5, 7, 3]]}}], "_note": "P2-048 night. The bazaar, GB Road and Paharganj shop fronts at night (signs_<area>_night.png): glow boxes and lamp lit boards emit and light the pavement under them (kit_night global, sign_pool.gdshader); painted boards stay dark."},
+    {"name": "city_shell_signs_cost", "query": "light=afternoon&spawn=chandni_chowk_east", "solo": true, "allOnly": true, "steps": [{"script": "harness/verify/scripts/city_buildings_busiest.js", "timeout": 420000, "params": {"layers": ["buildings"], "param": {"name": "shell_signs", "on": 1, "off": 0}, "budgetMs": 0.3}}], "_note": "P2-048 round 3 perf. The GPU cost of the signs the kit shader draws on shell walls (surface_b.gdshaderinc s_grp): the frame with shell_signs 1 on every building material minus the frame with 0, in the busiest Chandni Chowk views, same ballast method as city_buildings_busiest; 0.3 ms at most. Leaves the density at 1 in that session. Not in quick."},
+    {"name": "city_sign_led", "query": "light=night&spawn=chandni_chowk_east", "steps": [{"script": "harness/verify/scripts/city_sign_led.js", "timeout": 420000, "params": {"view": ["signs_led_seq", -726.0, 225.1, -2704.8, 0.98, -0.18, 2.6, 5, 2, 4.8], "lookUp": 3.3, "frames": 3, "gap": 0.2}}], "_note": "P2-048 fix round 3. Three frames 0.2 s of sim apart of the Paharganj fronts at night (signs_led_seq_0..2.png): the running borders of the lit vertical boards move between the frames, older boards have dark dead letters. Read by eye; fails only when no kit module is drawn."},
+    {"name": "city_signs_cost", "query": "light=night&spawn=chandni_chowk_east", "solo": true, "allOnly": true, "steps": [{"script": "harness/verify/scripts/city_buildings_busiest.js", "timeout": 420000, "params": {"layers": ["buildings_*_p*"], "budgetMs": 0.5}}], "_note": "P2-048 perf. The GPU cost of the kits' small pieces alone (sign boards, AC units, railings, tanks: stream layer buildings_*_p*) in the busiest Chandni Chowk views at night (glow boxes and pavement pools on), same ballast method as city_buildings_busiest; 0.5 ms at most. Not in quick."},
+    {
+      "name": "city_kit_shots",
+      "query": "light=afternoon&spawn=chandni_chowk_east",
+      "steps": [
+        {
+          "script": "harness/verify/scripts/city_kit_shots.js",
+          "timeout": 420000
+        }
+      ],
+      "_note": "P2-010 look. One street shot per area kit at player height (kit_colonnade, kit_bazaar, kit_gali, kit_hotel, kit_office, kit_lutyens, kit_market, kit_hardware), the grime pair kit_wear_bazaar and kit_wear_lutyens, and kit_railings_close; the verifier reads them against each area sheet board and the respect rule. Fails only when a view draws no kit module or a tile is bad."
     }
   ]
 }

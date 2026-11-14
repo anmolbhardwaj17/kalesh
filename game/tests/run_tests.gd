@@ -19,9 +19,11 @@ const SUITES := [
 	"res://tests/test_physics_bench.gd",
 	"res://tests/test_tiles.gd",
 	"res://tests/test_streaming.gd",
+	"res://tests/test_access_routes.gd",
 	"res://tests/test_landmarks.gd",
 	"res://tests/test_landmark_kit.gd",
 	"res://tests/test_infra_kit.gd",
+	"res://tests/test_area_kits.gd",
 	"res://tests/test_module_size.gd",
 	"res://tests/test_sim_clock.gd",
 	"res://tests/test_data_packs.gd",
@@ -47,7 +49,11 @@ func _run_all() -> void:
 		gargs.stop_style_runner()
 	var passed := 0
 	var failed := 0
+	# GODOT_TEST_ONLY=<part of a suite path> runs only the matching suites (a quick loop on one suite)
+	var only := OS.get_environment("GODOT_TEST_ONLY")
 	for path in SUITES:
+		if only != "" and not only in path:
+			continue
 		var script: GDScript = load(path)
 		if script == null or not script.can_instantiate():
 			failed += 1

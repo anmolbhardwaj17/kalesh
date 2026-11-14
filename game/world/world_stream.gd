@@ -25,6 +25,9 @@ const SpawnPins := preload("res://world/spawn_pins.gd")
 const LandmarkSlots := preload("res://world/landmark_slots.gd")
 const Landmarks := preload("res://world/systems/landmarks.gd")
 const Infra := preload("res://world/systems/infra.gd")
+const AccessWatch := preload("res://world/access_watch.gd")
+const Traffic := preload("res://ai/traffic.gd")
+const Gps := preload("res://ui/gps.gd")
 ## The kit landmarks within this distance of the start are built before the game says ready (no hero pops in).
 const LANDMARK_READY_M := 1800.0
 const TileReader := preload("res://world/streaming/tile_reader.gd")
@@ -49,6 +52,12 @@ var infra: RefCounted = null
 var buildings: RefCounted = null
 ## The parts kit landmarks and the far silhouettes (game/world/systems/landmarks.gd, P2-007).
 var landmarks: Node3D = null
+## Road access for the player's vehicle (game/world/access_watch.gd, P2-045): the access_violation events.
+var access: Node = null
+## The traffic stand-in (game/ai/traffic.gd, P2-045), off until the debug hook traffic('start').
+var traffic: Node3D = null
+## The route line (game/ui/gps.gd, P2-045), drawn while a target is set.
+var gps: Node3D = null
 var booted := false
 var load_ms := 0
 ## The start: {pin, name, lane, pos: [x, y, z], heading, offM} (pin "" when the old start near India Gate was used).
@@ -90,6 +99,19 @@ func setup(dir: String, build_landmarks := true) -> bool:
 	add_child(landmarks)
 	if infra != null and build_landmarks:
 		Infra.skyline(self, index.infra_skyline, landmarks.haze)
+	# P2-045: the systems that read the lane graph and its access modes
+	access = AccessWatch.new()
+	access.name = "Access"
+	access.setup(lanes, dir)
+	add_child(access)
+	traffic = Traffic.new()
+	traffic.name = "Traffic"
+	traffic.setup(lanes)
+	add_child(traffic)
+	gps = Gps.new()
+	gps.name = "Gps"
+	gps.setup(lanes)
+	add_child(gps)
 	return true
 
 
@@ -281,9 +303,12 @@ func info() -> Dictionary:
 	out["loadMs"] = load_ms
 	out["triangles"] = int(ground_roads.triangles) + int(buildings.triangles) + (int(infra.triangles) if infra != null else 0)
 	out["infra"] = infra.info() if infra != null else {"tiles": 0, "triangles": 0, "nodes": 0}
+	# the area kits (P2-010): live tiles, shell triangles, module instances and MultiMesh nodes
+	out["buildings"] = buildings.info()
 	out["colliderTriangles"] = int(colliders.triangles)
 	out["colliderChunks"] = int(colliders.chunks)
 	out["lanes"] = lanes.pieces.size()
+	out["access"] = access.info() if access != null else null
 	out["spawn"] = spawn
 	out["landmarks"] = {"placed": index.landmarks.size(), "far": index.far_landmarks.size(), "fullDetailCap": LandmarkSlots.cap(index.landmark_limits)}
 	out["landmarks"].merge(landmarks.info())

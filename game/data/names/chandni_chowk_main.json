@@ -535,6 +535,248 @@
     "deva": "रात वाली 106.1 सुनते रहो"
    },
    "weight": 1
+  },
+  {
+   "kind": "sweets",
+   "text": {
+    "latn": "Halwa Ramji Mithai",
+    "deva": "हलवा रामजी मिठाई"
+   },
+   "weight": 2,
+   "parody": true,
+   "board_style": "glow_box",
+   "tagline": "Taaza roz subah"
+  },
+  {
+   "kind": "sweets",
+   "text": {
+    "latn": "Ghanta Ghar Halwai",
+    "deva": "घंटा घर हलवाई"
+   },
+   "weight": 2,
+   "parody": true,
+   "board_style": "hand_painted",
+   "tagline": "Jalebi ka asli ghar"
+  },
+  {
+   "kind": "sweets",
+   "text": {
+    "latn": "Purani Mashhoor Imarti Wala",
+    "deva": "पुरानी मशहूर इमरती वाला"
+   },
+   "weight": 2,
+   "parody": true,
+   "board_style": "hand_painted",
+   "tagline": "Sau saal se garam"
+  },
+  {
+   "kind": "eatery",
+   "text": {
+    "latn": "Rangraj Dahi Vada Corner",
+    "deva": "रंगराज दही वड़ा कॉर्नर"
+   },
+   "weight": 2,
+   "parody": true,
+   "board_style": "enamel",
+   "tagline": "Thanda, meetha, pakka"
+  },
+  {
+   "kind": "sweets",
+   "text": {
+    "latn": "Chain Se Mithai Ghar",
+    "deva": "चैन से मिठाई घर"
+   },
+   "weight": 2,
+   "parody": true,
+   "board_style": "flex",
+   "tagline": "Khao aur chain se ghar jao"
+  },
+  {
+   "kind": "bridal",
+   "text": {
+    "latn": "Jhalar Bazaar Gota House",
+    "deva": "झालर बाज़ार गोटा हाउस"
+   },
+   "weight": 2,
+   "parody": true,
+   "board_style": "flex",
+   "tagline": "Shaadi ka poora saaz"
+  },
+  {
+   "kind": "jeweller",
+   "text": {
+    "latn": "Chandi Mahal Jewels",
+    "deva": "चांदी महल ज्वेल्स"
+   },
+   "weight": 2,
+   "parody": true,
+   "board_style": "glow_box",
+   "tagline": "Shuddhta ki guarantee"
+  },
+  {
+   "kind": "jeweller",
+   "text": {
+    "latn": "Dariba Sona Sansaar",
+    "deva": "दरीबा सोना संसार"
+   },
+   "weight": 2,
+   "parody": true,
+   "board_style": "glow_box",
+   "tagline": "Bharosa 24 carat"
+  },
+  {
+   "kind": "spice",
+   "text": {
+    "latn": "Dilli Dry Fruit Darbar",
+    "deva": "दिल्ली ड्राई फ्रूट दरबार"
+   },
+   "weight": 2,
+   "parody": true,
+   "board_style": "hand_painted",
+   "tagline": "Kaju badam, seedha khet se"
+  },
+  {
+   "kind": "spice",
+   "text": {
+    "latn": "Meva Mandi Mahal",
+    "deva": "मेवा मंडी महल"
+   },
+   "weight": 2,
+   "parody": true,
+   "board_style": "flex",
+   "tagline": "Pista se pista tak"
+  },
+  {
+   "kind": "spice",
+   "text": {
+    "latn": "Ghar Ka Garam Masala",
+    "deva": "घर का गरम मसाला"
+   },
+   "weight": 2,
+   "parody": true,
+   "board_style": "enamel",
+   "tagline": "Peesa hua, taaza hua"
+  },
+  {
+   "kind": "bridal",
+   "text": {
+    "latn": "Lehenga Lok",
+    "deva": "लहंगा लोक"
+   },
+   "weight": 2,
+   "parody": true,
+   "board_style": "flex",
+   "tagline": "Dulhan ka sapna"
+  },
+  {
+   "kind": "cloth",
+   "text": {
+    "latn": "Sherwani Sansaar",
+    "deva": "शेरवानी संसार"
+   },
+   "weight": 2,
+   "parody": true,
+   "board_style": "flex",
+   "tagline": "Baraat ki shaan"
+  },
+  {
+   "kind": "eatery",
+   "text": {
+    "latn": "Kababi Kothi Kamaal",
+    "deva": "कबाबी कोठी कमाल"
+   },
+   "weight": 2,
+   "parody": true,
+   "board_style": "glow_box",
+   "tagline": "Seekh ka sukoon"
+  },
+  {
+   "kind": "eatery",
+   "text": {
+    "latn": "Makhani Mahal Lassi Wala",
+    "deva": "मखनी महल लस्सी वाला"
+   },
+   "weight": 2,
+   "parody": true,
+   "board_style": "hand_painted",
+   "tagline": "Malai maar ke"
+  },
+  {
+   "kind": "eatery",
+   "text": {
+    "latn": "Makkhan Da Parantha Hut",
+    "deva": "मक्खन दा परांठा हट"
+   },
+   "weight": 2,
+   "parody": true,
+   "board_style": "glow_box",
+   "tagline": "Ghee ke saath"
+  },
+  {
+   "kind": "sweets",
+   "text": {
+    "latn": "Daulat Ki Dawat Corner",
+    "deva": "दौलत की दावत कॉर्नर"
+   },
+   "weight": 2,
+   "parody": true,
+   "board_style": "hand_painted",
+   "tagline": "Jhaag hi jhaag"
+  },
+  {
+   "kind": "sweets",
+   "text": {
+    "latn": "Kulfi Kingdom Kulhad",
+    "deva": "कुल्फ़ी किंगडम कुल्हड़"
+   },
+   "weight": 2,
+   "parody": true,
+   "board_style": "vertical",
+   "tagline": "Matke wali thandak"
+  },
+  {
+   "kind": "jeweller",
+   "text": {
+    "latn": "Chandi Wale Bhaiya",
+    "deva": "चांदी वाले भैया"
+   },
+   "weight": 2,
+   "parody": true,
+   "board_style": "enamel",
+   "tagline": "Pazeb, thali, tamasha"
+  },
+  {
+   "kind": "printing",
+   "text": {
+    "latn": "Dilli Daftar Stationery",
+    "deva": "दिल्ली दफ़्तर स्टेशनरी"
+   },
+   "weight": 2,
+   "parody": true,
+   "board_style": "enamel",
+   "tagline": "Register, rubber stamp, sab kuch"
+  },
+  {
+   "kind": "books",
+   "text": {
+    "latn": "Bharat Bazaar Books",
+    "deva": "भारत बाज़ार बुक्स"
+   },
+   "weight": 2,
+   "parody": true,
+   "board_style": "hand_painted",
+   "tagline": "Nayi purani sab kitaabein"
+  },
+  {
+   "kind": "cloth",
+   "text": {
+    "latn": "Naya Ghantaghar Cloth Mart",
+    "deva": "नया घंटाघर क्लॉथ मार्ट"
+   },
+   "weight": 2,
+   "parody": true,
+   "board_style": "flex",
+   "tagline": "Thaan se taan tak"
   }
  ]
 }

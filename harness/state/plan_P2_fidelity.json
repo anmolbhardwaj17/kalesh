@@ -1,0 +1,169 @@
+[
+  {
+    "phase": "P2",
+    "title": "Look critic 1: the kits against the Watch Dogs 2 bar (right after P2-010)",
+    "desc": "First recurring look critic (harness/design/FIDELITY_BAR.md 'The look critic', decisions.md 2026-11-14 'The orchestrator judges the look for Anmol'). Verifier on Sonnet, low usage rules. Work on a snapshot of main after P2-010 lands. Drive and walk the pilot at the play camera in golden and afternoon: the CP radials, the Chandni Chowk main road and a gali, Paharganj, ITO and the India Gate edges. Read at most 8 shots (about 1600 px) beside dated current photos of the same places (area boards refreshed by P2-049) and OWNER_EYE.md. For each shot answer: would this frame sit next to a Watch Dogs 2 street shot without looking cheap; which OWNER_EYE.md lines fail; which FIDELITY_BAR.md table row is weakest. Return findings, do not fix anything.",
+    "accept": [
+      "A findings list in the report: one line per finding with place, shot path, FIDELITY_BAR.md row number, blocker or polish, and a one-line fix; emptiness and any OWNER_EYE.md breach are blockers",
+      "Each shot read is named with the reference photo (and its date) it was compared with",
+      "The report ranks the top 5 findings by look gained per ms using the FIDELITY_BAR.md cost column",
+      "The orchestrator turns every blocker into a task (task.mjs add or a note on an existing task) and lists the ids in the done summary"
+    ],
+    "deps": ["P2-010", "P2-049"],
+    "agent": "verifier",
+    "priority": 1,
+    "kind": "feature"
+  },
+  {
+    "phase": "P2",
+    "title": "Shade, sky and grade on the streamed city to the Watch Dogs 2 bar",
+    "desc": "FIDELITY_BAR.md rows 8 and 10, gap 1. Every day shot of the streamed city shows saturated navy blue shade on asphalt, footpaths and walls (cold wash banned by STYLE_BIBLE.md palette) and a flat gradient sky. Fix by data and shader, at no frame cost: shade colour (sky ambient colour and energy, SSIL low, the LUT shadow tint capped so shade on asphalt reads neutral warm-grey #3e3d3a family, never blue), a contrast curve that keeps the readability floor, a procedural cloud layer and a sun disc in the sky shader for dawn, afternoon and golden, and distance layering by the existing warm haze. Four lights on the day curve. This changes the look on purpose: the orchestrator judges the result to the bar (decisions.md 2026-11-14), re-approves the stylised B sets it accepts, and tells Anmol in the progress report. Touches game/render/ only; no tile change.",
+    "accept": [
+      "lookproof --set city_grade_golden and city_grade_afternoon (--scene-kind city, views cp_street_eye, ito_junction, gali_foot, city_busiest_40m, india_gate_lawns, city_flyover_ramp): measured on the shot, shade pixels on asphalt in cp_street_eye and gali_foot have mean blue minus red of 6 or less (0 to 255), printed before and after",
+      "A side by side sheet (lookproof --sheet) of the 6 golden views before and after, beside dated current photos of the same places from the area boards, read by the verifier: passes the Watch Dogs 2 bar question of FIDELITY_BAR.md and every OWNER_EYE.md line; sky shows clouds and a sun disc in dawn, afternoon and golden",
+      "The readability floor numbers of STYLE_BIBLE.md hold on the city views in all four lights (printed)",
+      "Perf on a quiet machine with load quoted: the look stack stays at or under 3.6 ms (--style-off readings), every city view frame p95 at or under warn 10 ms",
+      "STYLE_BIBLE.md 'Lighting presets' and the light .tres numbers are updated together; the stand-in look sets are re-approved only for the views the orchestrator accepted, recorded in decisions.md",
+      "npm run typecheck, npm test and node harness/bin/verify.mjs --quick are green, with no engine or console errors"
+    ],
+    "deps": ["P2-001"],
+    "agent": "builder",
+    "priority": 1,
+    "kind": "feature"
+  },
+  {
+    "phase": "P2",
+    "title": "Surface shader: soft natural wear, detail normals and material sheen",
+    "desc": "FIDELITY_BAR.md rows 3, 4 and 9, gap 4. OWNER_EYE.md: 'Wear is soft and natural, never blocky patches'. Today the wear mask shows blocky white blobs and pixel-check patches on kit facades. In game/render/shaders/surface_b.gdshader: (1) rebuild the wear mask from smooth noise and geometry: rain streaks under every ledge, sill and chhajja (from the trim rows and UV2 facade coordinates), soot above shutters and vents, a damp dirt band at wall bases, edge wear at corners, faded and peeling paint by area wear; no hard edges at texel scale. (2) A tiling detail normal per layer (plaster, brick, concrete, asphalt, paver, shutter) faded out by about 20 m, generated offline like the existing layers (make_textures.gd), so walls have relief at street level; this amends STYLE_BIBLE.md 'Normal maps are not used in stylised_b': update that line and add a decisions.md entry with the measured cost. (3) Roughness from the mask and per layer, fresnel sheen on glass, metal shutters and car paint, wet and oil patches with low roughness that pick up the sky and the hero reflection probes; no SSR. Wear by area stays data (wear 0.9 bazaar, 0.03 Lutyens).",
+    "accept": [
+      "Close shots kit_wear_bazaar, kit_wear_lutyens and kit_railings_close plus street shots in the bazaar and Paharganj at 1.7 m: the verifier finds no blocky wear patch and reads streaks under ledges, a base band and edge wear on bazaar walls, and near-clean Lutyens walls",
+      "A side by side sheet of 6 street views before and after, beside dated current photos of the same places, read by the verifier: passes the Watch Dogs 2 bar question of FIDELITY_BAR.md and every OWNER_EYE.md line on wear and materials",
+      "Perf on a quiet machine with load quoted: the shader change costs 0.3 ms or less in city_buildings_busiest and the night bazaar lane (printed with a --style-off token for detail normals and one for the new wear); frame p95 at or under warn 10 ms; if the buildings line is over 2.0 ms the task says so with numbers and the trade it proposes",
+      "Kit texture memory stays at or under 60 MB per kit (printed)",
+      "npm run typecheck, npm test and node harness/bin/verify.mjs --quick are green, with no engine or console errors"
+    ],
+    "deps": ["P2-010"],
+    "agent": "builder",
+    "priority": 2,
+    "kind": "feature"
+  },
+  {
+    "phase": "P2",
+    "title": "Vehicles to the detail floor, procedural: auto, scooter, motorbike, hatchback, sedan, e-rickshaw, DTC bus, with parked variants",
+    "desc": "FIDELITY_BAR.md row 15, gap 6. The player auto is three stacked boxes in every driving frame. Build the slice vehicles procedurally to the STYLE_BIBLE.md 'Vehicles' detail floor: body with panel lines and bevels, wheels with tyres and hubs, mirrors, head and tail lamps (emissive slots for night), an invented plate, an interior hint through the windscreen, shadow contact; the auto's canopy, grab bars, meter and the green and yellow paint; the CAR_PAINT palette; small dents and dust on older ones only. Each vehicle gets 2 LODs and a parked variant usable as MultiMesh by the street life task. Physics shapes and handling tunes (P1-020, P1-021) do not change: the visual mesh only. Models are later replaced through the art cards of P2-011 by id. P3-001 folds these in instead of planning its own vehicle meshes.",
+    "accept": [
+      "lookproof view car_closeup and a city chase shot per vehicle: the verifier reads each beside a dated current photo of the real kind (licensed, credited) and passes it on the detail floor list of STYLE_BIBLE.md 'Vehicles' and the Watch Dogs 2 bar question of FIDELITY_BAR.md",
+      "Triangles: player vehicle LOD0 at most 25 k, traffic LOD0 at most 12 k, parked LOD1 at most 3 k (printed per vehicle)",
+      "Perf on a quiet machine with load quoted: 60 parked vehicles plus the player in city_buildings_busiest cost 0.2 ms GPU or less (vehicles line 0.4 ms); frame p95 at or under warn 10 ms",
+      "Test: each vehicle's collider is unchanged against its P1 tune (drive scenarios for car, auto and scooter still pass)",
+      "No real brand, badge or plate format on any vehicle (test on names, the verifier reads the shots)",
+      "npm run typecheck, npm test and node harness/bin/verify.mjs --quick are green, with no engine or console errors"
+    ],
+    "deps": [],
+    "agent": "builder",
+    "priority": 2,
+    "kind": "feature"
+  },
+  {
+    "phase": "P2",
+    "title": "Street life before P3: parked vehicles, autos at stands and people at life points",
+    "desc": "FIDELITY_BAR.md row 2, gap 3. OWNER_EYE.md: 'Emptiness is a blocker'. No city shot today has a person or a vehicle. Before the P3 crowd and traffic systems, fill the baked life points (P2-013) with static and idle life: parked two-wheelers in rows on footpath edges, parked cars on both sides where the area profile and the access model allow, autos queued at the real auto stands, handcarts and cycle rickshaws by area, and people standing, sitting on steps and charpais, vending, waiting at bus stops, with idle loops (a vertex animation texture or the P3 rig when it exists), clothing from the cloth palette and the crowd variety rule of STYLE_BIBLE.md 'Characters'. Instanced per 125 m cell, density from the area profile, never in a lane, crossing or junction, never on car-free carriageways for cars. P3 crowds and traffic later take over the same points; this layer stays for parked and seated life.",
+    "accept": [
+      "Metric: parked vehicles and people per 100 m of frontage per area printed and within 20% of the area profile; test: 0 placements inside a lane, crossing or junction polygon, 0 cars on car-free edges",
+      "A side by side sheet of 6 player-height views (bazaar main road, a gali, Paharganj, CP outer circle, Janpath, ITO) beside dated current photos of the same places, read by the verifier: no 40 m of frontage without life where the photos show it, crowd variety rule holds, passes the Watch Dogs 2 bar question of FIDELITY_BAR.md",
+      "Perf on a quiet machine with load quoted: people at life points 0.6 ms or less and parked vehicles 0.4 ms or less in city_buildings_busiest and the night bazaar lane (printed); frame p95 at or under warn 10 ms",
+      "Respect rule: the verifier reads the named shots against GAME.md 'Respect rule' and VERIFY.md rubric line 21; any breach is a fail",
+      "npm run typecheck, npm test and node harness/bin/verify.mjs --quick are green, with no engine or console errors"
+    ],
+    "deps": ["P2-013", "#4"],
+    "agent": "builder",
+    "priority": 2,
+    "kind": "feature"
+  },
+  {
+    "phase": "P2",
+    "title": "Shop fronts and windows with depth: interior mapping, goods and awnings by area",
+    "desc": "FIDELITY_BAR.md row 6, gap 5. Every shop in the kits shows one repeated coloured shelf module and windows are flat dark panes. Add an interior mapping shader (parallax cube room from a small atlas per kit, about 8 room kinds per area: cloth, hardware, sweets, mobile phones, chemist, dhaba, hotel reception, office) for shop interiors and upper windows (curtains, fans, tube lights, a share empty), goods that spill onto the footpath and hang from the shop front by shop kind, varied awnings and tarps from the cloth palette, shutters fully up, half down or closed. Shop kinds per area come from the area profile and the dated photo boards; the night version lights the same rooms (lit windows share, P3-007). Modules keep their fixed ids (P2-010).",
+    "accept": [
+      "No two neighbouring shops in a row share the same room kind and goods (test on placements); at least 6 room kinds visible in a 60 m bazaar stretch",
+      "A side by side sheet of 6 shop front views at 1.7 m (Chandni Chowk main road, a gali, Paharganj, GB Road, Janpath, CP outer circle) beside dated current photos of the same places, read by the verifier: interiors read as rooms with depth, goods match the shop kind and the area, passes the Watch Dogs 2 bar question of FIDELITY_BAR.md and the OWNER_EYE.md lines",
+      "Perf on a quiet machine with load quoted: the interior shader and goods cost 0.3 ms or less in city_buildings_busiest and the night bazaar lane (--style-off token printed); frame p95 at or under warn 10 ms",
+      "npm run typecheck, npm test and node harness/bin/verify.mjs --quick are green, with no engine or console errors"
+    ],
+    "deps": ["P2-010", "P2-048"],
+    "agent": "builder",
+    "priority": 2,
+    "kind": "feature"
+  },
+  {
+    "phase": "P2",
+    "title": "Image quality: anti-aliasing for wires, railings and grilles, measured and chosen",
+    "desc": "FIDELITY_BAR.md row 14. With dense wires, railings and grilles (P2-010, P2-036), thin detail crawls without AA. Measure on the busiest city views and a moving frame sequence at 60 km/h: none, FXAA, SMAA (Godot 4.7), MSAA 2x and TAA (1.23 ms measured in P0). Choose the cheapest that stops the crawl on wires at 20 to 60 m and railings at the play camera, inside the 10 ms frame; if it does not fit, propose a measured trade (the afternoon heat shimmer first) in decisions.md. Write the numbers to harness/reports/arch/aa.json.",
+    "accept": [
+      "harness/reports/arch/aa.json holds GPU cost per method on 3 city views with the machine load quoted",
+      "A frame sequence of 10 frames per method at 60 km/h past wires and railings is read by the verifier; the chosen method shows no crawling wire or railing a player would notice",
+      "Frame p95 at or under warn 10 ms on every city view with the chosen method on; decisions.md entry with the choice and the numbers; TECH.md 'Render pipeline' updated",
+      "npm run typecheck, npm test and node harness/bin/verify.mjs --quick are green, with no engine or console errors"
+    ],
+    "deps": ["P2-036"],
+    "agent": "builder",
+    "priority": 3,
+    "kind": "feature"
+  },
+  {
+    "phase": "P2",
+    "title": "Small motion: wind on trees, tarps, flags, laundry and wires; birds and stall steam",
+    "desc": "FIDELITY_BAR.md row 12. A still city reads as a set. Vertex wind in one shared shader function (strength from a global wind value on the day curve) for trees and hedges (P2-037), tarps and awnings, flags, hanging laundry and goods, and hanging wires (P2-036); pigeons over chowks and kites at golden as cheap particles; steam and smoke at tea stalls and food carts from the dressing. No CPU per instance.",
+    "accept": [
+      "A 3 s clip (frame sheet of 6 frames) at the Chandni Chowk main road and the India Gate lawns shows the moving kinds, read by the verifier: motion is soft and plausible, nothing jitters or swims",
+      "Perf on a quiet machine with load quoted: all motion costs 0.15 ms or less in city_buildings_busiest (--style-off token printed); frame p95 at or under warn 10 ms; look-proof sets stay pinned (motion frozen when the sim is held)",
+      "npm run typecheck, npm test and node harness/bin/verify.mjs --quick are green, with no engine or console errors"
+    ],
+    "deps": ["P2-036", "P2-037"],
+    "agent": "builder",
+    "priority": 3,
+    "kind": "feature"
+  },
+  {
+    "phase": "P2",
+    "title": "Look critic 2: grade, wear, Chandni Chowk today and sign boards",
+    "desc": "Recurring look critic (FIDELITY_BAR.md 'The look critic'), after the next 4 look tasks. Verifier on Sonnet, low usage rules, on a snapshot of main. Same method as Look critic 1: play camera, golden and night, at most 8 shots beside dated current photos, OWNER_EYE.md and FIDELITY_BAR.md. Also re-check the blockers Look critic 1 found.",
+    "accept": [
+      "A findings list in the report: place, shot path, FIDELITY_BAR.md row, blocker or polish, one-line fix; emptiness and OWNER_EYE.md breaches are blockers",
+      "Each blocker of Look critic 1 is marked fixed or still open with a shot",
+      "The orchestrator turns every blocker into a task or a note and lists the ids in the done summary"
+    ],
+    "deps": ["#2", "#3", "P2-047", "P2-048"],
+    "agent": "verifier",
+    "priority": 1,
+    "kind": "feature"
+  },
+  {
+    "phase": "P2",
+    "title": "Look critic 3: roads, street furniture, trees and street life",
+    "desc": "Recurring look critic (FIDELITY_BAR.md 'The look critic'), after the next 4 look tasks. Verifier on Sonnet, low usage rules, on a snapshot of main. Same method as Look critic 1, with one driving pass at 60 km/h (frame sheet) for density and pop. Also re-check the open blockers of the earlier critics.",
+    "accept": [
+      "A findings list in the report: place, shot path, FIDELITY_BAR.md row, blocker or polish, one-line fix; emptiness and OWNER_EYE.md breaches are blockers",
+      "Each open blocker of the earlier critics is marked fixed or still open with a shot",
+      "The orchestrator turns every blocker into a task or a note and lists the ids in the done summary"
+    ],
+    "deps": ["P2-035", "P2-036", "P2-037", "#5"],
+    "agent": "verifier",
+    "priority": 1,
+    "kind": "feature"
+  },
+  {
+    "phase": "P2",
+    "title": "Look critic 4: the streamed city in four lights, hero roads and shop fronts",
+    "desc": "Recurring look critic (FIDELITY_BAR.md 'The look critic'), after the next 4 look tasks. Verifier on Sonnet, low usage rules, on a snapshot of main. Same method as Look critic 1, in all four lights (at most 8 shots), with the hero roads of P2-015 and P2-016. Also re-check the open blockers of the earlier critics. P2-040 is the last critic, before the gate.",
+    "accept": [
+      "A findings list in the report: place, shot path, FIDELITY_BAR.md row, blocker or polish, one-line fix; emptiness and OWNER_EYE.md breaches are blockers",
+      "Each open blocker of the earlier critics is marked fixed or still open with a shot",
+      "The orchestrator turns every blocker into a task or a note and lists the ids in the done summary"
+    ],
+    "deps": ["P2-014", "P2-015", "P2-016", "#6"],
+    "agent": "verifier",
+    "priority": 1,
+    "kind": "feature"
+  }
+]

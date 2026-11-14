@@ -108,15 +108,73 @@ func hook(a: Array) -> Dictionary:
 ## Hides or shows the drawn meshes of the named streaming systems on every live tile; answers the count per system.
 func _layers(city: Node, o: Dictionary) -> Dictionary:
 	var out := {}
-	for key: String in ["hide", "show"]:
+	for key: String in ["hide", "show", "flat", "unflat"]:
 		for n: Variant in o.get(key, []):
 			var name := str(n)
 			var count := 0
-			for node: Node in city.find_children("%s_*" % name, "MeshInstance3D", true, false):
-				(node as MeshInstance3D).visible = key == "show"
+			# meshes and, for buildings, the kit modules' MultiMesh nodes (P2-010); a name with a * is the pattern itself
+			# (buildings_*_m* the modules, buildings_*_p* the small pieces)
+			var pattern := name if name.contains("*") else "%s_*" % name
+			for node: Node in city.find_children(pattern, "GeometryInstance3D", true, false):
+				var g := node as GeometryInstance3D
+				match key:
+					"hide", "show":
+						g.visible = key == "show"
+					"flat":
+						g.material_override = _flat_material()
+					"unflat":
+						g.material_override = null
 				count += 1
-			out[name] = {"meshes": count, "visible": key == "show"}
+			out[name] = {"meshes": count, "visible": key == "show"} if key in ["hide", "show"] else {"meshes": count, "flat": key == "flat"}
+	# {rangeEnd: metres, of: [names]}: the visibility range end of those nodes (A/B cost runs)
+	if o.get("rangeEnd") is float or o.get("rangeEnd") is int:
+		var count := 0
+		for n: Variant in o.get("of", []):
+			var name := str(n)
+			for node: Node in city.find_children(name if name.contains("*") else "%s_*" % name, "GeometryInstance3D", true, false):
+				(node as GeometryInstance3D).visibility_range_end = float(o.rangeEnd)
+				count += 1
+		out["rangeEnd"] = {"meshes": count}
+	# {fade: bool, of: [names]}: the visibility range fade (self) of those nodes on or off (A/B cost runs)
+	if o.get("fade") is bool:
+		for n: Variant in o.get("of", []):
+			var name := str(n)
+			for node: Node in city.find_children(name if name.contains("*") else "%s_*" % name, "GeometryInstance3D", true, false):
+				(node as GeometryInstance3D).visibility_range_fade_mode = GeometryInstance3D.VISIBILITY_RANGE_FADE_SELF if bool(o.fade) else GeometryInstance3D.VISIBILITY_RANGE_FADE_DISABLED
+	# {param: {name: value}, of: [names]}: sets a shader parameter on the materials of those nodes (A/B cost runs)
+	var param: Variant = o.get("param")
+	if param is Dictionary:
+		var mats := {}
+		for n: Variant in o.get("of", []):
+			var name := str(n)
+			for node: Node in city.find_children(name if name.contains("*") else "%s_*" % name, "GeometryInstance3D", true, false):
+				var mesh: Mesh = null
+				if node is MultiMeshInstance3D and (node as MultiMeshInstance3D).multimesh != null:
+					mesh = (node as MultiMeshInstance3D).multimesh.mesh
+				elif node is MeshInstance3D:
+					mesh = (node as MeshInstance3D).mesh
+				if mesh != null:
+					for s in mesh.get_surface_count():
+						var m := mesh.surface_get_material(s)
+						if m is ShaderMaterial:
+							mats[m] = true
+		for m: ShaderMaterial in mats:
+			for k: String in param:
+				m.set_shader_parameter(k, param[k])
+		out["param"] = {"materials": mats.size()}
 	return out
+
+
+var _flat: StandardMaterial3D = null
+
+
+## A plain grey material for shader cost ablations (stream layers flat): no textures, per pixel lighting only.
+func _flat_material() -> StandardMaterial3D:
+	if _flat == null:
+		_flat = StandardMaterial3D.new()
+		_flat.albedo_color = Color(0.6, 0.58, 0.55)
+		_flat.roughness = 0.9
+	return _flat
 
 
 # ---------------------------------------------------------------- the scripted drive

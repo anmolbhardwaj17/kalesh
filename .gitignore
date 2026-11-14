@@ -17,6 +17,8 @@ assets_inbox/*
 !assets_inbox/.gitkeep
 harness/state/.requests.lock
 harness/state/.dash_token
+# live agents line of the dashboard (harness/bin/agents.mjs)
+harness/state/agents.json
 # verify snapshot, sweep and lane worktrees
 .worktrees/
 # local Claude Code overrides only (the rest of .claude/ is versioned)
@@ -40,3 +42,9 @@ game/bench/roads/gen/
 game/world/tiles/
 # the Universal Animation Library .glb files while tools/characters/ual_build.mjs imports them (removed after the build)
 game/characters/ual_src/
+# the owner's lead models while tools/characters/lead_build.mjs imports them (removed after the build)
+game/characters/lead_src/
+harness/design/reference/owner/**/*.jp*g
+harness/design/reference/owner/**/*.webp
+harness/design/reference/owner/**/*.avif
+harness/design/reference/owner/**/*.png

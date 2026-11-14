@@ -483,6 +483,237 @@
     "deva": "कृपया यहाँ कतार में लगें"
    },
    "weight": 2
+  },
+  {
+   "kind": "cart",
+   "text": {
+    "latn": "Gola Gali Jantar",
+    "deva": "गोला गली जंतर"
+   },
+   "weight": 2,
+   "parody": true,
+   "board_style": "vertical",
+   "tagline": "Barf, bahar ki"
+  },
+  {
+   "kind": "tea",
+   "text": {
+    "latn": "Jantar Chai Jugaad",
+    "deva": "जंतर चाय जुगाड़"
+   },
+   "weight": 2,
+   "parody": true,
+   "board_style": "hand_painted",
+   "tagline": "Garam chai, thande dimaag"
+  },
+  {
+   "kind": "eatery",
+   "text": {
+    "latn": "Dharna Dhaba",
+    "deva": "धरना ढाबा"
+   },
+   "weight": 2,
+   "parody": true,
+   "board_style": "hand_painted",
+   "tagline": "Dal, roti, dilasa"
+  },
+  {
+   "kind": "eatery",
+   "text": {
+    "latn": "Parliament Street Parantha",
+    "deva": "पार्लियामेंट स्ट्रीट परांठा"
+   },
+   "weight": 2,
+   "parody": true,
+   "board_style": "enamel",
+   "tagline": "Sansad se sasta"
+  },
+  {
+   "kind": "eatery",
+   "text": {
+    "latn": "Sansad Marg Samosa",
+    "deva": "संसद मार्ग समोसा"
+   },
+   "weight": 2,
+   "parody": true,
+   "board_style": "hand_painted",
+   "tagline": "Aloo ka bhashan"
+  },
+  {
+   "kind": "eatery",
+   "text": {
+    "latn": "Haldi Wale Ram Chaat",
+    "deva": "हल्दी वाले राम चाट"
+   },
+   "weight": 2,
+   "parody": true,
+   "board_style": "glow_box",
+   "tagline": "Dahi, imli, masala"
+  },
+  {
+   "kind": "office",
+   "text": {
+    "latn": "Banner Wale Bhaiya",
+    "deva": "बैनर वाले भैया"
+   },
+   "weight": 2,
+   "parody": true,
+   "board_style": "flex",
+   "tagline": "Flex aur slogan jaldi"
+  },
+  {
+   "kind": "office",
+   "text": {
+    "latn": "Photocopy Premier Pvt",
+    "deva": "फ़ोटोकॉपी प्रीमियर"
+   },
+   "weight": 2,
+   "parody": true,
+   "board_style": "flex",
+   "tagline": "Xerox, stamp, affidavit"
+  },
+  {
+   "kind": "office",
+   "text": {
+    "latn": "Affidavit Wale Vakil Ji Kiosk",
+    "deva": "एफ़िडेविट वाले वकील जी किओस्क"
+   },
+   "weight": 2,
+   "parody": true,
+   "board_style": "enamel",
+   "tagline": "Stamp paper available"
+  },
+  {
+   "kind": "eatery",
+   "text": {
+    "latn": "Jantar Jalpaan",
+    "deva": "जंतर जलपान"
+   },
+   "weight": 2,
+   "parody": true,
+   "board_style": "enamel",
+   "tagline": "Chhola kulcha, chai"
+  },
+  {
+   "kind": "cart",
+   "text": {
+    "latn": "Pani Poori Parliament",
+    "deva": "पानी पूरी पार्लियामेंट"
+   },
+   "weight": 2,
+   "parody": true,
+   "board_style": "hand_painted",
+   "tagline": "Paani ka tamasha"
+  },
+  {
+   "kind": "cart",
+   "text": {
+    "latn": "Chaat Chowk Janta",
+    "deva": "चाट चौक जनता"
+   },
+   "weight": 2,
+   "parody": true,
+   "board_style": "hand_painted",
+   "tagline": "Janta ki chaat"
+  },
+  {
+   "kind": "tourist",
+   "text": {
+    "latn": "Dilli Darshan Tour Ticket",
+    "deva": "दिल्ली दर्शन टूर टिकट"
+   },
+   "weight": 2,
+   "parody": true,
+   "board_style": "flex",
+   "tagline": "Chadho, ghoomo"
+  },
+  {
+   "kind": "tourist",
+   "text": {
+    "latn": "Yantra Yatra Souvenirs",
+    "deva": "यंत्र यात्रा सूवेनिर"
+   },
+   "weight": 2,
+   "parody": true,
+   "board_style": "flex",
+   "tagline": "Samay ka saaya, aapka"
+  },
+  {
+   "kind": "tea",
+   "text": {
+    "latn": "Dhoop Ghadi Cafe",
+    "deva": "धूप घड़ी कैफ़े"
+   },
+   "weight": 2,
+   "parody": true,
+   "board_style": "glow_box",
+   "tagline": "Waqt par chai"
+  },
+  {
+   "kind": "tea",
+   "text": {
+    "latn": "Chai Ki Kitli Wale",
+    "deva": "चाय की केतली वाले"
+   },
+   "weight": 2,
+   "parody": true,
+   "board_style": "hand_painted",
+   "tagline": "Kadak, garam, ghar jaisi"
+  },
+  {
+   "kind": "eatery",
+   "text": {
+    "latn": "Nukkad Nashta Centre",
+    "deva": "नुक्कड़ नाश्ता सेंटर"
+   },
+   "weight": 2,
+   "parody": true,
+   "board_style": "enamel",
+   "tagline": "Aaj ka special: Subah ka"
+  },
+  {
+   "kind": "transport",
+   "text": {
+    "latn": "Rasoi Rickshaw Reporter",
+    "deva": "रसोई रिक्शा रिपोर्टर"
+   },
+   "weight": 2,
+   "parody": true,
+   "board_style": "flex",
+   "tagline": "Dilli ghoomo, sach bolo"
+  },
+  {
+   "kind": "office",
+   "text": {
+    "latn": "Rajiv Chowk Sasta Sauda",
+    "deva": "राजीव चौक सस्ता सौदा"
+   },
+   "weight": 2,
+   "parody": true,
+   "board_style": "flex",
+   "tagline": "Sab kuch sasta"
+  },
+  {
+   "kind": "eatery",
+   "text": {
+    "latn": "Raja Ji Ka Rasgulla",
+    "deva": "राजा जी का रसगुल्ला"
+   },
+   "weight": 2,
+   "parody": true,
+   "board_style": "enamel",
+   "tagline": "Meetha, mulaayam"
+  },
+  {
+   "kind": "cart",
+   "text": {
+    "latn": "Gol Gappe Ka Gol Chowk",
+    "deva": "गोल गप्पे का गोल चौक"
+   },
+   "weight": 2,
+   "parody": true,
+   "board_style": "hand_painted",
+   "tagline": "Paani ka tamasha"
   }
  ]
 }

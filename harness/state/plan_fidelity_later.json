@@ -1,0 +1,58 @@
+[
+  {
+    "phase": "P7",
+    "title": "Watch Dogs 2 bar for the new centre areas: layers by data and recurring look critics",
+    "desc": "Seed for PLAN_PHASE P7 (harness/design/FIDELITY_BAR.md, OWNER_EYE.md, decisions.md 2026-11-14). Every new area is built to the bar the pilot reached in P2, through the same layers tuned by data (grade, soft wear and detail normals, road surfaces, shop interiors, street life, vehicles, trees and ground cover, motion, night emissives), never by hand-building what a layer does. The planner splits this into: one look critic task (verifier on Sonnet, priority 1) after every 3 to 4 look tasks of the phase, plus a side by side sheet per new area beside dated current photos with the WD2 bar question answered per shot. Lutyens, Khan Market, Lodhi, Nizamuddin, the Ridge and the Yamuna floodplain each have their own look (foliage-heavy areas lean on rows 11 and 12 of the bar).",
+    "accept": [
+      "The P7 plan has a look critic task after every 3 to 4 look tasks, each with the acceptance of P2-051",
+      "Each new area's side by side sheet is read beside dated current photos and passes the WD2 bar question and every OWNER_EYE.md line",
+      "Perf on the new areas' camera paths stays inside the signed system lines (quiet machine, load quoted)"
+    ],
+    "deps": [],
+    "agent": "verifier",
+    "priority": 2,
+    "kind": "feature"
+  },
+  {
+    "phase": "P8",
+    "title": "Watch Dogs 2 bar for the far south and the corridors: layers by data, speed, and look critics",
+    "desc": "Seed for PLAN_PHASE P8 (FIDELITY_BAR.md, OWNER_EYE.md). Qutub, Vasant Kunj, the airport, Gurugram and the corridors get the bar through the same data-driven layers. Corridors at 100 to 200 km/h are judged on distance layering, LOD pop and skyline (bar rows 10 and 14) as much as close detail; Gurugram glass towers on reflections and sheen (row 9). The planner adds a look critic task (verifier on Sonnet, priority 1) after every 3 to 4 look tasks and a side by side sheet per area beside dated current photos.",
+    "accept": [
+      "The P8 plan has a look critic task after every 3 to 4 look tasks, each with the acceptance of P2-051, plus one driving critic at 140 km/h on a corridor",
+      "Each new area's side by side sheet passes the WD2 bar question and every OWNER_EYE.md line",
+      "Perf at 200 km/h on the corridors stays inside the signed lines (quiet machine, load quoted)"
+    ],
+    "deps": [],
+    "agent": "verifier",
+    "priority": 2,
+    "kind": "feature"
+  },
+  {
+    "phase": "P11",
+    "title": "Watch Dogs 2 bar east of the river: the floodplain, Bela basti, Shahdara and Noida, with look critics",
+    "desc": "Seed for PLAN_PHASE P11 (FIDELITY_BAR.md, OWNER_EYE.md, GAME.md respect rule). The basti and Shahdara get the same craft and density as the rich areas: wear and clutter are honest, never mockery. Noida's expressway and towers lean on rows 9 and 10 of the bar. The planner adds a look critic task (verifier on Sonnet, priority 1) after every 3 to 4 look tasks and a side by side sheet per area beside dated current photos.",
+    "accept": [
+      "The P11 plan has a look critic task after every 3 to 4 look tasks, each with the acceptance of P2-051 plus the respect rule check",
+      "Each new area's side by side sheet passes the WD2 bar question and every OWNER_EYE.md line",
+      "Perf on the new areas' camera paths stays inside the signed lines (quiet machine, load quoted)"
+    ],
+    "deps": [],
+    "agent": "verifier",
+    "priority": 2,
+    "kind": "feature"
+  },
+  {
+    "phase": "P14",
+    "title": "Final look critic: the whole first release map against the Watch Dogs 2 bar",
+    "desc": "Before the release gate (FIDELITY_BAR.md, OWNER_EYE.md). Verifier on Sonnet. One side by side sheet per area of the first release map (pilot, centre, far south, east), each game view beside dated current photos, in golden and night, plus a driving sheet at 140 km/h and an on-foot sheet in a crowded bazaar. Answer the WD2 bar question per shot, re-check every open blocker of earlier critics, and list findings; the orchestrator turns blockers into P14 tasks.",
+    "accept": [
+      "Sheets exist under harness/reports/look/ as JPEGs under 2 MB, one per area plus the driving and on-foot sheets",
+      "A findings list: place, shot, FIDELITY_BAR.md row, blocker or polish, one-line fix; every blocker becomes a task before the final gate",
+      "Perf on the release camera paths stays inside the signed lines (quiet machine, load quoted)"
+    ],
+    "deps": ["P14-002"],
+    "agent": "verifier",
+    "priority": 2,
+    "kind": "feature"
+  }
+]

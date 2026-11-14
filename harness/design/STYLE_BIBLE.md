@@ -9,6 +9,7 @@ Anmol's words that this look must honour (interview, rounds 1 to 5):
 - "small things that looks like attention to detial for delhi should be there and not missed".
 - "Each ADA should have its own style" built from many real photos (decisions.md "Every area is built from real references").
 - Fidelity bar: Watch Dogs 2. Performance: "The game should be able to run on Mac M2 smoothly. No struggles."
+- How the bar is reached and checked: `harness/design/FIDELITY_BAR.md` (traits, routes on the M2, ranked gaps, the recurring look critic) and `harness/design/OWNER_EYE.md` (Anmol's corrections).
 
 ## One-line look
 
@@ -233,7 +234,7 @@ Examples that fit the signed look:
 - Hero or signature landmark (concept for the model card): the landmark anchor, then the landmark's name, material, era and the 3 features that make it recognisable (India Gate: 42 m sandstone arch on a stepped base, the names carved on its faces, the canopy; Red Fort: red sandstone walls, Lahori Gate, Chhatta Chowk), then the four-views tail. Never a photograph: a stylised concept in the signed look. The model cards add "split into parts: base, main mass, domes, trim" for the parts kit.
 - Kit atlas (per area kit, 6 to 12 cards): one card each for walls (2 or 3 colours), a ground floor with shutters, an upper floor with balconies, a roof, a footpath, a road surface, a boundary wall, a signage board blank, and 3 to 5 wear decals. Every card names the area and its evidence photo set: for example "Chandni Chowk bazaar, lime plaster over brick, mint, ochre and dusty pink paints, heavy soot and posters". Colours come from the area profile palette, not invention.
 - Grime decals (40 to 80): posters (wordless or invented Hindi), water stains, soot streaks, patched plaster, faded painted advertisements (invented), wall chalk marks, kerb paint. Never an image of a real politician, party symbol or brand; religious symbols only as part of a real place of worship, never as wall decoration labelling an area.
-- Signs: Claude composes the board text and layout procedurally; cards are only for hand-painted backgrounds (no letters in the image).
+- Signs: two sources. Hero boards come from the owner's AI images as single-board documentary photos (real materials, hand-painted signwriter or print-shop lettering, real wear, the script chosen by place and trade; owner 2026-11-14); the rest are composed procedurally by tools/kits/make_signs.mjs with the same rules. Each image is A/B tested in game (REALITY_MATCH.md).
 
 ### Audio prompt style
 

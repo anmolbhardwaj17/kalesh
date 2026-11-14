@@ -38,6 +38,8 @@ const LAYER := 4
 @export var body_color := Color(0.36, 0.72, 0.42)
 ## Which lead the humanoid is dressed as (leads.gd): bittu, meera or danny.
 @export var look := "bittu"
+## Draw the painted stand-in mannequin even when the lead has a model (P2-063, side by side checks only).
+var stand_in := false
 ## Foot placement on kerbs, stairs and slopes (body_feel.gd): 1 on, 0 off, -1 for the player's character only (four
 ## rays and two leg solves a tick; a crowd turns it on only near the camera).
 @export var foot_ik := -1
@@ -140,7 +142,7 @@ func _build_body() -> void:
 		humanoid = Humanoid.new()
 		humanoid.name = "Humanoid"
 		add_child(humanoid)
-		if humanoid.setup(look):
+		if humanoid.setup(look, stand_in):
 			humanoid.feel.body = self
 			humanoid.feel.ik_on = foot_ik == 1 or (foot_ik < 0 and is_player)
 			humanoid.feel.look_on = is_player

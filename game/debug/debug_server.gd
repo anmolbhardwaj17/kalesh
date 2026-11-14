@@ -20,7 +20,7 @@ const DebugInput := preload("res://debug/debug_input.gd")
 const PROTOCOL := 1
 const METHODS := [
 	"ping", "state", "clock", "frames", "input", "perf", "load", "teleport", "setCamera", "timeScale", "hold",
-	"events", "hud", "shot", "quality", "timeOfDay", "bench", "stream", "vehicle", "foot", "quit",
+	"events", "hud", "shot", "quality", "timeOfDay", "bench", "stream", "vehicle", "foot", "traffic", "gps", "quit",
 ]
 const QUALITY_PRESETS := ["low", "medium", "high"]
 
@@ -82,8 +82,8 @@ func _exit_tree() -> void:
 	_server.stop()
 
 
-func _process(_delta: float) -> void:
-	_keep_drawing()
+func _process(delta: float) -> void:
+	_keep_drawing(delta)
 	for e in _logger.drain():
 		_events().emit_event("error", e)
 	while listening and _server.is_connection_available():
@@ -211,6 +211,8 @@ func _call(method: String, a: Array) -> Dictionary:
 			return await _foot_probe().hook(a)
 		"city":
 			return await _city_probe().hook(a)
+		"traffic", "gps":
+			return _route_probe().hook(method, a)
 		"setCamera":
 			return _cam.set_camera(a[0] if a.size() > 0 else null)
 		"hud":
@@ -427,7 +429,7 @@ var _idle_frames := 0
 var forced_draws := 0
 
 
-func _keep_drawing() -> void:
+func _keep_drawing(delta: float) -> void:
 	if _headless:
 		return
 	var drawn := Engine.get_frames_drawn()
@@ -438,7 +440,9 @@ func _keep_drawing() -> void:
 	_idle_frames += 1
 	if _idle_frames >= OCCLUDED_AFTER:
 		forced_draws += 1
-		RenderingServer.force_draw(false)
+		# (with the frame's step: a forced draw with no step freezes shader TIME, so nothing a shader animates moves in
+		# the shots of a covered or parked window: the running sign borders of P2-048 stood still)
+		RenderingServer.force_draw(false, delta)
 		_seen_drawn = Engine.get_frames_drawn()
 
 
@@ -491,6 +495,16 @@ func _city_probe() -> Node:
 	if probe == null:
 		probe = load("res://debug/city_probe.gd").new()
 		probe.name = "CityProbe"
+		add_child(probe)
+	return probe
+
+
+## The traffic stand-in and the route line (route_probe.gd: traffic and gps), made on first use (P2-045).
+func _route_probe() -> Node:
+	var probe := get_node_or_null("RouteProbe")
+	if probe == null:
+		probe = load("res://debug/route_probe.gd").new()
+		probe.name = "RouteProbe"
 		add_child(probe)
 	return probe
 

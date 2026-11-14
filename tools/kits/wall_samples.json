@@ -1,0 +1,336 @@
+{
+ "_doc": "Wall colour samples of the area kits (P2-010 fix round, decisions.md 2026-11-14 'Areas are built from how they look today'). For every kit: its area board (harness/design/areas/<board>_board.jpg) and rectangles [x, y, w, h] in board pixels, each on a plain wall of one photo (`photo` is the number printed on the board). tools/kits/sample_walls.mjs reads the median wall colour of each rectangle (darkest fifth and brightest tenth dropped: shadow and glare), writes the kit's `walls` (samples with their photo, the colours, the hue, saturation and value range, the palette word map) into game/world/kits/kits.json, and a crop sheet to harness/reports/kits/wall_samples.jpg to check each rectangle sits on a wall. Bright colour on goods, signs and awnings is not sampled: walls only. `cap` is the brightest channel a wall colour may have (sRGB 0 to 255; a kit may set its own): the afternoon sun clips a lit wall brighter than about 190 to flat white (measured on kit_colonnade and kit_railings_close), so the CP whitewash takes 168 and its columns and arches keep their shading. `lift`: when a board's photos are dull (haze, shade), the kit's colours are lifted together until the brightest reaches this value (0 to 1).",
+ "cap": 184,
+ "lift": 0.7,
+ "kits": {
+  "colonnade": {
+   "cap": 168,
+   "board": "cp_inner_circle",
+   "samples": [
+    {
+     "photo": 5,
+     "rect": [1240, 30, 8, 100]
+    },
+    {
+     "photo": 17,
+     "rect": [1318, 510, 25, 15]
+    },
+    {
+     "photo": 21,
+     "rect": [700, 700, 40, 15]
+    },
+    {
+     "photo": 23,
+     "rect": [1222, 730, 12, 50]
+    },
+    {
+     "photo": 18,
+     "rect": [1520, 548, 40, 10]
+    },
+    {
+     "photo": 21,
+     "rect": [640, 690, 30, 12]
+    },
+    {
+     "photo": 23,
+     "rect": [1250, 735, 10, 40]
+    },
+    {
+     "photo": 17,
+     "rect": [1340, 512, 8, 15]
+    }
+   ]
+  },
+  "bazaar": {
+   "board": "chandni_chowk_main",
+   "samples": [
+    {
+     "photo": 9,
+     "rect": [604, 300, 14, 30]
+    },
+    {
+     "photo": 9,
+     "rect": [664, 296, 30, 12]
+    },
+    {
+     "photo": 3,
+     "rect": [722, 78, 30, 14]
+    },
+    {
+     "photo": 8,
+     "rect": [306, 330, 20, 16]
+    },
+    {
+     "photo": 8,
+     "rect": [450, 332, 40, 14]
+    },
+    {
+     "photo": 22,
+     "rect": [1110, 700, 30, 16]
+    },
+    {
+     "photo": 22,
+     "rect": [1160, 700, 25, 30]
+    },
+    {
+     "photo": 20,
+     "rect": [340, 682, 50, 14]
+    },
+    {
+     "photo": 20,
+     "rect": [470, 700, 30, 14]
+    },
+    {
+     "photo": 23,
+     "rect": [1420, 722, 35, 20]
+    }
+   ]
+  },
+  "gali": {
+   "board": "chandni_chowk_galis",
+   "samples": [
+    {
+     "photo": 6,
+     "rect": [1010, 14, 30, 14]
+    },
+    {
+     "photo": 6,
+     "rect": [1160, 75, 30, 20]
+    },
+    {
+     "photo": 7,
+     "rect": [1260, 108, 30, 12]
+    },
+    {
+     "photo": 25,
+     "rect": [40, 468, 35, 16]
+    },
+    {
+     "photo": 35,
+     "rect": [550, 660, 40, 30]
+    },
+    {
+     "photo": 42,
+     "rect": [258, 786, 25, 25]
+    },
+    {
+     "photo": 42,
+     "rect": [320, 778, 40, 20]
+    },
+    {
+     "photo": 45,
+     "rect": [806, 768, 30, 20]
+    },
+    {
+     "photo": 45,
+     "rect": [946, 826, 30, 14]
+    },
+    {
+     "photo": 33,
+     "rect": [100, 606, 25, 25]
+    }
+   ]
+  },
+  "hotel": {
+   "board": "paharganj_station",
+   "samples": [
+    {
+     "photo": 1,
+     "rect": [4, 52, 22, 20]
+    },
+    {
+     "photo": 1,
+     "rect": [55, 45, 40, 35]
+    },
+    {
+     "photo": 1,
+     "rect": [130, 40, 18, 25]
+    },
+    {
+     "photo": 7,
+     "rect": [140, 234, 22, 20]
+    },
+    {
+     "photo": 8,
+     "rect": [500, 236, 50, 20]
+    },
+    {
+     "photo": 8,
+     "rect": [314, 236, 30, 20]
+    },
+    {
+     "photo": 8,
+     "rect": [452, 247, 18, 20]
+    },
+    {
+     "photo": 9,
+     "rect": [808, 276, 45, 40]
+    },
+    {
+     "photo": 9,
+     "rect": [600, 274, 40, 40]
+    },
+    {
+     "photo": 18,
+     "rect": [1506, 474, 22, 25]
+    },
+    {
+     "photo": 21,
+     "rect": [602, 676, 25, 35]
+    },
+    {
+     "photo": 24,
+     "rect": [1520, 686, 90, 14]
+    }
+   ]
+  },
+  "office": {
+   "board": "ito",
+   "samples": [
+    {
+     "photo": 2,
+     "rect": [275, 25, 40, 50]
+    },
+    {
+     "photo": 26,
+     "rect": [215, 330, 40, 40]
+    },
+    {
+     "photo": 28,
+     "rect": [625, 350, 40, 50]
+    },
+    {
+     "photo": 9,
+     "rect": [110, 160, 25, 40]
+    },
+    {
+     "photo": 9,
+     "rect": [58, 210, 15, 50]
+    },
+    {
+     "photo": 14,
+     "rect": [1010, 210, 60, 25]
+    },
+    {
+     "photo": 39,
+     "rect": [1260, 496, 40, 20]
+    }
+   ]
+  },
+  "lutyens": {
+   "board": "india_gate_kartavya_path",
+   "samples": [
+    {
+     "photo": 6,
+     "rect": [1515, 82, 30, 10]
+    },
+    {
+     "photo": 6,
+     "rect": [1690, 70, 40, 8]
+    },
+    {
+     "photo": 9,
+     "rect": [672, 376, 8, 30]
+    },
+    {
+     "photo": 16,
+     "rect": [910, 456, 35, 16]
+    },
+    {
+     "photo": 16,
+     "rect": [1050, 548, 40, 12]
+    },
+    {
+     "photo": 16,
+     "rect": [1000, 480, 40, 12]
+    },
+    {
+     "photo": 17,
+     "rect": [1260, 556, 60, 30]
+    },
+    {
+     "photo": 18,
+     "rect": [1534, 566, 20, 50]
+    }
+   ]
+  },
+  "market": {
+   "board": "janpath",
+   "samples": [
+    {
+     "photo": 9,
+     "rect": [612, 248, 40, 20]
+    },
+    {
+     "photo": 9,
+     "rect": [790, 244, 40, 20]
+    },
+    {
+     "photo": 9,
+     "rect": [620, 330, 60, 8]
+    },
+    {
+     "photo": 13,
+     "rect": [50, 476, 8, 25]
+    },
+    {
+     "photo": 13,
+     "rect": [6, 452, 20, 12]
+    },
+    {
+     "photo": 9,
+     "rect": [800, 280, 30, 15]
+    },
+    {
+     "photo": 9,
+     "rect": [612, 300, 30, 10]
+    }
+   ]
+  },
+  "hardware": {
+   "board": "gb_road_ajmeri_gate",
+   "samples": [
+    {
+     "photo": 1,
+     "rect": [42, 72, 30, 20]
+    },
+    {
+     "photo": 5,
+     "rect": [1080, 52, 40, 30]
+    },
+    {
+     "photo": 6,
+     "rect": [1316, 32, 40, 20]
+    },
+    {
+     "photo": 7,
+     "rect": [130, 297, 40, 40]
+    },
+    {
+     "photo": 9,
+     "rect": [610, 240, 40, 25]
+    },
+    {
+     "photo": 23,
+     "rect": [1076, 628, 25, 16]
+    },
+    {
+     "photo": 23,
+     "rect": [1204, 667, 25, 12]
+    },
+    {
+     "photo": 25,
+     "rect": [112, 826, 30, 25]
+    },
+    {
+     "photo": 26,
+     "rect": [330, 846, 40, 14]
+    },
+    {
+     "photo": 27,
+     "rect": [550, 856, 50, 14]
+    }
+   ]
+  }
+ }
+}
