@@ -13,6 +13,9 @@ const KitMesh := preload("res://world/landmarks/kit_mesh.gd")
 const MURAL_SHADER := preload("res://world/infra/tunnel_mural.gdshader")
 const MURAL_INSIDE_SHADER := preload("res://world/infra/tunnel_mural_inside.gdshader")
 const TUNNEL_LIT_SHADER := preload("res://world/infra/tunnel_lit.gdshader")
+const TUNNEL_GLOW_SHADER := preload("res://world/infra/tunnel_glow.gdshader")
+## The surfaces of tunnel_lit.gdshader (P2-032): key -> its `surface`
+const TUNNEL_SURFACES := {"tunnel_lit": 0, "tunnel_road": 1, "tunnel_wall": 2, "tunnel_soffit": 3, "tunnel_road_petals": 4}
 ## Mural materials (P2-032): key -> [shader kind, inside a roofed tunnel]
 const MURALS := {"mural_wave": [0, true], "mural_ramp": [1, false], "mural_pillar": [2, true]}
 
@@ -26,6 +29,9 @@ var root: Node3D
 ## tile id -> records (the folder's infra.json "tiles")
 var records: Dictionary
 var materials := {}
+## The tunnel materials that follow the scene's exposure (tick), and the exposure they were last set for.
+var _tunnel: Array = []
+var _exposure := -1.0
 var live := 0
 var triangles := 0
 var nodes := 0
@@ -42,17 +48,40 @@ func _init(parent: Node3D, tile_records: Dictionary) -> void:
 		m.set_shader_parameter("kind", MURALS[k][0])
 		m.resource_name = k
 		materials[k] = m
-	# the inside of a roofed tunnel (P2-032): lit evenly as from its LED strip lines, never by the sun or the sky
-	var lit := ShaderMaterial.new()
-	lit.shader = TUNNEL_LIT_SHADER
-	lit.resource_name = "tunnel_lit"
-	materials["tunnel_lit"] = lit
-	# the concrete road under a ceiling: the same light, a worn concrete surface
-	var road := ShaderMaterial.new()
-	road.shader = TUNNEL_LIT_SHADER
-	road.set_shader_parameter("surface", 1)
-	road.resource_name = "tunnel_road"
-	materials["tunnel_road"] = road
+	# the inside of a roofed tunnel (P2-032): lit by its LED strip lines per pixel, never by the sun or the sky, seen
+	# through its own haze: the fittings, the asphalt road, the painted concrete walls, the soffit
+	for k: String in TUNNEL_SURFACES:
+		var lit := ShaderMaterial.new()
+		lit.shader = TUNNEL_LIT_SHADER
+		lit.set_shader_parameter("surface", TUNNEL_SURFACES[k])
+		lit.resource_name = k
+		materials[k] = lit
+	# the strip lines themselves and the lit faces of signs
+	var tglow := ShaderMaterial.new()
+	tglow.shader = TUNNEL_GLOW_SHADER
+	tglow.resource_name = "tunnel_glow"
+	materials["tunnel_glow"] = tglow
+	_tunnel = [tglow]
+	for k: String in TUNNEL_SURFACES:
+		_tunnel.append(materials[k])
+	for k: String in MURALS:
+		if MURALS[k][1]:
+			_tunnel.append(materials[k])
+
+
+## Keeps the tunnels' light the same at any hour: their materials are unshaded and go through the scene's tonemap, so
+## they take the scene's exposure back out (`exposure_comp`). Called every frame by the city (world_stream.gd).
+func tick() -> void:
+	if not is_instance_valid(root) or not root.is_inside_tree():
+		return
+	var world := root.get_viewport().find_world_3d()
+	var env := world.environment if world != null else null
+	var exposure := env.tonemap_exposure if env != null else 1.0
+	if is_equal_approx(exposure, _exposure):
+		return
+	_exposure = exposure
+	for m: ShaderMaterial in _tunnel:
+		m.set_shader_parameter("exposure_comp", 1.0 / maxf(exposure, 0.05))
 
 
 func prepare(tile: Dictionary) -> Variant:

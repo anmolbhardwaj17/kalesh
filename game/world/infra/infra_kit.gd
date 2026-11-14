@@ -16,6 +16,7 @@ const Road := preload("res://world/infra/kit_road.gd")
 const Rail := preload("res://world/infra/kit_rail.gd")
 const Elevated := preload("res://world/infra/kit_elevated.gd")
 const Tunnel := preload("res://world/infra/kit_tunnel.gd")
+const TunnelMouth := preload("res://world/infra/kit_tunnel_mouth.gd")
 const TunnelPaint := preload("res://world/infra/kit_tunnel_paint.gd")
 const TunnelLight := preload("res://world/infra/kit_tunnel_light.gd")
 
@@ -78,16 +79,20 @@ static func build(recs: Dictionary, origin: Vector3) -> Dictionary:
 		Tunnel.ceiling(tun.base, tun.near, c, tlines)
 	var labels := []
 	for h: Dictionary in recs.get("theads", []):
-		Tunnel.head(tun.base, tun.near, h)
-		var lab := Tunnel.head_label(h)
+		TunnelMouth.head(tun.base, tun.near, h)
+		var lab := TunnelMouth.head_label(h)
 		if not lab.is_empty():
 			labels.append(lab)
-	for d: Dictionary in recs.get("tdrains", []):
-		Tunnel.drain(tun.base, d)
-	for l: Dictionary in recs.get("tlines", []):
-		Tunnel.line(tun.base, l)
-	# the light of the two LED strip lines inside every roofed stretch, per vertex (kit_tunnel_light.gd)
+	# what lies on the road is lit by the strips under a roof and by the sky on an open ramp
 	var tceils: Array = recs.get("tceils", [])
+	var wsegs := TunnelLight.strips(tceils, Transform3D.IDENTITY)
+	var wgrid := TunnelLight.grid_of(wsegs)
+	for d: Dictionary in recs.get("tdrains", []):
+		var mid := Vector3((float(d.a[0]) + float(d.b[0])) * 0.5, (float(d.a[1]) + float(d.b[1])) * 0.5, (float(d.a[2]) + float(d.b[2])) * 0.5)
+		TunnelMouth.drain(tun.base, d, TunnelLight.under(mid, wsegs, wgrid))
+	for l: Dictionary in recs.get("tlines", []):
+		Tunnel.line(tun.base, l, func(p: Vector3) -> bool: return TunnelLight.under(p, wsegs, wgrid))
+	# the light of the two LED strip lines inside every roofed stretch, per vertex (kit_tunnel_light.gd)
 	if not tceils.is_empty():
 		var segs := TunnelLight.strips(tceils, to_local)
 		TunnelLight.apply(tun.base, segs)

@@ -19,9 +19,13 @@ const PLINTH_H_M := 0.9
 const PILLAR_GAP := Color("#8a877e")
 const PILLAR_BAND := Color("#5b2f86")
 const PILLAR_COLS := [Color("#f07a2a"), Color("#7b3f9e"), Color("#1f8f8f"), Color("#f2b51c")]
-## The road finish inside a roofed stretch: light grey concrete (its wear is drawn by tunnel_lit.gdshader).
-const ROAD := Color("#b5b3ac")
-const ROAD_STRIPS := 4
+## The road finish inside a roofed stretch: mid grey-olive asphalt (its wear is drawn by tunnel_lit.gdshader).
+const ROAD := Color("#62615d")
+## A raised walkway's top: worn concrete.
+const WALKWAY := Color("#a29f95")
+## The inside walls' base coats (tunnel_mural.gdshaderinc M_YELLOW and M_GREEN): the dado under each takes its wall's.
+const WALL_YELLOW := Color("#d6b033")
+const WALL_GREEN := Color("#33733b")
 ## The bake's kerb and footpath top over the road, and the kerb's width (m).
 const KERB_H_M := 0.15
 const KERB_W_M := 0.3
@@ -32,7 +36,7 @@ const LEFT_SCALE_M := 16.0
 ## The mural of one wall segment from the dado to its top: inside (roofed) the wave band from 1.0 m, on a ramp the
 ## river scene from 0.7 m. a and b are the road edge at the lane top (offset off the wall), ta and tb the wall top.
 ## Cut into bands up the wall (`T.heights`) so the strip light, worked out per vertex, falls off down the wall.
-static func band(m: KitMesh, a: Vector3, b: Vector3, ta: float, tb: float, sa: float, sb: float, want: Vector3, roofed: bool) -> void:
+static func band(m: KitMesh, a: Vector3, b: Vector3, ta: float, tb: float, sa: float, sb: float, want: Vector3, roofed: bool, scheme := 0.0) -> void:
 	var y0 := 1.0 if roofed else 0.7
 	if ta - a.y <= y0 + 0.02 and tb - b.y <= y0 + 0.02:
 		return
@@ -43,24 +47,24 @@ static func band(m: KitMesh, a: Vector3, b: Vector3, ta: float, tb: float, sa: f
 	var la := maxf(ta, a.y + y0) - a.y - y0
 	var lb := maxf(tb, b.y + y0) - b.y - y0
 	for k in ya.size() - 1:
-		# the ramp shader reads the height left to the wall top from the red channel
-		var c0 := Color((la - (ya[k] - a.y - y0)) / LEFT_SCALE_M, 0, 0)
-		var c1 := Color((lb - (yb[k] - b.y - y0)) / LEFT_SCALE_M, 0, 0)
-		var c2 := Color((lb - (yb[k + 1] - b.y - y0)) / LEFT_SCALE_M, 0, 0)
-		var c3 := Color((la - (ya[k + 1] - a.y - y0)) / LEFT_SCALE_M, 0, 0)
+		# the shader reads the height left to the wall top from the red channel, the wall's palette from the green
+		var c0 := Color((la - (ya[k] - a.y - y0)) / LEFT_SCALE_M, scheme, 0)
+		var c1 := Color((lb - (yb[k] - b.y - y0)) / LEFT_SCALE_M, scheme, 0)
+		var c2 := Color((lb - (yb[k + 1] - b.y - y0)) / LEFT_SCALE_M, scheme, 0)
+		var c3 := Color((la - (ya[k + 1] - a.y - y0)) / LEFT_SCALE_M, scheme, 0)
 		_oquad_uv(m, _at(a, ya[k]), _at(b, yb[k]), _at(b, yb[k + 1]), _at(a, ya[k + 1]), Vector2(sa, ya[k] - a.y), Vector2(sb, yb[k] - b.y), Vector2(sb, yb[k + 1] - b.y), Vector2(sa, ya[k + 1] - a.y), c0, c1, c2, c3, want)
 	m.use("main", "matte")
 
 
 ## The wall behind the wide section's pillars (owner photo 03): the other carriageway shows between them, so the wall
 ## there is painted as that lit space, a soft grey over a dark foot, from the plinths up.
-static func gap(m: KitMesh, a: Vector3, b: Vector3, ta: float, tb: float, want: Vector3) -> void:
-	m.use("main", "tunnel_lit")
+static func gap(m: KitMesh, a: Vector3, b: Vector3, ta: float, tb: float, sa: float, sb: float, want: Vector3) -> void:
+	m.use("main", "tunnel_wall")
 	var hp := T.heights_pair(a.y + 0.3, ta, b.y + 0.3, tb)
 	var ya: PackedFloat32Array = hp[0]
 	var yb: PackedFloat32Array = hp[1]
 	for k in ya.size() - 1:
-		K.oquad(m, _at(a, ya[k]), _at(b, yb[k]), _at(b, yb[k + 1]), _at(a, ya[k + 1]), want, PILLAR_GAP)
+		T._wall_quad(m, a, b, ya[k], yb[k], ya[k + 1], yb[k + 1], sa, sb, a.y, b.y, ta, tb, want, PILLAR_GAP)
 	m.use("main", "matte")
 
 
@@ -86,9 +90,9 @@ static func pillar(m: KitMesh, foot: Vector3, top: float, inw: Vector3, d: Vecto
 		_otri(m, fr + along * (x - w), fr + along * (x - w * 0.2) + Vector3(0, PLINTH_H_M * 0.7, 0), fr + along * (x + w * 0.35) + Vector3(0, PLINTH_H_M * 0.92, 0), inw, T.ORANGE)
 	# the uplight on the plinth, black with a lens
 	var lamp := foot + inw * (PLINTH_D_M - 0.1) + Vector3(0, PLINTH_H_M, 0)
-	K.post(m, lamp, Vector3(0.16, 0.14, 0.2), d, T.BLACK)
-	m.use("main", "glow")
-	K.post(m, lamp + Vector3(0, 0.14, 0), Vector3(0.12, 0.012, 0.15), d, T.LED)
+	m.lathe(PackedVector2Array([Vector2(0.05, 0.0), Vector2(0.06, 0.03), Vector2(0.085, 0.13), Vector2(0.085, 0.13), Vector2(0.07, 0.13)]), 8, lamp, T.BLACK)
+	m.use("main", "tunnel_glow")
+	m.lathe(PackedVector2Array([Vector2(0.07, 0.125), Vector2(0.0, 0.125)]), 8, lamp, Color(T.WARM_LED, 0.45))
 	# the shaft: front and both sides painted, from the plinth up
 	var y0 := foot.y + PLINTH_H_M
 	var ys := T.heights(y0, top)
@@ -122,6 +126,7 @@ static func road(m: KitMesh, c: Dictionary, lines: Array) -> void:
 	var n := pts.size()
 	if n < 2 or lines.is_empty():
 		return
+	var petals: bool = T.finish(str(c.v)).get("marigold", false)
 	var segs := []
 	var edges := []
 	for l: Dictionary in lines:
@@ -154,15 +159,21 @@ static func road(m: KitMesh, c: Dictionary, lines: Array) -> void:
 		if is_nan(L[i].y) or is_nan(R[i].y) or is_nan(L[i + 1].y) or is_nan(R[i + 1].y):
 			continue
 		var up := Vector3(0, 0.008, 0)
-		# the concrete (tunnel_road: UV metres along the run and across from the left wall)
-		m.use("main", "tunnel_road")
+		# the asphalt (tunnel_road: UV metres along the run and across from the left kerb line, the alpha the metres
+		# to the nearest kerb line over 4 m), cut across at the kerb lines and near them
+		m.use("main", "tunnel_road_petals" if petals else "tunnel_road")
 		var rw0 := Vector2(R[i].x - L[i].x, R[i].z - L[i].z).length()
 		var rw1 := Vector2(R[i + 1].x - L[i + 1].x, R[i + 1].z - L[i + 1].z).length()
-		for k in ROAD_STRIPS:
-			var u0 := float(k) / ROAD_STRIPS
-			var u1 := float(k + 1) / ROAD_STRIPS
-			_oquad_uv(m, L[i].lerp(R[i], u0) + up, L[i + 1].lerp(R[i + 1], u0) + up, L[i + 1].lerp(R[i + 1], u1) + up, L[i].lerp(R[i], u1) + up,
-				Vector2(S[i], rw0 * u0), Vector2(S[i + 1], rw1 * u0), Vector2(S[i + 1], rw1 * u1), Vector2(S[i], rw0 * u1), ROAD, ROAD, ROAD, ROAD, Vector3.UP)
+		var q0 := _road_cuts(rw0, WL[i], WR[i])
+		var q1 := _road_cuts(rw1, WL[i + 1], WR[i + 1])
+		for k in q0.size() - 1:
+			var a0: Vector3 = q0[k]
+			var a1: Vector3 = q1[k]
+			var b0: Vector3 = q0[k + 1]
+			var b1: Vector3 = q1[k + 1]
+			_oquad_uv(m, L[i].lerp(R[i], a0.x / rw0) + up, L[i + 1].lerp(R[i + 1], a1.x / rw1) + up, L[i + 1].lerp(R[i + 1], b1.x / rw1) + up, L[i].lerp(R[i], b0.x / rw0) + up,
+				Vector2(S[i], a0.y), Vector2(S[i + 1], a1.y), Vector2(S[i + 1], b1.y), Vector2(S[i], b0.y),
+				T._shade(ROAD, a0.z / 4.0), T._shade(ROAD, a1.z / 4.0), T._shade(ROAD, b1.z / 4.0), T._shade(ROAD, b0.z / 4.0), Vector3.UP)
 		m.use("main", "tunnel_lit")
 		# the walkways: their top in the finish, the kerb at the road side striped black and white
 		for side in 2:
@@ -177,13 +188,30 @@ static func road(m: KitMesh, c: Dictionary, lines: Array) -> void:
 			d0 = Vector3(d0.x, 0, d0.z).normalized()
 			d1 = Vector3(d1.x, 0, d1.z).normalized()
 			var top := Vector3(0, KERB_H_M + 0.008, 0)
-			var k0 := a0 + d0 * (w0 - KERB_W_M) + top
-			var k1 := a1 + d1 * (w1 - KERB_W_M) + top
-			K.oquad(m, a0 + top, a1 + top, k1, k0, Vector3.UP, ROAD)
+			var k0 := a0 + d0 * maxf(w0 - KERB_W_M, 0.0) + top
+			var k1 := a1 + d1 * maxf(w1 - KERB_W_M, 0.0) + top
+			K.oquad(m, a0 + top, a1 + top, k1, k0, Vector3.UP, WALKWAY)
 			var e0 := a0 + d0 * w0
 			var e1 := a1 + d1 * w1
 			_kerb(m, k0, k1, e0 + top, e1 + top, e0 + Vector3(0, 0.008, 0), e1 + Vector3(0, 0.008, 0), S[i], S[i + 1], -d0)
 	m.use("main", "matte")
+
+
+## Where a road `rw` wide is cut across, with walkways wl and wr wide at its sides (NAN: none): per cut
+## Vector3(metres from the left wall, metres from the left kerb line, metres to the nearest kerb line).
+static func _road_cuts(rw: float, wl: float, wr: float) -> Array:
+	var l := 0.0 if is_nan(wl) else minf(wl, rw * 0.4)
+	var r := 0.0 if is_nan(wr) else minf(wr, rw * 0.4)
+	var half := (rw - l - r) * 0.5
+	var out := []
+	for e: float in [-l, 0.0, 0.6, 2.0]:
+		var x := minf(e, half)
+		out.append(Vector3(l + x, x, maxf(x, 0.0)))
+	out.append(Vector3(l + half, half, half))
+	for e: float in [2.0, 0.6, 0.0, -r]:
+		var x := minf(e, half)
+		out.append(Vector3(rw - r - x, rw - r - x - l, maxf(x, 0.0)))
+	return out
 
 
 ## A kerb's top (from k to e, both at its top) and its face (from e's top down to the road), in 0.5 m black and white
@@ -201,8 +229,8 @@ static func _kerb(m: KitMesh, k0: Vector3, k1: Vector3, e0: Vector3, e1: Vector3
 		K.oquad(m, f0.lerp(f1, u0), f0.lerp(f1, u1), e0.lerp(e1, u1), e0.lerp(e1, u0), -want, col)
 
 
-## The width of a walkway beside a wall corner p (plan metres to the nearest edge line, the kerb's road side), or NAN
-## when the edge line runs within 0.5 m of the wall (no walkway) or none is within 4 m at the road's level.
+## The width of a walkway or kerb beside a wall corner p (plan metres to the nearest edge line, the kerb's road side),
+## or NAN when the edge line runs within 0.15 m of the wall (no kerb) or none is within 4 m at the road's level.
 static func _walkway(edges: Array, p: Vector3, ceil_y: float) -> float:
 	var best := INF
 	for sg: Array in edges:
@@ -216,7 +244,7 @@ static func _walkway(edges: Array, p: Vector3, ceil_y: float) -> float:
 		if py > ceil_y - 3.5 or py < ceil_y - 9.0:
 			continue
 		best = minf(best, Vector2(p.x - a.x - dx * t, p.z - a.z - dz * t).length())
-	return best if best >= 0.5 and best <= 4.0 else NAN
+	return best if best >= 0.15 and best <= 4.0 else NAN
 
 
 ## The road under a ceiling corner: the nearest lane line in plan between 3.5 and 9 m under the ceiling, read where

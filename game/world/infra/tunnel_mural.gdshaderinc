@@ -4,8 +4,12 @@
 // brushed by hand on concrete, not clean vector art. Shape edges wobble a little, every colour carries brush streaks
 // and a slight shift from motif to motif, the concrete shows through in flecks, the wall has its panel joints every
 // 6 m and some grime at its foot. UV.x is metres along the wall run, UV.y metres over the road.
-//   kind 0  inside: a yellow wall with a flowing green wave band between ochre borders with white and red dots; the
-//           band's motifs change every 16 m (leaves and birds, Madhubani fish, flowers on a vine, Warli dancers)
+//   kind 0  inside (owner photo 02): the whole wall from the dado to the curve is painted. A yellow wall on one side
+//           and a green wall on the other (COLOR.g), each with a broad deep green wave band between dotted borders
+//           (a zigzag inside its edge, an inner stripe whose motifs change every 12 m: leaves and birds, Madhubani
+//           fish, flowers on a vine, paisleys), a thinner counter wave with a dotted middle crossing it, and small
+//           motifs scattered over the rest of the field (birds, sprigs, flowers, dot rings, fish, stars); the bands'
+//           widths change along the wall; COLOR.r * 16 is the height left to the wall top
 //   kind 1  the ramp walls: cream with grey-blue dandelion discs, a blue river band with white curls, pink lotus,
 //           white and brown swans, trees of three kinds (banyan, teal cypress, sapling), a saffron band with a scalloped
 //           edge and a white line under the coping (COLOR.r * 16 is the height left to the wall top): the tricolour
@@ -134,94 +138,199 @@ float warli(vec2 q, float up) {
 vec3 brushed(vec3 col, vec2 uv, float cell, bool upright) {
 	float streak = (upright ? vnoise(vec2(uv.x * 24.0, uv.y * 1.4 + cell)) : vnoise(vec2(uv.x * 1.4 + cell, uv.y * 24.0))) - 0.5;
 	float mottle = fbm(uv * 2.2) - 0.5;
-	col *= 1.0 + streak * (upright ? 0.06 : 0.1) + mottle * 0.09;
+	col *= 1.0 + streak * (upright ? 0.1 : 0.16) + mottle * 0.14;
 	col *= vec3(1.0) + (vec3(hash(cell), hash(cell + 1.7), hash(cell + 3.1)) - 0.5) * 0.07;
-	float fleck = smoothstep(0.82, 0.9, vnoise(uv * vec2(38.0, 52.0))) * smoothstep(0.55, 0.75, vnoise(uv * 3.0 + 11.0));
-	return mix(col, CONCRETE, fleck * 0.45);
+	float fleck = smoothstep(0.86, 0.92, vnoise(uv * vec2(38.0, 52.0))) * smoothstep(0.6, 0.8, vnoise(uv * 0.7 + 11.0));
+	return mix(col, CONCRETE, fleck * 0.3);
 }
 
-// the wall itself: panel joints every 6 m and grime at its foot
-vec3 concrete(vec3 col, vec2 uv) {
-	float j = abs(mod(uv.x + 3.0, 6.0) - 3.0);
-	col *= 1.0 - 0.38 * fill(j - 0.009) - 0.08 * fill(j - 0.04);
-	float foot = smoothstep(1.4, 0.55, uv.y + 0.35 * (fbm(vec2(uv.x * 1.5, 0.0)) - 0.5));
-	float drips = smoothstep(0.62, 0.95, vnoise(vec2(uv.x * 5.0, uv.y * 0.5))) * smoothstep(2.6, 0.8, uv.y);
-	return col * (1.0 - 0.2 * foot - 0.1 * drips);
+// the wall itself, weathered the way it runs: panel joints every 3 m, streaks running down from the top (`left`
+// metres under it), each its own length, a longer one under some joints, a dirty splashed band at the foot, a few
+// small chips to the concrete at the joints low down
+vec3 concrete(vec3 col, vec2 uv, float left) {
+	float j = abs(mod(uv.x + 1.5, 3.0) - 1.5);
+	float panel = floor((uv.x + 1.5) / 3.0);
+	col *= 1.0 - 0.4 * fill(j - 0.008);
+	col *= 0.92 + 0.16 * fbm(vec2(uv.x * 0.11, uv.y * 0.3));
+	float col_id = uv.x * 5.5 + 0.35 * vnoise(vec2(uv.x * 0.9, uv.y * 0.35));
+	float reach = 1.4 + 4.2 * vnoise(vec2(uv.x * 0.37, 8.0)) * vnoise(vec2(col_id * 0.31, 2.5));
+	float run = smoothstep(0.5, 0.85, vnoise(vec2(col_id, 0.5))) * smoothstep(reach, reach * 0.35, left);
+	float seam_run = smoothstep(0.07, 0.0, j) * step(0.45, hash(panel + 7.0)) * smoothstep(1.6 + 3.5 * hash(panel + 9.0), 0.8, left);
+	col = mix(col, col * vec3(0.36, 0.33, 0.29), clamp(0.8 * run + 0.7 * seam_run, 0.0, 0.85));
+	col *= 1.0 - 0.3 * smoothstep(1.6, 0.6, left + 0.5 * (vnoise(vec2(uv.x * 0.8, 6.0)) - 0.5));
+#ifdef VERTEX_LIGHT
+	// (the same band as the dado under it, tunnel_lit.gdshader)
+	float lift = 0.35 + 0.9 * t_fbm(vec2(uv.x * 0.19, 4.0));
+	float foot = smoothstep(lift + 0.45, lift - 0.2, uv.y) * (0.6 + 0.4 * t_n2(vec2(uv.x * 1.3, uv.y * 9.0)));
+#else
+	float lift = 0.5 + 0.6 * fbm(vec2(uv.x * 0.19, 4.0));
+	float foot = smoothstep(lift + 0.45, lift - 0.2, uv.y) * (0.6 + 0.4 * vnoise(vec2(uv.x * 1.3, uv.y * 9.0)));
+#endif
+	col = mix(col, col * vec3(0.4, 0.36, 0.32), foot * 0.85);
+	float chip = smoothstep(0.86, 0.9, vnoise(uv * 26.0)) * smoothstep(0.16, 0.02, j) * smoothstep(2.4, 1.0, uv.y);
+	return mix(col, CONCRETE, chip * 0.8);
 }
 
-vec3 inside(vec2 uv0) {
-	vec2 uv = hand(uv0);
+const vec3 M_YELLOW = vec3(0.84, 0.69, 0.2);
+const vec3 M_OCHRE = vec3(0.72, 0.48, 0.12);
+const vec3 M_GREEN = vec3(0.2, 0.45, 0.23);
+const vec3 M_DEEP = vec3(0.08, 0.25, 0.14);
+const vec3 M_LEAF = vec3(0.44, 0.61, 0.27);
+const vec3 M_WHITE = vec3(0.89, 0.87, 0.8);
+const vec3 M_RED = vec3(0.68, 0.17, 0.14);
+const vec3 M_RUST = vec3(0.72, 0.33, 0.12);
+
+// a fill with a dry brush edge
+float dab(float d, vec2 uv) {
+	return fill(d + (vnoise(uv * 46.0) - 0.5) * 0.016);
+}
+
+vec2 turn(vec2 q, float a) {
+	return vec2(cos(a) * q.x + sin(a) * q.y, -sin(a) * q.x + cos(a) * q.y);
+}
+
+// a paisley (local q, its round end at the origin, the tail curling up): body distance
+float paisley(vec2 q) {
+	float body = length(q * vec2(1.0, 1.25)) - 0.085;
+	float tail = tri(q, vec2(-0.06, 0.04), vec2(0.07, 0.03), vec2(0.07, 0.19));
+	return min(body, tail);
+}
+
+vec3 inside(vec2 uv0, float left, float scheme) {
+	vec2 uv = hand(uv0) + (vec2(vnoise(uv0 * 1.7), vnoise(uv0 * 1.7 + 13.0)) - 0.5) * 0.09;
 	float s = uv.x;
 	float y = uv.y;
-	float c = 2.4 + 0.55 * sin(s * 0.33) + 0.2 * sin(s * 0.9);
-	float d = abs(y - c);
-	vec3 col = YELLOW;
-	col = mix(col, OCHRE, fill(d - 0.62));
-	col = mix(col, GREEN * (0.92 + 0.16 * vnoise(vec2(s * 0.7, y * 3.0))), fill(d - 0.48));
-	// a thin white line and dots on both ochre borders
-	col = mix(col, WHITE, fill(abs(d - 0.5) - 0.012));
-	for (int side = -1; side <= 1; side += 2) {
-		float by = c + float(side) * 0.56;
-		float k = floor(s / 0.32);
-		vec2 dc = vec2((k + 0.5) * 0.32, by);
-		float r = length(vec2(s, y) - dc) - 0.05 - 0.01 * hash(k);
-		col = mix(col, mod(k, 3.0) < 1.0 ? RED : WHITE, fill(r));
+	vec2 p = vec2(s, y);
+	// the field: from the dado (1 m) to where the curve to the soffit comes out in front of the wall
+	float top = uv0.y + left - 0.62;
+	float F = max(top - 1.0, 1.6);
+	float c0 = 1.0 + F * 0.5;
+	bool green = scheme > 0.5;
+	vec3 base = green ? M_GREEN : M_YELLOW;
+	vec3 border = green ? M_YELLOW : M_OCHRE;
+	vec3 second = green ? M_WHITE : M_RUST;
+	vec3 ink = green ? M_WHITE : M_DEEP;
+	vec3 inner = green ? M_LEAF * 0.85 : M_OCHRE * 1.08;
+	vec3 col = base * (0.95 + 0.1 * vnoise(vec2(s * 0.35, y * 0.8)));
+
+	// small motifs scattered over the field on a jittered 0.72 m grid
+	vec2 g = p / 0.72;
+	vec2 id = floor(g);
+	vec2 q = (fract(g) - 0.5) * 0.72 - (vec2(hash2(id), hash2(id + 7.3)) - 0.5) * 0.3;
+	float mk = hash2(id + 3.1) * 6.0;
+	vec2 qr = turn(q, hash2(id + 5.7) * 6.283);
+	float md;
+	vec3 mc;
+	if (mk < 1.0) {
+		md = bird(q, vec2(0.0), 0.12 + 0.05 * hash2(id + 1.0));
+		mc = green ? M_WHITE : M_RED;
+	} else if (mk < 2.0) {
+		md = min(leaf(qr, vec2(0.07, 0.05), 0.6, 0.11, 0.04), leaf(qr, vec2(-0.07, 0.05), 2.54, 0.11, 0.04));
+		md = min(md, seg(qr, vec2(0.0, -0.14), vec2(0.0, 0.06)) - 0.008);
+		mc = green ? M_LEAF : M_DEEP;
+	} else if (mk < 3.0) {
+		md = length(qr) - 0.105 * (0.55 + 0.45 * abs(cos(2.5 * atan(qr.y, qr.x))));
+		mc = green ? M_WHITE : M_RED;
+	} else if (mk < 4.0) {
+		float k = floor(atan(qr.y, qr.x) / 0.7854 + 0.5) * 0.7854;
+		md = min(length(qr - 0.1 * vec2(cos(k), sin(k))) - 0.022, length(qr) - 0.032);
+		mc = green ? M_YELLOW : M_WHITE;
+	} else if (mk < 5.0) {
+		md = fish(qr * 1.7).x / 1.7;
+		mc = green ? M_YELLOW : M_RUST;
+	} else {
+		md = min(min(seg(qr, vec2(-0.09, 0.0), vec2(0.09, 0.0)), seg(qr, vec2(-0.045, -0.078), vec2(0.045, 0.078))), seg(qr, vec2(-0.045, 0.078), vec2(0.045, -0.078))) - 0.011;
+		mc = green ? M_RED : M_DEEP;
 	}
-	// the band's motif changes every 16 m
-	float panel = floor(s / 16.0);
+	col = mix(col, mc, dab(md, uv0));
+	if (mk >= 2.0 && mk < 3.0) {
+		col = mix(col, green ? M_YELLOW : M_WHITE, dab(length(qr) - 0.03, uv0));
+	}
+
+	// the counter wave: a thinner band with a dotted middle, under the main one
+	float ph = s * 0.42;
+	float cb = c0 - 0.36 * F * sin(ph + 0.9);
+	float db = abs(y - cb);
+	float wb = F * 0.07 * (1.0 + 0.35 * sin(s * 0.23 + 2.0));
+	col = mix(col, border, dab(db - wb - 0.05, uv0));
+	col = mix(col, second, dab(db - wb, uv0));
+	float kb = floor(s / 0.3);
+	float sb = (kb + 0.5) * 0.3;
+	col = mix(col, green ? M_RED : M_WHITE, dab(length(p - vec2(sb, c0 - 0.36 * F * sin(sb * 0.42 + 0.9))) - 0.042 - 0.012 * hash(kb), uv0));
+
+	// the main wave: a dotted border, a deep green body with a zigzag inside its edge, an inner stripe of motifs
+	float ca = c0 + 0.33 * F * sin(ph) + 0.05 * F * sin(s * 1.1);
+	float da = abs(y - ca);
+	float wa = F * (0.2 + 0.05 * sin(s * 0.19 + 1.0));
+	col = mix(col, border, dab(da - wa - 0.15, uv0));
+	float ka = floor(s / 0.27);
+	float sa = (ka + 0.5) * 0.27;
+	float ca_k = c0 + 0.33 * F * sin(sa * 0.42) + 0.05 * F * sin(sa * 1.1);
+	float wa_k = F * (0.2 + 0.05 * sin(sa * 0.19 + 1.0));
+	float dot_d = length(vec2(s - sa, da - (wa_k + 0.075) + (ca - ca_k) * sign(y - ca))) - 0.04 - 0.01 * hash(ka);
+	col = mix(col, mod(ka, 3.0) < 1.0 ? M_RED : M_WHITE, dab(dot_d, uv0));
+	col = mix(col, M_DEEP * (0.9 + 0.25 * vnoise(vec2(s * 0.7, y * 3.0))), dab(da - wa, uv0));
+	float zd = wa - 0.03 - da;
+	float zh = 0.13 * (1.0 - 2.0 * abs(fract(s / 0.24) - 0.5));
+	col = mix(col, green ? M_YELLOW : M_WHITE, dab(max(-zd, zd - zh), uv0));
+	float wi = wa * 0.5;
+	col = mix(col, inner, dab(da - wi, uv0));
+	col = mix(col, M_WHITE, dab(abs(da - wi) - 0.011, uv0));
+	float inb = fill(da - wi + 0.035);
+	float panel = floor(s / 12.0);
 	float theme = mod(panel, 4.0);
-	float inb = step(d, 0.46);
 	if (theme < 1.0) {
 		// leaves and white and red birds
-		float cell = floor(s / 0.9);
-		vec2 lc = vec2((cell + 0.5) * 0.9, c + (hash(cell) - 0.5) * 0.4);
-		float la = (hash(cell + 7.0) - 0.5) * 1.6;
-		float lf = leaf(vec2(s, y), lc, la, 0.26, 0.09);
-		col = mix(col, LEAF * (0.9 + 0.2 * hash(cell + 2.0)), fill(lf) * inb);
-		col = mix(col, TREE_DARK, fill(abs(lf) - 0.008) * inb);
-		float bc = floor(s / 1.8);
-		vec2 bp = vec2((bc + 0.3) * 1.8, c + 0.2 * sin(bc * 3.1));
-		col = mix(col, mod(bc, 3.0) < 1.0 ? RED : WHITE, fill(bird(vec2(s, y), bp, 0.18 + 0.08 * hash(bc))) * inb);
+		float cell = floor(s / 0.8);
+		vec2 lc = vec2((cell + 0.5) * 0.8, ca + (hash(cell) - 0.5) * wi);
+		float lf = leaf(p, lc, (hash(cell + 7.0) - 0.5) * 1.6, 0.24, 0.085);
+		col = mix(col, (green ? M_YELLOW : M_LEAF) * (0.9 + 0.2 * hash(cell + 2.0)), dab(lf, uv0) * inb);
+		col = mix(col, M_DEEP, fill(abs(lf) - 0.008) * inb);
+		float bc = floor(s / 1.6);
+		vec2 bp = vec2((bc + 0.3) * 1.6, ca + 0.5 * wi * sin(bc * 3.1));
+		col = mix(col, mod(bc, 3.0) < 1.0 ? M_RED : M_WHITE, dab(bird(p, bp, 0.16 + 0.07 * hash(bc)), uv0) * inb);
 	} else if (theme < 2.0) {
 		// Madhubani fish, nose to tail, outlined in ink and hatched
-		float cell = floor(s / 1.1);
+		float cell = floor(s / 1.0);
 		float dir = mod(cell, 2.0) < 1.0 ? 1.0 : -1.0;
-		vec2 q = (vec2(s, y) - vec2((cell + 0.5) * 1.1, c + 0.1 * sin(cell * 2.3))) * vec2(dir, 1.0);
-		vec2 f = fish(q);
-		vec3 fc = mod(cell, 3.0) < 1.0 ? ORANGE : (mod(cell, 3.0) < 2.0 ? YELLOW : PINK);
-		float hatch = step(0.5, fract((q.x + q.y) * 16.0));
-		col = mix(col, fc * (0.88 + 0.12 * hatch), fill(f.x) * inb);
+		vec2 fq = (p - vec2((cell + 0.5) * 1.0, ca + 0.3 * wi * sin(cell * 2.3))) * vec2(dir, 1.0);
+		vec2 f = fish(fq);
+		vec3 fc = mod(cell, 3.0) < 1.0 ? M_RUST : (mod(cell, 3.0) < 2.0 ? M_WHITE : M_RED);
+		float hatch = step(0.5, fract((fq.x + fq.y) * 16.0));
+		col = mix(col, fc * (0.86 + 0.14 * hatch), dab(f.x, uv0) * inb);
 		col = mix(col, INK, fill(abs(f.x) - 0.01) * inb);
 		col = mix(col, INK, fill(f.y) * inb);
 	} else if (theme < 3.0) {
 		// flowers on a vine
-		float vy = c + 0.16 * sin(s * 2.6);
-		col = mix(col, TREE_DARK, fill(abs(y - vy) - 0.014) * inb);
-		float cell = floor(s / 0.6);
-		vec2 fc = vec2((cell + 0.5) * 0.6, c + 0.16 * sin((cell + 0.5) * 0.6 * 2.6) + (mod(cell, 2.0) < 1.0 ? 0.2 : -0.2));
-		vec2 dp = vec2(s, y) - fc;
-		float th = atan(dp.y, dp.x);
-		float pet = length(dp) - 0.12 * (0.55 + 0.45 * abs(cos(2.5 * th + cell)));
-		col = mix(col, mod(cell, 2.0) < 1.0 ? WHITE : PINK, fill(pet) * inb);
+		float vy = ca + 0.4 * wi * sin(s * 2.6);
+		col = mix(col, M_DEEP, fill(abs(y - vy) - 0.014) * inb);
+		float cell = floor(s / 0.55);
+		vec2 fc = vec2((cell + 0.5) * 0.55, ca + 0.4 * wi * sin((cell + 0.5) * 0.55 * 2.6) + (mod(cell, 2.0) < 1.0 ? 0.5 : -0.5) * wi);
+		vec2 dp = p - fc;
+		float pet = length(dp) - 0.115 * (0.55 + 0.45 * abs(cos(2.5 * atan(dp.y, dp.x) + cell)));
+		col = mix(col, mod(cell, 2.0) < 1.0 ? M_WHITE : M_RED, dab(pet, uv0) * inb);
 		col = mix(col, INK, fill(abs(pet) - 0.007) * inb);
-		col = mix(col, YELLOW, fill(length(dp) - 0.03) * inb);
-		col = mix(col, LEAF, fill(leaf(vec2(s, y), vec2(fc.x + 0.3, vy), 0.6 * sin(cell), 0.12, 0.045)) * inb);
+		col = mix(col, M_YELLOW, fill(length(dp) - 0.03) * inb);
 	} else {
-		// Warli dancers in white, hand in hand
-		float cell = floor(s / 0.45);
-		vec2 q = vec2(s, y) - vec2((cell + 0.5) * 0.45, c - 0.3);
-		col = mix(col, WHITE, fill(warli(q, mod(cell, 2.0))) * inb);
-		col = mix(col, WHITE, fill(abs(y - (c - 0.36)) - 0.01) * inb);
+		// paisleys, head up and head down in turn, a dot in each
+		float cell = floor(s / 0.5);
+		float flip = mod(cell, 2.0) < 1.0 ? 1.0 : -1.0;
+		vec2 pq = (p - vec2((cell + 0.5) * 0.5, ca - 0.25 * wi * flip)) * vec2(1.0, flip);
+		float pd = paisley(pq);
+		col = mix(col, mod(cell, 3.0) < 1.0 ? M_RED : (green ? M_WHITE : M_DEEP), dab(pd, uv0) * inb);
+		col = mix(col, M_WHITE, fill(abs(pd + 0.03) - 0.007) * inb);
+		col = mix(col, M_YELLOW, fill(length(pq) - 0.025) * inb);
 	}
-	// small white flowers here and there on the yellow over the band
-	float fk = floor(s / 2.3);
-	vec2 sp = vec2((fk + hash(fk)) * 2.3, c + 0.95 + 0.4 * hash(fk + 4.0));
-	vec2 sd = vec2(s, y) - sp;
-	float sth = atan(sd.y, sd.x);
-	float sm = length(sd) - 0.07 * (0.6 + 0.4 * abs(cos(2.5 * sth)));
-	col = mix(col, mod(fk, 2.0) < 1.0 ? RED : WHITE, fill(sm) * step(0.7, d));
-	col = brushed(col, uv0, panel * 3.0 + floor(s / 1.2), false);
-	return concrete(col, uv0);
+	// a line under the curve and one over the dado close the field
+	col = mix(col, border, dab(top - 0.13 - uv0.y, uv0));
+	col = mix(col, M_WHITE, fill(abs(uv0.y - (top - 0.16)) - 0.012));
+	col = mix(col, border, dab(uv0.y - 1.1, uv0));
+	// the brush: strokes along the waves in the bands, up and down on the base coat
+	bool in_band = da < wa + 0.15 || db < wb + 0.05;
+	col = brushed(col, in_band ? vec2(uv0.x, uv0.y - (da < wa + 0.15 ? ca : cb)) : uv0, panel * 3.0 + floor(s / 1.2), !in_band);
+	// a little of the colour's edge lost: paint, not print
+	col = mix(col, vec3(dot(col, vec3(0.3, 0.6, 0.1))), 0.1);
+	return concrete(col, uv0, left);
 }
 
 vec3 tree(vec3 col, vec2 p, vec2 tp, float k) {
@@ -326,7 +435,7 @@ vec3 ramp(vec2 uv0, float left) {
 	col = mix(col, WHITE, fill(left - edge - 0.07));
 	col = mix(col, SAFFRON, fill(left - edge));
 	col = brushed(col, uv0, floor(s / 1.5), false);
-	return concrete(col, uv0);
+	return concrete(col, uv0, left);
 }
 
 vec3 pillar(vec2 uv0, vec3 base) {
@@ -359,22 +468,38 @@ vec3 pillar(vec2 uv0, vec3 base) {
 		col = mix(col, WHITE, fill(length(vec2(fract(uv.x * 4.0) - 0.5, mod(uv.y, 0.2) - 0.1) * vec2(0.25, 1.0)) - 0.02));
 	}
 	col = brushed(col, uv0, 5.0, true);
+	col = mix(col, vec3(dot(col, vec3(0.3, 0.6, 0.1))), 0.12);
+	// wear: chips to the concrete at the edges and low down, scuffs at bumper height, grime up from the plinth
+	float ex2 = side < 0.5 ? min(uv.x, 1.1 - uv.x) : 0.5;
+	float chipn = vnoise(uv0 * 15.0) * 0.6 + vnoise(uv0 * 34.0) * 0.4;
+	float where = 0.2 * smoothstep(0.1, 0.0, ex2) * smoothstep(0.3, 0.7, vnoise(vec2(uv0.y * 0.8, 3.0))) + 0.1 * smoothstep(1.9, 0.9, uv0.y);
+	col = mix(col, CONCRETE * (0.75 + 0.4 * chipn), smoothstep(0.84 - where, 0.88 - where, chipn) * 0.85);
+	float scuff = smoothstep(0.6, 0.85, vnoise(vec2(uv0.x * 3.0, uv0.y * 26.0))) * smoothstep(0.5, 0.0, abs(uv0.y - 1.35));
+	col = mix(col, vec3(0.2, 0.19, 0.18), scuff * 0.45);
+	float streak = smoothstep(0.5, 0.9, vnoise(vec2(uv0.x * 9.0, uv0.y * 0.3)));
+	col *= 1.0 - 0.22 * streak - 0.3 * smoothstep(1.8, 0.9, uv0.y + 0.3 * vnoise(vec2(uv0.x * 4.0, 2.0)));
 	return col;
 }
 
 void fragment() {
 	vec3 c;
+	float left = COLOR.r * 16.0;
 	if (kind == 0) {
-		c = inside(UV);
+		c = inside(UV, left, COLOR.g);
 	} else if (kind == 1) {
-		c = ramp(UV, COLOR.r * 16.0);
+		c = ramp(UV, left);
 	} else {
 		c = pillar(UV, COLOR.rgb);
 	}
 #ifdef VERTEX_LIGHT
-	float fade = clamp(1.0 - length(VERTEX) / 60.0, 0.0, 1.0);
-	vec3 nb = t_bump(v_wnrm, v_wpos, 11.0, 0.02 * fade);
-	ALBEDO = tunnel_shade(to_linear(c), nb, normalize(CAMERA_POSITION_WORLD - v_wpos), v_s0, v_s1, 32.0, 0.25, light_level);
+	TUNNEL_DIRS
+	float near = clamp(1.0 - t_dist / 45.0, 0.0, 1.0);
+	vec3 g = t_n2d(UV * 17.0);
+	vec3 nb = t_bend(v_wnrm, g.yz * 0.05 * near);
+	// darker into the curve at the top of a wall and down to its foot; a pillar: up from its plinth
+	float ao = kind == 0 ? mix(0.72, 1.0, smoothstep(0.62, 1.5, left)) * mix(0.62, 1.0, smoothstep(0.6, 1.9, UV.y)) : mix(0.6, 1.0, smoothstep(0.7, 1.8, UV.y));
+	ALBEDO = tunnel_out(tunnel_shade(to_linear(c), nb, t_v, v_s0, v_s1, t_d0, t_d1, 30.0, 0.11, ao), t_dist);
+	FOG = vec4(0.0);
 #else
 	ALBEDO = to_linear(c);
 	ROUGHNESS = roughness_base;

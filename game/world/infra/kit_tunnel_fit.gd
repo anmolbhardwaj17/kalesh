@@ -75,10 +75,10 @@ static func message_sign(m: KitMesh, top: Vector3, d: Vector3, w: float) -> void
 		K.post(m, c + Vector3(0, 0.05, 0) + d * (sg * 0.172), Vector3(w - 0.08, 0.66, 0.01), along, SIGN_FACE)
 	for sg in [-0.35, 0.35]:
 		K.post(m, c + across * (w * sg) + Vector3(0, 0.78, 0), Vector3(0.06, 0.2, 0.06), along, SIGN_FRAME)
-	m.use("main", "glow")
+	m.use("main", "tunnel_glow")
 	for sg in [-1.0, 1.0]:
 		for row in 2:
-			K.post(m, c + Vector3(0, 0.18 + row * 0.26, 0) + d * (sg * 0.18), Vector3(w * (0.7 - 0.2 * row), 0.11, 0.01), along, SIGN_TEXT)
+			K.post(m, c + Vector3(0, 0.18 + row * 0.26, 0) + d * (sg * 0.18), Vector3(w * (0.7 - 0.2 * row), 0.11, 0.01), along, Color(SIGN_TEXT, 0.45))
 	m.use("main", "matte")
 
 

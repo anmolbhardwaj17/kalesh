@@ -101,12 +101,17 @@ func test_a_piers_sides_face_away_from_it_and_a_soffit_faces_down() -> void:
 func test_a_tunnel_ceiling_faces_down_its_walls_face_the_road_and_the_mouth_has_its_name() -> void:
 	var out := InfraKit.build(records(), Vector3.ZERO)
 	var base: Dictionary = out.tunnel.base.arrays_of("main")
-	t.ok(base.has("glow"), "the tunnel lamps are in the glow material")
-	# the inside of a roofed stretch is tunnel_lit (even light from the strip lines), the open walls satin or matte
-	t.ok(base.has("tunnel_lit"), "the inside of the tunnel uses the even tunnel light")
+	t.ok(base.has("glow"), "the lamps at the mouth are in the glow material")
+	t.ok(base.has("tunnel_glow"), "the strip lines inside are in the tunnel's own glow material")
+	# the inside of a roofed stretch is lit by the strip lines (tunnel_lit.gdshader: the walls, the soffit, the road
+	# and the fittings each on their surface), the open walls satin or matte
+	for key: String in ["tunnel_wall", "tunnel_soffit"]:
+		t.ok(base.has(key), "the inside of the tunnel has its %s surface" % key)
+		if base.has(key):
+			t.ok(base[key][Mesh.ARRAY_TEX_UV] != null and base[key][Mesh.ARRAY_CUSTOM0] != null, "%s carries the shader's UV and the strip vectors" % key)
 	var v := PackedVector3Array()
 	var nrm := PackedVector3Array()
-	for key: String in ["matte", "satin", "tunnel_lit"]:
+	for key: String in ["matte", "satin", "tunnel_lit", "tunnel_wall", "tunnel_soffit"]:
 		if not base.has(key):
 			continue
 		var arr: Array = base[key]

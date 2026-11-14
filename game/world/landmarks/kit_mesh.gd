@@ -129,6 +129,28 @@ func quad_uv(a: Vector3, b: Vector3, c: Vector3, d: Vector3, ua: Vector2, ub: Ve
 	triangles += 2
 
 
+## A quad with a normal, a UV and a colour per corner (P2-032: the curve between a tunnel wall and its soffit shades
+## smooth). Counter-clockwise seen from the side it faces; the normals are given in the local frame.
+func quad_n(a: Vector3, b: Vector3, c: Vector3, d: Vector3, na: Vector3, nb: Vector3, nc: Vector3, nd: Vector3, ua: Vector2, ub: Vector2, uc: Vector2, ud: Vector2, ca: Color, cb: Color, cc: Color, cd: Color) -> void:
+	var wa := xf * a
+	var wb := xf * b
+	var wc := xf * c
+	var wd := xf * d
+	if ((wb - wa).cross(wc - wa) + (wc - wa).cross(wd - wa)).length_squared() < 1e-12:
+		return
+	var s := _surf()
+	var base := s.v.size()
+	if s.uv.size() < base:
+		s.uv.resize(base)
+	s.v.append_array([wa, wb, wc, wd])
+	s.n.append_array([(xf.basis * na).normalized(), (xf.basis * nb).normalized(), (xf.basis * nc).normalized(), (xf.basis * nd).normalized()])
+	s.c.append_array([ca, cb, cc, cd])
+	s.uv.append_array([ua, ub, uc, ud])
+	s.i.append_array([base, base + 2, base + 1, base, base + 3, base + 2])
+	top = maxf(top, maxf(maxf(wa.y, wb.y), maxf(wc.y, wd.y)))
+	triangles += 2
+
+
 ## A box centred at c, full size sz, turned yaw radians about Y. `bottom` false leaves the underside out.
 func box(c: Vector3, sz: Vector3, col: Color, yaw := 0.0, bottom := false, solid := true) -> void:
 	push(Transform3D(Basis(Vector3.UP, yaw), c))

@@ -13,7 +13,7 @@ const KitMesh := preload("res://world/landmarks/kit_mesh.gd")
 const Tunnel := preload("res://world/infra/kit_tunnel.gd")
 
 ## The materials whose vertices carry the strip vectors.
-const KEYS := ["tunnel_lit", "tunnel_road", "mural_wave", "mural_pillar"]
+const KEYS := ["tunnel_lit", "tunnel_road", "tunnel_road_petals", "tunnel_wall", "tunnel_soffit", "mural_wave", "mural_pillar"]
 ## Plan cell of the strip segment grid (m) and how far a strip lights.
 const CELL := 8.0
 const REACH_M := 14.0
@@ -44,8 +44,8 @@ static func strips(tceils: Array, to_local: Transform3D) -> Array:
 	return out
 
 
-## Writes the strip vectors of every vertex of the KEYS surfaces of a sink.
-static func apply(m: KitMesh, segs: Array) -> void:
+## The plan grid of strip segments: cell -> indices of the segments that reach it.
+static func grid_of(segs: Array) -> Dictionary:
 	var grid := {}
 	for k in segs.size():
 		var s: Dictionary = segs[k]
@@ -61,6 +61,47 @@ static func apply(m: KitMesh, segs: Array) -> void:
 				if not grid.has(cell):
 					grid[cell] = []
 				grid[cell].append(k)
+	return grid
+
+
+## True when the point p is under a roof: a strip line runs within 8 m of it in plan, 2 m or more over it (lane
+## lines and drains inside take the tunnel's light, the ones on an open ramp the sky's).
+static func under(p: Vector3, segs: Array, grid: Dictionary) -> bool:
+	for k: int in grid.get(Vector2i(floori(p.x / CELL), floori(p.z / CELL)), []):
+		var s: Dictionary = segs[k]
+		var a: Vector3 = s.a
+		var b: Vector3 = s.b
+		var d := Vector2(b.x - a.x, b.z - a.z)
+		var l2 := d.length_squared()
+		var t := 0.0 if l2 < 1e-8 else clampf((Vector2(p.x - a.x, p.z - a.z)).dot(d) / l2, 0.0, 1.0)
+		var q := a.lerp(b, t)
+		if q.y > p.y + 2.0 and Vector2(q.x - p.x, q.z - p.z).length() < 8.0:
+			return true
+	return false
+
+
+## Writes the strip vectors of every vertex of the KEYS surfaces of a sink. The two strip lines are chosen once per
+## primitive (a quad, a triangle, a lathe: its vertices lie together in the surface) from its middle, and every vertex
+## of it takes its own vector to those same two lines: where more than two strips are near (a merge, two carriageways
+## side by side) vertices that each chose their own pair interpolated a vector to one line into a vector to another,
+## and the road showed its triangles. Built for speed (a tunnel tile has some 300,000 vertices): the choice is kept per
+## metre cell and facing, a small primitive takes the segment nearest its middle for all its vertices, and only a
+## primitive over 2 m looks for each vertex's own segment.
+static func apply(m: KitMesh, segs: Array) -> void:
+	var grid := grid_of(segs)
+	var ns := segs.size()
+	var A := PackedVector3Array()
+	var D := PackedVector3Array()
+	var LINE := PackedInt32Array()
+	A.resize(ns)
+	D.resize(ns)
+	LINE.resize(ns)
+	for k in ns:
+		var sg: Dictionary = segs[k]
+		A[k] = sg.a
+		D[k] = sg.b - sg.a
+		LINE[k] = int(sg.line)
+	var picks := {}
 	for part: String in m.parts:
 		for key: String in m.parts[part]:
 			if not KEYS.has(key):
@@ -69,46 +110,117 @@ static func apply(m: KitMesh, segs: Array) -> void:
 			var nv := s.v.size()
 			s.cu0.resize(nv * 4)
 			s.cu1.resize(nv * 4)
-			for i in nv:
-				var two := lights_at(s.v[i], s.n[i], segs, grid.get(Vector2i(floori(s.v[i].x / CELL), floori(s.v[i].z / CELL)), []))
-				for j in 4:
-					s.cu0[i * 4 + j] = two[0][j]
-					s.cu1[i * 4 + j] = two[1][j]
+			s.cu0.fill(0.0)
+			s.cu1.fill(0.0)
+			# the primitives: runs of vertices joined by triangles (each primitive's vertices are appended together)
+			var lo := -1
+			var hi := -1
+			var nt := s.i.size() / 3
+			for t in nt + 1:
+				var a := nv
+				var b := nv
+				if t < nt:
+					a = mini(s.i[t * 3], mini(s.i[t * 3 + 1], s.i[t * 3 + 2]))
+					b = maxi(s.i[t * 3], maxi(s.i[t * 3 + 1], s.i[t * 3 + 2]))
+				if lo >= 0 and a <= hi and t < nt:
+					lo = mini(lo, a)
+					hi = maxi(hi, b)
+					continue
+				if lo >= 0:
+					_light_run(s, lo, hi, grid, A, D, LINE, picks)
+				lo = a
+				hi = b
 
 
-## The two strips that light a point with normal n: [Vector4(to the strip xyz, 1), ...], Vector4.ZERO for none.
-## Per strip line its nearest segment; the two lines that give the most light (cos over distance, a little for a
-## face turned away so a pillar's side still knows its strips).
-static func lights_at(p: Vector3, n: Vector3, segs: Array, cand: Array) -> Array:
+## The strip vectors of the vertices lo to hi of a surface (one primitive): the two lines from its middle.
+static func _light_run(s: KitMesh.Surf, lo: int, hi: int, grid: Dictionary, A: PackedVector3Array, D: PackedVector3Array, LINE: PackedInt32Array, picks: Dictionary) -> void:
+	var mid := Vector3.ZERO
+	var nrm := Vector3.ZERO
+	for i in range(lo, hi + 1):
+		mid += s.v[i]
+		nrm += s.n[i]
+	mid /= float(hi - lo + 1)
+	nrm = nrm.normalized() if nrm.length() > 1e-4 else Vector3.UP
+	var size := 0.0
+	for i in range(lo, hi + 1):
+		size = maxf(size, (s.v[i] - mid).length_squared())
+	# the choice for this metre cell and facing: [line, segment, line, segment] (-1: none)
+	var ax := nrm.abs().max_axis_index()
+	var pk := Vector4i(floori(mid.x), floori(mid.y), floori(mid.z), ax * 2 + (1 if nrm[ax] > 0.0 else 0))
+	var pick: PackedInt32Array
+	if picks.has(pk):
+		pick = picks[pk]
+	else:
+		pick = _pick(mid, nrm, grid.get(Vector2i(floori(mid.x / CELL), floori(mid.z / CELL)), []), A, D, LINE)
+		picks[pk] = pick
+	for j in 2:
+		var line := pick[j * 2]
+		var seg := pick[j * 2 + 1]
+		if line < 0:
+			continue
+		for i in range(lo, hi + 1):
+			var p := s.v[i]
+			var k := seg
+			if size > 1.0:
+				# a primitive over 2 m across: each vertex its own nearest segment of the line
+				var best := INF
+				for c: int in grid.get(Vector2i(floori(p.x / CELL), floori(p.z / CELL)), []):
+					if LINE[c] != line:
+						continue
+					var dc := D[c]
+					var l2c := dc.length_squared()
+					var uc := 0.0 if l2c < 1e-8 else clampf((p - A[c]).dot(dc) / l2c, 0.0, 1.0)
+					var rc := (A[c] + dc * uc - p).length_squared()
+					if rc < best:
+						best = rc
+						k = c
+			var d := D[k]
+			var l2 := d.length_squared()
+			# the nearest point of the segment's line (not clamped past its ends by more than a little)
+			var u := 0.0 if l2 < 1e-8 else clampf((p - A[k]).dot(d) / l2, -0.5, 1.5)
+			var to := A[k] + d * u - p
+			if j == 0:
+				s.cu0[i * 4] = to.x
+				s.cu0[i * 4 + 1] = to.y
+				s.cu0[i * 4 + 2] = to.z
+				s.cu0[i * 4 + 3] = 1.0
+			else:
+				s.cu1[i * 4] = to.x
+				s.cu1[i * 4 + 1] = to.y
+				s.cu1[i * 4 + 2] = to.z
+				s.cu1[i * 4 + 3] = 1.0
+
+
+## The two strip lines that light a point with normal n most (cos over distance, a little for a face turned away so a
+## pillar's side still knows its strips), in id order, each with its segment nearest the point: [line, segment, line,
+## segment], -1 where fewer are in reach over the point.
+static func _pick(p: Vector3, n: Vector3, cand: Array, A: PackedVector3Array, D: PackedVector3Array, LINE: PackedInt32Array) -> PackedInt32Array:
+	# line -> [distance, weight, segment]
 	var best := {}
 	for k: int in cand:
-		var s: Dictionary = segs[k]
-		var a: Vector3 = s.a
-		var b: Vector3 = s.b
-		var d := b - a
-		var L2 := d.length_squared()
-		var t := 0.0 if L2 < 1e-8 else clampf((p - a).dot(d) / L2, 0.0, 1.0)
-		# the nearest point of the segment's line (not clamped past the run's ends by more than a little)
-		var tl := 0.0 if L2 < 1e-8 else clampf((p - a).dot(d) / L2, -0.5, 1.5)
-		var q := a + d * tl
-		var r := (a + d * t - p).length()
-		if r > REACH_M or q.y < p.y - 0.4:
+		var d := D[k]
+		var l2 := d.length_squared()
+		var t := 0.0 if l2 < 1e-8 else clampf((p - A[k]).dot(d) / l2, 0.0, 1.0)
+		var v := A[k] + d * t - p
+		var r := v.length()
+		if r > REACH_M or v.y < -0.4:
 			continue
-		var line: int = s.line
+		var line := LINE[k]
 		if not best.has(line) or r < float(best[line][0]):
-			best[line] = [r, q - p]
-	var picks := []
+			var rr := maxf(r, 0.05)
+			best[line] = [r, maxf(0.05, n.dot(v / rr)) / rr, k]
+	var first := -1
+	var second := -1
 	for line: int in best:
-		var v: Vector3 = best[line][1]
-		var r := maxf(v.length(), 0.05)
-		picks.append([maxf(0.05, n.dot(v / r)) / r, v, line])
-	picks.sort_custom(func(x: Array, y: Array) -> bool: return float(x[0]) > float(y[0]))
-	# the two kept in the order of their line ids, so the vertices of a triangle that see the same two strips put
-	# each in the same channel (a swapped pair would interpolate one strip into the other)
-	var two := picks.slice(0, 2)
-	two.sort_custom(func(x: Array, y: Array) -> bool: return int(x[2]) < int(y[2]))
-	var out := [Vector4.ZERO, Vector4.ZERO]
-	for j in two.size():
-		var v: Vector3 = two[j][1]
-		out[j] = Vector4(v.x, v.y, v.z, 1.0)
-	return out
+		var w := float(best[line][1])
+		if first < 0 or w > float(best[first][1]):
+			second = first
+			first = line
+		elif second < 0 or w > float(best[second][1]):
+			second = line
+	# in the order of their ids, so every primitive that sees the same two strips puts each in the same channel
+	if second >= 0 and second < first:
+		var x := first
+		first = second
+		second = x
+	return PackedInt32Array([first, int(best[first][2]) if first >= 0 else -1, second, int(best[second][2]) if second >= 0 else -1])

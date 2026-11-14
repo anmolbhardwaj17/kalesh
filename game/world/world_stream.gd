@@ -180,6 +180,8 @@ func _spawn_on_pin(pin: Dictionary) -> Dictionary:
 
 ## The streaming focus follows the node the player controls (the vehicle or the character on foot).
 func _process(_delta: float) -> void:
+	if infra != null:
+		infra.tick()
 	if not booted:
 		return
 	var p := get_tree().get_first_node_in_group("player") as Node3D
