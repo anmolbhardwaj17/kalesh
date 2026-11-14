@@ -47,7 +47,8 @@ static func _flat(color: Color) -> StandardMaterial3D:
 ## One ArrayMesh from the header meshes whose material is in `only` (or, with `only` empty, not in `skip`).
 ## Returns {mesh (null when the tile has none of them), triangles, node = null} or {error} when the mesh reaches
 ## outside the tile plus its margin (the magnitude rule, on the bounds the engine worked out).
-static func build(tile: Dictionary, materials: Dictionary, only: Array, skip: Array) -> Dictionary:
+## `uv2_fn` (optional) rewrites the UV2 array of each surface that has one (buildings.gd repaints the shell tints).
+static func build(tile: Dictionary, materials: Dictionary, only: Array, skip: Array, uv2_fn := Callable()) -> Dictionary:
 	var mesh := ArrayMesh.new()
 	var triangles := 0
 	var surfaces := 0
@@ -66,7 +67,7 @@ static func build(tile: Dictionary, materials: Dictionary, only: Array, skip: Ar
 		if m.has("uv"):
 			arrays[Mesh.ARRAY_TEX_UV] = TileReader.vec2(tile, int(m.uv), n)
 		if m.has("uv2"):
-			arrays[Mesh.ARRAY_TEX_UV2] = TileReader.vec2(tile, int(m.uv2), n)
+			arrays[Mesh.ARRAY_TEX_UV2] = TileReader.vec2(tile, int(m.uv2), n) if not uv2_fn.is_valid() else uv2_fn.call(TileReader.vec2(tile, int(m.uv2), n))
 		mesh.add_surface_from_arrays(Mesh.PRIMITIVE_TRIANGLES, arrays)
 		mesh.surface_set_name(surfaces, str(m.name))
 		mesh.surface_set_material(surfaces, materials.get(material, materials[OTHER]))

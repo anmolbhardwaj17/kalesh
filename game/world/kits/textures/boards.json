@@ -1,0 +1,2046 @@
+{
+ "_doc": "Sign board cells of each kit atlas (tools/kits/make_textures.mjs): cell i is at x = (i % 4) * 256, y = floor(i / 4) * 64 of the 1024 px atlas. Every name is copied from game/data/names/<area>.json (respect rule: invented names only).",
+ "kits": {
+  "colonnade": {
+   "area": "cp_inner_circle",
+   "cells": [
+    {
+     "cell": 0,
+     "kind": "clothing",
+     "text": {
+      "latn": "Linen and Loom"
+     }
+    },
+    {
+     "cell": 1,
+     "kind": "clothing",
+     "text": {
+      "latn": "Heritage Handloom House",
+      "deva": "हेरिटेज हैंडलूम हाउस"
+     }
+    },
+    {
+     "cell": 2,
+     "kind": "clothing",
+     "text": {
+      "latn": "Gentleman's Tailors and Outfitters"
+     }
+    },
+    {
+     "cell": 3,
+     "kind": "clothing",
+     "text": {
+      "latn": "Madras Cotton House"
+     }
+    },
+    {
+     "cell": 4,
+     "kind": "clothing",
+     "text": {
+      "latn": "Tailor Master Cutters",
+      "deva": "टेलर मास्टर कटर्स"
+     }
+    },
+    {
+     "cell": 5,
+     "kind": "handicraft",
+     "text": {
+      "latn": "State Emporium Craft Hall"
+     }
+    },
+    {
+     "cell": 6,
+     "kind": "handicraft",
+     "text": {
+      "latn": "Kashida Embroidery House"
+     }
+    },
+    {
+     "cell": 7,
+     "kind": "office",
+     "text": {
+      "latn": "Raisina Associates Chartered Accountants"
+     }
+    },
+    {
+     "cell": 8,
+     "kind": "office",
+     "text": {
+      "latn": "Barakhamba Legal Chambers"
+     }
+    },
+    {
+     "cell": 9,
+     "kind": "office",
+     "text": {
+      "latn": "Dhar and Mehta Solicitors"
+     }
+    },
+    {
+     "cell": 10,
+     "kind": "office",
+     "text": {
+      "latn": "Colonnade Travel Desk"
+     }
+    },
+    {
+     "cell": 11,
+     "kind": "office",
+     "text": {
+      "latn": "Capital Insurance Agents"
+     }
+    },
+    {
+     "cell": 12,
+     "kind": "office",
+     "text": {
+      "latn": "Delhi Chamber of Commerce",
+      "deva": "दिल्ली चैंबर ऑफ़ कॉमर्स"
+     }
+    },
+    {
+     "cell": 13,
+     "kind": "hotel",
+     "text": {
+      "latn": "Hotel Connaught Palace",
+      "deva": "होटल कनॉट पैलेस"
+     }
+    },
+    {
+     "cell": 14,
+     "kind": "hotel",
+     "text": {
+      "latn": "Hotel Regent Court"
+     }
+    },
+    {
+     "cell": 15,
+     "kind": "hotel",
+     "text": {
+      "latn": "The Colonnade Inn"
+     }
+    },
+    {
+     "cell": 16,
+     "kind": "transport",
+     "text": {
+      "latn": "Metro Rajiv Chowk Exit Four",
+      "deva": "मेट्रो राजीव चौक निकास चार"
+     }
+    },
+    {
+     "cell": 17,
+     "kind": "transport",
+     "text": {
+      "latn": "Pre-paid Auto Stand",
+      "deva": "प्रीपेड ऑटो स्टैंड"
+     }
+    },
+    {
+     "cell": 18,
+     "kind": "cafe",
+     "text": {
+      "latn": "Blue Door Cafe"
+     }
+    },
+    {
+     "cell": 19,
+     "kind": "cafe",
+     "text": {
+      "latn": "The Brass Kettle Cafe"
+     }
+    },
+    {
+     "cell": 20,
+     "kind": "cafe",
+     "text": {
+      "latn": "Colonnade Coffee House",
+      "deva": "कोलोनेड कॉफ़ी हाउस"
+     }
+    },
+    {
+     "cell": 21,
+     "kind": "cafe",
+     "text": {
+      "latn": "Evening Tiffin Room"
+     }
+    },
+    {
+     "cell": 22,
+     "kind": "restaurant",
+     "text": {
+      "latn": "The Peacock Room"
+     }
+    },
+    {
+     "cell": 23,
+     "kind": "restaurant",
+     "text": {
+      "latn": "Lotus Garden Restaurant",
+      "deva": "लोटस गार्डन रेस्टोरेंट"
+     }
+    },
+    {
+     "cell": 24,
+     "kind": "restaurant",
+     "text": {
+      "latn": "Spice Route Kitchen"
+     }
+    },
+    {
+     "cell": 25,
+     "kind": "restaurant",
+     "text": {
+      "latn": "Raj Darbar Dining",
+      "deva": "राज दरबार डाइनिंग"
+     }
+    },
+    {
+     "cell": 26,
+     "kind": "restaurant",
+     "text": {
+      "latn": "North Block Grill"
+     }
+    },
+    {
+     "cell": 27,
+     "kind": "restaurant",
+     "text": {
+      "latn": "Anand Vegetarian Restaurant",
+      "deva": "आनंद वेजिटेरियन रेस्टोरेंट"
+     }
+    },
+    {
+     "cell": 28,
+     "kind": "restaurant",
+     "text": {
+      "latn": "Mehfil Bar and Kitchen"
+     }
+    },
+    {
+     "cell": 29,
+     "kind": "bar",
+     "text": {
+      "latn": "The Copper Pot Bar"
+     }
+    },
+    {
+     "cell": 30,
+     "kind": "bar",
+     "text": {
+      "latn": "Midnight Verandah"
+     }
+    },
+    {
+     "cell": 31,
+     "kind": "bakery",
+     "text": {
+      "latn": "Rosewood Bakery"
+     }
+    }
+   ]
+  },
+  "bazaar": {
+   "area": "chandni_chowk_main",
+   "cells": [
+    {
+     "cell": 0,
+     "kind": "cloth",
+     "text": {
+      "latn": "Lal Chand Textiles",
+      "deva": "लाल चंद टेक्सटाइल्स"
+     }
+    },
+    {
+     "cell": 1,
+     "kind": "cloth",
+     "text": {
+      "latn": "Shree Ganga Saree Bhandar",
+      "deva": "श्री गंगा साड़ी भंडार"
+     }
+    },
+    {
+     "cell": 2,
+     "kind": "cloth",
+     "text": {
+      "latn": "Mehra Dupatta House",
+      "deva": "मेहरा दुपट्टा हाउस"
+     }
+    },
+    {
+     "cell": 3,
+     "kind": "cloth",
+     "text": {
+      "latn": "Naya Rang Fabrics",
+      "deva": "नया रंग फैब्रिक्स"
+     }
+    },
+    {
+     "cell": 4,
+     "kind": "cloth",
+     "text": {
+      "latn": "Banarasi Silk Emporium",
+      "deva": "बनारसी सिल्क एम्पोरियम"
+     }
+    },
+    {
+     "cell": 5,
+     "kind": "cloth",
+     "text": {
+      "latn": "Kapda Mandir",
+      "deva": "कपड़ा मंदिर"
+     }
+    },
+    {
+     "cell": 6,
+     "kind": "eatery",
+     "text": {
+      "latn": "Old Delhi Chaat Corner",
+      "deva": "ओल्ड दिल्ली चाट कॉर्नर"
+     }
+    },
+    {
+     "cell": 7,
+     "kind": "eatery",
+     "text": {
+      "latn": "Dahi Bhalla Bhandar",
+      "deva": "दही भल्ला भंडार"
+     }
+    },
+    {
+     "cell": 8,
+     "kind": "eatery",
+     "text": {
+      "latn": "Kachori Sabzi Wale",
+      "deva": "कचौड़ी सब्ज़ी वाले"
+     }
+    },
+    {
+     "cell": 9,
+     "kind": "eatery",
+     "text": {
+      "latn": "Nihari Kulcha House",
+      "deva": "नहारी कुलचा हाउस",
+      "arab": "نہاری کلچہ ہاؤس"
+     }
+    },
+    {
+     "cell": 10,
+     "kind": "eatery",
+     "text": {
+      "latn": "Bade Miyan Kebab Corner",
+      "arab": "بڑے میاں کباب کارنر"
+     }
+    },
+    {
+     "cell": 11,
+     "kind": "eatery",
+     "text": {
+      "latn": "Lassi Wala Gopal",
+      "deva": "लस्सी वाला गोपाल"
+     }
+    },
+    {
+     "cell": 12,
+     "kind": "eatery",
+     "text": {
+      "latn": "Shahi Biryani Point",
+      "deva": "शाही बिरयानी पॉइंट",
+      "arab": "شاہی بریانی پوائنٹ"
+     }
+    },
+    {
+     "cell": 13,
+     "kind": "tea",
+     "text": {
+      "latn": "Kulhad Chai Stall",
+      "deva": "कुल्हड़ चाय स्टॉल"
+     }
+    },
+    {
+     "cell": 14,
+     "kind": "tea",
+     "text": {
+      "latn": "Nukkad Ki Chai",
+      "deva": "नुक्कड़ की चाय"
+     }
+    },
+    {
+     "cell": 15,
+     "kind": "hotel",
+     "text": {
+      "latn": "Hotel Shanti Palace",
+      "deva": "होटल शांति पैलेस"
+     }
+    },
+    {
+     "cell": 16,
+     "kind": "hotel",
+     "text": {
+      "latn": "Hotel Gulab Bhawan",
+      "deva": "होटल गुलाब भवन"
+     }
+    },
+    {
+     "cell": 17,
+     "kind": "lodge",
+     "text": {
+      "latn": "Chandni Guest Lodge",
+      "deva": "चाँदनी गेस्ट लॉज"
+     }
+    },
+    {
+     "cell": 18,
+     "kind": "office",
+     "text": {
+      "latn": "Gupta and Sons Traders",
+      "deva": "गुप्ता एंड सन्स ट्रेडर्स"
+     }
+    },
+    {
+     "cell": 19,
+     "kind": "office",
+     "text": {
+      "latn": "Delhi Kapda Vyapar Mandal",
+      "deva": "दिल्ली कपड़ा व्यापार मंडल"
+     }
+    },
+    {
+     "cell": 20,
+     "kind": "office",
+     "text": {
+      "latn": "Chandni Chowk Traders Association",
+      "deva": "चाँदनी चौक ट्रेडर्स एसोसिएशन"
+     }
+    },
+    {
+     "cell": 21,
+     "kind": "office",
+     "text": {
+      "latn": "Jain Brothers Commission Agents",
+      "deva": "जैन ब्रदर्स कमीशन एजेंट्स"
+     }
+    },
+    {
+     "cell": 22,
+     "kind": "transport",
+     "text": {
+      "latn": "Chandni Chowk Cycle Rickshaw Stand",
+      "deva": "चाँदनी चौक साइकिल रिक्शा स्टैंड"
+     }
+    },
+    {
+     "cell": 23,
+     "kind": "transport",
+     "text": {
+      "latn": "Metro Gate Number One",
+      "deva": "मेट्रो गेट नंबर एक"
+     }
+    },
+    {
+     "cell": 24,
+     "kind": "transport",
+     "text": {
+      "latn": "Ghar Tak Tempo Service",
+      "deva": "घर तक टेम्पो सर्विस"
+     }
+    },
+    {
+     "cell": 25,
+     "kind": "bridal",
+     "text": {
+      "latn": "Dulhan Lehenga Ghar",
+      "deva": "दुल्हन लहंगा घर"
+     }
+    },
+    {
+     "cell": 26,
+     "kind": "bridal",
+     "text": {
+      "latn": "Shagun Bridal Wear",
+      "deva": "शगुन ब्राइडल वियर"
+     }
+    },
+    {
+     "cell": 27,
+     "kind": "bridal",
+     "text": {
+      "latn": "Rani Rang Lehenga Centre",
+      "deva": "रानी रंग लहंगा सेंटर"
+     }
+    },
+    {
+     "cell": 28,
+     "kind": "jeweller",
+     "text": {
+      "latn": "Hira Moti Jewellers",
+      "deva": "हीरा मोती ज्वेलर्स"
+     }
+    },
+    {
+     "cell": 29,
+     "kind": "jeweller",
+     "text": {
+      "latn": "Sone Ki Dukaan Jewellers",
+      "deva": "सोने की दुकान ज्वेलर्स"
+     }
+    },
+    {
+     "cell": 30,
+     "kind": "jeweller",
+     "text": {
+      "latn": "Pannalal Silver House",
+      "deva": "पन्नालाल सिल्वर हाउस"
+     }
+    },
+    {
+     "cell": 31,
+     "kind": "sweets",
+     "text": {
+      "latn": "Chandni Mithai Ghar",
+      "deva": "चाँदनी मिठाई घर"
+     }
+    }
+   ]
+  },
+  "gali": {
+   "area": "chandni_chowk_galis",
+   "cells": [
+    {
+     "cell": 0,
+     "kind": "eatery",
+     "text": {
+      "latn": "Shudh Ghee Parantha House",
+      "deva": "शुद्ध घी परांठा हाउस"
+     }
+    },
+    {
+     "cell": 1,
+     "kind": "eatery",
+     "text": {
+      "latn": "Aloo Gobhi Parantha Corner",
+      "deva": "आलू गोभी परांठा कॉर्नर"
+     }
+    },
+    {
+     "cell": 2,
+     "kind": "eatery",
+     "text": {
+      "latn": "Khurchan Paratha Wale",
+      "deva": "खुरचन परांठा वाले"
+     }
+    },
+    {
+     "cell": 3,
+     "kind": "eatery",
+     "text": {
+      "latn": "Gali Ka Kulcha Chole",
+      "deva": "गली का कुलचा छोले"
+     }
+    },
+    {
+     "cell": 4,
+     "kind": "eatery",
+     "text": {
+      "latn": "Daulat Ki Chaat Corner",
+      "deva": "दौलत की चाट कॉर्नर"
+     }
+    },
+    {
+     "cell": 5,
+     "kind": "eatery",
+     "text": {
+      "latn": "Naan Khatai Bakers",
+      "deva": "नान खटाई बेकर्स"
+     }
+    },
+    {
+     "cell": 6,
+     "kind": "eatery",
+     "text": {
+      "latn": "Sheermal Tandoor",
+      "arab": "شیرمال تندور"
+     }
+    },
+    {
+     "cell": 7,
+     "kind": "eatery",
+     "text": {
+      "latn": "Qorma Roti Hotel",
+      "arab": "قورمہ روٹی ہوٹل"
+     }
+    },
+    {
+     "cell": 8,
+     "kind": "eatery",
+     "text": {
+      "latn": "Mutton Burra Tikka Point",
+      "deva": "मटन बर्रा टिक्का पॉइंट",
+      "arab": "مٹن برہ ٹکہ پوائنٹ"
+     }
+    },
+    {
+     "cell": 9,
+     "kind": "cloth",
+     "text": {
+      "latn": "Katra Neel Cloth Market",
+      "deva": "कटरा नील कपड़ा बाज़ार"
+     }
+    },
+    {
+     "cell": 10,
+     "kind": "cloth",
+     "text": {
+      "latn": "Zari Zardozi Kaarigar",
+      "arab": "زری زردوزی کاریگر"
+     }
+    },
+    {
+     "cell": 11,
+     "kind": "cloth",
+     "text": {
+      "latn": "Gota Kinari Bhandar",
+      "deva": "गोटा किनारी भंडार"
+     }
+    },
+    {
+     "cell": 12,
+     "kind": "cloth",
+     "text": {
+      "latn": "Dupatta Rangai Wale",
+      "deva": "दुपट्टा रँगाई वाले"
+     }
+    },
+    {
+     "cell": 13,
+     "kind": "cloth",
+     "text": {
+      "latn": "Lace Aur Fita Ghar",
+      "deva": "लेस और फीता घर"
+     }
+    },
+    {
+     "cell": 14,
+     "kind": "hardware",
+     "text": {
+      "latn": "Nut Bolt Tala Chabi Wale",
+      "deva": "नट बोल्ट ताला चाबी वाले"
+     }
+    },
+    {
+     "cell": 15,
+     "kind": "tea",
+     "text": {
+      "latn": "Chaiwala Ballimaran",
+      "deva": "चायवाला बल्लीमारान"
+     }
+    },
+    {
+     "cell": 16,
+     "kind": "tea",
+     "text": {
+      "latn": "Kullad Doodh Patti",
+      "deva": "कुल्हड़ दूध पत्ती"
+     }
+    },
+    {
+     "cell": 17,
+     "kind": "office",
+     "text": {
+      "latn": "Haveli Heritage Guest House",
+      "deva": "हवेली हेरिटेज गेस्ट हाउस"
+     }
+    },
+    {
+     "cell": 18,
+     "kind": "office",
+     "text": {
+      "latn": "Gali Residents Welfare Committee",
+      "deva": "गली निवासी कल्याण समिति"
+     }
+    },
+    {
+     "cell": 19,
+     "kind": "office",
+     "text": {
+      "latn": "Hand Embroidery Co-operative",
+      "deva": "हैंड एम्ब्रॉयडरी को-ऑपरेटिव"
+     }
+    },
+    {
+     "cell": 20,
+     "kind": "lodge",
+     "text": {
+      "latn": "Haveli Lodge",
+      "deva": "हवेली लॉज"
+     }
+    },
+    {
+     "cell": 21,
+     "kind": "transport",
+     "text": {
+      "latn": "Rickshaw Parking Only",
+      "deva": "रिक्शा पार्किंग केवल"
+     }
+    },
+    {
+     "cell": 22,
+     "kind": "transport",
+     "text": {
+      "latn": "Thela Loading Point",
+      "deva": "ठेला लोडिंग पॉइंट"
+     }
+    },
+    {
+     "cell": 23,
+     "kind": "sweets",
+     "text": {
+      "latn": "Panditji Ki Mithai",
+      "deva": "पंडितजी की मिठाई"
+     }
+    },
+    {
+     "cell": 24,
+     "kind": "sweets",
+     "text": {
+      "latn": "Imarti Jalebi Bhandar",
+      "deva": "इमरती जलेबी भंडार"
+     }
+    },
+    {
+     "cell": 25,
+     "kind": "sweets",
+     "text": {
+      "latn": "Sohan Halwa Ghar",
+      "deva": "सोहन हलवा घर"
+     }
+    },
+    {
+     "cell": 26,
+     "kind": "sweets",
+     "text": {
+      "latn": "Katra Dahi Wale",
+      "deva": "कटरा दही वाले"
+     }
+    },
+    {
+     "cell": 27,
+     "kind": "bangles",
+     "text": {
+      "latn": "Chudi Wali Gali Kangan",
+      "deva": "चूड़ी वाली गली कंगन"
+     }
+    },
+    {
+     "cell": 28,
+     "kind": "bangles",
+     "text": {
+      "latn": "Lakh Ki Chudiyan",
+      "deva": "लाख की चूड़ियाँ"
+     }
+    },
+    {
+     "cell": 29,
+     "kind": "jeweller",
+     "text": {
+      "latn": "Ballimaran Sone Chandi",
+      "deva": "बल्लीमारान सोना चाँदी"
+     }
+    },
+    {
+     "cell": 30,
+     "kind": "jeweller",
+     "text": {
+      "latn": "Dariba Silver Works",
+      "deva": "दरीबा सिल्वर वर्क्स"
+     }
+    },
+    {
+     "cell": 31,
+     "kind": "attar",
+     "text": {
+      "latn": "Gali Attar Wale",
+      "arab": "گلی عطر والے"
+     }
+    }
+   ]
+  },
+  "hotel": {
+   "area": "paharganj_station",
+   "cells": [
+    {
+     "cell": 0,
+     "kind": "eatery",
+     "text": {
+      "latn": "Main Bazaar Thali House",
+      "deva": "मेन बाज़ार थाली हाउस"
+     }
+    },
+    {
+     "cell": 1,
+     "kind": "eatery",
+     "text": {
+      "latn": "Chhole Bhature Station Road",
+      "deva": "छोले भटूरे स्टेशन रोड"
+     }
+    },
+    {
+     "cell": 2,
+     "kind": "eatery",
+     "text": {
+      "latn": "Dosa Corner",
+      "deva": "डोसा कॉर्नर"
+     }
+    },
+    {
+     "cell": 3,
+     "kind": "eatery",
+     "text": {
+      "latn": "Israeli Breakfast Cafe"
+     }
+    },
+    {
+     "cell": 4,
+     "kind": "eatery",
+     "text": {
+      "latn": "Chowmein and Momos",
+      "deva": "चाउमीन और मोमोज़"
+     }
+    },
+    {
+     "cell": 5,
+     "kind": "eatery",
+     "text": {
+      "latn": "Lassi Shop Paharganj",
+      "deva": "लस्सी शॉप पहाड़गंज"
+     }
+    },
+    {
+     "cell": 6,
+     "kind": "eatery",
+     "text": {
+      "latn": "Rooftop Cafe Paharganj"
+     }
+    },
+    {
+     "cell": 7,
+     "kind": "eatery",
+     "text": {
+      "latn": "Veg and Non-Veg Dhaba",
+      "deva": "वेज नॉन-वेज ढाबा"
+     }
+    },
+    {
+     "cell": 8,
+     "kind": "clothing",
+     "text": {
+      "latn": "Hippie Trousers and Tops"
+     }
+    },
+    {
+     "cell": 9,
+     "kind": "clothing",
+     "text": {
+      "latn": "Cotton Bags Bazaar"
+     }
+    },
+    {
+     "cell": 10,
+     "kind": "clothing",
+     "text": {
+      "latn": "Pashmina and Shawls",
+      "deva": "पश्मीना और शॉल"
+     }
+    },
+    {
+     "cell": 11,
+     "kind": "clothing",
+     "text": {
+      "latn": "Paharganj Tailor Master",
+      "deva": "पहाड़गंज टेलर मास्टर"
+     }
+    },
+    {
+     "cell": 12,
+     "kind": "clothing",
+     "text": {
+      "latn": "Tibetan Woollens"
+     }
+    },
+    {
+     "cell": 13,
+     "kind": "handicraft",
+     "text": {
+      "latn": "Incense and Brass Shop"
+     }
+    },
+    {
+     "cell": 14,
+     "kind": "handicraft",
+     "text": {
+      "latn": "Silver Rings and Beads"
+     }
+    },
+    {
+     "cell": 15,
+     "kind": "handicraft",
+     "text": {
+      "latn": "Leather Bag House"
+     }
+    },
+    {
+     "cell": 16,
+     "kind": "hotel",
+     "text": {
+      "latn": "Hotel Sunrise Paharganj",
+      "deva": "होटल सनराइज़ पहाड़गंज"
+     }
+    },
+    {
+     "cell": 17,
+     "kind": "hotel",
+     "text": {
+      "latn": "Hotel Sagar Residency",
+      "deva": "होटल सागर रेज़िडेंसी"
+     }
+    },
+    {
+     "cell": 18,
+     "kind": "hotel",
+     "text": {
+      "latn": "Hotel Krishna Palace",
+      "deva": "होटल कृष्णा पैलेस"
+     }
+    },
+    {
+     "cell": 19,
+     "kind": "hotel",
+     "text": {
+      "latn": "Hotel Moonlight",
+      "deva": "होटल मूनलाइट"
+     }
+    },
+    {
+     "cell": 20,
+     "kind": "hotel",
+     "text": {
+      "latn": "Hotel Raj Mahal Inn",
+      "deva": "होटल राज महल इन"
+     }
+    },
+    {
+     "cell": 21,
+     "kind": "hotel",
+     "text": {
+      "latn": "Hotel Satkar",
+      "deva": "होटल सत्कार"
+     }
+    },
+    {
+     "cell": 22,
+     "kind": "hotel",
+     "text": {
+      "latn": "Hotel Ganesh Villa",
+      "deva": "होटल गणेश विला"
+     }
+    },
+    {
+     "cell": 23,
+     "kind": "lodge",
+     "text": {
+      "latn": "Station Road Lodge",
+      "deva": "स्टेशन रोड लॉज"
+     }
+    },
+    {
+     "cell": 24,
+     "kind": "lodge",
+     "text": {
+      "latn": "Bhola Lodge",
+      "deva": "भोला लॉज"
+     }
+    },
+    {
+     "cell": 25,
+     "kind": "lodge",
+     "text": {
+      "latn": "Backpackers Rest House"
+     }
+    },
+    {
+     "cell": 26,
+     "kind": "lodge",
+     "text": {
+      "latn": "Main Bazaar Guest House",
+      "deva": "मेन बाज़ार गेस्ट हाउस"
+     }
+    },
+    {
+     "cell": 27,
+     "kind": "lodge",
+     "text": {
+      "latn": "Rooftop Dormitory"
+     }
+    },
+    {
+     "cell": 28,
+     "kind": "tea",
+     "text": {
+      "latn": "Chai Wala Station Gate",
+      "deva": "चाय वाला स्टेशन गेट"
+     }
+    },
+    {
+     "cell": 29,
+     "kind": "tea",
+     "text": {
+      "latn": "Masala Chai Tapri",
+      "deva": "मसाला चाय टपरी"
+     }
+    },
+    {
+     "cell": 30,
+     "kind": "transport",
+     "text": {
+      "latn": "Auto Stand New Delhi Station",
+      "deva": "ऑटो स्टैंड नई दिल्ली स्टेशन"
+     }
+    },
+    {
+     "cell": 31,
+     "kind": "transport",
+     "text": {
+      "latn": "Prepaid Taxi Booth",
+      "deva": "प्रीपेड टैक्सी बूथ"
+     }
+    }
+   ]
+  },
+  "office": {
+   "area": "ito",
+   "cells": [
+    {
+     "cell": 0,
+     "kind": "eatery",
+     "text": {
+      "latn": "Office Tiffin Service",
+      "deva": "ऑफ़िस टिफ़िन सर्विस"
+     }
+    },
+    {
+     "cell": 1,
+     "kind": "eatery",
+     "text": {
+      "latn": "Rajma Chawal Counter",
+      "deva": "राजमा चावल काउंटर"
+     }
+    },
+    {
+     "cell": 2,
+     "kind": "eatery",
+     "text": {
+      "latn": "Chhole Bhature Wala",
+      "deva": "छोले भटूरे वाला"
+     }
+    },
+    {
+     "cell": 3,
+     "kind": "eatery",
+     "text": {
+      "latn": "South Indian Canteen",
+      "deva": "साउथ इंडियन कैंटीन"
+     }
+    },
+    {
+     "cell": 4,
+     "kind": "eatery",
+     "text": {
+      "latn": "Samosa Junction",
+      "deva": "समोसा जंक्शन"
+     }
+    },
+    {
+     "cell": 5,
+     "kind": "eatery",
+     "text": {
+      "latn": "Ito Highway Dhaba",
+      "deva": "आईटीओ हाईवे ढाबा"
+     }
+    },
+    {
+     "cell": 6,
+     "kind": "office",
+     "text": {
+      "latn": "Delhi Revenue Bhawan",
+      "deva": "दिल्ली राजस्व भवन"
+     }
+    },
+    {
+     "cell": 7,
+     "kind": "office",
+     "text": {
+      "latn": "Municipal Engineers Office",
+      "deva": "नगर अभियंता कार्यालय"
+     }
+    },
+    {
+     "cell": 8,
+     "kind": "office",
+     "text": {
+      "latn": "Press Enclave Annexe",
+      "deva": "प्रेस एन्क्लेव एनेक्स"
+     }
+    },
+    {
+     "cell": 9,
+     "kind": "office",
+     "text": {
+      "latn": "Metro Rail Office Block"
+     }
+    },
+    {
+     "cell": 10,
+     "kind": "office",
+     "text": {
+      "latn": "Pension Disbursement Counter",
+      "deva": "पेंशन वितरण काउंटर"
+     }
+    },
+    {
+     "cell": 11,
+     "kind": "office",
+     "text": {
+      "latn": "Water Board Complaint Cell",
+      "deva": "जल बोर्ड शिकायत प्रकोष्ठ"
+     }
+    },
+    {
+     "cell": 12,
+     "kind": "office",
+     "text": {
+      "latn": "Land Records Branch",
+      "deva": "भूमि अभिलेख शाखा"
+     }
+    },
+    {
+     "cell": 13,
+     "kind": "tea",
+     "text": {
+      "latn": "Mandi House Chai Adda",
+      "deva": "मंडी हाउस चाय अड्डा"
+     }
+    },
+    {
+     "cell": 14,
+     "kind": "tea",
+     "text": {
+      "latn": "Rangkarmi Tea Stall",
+      "deva": "रंगकर्मी चाय स्टॉल"
+     }
+    },
+    {
+     "cell": 15,
+     "kind": "tea",
+     "text": {
+      "latn": "Press Wale Chacha Chai",
+      "deva": "प्रेस वाले चाचा चाय"
+     }
+    },
+    {
+     "cell": 16,
+     "kind": "transport",
+     "text": {
+      "latn": "E-Rickshaw Stand Mandi House",
+      "deva": "ई-रिक्शा स्टैंड मंडी हाउस"
+     }
+    },
+    {
+     "cell": 17,
+     "kind": "transport",
+     "text": {
+      "latn": "Auto Stand Ito",
+      "deva": "ऑटो स्टैंड आईटीओ"
+     }
+    },
+    {
+     "cell": 18,
+     "kind": "transport",
+     "text": {
+      "latn": "Cluster Bus Terminus",
+      "deva": "क्लस्टर बस टर्मिनस"
+     }
+    },
+    {
+     "cell": 19,
+     "kind": "transport",
+     "text": {
+      "latn": "Cab Waiting Bay"
+     }
+    },
+    {
+     "cell": 20,
+     "kind": "newsroom",
+     "text": {
+      "latn": "NewsTez 24 Studio Tower",
+      "deva": "न्यूज़तेज़ 24 स्टूडियो टावर"
+     }
+    },
+    {
+     "cell": 21,
+     "kind": "newsroom",
+     "text": {
+      "latn": "Footpath News Bureau",
+      "deva": "फ़ुटपाथ न्यूज़ ब्यूरो"
+     }
+    },
+    {
+     "cell": 22,
+     "kind": "newsroom",
+     "text": {
+      "latn": "Daily Rajkaaj Newspaper",
+      "deva": "दैनिक राजकाज"
+     }
+    },
+    {
+     "cell": 23,
+     "kind": "newsroom",
+     "text": {
+      "latn": "Evening Dilli Times",
+      "deva": "ईवनिंग दिल्ली टाइम्स"
+     }
+    },
+    {
+     "cell": 24,
+     "kind": "newsroom",
+     "text": {
+      "latn": "Press Club Canteen",
+      "deva": "प्रेस क्लब कैंटीन"
+     }
+    },
+    {
+     "cell": 25,
+     "kind": "theatre",
+     "text": {
+      "latn": "Rang Manch Auditorium",
+      "deva": "रंगमंच सभागार"
+     }
+    },
+    {
+     "cell": 26,
+     "kind": "theatre",
+     "text": {
+      "latn": "Kala Bhavan Hall",
+      "deva": "कला भवन हॉल"
+     }
+    },
+    {
+     "cell": 27,
+     "kind": "theatre",
+     "text": {
+      "latn": "Natya Kendra",
+      "deva": "नाट्य केंद्र"
+     }
+    },
+    {
+     "cell": 28,
+     "kind": "theatre",
+     "text": {
+      "latn": "Sangeet Sabha Hall",
+      "deva": "संगीत सभा हॉल"
+     }
+    },
+    {
+     "cell": 29,
+     "kind": "books",
+     "text": {
+      "latn": "Natak Kitab Ghar",
+      "deva": "नाटक किताब घर"
+     }
+    },
+    {
+     "cell": 30,
+     "kind": "books",
+     "text": {
+      "latn": "Press Stationers",
+      "deva": "प्रेस स्टेशनर्स"
+     }
+    },
+    {
+     "cell": 31,
+     "kind": "photo",
+     "text": {
+      "latn": "Photostat and Lamination",
+      "deva": "फ़ोटोस्टेट और लैमिनेशन"
+     }
+    }
+   ]
+  },
+  "lutyens": {
+   "area": "india_gate_kartavya_path",
+   "cells": [
+    {
+     "cell": 0,
+     "kind": "eatery",
+     "text": {
+      "latn": "Lawn Side Snack Bar"
+     }
+    },
+    {
+     "cell": 1,
+     "kind": "eatery",
+     "text": {
+      "latn": "Gate Canteen",
+      "deva": "गेट कैंटीन"
+     }
+    },
+    {
+     "cell": 2,
+     "kind": "eatery",
+     "text": {
+      "latn": "Sunset Chai Point",
+      "deva": "सनसेट चाय पॉइंट"
+     }
+    },
+    {
+     "cell": 3,
+     "kind": "eatery",
+     "text": {
+      "latn": "Family Picnic Meals",
+      "deva": "फ़ैमिली पिकनिक भोजन"
+     }
+    },
+    {
+     "cell": 4,
+     "kind": "transport",
+     "text": {
+      "latn": "Auto Stand India Gate",
+      "deva": "ऑटो स्टैंड इंडिया गेट"
+     }
+    },
+    {
+     "cell": 5,
+     "kind": "transport",
+     "text": {
+      "latn": "E-Rickshaw Stand Kartavya Path",
+      "deva": "ई-रिक्शा स्टैंड कर्तव्य पथ"
+     }
+    },
+    {
+     "cell": 6,
+     "kind": "transport",
+     "text": {
+      "latn": "Tourist Bus Stop",
+      "deva": "टूरिस्ट बस स्टॉप"
+     }
+    },
+    {
+     "cell": 7,
+     "kind": "transport",
+     "text": {
+      "latn": "Cycle Hire Point",
+      "deva": "साइकिल किराया केंद्र"
+     }
+    },
+    {
+     "cell": 8,
+     "kind": "transport",
+     "text": {
+      "latn": "Metro Shuttle Stand",
+      "deva": "मेट्रो शटल स्टैंड"
+     }
+    },
+    {
+     "cell": 9,
+     "kind": "office",
+     "text": {
+      "latn": "Memorial Management Office",
+      "deva": "स्मारक प्रबंधन कार्यालय"
+     }
+    },
+    {
+     "cell": 10,
+     "kind": "office",
+     "text": {
+      "latn": "Rajdhani Police Post India Gate",
+      "deva": "राजधानी पुलिस चौकी इंडिया गेट"
+     }
+    },
+    {
+     "cell": 11,
+     "kind": "office",
+     "text": {
+      "latn": "Horticulture Department Depot",
+      "deva": "उद्यान विभाग डिपो"
+     }
+    },
+    {
+     "cell": 12,
+     "kind": "office",
+     "text": {
+      "latn": "Ex-Servicemen Association Stall",
+      "deva": "पूर्व सैनिक संघ स्टॉल"
+     }
+    },
+    {
+     "cell": 13,
+     "kind": "office",
+     "text": {
+      "latn": "Ministry Block Reception",
+      "deva": "मंत्रालय ब्लॉक स्वागत कक्ष"
+     }
+    },
+    {
+     "cell": 14,
+     "kind": "tourist",
+     "text": {
+      "latn": "Photo Walla India Gate",
+      "deva": "फ़ोटो वाला इंडिया गेट"
+     }
+    },
+    {
+     "cell": 15,
+     "kind": "tourist",
+     "text": {
+      "latn": "Boat Ride Counter",
+      "deva": "नाव सवारी काउंटर"
+     }
+    },
+    {
+     "cell": 16,
+     "kind": "tourist",
+     "text": {
+      "latn": "Horse Cart Ride",
+      "deva": "घोड़ागाड़ी सवारी"
+     }
+    },
+    {
+     "cell": 17,
+     "kind": "tourist",
+     "text": {
+      "latn": "Camera Rental Stall"
+     }
+    },
+    {
+     "cell": 18,
+     "kind": "tourist",
+     "text": {
+      "latn": "Souvenir Flag and Cap Stall",
+      "deva": "झंडा टोपी स्मृति चिह्न"
+     }
+    },
+    {
+     "cell": 19,
+     "kind": "tourist",
+     "text": {
+      "latn": "Guide for Memorial Tour",
+      "deva": "स्मारक भ्रमण गाइड"
+     }
+    },
+    {
+     "cell": 20,
+     "kind": "tourist",
+     "text": {
+      "latn": "Tourist Help Desk",
+      "deva": "पर्यटक सहायता डेस्क"
+     }
+    },
+    {
+     "cell": 21,
+     "kind": "clinic",
+     "text": {
+      "latn": "First Aid Post",
+      "deva": "प्राथमिक उपचार केंद्र"
+     }
+    },
+    {
+     "cell": 22,
+     "kind": "clinic",
+     "text": {
+      "latn": "Ambulance Standby",
+      "deva": "एम्बुलेंस स्टैंडबाय"
+     }
+    },
+    {
+     "cell": 23,
+     "kind": "tourist",
+     "text": {
+      "latn": "Handicraft Souvenir Cart",
+      "deva": "हस्तशिल्प स्मृति ठेला"
+     }
+    },
+    {
+     "cell": 24,
+     "kind": "eatery",
+     "text": {
+      "latn": "Lawn Side Snack Bar"
+     }
+    },
+    {
+     "cell": 25,
+     "kind": "eatery",
+     "text": {
+      "latn": "Gate Canteen",
+      "deva": "गेट कैंटीन"
+     }
+    },
+    {
+     "cell": 26,
+     "kind": "eatery",
+     "text": {
+      "latn": "Sunset Chai Point",
+      "deva": "सनसेट चाय पॉइंट"
+     }
+    },
+    {
+     "cell": 27,
+     "kind": "eatery",
+     "text": {
+      "latn": "Family Picnic Meals",
+      "deva": "फ़ैमिली पिकनिक भोजन"
+     }
+    },
+    {
+     "cell": 28,
+     "kind": "transport",
+     "text": {
+      "latn": "Auto Stand India Gate",
+      "deva": "ऑटो स्टैंड इंडिया गेट"
+     }
+    },
+    {
+     "cell": 29,
+     "kind": "transport",
+     "text": {
+      "latn": "E-Rickshaw Stand Kartavya Path",
+      "deva": "ई-रिक्शा स्टैंड कर्तव्य पथ"
+     }
+    },
+    {
+     "cell": 30,
+     "kind": "transport",
+     "text": {
+      "latn": "Tourist Bus Stop",
+      "deva": "टूरिस्ट बस स्टॉप"
+     }
+    },
+    {
+     "cell": 31,
+     "kind": "transport",
+     "text": {
+      "latn": "Cycle Hire Point",
+      "deva": "साइकिल किराया केंद्र"
+     }
+    }
+   ]
+  },
+  "market": {
+   "area": "janpath",
+   "cells": [
+    {
+     "cell": 0,
+     "kind": "handicraft",
+     "text": {
+      "latn": "Tibetan Market Curio House",
+      "deva": "तिब्बती मार्केट क्यूरियो हाउस"
+     }
+    },
+    {
+     "cell": 1,
+     "kind": "handicraft",
+     "text": {
+      "latn": "Himalayan Handicrafts"
+     }
+    },
+    {
+     "cell": 2,
+     "kind": "handicraft",
+     "text": {
+      "latn": "Kashmir Carpet Emporium",
+      "deva": "कश्मीर कारपेट एम्पोरियम"
+     }
+    },
+    {
+     "cell": 3,
+     "kind": "handicraft",
+     "text": {
+      "latn": "Silver Charm Jewellery"
+     }
+    },
+    {
+     "cell": 4,
+     "kind": "handicraft",
+     "text": {
+      "latn": "Brass and Bell Gallery"
+     }
+    },
+    {
+     "cell": 5,
+     "kind": "handicraft",
+     "text": {
+      "latn": "Rajasthani Mirror Work",
+      "deva": "राजस्थानी मिरर वर्क"
+     }
+    },
+    {
+     "cell": 6,
+     "kind": "handicraft",
+     "text": {
+      "latn": "Jaipur Block Print House",
+      "deva": "जयपुर ब्लॉक प्रिंट हाउस"
+     }
+    },
+    {
+     "cell": 7,
+     "kind": "handicraft",
+     "text": {
+      "latn": "Thangka Art Corner"
+     }
+    },
+    {
+     "cell": 8,
+     "kind": "handicraft",
+     "text": {
+      "latn": "Incense and Candle Stall"
+     }
+    },
+    {
+     "cell": 9,
+     "kind": "handicraft",
+     "text": {
+      "latn": "Wooden Toy Bazaar",
+      "deva": "लकड़ी खिलौना बाज़ार"
+     }
+    },
+    {
+     "cell": 10,
+     "kind": "clothing",
+     "text": {
+      "latn": "Cotton Kurta Corner",
+      "deva": "कॉटन कुर्ता कॉर्नर"
+     }
+    },
+    {
+     "cell": 11,
+     "kind": "clothing",
+     "text": {
+      "latn": "Rainbow Scarves and Stoles"
+     }
+    },
+    {
+     "cell": 12,
+     "kind": "clothing",
+     "text": {
+      "latn": "Janpath Handloom House",
+      "deva": "जनपथ हैंडलूम हाउस"
+     }
+    },
+    {
+     "cell": 13,
+     "kind": "clothing",
+     "text": {
+      "latn": "Gujarati Embroidery Bazaar",
+      "deva": "गुजराती कढ़ाई बाज़ार"
+     }
+    },
+    {
+     "cell": 14,
+     "kind": "clothing",
+     "text": {
+      "latn": "Export Surplus Garments"
+     }
+    },
+    {
+     "cell": 15,
+     "kind": "clothing",
+     "text": {
+      "latn": "Denim and Tees"
+     }
+    },
+    {
+     "cell": 16,
+     "kind": "clothing",
+     "text": {
+      "latn": "Bag Bazaar"
+     }
+    },
+    {
+     "cell": 17,
+     "kind": "eatery",
+     "text": {
+      "latn": "Momo Point",
+      "deva": "मोमो पॉइंट"
+     }
+    },
+    {
+     "cell": 18,
+     "kind": "eatery",
+     "text": {
+      "latn": "Tibetan Thukpa Kitchen"
+     }
+    },
+    {
+     "cell": 19,
+     "kind": "eatery",
+     "text": {
+      "latn": "Chowmein Corner",
+      "deva": "चाउमीन कॉर्नर"
+     }
+    },
+    {
+     "cell": 20,
+     "kind": "eatery",
+     "text": {
+      "latn": "Chhole Kulche Wala",
+      "deva": "छोले कुल्चे वाला"
+     }
+    },
+    {
+     "cell": 21,
+     "kind": "eatery",
+     "text": {
+      "latn": "Rajma Rice Counter",
+      "deva": "राजमा राइस काउंटर"
+     }
+    },
+    {
+     "cell": 22,
+     "kind": "eatery",
+     "text": {
+      "latn": "Sandwich Stall"
+     }
+    },
+    {
+     "cell": 23,
+     "kind": "tea",
+     "text": {
+      "latn": "Tapri Chai Janpath",
+      "deva": "टपरी चाय जनपथ"
+     }
+    },
+    {
+     "cell": 24,
+     "kind": "hotel",
+     "text": {
+      "latn": "Hotel Janpath Residency",
+      "deva": "होटल जनपथ रेज़िडेंसी"
+     }
+    },
+    {
+     "cell": 25,
+     "kind": "hotel",
+     "text": {
+      "latn": "Hotel Palash View"
+     }
+    },
+    {
+     "cell": 26,
+     "kind": "lodge",
+     "text": {
+      "latn": "Janpath Budget Lodge",
+      "deva": "जनपथ बजट लॉज"
+     }
+    },
+    {
+     "cell": 27,
+     "kind": "office",
+     "text": {
+      "latn": "Janpath Market Traders Association",
+      "deva": "जनपथ मार्केट ट्रेडर्स एसोसिएशन"
+     }
+    },
+    {
+     "cell": 28,
+     "kind": "office",
+     "text": {
+      "latn": "Handicrafts Cooperative Society",
+      "deva": "हस्तशिल्प सहकारी समिति"
+     }
+    },
+    {
+     "cell": 29,
+     "kind": "office",
+     "text": {
+      "latn": "Tourist Information Booth",
+      "deva": "पर्यटक सूचना बूथ"
+     }
+    },
+    {
+     "cell": 30,
+     "kind": "office",
+     "text": {
+      "latn": "State Crafts Emporium Office"
+     }
+    },
+    {
+     "cell": 31,
+     "kind": "transport",
+     "text": {
+      "latn": "Auto Stand Janpath",
+      "deva": "ऑटो स्टैंड जनपथ"
+     }
+    }
+   ]
+  },
+  "hardware": {
+   "area": "gb_road_ajmeri_gate",
+   "cells": [
+    {
+     "cell": 0,
+     "kind": "hardware",
+     "text": {
+      "latn": "Shri Ram Hardware Store",
+      "deva": "श्री राम हार्डवेयर स्टोर"
+     }
+    },
+    {
+     "cell": 1,
+     "kind": "hardware",
+     "text": {
+      "latn": "Jain Hardware and Paints",
+      "deva": "जैन हार्डवेयर एंड पेंट्स"
+     }
+    },
+    {
+     "cell": 2,
+     "kind": "hardware",
+     "text": {
+      "latn": "Agrawal Nut Bolt Bhandar",
+      "deva": "अग्रवाल नट बोल्ट भंडार"
+     }
+    },
+    {
+     "cell": 3,
+     "kind": "hardware",
+     "text": {
+      "latn": "Mahalaxmi Metals",
+      "deva": "महालक्ष्मी मेटल्स"
+     }
+    },
+    {
+     "cell": 4,
+     "kind": "hardware",
+     "text": {
+      "latn": "Ajmeri Gate Hardware Traders",
+      "deva": "अजमेरी गेट हार्डवेयर ट्रेडर्स"
+     }
+    },
+    {
+     "cell": 5,
+     "kind": "hardware",
+     "text": {
+      "latn": "Bansal Pipe and Fittings",
+      "deva": "बंसल पाइप एंड फ़िटिंग्स"
+     }
+    },
+    {
+     "cell": 6,
+     "kind": "hardware",
+     "text": {
+      "latn": "Delhi Tool Centre",
+      "deva": "दिल्ली टूल सेंटर"
+     }
+    },
+    {
+     "cell": 7,
+     "kind": "hardware",
+     "text": {
+      "latn": "Gupta Steel Furniture",
+      "deva": "गुप्ता स्टील फ़र्नीचर"
+     }
+    },
+    {
+     "cell": 8,
+     "kind": "hardware",
+     "text": {
+      "latn": "Kumar Cement and Sanitary",
+      "deva": "कुमार सीमेंट एंड सैनिटरी"
+     }
+    },
+    {
+     "cell": 9,
+     "kind": "hardware",
+     "text": {
+      "latn": "Rajesh Electricals",
+      "deva": "राजेश इलेक्ट्रिकल्स"
+     }
+    },
+    {
+     "cell": 10,
+     "kind": "hardware",
+     "text": {
+      "latn": "Verma Locks and Hinges",
+      "deva": "वर्मा लॉक्स एंड हिंजेस"
+     }
+    },
+    {
+     "cell": 11,
+     "kind": "hardware",
+     "text": {
+      "latn": "National Iron Mart",
+      "deva": "नेशनल आयरन मार्ट"
+     }
+    },
+    {
+     "cell": 12,
+     "kind": "hardware",
+     "text": {
+      "latn": "Shiv Shakti Machinery",
+      "deva": "शिव शक्ति मशीनरी"
+     }
+    },
+    {
+     "cell": 13,
+     "kind": "hardware",
+     "text": {
+      "latn": "Modern Pump House",
+      "deva": "मॉडर्न पंप हाउस"
+     }
+    },
+    {
+     "cell": 14,
+     "kind": "hardware",
+     "text": {
+      "latn": "Bharat Wire and Cable",
+      "deva": "भारत वायर एंड केबल"
+     }
+    },
+    {
+     "cell": 15,
+     "kind": "hardware",
+     "text": {
+      "latn": "Sai Paint and Brush",
+      "deva": "साई पेंट एंड ब्रश"
+     }
+    },
+    {
+     "cell": 16,
+     "kind": "hardware",
+     "text": {
+      "latn": "Choudhary Tiles and Taps",
+      "deva": "चौधरी टाइल्स एंड टैप्स"
+     }
+    },
+    {
+     "cell": 17,
+     "kind": "hardware",
+     "text": {
+      "latn": "Delhi Sheet Metal Works",
+      "deva": "दिल्ली शीट मेटल वर्क्स"
+     }
+    },
+    {
+     "cell": 18,
+     "kind": "hardware",
+     "text": {
+      "latn": "Hindustani Brass Fittings",
+      "deva": "हिंदुस्तानी ब्रास फ़िटिंग्स"
+     }
+    },
+    {
+     "cell": 19,
+     "kind": "hardware",
+     "text": {
+      "latn": "Mittal Auto Parts",
+      "deva": "मित्तल ऑटो पार्ट्स"
+     }
+    },
+    {
+     "cell": 20,
+     "kind": "hardware",
+     "text": {
+      "latn": "Standard Gear and Bearing",
+      "deva": "स्टैंडर्ड गियर एंड बेयरिंग"
+     }
+    },
+    {
+     "cell": 21,
+     "kind": "hardware",
+     "text": {
+      "latn": "Anand Glass and Plywood",
+      "deva": "आनंद ग्लास एंड प्लाईवुड"
+     }
+    },
+    {
+     "cell": 22,
+     "kind": "hardware",
+     "text": {
+      "latn": "Navkar Tools",
+      "deva": "नवकार टूल्स"
+     }
+    },
+    {
+     "cell": 23,
+     "kind": "hardware",
+     "text": {
+      "latn": "Pioneer Spare Parts",
+      "deva": "पायनियर स्पेयर पार्ट्स"
+     }
+    },
+    {
+     "cell": 24,
+     "kind": "hardware",
+     "text": {
+      "latn": "Ajmeri Pipe Mart",
+      "deva": "अजमेरी पाइप मार्ट"
+     }
+    },
+    {
+     "cell": 25,
+     "kind": "eatery",
+     "text": {
+      "latn": "Bhola Chhole Bhature",
+      "deva": "भोला छोले भटूरे"
+     }
+    },
+    {
+     "cell": 26,
+     "kind": "eatery",
+     "text": {
+      "latn": "Truckers Dhaba",
+      "deva": "ट्रकर्स ढाबा"
+     }
+    },
+    {
+     "cell": 27,
+     "kind": "eatery",
+     "text": {
+      "latn": "Dal Roti Counter",
+      "deva": "दाल रोटी काउंटर"
+     }
+    },
+    {
+     "cell": 28,
+     "kind": "eatery",
+     "text": {
+      "latn": "Parantha Tiffin Wale",
+      "deva": "परांठा टिफ़िन वाले"
+     }
+    },
+    {
+     "cell": 29,
+     "kind": "transport",
+     "text": {
+      "latn": "GB Road Tempo Stand",
+      "deva": "जीबी रोड टेम्पो स्टैंड"
+     }
+    },
+    {
+     "cell": 30,
+     "kind": "transport",
+     "text": {
+      "latn": "Loading Point Number Three",
+      "deva": "लोडिंग पॉइंट नंबर तीन"
+     }
+    },
+    {
+     "cell": 31,
+     "kind": "transport",
+     "text": {
+      "latn": "Handcart Thela Stand",
+      "deva": "हैंडकार्ट ठेला स्टैंड"
+     }
+    }
+   ]
+  }
+ }
+}

@@ -1,0 +1,195 @@
+// Hand-written "what the street is made of today" text per area (P2-049, 2026-11-14).
+// Every line says what it is read from: "seen" = visible in a dated current photo of this sheet (C-number in the table),
+// "known" = general knowledge or press, not visible in a dated Commons photo (recheck before building).
+// The facade and road colour lines are NOT here: build_boards.mjs samples them from the photos and adds them.
+export const CUTOFF = {
+  chandni_chowk_main: 'redeveloped street, finished about Dec 2021: only photos from 2022 on count',
+  india_gate_kartavya_path: 'Central Vista redevelopment, Kartavya Path opened 8 Sept 2022: only photos from 2022-09-08 on count',
+  ito: 'Pragati Maidan tunnel opened June 2022, ITPO complex finished 2023: only photos from 2022-06-19 on count',
+};
+export const CUTOFF_ISO = { chandni_chowk_main: '2022-01-01', india_gate_kartavya_path: '2022-09-08', ito: '2022-06-19' };
+export const DEFAULT_CUTOFF = 'no big rebuild known since 2019: photos from 2019 on count';
+
+export const MADE_OF = {
+  chandni_chowk_main: {
+    changed: [
+      'Chandni Chowk main road was redeveloped (about 2021): red sandstone paving across the street, no central median, no railings, bollards, wider pedestrian space, hawkers moved, motor vehicles only at set hours (the access model already makes it car-free by day). Press and the 2021 map board (C-photos do not show the whole street). The 2008 median with iron railings, sodium double-arm poles and tram-era asphalt are gone.',
+      'Every photo older than 2022 is marked OLD: it shows the street before the redevelopment (2008 view, 2005 Vellut, 2014, 2015). Use the old ones only for what did not change: the shape of the bazaar blocks.',
+    ],
+    lines: [
+      'Road surface and colour: the redevelopment is reported to use red sandstone paving (known). SEEN: pink-red sandstone slabs on the Fatehpuri Masjid forecourt (2024), but the ground at the Sis Ganj junction in the 2025 shots reads dark grey (asphalt or dark stone setts, not red). The carriageway down the middle is not clearly visible in any dated free photo: do not assume red there until a photo shows it (see Photo requests).',
+      'Kerbs: none on the central section (flush paving, bollards at the ends, per redevelopment, known). Side lanes keep low concrete kerbs.',
+      'Footpath: the whole street is footpath: sandstone slabs, stalls moved back, planters (known). Sis Ganj plaza steps and forecourt are sandstone too (seen).',
+      'Median: none (removed in the redevelopment, known).',
+      'Poles and wires: new street poles at the edges (known); overhead wires and signal cables still hang across the cross lanes and at the gurudwara end (seen in the 2025 Sis Ganj street shots).',
+      'Lights: lamp posts at the edges plus shop lights; evening shots show neon and strip lights, garlands of fairy lights (seen, 2023 night view).',
+      'Trees: a few large trees at the Fatehpuri end and in the Sis Ganj forecourt, potted plants in the gate arch (seen).',
+      'Signs: SBI building has a blue and white bank board over the arcade; shop fascia boards in Hindi and English, blue, white and yellow, stacked three high, with vertical lit boards; the new ornamental gateway at the gurudwara end is peach-cream with maroon edging and carved white and pink jaali arches (seen, 2025). Facades at the Sis Ganj junction are peach, cream, white and maroon-brown plaster, three to four storeys, with lit hoardings (seen).',
+      'Typical clutter: cycle rickshaws with red canopies, e-rickshaws, handcarts, crowds, umbrellas (seen, 2025 Sis Ganj shots).',
+    ],
+    requests: [
+      'A street-level photo down the middle of the redeveloped Chandni Chowk carriageway, taken 2022 or later, in daylight: the sandstone paving, the bollards, the poles, the two sides of the shopfronts. Free Commons photos only show the forecourts, so the paving pattern and the exact colour of the road are unconfirmed.',
+    ],
+  },
+  chandni_chowk_galis: {
+    changed: ['Not rebuilt. The 2026 Old Delhi Bazaar series (C1 to C15) is the current look of the working lanes (old Delhi bazaar lanes; the series names Khari Baoli only for the last two, the other lanes are not named, so do not map them to a street yet). Old photos before 2019 are marked OLD.'],
+    lines: [
+      'Road surface and colour: patched, cracked asphalt and concrete, grey-brown, with standing puddles, rubble and spilled grain; no markings (seen, C1, C4).',
+      'Kerbs: none; shopfronts open straight onto the carriageway. Some drain slabs and step edges in grey concrete (seen).',
+      'Footpath: none in the narrow lanes; shop platforms (chabutra) and stacked sacks take the edge, about 0.5 to 1 m of raised shop floor (seen).',
+      'Median: none.',
+      'Poles and wires: concrete and steel poles carrying thick bundles of cables, junction boxes, transformers; wires cross at every storey (seen, C2, C6).',
+      'Lights: a few bare tube lights and shop bulbs; very little street lighting (seen).',
+      'Trees: rare; one old peepal or neem at a junction with a cow under it (seen).',
+      'Signs: dense painted tin and flex signboards, Hindi and English, blue, white and red, three to four rows deep; shutters in green, blue, grey (seen).',
+      'Typical clutter: handcarts, cycle rickshaws, e-rickshaws, sacks of grain and spice, gas cylinders, bicycles, cows and calves, concrete pipes stacked on the road (seen, C9, C10, C13).',
+    ],
+    requests: [],
+  },
+  cp_inner_circle: {
+    changed: ['No big rebuild since 2019 apart from repaving and metro works at the edges. The 2020 and 2021 lockdown photos show the empty circle and the colonnade clearly and are kept as current (the buildings and paving did not change); crowds and vehicles come from the 2019 and 2022 photos.'],
+    lines: [
+      'Road surface and colour: smooth dark grey asphalt, wide inner-circle carriageway, white lane and edge lines; at night near-black with orange sodium glare (seen, 2020 empty circle, 2019 night shot).',
+      'Kerbs: stone kerb with a black and yellow painted stripe at the circle edge and at refuges (seen, 2019 night shot).',
+      'Footpath: inside the colonnade dark grey stone flags with pale grey joint bands, about 4 to 5 m wide; outside the arcade a grey cement paver strip with a yellow tactile guide strip (seen, C-photos of the colonnade 2020 and 2021).',
+      'Median and edges: a planter strip at the kerb with white and pink flowering shrubs (bougainvillea, petunia); dark green iron railing, about 1 m, along the central park (seen).',
+      'Poles and wires: tall steel poles with cobra-head lamps; the arcade has hanging tube lights under the ceiling; few overhead wires (seen).',
+      'Lights: sodium orange street lights and cool white on the facades at night; the corner blocks are lit pale yellow-cream (seen, 2019 night shot).',
+      'Trees: large rain trees and neem along the circle, canopy over the footpath, palms in the park (seen).',
+      'Signs: white stucco facades carry bar and restaurant boards in red and white, blue bank boards at the upper arcade, block letters on the white faces, a dark granite plaque at State Entry Road, green NDMC street signs (seen).',
+      'Typical clutter: green and yellow autos, vendors with balloons in the arcade, pigeons, parked cars on the outer edge, metro entrance (seen, 2021 and 2022 shots).',
+      'Facade: white and cream lime stucco, Tuscan columns about 0.7 m diameter, round arches, a cornice, upper storey with white balustrade and arched windows (seen).',
+    ],
+    requests: [],
+  },
+  cp_outer_circle: {
+    changed: ['No big rebuild since 2019. The 2022 Barakhamba Road and Kasturba Gandhi Marg series (Pinakpani) shows the radial roads that feed the outer circle as they look now.'],
+    lines: [
+      'Road surface and colour: dark grey asphalt, white lane lines and long white zebra crossings, little cracking (seen, Barakhamba Road 2022).',
+      'Kerbs: black and yellow painted kerb stones along the median and at crossing refuges (seen).',
+      'Footpath: grey and red paver footpath, wide, with trees growing in it (seen).',
+      'Median: raised concrete median with black and yellow painted edges and reflective bollards; planting on wider ones (seen).',
+      'Poles and wires: tall galvanised poles with cobra-head lamps, yellow signal poles with hanging heads at crossings; few overhead wires (seen).',
+      'Lights: streetlights at about 10 m spacing, at night orange-white (seen, 2026 night shot).',
+      'Trees: dense avenue canopy of mature trees (rain tree, neem, jamun) on both sides (seen).',
+      'Signs: green street name boards in Hindi, English, Urdu with pin code and a small "Towards India Gate" style logo, blue directional boards (seen).',
+      'Typical clutter: parked cars along the kerb, autos, tow trucks, scooters, a few barriers (seen).',
+    ],
+    requests: [],
+  },
+  gb_road_ajmeri_gate: {
+    changed: ['The Commons photos of the New Delhi station Ajmeri Gate side (2022) are current. No dated free photo of G.B. Road (Shraddhanand Marg) itself and no photo of Ajmeri Gate (Delhi) was found: the search results for "Ajmeri Gate" are Ajmer and Jaipur. Old photos kept on the sheet are marked OLD.'],
+    lines: [
+      'Road surface and colour: worn dark grey asphalt on the forecourt road, black and yellow painted kerb stones, white edge lines (seen, C-photos of the Ajmeri Gate side).',
+      'Kerbs: raised stone kerb painted black and yellow in segments (seen).',
+      'Footpath: wide forecourt of grey tile and concrete in front of the station, cycle rickshaw stand at the edge (seen).',
+      'Median: none on the forecourt.',
+      'Poles and wires: tall mast floodlights on the forecourt, ordinary steel poles with cobra-head lamps; overhead rail wires beyond (seen).',
+      'Lights: mast lights glaring white at night, autos with tail lamps, station sign lit (seen, 2022 night series).',
+      'Trees: a few palms and neem at the forecourt edge (seen).',
+      'Signs: big red and white "NEW DELHI" sign with Hindi and Urdu, a green, yellow and white artwork banner over the arcade, parking and auto stand boards (seen).',
+      'Typical clutter: green and yellow autos and e-rickshaws, white taxis, a red balloon, porters, cycle rickshaws, tuk-tuks queueing (seen).',
+    ],
+    requests: [
+      'A street-level photo along G.B. Road (Shraddhanand Marg) from the road, 2019 or later, in daylight: the shopfronts, the pavement, the poles and wires. No free dated photo of this street exists on Commons, so the facade colours and the surface here are still from the map and the old sheet.',
+      'The Ajmeri Gate itself (the Delhi city gate near Ajmeri Gate Chowk), 2019 or later, street level.',
+    ],
+  },
+  india_gate_kartavya_path: {
+    changed: [
+      'Central Vista redevelopment (2020 to 2022): Rajpath was renamed Kartavya Path on 8 Sept 2022. New red granite verges and footpaths, new black lamp posts, chain and bollard barriers, new green name signs in three scripts, relaid lawns, blue-green water channels, new vending kiosks and parking, the Kartavya Bhavan blocks behind. The 2019 Rajpath photos on the board (red gravel verges, hedges, fountain basins, old signs) are OLD and not used for surfaces, signs or colours.',
+    ],
+    lines: [
+      'Road surface and colour: dark grey asphalt with white edge lines, a white dashed lane line and an orange-yellow line on one side; wide, about 15 m of carriageway (seen, C-photos of Kartavya Path, 2022-09-12).',
+      'Kerbs: no raised kerb: the red-pink stone paving runs flush to a white edge line at the carriageway (seen, C7, C8).',
+      'Footpath: wide red-pink stone paving with cream bands, 6 to 8 m, with lawn beyond; low cream stone bollards with black chain between them along the edge (seen).',
+      'Median: none on the main carriageway (seen). The old 2019 median hedges are gone.',
+      'Poles and wires: no overhead wires; plain black lamp posts about 6 to 8 m high with a lantern head at regular spacing along both verges (seen).',
+      'Lights: the lamp posts, plus up-lighting on the gate at night (seen, 2025 night shots).',
+      'Trees: mature avenue trees (jamun, neem) in the lawns, kept low and set back (seen).',
+      'Signs: green boards "कर्तव्य पथ Kartavya Path" in Hindi, English, Punjabi and Urdu on black posts with arrows (seen); caution boards and yellow barrier A-frames on the footpath.',
+      'Typical clutter: cyclists, groups of visitors, security (CISF and police in khaki), parked cars at the edge, tea and ice-cream vendors in the zones (seen).',
+    ],
+    requests: [],
+  },
+  ito: {
+    changed: [
+      'Pragati Maidan area: the Pragati Maidan Integrated Transit Corridor and its tunnel opened in June 2022; the ITPO complex (Bharat Mandapam) was rebuilt and opened 2023. Photos before 2022 are marked OLD.',
+      'Photos of the ITO crossing and the Pragati Maidan tunnel from road level were not found among the free dated files; see Photo requests.',
+    ],
+    lines: [
+      'Road surface and colour: dark grey asphalt with white lane lines on the Outer Ring Road and Barakhamba Road; black and yellow painted kerbs (seen, Barakhamba Road 2022, Outer Ring Road 2022).',
+      'Kerbs: black and yellow painted kerb stones along medians and refuges (seen).',
+      'Footpath: grey concrete tile footpath, wide at the metro entrance, tree pits (seen).',
+      'Median: raised concrete median with black and yellow edges, reflective bollards and planting (seen).',
+      'Poles and wires: tall double-arm streetlight poles on the ring road median, overhead metro and traffic wires near the ITO crossing (seen, night shot).',
+      'Lights: orange-white double-arm lights at night over the ring road (seen, 2022).',
+      'Trees: avenue trees along Barakhamba Road; ring road edges are mostly bare with some planted strips (seen).',
+      'Signs: green street signs, blue directional boards, the ITO metro station entrance with its yellow and blue shop boards, CNG bus route boards (seen).',
+      'Typical clutter: blue DTC buses, autos, scooters at the metro entrance steps (seen).',
+    ],
+    requests: [
+      'A street-level photo of the ITO crossing (Vikas Marg, Bahadur Shah Zafar Marg, Tilak Marg) and of the Pragati Maidan tunnel mouth (2022 or later), at the height of a car driver. Free dated photos of both could not be found.',
+    ],
+  },
+  janpath: {
+    changed: ['No big rebuild known since 2019. The 2022 Pinakpani series (Janpath, a road in New Delhi, and Tibet Market) is current and shows the road and the shopfronts at street level.'],
+    lines: [
+      'Road surface and colour: dark grey asphalt (looks near black when wet), white lane lines and edge lines (seen, C-photos 2022).',
+      'Kerbs: black and yellow painted concrete kerb stones along the median edge, grey stone kerb on the tree side (seen).',
+      'Footpath: grey and red concrete pavers, about 3 m, with tree pits; the Tibet Market side has a red and white paver strip in front of the shops (seen).',
+      'Median: raised median with black and yellow painted edges and planting (seen).',
+      'Poles and wires: galvanised streetlight poles with cobra-head lamps, blue and green sign poles, few overhead wires (seen).',
+      'Lights: streetlights at about 10 m spacing; Tibet Market has shop lights only (seen).',
+      'Trees: dense canopy of mature trees (neem, rain tree) on both sides and in the median (seen).',
+      'Signs: green boards "जनपथ JANPATH" in Hindi, English, Urdu with a left arrow; blue sign "TIBETAN MARKET" on a pole; shop fascia boards in red and white (seen).',
+      'Typical clutter: parked scooters at the Tibet Market edge, hawker stands, jewellery stalls and stacked goods at shutters, autos and buses on the road (seen).',
+    ],
+    requests: [],
+  },
+  jantar_mantar: {
+    changed: ['No big rebuild known since 2019. The 2022 Pinakpani series (Sansad Marg, Vakil Lane) is the current road look. The site itself is walled and photographs of the instruments are in the table as landmark views only (not street level).'],
+    lines: [
+      'Road surface and colour: dark grey asphalt with white lane lines and wide zebra stripes; some patching near parking (seen, Sansad Marg 2022).',
+      'Kerbs: black and yellow painted kerb stones on the median, grey stone kerb on the park side (seen).',
+      'Footpath: narrow grey paver footpath, wider near the metro; red sandstone compound walls and gates along the road (seen).',
+      'Median: raised median with black and yellow edges and reflective bollards (seen).',
+      'Poles and wires: galvanised light poles with cobra-head lamps, yellow signal poles, few overhead wires (seen).',
+      'Lights: streetlights at about 10 m spacing; the site is lit at night (seen).',
+      'Trees: big old trees line the road, canopy overhead (seen).',
+      'Signs: green "सांसद मार्ग SANSAD MARG" boards in three scripts, blue direction boards, the red Jantar Mantar ASI board on the railing (seen, 2019).',
+      'Typical clutter: taxis parked nose to tail along the kerb, barricades, protest crowds with flags at the entrance at times (seen, 2026 protest shot).',
+    ],
+    requests: [],
+  },
+  paharganj_station: {
+    changed: ['No rebuild of Main Bazar known since 2019. The New Delhi station Ajmeri Gate side is current from 2022 (see the G.B. Road sheet). Main Bazar photos from 2020 are lockdown-empty and show shopfront colours well; 2019 and 2024 night shots show the crowd and lights.'],
+    lines: [
+      'Road surface and colour: worn grey asphalt and concrete, patched, wet at times (seen, 2020 empty road shots).',
+      'Kerbs: low, broken concrete kerbs; no markings (seen).',
+      'Footpath: narrow, shared with stalls and parked scooters; grey tile in places (seen).',
+      'Median: none on Main Bazar; the station road has a painted median (seen).',
+      'Poles and wires: tangled overhead wires at every storey, transformers on poles, bundled cables over the lane (seen, 2019 evening).',
+      'Lights: strings of fairy lights on whole facades, neon hotel signs (vertical, red and yellow), tube lights over stalls (seen, Diwali 2024 shots).',
+      'Trees: very few; a tree at the station road corner (seen).',
+      'Signs: vertical neon hotel boards, painted shop fascias with Hindi and English, shutters with painted names (seen).',
+      'Typical clutter: hawkers, handcarts, e-rickshaws, tuk-tuks, backpackers, scooters on the pavement, cows (seen).',
+    ],
+    requests: [],
+  },
+  red_fort_surroundings: {
+    changed: ['No rebuild of the fort forecourt known since 2019; barricades and CISF posts change around 15 August. Photos from 2019 on count. Old photos (1966 and earlier) are marked OLD.'],
+    lines: [
+      'Road surface and colour: wide dark grey asphalt carriageway with white lane lines along the fort wall, beside it a wide forecourt of grey and red-pink stone flags (seen, 2025 wall series).',
+      'Kerbs: stone kerb at the forecourt edge, yellow and orange barricades and CISF posts across it (seen).',
+      'Footpath: broad red-pink sandstone and grey stone flagged forecourt at the Lahori Gate; grass strips along the dry moat (seen).',
+      'Median: none seen along the fort wall road; at the Chandni Chowk end a blue P parking board and a security cabin sit at the road edge (seen, C-photo Lal Qila from Chandni Chowk, 2024).',
+      'Poles and wires: black ornamental lamp posts along the wall, tall mast lights; very few overhead wires on the fort side, many on the Chandni Chowk side (seen).',
+      'Lights: the wall is floodlit in warm orange-yellow at night (seen, 2019 and 2023 night shots).',
+      'Trees: a few large trees at the wall foot, bare moat (seen).',
+      'Signs: parking board with a blue P, ASI and CISF boards, brown tourist boards (seen).',
+      'Typical clutter: crowds in the forecourt, autos and e-rickshaws at the edge, police vans, flag poles (seen).',
+    ],
+    requests: [],
+  },
+};
