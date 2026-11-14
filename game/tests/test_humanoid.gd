@@ -170,6 +170,22 @@ func test_lead_models_are_in_the_game() -> void:
 		t.ok(tex != null and tex.get_compression_mode() == PortableCompressedTexture2D.COMPRESSION_MODE_S3TC and tex.get_width() == 2048,
 			"%s texture is 2048 px S3TC (VRAM compressed)" % id)
 		t.ok(ResourceLoader.exists(Humanoid.LEAD_LOCO_PATH % id), "%s has its own locomotion clips" % id)
+		# P2-068: the model keeps Mixamo's rest; the clips play relative to it because every bone frame is the
+		# mannequin's, and only the limbs are aimed (never the clavicles, spine or neck)
+		var man := (load(Humanoid.MESH_PATH[Leads.look(id)["mesh"]]) as PackedScene).instantiate() as Node3D
+		var msk := man.get_node("GeneralSkeleton") as Skeleton3D
+		var worst := 0.0
+		for i in sk.get_bone_count():
+			var m := msk.find_bone(sk.get_bone_name(i))
+			if m >= 0:
+				worst = maxf(worst, rad_to_deg(sk.get_bone_global_rest(i).basis.get_rotation_quaternion().angle_to(
+					msk.get_bone_global_rest(m).basis.get_rotation_quaternion())))
+		man.free()
+		t.ok(worst < 0.5, "%s: bone frames are the mannequin's (worst %.2f degrees)" % [id, worst])
+		t.ok(ResourceLoader.exists(Humanoid.LEAD_CLIPS_PATH % id), "%s has its library clips on its own rest" % id)
+		var aimed: Dictionary = (load(Humanoid.LEAD_CLIPS_PATH % id) as AnimationLibrary).get_meta("aimed", {})
+		t.ok(not aimed.is_empty() and not aimed.has("LeftShoulder") and not aimed.has("Spine") and not aimed.has("Neck"),
+			"%s: only the limbs are aimed (%s)" % [id, aimed.keys()])
 		n.free()
 		var h := Humanoid.new()
 		tree.root.add_child(h)

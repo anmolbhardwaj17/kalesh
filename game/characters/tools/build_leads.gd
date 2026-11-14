@@ -1,8 +1,8 @@
 ## Offline build of the three lead models (P2-063), run by tools/characters/lead_build.mjs (never by the game):
 ##   godot --headless --path game -s res://characters/tools/build_leads.gd -- bittu meera danny
 ## Reads the owner's models that the driver copied into the gitignored res://characters/lead_src/<id>.glb with the
-## import setting that retargets the Mixamo rig to Godot's SkeletonProfileHumanoid (rig/mixamo_bone_map.tres, rests
-## fixed, the A-pose fixed to the profile's T silhouette, the skeleton named %GeneralSkeleton): the same profile as the
+## import setting that retargets the Mixamo rig to Godot's SkeletonProfileHumanoid (rig/mixamo_bone_map.tres, bone
+## frames set to the profile's, the pose and the mesh as delivered, the skeleton named %GeneralSkeleton): the same profile as the
 ## Universal Animation Library clips (rig/ual_clips.res) and the built locomotion (rig/loco_clips.res), so every clip
 ## plays on the lead's own skeleton. Writes per lead:
 ##   rig/lead_<id>.scn         a Node3D with the %GeneralSkeleton and three skinned levels of one mesh:
@@ -116,8 +116,10 @@ func _build(id: String) -> String:
 	var msk := man.get_node("GeneralSkeleton") as Skeleton3D
 	var units := LegIK.reach(msk, LegIK.leg(msk, "Left")) / LegIK.reach(sk, LegIK.leg(sk, "Left"))
 	_rescale(sk, skin, arrays, units)
-	var turned := _match_silhouette(sk, skin, arrays, msk)
-	print("lead %s: rest matched to the mannequin's (degrees turned): %s" % [id, turned])
+	var frames := _rest_frames(sk, msk)
+	print("lead %s: rest kept as delivered; bone frames against the mannequin's (degrees): %s" % [id, frames])
+	if float(frames.get("max", 0.0)) > 0.5:
+		return "%s: bone frames differ from the mannequin's by %.1f degrees (the clips would not play relative to rest)" % [id, frames.max]
 	var m_height: float = Leads.REST_HEIGHT[Leads.look(id)["mesh"]]
 	var head_f := 1.0
 	if Leads.look(id)["mesh"] == "f":
@@ -398,45 +400,27 @@ func _split_legs(arr: Array, skin: Skin, sk: Skeleton3D, rest: PackedVector3Arra
 	return Vector2i(moved, cut)
 
 
-## The bone chains whose direction the clips' rotations act on, parent first: each bone and the child it points at.
-const CHAINS := [["Spine", "Chest"], ["Chest", "UpperChest"], ["UpperChest", "Neck"], ["Neck", "Head"],
-	["LeftShoulder", "LeftUpperArm"], ["LeftUpperArm", "LeftLowerArm"], ["LeftLowerArm", "LeftHand"],
-	["RightShoulder", "RightUpperArm"], ["RightUpperArm", "RightLowerArm"], ["RightLowerArm", "RightHand"],
-	["LeftUpperLeg", "LeftLowerLeg"], ["LeftLowerLeg", "LeftFoot"], ["RightUpperLeg", "RightLowerLeg"], ["RightLowerLeg", "RightFoot"]]
-
-
-## The clips set absolute local rotations in the profile's bone frames, so a pose comes out the same on two skeletons
-## only when each bone points at its child the same way in its own frame. The import's silhouette fix gives the
-## profile's reference T, not the library mannequin's rest (its clavicles, arms and legs sit a few degrees apart):
-## played on that, every clip shrugs the shoulders, pins the upper arms and splays the forearms. So the model is posed
-## into the mannequin's rest (each chain bone turned, parent first, until it points where the mannequin's does), the
-## mesh is skinned into that pose, and the pose becomes the new rest with the bone frames unchanged (only the joint
-## positions move). Answers the degrees each chain bone turned.
-func _match_silhouette(sk: Skeleton3D, skin: Skin, arr: Array, msk: Skeleton3D) -> Dictionary:
-	sk.reset_bone_poses()
-	var turned := {}
-	for pair in CHAINS:
-		var b := sk.find_bone(pair[0])
-		var c := sk.find_bone(pair[1])
-		var mb := msk.find_bone(pair[0])
-		var mc := msk.find_bone(pair[1])
-		if b < 0 or c < 0 or mb < 0 or mc < 0:
+## The clips must play on the model as rotations relative to its rest in global space (P2-068, Anmol 2026-11-14: the
+## model's bind and rest pose stay exactly as Mixamo delivered them). For a bone b of the clips' skeleton S and the
+## lead's T that is T_local(b) = C(parent)^-1 * S_local(b) * C(b) with C(b) = S_global_rest(b)^-1 * T_global_rest(b).
+## The import's "overwrite axis" rest fix gives every profile bone of both skeletons the profile's reference frame, so C
+## is the identity and the clips play as they are: each bone turns from the model's own rest by the clip's turn, the
+## model's own clavicles, arm hang and silhouette are kept. Answers the largest frame difference (degrees) and the
+## bones over 0.1 degree.
+func _rest_frames(sk: Skeleton3D, msk: Skeleton3D) -> Dictionary:
+	var out := {"max": 0.0}
+	for i in sk.get_bone_count():
+		var n := sk.get_bone_name(i)
+		var m := msk.find_bone(n)
+		if m < 0:
 			continue
-		sk.force_update_all_bone_transforms()
-		var g := sk.get_bone_global_pose(b)
-		var d_lead := (sk.get_bone_global_pose(c).origin - g.origin).normalized()
-		var d_man := (msk.get_bone_global_rest(mc).origin - msk.get_bone_global_rest(mb).origin).normalized()
-		var ang := d_lead.angle_to(d_man)
-		turned[pair[0]] = snappedf(rad_to_deg(ang), 0.1)
-		if ang < 1e-4:
-			continue
-		var q := Quaternion(d_lead, d_man)
-		var ng := Basis(q) * g.basis
-		var par := sk.get_bone_parent(b)
-		var pg := sk.get_bone_global_pose(par).basis if par >= 0 else Basis.IDENTITY
-		sk.set_bone_pose_rotation(b, (pg.inverse() * ng).get_rotation_quaternion())
-	_bake_pose(sk, skin, arr)
-	return turned
+		var a := sk.get_bone_global_rest(i).basis.orthonormalized().get_rotation_quaternion()
+		var b := msk.get_bone_global_rest(m).basis.orthonormalized().get_rotation_quaternion()
+		var d := rad_to_deg(a.angle_to(b))
+		out["max"] = snappedf(maxf(float(out["max"]), d), 0.01)
+		if d > 0.1:
+			out[n] = snappedf(d, 0.01)
+	return out
 
 
 ## Skins the mesh into the skeleton's current pose and makes that pose the rest, keeping each bone's rest frame (the

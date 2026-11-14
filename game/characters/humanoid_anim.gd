@@ -25,6 +25,7 @@ const BodyFeel := preload("res://characters/body_feel.gd")
 const CLIPS_PATH := "res://characters/rig/ual_clips.res"
 const LOCO_PATH := "res://characters/rig/loco_clips.res"
 const LEAD_LOCO_PATH := "res://characters/rig/loco_%s.res"
+const LEAD_CLIPS_PATH := "res://characters/rig/clips_%s.res"
 const SHADER_PATH := "res://characters/rig/lead_look.gdshader"
 const MESH_PATH := {"m": "res://characters/rig/mannequin_m.scn", "f": "res://characters/rig/mannequin_f.scn"}
 ## State -> clip ("k/" is the built library). The first two are the blends; the rest play one clip.
@@ -63,6 +64,7 @@ const P_RATE := &"parameters/rate/scale"
 static var _clips: AnimationLibrary
 static var _loco: AnimationLibrary
 static var _lead_loco := {}
+static var _lead_clips := {}
 static var _meshes := {}
 static var _shader: Shader
 
@@ -126,6 +128,15 @@ static func loco() -> AnimationLibrary:
 	if _loco == null:
 		_loco = load(LOCO_PATH)
 	return _loco
+
+
+## A lead model's library clips retargeted onto its own rest (rig/clips_<id>.res, P2-068: the model keeps Mixamo's
+## rest, the limbs aimed at the mannequin's), or the shared library when that file is missing.
+static func lead_clips(id: String) -> AnimationLibrary:
+	if not _lead_clips.has(id):
+		var p := LEAD_CLIPS_PATH % id
+		_lead_clips[id] = load(p) if ResourceLoader.exists(p) else clips()
+	return _lead_clips[id]
 
 
 ## A lead model's own locomotion clips (rig/loco_<id>.res, built on its skeleton by tools/characters/lead_build.mjs),
@@ -287,7 +298,7 @@ func _build_tree() -> void:
 	bt.connect_node("output", 0, "rate")
 	tree = AnimationTree.new()
 	tree.name = "AnimTree"
-	tree.add_animation_library("", clips())
+	tree.add_animation_library("", clips() if lead_model.is_empty() else lead_clips(look_id))
 	tree.add_animation_library("k", _lib)
 	tree.tree_root = bt
 	tree.callback_mode_process = AnimationMixer.ANIMATION_CALLBACK_MODE_PROCESS_MANUAL
