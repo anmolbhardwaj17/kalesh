@@ -1,6 +1,6 @@
 {
   "_doc": "Written only by node harness/bin/task.mjs. Phases run in order; P0 (ADOPT + STYLE DISCOVERY) waits for the owner by design and needs task.mjs signoff and task.mjs archsignoff before its gate passes. Later phases are added by the planner at the end of P0 (task.mjs phase-add) from the game's real state.",
-  "updated": "2026-11-14T11:19:25.759Z",
+  "updated": "2026-11-14T11:40:16.569Z",
   "phases": [
     {
       "id": "P0",
@@ -5058,6 +5058,24 @@
       "notes": [],
       "created": "2026-11-14T11:13:12.256Z",
       "model": "opus"
+    },
+    {
+      "id": "P2-065",
+      "phase": "P2",
+      "title": "Game test runs never open windows on the owner's screen",
+      "desc": "Anmol 2026-11-14 sees Godot windows from verify and shoot runs on his screen. harness/bin/godotclient.mjs gameArgs launches a visible 1280x720 window unless headless. Default every non-headless run to an off-screen position (--position far outside the desktop, as the tunnel builder did with --position 30000,30000), with an env switch HARNESS_SHOW_WINDOW=1 for debugging. macOS may throttle windows it thinks are hidden (App Nap, occlusion): measure perf_baseline and one city_path scenario on-screen and off-screen in the same session; if off-screen throttles, find a setting that keeps full speed (for example disable App Nap for the process with NSAppSleepDisabled via defaults or the launch environment, or keep the window on-screen at 1 px opacity) and record the result in knowledge.md.",
+      "accept": [
+        "npm test green"
+      ],
+      "deps": [],
+      "agent": "builder",
+      "priority": 1,
+      "kind": "bug",
+      "status": "todo",
+      "attempts": 0,
+      "notes": [],
+      "created": "2026-11-14T11:40:16.568Z",
+      "model": "sonnet"
     }
   ]
 }
