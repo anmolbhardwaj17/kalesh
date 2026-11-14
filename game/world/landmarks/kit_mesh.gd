@@ -7,11 +7,21 @@
 extends RefCounted
 
 
+## The format flags of the custom channels (both RGBA float), for add_surface_from_arrays.
+const CUSTOM_FLAGS := (Mesh.ARRAY_CUSTOM_RGBA_FLOAT << Mesh.ARRAY_FORMAT_CUSTOM0_SHIFT) | (Mesh.ARRAY_CUSTOM_RGBA_FLOAT << Mesh.ARRAY_FORMAT_CUSTOM1_SHIFT)
+
+
 class Surf:
 	var v := PackedVector3Array()
 	var n := PackedVector3Array()
 	var c := PackedColorArray()
 	var i := PackedInt32Array()
+	## UVs, only on a surface that got a quad_uv (P2-032, the tunnel murals); kept as long as v once started.
+	var uv := PackedVector2Array()
+	## Two custom channels (4 floats a vertex), only on a surface a post pass filled whole (P2-032: the tunnel's strip
+	## light vectors, game/world/infra/kit_tunnel_light.gd); written as ARRAY_CUSTOM0 and 1 in RGBA float.
+	var cu0 := PackedFloat32Array()
+	var cu1 := PackedFloat32Array()
 
 
 ## part name -> material key -> Surf
@@ -66,6 +76,8 @@ func tri(a: Vector3, b: Vector3, c: Vector3, col: Color) -> void:
 	s.v.append_array([wa, wb, wc])
 	s.n.append_array([nrm, nrm, nrm])
 	s.c.append_array([col, col, col])
+	if not s.uv.is_empty():
+		s.uv.append_array([Vector2.ZERO, Vector2.ZERO, Vector2.ZERO])
 	s.i.append_array([base, base + 2, base + 1])
 	top = maxf(top, maxf(wa.y, maxf(wb.y, wc.y)))
 	triangles += 1
@@ -86,6 +98,54 @@ func quad(a: Vector3, b: Vector3, c: Vector3, d: Vector3, col: Color) -> void:
 	s.v.append_array([wa, wb, wc, wd])
 	s.n.append_array([nrm, nrm, nrm, nrm])
 	s.c.append_array([col, col, col, col])
+	if not s.uv.is_empty():
+		s.uv.append_array([Vector2.ZERO, Vector2.ZERO, Vector2.ZERO, Vector2.ZERO])
+	s.i.append_array([base, base + 2, base + 1, base, base + 3, base + 2])
+	top = maxf(top, maxf(maxf(wa.y, wb.y), maxf(wc.y, wd.y)))
+	triangles += 2
+
+
+## A flat quad with a UV and a colour per corner (P2-032: the tunnel murals' shader reads the run's metres and the
+## height in the UV, and a value in the colour). Counter-clockwise seen from the side it faces.
+func quad_uv(a: Vector3, b: Vector3, c: Vector3, d: Vector3, ua: Vector2, ub: Vector2, uc: Vector2, ud: Vector2, ca: Color, cb: Color, cc: Color, cd: Color) -> void:
+	var wa := xf * a
+	var wb := xf * b
+	var wc := xf * c
+	var wd := xf * d
+	var nrm := (wb - wa).cross(wc - wa) + (wc - wa).cross(wd - wa)
+	if nrm.length_squared() < 1e-12:
+		return
+	nrm = nrm.normalized()
+	var s := _surf()
+	var base := s.v.size()
+	if s.uv.size() < base:
+		s.uv.resize(base)
+	s.v.append_array([wa, wb, wc, wd])
+	s.n.append_array([nrm, nrm, nrm, nrm])
+	s.c.append_array([ca, cb, cc, cd])
+	s.uv.append_array([ua, ub, uc, ud])
+	s.i.append_array([base, base + 2, base + 1, base, base + 3, base + 2])
+	top = maxf(top, maxf(maxf(wa.y, wb.y), maxf(wc.y, wd.y)))
+	triangles += 2
+
+
+## A quad with a normal, a UV and a colour per corner (P2-032: the curve between a tunnel wall and its soffit shades
+## smooth). Counter-clockwise seen from the side it faces; the normals are given in the local frame.
+func quad_n(a: Vector3, b: Vector3, c: Vector3, d: Vector3, na: Vector3, nb: Vector3, nc: Vector3, nd: Vector3, ua: Vector2, ub: Vector2, uc: Vector2, ud: Vector2, ca: Color, cb: Color, cc: Color, cd: Color) -> void:
+	var wa := xf * a
+	var wb := xf * b
+	var wc := xf * c
+	var wd := xf * d
+	if ((wb - wa).cross(wc - wa) + (wc - wa).cross(wd - wa)).length_squared() < 1e-12:
+		return
+	var s := _surf()
+	var base := s.v.size()
+	if s.uv.size() < base:
+		s.uv.resize(base)
+	s.v.append_array([wa, wb, wc, wd])
+	s.n.append_array([(xf.basis * na).normalized(), (xf.basis * nb).normalized(), (xf.basis * nc).normalized(), (xf.basis * nd).normalized()])
+	s.c.append_array([ca, cb, cc, cd])
+	s.uv.append_array([ua, ub, uc, ud])
 	s.i.append_array([base, base + 2, base + 1, base, base + 3, base + 2])
 	top = maxf(top, maxf(maxf(wa.y, wb.y), maxf(wc.y, wd.y)))
 	triangles += 2
@@ -355,7 +415,8 @@ static func _area(poly: PackedVector2Array) -> float:
 	return a * 0.5
 
 
-## The arrays of one part: material key -> mesh arrays.
+## The arrays of one part: material key -> mesh arrays. A surface with the custom channels needs CUSTOM_FLAGS when it
+## is added to a mesh.
 func arrays_of(part_name: String) -> Dictionary:
 	var out := {}
 	if not parts.has(part_name):
@@ -369,6 +430,11 @@ func arrays_of(part_name: String) -> Dictionary:
 		a[Mesh.ARRAY_VERTEX] = s.v
 		a[Mesh.ARRAY_NORMAL] = s.n
 		a[Mesh.ARRAY_COLOR] = s.c
+		if not s.uv.is_empty() and s.uv.size() == s.v.size():
+			a[Mesh.ARRAY_TEX_UV] = s.uv
+		if s.cu0.size() == s.v.size() * 4 and s.cu1.size() == s.v.size() * 4:
+			a[Mesh.ARRAY_CUSTOM0] = s.cu0
+			a[Mesh.ARRAY_CUSTOM1] = s.cu1
 		a[Mesh.ARRAY_INDEX] = s.i
 		out[k] = a
 	return out

@@ -101,17 +101,28 @@ export function polyline(pieces, ids, tol = 0.25) {
   return thin(all, tol);
 }
 
-/** Thins a point list the same way (a point stays when over `tol` off the line of its kept neighbour and the next one). */
+/**
+ * Thins a point list: a point is dropped only while every point dropped since the last kept one stays within `tol` of
+ * the chord from that kept point to the next one (P2-032: testing only the newest point let a 31 m chord on a curve
+ * stray 0.77 m off the lane, and a car on it touched the kerb on the inside of the bend).
+ */
 export function thin(all, tol = 0.25) {
   const keep = [all[0]];
-  for (let i = 1; i < all.length - 1; i++) {
-    const a = keep[keep.length - 1];
-    const b = all[i + 1];
-    const q = all[i];
+  let from = 0;
+  const off = (q, a, b) => {
     const L = Math.hypot(b[0] - a[0], b[1] - a[1], b[2] - a[2]) || 1;
     const t = Math.max(0, Math.min(1, ((q[0] - a[0]) * (b[0] - a[0]) + (q[1] - a[1]) * (b[1] - a[1]) + (q[2] - a[2]) * (b[2] - a[2])) / (L * L)));
-    const off = Math.hypot(q[0] - (a[0] + t * (b[0] - a[0])), q[1] - (a[1] + t * (b[1] - a[1])), q[2] - (a[2] + t * (b[2] - a[2])));
-    if (off > tol || L > 60) keep.push(q);
+    return Math.hypot(q[0] - (a[0] + t * (b[0] - a[0])), q[1] - (a[1] + t * (b[1] - a[1])), q[2] - (a[2] + t * (b[2] - a[2])));
+  };
+  for (let i = 1; i < all.length - 1; i++) {
+    const a = all[from];
+    const b = all[i + 1];
+    let bad = Math.hypot(b[0] - a[0], b[1] - a[1], b[2] - a[2]) > 60;
+    for (let k = from + 1; k <= i && !bad; k++) bad = off(all[k], a, b) > tol;
+    if (bad) {
+      keep.push(all[i]);
+      from = i;
+    }
   }
   keep.push(all[all.length - 1]);
   return keep.map((q) => q.map((v) => Math.round(v * 1000) / 1000));

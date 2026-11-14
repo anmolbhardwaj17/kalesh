@@ -79,6 +79,8 @@ interface Raw {
 export interface ProfileOptions {
   /** Aim for this many metres between knots. */
   spacing: number;
+  /** Per strip a grade cap under the class limit (tunnel approaches, P2-032); absent: the class limit. */
+  gradeCaps?: ArrayLike<number>;
 }
 
 export class Profiles {
@@ -211,7 +213,7 @@ export class Profiles {
       c.curve = new Float64Array(c.m + 1).fill(Infinity);
       for (const p of c.parts) {
         const s = strips[p.strip] as Strip;
-        const g = maxGrade(s.cls, s.link);
+        const g = Math.min(maxGrade(s.cls, s.link), opts.gradeCaps?.[p.strip] ?? Infinity);
         const k = 1 / minCurveRadius(s.cls, s.link);
         const eps = 1e-9 * c.d;
         // the grade at a point blends the two knot intervals around its nearest knot: both take the part's limit
