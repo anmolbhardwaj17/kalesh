@@ -22,10 +22,6 @@
       "priority": 2,
       "batch": null,
       "created": "2026-11-13T07:39:51.061Z",
-      "redo": {
-        "at": "2026-11-14T12:11:20.758Z",
-        "note": "Owner 2026-11-14: regenerate for a realistic look: the first model has a cartoon face (big eyes, thick moustache), a head about 8% too big and a ragged shirt hem."
-      },
       "promptAt": "2026-11-14T12:26:55.279Z",
       "review": {
         "at": "2026-11-14T12:11:20.758Z",
@@ -57,10 +53,6 @@
       "priority": 2,
       "batch": null,
       "created": "2026-11-13T07:39:51.097Z",
-      "redo": {
-        "at": "2026-11-14T12:11:20.825Z",
-        "note": "Owner 2026-11-14: regenerate: trousers came fused between the legs with a slab under the shoes, flared hems, stylised face."
-      },
       "promptAt": "2026-11-14T12:16:28.286Z",
       "review": {
         "at": "2026-11-14T12:11:20.827Z",
@@ -92,10 +84,6 @@
       "priority": 2,
       "batch": null,
       "created": "2026-11-13T07:39:51.133Z",
-      "redo": {
-        "at": "2026-11-14T12:11:20.903Z",
-        "note": "Owner 2026-11-14: regenerate: sunglasses sat on the eyes instead of pushed up into the hair, boxy puffed jacket shoulders, legs of different lengths, stylised face."
-      },
       "promptAt": "2026-11-14T12:16:28.353Z",
       "review": {
         "at": "2026-11-14T12:11:20.907Z",
@@ -116,7 +104,7 @@
         "h": 768,
         "tileable": false,
         "normalMap": false,
-        "alpha": true,
+        "alpha": false,
         "out": "portraits/portrait_lead_bittu.webp"
       },
       "placeholder": {
@@ -129,11 +117,12 @@
       "batch": null,
       "created": "2026-11-14T12:12:01.288Z",
       "review": {
-        "at": "2026-11-14T13:04:53.189Z",
-        "verdict": "redo",
-        "note": "Owner 2026-11-14: Bittu reads as a believable person but not a game lead (no silhouette, low contrast, meek). Redo with lead presence: open khaki shirt over a dark vest, bold red gamchha at the neck, distinctive haircut, wiry strong build, confident stance.",
-        "ingestedAt": "2026-11-14T12:59:05.245Z",
-        "removed": false
+        "at": "2026-11-14T13:10:46.980Z",
+        "verdict": "ok",
+        "note": "Approved 2026-11-14 (lead presence T-pose): open khaki shirt over a dark vest, red gamchha at the neck, distinctive hair with faded sides, cheeky confident half smile, wiry arms, navy trousers, brown belt and sandals, steel watch and black thread; clean T-pose with gaps under the arms and between the legs. Reads as the hero from across a street.",
+        "ingestedAt": "2026-11-14T13:09:30.579Z",
+        "fit": "pending",
+        "fitNote": "Use for image to 3D."
       },
       "redo": {
         "at": "2026-11-14T13:04:53.072Z",
@@ -152,7 +141,7 @@
         "h": 768,
         "tileable": false,
         "normalMap": false,
-        "alpha": true,
+        "alpha": false,
         "out": "portraits/portrait_lead_meera.webp"
       },
       "placeholder": {
@@ -172,10 +161,6 @@
         "fit": "pending",
         "fitNote": "Use for image to 3D."
       },
-      "redo": {
-        "at": "2026-11-14T13:00:27.661Z",
-        "note": "2026-11-14 T-pose sheet: face, uniform and arms are right and the face is strong (keep it), but her thighs and knees touch, the same thing that fused the trousers in the first 3D model. Redo with a wider stance and visible background between the legs."
-      },
       "promptAt": "2026-11-14T13:00:27.661Z"
     },
     {
@@ -189,7 +174,7 @@
         "h": 768,
         "tileable": false,
         "normalMap": false,
-        "alpha": true,
+        "alpha": false,
         "out": "portraits/portrait_lead_danny.webp"
       },
       "placeholder": {
@@ -208,10 +193,6 @@
         "ingestedAt": "2026-11-14T12:59:12.611Z",
         "fit": "pending",
         "fitNote": "Use for image to 3D."
-      },
-      "redo": {
-        "at": "2026-11-14T12:53:50.839Z",
-        "note": "Owner 2026-11-14: redo as a single front view in a strict T-pose: the A-pose model had the jacket stuck to the waist."
       },
       "promptAt": "2026-11-14T12:53:50.845Z"
     }
