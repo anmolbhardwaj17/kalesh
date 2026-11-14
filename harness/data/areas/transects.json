@@ -1,0 +1,44 @@
+{
+ "_doc": "Transects of the edge blend test (P2-009, tools/bake/areas/blend.ts): each runs from well inside a drawn area across its edge into the ground beyond. The bake samples the profile mix every 25 m along each (harness/reports/map/areas/generator.json, picture blend_<stage>.png) and checks that the area's own weight only falls and that no step between two samples is over 20 percent. from and to are [lon, lat].",
+ "transects": [
+  {
+   "id": "cp_to_paharganj",
+   "name": "Connaught Place outer circle toward Paharganj",
+   "area": "cp_outer_circle",
+   "from": [
+    77.21883,
+    28.635198
+   ],
+   "to": [
+    77.21795,
+    28.637598
+   ]
+  },
+  {
+   "id": "paharganj_to_cp",
+   "name": "Paharganj toward Connaught Place",
+   "area": "paharganj_station",
+   "from": [
+    77.216252,
+    28.643075
+   ],
+   "to": [
+    77.217193,
+    28.640494
+   ]
+  },
+  {
+   "id": "chandni_chowk_to_daryaganj",
+   "name": "Chandni Chowk galis toward Daryaganj",
+   "area": "chandni_chowk_galis",
+   "from": [
+    77.231492,
+    28.651963
+   ],
+   "to": [
+    77.233456,
+    28.649653
+   ]
+  }
+ ]
+}

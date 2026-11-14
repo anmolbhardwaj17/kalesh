@@ -25,7 +25,7 @@ describe.skipIf(missing.length > 0)(`pilot centre tiles${reason ? ` (skipped: ${
     const { report, health, rec, index, out } = await baked();
     expect(report.steps).toEqual(['sources', 'ground', 'graph', 'repair', 'lanes', 'elevation', 'mesh', 'terrain', 'tiles']);
     const inv = Object.fromEntries(health.invariants.filter((i) => i.id.startsWith('TILE-')).map((i) => [i.id, i.ok]));
-    expect(inv).toEqual({ 'TILE-01.none_skipped': true, 'TILE-02.chunks': true, 'TILE-03.colliders_match_drawn': true, 'TILE-04.deck_rays': true, 'TILE-05.bytes': true });
+    expect(inv).toEqual({ 'TILE-01.none_skipped': true, 'TILE-02.chunks': true, 'TILE-03.colliders_match_drawn': true, 'TILE-04.deck_rays': true, 'TILE-05.bytes': true, 'TILE-06.placement_bytes': true });
     expect(rec.skipped).toEqual([]);
     expect(rec.stats.tiles).toBeGreaterThan(300);
     expect(health.tiles.written).toBe(rec.stats.tiles);
@@ -69,7 +69,8 @@ describe.skipIf(missing.length > 0)(`pilot centre tiles${reason ? ` (skipped: ${
       for (const c of d.header.colliders) largest = Math.max(largest, c.triangles);
       expect(d.header.nav).toBeNull();
       expect(d.header.life).toBeNull();
-      expect(d.header.placements).toEqual([]);
+      // facade module placements since P2-009 (checked in tools/bake/areas/pilot_areas.test.mjs)
+      expect(d.header.placements.reduce((n, p) => n + p.count, 0)).toBe(t.placements);
     }
     expect(largest).toBeLessThanOrEqual(600);
   }, T);

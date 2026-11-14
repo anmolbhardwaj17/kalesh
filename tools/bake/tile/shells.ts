@@ -51,6 +51,11 @@ export interface Shell {
   base: number;
   top: number;
   from: 'height' | 'levels' | 'class' | 'default';
+  /** A generated shell (P2-009): two numbers per vertex, three vertices per triangle (bays along the wall, floors up). */
+  uv?: number[];
+  /** A generated shell: the wall colour as 0xRRGGBB and the wear 0 to 1; they ride in UV2 of every vertex. */
+  tint?: number;
+  wear?: number;
 }
 
 /** Heights of the solved ground surface at any point (block metres), from the terrain step's emitted triangles. */

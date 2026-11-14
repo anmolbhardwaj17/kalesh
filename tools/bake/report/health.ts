@@ -9,6 +9,7 @@ import type { WalkwaysRecord } from '../terrain/walkways.ts';
 import type { LandmarksRecord } from '../landmarks/placeout.ts';
 import type { GraphCounts } from '../graph/checks.ts';
 import type { RepairResult, RepairSummary } from '../repair/engine.ts';
+import type { AreasRecord } from '../areas/checks.ts';
 import type { BuildingsRecord } from '../repair/clear.ts';
 import type { OverrideCounts, OverrideRecord } from '../repair/overrides.ts';
 
@@ -118,6 +119,8 @@ export interface HealthReport {
   decisions?: DecisionCounts;
   /** Buildings taken off the road faces after the mesh step (P1-030, repair/clear.ts): counts by action, what is left (0). */
   buildings?: BuildingsRecord;
+  /** The area generator (P2-009, tools/bake/areas/generator.ts): parcels, buildings, the blend transects and the placement bytes. */
+  areas?: AreasRecord;
   /** Underground structures (P1-041, graph/underground.ts): every one with its reason, and what the class took out; set by the graph and repair steps. */
   underground?: UndergroundHealth;
   /** Who may use each road (P2-042, graph/access.ts): edges and km by mode and by reason; barriers (mesh step) and walkways (terrain step). */

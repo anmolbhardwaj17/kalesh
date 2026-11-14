@@ -1,0 +1,4 @@
+{
+ "_doc": "Footprints the odd-footprint check must leave as they are (P2-009, tools/bake/areas/oddshapes.ts; DELHI_WORLD.md 'OSM is reference, not the final word'). A footprint flagged in harness/reports/map/areas/odd_footprints.json (sliver, spike, an outline that crosses itself, machine-made wobble, an outlier of size or height) goes here once it has been checked against photos or the satellite view and the real building is like that. keep maps the footprint id of the report to one line that names the photo or the view it was checked against. Empty until a check is made.",
+ "keep": {}
+}

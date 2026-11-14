@@ -1,0 +1,28 @@
+{
+ "_doc": "Format of an area blueprint (P2-009, tools/bake/areas/blueprints.ts; DELHI_WORLD.md 'OSM is reference, not the final word'). One file per drawn area, named <area id>.json; a file whose name starts with _ is not read. The bake lays the blocks over the repaired footprints: every map footprint under a block, or with its centre inside a clear ring, leaves with a log line (harness/reports/map/areas/parcels.json). Precedence on any square metre: road, landmark zone, blueprint, generator: a block is cut back to the road edge and a block inside a landmark zone is left out. Rings are [lon, lat] lists like areas.geojson. This file is the format only; the area passes (P2-020 to P2-024) write the real ones from the area sheets and photos.",
+ "area": "<area id of harness/data/areas/areas.geojson>",
+ "evidence": "<the sheet section and photo set the blueprint is drawn from>",
+ "clear": [
+  [
+   "optional: rings; map footprints with their centre inside leave (ground the blueprint keeps open)"
+  ]
+ ],
+ "blocks": [
+  {
+   "id": "<letters, digits and _; the parcel is bp/<area>/<id>>",
+   "ring": [
+    [
+     "lon",
+     "lat"
+    ]
+   ],
+   "type": "<a building type of tools/bake/areas/schema.ts BUILDING_TYPES>",
+   "floors": "<whole number 1 to 60>",
+   "height_m": "<optional: wall height in metres; else the type's floor heights>",
+   "roof": "<optional: flat, mumty, setback, crown or gable>",
+   "tint": "<optional: a colour word of the area's buildings.colours in palette.json>",
+   "ground_floor": "<optional note: colonnade, arcade, shopfronts>",
+   "evidence": "<the photo or sheet line this block is drawn from>"
+  }
+ ]
+}

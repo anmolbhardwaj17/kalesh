@@ -169,7 +169,8 @@ export class WorldCutter {
         const key = tileId(t.tx, t.tz);
         let part = parts.get(key);
         if (!part) {
-          part = { ...s, id: `${s.id}#${parts.size}`, anchor: { x: (a[0] + b[0] + c[0]) / 3, z: (a[2] + b[2] + c[2]) / 3 }, tris: [], nrm: [] };
+          // the halved pieces carry no facade UV (a shell this long is a station roof or a fort wall)
+          part = { ...s, id: `${s.id}#${parts.size}`, anchor: { x: (a[0] + b[0] + c[0]) / 3, z: (a[2] + b[2] + c[2]) / 3 }, tris: [], nrm: [], uv: undefined };
           parts.set(key, part);
         }
         part.tris.push(...a, ...b, ...c);
@@ -221,6 +222,8 @@ export class WorldCutter {
         if (m.uv.length && m.uv.length === (m.pos.length / 3) * 2 && m.uv2.length === m.uv.length) uvMaterials.add(material);
       }
     }
+    // generated shells carry a facade UV and their colour and wear in UV2 (P2-009)
+    if (bin.shells.some((si) => (this.shells[si] as Shell).tint !== undefined)) uvMaterials.add('building');
     const welder = (material: string): Welder => {
       let w = welders.get(material);
       if (!w) welders.set(material, (w = new Welder(material, uvMaterials.has(material))));
@@ -309,7 +312,9 @@ export class WorldCutter {
           const vy = d[1] - a[1];
           const vz = d[2] - a[2];
           const facing = (uy * vz - uz * vy) * n[0] + (uz * vx - ux * vz) * n[1] + (ux * vy - uy * vx) * n[2];
-          for (const p of facing > 0 ? [a, d, b] : [a, b, d]) w.mesh.idx.push(w.vertex(p[0], p[1], p[2], n[0], n[1], n[2]));
+          const uvOf = (i: number): [number, number] => (s.uv ? [s.uv[t * 6 + i * 2] as number, s.uv[t * 6 + i * 2 + 1] as number] : [0, 0]);
+          const corners: [V3, [number, number]][] = facing > 0 ? [[a, uvOf(0)], [d, uvOf(2)], [b, uvOf(1)]] : [[a, uvOf(0)], [b, uvOf(1)], [d, uvOf(2)]];
+          for (const [p, uv] of corners) w.mesh.idx.push(w.vertex(p[0], p[1], p[2], n[0], n[1], n[2], uv[0], uv[1], s.tint ?? 0, s.wear ?? 0));
         }
         buildings.push({ id: s.id, first, end: w.mesh.idx.length / 3 });
       }

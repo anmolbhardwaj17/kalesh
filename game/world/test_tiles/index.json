@@ -5,24 +5,24 @@
  "block": "centre",
  "size": 250,
  "margin": 250,
- "bakeHash": "0b2195740addab",
+ "bakeHash": "1d610204ff3f9d",
  "offset": [
   621.6,
   467.2
  ],
  "bytes": {
-  "total": 10854617,
-  "average": 1206069,
+  "total": 12313577,
+  "average": 1368175,
   "largest": {
    "id": "-3_-6",
-   "bytes": 1718900
+   "bytes": 2145196
   }
  },
  "blocks": [
   {
    "id": "centre",
    "tiles": 9,
-   "bytes": 10854617
+   "bytes": 12313577
   }
  ],
  "tiles": [
@@ -31,8 +31,8 @@
    "x": -4,
    "z": -8,
    "file": "-4_-8.ktl",
-   "bytes": 967280,
-   "hash": "8d7c5656d1471abd",
+   "bytes": 1001992,
+   "hash": "c6e85205b5d8803b",
    "origin": [
     -1000,
     216,
@@ -52,29 +52,31 @@
     "building",
     "landmark"
    ],
-   "vertices": 15470,
-   "triangles": 7631,
-   "colliderTriangles": 7597,
+   "vertices": 15510,
+   "triangles": 7651,
+   "colliderTriangles": 7617,
    "chunks": 23,
    "largestChunk": 484,
    "buildings": 2,
    "lanes": 87,
    "pins": 0,
-   "overhangM": 22.4
+   "overhangM": 22.4,
+   "placements": 585,
+   "placementBytes": 30420
   },
   {
    "id": "-3_-8",
    "x": -3,
    "z": -8,
    "file": "-3_-8.ktl",
-   "bytes": 1048636,
-   "hash": "6b12e05a85ded34f",
+   "bytes": 1056084,
+   "hash": "5bd001f10d0499ed",
    "origin": [
     -750,
     215,
     -2000
    ],
-   "meshes": 16,
+   "meshes": 15,
    "materials": [
     "ground",
     "lawn",
@@ -88,28 +90,29 @@
     "median",
     "footpath",
     "kerb",
-    "railbed",
     "building",
     "landmark",
     "bollard"
    ],
-   "vertices": 16782,
-   "triangles": 8105,
-   "colliderTriangles": 7997,
+   "vertices": 16689,
+   "triangles": 8024,
+   "colliderTriangles": 7916,
    "chunks": 22,
    "largestChunk": 500,
    "buildings": 3,
    "lanes": 84,
    "pins": 3,
-   "overhangM": 14.32
+   "overhangM": 14.32,
+   "placements": 221,
+   "placementBytes": 11492
   },
   {
    "id": "-4_-7",
    "x": -4,
    "z": -7,
    "file": "-4_-7.ktl",
-   "bytes": 959956,
-   "hash": "a6d437437d8a3f35",
+   "bytes": 1293176,
+   "hash": "0a333dec076adf70",
    "origin": [
     -1000,
     215,
@@ -130,23 +133,25 @@
     "landmark",
     "bollard"
    ],
-   "vertices": 15243,
-   "triangles": 7993,
-   "colliderTriangles": 7993,
+   "vertices": 15797,
+   "triangles": 8273,
+   "colliderTriangles": 8273,
    "chunks": 27,
-   "largestChunk": 489,
+   "largestChunk": 488,
    "buildings": 63,
    "lanes": 84,
    "pins": 1,
-   "overhangM": 25.99
+   "overhangM": 25.99,
+   "placements": 5184,
+   "placementBytes": 269568
   },
   {
    "id": "-3_-7",
    "x": -3,
    "z": -7,
    "file": "-3_-7.ktl",
-   "bytes": 1369477,
-   "hash": "598ca42ded5fb64b",
+   "bytes": 1490597,
+   "hash": "07186773199b5d38",
    "origin": [
     -750,
     215,
@@ -169,23 +174,25 @@
     "building",
     "landmark"
    ],
-   "vertices": 21515,
-   "triangles": 10544,
-   "colliderTriangles": 10306,
+   "vertices": 21509,
+   "triangles": 10536,
+   "colliderTriangles": 10298,
    "chunks": 28,
    "largestChunk": 494,
-   "buildings": 19,
+   "buildings": 18,
    "lanes": 196,
    "pins": 3,
-   "overhangM": 20.18
+   "overhangM": 20.18,
+   "placements": 2008,
+   "placementBytes": 104416
   },
   {
    "id": "-3_-6",
    "x": -3,
    "z": -6,
    "file": "-3_-6.ktl",
-   "bytes": 1718900,
-   "hash": "086268173088fa29",
+   "bytes": 2145196,
+   "hash": "c694ad022eb12dc0",
    "origin": [
     -750,
     215,
@@ -209,23 +216,25 @@
     "landmark",
     "bollard"
    ],
-   "vertices": 27074,
-   "triangles": 12945,
-   "colliderTriangles": 12876,
-   "chunks": 34,
-   "largestChunk": 499,
+   "vertices": 27294,
+   "triangles": 13055,
+   "colliderTriangles": 12986,
+   "chunks": 35,
+   "largestChunk": 453,
    "buildings": 33,
    "lanes": 252,
    "pins": 1,
-   "overhangM": 49.85
+   "overhangM": 49.85,
+   "placements": 7437,
+   "placementBytes": 386724
   },
   {
    "id": "8_-6",
    "x": 8,
    "z": -6,
    "file": "8_-6.ktl",
-   "bytes": 640976,
-   "hash": "3a4fd3e10f7ab917",
+   "bytes": 863524,
+   "hash": "b12891e97a5955ea",
    "origin": [
     2000,
     206,
@@ -244,29 +253,31 @@
     "building",
     "landmark"
    ],
-   "vertices": 10069,
-   "triangles": 5365,
-   "colliderTriangles": 5365,
+   "vertices": 10137,
+   "triangles": 5397,
+   "colliderTriangles": 5397,
    "chunks": 20,
    "largestChunk": 466,
    "buildings": 12,
    "lanes": 47,
    "pins": 1,
-   "overhangM": 29.29
+   "overhangM": 29.29,
+   "placements": 4029,
+   "placementBytes": 209508
   },
   {
    "id": "9_-6",
    "x": 9,
    "z": -6,
    "file": "9_-6.ktl",
-   "bytes": 1406340,
-   "hash": "21d929ef522df984",
+   "bytes": 1459968,
+   "hash": "366555f282ef8e53",
    "origin": [
     2250,
     203,
     -1500
    ],
-   "meshes": 22,
+   "meshes": 19,
    "materials": [
     "ground",
     "plot",
@@ -282,38 +293,37 @@
     "median",
     "footpath",
     "kerb",
-    "barrier",
-    "fascia",
-    "retaining",
-    "abutment",
+    "wall",
     "pier",
     "underside",
     "building",
     "landmark"
    ],
-   "vertices": 23542,
-   "triangles": 11447,
-   "colliderTriangles": 11090,
-   "chunks": 31,
-   "largestChunk": 477,
+   "vertices": 23254,
+   "triangles": 11303,
+   "colliderTriangles": 10946,
+   "chunks": 30,
+   "largestChunk": 498,
    "buildings": 1,
    "lanes": 81,
    "pins": 0,
-   "overhangM": 23.43
+   "overhangM": 23.43,
+   "placements": 1260,
+   "placementBytes": 65520
   },
   {
    "id": "8_-5",
    "x": 8,
    "z": -5,
    "file": "8_-5.ktl",
-   "bytes": 1108232,
-   "hash": "130c63b1cbbeb352",
+   "bytes": 1379316,
+   "hash": "e6e116fe2f9b4bcb",
    "origin": [
     2000,
     206,
     -1250
    ],
-   "meshes": 17,
+   "meshes": 15,
    "materials": [
     "ground",
     "plot",
@@ -327,35 +337,35 @@
     "planter",
     "footpath",
     "kerb",
-    "pier",
-    "fob",
     "building",
     "landmark",
     "bollard"
    ],
-   "vertices": 18028,
-   "triangles": 8382,
-   "colliderTriangles": 8274,
-   "chunks": 25,
+   "vertices": 17916,
+   "triangles": 8326,
+   "colliderTriangles": 8218,
+   "chunks": 24,
    "largestChunk": 485,
    "buildings": 13,
    "lanes": 99,
    "pins": 0,
-   "overhangM": 62.64
+   "overhangM": 62.64,
+   "placements": 5107,
+   "placementBytes": 265564
   },
   {
    "id": "9_-5",
    "x": 9,
    "z": -5,
    "file": "9_-5.ktl",
-   "bytes": 1634820,
-   "hash": "9ab26095712e305d",
+   "bytes": 1623724,
+   "hash": "7385e01c771cc41c",
    "origin": [
     2250,
     206,
     -1250
    ],
-   "meshes": 17,
+   "meshes": 14,
    "materials": [
     "ground",
     "plot",
@@ -368,22 +378,21 @@
     "planter",
     "footpath",
     "kerb",
-    "barrier",
-    "fascia",
-    "retaining",
-    "abutment",
+    "wall",
     "pier",
     "underside"
    ],
-   "vertices": 27203,
-   "triangles": 12491,
-   "colliderTriangles": 12168,
+   "vertices": 26979,
+   "triangles": 12379,
+   "colliderTriangles": 12056,
    "chunks": 33,
-   "largestChunk": 494,
+   "largestChunk": 483,
    "buildings": 0,
    "lanes": 141,
    "pins": 0,
-   "overhangM": 2.56
+   "overhangM": 2.56,
+   "placements": 0,
+   "placementBytes": 0
   }
  ],
  "skipped": []

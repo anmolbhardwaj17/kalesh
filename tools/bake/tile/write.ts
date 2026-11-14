@@ -48,6 +48,8 @@ export interface TileBakeInput {
   shells: Iterable<Shell>;
   lanes: readonly LanePiece[];
   pins: readonly WorldPin[];
+  /** Facade module placements by tile id (P2-009): transforms in world metres, twelve numbers per instance, and one custom data value per instance. */
+  placements?: ReadonlyMap<string, readonly { module: string; xforms: readonly number[]; data: readonly number[] }[]>;
   /** A partial bake: only these tile ids are written. */
   only?: ReadonlySet<string> | null;
   margin?: number;
@@ -73,6 +75,9 @@ export interface TileRecord {
   lanes: number;
   pins: number;
   overhangM: number;
+  /** Facade module instances and the bytes their arrays take (P2-009); absent in tiles written before. */
+  placements?: number;
+  placementBytes?: number;
 }
 
 export interface SkippedTile {
@@ -88,6 +93,8 @@ export interface TileBakeResult {
   stats: {
     tiles: number; bytes: number; averageBytes: number; largest: { id: string; bytes: number } | null; triangles: number; colliderTriangles: number; chunks: number;
     largestChunk: number; slivers: number; splitBuildings: number; joints: number; buildings: number; lanes: number; pins: number; maxOverhangM: number; droppedUv: number; flipped: number; cutShells: number;
+    /** Facade module instances, their bytes and the tile with the most placement bytes (P2-009). */
+    placements?: number; placementBytes?: number; largestPlacements?: { id: string; bytes: number; instances: number } | null;
   };
   bakeHash: string;
   ms: Record<string, number>;
@@ -153,7 +160,14 @@ export function bakeTiles(input: TileBakeInput, emit: (rec: TileRecord, bytes: U
     // lane points and pins take the vertex snap too: exact as float32, the same point in every tile
     const lanes = (lanesBy.get(t.id) ?? []).map(({ tile: _tile, pts, ...l }) => ({ ...l, pts: pts.map((v, i) => snap(v) - (i % 3 === 0 ? x0 : i % 3 === 1 ? y0 : z0)) }));
     const pins: TilePin[] = (pinsBy.get(t.id) ?? []).map((p) => ({ id: p.id, name: p.name, kind: p.kind, pos: [snap(p.x) - x0, snap(p.y) - y0, snap(p.z) - z0], ...(p.extra ?? {}) }));
-    const content: TileContent = { district: input.block, tx: t.tx, tz: t.tz, size: TILE_M, origin: cut.origin, meshes: cut.meshes, colliders: chunks, placements: [], lanes, pins, margin };
+    // facade modules: origins take the vertex snap and the tile origin, like every vertex
+    const placements = (input.placements?.get(t.id) ?? []).map((p) => ({
+      module: p.module, data: p.data.slice(),
+      xforms: p.xforms.map((v, i) => (i % 12 === 3 ? snap(v) - x0 : i % 12 === 7 ? snap(v) - y0 : i % 12 === 11 ? snap(v) - z0 : Math.fround(v))),
+    }));
+    const placed = placements.reduce((n, p) => n + p.data.length, 0);
+    const placementBytes = placements.reduce((n, p) => n + p.xforms.length * 4 + p.data.length * 4, 0);
+    const content: TileContent = { district: input.block, tx: t.tx, tz: t.tz, size: TILE_M, origin: cut.origin, meshes: cut.meshes, colliders: chunks, placements, lanes, pins, margin };
     const bad = tileBadVertices(content, margin);
     if (bad.length) {
       const b = bad[0]!;
@@ -181,6 +195,7 @@ export function bakeTiles(input: TileBakeInput, emit: (rec: TileRecord, bytes: U
       id: t.id, x: t.tx, z: t.tz, file: tileFile(t.id), bytes: bytes.length, hash: bytesHash(bytes), origin: cut.origin, meshes: cut.meshes.length, materials: cut.meshes.map((m) => m.material),
       vertices: cut.meshes.reduce((n, m) => n + m.pos.length / 3, 0), triangles, colliderTriangles, chunks: chunks.length, largestChunk, buildings: cut.buildings.length,
       lanes: lanes.length, pins: pins.length, overhangM: Math.round(cut.overhangM * 100) / 100,
+      ...(input.placements ? { placements: placed, placementBytes } : {}),
     };
     emit(rec, bytes);
     lap('emit');
@@ -203,6 +218,11 @@ export function bakeTiles(input: TileBakeInput, emit: (rec: TileRecord, bytes: U
     s.maxOverhangM = Math.max(s.maxOverhangM, rec.overhangM);
     s.droppedUv += cut.droppedUv;
     s.flipped += cut.flipped;
+    if (input.placements) {
+      s.placements = (s.placements ?? 0) + placed;
+      s.placementBytes = (s.placementBytes ?? 0) + placementBytes;
+      if (!s.largestPlacements || placementBytes > s.largestPlacements.bytes) s.largestPlacements = { id: t.id, bytes: placementBytes, instances: placed };
+    }
   }
   s.averageBytes = s.tiles ? Math.round(s.bytes / s.tiles) : 0;
   return { records, skipped, kept, stats: s, bakeHash: hashText(hashes.join('\n')), ms };

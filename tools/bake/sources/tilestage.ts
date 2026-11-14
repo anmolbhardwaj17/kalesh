@@ -53,6 +53,8 @@ export interface TileStepInput {
   access?: { meshes: readonly SourceMesh[]; placements: readonly BarrierPlacement[] };
   /** The infrastructure kits (P2-034): the plain shapes they stand on (colliders) and the kit file of the folder. */
   infra?: { meshes: readonly SourceMesh[]; file: unknown };
+  /** The area generator's buildings (P2-009): its shells stand in for the plain ones, and the facade placements by tile id. */
+  generated?: { shells: readonly Shell[]; placements: ReadonlyMap<string, readonly { module: string; xforms: readonly number[]; data: readonly number[] }[]>; lines: number };
   log: (line: string) => void;
 }
 
@@ -78,14 +80,23 @@ export function runTileStep(s: TileStepInput): { record: TilesRecord; invariants
   const shells: Shell[] = [];
   const byHeight: Record<string, number> = {};
   let rejected = 0;
-  for (const f of s.repaired.footprints) {
-    const sh = shellOf(f, (x, z) => heights.at(x, z), model);
-    if (!sh) {
-      rejected++;
-      continue;
+  if (s.generated) {
+    // the generator built them on this ground (areas/generator.ts): one shell per parcel
+    for (const sh of s.generated.shells) {
+      byHeight[sh.from] = (byHeight[sh.from] ?? 0) + 1;
+      shells.push(sh);
     }
-    byHeight[sh.from] = (byHeight[sh.from] ?? 0) + 1;
-    shells.push(sh);
+    rejected = s.generated.lines;
+  } else {
+    for (const f of s.repaired.footprints) {
+      const sh = shellOf(f, (x, z) => heights.at(x, z), model);
+      if (!sh) {
+        rejected++;
+        continue;
+      }
+      byHeight[sh.from] = (byHeight[sh.from] ?? 0) + 1;
+      shells.push(sh);
+    }
   }
   // pins: the named places of this block inside the stage, on the ground
   const proj = projector(s.origin);
@@ -113,7 +124,7 @@ export function runTileStep(s: TileStepInput): { record: TilesRecord; invariants
 
   const old: TileRecord[] = partial && fs.existsSync(path.join(dir, 'index.json')) ? (JSON.parse(fs.readFileSync(path.join(dir, 'index.json'), 'utf8')) as TileIndex).tiles : [];
   const res = bakeTiles(
-    { block: s.block, offset: s.offset, road: [...s.meshed.mesh.sink.meshes.values(), ...(s.landmarks?.meshes ?? []), ...(s.access?.meshes ?? []), ...(s.infra?.meshes ?? [])], ground: s.ground.tiles, shells, lanes, pins, only: s.only ? new Set(s.only) : null },
+    { block: s.block, offset: s.offset, road: [...s.meshed.mesh.sink.meshes.values(), ...(s.landmarks?.meshes ?? []), ...(s.access?.meshes ?? []), ...(s.infra?.meshes ?? [])], ground: s.ground.tiles, shells, lanes, pins, only: s.only ? new Set(s.only) : null, ...(s.generated ? { placements: s.generated.placements } : {}) },
     (rec, bytes) => fs.writeFileSync(path.join(dir, rec.file), bytes),
     (id) => keep.has(id),
   );
