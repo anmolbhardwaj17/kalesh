@@ -536,3 +536,4 @@ One line per event, written by task.mjs (start, done, fail, phase changes, inbox
 - 2026-11-14 06:52 [P1-037] done: Map lane, PR 61. Tunnel headwalls (open faces 0 at 88 mouth edges), sloped drain water (7 channels), forced bent crossings 25,033 to 0 (nudged), road edge without ground 399 to 125 m (rest explained), end kerbs on 717 of 737 dead ends, widthSteps and TERR-01 to 07 on the dashboard. S25/S28 explained (ramps at grade limit), CP collider offset not reproduced. Verified: whole bake 228 s, typecheck, 1018 tests, Godot tests, quick 15/15, shots read.
 - 2026-11-14 07:26 [P14-007] added: Landmark polish from the P2-007 verifier
 - 2026-11-14 08:17 [P2-042] start (attempt 1): Who may use each road: car-free streets, two-wheeler galis, footways, bollards and gates
+- 2026-11-14 08:17 PHASE P1 DONE: Foundation: drive and walk the real pilot centre. Next: P2 Pilot made rich: landmarks, areas and hero roads in stylised B

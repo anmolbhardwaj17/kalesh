@@ -1,6 +1,6 @@
 {
   "_doc": "Written only by node harness/bin/task.mjs. Phases run in order; P0 (ADOPT + STYLE DISCOVERY) waits for the owner by design and needs task.mjs signoff and task.mjs archsignoff before its gate passes. Later phases are added by the planner at the end of P0 (task.mjs phase-add) from the game's real state.",
-  "updated": "2026-11-14T02:47:04.822Z",
+  "updated": "2026-11-14T02:47:23.505Z",
   "phases": [
     {
       "id": "P0",
@@ -47,7 +47,7 @@
       "milestones": [
         "FD0"
       ],
-      "status": "active",
+      "status": "done",
       "playtest": [
         "Read this first: buildings are plain box placeholders, there is no traffic, no people and no missions beyond FD0. Judge the ground, roads, movement and feel, not the looks of the buildings. Start with npm run play.",
         "Frame rate: watch the FPS counter top left while you drive and walk. Does it stay smooth in the CP circle, on the radials and on the ITO flyover? Note where it dips.",
@@ -62,7 +62,8 @@
         "Landmarks: go to India Gate and the Red Fort. Are they in the right place and about the right size, even as placeholders?",
         "Anything floating, sunk, flickering or stuck anywhere else: write down where, so I can add a fix task."
       ],
-      "planned": true
+      "planned": true,
+      "doneAt": "2026-11-14T02:47:23.504Z"
     },
     {
       "id": "P2",
@@ -81,7 +82,7 @@
         "verify --all is green"
       ],
       "milestones": [],
-      "status": "planned",
+      "status": "active",
       "playtest": [],
       "planned": true
     },
