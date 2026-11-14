@@ -37,6 +37,11 @@ uniform vec3 kit_shell_colour = vec3(0.78, 0.7, 0.58);
 // atlas fractions; columns and count), and the night (project global, set by the look: glow boxes and lamps emit)
 uniform sampler2D kit_signs : source_color, filter_linear_mipmap_anisotropic;
 global uniform float kit_night;
+// signs on shell walls (P2-048 fix round 3): how thickly the kit's streets carry boards on walls with no modules (the
+// side lanes and back walls of the galis, Paharganj and GB Road are wall to wall boards, Connaught Place has few), and
+// the share of those boards that are lit boxes
+uniform float shell_signs = 0.0;
+uniform float shell_glow = 0.2;
 const vec4 SIGN_RECT[8] = vec4[](vec4(0.0, 0.0, 0.25, 0.0625), vec4(0.0, 0.3125, 0.25, 0.09375), vec4(0.0, 0.5, 0.25, 0.0625),
 	vec4(0.0, 0.625, 0.25, 0.0625), vec4(0.0, 0.6875, 0.0625, 0.25), vec4(0.5, 0.6875, 0.125, 0.125), vec4(0.5, 0.8125, 0.125, 0.0625),
 	vec4(0.0, 0.9375, 0.125, 0.0625));
@@ -178,9 +183,26 @@ void fragment() {
 	int na = max(kit_accent_count, 1);
 	vec3 acc = kit_accents[int(k_var * 7.999) % na];
 	vec3 acc2 = kit_accents[int(k_var2 * 7.999) % na];
+	// a sign drawn on a shell wall (fix round 3): its group (-1 none), its place in the cell (v down), the cell hash, the
+	// size of the board against the bay (for the texture gradient), how strongly it shows, and the shade under a board
+	int s_grp = -1;
+	vec2 s_q = vec2(0.0);
+	float s_hash = 0.0;
+	vec2 s_scale = vec2(1.0);
+	float s_fade = 0.0;
+	float s_under = 0.0;
+	bool s_shut = false;
+	int s_cell = -1;
+	vec2 s_dkx = dFdx(k_uv);
+	vec2 s_dky = dFdy(k_uv);
 	if (kit_shell) {
 		// far shells: windows and shop openings drawn from the facade UV where no module stands (bays across, floors up)
 		bool up = abs(wnrm.y) > 0.7;
+		// the bay's width and the floor's height in metres, from how fast the facade UV runs along the wall
+		vec3 tng = normalize(cross(vec3(0.0, 1.0, 0.0), wnrm) + vec3(1e-5, 0.0, 0.0));
+		float alongw = dot(wpos, tng);
+		float bay_m = clamp(length(vec2(dFdx(alongw), dFdy(alongw))) / max(length(vec2(s_dkx.x, s_dky.x)), 1e-6), 1.6, 14.0);
+		float flr_m = clamp(length(vec2(dFdx(wpos.y), dFdy(wpos.y))) / max(length(vec2(s_dkx.y, s_dky.y)), 1e-6), 2.4, 6.0);
 		if (up) {
 			code = 3;
 			srgb = mix(tint, vec3(0.6, 0.58, 0.55), 0.6);
@@ -192,12 +214,103 @@ void fragment() {
 				srgb = vec3(0.24, 0.23, 0.22);
 				mode = 0;
 			} else if (k_uv.y < 1.0 && fu > 0.12 && fu < 0.88 && fv > 0.04 && fv < 0.78) {
-				// a closed rolling shutter
+				// a closed rolling shutter: bare galvanised grey, or painted in one of the kit's accents (by bay)
 				code = 4;
-				srgb = vec3(0.5, 0.51, 0.5);
+				float hs0 = hash12(vec2(floor(k_uv.x) * 1.7 + 3.0, dot(k_tint, vec3(37.0, 59.0, 11.0))));
+				// (the paints Delhi shutters carry: grey blue, dull green, brown, cream; never a bright accent)
+				int sp = int(hs0 * 37.0) % 4;
+				vec3 sacc = sp == 0 ? vec3(0.34, 0.43, 0.52) : (sp == 1 ? vec3(0.37, 0.45, 0.37) : (sp == 2 ? vec3(0.46, 0.37, 0.3) : vec3(0.58, 0.55, 0.45)));
+				srgb = hs0 < 0.45 ? vec3(0.5, 0.51, 0.5) : sacc;
 				mode = 0;
 			} else {
 				srgb = tint;
+			}
+			float sdist = length(VERTEX);
+			if (shell_signs > 0.001 && sdist < 120.0 && k_uv.y >= 0.0) {
+				// boards, lettering and notices where a street has them: one hash set per bay and floor of this wall
+				float sseed = dot(k_tint, vec3(91.0, 53.0, 17.0)) + floor(wnrm.x * 3.0 + 0.5) * 7.0 + floor(wnrm.z * 3.0 + 0.5) * 13.0;
+				vec2 hk = vec2(floor(k_uv.x) + sseed, floor(k_uv.y) * 3.7 + sseed * 0.37);
+				float h1 = hash12(hk);
+				float h2 = hash12(hk + 17.3);
+				float h3 = hash12(hk + 41.9);
+				float xm = (fu - 0.5) * bay_m;
+				float ym = fv * flr_m;
+				s_fade = 1.0 - smoothstep(85.0, 120.0, sdist);
+				if (k_uv.y < 1.0) {
+					// over the shutter: a painted board or a lit box, as wide as the space under the floor band allows
+					float bh = min(min(bay_m * 0.86, 2.7) * 0.25, flr_m * 0.22 - 0.1);
+					float bw = bh * 4.0;
+					float by0 = 0.78 * flr_m + 0.06;
+					vec2 q = vec2(xm / bw + 0.5, 1.0 - (ym - by0) / bh);
+					// lettering painted on the shutter, and a poster or two pasted low on it
+					float lw = min(bay_m * 0.66, 2.3);
+					vec2 ql = vec2(xm / lw + 0.5, 1.0 - (ym - (0.4 * flr_m - lw * 0.125)) / (lw * 0.25));
+					vec2 qp = vec2((xm - (h3 - 0.5) * bay_m * 0.3) / 0.7 + 0.5, 1.0 - (ym - 0.55) / 0.35);
+					// paper on the pier between two bays (a bay boundary inside the wall)
+					float bnd = floor(k_uv.x + 0.5);
+					float hp = hash12(vec2(bnd + sseed, 5.1));
+					float pwid = min(bay_m * 0.22, 0.64);
+					vec2 qn = vec2((fract(k_uv.x + 0.5) - 0.5) * bay_m / pwid + 0.5, 1.0 - (ym - (1.25 + hp * 0.5)) / (pwid * 0.5));
+					if (h1 < shell_signs * 0.92 && bh > 0.3 && q.x > 0.0 && q.x < 1.0 && q.y > 0.0 && q.y < 1.0) {
+						s_grp = h2 < shell_glow ? 2 : 0;
+						s_q = q;
+						s_hash = h3;
+						s_scale = vec2(bay_m / bw, flr_m / bh);
+					} else if (h1 < shell_signs * 0.92 && bh > 0.3 && q.x > -0.01 && q.x < 1.01 && q.y > 1.0 && q.y < 1.22) {
+						// the board stands off the wall: its shadow on the wall and the shutter drum under it
+						s_under = 1.0 - (q.y - 1.0) / 0.22;
+					} else if (bnd >= 1.0 && hp < shell_signs * 0.7 && pwid > 0.4 && qn.x > 0.0 && qn.x < 1.0 && qn.y > 0.0 && qn.y < 1.0) {
+						s_grp = 7;
+						s_q = qn;
+						s_hash = hash12(vec2(bnd + sseed, 9.3));
+						s_scale = vec2(bay_m / pwid, flr_m / (pwid * 0.5));
+					} else if (code == 4 && h2 > 1.0 - shell_signs * 0.6 && ql.x > 0.0 && ql.x < 1.0 && ql.y > 0.0 && ql.y < 1.0) {
+						s_grp = 3;
+						s_shut = true;
+						s_q = ql;
+						s_hash = h1;
+						s_scale = vec2(bay_m / lw, flr_m / (lw * 0.25));
+					} else if (code == 4 && h3 < shell_signs * 0.45 && qp.x > 0.0 && qp.x < 1.0 && qp.y > 0.0 && qp.y < 1.0) {
+						s_grp = 7;
+						s_q = qp;
+						s_hash = h2;
+						s_scale = vec2(bay_m / 0.7, flr_m / 0.35);
+					}
+				} else if (code != 11) {
+					// upper floors: a board in the band under the window, two small boards on the pier left of it, and
+					// lettering painted on the plaster over it (the stacked fronts of the photos)
+					float bh = min(flr_m * 0.19, 0.6);
+					float bw = min(bh * 4.0, bay_m * 0.84);
+					bh = bw * 0.25;
+					vec2 q = vec2(xm / bw + 0.5, 1.0 - (ym - 0.05 * flr_m) / bh);
+					float sw = min(bay_m * 0.25, 0.74);
+					vec2 qa = vec2((xm + 0.335 * bay_m) / sw + 0.5, 1.0 - (ym - 0.36 * flr_m) / (sw * 0.5));
+					vec2 qb = vec2((xm + 0.335 * bay_m) / sw + 0.5, 1.0 - (ym - 0.56 * flr_m) / (sw * 0.5));
+					float lw = min(bay_m * 0.8, 2.2);
+					lw = min(lw, flr_m * 0.2 * 4.0);
+					vec2 qw = vec2(xm / lw + 0.5, 1.0 - (ym - 0.77 * flr_m) / (lw * 0.25));
+					if (h1 < shell_signs * 0.42 && q.x > 0.0 && q.x < 1.0 && q.y > 0.0 && q.y < 1.0) {
+						s_grp = 0;
+						s_q = q;
+						s_hash = h2;
+						s_scale = vec2(bay_m / bw, flr_m / bh);
+					} else if (h2 < shell_signs * 0.5 && sw > 0.45 && qa.x > 0.0 && qa.x < 1.0 && qa.y > 0.0 && qa.y < 1.0) {
+						s_grp = 6;
+						s_q = qa;
+						s_hash = h3;
+						s_scale = vec2(bay_m / sw, flr_m / (sw * 0.5));
+					} else if (h3 < shell_signs * 0.42 && sw > 0.45 && qb.x > 0.0 && qb.x < 1.0 && qb.y > 0.0 && qb.y < 1.0) {
+						s_grp = 6;
+						s_q = qb;
+						s_hash = h1;
+						s_scale = vec2(bay_m / sw, flr_m / (sw * 0.5));
+					} else if (h3 > 1.0 - shell_signs * 0.3 && qw.x > 0.0 && qw.x < 1.0 && qw.y > 0.0 && qw.y < 1.0) {
+						s_grp = 3;
+						s_q = qw;
+						s_hash = h2;
+						s_scale = vec2(bay_m / lw, flr_m / (lw * 0.25));
+					}
+				}
 			}
 		} else {
 			srgb = tint;
@@ -213,6 +326,21 @@ void fragment() {
 		srgb = acc * COLOR.rgb;
 	} else if (mode == 3 && !kit_shell) {
 		srgb = acc2 * COLOR.rgb;
+	}
+	if (!kit_shell && code == 10 && (int(COLOR.b * 255.0 + 0.5) & 17) == 1) {
+		// a piece painted or pasted on the wall (wall lettering, paper notices, the round enamel board: flag 1, white is
+		// the key): the wall itself is drawn here, with its own layer, colour and grime, and the sign goes over it like
+		// a sign on a shell wall (fix round 3: the keyed part was a flat patch of wall colour)
+		s_grp = clamp(int(COLOR.r * 255.0 + 0.5), 0, 7);
+		int slot0 = int(COLOR.g * 255.0 + 0.5);
+		ivec2 G0 = SIGN_GRID[s_grp];
+		s_cell = (int(k_var2 * float(G0.y) * 0.9999) + int(k_var * 7.0) * slot0 + slot0 * 3) % G0.y;
+		s_q = k_uv;
+		s_fade = 1.0;
+		code = 0;
+		mode = 1;
+		srgb = tint;
+		srgb = mix(srgb, vec3(dot(srgb, vec3(0.2126, 0.7152, 0.0722))), 0.35 * clamp(wear, 0.0, 1.0));
 	}
 #endif
 	vec3 base = to_linear(srgb);
@@ -280,10 +408,21 @@ void fragment() {
 			if (goods) {
 				// real goods colours, a little duller than print, darker deep in the shop and low down
 				col = mix(vec3(luma(col)), col, 0.82) * (0.78 + 0.22 * (1.0 - clamp(fract(auv.y * 4.0) * 1.2, 0.0, 1.0)));
-				// at night the shop's tube light at the top of the opening lights them: a warm light falling off downwards
-				// (the light the goods reflect, not a glow of their own)
-				float tube = 1.0 - smoothstep(0.0, 0.95, fract(auv.y * 4.0));
-				emit = col * vec3(1.0, 0.86, 0.66) * kit_night * (0.08 + 0.42 * tube * tube) * (0.6 + 0.5 * k_var);
+				// at night the shop's tube lights (upright on the two jambs, kit_pieces.gd tube) light them: brightest by
+				// the jambs at tube height, falling off to the middle and the floor (the light the goods reflect, not a
+				// glow of their own)
+				float gy = fract(auv.y * 4.0);
+				float gx = abs(fract((auv.x - 0.25) * 4.0) * 2.0 - 1.0);
+				float tube = (0.45 + 0.55 * gx * gx) * (1.0 - 0.55 * smoothstep(0.35, 1.0, gy));
+				emit = col * vec3(0.92, 0.95, 1.0) * kit_night * (0.14 + 0.5 * tube) * (0.75 + 0.3 * k_var);
+			} else if (mode != 0 && auv.y > 0.5 && auv.y < 0.75 && auv.x > 0.25 && auv.x < 0.5) {
+				// a door leaf (fix round 3: doors were black voids): old paint is not that dark, and at night the bulkhead
+				// lamp under the lintel lights it, brightest at the top
+				// (the door cell is a mid grey relief with its panels and studs: times the accent it was near black; the
+				// leaf takes the accent as its paint colour)
+				col = min(col * 3.6, vec3(0.8));
+				float dy = (auv.y - 0.5) * 4.0;
+				emit = col * vec3(1.0, 0.74, 0.46) * kit_night * (0.04 + 0.34 * pow(1.0 - dy, 2.0));
 			}
 			rough = 0.8;
 			sk = 3;
@@ -300,13 +439,19 @@ void fragment() {
 				col = vec3(0.05, 0.045, 0.04);
 				emit = vec3(1.0, 0.72, 0.42) * 7.0 * kit_night;
 				rough = 0.4;
+			} else if ((flags & 32) != 0) {
+				// a shop's tube light: milky white by day, a cool white light at night
+				col = vec3(0.72, 0.73, 0.7);
+				emit = vec3(0.82, 0.92, 1.0) * 5.0 * kit_night;
+				rough = 0.3;
 			} else {
 				int g8 = clamp(grp, 0, 7);
 				vec4 R = SIGN_RECT[g8];
 				ivec2 G = SIGN_GRID[g8];
 				int cell = (int(k_var2 * float(G.y) * 0.9999) + int(k_var * 7.0) * slot + slot * 3) % G.y;
 				vec2 cuv = R.xy + vec2(float(cell % G.x), float(cell / G.x)) * R.zw + clamp(k_uv, vec2(0.006), vec2(0.994)) * R.zw;
-				col = texture(kit_signs, cuv).rgb;
+				// (a sharper mip than the default, so a far board still shows dark letters on its ground and reads as a sign)
+				col = texture(kit_signs, cuv, -0.7).rgb;
 				if ((flags & 16) != 0) {
 					// lettering painted on a rolled-down shutter (P2-048 galis): the key is the shutter itself (the same
 					// ribbed layer and bay accent the shutter under it draws), the letters a bright paint picked per bay;
@@ -334,25 +479,39 @@ void fragment() {
 					// a soft falloff to the frame, never a white slab
 					vec2 cq = abs(k_uv * 2.0 - 1.0);
 					float mid = 1.0 - 0.35 * smoothstep(0.2, 1.0, max(cq.x, cq.y * 0.8));
-					emit = min(col * 1.25 * mid, vec3(0.95)) * kit_night;
+					// far boxes dim (fix round 3): a small lit face a street away must not read as a lit window
+					float far_k = 1.0 - 0.78 * smoothstep(28.0, 80.0, length(VERTEX));
+					emit = min(col * 1.25 * mid, vec3(0.95)) * kit_night * far_k;
+					// a loose tube: on a few boxes a part of the face flickers, each on its own seed and beat
+					float beat = step(0.22, fract(sin(floor(TIME * 8.0 + k_var * 5.0) * 12.9898 + k_var2 * 78.233) * 43758.55));
 					if (g8 == 4) {
-						// the bulb border of a lit vertical board (make_signs.mjs bulbs): on about half of them the bulbs
-						// chase round at night; a few boards flicker (a loose tube), each on its own seed
+						// far off, a lit vertical board shows as its bright column of letters only: a thin upright strip of
+						// light reads as a sign blade, a lit box the size of a window reads as a window
+						emit *= mix(1.0, 1.0 - smoothstep(0.16, 0.3, abs(k_uv.x - 0.5)), smoothstep(30.0, 70.0, length(VERTEX)));
+						// the running border of a lit vertical board (make_signs.mjs: a dark channel with a bulb every 15 px in
+						// the outer 0.115 of the width): on about seven in ten the light runs round the board at night in
+						// lit and dark stretches, the others burn steady; each board on its own phase (k_var)
 						vec2 eb = min(k_uv, vec2(1.0) - k_uv);
-						bool bulb = (eb.x < 0.11 || eb.y < 0.03) && col.r > 0.75 && col.g > 0.4 && col.b < 0.25;
-						if (bulb) {
-							float ph = k_var > 0.45 ? step(0.5, fract(k_uv.y * 26.0 + k_uv.x * 3.0 - TIME * 1.6 + k_var * 7.0)) : 1.0;
-							emit = vec3(1.0, 0.72, 0.28) * (0.25 + 0.75 * ph) * kit_night;
+						if (eb.x < 0.115 || eb.y < 0.029) {
+							float per = eb.x < 0.115 ? (k_uv.x < 0.5 ? -k_uv.y * 4.0 : k_uv.y * 4.0) : (k_uv.y < 0.5 ? k_uv.x : -k_uv.x);
+							// (stretches about 0.7 m lit and 0.5 m dark, moving about 1.4 m a second: wide enough to read from
+							// across the street, where one bulb is a pixel or two)
+							float run = k_var > 0.15 ? step(0.42, fract(per * 0.5 - TIME * 1.2 + k_var * 7.0)) : 1.0;
+							emit = (col * 2.6 + vec3(0.05, 0.035, 0.012)) * (0.03 + 0.97 * run) * kit_night * far_k * (1.0 - 0.85 * smoothstep(30.0, 70.0, length(VERTEX)));
+							// (a bulb that is off is dark glass, not a pale dot in the street's light)
+							col *= mix(1.0, 0.2 + 0.8 * run, kit_night);
+						} else if (k_var2 > 0.8 && abs(k_uv.y - (0.3 + 0.35 * k_var)) < 0.07) {
+							// one letter of a few boards flickers
+							emit *= 0.15 + 0.85 * beat;
 						}
-						if (k_var2 > 0.86) {
-							float fl = step(0.18, fract(sin(floor(TIME * 9.0) * 12.9898 + k_var * 78.233) * 43758.55));
-							emit *= 0.35 + 0.65 * fl;
-						}
+					} else if (k_var2 > 0.88 && abs(k_uv.x - (0.2 + 0.6 * k_var)) < 0.16) {
+						emit *= 0.25 + 0.75 * beat;
 					}
 				}
 				if ((flags & 4) != 0) {
 					// lit from above by its bracket lamp or tube light at night: bright under the lamps, falling off down
-					emit = min(col * 1.0 * (1.0 - 0.6 * clamp(k_uv.y, 0.0, 1.0)), vec3(0.7)) * kit_night;
+					// (exposure safe: a white flex sheet under its tubes stays a lit sheet with its print, never a white slab)
+					emit = min(col * 0.72 * (1.0 - 0.62 * clamp(k_uv.y, 0.0, 1.0)), vec3(0.5)) * kit_night * (1.0 - 0.45 * smoothstep(30.0, 85.0, length(VERTEX)));
 				}
 				bool lit_face = ((flags & 2) != 0 && (g8 != 4 || cell % 2 == 0)) || (flags & 4) != 0;
 				if (!lit_face && (flags & 17) == 0) {
@@ -489,6 +648,55 @@ void fragment() {
 		col *= 1.0 + detail * ((m - 0.5) * 0.4 + (m2 - 0.5) * 0.3);
 		col.r *= 1.0 + detail * (m2 - 0.5) * 0.35;
 	}
+#ifdef KIT
+	if (s_under > 0.0) {
+		col *= 1.0 - 0.42 * s_under * s_fade;
+	}
+	if (s_grp >= 0) {
+		// a sign on a shell wall (fix round 3): the same cells the kit pieces hang, drawn flat on the wall or the shutter
+		vec4 R = SIGN_RECT[s_grp];
+		ivec2 G = SIGN_GRID[s_grp];
+		int cell = s_cell >= 0 ? s_cell : int(s_hash * float(G.y) * 0.9999);
+		vec2 cuv = R.xy + vec2(float(cell % G.x), float(cell / G.x)) * R.zw + clamp(s_q, vec2(0.006), vec2(0.994)) * R.zw;
+		vec3 sc = textureGrad(kit_signs, cuv, s_dkx * s_scale * R.zw, s_dky * s_scale * R.zw).rgb;
+		if (s_grp == 3 || s_grp == 7 || s_grp == 5) {
+			// painted on the wall or the shutter, or paper pasted on it: white is the key
+			float mn = min(sc.r, min(sc.g, sc.b));
+			// (the atlas is a dithered palette image under block compression: its white is not always quite white)
+			float key = smoothstep(0.78, 0.92, mn);
+			if (s_grp == 3 || (s_grp == 7 && cell >= 6)) {
+				// brushed lettering: a texel is part ink, part white; the ink's share comes from its darkest channel
+				// and the ink colour is taken back out of the mix, so a far letter keeps its colour (no pale fringe)
+				float a = clamp((1.0 - mn) / 0.97, 0.0, 1.0);
+				sc = clamp((sc - vec3(1.0 - a)) / max(a, 0.08), vec3(0.0), vec3(1.0));
+				key = 1.0 - smoothstep(0.1, 0.6, a);
+			}
+			if (s_shut) {
+				int pc = int(s_hash * 3.999);
+				vec3 ink = pc == 0 ? vec3(0.85, 0.62, 0.08) : (pc == 1 ? vec3(0.86, 0.85, 0.8) : (pc == 2 ? vec3(0.62, 0.06, 0.04) : vec3(0.05, 0.05, 0.06)));
+				sc = ink * (0.8 + 0.4 * vnoise(uv * 23.0));
+				// old shutter paint is thin: the ribs show through it
+				key = max(key, 0.25);
+			}
+			col = mix(col, sc * (1.0 - 0.4 * kit_night), (1.0 - key) * s_fade);
+		} else {
+			// a board: its frame shades the rim, a lit box glows at night, a painted one takes only the street's light
+			vec2 eq = min(s_q, vec2(1.0) - s_q) * vec2(s_grp == 6 ? 2.0 : 4.0, 1.0);
+			sc *= 0.5 + 0.5 * smoothstep(0.0, 0.07, min(eq.x, eq.y));
+			if (s_grp == 2) {
+				vec2 cq = abs(s_q * 2.0 - 1.0);
+				emit = min(sc * 1.1 * (1.0 - 0.35 * smoothstep(0.2, 1.0, max(cq.x, cq.y * 0.8))), vec3(0.9)) * kit_night * s_fade * (1.0 - 0.5 * smoothstep(35.0, 90.0, length(VERTEX)));
+			} else {
+				sc *= 1.0 - 0.45 * kit_night;
+			}
+			col = mix(col, sc, s_fade);
+			rough = mix(rough, s_grp == 2 ? 0.25 : 0.65, s_fade);
+			metal *= 1.0 - s_fade;
+			mask *= 1.0 - s_fade;
+			kg = mix(kg, 0.2, s_fade);
+		}
+	}
+#endif
 	float w = clamp(wear * wear_scale, 0.0, 1.0);
 #ifdef KIT
 	w *= kg;

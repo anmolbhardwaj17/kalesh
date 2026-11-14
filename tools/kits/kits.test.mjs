@@ -106,6 +106,35 @@ describe('area kits', () => {
         expect(ax < bx + bw && bx < ax + aw && ay < by + bh && by < ay + ah, `${a} ${b}`).toBe(false);
       }
   });
+  it('keeps the pieces of one place on a bay at or under a whole share (kit_modules.gd PIECES slots: front, sill, spill)', () => {
+    // pieces of a slot take back to back ranges of one bay hash (buildings.gd): past 1 the last pieces never draw
+    const src = fs.readFileSync(path.join(ROOT, 'game/world/kits/kit_modules.gd'), 'utf8');
+    const slots = {};
+    for (const m of src.matchAll(/"(\w+)": \{"from": \[[^\]]*\], "share": "(\w+)", "column": \w+, "slot": "(\w+)"\}/g)) (slots[m[3]] ||= []).push(m[2]);
+    expect(Object.keys(slots).sort()).toEqual(['front', 'sill', 'spill']);
+    for (const [id, k] of Object.entries(KITS.kits))
+      for (const [slot, shares] of Object.entries(slots)) {
+        const sum = shares.reduce((a, sh) => a + (k.shares[sh] ?? 0), 0);
+        expect(sum, `${id} ${slot}`).toBeLessThanOrEqual(1.0001);
+      }
+  });
+  it('wears the old city boards far more than the Connaught Place ones, and ages each board on its own (P2-048 round 3)', () => {
+    expect(BOARDS.kits.gali.wear).toBeGreaterThan(BOARDS.kits.colonnade.wear * 3);
+    expect(BOARDS.kits.hardware.wear).toBeGreaterThan(BOARDS.kits.market.wear);
+  });
+  it('picks the scripts of a board by place (owner rule 2026-11-14): Hindi first in the old city, English first on GB Road, in Paharganj and Connaught Place, Urdu only in the old city', () => {
+    const share = (id, modes) => {
+      const cells = BOARDS.kits[id].cells.filter((c) => c.scripts);
+      return cells.filter((c) => modes.includes(c.scripts)).length / cells.length;
+    };
+    for (const id of ['bazaar', 'gali']) expect(share(id, ['h', 'he', 'u', 'uh']), id).toBeGreaterThan(0.6);
+    for (const id of ['hardware', 'hotel', 'market']) expect(share(id, ['e', 'eh']), id).toBeGreaterThan(0.75);
+    expect(share('colonnade', ['e'])).toBeGreaterThan(0.75);
+    expect(share('gali', ['u', 'uh'])).toBeGreaterThan(0);
+    for (const id of ['hardware', 'hotel', 'market', 'colonnade', 'lutyens', 'office']) expect(share(id, ['u', 'uh']), id).toBe(0);
+    // no board carries all three scripts: a mode is at most two
+    for (const b of Object.values(BOARDS.kits)) for (const c of b.cells) if (c.scripts) expect(['h', 'he', 'e', 'eh', 'u', 'uh']).toContain(c.scripts);
+  });
   it('uses only free fonts, each credited (tools/kits/fonts/CREDITS.md)', () => {
     const credits = fs.readFileSync(path.join(ROOT, 'tools/kits/fonts/CREDITS.md'), 'utf8');
     for (const f of fs.readdirSync(path.join(ROOT, 'tools/kits/fonts')).filter((x) => x.endsWith('.ttf'))) expect(credits, f).toContain(f);

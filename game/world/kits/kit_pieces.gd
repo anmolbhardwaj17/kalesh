@@ -27,6 +27,8 @@ const F_LIT := 4
 const F_LAMP := 8
 ## lettering painted on a rolled-down shutter: the key shows the shutter (its ribbed layer and the bay accent)
 const F_SHUTTER := 16
+## a tube light: off-white by day, a cool white light at night
+const F_TUBE := 32
 const UV1 := Rect2(0, 0, 1, 1)
 const STEEL := Color(0.16, 0.16, 0.17)
 
@@ -132,7 +134,8 @@ static func _flex(m: M, _kit: String, _o := {}) -> void:
 		_sign(m, 0, 0, F_LAMP)
 		m.box(Vector3(x - 0.3, y1 + 0.01, z + 0.18), Vector3(x + 0.3, y1 + 0.05, z + 0.23), false, true)
 	_sign(m, G_FLEX, 0, F_LIT)
-	_face(m, x0 + 0.02, y0 + 0.02, x1 - 0.02, y1 - 0.02, z)
+	# (the lower right corner has come off its tie and curls out)
+	_face(m, x0 + 0.02, y0 + 0.02, x1 - 0.02, y1 - 0.02, z, 0.0, 0.07)
 
 
 ## An acrylic glow box over the shop: an aluminium box with a printed face lit from inside at night.
@@ -179,7 +182,7 @@ static func _band(m: M, _o := {}) -> void:
 	m.paint(M.IRON, M.OWN, STEEL)
 	m.box(Vector3(-1.38, 0.13, 0.05), Vector3(0.56, 0.59, 0.2), false, true)
 	_sign(m, G_FASCIA, 1)
-	_face(m, -1.38, 0.12, 0.56, 0.6, 0.205)
+	_face(m, -1.38, 0.12, 0.56, 0.6, 0.205, -1.1)
 
 
 ## Boards stacked up a blank upper wall (Paharganj, GB Road): a flex banner and a painted board above it.
@@ -190,7 +193,7 @@ static func _stack(m: M, _o := {}) -> void:
 	_sign(m, G_FLEX, 2)
 	_face(m, -1.4, 0.25, 1.0, 1.25, 0.175)
 	_sign(m, G_FASCIA, 2)
-	_face(m, -1.32, 1.45, 0.92, 2.05, 0.155, 0.8)
+	_face(m, -1.32, 1.45, 0.92, 2.05, 0.155, 1.6, 0.06)
 
 
 ## A round enamel board on the wall right of a door, on a thin rim, screwed through top and bottom.
@@ -227,7 +230,7 @@ static func _small(m: M, _o := {}) -> void:
 	m.paint(M.IRON, M.OWN, STEEL)
 	m.box(Vector3(-1.41, 1.76, 0.05), Vector3(-0.83, 2.04, 0.07), false, true)
 	_sign(m, G_SMALL)
-	_face(m, -1.42, 1.75, -0.82, 2.05, 0.072, -1.2)
+	_face(m, -1.42, 1.75, -0.82, 2.05, 0.072, -2.4, 0.03)
 
 
 ## Paper notices pasted on the wall at eye height (white is the wall).
@@ -278,9 +281,9 @@ static func _upboards(m: M, kit: String, _o := {}) -> void:
 	m.box(Vector3(-1.43, 1.53, 0.05), Vector3(-0.83, 1.83, 0.07), false, true)
 	m.box(Vector3(-1.43, 1.98, 0.05), Vector3(-0.83, 2.28, 0.07), false, true)
 	_sign(m, G_SMALL, 1)
-	_face(m, -1.44, 1.52, -0.82, 1.84, 0.072, 0.9)
+	_face(m, -1.44, 1.52, -0.82, 1.84, 0.072, 2.6, 0.03)
 	_sign(m, G_SMALL, 2)
-	_face(m, -1.44, 1.97, -0.82, 2.29, 0.072, -0.6)
+	_face(m, -1.44, 1.97, -0.82, 2.29, 0.072, -1.5)
 	if kit == "hotel":
 		m.paint(M.IRON, M.OWN, Color(0.55, 0.56, 0.57))
 		m.box(Vector3(-1.0, 2.66, 0.05), Vector3(1.0, 3.07, 0.2), false, true)
@@ -289,7 +292,7 @@ static func _upboards(m: M, kit: String, _o := {}) -> void:
 	else:
 		m.box(Vector3(-0.96, 2.68, 0.05), Vector3(0.96, 3.06, 0.08), false, true)
 		_sign(m, G_FASCIA, 3)
-		_face(m, -0.98, 2.66, 0.98, 3.08, 0.085, 0.5)
+		_face(m, -0.98, 2.66, 0.98, 3.08, 0.085, 1.3, 0.05)
 
 
 ## A printed flex sheet on a pipe frame over the lower part of an upper window, clear of the ground floor boards below (GB Road machine shops advertise on every
@@ -342,8 +345,9 @@ static func _cables(m: M, kit := "", _o := {}) -> void:
 	var wires := [[0.0, 0.22, 0.0], [0.05, 0.34, 0.04], [-0.04, 0.27, 0.08], [0.02, 0.48, -0.04], [-0.02, 0.4, 0.11]]
 	if kit == "hardware" or kit == "gali":
 		# a thick band of cables across the first floor (GB Road street view Oct 2025, old city galis)
-		wires.append_array([[0.03, 0.3, 0.02], [-0.03, 0.36, 0.06], [0.06, 0.25, -0.02], [-0.05, 0.44, 0.09], [0.01, 0.31, 0.13]])
-	var n := 6
+		wires.append_array([[0.03, 0.3, 0.02], [-0.03, 0.36, 0.06], [0.06, 0.25, -0.02]])
+	# (fix round 3 perf: four spans a wire and one under face, seen from the street below; was six spans, two faces)
+	var n := 4
 	var was := m.fine
 	m.fine = true
 	for wd: Array in wires:
@@ -357,8 +361,57 @@ static func _cables(m: M, kit := "", _o := {}) -> void:
 			var ya := y0 - sag * (1.0 - pow(xa / xe, 2.0))
 			var yb2 := y0 - sag * (1.0 - pow(xb / xe, 2.0))
 			m.quad(Vector3(xa, ya - h, z), Vector3(xb, yb2 - h, z), Vector3(xb, yb2 + h, z), Vector3(xa, ya + h, z))
-			m.both(Vector3(xa, ya - h, z - h), Vector3(xb, yb2 - h, z - h), Vector3(xb, yb2 - h, z + h), Vector3(xa, ya - h, z + h))
+			m.quad(Vector3(xa, ya - h, z + h), Vector3(xb, yb2 - h, z + h), Vector3(xb, yb2 - h, z - h), Vector3(xa, ya - h, z - h))
 	m.fine = was
+
+
+## Boards on a plain ground floor bay (fix round 3: the galis and Paharganj are wall to wall boards, owner photos #6
+## and #7): a painted board over the small window, a small board each side of it and a flex sheet low on the wall, all
+## screwed to the wall on thin frames, hung a little crooked. The bay's wall lettering and notices sit between them.
+static func _wallboards(m: M, _kit: String) -> void:
+	m.paint(M.IRON, M.OWN, STEEL)
+	m.box(Vector3(-1.3, 2.64, 0.05), Vector3(1.2, 3.08, 0.085), false, true)
+	m.box(Vector3(-1.4, 1.93, 0.05), Vector3(-0.6, 2.33, 0.075), false, true)
+	m.box(Vector3(0.58, 1.86, 0.05), Vector3(1.26, 2.2, 0.075), false, true)
+	m.box(Vector3(-1.36, 1.36, 0.05), Vector3(-0.05, 1.84, 0.08), false, true)
+	_sign(m, G_FASCIA, 4)
+	_face(m, -1.31, 2.63, 1.21, 3.09, 0.09, -1.4, 0.05)
+	_sign(m, G_SMALL, 4)
+	_face(m, -1.41, 1.92, -0.59, 2.34, 0.08, 2.2)
+	_sign(m, G_SMALL, 5)
+	_face(m, 0.57, 1.85, 1.27, 2.21, 0.08, -3.0, 0.03)
+	_sign(m, G_FLEX, 3)
+	_face(m, -1.37, 1.35, -0.04, 1.85, 0.085, 0.8)
+
+
+## A name board over a door or a gate (the clinic, lodge or workshop inside), on a frame over the lintel.
+static func _overboard(m: M, _kit: String) -> void:
+	m.paint(M.IRON, M.OWN, STEEL)
+	m.box(Vector3(-0.66, 2.77, 0.05), Vector3(0.66, 3.09, 0.09), false, true)
+	_sign(m, G_FASCIA, 5)
+	_face(m, -0.67, 2.76, 0.67, 3.1, 0.095, 1.5, 0.03)
+
+
+## A bulkhead lamp over a door, fixed under the lintel (its top at `y`, the soffit of the opening): a small hooded
+## fitting whose bulb face lights at night (it lights the door under it: the kit shader lights door leaves at night).
+static func bulkhead(m: M, y: float) -> void:
+	m.paint(M.IRON, M.OWN, STEEL)
+	m.box(Vector3(-0.09, y - 0.13, 0.03), Vector3(0.09, y, 0.2), false, true)
+	_sign(m, 0, 0, F_LAMP)
+	m.quad(Vector3(-0.08, y - 0.132, 0.04), Vector3(0.08, y - 0.132, 0.04), Vector3(0.08, y - 0.132, 0.2), Vector3(-0.08, y - 0.132, 0.2))
+	m.front(-0.08, y - 0.11, 0.08, y - 0.03, 0.202)
+
+
+## A shop's tube light, upright on a door jamb as Delhi shops fix them: a batten on the reveal's side face at x, the
+## tube on it facing into the opening (`dir` +1 on the left jamb, -1 on the right). F_TUBE: cool white at night.
+static func tube(m: M, x: float, y0: float, y1: float, z: float, dir: float) -> void:
+	m.paint(M.IRON, M.OWN, Color(0.8, 0.8, 0.78))
+	var xa := x
+	var xb := x + dir * 0.03
+	m.box(Vector3(minf(xa, xb), y0 - 0.04, z - 0.03), Vector3(maxf(xa, xb), y1 + 0.04, z + 0.03), false, true)
+	_sign(m, 0, 0, F_TUBE)
+	var xc := x + dir * 0.065
+	m.box(Vector3(minf(xb, xc), y0, z - 0.018), Vector3(maxf(xb, xc), y1, z + 0.018), false, true)
 
 
 ## The light a lit board throws round it at night (WORLD_LOGIC.md: a shop sign glows on the pavement under it), drawn

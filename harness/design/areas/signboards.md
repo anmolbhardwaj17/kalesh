@@ -36,8 +36,9 @@ Kinds seen, and how each is made:
   (O-signboards/01 tailor and laundry boards.)
 - **Paper notices**: "To Let", tuition, electrician, with tear-off phone strips, pasted on walls and poles (#7).
 
-Scripts: Hindi (Devanagari) on almost every board in the old city and GB Road, usually first; English on the same
-board; Urdu (Nastaliq) on old city boards near Jama Masjid and on official boards (#4, #5); Punjabi rarely (the
+Scripts (corrected by Anmol 2026-11-14: it depends on the place, the trade and the kind of shop; see "Scripts by
+place and trade" below): Hindi (Devanagari) on most boards in the old city, often alone; English first on GB Road
+machinery flex and in Paharganj; Urdu (Nastaliq) on old city boards near Jama Masjid and on official boards (#4, #5); Punjabi rarely (the
 trilingual name stone of Chandni Chowk, owner photo O-chandni_chowk_main/04). Fonts: painted boards use high contrast
 display serifs and slab serifs with drop shadows, or brush hands; printed flex uses condensed bold sans; glow boxes use
 clean sans. Colours: yellow ground with red letters, red ground with cream, blue with white, white with red or blue,
@@ -96,6 +97,46 @@ up the floors; in CP one sign per bay; around India Gate and Jantar Mantar none.
   GB Road: blue and white printed boards with "importers and stockists" lines (owner street view, Oct 2025).
   Shares per kit in `kits.json`: Paharganj and GB Road densest, then the old city; Janpath one board per shop at one
   height; ITO offices medium; Lutyens almost none.
+- Fix round 3 (wear, street level, light): wear is sized in metres and big enough for the driving camera
+  (`make_signs.mjs` `wearCell`, `PPM`): rust runs 3 to 8 cm wide from every screw and the two strap brackets, a ragged
+  rust band along the bottom edge, paint peeled in sheets to an older coat (another colour with the ghost of its
+  lettering) or bare rusted tin, one end of the board bleached by the sun, dust on the top lip with dirt runs, a bent
+  corner; flex bleaches at one end, sags between its ties, tears at a corner and has holes; acrylic yellows, holds dirt
+  along the bottom and has a dead tube. Every board has an age (`ageOf`: a fifth new, a quarter very old), so old
+  boards hang beside newer ones. Boards hang more crooked (`board_tilt` 3.4 degrees with a bent corner, the small and
+  upper boards 1.5 to 3 degrees), a flex corner curls out.
+- Walls with no modules (the shells: side lanes, back walls, long blank faces) carry signs too, drawn by the kit
+  shader from the same atlas (`surface_b.gdshaderinc` `s_grp`, `shell_signs` and `shell_glow` per kit in
+  `module_library.gd` `SHELL_SIGNS`): a board or lit box over every shutter, lettering painted on shutters, posters and
+  paper notices on shutters and piers, a board in the band under upper windows, small boards on the piers and lettering
+  painted on the plaster; out to 120 m (the range of the kit pieces). A tile's shells take the sign atlas of the tile's main kit.
+- New pieces: `wallboards` (a plain bay's wall: a board over the window, a small board each side, a flex sheet low),
+  `overboard` (a name board over a door or gate), paper notice cells are layered and torn, the last two notice cells
+  are "to let" lettering painted on the plaster with a number.
+- Lit vertical boards carry a running border (a dark channel with a bulb every 15 px; on seven in ten the light runs
+  round the board, each on its own phase; `TIME` in the kit shader, so it runs whenever frames draw), dead letters
+  (a dark patch painted over one or two letters of older boards, dark by day and night) and on a few a flickering
+  letter; a few fascia boxes flicker on a third of the face. Scenario `city_sign_led` saves three frames 0.2 s apart.
+- Night: every shop has two upright tube lights on its jambs below the shutter (`kit_pieces.gd` `tube`) and its goods
+  take their light; every wooden door has a bulkhead lamp under the lintel that lights the door leaf; lit faces dim
+  to half between 35 and 90 m, so a far box never reads as a lit window.
+- Goods on the pavement are kit pieces with real shapes (slot `spill`, `game/world/kits/kit_goods.gd`): drums with hoops and a bucket stack,
+  a rack of pipe lengths with hose coils, taped cartons stacked off square, jute sacks lying in a pile with one open.
+- Scripts by place and trade (Anmol 2026-11-14: not every board has Hindi, English and Urdu together): the generator
+  picks a mode per board (`make_signs.mjs` `SCRIPT_ODDS`, `scriptMode`; the cell's mode is in `boards.json` `scripts`):
+  Hindi only, Hindi over English, English only, English with a Hindi line, Urdu only, Urdu with Hindi. Chandni Chowk
+  painted boards are Hindi only or Hindi over English; the galis carry small Hindi boards and shutter lettering, and
+  Urdu or Urdu with Hindi on the trades of the Urdu bazaars (hakims, attar, books, printing, eateries); GB Road flex is
+  mostly English with phone numbers, a Hindi line on some; Paharganj hotels and travel shops are English, some with a
+  Hindi line; Connaught Place is English. Newer lit boxes and flex lean to English in the old city, small boards and
+  wall lettering to Hindi. The words under the name follow the board (Hindi goods on a Hindi board).
+- Lettering (Anmol 2026-11-14: the boards looked AI-made): painted boards are lettered with a sign painter's brush
+  (`brush`, `painted`): a wobble filter on every stroke, fat uneven strokes, and one of four styles per board (a solid
+  block shadow, an outline in a second colour, a thin drop shadow, one plain coat), a hand-drawn border, a diamond
+  flourish; old city vertical boards can stack the Hindi name one akshara to a line. Flex has the cheap print-shop
+  look: a loud two-colour gradient, the name squeezed to the width with a white and a dark line and a hard shadow, a
+  slanted top line, a starburst ("best price", "थोक रेट"), clip-art tiles in white boxes, a phone band with a handset
+  disc. Connaught Place stays neat cut type. Anmol's own photo-real board images will replace atlas cells later.
 - Shop goods (`tools/kits/make_goods.mjs`): three goods cells per kit in the trim atlas (sweets, cloth, gota reels in
   the bazaar; sacks, steel utensils, reels in the galis; motors, pipes and belts, cartons on GB Road; clothes, bags,
   phone accessories in Paharganj; brass and stoles at Janpath; books, clothes, phones in CP; books, cartons, phones at
@@ -113,6 +154,31 @@ up the floors; in CP one sign per bay; around India Gate and Jantar Mantar none.
   colonnade of GB Road shop fronts (module work), a per-area name lookup for shop houses of one kit in
   another area (P2-010 follow-up). GB Road has no free current photos of its shop boards on Commons; the owner photos
   cover it, and a photo request is noted for Anmol.
+
+## Reality match, builder's own scores (round 3, 2026-11-14)
+
+Scored 0 to 10 against the dated photos (#1 to #22), the owner's GB Road street view (Oct 2025) and the owner's
+collage of old shop signs, on shots at the game's own size (`harness/reports/shots/signs_*.png`, side by side in
+`signs_compare.png`). Lines: shape, real size, material and colour, wear, detail at play distance, mounting, light,
+game language. Pass is an average of 8 with no line under 6; the verifier scores again.
+
+| Board kind | Shape | Size | Material | Wear | Detail | Mounting | Light | Language | Average |
+|---|---|---|---|---|---|---|---|---|---|
+| Painted tin or wood fascia | 8 | 8 | 8 | 8 | 8 | 8 | 7 | 8 | 7.9 |
+| Printed flex on a frame | 8 | 8 | 8 | 7 | 8 | 8 | 7 | 8 | 7.8 |
+| Acrylic glow box | 8 | 8 | 8 | 7 | 8 | 7 | 8 | 8 | 7.8 |
+| Lit vertical board (running border) | 8 | 8 | 7 | 7 | 8 | 8 | 8 | 8 | 7.8 |
+| Painted vertical board | 8 | 8 | 8 | 8 | 7 | 8 | 7 | 8 | 7.8 |
+| Small boards and blades | 8 | 8 | 8 | 8 | 7 | 8 | 7 | 8 | 7.8 |
+| Enamel disc | 8 | 8 | 7 | 7 | 7 | 8 | 7 | 7 | 7.4 |
+| Wall and shutter lettering | 8 | 8 | 8 | 7 | 7 | 8 | 7 | 8 | 7.6 |
+| Paper notices and posters | 8 | 8 | 7 | 8 | 7 | 8 | 7 | 7 | 7.5 |
+| Boards on shell walls (drawn flat) | 6 | 8 | 7 | 8 | 7 | 6 | 7 | 7 | 7.0 |
+| Goods on the pavement | 7 | 8 | 7 | 6 | 7 | 8 | 7 | 7 | 7.1 |
+
+Short of the bar and why: no kind reaches an average of 8. Boards on shell walls have no thickness or frame (a shadow
+strip only); the flex tear shows a near black gap with a hard ragged edge; goods carry no wear of their own; no board
+has a gloss or bump response to the sun; the real streets are still denser than the game's (photos #6, #7, O-gb_road/06).
 
 ## Photo credits (signboards_board.jpg)
 

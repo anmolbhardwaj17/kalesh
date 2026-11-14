@@ -82,7 +82,7 @@ export function shapeLine(key, text, size, track = 0, opt = {}) {
     if (track && i + 1 < infos.length && infos[i + 1].cluster !== infos[i].cluster) x += track;
   }
   if (typeof buf.destroy === 'function') buf.destroy();
-  return { width: x, svg: parts.join('') };
+  return { width: x, svg: parts.join(''), unit: s };
 }
 
 /**
@@ -90,8 +90,8 @@ export function shapeLine(key, text, size, track = 0, opt = {}) {
  * px tall, squeezed horizontally down to 70 % before the size drops (sign painters condense letters to fit the board).
  * Extra attributes (fill, stroke) go on the group.
  */
-export function fitLine(key, text, { x, y, maxW, size, anchor = 'middle', attrs = '', track = 0, minSqueeze = 0.7, jitter = null, drop = null }) {
-  const { width, svg } = shapeLine(key, text, size, track, { jitter, drop });
+export function fitLine(key, text, { x, y, maxW, size, anchor = 'middle', attrs = '', track = 0, minSqueeze = 0.7, jitter = null, drop = null, stroke = null, strokePx = 0 }) {
+  const { width, svg, unit } = shapeLine(key, text, size, track, { jitter, drop });
   let sx = 1;
   let sz = 1;
   if (width > maxW) {
@@ -100,5 +100,8 @@ export function fitLine(key, text, { x, y, maxW, size, anchor = 'middle', attrs 
   }
   const w = width * sx * sz;
   const x0 = anchor === 'middle' ? x - w / 2 : anchor === 'end' ? x - w : x;
-  return { w, h: size * sz, svg: `<g transform="translate(${x0.toFixed(2)} ${y.toFixed(2)}) scale(${(sx * sz).toFixed(4)} ${sz.toFixed(4)})" ${attrs}>${svg}</g>` };
+  // a stroke `strokePx` px wide on the board: the glyph paths are drawn in font units, so the width is given in those
+  // (a plain stroke-width on the group shrinks with the glyph scale to a hair nobody sees)
+  const st = stroke && strokePx > 0 ? ` stroke="${stroke}" stroke-width="${(strokePx / (unit * sz * Math.sqrt(sx))).toFixed(1)}" stroke-linejoin="round" stroke-linecap="round"` : '';
+  return { w, h: size * sz, svg: `<g transform="translate(${x0.toFixed(2)} ${y.toFixed(2)}) scale(${(sx * sz).toFixed(4)} ${sz.toFixed(4)})" ${attrs}${st}>${svg}</g>` };
 }

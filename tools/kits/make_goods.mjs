@@ -276,21 +276,57 @@ function hangers(x, y, r, id) {
 }
 
 function bags(x, y, r, id) {
-  let s = room(x, y, id, [], '#3a332c');
-  // a pegboard of bags and backpacks, suitcases on the floor
-  for (let i = 0; i < 16; i++) s += rect(x, y + 12 + i * 15, 256, 1, '#000', 'opacity="0.15"');
+  // (fix round 3: the bags were flat rounded rectangles) a slat wall of backpacks and shoulder bags hung on hooks, each
+  // with a top handle, a rounded body shaded from the light side to the dark side, a front pocket with a zip, side
+  // straps and its shadow on the wall; duffels rolled on a shelf; trolley cases with ribs, handles and wheels below
+  let s = room(x, y, id, [0.62], '#3a332c');
+  s += `<defs><linearGradient id="bs${id}" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#fff" stop-opacity="0.3"/><stop offset="0.3" stop-color="#fff" stop-opacity="0.04"/><stop offset="0.7" stop-color="#000" stop-opacity="0.08"/><stop offset="1" stop-color="#000" stop-opacity="0.45"/></linearGradient>`;
+  s += `<linearGradient id="bv${id}" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#fff" stop-opacity="0.16"/><stop offset="0.5" stop-color="#000" stop-opacity="0"/><stop offset="1" stop-color="#000" stop-opacity="0.4"/></linearGradient></defs>`;
+  for (let i = 0; i < 10; i++) s += rect(x, y + 12 + i * 15, 256, 1.5, '#000', 'opacity="0.2"') + rect(x, y + 13.5 + i * 15, 256, 1, '#fff', 'opacity="0.05"');
+  const cols = ['#6b4a33', '#2c3e70', '#b3261e', '#26262a', '#3a7d44', '#c48a4a', '#7a4a8c', '#d9a514', '#0f6e74', '#8a8f96'];
   for (let row = 0; row < 2; row++)
-    for (let i = 0; i < 6; i++) {
-      const cx = x + 22 + i * 42 + (row % 2) * 10;
-      const cy = y + 26 + row * 76;
-      const c = pick(r, ['#5d4037', '#2c3e70', '#b3261e', '#1c1c1e', '#3a7d44', '#c48a4a', '#7a4a8c', '#e6b422']);
-      s += rect(cx - 1, cy - 6, 3, 8, '#9aa0a6') + `<path d="M${cx - 10},${cy + 8} Q${cx},${cy - 8} ${cx + 10},${cy + 8}" fill="none" stroke="#222" stroke-width="2"/>`;
-      s += rect(cx - 16, cy + 6, 32, 46, c, 'rx="7"') + rect(cx - 12, cy + 30, 24, 16, '#000', 'opacity="0.2" rx="4"') + rect(cx - 16, cy + 6, 32, 4, '#ffffff', 'opacity="0.2" rx="2"');
+    for (let i = 0; i < 5; i++) {
+      const w = 34 + r() * 8;
+      const h = 44 + r() * 10;
+      const cx = x + 27 + i * 50 + (row % 2) * 6 + (r() - 0.5) * 6;
+      const cy = y + 20 + row * 70;
+      const c = pick(r, cols);
+      const body = `M${f(cx - w / 2 + 5)},${f(cy + 8)} Q${f(cx)},${f(cy + 1)} ${f(cx + w / 2 - 5)},${f(cy + 8)} Q${f(cx + w / 2 + 2)},${f(cy + 12)} ${f(cx + w / 2 + 1)},${f(cy + h * 0.6)} Q${f(cx + w / 2 + 1)},${f(cy + h + 4)} ${f(cx + w / 2 - 8)},${f(cy + h + 5)} L${f(cx - w / 2 + 8)},${f(cy + h + 5)} Q${f(cx - w / 2 - 1)},${f(cy + h + 4)} ${f(cx - w / 2 - 1)},${f(cy + h * 0.6)} Q${f(cx - w / 2 - 2)},${f(cy + 12)} ${f(cx - w / 2 + 5)},${f(cy + 8)} Z`;
+      // the shadow on the wall, the hook and the handle loop
+      s += `<path d="${body}" fill="#000" opacity="0.4" transform="translate(4 5)"/>`;
+      s += rect(cx - 1.5, cy - 8, 3, 9, '#b9bec2') + `<path d="M${f(cx - 8)},${f(cy + 8)} Q${f(cx)},${f(cy - 10)} ${f(cx + 8)},${f(cy + 8)}" fill="none" stroke="#17171a" stroke-width="3"/>`;
+      s += `<path d="${body}" fill="${c}"/><path d="${body}" fill="url(#bs${id})"/><path d="${body}" fill="url(#bv${id})"/>`;
+      // the front pocket: a darker panel that stands out, its zip, a light upper lip
+      const pw = w * 0.72;
+      const ph = h * 0.42;
+      s += rect(cx - pw / 2, cy + h * 0.52, pw, ph, '#000', 'opacity="0.26" rx="6"') + rect(cx - pw / 2, cy + h * 0.52, pw, 2.2, '#fff', 'opacity="0.28" rx="1"');
+      s += `<path d="M${f(cx - pw / 2 + 3)},${f(cy + h * 0.62)} Q${f(cx)},${f(cy + h * 0.56)} ${f(cx + pw / 2 - 3)},${f(cy + h * 0.62)}" fill="none" stroke="#d8d2c0" stroke-width="1.3"/>`;
+      // the main zip round the top and the side straps
+      s += `<path d="M${f(cx - w / 2 + 3)},${f(cy + h * 0.36)} Q${f(cx)},${f(cy + 8)} ${f(cx + w / 2 - 3)},${f(cy + h * 0.36)}" fill="none" stroke="#000" stroke-width="1.4" opacity="0.5"/>`;
+      s += rect(cx - w / 2 - 1, cy + h * 0.45, 3, h * 0.4, '#111', 'opacity="0.55"') + rect(cx + w / 2 - 2, cy + h * 0.45, 3, h * 0.4, '#111', 'opacity="0.55"');
+      if (r() < 0.5) s += rect(cx - 5, cy + h * 0.7, 10, 6, pick(r, ['#f1ecdf', '#e6b422', '#b3261e']), 'rx="1"');
     }
+  // duffels rolled on the shelf: a barrel with an end cap and two straps
+  for (let i = 0; i < 4; i++) {
+    const bx = x + 6 + i * 63;
+    const by = y + 0.62 * 256 - 24;
+    const c = pick(r, cols);
+    s += rect(bx, by, 56, 24, c, 'rx="11"') + rect(bx, by, 56, 24, `url(#bv${id})`, 'rx="11"') + ell(bx + 50, by + 12, 6, 11.5, '#000', 'opacity="0.3"');
+    s += rect(bx + 14, by, 4, 24, '#111', 'opacity="0.55"') + rect(bx + 34, by, 4, 24, '#111', 'opacity="0.55"') + rect(bx + 6, by + 3, 40, 2.5, '#fff', 'opacity="0.22" rx="1"');
+  }
+  // trolley cases standing on the floor
   for (let i = 0; i < 5; i++) {
-    const c = pick(r, ['#2c3e70', '#b3261e', '#1c1c1e', '#6b7075', '#7a4a8c']);
-    const h = 52 + (i % 2) * 14;
-    s += rect(x + 6 + i * 50, y + 254 - h, 44, h, c, 'rx="5"') + rect(x + 6 + i * 50, y + 254 - h + 12, 44, 2, '#000', 'opacity="0.3"') + rect(x + 20 + i * 50, y + 248 - h, 16, 6, '#222', 'rx="2"');
+    const c = pick(r, ['#2c3e70', '#b3261e', '#26262a', '#6b7075', '#7a4a8c', '#0f6e74']);
+    const h = 56 + (i % 2) * 14 + r() * 6;
+    const w = 40 + (i % 3) * 3;
+    const bx = x + 5 + i * 50;
+    const by = y + 250 - h;
+    s += rect(bx + 4, by + 5, w, h, '#000', 'opacity="0.35" rx="6"');
+    s += rect(bx + w * 0.3, by - 12, 2.5, 13, '#9aa0a6') + rect(bx + w * 0.64, by - 12, 2.5, 13, '#9aa0a6') + rect(bx + w * 0.26, by - 15, w * 0.48, 4, '#222', 'rx="2"');
+    s += rect(bx, by, w, h, c, 'rx="6"') + rect(bx, by, w, h, `url(#bs${id})`, 'rx="6"');
+    for (let k = 1; k < 5; k++) s += rect(bx + (w * k) / 5 - 1, by + 5, 2, h - 10, '#000', 'opacity="0.28"') + rect(bx + (w * k) / 5 + 1, by + 5, 1, h - 10, '#fff', 'opacity="0.12"');
+    s += rect(bx + 3, by + h * 0.5 - 1, w - 6, 2.5, '#000', 'opacity="0.4"') + rect(bx + w * 0.4, by + 4, w * 0.2, 4, '#17171a', 'rx="2"');
+    s += circ(bx + 7, by + h + 2, 3.2, '#111') + circ(bx + w - 7, by + h + 2, 3.2, '#111');
   }
   return s + light(x, y, id);
 }

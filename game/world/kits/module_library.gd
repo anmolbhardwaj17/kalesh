@@ -27,6 +27,13 @@ const TEX_DIR := "res://world/kits/textures/"
 const PARTS := ["gf_shop", "gf_door", "gf_plain", "gf_colonnade", "gf_arcade", "gf_gate", "up_window", "up_balcony", "up_jharokha", "up_blank", "up_strip", "up_glass", "roof_parapet"]
 ## the kit whose layers the far shells use (a middle wear, plain plaster)
 const SHELL_KIT := "hotel"
+## signs the shell walls of a kit's tiles carry (P2-048 fix round 3; kit_b shell_signs, shell_glow): how thickly, and
+## the share of the boards over shutters that are lit boxes. The old city, GB Road and Paharganj are wall to wall
+## boards (owner photos, signboards.md), Janpath and the offices carry fewer, Connaught Place few, Lutyens none.
+const SHELL_SIGNS := {
+	"gali": [1.0, 0.08], "bazaar": [0.95, 0.25], "hardware": [1.0, 0.1], "hotel": [1.0, 0.45],
+	"market": [0.55, 0.2], "office": [0.35, 0.3], "colonnade": [0.15, 0.6], "lutyens": [0.0, 0.0],
+}
 
 var data: Dictionary
 ## id -> Mesh
@@ -38,6 +45,8 @@ var design_of := {}
 ## kit id -> ShaderMaterial
 var materials := {}
 var shell_material: ShaderMaterial
+## kit id -> the shell material of a tile whose main kit it is: the shell layers, with that kit's sign atlas and density
+var shell_materials := {}
 ## pool colour key -> the additive pavement light material of lit sign pieces
 var pool_materials := {}
 ## id -> true for ids replaced since the library was built
@@ -56,6 +65,15 @@ func _init(with_materials := true) -> void:
 			materials[kit] = material(kit)
 		shell_material = material(SHELL_KIT)
 		shell_material.set_shader_parameter("kit_shell", true)
+		for kit: String in data.kits:
+			var sm := material(SHELL_KIT)
+			sm.resource_name = "kit_shell_%s" % kit
+			sm.set_shader_parameter("kit_shell", true)
+			sm.set_shader_parameter("kit_signs", load(TEX_DIR + kit + "_signs.png"))
+			var ss: Array = SHELL_SIGNS.get(kit, [0.0, 0.0])
+			sm.set_shader_parameter("shell_signs", float(ss[0]))
+			sm.set_shader_parameter("shell_glow", float(ss[1]))
+			shell_materials[kit] = sm
 	_build()
 	_build_walls()
 

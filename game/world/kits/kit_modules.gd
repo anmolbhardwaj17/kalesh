@@ -8,6 +8,7 @@ extends RefCounted
 
 const M := preload("res://world/kits/module_mesh.gd")
 const P := preload("res://world/kits/kit_pieces.gd")
+const Goods := preload("res://world/kits/kit_goods.gd")
 
 ## atlas cells (tools/kits/make_textures.mjs): lower half, 256 px each
 const A_POSTERS := Rect2(0.0, 0.5, 0.25, 0.25)
@@ -73,7 +74,7 @@ const RECIPES := {
 		"up_window": ["window", {"chhajja": true}], "up_blank": ["blank", {"pipe": true}], "roof_parapet": ["parapet", {}],
 	},
 	"hardware": {
-		"gf_shop": ["shop", {"awning": true, "shutter": 0.12, "goods": 0, "spill": true}], "gf_door": ["door", {"studs": true}],
+		"gf_shop": ["shop", {"awning": true, "shutter": 0.12, "goods": 0}], "gf_door": ["door", {"studs": true}],
 		"gf_gate": ["gate", {}], "gf_plain": ["plain", {"plinth": true}], "up_window": ["window", {"grille": true, "chhajja": true}],
 		"up_balcony": ["balcony", {"railing": true}], "up_blank": ["blank", {"pipe": true, "wires": true}], "roof_parapet": ["parapet", {}],
 	},
@@ -103,6 +104,12 @@ const PIECES := {
 	"small": {"from": ["gf_door"], "share": "small", "column": false},
 	"notice": {"from": ["gf_door", "gf_plain"], "share": "notice", "column": false},
 	"wallsign": {"from": ["gf_plain"], "share": "wallsign", "column": false},
+	"wallboards": {"from": ["gf_plain"], "share": "wallboards", "column": false},
+	"overboard": {"from": ["gf_door", "gf_gate"], "share": "overboard", "column": false},
+	"goods_drums": {"from": ["gf_shop"], "share": "goods_drums", "column": false, "slot": "spill"},
+	"goods_pipes": {"from": ["gf_shop"], "share": "goods_pipes", "column": false, "slot": "spill"},
+	"goods_cartons": {"from": ["gf_shop"], "share": "goods_cartons", "column": false, "slot": "spill"},
+	"goods_sacks": {"from": ["gf_shop"], "share": "goods_sacks", "column": false, "slot": "spill"},
 	"stair": {"from": ["up_blank"], "share": "stair", "column": true},
 	"tank": {"from": ["roof_parapet"], "share": "tank", "column": true},
 	"rail": {"from": ["roof_parapet"], "share": "roof_rail", "column": true},
@@ -134,7 +141,7 @@ static func build(design: String, o: Dictionary, kit: String) -> ArrayMesh:
 		"glass": _glass(m, o)
 		"parapet": _parapet(m, o)
 		"board": P._board(m, kit)
-		"board_tilt": P._board(m, kit, {"tilt": -2.2, "bend": 0.05})
+		"board_tilt": P._board(m, kit, {"tilt": -3.4, "bend": 0.1})
 		"board_lamp": P._board(m, kit, {"lamp": true, "tilt": 0.7})
 		"flex": P._flex(m, kit)
 		"glow": P._glow(m, kit)
@@ -154,6 +161,9 @@ static func build(design: String, o: Dictionary, kit: String) -> ArrayMesh:
 		"small": P._small(m)
 		"notice": P._notice(m)
 		"wallsign": P._wallsign(m)
+		"wallboards": P._wallboards(m, kit)
+		"overboard": P._overboard(m, kit)
+		"goods_drums", "goods_pipes", "goods_cartons", "goods_sacks": Goods.goods(m, design.trim_prefix("goods_"))
 		"stair": P._stair(m, o)
 		"tank": P._tank(m, o)
 		"rail": P._rail(m, o)
@@ -273,12 +283,10 @@ static func _shop(m: M, o: Dictionary) -> void:
 	# a step and the counter at the front (shop spill)
 	m.paint(M.STONE, M.OWN, Color(0.62, 0.6, 0.56))
 	m.box(Vector3(-1.5, 0.0, 0.0), Vector3(1.5, 0.18, 0.55), false, false)
-	if o.get("spill", false):
-		# goods stacked out front: sacks and bundles under a cloth
-		m.paint(M.CLOTH, M.ACCENT2, Color(0.8, 0.8, 0.8))
-		m.box(Vector3(-w + 0.1, 0.18, 0.4), Vector3(-w + 0.9, 0.95, 0.9), false, false)
-		m.paint(M.SHUTTER, M.ACCENT, Color(0.9, 0.9, 0.9))
-		m.box(Vector3(w - 0.8, 0.18, 0.45), Vector3(w - 0.15, 0.7, 0.95), false, false)
+	# the shop's tube lights, upright on the jambs under the shutter (goods out front are pieces: kit_goods.gd)
+	var ty1 := minf(1.95, top - 0.22 - top * down - 0.08)
+	P.tube(m, -w, 0.8, ty1, 0.17, 1.0)
+	P.tube(m, w, 0.8, ty1, 0.17, -1.0)
 	if o.get("chhajja", false):
 		_chhajja(m, top + 0.05, 0.6)
 	if o.get("awning", false):
@@ -299,6 +307,8 @@ static func _door(m: M, o: Dictionary) -> void:
 		m.front(-0.02, r.position.y, 0.02, r.end.y, M.SKIN + 0.02)
 	else:
 		_opening(m, r, 0.22, M.ATLAS, M.ACCENT, WHITE, A_DOOR)
+		# a bulkhead lamp over the door (fix round 3: a door was a black void at night)
+		P.bulkhead(m, r.end.y)
 	if o.get("arch", false):
 		# a pointed head over the haveli door, in lime against the wall colour
 		m.paint(M.STONE, M.OWN, Color(0.85, 0.8, 0.7))

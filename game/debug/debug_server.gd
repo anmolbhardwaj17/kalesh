@@ -43,6 +43,11 @@ var _headless := false
 func _ready() -> void:
 	process_mode = Node.PROCESS_MODE_ALWAYS
 	_headless = DisplayServer.get_name() == "headless"
+	# The harness parks its windows far outside every display (HARNESS_PARK_WINDOW=1, harness/bin/godot.mjs). A borderless
+	# window is not clamped back onto a screen by macOS, a titled one is.
+	if not _headless and OS.get_environment("HARNESS_PARK_WINDOW") != "":
+		DisplayServer.window_set_flag(DisplayServer.WINDOW_FLAG_BORDERLESS, true)
+		DisplayServer.window_set_position(Vector2i(30000, 30000))
 	var args := _args()
 	port = args.debug_port if args != null else 47181
 	var err := _server.listen(port, "127.0.0.1")
@@ -77,8 +82,8 @@ func _exit_tree() -> void:
 	_server.stop()
 
 
-func _process(_delta: float) -> void:
-	_keep_drawing()
+func _process(delta: float) -> void:
+	_keep_drawing(delta)
 	for e in _logger.drain():
 		_events().emit_event("error", e)
 	while listening and _server.is_connection_available():
@@ -421,7 +426,7 @@ var _idle_frames := 0
 var forced_draws := 0
 
 
-func _keep_drawing() -> void:
+func _keep_drawing(delta: float) -> void:
 	if _headless:
 		return
 	var drawn := Engine.get_frames_drawn()
@@ -432,7 +437,9 @@ func _keep_drawing() -> void:
 	_idle_frames += 1
 	if _idle_frames >= OCCLUDED_AFTER:
 		forced_draws += 1
-		RenderingServer.force_draw(false)
+		# (with the frame's step: a forced draw with no step freezes shader TIME, so nothing a shader animates moves in
+		# the shots of a covered or parked window: the running sign borders of P2-048 stood still)
+		RenderingServer.force_draw(false, delta)
 		_seen_drawn = Engine.get_frames_drawn()
 
 

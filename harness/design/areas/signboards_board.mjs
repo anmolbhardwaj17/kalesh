@@ -123,10 +123,11 @@ async function main() {
 /** Rows of the side by side sheet: area, reference photos (board numbers, or owner files kept local), game shots. */
 const COMPARE = [
   ['Chandni Chowk main (bazaar)', [1, 2], ['signs_bazaar', 'signs_bazaar_night']],
-  ['Old Delhi galis (gali)', [6, 7], ['signs_gali']],
+  ['Old Delhi galis (gali)', [6, 7], ['signs_gali', 'signs_wear_gali']],
   ['GB Road (hardware)', ['owner/gb_road/06_streetview_oct2025_hardware_facades.png', 'owner/gb_road/03_night_hardware_shops_below.webp'], ['signs_gbroad', 'signs_gbroad_night']],
-  ['Old shop signs (owner collage)', ['owner/signboards/03_real_delhi_old_shop_signs_collage.png'], ['signs_bazaar', 'signs_gali', 'signs_gbroad']],
+  ['Old shop signs (owner collage)', ['owner/signboards/03_real_delhi_old_shop_signs_collage.png'], ['signs_wear_gali', 'signs_wear_gbroad', 'signs_bazaar']],
   ['Paharganj (hotel)', [9, 10], ['signs_paharganj', 'signs_paharganj_night']],
+  ['Paharganj street and lit boards (owner collage)', ['owner/signboards/03_real_delhi_old_shop_signs_collage.png'], ['signs_paharganj_street', 'signs_led_seq_0', 'signs_led_seq_2']],
   ['Janpath (market)', [12, 14], ['signs_janpath']],
   ['Connaught Place (colonnade)', [15, 16], ['signs_cp']],
   ['ITO (office)', [18], ['signs_ito']],

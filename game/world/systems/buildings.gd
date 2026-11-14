@@ -19,7 +19,7 @@ const CELL_M := 125.0
 ## visibility range ends, measured from a cell's middle (a 125 m cell reaches about 88 m from it)
 const MODULE_RANGE_M := 200.0
 const PIECE_RANGE_M := 120.0
-const SMALL := ["board", "ac", "rail", "vsign", "tank", "board_tilt", "board_lamp", "flex", "glow", "vboard", "band", "stack", "enamel", "small", "notice", "wallsign", "upflex", "upboards", "blade", "shutpaint", "cables"]
+const SMALL := ["board", "ac", "rail", "vsign", "tank", "board_tilt", "board_lamp", "flex", "glow", "vboard", "band", "stack", "enamel", "small", "notice", "wallsign", "upflex", "upboards", "blade", "shutpaint", "cables", "wallboards", "overboard", "goods_drums", "goods_pipes", "goods_cartons", "goods_sacks"]
 const STEP_NODES := 40
 
 ## one library for every streamed city (built on the main thread the first time a system is made)
@@ -58,7 +58,12 @@ func prepare(tile: Dictionary) -> Variant:
 	# the shells take the same photo wall colours as their modules (a far building keeps its colour as it nears)
 	var tints: Dictionary = cells.tints
 	var kit: String = cells.kit
-	var shell := TileMesh.build(tile, materials, ONLY, [], func(uv2: PackedVector2Array) -> PackedVector2Array: return shell_tints(uv2, tints, kit, lib))
+	# the shell takes the sign atlas of the tile's main kit (P2-048 fix round 3: boards on walls that carry no modules)
+	var mats := materials
+	if lib.shell_materials.has(kit):
+		mats = materials.duplicate()
+		mats["building"] = lib.shell_materials[kit]
+	var shell := TileMesh.build(tile, mats, ONLY, [], func(uv2: PackedVector2Array) -> PackedVector2Array: return shell_tints(uv2, tints, kit, lib))
 	if shell.has("error"):
 		return shell
 	var groups := []
