@@ -107,11 +107,35 @@ export interface KitFace {
   pts: [V3, V3, V3, V3];
 }
 
+/**
+ * A side wall of a lowered stretch (a cut, a tunnel ramp or the inside of a tunnel, P2-032) between two stations: the
+ * road edge at the lane top, the wall top (the ceiling inside a roofed tunnel, else the ground and a parapet over
+ * it), the ground there, and whether the segment is under a roof. The tile keeps the plain wall (material `wall`)
+ * as the collider; the tunnel kit (game/world/infra/kit_tunnel.gd) draws the variant's finish on the same lines.
+ */
+export interface KitWall {
+  strip: number;
+  station: number;
+  side: 'L' | 'R';
+  a: V3;
+  b: V3;
+  top: [number, number];
+  ground: [number, number];
+  roofed: boolean;
+  parapet: boolean;
+  /** Outward unit normal in plan (away from the road). */
+  out: [number, number];
+}
+
 export interface KitRecords {
   edges: KitEdge[];
   soffits: KitSoffit[];
   beams: KitBeam[];
   faces: KitFace[];
+  /** Lowered side walls (P2-032). */
+  walls: KitWall[];
+  /** A roofed tunnel's ceiling between two stations, the left and right edge at both (P2-032; collider `ceiling`). */
+  ceilings: KitSoffit[];
 }
 
 export interface StructureReport {
@@ -233,7 +257,7 @@ function pointInFace(fs: FaceSet, f: number, x: number, z: number): boolean {
 const structureOf = (kp: number, kq: number): EdgeKind | null => (kp === K_DECK || kq === K_DECK ? 'deck' : kp === K_FILL || kq === K_FILL ? 'fill' : kp === K_TUNNEL || kq === K_TUNNEL ? 'tunnel' : kp === K_CUT || kq === K_CUT ? 'cut' : null);
 
 export function buildStructures(input: MeshInput, fs: FaceSet, edges: EdgeMap, grid: FaceGrid, sink: Sink, borders: Borders, sheetOfStation: (strip: number, station: number) => number): StructureReport {
-  const out: StructureReport = { segments: [], parapets: 0, byKind: {}, sharedSides: 0, piers: [], piersMoved: 0, maxSpanM: 0, portals: 0, longSpans: [], joints: 0, undersides: 0, roofs: 0, abutmentWalls: 0, headwalls: [], kit: { edges: [], soffits: [], beams: [], faces: [] } };
+  const out: StructureReport = { segments: [], parapets: 0, byKind: {}, sharedSides: 0, piers: [], piersMoved: 0, maxSpanM: 0, portals: 0, longSpans: [], joints: 0, undersides: 0, roofs: 0, abutmentWalls: 0, headwalls: [], kit: { edges: [], soffits: [], beams: [], faces: [], walls: [], ceilings: [] } };
   input.strips.forEach((s: Strip, si: number) => {
     const kind = input.kinds[si] as ArrayLike<number>;
     let any = false;
@@ -311,6 +335,7 @@ export function buildStructures(input: MeshInput, fs: FaceSet, edges: EdgeMap, g
             sink.quad(parapet ? 'parapet' : 'wall', P(p, i, t0), P(q, i + 1, t1), P(q, i + 1, t1, PARAPET_WIDTH_M), P(p, i, t0, PARAPET_WIDTH_M), [0, 1, 0]);
             if (parapet) sink.quad('parapet', P(p, i, t0, PARAPET_WIDTH_M), P(q, i + 1, t1, PARAPET_WIDTH_M), P(q, i + 1, Math.min(q.g, t1), PARAPET_WIDTH_M), P(p, i, Math.min(p.g, t0), PARAPET_WIDTH_M), outward);
           }
+          out.kit.walls.push({ strip: si, station: i, side, a: P(p, i, lt0), b: P(q, i + 1, lt1), top: [t0, t1], ground: [p.g, q.g], roofed: roof, parapet, out: [outward[0], outward[2]] });
         }
         out.segments.push({ strip: si, station: i, side, kind: sc, parapet });
         out.byKind[sc] = (out.byKind[sc] ?? 0) + 1;
@@ -333,7 +358,9 @@ export function buildStructures(input: MeshInput, fs: FaceSet, edges: EdgeMap, g
         out.abutmentWalls++;
       }
       if (roofed(p, kp) && roofed(q, kq)) {
-        sink.quad('underside', A(i, 0, p.h + HEADROOM), A(i, L, p.h + HEADROOM), A(i + 1, L, q.h + HEADROOM), A(i + 1, 0, q.h + HEADROOM), [0, -1, 0]);
+        // the ceiling is a collider (P2-032: a car or the camera never leaves the box through its roof); the tunnel kit draws it
+        sink.quad('ceiling', A(i, 0, p.h + HEADROOM), A(i, L, p.h + HEADROOM), A(i + 1, L, q.h + HEADROOM), A(i + 1, 0, q.h + HEADROOM), [0, -1, 0]);
+        out.kit.ceilings.push({ strip: si, station: i, l0: A(i, 0, p.h + HEADROOM), r0: A(i, L, p.h + HEADROOM), l1: A(i + 1, 0, q.h + HEADROOM), r1: A(i + 1, L, q.h + HEADROOM) });
         out.roofs++;
       }
     }

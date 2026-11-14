@@ -10,6 +10,8 @@ import { F_BALLAST, F_BRIDGE, F_CROSSING, MAST_CLEAR_M, RAIL_APPROACH_GRADE, RAI
 import { VARIANTS, footBridgeVariant, railVariant, readRules, stripVariants } from './variants.ts';
 import { readInfraRules } from '../sources/meshstage.ts';
 import type { VariantRules } from './variants.ts';
+import { buildTunnels, tunnelInvariant, tunnelVariants } from './tunnels.ts';
+import { TUNNEL_MAX_GRADE, tunnelGradeCaps } from '../elevation/limits.ts';
 
 const ROOT = path.resolve(import.meta.dirname, '../../..');
 const rules = (): VariantRules => readInfraRules(ROOT);
@@ -139,7 +141,7 @@ describe('platform envelope pieces', () => {
 describe('the infra file', () => {
   it('cuts a track into tile pieces that share their end points, in world metres, with its collider bed', () => {
     const res = buildInfra({
-      strips: [], variants: [], kit: { edges: [], soffits: [], beams: [], faces: [] }, piers: [],
+      strips: [], variants: [], kit: { edges: [], soffits: [], beams: [], faces: [], walls: [], ceilings: [] }, piers: [],
       rails: [{ id: 'way/7', kind: 'rail', name: '', pts: [{ x: 200, z: 10 }, { x: 320, z: 10 }], bridge: false, tunnel: false, layer: 0 }],
       viaducts: [], footBridges: [], footHeights: [], ground: () => 50, groundModel: () => 50, roadAt: () => NaN, blocked: () => false,
       railEmbankment: 4.5, rules: rules(), offset: { x: 10, z: 0 }, stage: 't', block: 'b',
@@ -153,5 +155,52 @@ describe('the infra file', () => {
     expect(res.meshes.find((m) => m.material === 'railbed')).toBeDefined();
     expect(res.record.withoutKit).toEqual([]);
     expect(res.record.variants['RAIL-BG']).toBe(1);
+  });
+});
+
+describe('tunnels (P2-032)', () => {
+  const lowered = (id: string, cls: string, name: string, n = 6): Strip => ({ ...strip(id, [`way/${id}`], cls, n), name });
+
+  it('variants: the Pragati Maidan main tunnel, its underpasses, service tunnels, subways, the rest UND-U1', () => {
+    const strips = [lowered('main', 'secondary', 'Pragati Maidan Tunnel'), lowered('link', 'primary', 'Pragati Maidan Tunnel'), lowered('approach', 'secondary', ''), lowered('basement', 'service', ''), lowered('subway', 'pedestrian', ''), lowered('ring', 'tertiary', ''), lowered('grade', 'secondary', '')];
+    const k = (v: number): Uint8Array => Uint8Array.from([0, v, v, v, v, 0]);
+    const kinds = [k(4), k(4), k(3), k(4), k(4), k(3), k(0)];
+    const joints = [{ a: { strip: 0, end: 'start' as const }, b: { strip: 2, end: 'end' as const }, lanes: [], kind: 'section' as const }];
+    expect(tunnelVariants(strips, joints, kinds)).toEqual(['TUN-T1', 'TUN-T2', 'TUN-T1', 'TUN-T3', 'SUB-S4', 'UND-U1', null]);
+    for (const v of ['TUN-T1', 'TUN-T2', 'TUN-T3', 'UND-U1', 'SUB-S4']) expect(VARIANTS[v]).toBeDefined();
+  });
+
+  it('a roofed stretch is checked for headroom over the road and cover over the ceiling; runs, mouths and drains', () => {
+    const s = lowered('t', 'secondary', 'Pragati Maidan Tunnel', 8);
+    s.st.forEach((st, i) => { st.h = 100 - (i === 3 ? 0.2 : 0); st.g = 107; });
+    const walls = [0, 1, 2, 3, 4, 5, 6].map((i) => ({ strip: 0, station: i, side: 'L' as const, a: [i * 10, 100, 1.75] as [number, number, number], b: [i * 10 + 10, 100, 1.75] as [number, number, number], top: [105.5, 105.5] as [number, number], ground: [107, 107] as [number, number], roofed: i >= 2, parapet: false, out: [0, 1] as [number, number] }));
+    const ceilings = [2, 3, 4, 5, 6].map((i) => ({ strip: 0, station: i, l0: [i * 10, 105.5, 1.75] as [number, number, number], r0: [i * 10, 105.5, -1.75] as [number, number, number], l1: [i * 10 + 10, 105.5, 1.75] as [number, number, number], r1: [i * 10 + 10, 105.5, -1.75] as [number, number, number] }));
+    const headwalls = [{ strip: 0, station: 2, ax: 20, az: 1.75, bx: 20, bz: -1.75, bottom: 105.5, top: 107.9, nx: -1, nz: 0, underRoad: false }];
+    const base = { strips: [s], kinds: [Uint8Array.from([3, 3, 4, 4, 4, 4, 4, 4])], variants: ['TUN-T1'], walls, ceilings, headwalls };
+    const good = buildTunnels({ ...base, ground: () => 107, roadAt: () => 100 });
+    expect(good.record.segments).toBe(5);
+    expect(good.record.minHeadroomM).toBeCloseTo(5.5, 6);
+    expect(good.record.minCoverM).toBeCloseTo(1.5, 6);
+    expect(tunnelInvariant(good.record).ok).toBe(true);
+    // one open run and one roofed run on the left side, one ceiling run, the mouth with its name, drains at the sag and the mouth
+    expect(good.walls.map((w) => w.roofed)).toEqual([false, true]);
+    expect(good.ceilings.length).toBe(1);
+    expect(good.record.portals[0]).toMatchObject({ name: 'Pragati Maidan Tunnel', variant: 'TUN-T1', facesDeg: 270 });
+    expect(good.drains.length).toBe(2);
+    // a pond bed under the ceiling, and a low ceiling: both fail
+    const wet = buildTunnels({ ...base, ground: (x) => (x > 40 ? 105.2 : 107), roadAt: () => 100 });
+    expect(wet.record.noCoverCount).toBeGreaterThan(0);
+    expect(tunnelInvariant(wet.record).ok).toBe(false);
+    const low = buildTunnels({ ...base, ground: () => 107, roadAt: () => 100.8 });
+    expect(low.record.lowHeadroomCount).toBe(15);
+    expect(tunnelInvariant(low.record).ok).toBe(false);
+  });
+
+  it('the grade cap of a tunnel: 6 percent on a public road and its joined approach, none on a service way', () => {
+    const strips = [{ cls: 'tertiary' }, { cls: 'tertiary' }, { cls: 'service' }, { cls: 'primary' }];
+    const tunnels = [Uint8Array.from([0, 1, 1]), undefined, Uint8Array.from([1, 1]), undefined];
+    const joints = [{ a: { strip: 0 }, b: { strip: 1 } }, { a: { strip: 2 }, b: { strip: 3 } }];
+    const caps = tunnelGradeCaps(strips, joints, tunnels);
+    expect([...caps]).toEqual([TUNNEL_MAX_GRADE, TUNNEL_MAX_GRADE, Infinity, TUNNEL_MAX_GRADE]);
   });
 });

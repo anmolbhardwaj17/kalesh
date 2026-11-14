@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-// Writes harness/data/fixtures/city_paths.json: the four fixed vehicle paths of the city perf scenarios (P1-026), read from the
+// Writes harness/data/fixtures/city_paths.json: the five fixed vehicle paths of the city perf scenarios (P1-026), read from the
 // lane graph of the baked pilot tiles (game/world/tiles/, tools/fixtures/lanegraph.mjs). Each path follows the lanes from a
 // start point to an end point, then comes back the same way, so it is a closed loop (`loop: true`, the last point is the
 // first): the scripted drive (`stream('path')`) never ends while a perf window with the GPU ballast runs (about 40 s).
@@ -7,6 +7,7 @@
 //   ito_flyover   the Ring Road south of ITO, up the ramp, over the deck and down the north ramp
 //   chandni_main  Chandni Chowk main road, west from the Red Fort end
 //   india_gate    Kartavya Path east into the India Gate hexagon and a quarter of the way round it
+//   pragati_tunnel  down the north ramp of the Pragati Maidan tunnel and east through it (P2-032)
 // World metres [x, y, z] (east +X, north -Z). Rerun after a bake that changes game/world/tiles.hash:
 //   node tools/fixtures/gen_city_paths.mjs
 import fs from 'node:fs';
@@ -74,6 +75,8 @@ const SPECS = {
   ito_flyover: { name: 'the Ring Road over the ITO flyover', from: [2380, -500, N], via: [[2311.8, -1560, N]] },
   chandni_main: { name: 'Chandni Chowk main road westbound', from: [1345, -4292, W], via: [[762, -4335, W]] },
   india_gate: { name: 'Kartavya Path east into the India Gate hexagon', from: [40, 436, E], via: [[461, 454, E], [658, 169, E]] },
+  // P2-032: down the north ramp of the Pragati Maidan tunnel, through the main tunnel under the exhibition grounds
+  pragati_tunnel: { name: 'the Pragati Maidan tunnel from its north ramp, east under the grounds', from: [1689, -200, Math.PI], via: [[1997, 161, 2.11], [2318, 268, 2.0]] },
 };
 
 const paths = {};

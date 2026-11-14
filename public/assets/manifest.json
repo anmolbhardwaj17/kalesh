@@ -149,6 +149,390 @@
       "w": 2048,
       "h": 2048,
       "ingestedAt": "2026-11-14T16:41:41.215Z"
+    },
+    "tex_interior_chemist_night": {
+      "path": "assets/textures/tex_interior_chemist_night.webp",
+      "w": 2048,
+      "h": 2048,
+      "ingestedAt": "2026-11-14T16:44:45.203Z"
+    },
+    "tex_interior_cloth_night": {
+      "path": "assets/textures/tex_interior_cloth_night.webp",
+      "w": 2048,
+      "h": 2048,
+      "ingestedAt": "2026-11-14T16:44:58.009Z"
+    },
+    "tex_interior_bookshop_night": {
+      "path": "assets/textures/tex_interior_bookshop_night.webp",
+      "w": 2048,
+      "h": 2048,
+      "ingestedAt": "2026-11-14T16:45:12.922Z"
+    },
+    "tex_interior_dryfruit_night": {
+      "path": "assets/textures/tex_interior_dryfruit_night.webp",
+      "w": 2048,
+      "h": 2048,
+      "ingestedAt": "2026-11-14T16:46:27.685Z"
+    },
+    "tex_interior_home_night": {
+      "path": "assets/textures/tex_interior_home_night.webp",
+      "w": 2048,
+      "h": 2048,
+      "ingestedAt": "2026-11-14T16:46:39.729Z"
+    },
+    "tex_interior_hardware_night": {
+      "path": "assets/textures/tex_interior_hardware_night.webp",
+      "w": 2048,
+      "h": 2048,
+      "ingestedAt": "2026-11-14T16:47:55.388Z"
+    },
+    "tex_interior_hotel_reception_night": {
+      "path": "assets/textures/tex_interior_hotel_reception_night.webp",
+      "w": 2048,
+      "h": 2048,
+      "ingestedAt": "2026-11-14T16:48:03.022Z"
+    },
+    "tex_interior_jeweller_night": {
+      "path": "assets/textures/tex_interior_jeweller_night.webp",
+      "w": 2048,
+      "h": 2048,
+      "ingestedAt": "2026-11-14T16:48:12.374Z"
+    },
+    "tex_interior_office_night": {
+      "path": "assets/textures/tex_interior_office_night.webp",
+      "w": 2048,
+      "h": 2048,
+      "ingestedAt": "2026-11-14T16:50:03.579Z"
+    },
+    "tex_interior_phones_night": {
+      "path": "assets/textures/tex_interior_phones_night.webp",
+      "w": 2048,
+      "h": 2048,
+      "ingestedAt": "2026-11-14T16:50:09.996Z"
+    },
+    "tex_interior_sweet_night": {
+      "path": "assets/textures/tex_interior_sweet_night.webp",
+      "w": 2048,
+      "h": 2048,
+      "ingestedAt": "2026-11-14T16:50:17.098Z"
+    },
+    "tex_interior_tea_stall_night": {
+      "path": "assets/textures/tex_interior_tea_stall_night.webp",
+      "w": 2048,
+      "h": 2048,
+      "ingestedAt": "2026-11-14T16:51:07.016Z"
+    },
+    "tex_interior_tailor_night": {
+      "path": "assets/textures/tex_interior_tailor_night.webp",
+      "w": 2048,
+      "h": 2048,
+      "ingestedAt": "2026-11-14T16:51:22.086Z"
+    },
+    "tex_interior_utensils_night": {
+      "path": "assets/textures/tex_interior_utensils_night.webp",
+      "w": 2048,
+      "h": 2048,
+      "ingestedAt": "2026-11-14T16:52:25.213Z"
+    },
+    "tex_trim_cp_colonnade": {
+      "path": "assets/textures/tex_trim_cp_colonnade.webp",
+      "w": 2048,
+      "h": 2048,
+      "ingestedAt": "2026-11-14T16:53:58.280Z"
+    },
+    "tex_trim_lutyens": {
+      "path": "assets/textures/tex_trim_lutyens.webp",
+      "w": 2048,
+      "h": 2048,
+      "ingestedAt": "2026-11-14T16:55:12.281Z"
+    },
+    "tex_trim_oldcity": {
+      "path": "assets/textures/tex_trim_oldcity.webp",
+      "w": 2048,
+      "h": 2048,
+      "ingestedAt": "2026-11-14T16:55:27.258Z"
+    },
+    "decal_wall_grime_sheet": {
+      "path": "assets/decals/decal_wall_grime_sheet.webp",
+      "w": 2048,
+      "h": 2048,
+      "ingestedAt": "2026-11-14T17:00:18.727Z"
+    },
+    "tex_wall_old_brick": {
+      "path": "assets/textures/tex_wall_old_brick.webp",
+      "w": 2048,
+      "h": 2048,
+      "ingestedAt": "2026-11-14T17:00:26.735Z"
+    },
+    "tex_wall_oldcity_layer_brick": {
+      "path": "assets/textures/tex_wall_oldcity_layer_brick.webp",
+      "w": 2048,
+      "h": 2048,
+      "ingestedAt": "2026-11-14T17:00:45.894Z"
+    },
+    "tex_wall_oldcity_layer_peel": {
+      "path": "assets/textures/tex_wall_oldcity_layer_peel.webp",
+      "w": 2048,
+      "h": 2048,
+      "ingestedAt": "2026-11-14T17:00:59.597Z"
+    },
+    "tex_wall_oldcity_plaster": {
+      "path": "assets/textures/tex_wall_oldcity_plaster.webp",
+      "w": 2048,
+      "h": 2048,
+      "ingestedAt": "2026-11-14T17:01:19.699Z"
+    },
+    "decal_wall_peeling_plaster": {
+      "path": "assets/decals/decal_wall_peeling_plaster.webp",
+      "w": 1024,
+      "h": 1024,
+      "ingestedAt": "2026-11-14T17:01:34.773Z"
+    },
+    "tex_wall_cp_colonnade_plaster": {
+      "path": "assets/textures/tex_wall_cp_colonnade_plaster.webp",
+      "w": 2048,
+      "h": 2048,
+      "ingestedAt": "2026-11-14T17:02:32.450Z"
+    },
+    "tex_wall_lutyens_whitewash": {
+      "path": "assets/textures/tex_wall_lutyens_whitewash.webp",
+      "w": 2048,
+      "h": 2048,
+      "ingestedAt": "2026-11-14T17:02:54.843Z"
+    },
+    "tex_wall_modern_office": {
+      "path": "assets/textures/tex_wall_modern_office.webp",
+      "w": 2048,
+      "h": 2048,
+      "ingestedAt": "2026-11-14T17:03:12.808Z"
+    },
+    "decal_goods_cloth_sheet": {
+      "path": "assets/decals/decal_goods_cloth_sheet.webp",
+      "w": 2048,
+      "h": 2048,
+      "ingestedAt": "2026-11-14T17:05:09.103Z"
+    },
+    "decal_goods_sweets_sheet": {
+      "path": "assets/decals/decal_goods_sweets_sheet.webp",
+      "w": 2048,
+      "h": 2048,
+      "ingestedAt": "2026-11-14T17:05:21.823Z"
+    },
+    "decal_goods_dryfruit_sheet": {
+      "path": "assets/decals/decal_goods_dryfruit_sheet.webp",
+      "w": 2048,
+      "h": 2048,
+      "ingestedAt": "2026-11-14T17:05:36.046Z"
+    },
+    "decal_goods_hardware_sheet": {
+      "path": "assets/decals/decal_goods_hardware_sheet.webp",
+      "w": 2048,
+      "h": 2048,
+      "ingestedAt": "2026-11-14T17:06:01.800Z"
+    },
+    "decal_goods_phones_bags_sheet": {
+      "path": "assets/decals/decal_goods_phones_bags_sheet.webp",
+      "w": 2048,
+      "h": 2048,
+      "ingestedAt": "2026-11-14T17:06:39.942Z"
+    },
+    "decal_goods_utensils_sheet": {
+      "path": "assets/decals/decal_goods_utensils_sheet.webp",
+      "w": 2048,
+      "h": 2048,
+      "ingestedAt": "2026-11-14T17:08:24.151Z"
+    },
+    "decal_sign_tin_boards": {
+      "path": "assets/decals/decal_sign_tin_boards.webp",
+      "w": 2048,
+      "h": 2048,
+      "ingestedAt": "2026-11-14T17:09:55.325Z"
+    },
+    "decal_poster_paper_notices": {
+      "path": "assets/decals/decal_poster_paper_notices.webp",
+      "w": 2048,
+      "h": 2048,
+      "ingestedAt": "2026-11-14T17:10:02.462Z"
+    },
+    "decal_sign_gb_flex": {
+      "path": "assets/decals/decal_sign_gb_flex.webp",
+      "w": 2048,
+      "h": 2048,
+      "ingestedAt": "2026-11-14T17:10:59.802Z"
+    },
+    "tex_shutter_rolling_steel": {
+      "path": "assets/textures/tex_shutter_rolling_steel.webp",
+      "w": 2048,
+      "h": 2048,
+      "ingestedAt": "2026-11-14T17:11:02.499Z"
+    },
+    "decal_shutter_lettering": {
+      "path": "assets/decals/decal_shutter_lettering.webp",
+      "w": 2048,
+      "h": 1024,
+      "ingestedAt": "2026-11-14T17:12:32.942Z"
+    },
+    "decal_sign_hotel_led": {
+      "path": "assets/decals/decal_sign_hotel_led.webp",
+      "w": 1024,
+      "h": 2048,
+      "ingestedAt": "2026-11-14T17:12:39.274Z"
+    },
+    "decal_sign_hotel_led_01": {
+      "path": "assets/decals/decal_sign_hotel_led_01.webp",
+      "w": 1024,
+      "h": 1536,
+      "ingestedAt": "2026-11-14T17:23:13.726Z"
+    },
+    "decal_sign_hotel_led_02": {
+      "path": "assets/decals/decal_sign_hotel_led_02.webp",
+      "w": 1024,
+      "h": 1536,
+      "ingestedAt": "2026-11-14T17:24:16.732Z"
+    },
+    "decal_sign_glowbox_01": {
+      "path": "assets/decals/decal_sign_glowbox_01.webp",
+      "w": 1536,
+      "h": 1024,
+      "ingestedAt": "2026-11-14T17:25:12.559Z"
+    },
+    "decal_sign_glowbox_02": {
+      "path": "assets/decals/decal_sign_glowbox_02.webp",
+      "w": 1536,
+      "h": 1024,
+      "ingestedAt": "2026-11-14T17:25:25.763Z"
+    },
+    "decal_sign_glowbox_03": {
+      "path": "assets/decals/decal_sign_glowbox_03.webp",
+      "w": 1536,
+      "h": 1024,
+      "ingestedAt": "2026-11-14T17:25:33.834Z"
+    },
+    "decal_sign_hotel_led_03": {
+      "path": "assets/decals/decal_sign_hotel_led_03.webp",
+      "w": 1024,
+      "h": 1536,
+      "ingestedAt": "2026-11-14T17:25:43.611Z"
+    },
+    "decal_sign_hotel_led_04": {
+      "path": "assets/decals/decal_sign_hotel_led_04.webp",
+      "w": 1024,
+      "h": 1536,
+      "ingestedAt": "2026-11-14T17:25:54.014Z"
+    },
+    "decal_sign_tin_01": {
+      "path": "assets/decals/decal_sign_tin_01.webp",
+      "w": 1536,
+      "h": 1024,
+      "ingestedAt": "2026-11-14T18:39:59.083Z"
+    },
+    "decal_sign_tin_02": {
+      "path": "assets/decals/decal_sign_tin_02.webp",
+      "w": 1536,
+      "h": 1024,
+      "ingestedAt": "2026-11-14T18:40:26.156Z"
+    },
+    "decal_shutter_text_01": {
+      "path": "assets/decals/decal_shutter_text_01.webp",
+      "w": 1536,
+      "h": 1024,
+      "ingestedAt": "2026-11-14T18:41:02.882Z"
+    },
+    "decal_sign_tin_03": {
+      "path": "assets/decals/decal_sign_tin_03.webp",
+      "w": 1536,
+      "h": 1024,
+      "ingestedAt": "2026-11-14T18:41:15.093Z"
+    },
+    "decal_sign_enamel_01": {
+      "path": "assets/decals/decal_sign_enamel_01.webp",
+      "w": 1024,
+      "h": 1024,
+      "ingestedAt": "2026-11-14T18:41:28.777Z"
+    },
+    "decal_sign_tin_04": {
+      "path": "assets/decals/decal_sign_tin_04.webp",
+      "w": 1536,
+      "h": 1024,
+      "ingestedAt": "2026-11-14T18:41:40.100Z"
+    },
+    "decal_sign_tin_05": {
+      "path": "assets/decals/decal_sign_tin_05.webp",
+      "w": 1536,
+      "h": 1024,
+      "ingestedAt": "2026-11-14T18:41:55.690Z"
+    },
+    "decal_sign_tin_06": {
+      "path": "assets/decals/decal_sign_tin_06.webp",
+      "w": 1536,
+      "h": 1024,
+      "ingestedAt": "2026-11-14T18:44:19.928Z"
+    },
+    "decal_shutter_text_02": {
+      "path": "assets/decals/decal_shutter_text_02.webp",
+      "w": 1536,
+      "h": 1024,
+      "ingestedAt": "2026-11-14T18:44:38.779Z"
+    },
+    "decal_shutter_text_03": {
+      "path": "assets/decals/decal_shutter_text_03.webp",
+      "w": 1536,
+      "h": 1024,
+      "ingestedAt": "2026-11-14T18:45:15.326Z"
+    },
+    "decal_sign_enamel_02": {
+      "path": "assets/decals/decal_sign_enamel_02.webp",
+      "w": 1024,
+      "h": 1024,
+      "ingestedAt": "2026-11-14T18:45:21.565Z"
+    },
+    "decal_sign_flex_gb_01": {
+      "path": "assets/decals/decal_sign_flex_gb_01.webp",
+      "w": 1536,
+      "h": 1024,
+      "ingestedAt": "2026-11-14T18:47:53.147Z"
+    },
+    "decal_sign_flex_gb_02": {
+      "path": "assets/decals/decal_sign_flex_gb_02.webp",
+      "w": 1536,
+      "h": 1024,
+      "ingestedAt": "2026-11-14T18:48:23.532Z"
+    },
+    "decal_poster_01": {
+      "path": "assets/decals/decal_poster_01.webp",
+      "w": 1024,
+      "h": 1024,
+      "ingestedAt": "2026-11-14T18:48:46.366Z"
+    },
+    "decal_poster_02": {
+      "path": "assets/decals/decal_poster_02.webp",
+      "w": 1024,
+      "h": 1024,
+      "ingestedAt": "2026-11-14T18:49:10.684Z"
+    },
+    "decal_poster_03": {
+      "path": "assets/decals/decal_poster_03.webp",
+      "w": 1024,
+      "h": 1024,
+      "ingestedAt": "2026-11-14T18:49:23.943Z"
+    },
+    "decal_sign_flex_gb_03": {
+      "path": "assets/decals/decal_sign_flex_gb_03.webp",
+      "w": 1536,
+      "h": 1024,
+      "ingestedAt": "2026-11-14T18:49:34.739Z"
+    },
+    "decal_sign_flex_gb_04": {
+      "path": "assets/decals/decal_sign_flex_gb_04.webp",
+      "w": 1536,
+      "h": 1024,
+      "ingestedAt": "2026-11-14T18:49:58.917Z"
+    },
+    "decal_poster_04": {
+      "path": "assets/decals/decal_poster_04.webp",
+      "w": 1024,
+      "h": 1024,
+      "ingestedAt": "2026-11-14T18:50:10.031Z"
     }
   },
   "audio": {},

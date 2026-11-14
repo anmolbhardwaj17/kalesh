@@ -6,7 +6,7 @@
 // CLEARANCE_TOL_M. Pure.
 import type { Joint, Station, Strip } from '../roads/model.ts';
 import type { ElevationJunction } from './crossings.ts';
-import { AT_GRADE_M, CROSSFALL_MAX, DECK_DEPTH, HEADROOM, JUNCTION_SLOPE_MAX, maxGrade, minCurveRadius, RAIL_DECK_DEPTH_M, RAIL_HEADROOM_M, TUNNEL_COVER_M, WATER_CLEARANCE_M } from './limits.ts';
+import { AT_GRADE_M, CROSSFALL_MAX, DECK_DEPTH, HEADROOM, JUNCTION_SLOPE_MAX, maxGrade, minCurveRadius, RAIL_DECK_DEPTH_M, RAIL_HEADROOM_M, TUNNEL_COVER_M, tunnelGradeCaps, WATER_CLEARANCE_M } from './limits.ts';
 import type { ElevationResult } from './solve.ts';
 
 export const CLEARANCE_TOL_M = 0.02;
@@ -93,8 +93,9 @@ export function checkElevation(strips: readonly Strip[], joints: readonly Joint[
   const grade: ElevationChecks['grade'] = { segments: 0, violations: 0, steepestPct: 0, steepest: null };
   const curves: ElevationChecks['curves'] = { measured: 0, violations: 0, tightestRadiusM: null, tightest: null };
   let worstCurve = 0;
-  for (const s of strips) {
-    const gMax = maxGrade(s.cls, s.link);
+  const caps = tunnelGradeCaps(strips, joints, res.tunnels);
+  for (const [si, s] of strips.entries()) {
+    const gMax = Math.min(maxGrade(s.cls, s.link), caps[si] as number);
     const kMax = 1 / minCurveRadius(s.cls, s.link);
     let prevD = 0;
     let prevG = 0;

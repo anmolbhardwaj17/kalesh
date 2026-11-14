@@ -18,6 +18,7 @@
 //   masts   {x, y, z, dx, dz, reach, wire}                           an overhead line mast and its arm
 //   metro   {v, twin, p: [x, y, z, g] per point}                     a metro deck: y the rail level
 //   fobs    {v, w, h, p: [x, z] per point, stairs: [[x, z, dx, dz, rise]]}  a foot bridge's walking level
+//   twalls, tceils, theads, tdrains, tlines   cuts, tunnels and underpasses (P2-032): see tunnels.ts
 import type { P2 } from '../geom.ts';
 import type { FootBridgeHeights, Viaduct } from '../elevation/overhead.ts';
 import type { Strip } from '../roads/model.ts';
@@ -36,6 +37,8 @@ import { triangulateRing } from '../mesh/solids.ts';
 import type { Support } from './elevated.ts';
 import { VARIANTS, footBridgeVariant, railVariant } from './variants.ts';
 import type { VariantRules } from './variants.ts';
+import { buildTunnels } from './tunnels.ts';
+import type { TunnelInput, TunnelRecord } from './tunnels.ts';
 
 export interface InfraInput {
   strips: readonly Strip[];
@@ -56,6 +59,8 @@ export interface InfraInput {
   /** Railway platforms of the extract (platforms.ts); absent: none. */
   platforms?: readonly PlatformSource[];
   rules: VariantRules;
+  /** Cuts, tunnels and underpasses (P2-032): the mesh step's walls, ceilings and headwalls, the lowered strips' variants. */
+  tunnels?: Omit<TunnelInput, 'strips' | 'ground' | 'roadAt'>;
   /** World = block + offset. */
   offset: P2;
   stage: string;
@@ -84,6 +89,8 @@ export interface InfraRecord {
   withoutKit: string[];
   tiles: number;
   envelopeTriangles: number;
+  /** Cuts, tunnels and underpasses (P2-032); absent without tunnel input. Portal positions in world metres. */
+  tunnels?: TunnelRecord;
 }
 
 type TileRecs = Record<string, unknown[]>;
@@ -376,6 +383,57 @@ export function buildInfra(input: InfraInput): { file: unknown; meshes: SourceMe
     }
   }
   for (const c of foot.columns) support(c, 'fob');
+
+  // ---- cuts, tunnels and underpasses (P2-032): the plain shapes are the mesh step's colliders; records for the kit
+  if (input.tunnels) {
+    const tun = buildTunnels({ ...input.tunnels, strips: input.strips, ground: input.ground, roadAt: input.roadAt });
+    const along = <T>(pts: readonly T[], xz: (p: T) => [number, number]): number[] => {
+      const s = [0];
+      for (let k = 1; k < pts.length; k++) {
+        const [ax, az] = xz(pts[k - 1] as T);
+        const [bx, bz] = xz(pts[k] as T);
+        s.push((s[k - 1] as number) + Math.hypot(bx - ax, bz - az));
+      }
+      return s;
+    };
+    for (const w of tun.walls) {
+      used(w.v);
+      const tagged = w.pts.map((q, k) => ({ ...q, k }));
+      const sAt = along(w.pts, (q) => [q.p[0], q.p[2]]);
+      perTile(tagged, (q) => [q.p[0], q.p[2]], (tile, piece) => {
+        put(tile, 'twalls', { v: w.v, r: w.roofed ? 1 : 0, pp: w.parapet ? 1 : 0, s0: r2(w.s0 + (sAt[(piece[0] as { k: number }).k] as number)), p: piece.flatMap((q) => [...P(q.p[0], q.p[1], q.p[2]), r2(q.top), r2(q.g), r3(q.o[0]), r3(q.o[1])]) });
+      });
+    }
+    for (const c of tun.ceilings) {
+      const tagged = c.pts.map((q, k) => ({ ...q, k }));
+      const sAt = along(c.pts, (q) => [(q.l[0] + q.r[0]) / 2, (q.l[2] + q.r[2]) / 2]);
+      perTile(tagged, (q) => [(q.l[0] + q.r[0]) / 2, (q.l[2] + q.r[2]) / 2], (tile, piece) => {
+        put(tile, 'tceils', { v: c.v, s0: r2(sAt[(piece[0] as { k: number }).k] as number), p: piece.flatMap((q) => [...P(q.l[0], q.l[1], q.l[2]), ...P(q.r[0], q.r[1], q.r[2])]) });
+      });
+    }
+    for (const h of tun.heads) {
+      put(tileOf((h.ax + h.bx) / 2, (h.az + h.bz) / 2), 'theads', { v: h.v, a: W(h.ax, h.az), b: W(h.bx, h.bz), y0: r2(h.y0), y1: r2(h.y1), road: h.road ? 1 : 0, n: [r3(h.nx), r3(h.nz)], name: h.name, floor: r2(h.floor) });
+    }
+    for (const d of tun.drains) {
+      put(tileOf((d.a[0] + d.b[0]) / 2, (d.a[2] + d.b[2]) / 2), 'tdrains', { v: d.v, a: P(d.a[0], d.a[1], d.a[2]), b: P(d.b[0], d.b[1], d.b[2]) });
+    }
+    for (const l of tun.lines) {
+      const tagged = l.pts.map((q, k) => ({ q, k }));
+      const sAt = along(l.pts, (q) => [q[0], q[2]]);
+      perTile(tagged, (t) => [t.q[0], t.q[2]], (tile, piece) => {
+        put(tile, 'tlines', { v: l.v, m: l.m, s0: r2(sAt[(piece[0] as { k: number }).k] as number), p: piece.flatMap((t) => P(t.q[0], t.q[1], t.q[2])) });
+      });
+    }
+    for (const p of tun.record.portals) {
+      p.x = r2(p.x + offset.x);
+      p.z = r2(p.z + offset.z);
+    }
+    for (const l of [...tun.record.lowHeadroom, ...tun.record.noCover]) {
+      l.x = r2(l.x + offset.x);
+      l.z = r2(l.z + offset.z);
+    }
+    record.tunnels = tun.record;
+  }
 
   const meshes: SourceMesh[] = [...sink.meshes.values()].filter((m) => m.idx.length > 0);
   record.envelopeTriangles = meshes.reduce((s, m) => s + m.idx.length / 3, 0);
