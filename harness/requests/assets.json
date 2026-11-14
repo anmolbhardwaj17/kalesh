@@ -212,7 +212,7 @@
       "id": "tex_pragati_mural_wave",
       "kind": "texture",
       "intent": "Pragati Maidan tunnel inside wall mural: yellow and green wave band with birds and leaves",
-      "prompt": "stylised realistic game art, real proportions, clean simplified shapes, rich warm colour, soft hazy sunlight, hand-tuned colour, no outlines. A painted tunnel wall mural strip, as in the Pragati Maidan tunnel in Delhi. Big flowing wave bands in warm marigold yellow and leaf green, rolling across the whole strip, with simple stylised birds in flight (parrots, peacocks, sparrows) and large curling leaves painted in the waves, in a bold folk-art flat paint style, slightly chalky matte paint on concrete, a few scuffs at the lower edge from traffic dust and small chips. Covers a wall section 8 m wide by 2 m tall. Photographic quality material, shot flat and straight on, evenly lit, no perspective, no shadows cast across it, no people, no real brand names or logos. Seamless tileable horizontally (left edge continues into right edge), 2048 x 512, flat front view, even lighting, no baked shadows, no perspective.",
+      "prompt": "stylised realistic game art, real proportions, clean simplified shapes, rich warm colour, soft hazy sunlight, hand-tuned colour, no outlines. A painted tunnel wall mural strip, as in the Pragati Maidan tunnel in Delhi. Big flowing wave bands in warm marigold yellow and leaf green, rolling across the whole strip, with simple stylised birds in flight (parrots, peacocks, sparrows) and large curling leaves painted in the waves, in a bold folk-art flat paint style, slightly chalky matte paint on concrete, a few scuffs at the lower edge from traffic dust and small chips. Covers a wall section 8 m wide by 2 m tall. Photographic quality material, shot flat and straight on, evenly lit, no perspective, no shadows cast across it, no people, no real brand names or logos. Seamless tileable horizontally (left edge continues into right edge), 2048 x 512, flat front view, even lighting, no baked shadows, no perspective. Lighting must be uniform across the whole image: no vignette, no gradient, no brighter or darker corner. This is a deliberate unique mural, not a surface tile, so it is allowed one composition; keep its edges seamless where the card says tileable and state the real size shown (see \"Covers\" above) so paint details such as a bird or a flower keep their real size.",
       "generate": "square 1024x1024",
       "target": {
         "w": 2048,
@@ -232,13 +232,14 @@
       ],
       "priority": 1,
       "batch": "B1-tunnel-road",
-      "created": "2026-11-14T15:51:14.440Z"
+      "created": "2026-11-14T15:51:14.440Z",
+      "promptAt": "2026-11-14T16:04:36.018Z"
     },
     {
       "id": "tex_pragati_mural_madhubani",
       "kind": "texture",
       "intent": "Pragati tunnel wall mural: Madhubani fish band",
-      "prompt": "stylised realistic game art, real proportions, clean simplified shapes, rich warm colour, soft hazy sunlight, hand-tuned colour, no outlines. A painted tunnel wall mural strip in Madhubani folk-art style: a continuous band of stylised fish with big round eyes and patterned scales, fine line hatching, floral borders, in red, ochre, indigo, green and cream on a cream ground, with a thin double border line at top and bottom. Matte paint on concrete, light dust and a few chips at the bottom. Covers a wall section 8 m wide by 2 m tall. Invented original motifs only. Photographic quality material, shot flat and straight on, evenly lit, no perspective, no shadows cast across it, no people, no real brand names or logos. Seamless tileable horizontally (left edge continues into right edge), 2048 x 512, flat front view, even lighting, no baked shadows, no perspective.",
+      "prompt": "stylised realistic game art, real proportions, clean simplified shapes, rich warm colour, soft hazy sunlight, hand-tuned colour, no outlines. A painted tunnel wall mural strip in Madhubani folk-art style: a continuous band of stylised fish with big round eyes and patterned scales, fine line hatching, floral borders, in red, ochre, indigo, green and cream on a cream ground, with a thin double border line at top and bottom. Matte paint on concrete, light dust and a few chips at the bottom. Covers a wall section 8 m wide by 2 m tall. Invented original motifs only. Photographic quality material, shot flat and straight on, evenly lit, no perspective, no shadows cast across it, no people, no real brand names or logos. Seamless tileable horizontally (left edge continues into right edge), 2048 x 512, flat front view, even lighting, no baked shadows, no perspective. Lighting must be uniform across the whole image: no vignette, no gradient, no brighter or darker corner. This is a deliberate unique mural, not a surface tile, so it is allowed one composition; keep its edges seamless where the card says tileable and state the real size shown (see \"Covers\" above) so paint details such as a bird or a flower keep their real size.",
       "generate": "square 1024x1024",
       "target": {
         "w": 2048,
@@ -258,13 +259,14 @@
       ],
       "priority": 1,
       "batch": "B1-tunnel-road",
-      "created": "2026-11-14T15:51:14.899Z"
+      "created": "2026-11-14T15:51:14.899Z",
+      "promptAt": "2026-11-14T16:04:36.737Z"
     },
     {
       "id": "tex_pragati_mural_warli",
       "kind": "texture",
       "intent": "Pragati tunnel wall mural: Warli figures band",
-      "prompt": "stylised realistic game art, real proportions, clean simplified shapes, rich warm colour, soft hazy sunlight, hand-tuned colour, no outlines. A painted tunnel wall mural strip in Warli folk-art style: simple white stick-figure people made of triangles and circles, dancing in a ring, farming, carrying pots, with trees, birds and huts, painted in white on a deep terracotta red-brown ground, with a thin white border line at top and bottom. Matte paint on concrete, light dust and a few chips at the bottom. Covers a wall section 8 m wide by 2 m tall. Figures are dignified folk art, nothing mocking. Photographic quality material, shot flat and straight on, evenly lit, no perspective, no shadows cast across it, no people, no real brand names or logos. Seamless tileable horizontally (left edge continues into right edge), 2048 x 512, flat front view, even lighting, no baked shadows, no perspective.",
+      "prompt": "stylised realistic game art, real proportions, clean simplified shapes, rich warm colour, soft hazy sunlight, hand-tuned colour, no outlines. A painted tunnel wall mural strip in Warli folk-art style: simple white stick-figure people made of triangles and circles, dancing in a ring, farming, carrying pots, with trees, birds and huts, painted in white on a deep terracotta red-brown ground, with a thin white border line at top and bottom. Matte paint on concrete, light dust and a few chips at the bottom. Covers a wall section 8 m wide by 2 m tall. Figures are dignified folk art, nothing mocking. Photographic quality material, shot flat and straight on, evenly lit, no perspective, no shadows cast across it, no people, no real brand names or logos. Seamless tileable horizontally (left edge continues into right edge), 2048 x 512, flat front view, even lighting, no baked shadows, no perspective. Lighting must be uniform across the whole image: no vignette, no gradient, no brighter or darker corner. This is a deliberate unique mural, not a surface tile, so it is allowed one composition; keep its edges seamless where the card says tileable and state the real size shown (see \"Covers\" above) so paint details such as a bird or a flower keep their real size.",
       "generate": "square 1024x1024",
       "target": {
         "w": 2048,
@@ -284,13 +286,14 @@
       ],
       "priority": 1,
       "batch": "B1-tunnel-road",
-      "created": "2026-11-14T15:51:15.316Z"
+      "created": "2026-11-14T15:51:15.316Z",
+      "promptAt": "2026-11-14T16:04:37.115Z"
     },
     {
       "id": "tex_pragati_ramp_wall",
       "kind": "texture",
       "intent": "Pragati tunnel approach ramp retaining wall: lotus, swans, trees, tricolour bands",
-      "prompt": "stylised realistic game art, real proportions, clean simplified shapes, rich warm colour, soft hazy sunlight, hand-tuned colour, no outlines. A painted retaining wall mural strip, as on the open approach ramp of the Pragati Maidan tunnel. Cream base with pale grey flower discs, a blue and white river band across the middle, painted lotus flowers, white swans and dark green trees; a thick saffron band along the top edge and a deep green band along the bottom edge. Matte paint on concrete, light road dust splash at the bottom, a few chips. Covers a wall section 8 m wide by 4 m tall. Photographic quality material, shot flat and straight on, evenly lit, no perspective, no shadows cast across it, no people, no real brand names or logos. Seamless tileable horizontally, 2048 x 1024, flat front view, even lighting, no baked shadows, no perspective.",
+      "prompt": "stylised realistic game art, real proportions, clean simplified shapes, rich warm colour, soft hazy sunlight, hand-tuned colour, no outlines. A painted retaining wall mural strip, as on the open approach ramp of the Pragati Maidan tunnel. Cream base with pale grey flower discs, a blue and white river band across the middle, painted lotus flowers, white swans and dark green trees; a thick saffron band along the top edge and a deep green band along the bottom edge. Matte paint on concrete, light road dust splash at the bottom, a few chips. Covers a wall section 8 m wide by 4 m tall. Photographic quality material, shot flat and straight on, evenly lit, no perspective, no shadows cast across it, no people, no real brand names or logos. Seamless tileable horizontally, 2048 x 1024, flat front view, even lighting, no baked shadows, no perspective. Lighting must be uniform across the whole image: no vignette, no gradient, no brighter or darker corner. This is a deliberate unique mural, not a surface tile, so it is allowed one composition; keep its edges seamless where the card says tileable and state the real size shown (see \"Covers\" above) so paint details such as a bird or a flower keep their real size.",
       "generate": "square 1024x1024",
       "target": {
         "w": 2048,
@@ -310,13 +313,14 @@
       ],
       "priority": 1,
       "batch": "B1-tunnel-road",
-      "created": "2026-11-14T15:51:15.707Z"
+      "created": "2026-11-14T15:51:15.707Z",
+      "promptAt": "2026-11-14T16:04:37.374Z"
     },
     {
       "id": "tex_road_asphalt_delhi",
       "kind": "texture",
       "intent": "Delhi road asphalt, worn, with darker tyre lanes",
-      "prompt": "stylised realistic game art, real proportions, clean simplified shapes, rich warm colour, soft hazy sunlight, hand-tuned colour, no outlines, lived-in surfaces: soot, water stains, faded paint, patched plaster, dust; honest, not exaggerated. Worn dark grey asphalt of a busy Delhi road seen from straight above, coarse aggregate showing, two faint darker polished tyre tracks running down the image, a few hairline cracks, tiny patched tar repairs, dusty brownish edges, no lane markings, no kerbs, no vehicles. Covers 4 m x 4 m of road. Photographic quality material, shot flat and straight on, evenly lit, no perspective, no shadows cast across it, no people, no real brand names or logos. Seamless tileable in both directions, 2048 x 2048, no baked shadows, no text, no letters.",
+      "prompt": "stylised realistic game art, real proportions, clean simplified shapes, rich warm colour, soft hazy sunlight, hand-tuned colour, no outlines. Worn dark grey Delhi asphalt seen from straight above, MATTE DRY surface with no sheen, no wet look, no reflections and no puddles (wetness is added later in the game shader). Even coarse aggregate: angular stones 5 to 14 mm across, bitumen binder showing between them, tiny sand grain, a faint dusty brown tint. No tyre tracks, no cracks, no patches, no lane markings, no kerbs, no vehicles. TILEABLE MATERIAL RULES: this is a repeating surface, not a picture. Seamless on all four edges (left continues into right, top into bottom). Even, low-contrast variation across the whole image with no single standout feature: no one big crack, stain, patch, chip or mark that would be noticed repeating from far away. Uniform flat lighting, no vignette, no gradient, no baked shadows, no brighter or darker corner. Standout marks (cracks, stains, patches, posters) are made on the separate decal sheets, so leave them out. REAL SCALE: the image shows exactly 4 m x 4 m of road of real surface at 2048 x 2048 px, about 512 px per metre. Aggregate stones are 5 to 14 mm, so each stone is about 3 to 7 px wide. Shot flat and straight on, no perspective, no people, no real brand names or logos, no text, no letters.",
       "generate": "square 1024x1024",
       "target": {
         "w": 2048,
@@ -336,13 +340,14 @@
       ],
       "priority": 1,
       "batch": "B1-tunnel-road",
-      "created": "2026-11-14T15:51:16.131Z"
+      "created": "2026-11-14T15:51:16.131Z",
+      "promptAt": "2026-11-14T16:05:08.877Z"
     },
     {
       "id": "tex_tunnel_concrete_panel",
       "kind": "texture",
       "intent": "Concrete tunnel wall panel with joints and soot",
-      "prompt": "stylised realistic game art, real proportions, clean simplified shapes, rich warm colour, soft hazy sunlight, hand-tuned colour, no outlines, lived-in surfaces: soot, water stains, faded paint, patched plaster, dust; honest, not exaggerated. A pale grey cast concrete tunnel wall panel seen straight on: formwork board marks, a vertical panel joint with a sealed seam, a faint tie-hole grid, soft grey-black exhaust soot rising from the bottom, light efflorescence stains, dry. No signs, no pipes. Covers 2 m x 2 m of wall. Photographic quality material, shot flat and straight on, evenly lit, no perspective, no shadows cast across it, no people, no real brand names or logos. Seamless tileable in both directions, 2048 x 2048, no baked shadows, no text, no letters.",
+      "prompt": "stylised realistic game art, real proportions, clean simplified shapes, rich warm colour, soft hazy sunlight, hand-tuned colour, no outlines. Pale grey cast concrete tunnel wall seen straight on, dry: faint horizontal formwork board marks, boards 15 cm tall and 2.4 m long, with fine wood grain imprint, a tie-hole grid with holes 2.5 cm wide every 60 cm in both directions, tiny air bubbles (blowholes 2 to 6 mm), very slight even colour mottling. No panel joint, no soot, no stains, no pipes, no signs (joints and soot come from geometry and the shader). TILEABLE MATERIAL RULES: this is a repeating surface, not a picture. Seamless on all four edges (left continues into right, top into bottom). Even, low-contrast variation across the whole image with no single standout feature: no one big crack, stain, patch, chip or mark that would be noticed repeating from far away. Uniform flat lighting, no vignette, no gradient, no baked shadows, no brighter or darker corner. Standout marks (cracks, stains, patches, posters) are made on the separate decal sheets, so leave them out. REAL SCALE: the image shows exactly 2 m x 2 m of wall of real surface at 2048 x 2048 px, about 1024 px per metre. Formwork boards 15 cm tall, tie holes every 60 cm. Shot flat and straight on, no perspective, no people, no real brand names or logos, no text, no letters.",
       "generate": "square 1024x1024",
       "target": {
         "w": 2048,
@@ -362,13 +367,14 @@
       ],
       "priority": 1,
       "batch": "B1-tunnel-road",
-      "created": "2026-11-14T15:51:16.321Z"
+      "created": "2026-11-14T15:51:16.321Z",
+      "promptAt": "2026-11-14T16:05:09.169Z"
     },
     {
       "id": "decal_road_marks_sheet",
       "kind": "decal",
       "intent": "Road decal sheet: cracks, patches, oil stains, manhole covers, tyre marks",
-      "prompt": "stylised realistic game art, real proportions, clean simplified shapes, rich warm colour, soft hazy sunlight, hand-tuned colour, no outlines, lived-in surfaces: soot, water stains, faded paint, patched plaster, dust; honest, not exaggerated. A sheet of 12 separate road surface details to paste onto asphalt, seen straight from above: two long cracks, two rectangular dark tar patches, two oil stains, one round cast iron manhole cover and one square drain grating (no lettering), a braking tyre skid mark, a set of two worn tyre tracks, a puddle stain ring, a patch of loose gravel. Colours drawn from dark grey asphalt, black and rust. Transparent background (PNG with alpha), 2048 x 2048, each item separate with clear space between, no ground, no shadow, no text, no letters, no logos.",
+      "prompt": "stylised realistic game art, real proportions, clean simplified shapes, rich warm colour, soft hazy sunlight, hand-tuned colour, no outlines, lived-in surfaces: soot, water stains, faded paint, patched plaster, dust; honest, not exaggerated. A sheet of 12 separate road surface details to paste onto asphalt, seen straight from above: two long cracks, two rectangular dark tar patches, two oil stains, one round cast iron manhole cover and one square drain grating (no lettering), a braking tyre skid mark, a set of two worn tyre tracks, a puddle stain ring, a patch of loose gravel. Colours drawn from dark grey asphalt, black and rust. Draw every item at real size relative to a 4 m x 4 m sheet (cracks 1 to 3 m long, patches 0.6 to 1.2 m, oil stains 0.3 to 0.8 m, manhole cover 0.6 m round, drain grating 0.5 m square, tyre tracks 3 m long, about 500 px per metre). Standout marks like these live on decal sheets because the tiling textures stay plain. Transparent background (PNG with alpha), 2048 x 2048, each item separate with clear space between, no ground, no shadow, no text, no letters, no logos.",
       "generate": "square 1024x1024",
       "target": {
         "w": 2048,
@@ -388,13 +394,14 @@
       ],
       "priority": 1,
       "batch": "B1-tunnel-road",
-      "created": "2026-11-14T15:51:16.743Z"
+      "created": "2026-11-14T15:51:16.743Z",
+      "promptAt": "2026-11-14T16:05:11.838Z"
     },
     {
       "id": "tex_wall_oldcity_plaster",
       "kind": "texture",
       "intent": "Old Delhi lime plaster wall, peeling paint and damp",
-      "prompt": "stylised realistic game art, real proportions, clean simplified shapes, rich warm colour, soft hazy sunlight, hand-tuned colour, no outlines, lived-in surfaces: soot, water stains, faded paint, patched plaster, dust; honest, not exaggerated. An Old Delhi lime plaster wall over lakhori brick, seen straight on: faded mint green and dusty ochre paint peeling in patches to bare plaster and a few red bricks, rising damp stain climbing from the base, soot streaks, a hairline crack, old nail holes. No posters, no windows, no signs. Covers 2 m x 2 m of wall. Photographic quality material, shot flat and straight on, evenly lit, no perspective, no shadows cast across it, no people, no real brand names or logos. Seamless tileable in both directions, 2048 x 2048, no baked shadows, no text, no letters.",
+      "prompt": "stylised realistic game art, real proportions, clean simplified shapes, rich warm colour, soft hazy sunlight, hand-tuned colour, no outlines, lived-in surfaces: soot, water stains, faded paint, patched plaster, dust; honest, not exaggerated. BASE LAYER (clean) for an Old Delhi wall: smooth lime plaster painted in one faded dusty mint green, fine trowel marks, sand grain 0.5 to 1 mm, very faint even colour mottling, tiny pores. No peeling, no bricks, no damp, no soot, no cracks, no windows, no posters. This is one of three blendable layers at identical scale and identical colour family (base, peel, brick). TILEABLE MATERIAL RULES: this is a repeating surface, not a picture. Seamless on all four edges (left continues into right, top into bottom). Even, low-contrast variation across the whole image with no single standout feature: no one big crack, stain, patch, chip or mark that would be noticed repeating from far away. Uniform flat lighting, no vignette, no gradient, no baked shadows, no brighter or darker corner. Standout marks (cracks, stains, patches, posters) are made on the separate decal sheets, so leave them out. REAL SCALE: the image shows exactly 2 m x 2 m of wall of real surface at 2048 x 2048 px, about 1024 px per metre. Trowel marks 10 to 30 cm long, sand grain 0.5 to 1 mm. Shot flat and straight on, no perspective, no people, no real brand names or logos, no text, no letters.",
       "generate": "square 1024x1024",
       "target": {
         "w": 2048,
@@ -414,13 +421,14 @@
       ],
       "priority": 1,
       "batch": "B2-walls",
-      "created": "2026-11-14T15:51:16.982Z"
+      "created": "2026-11-14T15:51:16.982Z",
+      "promptAt": "2026-11-14T16:05:09.533Z"
     },
     {
       "id": "tex_wall_old_brick",
       "kind": "texture",
       "intent": "Exposed old brick wall, lime mortar, soot",
-      "prompt": "stylised realistic game art, real proportions, clean simplified shapes, rich warm colour, soft hazy sunlight, hand-tuned colour, no outlines, lived-in surfaces: soot, water stains, faded paint, patched plaster, dust; honest, not exaggerated. Exposed old thin red-brown bricks of Old Delhi (lakhori style) laid in lime mortar, uneven, some bricks eroded, one band of dusty whitewash remains, soot staining and light salt bloom. Covers 2 m x 2 m of wall. Photographic quality material, shot flat and straight on, evenly lit, no perspective, no shadows cast across it, no people, no real brand names or logos. Seamless tileable in both directions, 2048 x 2048, no baked shadows, no text, no letters.",
+      "prompt": "stylised realistic game art, real proportions, clean simplified shapes, rich warm colour, soft hazy sunlight, hand-tuned colour, no outlines, lived-in surfaces: soot, water stains, faded paint, patched plaster, dust; honest, not exaggerated. Plain exposed old thin red-brown bricks of Old Delhi (lakhori style) in running bond, lime mortar joints 1.5 cm wide, slightly uneven, small random variation in brick colour from brick to brick, a few eroded brick faces spread evenly, very faint soot haze, no whitewash band, no big stain. Brick face 23 cm x 7.5 cm. TILEABLE MATERIAL RULES: this is a repeating surface, not a picture. Seamless on all four edges (left continues into right, top into bottom). Even, low-contrast variation across the whole image with no single standout feature: no one big crack, stain, patch, chip or mark that would be noticed repeating from far away. Uniform flat lighting, no vignette, no gradient, no baked shadows, no brighter or darker corner. Standout marks (cracks, stains, patches, posters) are made on the separate decal sheets, so leave them out. REAL SCALE: the image shows exactly 2 m x 2 m of wall of real surface at 2048 x 2048 px, about 1024 px per metre. Each brick face is 23 cm x 7.5 cm (about 235 x 77 px), about 9 courses per 80 cm. Shot flat and straight on, no perspective, no people, no real brand names or logos, no text, no letters.",
       "generate": "square 1024x1024",
       "target": {
         "w": 2048,
@@ -440,13 +448,14 @@
       ],
       "priority": 1,
       "batch": "B2-walls",
-      "created": "2026-11-14T15:51:17.234Z"
+      "created": "2026-11-14T15:51:17.234Z",
+      "promptAt": "2026-11-14T16:05:10.032Z"
     },
     {
       "id": "tex_wall_lutyens_whitewash",
       "kind": "texture",
       "intent": "Lutyens Delhi whitewash with cream sandstone course",
-      "prompt": "stylised realistic game art, real proportions, clean simplified shapes, rich warm colour, soft hazy sunlight, hand-tuned colour, no outlines. A Lutyens Delhi bungalow wall seen straight on: clean off-white lime wash, one horizontal course of pale cream and pink sandstone blocks near the base with fine joints, light grey rain streaks, a little green algae at the very bottom, otherwise well kept. Covers 2 m x 2 m of wall. Photographic quality material, shot flat and straight on, evenly lit, no perspective, no shadows cast across it, no people, no real brand names or logos. Seamless tileable in both directions, 2048 x 2048, no baked shadows, no text, no letters.",
+      "prompt": "stylised realistic game art, real proportions, clean simplified shapes, rich warm colour, soft hazy sunlight, hand-tuned colour, no outlines. Lutyens Delhi bungalow wall, well kept: clean off-white lime wash with soft brush variation, very fine sand grain, faint warm cream undertone. No sandstone course, no algae, no rain streaks, no cracks (the stone courses live on the Lutyens trim sheet, streaks on the grime decals). TILEABLE MATERIAL RULES: this is a repeating surface, not a picture. Seamless on all four edges (left continues into right, top into bottom). Even, low-contrast variation across the whole image with no single standout feature: no one big crack, stain, patch, chip or mark that would be noticed repeating from far away. Uniform flat lighting, no vignette, no gradient, no baked shadows, no brighter or darker corner. Standout marks (cracks, stains, patches, posters) are made on the separate decal sheets, so leave them out. REAL SCALE: the image shows exactly 2 m x 2 m of wall of real surface at 2048 x 2048 px, about 1024 px per metre. Brush strokes 15 to 30 cm wide, grain 0.5 mm. Shot flat and straight on, no perspective, no people, no real brand names or logos, no text, no letters.",
       "generate": "square 1024x1024",
       "target": {
         "w": 2048,
@@ -466,13 +475,14 @@
       ],
       "priority": 2,
       "batch": "B2-walls",
-      "created": "2026-11-14T15:51:17.426Z"
+      "created": "2026-11-14T15:51:17.426Z",
+      "promptAt": "2026-11-14T16:05:10.226Z"
     },
     {
       "id": "tex_wall_cp_colonnade_plaster",
       "kind": "texture",
       "intent": "Connaught Place colonnade whitewash plaster",
-      "prompt": "stylised realistic game art, real proportions, clean simplified shapes, rich warm colour, soft hazy sunlight, hand-tuned colour, no outlines, lived-in surfaces: soot, water stains, faded paint, patched plaster, dust; honest, not exaggerated. Connaught Place colonnade plaster: cream white painted stucco with fine horizontal rustication grooves, slightly yellowed, a few hairline cracks, grey dust streaks and a pale water stain, repainted a little unevenly. Covers 2 m x 2 m of wall. Photographic quality material, shot flat and straight on, evenly lit, no perspective, no shadows cast across it, no people, no real brand names or logos. Seamless tileable in both directions, 2048 x 2048, no baked shadows, no text, no letters.",
+      "prompt": "stylised realistic game art, real proportions, clean simplified shapes, rich warm colour, soft hazy sunlight, hand-tuned colour, no outlines. Connaught Place colonnade plaster, cream white painted stucco with horizontal rustication grooves 1 cm wide and 1 cm deep every 30 cm, with a very faint yellowed tone and even fine grain, evenly repainted. No cracks, no stains, no dust streaks. TILEABLE MATERIAL RULES: this is a repeating surface, not a picture. Seamless on all four edges (left continues into right, top into bottom). Even, low-contrast variation across the whole image with no single standout feature: no one big crack, stain, patch, chip or mark that would be noticed repeating from far away. Uniform flat lighting, no vignette, no gradient, no baked shadows, no brighter or darker corner. Standout marks (cracks, stains, patches, posters) are made on the separate decal sheets, so leave them out. REAL SCALE: the image shows exactly 2 m x 2 m of wall of real surface at 2048 x 2048 px, about 1024 px per metre. Rustication courses are 30 cm tall, so about 6.7 grooves per 2 m. Shot flat and straight on, no perspective, no people, no real brand names or logos, no text, no letters.",
       "generate": "square 1024x1024",
       "target": {
         "w": 2048,
@@ -492,13 +502,14 @@
       ],
       "priority": 2,
       "batch": "B2-walls",
-      "created": "2026-11-14T15:51:17.671Z"
+      "created": "2026-11-14T15:51:17.671Z",
+      "promptAt": "2026-11-14T16:05:10.407Z"
     },
     {
       "id": "tex_wall_modern_office",
       "kind": "texture",
       "intent": "Modern Delhi office facade: concrete and tinted glass with grime",
-      "prompt": "stylised realistic game art, real proportions, clean simplified shapes, rich warm colour, soft hazy sunlight, hand-tuned colour, no outlines, lived-in surfaces: soot, water stains, faded paint, patched plaster, dust; honest, not exaggerated. A modern Delhi office block facade seen straight on: pale grey precast concrete panels with a regular grid of tinted blue-green glass windows, aluminium frames, grey dust and rain streaks below each window, a few AC drip stains. No logos, no text. Covers 4 m x 4 m of facade. Photographic quality material, shot flat and straight on, evenly lit, no perspective, no shadows cast across it, no people, no real brand names or logos. Seamless tileable in both directions, 2048 x 2048, no baked shadows, no text, no letters.",
+      "prompt": "stylised realistic game art, real proportions, clean simplified shapes, rich warm colour, soft hazy sunlight, hand-tuned colour, no outlines. Modern Delhi office block facade seen straight on, clean: pale grey precast concrete panels with even fine pores, and a regular grid of tinted blue-green glass windows with aluminium frames, one window 1.2 m wide x 1.5 m tall every 2.0 m across and every 2.0 m up (four windows in the image). Uniform dust on the glass, no streaks, no drip stains, no logos. TILEABLE MATERIAL RULES: this is a repeating surface, not a picture. Seamless on all four edges (left continues into right, top into bottom). Even, low-contrast variation across the whole image with no single standout feature: no one big crack, stain, patch, chip or mark that would be noticed repeating from far away. Uniform flat lighting, no vignette, no gradient, no baked shadows, no brighter or darker corner. Standout marks (cracks, stains, patches, posters) are made on the separate decal sheets, so leave them out. REAL SCALE: the image shows exactly 4 m x 4 m of facade of real surface at 2048 x 2048 px, about 512 px per metre. Window 1.2 m x 1.5 m, aluminium frame 6 cm wide, concrete panel seams every 2 m. Shot flat and straight on, no perspective, no people, no real brand names or logos, no text, no letters.",
       "generate": "square 1024x1024",
       "target": {
         "w": 2048,
@@ -518,13 +529,14 @@
       ],
       "priority": 2,
       "batch": "B2-walls",
-      "created": "2026-11-14T15:51:17.983Z"
+      "created": "2026-11-14T15:51:17.983Z",
+      "promptAt": "2026-11-14T16:05:10.558Z"
     },
     {
       "id": "decal_wall_grime_sheet",
       "kind": "decal",
       "intent": "Wall grime sheet: rain streaks, soot, damp at foot, rust runs",
-      "prompt": "stylised realistic game art, real proportions, clean simplified shapes, rich warm colour, soft hazy sunlight, hand-tuned colour, no outlines, lived-in surfaces: soot, water stains, faded paint, patched plaster, dust; honest, not exaggerated. A sheet of 12 separate wall weathering marks, seen straight on, semi-soft edges: three vertical rain streaks running down from a window sill, two black soot clouds, two rising damp bands for the wall foot (wavy upper edge), two rust runs from a bracket, one AC water drip stain, two peeling plaster patches showing brick. Colours: grey-brown, black soot, rust orange, pale damp. Transparent background (PNG with alpha), 2048 x 2048, each item separate with clear space between, no ground, no shadow, no text, no letters, no logos.",
+      "prompt": "stylised realistic game art, real proportions, clean simplified shapes, rich warm colour, soft hazy sunlight, hand-tuned colour, no outlines, lived-in surfaces: soot, water stains, faded paint, patched plaster, dust; honest, not exaggerated. A sheet of 12 separate wall weathering marks, seen straight on, semi-soft edges: three vertical rain streaks running down from a window sill, two black soot clouds, two rising damp bands for the wall foot (wavy upper edge), two rust runs from a bracket, one AC water drip stain, two peeling plaster patches showing brick. Colours: grey-brown, black soot, rust orange, pale damp. Draw every item at real size relative to a 4 m x 4 m sheet of wall (rain streaks 1 to 2 m long and 10 to 30 cm wide, soot clouds 0.8 m, damp bands 1.5 m long, about 500 px per metre). Standout marks like these live on decal sheets because the tiling textures stay plain. Transparent background (PNG with alpha), 2048 x 2048, each item separate with clear space between, no ground, no shadow, no text, no letters, no logos.",
       "generate": "square 1024x1024",
       "target": {
         "w": 2048,
@@ -544,13 +556,14 @@
       ],
       "priority": 1,
       "batch": "B2-walls",
-      "created": "2026-11-14T15:51:18.338Z"
+      "created": "2026-11-14T15:51:18.338Z",
+      "promptAt": "2026-11-14T16:05:12.043Z"
     },
     {
       "id": "decal_wall_peeling_plaster",
       "kind": "decal",
       "intent": "Peeling plaster and exposed brick patches",
-      "prompt": "stylised realistic game art, real proportions, clean simplified shapes, rich warm colour, soft hazy sunlight, hand-tuned colour, no outlines, lived-in surfaces: soot, water stains, faded paint, patched plaster, dust; honest, not exaggerated. A sheet of 6 separate irregular patches where plaster has fallen off a wall exposing old red brick and lime mortar, jagged paint edges in faded mint and ochre. Transparent background (PNG with alpha), 1024 x 1024, each item separate with clear space between, no ground, no shadow, no text, no letters, no logos.",
+      "prompt": "stylised realistic game art, real proportions, clean simplified shapes, rich warm colour, soft hazy sunlight, hand-tuned colour, no outlines, lived-in surfaces: soot, water stains, faded paint, patched plaster, dust; honest, not exaggerated. A sheet of 6 separate irregular patches where plaster has fallen off a wall exposing old red brick and lime mortar, jagged paint edges in faded mint and ochre. Draw every patch at real size, 0.4 to 1.2 m across, about 250 px per metre on this 1024 px sheet; show brick 23 cm x 7.5 cm with 1.5 cm lime joints inside the patches. Standout marks like these live on decal sheets because the tiling textures stay plain. Transparent background (PNG with alpha), 1024 x 1024, each item separate with clear space between, no ground, no shadow, no text, no letters, no logos.",
       "generate": "square 1024x1024",
       "target": {
         "w": 1024,
@@ -570,7 +583,8 @@
       ],
       "priority": 2,
       "batch": "B2-walls",
-      "created": "2026-11-14T15:51:18.626Z"
+      "created": "2026-11-14T15:51:18.626Z",
+      "promptAt": "2026-11-14T16:05:12.243Z"
     },
     {
       "id": "decal_sign_tin_boards",
@@ -706,7 +720,7 @@
       "id": "tex_shutter_rolling_steel",
       "kind": "texture",
       "intent": "Rolling steel shutter, dented, painted green",
-      "prompt": "stylised realistic game art, real proportions, clean simplified shapes, rich warm colour, soft hazy sunlight, hand-tuned colour, no outlines, lived-in surfaces: soot, water stains, faded paint, patched plaster, dust; honest, not exaggerated. A rolling steel shutter seen straight on: horizontal corrugated slats, faded green paint worn to bare metal at edges, dents, rust at the lower rail, a padlock hasp, no lettering. Covers 2 m x 2 m. Photographic quality material, shot flat and straight on, evenly lit, no perspective, no shadows cast across it, no people, no real brand names or logos. Seamless tileable in both directions, 2048 x 2048, no baked shadows, no text, no letters.",
+      "prompt": "stylised realistic game art, real proportions, clean simplified shapes, rich warm colour, soft hazy sunlight, hand-tuned colour, no outlines, lived-in surfaces: soot, water stains, faded paint, patched plaster, dust; honest, not exaggerated. Rolling steel shutter seen straight on: horizontal corrugated slats with a pitch of 8 cm (rounded ridges about 1 cm deep), faded green paint evenly worn at the ridges to bare metal, light even dust. No dents, no rust patch, no padlock, no hasp, no lettering (those are decals). TILEABLE MATERIAL RULES: this is a repeating surface, not a picture. Seamless on all four edges (left continues into right, top into bottom). Even, low-contrast variation across the whole image with no single standout feature: no one big crack, stain, patch, chip or mark that would be noticed repeating from far away. Uniform flat lighting, no vignette, no gradient, no baked shadows, no brighter or darker corner. Standout marks (cracks, stains, patches, posters) are made on the separate decal sheets, so leave them out. REAL SCALE: the image shows exactly 2 m x 2 m of shutter of real surface at 2048 x 2048 px, about 1024 px per metre. Slat pitch 8 cm, about 25 slats in the image. Shot flat and straight on, no perspective, no people, no real brand names or logos, no text, no letters.",
       "generate": "square 1024x1024",
       "target": {
         "w": 2048,
@@ -726,7 +740,8 @@
       ],
       "priority": 2,
       "batch": "B3-signs",
-      "created": "2026-11-14T15:51:20.788Z"
+      "created": "2026-11-14T15:51:20.788Z",
+      "promptAt": "2026-11-14T16:05:10.655Z"
     },
     {
       "id": "decal_goods_sweets_sheet",
@@ -888,7 +903,7 @@
       "id": "tex_interior_sweet",
       "kind": "texture",
       "intent": "Interior-mapping room image: Sweet shop (mithai), day",
-      "prompt": "stylised realistic game art, real proportions, clean simplified shapes, rich warm colour, soft hazy sunlight, hand-tuned colour, no outlines, lived-in surfaces: soot, water stains, faded paint, patched plaster, dust; honest, not exaggerated. A Delhi sweet shop interior: a long glass-fronted counter along the left with steel trays of jalebi, barfi and laddoo, a back wall of glass shelves of boxed sweets and a cash desk with a steel stool, mint green tiled lower walls, cream upper walls with soot, a ceiling fan, a small framed deity picture shelf. Back wall sign says \"Chandni Mithai Ghar\" and \"चाँदनी मिठाई घर\" on a small painted board. A photographic one-point perspective view straight into the room from the shutter line, camera centred at 1.5 m height and exactly centred left to right, the back wall centred and square to the camera, left and right side walls and the ceiling and the floor all visible and mirror-symmetric so a game shader can map it as a box room of about 3 m wide, 2.6 m tall and 4 m deep. Nothing in the extreme foreground, no shutter or door frame in the picture. No people, no real brand names or logos, no readable text except where given. Evenly lit by overhead white tube lights, no hard shadows. 2048 x 2048, square, no vignette, no lens distortion.",
+      "prompt": "stylised realistic game art, real proportions, clean simplified shapes, rich warm colour, soft hazy sunlight, hand-tuned colour, no outlines, lived-in surfaces: soot, water stains, faded paint, patched plaster, dust; honest, not exaggerated. A Delhi sweet shop interior: a long glass-fronted counter along the left with steel trays of jalebi, barfi and laddoo, a back wall of glass shelves of boxed sweets and a cash desk with a steel stool, mint green tiled lower walls, cream upper walls with soot, a ceiling fan, a small framed deity picture shelf. Back wall sign says \"Chandni Mithai Ghar\" and \"चाँदनी मिठाई घर\" on a small painted board. A photographic one-point perspective view straight into the room from the shutter line, camera centred at 1.5 m height and exactly centred left to right, the back wall centred and square to the camera, left and right side walls and the ceiling and the floor all visible and mirror-symmetric so a game shader can map it as a box room of about 3 m wide, 2.6 m tall and 4 m deep. Nothing in the extreme foreground, no shutter or door frame in the picture. No people, no real brand names or logos, no readable text except where given. Evenly lit by overhead white tube lights, no hard shadows. Sharp and in focus from the front to the back wall: no motion blur, no depth of field, no fisheye, no wide-angle stretching. 2048 x 2048, square, no vignette, no lens distortion.",
       "generate": "square 1024x1024",
       "target": {
         "w": 2048,
@@ -908,13 +923,14 @@
       ],
       "priority": 1,
       "batch": "B1b-interiors",
-      "created": "2026-11-14T15:52:18.472Z"
+      "created": "2026-11-14T15:52:18.472Z",
+      "promptAt": "2026-11-14T16:05:12.388Z"
     },
     {
       "id": "tex_interior_sweet_night",
       "kind": "texture",
       "intent": "Interior-mapping room image: Sweet shop (mithai), night variant",
-      "prompt": "stylised realistic game art, real proportions, clean simplified shapes, rich warm colour, soft hazy sunlight, hand-tuned colour, no outlines, lived-in surfaces: soot, water stains, faded paint, patched plaster, dust; honest, not exaggerated. A Delhi sweet shop interior: a long glass-fronted counter along the left with steel trays of jalebi, barfi and laddoo, a back wall of glass shelves of boxed sweets and a cash desk with a steel stool, mint green tiled lower walls, cream upper walls with soot, a ceiling fan, a small framed deity picture shelf. Back wall sign says \"Chandni Mithai Ghar\" and \"चाँदनी मिठाई घर\" on a small painted board. A photographic one-point perspective view straight into the room from the shutter line, camera centred at 1.5 m height and exactly centred left to right, the back wall centred and square to the camera, left and right side walls and the ceiling and the floor all visible and mirror-symmetric so a game shader can map it as a box room of about 3 m wide, 2.6 m tall and 4 m deep. Nothing in the extreme foreground, no shutter or door frame in the picture. No people, no real brand names or logos, no readable text except where given. Same room at night: warm yellow tube light and a couple of warm bulbs, deeper shadows in the corners, the warm glow strong, no daylight. 2048 x 2048, square, no vignette, no lens distortion.",
+      "prompt": "stylised realistic game art, real proportions, clean simplified shapes, rich warm colour, soft hazy sunlight, hand-tuned colour, no outlines, lived-in surfaces: soot, water stains, faded paint, patched plaster, dust; honest, not exaggerated. A Delhi sweet shop interior: a long glass-fronted counter along the left with steel trays of jalebi, barfi and laddoo, a back wall of glass shelves of boxed sweets and a cash desk with a steel stool, mint green tiled lower walls, cream upper walls with soot, a ceiling fan, a small framed deity picture shelf. Back wall sign says \"Chandni Mithai Ghar\" and \"चाँदनी मिठाई घर\" on a small painted board. A photographic one-point perspective view straight into the room from the shutter line, camera centred at 1.5 m height and exactly centred left to right, the back wall centred and square to the camera, left and right side walls and the ceiling and the floor all visible and mirror-symmetric so a game shader can map it as a box room of about 3 m wide, 2.6 m tall and 4 m deep. Nothing in the extreme foreground, no shutter or door frame in the picture. No people, no real brand names or logos, no readable text except where given. Same room at night: warm yellow tube light and a couple of warm bulbs, deeper shadows in the corners, the warm glow strong, no daylight. Sharp and in focus from the front to the back wall: no motion blur, no depth of field, no fisheye, no wide-angle stretching. 2048 x 2048, square, no vignette, no lens distortion.",
       "generate": "square 1024x1024",
       "target": {
         "w": 2048,
@@ -934,13 +950,14 @@
       ],
       "priority": 2,
       "batch": "B1b-interiors-night",
-      "created": "2026-11-14T15:52:18.624Z"
+      "created": "2026-11-14T15:52:18.624Z",
+      "promptAt": "2026-11-14T16:05:12.514Z"
     },
     {
       "id": "tex_interior_cloth",
       "kind": "texture",
       "intent": "Interior-mapping room image: Cloth and saree shop, day",
-      "prompt": "stylised realistic game art, real proportions, clean simplified shapes, rich warm colour, soft hazy sunlight, hand-tuned colour, no outlines, lived-in surfaces: soot, water stains, faded paint, patched plaster, dust; honest, not exaggerated. An Old Delhi cloth shop interior: a white cotton mattress covered floor seating area (gaddi) in the middle, walls of floor to ceiling shelves packed with stacked fabric rolls and folded sarees in many colours, a low wooden desk, bolsters, a ceiling fan and tube lights. Small board on the back wall: \"Shree Ganga Saree Bhandar\" and \"श्री गंगा साड़ी भंडार\". A photographic one-point perspective view straight into the room from the shutter line, camera centred at 1.5 m height and exactly centred left to right, the back wall centred and square to the camera, left and right side walls and the ceiling and the floor all visible and mirror-symmetric so a game shader can map it as a box room of about 3 m wide, 2.6 m tall and 4 m deep. Nothing in the extreme foreground, no shutter or door frame in the picture. No people, no real brand names or logos, no readable text except where given. Evenly lit by overhead white tube lights, no hard shadows. 2048 x 2048, square, no vignette, no lens distortion.",
+      "prompt": "stylised realistic game art, real proportions, clean simplified shapes, rich warm colour, soft hazy sunlight, hand-tuned colour, no outlines, lived-in surfaces: soot, water stains, faded paint, patched plaster, dust; honest, not exaggerated. An Old Delhi cloth shop interior: a white cotton mattress covered floor seating area (gaddi) in the middle, walls of floor to ceiling shelves packed with stacked fabric rolls and folded sarees in many colours, a low wooden desk, bolsters, a ceiling fan and tube lights. Small board on the back wall: \"Shree Ganga Saree Bhandar\" and \"श्री गंगा साड़ी भंडार\". A photographic one-point perspective view straight into the room from the shutter line, camera centred at 1.5 m height and exactly centred left to right, the back wall centred and square to the camera, left and right side walls and the ceiling and the floor all visible and mirror-symmetric so a game shader can map it as a box room of about 3 m wide, 2.6 m tall and 4 m deep. Nothing in the extreme foreground, no shutter or door frame in the picture. No people, no real brand names or logos, no readable text except where given. Evenly lit by overhead white tube lights, no hard shadows. Sharp and in focus from the front to the back wall: no motion blur, no depth of field, no fisheye, no wide-angle stretching. 2048 x 2048, square, no vignette, no lens distortion.",
       "generate": "square 1024x1024",
       "target": {
         "w": 2048,
@@ -960,13 +977,14 @@
       ],
       "priority": 1,
       "batch": "B1b-interiors",
-      "created": "2026-11-14T15:52:18.789Z"
+      "created": "2026-11-14T15:52:18.789Z",
+      "promptAt": "2026-11-14T16:05:12.786Z"
     },
     {
       "id": "tex_interior_cloth_night",
       "kind": "texture",
       "intent": "Interior-mapping room image: Cloth and saree shop, night variant",
-      "prompt": "stylised realistic game art, real proportions, clean simplified shapes, rich warm colour, soft hazy sunlight, hand-tuned colour, no outlines, lived-in surfaces: soot, water stains, faded paint, patched plaster, dust; honest, not exaggerated. An Old Delhi cloth shop interior: a white cotton mattress covered floor seating area (gaddi) in the middle, walls of floor to ceiling shelves packed with stacked fabric rolls and folded sarees in many colours, a low wooden desk, bolsters, a ceiling fan and tube lights. Small board on the back wall: \"Shree Ganga Saree Bhandar\" and \"श्री गंगा साड़ी भंडार\". A photographic one-point perspective view straight into the room from the shutter line, camera centred at 1.5 m height and exactly centred left to right, the back wall centred and square to the camera, left and right side walls and the ceiling and the floor all visible and mirror-symmetric so a game shader can map it as a box room of about 3 m wide, 2.6 m tall and 4 m deep. Nothing in the extreme foreground, no shutter or door frame in the picture. No people, no real brand names or logos, no readable text except where given. Same room at night: warm yellow tube light and a couple of warm bulbs, deeper shadows in the corners, the warm glow strong, no daylight. 2048 x 2048, square, no vignette, no lens distortion.",
+      "prompt": "stylised realistic game art, real proportions, clean simplified shapes, rich warm colour, soft hazy sunlight, hand-tuned colour, no outlines, lived-in surfaces: soot, water stains, faded paint, patched plaster, dust; honest, not exaggerated. An Old Delhi cloth shop interior: a white cotton mattress covered floor seating area (gaddi) in the middle, walls of floor to ceiling shelves packed with stacked fabric rolls and folded sarees in many colours, a low wooden desk, bolsters, a ceiling fan and tube lights. Small board on the back wall: \"Shree Ganga Saree Bhandar\" and \"श्री गंगा साड़ी भंडार\". A photographic one-point perspective view straight into the room from the shutter line, camera centred at 1.5 m height and exactly centred left to right, the back wall centred and square to the camera, left and right side walls and the ceiling and the floor all visible and mirror-symmetric so a game shader can map it as a box room of about 3 m wide, 2.6 m tall and 4 m deep. Nothing in the extreme foreground, no shutter or door frame in the picture. No people, no real brand names or logos, no readable text except where given. Same room at night: warm yellow tube light and a couple of warm bulbs, deeper shadows in the corners, the warm glow strong, no daylight. Sharp and in focus from the front to the back wall: no motion blur, no depth of field, no fisheye, no wide-angle stretching. 2048 x 2048, square, no vignette, no lens distortion.",
       "generate": "square 1024x1024",
       "target": {
         "w": 2048,
@@ -986,13 +1004,14 @@
       ],
       "priority": 2,
       "batch": "B1b-interiors-night",
-      "created": "2026-11-14T15:52:19.047Z"
+      "created": "2026-11-14T15:52:19.047Z",
+      "promptAt": "2026-11-14T16:05:12.978Z"
     },
     {
       "id": "tex_interior_dryfruit",
       "kind": "texture",
       "intent": "Interior-mapping room image: Dry fruit and spice shop, day",
-      "prompt": "stylised realistic game art, real proportions, clean simplified shapes, rich warm colour, soft hazy sunlight, hand-tuned colour, no outlines, lived-in surfaces: soot, water stains, faded paint, patched plaster, dust; honest, not exaggerated. A Khari Baoli style shop interior: open jute sacks of almonds, cashews, raisins, red chillies and spices lined along both side walls and across the floor front, wooden shelves of jars and packets on the back wall, a hanging brass weighing scale, dusty beams, bare tube lights, a stained and spice-yellowed wall. A photographic one-point perspective view straight into the room from the shutter line, camera centred at 1.5 m height and exactly centred left to right, the back wall centred and square to the camera, left and right side walls and the ceiling and the floor all visible and mirror-symmetric so a game shader can map it as a box room of about 3 m wide, 2.6 m tall and 4 m deep. Nothing in the extreme foreground, no shutter or door frame in the picture. No people, no real brand names or logos, no readable text except where given. Evenly lit by overhead white tube lights, no hard shadows. 2048 x 2048, square, no vignette, no lens distortion.",
+      "prompt": "stylised realistic game art, real proportions, clean simplified shapes, rich warm colour, soft hazy sunlight, hand-tuned colour, no outlines, lived-in surfaces: soot, water stains, faded paint, patched plaster, dust; honest, not exaggerated. A Khari Baoli style shop interior: open jute sacks of almonds, cashews, raisins, red chillies and spices lined along both side walls and across the floor front, wooden shelves of jars and packets on the back wall, a hanging brass weighing scale, dusty beams, bare tube lights, a stained and spice-yellowed wall. A photographic one-point perspective view straight into the room from the shutter line, camera centred at 1.5 m height and exactly centred left to right, the back wall centred and square to the camera, left and right side walls and the ceiling and the floor all visible and mirror-symmetric so a game shader can map it as a box room of about 3 m wide, 2.6 m tall and 4 m deep. Nothing in the extreme foreground, no shutter or door frame in the picture. No people, no real brand names or logos, no readable text except where given. Evenly lit by overhead white tube lights, no hard shadows. Sharp and in focus from the front to the back wall: no motion blur, no depth of field, no fisheye, no wide-angle stretching. 2048 x 2048, square, no vignette, no lens distortion.",
       "generate": "square 1024x1024",
       "target": {
         "w": 2048,
@@ -1012,13 +1031,14 @@
       ],
       "priority": 1,
       "batch": "B1b-interiors",
-      "created": "2026-11-14T15:52:19.188Z"
+      "created": "2026-11-14T15:52:19.188Z",
+      "promptAt": "2026-11-14T16:05:13.115Z"
     },
     {
       "id": "tex_interior_dryfruit_night",
       "kind": "texture",
       "intent": "Interior-mapping room image: Dry fruit and spice shop, night variant",
-      "prompt": "stylised realistic game art, real proportions, clean simplified shapes, rich warm colour, soft hazy sunlight, hand-tuned colour, no outlines, lived-in surfaces: soot, water stains, faded paint, patched plaster, dust; honest, not exaggerated. A Khari Baoli style shop interior: open jute sacks of almonds, cashews, raisins, red chillies and spices lined along both side walls and across the floor front, wooden shelves of jars and packets on the back wall, a hanging brass weighing scale, dusty beams, bare tube lights, a stained and spice-yellowed wall. A photographic one-point perspective view straight into the room from the shutter line, camera centred at 1.5 m height and exactly centred left to right, the back wall centred and square to the camera, left and right side walls and the ceiling and the floor all visible and mirror-symmetric so a game shader can map it as a box room of about 3 m wide, 2.6 m tall and 4 m deep. Nothing in the extreme foreground, no shutter or door frame in the picture. No people, no real brand names or logos, no readable text except where given. Same room at night: warm yellow tube light and a couple of warm bulbs, deeper shadows in the corners, the warm glow strong, no daylight. 2048 x 2048, square, no vignette, no lens distortion.",
+      "prompt": "stylised realistic game art, real proportions, clean simplified shapes, rich warm colour, soft hazy sunlight, hand-tuned colour, no outlines, lived-in surfaces: soot, water stains, faded paint, patched plaster, dust; honest, not exaggerated. A Khari Baoli style shop interior: open jute sacks of almonds, cashews, raisins, red chillies and spices lined along both side walls and across the floor front, wooden shelves of jars and packets on the back wall, a hanging brass weighing scale, dusty beams, bare tube lights, a stained and spice-yellowed wall. A photographic one-point perspective view straight into the room from the shutter line, camera centred at 1.5 m height and exactly centred left to right, the back wall centred and square to the camera, left and right side walls and the ceiling and the floor all visible and mirror-symmetric so a game shader can map it as a box room of about 3 m wide, 2.6 m tall and 4 m deep. Nothing in the extreme foreground, no shutter or door frame in the picture. No people, no real brand names or logos, no readable text except where given. Same room at night: warm yellow tube light and a couple of warm bulbs, deeper shadows in the corners, the warm glow strong, no daylight. Sharp and in focus from the front to the back wall: no motion blur, no depth of field, no fisheye, no wide-angle stretching. 2048 x 2048, square, no vignette, no lens distortion.",
       "generate": "square 1024x1024",
       "target": {
         "w": 2048,
@@ -1038,13 +1058,14 @@
       ],
       "priority": 2,
       "batch": "B1b-interiors-night",
-      "created": "2026-11-14T15:52:19.295Z"
+      "created": "2026-11-14T15:52:19.295Z",
+      "promptAt": "2026-11-14T16:05:13.396Z"
     },
     {
       "id": "tex_interior_utensils",
       "kind": "texture",
       "intent": "Interior-mapping room image: Steel utensils shop, day",
-      "prompt": "stylised realistic game art, real proportions, clean simplified shapes, rich warm colour, soft hazy sunlight, hand-tuned colour, no outlines, lived-in surfaces: soot, water stains, faded paint, patched plaster, dust; honest, not exaggerated. A utensil shop interior: floor to ceiling shelves of stacked steel thalis, katoris, dabbas, brass pots and pressure cookers on all three walls, hanging ladles from the ceiling rail, a steel counter on the left with a scale, bare tube lights reflecting on metal. A photographic one-point perspective view straight into the room from the shutter line, camera centred at 1.5 m height and exactly centred left to right, the back wall centred and square to the camera, left and right side walls and the ceiling and the floor all visible and mirror-symmetric so a game shader can map it as a box room of about 3 m wide, 2.6 m tall and 4 m deep. Nothing in the extreme foreground, no shutter or door frame in the picture. No people, no real brand names or logos, no readable text except where given. Evenly lit by overhead white tube lights, no hard shadows. 2048 x 2048, square, no vignette, no lens distortion.",
+      "prompt": "stylised realistic game art, real proportions, clean simplified shapes, rich warm colour, soft hazy sunlight, hand-tuned colour, no outlines, lived-in surfaces: soot, water stains, faded paint, patched plaster, dust; honest, not exaggerated. A utensil shop interior: floor to ceiling shelves of stacked steel thalis, katoris, dabbas, brass pots and pressure cookers on all three walls, hanging ladles from the ceiling rail, a steel counter on the left with a scale, bare tube lights reflecting on metal. A photographic one-point perspective view straight into the room from the shutter line, camera centred at 1.5 m height and exactly centred left to right, the back wall centred and square to the camera, left and right side walls and the ceiling and the floor all visible and mirror-symmetric so a game shader can map it as a box room of about 3 m wide, 2.6 m tall and 4 m deep. Nothing in the extreme foreground, no shutter or door frame in the picture. No people, no real brand names or logos, no readable text except where given. Evenly lit by overhead white tube lights, no hard shadows. Sharp and in focus from the front to the back wall: no motion blur, no depth of field, no fisheye, no wide-angle stretching. 2048 x 2048, square, no vignette, no lens distortion.",
       "generate": "square 1024x1024",
       "target": {
         "w": 2048,
@@ -1064,13 +1085,14 @@
       ],
       "priority": 1,
       "batch": "B1b-interiors",
-      "created": "2026-11-14T15:52:19.430Z"
+      "created": "2026-11-14T15:52:19.430Z",
+      "promptAt": "2026-11-14T16:05:13.786Z"
     },
     {
       "id": "tex_interior_utensils_night",
       "kind": "texture",
       "intent": "Interior-mapping room image: Steel utensils shop, night variant",
-      "prompt": "stylised realistic game art, real proportions, clean simplified shapes, rich warm colour, soft hazy sunlight, hand-tuned colour, no outlines, lived-in surfaces: soot, water stains, faded paint, patched plaster, dust; honest, not exaggerated. A utensil shop interior: floor to ceiling shelves of stacked steel thalis, katoris, dabbas, brass pots and pressure cookers on all three walls, hanging ladles from the ceiling rail, a steel counter on the left with a scale, bare tube lights reflecting on metal. A photographic one-point perspective view straight into the room from the shutter line, camera centred at 1.5 m height and exactly centred left to right, the back wall centred and square to the camera, left and right side walls and the ceiling and the floor all visible and mirror-symmetric so a game shader can map it as a box room of about 3 m wide, 2.6 m tall and 4 m deep. Nothing in the extreme foreground, no shutter or door frame in the picture. No people, no real brand names or logos, no readable text except where given. Same room at night: warm yellow tube light and a couple of warm bulbs, deeper shadows in the corners, the warm glow strong, no daylight. 2048 x 2048, square, no vignette, no lens distortion.",
+      "prompt": "stylised realistic game art, real proportions, clean simplified shapes, rich warm colour, soft hazy sunlight, hand-tuned colour, no outlines, lived-in surfaces: soot, water stains, faded paint, patched plaster, dust; honest, not exaggerated. A utensil shop interior: floor to ceiling shelves of stacked steel thalis, katoris, dabbas, brass pots and pressure cookers on all three walls, hanging ladles from the ceiling rail, a steel counter on the left with a scale, bare tube lights reflecting on metal. A photographic one-point perspective view straight into the room from the shutter line, camera centred at 1.5 m height and exactly centred left to right, the back wall centred and square to the camera, left and right side walls and the ceiling and the floor all visible and mirror-symmetric so a game shader can map it as a box room of about 3 m wide, 2.6 m tall and 4 m deep. Nothing in the extreme foreground, no shutter or door frame in the picture. No people, no real brand names or logos, no readable text except where given. Same room at night: warm yellow tube light and a couple of warm bulbs, deeper shadows in the corners, the warm glow strong, no daylight. Sharp and in focus from the front to the back wall: no motion blur, no depth of field, no fisheye, no wide-angle stretching. 2048 x 2048, square, no vignette, no lens distortion.",
       "generate": "square 1024x1024",
       "target": {
         "w": 2048,
@@ -1090,13 +1112,14 @@
       ],
       "priority": 2,
       "batch": "B1b-interiors-night",
-      "created": "2026-11-14T15:52:19.798Z"
+      "created": "2026-11-14T15:52:19.798Z",
+      "promptAt": "2026-11-14T16:05:13.938Z"
     },
     {
       "id": "tex_interior_hardware",
       "kind": "texture",
       "intent": "Interior-mapping room image: Hardware and machine parts shop (GB Road), day",
-      "prompt": "stylised realistic game art, real proportions, clean simplified shapes, rich warm colour, soft hazy sunlight, hand-tuned colour, no outlines, lived-in surfaces: soot, water stains, faded paint, patched plaster, dust; honest, not exaggerated. A GB Road hardware shop interior: dark steel shelving on all three walls full of cardboard boxes, bearings, pipes and fittings, hanging chains and coils of wire, a worn wooden counter with a heavy scale and an old ledger, oil-stained floor, peeling green lower wall paint, bare tube lights, one calendar on the back wall with no readable text. A photographic one-point perspective view straight into the room from the shutter line, camera centred at 1.5 m height and exactly centred left to right, the back wall centred and square to the camera, left and right side walls and the ceiling and the floor all visible and mirror-symmetric so a game shader can map it as a box room of about 3 m wide, 2.6 m tall and 4 m deep. Nothing in the extreme foreground, no shutter or door frame in the picture. No people, no real brand names or logos, no readable text except where given. Evenly lit by overhead white tube lights, no hard shadows. 2048 x 2048, square, no vignette, no lens distortion.",
+      "prompt": "stylised realistic game art, real proportions, clean simplified shapes, rich warm colour, soft hazy sunlight, hand-tuned colour, no outlines, lived-in surfaces: soot, water stains, faded paint, patched plaster, dust; honest, not exaggerated. A GB Road hardware shop interior: dark steel shelving on all three walls full of cardboard boxes, bearings, pipes and fittings, hanging chains and coils of wire, a worn wooden counter with a heavy scale and an old ledger, oil-stained floor, peeling green lower wall paint, bare tube lights, one calendar on the back wall with no readable text. A photographic one-point perspective view straight into the room from the shutter line, camera centred at 1.5 m height and exactly centred left to right, the back wall centred and square to the camera, left and right side walls and the ceiling and the floor all visible and mirror-symmetric so a game shader can map it as a box room of about 3 m wide, 2.6 m tall and 4 m deep. Nothing in the extreme foreground, no shutter or door frame in the picture. No people, no real brand names or logos, no readable text except where given. Evenly lit by overhead white tube lights, no hard shadows. Sharp and in focus from the front to the back wall: no motion blur, no depth of field, no fisheye, no wide-angle stretching. 2048 x 2048, square, no vignette, no lens distortion.",
       "generate": "square 1024x1024",
       "target": {
         "w": 2048,
@@ -1116,13 +1139,14 @@
       ],
       "priority": 1,
       "batch": "B1b-interiors",
-      "created": "2026-11-14T15:52:19.956Z"
+      "created": "2026-11-14T15:52:19.956Z",
+      "promptAt": "2026-11-14T16:05:14.048Z"
     },
     {
       "id": "tex_interior_hardware_night",
       "kind": "texture",
       "intent": "Interior-mapping room image: Hardware and machine parts shop (GB Road), night variant",
-      "prompt": "stylised realistic game art, real proportions, clean simplified shapes, rich warm colour, soft hazy sunlight, hand-tuned colour, no outlines, lived-in surfaces: soot, water stains, faded paint, patched plaster, dust; honest, not exaggerated. A GB Road hardware shop interior: dark steel shelving on all three walls full of cardboard boxes, bearings, pipes and fittings, hanging chains and coils of wire, a worn wooden counter with a heavy scale and an old ledger, oil-stained floor, peeling green lower wall paint, bare tube lights, one calendar on the back wall with no readable text. A photographic one-point perspective view straight into the room from the shutter line, camera centred at 1.5 m height and exactly centred left to right, the back wall centred and square to the camera, left and right side walls and the ceiling and the floor all visible and mirror-symmetric so a game shader can map it as a box room of about 3 m wide, 2.6 m tall and 4 m deep. Nothing in the extreme foreground, no shutter or door frame in the picture. No people, no real brand names or logos, no readable text except where given. Same room at night: warm yellow tube light and a couple of warm bulbs, deeper shadows in the corners, the warm glow strong, no daylight. 2048 x 2048, square, no vignette, no lens distortion.",
+      "prompt": "stylised realistic game art, real proportions, clean simplified shapes, rich warm colour, soft hazy sunlight, hand-tuned colour, no outlines, lived-in surfaces: soot, water stains, faded paint, patched plaster, dust; honest, not exaggerated. A GB Road hardware shop interior: dark steel shelving on all three walls full of cardboard boxes, bearings, pipes and fittings, hanging chains and coils of wire, a worn wooden counter with a heavy scale and an old ledger, oil-stained floor, peeling green lower wall paint, bare tube lights, one calendar on the back wall with no readable text. A photographic one-point perspective view straight into the room from the shutter line, camera centred at 1.5 m height and exactly centred left to right, the back wall centred and square to the camera, left and right side walls and the ceiling and the floor all visible and mirror-symmetric so a game shader can map it as a box room of about 3 m wide, 2.6 m tall and 4 m deep. Nothing in the extreme foreground, no shutter or door frame in the picture. No people, no real brand names or logos, no readable text except where given. Same room at night: warm yellow tube light and a couple of warm bulbs, deeper shadows in the corners, the warm glow strong, no daylight. Sharp and in focus from the front to the back wall: no motion blur, no depth of field, no fisheye, no wide-angle stretching. 2048 x 2048, square, no vignette, no lens distortion.",
       "generate": "square 1024x1024",
       "target": {
         "w": 2048,
@@ -1142,13 +1166,14 @@
       ],
       "priority": 2,
       "batch": "B1b-interiors-night",
-      "created": "2026-11-14T15:52:20.080Z"
+      "created": "2026-11-14T15:52:20.080Z",
+      "promptAt": "2026-11-14T16:05:14.243Z"
     },
     {
       "id": "tex_interior_phones",
       "kind": "texture",
       "intent": "Interior-mapping room image: Phone and electronics shop, day",
-      "prompt": "stylised realistic game art, real proportions, clean simplified shapes, rich warm colour, soft hazy sunlight, hand-tuned colour, no outlines, lived-in surfaces: soot, water stains, faded paint, patched plaster, dust; honest, not exaggerated. A small phone and electronics shop interior: glass counters on the left and right with generic phones, chargers and earphones, a pegboard back wall of plain phone covers, a few wired shelves of speakers and cables, a white laminate ceiling with LED panels and a split AC unit on the side wall. No brand names. A photographic one-point perspective view straight into the room from the shutter line, camera centred at 1.5 m height and exactly centred left to right, the back wall centred and square to the camera, left and right side walls and the ceiling and the floor all visible and mirror-symmetric so a game shader can map it as a box room of about 3 m wide, 2.6 m tall and 4 m deep. Nothing in the extreme foreground, no shutter or door frame in the picture. No people, no real brand names or logos, no readable text except where given. Evenly lit by overhead white tube lights, no hard shadows. 2048 x 2048, square, no vignette, no lens distortion.",
+      "prompt": "stylised realistic game art, real proportions, clean simplified shapes, rich warm colour, soft hazy sunlight, hand-tuned colour, no outlines, lived-in surfaces: soot, water stains, faded paint, patched plaster, dust; honest, not exaggerated. A small phone and electronics shop interior: glass counters on the left and right with generic phones, chargers and earphones, a pegboard back wall of plain phone covers, a few wired shelves of speakers and cables, a white laminate ceiling with LED panels and a split AC unit on the side wall. No brand names. A photographic one-point perspective view straight into the room from the shutter line, camera centred at 1.5 m height and exactly centred left to right, the back wall centred and square to the camera, left and right side walls and the ceiling and the floor all visible and mirror-symmetric so a game shader can map it as a box room of about 3 m wide, 2.6 m tall and 4 m deep. Nothing in the extreme foreground, no shutter or door frame in the picture. No people, no real brand names or logos, no readable text except where given. Evenly lit by overhead white tube lights, no hard shadows. Sharp and in focus from the front to the back wall: no motion blur, no depth of field, no fisheye, no wide-angle stretching. 2048 x 2048, square, no vignette, no lens distortion.",
       "generate": "square 1024x1024",
       "target": {
         "w": 2048,
@@ -1168,13 +1193,14 @@
       ],
       "priority": 1,
       "batch": "B1b-interiors",
-      "created": "2026-11-14T15:52:20.171Z"
+      "created": "2026-11-14T15:52:20.171Z",
+      "promptAt": "2026-11-14T16:05:14.334Z"
     },
     {
       "id": "tex_interior_phones_night",
       "kind": "texture",
       "intent": "Interior-mapping room image: Phone and electronics shop, night variant",
-      "prompt": "stylised realistic game art, real proportions, clean simplified shapes, rich warm colour, soft hazy sunlight, hand-tuned colour, no outlines, lived-in surfaces: soot, water stains, faded paint, patched plaster, dust; honest, not exaggerated. A small phone and electronics shop interior: glass counters on the left and right with generic phones, chargers and earphones, a pegboard back wall of plain phone covers, a few wired shelves of speakers and cables, a white laminate ceiling with LED panels and a split AC unit on the side wall. No brand names. A photographic one-point perspective view straight into the room from the shutter line, camera centred at 1.5 m height and exactly centred left to right, the back wall centred and square to the camera, left and right side walls and the ceiling and the floor all visible and mirror-symmetric so a game shader can map it as a box room of about 3 m wide, 2.6 m tall and 4 m deep. Nothing in the extreme foreground, no shutter or door frame in the picture. No people, no real brand names or logos, no readable text except where given. Same room at night: warm yellow tube light and a couple of warm bulbs, deeper shadows in the corners, the warm glow strong, no daylight. 2048 x 2048, square, no vignette, no lens distortion.",
+      "prompt": "stylised realistic game art, real proportions, clean simplified shapes, rich warm colour, soft hazy sunlight, hand-tuned colour, no outlines, lived-in surfaces: soot, water stains, faded paint, patched plaster, dust; honest, not exaggerated. A small phone and electronics shop interior: glass counters on the left and right with generic phones, chargers and earphones, a pegboard back wall of plain phone covers, a few wired shelves of speakers and cables, a white laminate ceiling with LED panels and a split AC unit on the side wall. No brand names. A photographic one-point perspective view straight into the room from the shutter line, camera centred at 1.5 m height and exactly centred left to right, the back wall centred and square to the camera, left and right side walls and the ceiling and the floor all visible and mirror-symmetric so a game shader can map it as a box room of about 3 m wide, 2.6 m tall and 4 m deep. Nothing in the extreme foreground, no shutter or door frame in the picture. No people, no real brand names or logos, no readable text except where given. Same room at night: warm yellow tube light and a couple of warm bulbs, deeper shadows in the corners, the warm glow strong, no daylight. Sharp and in focus from the front to the back wall: no motion blur, no depth of field, no fisheye, no wide-angle stretching. 2048 x 2048, square, no vignette, no lens distortion.",
       "generate": "square 1024x1024",
       "target": {
         "w": 2048,
@@ -1194,13 +1220,14 @@
       ],
       "priority": 2,
       "batch": "B1b-interiors-night",
-      "created": "2026-11-14T15:52:20.293Z"
+      "created": "2026-11-14T15:52:20.293Z",
+      "promptAt": "2026-11-14T16:05:14.405Z"
     },
     {
       "id": "tex_interior_chemist",
       "kind": "texture",
       "intent": "Interior-mapping room image: Chemist shop, day",
-      "prompt": "stylised realistic game art, real proportions, clean simplified shapes, rich warm colour, soft hazy sunlight, hand-tuned colour, no outlines, lived-in surfaces: soot, water stains, faded paint, patched plaster, dust; honest, not exaggerated. A Delhi chemist shop interior: white wall shelves of generic medicine boxes in neat rows, a glass counter with a small cash desk, a green cross sign painted on the back wall with no text, a small fridge, tube lights and a ceiling fan, a stool. A photographic one-point perspective view straight into the room from the shutter line, camera centred at 1.5 m height and exactly centred left to right, the back wall centred and square to the camera, left and right side walls and the ceiling and the floor all visible and mirror-symmetric so a game shader can map it as a box room of about 3 m wide, 2.6 m tall and 4 m deep. Nothing in the extreme foreground, no shutter or door frame in the picture. No people, no real brand names or logos, no readable text except where given. Evenly lit by overhead white tube lights, no hard shadows. 2048 x 2048, square, no vignette, no lens distortion.",
+      "prompt": "stylised realistic game art, real proportions, clean simplified shapes, rich warm colour, soft hazy sunlight, hand-tuned colour, no outlines, lived-in surfaces: soot, water stains, faded paint, patched plaster, dust; honest, not exaggerated. A Delhi chemist shop interior: white wall shelves of generic medicine boxes in neat rows, a glass counter with a small cash desk, a green cross sign painted on the back wall with no text, a small fridge, tube lights and a ceiling fan, a stool. A photographic one-point perspective view straight into the room from the shutter line, camera centred at 1.5 m height and exactly centred left to right, the back wall centred and square to the camera, left and right side walls and the ceiling and the floor all visible and mirror-symmetric so a game shader can map it as a box room of about 3 m wide, 2.6 m tall and 4 m deep. Nothing in the extreme foreground, no shutter or door frame in the picture. No people, no real brand names or logos, no readable text except where given. Evenly lit by overhead white tube lights, no hard shadows. Sharp and in focus from the front to the back wall: no motion blur, no depth of field, no fisheye, no wide-angle stretching. 2048 x 2048, square, no vignette, no lens distortion.",
       "generate": "square 1024x1024",
       "target": {
         "w": 2048,
@@ -1220,13 +1247,14 @@
       ],
       "priority": 1,
       "batch": "B1b-interiors",
-      "created": "2026-11-14T15:52:20.402Z"
+      "created": "2026-11-14T15:52:20.402Z",
+      "promptAt": "2026-11-14T16:05:14.470Z"
     },
     {
       "id": "tex_interior_chemist_night",
       "kind": "texture",
       "intent": "Interior-mapping room image: Chemist shop, night variant",
-      "prompt": "stylised realistic game art, real proportions, clean simplified shapes, rich warm colour, soft hazy sunlight, hand-tuned colour, no outlines, lived-in surfaces: soot, water stains, faded paint, patched plaster, dust; honest, not exaggerated. A Delhi chemist shop interior: white wall shelves of generic medicine boxes in neat rows, a glass counter with a small cash desk, a green cross sign painted on the back wall with no text, a small fridge, tube lights and a ceiling fan, a stool. A photographic one-point perspective view straight into the room from the shutter line, camera centred at 1.5 m height and exactly centred left to right, the back wall centred and square to the camera, left and right side walls and the ceiling and the floor all visible and mirror-symmetric so a game shader can map it as a box room of about 3 m wide, 2.6 m tall and 4 m deep. Nothing in the extreme foreground, no shutter or door frame in the picture. No people, no real brand names or logos, no readable text except where given. Same room at night: warm yellow tube light and a couple of warm bulbs, deeper shadows in the corners, the warm glow strong, no daylight. 2048 x 2048, square, no vignette, no lens distortion.",
+      "prompt": "stylised realistic game art, real proportions, clean simplified shapes, rich warm colour, soft hazy sunlight, hand-tuned colour, no outlines, lived-in surfaces: soot, water stains, faded paint, patched plaster, dust; honest, not exaggerated. A Delhi chemist shop interior: white wall shelves of generic medicine boxes in neat rows, a glass counter with a small cash desk, a green cross sign painted on the back wall with no text, a small fridge, tube lights and a ceiling fan, a stool. A photographic one-point perspective view straight into the room from the shutter line, camera centred at 1.5 m height and exactly centred left to right, the back wall centred and square to the camera, left and right side walls and the ceiling and the floor all visible and mirror-symmetric so a game shader can map it as a box room of about 3 m wide, 2.6 m tall and 4 m deep. Nothing in the extreme foreground, no shutter or door frame in the picture. No people, no real brand names or logos, no readable text except where given. Same room at night: warm yellow tube light and a couple of warm bulbs, deeper shadows in the corners, the warm glow strong, no daylight. Sharp and in focus from the front to the back wall: no motion blur, no depth of field, no fisheye, no wide-angle stretching. 2048 x 2048, square, no vignette, no lens distortion.",
       "generate": "square 1024x1024",
       "target": {
         "w": 2048,
@@ -1246,13 +1274,14 @@
       ],
       "priority": 2,
       "batch": "B1b-interiors-night",
-      "created": "2026-11-14T15:52:20.524Z"
+      "created": "2026-11-14T15:52:20.524Z",
+      "promptAt": "2026-11-14T16:05:14.563Z"
     },
     {
       "id": "tex_interior_tea_stall",
       "kind": "texture",
       "intent": "Interior-mapping room image: Tea and snack stall, day",
-      "prompt": "stylised realistic game art, real proportions, clean simplified shapes, rich warm colour, soft hazy sunlight, hand-tuned colour, no outlines, lived-in surfaces: soot, water stains, faded paint, patched plaster, dust; honest, not exaggerated. A tiny Delhi tea and snack stall interior: a steel counter in front with a gas stove and kettle, glass jars of biscuits and rusk, plastic stools, soot-black wall behind the stove, a shelf of glass tumblers, a hanging bunch of bananas, a bare bulb and a tube light. A photographic one-point perspective view straight into the room from the shutter line, camera centred at 1.5 m height and exactly centred left to right, the back wall centred and square to the camera, left and right side walls and the ceiling and the floor all visible and mirror-symmetric so a game shader can map it as a box room of about 3 m wide, 2.6 m tall and 4 m deep. Nothing in the extreme foreground, no shutter or door frame in the picture. No people, no real brand names or logos, no readable text except where given. Evenly lit by overhead white tube lights, no hard shadows. 2048 x 2048, square, no vignette, no lens distortion.",
+      "prompt": "stylised realistic game art, real proportions, clean simplified shapes, rich warm colour, soft hazy sunlight, hand-tuned colour, no outlines, lived-in surfaces: soot, water stains, faded paint, patched plaster, dust; honest, not exaggerated. A tiny Delhi tea and snack stall interior: a steel counter in front with a gas stove and kettle, glass jars of biscuits and rusk, plastic stools, soot-black wall behind the stove, a shelf of glass tumblers, a hanging bunch of bananas, a bare bulb and a tube light. A photographic one-point perspective view straight into the room from the shutter line, camera centred at 1.5 m height and exactly centred left to right, the back wall centred and square to the camera, left and right side walls and the ceiling and the floor all visible and mirror-symmetric so a game shader can map it as a box room of about 3 m wide, 2.6 m tall and 4 m deep. Nothing in the extreme foreground, no shutter or door frame in the picture. No people, no real brand names or logos, no readable text except where given. Evenly lit by overhead white tube lights, no hard shadows. Sharp and in focus from the front to the back wall: no motion blur, no depth of field, no fisheye, no wide-angle stretching. 2048 x 2048, square, no vignette, no lens distortion.",
       "generate": "square 1024x1024",
       "target": {
         "w": 2048,
@@ -1272,13 +1301,14 @@
       ],
       "priority": 1,
       "batch": "B1b-interiors",
-      "created": "2026-11-14T15:52:20.672Z"
+      "created": "2026-11-14T15:52:20.672Z",
+      "promptAt": "2026-11-14T16:05:14.690Z"
     },
     {
       "id": "tex_interior_tea_stall_night",
       "kind": "texture",
       "intent": "Interior-mapping room image: Tea and snack stall, night variant",
-      "prompt": "stylised realistic game art, real proportions, clean simplified shapes, rich warm colour, soft hazy sunlight, hand-tuned colour, no outlines, lived-in surfaces: soot, water stains, faded paint, patched plaster, dust; honest, not exaggerated. A tiny Delhi tea and snack stall interior: a steel counter in front with a gas stove and kettle, glass jars of biscuits and rusk, plastic stools, soot-black wall behind the stove, a shelf of glass tumblers, a hanging bunch of bananas, a bare bulb and a tube light. A photographic one-point perspective view straight into the room from the shutter line, camera centred at 1.5 m height and exactly centred left to right, the back wall centred and square to the camera, left and right side walls and the ceiling and the floor all visible and mirror-symmetric so a game shader can map it as a box room of about 3 m wide, 2.6 m tall and 4 m deep. Nothing in the extreme foreground, no shutter or door frame in the picture. No people, no real brand names or logos, no readable text except where given. Same room at night: warm yellow tube light and a couple of warm bulbs, deeper shadows in the corners, the warm glow strong, no daylight. 2048 x 2048, square, no vignette, no lens distortion.",
+      "prompt": "stylised realistic game art, real proportions, clean simplified shapes, rich warm colour, soft hazy sunlight, hand-tuned colour, no outlines, lived-in surfaces: soot, water stains, faded paint, patched plaster, dust; honest, not exaggerated. A tiny Delhi tea and snack stall interior: a steel counter in front with a gas stove and kettle, glass jars of biscuits and rusk, plastic stools, soot-black wall behind the stove, a shelf of glass tumblers, a hanging bunch of bananas, a bare bulb and a tube light. A photographic one-point perspective view straight into the room from the shutter line, camera centred at 1.5 m height and exactly centred left to right, the back wall centred and square to the camera, left and right side walls and the ceiling and the floor all visible and mirror-symmetric so a game shader can map it as a box room of about 3 m wide, 2.6 m tall and 4 m deep. Nothing in the extreme foreground, no shutter or door frame in the picture. No people, no real brand names or logos, no readable text except where given. Same room at night: warm yellow tube light and a couple of warm bulbs, deeper shadows in the corners, the warm glow strong, no daylight. Sharp and in focus from the front to the back wall: no motion blur, no depth of field, no fisheye, no wide-angle stretching. 2048 x 2048, square, no vignette, no lens distortion.",
       "generate": "square 1024x1024",
       "target": {
         "w": 2048,
@@ -1298,13 +1328,14 @@
       ],
       "priority": 2,
       "batch": "B1b-interiors-night",
-      "created": "2026-11-14T15:52:20.844Z"
+      "created": "2026-11-14T15:52:20.844Z",
+      "promptAt": "2026-11-14T16:05:14.866Z"
     },
     {
       "id": "tex_interior_tailor",
       "kind": "texture",
       "intent": "Interior-mapping room image: Tailor shop, day",
-      "prompt": "stylised realistic game art, real proportions, clean simplified shapes, rich warm colour, soft hazy sunlight, hand-tuned colour, no outlines, lived-in surfaces: soot, water stains, faded paint, patched plaster, dust; honest, not exaggerated. A tailor shop interior: two sewing machines on tables on the left, a long cutting table on the right with fabric and scissors, shelves of folded cloth, paper patterns hanging on a wire, a mannequin torso with a half-made shirt in the centre back, a measuring tape, a ceiling fan. A photographic one-point perspective view straight into the room from the shutter line, camera centred at 1.5 m height and exactly centred left to right, the back wall centred and square to the camera, left and right side walls and the ceiling and the floor all visible and mirror-symmetric so a game shader can map it as a box room of about 3 m wide, 2.6 m tall and 4 m deep. Nothing in the extreme foreground, no shutter or door frame in the picture. No people, no real brand names or logos, no readable text except where given. Evenly lit by overhead white tube lights, no hard shadows. 2048 x 2048, square, no vignette, no lens distortion.",
+      "prompt": "stylised realistic game art, real proportions, clean simplified shapes, rich warm colour, soft hazy sunlight, hand-tuned colour, no outlines, lived-in surfaces: soot, water stains, faded paint, patched plaster, dust; honest, not exaggerated. A tailor shop interior: two sewing machines on tables on the left, a long cutting table on the right with fabric and scissors, shelves of folded cloth, paper patterns hanging on a wire, a mannequin torso with a half-made shirt in the centre back, a measuring tape, a ceiling fan. A photographic one-point perspective view straight into the room from the shutter line, camera centred at 1.5 m height and exactly centred left to right, the back wall centred and square to the camera, left and right side walls and the ceiling and the floor all visible and mirror-symmetric so a game shader can map it as a box room of about 3 m wide, 2.6 m tall and 4 m deep. Nothing in the extreme foreground, no shutter or door frame in the picture. No people, no real brand names or logos, no readable text except where given. Evenly lit by overhead white tube lights, no hard shadows. Sharp and in focus from the front to the back wall: no motion blur, no depth of field, no fisheye, no wide-angle stretching. 2048 x 2048, square, no vignette, no lens distortion.",
       "generate": "square 1024x1024",
       "target": {
         "w": 2048,
@@ -1324,13 +1355,14 @@
       ],
       "priority": 1,
       "batch": "B1b-interiors",
-      "created": "2026-11-14T15:52:21.002Z"
+      "created": "2026-11-14T15:52:21.002Z",
+      "promptAt": "2026-11-14T16:05:14.942Z"
     },
     {
       "id": "tex_interior_tailor_night",
       "kind": "texture",
       "intent": "Interior-mapping room image: Tailor shop, night variant",
-      "prompt": "stylised realistic game art, real proportions, clean simplified shapes, rich warm colour, soft hazy sunlight, hand-tuned colour, no outlines, lived-in surfaces: soot, water stains, faded paint, patched plaster, dust; honest, not exaggerated. A tailor shop interior: two sewing machines on tables on the left, a long cutting table on the right with fabric and scissors, shelves of folded cloth, paper patterns hanging on a wire, a mannequin torso with a half-made shirt in the centre back, a measuring tape, a ceiling fan. A photographic one-point perspective view straight into the room from the shutter line, camera centred at 1.5 m height and exactly centred left to right, the back wall centred and square to the camera, left and right side walls and the ceiling and the floor all visible and mirror-symmetric so a game shader can map it as a box room of about 3 m wide, 2.6 m tall and 4 m deep. Nothing in the extreme foreground, no shutter or door frame in the picture. No people, no real brand names or logos, no readable text except where given. Same room at night: warm yellow tube light and a couple of warm bulbs, deeper shadows in the corners, the warm glow strong, no daylight. 2048 x 2048, square, no vignette, no lens distortion.",
+      "prompt": "stylised realistic game art, real proportions, clean simplified shapes, rich warm colour, soft hazy sunlight, hand-tuned colour, no outlines, lived-in surfaces: soot, water stains, faded paint, patched plaster, dust; honest, not exaggerated. A tailor shop interior: two sewing machines on tables on the left, a long cutting table on the right with fabric and scissors, shelves of folded cloth, paper patterns hanging on a wire, a mannequin torso with a half-made shirt in the centre back, a measuring tape, a ceiling fan. A photographic one-point perspective view straight into the room from the shutter line, camera centred at 1.5 m height and exactly centred left to right, the back wall centred and square to the camera, left and right side walls and the ceiling and the floor all visible and mirror-symmetric so a game shader can map it as a box room of about 3 m wide, 2.6 m tall and 4 m deep. Nothing in the extreme foreground, no shutter or door frame in the picture. No people, no real brand names or logos, no readable text except where given. Same room at night: warm yellow tube light and a couple of warm bulbs, deeper shadows in the corners, the warm glow strong, no daylight. Sharp and in focus from the front to the back wall: no motion blur, no depth of field, no fisheye, no wide-angle stretching. 2048 x 2048, square, no vignette, no lens distortion.",
       "generate": "square 1024x1024",
       "target": {
         "w": 2048,
@@ -1350,13 +1382,14 @@
       ],
       "priority": 2,
       "batch": "B1b-interiors-night",
-      "created": "2026-11-14T15:52:21.496Z"
+      "created": "2026-11-14T15:52:21.496Z",
+      "promptAt": "2026-11-14T16:05:15.043Z"
     },
     {
       "id": "tex_interior_hotel_reception",
       "kind": "texture",
       "intent": "Interior-mapping room image: Small hotel reception (Paharganj), day",
-      "prompt": "stylised realistic game art, real proportions, clean simplified shapes, rich warm colour, soft hazy sunlight, hand-tuned colour, no outlines, lived-in surfaces: soot, water stains, faded paint, patched plaster, dust; honest, not exaggerated. A small budget hotel reception interior: a plain laminate reception desk on the back wall with a key rack of numbered keys and a brass bell, two worn sofas against the side walls, a stair going up on the right, marble effect floor tiles, a faded mural of mountains, a fan and one LED panel. No readable text. A photographic one-point perspective view straight into the room from the shutter line, camera centred at 1.5 m height and exactly centred left to right, the back wall centred and square to the camera, left and right side walls and the ceiling and the floor all visible and mirror-symmetric so a game shader can map it as a box room of about 3 m wide, 2.6 m tall and 4 m deep. Nothing in the extreme foreground, no shutter or door frame in the picture. No people, no real brand names or logos, no readable text except where given. Evenly lit by overhead white tube lights, no hard shadows. 2048 x 2048, square, no vignette, no lens distortion.",
+      "prompt": "stylised realistic game art, real proportions, clean simplified shapes, rich warm colour, soft hazy sunlight, hand-tuned colour, no outlines, lived-in surfaces: soot, water stains, faded paint, patched plaster, dust; honest, not exaggerated. A small budget hotel reception interior: a plain laminate reception desk on the back wall with a key rack of numbered keys and a brass bell, two worn sofas against the side walls, a stair going up on the right, marble effect floor tiles, a faded mural of mountains, a fan and one LED panel. No readable text. A photographic one-point perspective view straight into the room from the shutter line, camera centred at 1.5 m height and exactly centred left to right, the back wall centred and square to the camera, left and right side walls and the ceiling and the floor all visible and mirror-symmetric so a game shader can map it as a box room of about 3 m wide, 2.6 m tall and 4 m deep. Nothing in the extreme foreground, no shutter or door frame in the picture. No people, no real brand names or logos, no readable text except where given. Evenly lit by overhead white tube lights, no hard shadows. Sharp and in focus from the front to the back wall: no motion blur, no depth of field, no fisheye, no wide-angle stretching. 2048 x 2048, square, no vignette, no lens distortion.",
       "generate": "square 1024x1024",
       "target": {
         "w": 2048,
@@ -1376,13 +1409,14 @@
       ],
       "priority": 1,
       "batch": "B1b-interiors",
-      "created": "2026-11-14T15:52:22.827Z"
+      "created": "2026-11-14T15:52:22.827Z",
+      "promptAt": "2026-11-14T16:05:15.288Z"
     },
     {
       "id": "tex_interior_hotel_reception_night",
       "kind": "texture",
       "intent": "Interior-mapping room image: Small hotel reception (Paharganj), night variant",
-      "prompt": "stylised realistic game art, real proportions, clean simplified shapes, rich warm colour, soft hazy sunlight, hand-tuned colour, no outlines, lived-in surfaces: soot, water stains, faded paint, patched plaster, dust; honest, not exaggerated. A small budget hotel reception interior: a plain laminate reception desk on the back wall with a key rack of numbered keys and a brass bell, two worn sofas against the side walls, a stair going up on the right, marble effect floor tiles, a faded mural of mountains, a fan and one LED panel. No readable text. A photographic one-point perspective view straight into the room from the shutter line, camera centred at 1.5 m height and exactly centred left to right, the back wall centred and square to the camera, left and right side walls and the ceiling and the floor all visible and mirror-symmetric so a game shader can map it as a box room of about 3 m wide, 2.6 m tall and 4 m deep. Nothing in the extreme foreground, no shutter or door frame in the picture. No people, no real brand names or logos, no readable text except where given. Same room at night: warm yellow tube light and a couple of warm bulbs, deeper shadows in the corners, the warm glow strong, no daylight. 2048 x 2048, square, no vignette, no lens distortion.",
+      "prompt": "stylised realistic game art, real proportions, clean simplified shapes, rich warm colour, soft hazy sunlight, hand-tuned colour, no outlines, lived-in surfaces: soot, water stains, faded paint, patched plaster, dust; honest, not exaggerated. A small budget hotel reception interior: a plain laminate reception desk on the back wall with a key rack of numbered keys and a brass bell, two worn sofas against the side walls, a stair going up on the right, marble effect floor tiles, a faded mural of mountains, a fan and one LED panel. No readable text. A photographic one-point perspective view straight into the room from the shutter line, camera centred at 1.5 m height and exactly centred left to right, the back wall centred and square to the camera, left and right side walls and the ceiling and the floor all visible and mirror-symmetric so a game shader can map it as a box room of about 3 m wide, 2.6 m tall and 4 m deep. Nothing in the extreme foreground, no shutter or door frame in the picture. No people, no real brand names or logos, no readable text except where given. Same room at night: warm yellow tube light and a couple of warm bulbs, deeper shadows in the corners, the warm glow strong, no daylight. Sharp and in focus from the front to the back wall: no motion blur, no depth of field, no fisheye, no wide-angle stretching. 2048 x 2048, square, no vignette, no lens distortion.",
       "generate": "square 1024x1024",
       "target": {
         "w": 2048,
@@ -1402,13 +1436,14 @@
       ],
       "priority": 2,
       "batch": "B1b-interiors-night",
-      "created": "2026-11-14T15:52:25.318Z"
+      "created": "2026-11-14T15:52:25.318Z",
+      "promptAt": "2026-11-14T16:05:15.597Z"
     },
     {
       "id": "tex_interior_bookshop",
       "kind": "texture",
       "intent": "Interior-mapping room image: Bookshop (Connaught Place), day",
-      "prompt": "stylised realistic game art, real proportions, clean simplified shapes, rich warm colour, soft hazy sunlight, hand-tuned colour, no outlines, lived-in surfaces: soot, water stains, faded paint, patched plaster, dust; honest, not exaggerated. A CP bookshop interior: dark wooden shelves on all walls full of paperback books with plain unreadable spines, a central table with stacked books, a ladder on the back wall, a small counter with an old cash register, a ceiling fan and warm tube lights. A photographic one-point perspective view straight into the room from the shutter line, camera centred at 1.5 m height and exactly centred left to right, the back wall centred and square to the camera, left and right side walls and the ceiling and the floor all visible and mirror-symmetric so a game shader can map it as a box room of about 3 m wide, 2.6 m tall and 4 m deep. Nothing in the extreme foreground, no shutter or door frame in the picture. No people, no real brand names or logos, no readable text except where given. Evenly lit by overhead white tube lights, no hard shadows. 2048 x 2048, square, no vignette, no lens distortion.",
+      "prompt": "stylised realistic game art, real proportions, clean simplified shapes, rich warm colour, soft hazy sunlight, hand-tuned colour, no outlines, lived-in surfaces: soot, water stains, faded paint, patched plaster, dust; honest, not exaggerated. A CP bookshop interior: dark wooden shelves on all walls full of paperback books with plain unreadable spines, a central table with stacked books, a ladder on the back wall, a small counter with an old cash register, a ceiling fan and warm tube lights. A photographic one-point perspective view straight into the room from the shutter line, camera centred at 1.5 m height and exactly centred left to right, the back wall centred and square to the camera, left and right side walls and the ceiling and the floor all visible and mirror-symmetric so a game shader can map it as a box room of about 3 m wide, 2.6 m tall and 4 m deep. Nothing in the extreme foreground, no shutter or door frame in the picture. No people, no real brand names or logos, no readable text except where given. Evenly lit by overhead white tube lights, no hard shadows. Sharp and in focus from the front to the back wall: no motion blur, no depth of field, no fisheye, no wide-angle stretching. 2048 x 2048, square, no vignette, no lens distortion.",
       "generate": "square 1024x1024",
       "target": {
         "w": 2048,
@@ -1428,13 +1463,14 @@
       ],
       "priority": 1,
       "batch": "B1b-interiors",
-      "created": "2026-11-14T15:52:27.658Z"
+      "created": "2026-11-14T15:52:27.658Z",
+      "promptAt": "2026-11-14T16:05:15.678Z"
     },
     {
       "id": "tex_interior_bookshop_night",
       "kind": "texture",
       "intent": "Interior-mapping room image: Bookshop (Connaught Place), night variant",
-      "prompt": "stylised realistic game art, real proportions, clean simplified shapes, rich warm colour, soft hazy sunlight, hand-tuned colour, no outlines, lived-in surfaces: soot, water stains, faded paint, patched plaster, dust; honest, not exaggerated. A CP bookshop interior: dark wooden shelves on all walls full of paperback books with plain unreadable spines, a central table with stacked books, a ladder on the back wall, a small counter with an old cash register, a ceiling fan and warm tube lights. A photographic one-point perspective view straight into the room from the shutter line, camera centred at 1.5 m height and exactly centred left to right, the back wall centred and square to the camera, left and right side walls and the ceiling and the floor all visible and mirror-symmetric so a game shader can map it as a box room of about 3 m wide, 2.6 m tall and 4 m deep. Nothing in the extreme foreground, no shutter or door frame in the picture. No people, no real brand names or logos, no readable text except where given. Same room at night: warm yellow tube light and a couple of warm bulbs, deeper shadows in the corners, the warm glow strong, no daylight. 2048 x 2048, square, no vignette, no lens distortion.",
+      "prompt": "stylised realistic game art, real proportions, clean simplified shapes, rich warm colour, soft hazy sunlight, hand-tuned colour, no outlines, lived-in surfaces: soot, water stains, faded paint, patched plaster, dust; honest, not exaggerated. A CP bookshop interior: dark wooden shelves on all walls full of paperback books with plain unreadable spines, a central table with stacked books, a ladder on the back wall, a small counter with an old cash register, a ceiling fan and warm tube lights. A photographic one-point perspective view straight into the room from the shutter line, camera centred at 1.5 m height and exactly centred left to right, the back wall centred and square to the camera, left and right side walls and the ceiling and the floor all visible and mirror-symmetric so a game shader can map it as a box room of about 3 m wide, 2.6 m tall and 4 m deep. Nothing in the extreme foreground, no shutter or door frame in the picture. No people, no real brand names or logos, no readable text except where given. Same room at night: warm yellow tube light and a couple of warm bulbs, deeper shadows in the corners, the warm glow strong, no daylight. Sharp and in focus from the front to the back wall: no motion blur, no depth of field, no fisheye, no wide-angle stretching. 2048 x 2048, square, no vignette, no lens distortion.",
       "generate": "square 1024x1024",
       "target": {
         "w": 2048,
@@ -1454,13 +1490,14 @@
       ],
       "priority": 2,
       "batch": "B1b-interiors-night",
-      "created": "2026-11-14T15:52:30.975Z"
+      "created": "2026-11-14T15:52:30.975Z",
+      "promptAt": "2026-11-14T16:05:15.797Z"
     },
     {
       "id": "tex_interior_jeweller",
       "kind": "texture",
       "intent": "Interior-mapping room image: Jewellery shop (Chandni Chowk), day",
-      "prompt": "stylised realistic game art, real proportions, clean simplified shapes, rich warm colour, soft hazy sunlight, hand-tuned colour, no outlines, lived-in surfaces: soot, water stains, faded paint, patched plaster, dust; honest, not exaggerated. A Chandni Chowk jeweller interior: a white gaddi floor seating area with bolsters, glass counters with gold and silver jewellery on velvet in front, a steel safe on the back wall, mirror panels on the side walls, a carved wooden ceiling band, bright tube lights, a framed deity picture. Back wall small board \"Hira Moti Jewellers\" and \"हीरा मोती ज्वेलर्स\". A photographic one-point perspective view straight into the room from the shutter line, camera centred at 1.5 m height and exactly centred left to right, the back wall centred and square to the camera, left and right side walls and the ceiling and the floor all visible and mirror-symmetric so a game shader can map it as a box room of about 3 m wide, 2.6 m tall and 4 m deep. Nothing in the extreme foreground, no shutter or door frame in the picture. No people, no real brand names or logos, no readable text except where given. Evenly lit by overhead white tube lights, no hard shadows. 2048 x 2048, square, no vignette, no lens distortion.",
+      "prompt": "stylised realistic game art, real proportions, clean simplified shapes, rich warm colour, soft hazy sunlight, hand-tuned colour, no outlines, lived-in surfaces: soot, water stains, faded paint, patched plaster, dust; honest, not exaggerated. A Chandni Chowk jeweller interior: a white gaddi floor seating area with bolsters, glass counters with gold and silver jewellery on velvet in front, a steel safe on the back wall, mirror panels on the side walls, a carved wooden ceiling band, bright tube lights, a framed deity picture. Back wall small board \"Hira Moti Jewellers\" and \"हीरा मोती ज्वेलर्स\". A photographic one-point perspective view straight into the room from the shutter line, camera centred at 1.5 m height and exactly centred left to right, the back wall centred and square to the camera, left and right side walls and the ceiling and the floor all visible and mirror-symmetric so a game shader can map it as a box room of about 3 m wide, 2.6 m tall and 4 m deep. Nothing in the extreme foreground, no shutter or door frame in the picture. No people, no real brand names or logos, no readable text except where given. Evenly lit by overhead white tube lights, no hard shadows. Sharp and in focus from the front to the back wall: no motion blur, no depth of field, no fisheye, no wide-angle stretching. 2048 x 2048, square, no vignette, no lens distortion.",
       "generate": "square 1024x1024",
       "target": {
         "w": 2048,
@@ -1480,13 +1517,14 @@
       ],
       "priority": 1,
       "batch": "B1b-interiors",
-      "created": "2026-11-14T15:52:33.555Z"
+      "created": "2026-11-14T15:52:33.555Z",
+      "promptAt": "2026-11-14T16:05:15.876Z"
     },
     {
       "id": "tex_interior_jeweller_night",
       "kind": "texture",
       "intent": "Interior-mapping room image: Jewellery shop (Chandni Chowk), night variant",
-      "prompt": "stylised realistic game art, real proportions, clean simplified shapes, rich warm colour, soft hazy sunlight, hand-tuned colour, no outlines, lived-in surfaces: soot, water stains, faded paint, patched plaster, dust; honest, not exaggerated. A Chandni Chowk jeweller interior: a white gaddi floor seating area with bolsters, glass counters with gold and silver jewellery on velvet in front, a steel safe on the back wall, mirror panels on the side walls, a carved wooden ceiling band, bright tube lights, a framed deity picture. Back wall small board \"Hira Moti Jewellers\" and \"हीरा मोती ज्वेलर्स\". A photographic one-point perspective view straight into the room from the shutter line, camera centred at 1.5 m height and exactly centred left to right, the back wall centred and square to the camera, left and right side walls and the ceiling and the floor all visible and mirror-symmetric so a game shader can map it as a box room of about 3 m wide, 2.6 m tall and 4 m deep. Nothing in the extreme foreground, no shutter or door frame in the picture. No people, no real brand names or logos, no readable text except where given. Same room at night: warm yellow tube light and a couple of warm bulbs, deeper shadows in the corners, the warm glow strong, no daylight. 2048 x 2048, square, no vignette, no lens distortion.",
+      "prompt": "stylised realistic game art, real proportions, clean simplified shapes, rich warm colour, soft hazy sunlight, hand-tuned colour, no outlines, lived-in surfaces: soot, water stains, faded paint, patched plaster, dust; honest, not exaggerated. A Chandni Chowk jeweller interior: a white gaddi floor seating area with bolsters, glass counters with gold and silver jewellery on velvet in front, a steel safe on the back wall, mirror panels on the side walls, a carved wooden ceiling band, bright tube lights, a framed deity picture. Back wall small board \"Hira Moti Jewellers\" and \"हीरा मोती ज्वेलर्स\". A photographic one-point perspective view straight into the room from the shutter line, camera centred at 1.5 m height and exactly centred left to right, the back wall centred and square to the camera, left and right side walls and the ceiling and the floor all visible and mirror-symmetric so a game shader can map it as a box room of about 3 m wide, 2.6 m tall and 4 m deep. Nothing in the extreme foreground, no shutter or door frame in the picture. No people, no real brand names or logos, no readable text except where given. Same room at night: warm yellow tube light and a couple of warm bulbs, deeper shadows in the corners, the warm glow strong, no daylight. Sharp and in focus from the front to the back wall: no motion blur, no depth of field, no fisheye, no wide-angle stretching. 2048 x 2048, square, no vignette, no lens distortion.",
       "generate": "square 1024x1024",
       "target": {
         "w": 2048,
@@ -1506,13 +1544,14 @@
       ],
       "priority": 2,
       "batch": "B1b-interiors-night",
-      "created": "2026-11-14T15:52:35.039Z"
+      "created": "2026-11-14T15:52:35.039Z",
+      "promptAt": "2026-11-14T16:05:15.972Z"
     },
     {
       "id": "tex_interior_home",
       "kind": "texture",
       "intent": "Interior-mapping room image: Upper floor home interior (window view), day",
-      "prompt": "stylised realistic game art, real proportions, clean simplified shapes, rich warm colour, soft hazy sunlight, hand-tuned colour, no outlines, lived-in surfaces: soot, water stains, faded paint, patched plaster, dust; honest, not exaggerated. A lived-in Delhi upper floor room seen from the window: a half-drawn patterned curtain on the left edge of the room, a ceiling fan, a wall calendar with no readable text on the back wall, a wooden shelf with steel utensils and a small TV, a plastic chair, a bed with a printed sheet along the right wall, pale blue painted walls, a tube light. A photographic one-point perspective view straight into the room from the shutter line, camera centred at 1.5 m height and exactly centred left to right, the back wall centred and square to the camera, left and right side walls and the ceiling and the floor all visible and mirror-symmetric so a game shader can map it as a box room of about 3 m wide, 2.6 m tall and 4 m deep. Nothing in the extreme foreground, no shutter or door frame in the picture. No people, no real brand names or logos, no readable text except where given. Evenly lit by overhead white tube lights, no hard shadows. 2048 x 2048, square, no vignette, no lens distortion.",
+      "prompt": "stylised realistic game art, real proportions, clean simplified shapes, rich warm colour, soft hazy sunlight, hand-tuned colour, no outlines, lived-in surfaces: soot, water stains, faded paint, patched plaster, dust; honest, not exaggerated. A lived-in Delhi upper floor room seen from the window: a half-drawn patterned curtain on the left edge of the room, a ceiling fan, a wall calendar with no readable text on the back wall, a wooden shelf with steel utensils and a small TV, a plastic chair, a bed with a printed sheet along the right wall, pale blue painted walls, a tube light. A photographic one-point perspective view straight into the room from the shutter line, camera centred at 1.5 m height and exactly centred left to right, the back wall centred and square to the camera, left and right side walls and the ceiling and the floor all visible and mirror-symmetric so a game shader can map it as a box room of about 3 m wide, 2.6 m tall and 4 m deep. Nothing in the extreme foreground, no shutter or door frame in the picture. No people, no real brand names or logos, no readable text except where given. Evenly lit by overhead white tube lights, no hard shadows. Sharp and in focus from the front to the back wall: no motion blur, no depth of field, no fisheye, no wide-angle stretching. 2048 x 2048, square, no vignette, no lens distortion.",
       "generate": "square 1024x1024",
       "target": {
         "w": 2048,
@@ -1532,13 +1571,14 @@
       ],
       "priority": 1,
       "batch": "B1b-interiors",
-      "created": "2026-11-14T15:52:37.144Z"
+      "created": "2026-11-14T15:52:37.144Z",
+      "promptAt": "2026-11-14T16:05:16.056Z"
     },
     {
       "id": "tex_interior_home_night",
       "kind": "texture",
       "intent": "Interior-mapping room image: Upper floor home interior (window view), night variant",
-      "prompt": "stylised realistic game art, real proportions, clean simplified shapes, rich warm colour, soft hazy sunlight, hand-tuned colour, no outlines, lived-in surfaces: soot, water stains, faded paint, patched plaster, dust; honest, not exaggerated. A lived-in Delhi upper floor room seen from the window: a half-drawn patterned curtain on the left edge of the room, a ceiling fan, a wall calendar with no readable text on the back wall, a wooden shelf with steel utensils and a small TV, a plastic chair, a bed with a printed sheet along the right wall, pale blue painted walls, a tube light. A photographic one-point perspective view straight into the room from the shutter line, camera centred at 1.5 m height and exactly centred left to right, the back wall centred and square to the camera, left and right side walls and the ceiling and the floor all visible and mirror-symmetric so a game shader can map it as a box room of about 3 m wide, 2.6 m tall and 4 m deep. Nothing in the extreme foreground, no shutter or door frame in the picture. No people, no real brand names or logos, no readable text except where given. Same room at night: warm yellow tube light and a couple of warm bulbs, deeper shadows in the corners, the warm glow strong, no daylight. 2048 x 2048, square, no vignette, no lens distortion.",
+      "prompt": "stylised realistic game art, real proportions, clean simplified shapes, rich warm colour, soft hazy sunlight, hand-tuned colour, no outlines, lived-in surfaces: soot, water stains, faded paint, patched plaster, dust; honest, not exaggerated. A lived-in Delhi upper floor room seen from the window: a half-drawn patterned curtain on the left edge of the room, a ceiling fan, a wall calendar with no readable text on the back wall, a wooden shelf with steel utensils and a small TV, a plastic chair, a bed with a printed sheet along the right wall, pale blue painted walls, a tube light. A photographic one-point perspective view straight into the room from the shutter line, camera centred at 1.5 m height and exactly centred left to right, the back wall centred and square to the camera, left and right side walls and the ceiling and the floor all visible and mirror-symmetric so a game shader can map it as a box room of about 3 m wide, 2.6 m tall and 4 m deep. Nothing in the extreme foreground, no shutter or door frame in the picture. No people, no real brand names or logos, no readable text except where given. Same room at night: warm yellow tube light and a couple of warm bulbs, deeper shadows in the corners, the warm glow strong, no daylight. Sharp and in focus from the front to the back wall: no motion blur, no depth of field, no fisheye, no wide-angle stretching. 2048 x 2048, square, no vignette, no lens distortion.",
       "generate": "square 1024x1024",
       "target": {
         "w": 2048,
@@ -1558,13 +1598,14 @@
       ],
       "priority": 2,
       "batch": "B1b-interiors-night",
-      "created": "2026-11-14T15:52:38.327Z"
+      "created": "2026-11-14T15:52:38.327Z",
+      "promptAt": "2026-11-14T16:05:16.133Z"
     },
     {
       "id": "tex_interior_office",
       "kind": "texture",
       "intent": "Interior-mapping room image: Office interior (ITO), day",
-      "prompt": "stylised realistic game art, real proportions, clean simplified shapes, rich warm colour, soft hazy sunlight, hand-tuned colour, no outlines, lived-in surfaces: soot, water stains, faded paint, patched plaster, dust; honest, not exaggerated. A government-style office room for ITO, seen from the window: grey metal filing cabinets along the right wall, rows of laminate desks with old monitors and stacks of paper files, a wall clock and a noticeboard with no readable text on the back wall, a ceiling fan, white tube lights, pale green walls, a green water dispenser. A photographic one-point perspective view straight into the room from the shutter line, camera centred at 1.5 m height and exactly centred left to right, the back wall centred and square to the camera, left and right side walls and the ceiling and the floor all visible and mirror-symmetric so a game shader can map it as a box room of about 3 m wide, 2.6 m tall and 4 m deep. Nothing in the extreme foreground, no shutter or door frame in the picture. No people, no real brand names or logos, no readable text except where given. Evenly lit by overhead white tube lights, no hard shadows. 2048 x 2048, square, no vignette, no lens distortion.",
+      "prompt": "stylised realistic game art, real proportions, clean simplified shapes, rich warm colour, soft hazy sunlight, hand-tuned colour, no outlines, lived-in surfaces: soot, water stains, faded paint, patched plaster, dust; honest, not exaggerated. A government-style office room for ITO, seen from the window: grey metal filing cabinets along the right wall, rows of laminate desks with old monitors and stacks of paper files, a wall clock and a noticeboard with no readable text on the back wall, a ceiling fan, white tube lights, pale green walls, a green water dispenser. A photographic one-point perspective view straight into the room from the shutter line, camera centred at 1.5 m height and exactly centred left to right, the back wall centred and square to the camera, left and right side walls and the ceiling and the floor all visible and mirror-symmetric so a game shader can map it as a box room of about 3 m wide, 2.6 m tall and 4 m deep. Nothing in the extreme foreground, no shutter or door frame in the picture. No people, no real brand names or logos, no readable text except where given. Evenly lit by overhead white tube lights, no hard shadows. Sharp and in focus from the front to the back wall: no motion blur, no depth of field, no fisheye, no wide-angle stretching. 2048 x 2048, square, no vignette, no lens distortion.",
       "generate": "square 1024x1024",
       "target": {
         "w": 2048,
@@ -1584,13 +1625,14 @@
       ],
       "priority": 1,
       "batch": "B1b-interiors",
-      "created": "2026-11-14T15:52:39.525Z"
+      "created": "2026-11-14T15:52:39.525Z",
+      "promptAt": "2026-11-14T16:05:16.221Z"
     },
     {
       "id": "tex_interior_office_night",
       "kind": "texture",
       "intent": "Interior-mapping room image: Office interior (ITO), night variant",
-      "prompt": "stylised realistic game art, real proportions, clean simplified shapes, rich warm colour, soft hazy sunlight, hand-tuned colour, no outlines, lived-in surfaces: soot, water stains, faded paint, patched plaster, dust; honest, not exaggerated. A government-style office room for ITO, seen from the window: grey metal filing cabinets along the right wall, rows of laminate desks with old monitors and stacks of paper files, a wall clock and a noticeboard with no readable text on the back wall, a ceiling fan, white tube lights, pale green walls, a green water dispenser. A photographic one-point perspective view straight into the room from the shutter line, camera centred at 1.5 m height and exactly centred left to right, the back wall centred and square to the camera, left and right side walls and the ceiling and the floor all visible and mirror-symmetric so a game shader can map it as a box room of about 3 m wide, 2.6 m tall and 4 m deep. Nothing in the extreme foreground, no shutter or door frame in the picture. No people, no real brand names or logos, no readable text except where given. Same room at night: warm yellow tube light and a couple of warm bulbs, deeper shadows in the corners, the warm glow strong, no daylight. 2048 x 2048, square, no vignette, no lens distortion.",
+      "prompt": "stylised realistic game art, real proportions, clean simplified shapes, rich warm colour, soft hazy sunlight, hand-tuned colour, no outlines, lived-in surfaces: soot, water stains, faded paint, patched plaster, dust; honest, not exaggerated. A government-style office room for ITO, seen from the window: grey metal filing cabinets along the right wall, rows of laminate desks with old monitors and stacks of paper files, a wall clock and a noticeboard with no readable text on the back wall, a ceiling fan, white tube lights, pale green walls, a green water dispenser. A photographic one-point perspective view straight into the room from the shutter line, camera centred at 1.5 m height and exactly centred left to right, the back wall centred and square to the camera, left and right side walls and the ceiling and the floor all visible and mirror-symmetric so a game shader can map it as a box room of about 3 m wide, 2.6 m tall and 4 m deep. Nothing in the extreme foreground, no shutter or door frame in the picture. No people, no real brand names or logos, no readable text except where given. Same room at night: warm yellow tube light and a couple of warm bulbs, deeper shadows in the corners, the warm glow strong, no daylight. Sharp and in focus from the front to the back wall: no motion blur, no depth of field, no fisheye, no wide-angle stretching. 2048 x 2048, square, no vignette, no lens distortion.",
       "generate": "square 1024x1024",
       "target": {
         "w": 2048,
@@ -1610,7 +1652,162 @@
       ],
       "priority": 2,
       "batch": "B1b-interiors-night",
-      "created": "2026-11-14T15:52:40.870Z"
+      "created": "2026-11-14T15:52:40.870Z",
+      "promptAt": "2026-11-14T16:05:16.319Z"
+    },
+    {
+      "id": "tex_wall_oldcity_layer_peel",
+      "kind": "texture",
+      "intent": "Old Delhi wall peeling-paint layer for blending",
+      "prompt": "stylised realistic game art, real proportions, clean simplified shapes, rich warm colour, soft hazy sunlight, hand-tuned colour, no outlines, lived-in surfaces: soot, water stains, faded paint, patched plaster, dust; honest, not exaggerated. PEEL LAYER for blending on an Old Delhi wall: the same faded mint green lime-plaster wall, with paint flaking evenly all over: about half the surface still has paint, the other half is bare pale lime plaster, in many small flakes 3 to 12 cm across with thin curled edges, spread evenly with no big patch. No bricks showing, no damp band, no soot, no cracks. Same scale and colour family as the clean base layer so a shader can blend between them. TILEABLE MATERIAL RULES: this is a repeating surface, not a picture. Seamless on all four edges (left continues into right, top into bottom). Even, low-contrast variation across the whole image with no single standout feature: no one big crack, stain, patch, chip or mark that would be noticed repeating from far away. Uniform flat lighting, no vignette, no gradient, no baked shadows, no brighter or darker corner. Standout marks (cracks, stains, patches, posters) are made on the separate decal sheets, so leave them out. REAL SCALE: the image shows exactly 2 m x 2 m of wall of real surface at 2048 x 2048 px, about 1024 px per metre. Paint flakes 3 to 12 cm across, paint coat about 0.3 mm thick. Shot flat and straight on, no perspective, no people, no real brand names or logos, no text, no letters.",
+      "generate": "square 1024x1024",
+      "target": {
+        "w": 1024,
+        "h": 1024,
+        "tileable": true,
+        "normalMap": true,
+        "alpha": false,
+        "out": "textures/tex_wall_oldcity_layer_peel.webp"
+      },
+      "placeholder": {
+        "color": "#1f2533",
+        "pattern": "noise",
+        "scale": 1
+      },
+      "used_by": [
+        "oldcity"
+      ],
+      "priority": 1,
+      "batch": "B2-walls",
+      "created": "2026-11-14T16:05:09.871Z"
+    },
+    {
+      "id": "tex_wall_oldcity_layer_brick",
+      "kind": "texture",
+      "intent": "Old Delhi wall exposed-brick layer for blending under peeling paint",
+      "prompt": "stylised realistic game art, real proportions, clean simplified shapes, rich warm colour, soft hazy sunlight, hand-tuned colour, no outlines, lived-in surfaces: soot, water stains, faded paint, patched plaster, dust; honest, not exaggerated. BRICK LAYER for blending on an Old Delhi wall: bare old thin red-brown lakhori bricks in running bond, lime mortar joints 1.5 cm wide, a thin film of left-over pale lime wash only in the joints, slight soot haze, bricks vary a little in colour, no big stain or crack. Brick face 23 cm x 7.5 cm. Same scale as the clean base layer and the peel layer. TILEABLE MATERIAL RULES: this is a repeating surface, not a picture. Seamless on all four edges (left continues into right, top into bottom). Even, low-contrast variation across the whole image with no single standout feature: no one big crack, stain, patch, chip or mark that would be noticed repeating from far away. Uniform flat lighting, no vignette, no gradient, no baked shadows, no brighter or darker corner. Standout marks (cracks, stains, patches, posters) are made on the separate decal sheets, so leave them out. REAL SCALE: the image shows exactly 2 m x 2 m of wall of real surface at 2048 x 2048 px, about 1024 px per metre. Each brick face is 23 cm x 7.5 cm (about 235 x 77 px). Shot flat and straight on, no perspective, no people, no real brand names or logos, no text, no letters.",
+      "generate": "square 1024x1024",
+      "target": {
+        "w": 1024,
+        "h": 1024,
+        "tileable": true,
+        "normalMap": true,
+        "alpha": false,
+        "out": "textures/tex_wall_oldcity_layer_brick.webp"
+      },
+      "placeholder": {
+        "color": "#1f2533",
+        "pattern": "noise",
+        "scale": 1
+      },
+      "used_by": [
+        "oldcity"
+      ],
+      "priority": 1,
+      "batch": "B2-walls",
+      "created": "2026-11-14T16:05:10.756Z"
+    },
+    {
+      "id": "tex_trim_oldcity",
+      "kind": "texture",
+      "intent": "Old Delhi building kit trim sheet: cornices, chhajja, frames, jali, pipes, railings",
+      "prompt": "stylised realistic game art, real proportions, clean simplified shapes, rich warm colour, soft hazy sunlight, hand-tuned colour, no outlines, lived-in surfaces: soot, water stains, faded paint, patched plaster, dust; honest, not exaggerated. Old Delhi shop-house trim in lime plaster, sandstone, wood and iron, honestly aged. TRIM SHEET for a modular building kit: a flat front view of horizontal strips stacked from top to bottom, each strip full width, touching the next with no gap and no border, each strip seamless left to right so it tiles along a wall. The sheet shows 2 m wide x 2 m tall at 2048 x 2048 px (about 1024 px per metre). Strips from top to bottom: 1) cornice with dentil row, 30 cm tall; 2) chhajja projecting stone ledge on brackets, seen from the front, 25 cm; 3) plain painted band in faded ochre, 10 cm; 4) wooden window frame head and sill run with chipped green paint, 20 cm; 5) jali strip of pierced sandstone lattice, 30 cm; 6) pipe strip with a rusty water pipe 12 cm and an electrical conduit 8 cm held by clamps, 20 cm; 7) wrought iron balcony railing with vertical bars, black paint, on a flat mid grey background, 35 cm; 8) stone plinth base course with damp, 30 cm. Gentle ambient occlusion in recesses only, no cast shadows, no vignette, even flat light, no lens distortion. No text, no letters, no people, no real brand names or logos.",
+      "generate": "square 1024x1024",
+      "target": {
+        "w": 2048,
+        "h": 2048,
+        "tileable": true,
+        "normalMap": true,
+        "alpha": false,
+        "out": "textures/tex_trim_oldcity.webp"
+      },
+      "placeholder": {
+        "color": "#1f2533",
+        "pattern": "noise",
+        "scale": 1
+      },
+      "used_by": [
+        "kits"
+      ],
+      "priority": 2,
+      "batch": "B2-trims",
+      "created": "2026-11-14T16:05:11.064Z"
+    },
+    {
+      "id": "tex_trim_lutyens",
+      "kind": "texture",
+      "intent": "Lutyens Delhi kit trim sheet: sandstone cornice, bands, chhajja, architrave, jali, stone courses",
+      "prompt": "stylised realistic game art, real proportions, clean simplified shapes, rich warm colour, soft hazy sunlight, hand-tuned colour, no outlines, lived-in surfaces: soot, water stains, faded paint, patched plaster, dust; honest, not exaggerated. Lutyens era bungalow trim in cream and buff sandstone and red sandstone, clean and well kept, fine joints. TRIM SHEET for a modular building kit: a flat front view of horizontal strips stacked from top to bottom, each strip full width, touching the next with no gap and no border, each strip seamless left to right so it tiles along a wall. The sheet shows 2 m wide x 2 m tall at 2048 x 2048 px (about 1024 px per metre). Strips from top to bottom: 1) plain cream sandstone cornice with a simple moulding, 30 cm tall; 2) red sandstone band, 15 cm; 3) plain white lime wash band, 20 cm; 4) buff stone chhajja ledge seen from the front, 25 cm; 5) window architrave strip in cream stone, 20 cm; 6) sandstone jali strip with a geometric lattice, 30 cm; 7) dressed block course of alternating red and buff stone, 30 cm; 8) plinth course with fine joints, 30 cm. Gentle ambient occlusion in recesses only, no cast shadows, no vignette, even flat light, no lens distortion. No text, no letters, no people, no real brand names or logos.",
+      "generate": "square 1024x1024",
+      "target": {
+        "w": 2048,
+        "h": 2048,
+        "tileable": true,
+        "normalMap": true,
+        "alpha": false,
+        "out": "textures/tex_trim_lutyens.webp"
+      },
+      "placeholder": {
+        "color": "#1f2533",
+        "pattern": "noise",
+        "scale": 1
+      },
+      "used_by": [
+        "kits"
+      ],
+      "priority": 2,
+      "batch": "B2-trims",
+      "created": "2026-11-14T16:05:11.194Z"
+    },
+    {
+      "id": "tex_trim_cp_colonnade",
+      "kind": "texture",
+      "intent": "Connaught Place colonnade kit trim sheet: balustrade, frieze, fluted columns, base, rustication",
+      "prompt": "stylised realistic game art, real proportions, clean simplified shapes, rich warm colour, soft hazy sunlight, hand-tuned colour, no outlines, lived-in surfaces: soot, water stains, faded paint, patched plaster, dust; honest, not exaggerated. Connaught Place colonial colonnade trim in cream painted stucco, lightly yellowed, regular and neat. TRIM SHEET for a modular building kit: a flat front view of horizontal strips stacked from top to bottom, each strip full width, touching the next with no gap and no border, each strip seamless left to right so it tiles along a wall. The sheet shows 2 m wide x 2 m tall at 2048 x 2048 px (about 1024 px per metre). Strips from top to bottom: 1) cornice with parapet balustrade of small turned balusters, 40 cm tall; 2) plain frieze band, 20 cm; 3) architrave with fine mouldings, 20 cm; 4) fluted column shaft section, flutes 6 cm wide, 40 cm; 5) column base and plinth moulding, 25 cm; 6) rusticated arch soffit strip with grooves every 12 cm, 25 cm; 7) stone dado stall riser in pale grey stone, 30 cm. Gentle ambient occlusion in recesses only, no cast shadows, no vignette, even flat light, no lens distortion. No text, no letters, no people, no real brand names or logos.",
+      "generate": "square 1024x1024",
+      "target": {
+        "w": 2048,
+        "h": 2048,
+        "tileable": true,
+        "normalMap": true,
+        "alpha": false,
+        "out": "textures/tex_trim_cp_colonnade.webp"
+      },
+      "placeholder": {
+        "color": "#1f2533",
+        "pattern": "noise",
+        "scale": 1
+      },
+      "used_by": [
+        "kits"
+      ],
+      "priority": 2,
+      "batch": "B2-trims",
+      "created": "2026-11-14T16:05:11.426Z"
+    },
+    {
+      "id": "decal_road_wet_sheet",
+      "kind": "decal",
+      "intent": "Wet asphalt patches and puddle decals for rain and wet roads",
+      "prompt": "stylised realistic game art, real proportions, clean simplified shapes, rich warm colour, soft hazy sunlight, hand-tuned colour, no outlines. A sheet of 8 separate wet road details seen straight from above, to paste onto matte dry asphalt: three soft-edged darker wet asphalt patches (the asphalt looks darker and slightly richer, 1.5 to 3 m across), three irregular puddles (0.5 m, 1 m and 2 m across) filled with flat neutral grey-blue tone with a thin darker rim and a few floating leaves or dust (the game shader adds the real reflection), and two wet tyre track pairs fading out at the ends (3 m long). Edges feather to transparent. The sheet covers about 4 m x 4 m of real road at 2048 x 2048 px. Transparent background (PNG with alpha), each item separate with clear space between, no ground, no shadow, no text, no letters, no logos.",
+      "generate": "square 1024x1024",
+      "target": {
+        "w": 2048,
+        "h": 2048,
+        "tileable": false,
+        "normalMap": false,
+        "alpha": true,
+        "out": "decals/decal_road_wet_sheet.webp"
+      },
+      "placeholder": {
+        "color": "#1f2533",
+        "pattern": "flat",
+        "scale": 1
+      },
+      "used_by": [],
+      "priority": 2,
+      "batch": "B1-tunnel-road",
+      "created": "2026-11-14T16:05:11.612Z"
     }
   ]
 }
