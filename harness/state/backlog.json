@@ -1,6 +1,6 @@
 {
   "_doc": "Written only by node harness/bin/task.mjs. Phases run in order; P0 (ADOPT + STYLE DISCOVERY) waits for the owner by design and needs task.mjs signoff and task.mjs archsignoff before its gate passes. Later phases are added by the planner at the end of P0 (task.mjs phase-add) from the game's real state.",
-  "updated": "2026-11-14T19:09:12.417Z",
+  "updated": "2026-11-14T19:18:10.081Z",
   "phases": [
     {
       "id": "P0",
@@ -4683,7 +4683,7 @@
       "agent": "builder",
       "priority": 1,
       "kind": "feature",
-      "status": "doing",
+      "status": "done",
       "attempts": 2,
       "notes": [
         "Owner 2026-11-14 dusk and night shot (city_buildings_busiest): the whole city goes flat blue-grey, windows are black holes, no lit windows, no street lamps on, sky ambient dominates. Dusk and night must read: warm lit windows varying per building, street lamps on with pools (emissive plus near real lights), shop fronts glowing, sky ambient lowered so night is lit by the city, not tinted blue.",
@@ -4691,7 +4691,10 @@
         "attempt 1 failed: Verifier narrow FAIL (look a large real improvement, blue shade gone by day, warm dusk, lit night): night cp_street_eye luma 0.144 under the 0.15 floor with a black foreground road; gali road still B-R +10 and gali_foot not shootable (walk stops at 53 m); relight_live_street failed twice under load 95+; a few blown white windows at night."
       ],
       "created": "2026-11-14T08:58:18.634Z",
-      "started": "2026-11-14T16:03:16.305Z"
+      "started": "2026-11-14T16:03:16.305Z",
+      "done": "2026-11-14T19:18:10.063Z",
+      "summary": "Shade, sky and grade: shade fill a warm neutral grey (blue minus red 6 or less in every city view and light, gali road +5), procedural sky with clouds and sun disc, lit windows varying per window and building, street lamps on kerbs and medians with warm pools and a street glow near the camera, night CP luma 0.163 over the 0.15 floor, relight incremental (main-thread 3.6 ms at load 17). Attempt 1 verifier: large real improvement, narrow fail; attempt 2 fixes measured; quick 15/15 at load 15.",
+      "commit": "090386b"
     },
     {
       "id": "P2-053",
