@@ -207,6 +207,682 @@
         "fitNote": "Use for image to 3D."
       },
       "promptAt": "2026-11-14T12:53:50.845Z"
+    },
+    {
+      "id": "tex_pragati_mural_wave",
+      "kind": "texture",
+      "intent": "Pragati Maidan tunnel inside wall mural: yellow and green wave band with birds and leaves",
+      "prompt": "stylised realistic game art, real proportions, clean simplified shapes, rich warm colour, soft hazy sunlight, hand-tuned colour, no outlines. A painted tunnel wall mural strip, as in the Pragati Maidan tunnel in Delhi. Big flowing wave bands in warm marigold yellow and leaf green, rolling across the whole strip, with simple stylised birds in flight (parrots, peacocks, sparrows) and large curling leaves painted in the waves, in a bold folk-art flat paint style, slightly chalky matte paint on concrete, a few scuffs at the lower edge from traffic dust and small chips. Covers a wall section 8 m wide by 2 m tall. Photographic quality material, shot flat and straight on, evenly lit, no perspective, no shadows cast across it, no people, no real brand names or logos. Seamless tileable horizontally (left edge continues into right edge), 2048 x 512, flat front view, even lighting, no baked shadows, no perspective.",
+      "generate": "square 1024x1024",
+      "target": {
+        "w": 2048,
+        "h": 512,
+        "tileable": true,
+        "normalMap": true,
+        "alpha": false,
+        "out": "textures/tex_pragati_mural_wave.webp"
+      },
+      "placeholder": {
+        "color": "#1f2533",
+        "pattern": "noise",
+        "scale": 1
+      },
+      "used_by": [
+        "P2-032"
+      ],
+      "priority": 1,
+      "batch": "B1-tunnel-road",
+      "created": "2026-11-14T15:51:14.440Z"
+    },
+    {
+      "id": "tex_pragati_mural_madhubani",
+      "kind": "texture",
+      "intent": "Pragati tunnel wall mural: Madhubani fish band",
+      "prompt": "stylised realistic game art, real proportions, clean simplified shapes, rich warm colour, soft hazy sunlight, hand-tuned colour, no outlines. A painted tunnel wall mural strip in Madhubani folk-art style: a continuous band of stylised fish with big round eyes and patterned scales, fine line hatching, floral borders, in red, ochre, indigo, green and cream on a cream ground, with a thin double border line at top and bottom. Matte paint on concrete, light dust and a few chips at the bottom. Covers a wall section 8 m wide by 2 m tall. Invented original motifs only. Photographic quality material, shot flat and straight on, evenly lit, no perspective, no shadows cast across it, no people, no real brand names or logos. Seamless tileable horizontally (left edge continues into right edge), 2048 x 512, flat front view, even lighting, no baked shadows, no perspective.",
+      "generate": "square 1024x1024",
+      "target": {
+        "w": 2048,
+        "h": 512,
+        "tileable": true,
+        "normalMap": true,
+        "alpha": false,
+        "out": "textures/tex_pragati_mural_madhubani.webp"
+      },
+      "placeholder": {
+        "color": "#1f2533",
+        "pattern": "noise",
+        "scale": 1
+      },
+      "used_by": [
+        "P2-032"
+      ],
+      "priority": 1,
+      "batch": "B1-tunnel-road",
+      "created": "2026-11-14T15:51:14.899Z"
+    },
+    {
+      "id": "tex_pragati_mural_warli",
+      "kind": "texture",
+      "intent": "Pragati tunnel wall mural: Warli figures band",
+      "prompt": "stylised realistic game art, real proportions, clean simplified shapes, rich warm colour, soft hazy sunlight, hand-tuned colour, no outlines. A painted tunnel wall mural strip in Warli folk-art style: simple white stick-figure people made of triangles and circles, dancing in a ring, farming, carrying pots, with trees, birds and huts, painted in white on a deep terracotta red-brown ground, with a thin white border line at top and bottom. Matte paint on concrete, light dust and a few chips at the bottom. Covers a wall section 8 m wide by 2 m tall. Figures are dignified folk art, nothing mocking. Photographic quality material, shot flat and straight on, evenly lit, no perspective, no shadows cast across it, no people, no real brand names or logos. Seamless tileable horizontally (left edge continues into right edge), 2048 x 512, flat front view, even lighting, no baked shadows, no perspective.",
+      "generate": "square 1024x1024",
+      "target": {
+        "w": 2048,
+        "h": 512,
+        "tileable": true,
+        "normalMap": true,
+        "alpha": false,
+        "out": "textures/tex_pragati_mural_warli.webp"
+      },
+      "placeholder": {
+        "color": "#1f2533",
+        "pattern": "noise",
+        "scale": 1
+      },
+      "used_by": [
+        "P2-032"
+      ],
+      "priority": 1,
+      "batch": "B1-tunnel-road",
+      "created": "2026-11-14T15:51:15.316Z"
+    },
+    {
+      "id": "tex_pragati_ramp_wall",
+      "kind": "texture",
+      "intent": "Pragati tunnel approach ramp retaining wall: lotus, swans, trees, tricolour bands",
+      "prompt": "stylised realistic game art, real proportions, clean simplified shapes, rich warm colour, soft hazy sunlight, hand-tuned colour, no outlines. A painted retaining wall mural strip, as on the open approach ramp of the Pragati Maidan tunnel. Cream base with pale grey flower discs, a blue and white river band across the middle, painted lotus flowers, white swans and dark green trees; a thick saffron band along the top edge and a deep green band along the bottom edge. Matte paint on concrete, light road dust splash at the bottom, a few chips. Covers a wall section 8 m wide by 4 m tall. Photographic quality material, shot flat and straight on, evenly lit, no perspective, no shadows cast across it, no people, no real brand names or logos. Seamless tileable horizontally, 2048 x 1024, flat front view, even lighting, no baked shadows, no perspective.",
+      "generate": "square 1024x1024",
+      "target": {
+        "w": 2048,
+        "h": 1024,
+        "tileable": true,
+        "normalMap": true,
+        "alpha": false,
+        "out": "textures/tex_pragati_ramp_wall.webp"
+      },
+      "placeholder": {
+        "color": "#1f2533",
+        "pattern": "noise",
+        "scale": 1
+      },
+      "used_by": [
+        "P2-032"
+      ],
+      "priority": 1,
+      "batch": "B1-tunnel-road",
+      "created": "2026-11-14T15:51:15.707Z"
+    },
+    {
+      "id": "tex_road_asphalt_delhi",
+      "kind": "texture",
+      "intent": "Delhi road asphalt, worn, with darker tyre lanes",
+      "prompt": "stylised realistic game art, real proportions, clean simplified shapes, rich warm colour, soft hazy sunlight, hand-tuned colour, no outlines, lived-in surfaces: soot, water stains, faded paint, patched plaster, dust; honest, not exaggerated. Worn dark grey asphalt of a busy Delhi road seen from straight above, coarse aggregate showing, two faint darker polished tyre tracks running down the image, a few hairline cracks, tiny patched tar repairs, dusty brownish edges, no lane markings, no kerbs, no vehicles. Covers 4 m x 4 m of road. Photographic quality material, shot flat and straight on, evenly lit, no perspective, no shadows cast across it, no people, no real brand names or logos. Seamless tileable in both directions, 2048 x 2048, no baked shadows, no text, no letters.",
+      "generate": "square 1024x1024",
+      "target": {
+        "w": 2048,
+        "h": 2048,
+        "tileable": true,
+        "normalMap": true,
+        "alpha": false,
+        "out": "textures/tex_road_asphalt_delhi.webp"
+      },
+      "placeholder": {
+        "color": "#1f2533",
+        "pattern": "noise",
+        "scale": 1
+      },
+      "used_by": [
+        "P2-035"
+      ],
+      "priority": 1,
+      "batch": "B1-tunnel-road",
+      "created": "2026-11-14T15:51:16.131Z"
+    },
+    {
+      "id": "tex_tunnel_concrete_panel",
+      "kind": "texture",
+      "intent": "Concrete tunnel wall panel with joints and soot",
+      "prompt": "stylised realistic game art, real proportions, clean simplified shapes, rich warm colour, soft hazy sunlight, hand-tuned colour, no outlines, lived-in surfaces: soot, water stains, faded paint, patched plaster, dust; honest, not exaggerated. A pale grey cast concrete tunnel wall panel seen straight on: formwork board marks, a vertical panel joint with a sealed seam, a faint tie-hole grid, soft grey-black exhaust soot rising from the bottom, light efflorescence stains, dry. No signs, no pipes. Covers 2 m x 2 m of wall. Photographic quality material, shot flat and straight on, evenly lit, no perspective, no shadows cast across it, no people, no real brand names or logos. Seamless tileable in both directions, 2048 x 2048, no baked shadows, no text, no letters.",
+      "generate": "square 1024x1024",
+      "target": {
+        "w": 2048,
+        "h": 2048,
+        "tileable": true,
+        "normalMap": true,
+        "alpha": false,
+        "out": "textures/tex_tunnel_concrete_panel.webp"
+      },
+      "placeholder": {
+        "color": "#1f2533",
+        "pattern": "noise",
+        "scale": 1
+      },
+      "used_by": [
+        "P2-032"
+      ],
+      "priority": 1,
+      "batch": "B1-tunnel-road",
+      "created": "2026-11-14T15:51:16.321Z"
+    },
+    {
+      "id": "decal_road_marks_sheet",
+      "kind": "decal",
+      "intent": "Road decal sheet: cracks, patches, oil stains, manhole covers, tyre marks",
+      "prompt": "stylised realistic game art, real proportions, clean simplified shapes, rich warm colour, soft hazy sunlight, hand-tuned colour, no outlines, lived-in surfaces: soot, water stains, faded paint, patched plaster, dust; honest, not exaggerated. A sheet of 12 separate road surface details to paste onto asphalt, seen straight from above: two long cracks, two rectangular dark tar patches, two oil stains, one round cast iron manhole cover and one square drain grating (no lettering), a braking tyre skid mark, a set of two worn tyre tracks, a puddle stain ring, a patch of loose gravel. Colours drawn from dark grey asphalt, black and rust. Transparent background (PNG with alpha), 2048 x 2048, each item separate with clear space between, no ground, no shadow, no text, no letters, no logos.",
+      "generate": "square 1024x1024",
+      "target": {
+        "w": 2048,
+        "h": 2048,
+        "tileable": false,
+        "normalMap": false,
+        "alpha": true,
+        "out": "decals/decal_road_marks_sheet.webp"
+      },
+      "placeholder": {
+        "color": "#1f2533",
+        "pattern": "flat",
+        "scale": 1
+      },
+      "used_by": [
+        "P2-053"
+      ],
+      "priority": 1,
+      "batch": "B1-tunnel-road",
+      "created": "2026-11-14T15:51:16.743Z"
+    },
+    {
+      "id": "tex_wall_oldcity_plaster",
+      "kind": "texture",
+      "intent": "Old Delhi lime plaster wall, peeling paint and damp",
+      "prompt": "stylised realistic game art, real proportions, clean simplified shapes, rich warm colour, soft hazy sunlight, hand-tuned colour, no outlines, lived-in surfaces: soot, water stains, faded paint, patched plaster, dust; honest, not exaggerated. An Old Delhi lime plaster wall over lakhori brick, seen straight on: faded mint green and dusty ochre paint peeling in patches to bare plaster and a few red bricks, rising damp stain climbing from the base, soot streaks, a hairline crack, old nail holes. No posters, no windows, no signs. Covers 2 m x 2 m of wall. Photographic quality material, shot flat and straight on, evenly lit, no perspective, no shadows cast across it, no people, no real brand names or logos. Seamless tileable in both directions, 2048 x 2048, no baked shadows, no text, no letters.",
+      "generate": "square 1024x1024",
+      "target": {
+        "w": 2048,
+        "h": 2048,
+        "tileable": true,
+        "normalMap": true,
+        "alpha": false,
+        "out": "textures/tex_wall_oldcity_plaster.webp"
+      },
+      "placeholder": {
+        "color": "#1f2533",
+        "pattern": "noise",
+        "scale": 1
+      },
+      "used_by": [
+        "P2-053"
+      ],
+      "priority": 1,
+      "batch": "B2-walls",
+      "created": "2026-11-14T15:51:16.982Z"
+    },
+    {
+      "id": "tex_wall_old_brick",
+      "kind": "texture",
+      "intent": "Exposed old brick wall, lime mortar, soot",
+      "prompt": "stylised realistic game art, real proportions, clean simplified shapes, rich warm colour, soft hazy sunlight, hand-tuned colour, no outlines, lived-in surfaces: soot, water stains, faded paint, patched plaster, dust; honest, not exaggerated. Exposed old thin red-brown bricks of Old Delhi (lakhori style) laid in lime mortar, uneven, some bricks eroded, one band of dusty whitewash remains, soot staining and light salt bloom. Covers 2 m x 2 m of wall. Photographic quality material, shot flat and straight on, evenly lit, no perspective, no shadows cast across it, no people, no real brand names or logos. Seamless tileable in both directions, 2048 x 2048, no baked shadows, no text, no letters.",
+      "generate": "square 1024x1024",
+      "target": {
+        "w": 2048,
+        "h": 2048,
+        "tileable": true,
+        "normalMap": true,
+        "alpha": false,
+        "out": "textures/tex_wall_old_brick.webp"
+      },
+      "placeholder": {
+        "color": "#1f2533",
+        "pattern": "noise",
+        "scale": 1
+      },
+      "used_by": [
+        "P2-053"
+      ],
+      "priority": 1,
+      "batch": "B2-walls",
+      "created": "2026-11-14T15:51:17.234Z"
+    },
+    {
+      "id": "tex_wall_lutyens_whitewash",
+      "kind": "texture",
+      "intent": "Lutyens Delhi whitewash with cream sandstone course",
+      "prompt": "stylised realistic game art, real proportions, clean simplified shapes, rich warm colour, soft hazy sunlight, hand-tuned colour, no outlines. A Lutyens Delhi bungalow wall seen straight on: clean off-white lime wash, one horizontal course of pale cream and pink sandstone blocks near the base with fine joints, light grey rain streaks, a little green algae at the very bottom, otherwise well kept. Covers 2 m x 2 m of wall. Photographic quality material, shot flat and straight on, evenly lit, no perspective, no shadows cast across it, no people, no real brand names or logos. Seamless tileable in both directions, 2048 x 2048, no baked shadows, no text, no letters.",
+      "generate": "square 1024x1024",
+      "target": {
+        "w": 2048,
+        "h": 2048,
+        "tileable": true,
+        "normalMap": true,
+        "alpha": false,
+        "out": "textures/tex_wall_lutyens_whitewash.webp"
+      },
+      "placeholder": {
+        "color": "#1f2533",
+        "pattern": "noise",
+        "scale": 1
+      },
+      "used_by": [
+        "P2-053"
+      ],
+      "priority": 2,
+      "batch": "B2-walls",
+      "created": "2026-11-14T15:51:17.426Z"
+    },
+    {
+      "id": "tex_wall_cp_colonnade_plaster",
+      "kind": "texture",
+      "intent": "Connaught Place colonnade whitewash plaster",
+      "prompt": "stylised realistic game art, real proportions, clean simplified shapes, rich warm colour, soft hazy sunlight, hand-tuned colour, no outlines, lived-in surfaces: soot, water stains, faded paint, patched plaster, dust; honest, not exaggerated. Connaught Place colonnade plaster: cream white painted stucco with fine horizontal rustication grooves, slightly yellowed, a few hairline cracks, grey dust streaks and a pale water stain, repainted a little unevenly. Covers 2 m x 2 m of wall. Photographic quality material, shot flat and straight on, evenly lit, no perspective, no shadows cast across it, no people, no real brand names or logos. Seamless tileable in both directions, 2048 x 2048, no baked shadows, no text, no letters.",
+      "generate": "square 1024x1024",
+      "target": {
+        "w": 2048,
+        "h": 2048,
+        "tileable": true,
+        "normalMap": true,
+        "alpha": false,
+        "out": "textures/tex_wall_cp_colonnade_plaster.webp"
+      },
+      "placeholder": {
+        "color": "#1f2533",
+        "pattern": "noise",
+        "scale": 1
+      },
+      "used_by": [
+        "P2-053"
+      ],
+      "priority": 2,
+      "batch": "B2-walls",
+      "created": "2026-11-14T15:51:17.671Z"
+    },
+    {
+      "id": "tex_wall_modern_office",
+      "kind": "texture",
+      "intent": "Modern Delhi office facade: concrete and tinted glass with grime",
+      "prompt": "stylised realistic game art, real proportions, clean simplified shapes, rich warm colour, soft hazy sunlight, hand-tuned colour, no outlines, lived-in surfaces: soot, water stains, faded paint, patched plaster, dust; honest, not exaggerated. A modern Delhi office block facade seen straight on: pale grey precast concrete panels with a regular grid of tinted blue-green glass windows, aluminium frames, grey dust and rain streaks below each window, a few AC drip stains. No logos, no text. Covers 4 m x 4 m of facade. Photographic quality material, shot flat and straight on, evenly lit, no perspective, no shadows cast across it, no people, no real brand names or logos. Seamless tileable in both directions, 2048 x 2048, no baked shadows, no text, no letters.",
+      "generate": "square 1024x1024",
+      "target": {
+        "w": 2048,
+        "h": 2048,
+        "tileable": true,
+        "normalMap": true,
+        "alpha": false,
+        "out": "textures/tex_wall_modern_office.webp"
+      },
+      "placeholder": {
+        "color": "#1f2533",
+        "pattern": "noise",
+        "scale": 1
+      },
+      "used_by": [
+        "P2-053"
+      ],
+      "priority": 2,
+      "batch": "B2-walls",
+      "created": "2026-11-14T15:51:17.983Z"
+    },
+    {
+      "id": "decal_wall_grime_sheet",
+      "kind": "decal",
+      "intent": "Wall grime sheet: rain streaks, soot, damp at foot, rust runs",
+      "prompt": "stylised realistic game art, real proportions, clean simplified shapes, rich warm colour, soft hazy sunlight, hand-tuned colour, no outlines, lived-in surfaces: soot, water stains, faded paint, patched plaster, dust; honest, not exaggerated. A sheet of 12 separate wall weathering marks, seen straight on, semi-soft edges: three vertical rain streaks running down from a window sill, two black soot clouds, two rising damp bands for the wall foot (wavy upper edge), two rust runs from a bracket, one AC water drip stain, two peeling plaster patches showing brick. Colours: grey-brown, black soot, rust orange, pale damp. Transparent background (PNG with alpha), 2048 x 2048, each item separate with clear space between, no ground, no shadow, no text, no letters, no logos.",
+      "generate": "square 1024x1024",
+      "target": {
+        "w": 2048,
+        "h": 2048,
+        "tileable": false,
+        "normalMap": false,
+        "alpha": true,
+        "out": "decals/decal_wall_grime_sheet.webp"
+      },
+      "placeholder": {
+        "color": "#1f2533",
+        "pattern": "flat",
+        "scale": 1
+      },
+      "used_by": [
+        "P2-053"
+      ],
+      "priority": 1,
+      "batch": "B2-walls",
+      "created": "2026-11-14T15:51:18.338Z"
+    },
+    {
+      "id": "decal_wall_peeling_plaster",
+      "kind": "decal",
+      "intent": "Peeling plaster and exposed brick patches",
+      "prompt": "stylised realistic game art, real proportions, clean simplified shapes, rich warm colour, soft hazy sunlight, hand-tuned colour, no outlines, lived-in surfaces: soot, water stains, faded paint, patched plaster, dust; honest, not exaggerated. A sheet of 6 separate irregular patches where plaster has fallen off a wall exposing old red brick and lime mortar, jagged paint edges in faded mint and ochre. Transparent background (PNG with alpha), 1024 x 1024, each item separate with clear space between, no ground, no shadow, no text, no letters, no logos.",
+      "generate": "square 1024x1024",
+      "target": {
+        "w": 1024,
+        "h": 1024,
+        "tileable": false,
+        "normalMap": false,
+        "alpha": true,
+        "out": "decals/decal_wall_peeling_plaster.webp"
+      },
+      "placeholder": {
+        "color": "#1f2533",
+        "pattern": "flat",
+        "scale": 1
+      },
+      "used_by": [
+        "P2-053"
+      ],
+      "priority": 2,
+      "batch": "B2-walls",
+      "created": "2026-11-14T15:51:18.626Z"
+    },
+    {
+      "id": "decal_sign_tin_boards",
+      "kind": "decal",
+      "intent": "Old painted tin sign boards sheet (Hindi and English, invented names)",
+      "prompt": "stylised realistic game art, real proportions, clean simplified shapes, rich warm colour, soft hazy sunlight, hand-tuned colour, no outlines, lived-in surfaces: soot, water stains, faded paint, patched plaster, dust; honest, not exaggerated. A sheet of 6 separate hand-painted old tin shop boards, each a flat rectangle straight on, uneven brush lettering, faded and rusted at the edges, dirt in the corners, with Hindi on the top line and English below: board 1 blue ground, yellow letters, text \"Shri Ram Hardware Store\" and \"श्री राम हार्डवेयर स्टोर\"; board 2 cream ground, red letters \"Hira Moti Jewellers\" and \"हीरा मोती ज्वेलर्स\"; board 3 green ground, white letters \"Kapda Mandir\" and \"कपड़ा मंदिर\"; board 4 yellow ground, black letters \"Chandni Mithai Ghar\" and \"चाँदनी मिठाई घर\"; board 5 red ground, white letters \"Delhi Tool Centre\" and \"दिल्ली टूल सेंटर\"; board 6 white ground, blue letters \"Shudh Ghee Parantha House\" and \"शुद्ध घी परांठा हाउस\". Use exactly this text, correct Devanagari, no other text. Transparent background (PNG with alpha), 2048 x 2048, each item separate with clear space between, no ground, no shadow, no text, no letters, no logos.",
+      "generate": "square 1024x1024",
+      "target": {
+        "w": 2048,
+        "h": 2048,
+        "tileable": false,
+        "normalMap": false,
+        "alpha": true,
+        "out": "decals/decal_sign_tin_boards.webp"
+      },
+      "placeholder": {
+        "color": "#1f2533",
+        "pattern": "flat",
+        "scale": 1
+      },
+      "used_by": [
+        "P2-048"
+      ],
+      "priority": 1,
+      "batch": "B3-signs",
+      "created": "2026-11-14T15:51:18.872Z"
+    },
+    {
+      "id": "decal_sign_hotel_led",
+      "kind": "decal",
+      "intent": "Paharganj hotel vertical LED boards sheet",
+      "prompt": "stylised realistic game art, real proportions, clean simplified shapes, rich warm colour, soft hazy sunlight, hand-tuned colour, no outlines. A sheet of 4 separate tall vertical hotel sign boxes seen straight on, backlit acrylic and LED look, in strong red, orange, green and blue, each with a small painted arrow and a simple star-rating icon, faded and dusty, with text: \"Hotel Sunrise Paharganj\" and \"होटल सनराइज़ पहाड़गंज\", \"Hotel Krishna Palace\" and \"होटल कृष्णा पैलेस\", \"Hotel Moonlight\" and \"होटल मूनलाइट\", \"Bhola Lodge\" and \"भोला लॉज\". Use exactly this text, correct Devanagari, no other text. Transparent background (PNG with alpha), 1024 x 2048, each board separate, no wall, no shadow, no logos.",
+      "generate": "square 1024x1024",
+      "target": {
+        "w": 1024,
+        "h": 2048,
+        "tileable": false,
+        "normalMap": false,
+        "alpha": true,
+        "out": "decals/decal_sign_hotel_led.webp"
+      },
+      "placeholder": {
+        "color": "#1f2533",
+        "pattern": "flat",
+        "scale": 1
+      },
+      "used_by": [
+        "P2-048"
+      ],
+      "priority": 2,
+      "batch": "B3-signs",
+      "created": "2026-11-14T15:51:19.075Z"
+    },
+    {
+      "id": "decal_sign_gb_flex",
+      "kind": "decal",
+      "intent": "GB Road blue and white printed flex hardware boards sheet",
+      "prompt": "stylised realistic game art, real proportions, clean simplified shapes, rich warm colour, soft hazy sunlight, hand-tuned colour, no outlines, sun-faded vinyl. A sheet of 4 separate wide printed flex boards of Old Delhi machinery and hardware shops, straight on, blue and white with yellow accents, crowded layout of invented company name, a list of goods, tiny pictures of pumps, bearings, motors and pipes, and an invented phone number \"98XXXXXXXX\", creased, with grommet holes and sagging corners: \"Ajmeri Gate Hardware Traders\" and \"अजमेरी गेट हार्डवेयर ट्रेडर्स\", \"Bansal Pipe and Fittings\" and \"बंसल पाइप एंड फ़िटिंग्स\", \"Modern Pump House\" and \"मॉडर्न पंप हाउस\", \"Shiv Shakti Machinery\" and \"शिव शक्ति मशीनरी\". Use exactly this text, correct Devanagari, other lines may be unreadable small print. Transparent background (PNG with alpha), 2048 x 2048, each item separate with clear space between, no ground, no shadow, no text, no letters, no logos.",
+      "generate": "square 1024x1024",
+      "target": {
+        "w": 2048,
+        "h": 2048,
+        "tileable": false,
+        "normalMap": false,
+        "alpha": true,
+        "out": "decals/decal_sign_gb_flex.webp"
+      },
+      "placeholder": {
+        "color": "#1f2533",
+        "pattern": "flat",
+        "scale": 1
+      },
+      "used_by": [
+        "P2-048"
+      ],
+      "priority": 2,
+      "batch": "B3-signs",
+      "created": "2026-11-14T15:51:19.295Z"
+    },
+    {
+      "id": "decal_poster_paper_notices",
+      "kind": "decal",
+      "intent": "Torn layered paper posters and notices sheet",
+      "prompt": "stylised realistic game art, real proportions, clean simplified shapes, rich warm colour, soft hazy sunlight, hand-tuned colour, no outlines, lived-in surfaces: soot, water stains, faded paint, patched plaster, dust; honest, not exaggerated. A sheet of 10 separate pasted paper posters and notices straight on, torn and peeling at edges, glue stains, layered scraps: coaching class flyer, lost-and-found notice, mela fair poster, room for rent notice, plain handbills in red, yellow, blue and white, with Hindi and English headlines. Invented content only: no real people, parties, politicians, brands or phone numbers (use \"XXXXXXXXXX\"). Use only simple short invented words such as \"मेला\" and \"Room for Rent\", rest as unreadable small print. Transparent background (PNG with alpha), 2048 x 2048, each item separate with clear space between, no ground, no shadow, no text, no letters, no logos.",
+      "generate": "square 1024x1024",
+      "target": {
+        "w": 2048,
+        "h": 2048,
+        "tileable": false,
+        "normalMap": false,
+        "alpha": true,
+        "out": "decals/decal_poster_paper_notices.webp"
+      },
+      "placeholder": {
+        "color": "#1f2533",
+        "pattern": "flat",
+        "scale": 1
+      },
+      "used_by": [
+        "P2-053"
+      ],
+      "priority": 2,
+      "batch": "B3-signs",
+      "created": "2026-11-14T15:51:19.717Z"
+    },
+    {
+      "id": "decal_shutter_lettering",
+      "kind": "decal",
+      "intent": "Painted shutter lettering sheet",
+      "prompt": "stylised realistic game art, real proportions, clean simplified shapes, rich warm colour, soft hazy sunlight, hand-tuned colour, no outlines, lived-in surfaces: soot, water stains, faded paint, patched plaster, dust; honest, not exaggerated. A sheet of 4 separate strips of hand-painted lettering as found on rolling steel shutters, white and red paint on transparent background, slightly dripping and flaking: \"Shri Ram Hardware\" with \"श्री राम हार्डवेयर\"; \"Delhi Tool Centre\" with \"दिल्ली टूल सेंटर\"; \"No Parking\" with \"यहाँ पार्किंग मना है\"; \"Mahalaxmi Metals\" with \"महालक्ष्मी मेटल्स\". Use exactly this text, correct Devanagari. Transparent background (PNG with alpha), 2048 x 1024, each item separate with clear space between, no ground, no shadow, no text, no letters, no logos.",
+      "generate": "square 1024x1024",
+      "target": {
+        "w": 2048,
+        "h": 1024,
+        "tileable": false,
+        "normalMap": false,
+        "alpha": true,
+        "out": "decals/decal_shutter_lettering.webp"
+      },
+      "placeholder": {
+        "color": "#1f2533",
+        "pattern": "flat",
+        "scale": 1
+      },
+      "used_by": [
+        "P2-056"
+      ],
+      "priority": 3,
+      "batch": "B3-signs",
+      "created": "2026-11-14T15:51:20.367Z"
+    },
+    {
+      "id": "tex_shutter_rolling_steel",
+      "kind": "texture",
+      "intent": "Rolling steel shutter, dented, painted green",
+      "prompt": "stylised realistic game art, real proportions, clean simplified shapes, rich warm colour, soft hazy sunlight, hand-tuned colour, no outlines, lived-in surfaces: soot, water stains, faded paint, patched plaster, dust; honest, not exaggerated. A rolling steel shutter seen straight on: horizontal corrugated slats, faded green paint worn to bare metal at edges, dents, rust at the lower rail, a padlock hasp, no lettering. Covers 2 m x 2 m. Photographic quality material, shot flat and straight on, evenly lit, no perspective, no shadows cast across it, no people, no real brand names or logos. Seamless tileable in both directions, 2048 x 2048, no baked shadows, no text, no letters.",
+      "generate": "square 1024x1024",
+      "target": {
+        "w": 2048,
+        "h": 2048,
+        "tileable": true,
+        "normalMap": true,
+        "alpha": false,
+        "out": "textures/tex_shutter_rolling_steel.webp"
+      },
+      "placeholder": {
+        "color": "#1f2533",
+        "pattern": "noise",
+        "scale": 1
+      },
+      "used_by": [
+        "P2-056"
+      ],
+      "priority": 2,
+      "batch": "B3-signs",
+      "created": "2026-11-14T15:51:20.788Z"
+    },
+    {
+      "id": "decal_goods_sweets_sheet",
+      "kind": "decal",
+      "intent": "Shop goods sheet: sweet trays and snack stacks",
+      "prompt": "stylised realistic game art, real proportions, clean simplified shapes, rich warm colour, soft hazy sunlight, hand-tuned colour, no outlines. A sheet of 8 separate straight-on views of Delhi sweet shop goods: steel trays of jalebi, gulab jamun in syrup, barfi pieces, motichoor laddoo pyramid, kaju katli, samosas, paper-lined baskets of namkeen, a glass counter tray; warm colours, honest and appetising. Transparent background (PNG with alpha), 2048 x 2048, each item separate with clear space between, no ground, no shadow, no text, no letters, no logos.",
+      "generate": "square 1024x1024",
+      "target": {
+        "w": 2048,
+        "h": 2048,
+        "tileable": false,
+        "normalMap": false,
+        "alpha": true,
+        "out": "decals/decal_goods_sweets_sheet.webp"
+      },
+      "placeholder": {
+        "color": "#1f2533",
+        "pattern": "flat",
+        "scale": 1
+      },
+      "used_by": [
+        "P2-056"
+      ],
+      "priority": 2,
+      "batch": "B3-goods",
+      "created": "2026-11-14T15:51:21.084Z"
+    },
+    {
+      "id": "decal_goods_cloth_sheet",
+      "kind": "decal",
+      "intent": "Shop goods sheet: cloth rolls and saree stacks",
+      "prompt": "stylised realistic game art, real proportions, clean simplified shapes, rich warm colour, soft hazy sunlight, hand-tuned colour, no outlines. A sheet of 8 separate straight-on views of Old Delhi cloth shop goods: rolls of fabric stacked on edge in many colours, folded saree stacks with gold borders, dupatta bundles, a hanging row of bridal lehenga, plain bolts of white cotton. Rich colour. Transparent background (PNG with alpha), 2048 x 2048, each item separate with clear space between, no ground, no shadow, no text, no letters, no logos.",
+      "generate": "square 1024x1024",
+      "target": {
+        "w": 2048,
+        "h": 2048,
+        "tileable": false,
+        "normalMap": false,
+        "alpha": true,
+        "out": "decals/decal_goods_cloth_sheet.webp"
+      },
+      "placeholder": {
+        "color": "#1f2533",
+        "pattern": "flat",
+        "scale": 1
+      },
+      "used_by": [
+        "P2-056"
+      ],
+      "priority": 2,
+      "batch": "B3-goods",
+      "created": "2026-11-14T15:51:21.373Z"
+    },
+    {
+      "id": "decal_goods_utensils_sheet",
+      "kind": "decal",
+      "intent": "Shop goods sheet: steel and brass utensils",
+      "prompt": "stylised realistic game art, real proportions, clean simplified shapes, rich warm colour, soft hazy sunlight, hand-tuned colour, no outlines. A sheet of 8 separate straight-on views of utensil shop goods: stacked steel thalis and katoris, brass handi pots, pressure cookers, copper kettles, steel dabbas of graded sizes, ladles hanging on a rail. Honest metal wear. Transparent background (PNG with alpha), 2048 x 2048, each item separate with clear space between, no ground, no shadow, no text, no letters, no logos.",
+      "generate": "square 1024x1024",
+      "target": {
+        "w": 2048,
+        "h": 2048,
+        "tileable": false,
+        "normalMap": false,
+        "alpha": true,
+        "out": "decals/decal_goods_utensils_sheet.webp"
+      },
+      "placeholder": {
+        "color": "#1f2533",
+        "pattern": "flat",
+        "scale": 1
+      },
+      "used_by": [
+        "P2-056"
+      ],
+      "priority": 3,
+      "batch": "B3-goods",
+      "created": "2026-11-14T15:51:21.574Z"
+    },
+    {
+      "id": "decal_goods_dryfruit_sheet",
+      "kind": "decal",
+      "intent": "Shop goods sheet: dry fruit and spice sacks (Khari Baoli)",
+      "prompt": "stylised realistic game art, real proportions, clean simplified shapes, rich warm colour, soft hazy sunlight, hand-tuned colour, no outlines. A sheet of 8 separate straight-on views of Khari Baoli style goods: open jute sacks rolled down at the top showing almonds, cashews, raisins, dried dates, red chillies, turmeric, cardamom and whole spices, each with a small steel scoop, plus a stacked sack wall. Transparent background (PNG with alpha), 2048 x 2048, each item separate with clear space between, no ground, no shadow, no text, no letters, no logos.",
+      "generate": "square 1024x1024",
+      "target": {
+        "w": 2048,
+        "h": 2048,
+        "tileable": false,
+        "normalMap": false,
+        "alpha": true,
+        "out": "decals/decal_goods_dryfruit_sheet.webp"
+      },
+      "placeholder": {
+        "color": "#1f2533",
+        "pattern": "flat",
+        "scale": 1
+      },
+      "used_by": [
+        "P2-056"
+      ],
+      "priority": 3,
+      "batch": "B3-goods",
+      "created": "2026-11-14T15:51:21.740Z"
+    },
+    {
+      "id": "decal_goods_hardware_sheet",
+      "kind": "decal",
+      "intent": "Shop goods sheet: hardware, pipes, bolts, tools",
+      "prompt": "stylised realistic game art, real proportions, clean simplified shapes, rich warm colour, soft hazy sunlight, hand-tuned colour, no outlines. A sheet of 8 separate straight-on views of GB Road hardware shop goods: bundles of steel pipes, buckets of nuts and bolts, hanging spanners and hammers, coils of rope and wire, paint tins stacked, taps and fittings in cardboard trays, ball bearings in open boxes. Oily, dusty. Transparent background (PNG with alpha), 2048 x 2048, each item separate with clear space between, no ground, no shadow, no text, no letters, no logos.",
+      "generate": "square 1024x1024",
+      "target": {
+        "w": 2048,
+        "h": 2048,
+        "tileable": false,
+        "normalMap": false,
+        "alpha": true,
+        "out": "decals/decal_goods_hardware_sheet.webp"
+      },
+      "placeholder": {
+        "color": "#1f2533",
+        "pattern": "flat",
+        "scale": 1
+      },
+      "used_by": [
+        "P2-056"
+      ],
+      "priority": 3,
+      "batch": "B3-goods",
+      "created": "2026-11-14T15:51:21.859Z"
+    },
+    {
+      "id": "decal_goods_phones_bags_sheet",
+      "kind": "decal",
+      "intent": "Shop goods sheet: phones and covers, bags",
+      "prompt": "stylised realistic game art, real proportions, clean simplified shapes, rich warm colour, soft hazy sunlight, hand-tuned colour, no outlines. A sheet of 8 separate straight-on views of street shop goods: a pegboard of plain phone covers in many colours with no brand marks, a glass case of generic phones and chargers, hanging backpacks and duffel bags, school bags, a rack of belts, sunglasses on a spinner. No logos, no brand names. Transparent background (PNG with alpha), 2048 x 2048, each item separate with clear space between, no ground, no shadow, no text, no letters, no logos.",
+      "generate": "square 1024x1024",
+      "target": {
+        "w": 2048,
+        "h": 2048,
+        "tileable": false,
+        "normalMap": false,
+        "alpha": true,
+        "out": "decals/decal_goods_phones_bags_sheet.webp"
+      },
+      "placeholder": {
+        "color": "#1f2533",
+        "pattern": "flat",
+        "scale": 1
+      },
+      "used_by": [
+        "P2-056"
+      ],
+      "priority": 3,
+      "batch": "B3-goods",
+      "created": "2026-11-14T15:51:21.999Z"
     }
   ]
 }
