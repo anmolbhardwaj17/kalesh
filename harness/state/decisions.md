@@ -537,3 +537,8 @@ By: builder, P2-045.
 Decision: each kit's wall colours are sampled from rectangles on walls in its area board photos (tools/kits/sample_walls.mjs, tools/kits/wall_samples.json into kits.json `walls`) and the game repaints the bake tint when a tile is read, instead of rebaking palette.json. Kit colours are scaled together under a brightness cap so sunlit walls do not clip to white.
 Why: keeps the bake and tiles unchanged (no merge conflict with the map lane) and lets every kit follow its own photos (Anmol 2026-11-14 on colourful buildings).
 By: builder, P2-010 fix round.
+
+## 2026-11-14: Shop and brand names: parodies of famous Delhi names, never the real ones
+Decision: besides invented names, the name files (game/data/names/<area>.json) carry parody names that echo famous Delhi shops, eateries and brands the way GTA does: a player who knows Delhi recognises the joke, but the name, spelling and logo are never the real one and never confusingly close (change the core word, not one letter; no real logos, colours or slogans copied). Real place names (Chandni Chowk, Paranthe Wali Gali, Janpath) stay as they are. Respect rule (GAME.md): no parody of religious places, communities, real people or anything that mocks a group; humour aims at commerce, never at people.
+Why: Anmol 2026-11-14: "some name should be famous real names in delhi but just like those like the trick gta used, not exact just resembles".
+By: orchestrator, from the mentor inbox.

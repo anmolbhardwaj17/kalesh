@@ -618,3 +618,5 @@ One line per event, written by task.mjs (start, done, fail, phase changes, inbox
 - 2026-11-14 17:35 [P2-066] added: Dashboard live view of every lane's work in progress
 - 2026-11-14 17:35 [P2-066] start (attempt 1): Dashboard live view of every lane's work in progress
 - 2026-11-14 17:35 mentor message mmwgd09jj handled: Yes: P2-066 makes the dashboard show every lane's newest pictures live, labelled by task, and the sign board builder now saves its boards as it makes them, so you can comment in Messages.
+- 2026-11-14 17:38 [P2-067] added: Parody shop and brand names per area, GTA style
+- 2026-11-14 17:38 mentor message mmwgd3bg6 handled: Good idea. Decision recorded: GTA-style parodies of famous Delhi shop and brand names, clearly different and never mocking people; P2-067 writes them per area and the sign boards use them.
