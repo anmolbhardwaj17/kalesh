@@ -1,6 +1,6 @@
 {
   "_doc": "Written only by node harness/bin/task.mjs. Phases run in order; P0 (ADOPT + STYLE DISCOVERY) waits for the owner by design and needs task.mjs signoff and task.mjs archsignoff before its gate passes. Later phases are added by the planner at the end of P0 (task.mjs phase-add) from the game's real state.",
-  "updated": "2026-11-14T13:06:24.619Z",
+  "updated": "2026-11-14T13:14:54.196Z",
   "phases": [
     {
       "id": "P0",
@@ -4005,7 +4005,8 @@
         "Owner photos: harness/design/reference/owner/OWNER_PHOTOS.md (Pragati Maidan section, 4 photos): painted retaining walls with tricolour bands, yellow and green wave murals, painted pillars with mandala panels, marigold light strings, LED strip lines, jet fans. Build to these.",
         "Owner 2026-11-14: ceiling lights in the tunnel look off: short angled white bars floating under the ceiling. Must be continuous LED strips along the ceiling edges, mounted, emissive with soft glow, matching the light on walls and road; murals on the Pragati Maidan stretch.",
         "Owner 2026-11-14: some tunnels still have the old angled light bars; every tunnel and underpass must get the new fittings, proven with a shot inside each. Murals read as blocky rectangles: need real painted motifs.",
-        "attempt 1 failed: Built and bake green (TUN-01: 1,266 roofed segments, headroom 5.35 m min, 24 mouths, 58 drains, LED strips in all 14 stretches) but: tunnel_drive wheel contacts at kerb edges on 2 routes; walls lit unshaded and look flat; murals read as clean vector art, not hand-painted; tunnel road uses dark city asphalt; pillars in the wide section are paint only."
+        "attempt 1 failed: Built and bake green (TUN-01: 1,266 roofed segments, headroom 5.35 m min, 24 mouths, 58 drains, LED strips in all 14 stretches) but: tunnel_drive wheel contacts at kerb edges on 2 routes; walls lit unshaded and look flat; murals read as clean vector art, not hand-painted; tunnel road uses dark city asphalt; pillars in the wide section are paint only.",
+        "Owner 2026-11-14 screenshot (attempt 2 in progress): flat unshaded look, jet fans huge and hanging into view, fire boxes oversized red cubes, flat pale road; window visible again."
       ],
       "created": "2026-11-13T11:50:33.337Z",
       "started": "2026-11-14T11:59:07.140Z"
