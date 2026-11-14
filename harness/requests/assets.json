@@ -3,7 +3,7 @@
     {
       "id": "model_lead_bittu",
       "kind": "model",
-      "intent": "Bittu, the auto driver (about 35, 1.72 m, lean, tired but alert): khaki uniform shirt with rolled sleeves worn loose, dark trousers, sandals, a red and white checked cotton gamchha over the left shoulder, short black hair, a thin moustache. No logo or brand. Real adult proportions (7.5 heads), stylised B finish (simplified skin and cloth, clean colours from STYLE_BIBLE.md 'Characters'), respect rule: no caricature. Rigged to the Universal Animation Library skeleton (Unreal mannequin bone names) so the game's clips play on it; the stand-in today is the library mannequin with painted colours (game/characters/leads.gd).",
+      "intent": "Bittu, the auto driver (28, 1.72 m, lean, tired but alert): khaki uniform shirt with rolled sleeves worn loose, dark trousers, sandals, a red and white checked cotton gamchha over the left shoulder, short black hair, a thin moustache. No logo or brand. Real adult proportions (7.5 heads), stylised B finish (simplified skin and cloth, clean colours from STYLE_BIBLE.md 'Characters'), respect rule: no caricature. Rigged to the Universal Animation Library skeleton (Unreal mannequin bone names) so the game's clips play on it; the stand-in today is the library mannequin with painted colours (game/characters/leads.gd).",
       "prompt": "The picture is approved (portrait_lead_bittu). 1. Open an image to 3D tool whose download is free (tripo3d.ai Image to 3D or multi-view, or Hunyuan3D on huggingface.co; check the download before you generate). 2. Use your original sheet image: if the tool takes several views, give it the front, side and back cut from the sheet; otherwise cut out the front view alone (crop to just the person). 3. Settings: T-pose or A-pose if offered, polygons near 20,000 to 25,000, normal texture size (not 8K). 4. Rig on mixamo.com: Upload Character, place chin, wrists, elbows, knees, groin, Use Symmetry on, Standard Skeleton; download FBX Binary, T-pose, With Skin, no animation. 5. Upload the .fbx on this card. The game converts it and keeps the current model until the new one passes.",
       "generate": "rigged .glb (or the Mixamo .fbx, converted on upload), humanoid skeleton, up to 25000 triangles and 3 materials",
       "target": {
@@ -38,7 +38,7 @@
     {
       "id": "model_lead_meera",
       "kind": "model",
-      "intent": "SI Meera Rana, the cop (about 30, 1.64 m, fit, direct stare): Delhi-like khaki police uniform of an invented force (no real badges or unit names), full sleeves tucked in, plain dark belt with a holstered service pistol on the right hip, black shoes, hair in a bun. Real adult proportions (7.5 heads), stylised B finish (simplified skin and cloth, clean colours from STYLE_BIBLE.md 'Characters'), respect rule: no caricature. Rigged to the Universal Animation Library skeleton (Unreal mannequin bone names) so the game's clips play on it; the stand-in today is the library mannequin with painted colours (game/characters/leads.gd).",
+      "intent": "SI Meera Rana, the cop (31, 1.64 m, fit, direct stare): Delhi-like khaki police uniform of an invented force (no real badges or unit names), full sleeves tucked in, plain dark belt with a holstered service pistol on the right hip, black shoes, hair in a bun. Real adult proportions (7.5 heads), stylised B finish (simplified skin and cloth, clean colours from STYLE_BIBLE.md 'Characters'), respect rule: no caricature. Rigged to the Universal Animation Library skeleton (Unreal mannequin bone names) so the game's clips play on it; the stand-in today is the library mannequin with painted colours (game/characters/leads.gd).",
       "prompt": "The picture is approved (portrait_lead_meera). 1. Open an image to 3D tool whose download is free (tripo3d.ai Image to 3D or multi-view, or Hunyuan3D on huggingface.co; check the download before you generate). 2. Use your original sheet image: if the tool takes several views, give it the front, side and back cut from the sheet; otherwise cut out the front view alone (crop to just the person). 3. Settings: T-pose or A-pose if offered, polygons near 20,000 to 25,000, normal texture size (not 8K). 4. Rig on mixamo.com: Upload Character, place chin, wrists, elbows, knees, groin, Use Symmetry on, Standard Skeleton; download FBX Binary, T-pose, With Skin, no animation. 5. Upload the .fbx on this card. The game converts it and keeps the current model until the new one passes.",
       "generate": "rigged .glb (or the Mixamo .fbx, converted on upload), humanoid skeleton, up to 25000 triangles and 3 materials",
       "target": {
@@ -109,7 +109,7 @@
       "id": "portrait_lead_bittu",
       "kind": "portrait",
       "intent": "Bittu, the auto driver: the approved look before any 3D model (reference sheet, front, side, back). The 3D model is made from this picture.",
-      "prompt": "Realistic character reference sheet for a modern open world game (the look of Watch Dogs 2: grounded, real proportions, natural skin and cloth, no cartoon). Three full body views of the same person side by side on a plain light grey background: front, left side, back. Standing straight in a relaxed A-pose, arms slightly away from the body, feet flat, whole body visible from head to feet with space around it, even soft studio light, no shadows on the background, no text, no logos, photoreal game art. The person: an Indian man from Delhi, age 35, auto-rickshaw driver, lean wiry build, 1.72 m, realistic proportions about 7.5 heads tall, small head, natural small eyes, weathered sun-tanned face with light stubble and a thin neat moustache, short black hair slightly messy, tired but alert face, loose khaki uniform shirt with sleeves rolled to the elbows worn untucked with a clean hem, dark grey cotton trousers, worn rubber sandals, a red and white checked cotton gamchha towel over the left shoulder.",
+      "prompt": "Realistic character reference sheet for a modern open world game (the look of Watch Dogs 2: grounded, real proportions, natural skin and cloth, no cartoon). Three full body views of the same person side by side on a plain light grey background: front, left side, back. Standing straight in a relaxed A-pose, arms slightly away from the body, feet flat, whole body visible from head to feet with space around it, even soft studio light, no text, no logos, photoreal game art. The person: an Indian man from Delhi, age 28, auto-rickshaw driver, young but sun-worn, lean wiry build, 1.72 m, realistic proportions about 7.5 heads tall, quick friendly eyes and an easy half grin, light stubble and a thin neat moustache, short black hair slightly messy, loose khaki uniform shirt with sleeves rolled to the elbows worn untucked, dark grey cotton trousers, worn rubber sandals, a red and white checked cotton gamchha towel over the left shoulder, an old plain steel wristwatch on his left wrist.",
       "generate": "portrait 1024x1536",
       "target": {
         "w": 512,
@@ -129,13 +129,17 @@
       "batch": null,
       "created": "2026-11-14T12:12:01.288Z",
       "review": {
-        "at": "2026-11-14T12:16:27.976Z",
-        "verdict": "ok",
-        "note": "Approved 2026-11-14: realistic, lean 35 year old, thin moustache, khaki shirt with rolled sleeves, red checked gamchha on the left shoulder, dark trousers, sandals; consistent across front, side, back; real proportions, no caricature.",
-        "ingestedAt": "2026-11-14T12:15:16.060Z",
-        "fit": "pending",
-        "fitNote": "Sheet, not a single portrait: the game crop is for reference only; use the original sheet for image to 3D."
-      }
+        "at": "2026-11-14T12:20:09.665Z",
+        "verdict": "redo",
+        "note": "Story check 2026-11-14: Bittu is 28 in the story (STORY_OUTLINE.md: he was 13 at the fire 15 years ago, same as Danny), but the card said 35 and the sheet reads 35 to 40. Redo younger, and add his father's steel watch stopped at 6:10.",
+        "ingestedAt": null,
+        "removed": false
+      },
+      "redo": {
+        "at": "2026-11-14T12:20:09.664Z",
+        "note": "Story check 2026-11-14: Bittu is 28 in the story (STORY_OUTLINE.md: he was 13 at the fire 15 years ago, same as Danny), but the card said 35 and the sheet reads 35 to 40. Redo younger, and add his father's steel watch stopped at 6:10."
+      },
+      "promptAt": "2026-11-14T12:20:09.665Z"
     },
     {
       "id": "portrait_lead_meera",
