@@ -4,7 +4,7 @@
       "id": "model_lead_bittu",
       "kind": "model",
       "intent": "Bittu, the auto driver (28, 1.72 m, lean, tired but alert): khaki uniform shirt with rolled sleeves worn loose, dark trousers, sandals, a red and white checked cotton gamchha over the left shoulder, short black hair, a thin moustache. No logo or brand. Real adult proportions (7.5 heads), stylised B finish (simplified skin and cloth, clean colours from STYLE_BIBLE.md 'Characters'), respect rule: no caricature. Rigged to the Universal Animation Library skeleton (Unreal mannequin bone names) so the game's clips play on it; the stand-in today is the library mannequin with painted colours (game/characters/leads.gd).",
-      "prompt": "The picture is approved (portrait_lead_bittu). 1. Open an image to 3D tool whose download is free (tripo3d.ai Image to 3D or multi-view, or Hunyuan3D on huggingface.co; check the download before you generate). 2. Use your original sheet image: if the tool takes several views, give it the front, side and back cut from the sheet; otherwise cut out the front view alone (crop to just the person). 3. Settings: T-pose or A-pose if offered, polygons near 20,000 to 25,000, normal texture size (not 8K). 4. Rig on mixamo.com: Upload Character, place chin, wrists, elbows, knees, groin, Use Symmetry on, Standard Skeleton; download FBX Binary, T-pose, With Skin, no animation. 5. Upload the .fbx on this card. The game converts it and keeps the current model until the new one passes.",
+      "prompt": "The look is approved (portrait_lead_bittu). Before the 3D step, make one more sheet of the SAME man from that picture in your image tool: 'Same person, same clothes and pose, front, side and back on plain grey, relaxed face with mouth closed and a faint smile, no red patches under the eyes, even skin.' Use that neutral sheet for 3D, because a wide open grin baked into the model fights the game's face animation. Then: 1. Image to 3D tool with a free download (tripo3d.ai or Hunyuan3D on huggingface.co); multi-view if offered, else the front view cut out alone. 2. T-pose or A-pose, polygons near 20,000 to 25,000, normal texture size. 3. Rig on mixamo.com (chin, wrists, elbows, knees, groin; Use Symmetry; Standard Skeleton), download FBX Binary, T-pose, With Skin. 4. Upload the .fbx on this card.",
       "generate": "rigged .glb (or the Mixamo .fbx, converted on upload), humanoid skeleton, up to 25000 triangles and 3 materials",
       "target": {
         "out": "models/model_lead_bittu.glb",
@@ -26,7 +26,7 @@
         "at": "2026-11-14T12:11:20.758Z",
         "note": "Owner 2026-11-14: regenerate for a realistic look: the first model has a cartoon face (big eyes, thick moustache), a head about 8% too big and a ragged shirt hem."
       },
-      "promptAt": "2026-11-14T12:16:28.217Z",
+      "promptAt": "2026-11-14T12:26:55.279Z",
       "review": {
         "at": "2026-11-14T12:11:20.758Z",
         "verdict": "redo",
@@ -129,11 +129,12 @@
       "batch": null,
       "created": "2026-11-14T12:12:01.288Z",
       "review": {
-        "at": "2026-11-14T12:20:09.665Z",
-        "verdict": "redo",
-        "note": "Story check 2026-11-14: Bittu is 28 in the story (STORY_OUTLINE.md: he was 13 at the fire 15 years ago, same as Danny), but the card said 35 and the sheet reads 35 to 40. Redo younger, and add his father's steel watch stopped at 6:10.",
-        "ingestedAt": null,
-        "removed": false
+        "at": "2026-11-14T12:26:55.074Z",
+        "verdict": "ok",
+        "note": "Approved 2026-11-14 as the look: 28, lean, a big crooked grin and laugh lines, wind-messy hair, sweat on the shirt, steel watch, gamchha; reads as the funniest man at the stand. For the 3D model, make one more sheet of the same man with a closed-mouth relaxed face (open grin baked into a 3D face fights the face animation), and without the reddish patches under the eyes.",
+        "ingestedAt": "2026-11-14T12:26:08.192Z",
+        "fit": "pending",
+        "fitNote": "Sheet; for image to 3D use a neutral-face variant."
       },
       "redo": {
         "at": "2026-11-14T12:20:09.664Z",
