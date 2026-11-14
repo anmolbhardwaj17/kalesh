@@ -883,6 +883,734 @@
       "priority": 3,
       "batch": "B3-goods",
       "created": "2026-11-14T15:51:21.999Z"
+    },
+    {
+      "id": "tex_interior_sweet",
+      "kind": "texture",
+      "intent": "Interior-mapping room image: Sweet shop (mithai), day",
+      "prompt": "stylised realistic game art, real proportions, clean simplified shapes, rich warm colour, soft hazy sunlight, hand-tuned colour, no outlines, lived-in surfaces: soot, water stains, faded paint, patched plaster, dust; honest, not exaggerated. A Delhi sweet shop interior: a long glass-fronted counter along the left with steel trays of jalebi, barfi and laddoo, a back wall of glass shelves of boxed sweets and a cash desk with a steel stool, mint green tiled lower walls, cream upper walls with soot, a ceiling fan, a small framed deity picture shelf. Back wall sign says \"Chandni Mithai Ghar\" and \"चाँदनी मिठाई घर\" on a small painted board. A photographic one-point perspective view straight into the room from the shutter line, camera centred at 1.5 m height and exactly centred left to right, the back wall centred and square to the camera, left and right side walls and the ceiling and the floor all visible and mirror-symmetric so a game shader can map it as a box room of about 3 m wide, 2.6 m tall and 4 m deep. Nothing in the extreme foreground, no shutter or door frame in the picture. No people, no real brand names or logos, no readable text except where given. Evenly lit by overhead white tube lights, no hard shadows. 2048 x 2048, square, no vignette, no lens distortion.",
+      "generate": "square 1024x1024",
+      "target": {
+        "w": 2048,
+        "h": 2048,
+        "tileable": true,
+        "normalMap": true,
+        "alpha": false,
+        "out": "textures/tex_interior_sweet.webp"
+      },
+      "placeholder": {
+        "color": "#1f2533",
+        "pattern": "noise",
+        "scale": 1
+      },
+      "used_by": [
+        "P2-056"
+      ],
+      "priority": 1,
+      "batch": "B1b-interiors",
+      "created": "2026-11-14T15:52:18.472Z"
+    },
+    {
+      "id": "tex_interior_sweet_night",
+      "kind": "texture",
+      "intent": "Interior-mapping room image: Sweet shop (mithai), night variant",
+      "prompt": "stylised realistic game art, real proportions, clean simplified shapes, rich warm colour, soft hazy sunlight, hand-tuned colour, no outlines, lived-in surfaces: soot, water stains, faded paint, patched plaster, dust; honest, not exaggerated. A Delhi sweet shop interior: a long glass-fronted counter along the left with steel trays of jalebi, barfi and laddoo, a back wall of glass shelves of boxed sweets and a cash desk with a steel stool, mint green tiled lower walls, cream upper walls with soot, a ceiling fan, a small framed deity picture shelf. Back wall sign says \"Chandni Mithai Ghar\" and \"चाँदनी मिठाई घर\" on a small painted board. A photographic one-point perspective view straight into the room from the shutter line, camera centred at 1.5 m height and exactly centred left to right, the back wall centred and square to the camera, left and right side walls and the ceiling and the floor all visible and mirror-symmetric so a game shader can map it as a box room of about 3 m wide, 2.6 m tall and 4 m deep. Nothing in the extreme foreground, no shutter or door frame in the picture. No people, no real brand names or logos, no readable text except where given. Same room at night: warm yellow tube light and a couple of warm bulbs, deeper shadows in the corners, the warm glow strong, no daylight. 2048 x 2048, square, no vignette, no lens distortion.",
+      "generate": "square 1024x1024",
+      "target": {
+        "w": 2048,
+        "h": 2048,
+        "tileable": true,
+        "normalMap": true,
+        "alpha": false,
+        "out": "textures/tex_interior_sweet_night.webp"
+      },
+      "placeholder": {
+        "color": "#1f2533",
+        "pattern": "noise",
+        "scale": 1
+      },
+      "used_by": [
+        "P2-056"
+      ],
+      "priority": 2,
+      "batch": "B1b-interiors-night",
+      "created": "2026-11-14T15:52:18.624Z"
+    },
+    {
+      "id": "tex_interior_cloth",
+      "kind": "texture",
+      "intent": "Interior-mapping room image: Cloth and saree shop, day",
+      "prompt": "stylised realistic game art, real proportions, clean simplified shapes, rich warm colour, soft hazy sunlight, hand-tuned colour, no outlines, lived-in surfaces: soot, water stains, faded paint, patched plaster, dust; honest, not exaggerated. An Old Delhi cloth shop interior: a white cotton mattress covered floor seating area (gaddi) in the middle, walls of floor to ceiling shelves packed with stacked fabric rolls and folded sarees in many colours, a low wooden desk, bolsters, a ceiling fan and tube lights. Small board on the back wall: \"Shree Ganga Saree Bhandar\" and \"श्री गंगा साड़ी भंडार\". A photographic one-point perspective view straight into the room from the shutter line, camera centred at 1.5 m height and exactly centred left to right, the back wall centred and square to the camera, left and right side walls and the ceiling and the floor all visible and mirror-symmetric so a game shader can map it as a box room of about 3 m wide, 2.6 m tall and 4 m deep. Nothing in the extreme foreground, no shutter or door frame in the picture. No people, no real brand names or logos, no readable text except where given. Evenly lit by overhead white tube lights, no hard shadows. 2048 x 2048, square, no vignette, no lens distortion.",
+      "generate": "square 1024x1024",
+      "target": {
+        "w": 2048,
+        "h": 2048,
+        "tileable": true,
+        "normalMap": true,
+        "alpha": false,
+        "out": "textures/tex_interior_cloth.webp"
+      },
+      "placeholder": {
+        "color": "#1f2533",
+        "pattern": "noise",
+        "scale": 1
+      },
+      "used_by": [
+        "P2-056"
+      ],
+      "priority": 1,
+      "batch": "B1b-interiors",
+      "created": "2026-11-14T15:52:18.789Z"
+    },
+    {
+      "id": "tex_interior_cloth_night",
+      "kind": "texture",
+      "intent": "Interior-mapping room image: Cloth and saree shop, night variant",
+      "prompt": "stylised realistic game art, real proportions, clean simplified shapes, rich warm colour, soft hazy sunlight, hand-tuned colour, no outlines, lived-in surfaces: soot, water stains, faded paint, patched plaster, dust; honest, not exaggerated. An Old Delhi cloth shop interior: a white cotton mattress covered floor seating area (gaddi) in the middle, walls of floor to ceiling shelves packed with stacked fabric rolls and folded sarees in many colours, a low wooden desk, bolsters, a ceiling fan and tube lights. Small board on the back wall: \"Shree Ganga Saree Bhandar\" and \"श्री गंगा साड़ी भंडार\". A photographic one-point perspective view straight into the room from the shutter line, camera centred at 1.5 m height and exactly centred left to right, the back wall centred and square to the camera, left and right side walls and the ceiling and the floor all visible and mirror-symmetric so a game shader can map it as a box room of about 3 m wide, 2.6 m tall and 4 m deep. Nothing in the extreme foreground, no shutter or door frame in the picture. No people, no real brand names or logos, no readable text except where given. Same room at night: warm yellow tube light and a couple of warm bulbs, deeper shadows in the corners, the warm glow strong, no daylight. 2048 x 2048, square, no vignette, no lens distortion.",
+      "generate": "square 1024x1024",
+      "target": {
+        "w": 2048,
+        "h": 2048,
+        "tileable": true,
+        "normalMap": true,
+        "alpha": false,
+        "out": "textures/tex_interior_cloth_night.webp"
+      },
+      "placeholder": {
+        "color": "#1f2533",
+        "pattern": "noise",
+        "scale": 1
+      },
+      "used_by": [
+        "P2-056"
+      ],
+      "priority": 2,
+      "batch": "B1b-interiors-night",
+      "created": "2026-11-14T15:52:19.047Z"
+    },
+    {
+      "id": "tex_interior_dryfruit",
+      "kind": "texture",
+      "intent": "Interior-mapping room image: Dry fruit and spice shop, day",
+      "prompt": "stylised realistic game art, real proportions, clean simplified shapes, rich warm colour, soft hazy sunlight, hand-tuned colour, no outlines, lived-in surfaces: soot, water stains, faded paint, patched plaster, dust; honest, not exaggerated. A Khari Baoli style shop interior: open jute sacks of almonds, cashews, raisins, red chillies and spices lined along both side walls and across the floor front, wooden shelves of jars and packets on the back wall, a hanging brass weighing scale, dusty beams, bare tube lights, a stained and spice-yellowed wall. A photographic one-point perspective view straight into the room from the shutter line, camera centred at 1.5 m height and exactly centred left to right, the back wall centred and square to the camera, left and right side walls and the ceiling and the floor all visible and mirror-symmetric so a game shader can map it as a box room of about 3 m wide, 2.6 m tall and 4 m deep. Nothing in the extreme foreground, no shutter or door frame in the picture. No people, no real brand names or logos, no readable text except where given. Evenly lit by overhead white tube lights, no hard shadows. 2048 x 2048, square, no vignette, no lens distortion.",
+      "generate": "square 1024x1024",
+      "target": {
+        "w": 2048,
+        "h": 2048,
+        "tileable": true,
+        "normalMap": true,
+        "alpha": false,
+        "out": "textures/tex_interior_dryfruit.webp"
+      },
+      "placeholder": {
+        "color": "#1f2533",
+        "pattern": "noise",
+        "scale": 1
+      },
+      "used_by": [
+        "P2-056"
+      ],
+      "priority": 1,
+      "batch": "B1b-interiors",
+      "created": "2026-11-14T15:52:19.188Z"
+    },
+    {
+      "id": "tex_interior_dryfruit_night",
+      "kind": "texture",
+      "intent": "Interior-mapping room image: Dry fruit and spice shop, night variant",
+      "prompt": "stylised realistic game art, real proportions, clean simplified shapes, rich warm colour, soft hazy sunlight, hand-tuned colour, no outlines, lived-in surfaces: soot, water stains, faded paint, patched plaster, dust; honest, not exaggerated. A Khari Baoli style shop interior: open jute sacks of almonds, cashews, raisins, red chillies and spices lined along both side walls and across the floor front, wooden shelves of jars and packets on the back wall, a hanging brass weighing scale, dusty beams, bare tube lights, a stained and spice-yellowed wall. A photographic one-point perspective view straight into the room from the shutter line, camera centred at 1.5 m height and exactly centred left to right, the back wall centred and square to the camera, left and right side walls and the ceiling and the floor all visible and mirror-symmetric so a game shader can map it as a box room of about 3 m wide, 2.6 m tall and 4 m deep. Nothing in the extreme foreground, no shutter or door frame in the picture. No people, no real brand names or logos, no readable text except where given. Same room at night: warm yellow tube light and a couple of warm bulbs, deeper shadows in the corners, the warm glow strong, no daylight. 2048 x 2048, square, no vignette, no lens distortion.",
+      "generate": "square 1024x1024",
+      "target": {
+        "w": 2048,
+        "h": 2048,
+        "tileable": true,
+        "normalMap": true,
+        "alpha": false,
+        "out": "textures/tex_interior_dryfruit_night.webp"
+      },
+      "placeholder": {
+        "color": "#1f2533",
+        "pattern": "noise",
+        "scale": 1
+      },
+      "used_by": [
+        "P2-056"
+      ],
+      "priority": 2,
+      "batch": "B1b-interiors-night",
+      "created": "2026-11-14T15:52:19.295Z"
+    },
+    {
+      "id": "tex_interior_utensils",
+      "kind": "texture",
+      "intent": "Interior-mapping room image: Steel utensils shop, day",
+      "prompt": "stylised realistic game art, real proportions, clean simplified shapes, rich warm colour, soft hazy sunlight, hand-tuned colour, no outlines, lived-in surfaces: soot, water stains, faded paint, patched plaster, dust; honest, not exaggerated. A utensil shop interior: floor to ceiling shelves of stacked steel thalis, katoris, dabbas, brass pots and pressure cookers on all three walls, hanging ladles from the ceiling rail, a steel counter on the left with a scale, bare tube lights reflecting on metal. A photographic one-point perspective view straight into the room from the shutter line, camera centred at 1.5 m height and exactly centred left to right, the back wall centred and square to the camera, left and right side walls and the ceiling and the floor all visible and mirror-symmetric so a game shader can map it as a box room of about 3 m wide, 2.6 m tall and 4 m deep. Nothing in the extreme foreground, no shutter or door frame in the picture. No people, no real brand names or logos, no readable text except where given. Evenly lit by overhead white tube lights, no hard shadows. 2048 x 2048, square, no vignette, no lens distortion.",
+      "generate": "square 1024x1024",
+      "target": {
+        "w": 2048,
+        "h": 2048,
+        "tileable": true,
+        "normalMap": true,
+        "alpha": false,
+        "out": "textures/tex_interior_utensils.webp"
+      },
+      "placeholder": {
+        "color": "#1f2533",
+        "pattern": "noise",
+        "scale": 1
+      },
+      "used_by": [
+        "P2-056"
+      ],
+      "priority": 1,
+      "batch": "B1b-interiors",
+      "created": "2026-11-14T15:52:19.430Z"
+    },
+    {
+      "id": "tex_interior_utensils_night",
+      "kind": "texture",
+      "intent": "Interior-mapping room image: Steel utensils shop, night variant",
+      "prompt": "stylised realistic game art, real proportions, clean simplified shapes, rich warm colour, soft hazy sunlight, hand-tuned colour, no outlines, lived-in surfaces: soot, water stains, faded paint, patched plaster, dust; honest, not exaggerated. A utensil shop interior: floor to ceiling shelves of stacked steel thalis, katoris, dabbas, brass pots and pressure cookers on all three walls, hanging ladles from the ceiling rail, a steel counter on the left with a scale, bare tube lights reflecting on metal. A photographic one-point perspective view straight into the room from the shutter line, camera centred at 1.5 m height and exactly centred left to right, the back wall centred and square to the camera, left and right side walls and the ceiling and the floor all visible and mirror-symmetric so a game shader can map it as a box room of about 3 m wide, 2.6 m tall and 4 m deep. Nothing in the extreme foreground, no shutter or door frame in the picture. No people, no real brand names or logos, no readable text except where given. Same room at night: warm yellow tube light and a couple of warm bulbs, deeper shadows in the corners, the warm glow strong, no daylight. 2048 x 2048, square, no vignette, no lens distortion.",
+      "generate": "square 1024x1024",
+      "target": {
+        "w": 2048,
+        "h": 2048,
+        "tileable": true,
+        "normalMap": true,
+        "alpha": false,
+        "out": "textures/tex_interior_utensils_night.webp"
+      },
+      "placeholder": {
+        "color": "#1f2533",
+        "pattern": "noise",
+        "scale": 1
+      },
+      "used_by": [
+        "P2-056"
+      ],
+      "priority": 2,
+      "batch": "B1b-interiors-night",
+      "created": "2026-11-14T15:52:19.798Z"
+    },
+    {
+      "id": "tex_interior_hardware",
+      "kind": "texture",
+      "intent": "Interior-mapping room image: Hardware and machine parts shop (GB Road), day",
+      "prompt": "stylised realistic game art, real proportions, clean simplified shapes, rich warm colour, soft hazy sunlight, hand-tuned colour, no outlines, lived-in surfaces: soot, water stains, faded paint, patched plaster, dust; honest, not exaggerated. A GB Road hardware shop interior: dark steel shelving on all three walls full of cardboard boxes, bearings, pipes and fittings, hanging chains and coils of wire, a worn wooden counter with a heavy scale and an old ledger, oil-stained floor, peeling green lower wall paint, bare tube lights, one calendar on the back wall with no readable text. A photographic one-point perspective view straight into the room from the shutter line, camera centred at 1.5 m height and exactly centred left to right, the back wall centred and square to the camera, left and right side walls and the ceiling and the floor all visible and mirror-symmetric so a game shader can map it as a box room of about 3 m wide, 2.6 m tall and 4 m deep. Nothing in the extreme foreground, no shutter or door frame in the picture. No people, no real brand names or logos, no readable text except where given. Evenly lit by overhead white tube lights, no hard shadows. 2048 x 2048, square, no vignette, no lens distortion.",
+      "generate": "square 1024x1024",
+      "target": {
+        "w": 2048,
+        "h": 2048,
+        "tileable": true,
+        "normalMap": true,
+        "alpha": false,
+        "out": "textures/tex_interior_hardware.webp"
+      },
+      "placeholder": {
+        "color": "#1f2533",
+        "pattern": "noise",
+        "scale": 1
+      },
+      "used_by": [
+        "P2-056"
+      ],
+      "priority": 1,
+      "batch": "B1b-interiors",
+      "created": "2026-11-14T15:52:19.956Z"
+    },
+    {
+      "id": "tex_interior_hardware_night",
+      "kind": "texture",
+      "intent": "Interior-mapping room image: Hardware and machine parts shop (GB Road), night variant",
+      "prompt": "stylised realistic game art, real proportions, clean simplified shapes, rich warm colour, soft hazy sunlight, hand-tuned colour, no outlines, lived-in surfaces: soot, water stains, faded paint, patched plaster, dust; honest, not exaggerated. A GB Road hardware shop interior: dark steel shelving on all three walls full of cardboard boxes, bearings, pipes and fittings, hanging chains and coils of wire, a worn wooden counter with a heavy scale and an old ledger, oil-stained floor, peeling green lower wall paint, bare tube lights, one calendar on the back wall with no readable text. A photographic one-point perspective view straight into the room from the shutter line, camera centred at 1.5 m height and exactly centred left to right, the back wall centred and square to the camera, left and right side walls and the ceiling and the floor all visible and mirror-symmetric so a game shader can map it as a box room of about 3 m wide, 2.6 m tall and 4 m deep. Nothing in the extreme foreground, no shutter or door frame in the picture. No people, no real brand names or logos, no readable text except where given. Same room at night: warm yellow tube light and a couple of warm bulbs, deeper shadows in the corners, the warm glow strong, no daylight. 2048 x 2048, square, no vignette, no lens distortion.",
+      "generate": "square 1024x1024",
+      "target": {
+        "w": 2048,
+        "h": 2048,
+        "tileable": true,
+        "normalMap": true,
+        "alpha": false,
+        "out": "textures/tex_interior_hardware_night.webp"
+      },
+      "placeholder": {
+        "color": "#1f2533",
+        "pattern": "noise",
+        "scale": 1
+      },
+      "used_by": [
+        "P2-056"
+      ],
+      "priority": 2,
+      "batch": "B1b-interiors-night",
+      "created": "2026-11-14T15:52:20.080Z"
+    },
+    {
+      "id": "tex_interior_phones",
+      "kind": "texture",
+      "intent": "Interior-mapping room image: Phone and electronics shop, day",
+      "prompt": "stylised realistic game art, real proportions, clean simplified shapes, rich warm colour, soft hazy sunlight, hand-tuned colour, no outlines, lived-in surfaces: soot, water stains, faded paint, patched plaster, dust; honest, not exaggerated. A small phone and electronics shop interior: glass counters on the left and right with generic phones, chargers and earphones, a pegboard back wall of plain phone covers, a few wired shelves of speakers and cables, a white laminate ceiling with LED panels and a split AC unit on the side wall. No brand names. A photographic one-point perspective view straight into the room from the shutter line, camera centred at 1.5 m height and exactly centred left to right, the back wall centred and square to the camera, left and right side walls and the ceiling and the floor all visible and mirror-symmetric so a game shader can map it as a box room of about 3 m wide, 2.6 m tall and 4 m deep. Nothing in the extreme foreground, no shutter or door frame in the picture. No people, no real brand names or logos, no readable text except where given. Evenly lit by overhead white tube lights, no hard shadows. 2048 x 2048, square, no vignette, no lens distortion.",
+      "generate": "square 1024x1024",
+      "target": {
+        "w": 2048,
+        "h": 2048,
+        "tileable": true,
+        "normalMap": true,
+        "alpha": false,
+        "out": "textures/tex_interior_phones.webp"
+      },
+      "placeholder": {
+        "color": "#1f2533",
+        "pattern": "noise",
+        "scale": 1
+      },
+      "used_by": [
+        "P2-056"
+      ],
+      "priority": 1,
+      "batch": "B1b-interiors",
+      "created": "2026-11-14T15:52:20.171Z"
+    },
+    {
+      "id": "tex_interior_phones_night",
+      "kind": "texture",
+      "intent": "Interior-mapping room image: Phone and electronics shop, night variant",
+      "prompt": "stylised realistic game art, real proportions, clean simplified shapes, rich warm colour, soft hazy sunlight, hand-tuned colour, no outlines, lived-in surfaces: soot, water stains, faded paint, patched plaster, dust; honest, not exaggerated. A small phone and electronics shop interior: glass counters on the left and right with generic phones, chargers and earphones, a pegboard back wall of plain phone covers, a few wired shelves of speakers and cables, a white laminate ceiling with LED panels and a split AC unit on the side wall. No brand names. A photographic one-point perspective view straight into the room from the shutter line, camera centred at 1.5 m height and exactly centred left to right, the back wall centred and square to the camera, left and right side walls and the ceiling and the floor all visible and mirror-symmetric so a game shader can map it as a box room of about 3 m wide, 2.6 m tall and 4 m deep. Nothing in the extreme foreground, no shutter or door frame in the picture. No people, no real brand names or logos, no readable text except where given. Same room at night: warm yellow tube light and a couple of warm bulbs, deeper shadows in the corners, the warm glow strong, no daylight. 2048 x 2048, square, no vignette, no lens distortion.",
+      "generate": "square 1024x1024",
+      "target": {
+        "w": 2048,
+        "h": 2048,
+        "tileable": true,
+        "normalMap": true,
+        "alpha": false,
+        "out": "textures/tex_interior_phones_night.webp"
+      },
+      "placeholder": {
+        "color": "#1f2533",
+        "pattern": "noise",
+        "scale": 1
+      },
+      "used_by": [
+        "P2-056"
+      ],
+      "priority": 2,
+      "batch": "B1b-interiors-night",
+      "created": "2026-11-14T15:52:20.293Z"
+    },
+    {
+      "id": "tex_interior_chemist",
+      "kind": "texture",
+      "intent": "Interior-mapping room image: Chemist shop, day",
+      "prompt": "stylised realistic game art, real proportions, clean simplified shapes, rich warm colour, soft hazy sunlight, hand-tuned colour, no outlines, lived-in surfaces: soot, water stains, faded paint, patched plaster, dust; honest, not exaggerated. A Delhi chemist shop interior: white wall shelves of generic medicine boxes in neat rows, a glass counter with a small cash desk, a green cross sign painted on the back wall with no text, a small fridge, tube lights and a ceiling fan, a stool. A photographic one-point perspective view straight into the room from the shutter line, camera centred at 1.5 m height and exactly centred left to right, the back wall centred and square to the camera, left and right side walls and the ceiling and the floor all visible and mirror-symmetric so a game shader can map it as a box room of about 3 m wide, 2.6 m tall and 4 m deep. Nothing in the extreme foreground, no shutter or door frame in the picture. No people, no real brand names or logos, no readable text except where given. Evenly lit by overhead white tube lights, no hard shadows. 2048 x 2048, square, no vignette, no lens distortion.",
+      "generate": "square 1024x1024",
+      "target": {
+        "w": 2048,
+        "h": 2048,
+        "tileable": true,
+        "normalMap": true,
+        "alpha": false,
+        "out": "textures/tex_interior_chemist.webp"
+      },
+      "placeholder": {
+        "color": "#1f2533",
+        "pattern": "noise",
+        "scale": 1
+      },
+      "used_by": [
+        "P2-056"
+      ],
+      "priority": 1,
+      "batch": "B1b-interiors",
+      "created": "2026-11-14T15:52:20.402Z"
+    },
+    {
+      "id": "tex_interior_chemist_night",
+      "kind": "texture",
+      "intent": "Interior-mapping room image: Chemist shop, night variant",
+      "prompt": "stylised realistic game art, real proportions, clean simplified shapes, rich warm colour, soft hazy sunlight, hand-tuned colour, no outlines, lived-in surfaces: soot, water stains, faded paint, patched plaster, dust; honest, not exaggerated. A Delhi chemist shop interior: white wall shelves of generic medicine boxes in neat rows, a glass counter with a small cash desk, a green cross sign painted on the back wall with no text, a small fridge, tube lights and a ceiling fan, a stool. A photographic one-point perspective view straight into the room from the shutter line, camera centred at 1.5 m height and exactly centred left to right, the back wall centred and square to the camera, left and right side walls and the ceiling and the floor all visible and mirror-symmetric so a game shader can map it as a box room of about 3 m wide, 2.6 m tall and 4 m deep. Nothing in the extreme foreground, no shutter or door frame in the picture. No people, no real brand names or logos, no readable text except where given. Same room at night: warm yellow tube light and a couple of warm bulbs, deeper shadows in the corners, the warm glow strong, no daylight. 2048 x 2048, square, no vignette, no lens distortion.",
+      "generate": "square 1024x1024",
+      "target": {
+        "w": 2048,
+        "h": 2048,
+        "tileable": true,
+        "normalMap": true,
+        "alpha": false,
+        "out": "textures/tex_interior_chemist_night.webp"
+      },
+      "placeholder": {
+        "color": "#1f2533",
+        "pattern": "noise",
+        "scale": 1
+      },
+      "used_by": [
+        "P2-056"
+      ],
+      "priority": 2,
+      "batch": "B1b-interiors-night",
+      "created": "2026-11-14T15:52:20.524Z"
+    },
+    {
+      "id": "tex_interior_tea_stall",
+      "kind": "texture",
+      "intent": "Interior-mapping room image: Tea and snack stall, day",
+      "prompt": "stylised realistic game art, real proportions, clean simplified shapes, rich warm colour, soft hazy sunlight, hand-tuned colour, no outlines, lived-in surfaces: soot, water stains, faded paint, patched plaster, dust; honest, not exaggerated. A tiny Delhi tea and snack stall interior: a steel counter in front with a gas stove and kettle, glass jars of biscuits and rusk, plastic stools, soot-black wall behind the stove, a shelf of glass tumblers, a hanging bunch of bananas, a bare bulb and a tube light. A photographic one-point perspective view straight into the room from the shutter line, camera centred at 1.5 m height and exactly centred left to right, the back wall centred and square to the camera, left and right side walls and the ceiling and the floor all visible and mirror-symmetric so a game shader can map it as a box room of about 3 m wide, 2.6 m tall and 4 m deep. Nothing in the extreme foreground, no shutter or door frame in the picture. No people, no real brand names or logos, no readable text except where given. Evenly lit by overhead white tube lights, no hard shadows. 2048 x 2048, square, no vignette, no lens distortion.",
+      "generate": "square 1024x1024",
+      "target": {
+        "w": 2048,
+        "h": 2048,
+        "tileable": true,
+        "normalMap": true,
+        "alpha": false,
+        "out": "textures/tex_interior_tea_stall.webp"
+      },
+      "placeholder": {
+        "color": "#1f2533",
+        "pattern": "noise",
+        "scale": 1
+      },
+      "used_by": [
+        "P2-056"
+      ],
+      "priority": 1,
+      "batch": "B1b-interiors",
+      "created": "2026-11-14T15:52:20.672Z"
+    },
+    {
+      "id": "tex_interior_tea_stall_night",
+      "kind": "texture",
+      "intent": "Interior-mapping room image: Tea and snack stall, night variant",
+      "prompt": "stylised realistic game art, real proportions, clean simplified shapes, rich warm colour, soft hazy sunlight, hand-tuned colour, no outlines, lived-in surfaces: soot, water stains, faded paint, patched plaster, dust; honest, not exaggerated. A tiny Delhi tea and snack stall interior: a steel counter in front with a gas stove and kettle, glass jars of biscuits and rusk, plastic stools, soot-black wall behind the stove, a shelf of glass tumblers, a hanging bunch of bananas, a bare bulb and a tube light. A photographic one-point perspective view straight into the room from the shutter line, camera centred at 1.5 m height and exactly centred left to right, the back wall centred and square to the camera, left and right side walls and the ceiling and the floor all visible and mirror-symmetric so a game shader can map it as a box room of about 3 m wide, 2.6 m tall and 4 m deep. Nothing in the extreme foreground, no shutter or door frame in the picture. No people, no real brand names or logos, no readable text except where given. Same room at night: warm yellow tube light and a couple of warm bulbs, deeper shadows in the corners, the warm glow strong, no daylight. 2048 x 2048, square, no vignette, no lens distortion.",
+      "generate": "square 1024x1024",
+      "target": {
+        "w": 2048,
+        "h": 2048,
+        "tileable": true,
+        "normalMap": true,
+        "alpha": false,
+        "out": "textures/tex_interior_tea_stall_night.webp"
+      },
+      "placeholder": {
+        "color": "#1f2533",
+        "pattern": "noise",
+        "scale": 1
+      },
+      "used_by": [
+        "P2-056"
+      ],
+      "priority": 2,
+      "batch": "B1b-interiors-night",
+      "created": "2026-11-14T15:52:20.844Z"
+    },
+    {
+      "id": "tex_interior_tailor",
+      "kind": "texture",
+      "intent": "Interior-mapping room image: Tailor shop, day",
+      "prompt": "stylised realistic game art, real proportions, clean simplified shapes, rich warm colour, soft hazy sunlight, hand-tuned colour, no outlines, lived-in surfaces: soot, water stains, faded paint, patched plaster, dust; honest, not exaggerated. A tailor shop interior: two sewing machines on tables on the left, a long cutting table on the right with fabric and scissors, shelves of folded cloth, paper patterns hanging on a wire, a mannequin torso with a half-made shirt in the centre back, a measuring tape, a ceiling fan. A photographic one-point perspective view straight into the room from the shutter line, camera centred at 1.5 m height and exactly centred left to right, the back wall centred and square to the camera, left and right side walls and the ceiling and the floor all visible and mirror-symmetric so a game shader can map it as a box room of about 3 m wide, 2.6 m tall and 4 m deep. Nothing in the extreme foreground, no shutter or door frame in the picture. No people, no real brand names or logos, no readable text except where given. Evenly lit by overhead white tube lights, no hard shadows. 2048 x 2048, square, no vignette, no lens distortion.",
+      "generate": "square 1024x1024",
+      "target": {
+        "w": 2048,
+        "h": 2048,
+        "tileable": true,
+        "normalMap": true,
+        "alpha": false,
+        "out": "textures/tex_interior_tailor.webp"
+      },
+      "placeholder": {
+        "color": "#1f2533",
+        "pattern": "noise",
+        "scale": 1
+      },
+      "used_by": [
+        "P2-056"
+      ],
+      "priority": 1,
+      "batch": "B1b-interiors",
+      "created": "2026-11-14T15:52:21.002Z"
+    },
+    {
+      "id": "tex_interior_tailor_night",
+      "kind": "texture",
+      "intent": "Interior-mapping room image: Tailor shop, night variant",
+      "prompt": "stylised realistic game art, real proportions, clean simplified shapes, rich warm colour, soft hazy sunlight, hand-tuned colour, no outlines, lived-in surfaces: soot, water stains, faded paint, patched plaster, dust; honest, not exaggerated. A tailor shop interior: two sewing machines on tables on the left, a long cutting table on the right with fabric and scissors, shelves of folded cloth, paper patterns hanging on a wire, a mannequin torso with a half-made shirt in the centre back, a measuring tape, a ceiling fan. A photographic one-point perspective view straight into the room from the shutter line, camera centred at 1.5 m height and exactly centred left to right, the back wall centred and square to the camera, left and right side walls and the ceiling and the floor all visible and mirror-symmetric so a game shader can map it as a box room of about 3 m wide, 2.6 m tall and 4 m deep. Nothing in the extreme foreground, no shutter or door frame in the picture. No people, no real brand names or logos, no readable text except where given. Same room at night: warm yellow tube light and a couple of warm bulbs, deeper shadows in the corners, the warm glow strong, no daylight. 2048 x 2048, square, no vignette, no lens distortion.",
+      "generate": "square 1024x1024",
+      "target": {
+        "w": 2048,
+        "h": 2048,
+        "tileable": true,
+        "normalMap": true,
+        "alpha": false,
+        "out": "textures/tex_interior_tailor_night.webp"
+      },
+      "placeholder": {
+        "color": "#1f2533",
+        "pattern": "noise",
+        "scale": 1
+      },
+      "used_by": [
+        "P2-056"
+      ],
+      "priority": 2,
+      "batch": "B1b-interiors-night",
+      "created": "2026-11-14T15:52:21.496Z"
+    },
+    {
+      "id": "tex_interior_hotel_reception",
+      "kind": "texture",
+      "intent": "Interior-mapping room image: Small hotel reception (Paharganj), day",
+      "prompt": "stylised realistic game art, real proportions, clean simplified shapes, rich warm colour, soft hazy sunlight, hand-tuned colour, no outlines, lived-in surfaces: soot, water stains, faded paint, patched plaster, dust; honest, not exaggerated. A small budget hotel reception interior: a plain laminate reception desk on the back wall with a key rack of numbered keys and a brass bell, two worn sofas against the side walls, a stair going up on the right, marble effect floor tiles, a faded mural of mountains, a fan and one LED panel. No readable text. A photographic one-point perspective view straight into the room from the shutter line, camera centred at 1.5 m height and exactly centred left to right, the back wall centred and square to the camera, left and right side walls and the ceiling and the floor all visible and mirror-symmetric so a game shader can map it as a box room of about 3 m wide, 2.6 m tall and 4 m deep. Nothing in the extreme foreground, no shutter or door frame in the picture. No people, no real brand names or logos, no readable text except where given. Evenly lit by overhead white tube lights, no hard shadows. 2048 x 2048, square, no vignette, no lens distortion.",
+      "generate": "square 1024x1024",
+      "target": {
+        "w": 2048,
+        "h": 2048,
+        "tileable": true,
+        "normalMap": true,
+        "alpha": false,
+        "out": "textures/tex_interior_hotel_reception.webp"
+      },
+      "placeholder": {
+        "color": "#1f2533",
+        "pattern": "noise",
+        "scale": 1
+      },
+      "used_by": [
+        "P2-056"
+      ],
+      "priority": 1,
+      "batch": "B1b-interiors",
+      "created": "2026-11-14T15:52:22.827Z"
+    },
+    {
+      "id": "tex_interior_hotel_reception_night",
+      "kind": "texture",
+      "intent": "Interior-mapping room image: Small hotel reception (Paharganj), night variant",
+      "prompt": "stylised realistic game art, real proportions, clean simplified shapes, rich warm colour, soft hazy sunlight, hand-tuned colour, no outlines, lived-in surfaces: soot, water stains, faded paint, patched plaster, dust; honest, not exaggerated. A small budget hotel reception interior: a plain laminate reception desk on the back wall with a key rack of numbered keys and a brass bell, two worn sofas against the side walls, a stair going up on the right, marble effect floor tiles, a faded mural of mountains, a fan and one LED panel. No readable text. A photographic one-point perspective view straight into the room from the shutter line, camera centred at 1.5 m height and exactly centred left to right, the back wall centred and square to the camera, left and right side walls and the ceiling and the floor all visible and mirror-symmetric so a game shader can map it as a box room of about 3 m wide, 2.6 m tall and 4 m deep. Nothing in the extreme foreground, no shutter or door frame in the picture. No people, no real brand names or logos, no readable text except where given. Same room at night: warm yellow tube light and a couple of warm bulbs, deeper shadows in the corners, the warm glow strong, no daylight. 2048 x 2048, square, no vignette, no lens distortion.",
+      "generate": "square 1024x1024",
+      "target": {
+        "w": 2048,
+        "h": 2048,
+        "tileable": true,
+        "normalMap": true,
+        "alpha": false,
+        "out": "textures/tex_interior_hotel_reception_night.webp"
+      },
+      "placeholder": {
+        "color": "#1f2533",
+        "pattern": "noise",
+        "scale": 1
+      },
+      "used_by": [
+        "P2-056"
+      ],
+      "priority": 2,
+      "batch": "B1b-interiors-night",
+      "created": "2026-11-14T15:52:25.318Z"
+    },
+    {
+      "id": "tex_interior_bookshop",
+      "kind": "texture",
+      "intent": "Interior-mapping room image: Bookshop (Connaught Place), day",
+      "prompt": "stylised realistic game art, real proportions, clean simplified shapes, rich warm colour, soft hazy sunlight, hand-tuned colour, no outlines, lived-in surfaces: soot, water stains, faded paint, patched plaster, dust; honest, not exaggerated. A CP bookshop interior: dark wooden shelves on all walls full of paperback books with plain unreadable spines, a central table with stacked books, a ladder on the back wall, a small counter with an old cash register, a ceiling fan and warm tube lights. A photographic one-point perspective view straight into the room from the shutter line, camera centred at 1.5 m height and exactly centred left to right, the back wall centred and square to the camera, left and right side walls and the ceiling and the floor all visible and mirror-symmetric so a game shader can map it as a box room of about 3 m wide, 2.6 m tall and 4 m deep. Nothing in the extreme foreground, no shutter or door frame in the picture. No people, no real brand names or logos, no readable text except where given. Evenly lit by overhead white tube lights, no hard shadows. 2048 x 2048, square, no vignette, no lens distortion.",
+      "generate": "square 1024x1024",
+      "target": {
+        "w": 2048,
+        "h": 2048,
+        "tileable": true,
+        "normalMap": true,
+        "alpha": false,
+        "out": "textures/tex_interior_bookshop.webp"
+      },
+      "placeholder": {
+        "color": "#1f2533",
+        "pattern": "noise",
+        "scale": 1
+      },
+      "used_by": [
+        "P2-056"
+      ],
+      "priority": 1,
+      "batch": "B1b-interiors",
+      "created": "2026-11-14T15:52:27.658Z"
+    },
+    {
+      "id": "tex_interior_bookshop_night",
+      "kind": "texture",
+      "intent": "Interior-mapping room image: Bookshop (Connaught Place), night variant",
+      "prompt": "stylised realistic game art, real proportions, clean simplified shapes, rich warm colour, soft hazy sunlight, hand-tuned colour, no outlines, lived-in surfaces: soot, water stains, faded paint, patched plaster, dust; honest, not exaggerated. A CP bookshop interior: dark wooden shelves on all walls full of paperback books with plain unreadable spines, a central table with stacked books, a ladder on the back wall, a small counter with an old cash register, a ceiling fan and warm tube lights. A photographic one-point perspective view straight into the room from the shutter line, camera centred at 1.5 m height and exactly centred left to right, the back wall centred and square to the camera, left and right side walls and the ceiling and the floor all visible and mirror-symmetric so a game shader can map it as a box room of about 3 m wide, 2.6 m tall and 4 m deep. Nothing in the extreme foreground, no shutter or door frame in the picture. No people, no real brand names or logos, no readable text except where given. Same room at night: warm yellow tube light and a couple of warm bulbs, deeper shadows in the corners, the warm glow strong, no daylight. 2048 x 2048, square, no vignette, no lens distortion.",
+      "generate": "square 1024x1024",
+      "target": {
+        "w": 2048,
+        "h": 2048,
+        "tileable": true,
+        "normalMap": true,
+        "alpha": false,
+        "out": "textures/tex_interior_bookshop_night.webp"
+      },
+      "placeholder": {
+        "color": "#1f2533",
+        "pattern": "noise",
+        "scale": 1
+      },
+      "used_by": [
+        "P2-056"
+      ],
+      "priority": 2,
+      "batch": "B1b-interiors-night",
+      "created": "2026-11-14T15:52:30.975Z"
+    },
+    {
+      "id": "tex_interior_jeweller",
+      "kind": "texture",
+      "intent": "Interior-mapping room image: Jewellery shop (Chandni Chowk), day",
+      "prompt": "stylised realistic game art, real proportions, clean simplified shapes, rich warm colour, soft hazy sunlight, hand-tuned colour, no outlines, lived-in surfaces: soot, water stains, faded paint, patched plaster, dust; honest, not exaggerated. A Chandni Chowk jeweller interior: a white gaddi floor seating area with bolsters, glass counters with gold and silver jewellery on velvet in front, a steel safe on the back wall, mirror panels on the side walls, a carved wooden ceiling band, bright tube lights, a framed deity picture. Back wall small board \"Hira Moti Jewellers\" and \"हीरा मोती ज्वेलर्स\". A photographic one-point perspective view straight into the room from the shutter line, camera centred at 1.5 m height and exactly centred left to right, the back wall centred and square to the camera, left and right side walls and the ceiling and the floor all visible and mirror-symmetric so a game shader can map it as a box room of about 3 m wide, 2.6 m tall and 4 m deep. Nothing in the extreme foreground, no shutter or door frame in the picture. No people, no real brand names or logos, no readable text except where given. Evenly lit by overhead white tube lights, no hard shadows. 2048 x 2048, square, no vignette, no lens distortion.",
+      "generate": "square 1024x1024",
+      "target": {
+        "w": 2048,
+        "h": 2048,
+        "tileable": true,
+        "normalMap": true,
+        "alpha": false,
+        "out": "textures/tex_interior_jeweller.webp"
+      },
+      "placeholder": {
+        "color": "#1f2533",
+        "pattern": "noise",
+        "scale": 1
+      },
+      "used_by": [
+        "P2-056"
+      ],
+      "priority": 1,
+      "batch": "B1b-interiors",
+      "created": "2026-11-14T15:52:33.555Z"
+    },
+    {
+      "id": "tex_interior_jeweller_night",
+      "kind": "texture",
+      "intent": "Interior-mapping room image: Jewellery shop (Chandni Chowk), night variant",
+      "prompt": "stylised realistic game art, real proportions, clean simplified shapes, rich warm colour, soft hazy sunlight, hand-tuned colour, no outlines, lived-in surfaces: soot, water stains, faded paint, patched plaster, dust; honest, not exaggerated. A Chandni Chowk jeweller interior: a white gaddi floor seating area with bolsters, glass counters with gold and silver jewellery on velvet in front, a steel safe on the back wall, mirror panels on the side walls, a carved wooden ceiling band, bright tube lights, a framed deity picture. Back wall small board \"Hira Moti Jewellers\" and \"हीरा मोती ज्वेलर्स\". A photographic one-point perspective view straight into the room from the shutter line, camera centred at 1.5 m height and exactly centred left to right, the back wall centred and square to the camera, left and right side walls and the ceiling and the floor all visible and mirror-symmetric so a game shader can map it as a box room of about 3 m wide, 2.6 m tall and 4 m deep. Nothing in the extreme foreground, no shutter or door frame in the picture. No people, no real brand names or logos, no readable text except where given. Same room at night: warm yellow tube light and a couple of warm bulbs, deeper shadows in the corners, the warm glow strong, no daylight. 2048 x 2048, square, no vignette, no lens distortion.",
+      "generate": "square 1024x1024",
+      "target": {
+        "w": 2048,
+        "h": 2048,
+        "tileable": true,
+        "normalMap": true,
+        "alpha": false,
+        "out": "textures/tex_interior_jeweller_night.webp"
+      },
+      "placeholder": {
+        "color": "#1f2533",
+        "pattern": "noise",
+        "scale": 1
+      },
+      "used_by": [
+        "P2-056"
+      ],
+      "priority": 2,
+      "batch": "B1b-interiors-night",
+      "created": "2026-11-14T15:52:35.039Z"
+    },
+    {
+      "id": "tex_interior_home",
+      "kind": "texture",
+      "intent": "Interior-mapping room image: Upper floor home interior (window view), day",
+      "prompt": "stylised realistic game art, real proportions, clean simplified shapes, rich warm colour, soft hazy sunlight, hand-tuned colour, no outlines, lived-in surfaces: soot, water stains, faded paint, patched plaster, dust; honest, not exaggerated. A lived-in Delhi upper floor room seen from the window: a half-drawn patterned curtain on the left edge of the room, a ceiling fan, a wall calendar with no readable text on the back wall, a wooden shelf with steel utensils and a small TV, a plastic chair, a bed with a printed sheet along the right wall, pale blue painted walls, a tube light. A photographic one-point perspective view straight into the room from the shutter line, camera centred at 1.5 m height and exactly centred left to right, the back wall centred and square to the camera, left and right side walls and the ceiling and the floor all visible and mirror-symmetric so a game shader can map it as a box room of about 3 m wide, 2.6 m tall and 4 m deep. Nothing in the extreme foreground, no shutter or door frame in the picture. No people, no real brand names or logos, no readable text except where given. Evenly lit by overhead white tube lights, no hard shadows. 2048 x 2048, square, no vignette, no lens distortion.",
+      "generate": "square 1024x1024",
+      "target": {
+        "w": 2048,
+        "h": 2048,
+        "tileable": true,
+        "normalMap": true,
+        "alpha": false,
+        "out": "textures/tex_interior_home.webp"
+      },
+      "placeholder": {
+        "color": "#1f2533",
+        "pattern": "noise",
+        "scale": 1
+      },
+      "used_by": [
+        "P2-056"
+      ],
+      "priority": 1,
+      "batch": "B1b-interiors",
+      "created": "2026-11-14T15:52:37.144Z"
+    },
+    {
+      "id": "tex_interior_home_night",
+      "kind": "texture",
+      "intent": "Interior-mapping room image: Upper floor home interior (window view), night variant",
+      "prompt": "stylised realistic game art, real proportions, clean simplified shapes, rich warm colour, soft hazy sunlight, hand-tuned colour, no outlines, lived-in surfaces: soot, water stains, faded paint, patched plaster, dust; honest, not exaggerated. A lived-in Delhi upper floor room seen from the window: a half-drawn patterned curtain on the left edge of the room, a ceiling fan, a wall calendar with no readable text on the back wall, a wooden shelf with steel utensils and a small TV, a plastic chair, a bed with a printed sheet along the right wall, pale blue painted walls, a tube light. A photographic one-point perspective view straight into the room from the shutter line, camera centred at 1.5 m height and exactly centred left to right, the back wall centred and square to the camera, left and right side walls and the ceiling and the floor all visible and mirror-symmetric so a game shader can map it as a box room of about 3 m wide, 2.6 m tall and 4 m deep. Nothing in the extreme foreground, no shutter or door frame in the picture. No people, no real brand names or logos, no readable text except where given. Same room at night: warm yellow tube light and a couple of warm bulbs, deeper shadows in the corners, the warm glow strong, no daylight. 2048 x 2048, square, no vignette, no lens distortion.",
+      "generate": "square 1024x1024",
+      "target": {
+        "w": 2048,
+        "h": 2048,
+        "tileable": true,
+        "normalMap": true,
+        "alpha": false,
+        "out": "textures/tex_interior_home_night.webp"
+      },
+      "placeholder": {
+        "color": "#1f2533",
+        "pattern": "noise",
+        "scale": 1
+      },
+      "used_by": [
+        "P2-056"
+      ],
+      "priority": 2,
+      "batch": "B1b-interiors-night",
+      "created": "2026-11-14T15:52:38.327Z"
+    },
+    {
+      "id": "tex_interior_office",
+      "kind": "texture",
+      "intent": "Interior-mapping room image: Office interior (ITO), day",
+      "prompt": "stylised realistic game art, real proportions, clean simplified shapes, rich warm colour, soft hazy sunlight, hand-tuned colour, no outlines, lived-in surfaces: soot, water stains, faded paint, patched plaster, dust; honest, not exaggerated. A government-style office room for ITO, seen from the window: grey metal filing cabinets along the right wall, rows of laminate desks with old monitors and stacks of paper files, a wall clock and a noticeboard with no readable text on the back wall, a ceiling fan, white tube lights, pale green walls, a green water dispenser. A photographic one-point perspective view straight into the room from the shutter line, camera centred at 1.5 m height and exactly centred left to right, the back wall centred and square to the camera, left and right side walls and the ceiling and the floor all visible and mirror-symmetric so a game shader can map it as a box room of about 3 m wide, 2.6 m tall and 4 m deep. Nothing in the extreme foreground, no shutter or door frame in the picture. No people, no real brand names or logos, no readable text except where given. Evenly lit by overhead white tube lights, no hard shadows. 2048 x 2048, square, no vignette, no lens distortion.",
+      "generate": "square 1024x1024",
+      "target": {
+        "w": 2048,
+        "h": 2048,
+        "tileable": true,
+        "normalMap": true,
+        "alpha": false,
+        "out": "textures/tex_interior_office.webp"
+      },
+      "placeholder": {
+        "color": "#1f2533",
+        "pattern": "noise",
+        "scale": 1
+      },
+      "used_by": [
+        "P2-056"
+      ],
+      "priority": 1,
+      "batch": "B1b-interiors",
+      "created": "2026-11-14T15:52:39.525Z"
+    },
+    {
+      "id": "tex_interior_office_night",
+      "kind": "texture",
+      "intent": "Interior-mapping room image: Office interior (ITO), night variant",
+      "prompt": "stylised realistic game art, real proportions, clean simplified shapes, rich warm colour, soft hazy sunlight, hand-tuned colour, no outlines, lived-in surfaces: soot, water stains, faded paint, patched plaster, dust; honest, not exaggerated. A government-style office room for ITO, seen from the window: grey metal filing cabinets along the right wall, rows of laminate desks with old monitors and stacks of paper files, a wall clock and a noticeboard with no readable text on the back wall, a ceiling fan, white tube lights, pale green walls, a green water dispenser. A photographic one-point perspective view straight into the room from the shutter line, camera centred at 1.5 m height and exactly centred left to right, the back wall centred and square to the camera, left and right side walls and the ceiling and the floor all visible and mirror-symmetric so a game shader can map it as a box room of about 3 m wide, 2.6 m tall and 4 m deep. Nothing in the extreme foreground, no shutter or door frame in the picture. No people, no real brand names or logos, no readable text except where given. Same room at night: warm yellow tube light and a couple of warm bulbs, deeper shadows in the corners, the warm glow strong, no daylight. 2048 x 2048, square, no vignette, no lens distortion.",
+      "generate": "square 1024x1024",
+      "target": {
+        "w": 2048,
+        "h": 2048,
+        "tileable": true,
+        "normalMap": true,
+        "alpha": false,
+        "out": "textures/tex_interior_office_night.webp"
+      },
+      "placeholder": {
+        "color": "#1f2533",
+        "pattern": "noise",
+        "scale": 1
+      },
+      "used_by": [
+        "P2-056"
+      ],
+      "priority": 2,
+      "batch": "B1b-interiors-night",
+      "created": "2026-11-14T15:52:40.870Z"
     }
   ]
 }
