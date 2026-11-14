@@ -8,7 +8,7 @@
 // carriageways lie on each other beyond their cuts (a slow fork, arms that leave side by side) are cut back to where
 // they come clear (clearCuts, P1-033).
 import type { P2 } from '../geom.ts';
-import { Curve, area2, leftOf, lerp, segCross, selfCrossing, unit } from './curve.ts';
+import { Curve, area2, leftOf, lerp, selfCrossing, unit } from './curve.ts';
 import type { GEdge, GEnd, Graph } from './graph.ts';
 import { outward } from './graph.ts';
 import { endCrossSection } from './lanes.ts';
@@ -80,29 +80,83 @@ const BACK = 25;
 /** Two neighbouring arms whose headings differ by less than this meet in a point (a fork's crotch), not a corner arc. */
 const CROTCH_RAD = (30 * Math.PI) / 180;
 
+/**
+ * The frames meet() samples along an arm (every metre from BACK behind the node to 60 m out, and the top), per arm:
+ * the frame does not depend on the lateral, so every edge of one arm reuses them (P1-034: half the lane model's time
+ * went into these samples). The points are computed exactly as edgePoint computes them.
+ */
+const meetFrames = new WeakMap<ArmPlan, { ts: number[]; fs: { x: number; z: number; tx: number; tz: number }[]; f0: { x: number; z: number; tx: number; tz: number } }>();
+
+function framesOf(a: ArmPlan): { ts: number[]; fs: { x: number; z: number; tx: number; tz: number }[]; f0: { x: number; z: number; tx: number; tz: number } } {
+  let got = meetFrames.get(a);
+  if (got) return got;
+  const ts: number[] = [];
+  const top = Math.min(a.curve.length, 60);
+  for (let t = -BACK; t < top; t += 1) ts.push(t);
+  ts.push(top);
+  const f0 = a.curve.smoothAt(0);
+  const fs = ts.map((t) => (t >= 0 ? a.curve.smoothAt(Math.min(t, a.curve.length)) : f0));
+  got = { ts, fs, f0 };
+  meetFrames.set(a, got);
+  return got;
+}
+
+/** The points of edgePoint(a, l, t) at meet()'s sample parameters (the same arithmetic). */
+function meetSamples(a: ArmPlan, l: number): { xs: Float64Array; zs: Float64Array; ts: number[] } {
+  const { ts, fs } = framesOf(a);
+  const xs = new Float64Array(ts.length);
+  const zs = new Float64Array(ts.length);
+  for (let k = 0; k < ts.length; k++) {
+    const t = ts[k] as number;
+    const f = fs[k] as { x: number; z: number; tx: number; tz: number };
+    // leftOf(tx, tz) = (tz, -tx)
+    if (t >= 0) {
+      xs[k] = f.x + f.tz * l;
+      zs[k] = f.z + -f.tx * l;
+    } else {
+      xs[k] = f.x + f.tx * t + f.tz * l;
+      zs[k] = f.z + f.tz * t + -f.tx * l;
+    }
+  }
+  return { xs, zs, ts };
+}
+
 /** First meeting of arm i's edge at `li` and arm j's edge at `lj`: the distances along each arm from its node. */
 function meet(ai: ArmPlan, li: number, aj: ArmPlan, lj: number): { ti: number; tj: number; x: number; z: number } | null {
-  const sample = (a: ArmPlan, l: number): { t: number; p: P2 }[] => {
-    const out = [];
-    const top = Math.min(a.curve.length, 60);
-    for (let t = -BACK; t < top; t += 1) out.push({ t, p: edgePoint(a, l, t) });
-    out.push({ t: top, p: edgePoint(a, l, top) });
-    return out;
-  };
-  const pi = sample(ai, li);
-  const pj = sample(aj, lj);
+  const pi = meetSamples(ai, li);
+  const pj = meetSamples(aj, lj);
   let best: { ti: number; tj: number; x: number; z: number } | null = null;
-  for (let i = 0; i + 1 < pi.length; i++) {
-    const a = pi[i] as { t: number; p: P2 };
-    const b = pi[i + 1] as { t: number; p: P2 };
-    for (let j = 0; j + 1 < pj.length; j++) {
-      const c = pj[j] as { t: number; p: P2 };
-      const d = pj[j + 1] as { t: number; p: P2 };
-      const x = segCross(a.p, b.p, c.p, d.p);
-      if (!x) continue;
-      const ti = lerp(a.t, b.t, x.t);
-      const tj = lerp(c.t, d.t, x.u);
-      if (!best || Math.max(ti, tj) < Math.max(best.ti, best.tj)) best = { ti, tj, x: x.x, z: x.z };
+  let bestMax = Infinity;
+  const ni = pi.ts.length;
+  const nj = pj.ts.length;
+  for (let i = 0; i + 1 < ni; i++) {
+    const at = pi.ts[i] as number;
+    // the parameters grow along the samples: a crossing here lies at ti >= at, so it cannot come first any more
+    if (at >= bestMax) break;
+    const bt = pi.ts[i + 1] as number;
+    const ax = pi.xs[i] as number;
+    const az = pi.zs[i] as number;
+    const rx = (pi.xs[i + 1] as number) - ax;
+    const rz = (pi.zs[i + 1] as number) - az;
+    for (let j = 0; j + 1 < nj; j++) {
+      const ct = pj.ts[j] as number;
+      if (ct >= bestMax) break;
+      // segCross (curve.ts), inline
+      const cx = pj.xs[j] as number;
+      const cz = pj.zs[j] as number;
+      const sx = (pj.xs[j + 1] as number) - cx;
+      const sz = (pj.zs[j + 1] as number) - cz;
+      const den = rx * sz - rz * sx;
+      if (Math.abs(den) < 1e-12) continue;
+      const t = ((cx - ax) * sz - (cz - az) * sx) / den;
+      const u = ((cx - ax) * rz - (cz - az) * rx) / den;
+      if (t < 0 || t > 1 || u < 0 || u > 1) continue;
+      const ti = lerp(at, bt, t);
+      const tj = lerp(ct, pj.ts[j + 1] as number, u);
+      if (!best || Math.max(ti, tj) < bestMax) {
+        best = { ti, tj, x: ax + rx * t, z: az + rz * t };
+        bestMax = Math.max(ti, tj);
+      }
     }
   }
   return best;

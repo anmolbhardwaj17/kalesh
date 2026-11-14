@@ -1,12 +1,15 @@
 // Terrain rules (R-TERR) on the block graph and the height data. 01: the ground model stands above the road inside
 // its own corridor (the corridor is cut). 02: a ground road lies in water with no bridge or tunnel tag (it would
 // float or drown). 03: the height source steps along a ground road in a way no road can (a roof or a tree left in the
-// data, or a real cutting the tags do not say): the smoothed profile is taken, up to 3 m on its own. Pure.
-import { boxOf, pointInRing, Grid } from '../geom.ts';
+// data, or a real cutting the tags do not say): the smoothed profile is taken, up to 3 m on its own. 04: a road at
+// grade crosses the open ramp just past a tunnel tag's end: the portal moves past it (P1-034). Pure.
+import { boxOf, pointInRing, segmentCrossing, Grid } from '../geom.ts';
 import type { P2 } from '../geom.ts';
 import type { GraphEdge } from '../graph/build.ts';
 import type { AreaFeature } from '../graph/features.ts';
-import { atGrade, leftOf } from './context.ts';
+import { TUNNEL_COVER_M } from '../elevation/limits.ts';
+import { maxGrade } from '../roads/model.ts';
+import { atGrade, leftOf, r2, r3 } from './context.ts';
 import type { Rule, RuleContext } from './context.ts';
 import { patchOf } from './types.ts';
 import type { Issue } from './types.ts';
@@ -167,6 +170,104 @@ export const groundOutlier: Rule = {
       out.push(ctx.issue(groundOutlier, used[c.worst] as P2, [e.id], [e], 0.8, `${c.outliers} of ${c.samples} samples, worst ${c.maxDeviation} m off the median, steepest ${c.maxGradePct} percent`, [
         ctx.proposal('set_height', { mode: 'smooth_profile', on: e.id, max_m: c.maxDeviation }, 0.85, { kind: 'height_outlier', m: c.maxDeviation }, `A ground road cannot step like this (${c.maxDeviation} m off its neighbours): take the smoothed profile for ${e.id} (the elevation solver does it from the grade limits)`, used),
       ]));
+    }
+    return out;
+  },
+  repair: (i, p) => patchOf(i, p),
+};
+
+/** The portal moves this far (m) past the far edge of the road crossing over the ramp. */
+export const PORTAL_MARGIN_M = 1;
+/** A ramp out of a tunnel is a lowered road (mesh/stripfaces.ts LEVEL_GAP_M) until it is this close to the ground (m). */
+const LOWERED_M = 2.5;
+/** A portal within this of where it should be is there (m). */
+const PORTAL_TOL_M = 0.05;
+/** A crossing this far (m) inside the tunnel tag is looked at too: its width may reach past the mouth. */
+const BACK_M = 30;
+/** Two roads crossing at less than this angle (sine) run along each other: not a crossing over the ramp. */
+const CROSS_SIN_MIN = 0.3;
+
+/** Where a tunnel tag ends inside an edge: the boundary, the direction of the open ramp (+1 on, -1 back) and its piece. */
+export function tunnelMouths(e: GraphEdge): { s: number; dir: 1 | -1; tunnel: number; open: number }[] {
+  const out: { s: number; dir: 1 | -1; tunnel: number; open: number }[] = [];
+  for (let k = 0; k + 1 < e.pieces.length; k++) {
+    const p = e.pieces[k] as GraphEdge['pieces'][number];
+    const q = e.pieces[k + 1] as GraphEdge['pieces'][number];
+    if (p.tunnel && p.layer < 0 && atGrade(q)) out.push({ s: p.s1, dir: 1, tunnel: k, open: k + 1 });
+    else if (q.tunnel && q.layer < 0 && atGrade(p)) out.push({ s: p.s1, dir: -1, tunnel: k + 1, open: k });
+  }
+  return out;
+}
+
+/**
+ * R-TERR-04 (P1-034): a road at grade crosses the open ramp of a tunnel just past the end of the tunnel tag. The ramp
+ * is still a lowered road there (it climbs from the tunnel's cover depth at its grade limit), so a road on the ground
+ * can only cross it over a roof: the portal lies past the crossing road's far edge and the tunnel tag moves there (the
+ * boundary between the tunnel way and the ramp way moves; no way is added). OSM ends the tag where the mapper saw the
+ * mouth from above, often a few metres short of the road over it (the Pragati Maidan tunnel under the slip from the
+ * Ring Road: 0.78 m2 of the slip lay on the open ramp).
+ */
+export const tunnelPortal: Rule = {
+  id: 'R-TERR-04',
+  area: 'terrain',
+  title: 'Road at grade over the open ramp of a tunnel mouth',
+  confidence: 0.85,
+  detect(ctx: RuleContext): Issue[] {
+    const out: Issue[] = [];
+    for (const e of ctx.graph.edges) {
+      const mouths = tunnelMouths(e);
+      if (!mouths.length) continue;
+      const c = ctx.cum(e);
+      const halfE = e.road.width / 2 + Math.max(e.road.footpath.left, e.road.footpath.right);
+      for (const m of mouths) {
+        const open = e.pieces[m.open] as GraphEdge['pieces'][number];
+        const reach = (TUNNEL_COVER_M - LOWERED_M) / maxGrade(e.road.cls, e.road.link);
+        let need = 0;
+        const over: GraphEdge[] = [];
+        let at: P2 | null = null;
+        for (let i = 0; i + 1 < e.pts.length; i++) {
+          const s0 = c[i] as number;
+          const s1 = c[i + 1] as number;
+          // the ramp within its reach of the mouth, and the last metres of the tunnel (a road crossing just inside the
+          // tag can still reach past it with its width)
+          if (m.dir === 1 ? s1 <= m.s - BACK_M || s0 >= m.s + reach : s0 >= m.s + BACK_M || s1 <= m.s - reach) continue;
+          const a = e.pts[i] as P2;
+          const b = e.pts[i + 1] as P2;
+          for (const seg of ctx.segs.query(boxOf([a, b]))) {
+            if (seg.edge === e || !atGrade(seg.lv)) continue;
+            const x = segmentCrossing(a, b, seg.a, seg.b);
+            if (!x) continue;
+            const s = s0 + (s1 - s0) * x.t;
+            const d = (s - m.s) * m.dir;
+            if (d < -BACK_M || d > reach) continue;
+            const le = Math.hypot(b.x - a.x, b.z - a.z) || 1;
+            const lo = Math.hypot(seg.b.x - seg.a.x, seg.b.z - seg.a.z) || 1;
+            const sin = Math.abs(((b.x - a.x) * (seg.b.z - seg.a.z) - (b.z - a.z) * (seg.b.x - seg.a.x)) / (le * lo));
+            if (sin < CROSS_SIN_MIN) continue;
+            const cos = Math.sqrt(Math.max(0, 1 - sin * sin));
+            const o = seg.edge;
+            const halfO = o.road.width / 2 + Math.max(o.road.footpath.left, o.road.footpath.right);
+            // the ramp's whole width passes under the crossing road's whole width
+            const ext = d + halfO / sin + (halfE * cos) / sin + PORTAL_MARGIN_M;
+            // a portal already past the far edge (a moved one lies exactly there, to the millimetre)
+            if (ext <= PORTAL_TOL_M) continue;
+            if (!over.includes(o)) over.push(o);
+            if (ext > need) {
+              need = ext;
+              at = { x: x.x, z: x.z };
+            }
+          }
+        }
+        if (!at || need <= 0) continue;
+        const to = r3(m.s + m.dir * need);
+        // the new portal must stay inside the ramp piece, with a metre of ramp left
+        const fits = m.dir === 1 ? to < open.s1 - 1 : to > open.s0 + 1;
+        const ext = r2(need);
+        const names = over.map((o) => o.name || o.id).join(', ');
+        out.push(ctx.issue(tunnelPortal, at, [e.id, ...over.map((o) => o.id).sort()], [e, ...over], 0.85, `${names} crosses the tunnel mouth: its far edge lies ${r2(need - PORTAL_MARGIN_M)} m past the end of the tunnel tag, over the open ramp`, [
+          ctx.proposal('set_tag', { key: 'portal', on: e.id, from: r3(m.s), to }, fits ? 0.85 : 0.5, { kind: 'portal', m: ext }, `The ramp of ${e.name || e.id} is still about ${r2(TUNNEL_COVER_M - maxGrade(e.road.cls, e.road.link) * Math.max(0, need - PORTAL_MARGIN_M))} m below the ground under the far edge of ${names}, which crosses it at grade: the tunnel runs on under that road and its portal moves ${ext} m out, past the far edge`, [at]),
+        ]));
+      }
     }
     return out;
   },

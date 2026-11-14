@@ -5,24 +5,24 @@
  "block": "centre",
  "size": 250,
  "margin": 250,
- "bakeHash": "024d1e1f0f67ac",
+ "bakeHash": "1c11dae9f3e55a",
  "offset": [
   621.6,
   467.2
  ],
  "bytes": {
-  "total": 10671405,
-  "average": 1185712,
+  "total": 10661997,
+  "average": 1184666,
   "largest": {
    "id": "-3_-6",
-   "bytes": 1701808
+   "bytes": 1692400
   }
  },
  "blocks": [
   {
    "id": "centre",
    "tiles": 9,
-   "bytes": 10671405
+   "bytes": 10661997
   }
  ],
  "tiles": [
@@ -32,7 +32,7 @@
    "z": -8,
    "file": "-4_-8.ktl",
    "bytes": 951124,
-   "hash": "746442da4c3625c8",
+   "hash": "ba3bc463154345ad",
    "origin": [
     -1000,
     216,
@@ -67,7 +67,7 @@
    "z": -8,
    "file": "-3_-8.ktl",
    "bytes": 1049604,
-   "hash": "eff9ac1d52f23de2",
+   "hash": "64ade6343547e60f",
    "origin": [
     -750,
     215,
@@ -105,7 +105,7 @@
    "z": -7,
    "file": "-4_-7.ktl",
    "bytes": 947280,
-   "hash": "0cf4886e00857fa0",
+   "hash": "58c929fdee41c3ae",
    "origin": [
     -1000,
     215,
@@ -141,7 +141,7 @@
    "z": -7,
    "file": "-3_-7.ktl",
    "bytes": 1342957,
-   "hash": "c3ccddda0eafd213",
+   "hash": "a8954d646d82f5df",
    "origin": [
     -750,
     215,
@@ -178,8 +178,8 @@
    "x": -3,
    "z": -6,
    "file": "-3_-6.ktl",
-   "bytes": 1701808,
-   "hash": "55cbc10a69025323",
+   "bytes": 1692400,
+   "hash": "9fd02b290a43afd0",
    "origin": [
     -750,
     215,
@@ -201,9 +201,9 @@
     "building",
     "landmark"
    ],
-   "vertices": 27109,
-   "triangles": 12824,
-   "colliderTriangles": 12767,
+   "vertices": 26938,
+   "triangles": 12790,
+   "colliderTriangles": 12721,
    "chunks": 34,
    "largestChunk": 497,
    "buildings": 33,
@@ -217,7 +217,7 @@
    "z": -6,
    "file": "8_-6.ktl",
    "bytes": 633080,
-   "hash": "140feb48e0553dab",
+   "hash": "aa8e2331bc3355b9",
    "origin": [
     2000,
     206,
@@ -251,7 +251,7 @@
    "z": -6,
    "file": "9_-6.ktl",
    "bytes": 1370192,
-   "hash": "8a15cdb221e43461",
+   "hash": "c7b20b73618cc257",
    "origin": [
     2250,
     203,
@@ -294,7 +294,7 @@
    "z": -5,
    "file": "8_-5.ktl",
    "bytes": 1071792,
-   "hash": "78d9bc8062c4a63c",
+   "hash": "301d15b5567536f5",
    "origin": [
     2000,
     206,
@@ -332,7 +332,7 @@
    "z": -5,
    "file": "9_-5.ktl",
    "bytes": 1603568,
-   "hash": "392a76a374a1ab56",
+   "hash": "e1a5f44fee921461",
    "origin": [
     2250,
     206,

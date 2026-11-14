@@ -3,6 +3,7 @@
 // graph for the tiles (one polyline per driving lane and per junction path, with what follows what, filed under the
 // world tile of its middle), the lanes layer of the map inspector (world metres, compact) and the record for the
 // health report. One implementation: the game only reads these. Our own JSON, modelled on OpenDRIVE. Pure.
+import type { DividerFit } from './dividers.ts';
 import type { P2 } from '../geom.ts';
 import { hashText } from '../graph/checks.ts';
 import type { GraphEdge } from '../graph/build.ts';
@@ -310,6 +311,8 @@ export interface LanesRecord {
   solvedTrims?: LaneBuild['edgeTrims'] & { beforeM2: number; beforePairs: number };
   /** Edge lanes narrowed beside another strip (roads/edges.ts). */
   edgeTrims: LaneBuild['edgeTrims'];
+  /** Carriageways fitted to their reference divider (dividers.ts, P1-034); the per-station widening is left out. */
+  dividers?: Omit<DividerFit, 'widened'>;
   junctionClusters: { most: number; over8Nodes: number };
   /** Turn rules of the map (P1-032): restriction relations read, mapped and applied; turn lanes read and applied. */
   turnRules: LaneBuild['turnRules'];
@@ -361,9 +364,17 @@ export function lanesRecord(b: LaneBuild, c: LaneChecks, hash: string, buildMs: 
     hero: c.hero.map((h) => ({ spec: h.spec, strips: h.strips, stationsChecked: h.stationsChecked, fieldsCompared: h.fieldsCompared, mismatches: h.mismatches, list: h.list })),
     overlap: c.overlap,
     edgeTrims: b.edgeTrims,
+    ...(b.dividers ? { dividers: dividerRecord(b.dividers) } : {}),
     junctionClusters: { most: b.junctions.reduce((m, j) => Math.max(m, j.nodes.length), 0), over8Nodes: b.junctions.filter((j) => j.nodes.length > 8).length },
     turnRules: b.turnRules,
     midBlockCrossings: { ...b.crossingReport, bySource: b.crossings.reduce<Record<string, number>>((m, x) => ((m[x.source] = (m[x.source] ?? 0) + 1), m), {}) },
     problems: b.problems, ms: b.ms, files,
   };
 }
+
+/** The divider fit for health.json, without the per-station widening. */
+const dividerRecord = (d: DividerFit): Omit<DividerFit, 'widened'> => {
+  const { widened: _w, ...rest } = d;
+  void _w;
+  return rest;
+};

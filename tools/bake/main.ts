@@ -60,12 +60,11 @@ import { graphSvg } from './graph/render.ts';
 import type { RepairedGraph } from './repair/engine.ts';
 import { checkLaneModel, checkPlanOverlap } from './roads/lanechecks.ts';
 import type { LaneChecks } from './roads/lanechecks.ts';
-import type { LaneConflict } from './roads/surfaces.ts';
 import { explainGates, gateInvariant, gateLog } from './report/gates.ts';
 import type { GateFile } from './report/gates.ts';
 import { gateItems } from './report/gateitems.ts';
 import type { MeshChecks } from './mesh/checks.ts';
-import { NOT_TWICE, defaultBenchDir, runClearStep, runMeshStep, runTerrainStep } from './sources/meshstage.ts';
+import { NOT_TWICE, defaultBenchDir, readMedianRefs, runClearStep, runMeshStep, runTerrainStep } from './sources/meshstage.ts';
 import { laneGraph, laneModelFile, laneModelHash, lanesLayer, lanesRecord } from './roads/laneout.ts';
 import { lanesSvg } from './roads/lanerender.ts';
 import { buildLaneModel, giveWaySolved } from './roads/network.ts';
@@ -94,6 +93,7 @@ import { runMassingStep, runPlaceStep } from './sources/landmarkstage.ts';
 import type { MassingStep } from './sources/landmarkstage.ts';
 import { GroundHeights } from './tile/shells.ts';
 import { runTileStep } from './sources/tilestage.ts';
+import { readWarm, warmKey, writeWarm } from './sources/warmstart.ts';
 import type { SourceResult } from './sources/stage.ts';
 
 interface Proc {
@@ -316,11 +316,15 @@ export async function bake(args: BakeArgs, opts: BakeOptions): Promise<HealthRep
       opts.log(`[rules] ${timed.issues.length} issues on the raw graph in ${timed.totalMs} ms: ${Object.entries(timed.ms).map(([id, ms]) => `${id} ${ms}`).join(', ')} (ms per rule)`);
       const t0 = clock.now();
       // the repair, then the lane model on its result: lane surfaces on each other go back as conflicts (R-LANE-06)
-      const lin = laneInputs(graphInput, plan, readRepairInput(opts.root).heroSpecs);
-      const seed = quick ? readConflicts(conflictsFile) : [];
+      const lin = laneInputs(graphInput, plan, readRepairInput(opts.root).heroSpecs, readMedianRefs(opts.root, toBlock));
+      // the warm start of a partial bake: the conflicts of a whole bake with the same inputs (P1-050), else none
+      const pins = loadSources(sourcesFile);
+      const warm = warmKey(opts.root, [plan.id, graphHash(graph), entries.map((e) => e.patch), extra, lin.medianRefs ?? [], plan.sources.map((x) => pins.files[x.id]?.sha256 ?? null)]);
+      const seed = quick ? readWarm(conflictsFile, warm) : [];
       const fb = repairWithLanes(graph, env, { overrides: { entries, project: toBlock } }, (g) => ({ nodes: g.nodes, edges: g.edges, marks: g.marks, ...lin }), seed.length ? 0 : undefined, seed);
-      if (seed.length) opts.log(`[repair] partial bake: the lane feedback starts from the ${seed.length} conflicts of the last whole bake (${path.relative(opts.root, conflictsFile)}), one round`);
-      else if (!quick) fs.writeFileSync(conflictsFile, JSON.stringify({ _doc: 'Lane conflicts the last whole bake handed back to the repair (rule R-LANE-06); a partial bake starts from them (P1-017).', conflicts: fb.conflicts }) + '\n');
+      if (seed.length) opts.log(`[repair] partial bake: the lane feedback starts from the ${seed.length} conflicts of a whole bake with the same inputs (${path.relative(opts.root, conflictsFile)}), one round`);
+      else if (quick) opts.log(`[repair] partial bake: no whole bake with the same inputs left its lane conflicts (${path.relative(opts.root, conflictsFile)}): the whole lane feedback runs`);
+      else writeWarm(conflictsFile, warm, fb.conflicts);
       const res = fb.res;
       const repairMs = Math.round(clock.now() - t0);
       const again = repairGraph(res.graph, fb.env, { overrides: { entries, project: toBlock, applied: true } });
@@ -366,7 +370,7 @@ export async function bake(args: BakeArgs, opts: BakeOptions): Promise<HealthRep
       const proj = projector(plan.origin);
       const offset = blockFrame(districts, plan.def.block).offset;
       const heroes = readRepairInput(opts.root).heroSpecs;
-      const input: LaneModelInput = { nodes: repaired.nodes, edges: repaired.edges, marks: repaired.marks, ...laneInputs(graphInput, plan, heroes) };
+      const input: LaneModelInput = { nodes: repaired.nodes, edges: repaired.edges, marks: repaired.marks, ...laneInputs(graphInput, plan, heroes, readMedianRefs(opts.root, (lat, lon) => proj.toWorld(lat, lon))) };
       const t0 = clock.now();
       // the repair step's last lane model is this model (the same graph and inputs); built again for the hash check
       const build: LaneBuild = laneBuild ?? buildLaneModel(input);
@@ -403,6 +407,8 @@ export async function bake(args: BakeArgs, opts: BakeOptions): Promise<HealthRep
       opts.log(`[lanes] hero: ${c.hero.map((h) => `${h.spec} ${h.mismatches} mismatches over ${h.fieldsCompared} comparisons`).join(', ') || 'no spec'}; strips on each other in plan: ${c.overlap?.areaM2 ?? 0} m2 in ${c.overlap?.pairs ?? 0} pairs; edges gave way on ${build.edgeTrims.strips} strips (${build.edgeTrims.stations} stations, ${build.edgeTrims.areaM2} m2)`);
       const tr = build.turnRules;
       opts.log(`[lanes] turn rules: ${tr.restrictions.relations} restriction relations (${Object.entries(tr.restrictions.byType).map(([k, v]) => `${k} ${v}`).join(', ') || 'none'}), ${tr.restrictions.mapped} on graph edges, ${tr.restrictions.applied} applied at their junction (${tr.restrictions.movementsRemoved} movements taken out)${tr.restrictions.unmapped.length + tr.restrictions.notApplied.length ? `; not applied: ${[...tr.restrictions.unmapped, ...tr.restrictions.notApplied].map((u) => `${u.id} (${u.why})`).join('; ')}` : ''}; turn lanes on ${tr.turnLanes.ways} ways (${Object.entries(tr.turnLanes.bySource).map(([k, v]) => `${k} ${v}`).join(', ') || 'none'}), used on ${tr.turnLanes.applied} arms (${tr.turnLanes.movementsRemoved} movements no lane allows), ${tr.turnLanes.mismatched.length} arms whose lane count differs`);
+      const dv = build.dividers;
+      if (dv) opts.log(`[lanes] reference dividers: ${dv.lanesSet ?? 0} carriageways took a lane count from the space up to their divider; ${dv.strips} strips widened at ${dv.stations} stations (up to ${dv.maxM} m), ${dv.reach.fitted} of ${dv.reach.asked} stations reach their divider (${Object.entries(dv.byStreet).map(([k, v]) => `${k} ${v.meanM} m`).join(', ')})`);
       const mc = build.crossingReport;
       opts.log(`[lanes] mid-block crossings: ${mc.placed} placed from ${mc.points} crossing points (${mc.pairedAdded} more on the other carriageway); skipped ${Object.entries(mc.skipped).map(([k, v]) => `${v} ${k}`).join(', ') || 'none'}`);
       const ws = rec.widthSteps;
@@ -554,14 +560,6 @@ export async function bake(args: BakeArgs, opts: BakeOptions): Promise<HealthRep
 const round = (v: number): number => Math.round(v * 100) / 100;
 
 /** The lane conflicts the last whole bake wrote; none when the file is missing or half written (a cold start). */
-function readConflicts(file: string): LaneConflict[] {
-  try {
-    return (JSON.parse(fs.readFileSync(file, 'utf8')) as { conflicts: LaneConflict[] }).conflicts;
-  } catch {
-    return [];
-  }
-}
-
 /** harness/data/gate_explanations.json: the entries that explain the gate items left, and the known findings. */
 export function readGateFile(root: string): GateFile {
   const f = path.join(root, 'harness', 'data', 'gate_explanations.json');

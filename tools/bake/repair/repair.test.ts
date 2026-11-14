@@ -56,7 +56,9 @@ const longRoad = (): Sketch => {
 
 describe('auto-repair bounds (AR1)', () => {
   it('names every bound of MAP_REPAIR.md and compares in millimetres', () => {
-    expect(BOUNDS).toEqual({ joinM: 5, buildingIntoRoadM: 1.5, heightOutlierM: 3, carriagewayShiftM: 2.5, joinSupportedM: 8 });
+    expect(BOUNDS).toEqual({ joinM: 5, buildingIntoRoadM: 1.5, heightOutlierM: 3, carriagewayShiftM: 2.5, joinSupportedM: 8, portalM: 15 });
+    expect(isLowImpact({ kind: 'portal', m: 15 })).toBe(true);
+    expect(isLowImpact({ kind: 'portal', m: 15.1 })).toBe(false);
     expect(isLowImpact({ kind: 'join', m: 5 })).toBe(true);
     expect(isLowImpact({ kind: 'join', m: 5.0000000001 })).toBe(true);
     expect(isLowImpact({ kind: 'join', m: 5.1 })).toBe(false);
@@ -304,6 +306,26 @@ describe('auto-repair bounds (AR1)', () => {
     expect(r.drops).toEqual([{ id: 'way/108', rule: 'R-BLDG-03', issue: of(r, 'R-BLDG-03')[0]!.id, provisional: false }]);
     expect(r.graph.footprints.map((f) => f.id)).not.toContain('way/108');
     expect(r.graph.footprints.find((f) => f.id === 'way/107')!.tags).toMatchObject({ name: 'kept' });
+  });
+
+  it('a tunnel tag that ends under a street crossing the mouth at grade moves past its far edge, and a second run moves nothing (R-TERR-04)', () => {
+    const s = new Sketch();
+    const n = s.node(0, 0);
+    s.way([[-300, 0], n], { highway: 'primary', oneway: 'yes', name: 'Tunnel Marg', tunnel: 'yes', layer: '-1' });
+    s.way([n, [300, 0]], { highway: 'primary', oneway: 'yes', name: 'Tunnel Marg' });
+    // a street crossing at an angle, its centre line 1 m inside the tunnel tag: its width still reaches past the mouth
+    s.way([[-61, -80], [59, 80]], { highway: 'tertiary', name: 'Over Road' });
+    const r = run(s);
+    expect(of(r, 'R-TERR-04').map((i) => i.status)).toEqual(['auto_repaired']);
+    const t = r.graph.edges.find((e) => e.name === 'Tunnel Marg')!;
+    const [tunnel, ramp] = t.pieces;
+    expect(tunnel!.tunnel).toBe(true);
+    expect(ramp!.s0).toBe(tunnel!.s1);
+    // the street's far edge crosses the ramp's far edge a few metres past the old mouth (300 m along the edge)
+    expect(tunnel!.s1 - 300).toBeGreaterThan(3);
+    expect(tunnel!.s1 - 300).toBeLessThan(15);
+    expect(r.graph.marks[t.id]).toMatchObject({ portal_moved_m: Math.round((tunnel!.s1 - 300) * 1000) / 1000 });
+    expect(repairGraph(r.graph, testEnv({ nodeTags: s.nodeTags() })).repairs).toEqual([]);
   });
 
   it('writes one log line per applied repair with before and after, and a second run applies none', () => {
