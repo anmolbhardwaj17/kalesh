@@ -655,3 +655,4 @@ One line per event, written by task.mjs (start, done, fail, phase changes, inbox
 - 2026-11-14 19:29 mentor message mmwgh2641 handled: Saved and described all ten (ITO skywalk plan and renders, GB Road street view and night, Ajmeri Gate three views), linked to the ITO, GB Road and sign board tasks. That closes every photo request; nothing more needed now.
 - 2026-11-14 19:33 [P2-052] start (attempt 1): Shade, sky and grade on the streamed city to the Watch Dogs 2 bar
 - 2026-11-14 19:33 mentor message mmwgh7myk handled: Started P2-052 in a free lane.
+- 2026-11-14 19:34 mentor message mmwgh8doa handled: Yes, sent to the sign builder now: glow boards are blank white slabs, they light nothing around them, goods glow like toys. The navy wash over everything is the grade task, also running.
