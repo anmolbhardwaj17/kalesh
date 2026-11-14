@@ -8,6 +8,58 @@ Status: draft from reference research, P0-035 (2026-11-11). Id `jantar_mantar`. 
 
 Where a line says 'about', the number was read from the photos by scale cues (a car is about 1.7 m wide, a person about 1.7 m tall) and is not surveyed. Lines are read from the board photos except where the evidence note says the area is thin; those lines also use general knowledge and must be rechecked with street imagery. Confidence per area is in DELHI_WORLD.md section 2a.
 
+
+
+
+
+<!-- P2-049:start -->
+## Current photos and what the street is made of today (P2-049, 2026-11-14)
+
+Added 2026-11-14 on Anmol's rule: areas are built from how they look today, and every photo carries its date. **State used:** no big rebuild known since 2019: photos from 2019 on count. Board: `jantar_mantar_board.jpg` (current photos first, the earlier P0 board below it, dimmed; the old board alone is `jantar_mantar_board_old.jpg`).
+
+Date basis: Commons "date" field. EXIF = a time of day is present (taken from the camera tags); stated = the uploader typed the date (no time of day), treated as unverified. Licences are as shown by Commons on 2026-11-14.
+
+| C | File | Date (basis) | View | Author | Licence | URL |
+|---|---|---|---|---|---|---|
+| C1 | Vakil Lane, in New Delhi 01.jpg | 2022-08-24 (EXIF) | street | Pinakpani | CC BY-SA 4.0 | https://commons.wikimedia.org/wiki/File:Vakil_Lane,_in_New_Delhi_01.jpg |
+| C2 | Sansad Marg, a street in New Delhi, India 03.jpg | 2022-08-25 (EXIF) | street | Pinakpani | CC BY-SA 4.0 | https://commons.wikimedia.org/wiki/File:Sansad_Marg,_a_street_in_New_Delhi,_India_03.jpg |
+| C3 | Sansad Marg, a street in New Delhi, India 05.jpg | 2022-08-25 (EXIF) | street | Pinakpani | CC BY-SA 4.0 | https://commons.wikimedia.org/wiki/File:Sansad_Marg,_a_street_in_New_Delhi,_India_05.jpg |
+| C4 | Sansad Marg, a street in New Delhi, India 06.jpg | 2022-08-25 (EXIF) | street | Pinakpani | CC BY-SA 4.0 | https://commons.wikimedia.org/wiki/File:Sansad_Marg,_a_street_in_New_Delhi,_India_06.jpg |
+| C5 | Sansad Marg, a street in New Delhi, India 07.jpg | 2022-08-25 (EXIF) | street | Pinakpani | CC BY-SA 4.0 | https://commons.wikimedia.org/wiki/File:Sansad_Marg,_a_street_in_New_Delhi,_India_07.jpg |
+| C6 | Sansad Marg, a street in New Delhi, India 09.jpg | 2022-08-25 (EXIF) | street | Pinakpani | CC BY-SA 4.0 | https://commons.wikimedia.org/wiki/File:Sansad_Marg,_a_street_in_New_Delhi,_India_09.jpg |
+| C7 | Sansad Marg, a street in New Delhi, India 11.jpg | 2022-08-25 (EXIF) | street | Pinakpani | CC BY-SA 4.0 | https://commons.wikimedia.org/wiki/File:Sansad_Marg,_a_street_in_New_Delhi,_India_11.jpg |
+| C8 | Sansad Marg, a street in New Delhi, India 14.jpg | 2022-08-25 (EXIF) | street | Pinakpani | CC BY-SA 4.0 | https://commons.wikimedia.org/wiki/File:Sansad_Marg,_a_street_in_New_Delhi,_India_14.jpg |
+| C9 | Jantar Mantar Protest.jpg | 2026-07-21 (EXIF) | street | Alnitak-Alnilam-Mintaka | CC BY-SA 4.0 | https://commons.wikimedia.org/wiki/File:Jantar_Mantar_Protest.jpg |
+| C10 | Jantar Mantar (Q2045115) - Connaught Place. New Delhi -N-DL-23 1.jpg | 2019-06-11 (EXIF) | landmark | Pawan.kamrani | CC BY-SA 4.0 | https://commons.wikimedia.org/wiki/File:Jantar_Mantar_(Q2045115)_-_Connaught_Place._New_Delhi_-N-DL-23_1.jpg |
+| C11 | Jantar Mantar Panorama.jpg | 2020-12-18 (EXIF) | landmark | Pallav.journo | CC BY-SA 4.0 | https://commons.wikimedia.org/wiki/File:Jantar_Mantar_Panorama.jpg |
+| C12 | Akashvani Bhawan, Parliament Street.jpg | 2021-06-22 (EXIF) | landmark | Aloofmanish | CC BY-SA 4.0 | https://commons.wikimedia.org/wiki/File:Akashvani_Bhawan,_Parliament_Street.jpg |
+| C13 | Delhi Jantar Mantar.jpg | 2021-09-10 (EXIF) | landmark | Birsoni | CC BY-SA 4.0 | https://commons.wikimedia.org/wiki/File:Delhi_Jantar_Mantar.jpg |
+| C14 | FULL VIEW JANTAR MANTAR.jpg | 2021-09-10 (EXIF) | landmark | Birsoni | CC BY-SA 4.0 | https://commons.wikimedia.org/wiki/File:FULL_VIEW_JANTAR_MANTAR.jpg |
+| C15 | India Delhi Jantar Mantar observatory 1.jpg | 2022-06-05 (EXIF) | landmark | Alessio | CC BY-SA 4.0 | https://commons.wikimedia.org/wiki/File:India_Delhi_Jantar_Mantar_observatory_1.jpg |
+| C16 | ASTRONOMICAL OBSERVATORY.jpg | 2023-07-01 (EXIF) | landmark | Iamsantanubose | CC BY-SA 4.0 | https://commons.wikimedia.org/wiki/File:ASTRONOMICAL_OBSERVATORY.jpg |
+
+Count: 16 current photos, 9 at street level or from the player's height (view = street), oldest current date 2019-06-11.
+
+### What it is made of today
+
+- **Changed since the old photos:** No big rebuild known since 2019. The 2022 Pinakpani series (Sansad Marg, Vakil Lane) is the current road look. The site itself is walled and photographs of the instruments are in the table as landmark views only (not street level).
+- **Facade colours (sampled):** k-means on the building band (18% to 52% of the frame height, sky, foliage, black and shadow removed, shown dark to light) of 9 street-level current photos (night shots skipped): #5F625D (17%), #7C7D77 (15%), #A19F96 (10%), #C8C7C5 (8%). Treat as the range; pick facade paints from these, and bright colours only where a photo shows them.
+- **Road surface sampled:** the bottom centre of the same photos, largest colour cluster #B1ADB1, others #878384, #343446 (cars, paint and shadow are mixed in, so read the main value as the surface and judge it against the photos).
+- Road surface and colour: dark grey asphalt with white lane lines and wide zebra stripes; some patching near parking (seen, Sansad Marg 2022).
+- Kerbs: black and yellow painted kerb stones on the median, grey stone kerb on the park side (seen).
+- Footpath: narrow grey paver footpath, wider near the metro; red sandstone compound walls and gates along the road (seen).
+- Median: raised median with black and yellow edges and reflective bollards (seen).
+- Poles and wires: galvanised light poles with cobra-head lamps, yellow signal poles, few overhead wires (seen).
+- Lights: streetlights at about 10 m spacing; the site is lit at night (seen).
+- Trees: big old trees line the road, canopy overhead (seen).
+- Signs: green "सांसद मार्ग SANSAD MARG" boards in three scripts, blue direction boards, the red Jantar Mantar ASI board on the railing (seen, 2019).
+- Typical clutter: taxis parked nose to tail along the kerb, barricades, protest crowds with flags at the entrance at times (seen, 2026 protest shot).
+
+### Photo requests for Anmol
+
+- none: the current set shows the surface, signs, colours and the player-height view.
+<!-- P2-049:end -->
+
 ## Sources
 
 Board tile number, file, page URL, licence, author and date. All are Wikimedia Commons pages; the licence is as shown by Commons on 2026-11-11 and must be rechecked before any image is reused outside this internal board.
@@ -15,29 +67,29 @@ Board tile number, file, page URL, licence, author and date. All are Wikimedia C
 | # | File | URL | Licence | Author, date |
 |---|---|---|---|---|
 | 1 | India Delhi Jantar Mantar observatory 1.jpg | https://commons.wikimedia.org/wiki/File:India_Delhi_Jantar_Mantar_observatory_1.jpg | CC BY-SA 4.0 | Alessio 2022-06-05 |
-| 2 | Jantar Mantar, New Delhi, Delhi.jpg | https://commons.wikimedia.org/wiki/File:Jantar_Mantar,_New_Delhi,_Delhi.jpg | CC BY-SA 4.0 | Srvkumar09 2016-01-01 |
-| 3 | Jantar Mantar, New Delhi kk.jpg | https://commons.wikimedia.org/wiki/File:Jantar_Mantar,_New_Delhi_kk.jpg | CC BY-SA 4.0 | KHAGESHK 2018-05-13 |
-| 4 | Jantar Mantar- Delhi-Delhi - 005.jpg | https://commons.wikimedia.org/wiki/File:Jantar_Mantar-_Delhi-Delhi_-_005.jpg | CC BY-SA 4.0 | Raajadharshini 2017-09-09 |
-| 5 | Jantar Mantar (Delhi) - IMG 1990.JPG | https://commons.wikimedia.org/wiki/File:Jantar_Mantar_(Delhi)_-_IMG_1990.JPG | Public domain | Daderot 2010-08-31 |
-| 6 | Jantar Mantar Delhi DSC 0585 01.jpg | https://commons.wikimedia.org/wiki/File:Jantar_Mantar_Delhi_DSC_0585_01.jpg | CC BY-SA 4.0 | Ranjithsiji 2016-08-09 |
-| 7 | Jantar Mantar Delhi DSC 0585 06.jpg | https://commons.wikimedia.org/wiki/File:Jantar_Mantar_Delhi_DSC_0585_06.jpg | CC BY-SA 4.0 | Ranjithsiji 2016-08-09 |
-| 8 | Jantar Mantar Hindi Markings 18 and 12.jpg | https://commons.wikimedia.org/wiki/File:Jantar_Mantar_Hindi_Markings_18_and_12.jpg | CC BY-SA 4.0 | Pallav.journo 2009-09-20 |
-| 9 | Jantar Mantar Lamp Post.jpg | https://commons.wikimedia.org/wiki/File:Jantar_Mantar_Lamp_Post.jpg | CC BY-SA 4.0 | Pallav.journo 2010-09-11 |
-| 10 | Jantar Mantar New Delhi.jpg | https://commons.wikimedia.org/wiki/File:Jantar_Mantar_New_Delhi.jpg | CC BY-SA 3.0 | Subeesh Balan സുഭീഷ് ബാലൻ 2011-07-02 |
-| 11 | Jantar Mantar Wall.jpg | https://commons.wikimedia.org/wiki/File:Jantar_Mantar_Wall.jpg | CC BY-SA 4.0 | Pallav.journo 2010-09-11 |
-| 12 | Jantar Mantar observatory in New Delhi.jpg | https://commons.wikimedia.org/wiki/File:Jantar_Mantar_observatory_in_New_Delhi.jpg | CC BY-SA 4.0 | Jan Kranendonk (https://www.jankranendonk.nl) 1988 |
+| 2 | Jantar Mantar, New Delhi, Delhi.jpg | https://commons.wikimedia.org/wiki/File:Jantar_Mantar,_New_Delhi,_Delhi.jpg | CC BY-SA 4.0 | Srvkumar09 2016-01-01 **OLD (2016, before 2019): not used for surfaces, signs or colours** |
+| 3 | Jantar Mantar, New Delhi kk.jpg | https://commons.wikimedia.org/wiki/File:Jantar_Mantar,_New_Delhi_kk.jpg | CC BY-SA 4.0 | KHAGESHK 2018-05-13 **OLD (2018, before 2019): not used for surfaces, signs or colours** |
+| 4 | Jantar Mantar- Delhi-Delhi - 005.jpg | https://commons.wikimedia.org/wiki/File:Jantar_Mantar-_Delhi-Delhi_-_005.jpg | CC BY-SA 4.0 | Raajadharshini 2017-09-09 **OLD (2017, before 2019): not used for surfaces, signs or colours** |
+| 5 | Jantar Mantar (Delhi) - IMG 1990.JPG | https://commons.wikimedia.org/wiki/File:Jantar_Mantar_(Delhi)_-_IMG_1990.JPG | Public domain | Daderot 2010-08-31 **OLD (2010, before 2019): not used for surfaces, signs or colours** |
+| 6 | Jantar Mantar Delhi DSC 0585 01.jpg | https://commons.wikimedia.org/wiki/File:Jantar_Mantar_Delhi_DSC_0585_01.jpg | CC BY-SA 4.0 | Ranjithsiji 2016-08-09 **OLD (2016, before 2019): not used for surfaces, signs or colours** |
+| 7 | Jantar Mantar Delhi DSC 0585 06.jpg | https://commons.wikimedia.org/wiki/File:Jantar_Mantar_Delhi_DSC_0585_06.jpg | CC BY-SA 4.0 | Ranjithsiji 2016-08-09 **OLD (2016, before 2019): not used for surfaces, signs or colours** |
+| 8 | Jantar Mantar Hindi Markings 18 and 12.jpg | https://commons.wikimedia.org/wiki/File:Jantar_Mantar_Hindi_Markings_18_and_12.jpg | CC BY-SA 4.0 | Pallav.journo 2009-09-20 **OLD (2009, before 2019): not used for surfaces, signs or colours** |
+| 9 | Jantar Mantar Lamp Post.jpg | https://commons.wikimedia.org/wiki/File:Jantar_Mantar_Lamp_Post.jpg | CC BY-SA 4.0 | Pallav.journo 2010-09-11 **OLD (2010, before 2019): not used for surfaces, signs or colours** |
+| 10 | Jantar Mantar New Delhi.jpg | https://commons.wikimedia.org/wiki/File:Jantar_Mantar_New_Delhi.jpg | CC BY-SA 3.0 | Subeesh Balan സുഭീഷ് ബാലൻ 2011-07-02 **OLD (2011, before 2019): not used for surfaces, signs or colours** |
+| 11 | Jantar Mantar Wall.jpg | https://commons.wikimedia.org/wiki/File:Jantar_Mantar_Wall.jpg | CC BY-SA 4.0 | Pallav.journo 2010-09-11 **OLD (2010, before 2019): not used for surfaces, signs or colours** |
+| 12 | Jantar Mantar observatory in New Delhi.jpg | https://commons.wikimedia.org/wiki/File:Jantar_Mantar_observatory_in_New_Delhi.jpg | CC BY-SA 4.0 | Jan Kranendonk (https://www.jankranendonk.nl) 1988 **OLD (1988, before 2019): not used for surfaces, signs or colours** |
 | 13 | Jantar mantar new Delhi ,a scene.jpg | https://commons.wikimedia.org/wiki/File:Jantar_mantar_new_Delhi_,a_scene.jpg | CC BY-SA 3.0 | Sidheeq 11 April 2 |
-| 14 | Doors of Jantar Mantar.jpg | https://commons.wikimedia.org/wiki/File:Doors_of_Jantar_Mantar.jpg | CC BY-SA 4.0 | Sudipta Maulik 2018-11-12 |
+| 14 | Doors of Jantar Mantar.jpg | https://commons.wikimedia.org/wiki/File:Doors_of_Jantar_Mantar.jpg | CC BY-SA 4.0 | Sudipta Maulik 2018-11-12 **OLD (2018, before 2019): not used for surfaces, signs or colours** |
 | 15 | Inside Jantar Mantar, New Delhi.jpg | https://commons.wikimedia.org/wiki/File:Inside_Jantar_Mantar,_New_Delhi.jpg | CC BY-SA 3.0 | Pranav Singh Taken on 2 |
-| 16 | Jaipur Jantar Mantar panorama 2011.jpg | https://commons.wikimedia.org/wiki/File:Jaipur_Jantar_Mantar_panorama_2011.jpg | CC BY-SA 3.0 | Marcin Białek, correction by Aleks G 2011-01-02 |
+| 16 | Jaipur Jantar Mantar panorama 2011.jpg | https://commons.wikimedia.org/wiki/File:Jaipur_Jantar_Mantar_panorama_2011.jpg | CC BY-SA 3.0 | Marcin Białek, correction by Aleks G 2011-01-02 **OLD (2011, before 2019): not used for surfaces, signs or colours** |
 | 17 | Jantar Mantar,New Delhi 02.JPG | https://commons.wikimedia.org/wiki/File:Jantar_Mantar,New_Delhi_02.JPG | CC BY-SA 3.0 | Divya Gautam Taken on 3 |
 | 18 | Jantar Mantar,New Delhi 05.JPG | https://commons.wikimedia.org/wiki/File:Jantar_Mantar,New_Delhi_05.JPG | CC BY-SA 3.0 | Divya Gautam Taken on 3 |
-| 19 | Jantar Mantar. New Delhi (Misra Yantra). 2010.jpg | https://commons.wikimedia.org/wiki/File:Jantar_Mantar._New_Delhi_(Misra_Yantra)._2010.jpg | CC BY-SA 4.0 | John Hill 2010 |
+| 19 | Jantar Mantar. New Delhi (Misra Yantra). 2010.jpg | https://commons.wikimedia.org/wiki/File:Jantar_Mantar._New_Delhi_(Misra_Yantra)._2010.jpg | CC BY-SA 4.0 | John Hill 2010 **OLD (2010, before 2019): not used for surfaces, signs or colours** |
 | 20 | Jantar Mantar (182293133).jpeg | https://commons.wikimedia.org/wiki/File:Jantar_Mantar_(182293133).jpeg | CC BY 3.0 | Ritu Raj 31 October |
 | 21 | Jantar Mantar (182293143).jpeg | https://commons.wikimedia.org/wiki/File:Jantar_Mantar_(182293143).jpeg | CC BY 3.0 | Ritu Raj 31 October |
 | 22 | Jantar Mantar (Q2045115) - Connaught Place. New Delhi -N-DL-23 1.jpg | https://commons.wikimedia.org/wiki/File:Jantar_Mantar_(Q2045115)_-_Connaught_Place._New_Delhi_-N-DL-23_1.jpg | CC BY-SA 4.0 | Pawan.kamrani 2019-06-11 |
 | 23 | Akashvani Bhawan, Parliament Street.jpg | https://commons.wikimedia.org/wiki/File:Akashvani_Bhawan,_Parliament_Street.jpg | CC BY-SA 4.0 | Aloofmanish 2021-06-22 |
-| 24 | Indian Post, New Delhi.jpg | https://commons.wikimedia.org/wiki/File:Indian_Post,_New_Delhi.jpg | CC BY-SA 4.0 | Sidheeq 2016-12-29 |
+| 24 | Indian Post, New Delhi.jpg | https://commons.wikimedia.org/wiki/File:Indian_Post,_New_Delhi.jpg | CC BY-SA 4.0 | Sidheeq 2016-12-29 **OLD (2016, before 2019): not used for surfaces, signs or colours** |
 | 25 | Sansad Marg, a street in New Delhi, India 01.jpg | https://commons.wikimedia.org/wiki/File:Sansad_Marg,_a_street_in_New_Delhi,_India_01.jpg | CC BY-SA 4.0 | Pinakpani 2022-08-25 |
 | 26 | Sansad Marg, a street in New Delhi, India 03.jpg | https://commons.wikimedia.org/wiki/File:Sansad_Marg,_a_street_in_New_Delhi,_India_03.jpg | CC BY-SA 4.0 | Pinakpani 2022-08-25 |
 | 27 | Sansad Marg, a street in New Delhi, India 05.jpg | https://commons.wikimedia.org/wiki/File:Sansad_Marg,_a_street_in_New_Delhi,_India_05.jpg | CC BY-SA 4.0 | Pinakpani 2022-08-25 |
@@ -47,11 +99,11 @@ Board tile number, file, page URL, licence, author and date. All are Wikimedia C
 | 31 | Sansad Marg, a street in New Delhi, India 13.jpg | https://commons.wikimedia.org/wiki/File:Sansad_Marg,_a_street_in_New_Delhi,_India_13.jpg | CC BY-SA 4.0 | Pinakpani 2022-08-25 |
 | 32 | Reserve Bank of India, Delhi 01.jpg | https://commons.wikimedia.org/wiki/File:Reserve_Bank_of_India,_Delhi_01.jpg | CC BY-SA 4.0 | Pinakpani 2022-08-25 |
 | 33 | Reserve Bank of India, Delhi 05.jpg | https://commons.wikimedia.org/wiki/File:Reserve_Bank_of_India,_Delhi_05.jpg | CC BY-SA 4.0 | Pinakpani 2022-08-25 |
-| 34 | Patel Chowk entrance, 2008.JPG | https://commons.wikimedia.org/wiki/File:Patel_Chowk_entrance,_2008.JPG | CC BY-SA 3.0 | Bahnfrend 2008-12-27 |
+| 34 | Patel Chowk entrance, 2008.JPG | https://commons.wikimedia.org/wiki/File:Patel_Chowk_entrance,_2008.JPG | CC BY-SA 3.0 | Bahnfrend 2008-12-27 **OLD (2008, before 2019): not used for surfaces, signs or colours** |
 | 35 | Patel Chowk Metro Station - panoramio.jpg | https://commons.wikimedia.org/wiki/File:Patel_Chowk_Metro_Station_-_panoramio.jpg | CC BY-SA 3.0 | Anil Kaushik Taken on 2 |
-| 36 | Delhi Police's Barricade.jpeg | https://commons.wikimedia.org/wiki/File:Delhi_Police's_Barricade.jpeg | CC BY-SA 3.0 | Sidheeq 2017-09-16 |
+| 36 | Delhi Police's Barricade.jpeg | https://commons.wikimedia.org/wiki/File:Delhi_Police's_Barricade.jpeg | CC BY-SA 3.0 | Sidheeq 2017-09-16 **OLD (2017, before 2019): not used for surfaces, signs or colours** |
 | 37 | Hanuman Road Area, Connaught Place, New Delhi, Delhi 110001, India - panoramio.jpg | https://commons.wikimedia.org/wiki/File:Hanuman_Road_Area,_Connaught_Place,_New_Delhi,_Delhi_110001,_India_-_panoramio.jpg | CC BY-SA 3.0 | Rainer Strehl Taken on 6 |
-| 38 | Jantar Mantar Entrance.jpg | https://commons.wikimedia.org/wiki/File:Jantar_Mantar_Entrance.jpg | CC BY-SA 4.0 | Pallav.journo 2010-09-11 |
+| 38 | Jantar Mantar Entrance.jpg | https://commons.wikimedia.org/wiki/File:Jantar_Mantar_Entrance.jpg | CC BY-SA 4.0 | Pallav.journo 2010-09-11 **OLD (2010, before 2019): not used for surfaces, signs or colours** |
 | 39 | Evening at Jantar Mantar Protest 21st July 2026.jpg | https://commons.wikimedia.org/wiki/File:Evening_at_Jantar_Mantar_Protest_21st_July_2026.jpg | CC BY-SA 4.0 | Alnitak-Alnilam-Mintaka 2026-07-21 |
 | 40 | Jantar Mantar Protest.jpg | https://commons.wikimedia.org/wiki/File:Jantar_Mantar_Protest.jpg | CC BY-SA 4.0 | Alnitak-Alnilam-Mintaka 2026-07-21 |
 | 41 | Near Jantar mantar New Delhi banner supporting 2020-2021 Indian farmers' protest IMG 20210210 092042.jpg | https://commons.wikimedia.org/wiki/File:Near_Jantar_mantar_New_Delhi_banner_supporting_2020-2021_Indian_farmers'_protest_IMG_20210210_092042.jpg | CC BY-SA 4.0 | Sumita Roy Dutta 2021-02-10 |
