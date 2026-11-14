@@ -1,6 +1,6 @@
 {
   "_doc": "Written only by node harness/bin/task.mjs. Phases run in order; P0 (ADOPT + STYLE DISCOVERY) waits for the owner by design and needs task.mjs signoff and task.mjs archsignoff before its gate passes. Later phases are added by the planner at the end of P0 (task.mjs phase-add) from the game's real state.",
-  "updated": "2026-11-14T19:46:54.597Z",
+  "updated": "2026-11-14T19:47:28.662Z",
   "phases": [
     {
       "id": "P0",
@@ -2783,7 +2783,8 @@
       "attempts": 0,
       "notes": [
         "Anmol 2026-11-13: write this area's blueprint (harness/data/blueprints/) from photos; the area must read in its own style (for CP: the uniform two storey white colonnade ring, towers behind the outer circle), not as raw OSM shapes. Acceptance: side by side of a reference photo and the same view in game.",
-        "Watch Dogs 2 bar (FIDELITY_BAR.md, OWNER_EYE.md): the side by side sheet is read beside dated current photos and the verifier answers per shot whether it would sit next to a Watch Dogs 2 street shot without looking cheap; any OWNER_EYE.md breach or empty frontage is a fail. Use the layers of P2-052 to P2-058 (grade, wear and normals, vehicles, street life, shop interiors, AA, motion) and tune them by data for this area; do not hand-build what a layer should do."
+        "Watch Dogs 2 bar (FIDELITY_BAR.md, OWNER_EYE.md): the side by side sheet is read beside dated current photos and the verifier answers per shot whether it would sit next to a Watch Dogs 2 street shot without looking cheap; any OWNER_EYE.md breach or empty frontage is a fail. Use the layers of P2-052 to P2-058 (grade, wear and normals, vehicles, street life, shop interiors, AA, motion) and tune them by data for this area; do not hand-build what a layer should do.",
+        "Starts only from its area layout study (P2-078): satellite plus street-level layout, floor use, parking, open spaces; fixes every listed mismatch."
       ],
       "created": "2026-11-11T12:31:54.059Z",
       "model": "opus"
@@ -2812,7 +2813,8 @@
       "attempts": 0,
       "notes": [
         "Anmol 2026-11-13: write this area's blueprint (harness/data/blueprints/) from photos; the area must read in its own style (for CP: the uniform two storey white colonnade ring, towers behind the outer circle), not as raw OSM shapes. Acceptance: side by side of a reference photo and the same view in game.",
-        "Watch Dogs 2 bar (FIDELITY_BAR.md, OWNER_EYE.md): the side by side sheet is read beside dated current photos and the verifier answers per shot whether it would sit next to a Watch Dogs 2 street shot without looking cheap; any OWNER_EYE.md breach or empty frontage is a fail. Use the layers of P2-052 to P2-058 (grade, wear and normals, vehicles, street life, shop interiors, AA, motion) and tune them by data for this area; do not hand-build what a layer should do."
+        "Watch Dogs 2 bar (FIDELITY_BAR.md, OWNER_EYE.md): the side by side sheet is read beside dated current photos and the verifier answers per shot whether it would sit next to a Watch Dogs 2 street shot without looking cheap; any OWNER_EYE.md breach or empty frontage is a fail. Use the layers of P2-052 to P2-058 (grade, wear and normals, vehicles, street life, shop interiors, AA, motion) and tune them by data for this area; do not hand-build what a layer should do.",
+        "Starts only from its area layout study (P2-078): satellite plus street-level layout, floor use, parking, open spaces; fixes every listed mismatch."
       ],
       "created": "2026-11-11T12:31:54.059Z",
       "model": "opus"
@@ -2843,7 +2845,8 @@
       "notes": [
         "Watch Dogs 2 bar (FIDELITY_BAR.md, OWNER_EYE.md): the side by side sheet is read beside dated current photos and the verifier answers per shot whether it would sit next to a Watch Dogs 2 street shot without looking cheap; any OWNER_EYE.md breach or empty frontage is a fail. Use the layers of P2-052 to P2-058 (grade, wear and normals, vehicles, street life, shop interiors, AA, motion) and tune them by data for this area; do not hand-build what a layer should do.",
         "Owner photos of the ITO crossing and the ITO skywalk (white tube arch skywalk with fabric roof, round piers with black and yellow bases): OWNER_PHOTOS.md ito section.",
-        "Owner photos (2026-11-14, OWNER_PHOTOS.md ITO second set): satellite plan of the W-Point skywalk (canopy chain along Bahadur Shah Zafar Marg, Tilak Marg branch, two star-shaped plazas either side of Mathura Road), design renders and the entry diagram. Build the skywalk to the satellite footprint."
+        "Owner photos (2026-11-14, OWNER_PHOTOS.md ITO second set): satellite plan of the W-Point skywalk (canopy chain along Bahadur Shah Zafar Marg, Tilak Marg branch, two star-shaped plazas either side of Mathura Road), design renders and the entry diagram. Build the skywalk to the satellite footprint.",
+        "Starts only from its area layout study (P2-078): satellite plus street-level layout, floor use, parking, open spaces; fixes every listed mismatch."
       ],
       "created": "2026-11-11T12:31:54.059Z",
       "model": "opus"
@@ -2874,7 +2877,8 @@
       "notes": [
         "Anmol 2026-11-13: write this area's blueprint (harness/data/blueprints/) from photos; the area must read in its own style (for CP: the uniform two storey white colonnade ring, towers behind the outer circle), not as raw OSM shapes. Acceptance: side by side of a reference photo and the same view in game.",
         "Anmol 2026-11-14: compare with how Chandni Chowk looks today (current photos), not only its map. The main road is the redeveloped sandstone street (see P2-047 and decisions.md). Facade colours from the photos.",
-        "Watch Dogs 2 bar (FIDELITY_BAR.md, OWNER_EYE.md): the side by side sheet is read beside dated current photos and the verifier answers per shot whether it would sit next to a Watch Dogs 2 street shot without looking cheap; any OWNER_EYE.md breach or empty frontage is a fail. Use the layers of P2-052 to P2-058 (grade, wear and normals, vehicles, street life, shop interiors, AA, motion) and tune them by data for this area; do not hand-build what a layer should do."
+        "Watch Dogs 2 bar (FIDELITY_BAR.md, OWNER_EYE.md): the side by side sheet is read beside dated current photos and the verifier answers per shot whether it would sit next to a Watch Dogs 2 street shot without looking cheap; any OWNER_EYE.md breach or empty frontage is a fail. Use the layers of P2-052 to P2-058 (grade, wear and normals, vehicles, street life, shop interiors, AA, motion) and tune them by data for this area; do not hand-build what a layer should do.",
+        "Starts only from its area layout study (P2-078): satellite plus street-level layout, floor use, parking, open spaces; fixes every listed mismatch."
       ],
       "created": "2026-11-11T12:31:54.059Z",
       "model": "opus"
@@ -2905,7 +2909,8 @@
         "Anmol 2026-11-13: write this area's blueprint (harness/data/blueprints/) from photos; the area must read in its own style (for CP: the uniform two storey white colonnade ring, towers behind the outer circle), not as raw OSM shapes. Acceptance: side by side of a reference photo and the same view in game.",
         "Watch Dogs 2 bar (FIDELITY_BAR.md, OWNER_EYE.md): the side by side sheet is read beside dated current photos and the verifier answers per shot whether it would sit next to a Watch Dogs 2 street shot without looking cheap; any OWNER_EYE.md breach or empty frontage is a fail. Use the layers of P2-052 to P2-058 (grade, wear and normals, vehicles, street life, shop interiors, AA, motion) and tune them by data for this area; do not hand-build what a layer should do.",
         "Owner photos of GB Road (day and night: decayed upper floors with jali balconies, dense faded hardware shop flex boards, wires): OWNER_PHOTOS.md. Three of the five look like Mumbai or Kolkata: mood only. Respect rule.",
-        "Owner photos (2026-11-14): GB Road street view Oct 2025 (dense blue printed flex of bearing and machinery shops on two levels, cable band, white pillar colonnade, jali screens, AC units, rooftop plants), GB Road at night from above, and the Ajmeri Gate in three views (red sandstone arch in grey rubble, octagonal bastion, crenellations, iron grille, small plaza with a tree)."
+        "Owner photos (2026-11-14): GB Road street view Oct 2025 (dense blue printed flex of bearing and machinery shops on two levels, cable band, white pillar colonnade, jali screens, AC units, rooftop plants), GB Road at night from above, and the Ajmeri Gate in three views (red sandstone arch in grey rubble, octagonal bastion, crenellations, iron grille, small plaza with a tree).",
+        "Starts only from its area layout study (P2-078): satellite plus street-level layout, floor use, parking, open spaces; fixes every listed mismatch."
       ],
       "created": "2026-11-11T12:31:54.059Z",
       "model": "opus"
@@ -5407,6 +5412,24 @@
       "attempts": 0,
       "notes": [],
       "created": "2026-11-14T19:46:54.595Z",
+      "model": "opus"
+    },
+    {
+      "id": "P2-078",
+      "phase": "P2",
+      "title": "Area layout study for every pilot area: satellite plus street level, before any area pass",
+      "desc": "Anmol 2026-11-15: CP in game has shops on every floor and no parking, unlike the photos; build only with clarity of how each place is actually laid out. For each of the 11 pilot areas write harness/design/areas/<area>_layout.md with an annotated satellite top view (free imagery as used by the access judge, Esri World Imagery) and dated street-level photos (area boards plus owner photos), answering: what each block is (shops, offices, homes, hotels, institutions, worship, markets), what is on each floor (ground floor shops and upper floor offices in CP colonnades; galis shops below, homes above), setbacks and frontages, parking (where, kind: surface lots, CP inner circle radial parking, multi-level, on-street, two-wheeler rows), open spaces and parks (CP Central Park, India Gate lawns), footpaths and colonnades, medians, kiosks and vendors, entrances, underground (Palika Bazaar, metro exits), trees, typical vehicles and crowd. Then compare with what the game builds today (a top view and street shots per area from the current build) and list every mismatch as a fix, assigned to the area pass or kit task that owns it. This is the input for P2-020 to P2-024; they do not start without it.",
+      "accept": [
+        "CP specifically: colonnade ground-floor shops and upper-floor offices, the inner and outer circle parking, Central Park, Palika Bazaar entrances, the radial road blocks, all matched or listed as fixes"
+      ],
+      "deps": [],
+      "agent": "builder",
+      "priority": 1,
+      "kind": "mentor",
+      "status": "todo",
+      "attempts": 0,
+      "notes": [],
+      "created": "2026-11-14T19:47:28.348Z",
       "model": "opus"
     }
   ]

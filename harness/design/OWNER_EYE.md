@@ -30,3 +30,4 @@ Every builder brief for a look task, every verifier and every look audit reads t
 
 ## Reporting
 - Say plainly what is still a stand-in. Show Anmol finished work, not work he has to correct.
+- Know the place before building it: every area is built from a layout study of satellite and street-level views (what each block is, what is on each floor, where the parking, parks, footpaths, kiosks and entrances are). Shops only where real shops are; parking where real parking is (2026-11-15).
