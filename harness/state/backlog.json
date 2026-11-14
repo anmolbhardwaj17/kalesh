@@ -1,6 +1,6 @@
 {
   "_doc": "Written only by node harness/bin/task.mjs. Phases run in order; P0 (ADOPT + STYLE DISCOVERY) waits for the owner by design and needs task.mjs signoff and task.mjs archsignoff before its gate passes. Later phases are added by the planner at the end of P0 (task.mjs phase-add) from the game's real state.",
-  "updated": "2026-11-14T19:42:08.016Z",
+  "updated": "2026-11-14T19:46:54.597Z",
   "phases": [
     {
       "id": "P0",
@@ -5285,14 +5285,17 @@
       "agent": "builder",
       "priority": 1,
       "kind": "mentor",
-      "status": "doing",
+      "status": "done",
       "attempts": 1,
       "notes": [
         "Verifier: motion good (Bittu 4/4/4, Meera 5/4/4, Danny 4/3/4, picks clearly better than the stiff candidates); narrow FAIL: foot_feel jog on stairs_north p95 0.0204 m vs 0.02, caused by the new jog blend. Small fix round."
       ],
       "created": "2026-11-14T17:39:13.193Z",
       "model": "opus",
-      "started": "2026-11-14T17:39:14.168Z"
+      "started": "2026-11-14T17:39:14.168Z",
+      "done": "2026-11-14T19:46:54.395Z",
+      "summary": "161 Mixamo clips imported for the leads (raw files out of git), picked per lead in game: Bittu relaxed idle and loose walk, Meera composed idle and upright walk, Danny hip-cocked idle and strut; jog and run blends at game speed; start, stop and turns; upper-body layers (pistol aim, phone, texting, carrying, gestures), spine aim, additive flinches. Verifier: motion natural and characterful; jog stairs foot fixed (p95 0.0182 m); Danny walk and sprint wander 6.2 and 8.0 percent left as a known item, not visible at play distance.",
+      "commit": "a26bb33"
     },
     {
       "id": "P2-073",
@@ -5386,6 +5389,24 @@
       "attempts": 0,
       "notes": [],
       "created": "2026-11-14T19:42:08.003Z",
+      "model": "opus"
+    },
+    {
+      "id": "P2-077",
+      "phase": "P2",
+      "title": "Danny's planted feet at walk and sprint; root-motion starts and turns",
+      "desc": "From P2-072: Danny's walk and sprint planted-foot wander 6.2 and 8.0 percent (limit 5) in lead_anim, not visible at play distance; the Mixamo start, stop and turn clips need the motor to follow their root motion before they play in game; foot_anim cost check is load-sensitive.",
+      "accept": [
+        "lead_anim clean for all three; Mx start, stop and turn clips play in game without sliding"
+      ],
+      "deps": [],
+      "agent": "builder",
+      "priority": 3,
+      "kind": "bug",
+      "status": "todo",
+      "attempts": 0,
+      "notes": [],
+      "created": "2026-11-14T19:46:54.595Z",
       "model": "opus"
     }
   ]

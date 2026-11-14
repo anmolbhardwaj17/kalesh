@@ -48,3 +48,6 @@ harness/design/reference/owner/**/*.jp*g
 harness/design/reference/owner/**/*.webp
 harness/design/reference/owner/**/*.avif
 harness/design/reference/owner/**/*.png
+# the Mixamo clips while tools/characters/mixamo_build.mjs imports them (removed after the build; the raw FBX are
+# licence-restricted and never committed)
+game/characters/mixamo_src/

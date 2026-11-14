@@ -22,9 +22,12 @@ extends Node3D
 
 const Leads := preload("res://characters/leads.gd")
 const BodyFeel := preload("res://characters/body_feel.gd")
+const Layers := preload("res://characters/anim_layers.gd")
 const CLIPS_PATH := "res://characters/rig/ual_clips.res"
 const LOCO_PATH := "res://characters/rig/loco_clips.res"
 const LEAD_LOCO_PATH := "res://characters/rig/loco_%s.res"
+## A lead's Mixamo set (P2-072, characters/tools/mixamo_lead.gd), played in place of loco_<id>.res when it exists.
+const LEAD_MX_PATH := "res://characters/rig/mx_%s.res"
 const LEAD_CLIPS_PATH := "res://characters/rig/clips_%s.res"
 const SHADER_PATH := "res://characters/rig/lead_look.gdshader"
 const MESH_PATH := {"m": "res://characters/rig/mannequin_m.scn", "f": "res://characters/rig/mannequin_f.scn"}
@@ -79,6 +82,8 @@ var _move_fade := 0.09
 var tree: AnimationTree
 var skeleton: Skeleton3D
 var feel := BodyFeel.new()
+## The upper body, flinch and aim layers (P2-072), null when the set has no layer clips.
+var layers: Layers
 ## "idle", "walk", "jog", "sprint", "crouch_idle", "crouch_walk", "start", "stop", "turn" or a state of STATES.
 var state := "idle"
 ## Play rate of the gait clips now: the cadence over the blend's natural cadence (1 at a gait's own speed).
@@ -139,11 +144,13 @@ static func lead_clips(id: String) -> AnimationLibrary:
 	return _lead_clips[id]
 
 
-## A lead model's own locomotion clips (rig/loco_<id>.res, built on its skeleton by tools/characters/lead_build.mjs),
-## or the mannequin's when that file is missing.
+## A lead model's own locomotion clips: its Mixamo set (rig/mx_<id>.res, P2-072) when there is one, else its built
+## set (rig/loco_<id>.res, built on its skeleton by tools/characters/lead_build.mjs), else the mannequin's.
 static func lead_loco(id: String) -> AnimationLibrary:
 	if not _lead_loco.has(id):
-		var p := LEAD_LOCO_PATH % id
+		var p := LEAD_MX_PATH % id
+		if not ResourceLoader.exists(p):
+			p = LEAD_LOCO_PATH % id
 		_lead_loco[id] = load(p) if ResourceLoader.exists(p) else loco()
 	return _lead_loco[id]
 
@@ -256,7 +263,7 @@ func _build_tree() -> void:
 	bt.add_node("gait_rate", AnimationNodeTimeScale.new(), Vector2(-300, 0))
 	bt.connect_node("gait_rate", 0, "gait_seek")
 	var idle := AnimationNodeAnimation.new()
-	idle.animation = "Idle"
+	idle.animation = _clip("move")
 	bt.add_node("a_idle", idle, Vector2(-300, -120))
 	var mv := AnimationNodeBlend2.new()
 	mv.sync = true
@@ -268,7 +275,7 @@ func _build_tree() -> void:
 	bt.add_node("crouch_rate", AnimationNodeTimeScale.new(), Vector2(-300, 240))
 	bt.connect_node("crouch_rate", 0, "c_walk")
 	var cidle := AnimationNodeAnimation.new()
-	cidle.animation = STATES["crouch"]
+	cidle.animation = _clip("crouch")
 	bt.add_node("c_idle", cidle, Vector2(-300, 120))
 	var cr := AnimationNodeBlend2.new()
 	cr.sync = true
@@ -285,7 +292,7 @@ func _build_tree() -> void:
 			_tr.set_input_reset(i, false)
 		else:
 			var an := AnimationNodeAnimation.new()
-			an.animation = STATES[s]
+			an.animation = _clip(s)
 			bt.add_node("a_" + s, an, Vector2(0, 360 + i * 120))
 		i += 1
 	bt.add_node("state", _tr, Vector2(300, 0))
@@ -295,8 +302,13 @@ func _build_tree() -> void:
 		i += 1
 	bt.add_node("rate", AnimationNodeTimeScale.new(), Vector2(500, 0))
 	bt.connect_node("rate", 0, "state")
-	bt.connect_node("output", 0, "rate")
 	tree = AnimationTree.new()
+	if not lead_model.is_empty() and Layers.supported(_lib):
+		layers = Layers.new()
+		layers.tree = tree
+		layers.build(bt, "rate", "k", skeleton)
+	else:
+		bt.connect_node("output", 0, "rate")
 	tree.name = "AnimTree"
 	tree.add_animation_library("", clips() if lead_model.is_empty() else lead_clips(look_id))
 	tree.add_animation_library("k", _lib)
@@ -320,11 +332,18 @@ func play(shot: String, seconds: float) -> void:
 	_shot = shot
 	_shot_left = seconds
 	state = shot
-	_set_input(shot, float(SHOT_PART.get(shot, _length(STATES[shot]))) / seconds, XFADE, true, true)
+	_set_input(shot, float(SHOT_PART.get(shot, _length(_clip(shot)))) / seconds, XFADE, true, true)
 
 
 func _length(clip: String) -> float:
 	return tree.get_animation(clip).length
+
+
+## The clip a state plays: STATES's, or the same name in this body's own set when it has one (a lead's Mixamo set has
+## its own Idle).
+func _clip(s: String) -> String:
+	var c: String = STATES[s]
+	return "k/" + c if not c.begins_with("k/") and _lib != null and _lib.has_animation(c) else c
 
 
 ## What the body is told about its motion before step(): the world velocity, the compass heading it faces and the
@@ -360,7 +379,11 @@ func step(dt: float, c_state: String, speed: float, crouched: bool, intent := ""
 	_was_intent = intent
 	if _input == "move":
 		phase = fposmod(phase + cadence * dt, 1.0)
+	if layers != null:
+		layers.pre(dt)
 	tree.advance(dt)
+	if layers != null:
+		layers.post(dt)
 	# no forced bone update here: body_feel.gd reads the bones it needs (that updates them), and a body it does not
 	# touch is updated by the skeleton itself before it is drawn
 	feel.update(dt, c_state == "ground" and not _shot in ["sit_enter", "sit", "sit_exit", "drive", "vault"])
@@ -390,7 +413,7 @@ func _end_shot() -> void:
 	var done := _shot
 	_shot = ""
 	if done == "start" or done.begins_with("turn_"):
-		var m: Dictionary = _moves.get(STATES[done].trim_prefix("k/"), {})
+		var m: Dictionary = _moves.get(_clip(done).trim_prefix("k/"), {})
 		_seek(float(m.get("out_phase", 0.5)))
 
 
@@ -408,7 +431,7 @@ func _move_shot(shot: String, fade: float) -> bool:
 	if not _set_input(shot, 1.0, fade, true):
 		return false
 	_shot = shot
-	_shot_left = _length(STATES[shot])
+	_shot_left = _length(_clip(shot))
 	state = shot.get_slice("_", 0)
 	return true
 
@@ -540,9 +563,9 @@ func cost_ms() -> float:
 ## The clip that leads the pose now (the nearest gait of the blend while moving).
 func clip() -> String:
 	if _input == "crouch":
-		return CROUCH_GAIT if state == "crouch_walk" else STATES["crouch"]
+		return CROUCH_GAIT if state == "crouch_walk" else _clip("crouch")
 	if _input != "move":
-		return STATES.get(_input, "")
+		return _clip(_input) if STATES.has(_input) else ""
 	match state:
 		"walk":
 			return GAITS[0]
@@ -550,12 +573,28 @@ func clip() -> String:
 			return GAITS[1]
 		"sprint":
 			return GAITS[2]
-	return "Idle"
+	return _clip("move")
 
 
 func info() -> Dictionary:
 	return {"look": look_id, "state": state, "clip": clip(), "rate": snappedf(rate, 0.001),
 		"cadenceSpm": snappedf(cadence * 120.0, 0.1), "phase": snappedf(phase, 0.001),
 		"lean": [snappedf(feel.lean.x, 0.001), snappedf(feel.lean.y, 0.001)], "headYaw": snappedf(feel.head_yaw, 0.001),
-		"scale": snappedf(body_scale, 0.0001), "model": "lead" if not lead_model.is_empty() else "mannequin", "msPerTick": snappedf(cost_ms(), 0.0001), "ticks": ticks}
+		"scale": snappedf(body_scale, 0.0001), "model": "lead" if not lead_model.is_empty() else "mannequin", "msPerTick": snappedf(cost_ms(), 0.0001), "ticks": ticks,
+		"layers": layers.info() if layers != null else {}, "set": str(_lib.get_meta("source", "")).get_slice(" ", 0) if _lib != null else ""}
 
+
+## The layers (anim_layers.gd): an upper body action ("" clears), an additive flinch, the spine aim. False without them.
+func upper(action: String) -> bool:
+	return layers != null and layers.set_upper(action)
+
+
+func flinch(kind: String, strength := 1.0) -> bool:
+	return layers != null and layers.flinch(kind, strength)
+
+
+func aim(on: bool, yaw := 0.0, pitch := 0.0) -> bool:
+	if layers == null:
+		return false
+	layers.aim(on, yaw, pitch)
+	return true

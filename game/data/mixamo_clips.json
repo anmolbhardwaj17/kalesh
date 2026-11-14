@@ -1,0 +1,2107 @@
+{
+ "source": {
+  "motion_scale": 0.526639,
+  "offsets": {
+   "Hips": [
+    0.0,
+    0.526639,
+    0.0
+   ],
+   "Spine": [
+    0.0,
+    0.057847,
+    -0.006554
+   ],
+   "Chest": [
+    0.0,
+    0.067488,
+    -0.007647
+   ],
+   "UpperChest": [
+    0.0,
+    0.077129,
+    -0.008739
+   ],
+   "Neck": [
+    0.0,
+    0.086771,
+    -0.009832
+   ],
+   "Head": [
+    0.0,
+    0.039238,
+    0.012979
+   ],
+   "mixamorig_HeadTop_End": [
+    0.0,
+    0.118766,
+    0.039286
+   ],
+   "LeftShoulder": [
+    0.044422,
+    0.074353,
+    -0.010201
+   ],
+   "LeftUpperArm": [
+    -0.000739,
+    0.08975,
+    -0.024477
+   ],
+   "LeftLowerArm": [
+    0.0,
+    0.08729,
+    0.0
+   ],
+   "LeftHand": [
+    0.0,
+    0.132604,
+    0.0
+   ],
+   "LeftThumbMetacarpal": [
+    -0.0136,
+    0.020685,
+    0.003776
+   ],
+   "LeftThumbProximal": [
+    -0.008959,
+    0.017853,
+    0.001645
+   ],
+   "LeftThumbDistal": [
+    -0.008721,
+    0.017378,
+    0.001601
+   ],
+   "mixamorig_LeftHandThumb4": [
+    -0.007046,
+    0.014041,
+    0.001294
+   ],
+   "LeftIndexProximal": [
+    -0.011208,
+    0.065733,
+    0.002317
+   ],
+   "LeftIndexIntermediate": [
+    0.0,
+    0.012809,
+    0.0
+   ],
+   "LeftIndexDistal": [
+    0.0,
+    0.012487,
+    0.0
+   ],
+   "mixamorig_LeftHandIndex4": [
+    0.0,
+    0.009836,
+    0.0
+   ],
+   "LeftMiddleProximal": [
+    0.0,
+    0.064659,
+    0.0
+   ],
+   "LeftMiddleIntermediate": [
+    0.0,
+    0.015088,
+    0.0
+   ],
+   "LeftMiddleDistal": [
+    0.0,
+    0.014571,
+    0.0
+   ],
+   "mixamorig_LeftHandMiddle4": [
+    0.0,
+    0.011431,
+    0.0
+   ],
+   "LeftRingProximal": [
+    0.010996,
+    0.06358,
+    -0.000528
+   ],
+   "LeftRingIntermediate": [
+    0.0,
+    0.013889,
+    0.0
+   ],
+   "LeftRingDistal": [
+    0.0,
+    0.013173,
+    0.0
+   ],
+   "mixamorig_LeftHandRing4": [
+    0.0,
+    0.010968,
+    0.0
+   ],
+   "LeftLittleProximal": [
+    0.019901,
+    0.047024,
+    0.002311
+   ],
+   "LeftLittleIntermediate": [
+    0.0,
+    0.017262,
+    0.0
+   ],
+   "LeftLittleDistal": [
+    0.0,
+    0.013968,
+    0.0
+   ],
+   "mixamorig_LeftHandPinky4": [
+    0.0,
+    0.011761,
+    0.0
+   ],
+   "RightShoulder": [
+    -0.044422,
+    0.074352,
+    -0.009462
+   ],
+   "RightUpperArm": [
+    -0.000739,
+    0.08975,
+    -0.024476
+   ],
+   "RightLowerArm": [
+    0.0,
+    0.087237,
+    0.0
+   ],
+   "RightHand": [
+    0.0,
+    0.132932,
+    0.0
+   ],
+   "RightThumbMetacarpal": [
+    0.013279,
+    0.019737,
+    0.003917
+   ],
+   "RightThumbProximal": [
+    0.008625,
+    0.017189,
+    0.001584
+   ],
+   "RightThumbDistal": [
+    0.00893,
+    0.017796,
+    0.00164
+   ],
+   "mixamorig_RightHandThumb4": [
+    0.007377,
+    0.0147,
+    0.001354
+   ],
+   "RightIndexProximal": [
+    0.011164,
+    0.066891,
+    0.000908
+   ],
+   "RightIndexIntermediate": [
+    0.0,
+    0.012565,
+    0.0
+   ],
+   "RightIndexDistal": [
+    0.0,
+    0.011678,
+    0.0
+   ],
+   "mixamorig_RightHandIndex4": [
+    0.0,
+    0.008813,
+    0.0
+   ],
+   "RightMiddleProximal": [
+    0.0,
+    0.063045,
+    0.0
+   ],
+   "RightMiddleIntermediate": [
+    0.0,
+    0.015351,
+    0.0
+   ],
+   "RightMiddleDistal": [
+    0.0,
+    0.013981,
+    0.0
+   ],
+   "mixamorig_RightHandMiddle4": [
+    0.0,
+    0.011246,
+    0.0
+   ],
+   "RightRingProximal": [
+    -0.011748,
+    0.062267,
+    -0.000995
+   ],
+   "RightRingIntermediate": [
+    0.0,
+    0.013615,
+    0.0
+   ],
+   "RightRingDistal": [
+    0.0,
+    0.013068,
+    0.0
+   ],
+   "mixamorig_RightHandRing4": [
+    0.0,
+    0.010574,
+    0.0
+   ],
+   "RightLittleProximal": [
+    -0.021185,
+    0.047632,
+    0.001217
+   ],
+   "RightLittleIntermediate": [
+    0.0,
+    0.015711,
+    0.0
+   ],
+   "RightLittleDistal": [
+    0.0,
+    0.013169,
+    0.0
+   ],
+   "mixamorig_RightHandPinky4": [
+    0.0,
+    0.010225,
+    0.0
+   ],
+   "LeftUpperLeg": [
+    0.0592,
+    -0.032092,
+    -0.000579
+   ],
+   "LeftLowerLeg": [
+    -0.000222,
+    0.23065,
+    -0.020621
+   ],
+   "LeftFoot": [
+    -0.000222,
+    0.207368,
+    0.025111
+   ],
+   "LeftToes": [
+    -0.011634,
+    0.074585,
+    -0.051687
+   ],
+   "mixamorig_LeftToe_End": [
+    0.004441,
+    0.036815,
+    0.000953
+   ],
+   "RightUpperLeg": [
+    -0.0592,
+    -0.032092,
+    0.001768
+   ],
+   "RightLowerLeg": [
+    0.000222,
+    0.23065,
+    -0.023082
+   ],
+   "RightFoot": [
+    0.000222,
+    0.20737,
+    0.023947
+   ],
+   "RightToes": [
+    0.011633,
+    0.074325,
+    -0.051681
+   ],
+   "mixamorig_RightToe_End": [
+    -0.00444,
+    0.037047,
+    0.00095
+   ]
+  }
+ },
+ "count": 161,
+ "clips": [
+  {
+   "name": "kneeling_down",
+   "category": "actions",
+   "file": "actions/Kneeling Down.fbx",
+   "length": 2.767,
+   "loop": false,
+   "root_m": 0.011,
+   "turn_deg": -2.1,
+   "loop_deg": 999.0,
+   "tracks": 43
+  },
+  {
+   "name": "opening_door_inwards",
+   "category": "actions",
+   "file": "actions/Opening Door Inwards.fbx",
+   "length": 6.367,
+   "loop": true,
+   "root_m": 1.768,
+   "turn_deg": 0.0,
+   "loop_deg": 0.1,
+   "tracks": 54
+  },
+  {
+   "name": "picking_up_object",
+   "category": "actions",
+   "file": "actions/Picking Up Object.fbx",
+   "length": 3.433,
+   "loop": false,
+   "root_m": 0.054,
+   "turn_deg": 2.6,
+   "loop_deg": 999.0,
+   "tracks": 53
+  },
+  {
+   "name": "box_jump",
+   "category": "climb_jump_fall",
+   "file": "climb_jump_fall/Box Jump.fbx",
+   "length": 3.9,
+   "loop": true,
+   "root_m": 0.0,
+   "turn_deg": 0.0,
+   "loop_deg": 0.1,
+   "tracks": 53
+  },
+  {
+   "name": "braced_hang_shimmy",
+   "category": "climb_jump_fall",
+   "file": "climb_jump_fall/Braced Hang Shimmy.fbx",
+   "length": 1.167,
+   "loop": true,
+   "root_m": 0.0,
+   "turn_deg": 0.0,
+   "loop_deg": 0.1,
+   "tracks": 43
+  },
+  {
+   "name": "climbing_to_top",
+   "category": "climb_jump_fall",
+   "file": "climb_jump_fall/Climbing To Top.fbx",
+   "length": 4.0,
+   "loop": false,
+   "root_m": 1.37,
+   "turn_deg": 9.7,
+   "loop_deg": 999.0,
+   "tracks": 44
+  },
+  {
+   "name": "climbing_up_wall_1",
+   "category": "climb_jump_fall",
+   "file": "climb_jump_fall/Climbing Up Wall (1).fbx",
+   "length": 2.0,
+   "loop": true,
+   "root_m": 0.0,
+   "turn_deg": 0.0,
+   "loop_deg": 0.1,
+   "tracks": 43
+  },
+  {
+   "name": "climbing_up_wall",
+   "category": "climb_jump_fall",
+   "file": "climb_jump_fall/Climbing Up Wall.fbx",
+   "length": 2.0,
+   "loop": true,
+   "root_m": 0.0,
+   "turn_deg": 0.0,
+   "loop_deg": 0.1,
+   "tracks": 43
+  },
+  {
+   "name": "falling_down",
+   "category": "climb_jump_fall",
+   "file": "climb_jump_fall/Falling Down.fbx",
+   "length": 2.267,
+   "loop": false,
+   "root_m": 1.03,
+   "turn_deg": -87.2,
+   "loop_deg": 999.0,
+   "tracks": 44
+  },
+  {
+   "name": "hard_landing",
+   "category": "climb_jump_fall",
+   "file": "climb_jump_fall/Hard Landing.fbx",
+   "length": 2.5,
+   "loop": false,
+   "root_m": 1.034,
+   "turn_deg": -9.0,
+   "loop_deg": 999.0,
+   "tracks": 44
+  },
+  {
+   "name": "jumping_over_into_combat",
+   "category": "climb_jump_fall",
+   "file": "climb_jump_fall/Jumping Over Into Combat.fbx",
+   "length": 4.167,
+   "loop": false,
+   "root_m": 4.286,
+   "turn_deg": -63.8,
+   "loop_deg": 999.0,
+   "tracks": 54
+  },
+  {
+   "name": "jumping",
+   "category": "climb_jump_fall",
+   "file": "climb_jump_fall/Jumping.fbx",
+   "length": 1.9,
+   "loop": true,
+   "root_m": 0.0,
+   "turn_deg": 0.0,
+   "loop_deg": 1.4,
+   "tracks": 43
+  },
+  {
+   "name": "vault_over_box",
+   "category": "climb_jump_fall",
+   "file": "climb_jump_fall/Vault Over Box.fbx",
+   "length": 3.533,
+   "loop": false,
+   "root_m": 3.269,
+   "turn_deg": 7.9,
+   "loop_deg": 999.0,
+   "tracks": 44
+  },
+  {
+   "name": "big_stomach_hit",
+   "category": "combat",
+   "file": "combat/Big Stomach Hit.fbx",
+   "length": 1.4,
+   "loop": true,
+   "root_m": 0.0,
+   "turn_deg": 0.0,
+   "loop_deg": 0.1,
+   "tracks": 53
+  },
+  {
+   "name": "boxing",
+   "category": "combat",
+   "file": "combat/Boxing.fbx",
+   "length": 2.2,
+   "loop": true,
+   "root_m": 0.0,
+   "turn_deg": 0.0,
+   "loop_deg": 0.1,
+   "tracks": 53
+  },
+  {
+   "name": "button_pushing",
+   "category": "combat",
+   "file": "combat/Button Pushing.fbx",
+   "length": 3.233,
+   "loop": true,
+   "root_m": 0.0,
+   "turn_deg": 0.0,
+   "loop_deg": 0.1,
+   "tracks": 43
+  },
+  {
+   "name": "cross_punch",
+   "category": "combat",
+   "file": "combat/Cross Punch.fbx",
+   "length": 2.0,
+   "loop": true,
+   "root_m": 0.0,
+   "turn_deg": 0.0,
+   "loop_deg": 0.1,
+   "tracks": 53
+  },
+  {
+   "name": "death",
+   "category": "combat",
+   "file": "combat/Death.fbx",
+   "length": 3.033,
+   "loop": false,
+   "root_m": 1.1,
+   "turn_deg": -55.0,
+   "loop_deg": 999.0,
+   "tracks": 54
+  },
+  {
+   "name": "dodge_while_sitting",
+   "category": "combat",
+   "file": "combat/Dodge While Sitting.fbx",
+   "length": 3.167,
+   "loop": true,
+   "root_m": 0.0,
+   "turn_deg": 0.0,
+   "loop_deg": 0.1,
+   "tracks": 43
+  },
+  {
+   "name": "dying",
+   "category": "combat",
+   "file": "combat/Dying.fbx",
+   "length": 4.4,
+   "loop": false,
+   "root_m": 0.343,
+   "turn_deg": 28.5,
+   "loop_deg": 999.0,
+   "tracks": 34
+  },
+  {
+   "name": "getting_up_1",
+   "category": "combat",
+   "file": "combat/Getting Up (1).fbx",
+   "length": 8.333,
+   "loop": false,
+   "root_m": 0.705,
+   "turn_deg": 81.0,
+   "loop_deg": 999.0,
+   "tracks": 54
+  },
+  {
+   "name": "getting_up",
+   "category": "combat",
+   "file": "combat/Getting Up.fbx",
+   "length": 2.7,
+   "loop": false,
+   "root_m": 0.047,
+   "turn_deg": -28.8,
+   "loop_deg": 999.0,
+   "tracks": 43
+  },
+  {
+   "name": "head_hit",
+   "category": "combat",
+   "file": "combat/Head Hit.fbx",
+   "length": 1.433,
+   "loop": true,
+   "root_m": 0.0,
+   "turn_deg": 0.0,
+   "loop_deg": 0.1,
+   "tracks": 53
+  },
+  {
+   "name": "hook_punch",
+   "category": "combat",
+   "file": "combat/Hook Punch.fbx",
+   "length": 2.167,
+   "loop": true,
+   "root_m": 0.0,
+   "turn_deg": 0.0,
+   "loop_deg": 0.1,
+   "tracks": 53
+  },
+  {
+   "name": "kicking_out",
+   "category": "combat",
+   "file": "combat/Kicking Out.fbx",
+   "length": 1.6,
+   "loop": true,
+   "root_m": 0.0,
+   "turn_deg": 0.0,
+   "loop_deg": 0.1,
+   "tracks": 43
+  },
+  {
+   "name": "lead_jab",
+   "category": "combat",
+   "file": "combat/Lead Jab.fbx",
+   "length": 1.8,
+   "loop": true,
+   "root_m": 0.0,
+   "turn_deg": 0.0,
+   "loop_deg": 0.1,
+   "tracks": 53
+  },
+  {
+   "name": "punching_bag",
+   "category": "combat",
+   "file": "combat/Punching Bag.fbx",
+   "length": 3.233,
+   "loop": true,
+   "root_m": 0.0,
+   "turn_deg": 0.0,
+   "loop_deg": 0.1,
+   "tracks": 53
+  },
+  {
+   "name": "pushing",
+   "category": "combat",
+   "file": "combat/Pushing.fbx",
+   "length": 3.967,
+   "loop": false,
+   "root_m": 0.371,
+   "turn_deg": -12.4,
+   "loop_deg": 999.0,
+   "tracks": 44
+  },
+  {
+   "name": "right_block",
+   "category": "combat",
+   "file": "combat/Right Block.fbx",
+   "length": 1.7,
+   "loop": true,
+   "root_m": 0.0,
+   "turn_deg": 0.0,
+   "loop_deg": 0.1,
+   "tracks": 53
+  },
+  {
+   "name": "roll_kicking",
+   "category": "combat",
+   "file": "combat/Roll Kicking.fbx",
+   "length": 2.267,
+   "loop": false,
+   "root_m": 0.486,
+   "turn_deg": -146.0,
+   "loop_deg": 999.0,
+   "tracks": 44
+  },
+  {
+   "name": "roundhouse_kick",
+   "category": "combat",
+   "file": "combat/Roundhouse Kick.fbx",
+   "length": 2.5,
+   "loop": true,
+   "root_m": 0.0,
+   "turn_deg": 0.0,
+   "loop_deg": 0.1,
+   "tracks": 53
+  },
+  {
+   "name": "sitting_dodges",
+   "category": "combat",
+   "file": "combat/Sitting Dodges.fbx",
+   "length": 8.9,
+   "loop": true,
+   "root_m": 0.0,
+   "turn_deg": 0.0,
+   "loop_deg": 0.1,
+   "tracks": 43
+  },
+  {
+   "name": "standing_arguing",
+   "category": "combat",
+   "file": "combat/Standing Arguing.fbx",
+   "length": 20.8,
+   "loop": true,
+   "root_m": 0.0,
+   "turn_deg": 0.0,
+   "loop_deg": 0.1,
+   "tracks": 53
+  },
+  {
+   "name": "standing_dodge_right",
+   "category": "combat",
+   "file": "combat/Standing Dodge Right.fbx",
+   "length": 0.967,
+   "loop": true,
+   "root_m": 1.936,
+   "turn_deg": 0.0,
+   "loop_deg": 2.9,
+   "tracks": 54
+  },
+  {
+   "name": "standing_up",
+   "category": "combat",
+   "file": "combat/Standing Up.fbx",
+   "length": 11.4,
+   "loop": false,
+   "root_m": 0.064,
+   "turn_deg": 35.4,
+   "loop_deg": 999.0,
+   "tracks": 52
+  },
+  {
+   "name": "texting_while_standing",
+   "category": "combat",
+   "file": "combat/Texting While Standing.fbx",
+   "length": 23.567,
+   "loop": true,
+   "root_m": 0.0,
+   "turn_deg": 0.0,
+   "loop_deg": 0.1,
+   "tracks": 53
+  },
+  {
+   "name": "uppercut",
+   "category": "combat",
+   "file": "combat/Uppercut.fbx",
+   "length": 1.333,
+   "loop": true,
+   "root_m": 0.0,
+   "turn_deg": 0.0,
+   "loop_deg": 0.1,
+   "tracks": 43
+  },
+  {
+   "name": "angry_gesture",
+   "category": "gesture_social",
+   "file": "gesture_social/Angry Gesture.fbx",
+   "length": 2.2,
+   "loop": true,
+   "root_m": 0.0,
+   "turn_deg": 0.0,
+   "loop_deg": 0.1,
+   "tracks": 53
+  },
+  {
+   "name": "clapping",
+   "category": "gesture_social",
+   "file": "gesture_social/Clapping.fbx",
+   "length": 1.167,
+   "loop": true,
+   "root_m": 0.0,
+   "turn_deg": 0.0,
+   "loop_deg": 0.1,
+   "tracks": 35
+  },
+  {
+   "name": "counting",
+   "category": "gesture_social",
+   "file": "gesture_social/Counting.fbx",
+   "length": 6.633,
+   "loop": true,
+   "root_m": 0.0,
+   "turn_deg": 0.0,
+   "loop_deg": 2.3,
+   "tracks": 53
+  },
+  {
+   "name": "dancing",
+   "category": "gesture_social",
+   "file": "gesture_social/Dancing.fbx",
+   "length": 21.4,
+   "loop": true,
+   "root_m": 1.044,
+   "turn_deg": 0.0,
+   "loop_deg": 0.1,
+   "tracks": 54
+  },
+  {
+   "name": "leaning_on_a_wall",
+   "category": "gesture_social",
+   "file": "gesture_social/Leaning On A Wall.fbx",
+   "length": 1.933,
+   "loop": true,
+   "root_m": 0.0,
+   "turn_deg": 0.0,
+   "loop_deg": 0.1,
+   "tracks": 53
+  },
+  {
+   "name": "leaning",
+   "category": "gesture_social",
+   "file": "gesture_social/Leaning.fbx",
+   "length": 3.333,
+   "loop": true,
+   "root_m": 0.0,
+   "turn_deg": 0.0,
+   "loop_deg": 0.1,
+   "tracks": 52
+  },
+  {
+   "name": "pointing_gesture",
+   "category": "gesture_social",
+   "file": "gesture_social/Pointing Gesture.fbx",
+   "length": 1.967,
+   "loop": true,
+   "root_m": 0.0,
+   "turn_deg": 0.0,
+   "loop_deg": 0.1,
+   "tracks": 53
+  },
+  {
+   "name": "pointing",
+   "category": "gesture_social",
+   "file": "gesture_social/Pointing.fbx",
+   "length": 3.433,
+   "loop": true,
+   "root_m": 0.0,
+   "turn_deg": 0.0,
+   "loop_deg": 0.1,
+   "tracks": 53
+  },
+  {
+   "name": "salute",
+   "category": "gesture_social",
+   "file": "gesture_social/Salute.fbx",
+   "length": 2.833,
+   "loop": true,
+   "root_m": 0.0,
+   "turn_deg": 0.0,
+   "loop_deg": 0.1,
+   "tracks": 53
+  },
+  {
+   "name": "shrugging",
+   "category": "gesture_social",
+   "file": "gesture_social/Shrugging.fbx",
+   "length": 2.0,
+   "loop": true,
+   "root_m": 0.0,
+   "turn_deg": 0.0,
+   "loop_deg": 0.1,
+   "tracks": 51
+  },
+  {
+   "name": "sitting_drinking",
+   "category": "gesture_social",
+   "file": "gesture_social/Sitting Drinking.fbx",
+   "length": 15.2,
+   "loop": false,
+   "root_m": 2.928,
+   "turn_deg": 166.4,
+   "loop_deg": 999.0,
+   "tracks": 54
+  },
+  {
+   "name": "talking_on_phone",
+   "category": "gesture_social",
+   "file": "gesture_social/Talking On Phone.fbx",
+   "length": 38.833,
+   "loop": true,
+   "root_m": 0.0,
+   "turn_deg": 0.0,
+   "loop_deg": 0.1,
+   "tracks": 53
+  },
+  {
+   "name": "talking_phone_pacing_1",
+   "category": "gesture_social",
+   "file": "gesture_social/Talking Phone Pacing (1).fbx",
+   "length": 42.233,
+   "loop": true,
+   "root_m": 3.618,
+   "turn_deg": 0.0,
+   "loop_deg": 0.1,
+   "tracks": 54
+  },
+  {
+   "name": "talking_phone_pacing",
+   "category": "gesture_social",
+   "file": "gesture_social/Talking Phone Pacing.fbx",
+   "length": 42.233,
+   "loop": true,
+   "root_m": 3.618,
+   "turn_deg": 0.0,
+   "loop_deg": 0.1,
+   "tracks": 54
+  },
+  {
+   "name": "talking",
+   "category": "gesture_social",
+   "file": "gesture_social/Talking.fbx",
+   "length": 5.0,
+   "loop": true,
+   "root_m": 0.0,
+   "turn_deg": 0.0,
+   "loop_deg": 0.1,
+   "tracks": 51
+  },
+  {
+   "name": "thankful",
+   "category": "gesture_social",
+   "file": "gesture_social/Thankful.fbx",
+   "length": 3.0,
+   "loop": true,
+   "root_m": 0.0,
+   "turn_deg": 0.0,
+   "loop_deg": 0.1,
+   "tracks": 53
+  },
+  {
+   "name": "waving_gesture",
+   "category": "gesture_social",
+   "file": "gesture_social/Waving Gesture.fbx",
+   "length": 1.467,
+   "loop": true,
+   "root_m": 0.0,
+   "turn_deg": 0.0,
+   "loop_deg": 0.0,
+   "tracks": 41
+  },
+  {
+   "name": "bored",
+   "category": "idle",
+   "file": "idle/Bored.fbx",
+   "length": 10.667,
+   "loop": true,
+   "root_m": 0.0,
+   "turn_deg": 0.0,
+   "loop_deg": 0.1,
+   "tracks": 53
+  },
+  {
+   "name": "breathing_idle",
+   "category": "idle",
+   "file": "idle/Breathing Idle.fbx",
+   "length": 9.933,
+   "loop": true,
+   "root_m": 0.0,
+   "turn_deg": 0.0,
+   "loop_deg": 0.1,
+   "tracks": 53
+  },
+  {
+   "name": "catwalk_idle_1",
+   "category": "idle",
+   "file": "idle/Catwalk Idle (1).fbx",
+   "length": 10.0,
+   "loop": true,
+   "root_m": 0.0,
+   "turn_deg": 0.0,
+   "loop_deg": 0.1,
+   "tracks": 53
+  },
+  {
+   "name": "catwalk_idle_to_twist_l",
+   "category": "idle",
+   "file": "idle/Catwalk Idle To Twist L.fbx",
+   "length": 1.767,
+   "loop": false,
+   "root_m": 0.136,
+   "turn_deg": 36.0,
+   "loop_deg": 35.9,
+   "tracks": 54
+  },
+  {
+   "name": "catwalk_idle_to_twist_r_1",
+   "category": "idle",
+   "file": "idle/Catwalk Idle To Twist R (1).fbx",
+   "length": 2.167,
+   "loop": false,
+   "root_m": 0.265,
+   "turn_deg": -53.0,
+   "loop_deg": 53.0,
+   "tracks": 54
+  },
+  {
+   "name": "catwalk_idle_to_twist_r",
+   "category": "idle",
+   "file": "idle/Catwalk Idle To Twist R.fbx",
+   "length": 2.167,
+   "loop": false,
+   "root_m": 0.265,
+   "turn_deg": -53.0,
+   "loop_deg": 53.0,
+   "tracks": 54
+  },
+  {
+   "name": "catwalk_idle_to_walk_forward",
+   "category": "idle",
+   "file": "idle/Catwalk Idle To Walk Forward.fbx",
+   "length": 1.333,
+   "loop": false,
+   "root_m": 0.734,
+   "turn_deg": -3.6,
+   "loop_deg": 52.4,
+   "tracks": 54
+  },
+  {
+   "name": "catwalk_idle_twist_l",
+   "category": "idle",
+   "file": "idle/Catwalk Idle Twist L.fbx",
+   "length": 5.167,
+   "loop": true,
+   "root_m": 0.0,
+   "turn_deg": 0.0,
+   "loop_deg": 0.1,
+   "tracks": 53
+  },
+  {
+   "name": "catwalk_idle",
+   "category": "idle",
+   "file": "idle/Catwalk Idle.fbx",
+   "length": 10.0,
+   "loop": true,
+   "root_m": 0.0,
+   "turn_deg": 0.0,
+   "loop_deg": 0.1,
+   "tracks": 53
+  },
+  {
+   "name": "crouching_idle",
+   "category": "idle",
+   "file": "idle/Crouching Idle.fbx",
+   "length": 2.5,
+   "loop": true,
+   "root_m": 0.0,
+   "turn_deg": 0.0,
+   "loop_deg": 0.1,
+   "tracks": 43
+  },
+  {
+   "name": "drunk_idle_variation",
+   "category": "idle",
+   "file": "idle/Drunk Idle Variation.fbx",
+   "length": 5.4,
+   "loop": true,
+   "root_m": 0.0,
+   "turn_deg": 0.0,
+   "loop_deg": 0.1,
+   "tracks": 53
+  },
+  {
+   "name": "falling_idle",
+   "category": "idle",
+   "file": "idle/Falling Idle.fbx",
+   "length": 0.7,
+   "loop": true,
+   "root_m": 0.0,
+   "turn_deg": 0.0,
+   "loop_deg": 0.1,
+   "tracks": 43
+  },
+  {
+   "name": "hanging_idle",
+   "category": "idle",
+   "file": "idle/Hanging Idle.fbx",
+   "length": 4.7,
+   "loop": true,
+   "root_m": 0.0,
+   "turn_deg": 0.0,
+   "loop_deg": 0.2,
+   "tracks": 53
+  },
+  {
+   "name": "happy_idle",
+   "category": "idle",
+   "file": "idle/Happy Idle.fbx",
+   "length": 2.0,
+   "loop": true,
+   "root_m": 0.001,
+   "turn_deg": -0.1,
+   "loop_deg": 0.4,
+   "tracks": 53
+  },
+  {
+   "name": "idle_1",
+   "category": "idle",
+   "file": "idle/Idle (1).fbx",
+   "length": 8.333,
+   "loop": true,
+   "root_m": 0.0,
+   "turn_deg": 0.0,
+   "loop_deg": 0.1,
+   "tracks": 53
+  },
+  {
+   "name": "idle_2",
+   "category": "idle",
+   "file": "idle/Idle (2).fbx",
+   "length": 1.967,
+   "loop": true,
+   "root_m": 0.0,
+   "turn_deg": 0.0,
+   "loop_deg": 0.0,
+   "tracks": 43
+  },
+  {
+   "name": "idle_3",
+   "category": "idle",
+   "file": "idle/Idle (3).fbx",
+   "length": 16.633,
+   "loop": true,
+   "root_m": 0.0,
+   "turn_deg": 0.0,
+   "loop_deg": 0.1,
+   "tracks": 53
+  },
+  {
+   "name": "idle_4",
+   "category": "idle",
+   "file": "idle/Idle (4).fbx",
+   "length": 10.0,
+   "loop": true,
+   "root_m": 0.0,
+   "turn_deg": 0.0,
+   "loop_deg": 0.1,
+   "tracks": 53
+  },
+  {
+   "name": "idle",
+   "category": "idle",
+   "file": "idle/Idle.fbx",
+   "length": 16.633,
+   "loop": true,
+   "root_m": 0.0,
+   "turn_deg": 0.0,
+   "loop_deg": 0.1,
+   "tracks": 53
+  },
+  {
+   "name": "injured_idle",
+   "category": "idle",
+   "file": "idle/Injured Idle.fbx",
+   "length": 9.333,
+   "loop": true,
+   "root_m": 0.0,
+   "turn_deg": 0.0,
+   "loop_deg": 0.1,
+   "tracks": 53
+  },
+  {
+   "name": "looking_around",
+   "category": "idle",
+   "file": "idle/Looking Around.fbx",
+   "length": 6.333,
+   "loop": true,
+   "root_m": 0.0,
+   "turn_deg": 0.0,
+   "loop_deg": 0.1,
+   "tracks": 53
+  },
+  {
+   "name": "neutral_idle",
+   "category": "idle",
+   "file": "idle/Neutral Idle.fbx",
+   "length": 8.767,
+   "loop": true,
+   "root_m": 0.0,
+   "turn_deg": 0.0,
+   "loop_deg": 0.1,
+   "tracks": 53
+  },
+  {
+   "name": "pistol_idle",
+   "category": "idle",
+   "file": "idle/Pistol Idle.fbx",
+   "length": 8.3,
+   "loop": true,
+   "root_m": 0.0,
+   "turn_deg": 0.0,
+   "loop_deg": 5.9,
+   "tracks": 53
+  },
+  {
+   "name": "pistol_kneeling_idle",
+   "category": "idle",
+   "file": "idle/Pistol Kneeling Idle.fbx",
+   "length": 3.8,
+   "loop": true,
+   "root_m": 0.0,
+   "turn_deg": 0.0,
+   "loop_deg": 0.1,
+   "tracks": 52
+  },
+  {
+   "name": "sitting_idle",
+   "category": "idle",
+   "file": "idle/Sitting Idle.fbx",
+   "length": 4.3,
+   "loop": true,
+   "root_m": 0.0,
+   "turn_deg": 0.0,
+   "loop_deg": 0.1,
+   "tracks": 52
+  },
+  {
+   "name": "crouched_sneaking_left",
+   "category": "other",
+   "file": "other/Crouched Sneaking Left.fbx",
+   "length": 1.267,
+   "loop": true,
+   "root_m": 0.0,
+   "turn_deg": 0.0,
+   "loop_deg": 0.1,
+   "tracks": 43
+  },
+  {
+   "name": "pontera",
+   "category": "other",
+   "file": "other/Pontera.fbx",
+   "length": 1.367,
+   "loop": true,
+   "root_m": 0.0,
+   "turn_deg": 0.0,
+   "loop_deg": 1.8,
+   "tracks": 53
+  },
+  {
+   "name": "thinking",
+   "category": "other",
+   "file": "other/Thinking.fbx",
+   "length": 4.233,
+   "loop": true,
+   "root_m": 0.0,
+   "turn_deg": 0.0,
+   "loop_deg": 0.1,
+   "tracks": 53
+  },
+  {
+   "name": "aim_pistol",
+   "category": "pistol",
+   "file": "pistol/Aim Pistol.fbx",
+   "length": 5.433,
+   "loop": false,
+   "root_m": 0.012,
+   "turn_deg": -2.4,
+   "loop_deg": 99.8,
+   "tracks": 43
+  },
+  {
+   "name": "pistol_aim",
+   "category": "pistol",
+   "file": "pistol/Pistol Aim.fbx",
+   "length": 7.1,
+   "loop": false,
+   "root_m": 0.11,
+   "turn_deg": 33.7,
+   "loop_deg": 999.0,
+   "tracks": 43
+  },
+  {
+   "name": "reloading",
+   "category": "pistol",
+   "file": "pistol/Reloading.fbx",
+   "length": 3.667,
+   "loop": true,
+   "root_m": 0.0,
+   "turn_deg": 0.0,
+   "loop_deg": 0.1,
+   "tracks": 53
+  },
+  {
+   "name": "shooting_pistol",
+   "category": "pistol",
+   "file": "pistol/Shooting Pistol.fbx",
+   "length": 2.667,
+   "loop": true,
+   "root_m": 0.0,
+   "turn_deg": 0.0,
+   "loop_deg": 0.1,
+   "tracks": 53
+  },
+  {
+   "name": "fast_run",
+   "category": "run_jog",
+   "file": "run_jog/Fast Run.fbx",
+   "length": 0.533,
+   "loop": true,
+   "root_m": 0.0,
+   "turn_deg": 0.0,
+   "loop_deg": 0.1,
+   "tracks": 53
+  },
+  {
+   "name": "injured_run",
+   "category": "run_jog",
+   "file": "run_jog/Injured Run.fbx",
+   "length": 0.633,
+   "loop": true,
+   "root_m": 0.003,
+   "turn_deg": 0.0,
+   "loop_deg": 5.2,
+   "tracks": 53
+  },
+  {
+   "name": "jog_forward_diagonal_1",
+   "category": "run_jog",
+   "file": "run_jog/Jog Forward Diagonal (1).fbx",
+   "length": 0.8,
+   "loop": true,
+   "root_m": 0.0,
+   "turn_deg": 0.0,
+   "loop_deg": 0.1,
+   "tracks": 53
+  },
+  {
+   "name": "jog_forward_diagonal",
+   "category": "run_jog",
+   "file": "run_jog/Jog Forward Diagonal.fbx",
+   "length": 0.833,
+   "loop": true,
+   "root_m": 0.0,
+   "turn_deg": 0.0,
+   "loop_deg": 0.1,
+   "tracks": 53
+  },
+  {
+   "name": "jogging_1",
+   "category": "run_jog",
+   "file": "run_jog/Jogging (1).fbx",
+   "length": 2.567,
+   "loop": true,
+   "root_m": 0.0,
+   "turn_deg": 0.0,
+   "loop_deg": 0.1,
+   "tracks": 53
+  },
+  {
+   "name": "jogging_2",
+   "category": "run_jog",
+   "file": "run_jog/Jogging (2).fbx",
+   "length": 2.567,
+   "loop": true,
+   "root_m": 5.116,
+   "turn_deg": 0.0,
+   "loop_deg": 0.1,
+   "tracks": 54
+  },
+  {
+   "name": "jogging_3",
+   "category": "run_jog",
+   "file": "run_jog/Jogging (3).fbx",
+   "length": 2.567,
+   "loop": true,
+   "root_m": 0.0,
+   "turn_deg": 0.0,
+   "loop_deg": 0.1,
+   "tracks": 53
+  },
+  {
+   "name": "jogging_stumble_1",
+   "category": "run_jog",
+   "file": "run_jog/Jogging Stumble (1).fbx",
+   "length": 1.167,
+   "loop": true,
+   "root_m": 0.0,
+   "turn_deg": 0.0,
+   "loop_deg": 0.1,
+   "tracks": 53
+  },
+  {
+   "name": "jogging_stumble",
+   "category": "run_jog",
+   "file": "run_jog/Jogging Stumble.fbx",
+   "length": 1.167,
+   "loop": true,
+   "root_m": 0.0,
+   "turn_deg": 0.0,
+   "loop_deg": 0.1,
+   "tracks": 53
+  },
+  {
+   "name": "jogging",
+   "category": "run_jog",
+   "file": "run_jog/Jogging.fbx",
+   "length": 2.567,
+   "loop": true,
+   "root_m": 0.0,
+   "turn_deg": 0.0,
+   "loop_deg": 0.1,
+   "tracks": 53
+  },
+  {
+   "name": "pistol_run",
+   "category": "run_jog",
+   "file": "run_jog/Pistol Run.fbx",
+   "length": 0.733,
+   "loop": true,
+   "root_m": 0.0,
+   "turn_deg": 0.0,
+   "loop_deg": 0.1,
+   "tracks": 53
+  },
+  {
+   "name": "run_backwards_1",
+   "category": "run_jog",
+   "file": "run_jog/Run Backwards (1).fbx",
+   "length": 0.967,
+   "loop": false,
+   "root_m": 1.732,
+   "turn_deg": 3.7,
+   "loop_deg": 999.0,
+   "tracks": 54
+  },
+  {
+   "name": "run_backwards",
+   "category": "run_jog",
+   "file": "run_jog/Run Backwards.fbx",
+   "length": 1.5,
+   "loop": false,
+   "root_m": 1.355,
+   "turn_deg": -37.6,
+   "loop_deg": 999.0,
+   "tracks": 54
+  },
+  {
+   "name": "run_forward",
+   "category": "run_jog",
+   "file": "run_jog/Run Forward.fbx",
+   "length": 0.6,
+   "loop": true,
+   "root_m": 0.0,
+   "turn_deg": 0.0,
+   "loop_deg": 1.3,
+   "tracks": 53
+  },
+  {
+   "name": "run_to_stop_1",
+   "category": "run_jog",
+   "file": "run_jog/Run To Stop (1).fbx",
+   "length": 1.8,
+   "loop": false,
+   "root_m": 2.704,
+   "turn_deg": -1.1,
+   "loop_deg": 999.0,
+   "tracks": 44
+  },
+  {
+   "name": "run_to_stop",
+   "category": "run_jog",
+   "file": "run_jog/Run To Stop.fbx",
+   "length": 1.667,
+   "loop": false,
+   "root_m": 3.457,
+   "turn_deg": -25.4,
+   "loop_deg": 999.0,
+   "tracks": 54
+  },
+  {
+   "name": "running_turn_180",
+   "category": "run_jog",
+   "file": "run_jog/Running Turn 180.fbx",
+   "length": 0.667,
+   "loop": false,
+   "root_m": 0.003,
+   "turn_deg": -180.0,
+   "loop_deg": 180.0,
+   "tracks": 43
+  },
+  {
+   "name": "running_up_stairs",
+   "category": "run_jog",
+   "file": "run_jog/Running Up Stairs.fbx",
+   "length": 0.6,
+   "loop": false,
+   "root_m": 0.0,
+   "turn_deg": 0.0,
+   "loop_deg": 999.0,
+   "tracks": 53
+  },
+  {
+   "name": "slow_run",
+   "category": "run_jog",
+   "file": "run_jog/Slow Run.fbx",
+   "length": 0.733,
+   "loop": true,
+   "root_m": 0.0,
+   "turn_deg": 0.0,
+   "loop_deg": 0.1,
+   "tracks": 53
+  },
+  {
+   "name": "sprint",
+   "category": "run_jog",
+   "file": "run_jog/Sprint.fbx",
+   "length": 0.533,
+   "loop": true,
+   "root_m": 3.317,
+   "turn_deg": 0.0,
+   "loop_deg": 0.1,
+   "tracks": 44
+  },
+  {
+   "name": "standing_jump_running_1",
+   "category": "run_jog",
+   "file": "run_jog/Standing Jump Running (1).fbx",
+   "length": 1.067,
+   "loop": false,
+   "root_m": 4.201,
+   "turn_deg": 2.4,
+   "loop_deg": 999.0,
+   "tracks": 54
+  },
+  {
+   "name": "standing_jump_running",
+   "category": "run_jog",
+   "file": "run_jog/Standing Jump Running.fbx",
+   "length": 1.067,
+   "loop": false,
+   "root_m": 4.201,
+   "turn_deg": 2.4,
+   "loop_deg": 999.0,
+   "tracks": 54
+  },
+  {
+   "name": "unarmed_run_forward",
+   "category": "run_jog",
+   "file": "run_jog/Unarmed Run Forward.fbx",
+   "length": 0.8,
+   "loop": true,
+   "root_m": 0.0,
+   "turn_deg": 0.0,
+   "loop_deg": 0.1,
+   "tracks": 53
+  },
+  {
+   "name": "swimming_1",
+   "category": "swim",
+   "file": "swim/Swimming (1).fbx",
+   "length": 4.533,
+   "loop": true,
+   "root_m": 0.0,
+   "turn_deg": 0.0,
+   "loop_deg": 0.1,
+   "tracks": 51
+  },
+  {
+   "name": "swimming",
+   "category": "swim",
+   "file": "swim/Swimming.fbx",
+   "length": 4.533,
+   "loop": true,
+   "root_m": 0.0,
+   "turn_deg": 0.0,
+   "loop_deg": 0.1,
+   "tracks": 51
+  },
+  {
+   "name": "treading_water_1",
+   "category": "swim",
+   "file": "swim/Treading Water (1).fbx",
+   "length": 3.0,
+   "loop": true,
+   "root_m": 0.0,
+   "turn_deg": 0.0,
+   "loop_deg": 0.1,
+   "tracks": 50
+  },
+  {
+   "name": "treading_water_2",
+   "category": "swim",
+   "file": "swim/Treading Water (2).fbx",
+   "length": 3.0,
+   "loop": true,
+   "root_m": 0.0,
+   "turn_deg": 0.0,
+   "loop_deg": 0.1,
+   "tracks": 50
+  },
+  {
+   "name": "treading_water",
+   "category": "swim",
+   "file": "swim/Treading Water.fbx",
+   "length": 3.0,
+   "loop": true,
+   "root_m": 0.0,
+   "turn_deg": 0.0,
+   "loop_deg": 0.1,
+   "tracks": 50
+  },
+  {
+   "name": "box_turn",
+   "category": "turn",
+   "file": "turn/Box Turn.fbx",
+   "length": 1.167,
+   "loop": false,
+   "root_m": 0.151,
+   "turn_deg": -79.5,
+   "loop_deg": 79.5,
+   "tracks": 54
+  },
+  {
+   "name": "carrying_turn",
+   "category": "turn",
+   "file": "turn/Carrying Turn.fbx",
+   "length": 3.867,
+   "loop": false,
+   "root_m": 0.007,
+   "turn_deg": 90.0,
+   "loop_deg": 90.0,
+   "tracks": 43
+  },
+  {
+   "name": "injured_backwards_turn_right",
+   "category": "turn",
+   "file": "turn/Injured Backwards Turn Right.fbx",
+   "length": 0.7,
+   "loop": true,
+   "root_m": 0.963,
+   "turn_deg": 0.0,
+   "loop_deg": 0.1,
+   "tracks": 54
+  },
+  {
+   "name": "left_turn",
+   "category": "turn",
+   "file": "turn/Left Turn.fbx",
+   "length": 0.933,
+   "loop": false,
+   "root_m": 0.008,
+   "turn_deg": 122.6,
+   "loop_deg": 122.6,
+   "tracks": 53
+  },
+  {
+   "name": "quick_180_turn",
+   "category": "turn",
+   "file": "turn/Quick 180 Turn.fbx",
+   "length": 1.3,
+   "loop": false,
+   "root_m": 0.028,
+   "turn_deg": -180.0,
+   "loop_deg": 180.0,
+   "tracks": 43
+  },
+  {
+   "name": "right_turn_w_briefcase",
+   "category": "turn",
+   "file": "turn/Right Turn W_ Briefcase.fbx",
+   "length": 1.1,
+   "loop": false,
+   "root_m": 1.077,
+   "turn_deg": -89.8,
+   "loop_deg": 89.8,
+   "tracks": 54
+  },
+  {
+   "name": "right_turn",
+   "category": "turn",
+   "file": "turn/Right Turn.fbx",
+   "length": 0.933,
+   "loop": false,
+   "root_m": 0.013,
+   "turn_deg": -122.6,
+   "loop_deg": 122.6,
+   "tracks": 53
+  },
+  {
+   "name": "driving_1",
+   "category": "vehicle",
+   "file": "vehicle/Driving (1).fbx",
+   "length": 5.0,
+   "loop": true,
+   "root_m": 0.0,
+   "turn_deg": 0.0,
+   "loop_deg": 0.1,
+   "tracks": 52
+  },
+  {
+   "name": "driving",
+   "category": "vehicle",
+   "file": "vehicle/Driving.fbx",
+   "length": 5.0,
+   "loop": true,
+   "root_m": 0.0,
+   "turn_deg": 0.0,
+   "loop_deg": 0.1,
+   "tracks": 52
+  },
+  {
+   "name": "entering_car",
+   "category": "vehicle",
+   "file": "vehicle/Entering Car.fbx",
+   "length": 5.467,
+   "loop": false,
+   "root_m": 1.957,
+   "turn_deg": 96.8,
+   "loop_deg": 999.0,
+   "tracks": 54
+  },
+  {
+   "name": "exiting_car",
+   "category": "vehicle",
+   "file": "vehicle/Exiting Car.fbx",
+   "length": 5.8,
+   "loop": false,
+   "root_m": 1.992,
+   "turn_deg": 87.5,
+   "loop_deg": 999.0,
+   "tracks": 54
+  },
+  {
+   "name": "catwalk_walk_forward_01",
+   "category": "walk",
+   "file": "walk/Catwalk Walk Forward 01.fbx",
+   "length": 1.233,
+   "loop": true,
+   "root_m": 0.0,
+   "turn_deg": -0.2,
+   "loop_deg": 0.2,
+   "tracks": 53
+  },
+  {
+   "name": "catwalk_walk_forward_02",
+   "category": "walk",
+   "file": "walk/Catwalk Walk Forward 02.fbx",
+   "length": 1.133,
+   "loop": true,
+   "root_m": 0.0,
+   "turn_deg": 0.0,
+   "loop_deg": 0.1,
+   "tracks": 53
+  },
+  {
+   "name": "catwalk_walk_forward_03",
+   "category": "walk",
+   "file": "walk/Catwalk Walk Forward 03.fbx",
+   "length": 1.1,
+   "loop": true,
+   "root_m": 0.0,
+   "turn_deg": 0.0,
+   "loop_deg": 0.1,
+   "tracks": 53
+  },
+  {
+   "name": "catwalk_walk_forward_turn_90l",
+   "category": "walk",
+   "file": "walk/Catwalk Walk Forward Turn 90L.fbx",
+   "length": 2.333,
+   "loop": false,
+   "root_m": 2.399,
+   "turn_deg": 92.5,
+   "loop_deg": 92.5,
+   "tracks": 54
+  },
+  {
+   "name": "catwalk_walk_forward_turn_90r",
+   "category": "walk",
+   "file": "walk/Catwalk Walk Forward Turn 90R.fbx",
+   "length": 2.467,
+   "loop": false,
+   "root_m": 2.399,
+   "turn_deg": -87.5,
+   "loop_deg": 87.5,
+   "tracks": 54
+  },
+  {
+   "name": "catwalk_walk_start_turn_180_right",
+   "category": "walk",
+   "file": "walk/Catwalk Walk Start Turn 180 Right.fbx",
+   "length": 3.267,
+   "loop": false,
+   "root_m": 1.573,
+   "turn_deg": 179.2,
+   "loop_deg": 179.2,
+   "tracks": 54
+  },
+  {
+   "name": "crouched_walking",
+   "category": "walk",
+   "file": "walk/Crouched Walking.fbx",
+   "length": 1.033,
+   "loop": true,
+   "root_m": 0.0,
+   "turn_deg": 0.0,
+   "loop_deg": 0.7,
+   "tracks": 53
+  },
+  {
+   "name": "drunk_walk",
+   "category": "walk",
+   "file": "walk/Drunk Walk.fbx",
+   "length": 3.0,
+   "loop": true,
+   "root_m": 0.0,
+   "turn_deg": 0.0,
+   "loop_deg": 0.1,
+   "tracks": 53
+  },
+  {
+   "name": "female_start_walking_1",
+   "category": "walk",
+   "file": "walk/Female Start Walking (1).fbx",
+   "length": 1.867,
+   "loop": false,
+   "root_m": 1.754,
+   "turn_deg": -2.6,
+   "loop_deg": 36.6,
+   "tracks": 54
+  },
+  {
+   "name": "female_start_walking_2",
+   "category": "walk",
+   "file": "walk/Female Start Walking (2).fbx",
+   "length": 1.867,
+   "loop": false,
+   "root_m": 1.754,
+   "turn_deg": -2.6,
+   "loop_deg": 36.6,
+   "tracks": 54
+  },
+  {
+   "name": "female_start_walking",
+   "category": "walk",
+   "file": "walk/Female Start Walking.fbx",
+   "length": 1.867,
+   "loop": false,
+   "root_m": 1.754,
+   "turn_deg": -2.6,
+   "loop_deg": 36.6,
+   "tracks": 54
+  },
+  {
+   "name": "female_stop_and_start_walking",
+   "category": "walk",
+   "file": "walk/Female Stop And Start Walking.fbx",
+   "length": 3.733,
+   "loop": true,
+   "root_m": 3.335,
+   "turn_deg": 0.0,
+   "loop_deg": 0.1,
+   "tracks": 54
+  },
+  {
+   "name": "female_stop_walking",
+   "category": "walk",
+   "file": "walk/Female Stop Walking.fbx",
+   "length": 1.533,
+   "loop": false,
+   "root_m": 1.525,
+   "turn_deg": 0.9,
+   "loop_deg": 38.9,
+   "tracks": 54
+  },
+  {
+   "name": "female_tough_walk_1",
+   "category": "walk",
+   "file": "walk/Female Tough Walk (1).fbx",
+   "length": 1.267,
+   "loop": true,
+   "root_m": 0.0,
+   "turn_deg": 0.0,
+   "loop_deg": 0.1,
+   "tracks": 53
+  },
+  {
+   "name": "female_tough_walk",
+   "category": "walk",
+   "file": "walk/Female Tough Walk.fbx",
+   "length": 1.267,
+   "loop": true,
+   "root_m": 0.0,
+   "turn_deg": 0.0,
+   "loop_deg": 0.1,
+   "tracks": 53
+  },
+  {
+   "name": "female_walk",
+   "category": "walk",
+   "file": "walk/Female Walk.fbx",
+   "length": 1.167,
+   "loop": true,
+   "root_m": 0.0,
+   "turn_deg": 0.0,
+   "loop_deg": 0.1,
+   "tracks": 53
+  },
+  {
+   "name": "injured_walk_backwards_1",
+   "category": "walk",
+   "file": "walk/Injured Walk Backwards (1).fbx",
+   "length": 1.667,
+   "loop": true,
+   "root_m": 0.0,
+   "turn_deg": 0.0,
+   "loop_deg": 0.1,
+   "tracks": 53
+  },
+  {
+   "name": "injured_walk_backwards_2",
+   "category": "walk",
+   "file": "walk/Injured Walk Backwards (2).fbx",
+   "length": 1.667,
+   "loop": true,
+   "root_m": 0.0,
+   "turn_deg": 0.0,
+   "loop_deg": 0.1,
+   "tracks": 53
+  },
+  {
+   "name": "injured_walk_backwards",
+   "category": "walk",
+   "file": "walk/Injured Walk Backwards.fbx",
+   "length": 1.667,
+   "loop": true,
+   "root_m": 0.0,
+   "turn_deg": 0.0,
+   "loop_deg": 0.1,
+   "tracks": 53
+  },
+  {
+   "name": "left_strafe_walk",
+   "category": "walk",
+   "file": "walk/Left Strafe Walk.fbx",
+   "length": 0.933,
+   "loop": true,
+   "root_m": 0.0,
+   "turn_deg": 1.4,
+   "loop_deg": 1.4,
+   "tracks": 53
+  },
+  {
+   "name": "old_man_walk",
+   "category": "walk",
+   "file": "walk/Old Man Walk.fbx",
+   "length": 1.267,
+   "loop": true,
+   "root_m": 0.0,
+   "turn_deg": 0.0,
+   "loop_deg": 0.1,
+   "tracks": 53
+  },
+  {
+   "name": "pistol_walk_backward",
+   "category": "walk",
+   "file": "walk/Pistol Walk Backward.fbx",
+   "length": 1.033,
+   "loop": true,
+   "root_m": 0.0,
+   "turn_deg": 0.0,
+   "loop_deg": 0.1,
+   "tracks": 53
+  },
+  {
+   "name": "pistol_walk",
+   "category": "walk",
+   "file": "walk/Pistol Walk.fbx",
+   "length": 0.8,
+   "loop": true,
+   "root_m": 0.0,
+   "turn_deg": 0.0,
+   "loop_deg": 0.1,
+   "tracks": 53
+  },
+  {
+   "name": "start_walking",
+   "category": "walk",
+   "file": "walk/Start Walking.fbx",
+   "length": 2.933,
+   "loop": false,
+   "root_m": 2.002,
+   "turn_deg": 10.4,
+   "loop_deg": 999.0,
+   "tracks": 44
+  },
+  {
+   "name": "stop_walking",
+   "category": "walk",
+   "file": "walk/Stop Walking.fbx",
+   "length": 3.0,
+   "loop": false,
+   "root_m": 1.218,
+   "turn_deg": -10.4,
+   "loop_deg": 999.0,
+   "tracks": 44
+  },
+  {
+   "name": "strut_walking",
+   "category": "walk",
+   "file": "walk/Strut Walking.fbx",
+   "length": 1.433,
+   "loop": true,
+   "root_m": 0.0,
+   "turn_deg": 0.0,
+   "loop_deg": 0.1,
+   "tracks": 53
+  },
+  {
+   "name": "walk_strafe_right",
+   "category": "walk",
+   "file": "walk/Walk Strafe Right.fbx",
+   "length": 1.467,
+   "loop": true,
+   "root_m": 0.0,
+   "turn_deg": 0.0,
+   "loop_deg": 0.1,
+   "tracks": 53
+  },
+  {
+   "name": "walking_1",
+   "category": "walk",
+   "file": "walk/Walking (1).fbx",
+   "length": 1.233,
+   "loop": true,
+   "root_m": 0.0,
+   "turn_deg": 0.0,
+   "loop_deg": 1.6,
+   "tracks": 53
+  },
+  {
+   "name": "walking_2",
+   "category": "walk",
+   "file": "walk/Walking (2).fbx",
+   "length": 1.4,
+   "loop": true,
+   "root_m": 0.0,
+   "turn_deg": 0.0,
+   "loop_deg": 0.1,
+   "tracks": 53
+  },
+  {
+   "name": "walking_3",
+   "category": "walk",
+   "file": "walk/Walking (3).fbx",
+   "length": 0.867,
+   "loop": false,
+   "root_m": 0.001,
+   "turn_deg": 0.0,
+   "loop_deg": 11.6,
+   "tracks": 53
+  },
+  {
+   "name": "walking_4",
+   "category": "walk",
+   "file": "walk/Walking (4).fbx",
+   "length": 1.733,
+   "loop": false,
+   "root_m": 0.0,
+   "turn_deg": 0.0,
+   "loop_deg": 8.8,
+   "tracks": 53
+  },
+  {
+   "name": "walking_backwards",
+   "category": "walk",
+   "file": "walk/Walking Backwards.fbx",
+   "length": 1.2,
+   "loop": true,
+   "root_m": 0.0,
+   "turn_deg": 0.0,
+   "loop_deg": 0.1,
+   "tracks": 53
+  },
+  {
+   "name": "walking_left_turn",
+   "category": "walk",
+   "file": "walk/Walking Left Turn.fbx",
+   "length": 1.2,
+   "loop": false,
+   "root_m": 0.003,
+   "turn_deg": 36.2,
+   "loop_deg": 36.2,
+   "tracks": 53
+  },
+  {
+   "name": "walking_while_texting_1",
+   "category": "walk",
+   "file": "walk/Walking While Texting (1).fbx",
+   "length": 4.0,
+   "loop": true,
+   "root_m": 0.0,
+   "turn_deg": 0.0,
+   "loop_deg": 0.0,
+   "tracks": 53
+  },
+  {
+   "name": "walking_while_texting",
+   "category": "walk",
+   "file": "walk/Walking While Texting.fbx",
+   "length": 4.0,
+   "loop": true,
+   "root_m": 0.0,
+   "turn_deg": 0.0,
+   "loop_deg": 0.0,
+   "tracks": 53
+  },
+  {
+   "name": "walking",
+   "category": "walk",
+   "file": "walk/Walking.fbx",
+   "length": 1.033,
+   "loop": true,
+   "root_m": 0.0,
+   "turn_deg": 0.0,
+   "loop_deg": 0.1,
+   "tracks": 43
+  }
+ ],
+ "note": "Mixamo clips converted by tools/characters/mixamo_build.mjs (P2-072). Raw FBX stay in assets_inbox/mixamo (gitignored)."
+}
