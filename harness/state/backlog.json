@@ -1,6 +1,6 @@
 {
   "_doc": "Written only by node harness/bin/task.mjs. Phases run in order; P0 (ADOPT + STYLE DISCOVERY) waits for the owner by design and needs task.mjs signoff and task.mjs archsignoff before its gate passes. Later phases are added by the planner at the end of P0 (task.mjs phase-add) from the game's real state.",
-  "updated": "2026-11-13T23:51:12.738Z",
+  "updated": "2026-11-14T00:09:23.048Z",
   "phases": [
     {
       "id": "P0",
@@ -3798,7 +3798,9 @@
       "kind": "polish",
       "status": "todo",
       "attempts": 0,
-      "notes": [],
+      "notes": [
+        "From the P2-041 verifier: the 180 degree turn holds a crouched, arms-wide pose for about 0.25 s (raise the pose, bring the arms in); add a stair and kerb strip so single-step foot misses (5 to 8 cm off an edge) can be judged by eye; foot_cost sits at the 0.05 ms limit under heavy load."
+      ],
       "created": "2026-11-13T07:55:23.133Z"
     },
     {
@@ -4241,12 +4243,15 @@
       "agent": "builder",
       "priority": 1,
       "kind": "mentor",
-      "status": "doing",
+      "status": "done",
       "attempts": 1,
       "notes": [],
       "created": "2026-11-13T19:44:33.896Z",
       "model": "fable",
-      "started": "2026-11-13T22:00:25.344Z"
+      "started": "2026-11-13T22:00:25.344Z",
+      "done": "2026-11-14T00:09:23.024Z",
+      "summary": "Locomotion rebuilt for feel: built walk, jog and sprint clips play at 0.9996x (cadence 130, 166, 204 steps a minute), speed and direction blend with start, stop and plant-and-turn, acceleration curves, lean, head look, two-bone leg IK (p95 0.4 to 1.0 cm on kerbs and stairs), calm camera follow; model no longer floats 8 cm. Verifier PASS: slide 1.0 to 1.5%, no pops, quick 12/12, foot_cost ok alone; reads as a real runner, GTA-like, not cartoonish. Polish on the 180 turn pose in P14-005.",
+      "commit": "2e64b39"
     },
     {
       "id": "P3-008",
