@@ -375,6 +375,7 @@ On foot (Claude call):
 - Walk 1.6 m/s, jog 3.8 m/s, sprint 6.5 m/s for 8 s of stamina (regen in 5 s), crouch 1.2 m/s.
 - Jump apex 0.45 m in 0.30 s. Vault up to 1.2 m, done in 0.6 s.
 - Turn to face a new direction (180 degrees) in 0.25 s while jogging.
+- Weight (P2-041, Anmol 2026-11-14: "running feels cartoonish"): the speeds above are kept, but the body gets to them: rest to a jog in 0.5 s and to a sprint in 0.9 s, a jog stops in 0.45 s over 0.7 m, a sprint in 0.65 s over 1.8 m. Cadence at each gait is a person's: about 130, 166 and 204 steps a minute at walk, jog and sprint.
 
 Vehicles (top speeds: decisions.md "Speeds and map size"; acceleration and braking are Claude calls):
 

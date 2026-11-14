@@ -5,6 +5,9 @@
 ## never sits inside geometry. When that leaves less than COMFORT metres it tries poses that squeeze the shoulder offset
 ## and rise over the head looking down, and takes the first with room; it never comes closer than 0.6 m to the head.
 ## It pulls in at once and eases back out. Walls between the camera and the body fade (wall_fade.gd).
+## Weight (P2-041): the pivot trails the head by a few centimetres along its motion (LAG_S seconds of its speed, at
+## most LAG_MAX, eased), so a start lets the body pull ahead and a stop lets the camera settle; a sprint adds a small
+## step-timed sway (bob, side sway and roll, smooth sines scaled by the eased sprint share: never a jitter).
 ## Follows on _physics_process after the character stepped (process_physics_priority 10). Coordinates: compass yaw 0
 ## looks north (-Z), PI/2 east (+X).
 extends Camera3D
@@ -30,6 +33,17 @@ const WallFade := preload("res://camera/wall_fade.gd")
 @export var sphere_r := 0.15
 @export var wall_margin := 0.08
 
+## Follow lag: seconds of the head's speed the pivot trails by, its cap (under the capsule's radius less the sweep
+## sphere, so the trailing pivot never starts inside a wall) and how fast it eases (1/s).
+const LAG_S := 0.03
+const LAG_MAX := 0.14
+const LAG_RATE := 7.0
+## Sprint sway: steps a second, bob and side sway (m), roll (rad).
+const SWAY_HZ := 3.4
+const SWAY_BOB := 0.011
+const SWAY_SIDE := 0.006
+const SWAY_ROLL := 0.0035
+
 ## [lift (rad, the camera rises over the head and looks down), shoulder share] tried in order when a wall is close.
 const POSES := [[0.0, 1.0], [0.0, 0.0], [0.35, 0.5], [0.7, 0.3], [1.05, 0.1], [1.35, 0.0]]
 
@@ -43,9 +57,14 @@ var shoulder_k := 1.0
 var free_m := 3.0
 var blocked_rays := 0
 var pivot := Vector3.ZERO
+## How far the pivot trails the head now (m).
+var lag_m := 0.0
 var fade := WallFade.new()
 
 var _sprint := 0.0
+var _lag := Vector3.ZERO
+var _head_was := Vector3.ZERO
+var _sway_t := 0.0
 var _pivot_y := NAN
 var _sphere := PhysicsShapeQueryParameters3D.new()
 var _target_id := 0
@@ -74,6 +93,7 @@ func snap_behind(h: float) -> void:
 	shoulder_k = 1.0
 	dist = back
 	_pivot_y = NAN
+	_lag = Vector3.ZERO
 	var t := target()
 	if t != null and "view_yaw" in t:
 		t.view_yaw = yaw
@@ -130,7 +150,25 @@ func follow(dt: float) -> void:
 	else:
 		_pivot_y = lerpf(_pivot_y, head.y, 1.0 - exp(-14.0 * dt))
 		_pivot_y = clampf(_pivot_y, head.y - 0.3, head.y + 0.3)
-	pivot = Vector3(head.x, _pivot_y, head.z)
+	# the follow lag: the pivot trails the head along its motion
+	if dt > 0.0 and not is_nan(_head_was.x):
+		var v := (head - _head_was) / dt
+		v.y = 0.0
+		var want := v * LAG_S
+		# a teleport is not motion
+		if v.length() > 20.0:
+			want = Vector3.ZERO
+			_lag = Vector3.ZERO
+		elif want.length() > LAG_MAX:
+			want = want.normalized() * LAG_MAX
+		_lag = _lag.lerp(want, 1.0 - exp(-LAG_RATE * dt))
+	else:
+		_lag = Vector3.ZERO
+	_head_was = head
+	# pulled in by a wall the lag goes too, so the camera keeps its distance to the head itself
+	var lag := _lag * clampf((dist - min_head) / maxf(0.01, back - min_head), 0.0, 1.0)
+	lag_m = lag.length()
+	pivot = Vector3(head.x - lag.x, _pivot_y, head.z - lag.z)
 	var space := get_world_3d().direct_space_state if get_world_3d() != null else null
 	var free_now := back
 	if space != null:
@@ -163,12 +201,22 @@ func follow(dt: float) -> void:
 	dist = goal if goal < dist or dt <= 0.0 else move_toward(dist, goal, ease_out * dt)
 	var b := _basis(lift)
 	var off := _offset(lift, shoulder_k)
-	global_transform = Transform3D(b, pivot + off.normalized() * (dist * off.length() / back))
+	var at := pivot + off.normalized() * (dist * off.length() / back)
 	if "view_yaw" in t:
 		t.view_yaw = yaw
 	var sprinting: bool = "motor" in t and t.motor.gait == "sprint"
 	_sprint = move_toward(_sprint, 1.0 if sprinting else 0.0, dt * 3.0)
 	fov = base_fov + sprint_fov * _sprint
+	# the sprint sway, eased in and out with the sprint (smoothstep of its share)
+	var k := _sprint * _sprint * (3.0 - 2.0 * _sprint)
+	if k > 0.0:
+		_sway_t += dt
+		var ph := TAU * SWAY_HZ * _sway_t
+		at += b.y * (SWAY_BOB * k * sin(ph)) + b.x * (SWAY_SIDE * k * sin(ph * 0.5))
+		b = b * Basis(Vector3.BACK, SWAY_ROLL * k * sin(ph * 0.5 + 0.6))
+	else:
+		_sway_t = 0.0
+	global_transform = Transform3D(b, at)
 	if space != null:
 		var feet := t.global_position
 		blocked_rays = fade.update(space, global_position, [head, feet + Vector3.UP * 1.1, feet + Vector3.UP * 0.5], maxf(dt, 1.0 / 60.0))

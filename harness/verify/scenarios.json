@@ -652,7 +652,7 @@
           "timeout": 120000
         }
       ],
-      "_note": "P1-023. The humanoid on the course pad at walk, jog and sprint (foot('anim', {gait}), input only): over one clip cycle the stance foot's mean backward speed in the body frame against the ground speed (foot_contact.gd) is under 5 percent off at walk and at jog; the body plays the walk, jog and sprint clips; the animation of one character (AnimationTree advance and bone update) costs under 0.05 ms a tick. Headless."
+      "_note": "P1-023, P2-041. The humanoid on the course pad at walk, jog and sprint (foot('anim', {gait}), input only): over three gait cycles the play rate of each gait's clip is between 0.9 and 1.15 (1 is the built clip's own pace; printed with the cadence and how much faster the built cycle is than the library clip), the planted foot's mean backward speed in the body frame is within 5 percent of the ground speed and the planted ball moves under 5 percent of the ground covered (foot_contact.gd: a foot is planted while its ball is on the ground, so the flight of a run is not counted), at all three gaits; the body plays the walk, jog and sprint states; the animation with the body feel costs under 0.05 ms per character a tick among 16. Headless."
     },
     {
       "name": "foot_anim_shots",
@@ -664,6 +664,29 @@
         }
       ],
       "_note": "P1-023. Shots of the humanoid from the on-foot play camera in the course scene, input only: foot_anim_walk (walking on the pad), foot_anim_sprint (sprinting), foot_anim_vault (in the middle of the vault over the 1.2 m wall) and lead_lineup (Bittu, SI Meera Rana and Danny side by side, the camera turned to face them, foot('lineup')). Checks the body states (walk, sprint, vault) when each shot is taken. Read by the verifier against VERIFY.md rubric lines 11 and 22. Default look. Lockstep."
+    },
+    {
+      "name": "foot_feel",
+      "query": "style=none",
+      "headless": true,
+      "steps": [
+        {
+          "script": "harness/verify/scripts/foot_feel.js",
+          "timeout": 300000
+        }
+      ],
+      "_note": "P2-041. How the on-foot body moves, in numbers, input only, course scene (foot('feel', {test})). pops: a start from standing, a stop from a jog and a plant-and-turn back (stop and turn at three points of the gait cycle) read every tick in skeleton space: trunk bones turn at most 12 degrees a tick, limb bones 42, the hips' step changes by at most 0.045 m and an ankle's by 0.17 m from one tick to the next; the steady walk, jog and sprint are the base line under the same limits (a jog: 4.9 degrees, 0.108 m). ik: at a walk and a jog over the kerb lane and the stairs, of the planted feet (the animation has the foot down, the capsule on the ground) the 95th percentile is within 0.02 m of the surface, 97 percent or more within 0.03 m, the worst under 0.12 m, and the hips never step more than 0.065 m in a tick beyond the body's own climb (the capsule hops 0.15 to 0.18 m); the jog down the stairs is reported only (a string of falls). Known gap: single walking steps off a kerb or over a stair edge are 0.05 to 0.09 m off for a few ticks. camera: over a start, a sprint, a stop and a turn back the follow lag stays between 0.03 and 0.15 m, no position is more than 6 mm off the middle of its neighbours and that offset never reverses from one tick to the next (no jitter). Headless."
+    },
+    {
+      "name": "foot_feel_strip",
+      "lockstep": true,
+      "steps": [
+        {
+          "script": "harness/verify/scripts/foot_feel_strip.js",
+          "timeout": 420000
+        }
+      ],
+      "_note": "P2-041. Frame strips of the on-foot body, input only, in the course scene: a walk, a jog, a sprint, a start from standing, a stop from a jog and a plant-and-turn back, 12 frames each a few ticks apart, every frame taken from the play camera and from a side camera level with the hips while the sim is held. Checks that the start, stop and turn clips play. `node harness/bin/footstrip.mjs` runs it and lays the shots out under harness/reports/foot/ (strip_<move>.png and strips.png), which the verifier reads against VERIFY.md and the task's 'grounded, not bouncy' bar. Default look. Lockstep."
     },
     {
       "name": "city_landmark_pins",
