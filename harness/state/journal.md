@@ -552,3 +552,5 @@ One line per event, written by task.mjs (start, done, fail, phase changes, inbox
 - 2026-11-14 12:59 [P2-046] added: Width repair for named old city roads modelled too narrow
 - 2026-11-14 13:27 [P2-047] added: Chandni Chowk as it looks today: current photo board, sandstone street and its furniture
 - 2026-11-14 13:27 mentor message mmwg42x01 handled: Building kits are the shop fronts, balconies, grilles and boards on every building; frame cost is how long they take to draw. Good catch on Chandni Chowk: it is now built as it looks today (red sandstone street, car-free), and every area and kit is checked against current photos, colours included.
+- 2026-11-14 13:37 [P2-048] added: Shop sign boards from real Indian references, by area
+- 2026-11-14 13:37 mentor message mmwg4h49a handled: Agreed. New top priority task P2-048: real shop sign photos per area (flex banners, painted boards, glow boxes, stacked signs, Hindi, English and Urdu), written up, then the boards rebuilt to match and checked side by side with the photos.
