@@ -101,6 +101,8 @@ func environment() -> Environment:
 ## them too.
 func light_environment(env: Environment, sync := true) -> void:
 	super(env, sync)
+	# lit sign boards of the area kits and their pavement pools (P2-048: the project global kit_night)
+	RenderingServer.global_shader_parameter_set("kit_night", 0.0 if off.has("lights") else clampf(light.night, 0.0, 1.0))
 	if not _lean():
 		return
 	# moonlit sky fill at night: a cool grey-blue ambient so no surface that faces away from every lamp goes black

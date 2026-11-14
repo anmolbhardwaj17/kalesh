@@ -482,6 +482,237 @@
     "latn": "Please Do Not Lean on the Pillars"
    },
    "weight": 1
+  },
+  {
+   "kind": "bakery",
+   "text": {
+    "latn": "Wonder Wallah Bakery",
+    "deva": "वंडर वाला बेकरी"
+   },
+   "weight": 2,
+   "parody": true,
+   "board_style": "glow_box",
+   "tagline": "Patties, pastries, pyaar"
+  },
+  {
+   "kind": "restaurant",
+   "text": {
+    "latn": "Nirmala's Ice Cream Parlour",
+    "deva": "निर्मला'स आइसक्रीम पार्लर"
+   },
+   "weight": 2,
+   "parody": true,
+   "board_style": "glow_box",
+   "tagline": "Sundae ke sapne"
+  },
+  {
+   "kind": "restaurant",
+   "text": {
+    "latn": "Sundae Sansaar Ice Cream House",
+    "deva": "संडे संसार आइसक्रीम हाउस"
+   },
+   "weight": 2,
+   "parody": true,
+   "board_style": "glow_box",
+   "tagline": "Thandi yaadein"
+  },
+  {
+   "kind": "restaurant",
+   "text": {
+    "latn": "Chole Chakkar Bhature",
+    "deva": "छोले चक्कर भटूरे"
+   },
+   "weight": 2,
+   "parody": true,
+   "board_style": "glow_box",
+   "tagline": "Chole ka cricket"
+  },
+  {
+   "kind": "restaurant",
+   "text": {
+    "latn": "Udupi Uttapam Mahal",
+    "deva": "उडुपी उत्तपम महल"
+   },
+   "weight": 2,
+   "parody": true,
+   "board_style": "flex",
+   "tagline": "Dosa ka darbaar"
+  },
+  {
+   "kind": "restaurant",
+   "text": {
+    "latn": "Samudra Ratan Dosa Haus",
+    "deva": "समुद्र रतन डोसा हाउस"
+   },
+   "weight": 2,
+   "parody": true,
+   "board_style": "flex",
+   "tagline": "Idli ka itihaas"
+  },
+  {
+   "kind": "cafe",
+   "text": {
+    "latn": "Chai Haus",
+    "deva": "चाय हाउस"
+   },
+   "weight": 2,
+   "parody": true,
+   "board_style": "glow_box",
+   "tagline": "Bahas ka adda"
+  },
+  {
+   "kind": "books",
+   "text": {
+    "latn": "Orchard Bookstore",
+    "deva": "ऑर्चर्ड बुकस्टोर"
+   },
+   "weight": 2,
+   "parody": true,
+   "board_style": "glow_box",
+   "tagline": "Naye lekhak, purani chai"
+  },
+  {
+   "kind": "clothing",
+   "text": {
+    "latn": "Bunai Dukaan",
+    "deva": "बुनाई दुकान"
+   },
+   "weight": 2,
+   "parody": true,
+   "board_style": "glow_box",
+   "tagline": "Hathkargha ka haath"
+  },
+  {
+   "kind": "shoes",
+   "text": {
+    "latn": "Bhatia Boot House",
+    "deva": "भाटिया बूट हाउस"
+   },
+   "weight": 2,
+   "parody": true,
+   "board_style": "glow_box",
+   "tagline": "Jootay jo chalte hain"
+  },
+  {
+   "kind": "jeweller",
+   "text": {
+    "latn": "Timeless Tiwari Watches",
+    "deva": "टाइमलेस तिवारी वॉचेस"
+   },
+   "weight": 2,
+   "parody": true,
+   "board_style": "glow_box",
+   "tagline": "Waqt ka bharosa"
+  },
+  {
+   "kind": "gallery",
+   "text": {
+    "latn": "Chachu Gift Gallery",
+    "deva": "चाचू गिफ़्ट गैलरी"
+   },
+   "weight": 2,
+   "parody": true,
+   "board_style": "glow_box",
+   "tagline": "Cards, chocolate, chaos"
+  },
+  {
+   "kind": "cinema",
+   "text": {
+    "latn": "Rajmahal Cinema",
+    "deva": "राजमहल सिनेमा"
+   },
+   "weight": 2,
+   "parody": true,
+   "board_style": "glow_box",
+   "tagline": "Interval mein samosa"
+  },
+  {
+   "kind": "cinema",
+   "text": {
+    "latn": "Plaza Palace Pictures",
+    "deva": "प्लाज़ा पैलेस पिक्चर्स"
+   },
+   "weight": 2,
+   "parody": true,
+   "board_style": "glow_box",
+   "tagline": "Aaj raat house full"
+  },
+  {
+   "kind": "hotel",
+   "text": {
+    "latn": "Hotel Imperador",
+    "deva": "होटल इम्पेरेडोर"
+   },
+   "weight": 2,
+   "parody": true,
+   "board_style": "glow_box",
+   "tagline": "Raj ki yaad mein"
+  },
+  {
+   "kind": "transport",
+   "text": {
+    "latn": "Rajdhani Rajdoot Motors",
+    "deva": "राजधानी राजदूत मोटर्स"
+   },
+   "weight": 2,
+   "parody": true,
+   "board_style": "flex",
+   "tagline": "Purani bike, nayi shaan"
+  },
+  {
+   "kind": "restaurant",
+   "text": {
+    "latn": "Rabri Raja Falooda",
+    "deva": "रबड़ी राजा फ़ालूदा"
+   },
+   "weight": 2,
+   "parody": true,
+   "board_style": "glow_box",
+   "tagline": "Rooh afza, rang, rabri"
+  },
+  {
+   "kind": "cafe",
+   "text": {
+    "latn": "Bhista Cafe",
+    "deva": "भिस्ता कैफ़े"
+   },
+   "weight": 2,
+   "parody": true,
+   "board_style": "glow_box",
+   "tagline": "Filter ka fatafat"
+  },
+  {
+   "kind": "cafe",
+   "text": {
+    "latn": "Kaapi Kothi",
+    "deva": "कापी कोठी"
+   },
+   "weight": 2,
+   "parody": true,
+   "board_style": "glow_box",
+   "tagline": "Aapki apni kaapi"
+  },
+  {
+   "kind": "clothing",
+   "text": {
+    "latn": "Suit Ka Suit Avenue",
+    "deva": "सूट का सूट एवेन्यू"
+   },
+   "weight": 2,
+   "parody": true,
+   "board_style": "glow_box",
+   "tagline": "Naap ka naya andaaz"
+  },
+  {
+   "kind": "optician",
+   "text": {
+    "latn": "Lens Bazaar Optical",
+    "deva": "लेंस बाज़ार ऑप्टिकल"
+   },
+   "weight": 2,
+   "parody": true,
+   "board_style": "glow_box",
+   "tagline": "Chashme ka chaska"
   }
  ]
 }

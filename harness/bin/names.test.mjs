@@ -6,7 +6,10 @@ import { fileURLToPath } from 'node:url';
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '../..');
 const dir = path.join(root, 'game/data/names');
 const areasDir = path.join(root, 'harness/design/areas');
-const areas = fs.readdirSync(areasDir).filter(f => f.endsWith('.md')).map(f => f.replace(/\.md$/, ''));
+// area sheets are the .md files with dated photos in current_photos.json (signboards.md, parody_names.md and other
+// notes in the folder are not areas)
+const photoAreas = new Set(Object.keys(JSON.parse(fs.readFileSync(path.join(areasDir, 'current_photos.json'), 'utf8'))));
+const areas = fs.readdirSync(areasDir).filter(f => f.endsWith('.md')).map(f => f.replace(/\.md$/, '')).filter(a => photoAreas.has(a));
 
 // Real brands, chains, parties, people and well-known eateries that must never appear on a sign.
 const BLOCK = [

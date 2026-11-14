@@ -573,6 +573,248 @@
     "deva": "झटपट: हार्डवेयर आपके द्वार"
    },
    "weight": 1
+  },
+  {
+   "kind": "hardware",
+   "text": {
+    "latn": "Bharat Bolt Bhandar",
+    "deva": "भारत बोल्ट भंडार"
+   },
+   "weight": 2,
+   "parody": true,
+   "board_style": "hand_painted",
+   "tagline": "Nut-bolt ka naya naam"
+  },
+  {
+   "kind": "hardware",
+   "text": {
+    "latn": "Drill Bahadur Tools",
+    "deva": "ड्रिल बहादुर टूल्स"
+   },
+   "weight": 2,
+   "parody": true,
+   "board_style": "glow_box",
+   "tagline": "Drill, grinder, grip"
+  },
+  {
+   "kind": "hardware",
+   "text": {
+    "latn": "Kasna Spanner House",
+    "deva": "कसना स्पैनर हाउस"
+   },
+   "weight": 2,
+   "parody": true,
+   "board_style": "enamel",
+   "tagline": "Kasne ka kamaal"
+  },
+  {
+   "kind": "hardware",
+   "text": {
+    "latn": "Karlo Engines Pump House",
+    "deva": "करलो इंजन पंप हाउस"
+   },
+   "weight": 2,
+   "parody": true,
+   "board_style": "hand_painted",
+   "tagline": "Paani chalega"
+  },
+  {
+   "kind": "hardware",
+   "text": {
+    "latn": "Cromwell Fans Aur Motor",
+    "deva": "क्रॉमवेल फ़ैन्स और मोटर"
+   },
+   "weight": 2,
+   "parody": true,
+   "board_style": "hand_painted",
+   "tagline": "Ghoomta hai to chalta hai"
+  },
+  {
+   "kind": "hardware",
+   "text": {
+    "latn": "Hawa Wire Cable Co",
+    "deva": "हवा वायर केबल कंपनी"
+   },
+   "weight": 2,
+   "parody": true,
+   "board_style": "enamel",
+   "tagline": "Current ki guarantee"
+  },
+  {
+   "kind": "hardware",
+   "text": {
+    "latn": "Taar Taar Cable Wale",
+    "deva": "तार तार केबल वाले"
+   },
+   "weight": 2,
+   "parody": true,
+   "board_style": "enamel",
+   "tagline": "Taar jo tikta hai"
+  },
+  {
+   "kind": "hardware",
+   "text": {
+    "latn": "Jangal Steel Traders",
+    "deva": "जंगल स्टील ट्रेडर्स"
+   },
+   "weight": 2,
+   "parody": true,
+   "board_style": "hand_painted",
+   "tagline": "Sariya, angle, patti"
+  },
+  {
+   "kind": "hardware",
+   "text": {
+    "latn": "Rang Rasiya Paint House",
+    "deva": "रंग रसिया पेंट हाउस"
+   },
+   "weight": 2,
+   "parody": true,
+   "board_style": "glow_box",
+   "tagline": "Har deewar ka dost"
+  },
+  {
+   "kind": "hardware",
+   "text": {
+    "latn": "Rang Bahaar Paints",
+    "deva": "रंग बहार पेंट्स"
+   },
+   "weight": 2,
+   "parody": true,
+   "board_style": "glow_box",
+   "tagline": "Rang barse"
+  },
+  {
+   "kind": "transport",
+   "text": {
+    "latn": "Chakka Chalega Truck Parts",
+    "deva": "चक्का चलेगा ट्रक पार्ट्स"
+   },
+   "weight": 2,
+   "parody": true,
+   "board_style": "hand_painted",
+   "tagline": "Chassis se chakka tak"
+  },
+  {
+   "kind": "transport",
+   "text": {
+    "latn": "Kisan Jugaad Tractors",
+    "deva": "किसान जुगाड़ ट्रैक्टर्स"
+   },
+   "weight": 2,
+   "parody": true,
+   "board_style": "hand_painted",
+   "tagline": "Khet se sadak tak"
+  },
+  {
+   "kind": "transport",
+   "text": {
+    "latn": "Hira Cycle Spare Mart",
+    "deva": "हीरा साइकिल स्पेयर मार्ट"
+   },
+   "weight": 2,
+   "parody": true,
+   "board_style": "hand_painted",
+   "tagline": "Pedal se paisa"
+  },
+  {
+   "kind": "hardware",
+   "text": {
+    "latn": "Ajmeri Gate Anda Bearing",
+    "deva": "अजमेरी गेट अंडा बेयरिंग"
+   },
+   "weight": 2,
+   "parody": true,
+   "board_style": "hand_painted",
+   "tagline": "Ghoome to zindagi"
+  },
+  {
+   "kind": "hardware",
+   "text": {
+    "latn": "Jugaad Jack Hydraulics",
+    "deva": "जुगाड़ जैक हाइड्रॉलिक्स"
+   },
+   "weight": 2,
+   "parody": true,
+   "board_style": "hand_painted",
+   "tagline": "Dabaav mein kaam"
+  },
+  {
+   "kind": "transport",
+   "text": {
+    "latn": "Bhaari Machine Earthmovers",
+    "deva": "भारी मशीन अर्थमूवर्स"
+   },
+   "weight": 2,
+   "parody": true,
+   "board_style": "flex",
+   "tagline": "Mitti hata do"
+  },
+  {
+   "kind": "hardware",
+   "text": {
+    "latn": "Hindustan Hatheda Hardware",
+    "deva": "हिंदुस्तान हथौड़ा हार्डवेयर"
+   },
+   "weight": 2,
+   "parody": true,
+   "board_style": "enamel",
+   "tagline": "Thok ke bechte hain"
+  },
+  {
+   "kind": "hardware",
+   "text": {
+    "latn": "Dilli Drill Dhamaka",
+    "deva": "दिल्ली ड्रिल धमाका"
+   },
+   "weight": 2,
+   "parody": true,
+   "board_style": "flex",
+   "tagline": "Chhed hi chhed"
+  },
+  {
+   "kind": "hardware",
+   "text": {
+    "latn": "Oriental Pankha Palace",
+    "deva": "ओरिएंटल पंखा पैलेस"
+   },
+   "weight": 2,
+   "parody": true,
+   "board_style": "hand_painted",
+   "tagline": "Hawa hi hawa"
+  },
+  {
+   "kind": "hardware",
+   "text": {
+    "latn": "Sunder Fasteners Chain",
+    "deva": "सुंदर फ़ास्टनर्स"
+   },
+   "weight": 2,
+   "parody": true,
+   "board_style": "hand_painted",
+   "tagline": "Chhota nut, bada kaam"
+  },
+  {
+   "kind": "transport",
+   "text": {
+    "latn": "Bijli Battery Ghar",
+    "deva": "बिजली बैटरी घर"
+   },
+   "weight": 2,
+   "parody": true,
+   "board_style": "hand_painted",
+   "tagline": "Jhatka nahi, jaan"
+  },
+  {
+   "kind": "hardware",
+   "text": {
+    "latn": "Roshni Inverter Wale",
+    "deva": "रोशनी इन्वर्टर वाले"
+   },
+   "weight": 2,
+   "parody": true,
+   "board_style": "glow_box",
+   "tagline": "Light gayi? Humein bulao"
   }
  ]
 }

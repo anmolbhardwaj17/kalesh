@@ -63,13 +63,81 @@ describe('area kits', () => {
   it('keeps old city walls dusty: no bazaar or gali wall colour above 0.3 saturation', () => {
     for (const id of ['bazaar', 'gali']) for (const c of KITS.kits[id].walls.colours) expect(hsv(c)[1], `${id} ${c}`).toBeLessThanOrEqual(0.3);
   });
-  it('writes sign boards only with names from the kit names file', () => {
+  it('writes sign boards only with names from the kit names file (P2-048: every kind but paper notices)', () => {
     for (const [id, k] of Object.entries(KITS.kits)) {
       const b = BOARDS.kits[id];
       expect(b.area, id).toBe(k.area);
-      expect(b.cells.length, id).toBe(32);
+      const total = BOARDS.groups.reduce((a, g) => a + g.count, 0);
+      expect(b.cells.length, id).toBe(total);
       const names = read(`game/data/names/${k.area}.json`).names.map((n) => JSON.stringify(n.text));
-      for (const c of b.cells) expect(names, `${id} cell ${c.cell}`).toContain(JSON.stringify(c.text));
+      for (const c of b.cells) if (c.group !== 'notice') expect(names, `${id} ${c.group} ${c.cell}`).toContain(JSON.stringify(c.text));
     }
+  });
+  it('shows phone numbers one digit short, so no real line is ever on a board', () => {
+    for (const b of Object.values(BOARDS.kits))
+      for (const c of b.cells)
+        for (const e of c.extra) {
+          const m = String(e).match(/^(?:Ph\.|M\.) ([\d ]+)$/);
+          if (m) expect(m[1].replace(/ /g, '').length, e).toBeLessThan(e.startsWith('M.') ? 10 : 8);
+        }
+  });
+  it('keeps official names off shop boards: no police, court, municipal, government or thana on any board (P2-048)', () => {
+    // its own word list (not the generator's), so a change there cannot quietly let an official name through
+    const LATN = ['police', 'thana', 'chowki', 'court', 'municipal', 'government', 'govt', 'ministry', 'secretariat', 'department', 'sarkari', 'nagar nigam', 'parliament', 'tribunal'];
+    const OTHER = ['पुलिस', 'थाना', 'चौकी', 'न्यायालय', 'अदालत', 'सरकार', 'नगर निगम', 'मंत्रालय', 'विभाग', 'سرکار', 'پولیس'];
+    for (const [id, b] of Object.entries(BOARDS.kits))
+      for (const c of b.cells) {
+        if (c.group === 'notice') continue;
+        const all = [...Object.values(c.text || {}), c.tagline || '', ...c.extra.map(String)].join(' | ');
+        const low = all.toLowerCase();
+        for (const w of LATN) expect(new RegExp(`(^|[^a-z])${w}($|[^a-z])`).test(low), `${id} ${c.group} ${c.cell}: "${all}" has "${w}"`).toBe(false);
+        for (const w of OTHER) expect(all.includes(w), `${id} ${c.group} ${c.cell}: "${all}" has "${w}"`).toBe(false);
+      }
+  });
+  it('lays the sign atlas out without overlaps, inside the atlas', () => {
+    const cells = [];
+    for (const g of BOARDS.groups)
+      for (let i = 0; i < g.count; i++) cells.push([g.x + (i % g.cols) * g.w, g.y + Math.floor(i / g.cols) * g.h, g.w, g.h]);
+    for (const [x, y, w, h] of cells) expect(x >= 0 && y >= 0 && x + w <= BOARDS.atlas && y + h <= BOARDS.atlas).toBe(true);
+    for (let a = 0; a < cells.length; a++)
+      for (let b = a + 1; b < cells.length; b++) {
+        const [ax, ay, aw, ah] = cells[a];
+        const [bx, by, bw, bh] = cells[b];
+        expect(ax < bx + bw && bx < ax + aw && ay < by + bh && by < ay + ah, `${a} ${b}`).toBe(false);
+      }
+  });
+  it('keeps the pieces of one place on a bay at or under a whole share (kit_modules.gd PIECES slots: front, sill, spill)', () => {
+    // pieces of a slot take back to back ranges of one bay hash (buildings.gd): past 1 the last pieces never draw
+    const src = fs.readFileSync(path.join(ROOT, 'game/world/kits/kit_modules.gd'), 'utf8');
+    const slots = {};
+    for (const m of src.matchAll(/"(\w+)": \{"from": \[[^\]]*\], "share": "(\w+)", "column": \w+, "slot": "(\w+)"\}/g)) (slots[m[3]] ||= []).push(m[2]);
+    expect(Object.keys(slots).sort()).toEqual(['front', 'sill', 'spill']);
+    for (const [id, k] of Object.entries(KITS.kits))
+      for (const [slot, shares] of Object.entries(slots)) {
+        const sum = shares.reduce((a, sh) => a + (k.shares[sh] ?? 0), 0);
+        expect(sum, `${id} ${slot}`).toBeLessThanOrEqual(1.0001);
+      }
+  });
+  it('wears the old city boards far more than the Connaught Place ones, and ages each board on its own (P2-048 round 3)', () => {
+    expect(BOARDS.kits.gali.wear).toBeGreaterThan(BOARDS.kits.colonnade.wear * 3);
+    expect(BOARDS.kits.hardware.wear).toBeGreaterThan(BOARDS.kits.market.wear);
+  });
+  it('picks the scripts of a board by place (owner rule 2026-11-14): Hindi first in the old city, English first on GB Road, in Paharganj and Connaught Place, Urdu only in the old city', () => {
+    const share = (id, modes) => {
+      const cells = BOARDS.kits[id].cells.filter((c) => c.scripts);
+      return cells.filter((c) => modes.includes(c.scripts)).length / cells.length;
+    };
+    for (const id of ['bazaar', 'gali']) expect(share(id, ['h', 'he', 'u', 'uh']), id).toBeGreaterThan(0.6);
+    for (const id of ['hardware', 'hotel', 'market']) expect(share(id, ['e', 'eh']), id).toBeGreaterThan(0.75);
+    expect(share('colonnade', ['e'])).toBeGreaterThan(0.75);
+    expect(share('gali', ['u', 'uh'])).toBeGreaterThan(0);
+    for (const id of ['hardware', 'hotel', 'market', 'colonnade', 'lutyens', 'office']) expect(share(id, ['u', 'uh']), id).toBe(0);
+    // no board carries all three scripts: a mode is at most two
+    for (const b of Object.values(BOARDS.kits)) for (const c of b.cells) if (c.scripts) expect(['h', 'he', 'e', 'eh', 'u', 'uh']).toContain(c.scripts);
+  });
+  it('uses only free fonts, each credited (tools/kits/fonts/CREDITS.md)', () => {
+    const credits = fs.readFileSync(path.join(ROOT, 'tools/kits/fonts/CREDITS.md'), 'utf8');
+    for (const f of fs.readdirSync(path.join(ROOT, 'tools/kits/fonts')).filter((x) => x.endsWith('.ttf'))) expect(credits, f).toContain(f);
+    expect(credits).toMatch(/SIL Open Font License/);
   });
 });
