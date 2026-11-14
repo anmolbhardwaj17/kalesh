@@ -1,6 +1,6 @@
 {
   "_doc": "Written only by node harness/bin/task.mjs. Phases run in order; P0 (ADOPT + STYLE DISCOVERY) waits for the owner by design and needs task.mjs signoff and task.mjs archsignoff before its gate passes. Later phases are added by the planner at the end of P0 (task.mjs phase-add) from the game's real state.",
-  "updated": "2026-11-14T10:25:45.937Z",
+  "updated": "2026-11-14T10:49:50.822Z",
   "phases": [
     {
       "id": "P0",
@@ -4003,7 +4003,8 @@
         "Before shots (helper, 2026-11-14): the Pragati Maidan Tunnel S5 is an open trench from x 1470 to 1670 with no roofed part found; S7 and S35 mouths could not be found (camera under terrain). Write a portal list report from the bake so mouths can be found and checked.",
         "Anmol 2026-11-14: the Pragati Maidan tunnel is famous and has its own style; build that style, not a generic tunnel: its painted art and mural panels on the walls, its wall finish and colours, lighting pattern, signage, ceiling fans and portals, from dated photos (2022 on). Acceptance adds: a side by side of game and photo for the portal, the inside with the wall art, and the approach, read by the verifier, who fails a generic tunnel.",
         "Owner photos: harness/design/reference/owner/OWNER_PHOTOS.md (Pragati Maidan section, 4 photos): painted retaining walls with tricolour bands, yellow and green wave murals, painted pillars with mandala panels, marigold light strings, LED strip lines, jet fans. Build to these.",
-        "Owner 2026-11-14: ceiling lights in the tunnel look off: short angled white bars floating under the ceiling. Must be continuous LED strips along the ceiling edges, mounted, emissive with soft glow, matching the light on walls and road; murals on the Pragati Maidan stretch."
+        "Owner 2026-11-14: ceiling lights in the tunnel look off: short angled white bars floating under the ceiling. Must be continuous LED strips along the ceiling edges, mounted, emissive with soft glow, matching the light on walls and road; murals on the Pragati Maidan stretch.",
+        "Owner 2026-11-14: some tunnels still have the old angled light bars; every tunnel and underpass must get the new fittings, proven with a shot inside each. Murals read as blocky rectangles: need real painted motifs."
       ],
       "created": "2026-11-13T11:50:33.337Z",
       "started": "2026-11-14T08:13:07.658Z"
