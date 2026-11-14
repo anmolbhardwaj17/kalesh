@@ -220,6 +220,7 @@ export const PROBLEM_WORDS: Record<string, string> = {
   'R-TERR-01': 'The ground rises above the road surface beside it.',
   'R-TERR-02': 'A road at ground level runs through water with no bridge.',
   'R-TERR-03': 'The height data along this road jumps, so the road would have a step in it.',
+  'R-TERR-04': 'A road crosses a tunnel mouth at ground level just where the tunnel tag ends, so it would lie over the open ramp.',
 };
 
 /**

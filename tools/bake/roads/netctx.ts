@@ -7,6 +7,8 @@ import type { RoadFilter, RoadGraph } from './blockgraph.ts';
 import type { ArmView, Turn, TurnKind, TurnRestriction } from './connect.ts';
 import type { EndClips } from './clip.ts';
 import type { EdgeTrims } from './edges.ts';
+import type { DividerFit } from './dividers.ts';
+import type { MedianRef } from './medianrefs.ts';
 import type { Graph } from './graph.ts';
 import type { HeroSpec } from './hero.ts';
 import type { JunctionPlan } from './junction.ts';
@@ -36,6 +38,8 @@ export interface LaneModelInput {
   step?: number;
   /** false: no width step rounds (P1-046), for tests and the before picture of the width report. */
   widthContinuity?: boolean;
+  /** Reference dividers of divided streets (harness/data/medians.json): the carriageways widen up to them (dividers.ts, P1-034). */
+  medianRefs?: readonly MedianRef[];
 }
 
 export interface LaneArm {
@@ -124,6 +128,8 @@ export interface LaneBuild {
   edgeTrims: EdgeTrims;
   /** Free ends (dead ends, the stage edge) shortened where they ran into another road's surface (clip.ts). */
   endClips: EndClips;
+  /** Carriageways widened up to their reference divider (dividers.ts, P1-034). */
+  dividers?: DividerFit;
   /** First and last strip of every edge that has strips, and the strip lane of every lane of its end cross-sections. */
   built: Map<number, { first: number; last: number; startLanes: number[]; endLanes: number[] }>;
   problems: string[];
@@ -226,6 +232,25 @@ export interface NetCtx {
   turnReport: RestrictionReport;
   problems: string[];
   step: number;
+  /** Planned junction clusters of earlier rounds of this build by their inputs (netclusters.ts, P1-034); kept over rounds. */
+  clusterMemo?: Map<string, ClusterMemo>;
+}
+
+/**
+ * One planned cluster and what planning it wrote (netclusters.ts planCluster): a later round whose cluster has the
+ * same inputs (nodes, arms, their cross-sections, strip parts and asked cuts) takes it as it is (P1-034: a width round
+ * changes a few roads, every other junction comes out the same).
+ */
+export interface ClusterMemo {
+  res: Planned;
+  /** The strip part of every arm's edge plan after planning (t0, t1 by edge index). */
+  parts: [number, number, number][];
+  /** The cut each arm asked for after planning (end key, metres). */
+  asked: [number, number][];
+  /** Edges the cluster handed to the absorb list. */
+  absorb: number[];
+  /** The arms' cross-sections when it was stored (a guard: they are never changed in place). */
+  csSig: string;
 }
 
 /** A junction cluster with its arms, the turns the rules allow and the counts of the turns left out. */

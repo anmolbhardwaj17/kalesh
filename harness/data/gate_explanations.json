@@ -25,11 +25,6 @@
   ],
   "findings": [
     {
-      "what": "tunnel mouth crossing at Pragati Maidan (w1248027222.0 over w973071388.0 just outside the OSM tunnel end)",
-      "measured": "0.78 m2 overlap, on two levels so not in overlappingRoadFaces",
-      "owner": "P1-034"
-    },
-    {
       "what": "ITO ramps against the Phase 0 profile",
       "measured": "0.31 to 1.46 m mid ramp on four ramps, decks within 0.13 m; explained (P1-035): with the Phase 0 merge zone starts imposed (the block lane model starts the two merges 30 m and 56 m later) and the slip road under the loop ramp lowered 0.43 m as Phase 0 did (the solver holds it, 0.15 m), every one of 463 points is within 0.29 m",
       "owner": "explained, decisions.md 2026-11-13 (no fix: both are rules of the block lane model and the solver)"

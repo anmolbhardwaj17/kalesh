@@ -3,8 +3,9 @@
 // result, and where two strips lie on each other the two roads go back to the repair as conflicts with the centre line
 // distance they need; the repair runs again from the raw graph with every conflict found so far, up to
 // FEEDBACK_ROUNDS times. The last result is the repaired graph; its environment (with the conflicts) is the one the
-// fixed point check must use. A partial bake (P1-017) starts from the conflicts the last whole bake handed back
-// (`seed`) with no further round: on an unchanged map that is the whole bake's last round, repair for repair. Pure.
+// fixed point check must use. A partial bake (P1-017) starts from the conflicts a whole bake with the same inputs
+// handed back (`seed`, sources/warmstart.ts) with no further round: that is the whole bake's last round, repair for
+// repair. Pure.
 import type { BlockGraph } from '../graph/build.ts';
 import { buildLaneModel } from '../roads/network.ts';
 import type { LaneBuild, LaneModelInput } from '../roads/network.ts';

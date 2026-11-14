@@ -277,7 +277,31 @@ const CASES: Record<string, { hit: () => Case; clean: () => Case; also?: (issues
     clean: () => ({ s: sketch((s) => { s.way([[0, 0], [300, 0]], { highway: 'secondary' }); }), env: { heightSource: (x: number) => 210 + x * 0.002 } }),
     also: (i) => { expect(i[0]!.proposals[0]!.params).toMatchObject({ mode: 'smooth_profile', max_m: 6 }); expect(checkProfile([210, 210, 210, 216, 210, 210, 210]).outliers).toBe(2); },
   },
+  'R-TERR-04': {
+    // a tunnel tag that ends 2 m short of a street crossing over its mouth at grade (Pragati Maidan, P1-034)
+    hit: () => ({ s: sketch((s) => tunnelMouth(s, 2)) }),
+    clean: () => ({ s: sketch((s) => tunnelMouth(s, -40)) }),
+    also: (i) => {
+      const p = i[0]!.proposals[0]!;
+      expect(p.action).toBe('set_tag');
+      // the edge starts 300 m west, so the mouth is 300 m along it
+      expect(p.params).toMatchObject({ key: 'portal', from: 300 });
+      // past the crossing's far edge: 2 m out, half the street (3.5 m carriageway half plus its footpath), a metre more
+      expect(Number(p.params['to']) - 300).toBeGreaterThan(2 + 3.5 + 1);
+      expect(Number(p.params['to']) - 300).toBeLessThan(15);
+      expect(p.lowImpact).toBe(true);
+      expect(p.confidence).toBeGreaterThanOrEqual(0.8);
+    },
+  },
 };
+
+/** A primary road in a tunnel (west of x 0) that comes out at x 0 and climbs a ramp east, with a street crossing it at grade at x `at`. */
+function tunnelMouth(s: Sketch, at: number): void {
+  const n = s.node(0, 0);
+  s.way([[-300, 0], n], { highway: 'primary', oneway: 'yes', name: 'Tunnel Marg', tunnel: 'yes', layer: '-1' });
+  s.way([n, [300, 0]], { highway: 'primary', oneway: 'yes', name: 'Tunnel Marg' });
+  s.way([[at, -80], [at, 80]], { highway: 'tertiary', name: 'Over Road' });
+}
 
 describe('rule catalogue (RE1)', () => {
   it('every rule has an id, an area, a detect function and a confidence, with unique ids', () => {
@@ -294,7 +318,7 @@ describe('rule catalogue (RE1)', () => {
   it('runs in one fixed order', () => {
     expect(CATALOGUE.map((r) => r.id)).toEqual([
       'R-ROAD-01', 'R-ROAD-02', 'R-ROAD-03', 'R-ROAD-04', 'R-ROAD-05', 'R-ROAD-07',
-      'R-BRIDGE-01', 'R-BRIDGE-02', 'R-BRIDGE-03', 'R-BRIDGE-04', 'R-BRIDGE-05',
+      'R-BRIDGE-01', 'R-BRIDGE-02', 'R-BRIDGE-03', 'R-BRIDGE-04', 'R-BRIDGE-05', 'R-TERR-04',
       'R-LANE-FIT-01', 'R-LANE-FIT-02', 'R-LANE-FIT-03',
       'R-ROAD-06', 'R-LANE-01', 'R-LANE-02', 'R-LANE-03', 'R-LANE-04', 'R-LANE-05', 'R-LANE-06',
       'R-JUNC-01', 'R-JUNC-02', 'R-JUNC-03', 'R-JUNC-04',

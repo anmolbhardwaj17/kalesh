@@ -20,6 +20,7 @@ import { RuleContext } from '../rules/context.ts';
 import { readGraphInput } from '../sources/graphinput.ts';
 import { readGedtmFile } from '../sources/ground.ts';
 import { readRepairInput } from '../sources/repairio.ts';
+import { readMedianRefs } from '../sources/meshstage.ts';
 import { memo, repairBaseline } from '../../testkit/sharedbake.mjs';
 import { buildRuleEnv } from './env.ts';
 import { repairWithLanes } from './feedback.ts';
@@ -48,7 +49,7 @@ describe.skipIf(missing.length > 0)(`pilot centre repair rules${reason ? ` (skip
       const a = timeRules(new RuleContext(g, env), () => performance.now());
       const b = timeRules(new RuleContext(g, env), () => performance.now());
       // the whole repair with the lane model's feedback (R-LANE-06), run here on its own
-      const lin = laneInputs(input, plan, extra.heroSpecs);
+      const lin = laneInputs(input, plan, extra.heroSpecs, readMedianRefs(ROOT, (lat, lon) => proj.toWorld(lat, lon)));
       const { res } = repairWithLanes(g, env, {}, (rg) => ({ nodes: rg.nodes, edges: rg.edges, marks: rg.marks, ...lin }));
       return { rules: Object.keys(a.ms), ms: a.ms, totalA: a.totalMs, totalB: b.totalMs, same: JSON.stringify(b.issues) === JSON.stringify(a.issues), hash: graphHash(res.graph), total: res.summary.total, repairs: res.summary.auto };
   }));

@@ -15,12 +15,12 @@ import { besideRoads, carriagewayFit, laneSurfaces, doubleTaper, goreRoom, laneC
 import { stationLinks, viaductPiers } from './rail.ts';
 import { crossingNoNode, danglingEnd, noTaperRoom, overlappingWays, pairNamesDiffer, unpairedOneway, widthSanity } from './roads.ts';
 import { mapEdgeClosed } from './stitch.ts';
-import { groundAboveRoad, groundOutlier, roadInWater } from './terrain.ts';
+import { groundAboveRoad, groundOutlier, roadInWater, tunnelPortal } from './terrain.ts';
 import type { Issue, RuleArea } from './types.ts';
 
 export const CATALOGUE: readonly Rule[] = [
   danglingEnd, crossingNoNode, overlappingWays, unpairedOneway, widthSanity, pairNamesDiffer,
-  bridgeSupport, rampInAir, deckClearance, rampGrade, bridgeNoGround,
+  bridgeSupport, rampInAir, deckClearance, rampGrade, bridgeNoGround, tunnelPortal,
   carriagewayFit, slipRoadFit, laneCountAhead,
   noTaperRoom, laneContinuity, doubleTaper, sharedIndexPoint, goreRoom, besideRoads, laneSurfaces,
   approachAngle, surfaceOverJunction, junctionCluster, shortArm,
