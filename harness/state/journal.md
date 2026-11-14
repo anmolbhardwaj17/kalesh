@@ -634,3 +634,4 @@ One line per event, written by task.mjs (start, done, fail, phase changes, inbox
 - 2026-11-14 18:23 mentor message mmwgeq2u7 handled: Three T-pose front-view prompts are on the picture cards (and in harness/reports/lead_views/tpose_prompts.txt). Upload each on its card; I check them, then you make the 3D models.
 - 2026-11-14 18:30 mentor message mmwgeyjai handled: Bittu and Danny approved, go to 3D. Meera: great face and uniform, but her thighs touch (that fused the trousers last time); redo with a wider stance, prompt updated on her card.
 - 2026-11-14 18:32 mentor message mmwgf124x handled: You were right: my crop squashed the image. At full size there is a clear gap; Meera is approved, all three ready for 3D.
+- 2026-11-14 18:34 mentor message mmwgf49fp handled: New lead-presence prompt on Bittu's picture card: open khaki shirt over a dark vest, bold red gamchha at the neck, distinctive haircut, wiry strong build, confident T-pose.

@@ -109,7 +109,7 @@
       "id": "portrait_lead_bittu",
       "kind": "portrait",
       "intent": "Bittu, the auto driver: the approved look before any 3D model (reference sheet, front, side, back). The 3D model is made from this picture.",
-      "prompt": "Realistic full body photo of ONE person for a game character 3D model, front view only, camera at chest height straight on, plain light grey background. The look of a modern open world game like Watch Dogs 2: grounded, real proportions, natural skin and cloth, photoreal, no cartoon. Pose: a strict T-pose: both arms stretched straight out to the sides at shoulder height, palms facing down, fingers slightly apart, a clear gap between the arms and the body, legs slightly apart with a gap between the knees, feet flat. Clothes hang naturally and do not stick to the body: a visible gap of air under the arms and between the jacket or shirt and the arms. Whole body visible from head to feet with space around it, even soft studio light, no shadow on the background, no text, no logo, only one person in the image. The person: an Indian man from Delhi, age 28, auto-rickshaw driver, young but sun-worn, lean wiry build, 1.72 m, realistic proportions about 7.5 heads tall. Face: warm brown skin tanned darker on the forehead and cheeks, laugh lines at the eyes, mouth closed with a faint amused smile, slightly tired eyes, thin neat moustache and two days of stubble, even skin, short black hair messy from the wind. Clothes: a loose faded khaki uniform shirt with sleeves rolled to the elbows, top button open, worn untucked, dark grey cotton trousers, worn rubber sandals, a red and white checked cotton gamchha towel over his left shoulder hanging down his chest, an old plain steel wristwatch on his left wrist.",
+      "prompt": "Realistic full body photo of ONE person for a game character 3D model, the lead hero of an open world crime game set in Delhi, front view only, camera at chest height straight on, plain light grey background. The look of a modern open world game like Watch Dogs 2: grounded, real proportions, natural skin and cloth, photoreal, no cartoon. Pose: a strict T-pose: both arms stretched straight out to the sides at shoulder height, palms facing down, fingers slightly apart, a clear gap between the arms and the body, legs apart with background visible between the thighs, feet flat. Clothes hang naturally and do not stick to the body. Whole body visible from head to feet with space around it, even soft studio light, no text, no logo, only one person in the image. The person: an Indian man from Delhi, age 28, auto-rickshaw driver and the game's lead, lean but wiry and strong, defined forearms and shoulders from years of driving, 1.72 m, realistic proportions about 7.5 heads tall, standing straight and alert with a cheeky confident look, mouth closed in a crooked half smile, quick bright eyes. Face: warm brown sun-tanned skin, laugh lines, thin neat moustache and short stubble. Hair: a distinctive cut, short faded sides and longer thick messy black hair on top falling to one side. Clothes with strong contrast: a faded khaki auto driver uniform shirt worn OPEN over a dark charcoal vest, sleeves rolled above the elbows, the shirt hanging loose and untucked; a bright red and white checked cotton gamchha tied loosely around his neck with the ends hanging down the front, his signature item; dark navy cotton trousers with a worn brown belt, worn brown leather sandals; an old plain steel wristwatch on his left wrist and a thin black thread on the right wrist. He should be recognisable from across a street by his silhouette: the open khaki shirt over the dark vest and the red gamchha.",
       "generate": "portrait 1024x1536",
       "target": {
         "w": 512,
@@ -129,18 +129,17 @@
       "batch": null,
       "created": "2026-11-14T12:12:01.288Z",
       "review": {
-        "at": "2026-11-14T13:00:27.079Z",
-        "verdict": "ok",
-        "note": "Approved 2026-11-14 (T-pose front): clean T-pose, clear gaps under the arms and between the legs, closed-mouth faint smile, gamchha, steel watch, rolled sleeves. Ready for image to 3D.",
+        "at": "2026-11-14T13:04:53.189Z",
+        "verdict": "redo",
+        "note": "Owner 2026-11-14: Bittu reads as a believable person but not a game lead (no silhouette, low contrast, meek). Redo with lead presence: open khaki shirt over a dark vest, bold red gamchha at the neck, distinctive haircut, wiry strong build, confident stance.",
         "ingestedAt": "2026-11-14T12:59:05.245Z",
-        "fit": "pending",
-        "fitNote": "Use for image to 3D."
+        "removed": false
       },
       "redo": {
-        "at": "2026-11-14T12:53:45.125Z",
-        "note": "Owner 2026-11-14: redo as a single front view in a strict T-pose for clean image to 3D (arms joined the body in the A-pose model)."
+        "at": "2026-11-14T13:04:53.072Z",
+        "note": "Owner 2026-11-14: Bittu reads as a believable person but not a game lead (no silhouette, low contrast, meek). Redo with lead presence: open khaki shirt over a dark vest, bold red gamchha at the neck, distinctive haircut, wiry strong build, confident stance."
       },
-      "promptAt": "2026-11-14T12:53:45.134Z"
+      "promptAt": "2026-11-14T13:04:53.189Z"
     },
     {
       "id": "portrait_lead_meera",
