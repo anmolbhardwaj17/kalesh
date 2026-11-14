@@ -12,7 +12,7 @@ import vm from 'node:vm';
 import { performance } from 'node:perf_hooks';
 
 /** The hooks a script may call on window.__game.debug (GAME_HOOKS.md "Required" plus quality and timeOfDay). */
-export const SHIM_HOOKS = ['state', 'clock', 'frames', 'input', 'perf', 'load', 'teleport', 'setCamera', 'timeScale', 'hold', 'events', 'hud', 'quality', 'timeOfDay', 'stream', 'vehicle', 'foot', 'city', 'bench'];
+export const SHIM_HOOKS = ['state', 'clock', 'frames', 'input', 'perf', 'load', 'teleport', 'setCamera', 'timeScale', 'hold', 'events', 'hud', 'quality', 'timeOfDay', 'stream', 'vehicle', 'foot', 'city', 'traffic', 'gps', 'bench'];
 
 /**
  * window.__game for a connected GodotDebugClient (or any object with hello, snapshot, events and call(method, ...args)).
@@ -46,6 +46,10 @@ export function makeGame(client, { onAsyncError = () => {} } = {}) {
     bench: (cmd, opts) => client.call('bench', cmd, ...(opts === undefined ? [] : [opts])),
     /** The city checks (GAME_HOOKS.md "city"): pins, geo, screen, mirror, surface, watch. */
     city: (cmd = 'pins', opts) => client.call('city', cmd, ...(opts === undefined ? [] : [opts])),
+    /** The traffic stand-in (GAME_HOOKS.md "traffic", P2-045): start, stop, info. */
+    traffic: (cmd = 'info', opts) => client.call('traffic', cmd, ...(opts === undefined ? [] : [opts])),
+    /** The route line (GAME_HOOKS.md "gps", P2-045): set, clear, info, plan. */
+    gps: (cmd = 'info', opts) => client.call('gps', cmd, ...(opts === undefined ? [] : [opts])),
     input: (action, value = 1) => { fire('input', action, value); },
     setCamera: (pose) => { fire('setCamera', pose ?? null); },
     timeScale: (n) => { fire('timeScale', n); },

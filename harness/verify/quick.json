@@ -376,7 +376,11 @@
         "city_india_gate",
         "city_cp_circle_lap",
         "city_access_bollards",
-        "city_access_scooter_gali"
+        "city_access_scooter_gali",
+        "city_access_traffic",
+        "city_access_gps",
+        "city_access_violation",
+        "city_chandni_walk"
       ]
     },
     {
@@ -388,7 +392,10 @@
         "city_india_gate",
         "city_north_up",
         "city_access_bollards",
-        "city_access_scooter_gali"
+        "city_access_scooter_gali",
+        "city_access_traffic",
+        "city_access_gps",
+        "city_access_violation"
       ]
     },
     {
@@ -443,6 +450,34 @@
       "scenarios": [
         "city_path_ito_flyover_60",
         "city_collide_probe"
+      ]
+    },
+    {
+      "path": "game/ai/",
+      "scenarios": [
+        "city_access_traffic",
+        "city_access_gps"
+      ]
+    },
+    {
+      "path": "game/ui/gps.gd",
+      "scenarios": [
+        "city_access_gps"
+      ]
+    },
+    {
+      "path": "game/world/access_watch.gd",
+      "scenarios": [
+        "city_access_violation",
+        "city_access_scooter_gali",
+        "city_access_bollards"
+      ]
+    },
+    {
+      "path": "game/debug/route_probe.gd",
+      "scenarios": [
+        "city_access_traffic",
+        "city_access_gps"
       ]
     }
   ]

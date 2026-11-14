@@ -139,3 +139,59 @@ export function nearestReachable(pieces, from, x, z, { slackM = 12, accept = nul
   }
   return null;
 }
+
+/** True when a walker may use the piece (game/ai/lane_router.gd walkable): walkers share its carriageway, or it is a car road at grade with a footpath beside it. */
+export const walkable = (p) => p.modes.includes('foot') || (p.layer === 0 && (p.modes.includes('car') || p.modes.includes('auto')));
+
+/**
+ * A walk between two world points [x, z] over pieces a walker may use, either way along a piece (Dijkstra over the
+ * piece end points, lane_router.gd's walker rule; a car road's footpath costs 1.2 times a shared street). `skip(piece)`
+ * leaves pieces out (a line of bollards a scripted walker should not thread). {refs: ids, a minus walks one backwards,
+ * startOffM, endOffM} or null.
+ */
+export function walkRoute(pieces, from, to, { skip = null } = {}) {
+  const key = (q) => `${Math.round(q[0] * 10)},${Math.round(q[2] * 10)},${Math.round(q[1])}`;
+  const adj = new Map();
+  const add = (k, e) => { if (!adj.has(k)) adj.set(k, []); adj.get(k).push(e); };
+  for (const p of pieces.values()) {
+    if (!walkable(p) || p.pts.length < 2 || (skip && skip(p))) continue;
+    const a = key(p.pts[0]);
+    const b = key(p.pts[p.pts.length - 1]);
+    if (a === b) continue;
+    const cost = p.len * (p.modes.includes('foot') ? 1 : 1.2);
+    add(a, { to: b, ref: p.id, cost });
+    add(b, { to: a, ref: `-${p.id}`, cost });
+  }
+  const nearestNode = (x, z) => {
+    let best = null;
+    for (const k of adj.keys()) {
+      const [kx, kz] = k.split(',').map(Number);
+      const d = Math.hypot(kx / 10 - x, kz / 10 - z);
+      if (!best || d < best.d || (d === best.d && k < best.k)) best = { k, d };
+    }
+    return best;
+  };
+  const s = nearestNode(from[0], from[1]);
+  const t = nearestNode(to[0], to[1]);
+  if (!s || !t) return null;
+  const dist = new Map([[s.k, 0]]);
+  const prev = new Map();
+  const done = new Set();
+  const open = [[0, s.k]];
+  while (open.length) {
+    let m = 0;
+    for (let i = 1; i < open.length; i++) if (open[i][0] < open[m][0]) m = i;
+    const [d, k] = open.splice(m, 1)[0];
+    if (done.has(k)) continue;
+    done.add(k);
+    if (k === t.k) break;
+    for (const e of adj.get(k) || []) {
+      const nd = d + e.cost;
+      if (nd < (dist.get(e.to) ?? Infinity)) { dist.set(e.to, nd); prev.set(e.to, { k, e }); open.push([nd, e.to]); }
+    }
+  }
+  if (!done.has(t.k)) return null;
+  const refs = [];
+  for (let k = t.k; k !== s.k; k = prev.get(k).k) refs.unshift(prev.get(k).e.ref);
+  return { refs, startOffM: s.d, endOffM: t.d };
+}

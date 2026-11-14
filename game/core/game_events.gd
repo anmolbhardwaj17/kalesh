@@ -1,7 +1,7 @@
 ## Autoload GameEvents: a ring buffer of recent game events for the harness (docs/GAME_HOOKS.md events()).
 ## Each event is {seq, t (sim s), w (wall ms since start), type, data}. Cheap, so it runs with or without --debug.
 ## Event types the harness reads: checkpoint, objective_complete, milestone:done, milestone:failed, ai:state,
-## dialogue:line, error (unexpected engine or script errors, sent by the debug server), sim:hold.
+## dialogue:line, error (unexpected engine or script errors, sent by the debug server), sim:hold, access_violation (P2-045).
 extends Node
 
 const RING := 200

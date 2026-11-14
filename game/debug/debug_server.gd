@@ -20,7 +20,7 @@ const DebugInput := preload("res://debug/debug_input.gd")
 const PROTOCOL := 1
 const METHODS := [
 	"ping", "state", "clock", "frames", "input", "perf", "load", "teleport", "setCamera", "timeScale", "hold",
-	"events", "hud", "shot", "quality", "timeOfDay", "bench", "stream", "vehicle", "foot", "quit",
+	"events", "hud", "shot", "quality", "timeOfDay", "bench", "stream", "vehicle", "foot", "traffic", "gps", "quit",
 ]
 const QUALITY_PRESETS := ["low", "medium", "high"]
 
@@ -206,6 +206,8 @@ func _call(method: String, a: Array) -> Dictionary:
 			return await _foot_probe().hook(a)
 		"city":
 			return await _city_probe().hook(a)
+		"traffic", "gps":
+			return _route_probe().hook(method, a)
 		"setCamera":
 			return _cam.set_camera(a[0] if a.size() > 0 else null)
 		"hud":
@@ -483,6 +485,16 @@ func _city_probe() -> Node:
 	if probe == null:
 		probe = load("res://debug/city_probe.gd").new()
 		probe.name = "CityProbe"
+		add_child(probe)
+	return probe
+
+
+## The traffic stand-in and the route line (route_probe.gd: traffic and gps), made on first use (P2-045).
+func _route_probe() -> Node:
+	var probe := get_node_or_null("RouteProbe")
+	if probe == null:
+		probe = load("res://debug/route_probe.gd").new()
+		probe.name = "RouteProbe"
 		add_child(probe)
 	return probe
 
